@@ -155,6 +155,18 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                             Icon = IconsConstants.Media,
                             Title = this.globalLocalizer.GetString("Media"),
                             Url = this.linkGenerator.GetPathByAction("Index", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
+                        },
+                        new DrawerMenuItemViewModel
+                        {
+                            Icon = IconsConstants.Download,
+                            Title = this.globalLocalizer.GetString("DownloadCenter"),
+                            Url = this.linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
+                        },
+                        new DrawerMenuItemViewModel
+                        {
+                            Icon = IconsConstants.Grid,
+                            Title = this.globalLocalizer.GetString("DownloadCenterCategories"),
+                            Url = this.linkGenerator.GetPathByAction("Index", "DownloadCenterCategories", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
                         }
                     }
                 },

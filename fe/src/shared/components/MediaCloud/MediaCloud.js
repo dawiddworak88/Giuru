@@ -164,7 +164,7 @@ function MediaCloud(props) {
                                 {files.map((file, index) =>
                                     <Draggable key={file.id} draggableId={file.id} index={index}>
                                         {(provided, snapshot) => (
-                                            <div className="dropzone__preview-thumbnail"
+                                            <div className="dropzone__preview-thumbnail m-2"
                                                 ref={provided.innerRef}
                                                 {...provided.draggableProps}
                                                 {...provided.dragHandleProps}

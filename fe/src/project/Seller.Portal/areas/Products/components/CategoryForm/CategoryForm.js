@@ -105,7 +105,7 @@ function CategoryForm(props) {
                             </FormControl>
                         </div>
                         <div className="field">
-                        <MediaCloud
+                            <MediaCloud
                                 id="files"
                                 name="files"
                                 label={props.productPicturesLabel}

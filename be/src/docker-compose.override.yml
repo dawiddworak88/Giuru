@@ -70,6 +70,9 @@ services:
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
       - OrganisationId=${ORGANISATION_ID}
+      - EventBusConnection=amqp://rabbitmq
+      - EventBusRetryCount=5
+      - EventBusRequestedHeartbeat=60
     ports:
       - "5131:80"
 
@@ -218,6 +221,21 @@ services:
     ports:
       - "5102:80"
 
+  downloadcenter-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=DownloadCenterDb;User Id=sa;Password=Gre@tPassw0rd
+      - LogstashUrl=http://logstash:31311
+      - SupportedCultures=${SUPPORTED_CULTURES}
+      - DefaultCulture=${DEFAULT_CULTURE}
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventBusConnection=amqp://rabbitmq
+      - EventBusRetryCount=5
+      - EventBusRequestedHeartbeat=60
+      - OrganisationId=${ORGANISATION_ID}
+    ports:
+      - "5136:80"
+
   seller-web:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -231,6 +249,7 @@ services:
       - InventoryUrl=http://inventory-api
       - NewsUrl=http://news-api
       - SellerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5104
+      - DownloadCenterUrl=http://downloadcenter-api
       - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -255,6 +274,7 @@ services:
       - BasketUrl=http://basket-api
       - ClientUrl=http://client-api
       - NewsUrl=http://news-api
+      - DownloadUrl=http://downloadcenter-api
       - MakeComplaintUrl=https://complaints.com
       - ProductAttributes=${PRODUCT_ATTRIBUTES}
       - OrganisationId=${ORGANISATION_ID}

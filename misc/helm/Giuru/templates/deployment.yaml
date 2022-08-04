@@ -50,6 +50,12 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: EventBusConnection
+          value: {{ .Values.eventBusConnection }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         ports:
         - containerPort: 80
 ---
@@ -637,6 +643,68 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: download-center-api-deployment
+  labels:
+    app: downloadcenter-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: downloadcenter-api
+  template:
+    metadata:
+      labels:
+        app: downloadcenter-api
+    spec:
+      containers:
+      - name: downloadcenter-api-container
+        image: {{ .Values.image.registry }}/downloadcenter-api:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
+        resources:
+          limits:
+            memory: "250Mi"
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ConnectionString
+          value: {{ .Values.downloadCenterApi.connectionString }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        - name: EventBusConnection
+          value: {{ .Values.eventBusConnection }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: buyer-web-deployment
   labels:
     app: buyer-web
@@ -777,6 +845,8 @@ spec:
           value: {{ .Values.newsUrl }}
         - name: BuyerUrl
           value: {{ .Values.buyerUrl }}
+        - name: DownloadCenterUrl
+          value: {{ .Values.downloadCenterUrl }}
         - name: ClientId
           value: {{ .Values.sellerWeb.clientId }}
         - name: ClientSecret

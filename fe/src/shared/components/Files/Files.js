@@ -2,14 +2,14 @@ import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, Button, Tooltip
+    TableHead, TableRow, Paper, Button, Tooltip,
 } from "@mui/material";
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
 import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
 
 function Files(props) {
-
+    
     const handleCopyClick = (file) => {
         ClipboardHelper.copyToClipboard(file.url);
     };
@@ -35,8 +35,8 @@ function Files(props) {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {props.files.map((file) => (
-                                            <TableRow key={file.id}>
+                                        {props.files.map((file, index) => (
+                                            <TableRow key={index}>
                                                 <TableCell width="11%">
                                                     <div className="files__tooltip">
                                                         <Tooltip title={props.downloadLabel} aria-label={props.downloadLabel}>

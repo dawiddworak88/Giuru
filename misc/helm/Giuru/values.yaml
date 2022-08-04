@@ -15,6 +15,7 @@ inventoryUrl: "#{InventoryUrl}#"
 newsUrl: "#{NewsUrl}#"
 buyerUrl: "#{BuyerUrl}#"
 sellerUrl: "#{SellerUrl}#"
+downloadCenterUrl: "#{DownloadCenterUrl}#"
 makeComplaintUrl: "#{MakeComplaintUrl}#"
 cdnUrl: "#{CdnUrl}#"
 elasticsearchUrl: "#{ElasticsearchUrl}#"
@@ -30,6 +31,8 @@ senderName: "#{SenderName}#"
 googleTagManagerIdentifier: "#{GoogleTagManagerIdentifier}#"
 defaultCulture: "en"
 supportedCultures: "en,de,pl"
+downloadCenterApi:
+  connectionString: "#{DownloadCenterApi--ConnectionString}#"
 newsApi:
   connectionString: "#{NewsApi--ConnectionString}#"
 inventoryApi:

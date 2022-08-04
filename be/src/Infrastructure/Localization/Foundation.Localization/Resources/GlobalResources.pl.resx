@@ -627,4 +627,34 @@
   <data name="TeamMembers" xml:space="preserve">
     <value>Członkowie zespołu</value>
   </data>
+  <data name="DownloadCenter" xml:space="preserve">
+    <value>Centrum pobierania</value>
+  </data>
+  <data name="DownloadCenterCategories" xml:space="preserve">
+    <value>Kategorie centrum pobierania</value>
+  </data>
+  <data name="EditCategory" xml:space="preserve">
+    <value>Edytuj kategorię</value>
+  </data>
+  <data name="EditDownloadCenter" xml:space="preserve">
+    <value>Edytuj centrum pobierania</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Kategoria</value>
+  </data>
+  <data name="DownloadEverything" xml:space="preserve">
+    <value>Pobierz wszystko</value>
+  </data>
+  <data name="DownloadSelected" xml:space="preserve">
+    <value>Pobierz wybrane</value>
+  </data>
+  <data name="NoCategories" xml:space="preserve">
+    <value>Brak kategorii.</value>
+  </data>
+  <data name="SelectFile" xml:space="preserve">
+    <value>Wybierz plik</value>
+  </data>
+  <data name="Thumbnail" xml:space="preserve">
+    <value>Miniaturka</value>
+  </data>
 </root>
