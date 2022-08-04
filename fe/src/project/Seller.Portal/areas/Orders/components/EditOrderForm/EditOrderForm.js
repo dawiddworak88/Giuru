@@ -5,7 +5,9 @@ import { Context } from "../../../../../../shared/stores/Store";
 import {
     FormControl, InputLabel, Select, MenuItem, Button,
     Table, TableBody, TableCell, TableContainer, TextField,
-    TableHead, TableRow, Paper, CircularProgress } from "@mui/material";
+    TableHead, TableRow, Paper, CircularProgress, Dialog,
+    DialogActions, DialogContent, DialogTitle
+} from "@mui/material";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import Files from "../../../../../../shared/components/Files/Files";
@@ -13,17 +15,16 @@ import OrderConstants from "../../../../shared/constants/OrderConstants";;
 
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
     const [orderItemsStatuses, setOrderItemsStatuses] = useState(props.orderItemsStatuses ? props.orderItemsStatuses : []);
 
     const handleOrderStatusSubmit = (e) => {
-
         e.preventDefault();
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         var orderStatus = {
-
             orderId: props.id,
             orderStatusId
         };
@@ -210,7 +211,8 @@ function EditOrderForm(props) {
                                                                     value={orderItemStatus ? orderItemStatus.orderStatusId : item.orderStatusId}
                                                                     onChange={(e) => {
                                                                         e.preventDefault();
-                                                                        handleOrderItemStatusChange(item.id, e.target.value);
+                                                                        setIsModalOpen(true)
+                                                                        //handleOrderItemStatusChange(item.id, e.target.value);
                                                                     }}>
                                                                     {props.orderStatuses.map((status, index) => {
                                                                         return (
@@ -261,6 +263,21 @@ function EditOrderForm(props) {
                 </Fragment>
             }
             {state.isLoading && <CircularProgress className="progressBar" />}
+            <Dialog open={isModalOpen} fullWidth={true}>
+                <DialogTitle>Komontarz do zmiany statusu</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        variant="standard"
+                        value="Przekazano do produkcji. Plonowane ukończenie 11.01.2023"
+                        name="orderCommnet"
+                        fullWidth={true}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button>Anuluj</Button>
+                    <Button>Dodaj</Button>
+                </DialogActions>
+            </Dialog>
         </section >
     );
 }

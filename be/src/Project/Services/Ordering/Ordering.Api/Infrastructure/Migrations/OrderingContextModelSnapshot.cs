@@ -17,7 +17,7 @@ namespace Ordering.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.6")
+                .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -177,48 +177,6 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.ToTable("OrderAttachments");
                 });
 
-            modelBuilder.Entity("Ordering.Api.Infrastructure.Orders.Entities.OrderComment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IpAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Language")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OrderComments");
-                });
-
             modelBuilder.Entity("Ordering.Api.Infrastructure.Orders.Entities.OrderItem", b =>
                 {
                     b.Property<Guid>("Id")
@@ -243,16 +201,13 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("LastOrderItemStatusChangeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("MoreInfo")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("OrderStateId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("OrderStatusId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("OutletQuantity")
@@ -288,6 +243,43 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("Ordering.Api.Infrastructure.Orders.Entities.OrderItemStatusChange", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("OrderItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderItemStateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OrderItemStatusChangeComment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("OrderItemStatusId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderItemStatusChanges");
                 });
 
             modelBuilder.Entity("Ordering.Api.Infrastructure.Orders.Entities.OrderState", b =>
