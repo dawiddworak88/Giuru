@@ -15,6 +15,8 @@ import OrderConstants from "../../../../shared/constants/OrderConstants";;
 
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
+    const [orderItem, setOrderItem] = useState(null);
+    const [orderItemComment, setOrderItemComment] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
     const [orderItemsStatuses, setOrderItemsStatuses] = useState(props.orderItemsStatuses ? props.orderItemsStatuses : []);
@@ -36,7 +38,7 @@ function EditOrderForm(props) {
         };
 
         fetch(props.updateOrderStatusUrl, requestOptions)
-            .then(function (response) {
+            .then((response) => {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
@@ -57,6 +59,12 @@ function EditOrderForm(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setOrderItem(null);
+        setOrderItemComment("");
+    }
 
     const handleOrderItemStatusChange = (id, newOrderStatus) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -99,6 +107,8 @@ function EditOrderForm(props) {
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
+                        setIsModalOpen(true)
+                        setOrderItem(orderItem)
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -209,11 +219,7 @@ function EditOrderForm(props) {
                                                                     id={`orderItemStatus-${item.id}`}
                                                                     name={`orderItemStatus-${item.id}`}
                                                                     value={orderItemStatus ? orderItemStatus.orderStatusId : item.orderStatusId}
-                                                                    onChange={(e) => {
-                                                                        e.preventDefault();
-                                                                        setIsModalOpen(true)
-                                                                        //handleOrderItemStatusChange(item.id, e.target.value);
-                                                                    }}>
+                                                                    onChange={(e) => handleOrderItemStatusChange(item.id, e.target.value)}>
                                                                     {props.orderStatuses.map((status, index) => {
                                                                         return (
                                                                             <MenuItem key={index} value={status.id}>{status.name}</MenuItem>
@@ -263,19 +269,24 @@ function EditOrderForm(props) {
                 </Fragment>
             }
             {state.isLoading && <CircularProgress className="progressBar" />}
-            <Dialog open={isModalOpen} fullWidth={true}>
+            <Dialog 
+                open={isModalOpen} 
+                fullWidth={true}
+            >
                 <DialogTitle>Komontarz do zmiany statusu</DialogTitle>
                 <DialogContent>
                     <TextField
+                        id="orderItemComment"
+                        name="orderItemComment"
                         variant="standard"
-                        value="Przekazano do produkcji. Plonowane ukończenie 11.01.2023"
-                        name="orderCommnet"
+                        value={orderItemComment}
+                        onChange={(e) => setOrderItemComment(e.target.value)}
                         fullWidth={true}
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button>Anuluj</Button>
-                    <Button>Dodaj</Button>
+                    <Button type="button" onClick={handleCloseModal}>Anuluj</Button>
+                    <Button type="button">Dodaj</Button>
                 </DialogActions>
             </Dialog>
         </section >
