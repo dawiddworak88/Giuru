@@ -58,6 +58,15 @@ namespace Media.Api.DependencyInjection
                         tags: new string[] { "azurestorage" });
             }
 
+            if (string.IsNullOrWhiteSpace(configuration["EventBusConnection"]) is false)
+            {
+                hcBuilder
+                    .AddRabbitMQ(
+                        configuration["EventBusConnection"],
+                        name: "media-api-messagebus",
+                        tags: new string[] { "messagebus" });
+            }
+
             return services;
         }
     }

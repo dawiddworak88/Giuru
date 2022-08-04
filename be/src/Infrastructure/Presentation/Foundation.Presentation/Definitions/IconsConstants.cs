@@ -18,5 +18,6 @@
         public static readonly string Key = "Key";
         public static readonly string List = "List";
         public static readonly string Briefcase = "Briefcase";
+        public static readonly string Download = "DownloadCloud";
     }
 }

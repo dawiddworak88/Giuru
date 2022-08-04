@@ -1,0 +1,17 @@
+@import "../../../../shared/components/DownloadCenterFiles/DownloadCenterFiles.scss";
+
+.dc-category {
+
+    &__subcategory-link {
+        background: $desertstorm;
+        border-radius: 1rem;
+        height: 9.375rem;
+        width: 9.375rem;
+        text-align: center;
+
+        @media only screen and (max-width: $tablet) {
+            height: 10rem;
+            width: 10rem;
+        }
+    }
+}

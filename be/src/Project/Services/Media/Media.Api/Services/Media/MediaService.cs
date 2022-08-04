@@ -20,6 +20,8 @@ using System.Net;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
+using Media.Api.IntegrationEvents;
+using Foundation.EventBus.Abstractions;
 
 namespace Media.Api.Services.Media
 {
@@ -29,16 +31,19 @@ namespace Media.Api.Services.Media
         private readonly IMediaRepository mediaRepository;
         private readonly IChecksumService checksumService;
         private readonly IStringLocalizer mediaResources;
+        private readonly IEventBus eventBus;
 
         public MediaService(MediaContext context, 
             IMediaRepository mediaRepository, 
             IChecksumService checksumService,
+            IEventBus eventBus,
             IStringLocalizer<MediaResources> mediaResources)
         {
             this.context = context;
             this.mediaRepository = mediaRepository;
             this.mediaResources = mediaResources;
             this.checksumService = checksumService;
+            this.eventBus = eventBus;
         }
 
         public async Task<Guid> CreateFileAsync(CreateMediaItemServiceModel serviceModel)
@@ -386,6 +391,14 @@ namespace Media.Api.Services.Media
                 }
 
                 await this.context.SaveChangesAsync();
+
+                var message = new UpdatedFileIntegrationEvent
+                {
+                    FileId = model.Id.Value,
+                    Name = model.Name
+                };
+
+                this.eventBus.Publish(message);
             }
         }
 
