@@ -16,6 +16,8 @@ namespace Ordering.Api.v1.ResponseModels
         public string OrderStatusName { get; set; }
         public Guid OrderStatusId { get; set; }
         public Guid OrderStateId { get; set; }
+        public string OrderStatusComment { get; set; }
+        public Guid LastOrderItemStatusChangeId { get; set; }
         public DateTime? ExpectedDeliveryFrom { get; set; }
         public DateTime? ExpectedDeliveryTo { get; set; }
         public string MoreInfo { get; set; }

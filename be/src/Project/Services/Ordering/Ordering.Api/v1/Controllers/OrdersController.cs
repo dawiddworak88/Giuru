@@ -212,6 +212,8 @@ namespace Ordering.Api.v1.Controllers
                             OrderStateId = x.OrderStateId,
                             OrderStatusId = x.OrderStatusId,
                             OrderStatusName = x.OrderStatusName,
+                            OrderStatusComment = x.OrderStatusComment,
+                            LastOrderItemStatusChangeId = x.LastOrderItemStatusChangeId.Value,
                             ProductId = x.ProductId,
                             ProductSku = x.ProductSku,
                             ProductName = x.ProductName,
@@ -238,6 +240,66 @@ namespace Ordering.Api.v1.Controllers
                     return this.StatusCode((int)HttpStatusCode.NotFound);
                 }
 
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Gets order item by id.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <returns>The order item.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("orderitem/{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetOrderItem(Guid? id)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetOrderItemServiceModel
+            {
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
+            };
+
+            var validator = new GetOrderItemModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var orderItem = await this.ordersService.GetAsync(serviceModel);
+
+                if (orderItem is not null)
+                {
+                    var response = new OrderItemResponseModel
+                    {
+                        Id = orderItem.Id,
+                        ProductId = orderItem.ProductId,
+                        ProductSku = orderItem.ProductSku,
+                        ProductName = orderItem.ProductName,
+                        PictureUrl = orderItem.PictureUrl,
+                        Quantity = orderItem.Quantity,
+                        StockQuantity = orderItem.StockQuantity,
+                        OutletQuantity = orderItem.OutletQuantity,
+                        ExternalReference = orderItem.ExternalReference,
+                        ExpectedDeliveryFrom = orderItem.ExpectedDeliveryFrom,
+                        ExpectedDeliveryTo = orderItem.ExpectedDeliveryTo,
+                        MoreInfo = orderItem.MoreInfo,
+                        OrderStateId = orderItem.OrderStateId,
+                        OrderStatusId = orderItem.OrderStatusId,
+                        OrderStatusName = orderItem.OrderStatusName,
+                        LastOrderItemStatusChangeId = orderItem.LastOrderItemStatusChangeId.Value,
+                        LastModifiedDate = orderItem.LastModifiedDate,
+                        CreatedDate = orderItem.CreatedDate
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);

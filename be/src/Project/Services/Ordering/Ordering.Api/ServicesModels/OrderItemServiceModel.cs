@@ -18,6 +18,8 @@ namespace Ordering.Api.ServicesModels
         public string MoreInfo { get; set; }
         public Guid OrderStatusId { get; set; }
         public Guid OrderStateId { get; set; }
+        public string OrderStatusComment { get; set; }
+        public Guid? LastOrderItemStatusChangeId { get; set; }
         public string OrderStatusName { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }

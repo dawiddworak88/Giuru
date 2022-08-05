@@ -54,6 +54,7 @@ import WarehousePage from "../../src/project/Seller.Portal/areas/Inventory/pages
 import WarehousesPage from "../../src/project/Seller.Portal/areas/Inventory/pages/WarehousesPage/WarehousesPage";
 import OrdersPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrdersPage/OrdersPage";
 import OrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage";
+import OrderItemPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderItemPage/OrderItemPage";
 import EditOrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/EditOrderPage/EditOrderPage";
 import ClientsPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientsPage/ClientsPage";
 import ClientPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage";
@@ -115,6 +116,7 @@ const Components = {
 	WarehousesPage,
 	OrdersPage,
 	OrderPage,
+	OrderItemPage,
 	EditOrderPage,
 	ClientsPage,
 	ClientPage,

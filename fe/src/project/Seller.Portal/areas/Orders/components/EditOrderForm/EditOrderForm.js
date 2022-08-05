@@ -16,7 +16,7 @@ import OrderConstants from "../../../../shared/constants/OrderConstants";;
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
     const [orderItem, setOrderItem] = useState(null);
-    const [orderItemComment, setOrderItemComment] = useState("");
+    const [orderItemStatusComment, setOrderItemStatusComment] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
     const [orderItemsStatuses, setOrderItemsStatuses] = useState(props.orderItemsStatuses ? props.orderItemsStatuses : []);
@@ -63,7 +63,41 @@ function EditOrderForm(props) {
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setOrderItem(null);
-        setOrderItemComment("");
+        setOrderItemStatusComment("");
+    }
+
+    const handleOrderItemStatusComment = () => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const requestPayload = {
+            orderItemId: orderItem.id,
+            orderItemStatusComment
+        };
+
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+            body: JSON.stringify(requestPayload)
+        };
+
+        fetch(props.saveOrderItemStatusCommentUrl, requestOptions)
+            .then((response) => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        toast.success(jsonResponse.message);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
     }
 
     const handleOrderItemStatusChange = (id, newOrderStatus) => {
@@ -276,17 +310,17 @@ function EditOrderForm(props) {
                 <DialogTitle>Komontarz do zmiany statusu</DialogTitle>
                 <DialogContent>
                     <TextField
-                        id="orderItemComment"
-                        name="orderItemComment"
+                        id="orderItemStatusComment"
+                        name="orderItemStatusComment"
                         variant="standard"
-                        value={orderItemComment}
-                        onChange={(e) => setOrderItemComment(e.target.value)}
+                        value={orderItemStatusComment}
+                        onChange={(e) => setOrderItemStatusComment(e.target.value)}
                         fullWidth={true}
                     />
                 </DialogContent>
                 <DialogActions>
                     <Button type="button" onClick={handleCloseModal}>Anuluj</Button>
-                    <Button type="button">Dodaj</Button>
+                    <Button type="button" onClick={handleOrderItemStatusComment}>Dodaj</Button>
                 </DialogActions>
             </Dialog>
         </section >

@@ -388,6 +388,7 @@ namespace Ordering.Api.Services
                 {
                     orderItem.OrderStateId = lastOrderStatusChange.OrderItemStateId;
                     orderItem.OrderStatusId = lastOrderStatusChange.OrderItemStatusId;
+                    orderItem.OrderStatusComment = lastOrderStatusChange.OrderItemStatusChangeComment;
 
                     var orderItemStatusTranslation = this.context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == lastOrderStatusChange.OrderItemStatusId && x.IsActive && x.Language == model.Language);
 
@@ -405,6 +406,57 @@ namespace Ordering.Api.Services
             order.OrderItems = orderItems;
 
             return order;
+        }
+
+        public async Task<OrderItemServiceModel> GetAsync(GetOrderItemServiceModel model)
+        {
+            var existingOrderItem = await this.context.OrderItems.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+
+            if (existingOrderItem is null)
+            {
+                throw new CustomException(this.orderLocalizer.GetString("OrderItemNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            var orderItem = new OrderItemServiceModel
+            {
+                Id = existingOrderItem.Id,
+                ProductId = existingOrderItem.ProductId,
+                ProductName = existingOrderItem.ProductName,
+                ProductSku = existingOrderItem.ProductSku,
+                PictureUrl = existingOrderItem.PictureUrl,
+                Quantity = existingOrderItem.Quantity,
+                StockQuantity = existingOrderItem.StockQuantity,
+                OutletQuantity = existingOrderItem.OutletQuantity,
+                ExternalReference = existingOrderItem.ExternalReference,
+                ExpectedDeliveryFrom = existingOrderItem.ExpectedDeliveryFrom,
+                ExpectedDeliveryTo = existingOrderItem.ExpectedDeliveryTo,
+                LastOrderItemStatusChangeId = existingOrderItem.LastOrderItemStatusChangeId,
+                MoreInfo = existingOrderItem.MoreInfo,
+                LastModifiedDate = existingOrderItem.LastModifiedDate,
+                CreatedDate = existingOrderItem.CreatedDate
+            };
+
+            var lastOrderItemStatus = await this.context.OrderItemStatusChanges.FirstOrDefaultAsync(x => x.Id == existingOrderItem.LastOrderItemStatusChangeId && x.IsActive);
+
+            if (lastOrderItemStatus is null)
+            {
+                throw new CustomException(this.orderLocalizer.GetString("LastOrderItemStatusNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            orderItem.OrderStateId = lastOrderItemStatus.OrderItemStateId;
+            orderItem.OrderStatusId = lastOrderItemStatus.OrderItemStatusId;
+            orderItem.OrderStatusComment = lastOrderItemStatus.OrderItemStatusChangeComment;
+
+            var orderItemStatusTranslation = await this.context.OrderStatusTranslations.FirstOrDefaultAsync(x => x.OrderStatusId == lastOrderItemStatus.OrderItemStatusId && x.Language == model.Language && x.IsActive);
+
+            if (orderItemStatusTranslation is null)
+            {
+                orderItemStatusTranslation = await this.context.OrderStatusTranslations.FirstOrDefaultAsync(x => x.OrderStatusId == lastOrderItemStatus.OrderItemStatusId && x.IsActive);
+            }
+
+            orderItem.OrderStatusName = orderItemStatusTranslation?.Name;
+
+            return orderItem;
         }
 
         public async Task<IEnumerable<OrderStatusServiceModel>> GetOrderStatusesAsync(GetOrderStatusesServiceModel serviceModel)
