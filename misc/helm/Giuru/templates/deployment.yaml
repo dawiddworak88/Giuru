@@ -677,6 +677,8 @@ spec:
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
+        - name: OrganisationId
+          value: {{ .Values.organisationId }}
         - name: ConnectionString
           value: {{ .Values.downloadCenterApi.connectionString }}
         - name: IdentityUrl
