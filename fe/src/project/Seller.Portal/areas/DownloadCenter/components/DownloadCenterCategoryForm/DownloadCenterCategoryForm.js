@@ -25,7 +25,7 @@ const DownloadCenterCategoryForm = (props) => {
         const requestPayload = { 
             id, 
             name, 
-            parentCategoryId: parentCategory.id, 
+            parentCategoryId: parentCategory ? parentCategory.id : null, 
             isVisible
         };
 
@@ -52,6 +52,9 @@ const DownloadCenterCategoryForm = (props) => {
                         toast.error(props.generalErrorMessage);
                     }
                 });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
             });
     }
 
@@ -70,6 +73,7 @@ const DownloadCenterCategoryForm = (props) => {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { id, name, parentCategory, isVisible } = values;
+
     return (
         <section className="section section-small-padding category">
             <h1 className="subtitle is-4">{props.title}</h1>
