@@ -162,6 +162,9 @@
   <data name="EditOrder" xml:space="preserve">
     <value>Edytuj zamówienie</value>
   </data>
+  <data name="EditOrderItem" xml:space="preserve">
+    <value>Edytuj pozycję zamówienia</value>
+  </data>
   <data name="EnterSkuOrName" xml:space="preserve">
     <value>Wprowadź SKU lub nazwę</value>
   </data>
@@ -195,6 +198,9 @@
   <data name="NameLabel" xml:space="preserve">
     <value>Nazwa:</value>
   </data>
+  <data name="NavigateToOrder" xml:space="preserve">
+    <value>Powróc do zamówienia</value>
+  </data>
   <data name="NavigateToOrdersList" xml:space="preserve">
     <value>Powróć do zamówień</value>
   </data>
@@ -213,6 +219,9 @@
   <data name="OrderFileError" xml:space="preserve">
     <value>Plik zamówienia ma niepoprawny format. Prześlij poprawny plik zamówienia.</value>
   </data>
+  <data name="OrderItem" xml:space="preserve">
+    <value>Pozycja z zamówienia</value>
+  </data>
   <data name="OrderItemsLabel" xml:space="preserve">
     <value>Pozycje zamówienia</value>
   </data>
@@ -227,6 +236,9 @@
   </data>
   <data name="OrderStatus" xml:space="preserve">
     <value>Status zamówienia</value>
+  </data>
+  <data name="OrderStatusComment" xml:space="preserve">
+    <value>Komentarz do statusu zamówienia</value>
   </data>
   <data name="OrderStatusNotFound" xml:space="preserve">
     <value>Status zamówienia nie został znaleziony.</value>

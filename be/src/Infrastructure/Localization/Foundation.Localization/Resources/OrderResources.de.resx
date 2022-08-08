@@ -162,6 +162,9 @@
   <data name="EditOrder" xml:space="preserve">
     <value>Bestellung editieren</value>
   </data>
+  <data name="EditOrderItem" xml:space="preserve">
+    <value>Bestellposition bearbeiten</value>
+  </data>
   <data name="EnterSkuOrName" xml:space="preserve">
     <value>SKU oder den Namen eingeben</value>
   </data>
@@ -195,6 +198,9 @@
   <data name="NameLabel" xml:space="preserve">
     <value>Name:</value>
   </data>
+  <data name="NavigateToOrder" xml:space="preserve">
+    <value>Zurück zur Bestellung</value>
+  </data>
   <data name="NavigateToOrdersList" xml:space="preserve">
     <value>Zurück zur Bestellliste</value>
   </data>
@@ -213,6 +219,9 @@
   <data name="OrderFileError" xml:space="preserve">
     <value>Die Bestelldatei ist falsch. Laden Sie die richtige Bestelldatei hoch.</value>
   </data>
+  <data name="OrderItem" xml:space="preserve">
+    <value>Bestellungsartikel</value>
+  </data>
   <data name="OrderItemsLabel" xml:space="preserve">
     <value>Positionen der Bestellung</value>
   </data>
@@ -227,6 +236,9 @@
   </data>
   <data name="Orderstatus" xml:space="preserve">
     <value>Bestellstatus</value>
+  </data>
+  <data name="OrderStatusComment" xml:space="preserve">
+    <value>Kommentar zum Bestellstatus</value>
   </data>
   <data name="OrderStatusNotFound" xml:space="preserve">
     <value>Bestellstatus nicht gefunden</value>

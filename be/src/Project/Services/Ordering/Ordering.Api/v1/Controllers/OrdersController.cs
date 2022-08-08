@@ -124,6 +124,10 @@ namespace Ordering.Api.v1.Controllers
                                 ExpectedDeliveryFrom = y.ExpectedDeliveryFrom,
                                 ExpectedDeliveryTo = y.ExpectedDeliveryTo,
                                 MoreInfo = y.MoreInfo,
+                                OrderStateId = y.OrderStateId,
+                                OrderStatusId = y.OrderStatusId,
+                                OrderStatusName = y.OrderStatusName,
+                                OrderStatusComment = y.OrderStatusComment,
                                 LastModifiedDate = y.LastModifiedDate,
                                 CreatedDate = y.CreatedDate
                             }),
@@ -251,7 +255,7 @@ namespace Ordering.Api.v1.Controllers
         /// <param name="id">The id.</param>
         /// <returns>The order item.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [Route("orderitem/{id}")]
+        [Route("orderitems/{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
@@ -279,6 +283,7 @@ namespace Ordering.Api.v1.Controllers
                     var response = new OrderItemResponseModel
                     {
                         Id = orderItem.Id,
+                        OrderId = orderItem.OrderId,
                         ProductId = orderItem.ProductId,
                         ProductSku = orderItem.ProductSku,
                         ProductName = orderItem.ProductName,
@@ -293,6 +298,7 @@ namespace Ordering.Api.v1.Controllers
                         OrderStateId = orderItem.OrderStateId,
                         OrderStatusId = orderItem.OrderStatusId,
                         OrderStatusName = orderItem.OrderStatusName,
+                        OrderStatusComment = orderItem.OrderStatusComment,
                         LastOrderItemStatusChangeId = orderItem.LastOrderItemStatusChangeId.Value,
                         LastModifiedDate = orderItem.LastModifiedDate,
                         CreatedDate = orderItem.CreatedDate
@@ -452,6 +458,10 @@ namespace Ordering.Api.v1.Controllers
                             ProductName = x.ProductName,
                             PictureUrl = x.PictureUrl,
                             Quantity = x.Quantity,
+                            OrderStateId = x.OrderStateId,
+                            OrderStatusId = x.OrderStatusId,
+                            OrderStatusName = x.OrderStatusName,
+                            OrderStatusComment = x.OrderStatusComment,
                             StockQuantity = x.StockQuantity,
                             OutletQuantity = x.OutletQuantity,
                             ExternalReference = x.ExternalReference,

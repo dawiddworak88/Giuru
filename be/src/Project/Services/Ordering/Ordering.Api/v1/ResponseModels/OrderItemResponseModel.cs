@@ -5,6 +5,7 @@ namespace Ordering.Api.v1.ResponseModels
     public class OrderItemResponseModel
     {
         public Guid Id { get; set; }
+        public Guid OrderId { get; set; }
         public Guid ProductId { get; set; }
         public double Quantity { get; set; }
         public double StockQuantity { get; set; }

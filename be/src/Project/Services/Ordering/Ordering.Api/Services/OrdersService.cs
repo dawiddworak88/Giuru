@@ -389,6 +389,7 @@ namespace Ordering.Api.Services
                     orderItem.OrderStateId = lastOrderStatusChange.OrderItemStateId;
                     orderItem.OrderStatusId = lastOrderStatusChange.OrderItemStatusId;
                     orderItem.OrderStatusComment = lastOrderStatusChange.OrderItemStatusChangeComment;
+                    orderItem.LastOrderItemStatusChangeId = lastOrderStatusChange.Id;
 
                     var orderItemStatusTranslation = this.context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == lastOrderStatusChange.OrderItemStatusId && x.IsActive && x.Language == model.Language);
 
@@ -420,6 +421,7 @@ namespace Ordering.Api.Services
             var orderItem = new OrderItemServiceModel
             {
                 Id = existingOrderItem.Id,
+                OrderId = existingOrderItem.OrderId,
                 ProductId = existingOrderItem.ProductId,
                 ProductName = existingOrderItem.ProductName,
                 ProductSku = existingOrderItem.ProductSku,

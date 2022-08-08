@@ -1,95 +1,103 @@
-import React, { useContext, useState, Fragment, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import {
-    FormControl, InputLabel, Select, MenuItem, Button,
-    Table, TableBody, TableCell, TableContainer, TextField,
-    TableHead, TableRow, Paper, CircularProgress, Dialog,
-    DialogActions, DialogContent, DialogTitle
+    FormControl, InputLabel, Select, MenuItem, Button, TextField, CircularProgress
 } from "@mui/material";
-import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import OrderConstants from "../../../../shared/constants/OrderConstants";;
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
-
-    const handleOrderStatusSubmit = (e) => {
-        e.preventDefault();
-
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        var orderStatus = {
-            orderId: props.id,
-            orderStatusId
-        };
-
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(orderStatus)
-        };
-
-        fetch(props.updateOrderStatusUrl, requestOptions)
-            .then((response) => {
-
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-
-                    if (response.ok) {
-                        setOrderStatusId(jsonResponse.orderStatusId);
-                        toast.success(jsonResponse.message);
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
-    };
+    const [orderStatusComment, setOrderStatusComment] = useState("")
 
     return (
         <section className="section section-small-padding order-item">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
-                    <form className="is-modern-form" onSubmit={handleOrderStatusSubmit}>
+                    <form className="is-modern-form">
+                        {props.id &&
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {props.id}</InputLabel>
+                            </div>
+                        }
                         <div className="field">
                             <TextField 
-                                id="name" 
-                                name="name" 
-                                label={props.nameLabel} 
+                                id="productSku" 
+                                name="productSku" 
+                                label={props.skuLabel} 
                                 fullWidth={true}
-                                value={''} 
+                                value={props.productSku}
                                 variant="standard"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
                             />
                         </div>
                         <div className="field">
                             <TextField 
-                                id="name" 
-                                name="name" 
+                                id="productName" 
+                                name="productName" 
                                 label={props.nameLabel} 
                                 fullWidth={true}
-                                value={''} 
+                                value={props.productName} 
                                 variant="standard"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
                             />
                         </div>
                         <div className="field">
-                            <TextField 
-                                id="name" 
-                                name="name" 
-                                label={props.nameLabel} 
-                                fullWidth={true}
-                                value={''} 
+                            <FormControl variant="standard" fullWidth={true}>
+                                <InputLabel id="orderItemStatus-label">{props.orderStatusLabel}</InputLabel>
+                                <Select
+                                    id="orderItemStatus"
+                                    name="orderItemStatus"
+                                    value={orderStatusId ? orderStatusId : props.orderStatusId}
+                                    onChange={(e) => setOrderStatusId(e.target.value)}
+                                    >
+                                    {props.orderItemStatuses.map((status, index) => {
+                                        return (
+                                            <MenuItem key={index} value={status.id}>{status.name}</MenuItem>
+                                        );
+                                    })}
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <div className="field">
+                            <TextField
+                                id="ordertatusComment"
+                                name="orderStatusComment"
+                                label={props.orderStatusCommentLabel}
                                 variant="standard"
+                                fullWidth={true}
+                                multiline={true}
+                                value={orderStatusComment}
+                                onChange={(e) => setOrderStatusComment(e.target.value)}
                             />
+                        </div>
+                        <div className="field">
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary" 
+                                disabled={state.isLoading || props.orderStatusId === orderStatusId}>
+                                {props.saveText}
+                            </Button>
+                            <Button 
+                                className="ml-2"
+                                type="button" 
+                                variant="contained" 
+                                color="secondary" 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.orderUrl);
+                                }}>
+                                {props.navigateToOrderLabel}
+                            </Button> 
                         </div>
                     </form>
                 </div>

@@ -15,6 +15,8 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public double StockQuantity { get; set; }
         public double OutletQuantity { get; set; }
         public string ExternalReference { get; set; }
+        public string OrderStatusName { get; set; }
+        public string OrderStatusComment { get; set; }
         public Guid? OrderStatusId { get; set; }
         public DateTime? DeliveryFrom { get; set; }
         public DateTime? DeliveryTo { get; set; }

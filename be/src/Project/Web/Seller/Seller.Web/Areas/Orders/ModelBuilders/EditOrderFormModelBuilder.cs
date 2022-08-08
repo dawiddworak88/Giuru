@@ -60,6 +60,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
                 CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
+                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
                 UpdateOrderItemStatusUrl = this.linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
@@ -79,6 +80,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 viewModel.ClientUrl = this.linkGenerator.GetPathByAction("Edit", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
                 viewModel.ClientName = order.ClientName;
                 viewModel.UpdateOrderStatusUrl = this.linkGenerator.GetPathByAction("Index", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
+                viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
                 viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                 {
                     Id = x.Id,
@@ -92,6 +94,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo,
                     OrderStatusId = x.OrderStatusId,
+                    OrderStatusName = x.OrderStatusName,
+                    OrderStatusComment = x.OrderStatusComment,
                     DeliveryFrom = x.ExpectedDeliveryFrom,
                     DeliveryTo = x.ExpectedDeliveryTo,
                     ImageAlt = x.ProductName,

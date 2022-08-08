@@ -1,4 +1,4 @@
-import React, { useContext, useState, Fragment, useEffect } from "react";
+import React, { useContext, useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -6,8 +6,9 @@ import {
     FormControl, InputLabel, Select, MenuItem, Button,
     Table, TableBody, TableCell, TableContainer, TextField,
     TableHead, TableRow, Paper, CircularProgress, Dialog,
-    DialogActions, DialogContent, DialogTitle
+    DialogActions, DialogContent, DialogTitle, Fab
 } from "@mui/material";
+import { Edit } from "@mui/icons-material";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import Files from "../../../../../../shared/components/Files/Files";
@@ -223,12 +224,14 @@ function EditOrderForm(props) {
                                         <TableHead>
                                             <TableRow>
                                                 <TableCell></TableCell>
+                                                <TableCell></TableCell>
                                                 <TableCell>{props.skuLabel}</TableCell>
                                                 <TableCell>{props.nameLabel}</TableCell>
                                                 <TableCell>{props.quantityLabel}</TableCell>
                                                 <TableCell>{props.stockQuantityLabel}</TableCell>
                                                 <TableCell>{props.outletQuantityLabel}</TableCell>
                                                 <TableCell>{props.orderStatusLabel}</TableCell>
+                                                <TableCell>{props.orderStatusCommentLabel}</TableCell>
                                                 <TableCell>{props.externalReferenceLabel}</TableCell>
                                                 <TableCell>{props.deliveryFromLabel}</TableCell>
                                                 <TableCell>{props.deliveryToLabel}</TableCell>
@@ -237,31 +240,21 @@ function EditOrderForm(props) {
                                         </TableHead>
                                         <TableBody>
                                             {props.orderItems.map((item, index) => {
-                                                const orderItemStatus = orderItemsStatuses.find((orderItem) => orderItem.id === item.id);
-
                                                 return (
                                                     <TableRow key={index}>
+                                                        <TableCell>
+                                                            <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel}>
+                                                                <Edit />
+                                                            </Fab>
+                                                        </TableCell>
                                                         <TableCell><a href={item.productUrl} target="_blank"><img className="edit-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
                                                         <TableCell>{item.sku}</TableCell>
                                                         <TableCell>{item.name}</TableCell>
                                                         <TableCell>{item.quantity}</TableCell>
                                                         <TableCell>{item.stockQuantity}</TableCell>
                                                         <TableCell>{item.outletQuantity}</TableCell>
-                                                        <TableCell>
-                                                            <FormControl variant="standard" fullWidth={true}>
-                                                                <Select
-                                                                    id={`orderItemStatus-${item.id}`}
-                                                                    name={`orderItemStatus-${item.id}`}
-                                                                    value={orderItemStatus ? orderItemStatus.orderStatusId : item.orderStatusId}
-                                                                    onChange={(e) => handleOrderItemStatusChange(item.id, e.target.value)}>
-                                                                    {props.orderStatuses.map((status, index) => {
-                                                                        return (
-                                                                            <MenuItem key={index} value={status.id}>{status.name}</MenuItem>
-                                                                        );
-                                                                    })}
-                                                                </Select>
-                                                            </FormControl>
-                                                        </TableCell>
+                                                        <TableCell>{item.orderStatusName}</TableCell>
+                                                        <TableCell>{item.orderStatusComment}</TableCell>
                                                         <TableCell>{item.externalReference}</TableCell>
                                                         <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                         <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
@@ -349,7 +342,8 @@ EditOrderForm.propTypes = {
     updateOrderStatusUrl: PropTypes.string.isRequired,
     idLabel: PropTypes.string,
     updateOrderItemStatusUrl: PropTypes.string.isRequired,
-    orderItemsStatuses: PropTypes.array
+    orderItemsStatuses: PropTypes.array,
+    orderStatusCommentLabel: PropTypes.string.isRequired
 };
 
 export default EditOrderForm;

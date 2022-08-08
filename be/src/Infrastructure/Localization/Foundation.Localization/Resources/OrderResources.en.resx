@@ -162,6 +162,9 @@
   <data name="EditOrder" xml:space="preserve">
     <value>Edit order</value>
   </data>
+  <data name="EditOrderItem" xml:space="preserve">
+    <value>Edit order item</value>
+  </data>
   <data name="EnterSkuOrName" xml:space="preserve">
     <value>Enter SKU or product name</value>
   </data>
@@ -195,6 +198,9 @@
   <data name="NameLabel" xml:space="preserve">
     <value>Name:</value>
   </data>
+  <data name="NavigateToOrder" xml:space="preserve">
+    <value>Back to order</value>
+  </data>
   <data name="NavigateToOrdersList" xml:space="preserve">
     <value>Back to orders list</value>
   </data>
@@ -213,6 +219,9 @@
   <data name="OrderFileError" xml:space="preserve">
     <value>The order file is incorrect. Upload the correct order file.</value>
   </data>
+  <data name="OrderItem" xml:space="preserve">
+    <value>Order item</value>
+  </data>
   <data name="OrderItemsLabel" xml:space="preserve">
     <value>Order items</value>
   </data>
@@ -227,6 +236,9 @@
   </data>
   <data name="OrderStatus" xml:space="preserve">
     <value>Order status</value>
+  </data>
+  <data name="OrderStatusComment" xml:space="preserve">
+    <value>Order status comment</value>
   </data>
   <data name="OrderStatusNotFound" xml:space="preserve">
     <value>Order status has not been found</value>
