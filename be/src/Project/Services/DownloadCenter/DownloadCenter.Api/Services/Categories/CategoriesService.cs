@@ -210,7 +210,8 @@ namespace DownloadCenter.Api.Services.Categories
                 var newCategoryTranslation = new DownloadCenterCategoryTranslation
                 {
                     CategoryId = category.Id,
-                    Name = model.Name
+                    Name = model.Name,
+                    Language = model.Language
                 };
 
                 this.context.DownloadCenterCategoryTranslations.Add(newCategoryTranslation.FillCommonProperties());
