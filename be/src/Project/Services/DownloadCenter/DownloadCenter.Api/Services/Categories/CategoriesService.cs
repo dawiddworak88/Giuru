@@ -185,20 +185,7 @@ namespace DownloadCenter.Api.Services.Categories
                 throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            if (model.ParentCategoryId.HasValue)
-            {
-                var parentCategory = await this.context.DownloadCenterCategories.FirstOrDefaultAsync(x => x.Id == model.ParentCategoryId && x.IsActive);
-
-                if (parentCategory is null)
-                {
-                    throw new CustomException(this.downloadCenterLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NotFound);
-                }
-
-                category.ParentCategoryId = model.ParentCategoryId;
-                category.IsVisible = model.IsVisible;
-            }
-
-            var categoryTranslation =  await this.context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);
+            var categoryTranslation = await this.context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);
 
             if (categoryTranslation is not null)
             {
@@ -217,6 +204,8 @@ namespace DownloadCenter.Api.Services.Categories
                 this.context.DownloadCenterCategoryTranslations.Add(newCategoryTranslation.FillCommonProperties());
             }
 
+            category.ParentCategoryId = model.ParentCategoryId;
+            category.IsVisible = model.IsVisible;
             category.LastModifiedDate = DateTime.UtcNow;
 
             await this.context.SaveChangesAsync();
