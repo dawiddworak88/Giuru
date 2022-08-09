@@ -10,7 +10,6 @@ using Foundation.Media.Services.MediaServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Ordering.Api.Configurations;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.Infrastructure.Orders.Definitions;
@@ -459,6 +458,51 @@ namespace Ordering.Api.Services
             orderItem.OrderStatusName = orderItemStatusTranslation?.Name;
 
             return orderItem;
+        }
+
+        public async Task<OrderItemStatusesHistoryServiceModel> GetAsync(GetOrderItemStatusesHistoryServiceModel model)
+        {
+            var orderItem = this.context.OrderItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+
+            if (orderItem is null)
+            {
+                throw new CustomException(this.orderLocalizer.GetString("OrderItemNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            var orderItemStatusesHistory = new OrderItemStatusesHistoryServiceModel
+            {
+                OrderItemId = orderItem.Id,
+            };
+
+            var orderItemStatuses = this.context.OrderItemStatusChanges.Where(x => x.OrderItemId == model.Id && x.IsActive).OrderByDescending(x => x.CreatedDate);
+
+            var itemStatusesHistory = new List<OrderItemStatusesHistoryItemServiceModel>();
+
+            foreach (var orderItemStatus in orderItemStatuses.OrEmptyIfNull().ToList())
+            {
+                var orderItemHistoryItem = new OrderItemStatusesHistoryItemServiceModel
+                {
+                    OrderStateId = orderItemStatus.OrderItemStateId,
+                    OrderStatusId = orderItemStatus.OrderItemStatusId,
+                    OrderStatusComment = orderItemStatus.OrderItemStatusChangeComment,
+                    CreatedDate = orderItemStatus.CreatedDate
+                };
+
+                var orderItemStatusHistoryItemTranslation = this.context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == orderItemStatus.OrderItemStatusId && x.Language == model.Language && x.IsActive);
+
+                if (orderItemStatusHistoryItemTranslation is null)
+                {
+                    orderItemStatusHistoryItemTranslation = this.context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == orderItemStatus.OrderItemStatusId && x.IsActive);
+                }
+
+                orderItemHistoryItem.OrderStatusName = orderItemStatusHistoryItemTranslation?.Name;
+
+                itemStatusesHistory.Add(orderItemHistoryItem);
+            }
+
+            orderItemStatusesHistory.StatusesHistory = itemStatusesHistory;
+
+            return orderItemStatusesHistory;
         }
 
         public async Task<IEnumerable<OrderStatusServiceModel>> GetOrderStatusesAsync(GetOrderStatusesServiceModel serviceModel)

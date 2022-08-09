@@ -177,6 +177,9 @@
   <data name="GoToDetails" xml:space="preserve">
     <value>Go to details</value>
   </data>
+  <data name="HistoryOfStatusChanges" xml:space="preserve">
+    <value>History of status changes</value>
+  </data>
   <data name="ImportOrder" xml:space="preserve">
     <value>Import order</value>
   </data>

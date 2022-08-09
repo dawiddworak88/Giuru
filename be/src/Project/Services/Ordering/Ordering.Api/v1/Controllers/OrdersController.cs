@@ -312,6 +312,56 @@ namespace Ordering.Api.v1.Controllers
         }
 
         /// <summary>
+        /// Gets order item statuses history by order item id.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <returns>The order item statuses.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("orderitemstatuses/{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetOrderItemStatuses(Guid? id)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetOrderItemStatusesHistoryServiceModel
+            {
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
+            };
+
+            var validator = new GetOrderItemStatusesHistoryModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var itemStatusesHistory = await this.ordersService.GetAsync(serviceModel);
+
+                if (itemStatusesHistory is not null)
+                {
+                    var response = new OrderItemStatusesHistoryResponseModel
+                    {
+                        OrderItemId = itemStatusesHistory.OrderItemId,
+                        StatusesHistory = itemStatusesHistory.StatusesHistory.Select(x => new OrderItemStatusesHistoryItemResponseModel { 
+                            OrderStateId = x.OrderStateId,
+                            OrderStatusId = x.OrderStatusId,
+                            OrderStatusName = x.OrderStatusName,
+                            OrderStatusComment = x.OrderStatusComment,
+                            CreatedDate = x.CreatedDate
+                        })
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
         ///  Updates the order item status.
         /// </summary>
         /// <returns>The updated order item status.</returns>
@@ -483,7 +533,6 @@ namespace Ordering.Api.v1.Controllers
                 {
                     return this.StatusCode((int)HttpStatusCode.NotFound);
                 }
-
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);

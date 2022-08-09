@@ -3,10 +3,12 @@ import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import {
-    FormControl, InputLabel, Select, MenuItem, Button, TextField, CircularProgress
+    FormControl, InputLabel, Select, MenuItem, 
+    Button, TextField, CircularProgress
 } from "@mui/material";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
+import OrderHistory from "../../../../../../shared/components/OrderHistory/OrderHistory";
 
 const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -53,6 +55,11 @@ const OrderItemForm = (props) => {
             });
     }
 
+    const handleChangeOrderItemStatus = (e) => {
+        sa(false);
+        setOrderStatusId(e.target.value)
+    }
+
     return (
         <section className="section section-small-padding order-item">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -97,11 +104,7 @@ const OrderItemForm = (props) => {
                                     id="orderItemStatus"
                                     name="orderItemStatus"
                                     value={orderStatusId ? orderStatusId : props.orderStatusId}
-                                    onChange={(e) => {
-                                        sa(false);
-                                        setOrderStatusId(e.target.value)
-                                    }}
-                                    >
+                                    onChange={(e) => handleChangeOrderItemStatus(e)}>
                                     {props.orderItemStatuses.map((status, index) => {
                                         return (
                                             <MenuItem key={index} value={status.id}>{status.name}</MenuItem>
@@ -145,6 +148,9 @@ const OrderItemForm = (props) => {
                     </form>
                 </div>
             </div>
+            {props.orderStatusesHistory &&
+                <OrderHistory {...props.orderStatusesHistory} />
+            }
             {state.isLoading && <CircularProgress className="progressBar" />}
         </section>
     );

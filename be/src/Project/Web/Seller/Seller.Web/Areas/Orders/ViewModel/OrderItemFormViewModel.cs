@@ -1,4 +1,5 @@
 ﻿using Foundation.PageContent.Components.ListItems.ViewModels;
+using Seller.Web.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 
@@ -20,6 +21,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string SaveText { get; set; }
         public string OrderUrl { get; set; }
         public string SaveUrl { get; set; }
+        public OrderHistoryViewModel OrderStatusesHistory { get; set; }
         public IEnumerable<ListItemViewModel> OrderItemStatuses { get; set; }
     }
 }

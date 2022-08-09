@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
+using Seller.Web.Shared.ViewModels;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 {
     public class OrderItemFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrderItemFormViewModel>
     {
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderHistoryViewModel> orderHistoryModelBuilder;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly LinkGenerator linkGenerator;
@@ -21,6 +23,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 
         public OrderItemFormModelBuilder
         (
+            IAsyncComponentModelBuilder<ComponentModelBase, OrderHistoryViewModel> orderHistoryModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             LinkGenerator linkGenerator,
@@ -30,6 +33,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
             this.ordersRepository = ordersRepository;
+            this.orderHistoryModelBuilder = orderHistoryModelBuilder;
         }
 
         public async Task<OrderItemFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -65,6 +69,13 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     viewModel.ProductSku = orderItem.ProductSku;
                     viewModel.OrderStatusId = orderItem.OrderStatusId;
                     viewModel.OrderUrl = this.linkGenerator.GetPathByAction("Edit", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, id = orderItem.OrderId });
+                }
+
+                var orderItemStatusesHistory = await this.ordersRepository.GetOrderItemStatusesAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+
+                if (orderItemStatusesHistory is not null)
+                {
+                    viewModel.OrderStatusesHistory = await this.orderHistoryModelBuilder.BuildModelAsync(new ComponentModelBase { IsAuthenticated = componentModel.IsAuthenticated, Token = componentModel.Token, Language = componentModel.Language, Id = componentModel.Id });
                 }
             }
             

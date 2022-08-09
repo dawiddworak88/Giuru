@@ -1,6 +1,4 @@
-﻿using Buyer.Web.Areas.Products.DomainModels;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace Buyer.Web.Areas.Orders.DomainModels
 {
