@@ -17,6 +17,7 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public double OutletQuantity { get; set; }
         public string ExternalReference { get; set; }
         public string OrderStatusName { get; set; }
+        public string OrderStatusComment { get; set; }
         public string MoreInfo { get; set; }
         public string ProductAttributes { get; set; }
         public DateTime? DeliveryFrom { get; set; }

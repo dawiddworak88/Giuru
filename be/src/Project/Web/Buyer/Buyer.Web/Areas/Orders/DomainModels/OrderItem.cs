@@ -17,6 +17,7 @@ namespace Buyer.Web.Areas.Orders.DomainModels
         public string ProductAttributes { get; set; }
         public string MoreInfo { get; set; }
         public string OrderStatusName { get; set; }
+        public string OrderStatusComment { get; set; }
         public DateTime? ExpectedDeliveryFrom { get; set; }
         public DateTime? ExpectedDeliveryTo { get; set; }
         public DateTime LastModifiedDate { get; set; }

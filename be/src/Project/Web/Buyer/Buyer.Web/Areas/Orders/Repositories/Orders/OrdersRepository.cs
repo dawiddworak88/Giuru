@@ -65,6 +65,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
                             OutletQuantity = item.OutletQuantity,
                             ExternalReference = item.ExternalReference,
                             OrderStatusName = item.OrderStatusName,
+                            OrderStatusComment = item.OrderStatusComment,
                             ExpectedDeliveryFrom = item.ExpectedDeliveryFrom,
                             ProductAttributes = await this.productsService.GetProductAttributesAsync(product.ProductAttributes),
                             ExpectedDeliveryTo = item.ExpectedDeliveryTo,
