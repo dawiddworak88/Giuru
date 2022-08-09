@@ -168,12 +168,13 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
             return default;
         }
 
-        public async Task UpdateOrderItemStatusAsync(string token, string language, Guid orderItemId, Guid orderStatusId)
+        public async Task UpdateOrderItemStatusAsync(string token, string language, Guid id, Guid orderStatusId, string orderStatusComment)
         {
             var requestModel = new UpdateOrderItemStatusRequestModel
             {
-                OrderItemId = orderItemId,
-                OrderStatusId = orderStatusId
+                Id = id,
+                OrderStatusId = orderStatusId,
+                OrderStatusComment = orderStatusComment
             };
 
             var apiRequest = new ApiRequest<UpdateOrderItemStatusRequestModel>

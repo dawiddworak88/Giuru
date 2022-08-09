@@ -12,13 +12,53 @@ const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
     const [orderStatusComment, setOrderStatusComment] = useState("")
+    const [a, sa] = useState(false);
+
+    const handleSubmitForm = (e) => {
+        e.preventDefault();
+
+        const requestPayload = {
+            id: props.id,
+            orderStatusId,
+            orderStatusComment
+        }
+
+        const requestOptions = {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json", 
+                "X-Requested-With": "XMLHttpRequest" 
+            },
+            body: JSON.stringify(requestPayload)
+        }
+
+        fetch(props.saveUrl, requestOptions)
+            .then((response) => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        sa(true)
+                        toast.success(jsonResponse.message);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    }
 
     return (
         <section className="section section-small-padding order-item">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
-                    <form className="is-modern-form">
+                    <form className="is-modern-form" onSubmit={handleSubmitForm}>
                         {props.id &&
                             <div className="field">
                                 <InputLabel id="id-label">{props.idLabel} {props.id}</InputLabel>
@@ -57,7 +97,10 @@ const OrderItemForm = (props) => {
                                     id="orderItemStatus"
                                     name="orderItemStatus"
                                     value={orderStatusId ? orderStatusId : props.orderStatusId}
-                                    onChange={(e) => setOrderStatusId(e.target.value)}
+                                    onChange={(e) => {
+                                        sa(false);
+                                        setOrderStatusId(e.target.value)
+                                    }}
                                     >
                                     {props.orderItemStatuses.map((status, index) => {
                                         return (
@@ -84,7 +127,7 @@ const OrderItemForm = (props) => {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || props.orderStatusId === orderStatusId}>
+                                disabled={state.isLoading || props.orderStatusId === orderStatusId || a}>
                                 {props.saveText}
                             </Button>
                             <Button 

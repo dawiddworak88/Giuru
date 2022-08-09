@@ -8,7 +8,7 @@ namespace Ordering.Api.Validators
     {
         public UpdateOrderItemStatusModelValidator()
         {
-            this.RuleFor(x => x.OrderItemId).NotEmpty().NotNull();
+            this.RuleFor(x => x.Id).NotEmpty().NotNull();
             this.RuleFor(x => x.OrderStatusId).NotEmpty().NotNull();
         }
     }

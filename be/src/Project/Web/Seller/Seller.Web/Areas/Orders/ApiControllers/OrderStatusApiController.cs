@@ -44,7 +44,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await this.ordersRepository.UpdateOrderItemStatusAsync(token, language, request.OrderItemId, request.OrderStatusId);
+            await this.ordersRepository.UpdateOrderItemStatusAsync(token, language, request.Id, request.OrderStatusId, request.OrderStatusComment);
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.orderLocalizer.GetString("OrderStatusUpdatedSuccessfully").Value });
         }

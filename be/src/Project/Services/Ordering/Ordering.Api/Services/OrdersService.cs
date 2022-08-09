@@ -548,7 +548,7 @@ namespace Ordering.Api.Services
 
         public async Task UpdateOrderItemStatusAsync(UpdateOrderItemStatusServiceModel model)
         {
-            var orderItem = await this.context.OrderItems.FirstOrDefaultAsync(x => x.Id == model.OrderItemId && x.IsActive);
+            var orderItem = await this.context.OrderItems.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (orderItem is null)
             {
@@ -566,7 +566,8 @@ namespace Ordering.Api.Services
             {
                 OrderItemId = orderItem.Id,
                 OrderItemStateId = newOrderItemStatus.OrderStateId,
-                OrderItemStatusId = newOrderItemStatus.Id
+                OrderItemStatusId = newOrderItemStatus.Id,
+                OrderItemStatusChangeComment = model.OrderStatusComment
             };
 
             this.context.OrderItemStatusChanges.Add(orderItemStatusChange.FillCommonProperties());

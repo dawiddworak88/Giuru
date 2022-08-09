@@ -326,8 +326,9 @@ namespace Ordering.Api.v1.Controllers
 
             var serviceModel = new UpdateOrderItemStatusServiceModel
             {
-                OrderItemId = request.OrderItemId,
+                Id = request.Id,
                 OrderStatusId = request.OrderStatusId,
+                OrderStatusComment = request.OrderStatusComment,
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value

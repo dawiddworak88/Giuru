@@ -43,7 +43,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 NavigateToOrderLabel = this.orderLocalizer.GetString("NavigateToOrder"),
-                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment")
+                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
+                SaveUrl = this.linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             if (componentModel.Id.HasValue)
