@@ -64,6 +64,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.StockQuantity = orderItem.StockQuantity;
                     viewModel.OrderStatusName = orderItem.OrderStatusName;
                     viewModel.OutletQuantity = orderItem.OutletQuantity;
+                    viewModel.ImageUrl = orderItem.PictureUrl;
+                    viewModel.ImageAlt = orderItem.ProductName;
                     viewModel.OrderUrl = this.linkGenerator.GetPathByAction("Status", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, id = orderItem.OrderId });
                 }
 

@@ -24,6 +24,8 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string OrderStatusLabel { get; set; }
         public string OrderStatusCommentLabel { get; set; }
         public string OrderStatusName { get; set; }
+        public string ImageAlt { get; set; }
+        public string ImageUrl { get; set; }
         public string NavigateToOrderLabel { get; set; }
         public string OrderUrl { get; set; }
         public OrderHistoryViewModel OrderStatusesHistory { get; set; }
