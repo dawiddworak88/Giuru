@@ -71,6 +71,9 @@ const OrderItemForm = (props) => {
                                 <InputLabel id="id-label">{props.idLabel} {props.id}</InputLabel>
                             </div>
                         }
+                        <div className="mt-2 mb-3 order-item__image">
+                            <img src={props.imageUrl} alt={props.imageAlt} />
+                        </div>
                         <div className="field">
                             <TextField 
                                 id="productSku" 
@@ -200,7 +203,20 @@ const OrderItemForm = (props) => {
 
 OrderItemForm.propTypes = {
     title: PropTypes.string.isRequired,
-    id: PropTypes.string,
+    idLabel: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    imageAlt: PropTypes.string.isRequired,
+    imageUrl: PropTypes.string.isRequired,
+    skuLabel: PropTypes.string.isRequired,
+    nameLabel: PropTypes.string.isRequired,
+    quantityLabel: PropTypes.string.isRequired,
+    stockQuantityLabel: PropTypes.string.isRequired,
+    outletQuantity: PropTypes.string.isRequired,
+    orderStatusLabel: PropTypes.string.isRequired,
+    orderStatusCommentLabel: PropTypes.string.isRequired,
+    orderUrl: PropTypes.string.isRequired,
+    navigateToOrderLabel: PropTypes.string.isRequired,
+    orderStatusesHistory: PropTypes.array
 };
 
 export default OrderItemForm;

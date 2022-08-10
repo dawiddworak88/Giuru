@@ -1,1 +1,8 @@
 @import "../../../../../../shared/components/OrderHistory/OrderHistory.scss";
+
+.order-item {
+
+    &__image {
+        max-width: 12.5rem;
+    }
+}
