@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Seller.Web.Shared.ViewModels
+namespace Buyer.Web.Shared.ViewModels.OrderHistory
 {
     public class OrderHistoryViewModel
     {

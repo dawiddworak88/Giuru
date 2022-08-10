@@ -14,7 +14,7 @@ const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
     const [orderStatusComment, setOrderStatusComment] = useState("")
-    const [a, sa] = useState(false);
+    const [isSended, setIsSended] = useState(false);
 
     const handleSubmitForm = (e) => {
         e.preventDefault();
@@ -42,7 +42,7 @@ const OrderItemForm = (props) => {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        sa(true)
+                        setIsSended(true)
                         toast.success(jsonResponse.message);
                     }
                     else {
@@ -56,7 +56,7 @@ const OrderItemForm = (props) => {
     }
 
     const handleChangeOrderItemStatus = (e) => {
-        sa(false);
+        setIsSended(false);
         setOrderStatusId(e.target.value)
     }
 
@@ -98,6 +98,48 @@ const OrderItemForm = (props) => {
                             />
                         </div>
                         <div className="field">
+                            <TextField 
+                                id="quantity" 
+                                name="quantity" 
+                                label={props.quantityLabel} 
+                                fullWidth={true}
+                                value={props.quantity} 
+                                type="number"
+                                variant="standard"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </div>
+                        <div className="field">
+                            <TextField 
+                                id="stockQuantity" 
+                                name="stockQuantity" 
+                                label={props.stockQuantityLabel} 
+                                fullWidth={true}
+                                value={props.stockQuantity} 
+                                type="number"
+                                variant="standard"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </div>
+                        <div className="field">
+                            <TextField 
+                                id="outletQuantity" 
+                                name="outletQuantity" 
+                                label={props.outletQuantityLabel} 
+                                fullWidth={true}
+                                value={props.outletQuantity}
+                                type="number"
+                                variant="standard"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </div>
+                        <div className="field">
                             <FormControl variant="standard" fullWidth={true}>
                                 <InputLabel id="orderItemStatus-label">{props.orderStatusLabel}</InputLabel>
                                 <Select
@@ -130,7 +172,7 @@ const OrderItemForm = (props) => {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || props.orderStatusId === orderStatusId || a}>
+                                disabled={state.isLoading || props.orderStatusId === orderStatusId || isSended}>
                                 {props.saveText}
                             </Button>
                             <Button 

@@ -4,6 +4,8 @@ namespace Buyer.Web.Areas.Orders.DomainModels
 {
     public class OrderItem
     {
+        public Guid Id { get; set; }
+        public Guid OrderId { get; set; }
         public Guid ProductId { get; set; }
         public string ProductSku { get; set; }
         public string ProductName { get; set; }
@@ -12,12 +14,13 @@ namespace Buyer.Web.Areas.Orders.DomainModels
         public double StockQuantity { get; set; }
         public double OutletQuantity { get; set; }
         public string ExternalReference { get; set; }
-        public string ProductAttributes { get; set; }
-        public string MoreInfo { get; set; }
-        public string OrderStatusName { get; set; }
-        public string OrderStatusComment { get; set; }
         public DateTime? ExpectedDeliveryFrom { get; set; }
         public DateTime? ExpectedDeliveryTo { get; set; }
+        public string MoreInfo { get; set; }
+        public Guid? OrderStatusId { get; set; }
+        public string OrderStatusName { get; set; }
+        public string OrderStatusComment { get; set; }
+        public string ProductAttributes { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

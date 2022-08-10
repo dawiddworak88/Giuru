@@ -2,8 +2,9 @@ import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import {
     Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, TextField
+    TableHead, TableRow, Paper, TextField, Fab
 } from "@mui/material";
+import { Edit } from "@mui/icons-material";
 import moment from "moment";
 import Files from "../../../../../../shared/components/Files/Files";
 
@@ -33,6 +34,7 @@ function StatusOrder(props) {
                                     <TableHead>
                                         <TableRow>
                                             <TableCell></TableCell>
+                                            <TableCell></TableCell>
                                             <TableCell>{props.skuLabel}</TableCell>
                                             <TableCell>{props.nameLabel}</TableCell>
                                             <TableCell></TableCell>
@@ -51,6 +53,11 @@ function StatusOrder(props) {
                                         {props.orderItems && props.orderItems.map((item, index) => {
                                             return (
                                                 <TableRow key={index}>
+                                                    <TableCell>
+                                                        <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel}>
+                                                            <Edit />
+                                                        </Fab>
+                                                    </TableCell>
                                                     <TableCell><a href={item.productUrl}><img className="status-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
                                                     <TableCell>{item.sku}</TableCell>
                                                     <TableCell>{item.name}</TableCell>

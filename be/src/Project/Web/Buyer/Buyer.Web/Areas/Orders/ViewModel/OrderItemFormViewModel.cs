@@ -1,9 +1,9 @@
-﻿using Foundation.PageContent.Components.ListItems.ViewModels;
-using Seller.Web.Shared.ViewModels;
+﻿using Buyer.Web.Shared.ViewModels.OrderHistory;
+using Foundation.PageContent.Components.ListItems.ViewModels;
 using System;
 using System.Collections.Generic;
 
-namespace Seller.Web.Areas.Orders.ViewModel
+namespace Buyer.Web.Areas.Orders.ViewModel
 {
     public class OrderItemFormViewModel
     {
@@ -23,11 +23,9 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string OutletQuantityLabel { get; set; }
         public string OrderStatusLabel { get; set; }
         public string OrderStatusCommentLabel { get; set; }
+        public string OrderStatusName { get; set; }
         public string NavigateToOrderLabel { get; set; }
-        public string SaveText { get; set; }
         public string OrderUrl { get; set; }
-        public string SaveUrl { get; set; }
         public OrderHistoryViewModel OrderStatusesHistory { get; set; }
-        public IEnumerable<ListItemViewModel> OrderItemStatuses { get; set; }
     }
 }

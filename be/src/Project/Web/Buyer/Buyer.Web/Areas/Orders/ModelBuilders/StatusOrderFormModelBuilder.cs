@@ -73,8 +73,10 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 viewModel.OrderStatusId = order.OrderStatusId;
                 viewModel.ExpectedDelivery = order.ExpectedDeliveryDate;
                 viewModel.CustomOrder = order.MoreInfo;
+                viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
                 viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                 {
+                    Id = x.Id,
                     ProductId = x.ProductId,
                     Sku = x.ProductSku,
                     Name = x.ProductName,
@@ -84,6 +86,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo,
+                    OrderStatusId = x.OrderStatusId,
                     OrderStatusName = x.OrderStatusName,
                     OrderStatusComment = x.OrderStatusComment,
                     ProductAttributes = x.ProductAttributes,

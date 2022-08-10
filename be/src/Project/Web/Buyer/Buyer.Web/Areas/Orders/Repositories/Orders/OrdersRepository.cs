@@ -6,6 +6,7 @@ using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
+using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
 using System;
@@ -33,6 +34,56 @@ namespace Buyer.Web.Areas.Orders.Repositories
             this.productsService = productsService;
         }
 
+        public async Task<OrderItem> GetOrderItemAsync(string token, string language, Guid? id)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.OrderItemsApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OrderItem>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
+
+        public async Task<OrderItemStatusesHistory> GetOrderItemStatusesAsync(string token, string language, Guid? id)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.OrderItemStatusesApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OrderItemStatusesHistory>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
+
         public async Task<Order> GetOrderAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
@@ -44,6 +95,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Order>(apiRequest);
+
             if (response.IsSuccessStatusCode && response.Data?.OrderItems is not null)
             {
                 var orderItems = new List<OrderItem>();
@@ -56,6 +108,9 @@ namespace Buyer.Web.Areas.Orders.Repositories
                     {
                         orderItems.Add(new OrderItem
                         {
+                            Id = item.Id,
+                            OrderId = item.OrderId,
+                            OrderStatusId = item.OrderStatusId,
                             ProductId = item.ProductId,
                             ProductName = item.ProductName,
                             ProductSku = item.ProductSku,
