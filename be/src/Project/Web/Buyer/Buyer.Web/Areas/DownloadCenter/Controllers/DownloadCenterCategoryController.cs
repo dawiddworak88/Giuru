@@ -15,12 +15,12 @@ namespace Buyer.Web.Areas.DownloadCenter.Controllers
     [Area("DownloadCenter")]
     public class DownloadCenterCategoryController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryPageViewModel> categoryPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryPageViewModel> downloadCenterCategoryPageModelBuilder;
 
         public DownloadCenterCategoryController(
-            IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryPageViewModel> categoryPageModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryPageViewModel> downloadCenterCategoryPageModelBuilder)
         {
-            this.categoryPageModelBuilder = categoryPageModelBuilder;
+            this.downloadCenterCategoryPageModelBuilder = downloadCenterCategoryPageModelBuilder;
         }
 
         public async Task<IActionResult> Detail(Guid? id)
@@ -35,7 +35,7 @@ namespace Buyer.Web.Areas.DownloadCenter.Controllers
                 BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName])
             };
 
-            var viewModel = await this.categoryPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await this.downloadCenterCategoryPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
         }
