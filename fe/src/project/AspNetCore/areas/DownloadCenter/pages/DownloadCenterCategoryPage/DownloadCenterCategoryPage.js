@@ -15,7 +15,7 @@ const DownloadCenterCategoryPage = (props) => {
     LocaleHelper.setMomentLocale(props.locale);
 
     return (
-        <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
+        <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
             <ToastContainer />
             <Store>
                 <Header {...props.header}></Header>

@@ -48,6 +48,8 @@ namespace Seller.Web.Shared.ModelBuilders.Files
                         CopyLinkLabel = this.globalLocalizer.GetString("CopyLink"),
                         CreatedDateLabel = this.globalLocalizer.GetString("CreatedDate"),
                         LastModifiedDateLabel = this.globalLocalizer.GetString("LastModifiedDate"),
+                        DisplayedRowsLabel = this.globalLocalizer.GetString("DisplayedRows"),
+                        RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage")
                     };
 
                     var fileViewModels = new List<FileViewModel>();
