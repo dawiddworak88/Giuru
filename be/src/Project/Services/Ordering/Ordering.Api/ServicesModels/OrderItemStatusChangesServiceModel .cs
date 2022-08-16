@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Ordering.Api.ServicesModels
 {
-    public class OrderItemStatusesHistoryServiceModel
+    public class OrderItemStatusChangesServiceModel
     {
         public Guid? OrderItemId { get; set; }
-        public IEnumerable<OrderItemStatusesHistoryItemServiceModel> StatusesHistory { get; set; }
+        public IEnumerable<OrderItemStatusChangeServiceModel> OrderItemStatusChanges { get; set; }
     }
 }

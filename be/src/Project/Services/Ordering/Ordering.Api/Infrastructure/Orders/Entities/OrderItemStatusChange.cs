@@ -15,6 +15,6 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
         [Required]
         public Guid OrderItemStateId { get; set; }
 
-        public string OrderItemStatusChangeComment { get; set; }
+        public virtual OrderItemStatusChangeCommentTranslation OrderItemStatusChangeCommentTranslation { get; set; }
     }
 }

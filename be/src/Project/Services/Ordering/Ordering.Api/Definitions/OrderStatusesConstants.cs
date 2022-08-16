@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ordering.Api.Infrastructure.Orders.Definitions
+namespace Ordering.Api.Definitions
 {
     public static class OrderStatusesConstants
     {

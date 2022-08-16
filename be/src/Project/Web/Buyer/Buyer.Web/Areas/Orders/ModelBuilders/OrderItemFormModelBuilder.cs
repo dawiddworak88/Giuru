@@ -1,6 +1,6 @@
 ﻿using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.ViewModel;
-using Buyer.Web.Shared.ViewModels.OrderHistory;
+using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
@@ -13,7 +13,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 {
     public class OrderItemFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrderItemFormViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderHistoryViewModel> orderHistoryModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel> orderHistoryModelBuilder;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly LinkGenerator linkGenerator;
@@ -21,7 +21,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 
         public OrderItemFormModelBuilder
         (
-            IAsyncComponentModelBuilder<ComponentModelBase, OrderHistoryViewModel> orderHistoryModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel> orderHistoryModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             LinkGenerator linkGenerator,
@@ -73,7 +73,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 
                 if (orderItemStatusesHistory is not null)
                 {
-                    viewModel.OrderStatusesHistory = await this.orderHistoryModelBuilder.BuildModelAsync(new ComponentModelBase { IsAuthenticated = componentModel.IsAuthenticated, Token = componentModel.Token, Language = componentModel.Language, Id = componentModel.Id });
+                    viewModel.OrderItemStatusChanges = await this.orderHistoryModelBuilder.BuildModelAsync(new ComponentModelBase { IsAuthenticated = componentModel.IsAuthenticated, Token = componentModel.Token, Language = componentModel.Language, Id = componentModel.Id });
                 }
             }
 

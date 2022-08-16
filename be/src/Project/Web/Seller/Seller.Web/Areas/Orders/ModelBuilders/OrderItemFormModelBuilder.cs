@@ -15,7 +15,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 {
     public class OrderItemFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrderItemFormViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderHistoryViewModel> orderHistoryModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel> orderItemStatusChangesModelBuilder;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly LinkGenerator linkGenerator;
@@ -23,7 +23,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 
         public OrderItemFormModelBuilder
         (
-            IAsyncComponentModelBuilder<ComponentModelBase, OrderHistoryViewModel> orderHistoryModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel> orderItemStatusChangesModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             LinkGenerator linkGenerator,
@@ -33,7 +33,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
             this.ordersRepository = ordersRepository;
-            this.orderHistoryModelBuilder = orderHistoryModelBuilder;
+            this.orderItemStatusChangesModelBuilder = orderItemStatusChangesModelBuilder;
         }
 
         public async Task<OrderItemFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -83,7 +83,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 
                 if (orderItemStatusesHistory is not null)
                 {
-                    viewModel.OrderStatusesHistory = await this.orderHistoryModelBuilder.BuildModelAsync(new ComponentModelBase { IsAuthenticated = componentModel.IsAuthenticated, Token = componentModel.Token, Language = componentModel.Language, Id = componentModel.Id });
+                    viewModel.OrderItemStatusChanges = await this.orderItemStatusChangesModelBuilder.BuildModelAsync(new ComponentModelBase { IsAuthenticated = componentModel.IsAuthenticated, Token = componentModel.Token, Language = componentModel.Language, Id = componentModel.Id });
                 }
             }
             

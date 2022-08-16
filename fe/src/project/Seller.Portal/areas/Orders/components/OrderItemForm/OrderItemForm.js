@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
-import OrderHistory from "../../../../../../shared/components/OrderHistory/OrderHistory";
+import OrderItemStatusChanges from "../../../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
 
 const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -193,8 +193,8 @@ const OrderItemForm = (props) => {
                     </form>
                 </div>
             </div>
-            {props.orderStatusesHistory &&
-                <OrderHistory {...props.orderStatusesHistory} />
+            {props.orderItemStatusChanges &&
+                <OrderItemStatusChanges {...props.orderItemStatusChanges} />
             }
             {state.isLoading && <CircularProgress className="progressBar" />}
         </section>

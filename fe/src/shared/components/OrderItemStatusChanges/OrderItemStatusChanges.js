@@ -6,10 +6,10 @@ import {
 } from "@mui/material";
 import moment from "moment";
 
-const OrderHistory = (props) => {
+const OrderItemStatusChanges = (props) => {
 
     return (
-        props.orderStatusesHistory &&
+        props.orderItemStatusChanges &&
             <div className="order-history mt-5 p-5">
                 <h3 className="title is-4">{props.title}</h3>
                 <div className="table-container">
@@ -23,7 +23,7 @@ const OrderHistory = (props) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {props.orderStatusesHistory.map((historyItem, index) => 
+                                {props.orderItemStatusChanges.map((historyItem, index) => 
                                     <TableRow key={index}>
                                         <TableCell>{historyItem.orderStatusName}</TableCell>
                                         <TableCell>{historyItem.orderStatusComment}</TableCell>
@@ -38,12 +38,12 @@ const OrderHistory = (props) => {
     )
 }
 
-OrderHistory.propTypes = {
+OrderItemStatusChanges.propTypes = {
     title: PropTypes.string.isRequired,
     orderStatusLabel: PropTypes.string.isRequired,
     orderStatusCommentLabel: PropTypes.string.isRequired,
     lastModifiedDateLabel: PropTypes.string.isRequired,
-    orderStatusesHistory: PropTypes.array
+    orderItemStatusChanges: PropTypes.array
 }
 
-export default OrderHistory;
+export default OrderItemStatusChanges;

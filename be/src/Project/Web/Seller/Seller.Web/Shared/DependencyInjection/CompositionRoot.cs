@@ -20,7 +20,7 @@ using Seller.Web.Shared.ComponentModels.Files;
 using Seller.Web.Shared.ViewModels;
 using Seller.Web.Shared.ModelBuilders.Files;
 using Foundation.PageContent.ComponentModels;
-using Seller.Web.Shared.ModelBuilders.OrderHistory;
+using Seller.Web.Shared.ModelBuilders.OrderItemStatusChanges;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -40,7 +40,7 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel>, FilesModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderHistoryViewModel>, OrderHistoryModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel>, OrderItemStatusChangesModelBuilder>();
         }
     }
 }

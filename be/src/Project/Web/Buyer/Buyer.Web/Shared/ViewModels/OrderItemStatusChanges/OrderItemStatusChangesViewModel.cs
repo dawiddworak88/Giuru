@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace Seller.Web.Shared.ViewModels
+namespace Buyer.Web.Shared.ViewModels.OrderItemStatusChanges
 {
-    public class OrderHistoryViewModel
+    public class OrderItemStatusChangesViewModel
     {
         public string Title { get; set; }
         public string OrderStatusLabel { get; set; }
         public string OrderStatusCommentLabel { get; set; }
         public string LastModifiedDateLabel { get; set; }
-        public IEnumerable<OrderHistoryItemViewModel> OrderStatusesHistory { get; set; }
+        public IEnumerable<OrderItemStatusChangeViewModel> OrderStatusesHistory { get; set; }
     }
 }

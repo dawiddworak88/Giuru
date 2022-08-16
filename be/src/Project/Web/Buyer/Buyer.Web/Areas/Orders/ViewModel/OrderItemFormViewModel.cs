@@ -1,7 +1,6 @@
-﻿using Buyer.Web.Shared.ViewModels.OrderHistory;
-using Foundation.PageContent.Components.ListItems.ViewModels;
+﻿
+using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
 using System;
-using System.Collections.Generic;
 
 namespace Buyer.Web.Areas.Orders.ViewModel
 {
@@ -28,6 +27,6 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string ImageUrl { get; set; }
         public string NavigateToOrderLabel { get; set; }
         public string OrderUrl { get; set; }
-        public OrderHistoryViewModel OrderStatusesHistory { get; set; }
+        public OrderItemStatusChangesViewModel OrderItemStatusChanges { get; set; }
     }
 }

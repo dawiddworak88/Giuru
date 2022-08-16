@@ -15,6 +15,6 @@ namespace Ordering.Api.Services
         Task UpdateOrderItemStatusAsync(UpdateOrderItemStatusServiceModel model);
         Task SyncOrderItemsStatusesAsync(UpdateOrderItemsStatusesServiceModel model);
         Task<OrderItemServiceModel> GetAsync(GetOrderItemServiceModel model);
-        Task<OrderItemStatusesHistoryServiceModel> GetAsync(GetOrderItemStatusesHistoryServiceModel model);
+        Task<OrderItemStatusChangesServiceModel> GetAsync(GetOrderItemStatusChangesServiceModel model);
     }
 }

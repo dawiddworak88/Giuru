@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Ordering.Api.v1.ResponseModels
 {
-    public class OrderItemStatusesHistoryResponseModel
+    public class OrderItemStatusChangesResponseModel
     {
         public Guid? OrderItemId { get; set; }
-        public IEnumerable<OrderItemStatusesHistoryItemResponseModel> StatusesHistory { get; set; }
+        public IEnumerable<OrderItemStatusChangeResponseModel> OrderItemStatusChanges { get; set; }
     }
 }

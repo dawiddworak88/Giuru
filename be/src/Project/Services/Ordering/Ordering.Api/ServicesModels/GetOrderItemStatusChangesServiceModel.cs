@@ -3,7 +3,7 @@ using System;
 
 namespace Ordering.Api.ServicesModels
 {
-    public class GetOrderItemStatusesHistoryServiceModel : BaseServiceModel
+    public class GetOrderItemStatusChangesServiceModel : BaseServiceModel
     {
         public Guid? Id { get; set; }
     }

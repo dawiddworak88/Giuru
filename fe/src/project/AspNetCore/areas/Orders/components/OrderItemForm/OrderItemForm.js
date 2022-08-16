@@ -4,7 +4,7 @@ import {
     Button, TextField
 } from "@mui/material";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
-import OrderHistory from "../../../../../../shared/components/OrderHistory/OrderHistory";
+import OrderItemStatusChanges from "../../../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
 
 const OrderItemForm = (props) => {
 
@@ -99,8 +99,8 @@ const OrderItemForm = (props) => {
                     </div>
                 </div>
             </div>
-            {props.orderStatusesHistory &&
-                <OrderHistory {...props.orderStatusesHistory} />
+            {props.orderItemStatusChanges &&
+                <OrderItemStatusChanges {...props.orderItemStatusChanges} />
             }
         </section>
     );
@@ -119,7 +119,7 @@ OrderItemForm.propTypes = {
     orderStatusCommentLabel: PropTypes.string.isRequired,
     orderUrl: PropTypes.string.isRequired,
     navigateToOrderLabel: PropTypes.string.isRequired,
-    orderStatusesHistory: PropTypes.array
+    orderItemStatusChanges: PropTypes.array
 };
 
 export default OrderItemForm;

@@ -1,21 +1,21 @@
-﻿using Foundation.Extensions.ModelBuilders;
+﻿using Buyer.Web.Areas.Orders.Repositories;
+using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
+using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.Localization;
-using Seller.Web.Areas.Orders.Repositories.Orders;
-using Seller.Web.Shared.ViewModels;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Shared.ModelBuilders.OrderHistory
+namespace Buyer.Web.Shared.ModelBuilders.OrderItemStatusChanges
 {
-    public class OrderHistoryModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrderHistoryViewModel>
+    public class OrderItemStatusChangesModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel>
     {
         private readonly IOrdersRepository ordersRepository;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
 
-        public OrderHistoryModelBuilder(
+        public OrderItemStatusChangesModelBuilder(
             IOrdersRepository ordersRepository,
             IStringLocalizer<OrderResources> orderLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer)
@@ -25,9 +25,9 @@ namespace Seller.Web.Shared.ModelBuilders.OrderHistory
             this.globalLocalizer = globalLocalizer;
         }
 
-        public async Task<OrderHistoryViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<OrderItemStatusChangesViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new OrderHistoryViewModel
+            var viewModel = new OrderItemStatusChangesViewModel
             {
                 Title = this.orderLocalizer.GetString("HistoryOfStatusChanges"),
                 OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
@@ -41,10 +41,10 @@ namespace Seller.Web.Shared.ModelBuilders.OrderHistory
 
                 if (statusesHistory is not null)
                 {
-                    viewModel.OrderStatusesHistory = statusesHistory.StatusesHistory.Select(x => new OrderHistoryItemViewModel
+                    viewModel.OrderStatusesHistory = statusesHistory.StatusesHistory.Select(x => new OrderItemStatusChangeViewModel
                     {
-                        OrderStatusName = x.OrderStatusName,
-                        OrderStatusComment = x.OrderStatusComment,
+                        OrderItemStatusName = x.OrderStatusName,
+                        OrderItemStatusChangeComment = x.OrderStatusComment,
                         CreatedDate = x.CreatedDate
                     });
                 }

@@ -29,7 +29,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string SaveText { get; set; }
         public string OrderUrl { get; set; }
         public string SaveUrl { get; set; }
-        public OrderHistoryViewModel OrderStatusesHistory { get; set; }
+        public OrderItemStatusChangesViewModel OrderItemStatusChanges{ get; set; }
         public IEnumerable<ListItemViewModel> OrderItemStatuses { get; set; }
     }
 }

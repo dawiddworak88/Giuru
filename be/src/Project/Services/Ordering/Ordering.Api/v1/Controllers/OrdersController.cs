@@ -124,10 +124,10 @@ namespace Ordering.Api.v1.Controllers
                                 ExpectedDeliveryFrom = y.ExpectedDeliveryFrom,
                                 ExpectedDeliveryTo = y.ExpectedDeliveryTo,
                                 MoreInfo = y.MoreInfo,
-                                OrderStateId = y.OrderStateId,
-                                OrderStatusId = y.OrderStatusId,
-                                OrderStatusName = y.OrderStatusName,
-                                OrderStatusComment = y.OrderStatusComment,
+                                OrderItemStateId = y.OrderItemStateId,
+                                OrderItemStatusId = y.OrderItemStatusId,
+                                OrderItemStatusName = y.OrderItemStatusName,
+                                //OrderItemStatusComment = y.OrderStatusComment,
                                 LastModifiedDate = y.LastModifiedDate,
                                 CreatedDate = y.CreatedDate
                             }),
@@ -213,10 +213,10 @@ namespace Ordering.Api.v1.Controllers
                         OrderItems = order.OrderItems.Select(x => new OrderItemResponseModel
                         {
                             Id = x.Id,
-                            OrderStateId = x.OrderStateId,
-                            OrderStatusId = x.OrderStatusId,
-                            OrderStatusName = x.OrderStatusName,
-                            OrderStatusComment = x.OrderStatusComment,
+                            OrderItemStateId = x.OrderItemStateId,
+                            OrderItemStatusId = x.OrderItemStatusId,
+                            OrderItemStatusName = x.OrderItemStatusName,
+                            //OrderItemStatusComment = x.OrderStatusComment,
                             LastOrderItemStatusChangeId = x.LastOrderItemStatusChangeId.Value,
                             ProductId = x.ProductId,
                             ProductSku = x.ProductSku,
@@ -295,10 +295,10 @@ namespace Ordering.Api.v1.Controllers
                         ExpectedDeliveryFrom = orderItem.ExpectedDeliveryFrom,
                         ExpectedDeliveryTo = orderItem.ExpectedDeliveryTo,
                         MoreInfo = orderItem.MoreInfo,
-                        OrderStateId = orderItem.OrderStateId,
-                        OrderStatusId = orderItem.OrderStatusId,
-                        OrderStatusName = orderItem.OrderStatusName,
-                        OrderStatusComment = orderItem.OrderStatusComment,
+                        OrderItemStateId = orderItem.OrderItemStateId,
+                        OrderItemStatusId = orderItem.OrderItemStatusId,
+                        OrderItemStatusName = orderItem.OrderItemStatusName,
+                        //OrderItemStatusChangeComment = orderItem.OrderStatusComment,
                         LastOrderItemStatusChangeId = orderItem.LastOrderItemStatusChangeId.Value,
                         LastModifiedDate = orderItem.LastModifiedDate,
                         CreatedDate = orderItem.CreatedDate
@@ -325,7 +325,7 @@ namespace Ordering.Api.v1.Controllers
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new GetOrderItemStatusesHistoryServiceModel
+            var serviceModel = new GetOrderItemStatusChangesServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
@@ -342,14 +342,14 @@ namespace Ordering.Api.v1.Controllers
 
                 if (itemStatusesHistory is not null)
                 {
-                    var response = new OrderItemStatusesHistoryResponseModel
+                    var response = new OrderItemStatusChangesResponseModel
                     {
                         OrderItemId = itemStatusesHistory.OrderItemId,
-                        StatusesHistory = itemStatusesHistory.StatusesHistory.Select(x => new OrderItemStatusesHistoryItemResponseModel { 
-                            OrderStateId = x.OrderStateId,
-                            OrderStatusId = x.OrderStatusId,
-                            OrderStatusName = x.OrderStatusName,
-                            OrderStatusComment = x.OrderStatusComment,
+                        OrderItemStatusChanges = itemStatusesHistory.OrderItemStatusChanges.Select(x => new OrderItemStatusChangeResponseModel { 
+                            OrderItemStateId = x.OrderItemStateId,
+                            OrderItemStatusId = x.OrderItemStatusId,
+                            OrderItemStatusName = x.OrderItemStatusName,
+                            OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
                             CreatedDate = x.CreatedDate
                         })
                     };
@@ -509,10 +509,10 @@ namespace Ordering.Api.v1.Controllers
                             ProductName = x.ProductName,
                             PictureUrl = x.PictureUrl,
                             Quantity = x.Quantity,
-                            OrderStateId = x.OrderStateId,
-                            OrderStatusId = x.OrderStatusId,
-                            OrderStatusName = x.OrderStatusName,
-                            OrderStatusComment = x.OrderStatusComment,
+                            OrderItemStateId = x.OrderItemStateId,
+                            OrderItemStatusId = x.OrderItemStatusId,
+                            OrderItemStatusName = x.OrderItemStatusName,
+                            OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
                             StockQuantity = x.StockQuantity,
                             OutletQuantity = x.OutletQuantity,
                             ExternalReference = x.ExternalReference,
