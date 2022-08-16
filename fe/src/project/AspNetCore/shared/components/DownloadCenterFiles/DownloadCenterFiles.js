@@ -1,9 +1,11 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
 import PropTypes from "prop-types";
+import { Context } from "../../../../../shared/stores/Store";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button, Tooltip,
-    FormControlLabel, Checkbox, TablePagination
+    FormControlLabel, Checkbox, TablePagination,
+    CircularProgress
 } from "@mui/material";
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
@@ -14,6 +16,7 @@ import ResponseStatusConstants from "../../../../../shared/constants/ResponseSta
 import FilesConstants from "../../../../../shared/constants/FilesConstants";
 
 const DownloadCenterFiles = (props) => {
+    const [state, dispatch] = useContext(Context);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [files, setFiles] = useState(props.files ? props.files.slice(0, FilesConstants.defaultPageSize()) : []);
     const [page, setPage] = useState(0);
@@ -49,6 +52,8 @@ const DownloadCenterFiles = (props) => {
     }
 
     const handleDownloadFiles = checkedFiles => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
         let filesToDownload = props.files;
 
         if (checkedFiles && selectedFiles.length > 0) {
@@ -72,7 +77,9 @@ const DownloadCenterFiles = (props) => {
                 folder.file(filesToDownload[i].filename, blobPromise);
             }
 
-            zip.generateAsync({ type: "blob" }).then((blob) => saveAs(blob, `${filename}.zip`));
+            zip.generateAsync({ type: "blob" })
+                .then((blob) => saveAs(blob, `${filename}.zip`))
+                .then(() => dispatch({ type: "SET_IS_LOADING", payload: false }));
         }
     }
 
@@ -177,6 +184,7 @@ const DownloadCenterFiles = (props) => {
                     </div>
                 </section>
             }
+            {state.isLoading && <CircularProgress className="progressBar" />}
         </Fragment>
     );
 }
