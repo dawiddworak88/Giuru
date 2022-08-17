@@ -15,7 +15,7 @@ function ProductPage(props) {
   LocaleHelper.setMomentLocale(props.locale);
 
   return (
-    <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
+    <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
       <ToastContainer />
       <Store>
         <div className="category-page">

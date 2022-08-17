@@ -1,9 +1,11 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
 import PropTypes from "prop-types";
+import { Context } from "../../../../../shared/stores/Store";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button, Tooltip,
-    FormControlLabel, Checkbox
+    FormControlLabel, Checkbox, TablePagination,
+    CircularProgress
 } from "@mui/material";
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
@@ -11,9 +13,13 @@ import ClipboardHelper from "../../../../../shared/helpers/globals/ClipboardHelp
 import JsZip from 'jszip';
 import { saveAs } from 'file-saver';
 import ResponseStatusConstants from "../../../../../shared/constants/ResponseStatusConstants";
+import FilesConstants from "../../../../../shared/constants/FilesConstants";
 
 const DownloadCenterFiles = (props) => {
+    const [state, dispatch] = useContext(Context);
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [files, setFiles] = useState(props.files ? props.files.slice(0, FilesConstants.defaultPageSize()) : []);
+    const [page, setPage] = useState(0);
     
     const handleCopyClick = (file) => {
         ClipboardHelper.copyToClipboard(file.url);
@@ -46,19 +52,21 @@ const DownloadCenterFiles = (props) => {
     }
 
     const handleDownloadFiles = checkedFiles => {
-        let files = props.files;
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        let filesToDownload = props.files;
 
         if (checkedFiles && selectedFiles.length > 0) {
-            files = selectedFiles;
+            filesToDownload = selectedFiles;
         }
 
-        if (files.length > 0) {
+        if (filesToDownload.length > 0) {
             const zip = new JsZip();
             const filename = `${props.filesLabel}-${moment().local().toISOString()}`;
             const folder = zip.folder(`${filename}`);
 
-            for(let i = 0; i < files.length; i++) {
-                const blobPromise = fetch(files[i].url).then((r) => {
+            for(let i = 0; i < filesToDownload.length; i++) {
+                const blobPromise = fetch(filesToDownload[i].url).then((r) => {
                     if (r.status === ResponseStatusConstants.ok()) {
                         return r.blob();
                     }
@@ -66,16 +74,24 @@ const DownloadCenterFiles = (props) => {
                     return Promise.reject(new Error(r.statusText));
                 });
 
-                folder.file(files[i].filename, blobPromise);
+                folder.file(filesToDownload[i].filename, blobPromise);
             }
 
-            zip.generateAsync({ type: "blob" }).then((blob) => saveAs(blob, `${filename}.zip`));
+            zip.generateAsync({ type: "blob" })
+                .then((blob) => saveAs(blob, `${filename}.zip`))
+                .then(() => dispatch({ type: "SET_IS_LOADING", payload: false }));
         }
+    }
+
+    const handleChangePage = (event, newPage) => {
+        const startDisplayFiles = newPage * FilesConstants.defaultPageSize();
+        setPage(newPage)
+        setFiles(props.files.slice(startDisplayFiles, startDisplayFiles + FilesConstants.defaultPageSize()))
     }
 
     return (
         <Fragment>
-            {props.files &&
+            {files &&
                 <section className="section files pt-5">
                     <div className="is-flex is-justify-content-space-between is-align-items-center files__header">
                         <h3 className="title is-4">{props.filesLabel}</h3>
@@ -106,7 +122,7 @@ const DownloadCenterFiles = (props) => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {props.files.map((file, index) => {
+                                        {files.map((file, index) => {
                                             const isFileSelected = selectedFiles.indexOf(file) !== -1;
 
                                             return (
@@ -155,9 +171,20 @@ const DownloadCenterFiles = (props) => {
                                 </Table>
                             </TableContainer>
                         </div>
+                        <TablePagination 
+                            labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
+                            count={props.files.length}
+                            rowsPerPageOptions={[FilesConstants.defaultPageSize()]}
+                            rowsPerPage={FilesConstants.defaultPageSize()}
+                            component="div"
+                            page={page}
+                            onPageChange={handleChangePage}
+                            labelRowsPerPage={props.rowsPerPageLabel}
+                        />
                     </div>
                 </section>
             }
+            {state.isLoading && <CircularProgress className="progressBar" />}
         </Fragment>
     );
 }
@@ -175,7 +202,9 @@ DownloadCenterFiles.propTypes = {
     createdDateLabel: PropTypes.string.isRequired,
     selectFileLabel: PropTypes.string.isRequired,
     downloadSelectedLabel: PropTypes.string.isRequired,
-    downloadEverythingLabel: PropTypes.string.isRequired
+    downloadEverythingLabel: PropTypes.string.isRequired,
+    displayedRowsLabel: PropTypes.string.isRequired,
+    rowsPerPageLabel: PropTypes.string.isRequired
 };
 
 export default DownloadCenterFiles;

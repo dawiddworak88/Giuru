@@ -4,6 +4,8 @@ namespace Buyer.Web.Shared.ViewModels.Files
 {
     public class FilesViewModel
     {
+        public string DisplayedRowsLabel { get; set; }
+        public string RowsPerPageLabel { get; set; }
         public string FilesLabel { get; set; }
         public string DownloadLabel { get; set; }
         public string CopyLinkLabel { get; set; }

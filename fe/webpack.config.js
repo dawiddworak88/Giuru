@@ -50,7 +50,7 @@ const browserConfig = {
     },
     entry: {
         orderitempage: ["./src/project/AspNetCore/areas/Orders/pages/OrderItemPage/index.js", "./src/project/AspNetCore/areas/Orders/pages/OrderItemPage/OrderItemPage.scss"],
-        downloadcentercategorypage: ["./src/project/AspNetCore/areas/DownloadCenter/pages/CategoryPage/index.js", "./src/project/AspNetCore/areas/DownloadCenter/pages/CategoryPage/CategoryPage.scss"],
+        downloadcentercategorypage: ["./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/index.js", "./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage.scss"],
         downloadcenterpage: ["./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterPage/index.js", "./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage.scss"],
         applicationpage: ["./src/project/AspNetCore/areas/Home/pages/ApplicationPage/index.js", "./src/project/AspNetCore/areas/Home/pages/ApplicationPage/ApplicationPage.scss"],
         outletpage: ["./src/project/AspNetCore/areas/Products/pages/OutletPage/index.js", "./src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage.scss"],
