@@ -44,7 +44,7 @@ const DownloadCenterFiles = (props) => {
 
     const handleSelectAllItems = e => {
         if (e.target.checked){
-            setSelectedFiles(files.map((f) => f))
+            setSelectedFiles(props.files.map((f) => f))
             return;
         }
 
