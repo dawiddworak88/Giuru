@@ -127,7 +127,7 @@ namespace Ordering.Api.v1.Controllers
                                 OrderItemStateId = y.OrderItemStateId,
                                 OrderItemStatusId = y.OrderItemStatusId,
                                 OrderItemStatusName = y.OrderItemStatusName,
-                                //OrderItemStatusComment = y.OrderStatusComment,
+                                OrderItemStatusChangeComment = y.OrderItemStatusChangeComment,
                                 LastModifiedDate = y.LastModifiedDate,
                                 CreatedDate = y.CreatedDate
                             }),
@@ -212,11 +212,11 @@ namespace Ordering.Api.v1.Controllers
                         OrderStatusName = order.OrderStatusName,
                         OrderItems = order.OrderItems.Select(x => new OrderItemResponseModel
                         {
-                            Id = x.Id,
+                            Id = x.Id, 
                             OrderItemStateId = x.OrderItemStateId,
                             OrderItemStatusId = x.OrderItemStatusId,
                             OrderItemStatusName = x.OrderItemStatusName,
-                            //OrderItemStatusComment = x.OrderStatusComment,
+                            OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
                             LastOrderItemStatusChangeId = x.LastOrderItemStatusChangeId.Value,
                             ProductId = x.ProductId,
                             ProductSku = x.ProductSku,
@@ -298,7 +298,7 @@ namespace Ordering.Api.v1.Controllers
                         OrderItemStateId = orderItem.OrderItemStateId,
                         OrderItemStatusId = orderItem.OrderItemStatusId,
                         OrderItemStatusName = orderItem.OrderItemStatusName,
-                        //OrderItemStatusChangeComment = orderItem.OrderStatusComment,
+                        OrderItemStatusChangeComment = orderItem.OrderItemStatusChangeComment,
                         LastOrderItemStatusChangeId = orderItem.LastOrderItemStatusChangeId.Value,
                         LastModifiedDate = orderItem.LastModifiedDate,
                         CreatedDate = orderItem.CreatedDate
@@ -333,19 +333,19 @@ namespace Ordering.Api.v1.Controllers
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
             };
 
-            var validator = new GetOrderItemStatusesHistoryModelValidator();
+            var validator = new GetOrderItemStatusChangesModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var itemStatusesHistory = await this.ordersService.GetAsync(serviceModel);
+                var statusChanges = await this.ordersService.GetAsync(serviceModel);
 
-                if (itemStatusesHistory is not null)
+                if (statusChanges is not null)
                 {
                     var response = new OrderItemStatusChangesResponseModel
                     {
-                        OrderItemId = itemStatusesHistory.OrderItemId,
-                        OrderItemStatusChanges = itemStatusesHistory.OrderItemStatusChanges.Select(x => new OrderItemStatusChangeResponseModel { 
+                        OrderItemId = statusChanges.OrderItemId,
+                        StatusChanges = statusChanges.OrderItemStatusChanges.Select(x => new OrderItemStatusChangeResponseModel { 
                             OrderItemStateId = x.OrderItemStateId,
                             OrderItemStatusId = x.OrderItemStatusId,
                             OrderItemStatusName = x.OrderItemStatusName,
@@ -377,8 +377,8 @@ namespace Ordering.Api.v1.Controllers
             var serviceModel = new UpdateOrderItemStatusServiceModel
             {
                 Id = request.Id,
-                OrderStatusId = request.OrderStatusId,
-                OrderStatusComment = request.OrderStatusComment,
+                OrderItemStatusId = request.OrderItemStatusId,
+                OrderItemStatusChangeComment = request.OrderItemStatusChangeComment,
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value

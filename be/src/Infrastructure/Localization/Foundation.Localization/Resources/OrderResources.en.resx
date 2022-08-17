@@ -238,10 +238,10 @@
     <value>Orders</value>
   </data>
   <data name="OrderStatus" xml:space="preserve">
-    <value>Order status</value>
+    <value>Order status:</value>
   </data>
   <data name="OrderStatusComment" xml:space="preserve">
-    <value>Order status comment</value>
+    <value>Order status comment:</value>
   </data>
   <data name="OrderStatusNotFound" xml:space="preserve">
     <value>Order status has not been found</value>

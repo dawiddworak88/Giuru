@@ -78,7 +78,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
             return default;
         }
 
-        public async Task<OrderItemStatusesHistory> GetOrderItemStatusesAsync(string token, string language, Guid? id)
+        public async Task<OrderItemStatusChanges> GetOrderItemStatusesAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
@@ -88,7 +88,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
                 EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.OrderItemStatusesApiEndpoint}/{id}"
             };
 
-            var response = await this.apiOrderService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OrderItemStatusesHistory>(apiRequest);
+            var response = await this.apiOrderService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OrderItemStatusChanges>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -193,13 +193,13 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
             return default;
         }
 
-        public async Task UpdateOrderItemStatusAsync(string token, string language, Guid id, Guid orderStatusId, string orderStatusComment)
+        public async Task UpdateOrderItemStatusAsync(string token, string language, Guid id, Guid orderItemStatusId, string orderItemStatusChangeComment)
         {
             var requestModel = new UpdateOrderItemStatusRequestModel
             {
                 Id = id,
-                OrderStatusId = orderStatusId,
-                OrderStatusComment = orderStatusComment
+                OrderItemStatusId = orderItemStatusId,
+                OrderItemStatusChangeComment = orderItemStatusChangeComment
             };
 
             var apiRequest = new ApiRequest<UpdateOrderItemStatusRequestModel>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
     Table, TableBody, TableCell, TableContainer,
@@ -7,6 +7,11 @@ import {
 import moment from "moment";
 
 const OrderItemStatusChanges = (props) => {
+    const [isMounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
 
     return (
         props.orderItemStatusChanges &&
@@ -23,11 +28,11 @@ const OrderItemStatusChanges = (props) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {props.orderItemStatusChanges.map((historyItem, index) => 
+                                {props.orderItemStatusChanges.map((statusChange, index) => 
                                     <TableRow key={index}>
-                                        <TableCell>{historyItem.orderStatusName}</TableCell>
-                                        <TableCell>{historyItem.orderStatusComment}</TableCell>
-                                        <TableCell>{moment(historyItem.createdDate).local().format("L LT")}</TableCell>
+                                        <TableCell>{statusChange.orderItemStatusName}</TableCell>
+                                        <TableCell>{statusChange.orderItemStatusChangeComment}</TableCell>
+                                        <TableCell>{isMounted ? moment.utc(statusChange.createdDate).local().format("L LT") : moment.utc(statusChange.createdDate).format("L LT")}</TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>

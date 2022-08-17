@@ -7,7 +7,7 @@ namespace Buyer.Web.Areas.Orders.ViewModel
     public class OrderItemFormViewModel
     {
         public Guid? Id { get; set; }
-        public Guid? OrderStatusId { get; set; }
+        public Guid? OrderItemStatusId { get; set; }
         public string IdLabel { get; set; }
         public string Title { get; set; }
         public string SkuLabel { get; set; }
@@ -22,7 +22,7 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string OutletQuantityLabel { get; set; }
         public string OrderStatusLabel { get; set; }
         public string OrderStatusCommentLabel { get; set; }
-        public string OrderStatusName { get; set; }
+        public string OrderItemStatusName { get; set; }
         public string ImageAlt { get; set; }
         public string ImageUrl { get; set; }
         public string NavigateToOrderLabel { get; set; }

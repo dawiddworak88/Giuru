@@ -8,7 +8,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
     public class OrderItemFormViewModel
     {
         public Guid? Id { get; set; }
-        public Guid? OrderStatusId { get; set; }
+        public Guid? OrderItemStatusId { get; set; }
         public string IdLabel { get; set; }
         public string Title { get; set; }
         public string SkuLabel { get; set; }
@@ -29,7 +29,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string SaveText { get; set; }
         public string OrderUrl { get; set; }
         public string SaveUrl { get; set; }
-        public OrderItemStatusChangesViewModel OrderItemStatusChanges{ get; set; }
+        public OrderItemStatusChangesViewModel OrderItemStatusChanges { get; set; }
         public IEnumerable<ListItemViewModel> OrderItemStatuses { get; set; }
     }
 }

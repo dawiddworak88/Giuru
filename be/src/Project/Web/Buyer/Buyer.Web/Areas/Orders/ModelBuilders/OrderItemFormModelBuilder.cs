@@ -42,7 +42,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 Title = this.orderLocalizer.GetString("OrderItem"),
                 SkuLabel = this.globalLocalizer.GetString("Sku"),
                 NameLabel = this.globalLocalizer.GetString("Name"),
-                OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
+                OrderStatusLabel = this.globalLocalizer.GetString("OrderStatus"),
                 NavigateToOrderLabel = this.orderLocalizer.GetString("NavigateToOrder"),
                 OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
                 QuantityLabel = this.orderLocalizer.GetString("QuantityLabel"),
@@ -59,10 +59,10 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.Id = orderItem.Id;
                     viewModel.ProductName = orderItem.ProductName;
                     viewModel.ProductSku = orderItem.ProductSku;
-                    viewModel.OrderStatusId = orderItem.OrderStatusId;
+                    viewModel.OrderItemStatusId = orderItem.OrderItemStatusId;
                     viewModel.Quantity = orderItem.Quantity;
                     viewModel.StockQuantity = orderItem.StockQuantity;
-                    viewModel.OrderStatusName = orderItem.OrderStatusName;
+                    viewModel.OrderItemStatusName = orderItem.OrderItemStatusName;
                     viewModel.OutletQuantity = orderItem.OutletQuantity;
                     viewModel.ImageUrl = orderItem.PictureUrl;
                     viewModel.ImageAlt = orderItem.ProductName;

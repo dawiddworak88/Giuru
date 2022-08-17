@@ -182,6 +182,7 @@ function Catalog(props) {
     const copyToClipboard = (text) => {
         ClipboardHelper.copyToClipboard(text);
     }
+    
     useEffect(() => {
         setMounted(true)
     }, [])

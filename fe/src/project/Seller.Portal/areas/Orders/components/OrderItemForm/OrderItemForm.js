@@ -12,8 +12,8 @@ import OrderItemStatusChanges from "../../../../../../shared/components/OrderIte
 
 const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
-    const [orderStatusComment, setOrderStatusComment] = useState("")
+    const [orderItemStatusId, setOrderItemStatusId] = useState(props.orderItemStatusId);
+    const [orderItemStatusChangeComment, setOrderItemStatusChangeComment] = useState(null)
     const [isSended, setIsSended] = useState(false);
 
     const handleSubmitForm = (e) => {
@@ -21,8 +21,8 @@ const OrderItemForm = (props) => {
 
         const requestPayload = {
             id: props.id,
-            orderStatusId,
-            orderStatusComment
+            orderItemStatusId,
+            orderItemStatusChangeComment
         }
 
         const requestOptions = {
@@ -57,7 +57,7 @@ const OrderItemForm = (props) => {
 
     const handleChangeOrderItemStatus = (e) => {
         setIsSended(false);
-        setOrderStatusId(e.target.value)
+        setOrderItemStatusId(e.target.value)
     }
 
     return (
@@ -72,7 +72,7 @@ const OrderItemForm = (props) => {
                             </div>
                         }
                         <div className="mt-2 mb-3 order-item__image">
-                            <img src={props.imageUrl} alt={props.imageAlt} />
+                            <img src={props.imageUrl} alt=""/>
                         </div>
                         <div className="field">
                             <TextField 
@@ -148,7 +148,7 @@ const OrderItemForm = (props) => {
                                 <Select
                                     id="orderItemStatus"
                                     name="orderItemStatus"
-                                    value={orderStatusId ? orderStatusId : props.orderStatusId}
+                                    value={orderItemStatusId ? orderItemStatusId : props.orderItemStatusId}
                                     onChange={(e) => handleChangeOrderItemStatus(e)}>
                                     {props.orderItemStatuses.map((status, index) => {
                                         return (
@@ -160,14 +160,14 @@ const OrderItemForm = (props) => {
                         </div>
                         <div className="field">
                             <TextField
-                                id="ordertatusComment"
-                                name="orderStatusComment"
+                                id="orderItemStatusChangeComment"
+                                name="orderItemStatusChangeComment"
                                 label={props.orderStatusCommentLabel}
                                 variant="standard"
                                 fullWidth={true}
                                 multiline={true}
-                                value={orderStatusComment}
-                                onChange={(e) => setOrderStatusComment(e.target.value)}
+                                value={orderItemStatusChangeComment}
+                                onChange={(e) => setOrderItemStatusChangeComment(e.target.value)}
                             />
                         </div>
                         <div className="field">
@@ -175,7 +175,7 @@ const OrderItemForm = (props) => {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || props.orderStatusId === orderStatusId || isSended}>
+                                disabled={state.isLoading || props.orderItemStatusId === orderItemStatusId || isSended}>
                                 {props.saveText}
                             </Button>
                             <Button 

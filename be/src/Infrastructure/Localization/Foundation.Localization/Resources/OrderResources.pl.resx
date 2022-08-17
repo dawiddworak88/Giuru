@@ -238,10 +238,10 @@
     <value>Zamówienia</value>
   </data>
   <data name="OrderStatus" xml:space="preserve">
-    <value>Status zamówienia</value>
+    <value>Status zamówienia:</value>
   </data>
   <data name="OrderStatusComment" xml:space="preserve">
-    <value>Komentarz do statusu zamówienia</value>
+    <value>Komentarz do statusu zamówienia:</value>
   </data>
   <data name="OrderStatusNotFound" xml:space="preserve">
     <value>Status zamówienia nie został znaleziony.</value>

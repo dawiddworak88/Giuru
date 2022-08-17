@@ -4,9 +4,9 @@ using Ordering.Api.ServicesModels;
 
 namespace Ordering.Api.Validators
 {
-    public class GetOrderItemStatusesHistoryModelValidator : BaseServiceModelValidator<GetOrderItemStatusChangesServiceModel>
+    public class GetOrderItemStatusChangesModelValidator : BaseServiceModelValidator<GetOrderItemStatusChangesServiceModel>
     {
-        public GetOrderItemStatusesHistoryModelValidator()
+        public GetOrderItemStatusChangesModelValidator()
         {
             this.RuleFor(x => x.Id).NotEmpty().NotNull();
         }

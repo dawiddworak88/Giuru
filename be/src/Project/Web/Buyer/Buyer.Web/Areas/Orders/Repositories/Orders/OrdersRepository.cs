@@ -59,7 +59,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
             return default;
         }
 
-        public async Task<OrderItemStatusesHistory> GetOrderItemStatusesAsync(string token, string language, Guid? id)
+        public async Task<OrderItemStatusChanges> GetOrderItemStatusesAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
@@ -69,7 +69,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
                 EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.OrderItemStatusesApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OrderItemStatusesHistory>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OrderItemStatusChanges>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -110,7 +110,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
                         {
                             Id = item.Id,
                             OrderId = item.OrderId,
-                            OrderStatusId = item.OrderStatusId,
+                            OrderItemStatusId = item.OrderItemStatusId,
                             ProductId = item.ProductId,
                             ProductName = item.ProductName,
                             ProductSku = item.ProductSku,
@@ -119,8 +119,8 @@ namespace Buyer.Web.Areas.Orders.Repositories
                             StockQuantity = item.StockQuantity,
                             OutletQuantity = item.OutletQuantity,
                             ExternalReference = item.ExternalReference,
-                            OrderStatusName = item.OrderStatusName,
-                            OrderStatusComment = item.OrderStatusComment,
+                            OrderItemStatusName = item.OrderItemStatusName,
+                            OrderItemStatusChangeComment = item.OrderItemStatusChangeComment,
                             ExpectedDeliveryFrom = item.ExpectedDeliveryFrom,
                             ProductAttributes = await this.productsService.GetProductAttributesAsync(product.ProductAttributes),
                             ExpectedDeliveryTo = item.ExpectedDeliveryTo,

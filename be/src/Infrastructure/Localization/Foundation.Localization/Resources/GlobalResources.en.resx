@@ -648,4 +648,7 @@
   <data name="Thumbnail" xml:space="preserve">
     <value>Thumbnail</value>
   </data>
+  <data name="OrderStatusComment" xml:space="preserve">
+    <value>Order status comment</value>
+  </data>
 </root>

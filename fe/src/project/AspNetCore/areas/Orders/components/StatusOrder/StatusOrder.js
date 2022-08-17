@@ -58,15 +58,15 @@ function StatusOrder(props) {
                                                             <Edit />
                                                         </Fab>
                                                     </TableCell>
-                                                    <TableCell><a href={item.productUrl}><img className="status-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
+                                                    <TableCell><a href={item.productUrl}><img className="status-order__item-product-image" src={item.imageSrc} alt="" /></a></TableCell>
                                                     <TableCell>{item.sku}</TableCell>
                                                     <TableCell>{item.name}</TableCell>
                                                     <TableCell>{item.productAttributes}</TableCell>
                                                     <TableCell>{item.quantity}</TableCell>
                                                     <TableCell>{item.stockQuantity}</TableCell>
                                                     <TableCell>{item.outletQuantity}</TableCell>
-                                                    <TableCell>{item.orderStatusName}</TableCell>
-                                                    <TableCell>{item.orderStatusComment}</TableCell>
+                                                    <TableCell>{item.orderItemStatusName}</TableCell>
+                                                    <TableCell>{item.orderItemStatusChangeComment}</TableCell>
                                                     <TableCell>{item.externalReference}</TableCell>
                                                     <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                     <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>

@@ -93,9 +93,9 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo,
-                    OrderStatusId = x.OrderStatusId,
-                    OrderStatusName = x.OrderStatusName,
-                    OrderStatusComment = x.OrderStatusComment,
+                    OrderItemStatusId = x.OrderItemStatusId,
+                    OrderItemStatusName = x.OrderItemStatusName,
+                    OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
                     DeliveryFrom = x.ExpectedDeliveryFrom,
                     DeliveryTo = x.ExpectedDeliveryTo,
                     ImageAlt = x.ProductName,
@@ -110,7 +110,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     orderItemsStatuses.Add(new OrderItemStatusViewModel
                     {
                         Id = orderItem.Id,
-                        OrderStatusId = orderItem.OrderStatusId
+                        OrderStatusId = orderItem.OrderItemStatusId
                     });
                 }
 

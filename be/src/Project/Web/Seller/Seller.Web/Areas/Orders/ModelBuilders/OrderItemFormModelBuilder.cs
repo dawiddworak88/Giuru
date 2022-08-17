@@ -70,7 +70,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     viewModel.Id = orderItem.Id;
                     viewModel.ProductName = orderItem.ProductName;
                     viewModel.ProductSku = orderItem.ProductSku;
-                    viewModel.OrderStatusId = orderItem.OrderStatusId;
+                    viewModel.OrderItemStatusId = orderItem.OrderItemStatusId;
                     viewModel.Quantity = orderItem.Quantity;
                     viewModel.StockQuantity = orderItem.StockQuantity;
                     viewModel.OutletQuantity = orderItem.OutletQuantity;

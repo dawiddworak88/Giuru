@@ -387,7 +387,6 @@ namespace Ordering.Api.Services
                 {
                     orderItem.OrderItemStateId = lastOrderStatusChange.OrderItemStateId;
                     orderItem.OrderItemStatusId = lastOrderStatusChange.OrderItemStatusId;
-                    //orderItem.OrderItemStatusChangeComment = lastOrderStatusChange.OrderItemStatusChangeComment;
                     orderItem.LastOrderItemStatusChangeId = lastOrderStatusChange.Id;
 
                     var orderItemStatusTranslation = this.context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == lastOrderStatusChange.OrderItemStatusId && x.IsActive && x.Language == model.Language);
@@ -398,6 +397,15 @@ namespace Ordering.Api.Services
                     }
 
                     orderItem.OrderItemStatusName = orderItemStatusTranslation?.Name;
+
+                    var orderItemStatusCommentTranslation = this.context.OrderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == lastOrderStatusChange.Id && x.Language == model.Language && x.IsActive);
+
+                    if (orderItemStatusCommentTranslation is null)
+                    {
+                        orderItemStatusCommentTranslation = this.context.OrderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == lastOrderStatusChange.Id && x.IsActive);
+                    }
+
+                    orderItem.OrderItemStatusChangeComment = orderItemStatusCommentTranslation?.OrderItemStatusChangeComment;
                 }
 
                 orderItems.Add(orderItem);
@@ -446,7 +454,6 @@ namespace Ordering.Api.Services
 
             orderItem.OrderItemStateId = lastOrderItemStatus.OrderItemStateId;
             orderItem.OrderItemStatusId = lastOrderItemStatus.OrderItemStatusId;
-            //orderItem.OrderItemStatusComment = lastOrderItemStatus.OrderItemStatusChangeComment;
 
             var orderItemStatusTranslation = await this.context.OrderStatusTranslations.FirstOrDefaultAsync(x => x.OrderStatusId == lastOrderItemStatus.OrderItemStatusId && x.Language == model.Language && x.IsActive);
 
@@ -454,6 +461,15 @@ namespace Ordering.Api.Services
             {
                 orderItemStatusTranslation = await this.context.OrderStatusTranslations.FirstOrDefaultAsync(x => x.OrderStatusId == lastOrderItemStatus.OrderItemStatusId && x.IsActive);
             }
+
+            var orderItemStatusChangeCommentTranslation = this.context.OrderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == lastOrderItemStatus.Id && x.Language == model.Language && x.IsActive);
+
+            if (orderItemStatusChangeCommentTranslation is null)
+            {
+                orderItemStatusChangeCommentTranslation = this.context.OrderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == lastOrderItemStatus.Id && x.IsActive);
+            }
+
+            orderItem.OrderItemStatusChangeComment = orderItemStatusChangeCommentTranslation?.OrderItemStatusChangeComment;
 
             orderItem.OrderItemStatusName = orderItemStatusTranslation?.Name;
 
@@ -476,31 +492,39 @@ namespace Ordering.Api.Services
 
             var orderItemStatuses = this.context.OrderItemStatusChanges.Where(x => x.OrderItemId == model.Id && x.IsActive).OrderByDescending(x => x.CreatedDate);
 
-            var itemStatusesHistory = new List<OrderItemStatusChangeServiceModel>();
+            var orderItemStatusChanges = new List<OrderItemStatusChangeServiceModel>();
 
             foreach (var orderItemStatus in orderItemStatuses.OrEmptyIfNull().ToList())
             {
-                var orderItemHistoryItem = new OrderItemStatusChangeServiceModel
+                var orderItemStatusChange = new OrderItemStatusChangeServiceModel
                 {
                     OrderItemStateId = orderItemStatus.OrderItemStateId,
                     OrderItemStatusId = orderItemStatus.OrderItemStatusId,
-                    //OrderItemStatusChangeComment = orderItemStatus.OrderItemStatusChangeComment,
                     CreatedDate = orderItemStatus.CreatedDate
                 };
 
-                var orderItemStatusHistoryItemTranslation = this.context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == orderItemStatus.OrderItemStatusId && x.Language == model.Language && x.IsActive);
+                var orderItemStatusTranslation = this.context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == orderItemStatus.OrderItemStatusId && x.Language == model.Language && x.IsActive);
 
-                if (orderItemStatusHistoryItemTranslation is null)
+                if (orderItemStatusTranslation is null)
                 {
-                    orderItemStatusHistoryItemTranslation = this.context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == orderItemStatus.OrderItemStatusId && x.IsActive);
+                    orderItemStatusTranslation = this.context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == orderItemStatus.OrderItemStatusId && x.IsActive);
                 }
 
-                orderItemHistoryItem.OrderItemStatusName = orderItemStatusHistoryItemTranslation?.Name;
+                orderItemStatusChange.OrderItemStatusName = orderItemStatusTranslation?.Name;
 
-                itemStatusesHistory.Add(orderItemHistoryItem);
+                var orderItemStatusChangeCommentTranslation = this.context.OrderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == orderItemStatus.Id && x.Language == model.Language && x.IsActive);
+
+                if (orderItemStatusChangeCommentTranslation is null)
+                {
+                    orderItemStatusChangeCommentTranslation = this.context.OrderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == orderItemStatus.Id && x.IsActive);
+                }
+
+                orderItemStatusChange.OrderItemStatusChangeComment = orderItemStatusChangeCommentTranslation?.OrderItemStatusChangeComment;
+
+                orderItemStatusChanges.Add(orderItemStatusChange);
             }
 
-            orderItemStatusesHistory.OrderItemStatusChanges = itemStatusesHistory;
+            orderItemStatusesHistory.OrderItemStatusChanges = orderItemStatusChanges;
 
             return orderItemStatusesHistory;
         }
@@ -599,7 +623,7 @@ namespace Ordering.Api.Services
                 throw new CustomException(this.orderLocalizer.GetString("OrderItemNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            var newOrderItemStatus = await this.context.OrderStatuses.FirstOrDefaultAsync(x => x.Id == model.OrderStatusId && x.IsActive);
+            var newOrderItemStatus = await this.context.OrderStatuses.FirstOrDefaultAsync(x => x.Id == model.OrderItemStatusId && x.IsActive);
 
             if (newOrderItemStatus is null)
             {
@@ -613,29 +637,64 @@ namespace Ordering.Api.Services
                 OrderItemStatusId = newOrderItemStatus.Id
             };
 
-            this.context.OrderItemStatusChanges.Add(orderItemStatusChange.FillCommonProperties());
+            await this.context.OrderItemStatusChanges.AddAsync(orderItemStatusChange.FillCommonProperties());
+
+            if (model.OrderItemStatusChangeComment is not null)
+            {
+                var orderItemStatusChangeTranslation = new OrderItemStatusChangeCommentTranslation
+                {
+                    OrderItemStatusChangeComment = model.OrderItemStatusChangeComment,
+                    Language = model.Language,
+                    OrderItemStatusChangeId = orderItemStatusChange.Id
+                };
+
+                await this.context.OrderItemStatusChangesCommentTranslations.AddAsync(orderItemStatusChangeTranslation.FillCommonProperties());
+            }
 
             orderItem.LastOrderItemStatusChangeId = orderItemStatusChange.Id;
             orderItem.LastModifiedDate = DateTime.UtcNow;
 
-           /* var order = await this.context.Orders.FirstOrDefaultAsync(x => x.Id == orderItem.OrderId && x.IsActive);
-
-            bool sameStatuses = order.OrderItems.DistinctBy(x => x.OrderStatusId).Count() == 1;
-
-            if (sameStatuses is true)
-            {
-                order.OrderStatusId = order.OrderItems.FirstOrDefault().OrderStatusId;
-                order.OrderStateId = order.OrderItems.FirstOrDefault().OrderStateId;
-                order.LastModifiedDate = DateTime.UtcNow;
-            } 
-            else
-            {
-                order.OrderStatusId = OrderStatusesConstants.ProcessingId;
-                order.OrderStateId = OrderStatesConstants.ProcessingId;
-                order.LastModifiedDate = DateTime.UtcNow;
-            }*/
-
             await this.context.SaveChangesAsync();
+
+            var order = await this.context.Orders.FirstOrDefaultAsync(x => x.Id == orderItem.OrderId && x.IsActive);
+
+            if (order is not null)
+            {
+                var orderItemsLastStatusChangeIds = order.OrderItems.Select(x => x.LastOrderItemStatusChangeId);
+
+                var lastOrderItemStatusChanges = new List<OrderItemStatusServiceModel>();
+
+                foreach (var orderItemLastStatusChangeId in orderItemsLastStatusChangeIds.OrEmptyIfNull())
+                {
+                    var lastOrderItemStatusChange = this.context.OrderItemStatusChanges.FirstOrDefault(x => x.Id == orderItemLastStatusChangeId && x.IsActive);
+
+                    if (lastOrderItemStatusChange is not null)
+                    {
+                        lastOrderItemStatusChanges.Add(new OrderItemStatusServiceModel
+                        {
+                            OrderItemStateId = lastOrderItemStatusChange.OrderItemStateId,
+                            OrderItemStatusId = lastOrderItemStatusChange.OrderItemStatusId
+                        });
+                    }
+                }
+
+                bool isSameStatus = lastOrderItemStatusChanges.DistinctBy(x => x.OrderItemStatusId).Count() == 1;
+
+                if (isSameStatus is true)
+                {
+                    order.OrderStatusId = lastOrderItemStatusChanges.FirstOrDefault().OrderItemStatusId;
+                    order.OrderStateId = lastOrderItemStatusChanges.FirstOrDefault().OrderItemStateId;
+                    order.LastModifiedDate = DateTime.UtcNow;
+                }
+                else
+                {
+                    order.OrderStatusId = OrderStatusesConstants.ProcessingId;
+                    order.OrderStateId = OrderStatesConstants.ProcessingId;
+                    order.LastModifiedDate = DateTime.UtcNow;
+                }
+
+                await this.context.SaveChangesAsync();
+            }
         }
     }
 }

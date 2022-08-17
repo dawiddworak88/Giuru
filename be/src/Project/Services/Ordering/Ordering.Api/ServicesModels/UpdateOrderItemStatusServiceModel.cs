@@ -6,7 +6,7 @@ namespace Ordering.Api.ServicesModels
     public class UpdateOrderItemStatusServiceModel : BaseServiceModel
     {
         public Guid? Id { get; set; }
-        public Guid? OrderStatusId { get; set; }
-        public string OrderStatusComment { get; set; }
+        public Guid? OrderItemStatusId { get; set; }
+        public string OrderItemStatusChangeComment { get; set; }
     }
 }

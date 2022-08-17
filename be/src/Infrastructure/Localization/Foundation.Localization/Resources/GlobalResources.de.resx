@@ -648,4 +648,7 @@
   <data name="Thumbnail" xml:space="preserve">
     <value>Miniaturansicht</value>
   </data>
+  <data name="OrderStatusComment" xml:space="preserve">
+    <value>Kommentar zum Bestellstatus</value>
+  </data>
 </root>

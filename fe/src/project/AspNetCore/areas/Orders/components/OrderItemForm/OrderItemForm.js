@@ -13,9 +13,9 @@ const OrderItemForm = (props) => {
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
-                    <div className="order-item__status">{props.orderStatusLabel}: {props.orderStatusName}</div>
+                    <div className="order-item__status">{props.orderStatusLabel}: {props.orderItemStatusName}</div>
                     <div className="mt-2 mb-3 order-item__image">
-                        <img src={props.imageUrl} alt={props.imageAlt} />
+                        <img src={props.imageUrl} alt="" />
                     </div>
                     <div className="field">
                         <TextField 
@@ -116,6 +116,7 @@ OrderItemForm.propTypes = {
     stockQuantityLabel: PropTypes.string.isRequired,
     outletQuantity: PropTypes.string.isRequired,
     orderStatusLabel: PropTypes.string.isRequired,
+    orderItemStatusName: PropTypes.string.isRequired,
     orderStatusCommentLabel: PropTypes.string.isRequired,
     orderUrl: PropTypes.string.isRequired,
     navigateToOrderLabel: PropTypes.string.isRequired,

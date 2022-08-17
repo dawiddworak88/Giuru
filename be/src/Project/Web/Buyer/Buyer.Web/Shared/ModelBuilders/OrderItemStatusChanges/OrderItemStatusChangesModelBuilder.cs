@@ -30,21 +30,21 @@ namespace Buyer.Web.Shared.ModelBuilders.OrderItemStatusChanges
             var viewModel = new OrderItemStatusChangesViewModel
             {
                 Title = this.orderLocalizer.GetString("HistoryOfStatusChanges"),
-                OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
-                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
+                OrderStatusLabel = this.globalLocalizer.GetString("OrderStatus"),
+                OrderStatusCommentLabel = this.globalLocalizer.GetString("OrderStatusComment"),
                 LastModifiedDateLabel = this.globalLocalizer.GetString("LastModifiedDate")
             };
 
             if (componentModel.Id.HasValue)
             {
-                var statusesHistory = await this.ordersRepository.GetOrderItemStatusesAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                var orderItemChanges = await this.ordersRepository.GetOrderItemStatusesAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
-                if (statusesHistory is not null)
+                if (orderItemChanges is not null)
                 {
-                    viewModel.OrderStatusesHistory = statusesHistory.StatusesHistory.Select(x => new OrderItemStatusChangeViewModel
+                    viewModel.OrderItemStatusChanges = orderItemChanges.StatusChanges.Select(x => new OrderItemStatusChangeViewModel
                     {
-                        OrderItemStatusName = x.OrderStatusName,
-                        OrderItemStatusChangeComment = x.OrderStatusComment,
+                        OrderItemStatusName = x.OrderItemStatusName,
+                        OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
                         CreatedDate = x.CreatedDate
                     });
                 }
