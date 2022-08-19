@@ -52,7 +52,8 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         DownloadEverythingLabel = this.globalLocalizer.GetString("DownloadEverything"),
                         SelectFileLabel = this.globalLocalizer.GetString("SelectFile"),
                         DisplayedRowsLabel = this.globalLocalizer.GetString("DisplayedRows"),
-                        RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage")
+                        RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage"),
+                        SearchLabel = this.globalLocalizer.GetString("Search")
                     };
 
                     var fileViewModels = new List<FileViewModel>();

@@ -5,7 +5,8 @@ import {
     Fab, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button, Tooltip,
     FormControlLabel, Checkbox, TablePagination,
-    CircularProgress
+    CircularProgress,
+    TextField
 } from "@mui/material";
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
@@ -17,8 +18,11 @@ import FilesConstants from "../../../../../shared/constants/FilesConstants";
 
 const DownloadCenterFiles = (props) => {
     const [state, dispatch] = useContext(Context);
+    const [searchTerm, setSearchTerm] = useState("");
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [total, setTotal] = useState(props.files ? props.files.length : 0);
     const [files, setFiles] = useState(props.files ? props.files.slice(0, FilesConstants.defaultPageSize()) : []);
+    const [searchedFiles, setSearchedFiles] = useState([]);
     const [page, setPage] = useState(0);
     
     const handleCopyClick = (file) => {
@@ -44,7 +48,14 @@ const DownloadCenterFiles = (props) => {
 
     const handleSelectAllItems = e => {
         if (e.target.checked){
-            setSelectedFiles(props.files.map((f) => f))
+
+            let filesToSelect = props.files;
+
+            if (searchTerm) {
+                filesToSelect = searchedFiles;
+            }
+
+            setSelectedFiles(filesToSelect.map((f) => f))
             return;
         }
 
@@ -58,6 +69,10 @@ const DownloadCenterFiles = (props) => {
 
         if (checkedFiles && selectedFiles.length > 0) {
             filesToDownload = selectedFiles;
+        }
+
+        if (searchTerm) {
+            filesToDownload = searchedFiles;
         }
 
         if (filesToDownload.length > 0) {
@@ -86,19 +101,47 @@ const DownloadCenterFiles = (props) => {
     const handleChangePage = (event, newPage) => {
         const startDisplayFiles = newPage * FilesConstants.defaultPageSize();
         setPage(newPage)
-        setFiles(props.files.slice(startDisplayFiles, startDisplayFiles + FilesConstants.defaultPageSize()))
+
+        let filesToSearch = props.files
+
+        if (searchTerm){
+            filesToSearch = searchedFiles;
+        }
+
+        setFiles(filesToSearch.slice(startDisplayFiles, startDisplayFiles + FilesConstants.defaultPageSize()))
+    }
+
+    const handleOnChange = (event) => {
+        setSearchTerm(event.target.value);
+    }
+
+    const handleSearchButton = () => {
+        const filesFromSearch = props.files.filter(x => x.name.toLowerCase().startsWith(searchTerm.toLowerCase()));
+
+        setPage(0)
+        setFiles(filesFromSearch.slice(0, FilesConstants.defaultPageSize()));
+        setSearchedFiles(filesFromSearch)
+        setTotal(filesFromSearch.length)
     }
 
     return (
         <Fragment>
-            {files &&
+            {props.files && props.files.length > 0 && 
                 <section className="section files pt-5">
-                    <div className="is-flex is-justify-content-space-between is-align-items-center files__header">
-                        <h3 className="title is-4">{props.filesLabel}</h3>
-                            <div className="files__buttons">
-                                <button className="button is-text" type="button" onClick={() => handleDownloadFiles(true)} disabled={selectedFiles.length > 0 ? false : true}>{props.downloadSelectedLabel}</button>
-                                <button className="button is-text" type="button" onClick={() => handleDownloadFiles()}>{props.downloadEverythingLabel}</button>
-                            </div>
+                    <div className="files__content-box">
+                        <div className="files__search">
+                            <TextField id="search" name="search" className="files__search-field" value={searchTerm} onChange={handleOnChange} variant="standard" type="search" autoComplete="off" fullWidth={true} />
+                            <Button onClick={handleSearchButton} className="ml-5" type="button" variant="contained" color="primary">
+                                {props.searchLabel}
+                            </Button>
+                        </div>
+                        <div className="is-flex is-justify-content-space-between is-align-items-center files__header">
+                            <h3 className="title is-4">{props.filesLabel}</h3>
+                                <div className="files__buttons">
+                                    <button className="button is-text" type="button" onClick={() => handleDownloadFiles(true)} disabled={selectedFiles.length > 0 ? false : true}>{props.downloadSelectedLabel}</button>
+                                    <button className="button is-text" type="button" onClick={() => handleDownloadFiles()}>{props.downloadEverythingLabel}</button>
+                                </div>
+                        </div>
                     </div>
                     <div className="table-container">
                         <div className="catalog__table">
@@ -108,8 +151,8 @@ const DownloadCenterFiles = (props) => {
                                         <TableRow>
                                             <TableCell width="11%">
                                                 <Checkbox
-                                                    indeterminate={selectedFiles.length > 0 && selectedFiles.length < props.files.length}
-                                                    checked={props.files.length > 0 && selectedFiles.length === props.files.length}
+                                                    indeterminate={selectedFiles.length > 0 && selectedFiles.length < (searchTerm ? searchedFiles.length : props.files.length)}
+                                                    checked={(searchTerm ? searchedFiles.length : props.files.length) > 0 && selectedFiles.length === (searchTerm ? searchedFiles.length : props.files.length)}
                                                     onChange={handleSelectAllItems} 
                                                 />
                                             </TableCell>
@@ -173,7 +216,7 @@ const DownloadCenterFiles = (props) => {
                         </div>
                         <TablePagination 
                             labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
-                            count={props.files.length}
+                            count={total}
                             rowsPerPageOptions={[FilesConstants.defaultPageSize()]}
                             rowsPerPage={FilesConstants.defaultPageSize()}
                             component="div"
@@ -204,7 +247,8 @@ DownloadCenterFiles.propTypes = {
     downloadSelectedLabel: PropTypes.string.isRequired,
     downloadEverythingLabel: PropTypes.string.isRequired,
     displayedRowsLabel: PropTypes.string.isRequired,
-    rowsPerPageLabel: PropTypes.string.isRequired
+    rowsPerPageLabel: PropTypes.string.isRequired,
+    searchLabel: PropTypes.string.isRequired
 };
 
 export default DownloadCenterFiles;
