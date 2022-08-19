@@ -7,10 +7,9 @@ import {
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
 import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
-import FilesConstants from "../../constants/FilesConstants";
 
 function Files(props) {
-    const [files, setFiles] = useState(props.files ? props.files.slice(0, FilesConstants.defaultPageSize()) : []);
+    const [files, setFiles] = useState(props.files ? props.files.slice(0, props.defaultPageSize) : []);
     const [page, setPage] = useState(0);
     
     const handleCopyClick = (file) => {
@@ -18,9 +17,9 @@ function Files(props) {
     };
 
     const handleChangePage = (event, newPage) => {
-        const startDisplayFiles = newPage * FilesConstants.defaultPageSize();
+        const startDisplayFiles = newPage * props.defaultPageSize;
         setPage(newPage)
-        setFiles(props.files.slice(startDisplayFiles, startDisplayFiles + FilesConstants.defaultPageSize()))
+        setFiles(props.files.slice(startDisplayFiles, startDisplayFiles + props.defaultPageSize))
     }
 
     return (
@@ -82,8 +81,8 @@ function Files(props) {
                         <TablePagination 
                             labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
                             count={props.files.length}
-                            rowsPerPageOptions={[FilesConstants.defaultPageSize()]}
-                            rowsPerPage={FilesConstants.defaultPageSize()}
+                            rowsPerPageOptions={[props.defaultPageSize]}
+                            rowsPerPage={props.defaultPageSize}
                             component="div"
                             page={page}
                             onPageChange={handleChangePage}
@@ -108,7 +107,8 @@ Files.propTypes = {
     lastModifiedDateLabel: PropTypes.string.isRequired,
     createdDateLabel: PropTypes.string.isRequired,
     rowsPerPageLabel: PropTypes.string.isRequired,
-    displayedRowsLabel: PropTypes.string.isRequired
+    displayedRowsLabel: PropTypes.string.isRequired,
+    defaultPageSize: PropTypes.number.isRequired
 };
 
 export default Files;

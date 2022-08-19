@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Foundation.Media.Services.MediaServices;
 using System.Linq;
+using Buyer.Web.Shared.Definitions.Files;
 
 namespace Buyer.Web.Shared.ModelBuilders.Files
 {
@@ -52,7 +53,8 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         DownloadEverythingLabel = this.globalLocalizer.GetString("DownloadEverything"),
                         SelectFileLabel = this.globalLocalizer.GetString("SelectFile"),
                         DisplayedRowsLabel = this.globalLocalizer.GetString("DisplayedRows"),
-                        RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage")
+                        RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage"),
+                        DefaultPageSize = FilesConstants.DefaultPageSize
                     };
 
                     var fileViewModels = new List<FileViewModel>();

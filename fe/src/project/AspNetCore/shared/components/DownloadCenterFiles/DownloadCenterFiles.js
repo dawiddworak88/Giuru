@@ -13,12 +13,11 @@ import ClipboardHelper from "../../../../../shared/helpers/globals/ClipboardHelp
 import JsZip from 'jszip';
 import { saveAs } from 'file-saver';
 import ResponseStatusConstants from "../../../../../shared/constants/ResponseStatusConstants";
-import FilesConstants from "../../../../../shared/constants/FilesConstants";
 
 const DownloadCenterFiles = (props) => {
     const [state, dispatch] = useContext(Context);
     const [selectedFiles, setSelectedFiles] = useState([]);
-    const [files, setFiles] = useState(props.files ? props.files.slice(0, FilesConstants.defaultPageSize()) : []);
+    const [files, setFiles] = useState(props.files ? props.files.slice(0, props.defaultPageSize) : []);
     const [page, setPage] = useState(0);
     
     const handleCopyClick = (file) => {
@@ -84,9 +83,9 @@ const DownloadCenterFiles = (props) => {
     }
 
     const handleChangePage = (event, newPage) => {
-        const startDisplayFiles = newPage * FilesConstants.defaultPageSize();
+        const startDisplayFiles = newPage * props.defaultPageSize;
         setPage(newPage)
-        setFiles(props.files.slice(startDisplayFiles, startDisplayFiles + FilesConstants.defaultPageSize()))
+        setFiles(props.files.slice(startDisplayFiles, startDisplayFiles + props.defaultPageSize))
     }
 
     return (
@@ -174,8 +173,8 @@ const DownloadCenterFiles = (props) => {
                         <TablePagination 
                             labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
                             count={props.files.length}
-                            rowsPerPageOptions={[FilesConstants.defaultPageSize()]}
-                            rowsPerPage={FilesConstants.defaultPageSize()}
+                            rowsPerPageOptions={[props.defaultPageSize]}
+                            rowsPerPage={props.defaultPageSize}
                             component="div"
                             page={page}
                             onPageChange={handleChangePage}
@@ -204,7 +203,8 @@ DownloadCenterFiles.propTypes = {
     downloadSelectedLabel: PropTypes.string.isRequired,
     downloadEverythingLabel: PropTypes.string.isRequired,
     displayedRowsLabel: PropTypes.string.isRequired,
-    rowsPerPageLabel: PropTypes.string.isRequired
+    rowsPerPageLabel: PropTypes.string.isRequired,
+    defaultPageSize: PropTypes.number.isRequired
 };
 
 export default DownloadCenterFiles;

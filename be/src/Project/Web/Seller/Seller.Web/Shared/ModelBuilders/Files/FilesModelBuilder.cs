@@ -6,6 +6,7 @@ using Foundation.Media.Services.MediaServices;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.ComponentModels.Files;
+using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +50,8 @@ namespace Seller.Web.Shared.ModelBuilders.Files
                         CreatedDateLabel = this.globalLocalizer.GetString("CreatedDate"),
                         LastModifiedDateLabel = this.globalLocalizer.GetString("LastModifiedDate"),
                         DisplayedRowsLabel = this.globalLocalizer.GetString("DisplayedRows"),
-                        RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage")
+                        RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage"),
+                        DefaultPageSize = FilesConstants.DefaultPageSize
                     };
 
                     var fileViewModels = new List<FileViewModel>();

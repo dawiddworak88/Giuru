@@ -16,5 +16,6 @@ namespace Buyer.Web.Shared.ViewModels.Files
         public string LastModifiedDateLabel { get; set; }
         public string CreatedDateLabel { get; set; }
         public IEnumerable<FileViewModel> Files { get; set; }
+        public int DefaultPageSize { get; set; }
     }
 }
