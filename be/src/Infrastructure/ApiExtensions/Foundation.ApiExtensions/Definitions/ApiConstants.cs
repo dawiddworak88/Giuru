@@ -63,6 +63,8 @@
             public static readonly string MediaItemsApiEndpoint = "/api/v1/mediaitems";
             public static readonly string MediaItemsVersionsApiEndpoint = "/api/v1/mediaitems/versions";
             public static readonly string FilesApiEndpoint = "/api/v1/files";
+            public static readonly string FileChunksApiEndpoint = "/api/v1/files/chunks";
+            public static readonly string FileChunksSaveCompleteApiEndpoint = "/api/v1/files/chunkssavecomplete";
         }
 
         public struct Baskets
@@ -83,11 +85,13 @@
             public static readonly string FileContentName = "file";
             public static readonly string LanguageContentName = "language";
             public static readonly string GuidContentName = "id";
+            public static readonly string ChunkNumberContentName = "chunkNumber";
         }
 
         public struct Request
         {
             public const long RequestSizeLimit = 250_000_000;
+            public const long RequestChunkSizeLimit = 3_000_000;
         }
     }
 }

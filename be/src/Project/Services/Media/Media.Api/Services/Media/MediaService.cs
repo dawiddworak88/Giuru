@@ -22,6 +22,9 @@ using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
 using Media.Api.IntegrationEvents;
 using Foundation.EventBus.Abstractions;
+using Foundation.ApiExtensions.Shared.Definitions;
+using System.Reflection.Metadata;
+using Microsoft.AspNetCore.Http;
 
 namespace Media.Api.Services.Media
 {
@@ -409,6 +412,104 @@ namespace Media.Api.Services.Media
                 };
 
                 this.eventBus.Publish(message);
+            }
+        }
+
+        public async Task CreateFileChunkAsync(CreateFileChunkServiceModel model)
+        {
+            var path = Path.Combine($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}", $"{model.File.FileName}${model.ChunkSumber}");
+
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+            using (var fs = File.Create(path))
+            {
+                await model.File.CopyToAsync(fs);
+            }
+        }
+
+        public async Task<Guid> CreateFileFromChunksAsync(CreateMediaItemFromChunksServiceModel model)
+        {
+            string newPath = Path.Combine($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}", model.Filename);
+            
+            string[] filePaths = Directory.GetFiles($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}").Where(p => p.Contains(model.Filename)).OrderBy(p => int.Parse(p.Replace(model.Filename, "$").Split('$')[1])).ToArray();
+
+            foreach (var filePath in filePaths)
+            {
+                MergeChunks(newPath, filePath);
+            }
+
+            using var stream = new MemoryStream(File.ReadAllBytes(newPath).ToArray());
+
+            var formFile = new FormFile(stream, 0, stream.Length, model.Filename, model.Filename);
+
+            var id = await this.CreateFileAsync(new CreateMediaItemServiceModel
+            {
+                File = formFile,
+                OrganisationId = model.OrganisationId,
+                Language = model.Language,
+                Username = model.Username
+            });
+
+            File.Delete(newPath);
+
+            return id;
+        }
+
+        public async Task<Guid> UpdateFileFromChunksAsync(UpdateMediaItemFromChunksServiceModel model)
+        {
+            string newPath = Path.Combine($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}", model.Filename);
+
+            string[] filePaths = Directory.GetFiles($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}").Where(p => p.Contains(model.Filename)).OrderBy(p => int.Parse(p.Replace(model.Filename, "$").Split('$')[1])).ToArray();
+
+            foreach (var filePath in filePaths)
+            {
+                MergeChunks(newPath, filePath);
+            }
+
+            using var stream = new MemoryStream(File.ReadAllBytes(newPath).ToArray());
+
+            var formFile = new FormFile(stream, 0, stream.Length, model.Filename, model.Filename);
+
+            var id = await this.UpdateFileAsync(new UpdateMediaItemServiceModel
+            {
+                File = formFile,
+                Id = model.Id,
+                Language = model.Language,
+                OrganisationId = model.OrganisationId,
+                Username = model.Username
+            });
+
+            File.Delete(newPath);
+
+            return id;
+        }
+
+        private static void MergeChunks(string chunk1, string chunk2)
+        {
+            FileStream fs1 = null;
+            FileStream fs2 = null;
+
+            try
+            {
+                fs1 = File.Open(chunk1, FileMode.Append);
+                fs2 = File.Open(chunk2, FileMode.Open);
+                var fs2Content = new byte[fs2.Length];
+                fs2.Read(fs2Content, 0, (int)fs2.Length);
+                fs1.Write(fs2Content, 0, (int)fs2.Length);
+            }
+            finally
+            {
+                if (fs1 is not null)
+                {
+                    fs1.Close();
+                }
+
+                if (fs2 is not null)
+                {
+                    fs2.Close();
+                }
+
+                File.Delete(chunk2);
             }
         }
     }

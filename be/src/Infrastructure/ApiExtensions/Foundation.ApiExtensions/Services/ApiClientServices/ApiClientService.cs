@@ -49,6 +49,11 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
                             content.Add(new StringContent(request.Data.Id), ApiConstants.ContentNames.GuidContentName);
                         }
 
+                        if (request.Data.ChunkNumber.HasValue)
+                        {
+                            content.Add(new StringContent(request.Data.ChunkNumber.ToString()), ApiConstants.ContentNames.ChunkNumberContentName);
+                        }
+
                         var response = await client.PostAsync(request.EndpointAddress, content);
 
                         var apiResponse = new ApiResponse<T>

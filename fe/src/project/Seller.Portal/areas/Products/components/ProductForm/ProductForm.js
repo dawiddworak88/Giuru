@@ -272,6 +272,8 @@ function ProductForm(props) {
                                 label={props.productFilesLabel}
                                 accept=".png, .jpg, .pdf, .docx, .zip, .webp"
                                 multiple={true}
+                                isUploadInChunksEnabled={true}
+                                chunkSize={3000000}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
                                 dropFilesLabel={props.dropFilesLabel}

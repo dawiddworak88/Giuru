@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Foundation.ApiExtensions.Shared.Definitions;
 
 namespace Seller.Web.Areas.Media.ApiControllers
 {
@@ -44,7 +45,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
         }
 
         [HttpPost]
-        [DisableRequestSizeLimit]
+        [RequestSizeLimit(ApiConstants.Request.RequestSizeLimit)]
         public async Task<IActionResult> Post([FromForm] IFormFile file, List<IFormFile> files, string id)
         {
             if (file == null && (files == null || !files.Any()))
@@ -126,6 +127,66 @@ namespace Seller.Web.Areas.Media.ApiControllers
                                 Extension = mediaItem.Extension
                             }));
             }
+        }
+
+        [HttpPost]
+        [RequestSizeLimit(ApiConstants.Request.RequestSizeLimit)]
+        public async Task<IActionResult> PostChunk([FromForm] IFormFile chunk, int? chunkNumber, string filename)
+        {
+            if (chunk is not null && chunkNumber.HasValue && string.IsNullOrWhiteSpace(filename) is false)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    await chunk.CopyToAsync(ms);
+
+                    await this.filesRepository.SaveChunkAsync(
+                        await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                        CultureInfo.CurrentUICulture.Name,
+                        ms.ToArray(),
+                        filename,
+                        chunkNumber);
+
+                    return this.StatusCode((int)HttpStatusCode.OK);
+                }
+            }
+
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostChunksComplete(string filename)
+        {
+            if (string.IsNullOrWhiteSpace(filename) is true)
+            {
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            }
+
+            var fileId = await this.filesRepository.SaveChunksCompleteAsync(
+                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                CultureInfo.CurrentUICulture.Name,
+                filename);
+
+            var mediaItem = await this.mediaItemsRepository.GetMediaItemAsync(
+                        await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                        CultureInfo.CurrentUICulture.Name,
+                        fileId);
+
+            if (mediaItem is not null)
+            {
+                return this.StatusCode(
+                    (int)HttpStatusCode.OK,
+                    new
+                    {
+                        Id = mediaItem.Id,
+                        Url = this.mediaService.GetMediaUrl(mediaItem.Id),
+                        Name = mediaItem.Name,
+                        MimeType = mediaItem.MimeType,
+                        Filename = mediaItem.Filename,
+                        Extension = mediaItem.Extension
+                    });
+            }
+
+            return this.StatusCode((int)HttpStatusCode.BadRequest);
         }
 
         [HttpDelete]
