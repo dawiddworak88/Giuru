@@ -211,7 +211,7 @@ function MediaCloud(props) {
                         }
                         else 
                         {
-                            setFilesToUploadInChunks(null);
+                            setFilesToUploadInChunks([]);
                             setFileToUploadinChunksIndex(0);
                             setFileToUploadInChunks(null);
                             setFileToUploadInChunksFilename("");

@@ -429,13 +429,12 @@ namespace Media.Api.Services.Media
         {
             string newPath = Path.Combine($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}", model.Filename);
 
-            var path = $"{MediaConstants.Paths.TempPath}/{model.OrganisationId}";
-
-            string[] filePaths = Directory.GetFiles(path).Where(p => p.Contains(model.Filename)).OrderBy(p => Int32.Parse(p.Replace(model.Filename, "$").Split('$')[1])).ToArray();
+            string[] filePaths = Directory.GetFiles($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}").Where(p => p.Contains(model.Filename)).OrderBy(p => Int32.Parse(p.Replace(model.Filename, "$").Split('$')[1])).ToArray();
 
             foreach (var filePath in filePaths)
             {
                 MergeChunks(newPath, filePath);
+                File.Delete(filePath);
             }
 
             using var stream = new MemoryStream(File.ReadAllBytes(newPath).ToArray());
@@ -459,11 +458,12 @@ namespace Media.Api.Services.Media
         {
             string newPath = Path.Combine($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}", model.Filename);
 
-            string[] filePaths = Directory.GetFiles($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}").Where(p => p.Contains(model.Filename)).OrderBy(p => int.Parse(p.Replace(model.Filename, "$").Split('$')[1])).ToArray();
+            string[] filePaths = Directory.GetFiles($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}").Where(p => p.Contains(model.Filename)).OrderBy(p => Int32.Parse(p.Replace(model.Filename, "$").Split('$')[1])).ToArray();
 
             foreach (var filePath in filePaths)
             {
                 MergeChunks(newPath, filePath);
+                File.Delete(filePath);
             }
 
             using var stream = new MemoryStream(File.ReadAllBytes(newPath).ToArray());
