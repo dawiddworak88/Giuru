@@ -18,6 +18,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Foundation.ApiExtensions.Shared.Definitions;
+using Seller.Web.Areas.Media.ApiRequestModels;
 
 namespace Seller.Web.Areas.Media.ApiControllers
 {
@@ -154,9 +155,9 @@ namespace Seller.Web.Areas.Media.ApiControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostChunksComplete(string filename)
+        public async Task<IActionResult> PostChunksComplete([FromBody] UploadMediaChunkCompleteRequestModel model)
         {
-            if (string.IsNullOrWhiteSpace(filename) is true)
+            if (string.IsNullOrWhiteSpace(model.Filename) is true)
             {
                 return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
@@ -164,7 +165,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
             var fileId = await this.filesRepository.SaveChunksCompleteAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
-                filename);
+                model.Filename);
 
             var mediaItem = await this.mediaItemsRepository.GetMediaItemAsync(
                         await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),

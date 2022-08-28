@@ -10,18 +10,18 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 
 function MediaCloud(props) {
+
     const [, dispatch] = useContext(Context);
     const { setFieldValue, files, mediaId } = props;
 
     const [fileToUploadInChunksIndex, setFileToUploadinChunksIndex] = useState(0);
-    const [chunkCounter, setChunkCounter] = useState(0);
-    const [progress, setProgress] = useState(0);
+    const [fileUploadProgress, setFileUploadProgress] = useState(0);
     const [filesToUploadInChunks, setFilesToUploadInChunks] = useState([]);
     const [fileToUploadInChunks, setFileToUploadInChunks] = useState(null);
     const [beginingOfTheChunk, setBeginingOfTheChunk] = useState(0);
     const [endOfTheChunk, setEndOfTheChunk] = useState(props.chunkSize);
-    const [fileToUploadInChunksSize, setFileToUploadInChunksSize] = useState(0);
     const [fileToUploadInChunksFilename, setFileToUploadInChunksFilename] = useState("");
+    const [chunkCounter, setChunkCounter] = useState(0);
     const [chunkCount, setChunkCount] = useState(0);
 
     function deleteMedia(e, id) {
@@ -36,14 +36,10 @@ function MediaCloud(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         if (props.multiple) {
-
             if (props.isUploadInChunksEnabled) {
-                console.log("props.isUploadInChunksEnabled");
-                console.log(acceptedFiles);
                 setFilesToUploadInChunks(acceptedFiles);
             }
             else {
-
                 const formData = new FormData();
 
                 acceptedFiles.forEach((file) => {
@@ -79,12 +75,10 @@ function MediaCloud(props) {
             }
         }
         else {
-
             if (props.isUploadInChunksEnabled) {
                 setFilesToUploadInChunks(acceptedFiles);
             }
             else {
-
                 const formData = new FormData();
 
                 if (props.mediaId) {
@@ -137,32 +131,18 @@ function MediaCloud(props) {
 
     useEffect(() => {
         if (filesToUploadInChunks.length > 0) {
-            console.log("filesToUploadInChunks filesToUploadInChunks.length > 0")
             filesInChunksUpload();
         }
-      }, [filesToUploadInChunks, fileToUploadInChunks, progress]);
+      }, [filesToUploadInChunks, fileToUploadInChunks, fileUploadProgress]);
 
     const filesInChunksUpload = () => {
-        console.log("filesToUploadInChunks");
-        console.log(filesToUploadInChunks);
-
-        console.log("filesInChunksUpload");
-        console.log(fileToUploadInChunks);
-
-        if (fileToUploadInChunks) {
-            
+        if (fileToUploadInChunks) {        
             setChunkCounter(chunkCounter + 1);
             if (chunkCounter <= chunkCount) {
-                console.log("filesInChunksUpload chunkCounter <= chunkCount");
-                console.log(chunkCounter);
                 uploadChunk(fileToUploadInChunks.slice(beginingOfTheChunk, endOfTheChunk));
             }
         }
         else {
-            console.log("filesInChunksUpload else");
-            console.log(filesToUploadInChunks[fileToUploadInChunksIndex].name);
-            
-            setFileToUploadInChunksSize(filesToUploadInChunks[fileToUploadInChunksIndex].size);
             setFileToUploadInChunksFilename(filesToUploadInChunks[fileToUploadInChunksIndex].name);
             setChunkCount(filesToUploadInChunks[fileToUploadInChunksIndex].size % props.chunkSize == 0 ? filesToUploadInChunks[fileToUploadInChunksIndex].size / props.chunkSize : Math.floor(filesToUploadInChunks[fileToUploadInChunksIndex].size / props.chunkSize) + 1);
             setFileToUploadInChunks(filesToUploadInChunks[fileToUploadInChunksIndex]);
@@ -170,43 +150,26 @@ function MediaCloud(props) {
     };
 
     const uploadChunk = (chunk) => {
-
         var formData = new FormData();
-
-        console.log(chunk);
-        console.log(chunkCounter);
-        console.log(fileToUploadInChunksFilename);
-
         formData.append("chunk", chunk);
         formData.append("chunkNumber", chunkCounter);
         formData.append("filename", fileToUploadInChunksFilename);
-        
-        console.log("upload chunk");
-        console.log(fileToUploadInChunksFilename);
-        console.log(chunkCounter);
 
         const requestOptions = {
             method: "POST",
             body: formData
         };
 
-        fetch(props.saveMediaUrl, requestOptions)
+        fetch(props.saveMediaChunkUrl, requestOptions)
             .then(function (response) {
                 if (response.ok) {
-                    console.log("upload chunk response.ok")
-
                     setBeginingOfTheChunk(endOfTheChunk);
                     setEndOfTheChunk(endOfTheChunk + props.chunkSize);
-
-                    console.log(chunkCount);
-                    console.log(chunkCounter);
-
                     if (chunkCounter == chunkCount) {
                         uploadInChunksComplete();
                     }
                     else {
-                        console.log("setProgress")
-                        setProgress(((chunkCounter + 1) / chunkCount) * 100);
+                        setFileUploadProgress(((chunkCounter + 1) / chunkCount) * 100);
                     } 
                 }
                 else {
@@ -219,17 +182,53 @@ function MediaCloud(props) {
     };
 
     const uploadInChunksComplete = () => {
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+            body: JSON.stringify({ filename: fileToUploadInChunksFilename })
+        };
 
-        console.log("uploadInChunksComplete");
-        console.log(fileToUploadInChunks.name);
+        fetch(props.saveMediaChunkCompleteUrl, requestOptions)
+            .then(function (response) {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                return response.json().then(media => {
+                    if (response.ok) {
+                        if (props.multiple) {
+                            setFieldValue({ name: props.name, value: [...files, media] });
+                        }
+                        else {
+                            setFieldValue({ name: props.name, value: [media] });
+                        }
 
-        if (fileToUploadInChunksIndex < filesToUploadInChunks.length) {
-            setFileToUploadinChunksIndex(fileToUploadInChunksIndex + 1);
-            setFileToUploadInChunks(filesToUploadInChunks[fileToUploadInChunksIndex + 1]);
-            setFileToUploadInChunksSize(filesToUploadInChunks[fileToUploadInChunksIndex + 1].size);
-            setFileToUploadInChunksFilename(filesToUploadInChunks[fileToUploadInChunksIndex + 1].name);
-            setProgress(0);
-        }
+                        if ((fileToUploadInChunksIndex + 1) < filesToUploadInChunks.length) {
+                            setFileToUploadinChunksIndex(fileToUploadInChunksIndex + 1);
+                            setFileToUploadInChunks(filesToUploadInChunks[fileToUploadInChunksIndex + 1]);
+                            setFileToUploadInChunksFilename(filesToUploadInChunks[fileToUploadInChunksIndex + 1].name);
+                            setBeginingOfTheChunk(0);
+                            setEndOfTheChunk(props.chunkSize);
+                            setChunkCounter(0);
+                            setFileUploadProgress(0);
+                        }
+                        else 
+                        {
+                            setFilesToUploadInChunks(null);
+                            setFileToUploadinChunksIndex(0);
+                            setFileToUploadInChunks(null);
+                            setFileToUploadInChunksFilename("");
+                            setBeginingOfTheChunk(0);
+                            setEndOfTheChunk(props.chunkSize);
+                            setChunkCounter(0);
+                            setFileUploadProgress(0);
+                        }
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
     };
 
     const reorder = (list, startIndex, endIndex) => {
@@ -333,6 +332,8 @@ MediaCloud.propTypes = {
     dropOrSelectFilesLabel: PropTypes.string.isRequired,
     dropFilesLabel: PropTypes.string.isRequired,
     saveMediaUrl: PropTypes.string.isRequired,
+    saveMediaChunkUrl: PropTypes.string,
+    saveMediaChunkCompleteUrl: PropTypes.string,
     deleteLabel: PropTypes.string.isRequired,
     setFieldValue: PropTypes.func.isRequired,
     isUploadInChunksEnabled: PropTypes.bool,

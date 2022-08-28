@@ -22,8 +22,6 @@ using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
 using Media.Api.IntegrationEvents;
 using Foundation.EventBus.Abstractions;
-using Foundation.ApiExtensions.Shared.Definitions;
-using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Http;
 
 namespace Media.Api.Services.Media
@@ -417,7 +415,7 @@ namespace Media.Api.Services.Media
 
         public async Task CreateFileChunkAsync(CreateFileChunkServiceModel model)
         {
-            var path = Path.Combine($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}", $"{model.File.FileName}${model.ChunkSumber}");
+            var path = Path.Combine($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}", $"{model.File.FileName}{model.ChunkSumber}");
 
             Directory.CreateDirectory(Path.GetDirectoryName(path));
 
@@ -430,8 +428,10 @@ namespace Media.Api.Services.Media
         public async Task<Guid> CreateFileFromChunksAsync(CreateMediaItemFromChunksServiceModel model)
         {
             string newPath = Path.Combine($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}", model.Filename);
-            
-            string[] filePaths = Directory.GetFiles($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}").Where(p => p.Contains(model.Filename)).OrderBy(p => int.Parse(p.Replace(model.Filename, "$").Split('$')[1])).ToArray();
+
+            var path = $"{MediaConstants.Paths.TempPath}/{model.OrganisationId}";
+
+            string[] filePaths = Directory.GetFiles(path).Where(p => p.Contains(model.Filename)).OrderBy(p => Int32.Parse(p.Replace(model.Filename, "$").Split('$')[1])).ToArray();
 
             foreach (var filePath in filePaths)
             {

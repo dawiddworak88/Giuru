@@ -263,7 +263,9 @@ function ProductForm(props) {
                                 dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
                                 files={images}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl}
+                                saveMediaChunkUrl={props.saveMediaChunkUrl}
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} />
                         </div>
                         <div className="field">
                             <MediaCloud
@@ -281,7 +283,9 @@ function ProductForm(props) {
                                 imagePreviewEnabled={false}
                                 files={files}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl}
+                                saveMediaChunkUrl={props.saveMediaChunkUrl}
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} />
                         </div>
                         <div className="field">
                             <NoSsr>
