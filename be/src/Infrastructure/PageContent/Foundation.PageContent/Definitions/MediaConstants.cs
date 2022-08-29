@@ -9,6 +9,6 @@
 
         public readonly static string WebpExtension = "webp";
 
-        public readonly static int UploadFileinChunksChunkSize = 3000000;
+        public readonly static int DefaultChunkSize = 3000000;
     }
 }

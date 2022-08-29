@@ -72,7 +72,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 SaveMediaChunkUrl = this.linkGenerator.GetPathByAction("PostChunk", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveMediaChunkCompleteUrl = this.linkGenerator.GetPathByAction("PostChunksComplete", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 IsUploadInChunksEnabled = true,
-                ChunkSize = MediaConstants.UploadFileinChunksChunkSize,
+                ChunkSize = MediaConstants.DefaultChunkSize,
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 ProductPicturesLabel = this.productLocalizer.GetString("ProductPicturesLabel"),

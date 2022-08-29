@@ -91,7 +91,6 @@
         public struct Request
         {
             public const long RequestSizeLimit = 250_000_000;
-            public const long RequestChunkSizeLimit = 3_000_000;
         }
     }
 }

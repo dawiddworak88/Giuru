@@ -67,7 +67,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 SaveMediaChunkUrl = this.linkGenerator.GetPathByAction("PostChunk", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveMediaChunkCompleteUrl = this.linkGenerator.GetPathByAction("PostChunksComplete", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 IsUploadInChunksEnabled = true,
-                ChunkSize = MediaConstants.UploadFileinChunksChunkSize,
+                ChunkSize = MediaConstants.DefaultChunkSize,
                 DeleteLabel = this.globalLocalizer.GetString("Delete"),
                 DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
                 DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile")
