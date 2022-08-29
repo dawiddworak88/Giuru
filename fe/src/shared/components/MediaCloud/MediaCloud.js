@@ -81,7 +81,7 @@ function MediaCloud(props) {
             else {
                 const formData = new FormData();
 
-                if (props.mediaId) {
+                if (mediaId) {
                     formData.append("id", mediaId)
                 }
 
@@ -182,6 +182,7 @@ function MediaCloud(props) {
     };
 
     const uploadInChunksComplete = () => {
+        
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
