@@ -263,7 +263,11 @@ function ProductForm(props) {
                                 dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
                                 files={images}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl}
+                                isUploadInChunksEnabled={true}
+                                chunkSize={props.chunkSize}
+                                saveMediaChunkUrl={props.saveMediaChunkUrl}
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} />
                         </div>
                         <div className="field">
                             <MediaCloud
@@ -279,7 +283,11 @@ function ProductForm(props) {
                                 imagePreviewEnabled={false}
                                 files={files}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl}
+                                isUploadInChunksEnabled={props.isUploadInChunksEnabled}
+                                chunkSize={props.chunkSize}
+                                saveMediaChunkUrl={props.saveMediaChunkUrl}
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} />
                         </div>
                         <div className="field">
                             <NoSsr>
@@ -379,6 +387,10 @@ ProductForm.propTypes = {
     generalErrorMessage: PropTypes.string.isRequired,
     eanLabel: PropTypes.string.isRequired,
     idLabel: PropTypes.string,
+    isUploadInChunksEnabled: PropTypes.bool,
+    chunkSize: PropTypes.number,
+    saveMediaChunkUrl: PropTypes.string,
+    saveMediaChunkCompleteUrl: PropTypes.string,
     productsSuggestionUrl: PropTypes.string.isRequired
 };
 
