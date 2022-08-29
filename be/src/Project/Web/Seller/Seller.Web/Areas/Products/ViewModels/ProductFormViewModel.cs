@@ -34,6 +34,8 @@ namespace Seller.Web.Areas.Products.ViewModels
         public IEnumerable<ListItemViewModel> PrimaryProducts { get; set; }
         public string DropOrSelectFilesLabel { get; set; }
         public string DropFilesLabel { get; set; }
+        public bool IsUploadInChunksEnabled { get; set; }
+        public int? ChunkSize { get; set; }
         public string SaveMediaUrl { get; set; }
         public string SaveMediaChunkUrl { get; set; }
         public string SaveMediaChunkCompleteUrl { get; set; }

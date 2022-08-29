@@ -264,6 +264,8 @@ function ProductForm(props) {
                                 files={images}
                                 setFieldValue={setFieldValue}
                                 saveMediaUrl={props.saveMediaUrl}
+                                isUploadInChunksEnabled={true}
+                                chunkSize={props.chunkSize}
                                 saveMediaChunkUrl={props.saveMediaChunkUrl}
                                 saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} />
                         </div>
@@ -274,8 +276,6 @@ function ProductForm(props) {
                                 label={props.productFilesLabel}
                                 accept=".png, .jpg, .pdf, .docx, .zip, .webp"
                                 multiple={true}
-                                isUploadInChunksEnabled={true}
-                                chunkSize={3000000}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
                                 dropFilesLabel={props.dropFilesLabel}
@@ -284,6 +284,8 @@ function ProductForm(props) {
                                 files={files}
                                 setFieldValue={setFieldValue}
                                 saveMediaUrl={props.saveMediaUrl}
+                                isUploadInChunksEnabled={props.isUploadInChunksEnabled}
+                                chunkSize={props.chunkSize}
                                 saveMediaChunkUrl={props.saveMediaChunkUrl}
                                 saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} />
                         </div>
@@ -385,6 +387,10 @@ ProductForm.propTypes = {
     generalErrorMessage: PropTypes.string.isRequired,
     eanLabel: PropTypes.string.isRequired,
     idLabel: PropTypes.string,
+    isUploadInChunksEnabled: PropTypes.bool,
+    chunkSize: PropTypes.number,
+    saveMediaChunkUrl: PropTypes.string,
+    saveMediaChunkCompleteUrl: PropTypes.string,
     productsSuggestionUrl: PropTypes.string.isRequired
 };
 
