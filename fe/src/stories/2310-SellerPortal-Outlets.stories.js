@@ -1,7 +1,7 @@
 import React from "react";
-import OutletsPage from "../project/Seller.Portal/areas/Outlet/pages/OutletsPage/OutletsPage";
+import OutletsPage from "../project/Seller.Portal/areas/Inventory/pages/OutletsPage/OutletsPage";
 import { header, menuTiles, footer } from "./Shared/Props";
-import "../project/Seller.Portal/areas/Outlet/pages/OutletsPage/OutletsPage.scss";
+import "../project/Seller.Portal/areas/Inventory/pages/OutletsPage/OutletsPage.scss";
 
 const catalog = {
   title: "Outlet",
@@ -77,7 +77,7 @@ const catalog = {
   }
 };
 
-export const OutletsPageStory = () => <OutletsPage header={header} menuTiles={menuTiles} footer={footer} catalog={catalog} />;
+export const OutletPageStory = () => <OutletsPage header={header} menuTiles={menuTiles} footer={footer} catalog={catalog} />;
 
 OutletPageStory.story = {
   name: "Outlet Page",
@@ -85,7 +85,7 @@ OutletPageStory.story = {
 
 const SellerOutletsStories = {
   title: "SellerPortal.Outlet",
-  component: OutletsPageStory,
+  component: OutletPageStory,
 };
 
 export default SellerOutletsStories;

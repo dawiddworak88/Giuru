@@ -1,7 +1,7 @@
 import React from "react";
-import MediasPage from "../project/Seller.Portal/areas/Medias/pages/MediasPage/MediasPage";
+import MediasPage from "../project/Seller.Portal/areas/MediaItems/pages/MediaItemsPage/MediaItemsPage";
 import { header, menuTiles, footer } from "./Shared/Props";
-import "../project/Seller.Portal/areas/Medias/pages/MediasPage/MediasPage.scss";
+import "../project/Seller.Portal/areas/MediaItems/pages/MediaItemsPage/MediaItemsPage.scss";
 
 const catalog = {
   title: "Media",

@@ -21,7 +21,11 @@ namespace Seller.Web.Areas.DownloadCenter.ViewModel
         public string GeneralErrorMessage { get; set; }
         public string FieldRequiredErrorMessage { get; set; }
         public string FilesLabel { get; set; }
+        public bool IsUploadInChunksEnabled { get; set; }
+        public int? ChunkSize { get; set; }
         public string SaveMediaUrl { get; set; }
+        public string SaveMediaChunkUrl { get; set; }
+        public string SaveMediaChunkCompleteUrl { get; set; }
         public string DeleteLabel { get; set; }
         public string DropFilesLabel { get; set; }
         public string DropOrSelectFilesLabel { get; set; }

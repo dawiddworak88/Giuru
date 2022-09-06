@@ -8,5 +8,7 @@
         public readonly static string MobileMediaQuery = "(min-width: 320px)";
 
         public readonly static string WebpExtension = "webp";
+
+        public readonly static int DefaultChunkSize = 3000000;
     }
 }

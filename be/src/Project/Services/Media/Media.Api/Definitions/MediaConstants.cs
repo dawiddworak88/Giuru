@@ -144,5 +144,10 @@ namespace Media.Api.Definitions
             public const string Svg = "svg";
             public const string Webp = "webp";
         }
+
+        public struct Paths
+        {
+            public const string TempPath = "./Temp";
+        }
     }
 }

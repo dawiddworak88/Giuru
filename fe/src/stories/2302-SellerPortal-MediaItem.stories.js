@@ -1,7 +1,7 @@
 import React from "react";
-import MediaItemPage from "../project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage";
+import MediaItemPage from "../project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/MediaItemPage";
 import { header, menuTiles, footer } from "./Shared/Props";
-import "../project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage.scss";
+import "../project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/MediaItemPage.scss";
 
 const formData = {
   title: "Media",
