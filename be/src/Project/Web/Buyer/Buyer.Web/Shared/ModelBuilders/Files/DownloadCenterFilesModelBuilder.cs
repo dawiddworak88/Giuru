@@ -10,10 +10,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Foundation.Media.Services.MediaServices;
 using System.Linq;
+using Buyer.Web.Shared.Definitions.Files;
 
 namespace Buyer.Web.Shared.ModelBuilders.Files
 {
-    public class DownloadCenterFilesModelBuilder : IAsyncComponentModelBuilder<FilesComponentModel, DownloadCenterFilesViewModel>
+    public class DownloadCenterFilesModelBuilder : IAsyncComponentModelBuilder<DownloadCenterFilesComponentModel, DownloadCenterFilesViewModel>
     {
         private readonly IMediaItemsRepository mediaRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
@@ -29,16 +30,17 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
             this.mediaService = mediaHelperService;
         }
 
-        public async Task<DownloadCenterFilesViewModel> BuildModelAsync(FilesComponentModel componentModel)
+        public async Task<DownloadCenterFilesViewModel> BuildModelAsync(DownloadCenterFilesComponentModel componentModel)
         {
             if (componentModel.Files is not null && componentModel.Files.Any())
             {
-                var files = await this.mediaRepository.GetMediaItemsAsync(componentModel.Files, componentModel.Language, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token);
+                var files = await this.mediaRepository.GetMediaItemsAsync(componentModel.Files, componentModel.Language, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, componentModel.Token);
 
                 if (files is not null)
                 {
                     var filesViewModel = new DownloadCenterFilesViewModel
                     {
+                        Id = componentModel.Id,
                         NameLabel = this.globalLocalizer.GetString("Name"),
                         FilenameLabel = this.globalLocalizer.GetString("Filename"),
                         DescriptionLabel = this.globalLocalizer.GetString("Description"),
@@ -53,7 +55,11 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         SelectFileLabel = this.globalLocalizer.GetString("SelectFile"),
                         DisplayedRowsLabel = this.globalLocalizer.GetString("DisplayedRows"),
                         RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage"),
-                        SearchLabel = this.globalLocalizer.GetString("Search")
+                        SearchLabel = this.globalLocalizer.GetString("Search"),
+                        GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                        SearchApiUrl = componentModel.SearchApiUrl,
+                        DefaultPageSize = FilesConstants.DefaultPageSize,
+                        NoResultsLabel = this.globalLocalizer.GetString("NoResultsLabel")
                     };
 
                     var fileViewModels = new List<FileViewModel>();
@@ -75,7 +81,10 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         fileViewModels.Add(fileViewModel);
                     }
 
-                    filesViewModel.Files = fileViewModels;
+                    filesViewModel.Files = new PagedResults<IEnumerable<FileViewModel>>(fileViewModels.Count(), FilesConstants.DefaultPageSize)
+                    {
+                        Data = fileViewModels
+                    };
 
                     return filesViewModel;
                 }

@@ -37,10 +37,64 @@ namespace DownloadCenter.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Get download center files by category id.
+        /// Get list of download center category files.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
+        /// <param name="id">The category id.</param>
+        /// <returns>The list of download center files.</returns>
+        [HttpGet("categories/files/{id}"), MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<DownloadCenterCategoryFileResponseModel>>))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> CategoryFiles(Guid? id, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetDownloadCenterCategoryFilesServiceModel
+            {
+                Id = id,
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new GetDownloadCenterCategoryFilesModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var downloadCenterCategoryFiles = await this.downloadCenterService.GetDownloadCenterCategoryFilesAsync(serviceModel);
+
+                if (downloadCenterCategoryFiles is not null)
+                {
+                    var response = new PagedResults<IEnumerable<DownloadCenterCategoryFileResponseModel>>(downloadCenterCategoryFiles.Total, downloadCenterCategoryFiles.PageSize)
+                    {
+                        Data = downloadCenterCategoryFiles.Data.OrEmptyIfNull().Select(x => new DownloadCenterCategoryFileResponseModel
+                        {
+                            Id = x.Id,
+                            Filename = x.Filename
+                        })
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Get download center by category id.
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <returns>The download center files.</returns>
+        /// <returns>The download center category.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("categories/{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DownloadCenterCategoryResponseModel))]
@@ -50,7 +104,7 @@ namespace DownloadCenter.Api.v1.Controllers
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new GetDownloadCenterCategoryFilesServiceModel
+            var serviceModel = new GetDownloadCenterCategoryServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
@@ -58,7 +112,7 @@ namespace DownloadCenter.Api.v1.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new GetDownloadCenterCategoryFilesModelValidator();
+            var validator = new GetDownloadCenterCategoryModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)

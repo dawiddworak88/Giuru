@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Foundation.Media.Services.MediaServices;
 using System.Linq;
+using Buyer.Web.Shared.Definitions.Files;
 
 namespace Buyer.Web.Shared.ModelBuilders.Files
 {
@@ -71,7 +72,10 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         fileViewModels.Add(fileViewModel);
                     }
 
-                    filesViewModel.Files = fileViewModels;
+                    filesViewModel.Files = new PagedResults<IEnumerable<FileViewModel>>(fileViewModels.Count(), FilesConstants.DefaultPageSize)
+                    {
+                        Data = fileViewModels
+                    };
 
                     return filesViewModel;
                 }

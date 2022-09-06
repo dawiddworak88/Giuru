@@ -5,24 +5,24 @@ import {
     Fab, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button, Tooltip,
     FormControlLabel, Checkbox, TablePagination,
-    CircularProgress,
-    TextField
+    CircularProgress, TextField
 } from "@mui/material";
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
 import ClipboardHelper from "../../../../../shared/helpers/globals/ClipboardHelper";
 import JsZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { toast } from "react-toastify";
 import ResponseStatusConstants from "../../../../../shared/constants/ResponseStatusConstants";
-import FilesConstants from "../../../../../shared/constants/FilesConstants";
+import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
+import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
 
 const DownloadCenterFiles = (props) => {
     const [state, dispatch] = useContext(Context);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedFiles, setSelectedFiles] = useState([]);
-    const [total, setTotal] = useState(props.files ? props.files.length : 0);
-    const [files, setFiles] = useState(props.files ? props.files.slice(0, FilesConstants.defaultPageSize()) : []);
-    const [searchedFiles, setSearchedFiles] = useState([]);
+    const [total, setTotal] = useState(props.files ? props.files.total : 0);
+    const [files, setFiles] = useState(props.files ? props.files.data : []);
     const [page, setPage] = useState(0);
     
     const handleCopyClick = (file) => {
@@ -48,14 +48,7 @@ const DownloadCenterFiles = (props) => {
 
     const handleSelectAllItems = e => {
         if (e.target.checked){
-
-            let filesToSelect = props.files;
-
-            if (searchTerm) {
-                filesToSelect = searchedFiles;
-            }
-
-            setSelectedFiles(filesToSelect.map((f) => f))
+            setSelectedFiles(files.map((f) => f))
             return;
         }
 
@@ -65,14 +58,10 @@ const DownloadCenterFiles = (props) => {
     const handleDownloadFiles = checkedFiles => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        let filesToDownload = props.files;
+        let filesToDownload = files;
 
         if (checkedFiles && selectedFiles.length > 0) {
             filesToDownload = selectedFiles;
-        }
-
-        if (searchTerm) {
-            filesToDownload = searchedFiles;
         }
 
         if (filesToDownload.length > 0) {
@@ -99,38 +88,99 @@ const DownloadCenterFiles = (props) => {
     }
 
     const handleChangePage = (event, newPage) => {
-        const startDisplayFiles = newPage * FilesConstants.defaultPageSize();
-        setPage(newPage)
+        dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        let filesToSearch = props.files
+        setPage(newPage);
 
-        if (searchTerm){
-            filesToSearch = searchedFiles;
-        }
+        const searchParameters = {
+            id: props.id,
+            searchTerm,
+            pageIndex: newPage + 1,
+            itemsPerPage: props.defaultPageSize
+        };
 
-        setFiles(filesToSearch.slice(startDisplayFiles, startDisplayFiles + FilesConstants.defaultPageSize()))
+        const requestOptions = {
+            method: "GET",
+            headers: { 
+                "Content-Type": "application/json", 
+                "X-Requested-With": "XMLHttpRequest" 
+            }
+        };
+
+        const url = props.searchApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+
+        return fetch(url, requestOptions)
+            .then((response) => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setFiles(jsonResponse.data);
+                        setTotal(jsonResponse.total);
+                    } else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    }
+
+    const handleSearchButton = () => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const searchParameters = {
+            id: props.id,
+            searchTerm,
+            pageIndex: 1,
+            itemsPerPage: props.defaultPageSize
+        };
+
+        const requestOptions = {
+            method: "GET",
+            headers: { 
+                "Content-Type": "application/json", 
+                "X-Requested-With": "XMLHttpRequest" 
+            }
+        };
+
+        const url = props.searchApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+
+        return fetch(url, requestOptions)
+            .then((response) => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setPage(0)
+                        setFiles(jsonResponse.data);
+                        setTotal(jsonResponse.total);
+                    } else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
     }
 
     const handleOnChange = (event) => {
         setSearchTerm(event.target.value);
     }
 
-    const handleSearchButton = () => {
-        const filesFromSearch = props.files.filter(x => x.name.toLowerCase().startsWith(searchTerm.toLowerCase()));
-
-        setPage(0)
-        setFiles(filesFromSearch.slice(0, FilesConstants.defaultPageSize()));
-        setSearchedFiles(filesFromSearch)
-        setTotal(filesFromSearch.length)
-    }
-
     return (
         <Fragment>
-            {props.files && props.files.length > 0 && 
+            {files && 
                 <section className="section files pt-5">
                     <div className="files__content-box">
                         <div className="files__search">
-                            <TextField id="search" name="search" className="files__search-field" value={searchTerm} onChange={handleOnChange} variant="standard" type="search" autoComplete="off" fullWidth={true} />
+                            <TextField id="search" name="search" className="files__search-field" value={searchTerm} onChange={handleOnChange} variant="standard" type="search" autoComplete="off" />
                             <Button onClick={handleSearchButton} className="ml-5" type="button" variant="contained" color="primary">
                                 {props.searchLabel}
                             </Button>
@@ -143,88 +193,94 @@ const DownloadCenterFiles = (props) => {
                                 </div>
                         </div>
                     </div>
-                    <div className="table-container">
-                        <div className="catalog__table">
-                            <TableContainer component={Paper}>
-                                <Table aria-label={props.filesLabel}>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell width="11%">
-                                                <Checkbox
-                                                    indeterminate={selectedFiles.length > 0 && selectedFiles.length < (searchTerm ? searchedFiles.length : props.files.length)}
-                                                    checked={(searchTerm ? searchedFiles.length : props.files.length) > 0 && selectedFiles.length === (searchTerm ? searchedFiles.length : props.files.length)}
-                                                    onChange={handleSelectAllItems} 
-                                                />
-                                            </TableCell>
-                                            <TableCell>{props.filenameLabel}</TableCell>
-                                            <TableCell>{props.nameLabel}</TableCell>
-                                            <TableCell>{props.descriptionLabel}</TableCell>
-                                            <TableCell>{props.sizeLabel}</TableCell>
-                                            <TableCell>{props.lastModifiedDateLabel}</TableCell>
-                                            <TableCell>{props.createdDateLabel}</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {files.map((file, index) => {
-                                            const isFileSelected = selectedFiles.indexOf(file) !== -1;
+                    {files.length > 0 ? (
+                        <div className="table-container">
+                            <div className="catalog__table">
+                                <TableContainer component={Paper}>
+                                    <Table aria-label={props.filesLabel}>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell width="11%">
+                                                    <Checkbox
+                                                        indeterminate={selectedFiles.length > 0 && selectedFiles.length < total}
+                                                        checked={total > 0 && selectedFiles.length === total}
+                                                        onChange={handleSelectAllItems} 
+                                                    />
+                                                </TableCell>
+                                                <TableCell>{props.filenameLabel}</TableCell>
+                                                <TableCell>{props.nameLabel}</TableCell>
+                                                <TableCell>{props.descriptionLabel}</TableCell>
+                                                <TableCell>{props.sizeLabel}</TableCell>
+                                                <TableCell>{props.lastModifiedDateLabel}</TableCell>
+                                                <TableCell>{props.createdDateLabel}</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {files.map((file, index) => {
+                                                const isFileSelected = selectedFiles.indexOf(file) !== -1;
 
-                                            return (
-                                                <TableRow key={index}>
-                                                    <TableCell width="20%">
-                                                        <div className="files__tooltip">
-                                                            <Tooltip title={props.selectFileLabel} aria-label={props.selectFileLabel}>
-                                                                <FormControlLabel 
-                                                                    control={
-                                                                        <Checkbox 
-                                                                            checked={isFileSelected}
-                                                                            onChange={() => handleSelectItem(file)}
-                                                                        />
-                                                                    }
-                                                                />
-                                                            </Tooltip>
-                                                            <Tooltip title={props.downloadLabel} aria-label={props.downloadLabel}>
-                                                                <Fab href={file.url} size="small" color="primary">
-                                                                    <GetApp />
-                                                                </Fab>
-                                                            </Tooltip>
-                                                            <Tooltip title={props.copyLinkLabel} aria-label={props.copyLinkLabel}>
-                                                                <Fab onClick={() => handleCopyClick(file)} size="small" color="secondary">
-                                                                    <Link />
-                                                                </Fab>
-                                                            </Tooltip>
-                                                        </div>
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Button variant="text" href={file.url}>
-                                                            {file.filename}
-                                                            {(file.isProtected && !props.isAuthenticated) &&
-                                                                <LockOutlined color="primary" />
-                                                            }
-                                                        </Button>
-                                                    </TableCell>
-                                                    <TableCell>{file.name}</TableCell>
-                                                    <TableCell>{file.description}</TableCell>
-                                                    <TableCell>{file.size}</TableCell>
-                                                    <TableCell>{moment(file.lastModifiedDate).local().format("L LT")}</TableCell>
-                                                    <TableCell>{moment(file.createdDate).local().format("L LT")}</TableCell>
-                                                </TableRow>
-                                            )
-                                        })}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
+                                                return (
+                                                    <TableRow key={index}>
+                                                        <TableCell width="20%">
+                                                            <div className="files__tooltip">
+                                                                <Tooltip title={props.selectFileLabel} aria-label={props.selectFileLabel}>
+                                                                    <FormControlLabel 
+                                                                        control={
+                                                                            <Checkbox 
+                                                                                checked={isFileSelected}
+                                                                                onChange={() => handleSelectItem(file)}
+                                                                            />
+                                                                        }
+                                                                    />
+                                                                </Tooltip>
+                                                                <Tooltip title={props.downloadLabel} aria-label={props.downloadLabel}>
+                                                                    <Fab href={file.url} size="small" color="primary">
+                                                                        <GetApp />
+                                                                    </Fab>
+                                                                </Tooltip>
+                                                                <Tooltip title={props.copyLinkLabel} aria-label={props.copyLinkLabel}>
+                                                                    <Fab onClick={() => handleCopyClick(file)} size="small" color="secondary">
+                                                                        <Link />
+                                                                    </Fab>
+                                                                </Tooltip>
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Button variant="text" href={file.url}>
+                                                                {file.filename}
+                                                                {(file.isProtected && !props.isAuthenticated) &&
+                                                                    <LockOutlined color="primary" />
+                                                                }
+                                                            </Button>
+                                                        </TableCell>
+                                                        <TableCell>{file.name}</TableCell>
+                                                        <TableCell>{file.description}</TableCell>
+                                                        <TableCell>{file.size}</TableCell>
+                                                        <TableCell>{moment(file.lastModifiedDate).local().format("L LT")}</TableCell>
+                                                        <TableCell>{moment(file.createdDate).local().format("L LT")}</TableCell>
+                                                    </TableRow>
+                                                )
+                                            })}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </div>
+                            <TablePagination 
+                                labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
+                                count={total}
+                                rowsPerPageOptions={[props.defaultPageSize]}
+                                rowsPerPage={props.defaultPageSize}
+                                component="div"
+                                page={page}
+                                onPageChange={handleChangePage}
+                                labelRowsPerPage={props.rowsPerPageLabel}
+                            />
                         </div>
-                        <TablePagination 
-                            labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
-                            count={total}
-                            rowsPerPageOptions={[FilesConstants.defaultPageSize()]}
-                            rowsPerPage={FilesConstants.defaultPageSize()}
-                            component="div"
-                            page={page}
-                            onPageChange={handleChangePage}
-                            labelRowsPerPage={props.rowsPerPageLabel}
-                        />
-                    </div>
+                    ) : (
+                        <section className="is-flex-centered">
+                            <span className="is-title is-5">{props.noResultsLabel}</span>
+                        </section>
+                    )}
                 </section>
             }
             {state.isLoading && <CircularProgress className="progressBar" />}
@@ -233,6 +289,9 @@ const DownloadCenterFiles = (props) => {
 }
 
 DownloadCenterFiles.propTypes = {
+    id: PropTypes.string.isRequired,
+    noResultsLabel: PropTypes.string.isRequired,
+    defaultPageSize: PropTypes.number.isRequired,
     files: PropTypes.array.isRequired,
     filesLabel: PropTypes.string.isRequired,
     downloadLabel: PropTypes.string.isRequired,

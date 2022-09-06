@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Foundation.GenericRepository.Paginations;
+using System.Collections.Generic;
 
 namespace Buyer.Web.Shared.ViewModels.Files
 {
@@ -15,6 +16,9 @@ namespace Buyer.Web.Shared.ViewModels.Files
         public string SizeLabel { get; set; }
         public string LastModifiedDateLabel { get; set; }
         public string CreatedDateLabel { get; set; }
-        public IEnumerable<FileViewModel> Files { get; set; }
+        public string GeneralErrorMessage { get; set; }
+        public int DefaultPageSize { get; set; }
+        public string NoResultsLabel { get; set; }
+        public PagedResults<IEnumerable<FileViewModel>> Files { get; set; }
     }
 }
