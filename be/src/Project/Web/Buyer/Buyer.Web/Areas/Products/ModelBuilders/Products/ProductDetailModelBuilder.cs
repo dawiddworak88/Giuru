@@ -24,6 +24,7 @@ using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using ImageViewModel = Buyer.Web.Shared.ViewModels.Images.ImageViewModel;
 using Foundation.Media.Services.MediaServices;
+using Buyer.Web.Shared.Definitions.Files;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -125,7 +126,22 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 viewModel.Images = images;
 
-                viewModel.Files = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = product.Files });
+                var productFiles = await this.productsRepository.GetProductFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageSize, FilesConstants.DefaultPageIndex, null, $"{nameof(ProductFile.CreatedDate)} desc");
+
+                if (productFiles is not null)
+                {
+                    var fileComponentModel = new FilesComponentModel
+                    {
+                        Id = componentModel.Id,
+                        IsAuthenticated = componentModel.IsAuthenticated,
+                        Language = componentModel.Language,
+                        Token = componentModel.Token,
+                        Files = productFiles.Data.Select(x => x.Id),
+                        SearchApiUrl = this.linkGenerator.GetPathByAction("GetFiles", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                    };
+
+                    viewModel.Files = await this.filesModelBuilder.BuildModelAsync(fileComponentModel);
+                }
 
                 var inventory = await this.productsRepository.GetProductStockAsync(componentModel.Id);
 

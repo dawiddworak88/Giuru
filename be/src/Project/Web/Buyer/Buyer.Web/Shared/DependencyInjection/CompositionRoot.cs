@@ -45,7 +45,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped(typeof(ICatalogModelBuilder<,>), typeof(CatalogModelBuilder<,>));
             services.AddScoped(typeof(IBreadcrumbsModelBuilder<,>), typeof(BreadcrumbsModelBuilder<,>));
             services.AddScoped<IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel>, FilesModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<DownloadCenterFilesComponentModel, DownloadCenterFilesViewModel>, DownloadCenterFilesModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<FilesComponentModel, DownloadCenterFilesViewModel>, DownloadCenterFilesModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel>, SidebarModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel>, ModalModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel>, BuyerHeaderModelBuilder>();

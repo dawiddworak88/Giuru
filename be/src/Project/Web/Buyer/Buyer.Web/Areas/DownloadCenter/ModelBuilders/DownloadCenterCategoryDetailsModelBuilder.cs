@@ -16,16 +16,16 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
 {
     public class DownloadCenterCategoryDetailsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryDetailsViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<DownloadCenterFilesComponentModel, DownloadCenterFilesViewModel> downloadCenterFilesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<FilesComponentModel, DownloadCenterFilesViewModel> filesModelBuilder;
         private readonly IDownloadCenterRepository downloadCenterRepository;
         private readonly LinkGenerator linkGenerator;
 
         public DownloadCenterCategoryDetailsModelBuilder(
-            IAsyncComponentModelBuilder<DownloadCenterFilesComponentModel, DownloadCenterFilesViewModel> downloadCenterFilesModelBuilder,
+            IAsyncComponentModelBuilder<FilesComponentModel, DownloadCenterFilesViewModel> filesModelBuilder,
             IDownloadCenterRepository downloadCenterRepository,
             LinkGenerator linkGenerator)
         {
-            this.downloadCenterFilesModelBuilder = downloadCenterFilesModelBuilder;
+            this.filesModelBuilder = filesModelBuilder;
             this.downloadCenterRepository = downloadCenterRepository;
             this.linkGenerator = linkGenerator;
         }
@@ -53,7 +53,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
 
                 if (downloadCenterFiles is not null)
                 {
-                    var filesComponentModel = new DownloadCenterFilesComponentModel
+                    var filesComponentModel = new FilesComponentModel
                     {
                         Id = componentModel.Id,
                         Token = componentModel.Token,
@@ -62,7 +62,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
                         SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "DownloadCenterApi", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name, Id = componentModel.Id })
                     };
 
-                    viewModel.Files = await this.downloadCenterFilesModelBuilder.BuildModelAsync(filesComponentModel);
+                    viewModel.Files = await this.filesModelBuilder.BuildModelAsync(filesComponentModel);
                 }
             }
 

@@ -495,5 +495,26 @@ namespace Catalog.Api.Services.Products
 
             this.eventBus.Publish(message);
         }
+
+        public async Task<PagedResults<IEnumerable<ProductFileServiceModel>>> GetProductFiles(GetProductFilesServiceModel model)
+        {
+            var productFiles = from f in this.catalogContext.ProductFiles
+                                              where f.ProductId == model.Id && f.IsActive
+                                              select new ProductFileServiceModel
+                                              {
+                                                  Id = f.MediaId,
+                                                  LastModifiedDate = f.LastModifiedDate,
+                                                  CreatedDate = f.CreatedDate
+                                              };
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                productFiles = productFiles.Where(x => x.Id.ToString() == model.SearchTerm);
+            }
+
+            productFiles = productFiles.ApplySort(model.OrderBy);
+
+            return productFiles.PagedIndex(new Pagination(productFiles.Count(), model.ItemsPerPage), model.PageIndex);
+        }
     }
 }
