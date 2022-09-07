@@ -318,7 +318,6 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             downloadCenterCategoryFiles = downloadCenterCategoryFiles.ApplySort(model.OrderBy);
 
-
             return downloadCenterCategoryFiles.PagedIndex(new Pagination(downloadCenterCategoryFiles.Count(), model.ItemsPerPage), model.PageIndex);
         }
 
