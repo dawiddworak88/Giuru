@@ -10,7 +10,7 @@ import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
 import FilesConstants from "../../constants/FilesConstants";
 
 function Files(props) {
-    const [files, setFiles] = useState(props.files ? props.files.slice(0, FilesConstants.defaultPageSize()) : []);
+    const [files, setFiles] = useState(props.files ? props.files.data.slice(0, FilesConstants.defaultPageSize()) : []);
     const [page, setPage] = useState(0);
     
     const handleCopyClick = (file) => {
@@ -20,7 +20,7 @@ function Files(props) {
     const handleChangePage = (event, newPage) => {
         const startDisplayFiles = newPage * FilesConstants.defaultPageSize();
         setPage(newPage)
-        setFiles(props.files.slice(startDisplayFiles, startDisplayFiles + FilesConstants.defaultPageSize()))
+        setFiles(props.files.data.slice(startDisplayFiles, startDisplayFiles + FilesConstants.defaultPageSize()))
     }
 
     return (

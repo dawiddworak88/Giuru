@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Foundation.Media.Services.MediaServices;
 using System.Linq;
+using Buyer.Web.Shared.Definitions.Files;
 
 namespace Buyer.Web.Shared.ModelBuilders.Files
 {
@@ -63,7 +64,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                             Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
                             Description = file.Description ?? "-",
                             IsProtected = file.IsProtected,
-                            Size = string.Format("{0:0.00} MB", file.Size / 1024f / 1024f),
+                            Size = this.mediaService.ConvertToMB(file.Size),
                             LastModifiedDate = file.LastModifiedDate,
                             CreatedDate = file.CreatedDate
                         };
@@ -71,7 +72,10 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         fileViewModels.Add(fileViewModel);
                     }
 
-                    filesViewModel.Files = fileViewModels;
+                    filesViewModel.Files = new PagedResults<IEnumerable<FileViewModel>>(fileViewModels.Count(), FilesConstants.DefaultPageSize)
+                    {
+                        Data = fileViewModels
+                    };
 
                     return filesViewModel;
                 }

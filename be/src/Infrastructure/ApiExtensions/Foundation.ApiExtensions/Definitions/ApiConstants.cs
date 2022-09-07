@@ -36,6 +36,7 @@
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
             public static readonly string DownloadCenterApiEndponint = "/api/v1/downloadcenter";
             public static readonly string DownloadCenterCategoriesApiEndpoint = "/api/v1/downloadcenter/categories";
+            public static readonly string DownloadCenterCategoryFilesApiEndpoint = "/api/v1/downloadcenter/categories/files";
         }
 
         public struct News

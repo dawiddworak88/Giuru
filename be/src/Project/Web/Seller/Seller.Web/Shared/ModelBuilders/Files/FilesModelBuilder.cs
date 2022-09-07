@@ -6,6 +6,7 @@ using Foundation.Media.Services.MediaServices;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.ComponentModels.Files;
+using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,7 +64,7 @@ namespace Seller.Web.Shared.ModelBuilders.Files
                             Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
                             Description = file.Description ?? "-",
                             IsProtected = file.IsProtected,
-                            Size = string.Format("{0:0.00} MB", file.Size / 1024f / 1024f),
+                            Size = this.mediaService.ConvertToMB(file.Size),
                             LastModifiedDate = file.LastModifiedDate,
                             CreatedDate = file.CreatedDate
                         };
@@ -71,7 +72,10 @@ namespace Seller.Web.Shared.ModelBuilders.Files
                         fileViewModels.Add(fileViewModel);
                     }
 
-                    filesViewModel.Files = fileViewModels;
+                    filesViewModel.Files = new PagedResults<IEnumerable<FileViewModel>>(fileViewModels.Count(), FilesConstants.DefaultPageSize)
+                    {
+                        Data = fileViewModels
+                    };
 
                     return filesViewModel;
                 }
