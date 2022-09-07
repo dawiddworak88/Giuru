@@ -1,7 +1,9 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.DownloadCenter.ApiRequestModels;
@@ -40,6 +42,7 @@ namespace Seller.Web.Areas.DownloadCenter.ApiControllers
         }
 
         [HttpPost]
+        [RequestSizeLimit(ApiConstants.Request.RequestSizeLimit)]
         public async Task<IActionResult> Post([FromBody] DownloadCenterItemRequestModel model)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
@@ -48,7 +51,6 @@ namespace Seller.Web.Areas.DownloadCenter.ApiControllers
             await this.downloadCenterRepository.SaveAsync(token, language, model.Id, model.CategoriesIds, model.Files);
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.downloadCenterLocalizer.GetString("DownloadCenterItemSavedSuccessfully").Value });
-
         }
 
         [HttpDelete]

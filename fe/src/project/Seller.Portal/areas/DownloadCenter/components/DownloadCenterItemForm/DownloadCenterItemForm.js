@@ -107,7 +107,11 @@ const DownloadCenterItemForm = (props) => {
                                 dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
                                 files={files}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl}
+                                isUploadInChunksEnabled={props.isUploadInChunksEnabled}
+                                chunkSize={props.chunkSize}
+                                saveMediaChunkUrl={props.saveMediaChunkUrl}
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} />
                         </div>
                         <div className="field">
                             <Button 

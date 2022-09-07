@@ -1,22 +1,31 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, Button, Tooltip,
+    TableHead, TableRow, Paper, Button, Tooltip, TablePagination
 } from "@mui/material";
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
 import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
+import FilesConstants from "../../constants/FilesConstants";
 
 function Files(props) {
+    const [files, setFiles] = useState(props.files ? props.files.data.slice(0, FilesConstants.defaultPageSize()) : []);
+    const [page, setPage] = useState(0);
     
     const handleCopyClick = (file) => {
         ClipboardHelper.copyToClipboard(file.url);
     };
 
+    const handleChangePage = (event, newPage) => {
+        const startDisplayFiles = newPage * FilesConstants.defaultPageSize();
+        setPage(newPage)
+        setFiles(props.files.data.slice(startDisplayFiles, startDisplayFiles + FilesConstants.defaultPageSize()))
+    }
+
     return (
         <Fragment>
-            {props.files &&
+            {files &&
                 <section className="section files">
                     <h3 className="title is-4">{props.filesLabel}</h3>
                     <div className="table-container">
@@ -35,7 +44,7 @@ function Files(props) {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {props.files.map((file, index) => (
+                                        {files.map((file, index) => (
                                             <TableRow key={index}>
                                                 <TableCell width="11%">
                                                     <div className="files__tooltip">
@@ -70,6 +79,16 @@ function Files(props) {
                                 </Table>
                             </TableContainer>
                         </div>
+                        <TablePagination 
+                            labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
+                            count={props.files.length}
+                            rowsPerPageOptions={[FilesConstants.defaultPageSize()]}
+                            rowsPerPage={FilesConstants.defaultPageSize()}
+                            component="div"
+                            page={page}
+                            onPageChange={handleChangePage}
+                            labelRowsPerPage={props.rowsPerPageLabel}
+                        />
                     </div>
                 </section>
             }
@@ -87,7 +106,9 @@ Files.propTypes = {
     nameLabel: PropTypes.string.isRequired,
     descriptionLabel: PropTypes.string.isRequired,
     lastModifiedDateLabel: PropTypes.string.isRequired,
-    createdDateLabel: PropTypes.string.isRequired
+    createdDateLabel: PropTypes.string.isRequired,
+    rowsPerPageLabel: PropTypes.string.isRequired,
+    displayedRowsLabel: PropTypes.string.isRequired
 };
 
 export default Files;

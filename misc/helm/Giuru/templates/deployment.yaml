@@ -679,6 +679,8 @@ spec:
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
+        - name: OrganisationId
+          value: {{ .Values.organisationId }}
         - name: ConnectionString
           value: {{ .Values.downloadCenterApi.connectionString }}
         - name: IdentityUrl
@@ -761,6 +763,8 @@ spec:
           value: {{ .Values.orderUrl }}
         - name: NewsUrl
           value: {{ .Values.newsUrl }}
+        - name: DownloadCenterUrl
+          value: {{ .Values.downloadCenterUrl }}
         - name: MakeComplaintUrl
           value: {{ .Values.makeComplaintUrl }}
         - name: CdnUrl

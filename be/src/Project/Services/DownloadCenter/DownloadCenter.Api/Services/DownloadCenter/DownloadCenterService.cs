@@ -226,7 +226,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
             return pagedDownloadCenterServiceModel;
         }
 
-        public async Task<DownloadCenterCategoryServiceModel> GetDownloadCenterCategoryAsync(GetDownloadCenterCategoryFilesServiceModel model)
+        public async Task<DownloadCenterCategoryServiceModel> GetDownloadCenterCategoryAsync(GetDownloadCenterCategoryServiceModel model)
         {
             var downloadCenterCategory = await this.context.DownloadCenterCategories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive && x.IsVisible);
 
@@ -297,6 +297,28 @@ namespace DownloadCenter.Api.Services.DownloadCenter
             category.Subcategories = downloadCenterSubcategories;
 
             return category;
+        }
+
+        public async Task<PagedResults<IEnumerable<DownloadCenterCategoryFileServiceModel>>> GetDownloadCenterCategoryFilesAsync(GetDownloadCenterCategoryFilesServiceModel model)
+        {
+            var downloadCenterCategoryFiles = from f in this.context.DownloadCenterCategoryFiles
+                                              where f.CategoryId == model.Id && f.IsActive
+                                              select new DownloadCenterCategoryFileServiceModel
+                                              {
+                                                  Id = f.MediaId,
+                                                  Filename = f.Filename,
+                                                  LastModifiedDate = f.LastModifiedDate,
+                                                  CreatedDate = f.CreatedDate
+                                              };
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                downloadCenterCategoryFiles = downloadCenterCategoryFiles.Where(x => x.Filename.StartsWith(model.SearchTerm) || x.Id.ToString() == model.SearchTerm);
+            }
+
+            downloadCenterCategoryFiles = downloadCenterCategoryFiles.ApplySort(model.OrderBy);
+
+            return downloadCenterCategoryFiles.PagedIndex(new Pagination(downloadCenterCategoryFiles.Count(), model.ItemsPerPage), model.PageIndex);
         }
 
         public async Task<Guid> UpdateAsync(UpdateDownloadCenterItemServiceModel model)

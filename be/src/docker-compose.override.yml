@@ -274,7 +274,7 @@ services:
       - BasketUrl=http://basket-api
       - ClientUrl=http://client-api
       - NewsUrl=http://news-api
-      - DownloadUrl=http://downloadcenter-api
+      - DownloadCenterUrl=http://downloadcenter-api
       - MakeComplaintUrl=https://complaints.com
       - ProductAttributes=${PRODUCT_ATTRIBUTES}
       - OrganisationId=${ORGANISATION_ID}

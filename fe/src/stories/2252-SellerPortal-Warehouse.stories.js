@@ -1,7 +1,7 @@
 import React from "react";
-import WarehousePage from "../project/Seller.Portal/areas/Warehouse/pages/WarehousePage/WarehousePage";
+import WarehousePage from "../project/Seller.Portal/areas/Inventory/pages/WarehousePage/WarehousePage";
 import { header, menuTiles, footer } from "./Shared/Props";
-import "../project/Seller.Portal/areas/Warehouse/pages/WarehousePage/WarehousePage.scss";
+import "../project/Seller.Portal/areas/Inventory/pages/WarehousePage/WarehousePage.scss";
 
 const formData = {
   title: "Warehouse",

@@ -37,6 +37,7 @@
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
             public static readonly string DownloadCenterApiEndponint = "/api/v1/downloadcenter";
             public static readonly string DownloadCenterCategoriesApiEndpoint = "/api/v1/downloadcenter/categories";
+            public static readonly string DownloadCenterCategoryFilesApiEndpoint = "/api/v1/downloadcenter/categories/files";
         }
 
         public struct News
@@ -64,6 +65,8 @@
             public static readonly string MediaItemsApiEndpoint = "/api/v1/mediaitems";
             public static readonly string MediaItemsVersionsApiEndpoint = "/api/v1/mediaitems/versions";
             public static readonly string FilesApiEndpoint = "/api/v1/files";
+            public static readonly string FileChunksApiEndpoint = "/api/v1/files/chunks";
+            public static readonly string FileChunksSaveCompleteApiEndpoint = "/api/v1/files/chunkssavecomplete";
         }
 
         public struct Baskets
@@ -84,6 +87,7 @@
             public static readonly string FileContentName = "file";
             public static readonly string LanguageContentName = "language";
             public static readonly string GuidContentName = "id";
+            public static readonly string ChunkNumberContentName = "chunkNumber";
         }
 
         public struct Request

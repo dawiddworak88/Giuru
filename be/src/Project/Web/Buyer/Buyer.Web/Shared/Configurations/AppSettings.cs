@@ -12,7 +12,7 @@ namespace Buyer.Web.Shared.Configurations
         public string BasketUrl { get; set; }
         public string NewsUrl { get; set; }
         public string MediaUrl { get; set; }
-        public string DownloadUrl { get; set; }
+        public string DownloadCenterUrl { get; set; }
         public string CdnUrl { get; set; }
         public Guid? OrganisationId { get; set; }
         public string ProductAttributes { get; set; }

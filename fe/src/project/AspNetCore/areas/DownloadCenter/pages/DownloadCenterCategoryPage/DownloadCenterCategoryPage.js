@@ -10,12 +10,12 @@ import Footer from "../../../../../../shared/components/Footer/Footer";
 import CategoryDetails from "../../components/CategoryDetails/CategoryDetails";
 import Breadcrumbs from "../../../../shared/components/Breadcrumb/Breadcrumbs";
 
-const CategoryPage = (props) => {
+const DownloadCenterCategoryPage = (props) => {
     
     LocaleHelper.setMomentLocale(props.locale);
 
     return (
-        <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
+        <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
             <ToastContainer />
             <Store>
                 <Header {...props.header}></Header>
@@ -28,4 +28,4 @@ const CategoryPage = (props) => {
     )
 }
 
-export default CategoryPage;
+export default DownloadCenterCategoryPage;
