@@ -44,7 +44,7 @@ namespace DownloadCenter.Api.v1.Controllers
         /// <param name="itemsPerPage">The items per page.</param>
         /// <param name="orderBy">The optional order by.</param>
         /// <param name="id">The category id.</param>
-        /// <returns>The list of download center files.</returns>
+        /// <returns>The list of download center category files.</returns>
         [HttpGet("categories/files/{id}"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<DownloadCenterCategoryFileResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]

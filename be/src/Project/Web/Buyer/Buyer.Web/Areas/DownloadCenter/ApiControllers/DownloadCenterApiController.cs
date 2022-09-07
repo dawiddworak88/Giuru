@@ -5,6 +5,7 @@ using Buyer.Web.Shared.DomainModels.Media;
 using Buyer.Web.Shared.Repositories.Media;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Media.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
@@ -56,33 +57,30 @@ namespace Buyer.Web.Areas.DownloadCenter.ApiControllers
 
             var filesModel = new List<MediaItem>();
 
-            if ((downloadCenterFiles is not null) && (downloadCenterFiles.Data.Select(x => x.Id).Count() > 0))
+            if ((downloadCenterFiles is not null) && (downloadCenterFiles.Data.Select(x => x.Id).Any()))
             {
-                var files = await this.mediaRepository.GetMediaItemsAsync(token, language, downloadCenterFiles.Data.Select(x => x.Id), FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize);
+                var files = await this.mediaRepository.GetMediaItemsAsync(token, language, downloadCenterFiles.Data.OrEmptyIfNull().Select(x => x.Id), FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize);
 
-                if (files is not null)
+                foreach (var file in files.OrEmptyIfNull())
                 {
-                    foreach (var file in files)
+                    var fileModel = new MediaItem
                     {
-                        var fileModel = new MediaItem
-                        {
-                            Id = file.Id,
-                            Name = file.Name,
-                            Filename = file.Filename,
-                            Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
-                            Description = file.Description ?? "-",
-                            IsProtected = file.IsProtected,
-                            Size = string.Format("{0:0.00} MB", file.Size / 1024f / 1024f),
-                            LastModifiedDate = file.LastModifiedDate,
-                            CreatedDate = file.CreatedDate
-                        };
+                        Id = file.Id,
+                        Name = file.Name,
+                        Filename = file.Filename,
+                        Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
+                        Description = file.Description ?? "-",
+                        IsProtected = file.IsProtected,
+                        Size = this.mediaService.ConvertToMB(file.Size),
+                        LastModifiedDate = file.LastModifiedDate,
+                        CreatedDate = file.CreatedDate
+                    };
 
-                        filesModel.Add(fileModel);
-                    }
+                    filesModel.Add(fileModel);
                 }
             }
 
-            var pagedFiles = new PagedResults<IEnumerable<MediaItem>>(filesModel.Count(), FilesConstants.DefaultPageSize)
+            var pagedFiles = new PagedResults<IEnumerable<MediaItem>>(filesModel.Count, FilesConstants.DefaultPageSize)
             {
                 Data = filesModel
             };
