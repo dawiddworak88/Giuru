@@ -126,7 +126,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 viewModel.Images = images;
 
-                var productFiles = await this.productsRepository.GetProductFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageSize, FilesConstants.DefaultPageIndex, null, $"{nameof(ProductFile.CreatedDate)} desc");
+                var productFiles = await this.productsRepository.GetProductFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(ProductFile.CreatedDate)} desc");
 
                 if (productFiles is not null)
                 {
@@ -136,8 +136,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         IsAuthenticated = componentModel.IsAuthenticated,
                         Language = componentModel.Language,
                         Token = componentModel.Token,
-                        Files = productFiles.Data.Select(x => x.Id),
-                        SearchApiUrl = this.linkGenerator.GetPathByAction("GetFiles", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                        SearchApiUrl = this.linkGenerator.GetPathByAction("GetFiles", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                        Files = productFiles.Data.OrEmptyIfNull().Select(x => x.Id)
                     };
 
                     viewModel.Files = await this.filesModelBuilder.BuildModelAsync(fileComponentModel);

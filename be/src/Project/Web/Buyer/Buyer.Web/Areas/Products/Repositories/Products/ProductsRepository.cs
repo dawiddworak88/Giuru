@@ -16,6 +16,7 @@ using Buyer.Web.Areas.Products.DomainModels;
 using Foundation.Extensions.Exceptions;
 using System.Net;
 using Buyer.Web.Areas.Orders.ApiRequestModels;
+using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.Repositories.Products
 {
@@ -300,7 +301,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.DownloadCenterUrl}{ApiConstants.Catalog.ProductFilesApiEndpoint}/{id}"
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductFilesApiEndpoint}/{id}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ProductFile>>>(apiRequest);

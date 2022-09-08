@@ -1,7 +1,10 @@
-﻿using Buyer.Web.Areas.Orders.Repositories;
+﻿using Buyer.Web.Areas.Orders.DomainModels;
+using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.ViewModel;
 using Buyer.Web.Shared.ComponentModels.Files;
+using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.ViewModels.Files;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
@@ -65,7 +68,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             }
 
             var order = await this.ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
-            if (order != null)
+
+            if (order is not null)
             {
                 viewModel.Id = order.Id;
                 viewModel.OrderStatusId = order.OrderStatusId;
@@ -88,8 +92,23 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     ImageAlt = x.ProductName,
                     ImageSrc = x.PictureUrl
                 });
+            }
 
-                viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = order.Attachments });
+            var orderFiles = await this.ordersRepository.GetOrderFilesAsync(componentModel.Token, componentModel.Language, order.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(OrderFile.CreatedDate)} desc");
+
+            if (orderFiles is not null)
+            {
+                var filesComponentModel = new FilesComponentModel
+                {
+                    Id = componentModel.Id,
+                    IsAuthenticated = componentModel.IsAuthenticated,
+                    Language = componentModel.Language,
+                    Token = componentModel.Token,
+                    SearchApiUrl = this.linkGenerator.GetPathByAction("GetFiles", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                    Files = orderFiles.Data.OrEmptyIfNull().Select(x => x.Id)
+                };
+
+                viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(filesComponentModel);
             }
 
             return viewModel;

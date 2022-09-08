@@ -58,8 +58,8 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
                         Id = componentModel.Id,
                         Token = componentModel.Token,
                         Language = componentModel.Language,
-                        Files = downloadCenterFiles.Data.Select(x => x.Id),
-                        SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "DownloadCenterApi", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name, Id = componentModel.Id })
+                        Files = downloadCenterFiles.Data.OrEmptyIfNull().Select(x => x.Id),
+                        SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "DownloadCenterApi", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
                     };
 
                     viewModel.Files = await this.filesModelBuilder.BuildModelAsync(filesComponentModel);

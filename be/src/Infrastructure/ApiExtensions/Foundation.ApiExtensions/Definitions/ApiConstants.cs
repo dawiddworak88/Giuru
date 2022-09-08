@@ -80,6 +80,7 @@
             public static readonly string OrdersApiEndpoint = "/api/v1/orders";
             public static readonly string OrderStatusesApiEndpoint = "/api/v1/orderstatuses";
             public static readonly string UpdateOrderStatusApiEndpoint = "/api/v1/orders/orderstatus";
+            public static readonly string OrderFilesApiEndpoint = "/api/v1/orders/files";
         }
 
         public struct ContentNames
