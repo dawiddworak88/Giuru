@@ -222,7 +222,7 @@ namespace Seller.Web.Areas.Categories.Repositories
                 return response.Data;
             }
 
-            if (!response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.NotFound)
+            if (!response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.NoContent)
             {
                 return new CategorySchema();
             }

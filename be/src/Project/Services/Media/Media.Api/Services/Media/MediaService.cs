@@ -329,7 +329,7 @@ namespace Media.Api.Services.Media
             var mediaItem = this.context.MediaItems.FirstOrDefault(x => x.Id == model.MediaId.Value && x.IsActive);
             if (mediaItem == null)
             {
-                throw new CustomException(this.mediaResources.GetString("MediaNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.mediaResources.GetString("MediaNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             mediaItem.IsActive = false;

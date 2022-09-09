@@ -142,7 +142,7 @@ namespace Media.Api.v1.Controllers
         [AllowAnonymous]
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(MediaItemResponseModel))]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Get(Guid? id)
         {
@@ -181,7 +181,7 @@ namespace Media.Api.v1.Controllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                    return this.StatusCode((int)HttpStatusCode.NoContent);
                 }                
             }
 
@@ -232,7 +232,7 @@ namespace Media.Api.v1.Controllers
         [AllowAnonymous]
         [Route("versions/{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(MediaItemVersionsResponseModel))]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetVersions(Guid? id)
         {

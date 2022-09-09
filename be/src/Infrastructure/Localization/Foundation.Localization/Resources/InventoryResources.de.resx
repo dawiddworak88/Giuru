@@ -141,7 +141,7 @@
   <data name="Inventory" xml:space="preserve">
     <value>Verfügbarkeit</value>
   </data>
-  <data name="InventoryNotFound" xml:space="preserve">
+  <data name="InventoryNoContent" xml:space="preserve">
     <value>Inventar nicht auf lagerhaus gefunden</value>
   </data>
   <data name="InventorySavedSuccessfully" xml:space="preserve">
@@ -225,7 +225,7 @@
   <data name="Warehouse" xml:space="preserve">
     <value>Lagerhaus</value>
   </data>
-  <data name="WarehouseNotFound" xml:space="preserve">
+  <data name="WarehouseNoContent" xml:space="preserve">
     <value>Kein lagerhaus gefunden</value>
   </data>
   <data name="WarehouseRequiredErrorMessage" xml:space="preserve">

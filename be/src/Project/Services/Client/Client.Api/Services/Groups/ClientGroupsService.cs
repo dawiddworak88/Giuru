@@ -54,7 +54,7 @@ namespace Client.Api.Services.Groups
 
             if (group is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("GroupNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("GroupNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             if (await this.context.ClientsGroups.AnyAsync(x => x.GroupId == model.Id && x.IsActive))
@@ -185,7 +185,7 @@ namespace Client.Api.Services.Groups
             
             if (group == null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("GroupNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("GroupNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             var groupTranslation = await this.context.ClientGroupTranslations.FirstOrDefaultAsync(x => x.ClientGroupId == model.Id && x.Language == model.Language && x.IsActive);

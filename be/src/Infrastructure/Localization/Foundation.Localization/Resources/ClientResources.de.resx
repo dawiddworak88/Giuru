@@ -138,7 +138,7 @@
   <data name="ClientAlreadyExists" xml:space="preserve">
     <value>Der Kunder mit dieser E-Mail-Adresse wurde schon erstellt.</value>
   </data>
-  <data name="ClientApplicationNotFound" xml:space="preserve">
+  <data name="ClientApplicationNoContent" xml:space="preserve">
     <value>Kundenanwendung nicht gefunden</value>
   </data>
   <data name="ClientApplicationSavedSuccessfully" xml:space="preserve">
@@ -162,7 +162,7 @@
   <data name="ClientManagers" xml:space="preserve">
     <value>Kundenbetreuer</value>
   </data>
-  <data name="ClientNotFound" xml:space="preserve">
+  <data name="ClientNoContent" xml:space="preserve">
     <value>Kunde wurde nicht gefunden.</value>
   </data>
   <data name="Clients" xml:space="preserve">
@@ -201,7 +201,7 @@
   <data name="GroupDeletedSuccessfully" xml:space="preserve">
     <value>Gruppe wurde erfolgreich gelöscht.</value>
   </data>
-  <data name="GroupNotFound" xml:space="preserve">
+  <data name="GroupNoContent" xml:space="preserve">
     <value>Gruppe wurde nicht gefunden.</value>
   </data>
   <data name="GroupSavedSuccessfully" xml:space="preserve">
@@ -216,7 +216,7 @@
   <data name="ManagerExist" xml:space="preserve">
     <value>Account-Manager existiert bereit</value>
   </data>
-  <data name="ManagerNotFound" xml:space="preserve">
+  <data name="ManagerNoContent" xml:space="preserve">
     <value>Account-Manager wurde nicht gefunden.</value>
   </data>
   <data name="ManagerSavedSuccessfully" xml:space="preserve">
@@ -261,7 +261,7 @@
   <data name="RoleIsExisting" xml:space="preserve">
     <value>Rolle vorhanden</value>
   </data>
-  <data name="RoleNotFound" xml:space="preserve">
+  <data name="RoleNoContent" xml:space="preserve">
     <value>Rolle nicht gefunden</value>
   </data>
   <data name="RoleSavedSuccessfully" xml:space="preserve">

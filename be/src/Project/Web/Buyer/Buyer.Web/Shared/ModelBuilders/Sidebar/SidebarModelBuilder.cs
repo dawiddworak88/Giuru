@@ -35,7 +35,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Sidebar
                 SidebarTitle = this.orderLocalizer.GetString("SidebarTitle"),
                 BasketUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 ToBasketLabel = this.orderLocalizer.GetString("ToBasketLabel"),
-                NotFound = this.orderLocalizer.GetString("NotFound"),
+                NoContent = this.orderLocalizer.GetString("NoContent"),
                 FabricsLabel = this.orderLocalizer.GetString("FabricsLabel"),
                 SkuLabel = this.globalLocalizer.GetString("Sku"),
                 LackInformation = this.orderLocalizer.GetString("LackInformation"),

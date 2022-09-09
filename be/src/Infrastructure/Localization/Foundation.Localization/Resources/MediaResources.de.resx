@@ -135,7 +135,7 @@
   <data name="MediaItemsLabel" xml:space="preserve">
     <value>Mediendateien hochladen</value>
   </data>
-  <data name="MediaNotFound" xml:space="preserve">
+  <data name="MediaNoContent" xml:space="preserve">
     <value>Medien nicht gefunden</value>
   </data>
   <data name="MediaUpdatedSuccessfully" xml:space="preserve">

@@ -180,7 +180,7 @@
   <data name="InitCustomOrderLabel" xml:space="preserve">
     <value>I want to place a custom order</value>
   </data>
-  <data name="ItemNotFound" xml:space="preserve">
+  <data name="ItemNoContent" xml:space="preserve">
     <value>Product not found</value>
   </data>
   <data name="LackInformation" xml:space="preserve">
@@ -204,7 +204,7 @@
   <data name="NoOrderItemsLabel" xml:space="preserve">
     <value>The cart is empty. Add first order item.</value>
   </data>
-  <data name="NotFound" xml:space="preserve">
+  <data name="NoContent" xml:space="preserve">
     <value>No variants available</value>
   </data>
   <data name="Order" xml:space="preserve">
@@ -216,7 +216,7 @@
   <data name="OrderItemsLabel" xml:space="preserve">
     <value>Order items</value>
   </data>
-  <data name="OrderNotFound" xml:space="preserve">
+  <data name="OrderNoContent" xml:space="preserve">
     <value>Order has not been found</value>
   </data>
   <data name="OrderPlacedSuccessfully" xml:space="preserve">
@@ -228,13 +228,13 @@
   <data name="OrderStatus" xml:space="preserve">
     <value>Order status</value>
   </data>
-  <data name="OrderStatusNotFound" xml:space="preserve">
+  <data name="OrderStatusNoContent" xml:space="preserve">
     <value>Order status has not been found</value>
   </data>
   <data name="OrderStatusUpdatedSuccessfully" xml:space="preserve">
     <value>Order status has been updated successfully.</value>
   </data>
-  <data name="OrganisationNotFound:" xml:space="preserve">
+  <data name="OrganisationNoContent:" xml:space="preserve">
     <value>Customer organization does not exist</value>
   </data>
   <data name="OutletQuantityLabel" xml:space="preserve">

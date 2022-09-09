@@ -144,7 +144,7 @@
   <data name="InventoryDeletedSuccessfully" xml:space="preserve">
     <value>Pomyślnie usunięto.</value>
   </data>
-  <data name="InventoryNotFound" xml:space="preserve">
+  <data name="InventoryNoContent" xml:space="preserve">
     <value>Nie znaleziono produktu w stanach magazynowych</value>
   </data>
   <data name="InventorySavedSuccessfully" xml:space="preserve">
@@ -234,7 +234,7 @@
   <data name="WarehouseDeleteInventoryConflict" xml:space="preserve">
     <value>Podczas usuwania nastąpił konflikt. Magazyn jest używany w stanach magazynowych.</value>
   </data>
-  <data name="WarehouseNotFound" xml:space="preserve">
+  <data name="WarehouseNoContent" xml:space="preserve">
     <value>Nie znaleziono magazynu</value>
   </data>
   <data name="WarehouseRequiredErrorMessage" xml:space="preserve">

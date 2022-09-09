@@ -56,7 +56,7 @@ namespace News.Api.Services.Categories
 
             if (category is null)
             {
-                throw new CustomException(this.newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.newsLocalizer.GetString("CategoryNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             if (await this.newsContext.Categories.AnyAsync(x => x.ParentCategoryId == category.Id && x.IsActive))
@@ -176,7 +176,7 @@ namespace News.Api.Services.Categories
             
             if (category is null)
             {
-                throw new CustomException(this.newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.newsLocalizer.GetString("CategoryNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             if (model.ParentCategoryId.HasValue)
@@ -185,7 +185,7 @@ namespace News.Api.Services.Categories
 
                 if (parentCategory is null)
                 {
-                    throw new CustomException(this.newsLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NotFound);
+                    throw new CustomException(this.newsLocalizer.GetString("ParentCategoryNoContent"), (int)HttpStatusCode.NoContent);
                 }
 
                 category.ParentCategoryId = model.ParentCategoryId;

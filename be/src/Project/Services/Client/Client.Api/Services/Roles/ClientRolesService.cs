@@ -55,7 +55,7 @@ namespace Client.Api.Services.Roles
 
             if (role is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("RoleNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("RoleNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             role.IsActive = false;
@@ -91,7 +91,7 @@ namespace Client.Api.Services.Roles
 
             if (role is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("RoleNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("RoleNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             return new ClientRoleServiceModel
@@ -131,7 +131,7 @@ namespace Client.Api.Services.Roles
 
             if (role is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("RoleNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("RoleNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             role.Name = model.Name;

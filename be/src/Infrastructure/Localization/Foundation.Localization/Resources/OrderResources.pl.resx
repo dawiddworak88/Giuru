@@ -180,7 +180,7 @@
   <data name="InitCustomOrderLabel" xml:space="preserve">
     <value>Chcę złożyć zamówienie niestandardowe</value>
   </data>
-  <data name="ItemNotFound" xml:space="preserve">
+  <data name="ItemNoContent" xml:space="preserve">
     <value>Nie znaleziono produktu</value>
   </data>
   <data name="LackInformation" xml:space="preserve">
@@ -204,7 +204,7 @@
   <data name="NoOrderItemsLabel" xml:space="preserve">
     <value>Koszyk jest pusty. Dodaj pierwszą pozycję zamówienia.</value>
   </data>
-  <data name="NotFound" xml:space="preserve">
+  <data name="NoContent" xml:space="preserve">
     <value>Brak dostępnych wariantów</value>
   </data>
   <data name="Order" xml:space="preserve">
@@ -216,7 +216,7 @@
   <data name="OrderItemsLabel" xml:space="preserve">
     <value>Pozycje zamówienia</value>
   </data>
-  <data name="OrderNotFound" xml:space="preserve">
+  <data name="OrderNoContent" xml:space="preserve">
     <value>Zamówienie nie zostało znalezione.</value>
   </data>
   <data name="OrderPlacedSuccessfully" xml:space="preserve">
@@ -228,13 +228,13 @@
   <data name="OrderStatus" xml:space="preserve">
     <value>Status zamówienia</value>
   </data>
-  <data name="OrderStatusNotFound" xml:space="preserve">
+  <data name="OrderStatusNoContent" xml:space="preserve">
     <value>Status zamówienia nie został znaleziony.</value>
   </data>
   <data name="OrderStatusUpdatedSuccessfully" xml:space="preserve">
     <value>Status zamówienia został pomyślnie zaktualizowany.</value>
   </data>
-  <data name="OrganisationNotFound:" xml:space="preserve">
+  <data name="OrganisationNoContent:" xml:space="preserve">
     <value>Organizacja klienta nie istnieje</value>
   </data>
   <data name="OutletQuantityLabel" xml:space="preserve">

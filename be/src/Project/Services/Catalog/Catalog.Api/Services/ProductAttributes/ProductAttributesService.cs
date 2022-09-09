@@ -162,12 +162,12 @@ namespace Catalog.Api.Services.ProductAttributes
 
             if (existingProductAttribute == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductAttributeNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("ProductAttributeNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             if (existingProductAttribute.ProductAttributeItems.Any(x => x.IsActive))
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductAttributeNotEmpty"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("ProductAttributeNotEmpty"), (int)HttpStatusCode.NoContent);
             }
 
             existingProductAttribute.IsActive = false;
@@ -186,7 +186,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
             if (existingProductAttributeItem == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductAttributeItemNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("ProductAttributeItemNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             existingProductAttributeItem.IsActive = false;

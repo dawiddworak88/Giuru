@@ -60,7 +60,7 @@ namespace Identity.Api.Services.Users
             
             if (existingOrganisation == null)
             {
-                throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.accountLocalizer.GetString("OrganisationNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo(existingOrganisation.Language);
@@ -189,7 +189,7 @@ namespace Identity.Api.Services.Users
 
             if (existingUser is null)
             {
-                throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.accountLocalizer.GetString("UserNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             if (existingUser.EmailConfirmed is false)
@@ -213,7 +213,7 @@ namespace Identity.Api.Services.Users
             var existingUser = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
             if (existingUser is null)
             {
-                throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.accountLocalizer.GetString("UserNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             existingUser.FirstName = serviceModel.FirstName;
@@ -225,7 +225,7 @@ namespace Identity.Api.Services.Users
             var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == existingUser.OrganisationId && x.IsActive);
             if (organisation is null)
             {
-                throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.accountLocalizer.GetString("OrganisationNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             organisation.Name = serviceModel.Name;
@@ -252,7 +252,7 @@ namespace Identity.Api.Services.Users
 
                 if (userOrganisation is null)
                 {
-                    throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NotFound);
+                    throw new CustomException(this.accountLocalizer.GetString("OrganisationNoContent"), (int)HttpStatusCode.NoContent);
                 }
 
                 Thread.CurrentThread.CurrentCulture = new CultureInfo(userOrganisation.Language);

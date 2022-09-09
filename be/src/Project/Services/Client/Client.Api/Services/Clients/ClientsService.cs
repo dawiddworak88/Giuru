@@ -87,7 +87,7 @@ namespace Client.Api.Services.Clients
             
             if (existingClient is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("ClientNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             var client = new ClientServiceModel
@@ -124,7 +124,7 @@ namespace Client.Api.Services.Clients
 
             if (client == null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("ClientNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             client.IsActive = false;
@@ -138,7 +138,7 @@ namespace Client.Api.Services.Clients
 
             if (client == null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("ClientNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             client.Name = serviceModel.Name;
@@ -194,7 +194,7 @@ namespace Client.Api.Services.Clients
 
             if (exsitingClient is not null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientExists"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("ClientExists"), (int)HttpStatusCode.NoContent);
             }
 
             var client = new Infrastructure.Clients.Entities.Client

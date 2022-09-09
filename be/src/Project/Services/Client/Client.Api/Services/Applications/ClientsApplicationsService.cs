@@ -127,7 +127,7 @@ namespace Client.Api.Services.Applications
 
             if (clientApplication is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("ClientApplicationNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             clientApplication.IsActive = false;
@@ -173,7 +173,7 @@ namespace Client.Api.Services.Applications
 
             if (existingApplication is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("ClientApplicationNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             var clientApplication = new ClientApplicationServiceModel
@@ -235,7 +235,7 @@ namespace Client.Api.Services.Applications
 
             if (clientApplication == null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("ClientApplicationNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             clientApplication.FirstName = model.FirstName;

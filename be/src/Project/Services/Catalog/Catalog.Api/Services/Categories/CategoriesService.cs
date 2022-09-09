@@ -155,7 +155,7 @@ namespace Catalog.Api.Services.Categories
 
             if (category == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("CategoryNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             if (await this.context.Categories.AnyAsync(x => x.Parentid == category.Id && x.IsActive))
@@ -179,14 +179,14 @@ namespace Catalog.Api.Services.Categories
 
             if (category == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("CategoryNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             var parentCategory = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == model.ParentId && x.IsActive);
 
             if (parentCategory == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("ParentCategoryNoContent"), (int)HttpStatusCode.NoContent);
             }
 
             category.Parentid = model.ParentId;

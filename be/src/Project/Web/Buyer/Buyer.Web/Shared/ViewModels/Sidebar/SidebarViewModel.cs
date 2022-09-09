@@ -5,7 +5,7 @@
         public string SidebarTitle { get; set; }
         public string BasketUrl { get; set; }
         public string ToBasketLabel { get; set; }
-        public string NotFound { get; set; }
+        public string NoContent { get; set; }
         public string LackInformation { get; set; }
         public string SkuLabel { get; set; }
         public string EanLabel { get; set; }
