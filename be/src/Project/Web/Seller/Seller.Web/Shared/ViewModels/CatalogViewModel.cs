@@ -27,6 +27,8 @@ namespace Seller.Web.Shared.ViewModels
         public string IsAttachmentLabel { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string OrderBy { get; set; }
+        public string GenerateQRCodeLabel { get; set; }
+        public string CopyLinkLabel { get; set; }
         public IEnumerable<string> ConfirmationDialogDeleteNameProperty { get; set; }
         public CatalogTableViewModel Table { get; set; }
         public QRCodeDialogViewModel QrCodeDialog { get; set; }

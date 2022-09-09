@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { QRCodeCanvas } from "qrcode.react";
 import DialogConstants from "../../constants/DialogConstants";
 import {
@@ -55,6 +56,13 @@ const QRCodeDialog = (props) => {
             </DialogActions>
         </Dialog>
     )
+}
+
+QRCodeDialog.propTypes = {
+    labels: PropTypes.object.isRequired,
+    open: PropTypes.bool.isRequired,
+    item: PropTypes.object,
+    setOpen: PropTypes.func.isRequired
 }
 
 export default QRCodeDialog;

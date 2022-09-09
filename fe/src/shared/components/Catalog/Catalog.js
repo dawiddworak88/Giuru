@@ -254,11 +254,11 @@ function Catalog(props) {
                                                                     <FileCopyOutlined />
                                                                 </Fab>)
                                                             else if (actionItem.isPicture) return (
-                                                                <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary" aria-label={props.duplicateLabel}>
+                                                                <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary" aria-label={props.copyLinkLabel} key={index}>
                                                                     <Link />
                                                                 </Fab>)
                                                             else if (actionItem.qrCode) return (
-                                                                <Fab onClick={() => handleQRCodeDialog(item)} size="small" color="secondary" aria-label={props.qrCodeLabel}>
+                                                                <Fab onClick={() => handleQRCodeDialog(item)} size="small" color="secondary" aria-label={props.generateQRCodeLabel} key={index}>
                                                                     <QrCode2 />
                                                                 </Fab>)
                                                             else return (
@@ -365,7 +365,9 @@ Catalog.propTypes = {
     duplicateUrl: PropTypes.string,
     noResultsLabel: PropTypes.string.isRequired,
     table: PropTypes.object.isRequired,
-    confirmationDialogDeleteNameProperty: PropTypes.array
+    confirmationDialogDeleteNameProperty: PropTypes.array,
+    generateQRCodeLabel: PropTypes.string.isRequired,
+    copyLinkLabel: PropTypes.string.isRequired
 }
 
 export default Catalog;
