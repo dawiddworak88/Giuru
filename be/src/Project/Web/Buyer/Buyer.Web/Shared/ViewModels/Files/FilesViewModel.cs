@@ -1,10 +1,12 @@
 ﻿using Foundation.GenericRepository.Paginations;
+using System;
 using System.Collections.Generic;
 
 namespace Buyer.Web.Shared.ViewModels.Files
 {
     public class FilesViewModel
     {
+        public Guid? Id { get; set; }
         public string DisplayedRowsLabel { get; set; }
         public string RowsPerPageLabel { get; set; }
         public string FilesLabel { get; set; }
@@ -19,6 +21,7 @@ namespace Buyer.Web.Shared.ViewModels.Files
         public string GeneralErrorMessage { get; set; }
         public int DefaultPageSize { get; set; }
         public string NoResultsLabel { get; set; }
+        public string SearchApiUrl { get; set; }
         public PagedResults<IEnumerable<FileViewModel>> Files { get; set; }
     }
 }

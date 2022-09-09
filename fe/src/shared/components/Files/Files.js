@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button, Tooltip, TablePagination
@@ -7,10 +8,12 @@ import {
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
 import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
-import FilesConstants from "../../constants/FilesConstants";
+import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
+import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 
 function Files(props) {
-    const [files, setFiles] = useState(props.files ? props.files.data.slice(0, FilesConstants.defaultPageSize()) : []);
+    const [files, setFiles] = useState(props.files ? props.files.data : []);
+    const [total, setTotal] = useState(props.files ? props.files.total : 0);
     const [page, setPage] = useState(0);
     
     const handleCopyClick = (file) => {
@@ -18,9 +21,45 @@ function Files(props) {
     };
 
     const handleChangePage = (event, newPage) => {
-        const startDisplayFiles = newPage * FilesConstants.defaultPageSize();
-        setPage(newPage)
-        setFiles(props.files.data.slice(startDisplayFiles, startDisplayFiles + FilesConstants.defaultPageSize()))
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        setPage(newPage);
+
+        const searchParameters = {
+            id: props.id,
+            searchTerm,
+            pageIndex: newPage + 1,
+            itemsPerPage: props.defaultPageSize
+        };
+
+        const requestOptions = {
+            method: "GET",
+            headers: { 
+                "Content-Type": "application/json", 
+                "X-Requested-With": "XMLHttpRequest" 
+            }
+        };
+
+        const url = props.searchApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+
+        return fetch(url, requestOptions)
+            .then((response) => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setFiles(jsonResponse.data);
+                        setTotal(jsonResponse.total);
+                    } else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
     }
 
     return (
@@ -81,9 +120,9 @@ function Files(props) {
                         </div>
                         <TablePagination 
                             labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
-                            count={props.files.length}
-                            rowsPerPageOptions={[FilesConstants.defaultPageSize()]}
-                            rowsPerPage={FilesConstants.defaultPageSize()}
+                            count={total}
+                            rowsPerPageOptions={[props.defaultPageSize]}
+                            rowsPerPage={props.defaultPageSize}
                             component="div"
                             page={page}
                             onPageChange={handleChangePage}
@@ -108,7 +147,10 @@ Files.propTypes = {
     lastModifiedDateLabel: PropTypes.string.isRequired,
     createdDateLabel: PropTypes.string.isRequired,
     rowsPerPageLabel: PropTypes.string.isRequired,
-    displayedRowsLabel: PropTypes.string.isRequired
+    displayedRowsLabel: PropTypes.string.isRequired,
+    generalErrorMessage: PropTypes.string.isRequired,
+    defaultPageSize: PropTypes.number.isRequired,
+    searchApiUrl: PropTypes.string.isRequired
 };
 
 export default Files;

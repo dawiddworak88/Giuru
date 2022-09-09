@@ -14,7 +14,7 @@ using Buyer.Web.Shared.Definitions.Files;
 
 namespace Buyer.Web.Shared.ModelBuilders.Files
 {
-    public class DownloadCenterFilesModelBuilder : IAsyncComponentModelBuilder<DownloadCenterFilesComponentModel, DownloadCenterFilesViewModel>
+    public class DownloadCenterFilesModelBuilder : IAsyncComponentModelBuilder<FilesComponentModel, DownloadCenterFilesViewModel>
     {
         private readonly IMediaItemsRepository mediaRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
@@ -30,7 +30,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
             this.mediaService = mediaHelperService;
         }
 
-        public async Task<DownloadCenterFilesViewModel> BuildModelAsync(DownloadCenterFilesComponentModel componentModel)
+        public async Task<DownloadCenterFilesViewModel> BuildModelAsync(FilesComponentModel componentModel)
         {
             if (componentModel.Files is not null && componentModel.Files.Any())
             {
@@ -81,7 +81,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         fileViewModels.Add(fileViewModel);
                     }
 
-                    filesViewModel.Files = new PagedResults<IEnumerable<FileViewModel>>(fileViewModels.Count(), FilesConstants.DefaultPageSize)
+                    filesViewModel.Files = new PagedResults<IEnumerable<FileViewModel>>(fileViewModels.Count, FilesConstants.DefaultPageSize)
                     {
                         Data = fileViewModels
                     };

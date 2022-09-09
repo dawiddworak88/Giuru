@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace DownloadCenter.Api.v1.ResponseModel
+namespace Ordering.Api.v1.ResponseModels
 {
-    public class DownloadCenterCategoryFileResponseModel
+    public class OrderFileResponseModel
     {
         public Guid? Id { get; set; }
-        public string Filename { get; set; }
         public DateTime? LastModifiedDate { get; set; }
         public DateTime? CreatedDate { get; set; }
     }
