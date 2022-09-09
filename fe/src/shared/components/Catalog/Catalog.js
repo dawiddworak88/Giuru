@@ -5,7 +5,8 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { Plus } from "react-feather";
 import {
-    Delete, Edit, FileCopyOutlined, Link
+    Delete, Edit, FileCopyOutlined, Link,
+    QrCode2
 } from "@mui/icons-material";
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
@@ -19,6 +20,7 @@ import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
 import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 import { TextSnippet } from "@mui/icons-material";
+import QRCodeDialog from "../QRCodeDialog/QRCodeDialog";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -30,6 +32,8 @@ function Catalog(props) {
     const [total, setTotal] = React.useState(props.pagedItems ? props.pagedItems.total : 0);
     const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
     const [entityToDelete, setEntityToDelete] = React.useState(null);
+    const [selectedItem, setSelectedItem] = React.useState(null);
+    const [openQRCodeDialog, setOpenQRCodeDialog] = React.useState(false);
 
     const handleSearchTermKeyPress = (event) => {
 
@@ -182,6 +186,12 @@ function Catalog(props) {
     const copyToClipboard = (text) => {
         ClipboardHelper.copyToClipboard(text);
     }
+
+    const handleQRCodeDialog = (item) => {
+        setSelectedItem(item);
+        setOpenQRCodeDialog(true);
+    }
+
     useEffect(() => {
         setMounted(true)
     }, [])
@@ -246,6 +256,10 @@ function Catalog(props) {
                                                             else if (actionItem.isPicture) return (
                                                                 <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary" aria-label={props.duplicateLabel}>
                                                                     <Link />
+                                                                </Fab>)
+                                                            else if (actionItem.qrCode) return (
+                                                                <Fab onClick={() => handleQRCodeDialog(item)} size="small" color="secondary" aria-label={props.qrCodeLabel}>
+                                                                    <QrCode2 />
                                                                 </Fab>)
                                                             else return (
                                                                 <div></div>)})}
@@ -316,6 +330,14 @@ function Catalog(props) {
                     noLabel={props.noLabel}
                     yesLabel={props.yesLabel}
                 />
+                {props.qrCodeDialog &&
+                    <QRCodeDialog 
+                        open={openQRCodeDialog}
+                        setOpen={setOpenQRCodeDialog}
+                        item={selectedItem}
+                        labels={props.qrCodeDialog}
+                    />
+                }
                 {state.isLoading && <CircularProgress className="progressBar" />}
             </div>
         </section>

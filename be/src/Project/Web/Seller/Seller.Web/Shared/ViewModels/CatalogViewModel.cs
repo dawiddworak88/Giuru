@@ -29,6 +29,7 @@ namespace Seller.Web.Shared.ViewModels
         public string OrderBy { get; set; }
         public IEnumerable<string> ConfirmationDialogDeleteNameProperty { get; set; }
         public CatalogTableViewModel Table { get; set; }
+        public QRCodeDialogViewModel QrCodeDialog { get; set; }
         public PagedResults<IEnumerable<T>> PagedItems { get; set; }
     }
 }
