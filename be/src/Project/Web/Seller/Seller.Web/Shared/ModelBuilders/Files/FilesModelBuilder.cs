@@ -50,7 +50,8 @@ namespace Seller.Web.Shared.ModelBuilders.Files
                         CreatedDateLabel = this.globalLocalizer.GetString("CreatedDate"),
                         LastModifiedDateLabel = this.globalLocalizer.GetString("LastModifiedDate"),
                         DisplayedRowsLabel = this.globalLocalizer.GetString("DisplayedRows"),
-                        RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage")
+                        RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage"),
+                        DefaultPageSize = FilesConstants.DefaultPageSize
                     };
 
                     var fileViewModels = new List<FileViewModel>();
@@ -59,6 +60,7 @@ namespace Seller.Web.Shared.ModelBuilders.Files
                     {
                         var fileViewModel = new FileViewModel
                         {
+                            Id = file.Id,
                             Name = file.Name,
                             Filename = file.Filename,
                             Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
@@ -72,7 +74,7 @@ namespace Seller.Web.Shared.ModelBuilders.Files
                         fileViewModels.Add(fileViewModel);
                     }
 
-                    filesViewModel.Files = new PagedResults<IEnumerable<FileViewModel>>(fileViewModels.Count(), FilesConstants.DefaultPageSize)
+                    filesViewModel.Files = new PagedResults<IEnumerable<FileViewModel>>(fileViewModels.Count, FilesConstants.DefaultPageSize)
                     {
                         Data = fileViewModels
                     };
