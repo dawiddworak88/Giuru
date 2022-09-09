@@ -621,6 +621,9 @@
   <data name="SuccessfullyClientApply" xml:space="preserve">
     <value>Die Kooperationsanfrage wurde erfolgreich übermittelt.</value>
   </data>
+  <data name="TeamMembers" xml:space="preserve">
+    <value>Teammitglieder</value>
+  </data>
   <data name="DownloadCenterCategories" xml:space="preserve">
     <value>Download-Center-Kategorien</value>
   </data>

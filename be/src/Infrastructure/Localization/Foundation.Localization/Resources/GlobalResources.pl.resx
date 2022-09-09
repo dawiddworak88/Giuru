@@ -624,6 +624,9 @@
   <data name="SuccessfullyClientApply" xml:space="preserve">
     <value>Pomyślnie przesłano prośbę o współpracę.</value>
   </data>
+  <data name="TeamMembers" xml:space="preserve">
+    <value>Członkowie zespołu</value>
+  </data>
   <data name="DownloadCenter" xml:space="preserve">
     <value>Centrum pobierania</value>
   </data>
