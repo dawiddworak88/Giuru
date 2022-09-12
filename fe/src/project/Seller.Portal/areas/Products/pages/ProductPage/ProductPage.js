@@ -15,7 +15,7 @@ function ProductPage(props) {
       <Store>
         <Header {...props.header}></Header>
         <MenuTiles {...props.menuTiles} />
-        <ProductForm {...props.productForm} />
+        <ProductForm {...props.productForm} locale={props.locale} />
         <Footer {...props.footer}></Footer>
       </Store>
     </ThemeProvider>
