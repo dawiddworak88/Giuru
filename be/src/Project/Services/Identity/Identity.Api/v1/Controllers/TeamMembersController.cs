@@ -187,6 +187,7 @@ namespace Identity.Api.v1.Controllers
             {
                 var serviceModel = new UpdateTeamMemberServiceModel
                 {
+                    Id = request.Id,
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     Email = request.Email,

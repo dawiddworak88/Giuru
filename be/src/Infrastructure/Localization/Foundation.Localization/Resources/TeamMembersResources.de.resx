@@ -133,7 +133,7 @@
     <value>Teammitglied erfolgreich entfernt.</value>
   </data>
   <data name="SuccessfullySavedTeamMember" xml:space="preserve">
-    <value>Teammitglied erfolgreich hinzugefügt.</value>
+    <value>Teammitglied erfolgreich gespeichert.</value>
   </data>
   <data name="TeamMemberNotFound" xml:space="preserve">
     <value>Teammitglied nicht gefunden.</value>

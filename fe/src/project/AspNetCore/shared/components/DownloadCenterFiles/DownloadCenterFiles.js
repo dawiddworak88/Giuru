@@ -187,7 +187,7 @@ const DownloadCenterFiles = (props) => {
                 <section className="section files pt-5">
                     <div className="files__content-box">
                         <div className="files__search">
-                            <TextField id="search" name="search" className="files__search-field" value={searchTerm} onChange={handleOnChange} variant="standard" type="search" autoComplete="off" onKeyPress={handleSearchTermKeyPress} />
+                            <TextField id="search" name="search" className="files__search-field" label={props.searchLabel} value={searchTerm} onChange={handleOnChange} variant="standard" type="search" autoComplete="off" onKeyPress={handleSearchTermKeyPress} />
                             <Button onClick={handleSearchButton} className="ml-5" type="button" variant="contained" color="primary">
                                 {props.searchLabel}
                             </Button>
