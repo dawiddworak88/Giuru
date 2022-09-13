@@ -180,7 +180,7 @@ const DownloadCenterFiles = (props) => {
                 <section className="section files pt-5">
                     <div className="files__content-box">
                         <div className="files__search">
-                            <TextField id="search" name="search" className="files__search-field" value={searchTerm} onChange={handleOnChange} variant="standard" type="search" autoComplete="off" />
+                            <TextField id="search" name="search" label={props.searchLabel} className="files__search-field" value={searchTerm} onChange={handleOnChange} variant="standard" type="search" autoComplete="off" />
                             <Button onClick={handleSearchButton} className="ml-5" type="button" variant="contained" color="primary">
                                 {props.searchLabel}
                             </Button>
