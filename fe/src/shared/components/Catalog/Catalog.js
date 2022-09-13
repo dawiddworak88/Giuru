@@ -242,23 +242,23 @@ function Catalog(props) {
                                                     <TableCell width="12%">
                                                         {props.table.actions.map((actionItem, index) => {
                                                             if (actionItem.isEdit) return (
-                                                                <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel} key={index}>
+                                                                <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" title={props.editLabel} aria-label={props.editLabel} key={index}>
                                                                     <Edit />
                                                                 </Fab>)
                                                             else if (actionItem.isDelete) return (
-                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel} key={index}>
+                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" title={props.deleteLabel} aria-label={props.deleteLabel} key={index}>
                                                                     <Delete />
                                                                 </Fab>)
                                                             else if (actionItem.isDuplicate) return (
-                                                                <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" aria-label={props.duplicateLabel} key={index}>
+                                                                <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" title={props.duplicateLabel} aria-label={props.duplicateLabel} key={index}>
                                                                     <FileCopyOutlined />
                                                                 </Fab>)
                                                             else if (actionItem.isPicture) return (
-                                                                <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary" aria-label={props.copyLinkLabel} key={index}>
+                                                                <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary" title={props.copyLinkLabel} aria-label={props.copyLinkLabel} key={index}>
                                                                     <Link />
                                                                 </Fab>)
                                                             else if (actionItem.qrCode) return (
-                                                                <Fab onClick={() => handleQRCodeDialog(item)} size="small" color="secondary" aria-label={props.generateQRCodeLabel} key={index}>
+                                                                <Fab onClick={() => handleQRCodeDialog(item)} size="small" color="secondary" title={props.generateQRCodeLabel} aria-label={props.generateQRCodeLabel} key={index}>
                                                                     <QrCode2 />
                                                                 </Fab>)
                                                             else return (
