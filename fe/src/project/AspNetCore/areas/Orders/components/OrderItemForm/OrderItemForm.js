@@ -7,7 +7,6 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 import OrderItemStatusChanges from "../../../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
 
 const OrderItemForm = (props) => {
-
     return (
         <section className="section section-small-padding order-item">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -15,7 +14,7 @@ const OrderItemForm = (props) => {
                 <div className="column is-half">
                     <div className="order-item__status">{props.orderStatusLabel}: {props.orderItemStatusName}</div>
                     <div className="mt-2 mb-3 order-item__image">
-                        <img src={props.imageUrl} alt="" />
+                        <img src={props.imageUrl} alt={props.imageAlt} />
                     </div>
                     <div className="field">
                         <TextField 

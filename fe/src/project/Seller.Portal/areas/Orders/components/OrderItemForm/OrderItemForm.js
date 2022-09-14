@@ -72,7 +72,7 @@ const OrderItemForm = (props) => {
                             </div>
                         }
                         <div className="mt-2 mb-3 order-item__image">
-                            <img src={props.imageUrl} alt=""/>
+                            <img src={props.imageUrl} alt={props.imageAlt}/>
                         </div>
                         <div className="field">
                             <TextField 

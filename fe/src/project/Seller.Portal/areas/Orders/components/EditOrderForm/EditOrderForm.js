@@ -246,7 +246,7 @@ function EditOrderForm(props) {
                                                             <Edit />
                                                         </Fab>
                                                     </TableCell>
-                                                    <TableCell><a href={item.productUrl} target="_blank"><img className="edit-order__item-product-image" src={item.imageSrc} alt=""/></a></TableCell>
+                                                    <TableCell><a href={item.productUrl} target="_blank"><img className="edit-order__item-product-image" src={item.imageSrc} alt={item.imageAlt}/></a></TableCell>
                                                     <TableCell>{item.sku}</TableCell>
                                                     <TableCell>{item.name}</TableCell>
                                                     <TableCell>{item.quantity}</TableCell>
