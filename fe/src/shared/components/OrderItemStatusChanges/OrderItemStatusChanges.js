@@ -1,18 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import {
     Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper
+    TableHead, TableRow, Paper, NoSsr
 } from "@mui/material";
 import moment from "moment";
 
 const OrderItemStatusChanges = (props) => {
-    const [isMounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
-
     return (
         props.orderItemStatusChanges &&
             <div className="order-history mt-5 p-5">
@@ -32,7 +26,9 @@ const OrderItemStatusChanges = (props) => {
                                     <TableRow key={index}>
                                         <TableCell>{statusChange.orderItemStatusName}</TableCell>
                                         <TableCell>{statusChange.orderItemStatusChangeComment}</TableCell>
-                                        <TableCell>{isMounted ? moment.utc(statusChange.createdDate).local().format("L LT") : moment.utc(statusChange.createdDate).format("L LT")}</TableCell>
+                                        <NoSsr>
+                                            <TableCell>{moment.utc(statusChange.createdDate).local().format("L LT")}</TableCell>
+                                        </NoSsr>
                                     </TableRow>
                                 )}
                             </TableBody>

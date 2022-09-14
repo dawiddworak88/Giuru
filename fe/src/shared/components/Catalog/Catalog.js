@@ -11,7 +11,8 @@ import {
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, TablePagination, CircularProgress, Fab,
-    Tooltip
+    Tooltip,
+    NoSsr
 } from "@mui/material";
 import KeyConstants from "../../constants/KeyConstants";
 import { Context } from "../../stores/Store";
@@ -25,7 +26,6 @@ import QRCodeDialog from "../QRCodeDialog/QRCodeDialog";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
-    const [isMounted, setMounted] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [itemsPerPage,] = React.useState(PaginationConstants.defaultRowsPerPage());
     const [searchTerm, setSearchTerm] = React.useState("");
@@ -192,10 +192,6 @@ function Catalog(props) {
         setSelectedItem(item);
         setOpenQRCodeDialog(true);
     }
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
     
     return (
         <section className="section section-small-padding catalog">
@@ -294,7 +290,9 @@ function Catalog(props) {
                                                     }
                                                     else if (property.isDateTime){
                                                         return (
-                                                            <TableCell key={index}>{isMounted ? moment.utc(item[property.title]).local().format("L LT") : moment.utc(item[property.title]).format("L LT")}</TableCell>
+                                                            <NoSsr>
+                                                                <TableCell key={index}>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
+                                                            </NoSsr>
                                                         )
                                                     }
                                                     else {
