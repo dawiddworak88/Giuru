@@ -58,7 +58,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (downloadCenterFile is null)
             {
-                throw new CustomException(this.downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             foreach(var downloadCenterCategoryFile in downloadCenterFile.OrEmptyIfNull())
@@ -138,7 +138,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (downloadCenterFile is null)
             {
-                throw new CustomException(this.downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var downloadCenterFileItem = new DownloadCenterItemFileServiceModel
@@ -232,7 +232,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (downloadCenterCategory is null)
             {
-                throw new CustomException(this.downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var category = new DownloadCenterCategoryServiceModel
@@ -327,7 +327,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (downloadCenterCategoryFiles is null)
             {
-                throw new CustomException(this.downloadCenterLocalizer.GetString("DownloadCenterFilesNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.downloadCenterLocalizer.GetString("DownloadCenterFilesNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             foreach(var downloadCenterCategoryFile in downloadCenterCategoryFiles.OrEmptyIfNull())
