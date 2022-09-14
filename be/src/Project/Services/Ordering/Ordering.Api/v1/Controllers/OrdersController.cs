@@ -264,14 +264,14 @@ namespace Ordering.Api.v1.Controllers
                         OrderStateId = order.OrderStateId,
                         OrderStatusId = order.OrderStatusId,
                         OrderStatusName = order.OrderStatusName,
-                        OrderItems = order.OrderItems.Select(x => new OrderItemResponseModel
+                        OrderItems = order.OrderItems.OrEmptyIfNull().Select(x => new OrderItemResponseModel
                         {
                             Id = x.Id, 
                             OrderItemStateId = x.OrderItemStateId,
                             OrderItemStatusId = x.OrderItemStatusId,
                             OrderItemStatusName = x.OrderItemStatusName,
                             OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
-                            LastOrderItemStatusChangeId = x.LastOrderItemStatusChangeId.Value,
+                            LastOrderItemStatusChangeId = x.LastOrderItemStatusChangeId,
                             ProductId = x.ProductId,
                             ProductSku = x.ProductSku,
                             ProductName = x.ProductName,
@@ -399,7 +399,7 @@ namespace Ordering.Api.v1.Controllers
                     var response = new OrderItemStatusChangesResponseModel
                     {
                         OrderItemId = statusChanges.OrderItemId,
-                        StatusChanges = statusChanges.OrderItemStatusChanges.Select(x => new OrderItemStatusChangeResponseModel { 
+                        StatusChanges = statusChanges.OrderItemStatusChanges.OrEmptyIfNull().Select(x => new OrderItemStatusChangeResponseModel { 
                             OrderItemStateId = x.OrderItemStateId,
                             OrderItemStatusId = x.OrderItemStatusId,
                             OrderItemStatusName = x.OrderItemStatusName,
@@ -556,7 +556,7 @@ namespace Ordering.Api.v1.Controllers
                         OrderStateId = order.OrderStateId,
                         OrderStatusId = order.OrderStatusId,
                         OrderStatusName = order.OrderStatusName,
-                        OrderItems = order.OrderItems.Select(x => new OrderItemResponseModel
+                        OrderItems = order.OrderItems.OrEmptyIfNull().Select(x => new OrderItemResponseModel
                         {
                             ProductId = x.ProductId,
                             ProductSku = x.ProductSku,

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.ViewModels;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -79,11 +80,17 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     viewModel.OrderUrl = this.linkGenerator.GetPathByAction("Edit", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, id = orderItem.OrderId });
                 }
 
-                var orderItemStatusesHistory = await this.ordersRepository.GetOrderItemStatusesAsync(componentModel.Token, componentModel.Language, componentModel.Id);
-
-                if (orderItemStatusesHistory is not null)
+                if (orderItem.LastOrderItemStatusChangeId != Guid.Empty)
                 {
-                    viewModel.OrderItemStatusChanges = await this.orderItemStatusChangesModelBuilder.BuildModelAsync(new ComponentModelBase { IsAuthenticated = componentModel.IsAuthenticated, Token = componentModel.Token, Language = componentModel.Language, Id = componentModel.Id });
+                    var componentModelBase = new ComponentModelBase
+                    {
+                        IsAuthenticated = componentModel.IsAuthenticated,
+                        Token = componentModel.Token,
+                        Language = componentModel.Language,
+                        Id = componentModel.Id
+                    };
+
+                    viewModel.OrderItemStatusChanges = await this.orderItemStatusChangesModelBuilder.BuildModelAsync(componentModelBase);
                 }
             }
             

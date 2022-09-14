@@ -18,6 +18,7 @@ namespace Seller.Web.Areas.Orders.DomainModels
         public DateTime? ExpectedDeliveryTo { get; set; }
         public string MoreInfo { get; set; }
         public Guid? OrderItemStatusId { get; set; }
+        public Guid? LastOrderItemStatusChangeId { get; set; }
         public string OrderItemStatusName { get; set; }
         public string OrderItemStatusChangeComment { get; set; }
         public DateTime LastModifiedDate { get; set; }

@@ -14,7 +14,7 @@ const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [orderItemStatusId, setOrderItemStatusId] = useState(props.orderItemStatusId);
     const [orderItemStatusChangeComment, setOrderItemStatusChangeComment] = useState(null)
-    const [isSended, setIsSended] = useState(false);
+    const [isSent, setIsSent] = useState(false);
 
     const handleSubmitForm = (e) => {
         e.preventDefault();
@@ -42,7 +42,7 @@ const OrderItemForm = (props) => {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        setIsSended(true)
+                        setIsSent(true)
                         toast.success(jsonResponse.message);
                     }
                     else {
@@ -56,7 +56,7 @@ const OrderItemForm = (props) => {
     }
 
     const handleChangeOrderItemStatus = (e) => {
-        setIsSended(false);
+        setIsSent(false);
         setOrderItemStatusId(e.target.value)
     }
 
@@ -175,7 +175,7 @@ const OrderItemForm = (props) => {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || props.orderItemStatusId === orderItemStatusId || isSended}>
+                                disabled={state.isLoading || props.orderItemStatusId === orderItemStatusId || isSent}>
                                 {props.saveText}
                             </Button>
                             <Button 

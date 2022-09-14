@@ -6,6 +6,7 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -69,11 +70,17 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.OrderUrl = this.linkGenerator.GetPathByAction("Status", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, id = orderItem.OrderId });
                 }
 
-                var orderItemStatusesHistory = await this.ordersRepository.GetOrderItemStatusesAsync(componentModel.Token, componentModel.Language, componentModel.Id);
-
-                if (orderItemStatusesHistory is not null)
+                if (orderItem.LastOrderItemStatusChangeId != Guid.Empty)
                 {
-                    viewModel.OrderItemStatusChanges = await this.orderHistoryModelBuilder.BuildModelAsync(new ComponentModelBase { IsAuthenticated = componentModel.IsAuthenticated, Token = componentModel.Token, Language = componentModel.Language, Id = componentModel.Id });
+                    var componentModelBase = new ComponentModelBase
+                    {
+                        IsAuthenticated = componentModel.IsAuthenticated,
+                        Token = componentModel.Token,
+                        Language = componentModel.Language,
+                        Id = componentModel.Id
+                    };
+
+                    viewModel.OrderItemStatusChanges = await this.orderHistoryModelBuilder.BuildModelAsync(componentModelBase);
                 }
             }
 

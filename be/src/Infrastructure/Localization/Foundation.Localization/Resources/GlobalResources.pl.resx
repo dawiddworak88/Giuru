@@ -295,7 +295,7 @@
     <value>Zamówienia</value>
   </data>
   <data name="OrderStatus" xml:space="preserve">
-    <value>Status zamówienia:</value>
+    <value>Status zamówienia</value>
   </data>
   <data name="OrganisationExistsAlready" xml:space="preserve">
     <value>Organizacja już istnieje.</value>

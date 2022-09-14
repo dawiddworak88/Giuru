@@ -20,6 +20,7 @@ namespace Buyer.Web.Areas.Orders.DomainModels
         public Guid? OrderItemStatusId { get; set; }
         public string OrderItemStatusName { get; set; }
         public string OrderItemStatusChangeComment { get; set; }
+        public Guid? LastOrderItemStatusChangeId { get; set; }
         public string ProductAttributes { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }

@@ -445,33 +445,36 @@ namespace Ordering.Api.Services
                 CreatedDate = existingOrderItem.CreatedDate
             };
 
-            var lastOrderItemStatus = await this.context.OrderItemStatusChanges.FirstOrDefaultAsync(x => x.Id == existingOrderItem.LastOrderItemStatusChangeId && x.IsActive);
-
-            if (lastOrderItemStatus is null)
+            if (existingOrderItem.LastOrderItemStatusChangeId != Guid.Empty)
             {
-                throw new CustomException(this.orderLocalizer.GetString("LastOrderItemStatusNotFound"), (int)HttpStatusCode.NotFound);
+                var lastOrderItemStatus = await this.context.OrderItemStatusChanges.FirstOrDefaultAsync(x => x.Id == existingOrderItem.LastOrderItemStatusChangeId && x.IsActive);
+
+                if (lastOrderItemStatus is null)
+                {
+                    throw new CustomException(this.orderLocalizer.GetString("LastOrderItemStatusNotFound"), (int)HttpStatusCode.NotFound);
+                }
+
+                orderItem.OrderItemStateId = lastOrderItemStatus.OrderItemStateId;
+                orderItem.OrderItemStatusId = lastOrderItemStatus.OrderItemStatusId;
+
+                var orderItemStatusTranslation = await this.context.OrderStatusTranslations.FirstOrDefaultAsync(x => x.OrderStatusId == lastOrderItemStatus.OrderItemStatusId && x.Language == model.Language && x.IsActive);
+
+                if (orderItemStatusTranslation is null)
+                {
+                    orderItemStatusTranslation = await this.context.OrderStatusTranslations.FirstOrDefaultAsync(x => x.OrderStatusId == lastOrderItemStatus.OrderItemStatusId && x.IsActive);
+                }
+
+                var orderItemStatusChangeCommentTranslation = this.context.OrderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == lastOrderItemStatus.Id && x.Language == model.Language && x.IsActive);
+
+                if (orderItemStatusChangeCommentTranslation is null)
+                {
+                    orderItemStatusChangeCommentTranslation = this.context.OrderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == lastOrderItemStatus.Id && x.IsActive);
+                }
+
+                orderItem.OrderItemStatusChangeComment = orderItemStatusChangeCommentTranslation?.OrderItemStatusChangeComment;
+
+                orderItem.OrderItemStatusName = orderItemStatusTranslation?.Name;
             }
-
-            orderItem.OrderItemStateId = lastOrderItemStatus.OrderItemStateId;
-            orderItem.OrderItemStatusId = lastOrderItemStatus.OrderItemStatusId;
-
-            var orderItemStatusTranslation = await this.context.OrderStatusTranslations.FirstOrDefaultAsync(x => x.OrderStatusId == lastOrderItemStatus.OrderItemStatusId && x.Language == model.Language && x.IsActive);
-
-            if (orderItemStatusTranslation is null)
-            {
-                orderItemStatusTranslation = await this.context.OrderStatusTranslations.FirstOrDefaultAsync(x => x.OrderStatusId == lastOrderItemStatus.OrderItemStatusId && x.IsActive);
-            }
-
-            var orderItemStatusChangeCommentTranslation = this.context.OrderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == lastOrderItemStatus.Id && x.Language == model.Language && x.IsActive);
-
-            if (orderItemStatusChangeCommentTranslation is null)
-            {
-                orderItemStatusChangeCommentTranslation = this.context.OrderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == lastOrderItemStatus.Id && x.IsActive);
-            }
-
-            orderItem.OrderItemStatusChangeComment = orderItemStatusChangeCommentTranslation?.OrderItemStatusChangeComment;
-
-            orderItem.OrderItemStatusName = orderItemStatusTranslation?.Name;
 
             return orderItem;
         }
