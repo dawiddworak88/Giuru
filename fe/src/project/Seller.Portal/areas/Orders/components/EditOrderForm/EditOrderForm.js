@@ -12,7 +12,6 @@ import { Edit } from "@mui/icons-material";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import Files from "../../../../../../shared/components/Files/Files";
-import OrderConstants from "../../../../shared/constants/OrderConstants";;
 
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -119,7 +118,7 @@ function EditOrderForm(props) {
         if (sameStatuses) {
             setOrderStatusId(newOrderStatus)
         } else {
-            setOrderStatusId(OrderConstants.inProgressStatusId())
+            setOrderStatusId(props.inProgressStatusId)
         }
 
         const requestPayload = {
@@ -341,7 +340,8 @@ EditOrderForm.propTypes = {
     idLabel: PropTypes.string,
     updateOrderItemStatusUrl: PropTypes.string.isRequired,
     orderItemsStatuses: PropTypes.array,
-    orderStatusCommentLabel: PropTypes.string.isRequired
+    orderStatusCommentLabel: PropTypes.string.isRequired,
+    inProgressStatusId: PropTypes.string.isRequired
 };
 
 export default EditOrderForm;

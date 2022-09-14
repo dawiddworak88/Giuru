@@ -10,6 +10,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string Title { get; set; }
         public Guid? Id { get; set; }
         public Guid OrderStatusId { get; set; }
+        public Guid InProgressStatusId { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string SaveText { get; set; }
         public string SkuLabel { get; set; }
