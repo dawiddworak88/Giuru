@@ -49,7 +49,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<CategoryResponseModel>>))]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string searchTerm, int? level, bool? leafOnly, int pageIndex, int itemsPerPage, string orderBy)
         {
@@ -107,7 +107,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [Route("{id}")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategoryResponseModel))]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
@@ -146,7 +146,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NoContent);
+                    return this.StatusCode((int)HttpStatusCode.NotFound);
                 }
             }
 
@@ -160,7 +160,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         /// <returns>The category id.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategoryResponseModel))]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(CategoryRequestModel request)
@@ -262,7 +262,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [HttpDelete, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
@@ -298,7 +298,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [HttpPost, MapToApiVersion("1.0")]
         [Route("CategorySchemas")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemaResponseModel))]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> SaveCategorySchema(CategorySchemaRequestModel request)
@@ -351,7 +351,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [Route("CategorySchemas/{categoryId}")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemaResponseModel))]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetCategorySchemaByCategoryId(Guid? categoryId)
         {
@@ -385,7 +385,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NoContent);
+                    return this.StatusCode((int)HttpStatusCode.NotFound);
                 }
             }
 

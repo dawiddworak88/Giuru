@@ -121,7 +121,7 @@ namespace Inventory.Api.Services.Warehouses
             var warehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
             if (warehouse == null)
             {
-                throw new CustomException(this.warehouseLocalizer.GetString("WarehouseNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.warehouseLocalizer.GetString("WarehouseNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             if (await this.context.Inventory.AnyAsync(x => x.WarehouseId == warehouse.Id && x.IsActive))
@@ -138,7 +138,7 @@ namespace Inventory.Api.Services.Warehouses
             var warehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
             if (warehouse == null)
             {
-                throw new CustomException(this.warehouseLocalizer.GetString("WarehouseNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.warehouseLocalizer.GetString("WarehouseNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             warehouse.Name = serviceModel.Name;

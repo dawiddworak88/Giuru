@@ -37,7 +37,7 @@ namespace Identity.Api.v1.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{email}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetByEmail(string email)
         {

@@ -37,7 +37,7 @@ namespace Inventory.Api.Services.OutletItems
 
             if (product is null || outlet is null)
             {
-                throw new CustomException(this.inventoryLocalizer.GetString("InventoryNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             product.Name = model.ProductName;
@@ -529,7 +529,7 @@ namespace Inventory.Api.Services.OutletItems
 
             if (outlet == null)
             {
-                throw new CustomException(this.inventoryLocalizer.GetString("OutletNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.inventoryLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             outlet.IsActive = false;

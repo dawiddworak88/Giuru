@@ -135,7 +135,7 @@
   <data name="MediaItemsLabel" xml:space="preserve">
     <value>Prześlij pliki</value>
   </data>
-  <data name="MediaNoContent" xml:space="preserve">
+  <data name="MediaNotFound" xml:space="preserve">
     <value>Media nie znalezione</value>
   </data>
   <data name="MediaUpdatedSuccessfully" xml:space="preserve">

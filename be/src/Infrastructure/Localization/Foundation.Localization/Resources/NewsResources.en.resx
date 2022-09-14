@@ -132,7 +132,7 @@
   <data name="CategoryDeleteNewsConflict" xml:space="preserve">
     <value>Remove the news assigned to the category.</value>
   </data>
-  <data name="CategoryNoContent" xml:space="preserve">
+  <data name="CategoryNotFound" xml:space="preserve">
     <value>Category not found</value>
   </data>
   <data name="CategoryRequiredErrorMessage" xml:space="preserve">
@@ -186,7 +186,7 @@
   <data name="NewsNewText" xml:space="preserve">
     <value>Add news</value>
   </data>
-  <data name="NewsNoContent" xml:space="preserve">
+  <data name="NewsNotFound" xml:space="preserve">
     <value>News not found</value>
   </data>
   <data name="NewsSavedSuccessfully" xml:space="preserve">
@@ -198,7 +198,7 @@
   <data name="ParentCategoryLabel" xml:space="preserve">
     <value>Parent category</value>
   </data>
-  <data name="ParentCategoryNoContent" xml:space="preserve">
+  <data name="ParentCategoryNotFound" xml:space="preserve">
     <value>Parent category not found.</value>
   </data>
   <data name="PreviewImageLabel" xml:space="preserve">

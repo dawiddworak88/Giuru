@@ -174,7 +174,7 @@
   <data name="nc_subject" xml:space="preserve">
     <value>We have created an account for you on our B2B Platform</value>
   </data>
-  <data name="OrganisationNoContent" xml:space="preserve">
+  <data name="OrganisationNotFound" xml:space="preserve">
     <value>Organization not found.</value>
   </data>
   <data name="Partnership" xml:space="preserve">
@@ -207,7 +207,7 @@
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>The reset password link has been sent if your account exists in our platform. Please check your e-mail box for further instructions.</value>
   </data>
-  <data name="UserNoContent" xml:space="preserve">
+  <data name="UserNotFound" xml:space="preserve">
     <value>User not found.</value>
   </data>
   <data name="VerifyDateExpired" xml:space="preserve">

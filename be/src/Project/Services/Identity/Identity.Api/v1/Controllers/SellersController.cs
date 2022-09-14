@@ -35,7 +35,7 @@ namespace Identity.Api.v1.Controllers
         [Route("{id}")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
@@ -69,7 +69,7 @@ namespace Identity.Api.v1.Controllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NoContent);
+                    return this.StatusCode((int)HttpStatusCode.NotFound);
                 }
             }
 

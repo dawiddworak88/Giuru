@@ -58,7 +58,7 @@ namespace Client.Api.Services.Managers
 
             if (manager is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ManagerNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.clientLocalizer.GetString("ManagerNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             if (await this.context.ClientsAccountManagers.AnyAsync(x => x.ClientManagerId == model.Id && x.IsActive))
@@ -77,7 +77,7 @@ namespace Client.Api.Services.Managers
 
             if (manager is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ManagerNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.clientLocalizer.GetString("ManagerNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             return new ClientAccountManagerServiceModel
@@ -141,7 +141,7 @@ namespace Client.Api.Services.Managers
 
             if (manager is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ManagerNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.clientLocalizer.GetString("ManagerNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             manager.FirstName = model.FirstName;

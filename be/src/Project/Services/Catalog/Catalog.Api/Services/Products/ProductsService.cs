@@ -53,14 +53,14 @@ namespace Catalog.Api.Services.Products
 
             if (brand == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("BrandNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var category = catalogContext.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
 
             if (category == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("CategoryNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var product = new Product
@@ -146,21 +146,21 @@ namespace Catalog.Api.Services.Products
 
             if (brand == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("BrandNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var category = catalogContext.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
 
             if (category == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("CategoryNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var product = await this.catalogContext.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
 
             if (product == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NotFound);
             }
             
             product.IsNew = model.IsNew;
@@ -275,7 +275,7 @@ namespace Catalog.Api.Services.Products
 
             if (product == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             if (await this.catalogContext.Products.AnyAsync(x => x.PrimaryProductId == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive))

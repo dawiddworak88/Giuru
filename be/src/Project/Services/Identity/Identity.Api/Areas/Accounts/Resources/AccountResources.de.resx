@@ -174,7 +174,7 @@
   <data name="nc_subject" xml:space="preserve">
     <value>Wir haben ein neues Kundenkonto erstellt</value>
   </data>
-  <data name="OrganisationNoContent" xml:space="preserve">
+  <data name="OrganisationNotFound" xml:space="preserve">
     <value>Organisation nicht gefunden.</value>
   </data>
   <data name="Partnership" xml:space="preserve">
@@ -207,7 +207,7 @@
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>Der Link zum Zurücksetzen des Passworts wurde gesendet, wenn Ihr Konto auf unserer Plattform existiert. Bitte überprüfen Sie Ihre Mailbox für weitere Anweisungen.</value>
   </data>
-  <data name="UserNoContent" xml:space="preserve">
+  <data name="UserNotFound" xml:space="preserve">
     <value>Benutzer nicht gefunden.</value>
   </data>
   <data name="VerifyDateExpired" xml:space="preserve">

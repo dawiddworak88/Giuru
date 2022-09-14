@@ -60,7 +60,7 @@ namespace DownloadCenter.Api.Services.Categories
 
             if (category is null)
             {
-                throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             if (await this.context.DownloadCenterCategories.AnyAsync(x => x.ParentCategoryId == category.Id && x.IsActive))
@@ -84,7 +84,7 @@ namespace DownloadCenter.Api.Services.Categories
 
             if (category is null)
             {
-                throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var item = new CategoryServiceModel
@@ -182,7 +182,7 @@ namespace DownloadCenter.Api.Services.Categories
 
             if (category is null)
             {
-                throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryNoContent"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var categoryTranslation = await this.context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);
