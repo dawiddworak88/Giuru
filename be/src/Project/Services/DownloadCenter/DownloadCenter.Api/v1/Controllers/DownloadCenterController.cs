@@ -79,7 +79,9 @@ namespace DownloadCenter.Api.v1.Controllers
                         Data = downloadCenterCategoryFiles.Data.OrEmptyIfNull().Select(x => new DownloadCenterCategoryFileResponseModel
                         {
                             Id = x.Id,
-                            Filename = x.Filename
+                            Filename = x.Filename,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
                         })
                     };
 

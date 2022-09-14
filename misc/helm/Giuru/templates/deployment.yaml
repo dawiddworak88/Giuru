@@ -505,6 +505,8 @@ spec:
           value: {{ .Values.identityApi.actionSendGridCreateTemplateId }}
         - name: ActionSendGridResetTemplateId
           value: {{ .Values.identityApi.actionSendGridResetTemplateId }}
+        - name: ActionSendGridTeamMemberInvitationTemplateId
+          value: {{ .Values.identityApi.actionSendGridTeamMemberInvitationTemplateId }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType
@@ -863,5 +865,7 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: SellerUrl
+          value: {{ .Values.sellerUrl }}
         ports:
         - containerPort: 80

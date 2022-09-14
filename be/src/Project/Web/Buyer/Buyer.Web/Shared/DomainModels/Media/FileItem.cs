@@ -2,7 +2,7 @@
 
 namespace Buyer.Web.Shared.DomainModels.Media
 {
-    public class MediaItem
+    public class FileItem
     {
         public Guid Id { get; set; }
         public string Filename { get; set; }

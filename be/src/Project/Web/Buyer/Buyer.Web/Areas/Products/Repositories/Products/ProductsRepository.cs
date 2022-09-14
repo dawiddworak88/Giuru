@@ -16,6 +16,7 @@ using Buyer.Web.Areas.Products.DomainModels;
 using Foundation.Extensions.Exceptions;
 using System.Net;
 using Buyer.Web.Areas.Orders.ApiRequestModels;
+using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.Repositories.Products
 {
@@ -282,6 +283,43 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                     Values = x.Values.OrEmptyIfNull().Select(y => y)
                 })
             };
+        }
+
+        public async Task<PagedResults<IEnumerable<ProductFile>>> GetProductFilesAsync(string token, string language, Guid? id, int pageIndex, int itemsPerPage, string searchTerm, string orderBy)
+        {
+            var requestModel = new PagedRequestModelBase
+            {
+                Id = id,
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
+            };
+
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductFilesApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ProductFile>>>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                return new PagedResults<IEnumerable<ProductFile>>(response.Data.Total, response.Data.PageSize)
+                {
+                    Data = response.Data.Data
+                };
+            }
+
+            return default;
         }
     }
 }

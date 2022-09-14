@@ -22,8 +22,10 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
         private readonly IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly IDownloadCenterRepository downloadCenterRepository;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, QRCodeDialogViewModel> qrCodeDialogModelBuilder;
 
         public DownloadCenterPageCatalogModelBuilder(
+            IAsyncComponentModelBuilder<ComponentModelBase, QRCodeDialogViewModel> qrCodeDialogModelBuilder,
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IDownloadCenterRepository downloadCenterRepository,
@@ -35,6 +37,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             this.linkGenerator = linkGenerator;
             this.downloadCenterRepository = downloadCenterRepository;
             this.downloadCenterLocalizer = downloadCenterLocalizer;
+            this.qrCodeDialogModelBuilder = qrCodeDialogModelBuilder;
         }
 
         public async Task<CatalogViewModel<DownloadCenterItem>> BuildModelAsync(ComponentModelBase componentModel)
@@ -74,13 +77,16 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                     new CatalogActionViewModel
                     {
                         IsDelete = true
+                    },
+                    new CatalogActionViewModel {
+                        QrCode = true
                     }
                 },
                 Properties = new List<CatalogPropertyViewModel>
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(DownloadCenterItem.Url).ToCamelCase(),
+                        Title = nameof(DownloadCenterItem.CdnUrl).ToCamelCase(),
                         IsPicture = true
                     },
                     new CatalogPropertyViewModel
@@ -106,6 +112,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 }
             };
 
+            viewModel.QrCodeDialog = await this.qrCodeDialogModelBuilder.BuildModelAsync(componentModel);
             viewModel.PagedItems = await this.downloadCenterRepository.GetDownloadCenterItemsAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(DownloadCenterItem.CreatedDate)} desc");
 
             return viewModel;

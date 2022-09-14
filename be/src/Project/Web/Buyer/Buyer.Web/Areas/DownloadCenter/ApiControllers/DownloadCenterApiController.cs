@@ -55,15 +55,16 @@ namespace Buyer.Web.Areas.DownloadCenter.ApiControllers
 
             var downloadCenterFiles = await this.downloadCenterRepository.GetCategoryFilesAsync(token, language, id, pageIndex, itemsPerPage, searchTerm, $"{nameof(DownloadCenterFile.CreatedDate)} desc");
 
-            var filesModel = new List<MediaItem>();
+            var filesModel = new List<FileItem>();
+            var filesIds = downloadCenterFiles.Data.Select(x => x.Id);
 
-            if ((downloadCenterFiles is not null) && (downloadCenterFiles.Data.Select(x => x.Id).Any()))
+            if (downloadCenterFiles is not null && filesIds.Any())
             {
-                var files = await this.mediaRepository.GetMediaItemsAsync(token, language, downloadCenterFiles.Data.OrEmptyIfNull().Select(x => x.Id), FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize);
+                var files = await this.mediaRepository.GetMediaItemsAsync(token, language, filesIds, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize);
 
                 foreach (var file in files.OrEmptyIfNull())
                 {
-                    var fileModel = new MediaItem
+                    var fileModel = new FileItem
                     {
                         Id = file.Id,
                         Name = file.Name,
@@ -80,7 +81,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ApiControllers
                 }
             }
 
-            var pagedFiles = new PagedResults<IEnumerable<MediaItem>>(filesModel.Count, FilesConstants.DefaultPageSize)
+            var pagedFiles = new PagedResults<IEnumerable<FileItem>>(filesModel.Count, FilesConstants.DefaultPageSize)
             {
                 Data = filesModel
             };
