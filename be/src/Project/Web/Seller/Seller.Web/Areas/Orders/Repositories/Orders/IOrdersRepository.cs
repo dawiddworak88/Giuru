@@ -15,5 +15,6 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
         Task<IEnumerable<OrderStatus>> GetOrderStatusesAsync(string token, string language);
         Task<Guid> SaveOrderStatusAsync(string token, string language, Guid orderId, Guid orderStatusId);
         Task UpdateOrderItemStatusAsync(string token, string language, Guid id, Guid orderItemStatusId, string orderItemStatusChangeComment);
+        Task<PagedResults<IEnumerable<OrderFile>>> GetOrderFilesAsync(string token, string language, Guid? id, int pageIndex, int itemsPerPage, string searchTerm, string orderBy);
     }
 }

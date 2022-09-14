@@ -10,5 +10,6 @@ namespace Buyer.Web.Areas.DownloadCenter.Repositories
     {
         Task<PagedResults<IEnumerable<DownloadCenterItem>>> GetAsync(string token, string language, int pageIndex, int itemsPerPage, string searchTerm, string orderBy);
         Task<DownloadCenterCategory> GetAsync(string token, string language, Guid? id);
+        Task<PagedResults<IEnumerable<DownloadCenterFile>>> GetCategoryFilesAsync(string token, string language, Guid? id, int pageIndex, int itemsPerPage, string searchTerm, string orderBy);
     }
 }

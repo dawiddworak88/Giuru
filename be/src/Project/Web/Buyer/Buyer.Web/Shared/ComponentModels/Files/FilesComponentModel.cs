@@ -6,6 +6,7 @@ namespace Buyer.Web.Shared.ComponentModels.Files
 {
     public class FilesComponentModel : ComponentModelBase
     {
+        public string SearchApiUrl { get; set; }
         public IEnumerable<Guid> Files { get; set; }
     }
 }

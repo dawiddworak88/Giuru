@@ -621,6 +621,9 @@
   <data name="SuccessfullyClientApply" xml:space="preserve">
     <value>Die Kooperationsanfrage wurde erfolgreich übermittelt.</value>
   </data>
+  <data name="TeamMembers" xml:space="preserve">
+    <value>Teammitglieder</value>
+  </data>
   <data name="DownloadCenterCategories" xml:space="preserve">
     <value>Download-Center-Kategorien</value>
   </data>
@@ -650,5 +653,11 @@
   </data>
   <data name="OrderStatusComment" xml:space="preserve">
     <value>Kommentar zum Bestellstatus</value>
+  </data>
+  <data name="QRCode" xml:space="preserve">
+    <value>QR-Code</value>
+  </data>
+  <data name="GenerateQRCode" xml:space="preserve">
+    <value>QR-Code generieren</value>
   </data>
 </root>

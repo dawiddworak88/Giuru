@@ -186,6 +186,8 @@ const sellerPortalBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        teammember: ["./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/index.js", "./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/TeamMember.scss"],
+        teammembers: ["./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/index.js", "./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/TeamMembers.scss"],
         downloadcenteritempage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/DownloadCenterItemPage.scss"],
         downloadcenterpage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage.scss"],
         downloadcentercategorypage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoryPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage.scss"],

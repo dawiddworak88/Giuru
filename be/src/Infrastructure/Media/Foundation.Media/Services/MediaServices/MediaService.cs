@@ -18,6 +18,11 @@ namespace Foundation.Media.Services.MediaServices
             this.cdnService = cdnService;
         }
 
+        public string ConvertToMB(long size)
+        {
+            return string.Format("{0:0.00} MB", size / 1024f / 1024f);
+        }
+
         public string GetMediaUrl(Guid mediaId, int? maxWidth)
         {
             var mediaUrl = $"{this.options.Value.MediaUrl}/api/v1/files/{mediaId}";

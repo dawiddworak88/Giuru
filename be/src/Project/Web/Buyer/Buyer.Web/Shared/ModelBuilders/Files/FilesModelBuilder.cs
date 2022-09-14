@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Foundation.Media.Services.MediaServices;
 using System.Linq;
+using Buyer.Web.Shared.Definitions.Files;
 
 namespace Buyer.Web.Shared.ModelBuilders.Files
 {
@@ -39,6 +40,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                 {
                     var filesViewModel = new FilesViewModel
                     {
+                        Id = componentModel.Id,
                         NameLabel = this.globalLocalizer.GetString("Name"),
                         FilenameLabel = this.globalLocalizer.GetString("Filename"),
                         DescriptionLabel = this.globalLocalizer.GetString("Description"),
@@ -49,7 +51,10 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         CreatedDateLabel = this.globalLocalizer.GetString("CreatedDate"),
                         LastModifiedDateLabel = this.globalLocalizer.GetString("LastModifiedDate"),
                         DisplayedRowsLabel = this.globalLocalizer.GetString("DisplayedRows"),
-                        RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage")
+                        RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage"),
+                        DefaultPageSize = FilesConstants.DefaultPageSize,
+                        GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                        SearchApiUrl = componentModel.SearchApiUrl
                     };
 
                     var fileViewModels = new List<FileViewModel>();
@@ -63,7 +68,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                             Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
                             Description = file.Description ?? "-",
                             IsProtected = file.IsProtected,
-                            Size = string.Format("{0:0.00} MB", file.Size / 1024f / 1024f),
+                            Size = this.mediaService.ConvertToMB(file.Size),
                             LastModifiedDate = file.LastModifiedDate,
                             CreatedDate = file.CreatedDate
                         };
@@ -71,7 +76,10 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         fileViewModels.Add(fileViewModel);
                     }
 
-                    filesViewModel.Files = fileViewModels;
+                    filesViewModel.Files = new PagedResults<IEnumerable<FileViewModel>>(fileViewModels.Count, FilesConstants.DefaultPageSize)
+                    {
+                        Data = fileViewModels
+                    };
 
                     return filesViewModel;
                 }

@@ -176,6 +176,7 @@ services:
       - SendGridApiKey=${SENDGRID_API_KEY}
       - ActionSendGridCreateTemplateId=${SENDGRID_CREATE_ACCOUNT_TEMPLATE_ID}
       - ActionSendGridResetTemplateId=${SENDGRID_RESET_PASSWORD_TEMPLATE_ID}
+      - ActionSendGridTeamMemberInvitationTemplateId=${SENDGRID_TEAM_MEMBER_INVITATION_TEMPLATE_ID}
       - DevelopersEmail=it.developers@eltap.com
     ports:
       - "5105:80"
@@ -247,6 +248,7 @@ services:
       - OrderUrl=http://ordering-api
       - InventoryUrl=http://inventory-api
       - NewsUrl=http://news-api
+      - SellerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5104
       - DownloadCenterUrl=http://downloadcenter-api
       - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131

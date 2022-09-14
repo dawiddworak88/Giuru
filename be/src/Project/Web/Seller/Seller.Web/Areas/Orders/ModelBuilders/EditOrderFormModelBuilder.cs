@@ -5,9 +5,11 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.ComponentModels.Files;
+using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
 using System.Globalization;
@@ -70,56 +72,76 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             {
                 viewModel.OrderStatuses = orderStatuses.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
-
-            var order = await this.ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
-
-            if (order is not null)
+            
+            if (componentModel.Id.HasValue)
             {
-                viewModel.Id = order.Id;
-                viewModel.OrderStatusId = order.OrderStatusId;
-                viewModel.ClientUrl = this.linkGenerator.GetPathByAction("Edit", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
-                viewModel.ClientName = order.ClientName;
-                viewModel.UpdateOrderStatusUrl = this.linkGenerator.GetPathByAction("Index", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
-                viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
-                viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
-                {
-                    Id = x.Id,
-                    ProductId = x.ProductId,
-                    Sku = x.ProductSku,
-                    Name = x.ProductName,
-                    ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
-                    Quantity = x.Quantity,
-                    StockQuantity = x.StockQuantity,
-                    OutletQuantity = x.OutletQuantity,
-                    ExternalReference = x.ExternalReference,
-                    MoreInfo = x.MoreInfo,
-                    OrderItemStatusId = x.OrderItemStatusId,
-                    OrderItemStatusName = x.OrderItemStatusName,
-                    OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
-                    DeliveryFrom = x.ExpectedDeliveryFrom,
-                    DeliveryTo = x.ExpectedDeliveryTo,
-                    ImageAlt = x.ProductName,
-                    ImageSrc = x.PictureUrl
-                });
-                viewModel.CustomOrder = order.MoreInfo;
+                var order = await this.ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
-                var orderItemsStatuses = new List<OrderItemStatusViewModel>();
-
-                foreach (var orderItem in order.OrderItems.OrEmptyIfNull())
+                if (order is not null)
                 {
-                    orderItemsStatuses.Add(new OrderItemStatusViewModel
+                    viewModel.Id = order.Id;
+                    viewModel.OrderStatusId = order.OrderStatusId;
+                    viewModel.ClientUrl = this.linkGenerator.GetPathByAction("Edit", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
+                    viewModel.ClientName = order.ClientName;
+                    viewModel.UpdateOrderStatusUrl = this.linkGenerator.GetPathByAction("Index", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
+                    viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
+                    viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                     {
-                        Id = orderItem.Id,
-                        OrderStatusId = orderItem.OrderItemStatusId
+                        Id = x.Id,
+                        ProductId = x.ProductId,
+                        Sku = x.ProductSku,
+                        Name = x.ProductName,
+                        ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
+                        Quantity = x.Quantity,
+                        StockQuantity = x.StockQuantity,
+                        OutletQuantity = x.OutletQuantity,
+                        ExternalReference = x.ExternalReference,
+                        MoreInfo = x.MoreInfo,
+                        OrderItemStatusId = x.OrderItemStatusId,
+                        OrderItemStatusName = x.OrderItemStatusName,
+                        OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
+                        DeliveryFrom = x.ExpectedDeliveryFrom,
+                        DeliveryTo = x.ExpectedDeliveryTo,
+                        ImageAlt = x.ProductName,
+                        ImageSrc = x.PictureUrl
                     });
+                    viewModel.CustomOrder = order.MoreInfo;
+
+                    var orderItemsStatuses = new List<OrderItemStatusViewModel>();
+
+                    foreach (var orderItem in order.OrderItems.OrEmptyIfNull())
+                    {
+                        orderItemsStatuses.Add(new OrderItemStatusViewModel
+                        {
+                            Id = orderItem.Id,
+                            OrderStatusId = orderItem.OrderItemStatusId
+                        });
+                    }
+
+                    viewModel.OrderItemsStatuses = orderItemsStatuses;
+
+                    viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = order.Attachments });
                 }
 
-                viewModel.OrderItemsStatuses = orderItemsStatuses;
+                var orderFiles = await this.ordersRepository.GetOrderFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(OrderFile.CreatedDate)} desc");
 
-                viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = order.Attachments });
+                if (orderFiles is not null)
+                {
+                    var filesComponentModel = new FilesComponentModel
+                    {
+                        Id = componentModel.Id,
+                        IsAuthenticated = componentModel.IsAuthenticated,
+                        Language = componentModel.Language,
+                        Token = componentModel.Token,
+                        SearchApiUrl = this.linkGenerator.GetPathByAction("GetFiles", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                        Files = orderFiles.Data.OrEmptyIfNull().Select(x => x.Id)
+                    };
+
+                    viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(filesComponentModel);
+                }
             }
 
             return viewModel;
         }
     }
-}
+} 

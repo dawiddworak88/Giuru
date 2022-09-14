@@ -3,6 +3,7 @@ using Foundation.Localization;
 using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
+using Foundation.PageContent.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter;
@@ -63,6 +64,10 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 CategoriesLabel = this.globalLocalizer.GetString("Categories"),
                 FilesLabel = this.globalLocalizer.GetString("Files"),
                 SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveMediaChunkUrl = this.linkGenerator.GetPathByAction("PostChunk", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveMediaChunkCompleteUrl = this.linkGenerator.GetPathByAction("PostChunksComplete", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                IsUploadInChunksEnabled = true,
+                ChunkSize = MediaConstants.DefaultChunkSize,
                 DeleteLabel = this.globalLocalizer.GetString("Delete"),
                 DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
                 DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile")

@@ -120,7 +120,7 @@ namespace Buyer.Web.Areas.DownloadCenter.Repositories
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        Url = this.linkGenerator.GetPathByAction("Detail", "Category", new { Area = "DownloadCenter", Culture = CultureInfo.CurrentUICulture.Name, Id = x.Id })
+                        Url = this.linkGenerator.GetPathByAction("Detail", "DownloadCenterCategory", new { Area = "DownloadCenter", Culture = CultureInfo.CurrentUICulture.Name, Id = x.Id })
                     }),
                     Files = response.Data.Files,
                     LastModifiedDate = response.Data.LastModifiedDate,
@@ -128,6 +128,43 @@ namespace Buyer.Web.Areas.DownloadCenter.Repositories
                 };
 
                 return downloadCenterCategory;
+            }
+
+            return default;
+        }
+
+        public async Task<PagedResults<IEnumerable<DownloadCenterFile>>> GetCategoryFilesAsync(string token, string language, Guid? id, int pageIndex, int itemsPerPage, string searchTerm, string orderBy)
+        {
+            var requestModel = new PagedRequestModelBase
+            {
+                Id = id,
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
+            };
+
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.DownloadCenterUrl}{ApiConstants.DownloadCenter.DownloadCenterCategoryFilesApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<DownloadCenterFile>>>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                return new PagedResults<IEnumerable<DownloadCenterFile>>(response.Data.Total, response.Data.PageSize)
+                {
+                    Data = response.Data.Data
+                };
             }
 
             return default;
