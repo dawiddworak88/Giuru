@@ -100,60 +100,6 @@ function EditOrderForm(props) {
             });
     }
 
-    const handleOrderItemStatusChange = (id, newOrderStatus) => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const orderItemIndex = orderItemsStatuses.findIndex(x => x.id === id);
-        let prevOrderItemsStatuses = [...orderItemsStatuses];
-
-        let orderItem = prevOrderItemsStatuses.find(x => x.id === id);
-        orderItem.orderStatusId = newOrderStatus;
-
-        prevOrderItemsStatuses[orderItemIndex] = orderItem;
-
-        setOrderItemsStatuses(prevOrderItemsStatuses);
-
-        const sameStatuses = orderItemsStatuses.map(item => item.orderStatusId).filter((v, i, s) => s.indexOf(v) === i).length === 1;
-
-        if (sameStatuses) {
-            setOrderStatusId(newOrderStatus)
-        } else {
-            setOrderStatusId(props.inProgressStatusId)
-        }
-
-        const requestPayload = {
-            orderItemId: id,
-            orderStatusId: newOrderStatus
-        }
-
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(requestPayload)
-        };
-
-        fetch(props.updateOrderItemStatusUrl, requestOptions)
-            .then((response) => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        toast.success(jsonResponse.message);
-                        setIsModalOpen(true)
-                        setOrderItem(orderItem)
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
-    }
-
     return (
         <section className="section section-small-padding edit-order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -163,10 +109,11 @@ function EditOrderForm(props) {
                     <form className="is-modern-form" onSubmit={handleOrderStatusSubmit} method="post">
                         <div className="columns is-desktop">
                             <div className="column">
-                            {props.id &&
-                                <div className="field">
-                                    <InputLabel id="id-label">{props.idLabel} {props.id}</InputLabel>
-                                </div>}
+                                {props.id &&
+                                    <div className="field">
+                                        <InputLabel id="id-label">{props.idLabel} {props.id}</InputLabel>
+                                    </div>
+                                }
                                 <div className="columns is-desktop">
                                     <div className="column is-half">
                                         <div className="field">
@@ -340,8 +287,7 @@ EditOrderForm.propTypes = {
     idLabel: PropTypes.string,
     updateOrderItemStatusUrl: PropTypes.string.isRequired,
     orderItemsStatuses: PropTypes.array,
-    orderStatusCommentLabel: PropTypes.string.isRequired,
-    inProgressStatusId: PropTypes.string.isRequired
+    orderStatusCommentLabel: PropTypes.string.isRequired
 };
 
 export default EditOrderForm;

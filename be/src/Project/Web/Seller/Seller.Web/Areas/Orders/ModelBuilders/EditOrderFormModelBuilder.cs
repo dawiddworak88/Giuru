@@ -64,8 +64,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
                 CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
                 OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
-                UpdateOrderItemStatusUrl = this.linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                InProgressStatusId = OrdersConstants.OrderStatuses.ProcessingId
+                UpdateOrderItemStatusUrl = this.linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
