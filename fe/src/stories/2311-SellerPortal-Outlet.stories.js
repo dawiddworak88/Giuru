@@ -1,7 +1,7 @@
 import React from "react";
-import OutletPage from "../project/Seller.Portal/areas/Outlet/pages/OutletPage/OutletPage";
+import OutletPage from "../project/Seller.Portal/areas/Inventory/pages/OutletPage/OutletPage";
 import { header, menuTiles, footer } from "./Shared/Props";
-import "../project/Seller.Portal/areas/Outlet/pages/OutletPage/OutletPage.scss";
+import "../project/Seller.Portal/areas/Inventory/pages/OutletPage/OutletPage.scss";
 
 const outletForm = {
   title: "Outlet",

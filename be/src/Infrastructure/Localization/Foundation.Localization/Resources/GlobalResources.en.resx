@@ -624,6 +624,9 @@
   <data name="SuccessfullyClientApply" xml:space="preserve">
     <value>The cooperation request was successfully submitted.</value>
   </data>
+  <data name="TeamMembers" xml:space="preserve">
+    <value>Team members</value>
+  </data>
   <data name="DownloadCenterCategories" xml:space="preserve">
     <value>Download center categories</value>
   </data>
@@ -650,5 +653,11 @@
   </data>
   <data name="Thumbnail" xml:space="preserve">
     <value>Thumbnail</value>
+  </data>
+  <data name="QRCode" xml:space="preserve">
+    <value>QR Code</value>
+  </data>
+  <data name="GenerateQRCode" xml:space="preserve">
+    <value>Generate QR code</value>
   </data>
 </root>

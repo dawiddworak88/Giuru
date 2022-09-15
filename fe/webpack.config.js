@@ -49,7 +49,7 @@ const browserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
-        downloadcentercategorypage: ["./src/project/AspNetCore/areas/DownloadCenter/pages/CategoryPage/index.js", "./src/project/AspNetCore/areas/DownloadCenter/pages/CategoryPage/CategoryPage.scss"],
+        downloadcentercategorypage: ["./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/index.js", "./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage.scss"],
         downloadcenterpage: ["./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterPage/index.js", "./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage.scss"],
         applicationpage: ["./src/project/AspNetCore/areas/Home/pages/ApplicationPage/index.js", "./src/project/AspNetCore/areas/Home/pages/ApplicationPage/ApplicationPage.scss"],
         outletpage: ["./src/project/AspNetCore/areas/Products/pages/OutletPage/index.js", "./src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage.scss"],
@@ -185,6 +185,8 @@ const sellerPortalBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        teammember: ["./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/index.js", "./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/TeamMember.scss"],
+        teammembers: ["./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/index.js", "./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/TeamMembers.scss"],
         downloadcenteritempage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/DownloadCenterItemPage.scss"],
         downloadcenterpage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage.scss"],
         downloadcentercategorypage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoryPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage.scss"],

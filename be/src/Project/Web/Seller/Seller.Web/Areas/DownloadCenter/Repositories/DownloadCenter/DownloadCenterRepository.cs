@@ -116,6 +116,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
                     {
                         Id = downloadCenterFile.Id,
                         Filename = downloadCenterFile.Filename,
+                        Url = this.mediaService.GetNonCdnMediaUrl(downloadCenterFile.Id),
                         Categories = String.Join(", ", downloadCenterFile.Categories.OrEmptyIfNull()),
                         LastModifiedDate = downloadCenterFile.LastModifiedDate,
                         CreatedDate = downloadCenterFile.CreatedDate
@@ -125,7 +126,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
 
                     if (file is not null)
                     {
-                        downloadCenterFileItem.Url = fileTypeService.IsImage(file.MimeType) ? this.mediaService.GetMediaUrl(downloadCenterFile.Id, Constants.PreviewMaxWidth) : null;
+                        downloadCenterFileItem.CdnUrl = fileTypeService.IsImage(file.MimeType) ? this.mediaService.GetMediaUrl(downloadCenterFile.Id, Constants.PreviewMaxWidth) : null;
                     }
 
                     downloadCenterFiles.Add(downloadCenterFileItem);

@@ -11,5 +11,6 @@ namespace Identity.Api.Configurations
         public string DevelopersEmail { get; set; }
         public string ActionSendGridCreateTemplateId { get; set; }
         public string ActionSendGridResetTemplateId { get; set; }
+        public string ActionSendGridTeamMemberInvitationTemplateId { get; set; }
     }
 }

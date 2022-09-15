@@ -627,6 +627,9 @@
   <data name="SuccessfullyClientApply" xml:space="preserve">
     <value>Pomyślnie przesłano prośbę o współpracę.</value>
   </data>
+  <data name="TeamMembers" xml:space="preserve">
+    <value>Członkowie zespołu</value>
+  </data>
   <data name="DownloadCenter" xml:space="preserve">
     <value>Centrum pobierania</value>
   </data>
@@ -656,5 +659,11 @@
   </data>
   <data name="Thumbnail" xml:space="preserve">
     <value>Miniaturka</value>
+  </data>
+  <data name="QRCode" xml:space="preserve">
+    <value>Kod QR</value>
+  </data>
+  <data name="GenerateQRCode" xml:space="preserve">
+    <value>Generuj kod QR</value>
   </data>
 </root>

@@ -19,5 +19,8 @@ namespace Media.Api.Services.Media
         Task DeleteAsync(DeleteFileServiceModel model);
         MediaFileServiceModel GetFile(Guid? mediaId);
         MediaFileServiceModel GetFileVersion(Guid? versionId);
+        Task CreateFileChunkAsync(CreateFileChunkServiceModel model);
+        Task<Guid> CreateFileFromChunksAsync(CreateMediaItemFromChunksServiceModel model);
+        Task<Guid> UpdateFileFromChunksAsync(UpdateMediaItemFromChunksServiceModel model);
     }
 }

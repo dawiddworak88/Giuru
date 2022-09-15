@@ -8,5 +8,6 @@ namespace Foundation.Media.Services.MediaServices
         string GetMediaUrl(string mediaUrl, int? maxWidth = null);
         string GetMediaVersionUrl(Guid mediaVersionId, int? maxWidth = null);
         string GetNonCdnMediaUrl(Guid mediaId, int? maxWidth = null);
+        string ConvertToMB(long size);
     }
 }

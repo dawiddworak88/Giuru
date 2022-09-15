@@ -333,6 +333,27 @@ namespace Ordering.Api.Services
             return default;
         }
 
+        public async Task<PagedResults<IEnumerable<OrderFileServiceModel>>> GetOrderFilesAsync(GetOrderFilesServiceModel model)
+        {
+            var orderFiles = from f in this.context.OrderAttachments
+                                              where f.OrderId == model.Id && f.IsActive
+                                              select new OrderFileServiceModel
+                                              {
+                                                  Id = f.MediaId,
+                                                  LastModifiedDate = f.LastModifiedDate,
+                                                  CreatedDate = f.CreatedDate
+                                              };
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                orderFiles = orderFiles.Where(x => x.Id.ToString() == model.SearchTerm);
+            }
+
+            orderFiles = orderFiles.ApplySort(model.OrderBy);
+
+            return orderFiles.PagedIndex(new Pagination(orderFiles.Count(), model.ItemsPerPage), model.PageIndex);
+        }
+
         public async Task<IEnumerable<OrderStatusServiceModel>> GetOrderStatusesAsync(GetOrderStatusesServiceModel serviceModel)
         {
             var orderStatuses = from orderstatus in this.context.OrderStatuses

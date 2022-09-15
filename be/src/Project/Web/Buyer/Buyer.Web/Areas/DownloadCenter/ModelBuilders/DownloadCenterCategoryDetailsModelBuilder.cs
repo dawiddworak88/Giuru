@@ -1,10 +1,14 @@
-﻿using Buyer.Web.Areas.DownloadCenter.Repositories;
+﻿using Buyer.Web.Areas.DownloadCenter.DomainModels;
+using Buyer.Web.Areas.DownloadCenter.Repositories;
 using Buyer.Web.Areas.DownloadCenter.ViewModel;
 using Buyer.Web.Shared.ComponentModels.Files;
 using Buyer.Web.Shared.ViewModels.Files;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.GenericRepository.Definitions;
 using Foundation.PageContent.ComponentModels;
+using Microsoft.AspNetCore.Routing;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,15 +16,18 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
 {
     public class DownloadCenterCategoryDetailsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryDetailsViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<FilesComponentModel, DownloadCenterFilesViewModel> downloadCenterFilesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<FilesComponentModel, DownloadCenterFilesViewModel> filesModelBuilder;
         private readonly IDownloadCenterRepository downloadCenterRepository;
+        private readonly LinkGenerator linkGenerator;
 
         public DownloadCenterCategoryDetailsModelBuilder(
-            IAsyncComponentModelBuilder<FilesComponentModel, DownloadCenterFilesViewModel> downloadCenterFilesModelBuilder,
-            IDownloadCenterRepository downloadCenterRepository)
+            IAsyncComponentModelBuilder<FilesComponentModel, DownloadCenterFilesViewModel> filesModelBuilder,
+            IDownloadCenterRepository downloadCenterRepository,
+            LinkGenerator linkGenerator)
         {
-            this.downloadCenterFilesModelBuilder = downloadCenterFilesModelBuilder;
+            this.filesModelBuilder = filesModelBuilder;
             this.downloadCenterRepository = downloadCenterRepository;
+            this.linkGenerator = linkGenerator;
         }
 
         public async Task<DownloadCenterCategoryDetailsViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -40,11 +47,22 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
                         Name = x.Name,
                         Url = x.Url
                     });
+                }
 
-                    if (downloadCenterCategory.Files.OrEmptyIfNull().Any())
+                var downloadCenterFiles = await this.downloadCenterRepository.GetCategoryFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null, $"{nameof(DownloadCenterFile.CreatedDate)} desc");
+
+                if (downloadCenterFiles is not null)
+                {
+                    var filesComponentModel = new FilesComponentModel
                     {
-                        viewModel.Files = await this.downloadCenterFilesModelBuilder.BuildModelAsync(new FilesComponentModel { Language = componentModel.Language, Token = componentModel.Token, Files = downloadCenterCategory.Files });
-                    }
+                        Id = componentModel.Id,
+                        Token = componentModel.Token,
+                        Language = componentModel.Language,
+                        Files = downloadCenterFiles.Data.OrEmptyIfNull().Select(x => x.Id),
+                        SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "DownloadCenterApi", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
+                    };
+
+                    viewModel.Files = await this.filesModelBuilder.BuildModelAsync(filesComponentModel);
                 }
             }
 

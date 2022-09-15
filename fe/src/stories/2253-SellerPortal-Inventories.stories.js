@@ -77,10 +77,10 @@ const formData = {
   }
 };
 
-export const InventoryPageStory = () => <InventoriesPage header={header} menuTiles={menuTiles} footer={footer} catalog={formData} />;
+export const InventoriesPageStory = () => <InventoriesPage header={header} menuTiles={menuTiles} footer={footer} catalog={formData} />;
 
 InventoriesPageStory.story = {
-  name: "Inventory Page",
+  name: "Inventories Page",
 };
 
 const SellerInventoriesStories = {

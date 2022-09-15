@@ -1,22 +1,70 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, Button, Tooltip,
+    TableHead, TableRow, Paper, Button, Tooltip, TablePagination
 } from "@mui/material";
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
 import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
+import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
+import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 
 function Files(props) {
+    const [files, setFiles] = useState(props.files ? props.files.data : []);
+    const [total, setTotal] = useState(props.files ? props.files.total : 0);
+    const [page, setPage] = useState(0);
     
     const handleCopyClick = (file) => {
         ClipboardHelper.copyToClipboard(file.url);
     };
 
+    const handleChangePage = (event, newPage) => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        setPage(newPage);
+
+        const searchParameters = {
+            id: props.id,
+            searchTerm,
+            pageIndex: newPage + 1,
+            itemsPerPage: props.defaultPageSize
+        };
+
+        const requestOptions = {
+            method: "GET",
+            headers: { 
+                "Content-Type": "application/json", 
+                "X-Requested-With": "XMLHttpRequest" 
+            }
+        };
+
+        const url = props.searchApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+
+        return fetch(url, requestOptions)
+            .then((response) => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setFiles(jsonResponse.data);
+                        setTotal(jsonResponse.total);
+                    } else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    }
+
     return (
         <Fragment>
-            {props.files &&
+            {files &&
                 <section className="section files">
                     <h3 className="title is-4">{props.filesLabel}</h3>
                     <div className="table-container">
@@ -35,7 +83,7 @@ function Files(props) {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {props.files.map((file, index) => (
+                                        {files.map((file, index) => (
                                             <TableRow key={index}>
                                                 <TableCell width="11%">
                                                     <div className="files__tooltip">
@@ -70,6 +118,16 @@ function Files(props) {
                                 </Table>
                             </TableContainer>
                         </div>
+                        <TablePagination 
+                            labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
+                            count={total}
+                            rowsPerPageOptions={[props.defaultPageSize]}
+                            rowsPerPage={props.defaultPageSize}
+                            component="div"
+                            page={page}
+                            onPageChange={handleChangePage}
+                            labelRowsPerPage={props.rowsPerPageLabel}
+                        />
                     </div>
                 </section>
             }
@@ -87,7 +145,12 @@ Files.propTypes = {
     nameLabel: PropTypes.string.isRequired,
     descriptionLabel: PropTypes.string.isRequired,
     lastModifiedDateLabel: PropTypes.string.isRequired,
-    createdDateLabel: PropTypes.string.isRequired
+    createdDateLabel: PropTypes.string.isRequired,
+    rowsPerPageLabel: PropTypes.string.isRequired,
+    displayedRowsLabel: PropTypes.string.isRequired,
+    generalErrorMessage: PropTypes.string.isRequired,
+    defaultPageSize: PropTypes.number.isRequired,
+    searchApiUrl: PropTypes.string.isRequired
 };
 
 export default Files;

@@ -3,7 +3,7 @@ using System;
 
 namespace DownloadCenter.Api.ServicesModels.DownloadCenter
 {
-    public class GetDownloadCenterCategoryFilesServiceModel : BaseServiceModel
+    public class GetDownloadCenterCategoryFilesServiceModel : PagedBaseServiceModel
     {
         public Guid? Id { get; set; }
     }
