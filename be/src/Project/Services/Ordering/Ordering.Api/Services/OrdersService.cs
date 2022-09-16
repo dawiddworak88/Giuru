@@ -125,7 +125,7 @@ namespace Ordering.Api.Services
 
                 this.context.OrderItemStatusChanges.Add(orderItemStatusChange.FillCommonProperties());
 
-                orderItem.LastOrderItemStatusChangeId = orderItemStatusChange.Id;
+                orderItem.LastOrderItemStatusChangeId = orderItemStatusChange.Id == Guid.Empty ? null : orderItemStatusChange.Id;
             };
 
             if (serviceModel.HasCustomOrder)
