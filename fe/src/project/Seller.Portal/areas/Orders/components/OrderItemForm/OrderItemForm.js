@@ -6,14 +6,17 @@ import {
     FormControl, InputLabel, Select, MenuItem, 
     Button, TextField, CircularProgress
 } from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/lab";
+import AdapterMoment from '@mui/lab/AdapterMoment';
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import OrderItemStatusChanges from "../../../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
 
 const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [orderItemStatusId, setOrderItemStatusId] = useState(props.orderItemStatusId);
-    const [orderItemStatusChangeComment, setOrderItemStatusChangeComment] = useState(null)
+    const [orderItemStatusId, setOrderItemStatusId] = useState(props.orderItemStatusId ? props.orderItemStatusId : "");
+    const [orderItemStatusChangeComment, setOrderItemStatusChangeComment] = useState(null);
+    const [orderItemStatusChanges, setOrderItemStatusChanges] = useState(props.orderItemStatusChanges ? props.orderItemStatusChanges : []);
     const [isSent, setIsSent] = useState(false);
 
     const handleSubmitForm = (e) => {
@@ -143,21 +146,75 @@ const OrderItemForm = (props) => {
                             />
                         </div>
                         <div className="field">
-                            <FormControl variant="standard" fullWidth={true}>
-                                <InputLabel id="orderItemStatus-label">{props.orderStatusLabel}</InputLabel>
-                                <Select
-                                    id="orderItemStatus"
-                                    name="orderItemStatus"
-                                    value={orderItemStatusId ? orderItemStatusId : props.orderItemStatusId}
-                                    onChange={(e) => handleChangeOrderItemStatus(e)}>
-                                    {props.orderItemStatuses.map((status, index) => {
-                                        return (
-                                            <MenuItem key={index} value={status.id}>{status.name}</MenuItem>
-                                        );
-                                    })}
-                                </Select>
-                            </FormControl>
+                            <TextField 
+                                id="externalReference" 
+                                name="externalReference" 
+                                label={props.externalReferenceLabel} 
+                                fullWidth={true}
+                                value={props.externalReference}
+                                variant="standard"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
                         </div>
+                        <div className="field">
+                            <TextField 
+                                id="moreInfo" 
+                                name="moreInfo" 
+                                label={props.moreInfoLabel} 
+                                fullWidth={true}
+                                value={props.moreInfo}
+                                variant="standard"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </div>
+                        <div className="field">
+                            <LocalizationProvider dateAdapter={AdapterMoment}>
+                                <DatePicker
+                                    id="deliveryFrom"
+                                    name="deliveryFrom"
+                                    label={props.deliveryFromLabel}
+                                    value={props.deliveryFrom}
+                                    disableOpenPicker={true}
+                                    renderInput={(params) => 
+                                        <TextField {...params} fullWidth={true} variant="standard" inputProps={{ readOnly: true }} />
+                                    }/>
+                            </LocalizationProvider>
+                        </div>
+                        <div className="field">
+                                <LocalizationProvider dateAdapter={AdapterMoment}>
+                                    <DatePicker
+                                        id="deliveryTo"
+                                        name="deliveryTo"
+                                        label={props.deliveryToLabel}
+                                        value={props.deliveryTo}
+                                        disableOpenPicker={true}
+                                        renderInput={(params) => 
+                                            <TextField {...params} fullWidth={true} variant="standard" inputProps={{ readOnly: true }}/>
+                                        }/>
+                                </LocalizationProvider>
+                        </div>
+                        {orderItemStatusId &&
+                            <div className="field">
+                                <FormControl variant="standard" fullWidth={true}>
+                                    <InputLabel id="orderItemStatus-label">{props.orderStatusLabel}</InputLabel>
+                                    <Select
+                                        id="orderItemStatus"
+                                        name="orderItemStatus"
+                                        value={orderItemStatusId}
+                                        onChange={(e) => handleChangeOrderItemStatus(e)}>
+                                        {props.orderItemStatuses.map((status, index) => {
+                                            return (
+                                                <MenuItem key={index} value={status.id}>{status.name}</MenuItem>
+                                            );
+                                        })}
+                                    </Select>
+                                </FormControl>
+                            </div>
+                        }
                         <div className="field">
                             <TextField
                                 id="orderItemStatusChangeComment"
@@ -216,7 +273,11 @@ OrderItemForm.propTypes = {
     orderStatusCommentLabel: PropTypes.string.isRequired,
     orderUrl: PropTypes.string.isRequired,
     navigateToOrderLabel: PropTypes.string.isRequired,
-    orderStatusesHistory: PropTypes.array
+    orderItemStatusChanges: PropTypes.object,
+    deliveryFromLabel: PropTypes.string.isRequired,
+    deliveryToLabel: PropTypes.string.isRequired,
+    externalReferenceLabel: PropTypes.string.isRequired,
+    moreInfoLabel: PropTypes.string.isRequired
 };
 
 export default OrderItemForm;

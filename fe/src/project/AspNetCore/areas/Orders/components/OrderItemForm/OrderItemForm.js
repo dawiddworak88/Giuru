@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import {
     Button, TextField
 } from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/lab";
+import AdapterMoment from '@mui/lab/AdapterMoment';
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import OrderItemStatusChanges from "../../../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
 
@@ -12,7 +14,9 @@ const OrderItemForm = (props) => {
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
-                    <div className="order-item__status">{props.orderStatusLabel}: {props.orderItemStatusName}</div>
+                    {props.orderItemStatusId &&
+                        <div className="order-item__status">{props.orderStatusLabel}: {props.orderItemStatusName}</div>
+                    }
                     <div className="mt-2 mb-3 order-item__image">
                         <img src={props.imageUrl} alt={props.imageAlt} />
                     </div>
@@ -83,6 +87,58 @@ const OrderItemForm = (props) => {
                                 readOnly: true,
                             }}
                         />
+                    </div>
+                    <div className="field">
+                        <TextField 
+                            id="externalReference" 
+                            name="externalReference" 
+                            label={props.externalReferenceLabel} 
+                            fullWidth={true}
+                            value={props.externalReference}
+                            variant="standard"
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />
+                    </div>
+                    <div className="field">
+                        <TextField 
+                            id="moreInfo" 
+                            name="moreInfo" 
+                            label={props.moreInfoLabel} 
+                            fullWidth={true}
+                            value={props.moreInfo}
+                            variant="standard"
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />
+                    </div>
+                    <div className="field">
+                        <LocalizationProvider dateAdapter={AdapterMoment}>
+                            <DatePicker
+                                id="deliveryFrom"
+                                name="deliveryFrom"
+                                label={props.deliveryFromLabel}
+                                value={props.deliveryFrom}
+                                disableOpenPicker={true}
+                                renderInput={(params) => 
+                                    <TextField {...params} fullWidth={true} variant="standard" inputProps={{ readOnly: true }} />
+                                }/>
+                        </LocalizationProvider>
+                    </div>
+                    <div className="field">
+                            <LocalizationProvider dateAdapter={AdapterMoment}>
+                                <DatePicker
+                                    id="deliveryTo"
+                                    name="deliveryTo"
+                                    label={props.deliveryToLabel}
+                                    value={props.deliveryTo}
+                                    disableOpenPicker={true}
+                                    renderInput={(params) => 
+                                        <TextField {...params} fullWidth={true} variant="standard" inputProps={{ readOnly: true }}/>
+                                    }/>
+                            </LocalizationProvider>
                     </div>
                     <div className="field">
                         <Button 

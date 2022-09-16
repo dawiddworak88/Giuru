@@ -445,7 +445,7 @@ namespace Ordering.Api.Services
                 CreatedDate = existingOrderItem.CreatedDate
             };
 
-            if (existingOrderItem.LastOrderItemStatusChangeId != Guid.Empty)
+            if (existingOrderItem.LastOrderItemStatusChangeId is not null && existingOrderItem.LastOrderItemStatusChangeId != Guid.Empty)
             {
                 var lastOrderItemStatus = await this.context.OrderItemStatusChanges.FirstOrDefaultAsync(x => x.Id == existingOrderItem.LastOrderItemStatusChangeId && x.IsActive);
 

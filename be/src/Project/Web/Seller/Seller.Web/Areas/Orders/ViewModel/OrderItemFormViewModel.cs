@@ -29,6 +29,14 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string SaveText { get; set; }
         public string OrderUrl { get; set; }
         public string SaveUrl { get; set; }
+        public string ExternalReferenceLabel { get; set; }
+        public string ExternalReference { get; set; }
+        public string MoreInfoLabel { get; set; }
+        public string MoreInfo { get; set; }
+        public string DeliveryFromLabel { get; set; }
+        public string DeliveryToLabel { get; set; }
+        public DateTime? DeliveryFrom { get; set; }
+        public DateTime? DeliveryTo { get; set; }
         public OrderItemStatusChangesViewModel OrderItemStatusChanges { get; set; }
         public IEnumerable<ListItemViewModel> OrderItemStatuses { get; set; }
     }
