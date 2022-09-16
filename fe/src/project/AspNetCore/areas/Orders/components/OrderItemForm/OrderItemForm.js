@@ -175,7 +175,11 @@ OrderItemForm.propTypes = {
     orderStatusCommentLabel: PropTypes.string.isRequired,
     orderUrl: PropTypes.string.isRequired,
     navigateToOrderLabel: PropTypes.string.isRequired,
-    orderItemStatusChanges: PropTypes.array
+    orderItemStatusChanges: PropTypes.object,
+    deliveryFromLabel: PropTypes.string.isRequired,
+    deliveryToLabel: PropTypes.string.isRequired,
+    externalReferenceLabel: PropTypes.string.isRequired,
+    moreInfoLabel: PropTypes.string.isRequired
 };
 
 export default OrderItemForm;
