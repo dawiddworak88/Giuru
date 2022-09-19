@@ -7,22 +7,24 @@ import {
 import moment from "moment";
 
 const OrderItemStatusChanges = (props) => {
+    const { labels, statusChanges } = props;
+    
     return (
-        props.orderItemStatusChanges &&
+        props.statusChanges &&
             <div className="order-history mt-5 p-5">
-                <h3 className="title is-4">{props.title}</h3>
+                <h3 className="title is-4">{labels.title}</h3>
                 <div className="table-container">
                     <TableContainer component={Paper}>
-                        <Table aria-label={props.title}>
+                        <Table aria-label={labels.title}>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>{props.orderStatusLabel}</TableCell>
-                                    <TableCell>{props.orderStatusCommentLabel}</TableCell>
-                                    <TableCell>{props.lastModifiedDateLabel}</TableCell>
+                                    <TableCell>{labels.orderStatusLabel}</TableCell>
+                                    <TableCell>{labels.orderStatusCommentLabel}</TableCell>
+                                    <TableCell>{labels.lastModifiedDateLabel}</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {props.orderItemStatusChanges.map((statusChange, index) => 
+                                {props.statusChanges.map((statusChange, index) => 
                                     <TableRow key={index}>
                                         <TableCell>{statusChange.orderItemStatusName}</TableCell>
                                         <TableCell>{statusChange.orderItemStatusChangeComment}</TableCell>
@@ -40,11 +42,8 @@ const OrderItemStatusChanges = (props) => {
 }
 
 OrderItemStatusChanges.propTypes = {
-    title: PropTypes.string.isRequired,
-    orderStatusLabel: PropTypes.string.isRequired,
-    orderStatusCommentLabel: PropTypes.string.isRequired,
-    lastModifiedDateLabel: PropTypes.string.isRequired,
-    orderItemStatusChanges: PropTypes.array
+    labels: PropTypes.object.isRequired,
+    statusChanges: PropTypes.array.isRequired
 }
 
 export default OrderItemStatusChanges;

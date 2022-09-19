@@ -154,8 +154,11 @@ const OrderItemForm = (props) => {
                     </div>
                 </div>
             </div>
-            {props.orderItemStatusChanges &&
-                <OrderItemStatusChanges {...props.orderItemStatusChanges} />
+            {props.statusChanges &&
+                <OrderItemStatusChanges
+                    statusChanges={props.statusChanges}
+                    labels={props.orderItemStatusChanges}
+                />
             }
         </section>
     );
@@ -179,7 +182,8 @@ OrderItemForm.propTypes = {
     deliveryFromLabel: PropTypes.string.isRequired,
     deliveryToLabel: PropTypes.string.isRequired,
     externalReferenceLabel: PropTypes.string.isRequired,
-    moreInfoLabel: PropTypes.string.isRequired
+    moreInfoLabel: PropTypes.string.isRequired,
+    statusChanges: PropTypes.array
 };
 
 export default OrderItemForm;

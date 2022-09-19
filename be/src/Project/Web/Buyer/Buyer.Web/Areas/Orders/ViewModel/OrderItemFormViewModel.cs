@@ -1,6 +1,7 @@
 ﻿
 using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
 using System;
+using System.Collections.Generic;
 
 namespace Buyer.Web.Areas.Orders.ViewModel
 {
@@ -35,6 +36,7 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string DeliveryToLabel { get; set; }
         public DateTime? DeliveryFrom { get; set; }
         public DateTime? DeliveryTo { get; set; }
+        public IEnumerable<OrderItemStatusChangeViewModel> StatusChanges { get; set; }
         public OrderItemStatusChangesViewModel OrderItemStatusChanges { get; set; }
     }
 }

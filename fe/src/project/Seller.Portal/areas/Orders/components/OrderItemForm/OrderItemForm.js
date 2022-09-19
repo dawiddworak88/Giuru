@@ -16,8 +16,7 @@ const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [orderItemStatusId, setOrderItemStatusId] = useState(props.orderItemStatusId ? props.orderItemStatusId : "");
     const [orderItemStatusChangeComment, setOrderItemStatusChangeComment] = useState(null);
-    const [orderItemStatusChanges, setOrderItemStatusChanges] = useState(props.orderItemStatusChanges ? props.orderItemStatusChanges : []);
-    const [isSent, setIsSent] = useState(false);
+    const [orderItemStatusChanges, setOrderItemStatusChanges] = useState(props.statusChanges ? props.statusChanges : []);
 
     const handleSubmitForm = (e) => {
         e.preventDefault();
@@ -45,8 +44,9 @@ const OrderItemForm = (props) => {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        setIsSent(true)
                         toast.success(jsonResponse.message);
+                        setOrderItemStatusChangeComment("");
+                        setOrderItemStatusChanges(jsonResponse.statusChanges);
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -59,7 +59,6 @@ const OrderItemForm = (props) => {
     }
 
     const handleChangeOrderItemStatus = (e) => {
-        setIsSent(false);
         setOrderItemStatusId(e.target.value)
     }
 
@@ -232,7 +231,7 @@ const OrderItemForm = (props) => {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || props.orderItemStatusId === orderItemStatusId || isSent}>
+                                disabled={state.isLoading || props.orderItemStatusId === orderItemStatusId}>
                                 {props.saveText}
                             </Button>
                             <Button 
@@ -250,8 +249,11 @@ const OrderItemForm = (props) => {
                     </form>
                 </div>
             </div>
-            {props.orderItemStatusChanges &&
-                <OrderItemStatusChanges {...props.orderItemStatusChanges} />
+            {orderItemStatusChanges &&
+                <OrderItemStatusChanges
+                    statusChanges={orderItemStatusChanges}
+                    labels={props.orderItemStatusChanges}
+                />
             }
             {state.isLoading && <CircularProgress className="progressBar" />}
         </section>
@@ -277,7 +279,8 @@ OrderItemForm.propTypes = {
     deliveryFromLabel: PropTypes.string.isRequired,
     deliveryToLabel: PropTypes.string.isRequired,
     externalReferenceLabel: PropTypes.string.isRequired,
-    moreInfoLabel: PropTypes.string.isRequired
+    moreInfoLabel: PropTypes.string.isRequired,
+    statusChanges: PropTypes.array
 };
 
 export default OrderItemForm;

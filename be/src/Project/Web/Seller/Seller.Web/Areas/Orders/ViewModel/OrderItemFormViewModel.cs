@@ -37,6 +37,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string DeliveryToLabel { get; set; }
         public DateTime? DeliveryFrom { get; set; }
         public DateTime? DeliveryTo { get; set; }
+        public IEnumerable<OrderItemStatusChangeViewModel> StatusChanges { get; set; }
         public OrderItemStatusChangesViewModel OrderItemStatusChanges { get; set; }
         public IEnumerable<ListItemViewModel> OrderItemStatuses { get; set; }
     }

@@ -8,6 +8,5 @@ namespace Buyer.Web.Shared.ViewModels.OrderItemStatusChanges
         public string OrderStatusLabel { get; set; }
         public string OrderStatusCommentLabel { get; set; }
         public string LastModifiedDateLabel { get; set; }
-        public IEnumerable<OrderItemStatusChangeViewModel> OrderItemStatusChanges { get; set; }
     }
 }

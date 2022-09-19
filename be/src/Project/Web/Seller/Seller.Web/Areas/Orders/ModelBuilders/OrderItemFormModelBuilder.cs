@@ -7,7 +7,6 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.ViewModels;
-using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -88,17 +87,21 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     viewModel.MoreInfo = orderItem.MoreInfo;
                 }
 
-                if (orderItem.LastOrderItemStatusChangeId is not null && orderItem.LastOrderItemStatusChangeId != Guid.Empty)
+                if (orderItem.LastOrderItemStatusChangeId is not null)
                 {
-                    var componentModelBase = new ComponentModelBase
-                    {
-                        IsAuthenticated = componentModel.IsAuthenticated,
-                        Token = componentModel.Token,
-                        Language = componentModel.Language,
-                        Id = componentModel.Id
-                    };
+                    var orderItemStatusChanges = await this.ordersRepository.GetOrderItemStatusesAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
-                    viewModel.OrderItemStatusChanges = await this.orderItemStatusChangesModelBuilder.BuildModelAsync(componentModelBase);
+                    if (orderItemStatusChanges is not null)
+                    {
+                        viewModel.StatusChanges = orderItemStatusChanges.StatusChanges.Select(x => new OrderItemStatusChangeViewModel
+                        {
+                            OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
+                            OrderItemStatusName = x.OrderItemStatusName,
+                            CreatedDate = x.CreatedDate
+                        });
+                    }
+
+                    viewModel.OrderItemStatusChanges = await this.orderItemStatusChangesModelBuilder.BuildModelAsync(componentModel);
                 }
             }
             

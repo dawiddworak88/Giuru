@@ -8,13 +8,14 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Orders.ModelBuilders
 {
     public class OrderItemFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrderItemFormViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel> orderHistoryModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel> orderItemStatusChangesModelBuilder;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly LinkGenerator linkGenerator;
@@ -22,7 +23,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 
         public OrderItemFormModelBuilder
         (
-            IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel> orderHistoryModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel> orderItemStatusChangesModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             LinkGenerator linkGenerator,
@@ -32,7 +33,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
             this.ordersRepository = ordersRepository;
-            this.orderHistoryModelBuilder = orderHistoryModelBuilder;
+            this.orderItemStatusChangesModelBuilder = orderItemStatusChangesModelBuilder;
         }
 
         public async Task<OrderItemFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -78,17 +79,21 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.MoreInfo = orderItem.MoreInfo;
                 }
 
-                if (orderItem.LastOrderItemStatusChangeId is not null && orderItem.LastOrderItemStatusChangeId != Guid.Empty)
+                if (orderItem.LastOrderItemStatusChangeId is not null)
                 {
-                    var componentModelBase = new ComponentModelBase
-                    {
-                        IsAuthenticated = componentModel.IsAuthenticated,
-                        Token = componentModel.Token,
-                        Language = componentModel.Language,
-                        Id = componentModel.Id
-                    };
+                    var orderItemStatusChanges = await this.ordersRepository.GetOrderItemStatusesAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
-                    viewModel.OrderItemStatusChanges = await this.orderHistoryModelBuilder.BuildModelAsync(componentModelBase);
+                    if (orderItemStatusChanges is not null)
+                    {
+                        viewModel.StatusChanges = orderItemStatusChanges.StatusChanges.Select(x => new OrderItemStatusChangeViewModel
+                        {
+                            OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
+                            OrderItemStatusName = x.OrderItemStatusName,
+                            CreatedDate = x.CreatedDate
+                        });
+                    }
+
+                    viewModel.OrderItemStatusChanges = await this.orderItemStatusChangesModelBuilder.BuildModelAsync(componentModel);
                 }
             }
 
