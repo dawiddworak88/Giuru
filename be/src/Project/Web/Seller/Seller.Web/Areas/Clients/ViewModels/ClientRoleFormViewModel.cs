@@ -1,0 +1,19 @@
+﻿using System;
+
+namespace Seller.Web.Areas.Clients.ViewModels
+{
+    public class ClientRoleFormViewModel
+    {
+        public Guid? Id { get; set; }
+        public string Title { get; set; }
+        public string NameRequiredErrorMessage { get; set; }
+        public string NameLabel { get; set; }
+        public string Name { get; set; }
+        public string SaveText { get; set; }
+        public string SaveUrl { get; set; }
+        public string IdLabel { get; set; }
+        public string GeneralErrorMessage { get; set; }
+        public string NavigateToCliensRoles { get; set; }
+        public string RolesUrl { get; set; }
+    }
+}

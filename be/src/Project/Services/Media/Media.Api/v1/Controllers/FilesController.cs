@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using Media.Api.Services.Media;
 using Media.Api.v1.Areas.Media.RequestModels;
 using Foundation.ApiExtensions.Shared.Definitions;
+using Foundation.Extensions.Exceptions;
+using Media.Api.v1.RequestModels;
 
 namespace Media.Api.v1.Controllers
 {
@@ -46,9 +48,9 @@ namespace Media.Api.v1.Controllers
         [Route("{mediaId}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof (FileContentResult))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Get(Guid? mediaId, int? w, int? h, bool o, string? extension)
+        public IActionResult Get(Guid? mediaId, int? w, int? h, bool o, string? extension)
         {
-            var mediaFile = await this.mediaService.GetFileAsync(mediaId, w, h, o, extension);
+            var mediaFile = this.mediaService.GetFile(mediaId, w, h, o, extension);
 
             if (mediaFile != null)
             {
@@ -59,6 +61,36 @@ namespace Media.Api.v1.Controllers
 
             return this.BadRequest();
         }
+
+        /// <param name = "mediaId" > The media id</param>
+        /// /// <returns>OK</returns>
+        [HttpDelete, MapToApiVersion("1.0")]
+        [Route("{mediaId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Delete(Guid? mediaId)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var serviceModel = new DeleteFileServiceModel
+            {
+                MediaId = mediaId,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new DeleteFileModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if(validationResult.IsValid)
+            {
+                await this.mediaService.DeleteAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
 
         /// <summary>
         /// Uploads a file. The maximum file size is 250MB
@@ -78,26 +110,148 @@ namespace Media.Api.v1.Controllers
 
             var organisationClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new CreateMediaItemServiceModel
+            if (model.Id is not null)
             {
+                var serviceModel = new UpdateMediaItemServiceModel
+                {
+                    Id = Guid.Parse(model.Id),
+                    File = model.File,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
+                    Language = CultureInfo.CurrentCulture.Name
+                };
+
+                var validator = new UpdateMediaItemModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+                if (validationResult.IsValid)
+                {
+                    var mediaItemId = await this.mediaService.UpdateFileAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = mediaItemId });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            } 
+            else
+            {
+                var serviceModel = new CreateMediaItemServiceModel
+                {
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
+                    Language = CultureInfo.CurrentCulture.Name,
+                    File = model.File
+                };
+
+                var validator = new CreateMediaItemModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+                if (validationResult.IsValid)
+                {
+                    var mediaItemId = await this.mediaService.CreateFileAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.Created, new { Id = mediaItemId });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
+        }
+
+        /// <summary>
+        /// Uploads a file chunk. The maximum file chunk size is 3 MB.
+        /// </summary>
+        /// <param name="model">The file chunk contents. The max file chunk size is 3 MB. Please specify the chunk number.</param>
+        /// <returns>OK if the file chunk uploaded successfully.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [Route("chunks")]
+        public async Task<IActionResult> PostChunk([FromForm] UploadMediaRequestModel model)
+        {
+            var organisationClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new CreateFileChunkServiceModel
+            {
+                File = model.File,
+                ChunkSumber = model.ChunkNumber,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
-                Language = CultureInfo.CurrentCulture.Name,
-                File = model.File
+                Language = CultureInfo.CurrentCulture.Name
             };
 
-            var validator = new CreateMediaItemModelValidator();
+            var validator = new CreateFileChunkModelValidator();
 
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var mediaItemId = await this.mediaService.CreateFileAsync(serviceModel);
+                await this.mediaService.CreateFileChunkAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.Created, new { Id = mediaItemId });
+                return this.StatusCode((int)HttpStatusCode.OK);
             }
 
-            return this.StatusCode((int)HttpStatusCode.BadRequest);
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Completes the upload of file chunks by merging them and saving to the storage.
+        /// </summary>
+        /// <param name="model">The model that completes upload of media chunks..</param>
+        /// <returns>Created if the file has been saved successfully.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Guid))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [Route("chunkssavecomplete")]
+        public async Task<IActionResult> PostChunksComplete(UploadMediaChunksCompleteRequestModel model)
+        {
+            var organisationClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            if (model.Id.HasValue)
+            {
+                var serviceModel = new UpdateMediaItemFromChunksServiceModel
+                {
+                    Id = model.Id,
+                    Filename = model.Filename,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
+                    Language = CultureInfo.CurrentCulture.Name
+                };
+
+                var validator = new UpdateMediaItemFromChunksModelValidator();
+
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var mediaItemId = await this.mediaService.UpdateFileFromChunksAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = mediaItemId });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
+            else
+            {
+                var serviceModel = new CreateMediaItemFromChunksServiceModel
+                {
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Filename = model.Filename
+                };
+
+                var validator = new CreateMediaItemFromChunksModelValidator();
+
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var mediaItemId = await this.mediaService.CreateFileFromChunksAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.Created, new { Id = mediaItemId });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
         }
     }
 }

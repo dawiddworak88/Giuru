@@ -46,8 +46,6 @@ function Header(props) {
         );
     };
 
-    const links = props.links.map((link, index) => <a key={index} className="navbar-item" href={link.url}>{link.text}</a>);
-
     return (
         <header>
             <nav className="navbar is-spaced">
@@ -95,9 +93,11 @@ function Header(props) {
                             </Drawer>
                         </Fragment>
                     }
-                    <a href={props.logo.targetUrl}>
-                        <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} />
-                    </a>
+                    {props.logo &&
+                        <a href={props.logo.targetUrl}>
+                            <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} />
+                        </a>
+                    }
                     <div role="button" onClick={() => setIsActive(!isActive)} className={isActive ? "navbar-burger is-active" : "navbar-burger"} aria-label="menu" aria-expanded="false">
                         <span aria-hidden="true"></span>
                         <span aria-hidden="true"></span>
@@ -106,7 +106,10 @@ function Header(props) {
                 </div>
                 <div className={isActive ? "navbar-menu is-active" : "navbar-menu"}>
                     <div className="navbar-start">
-                        {links}
+                        {props.links && props.links.length > 0 && props.links.map((link, index) => 
+                                <a key={index} className="navbar-item" href={link.url}>{link.text}</a>
+                            )
+                        }
                     </div>
                     <div className="navbar-end">
                         {props.isLoggedIn && props.signOutLink &&

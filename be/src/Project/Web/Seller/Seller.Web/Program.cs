@@ -24,6 +24,11 @@ using Microsoft.AspNetCore.Http;
 using Seller.Web.Areas.Inventory.DependencyInjection;
 using Foundation.Account.Definitions;
 using Seller.Web.Areas.News.DependencyInjection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
+using Foundation.Media.DependencyInjection;
+using Seller.Web.Areas.TeamMembers.DependencyInjection;
+using Seller.Web.Areas.DownloadCenter.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +46,7 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 
     if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogstashUrl"]))
     {
-        loggerConfiguration.WriteTo.Http(hostingContext.Configuration["LogstashUrl"]);
+        loggerConfiguration.WriteTo.Http(requestUri: hostingContext.Configuration["LogstashUrl"], queueLimitBytes: null);
     }
 
     if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoToken"])
@@ -70,6 +75,8 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add(typeof(HttpWebGlobalExceptionFilter));
 }).AddNewtonsoftJson();
 
+builder.Services.RegisterFoundationMediaDependencies();
+
 builder.Services.RegisterClientAccountDependencies(builder.Configuration);
 
 builder.Services.RegisterApiExtensionsDependencies();
@@ -86,7 +93,11 @@ builder.Services.RegisterClientsAreaDependencies();
 
 builder.Services.RegisterInventoryAreaDependencies();
 
+builder.Services.RegisterDownloadCenterAreaDependencies();
+
 builder.Services.RegisterNewsAreaDependencies();
+
+builder.Services.RegisterTeamMembersAreaDependencies();
 
 builder.Services.RegisterProductsAreaDependencies();
 
@@ -100,6 +111,8 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("SellerOnly", policy => policy.RequireRole(AccountConstants.Roles.Seller));
 });
+
+builder.Services.ConigureHealthChecks(builder.Configuration);
 
 var app = builder.Build();
 
@@ -137,6 +150,17 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization("SellerOnly");
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 
 app.Run();

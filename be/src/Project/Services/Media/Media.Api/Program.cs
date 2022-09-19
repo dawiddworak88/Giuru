@@ -16,6 +16,8 @@ using Microsoft.Extensions.Options;
 using Foundation.Localization.Definitions;
 using Media.Api.Services.Checksums;
 using Foundation.Extensions.Filters;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +35,7 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 
     if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogstashUrl"]))
     {
-        loggerConfiguration.WriteTo.Http(hostingContext.Configuration["LogstashUrl"]);
+        loggerConfiguration.WriteTo.Http(requestUri: hostingContext.Configuration["LogstashUrl"], queueLimitBytes: null);
     }
 
     if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoToken"])
@@ -51,6 +53,8 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
 });
 
+builder.Services.AddCors();
+
 builder.Services.AddControllers(options =>
 {
     options.RespectBrowserAcceptHeader = true;
@@ -65,11 +69,15 @@ builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 
 builder.Services.RegisterMediaApiDependencies();
 
+builder.Services.RegisterEventBus(builder.Configuration);
+
 builder.Services.ConfigureSettings(builder.Configuration);
 
 builder.Services.AddApiVersioning();
 
 builder.Services.RegisterGeneralDependencies();
+
+builder.Services.ConigureHealthChecks(builder.Configuration);
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -108,9 +116,26 @@ app.UseAuthorization();
 
 app.UseCustomHeaderRequestLocalizationProvider(builder.Configuration, app.Services.GetService<IOptionsMonitor<LocalizationSettings>>());
 
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true)
+    .AllowCredentials());
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 
 app.Run();

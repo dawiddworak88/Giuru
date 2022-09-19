@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Areas.Products.ViewModels;
 using Foundation.PageContent.ComponentModels;
-using Foundation.Extensions.Services.MediaServices;
-using Microsoft.Extensions.Options;
-using Seller.Web.Shared.Configurations;
 using System.Collections.Generic;
 using Seller.Web.Shared.ViewModels;
 using Foundation.GenericRepository.Paginations;
@@ -21,6 +18,8 @@ using Seller.Web.Areas.Shared.Repositories.Products;
 using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Definitions;
 using System;
+using Foundation.Media.Services.MediaServices;
+using Foundation.PageContent.Definitions;
 
 namespace Seller.Web.Areas.ModelBuilders.Products
 {
@@ -31,8 +30,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
         private readonly IMediaItemsRepository mediaItemsRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
-        private readonly IMediaHelperService mediaHelperService;
-        private readonly IOptionsMonitor<AppSettings> settings;
+        private readonly IMediaService mediaService;
         private readonly LinkGenerator linkGenerator;
 
         public ProductFormModelBuilder(
@@ -41,8 +39,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             IMediaItemsRepository mediaItemsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
-            IMediaHelperService mediaHelperService,
-            IOptionsMonitor<AppSettings> settings,
+            IMediaService mediaService,
             LinkGenerator linkGenerator)
         {
             this.productsRepository = productsRepository;
@@ -50,8 +47,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             this.mediaItemsRepository = mediaItemsRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
-            this.mediaHelperService = mediaHelperService;
-            this.settings = settings;
+            this.mediaService = mediaService;
             this.linkGenerator = linkGenerator;
         }
 
@@ -73,6 +69,10 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
                 DeleteLabel = this.globalLocalizer.GetString("Delete"),
                 SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveMediaChunkUrl = this.linkGenerator.GetPathByAction("PostChunk", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveMediaChunkCompleteUrl = this.linkGenerator.GetPathByAction("PostChunksComplete", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                IsUploadInChunksEnabled = true,
+                ChunkSize = MediaConstants.DefaultChunkSize,
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 ProductPicturesLabel = this.productLocalizer.GetString("ProductPicturesLabel"),
@@ -156,7 +156,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                             images.Add(new FileViewModel 
                             {
                                 Id = mediaItem.Id,
-                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, mediaItem.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
+                                Url = this.mediaService.GetMediaUrl(mediaItem.Id, Constants.PreviewMaxWidth),
                                 Name = mediaItem.Name,
                                 MimeType = mediaItem.MimeType,
                                 Filename = mediaItem.Filename,
@@ -183,7 +183,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                             files.Add(new FileViewModel
                             {
                                 Id = file.Id,
-                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, file.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
+                                Url = this.mediaService.GetMediaUrl(file.Id, Constants.PreviewMaxWidth),
                                 Name = file.Name,
                                 MimeType = file.MimeType,
                                 Filename = file.Filename,

@@ -1,5 +1,6 @@
 ﻿using Foundation.Account.Definitions;
 using Foundation.Localization.Definitions;
+using Foundation.Media.Configurations;
 using Identity.Api.Areas.Accounts.Configurations;
 using Identity.Api.Areas.Accounts.Services.ProfileServices;
 using Identity.Api.Areas.Accounts.Services.UserServices;
@@ -9,6 +10,8 @@ using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.Repositories.AppSecrets;
 using Identity.Api.Services.Organisations;
 using Identity.Api.Services.Secrets;
+using Identity.Api.Services.Roles;
+using Identity.Api.Services.TeamMembers;
 using Identity.Api.Services.Tokens;
 using Identity.Api.Services.Users;
 using IdentityServer4.Services;
@@ -83,6 +86,7 @@ namespace Identity.Api.DependencyInjection
         {
             services.Configure<AppSettings>(configuration);
             services.Configure<LocalizationSettings>(configuration);
+            services.Configure<MediaAppSettings>(configuration);
         }
 
         public static void RegisterAccountsApiDependencies(this IServiceCollection services)
@@ -91,6 +95,8 @@ namespace Identity.Api.DependencyInjection
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<ISecretsService, SecretsService>();
+            services.AddScoped<IRolesService, RolesService>();
+            services.AddScoped<ITeamMemberService, TeamMemberService>();
         }
     }
 }

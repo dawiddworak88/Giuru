@@ -1,0 +1,22 @@
+﻿<div id="root" asp-prerender-module="MediaItemsPage" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("Media"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("Media")))
+    {
+        <meta name="description" content="@this.Localizer.GetString("Media")" />
+    }
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/mediaitemspage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/mediaitemspage.js" asp-append-version="true"></script>
+}

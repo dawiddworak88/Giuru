@@ -46,7 +46,7 @@ namespace Client.Api.v1.Controllers
         /// <returns>The list of clients.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
@@ -87,6 +87,7 @@ namespace Client.Api.v1.Controllers
                                 CommunicationLanguage = x.CommunicationLanguage,
                                 PhoneNumber = x.PhoneNumber,
                                 ClientGroupIds = x.ClientGroupIds,
+                                ClientManagerIds = x.ClientManagerIds,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -131,6 +132,7 @@ namespace Client.Api.v1.Controllers
                                 CommunicationLanguage = x.CommunicationLanguage,
                                 PhoneNumber = x.PhoneNumber,
                                 ClientGroupIds = x.ClientGroupIds,
+                                ClientManagerIds = x.ClientManagerIds,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -152,7 +154,7 @@ namespace Client.Api.v1.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
@@ -167,7 +169,6 @@ namespace Client.Api.v1.Controllers
             };
 
             var validator = new GetClientModelValidator();
-
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
@@ -184,6 +185,7 @@ namespace Client.Api.v1.Controllers
                         CommunicationLanguage = client.CommunicationLanguage,
                         PhoneNumber = client.PhoneNumber,
                         ClientGroupIds = client.ClientGroupIds,
+                        ClientManagerIds = client.ClientManagerIds,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };
@@ -192,7 +194,7 @@ namespace Client.Api.v1.Controllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                    return this.StatusCode((int)HttpStatusCode.NoContent);
                 }
                 
             }
@@ -207,7 +209,7 @@ namespace Client.Api.v1.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [Route("organisation")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetByOrganisation()
@@ -233,6 +235,7 @@ namespace Client.Api.v1.Controllers
                         CommunicationLanguage = client.CommunicationLanguage,
                         PhoneNumber = client.PhoneNumber,
                         ClientGroupIds = client.ClientGroupIds,
+                        ClientManagerIds = client.ClientManagerIds,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };
@@ -241,7 +244,7 @@ namespace Client.Api.v1.Controllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                    return this.StatusCode((int)HttpStatusCode.NoContent);
                 }
 
             }
@@ -256,7 +259,7 @@ namespace Client.Api.v1.Controllers
         /// <returns>The client id.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(ClientRequestModel request)
@@ -274,6 +277,7 @@ namespace Client.Api.v1.Controllers
                     PhoneNumber = request.PhoneNumber,
                     ClientOrganisationId = request.OrganisationId,
                     ClientGroupIds = request.ClientGroupIds,
+                    ClientManagerIds = request.ClientManagerIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -302,6 +306,7 @@ namespace Client.Api.v1.Controllers
                     PhoneNumber = request.PhoneNumber,
                     ClientOrganisationId = request.OrganisationId,
                     ClientGroupIds = request.ClientGroupIds,
+                    ClientManagerIds = request.ClientManagerIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -330,7 +335,7 @@ namespace Client.Api.v1.Controllers
         [HttpDelete, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)

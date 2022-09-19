@@ -21,7 +21,6 @@ using Buyer.Web.Shared.ViewModels.Files;
 using Buyer.Web.Shared.ModelBuilders.Files;
 using Buyer.Web.Shared.Repositories.Brands;
 using Buyer.Web.Shared.Repositories.Products;
-using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Buyer.Web.Shared.ModelBuilders.Sidebar;
@@ -33,6 +32,7 @@ using Buyer.Web.Shared.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Files;
 using Buyer.Web.Shared.ViewModels.DashboardNavigation;
 using Buyer.Web.Shared.ModelBuilders.DashboardNavigation;
+using Foundation.Media.Configurations;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -47,20 +47,21 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped(typeof(ICatalogModelBuilder<,>), typeof(CatalogModelBuilder<,>));
             services.AddScoped(typeof(IBreadcrumbsModelBuilder<,>), typeof(BreadcrumbsModelBuilder<,>));
             services.AddScoped<IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel>, FilesModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<FilesComponentModel, DownloadCenterFilesViewModel>, DownloadCenterFilesModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel>, SidebarModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel>, ModalModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel>, HeaderModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel>, BuyerHeaderModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>, MainNavigationModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
             services.AddScoped<IModelBuilder<DashboardNavigationViewModel>, DashboardNavigationModelBuilder>();
+            services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
 
             // Repositories
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<ICatalogProductsRepository, CatalogProductsRepository>();
 
             // Services
-            services.AddScoped<ICdnService, CdnService>();
             services.AddScoped<ICatalogService, CatalogService>();
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<INewsRepository, NewsRepository>();
@@ -76,6 +77,7 @@ namespace Buyer.Web.Shared.DependencyInjection
         {
             services.Configure<AppSettings>(configuration);
             services.Configure<LocalizationSettings>(configuration);
+            services.Configure<MediaAppSettings>(configuration);
         }
     }
 }

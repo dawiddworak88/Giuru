@@ -4,5 +4,6 @@
     {
         public string Title { get; set; }
         public bool IsDateTime { get; set; }
+        public bool IsPicture { get; set; }
     }
 }

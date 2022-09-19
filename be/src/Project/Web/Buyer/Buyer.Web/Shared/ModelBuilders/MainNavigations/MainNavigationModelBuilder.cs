@@ -75,6 +75,12 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
 
             links.Add(new LinkViewModel
             {
+                Text = this.globalLocalizer.GetString("DownloadCenter"),
+                Url = this.linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
+            });
+
+            links.Add(new LinkViewModel
+            {
                 Text = this.globalLocalizer.GetString("MakeComplaint"),
                 Target = "_blank",
                 Url = this.settings.CurrentValue.MakeComplaintUrl

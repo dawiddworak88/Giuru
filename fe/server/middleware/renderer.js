@@ -5,6 +5,9 @@ import { ServerStyleSheets } from "@mui/styles";
 
 // AspNetCore
 import ClientSettingsPage from "../../src/project/AspNetCore/areas/Dashboard/pages/SettingsPage/SettingsPage";
+import DownloadCenterBuyerCategoryPage from "../../src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage";
+import DownloadCenterBuyerPage from "../../src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage";
+import ApplicationPage from "../../src/project/AspNetCore/areas/Home/pages/ApplicationPage/ApplicationPage";
 import OutletCatalogPage from "../../src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage";
 import NewsItemDetails from "../../src/project/AspNetCore/areas/News/pages/NewsItemPage/NewsItemPage";
 import NewsBuyerPage from "../../src/project/AspNetCore/areas/News/pages/NewsPage/NewsPage";
@@ -25,6 +28,21 @@ import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetP
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
 
 // Seller Portal
+import TeamMemberPage from "../../src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/TeamMember";
+import TeamMembersPage from "../../src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/TeamMembers";
+import DownloadCenterItemPage from "../../src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/DownloadCenterItemPage";
+import DownloadCenterPage from "../../src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage";
+import DownloadCenterCategoryPage from "../../src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage";
+import DownloadCenterCategoriesPage from "../../src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoriesPage/DownloadCenterCategoriesPage";
+import ClientRolePage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientRolePage/ClientRolePage";
+import ClientRolesPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/ClientRolesPage";
+import ClientApplicationPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/ClientApplicationPage";
+import ClientsApplicationsPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientsApplicationsPage/ClientsApplicationsPage";
+import MediaPage from "../../src/project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/MediaItemPage";
+import MediaItemPage from "../../src/project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/MediaItemPage";
+import ClientAccountManagerPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagerPage/ClientAccountManagerPage";
+import ClientAccountManagersPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagersPage/ClientAccountManagersPage";
+import MediaItemsPage from "../../src/project/Seller.Portal/areas/MediaItems/pages/MediaItemsPage/MediaItemsPage"
 import OutletPage from "../../src/project/Seller.Portal/areas/Inventory/pages/OutletPage/OutletPage";
 import OutletsPage from "../../src/project/Seller.Portal/areas/Inventory/pages/OutletsPage/OutletsPage";
 import ClientGroupPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientGroupPage/ClientGroupPage";
@@ -53,6 +71,9 @@ import SettingsPage from "../../src/project/Seller.Portal/areas/Settings/pages/S
 
 const Components = {
 	ClientSettingsPage,
+	DownloadCenterBuyerCategoryPage,
+	DownloadCenterBuyerPage,
+	ApplicationPage,
 	OutletCatalogPage,
 	NewsItemDetails,
 	NewsBuyerPage,
@@ -71,6 +92,21 @@ const Components = {
 	SetPasswordPage,
 	ContentPage,
 
+	TeamMemberPage,
+	TeamMembersPage,
+	DownloadCenterItemPage,
+	DownloadCenterPage,
+	DownloadCenterCategoryPage,
+	DownloadCenterCategoriesPage,
+	ClientRolePage,
+	ClientRolesPage,
+	ClientApplicationPage,
+	ClientsApplicationsPage,
+	MediaPage,
+	MediaItemPage,
+	ClientAccountManagerPage,
+	ClientAccountManagersPage,
+	MediaItemsPage,
 	OutletPage,
 	OutletsPage,
 	ClientGroupPage,

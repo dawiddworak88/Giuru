@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store"
 import {
     Stepper, Step, StepLabel, StepContent, TextField, Button, FormHelperText,
-    FormControl, InputLabel, Select, MenuItem, RadioGroup, FormControlLabel, Radio, FormLabel
+    FormControl, InputLabel, Select, MenuItem, NoSsr, FormControlLabel, Checkbox
 } from "@mui/material";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
@@ -25,7 +25,8 @@ const RegisterForm = (props) => {
        companyCity: { value: "", error: "" },
        companyRegion: { value: "", error: "" },
        companyPostalCode: { value: "", error: "" },
-       companyCountry: { value: "", error: "" }
+       companyCountry: { value: "", error: "" },
+       acceptedTerms: { value: false }
     };
 
     const stateValidatorSchema = {
@@ -134,12 +135,14 @@ const RegisterForm = (props) => {
     }
 
     const {
-        values, errors, dirty, disable, handleOnChange, handleOnSubmit
+        values, errors, dirty, disable, 
+        setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
     const { 
         firstName, lastName, email, phoneNumber, contactJobTitle, companyName, 
-        companyAddress, companyCity, companyCountry, companyRegion, companyPostalCode
+        companyAddress, companyCity, companyCountry, companyRegion, companyPostalCode,
+        acceptedTerms
     } = values;
     
     return (
@@ -201,7 +204,7 @@ const RegisterForm = (props) => {
                                         <MenuItem key={0} value="">{props.selectJobTitle}</MenuItem>
                                         {props.contactJobTitles && props.contactJobTitles.map((title, index) => {
                                             return (
-                                                <MenuItem key={index} value={title.name}>{title.name}</MenuItem>
+                                                <MenuItem key={index} value={title.name}>{title.value}</MenuItem>
                                             )
                                         })}
                                     </Select>
@@ -235,7 +238,7 @@ const RegisterForm = (props) => {
                                     error={(errors.phoneNumber.length > 0) && dirty.phoneNumber} />
                             </div>
                         </div>
-                        <div className="group mb-6" onFocus={() => setActiveStep(1)}>
+                        <div className="group mb-4" onFocus={() => setActiveStep(1)}>
                             <h1 className="subtitle has-text-centered">{props.businessInformationTitle}</h1>
                             <div className="field">
                                 <TextField
@@ -311,13 +314,26 @@ const RegisterForm = (props) => {
                                     error={(errors.companyPostalCode.length > 0) && dirty.companyPostalCode} />
                             </div>
                         </div>
+                        <div className="field">
+                            <NoSsr>
+                                <FormControlLabel 
+                                    control={
+                                        <Checkbox 
+                                            checked={acceptedTerms}
+                                            onChange={(e) => {
+                                                setFieldValue({name: "acceptedTerms", value: e.target.checked});
+                                            }}/>
+                                    }/>
+                                <span>{props.acceptTermsText} <a href={props.regulationsUrl} className="is-underlined" target="_blank">{props.regulations}</a>  &amp; <a href={props.privacyPolicyUrl} className="is-underlined" target="_blank">{props.privacyPolicy}</a></span>
+                            </NoSsr>
+                        </div>
                         <div className="is-flex is-justify-content-center">
                             <Button 
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
                                 fullWidth={true}
-                                disabled={state.isLoading || disable || isSended}
+                                disabled={state.isLoading || disable || isSended || !acceptedTerms}
                             >
                                 {props.saveText}
                             </Button>
@@ -352,7 +368,12 @@ RegisterForm.propTypes = {
     companyPostalCodeLabel: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     selectJobTitle: PropTypes.string.isRequired,
-    signInUrl: PropTypes.string.isRequired
+    signInUrl: PropTypes.string.isRequired,
+    acceptTermsText: PropTypes.string.isRequired,
+    privacyPolicyUrl: PropTypes.string.isRequired,
+    regulationsUrl: PropTypes.string.isRequired,
+    privacyPolicy: PropTypes.string.isRequired,
+    regulations: PropTypes.string.isRequired
 }
 
 export default RegisterForm;

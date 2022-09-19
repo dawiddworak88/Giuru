@@ -1,4 +1,6 @@
-﻿using Buyer.Web.Areas.Home.ModelBuilders;
+﻿using Buyer.Web.Areas.Clients.ModelBuilders;
+using Buyer.Web.Areas.Clients.ViewModels;
+using Buyer.Web.Areas.Home.ModelBuilders;
 using Buyer.Web.Areas.Home.ViewModel;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
@@ -16,6 +18,8 @@ namespace Buyer.Web.Areas.Home.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, HomePageCarouselGridViewModel>, HomePageCarouselGridModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, HomePageContentGridViewModel>, HomePageContentGridModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, HomePageNewsCarouselGridViewModel>, HomePageNewsModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ApplicationPageViewModel>, ApplicationPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ApplicationFormViewModel>, ApplicationFormModelBuilder>();
         }
     }
 }

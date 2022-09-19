@@ -1,12 +1,12 @@
 ﻿using Catalog.Api.Configurations;
 using Catalog.Api.Infrastructure;
-using Catalog.Api.Services.Products;
 using Foundation.Catalog.Infrastructure;
 using Foundation.Localization.Definitions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Catalog.Api.DependencyInjection
 {
@@ -32,6 +32,43 @@ namespace Catalog.Api.DependencyInjection
         {
             services.Configure<AppSettings>(configuration);
             services.Configure<LocalizationSettings>(configuration);
+        }
+
+        public static IServiceCollection ConigureHealthChecks(this IServiceCollection services, IConfiguration configuration)
+        {
+            var hcBuilder = services.AddHealthChecks();
+
+            hcBuilder
+                .AddCheck("self", () => HealthCheckResult.Healthy());
+
+            if (string.IsNullOrWhiteSpace(configuration["ConnectionString"]) is false)
+            {
+                hcBuilder.AddSqlServer(
+                    configuration["ConnectionString"],
+                    name: "catalog-api-db",
+                    tags: new string[] { "catalogapidb" });
+            }
+
+            if (string.IsNullOrWhiteSpace(configuration["ElasticsearchUrl"]) is false)
+            {
+                hcBuilder
+                    .AddElasticsearch(
+                        configuration["ElasticsearchUrl"],
+                        name: "catalog-api-search",
+                        tags: new string[] { "catalogapisearch" }
+                    );
+            }
+
+            if (string.IsNullOrWhiteSpace(configuration["EventBusConnection"]) is false)
+            {
+                hcBuilder
+                    .AddRabbitMQ(
+                        configuration["EventBusConnection"],
+                        name: "catalog-api-messagebus",
+                        tags: new string[] { "messagebus" });
+            }
+
+            return services;
         }
     }
 }

@@ -14,6 +14,9 @@ using System.IO;
 using Client.Api.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Foundation.Localization.Definitions;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Foundation.Mailing.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +34,7 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 
     if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogstashUrl"]))
     {
-        loggerConfiguration.WriteTo.Http(hostingContext.Configuration["LogstashUrl"]);
+        loggerConfiguration.WriteTo.Http(requestUri: hostingContext.Configuration["LogstashUrl"], queueLimitBytes: null);
     }
 
     if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoToken"])
@@ -65,6 +68,8 @@ builder.Services.ConfigureSettings(builder.Configuration);
 
 builder.Services.RegisterClientApiDependencies();
 
+builder.Services.RegisterMailingDependencies(builder.Configuration);
+
 builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 
 builder.Services.AddSwaggerGen(c =>
@@ -76,7 +81,10 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
+builder.Services.ConigureHealthChecks(builder.Configuration);
+
 var app = builder.Build();
+
 IdentityModelEventSource.ShowPII = true;
 
 app.UseSwagger();
@@ -100,6 +108,17 @@ app.UseCustomHeaderRequestLocalizationProvider(builder.Configuration, app.Servic
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 
 app.Run();

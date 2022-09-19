@@ -36,6 +36,60 @@ namespace Ordering.Api.v1.Controllers
         }
 
         /// <summary>
+        /// Get list of order files.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
+        /// <param name="id">The order id.</param>
+        /// <returns>The list of order files.</returns>
+        [HttpGet("files/{id}"), MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<OrderFileResponseModel>>))]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Files(Guid? id, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetOrderFilesServiceModel
+            {
+                Id = id,
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new GetOrderFilesModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var orderFiles = await this.ordersService.GetOrderFilesAsync(serviceModel);
+
+                if (orderFiles is not null)
+                {
+                    var response = new PagedResults<IEnumerable<OrderFileResponseModel>>(orderFiles.Total, orderFiles.PageSize)
+                    {
+                        Data = orderFiles.Data.OrEmptyIfNull().Select(x => new OrderFileResponseModel
+                        {
+                            Id = x.Id,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
         /// Gets list of orders.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
@@ -46,7 +100,7 @@ namespace Ordering.Api.v1.Controllers
         /// <returns>The list of orders.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string orderBy, DateTime? createdDateGreaterThan)
         {
@@ -147,7 +201,7 @@ namespace Ordering.Api.v1.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
@@ -230,7 +284,7 @@ namespace Ordering.Api.v1.Controllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                    return this.StatusCode((int)HttpStatusCode.NoContent);
                 }
 
             }
@@ -245,7 +299,7 @@ namespace Ordering.Api.v1.Controllers
         [HttpPost, MapToApiVersion("1.0")]
         [Route("orderstatus")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Post(UpdateOrderStatusRequestModel model)
         {
@@ -329,7 +383,7 @@ namespace Ordering.Api.v1.Controllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                    return this.StatusCode((int)HttpStatusCode.NoContent);
                 }
 
             }

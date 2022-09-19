@@ -1,15 +1,15 @@
 ﻿using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
+using Foundation.Media.Services.MediaServices;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.ComponentModels.Files;
-using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Shared.ModelBuilders.Files
@@ -18,24 +18,21 @@ namespace Seller.Web.Shared.ModelBuilders.Files
     {
         private readonly IMediaItemsRepository mediaRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IMediaHelperService mediaHelperService;
-        private readonly IOptions<AppSettings> options;
+        private readonly IMediaService mediaService;
 
         public FilesModelBuilder(
             IMediaItemsRepository mediaRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IMediaHelperService mediaHelperService,
-            IOptions<AppSettings> options)
+            IMediaService mediaService)
         {
             this.mediaRepository = mediaRepository;
             this.globalLocalizer = globalLocalizer;
-            this.mediaHelperService = mediaHelperService;
-            this.options = options;
+            this.mediaService = mediaService;
         }
 
         public async Task<FilesViewModel> BuildModelAsync(FilesComponentModel componentModel)
         {
-            if (componentModel.Files != null)
+            if (componentModel.Files is not null && componentModel.Files.Any())
             {
                 var files = await this.mediaRepository.GetMediaItemsAsync(componentModel.Files, componentModel.Language, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token);
 
@@ -52,7 +49,9 @@ namespace Seller.Web.Shared.ModelBuilders.Files
                         CopyLinkLabel = this.globalLocalizer.GetString("CopyLink"),
                         CreatedDateLabel = this.globalLocalizer.GetString("CreatedDate"),
                         LastModifiedDateLabel = this.globalLocalizer.GetString("LastModifiedDate"),
-                        AttachmentsLabel = this.globalLocalizer.GetString("Attachments")
+                        DisplayedRowsLabel = this.globalLocalizer.GetString("DisplayedRows"),
+                        RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage"),
+                        DefaultPageSize = FilesConstants.DefaultPageSize
                     };
 
                     var fileViewModels = new List<FileViewModel>();
@@ -61,12 +60,13 @@ namespace Seller.Web.Shared.ModelBuilders.Files
                     {
                         var fileViewModel = new FileViewModel
                         {
+                            Id = file.Id,
                             Name = file.Name,
                             Filename = file.Filename,
-                            Url = this.mediaHelperService.GetFileUrl(this.options.Value.MediaUrl, file.Id),
+                            Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
                             Description = file.Description ?? "-",
                             IsProtected = file.IsProtected,
-                            Size = string.Format("{0:0.00} MB", file.Size / 1024f / 1024f),
+                            Size = this.mediaService.ConvertToMB(file.Size),
                             LastModifiedDate = file.LastModifiedDate,
                             CreatedDate = file.CreatedDate
                         };
@@ -74,7 +74,10 @@ namespace Seller.Web.Shared.ModelBuilders.Files
                         fileViewModels.Add(fileViewModel);
                     }
 
-                    filesViewModel.Files = fileViewModels;
+                    filesViewModel.Files = new PagedResults<IEnumerable<FileViewModel>>(fileViewModels.Count, FilesConstants.DefaultPageSize)
+                    {
+                        Data = fileViewModels
+                    };
 
                     return filesViewModel;
                 }

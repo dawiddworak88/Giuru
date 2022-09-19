@@ -1,16 +1,16 @@
 ﻿using Buyer.Web.Areas.Products.Repositories.Files;
-using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.ComponentModels.Files;
 using Buyer.Web.Shared.ViewModels.Files;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Foundation.Media.Services.MediaServices;
+using System.Linq;
+using Buyer.Web.Shared.Definitions.Files;
 
 namespace Buyer.Web.Shared.ModelBuilders.Files
 {
@@ -18,31 +18,29 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
     {
         private readonly IMediaItemsRepository mediaRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IMediaHelperService mediaHelperService;
-        private readonly IOptions<AppSettings> options;
+        private readonly IMediaService mediaService;
 
         public FilesModelBuilder(
             IMediaItemsRepository mediaRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IMediaHelperService mediaHelperService,
-            IOptions<AppSettings> options)
+            IMediaService mediaHelperService)
         {
             this.mediaRepository = mediaRepository;
             this.globalLocalizer = globalLocalizer;
-            this.mediaHelperService = mediaHelperService;
-            this.options = options;
+            this.mediaService = mediaHelperService;
         }
 
         public async Task<FilesViewModel> BuildModelAsync(FilesComponentModel componentModel)
         {
-            if (componentModel.Files != null)
+            if (componentModel.Files is not null && componentModel.Files.Any())
             {
                 var files = await this.mediaRepository.GetMediaItemsAsync(componentModel.Files, componentModel.Language, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token);
 
-                if (files != null)
+                if (files is not null)
                 {
                     var filesViewModel = new FilesViewModel
                     {
+                        Id = componentModel.Id,
                         NameLabel = this.globalLocalizer.GetString("Name"),
                         FilenameLabel = this.globalLocalizer.GetString("Filename"),
                         DescriptionLabel = this.globalLocalizer.GetString("Description"),
@@ -52,7 +50,11 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         CopyLinkLabel = this.globalLocalizer.GetString("CopyLink"),
                         CreatedDateLabel = this.globalLocalizer.GetString("CreatedDate"),
                         LastModifiedDateLabel = this.globalLocalizer.GetString("LastModifiedDate"),
-                        AttachmentsLabel = this.globalLocalizer.GetString("Attachments"),
+                        DisplayedRowsLabel = this.globalLocalizer.GetString("DisplayedRows"),
+                        RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage"),
+                        DefaultPageSize = FilesConstants.DefaultPageSize,
+                        GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                        SearchApiUrl = componentModel.SearchApiUrl
                     };
 
                     var fileViewModels = new List<FileViewModel>();
@@ -63,10 +65,10 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         {
                             Name = file.Name,
                             Filename = file.Filename,
-                            Url = this.mediaHelperService.GetFileUrl(this.options.Value.MediaUrl, file.Id),
+                            Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
                             Description = file.Description ?? "-",
                             IsProtected = file.IsProtected,
-                            Size = string.Format("{0:0.00} MB", file.Size / 1024f / 1024f),
+                            Size = this.mediaService.ConvertToMB(file.Size),
                             LastModifiedDate = file.LastModifiedDate,
                             CreatedDate = file.CreatedDate
                         };
@@ -74,7 +76,10 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         fileViewModels.Add(fileViewModel);
                     }
 
-                    filesViewModel.Files = fileViewModels;
+                    filesViewModel.Files = new PagedResults<IEnumerable<FileViewModel>>(fileViewModels.Count, FilesConstants.DefaultPageSize)
+                    {
+                        Data = fileViewModels
+                    };
 
                     return filesViewModel;
                 }

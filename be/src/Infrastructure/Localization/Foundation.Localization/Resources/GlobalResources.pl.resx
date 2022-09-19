@@ -426,6 +426,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Nazwisko</value>
   </data>
+  <data name="Miniature" xml:space="preserve">
+    <value>Miniaturka</value>
+  </data>
   <data name="BasketLabel" xml:space="preserve">
     <value>Dodaj do koszyka</value>
   </data>
@@ -599,5 +602,92 @@
   </data>
   <data name="AttachedAttachments" xml:space="preserve">
     <value>Klient załączył następujące pliki</value>
+  </data>
+  <data name="ClientsRoles" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="NewRole" xml:space="preserve">
+    <value>Nowa rola</value>
+  </data>
+  <data name="SelectJobTitle" xml:space="preserve">
+    <value>Wybierz stanowisko pracy</value>
+  </data>
+  <data name="ClientsApplications" xml:space="preserve">
+    <value>Wnioski klientów</value>
+  </data>
+  <data name="ClientManagers" xml:space="preserve">
+    <value>Menedżerowie klientów</value>
+  </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Account Menedżer</value>
+  </data>
+  <data name="BusinessInformation" xml:space="preserve">
+    <value>Informacje biznesowe</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>Informacje kontaktowe</value>
+  </data>
+  <data name="NewProducts" xml:space="preserve">
+    <value>Nowe produkty</value>
+  </data>
+  <data name="ApplyApplicationSubmit" xml:space="preserve">
+    <value>Wyślij wniosek teraz</value>
+  </data>
+  <data name="BusinessInformationDescription" xml:space="preserve">
+    <value>Podaj informacje o twojej firmie</value>
+  </data>
+  <data name="ContactInformationDescription" xml:space="preserve">
+    <value>Twoją główną osobą kontaktową z ELTAP będzie osoba kontaktowa podana w formularzu</value>
+  </data>
+  <data name="LowerPrivacyPolicy" xml:space="preserve">
+    <value>politykę prywatności</value>
+  </data>
+  <data name="LowerRegulations" xml:space="preserve">
+    <value>regulamin</value>
+  </data>
+  <data name="OnlineRetailers" xml:space="preserve">
+    <value>Gdzie prowadzisz największą sprzedaż online?</value>
+  </data>
+  <data name="SuccessfullyClientApply" xml:space="preserve">
+    <value>Pomyślnie przesłano prośbę o współpracę.</value>
+  </data>
+  <data name="TeamMembers" xml:space="preserve">
+    <value>Członkowie zespołu</value>
+  </data>
+  <data name="DownloadCenter" xml:space="preserve">
+    <value>Centrum pobierania</value>
+  </data>
+  <data name="DownloadCenterCategories" xml:space="preserve">
+    <value>Kategorie centrum pobierania</value>
+  </data>
+  <data name="EditCategory" xml:space="preserve">
+    <value>Edytuj kategorię</value>
+  </data>
+  <data name="EditDownloadCenter" xml:space="preserve">
+    <value>Edytuj centrum pobierania</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Kategoria</value>
+  </data>
+  <data name="DownloadEverything" xml:space="preserve">
+    <value>Pobierz wszystko</value>
+  </data>
+  <data name="DownloadSelected" xml:space="preserve">
+    <value>Pobierz wybrane</value>
+  </data>
+  <data name="NoCategories" xml:space="preserve">
+    <value>Brak kategorii.</value>
+  </data>
+  <data name="SelectFile" xml:space="preserve">
+    <value>Wybierz plik</value>
+  </data>
+  <data name="Thumbnail" xml:space="preserve">
+    <value>Miniaturka</value>
+  </data>
+  <data name="QRCode" xml:space="preserve">
+    <value>Kod QR</value>
+  </data>
+  <data name="GenerateQRCode" xml:space="preserve">
+    <value>Generuj kod QR</value>
   </data>
 </root>

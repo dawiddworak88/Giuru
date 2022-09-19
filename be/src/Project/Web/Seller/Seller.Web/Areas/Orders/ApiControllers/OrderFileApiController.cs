@@ -1,20 +1,24 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
-using Foundation.Extensions.Services.MediaServices;
+using Foundation.GenericRepository.Paginations;
+using Foundation.Media.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Media.ApiRequestModels;
 using Seller.Web.Areas.Orders.ApiResponseModels;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
+using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.Services.OrderFiles;
+using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Areas.Shared.Repositories.Products;
-using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.Definitions;
+using Seller.Web.Shared.DomainModels.Media;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -30,26 +34,29 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IProductsRepository productsRepository;
         private readonly IBasketRepository basketRepository;
         private readonly LinkGenerator linkGenerator;
-        private readonly IOptions<AppSettings> options;
-        private readonly IMediaHelperService mediaService;
+        private readonly IMediaService mediaService;
         private readonly ILogger<OrderFileApiController> logger;
+        private readonly IMediaItemsRepository mediaRepository;
+        private readonly IOrdersRepository ordersRepository;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
             IProductsRepository productsRepository,
             IBasketRepository basketRepository,
             LinkGenerator linkGenerator,
-            IOptions<AppSettings> options,
-            IMediaHelperService mediaService,
+            IMediaService mediaService,
+            IMediaItemsRepository mediaRepository,
+            IOrdersRepository ordersRepository,
             ILogger<OrderFileApiController> logger)
         {
             this.orderFileService = orderFileService;
             this.productsRepository = productsRepository;
             this.basketRepository = basketRepository;
             this.linkGenerator = linkGenerator;
-            this.options = options;
             this.mediaService = mediaService;
             this.logger = logger;
+            this.mediaRepository = mediaRepository;
+            this.ordersRepository = ordersRepository;
         }
 
         [HttpPost]
@@ -77,7 +84,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                         ProductId = product.Id,
                         ProductSku = product.Sku,
                         ProductName = product.Name,
-                        PictureUrl = product.Images.OrEmptyIfNull().Any() ? this.mediaService.GetFileUrl(this.options.Value.MediaUrl, product.Images.First(), OrdersConstants.Basket.BasketProductImageMaxWidth, OrdersConstants.Basket.BasketProductImageMaxHeight, true) : null,
+                        PictureUrl = product.Images.OrEmptyIfNull().Any() ? this.mediaService.GetMediaUrl(product.Images.First(), OrdersConstants.Basket.BasketProductImageMaxWidth) : null,
                         Quantity = orderLine.Quantity,
                         ExternalReference = orderLine.ExternalReference,
                         DeliveryFrom = orderLine.DeliveryFrom,
@@ -121,6 +128,48 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             }
 
             return this.StatusCode((int)HttpStatusCode.OK, basketResponseModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetFiles(Guid? id, string searchTerm, int pageIndex, int itemsPerPage)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            var productFiles = await this.ordersRepository.GetOrderFilesAsync(token, language, id, pageIndex, itemsPerPage, searchTerm, $"{nameof(OrderFile.CreatedDate)} desc");
+
+            var filesModel = new List<FileItem>();
+            var filesIds = productFiles.Data.Select(x => x.Id);
+
+            if (productFiles is not null && filesIds.Any())
+            {
+                var files = await this.mediaRepository.GetMediaItemsAsync(filesIds, language, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, token);
+
+                foreach (var file in files.Data.OrEmptyIfNull())
+                {
+                    var fileModel = new FileItem
+                    {
+                        Id = file.Id,
+                        Name = file.Name,
+                        Filename = file.Filename,
+                        Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
+                        Description = file.Description ?? "-",
+                        IsProtected = file.IsProtected,
+                        Size = this.mediaService.ConvertToMB(file.Size),
+                        LastModifiedDate = file.LastModifiedDate,
+                        CreatedDate = file.CreatedDate
+                    };
+
+                    filesModel.Add(fileModel);
+                }
+            }
+
+            var pagedFiles = new PagedResults<IEnumerable<FileItem>>(filesModel.Count, FilesConstants.DefaultPageSize)
+            {
+                Data = filesModel
+            };
+
+            return this.StatusCode((int)HttpStatusCode.OK, pagedFiles);
         }
     }
 }

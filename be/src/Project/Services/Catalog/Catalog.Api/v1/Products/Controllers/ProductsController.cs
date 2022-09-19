@@ -37,6 +37,60 @@ namespace Catalog.Api.v1.Products.Controllers
         }
 
         /// <summary>
+        /// Get list of product files.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
+        /// <param name="id">The product id.</param>
+        /// <returns>The list of product files.</returns>
+        [HttpGet("files/{id}"), MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<ProductFileResponseModel>>))]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Files(Guid? id, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetProductFilesServiceModel
+            {
+                Id = id,
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new GetProductFilesModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var productFiles = await this.productService.GetProductFiles(serviceModel);
+
+                if (productFiles is not null)
+                {
+                    var response = new PagedResults<IEnumerable<ProductFileResponseModel>>(productFiles.Total, productFiles.PageSize)
+                    {
+                        Data = productFiles.Data.OrEmptyIfNull().Select(x => new ProductFileResponseModel
+                        {
+                            Id = x.Id,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
         /// Gets list of products by Skus.
         /// </summary>
         /// <param name="skus">The list of skus.</param>
@@ -48,7 +102,7 @@ namespace Catalog.Api.v1.Products.Controllers
         [AllowAnonymous]
         [Route("skus")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetBySkus(string skus, int pageIndex, int itemsPerPage, string orderBy)
         {
@@ -270,7 +324,7 @@ namespace Catalog.Api.v1.Products.Controllers
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [AllowAnonymous]
         public async Task<IActionResult> GetById(Guid? id)
         {
@@ -298,7 +352,7 @@ namespace Catalog.Api.v1.Products.Controllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                    return this.StatusCode((int)HttpStatusCode.NoContent);
                 }
             }
 
@@ -314,7 +368,7 @@ namespace Catalog.Api.v1.Products.Controllers
         [Route("sku/{sku}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [AllowAnonymous]
         public async Task<IActionResult> GetBySku(string sku)
         {
@@ -342,7 +396,7 @@ namespace Catalog.Api.v1.Products.Controllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                    return this.StatusCode((int)HttpStatusCode.NoContent);
                 }
             }
 
@@ -357,7 +411,7 @@ namespace Catalog.Api.v1.Products.Controllers
         [HttpDelete, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)

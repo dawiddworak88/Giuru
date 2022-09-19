@@ -2,7 +2,6 @@
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
-using System;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.Extensions.Exceptions;
 using Foundation.ApiExtensions.Shared.Definitions;
