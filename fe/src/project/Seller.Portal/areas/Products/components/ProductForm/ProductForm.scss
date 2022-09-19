@@ -1,6 +1,11 @@
 @import "../../../../../../shared/components/MediaCloud/MediaCloud.scss";
+@import "~react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 .product {
+
+    .DraftEditor-root {
+        border: 1px dashed #d3d3d3;
+    }
 
     @media only screen and (max-width: $tablet) {
         margin-top: 1.5rem;

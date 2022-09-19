@@ -11,6 +11,7 @@ import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGri
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import Modal from "../../../../shared/components/Modal/Modal";
 import { ExpandMore, ExpandLess } from "@mui/icons-material"
+import { marked } from "marked";
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
@@ -173,7 +174,7 @@ function ProductDetail(props) {
                     {props.description &&
                         <div className="product-detail__product-description">
                             <h3 className="product-detail__feature-title">{props.descriptionLabel}</h3>
-                            <p>{props.description}</p>
+                            <div dangerouslySetInnerHTML={{__html: marked.parse(props.description)}}></div>
                         </div>
                     }
                     {props.features && props.features.length > 0 &&
