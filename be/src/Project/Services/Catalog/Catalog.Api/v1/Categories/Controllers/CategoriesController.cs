@@ -107,7 +107,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [Route("{id}")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategoryResponseModel))]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
@@ -146,7 +146,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NoContent);
+                    return this.StatusCode((int)HttpStatusCode.NotFound);
                 }
             }
 
@@ -351,7 +351,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [Route("CategorySchemas/{categoryId}")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemaResponseModel))]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetCategorySchemaByCategoryId(Guid? categoryId)
         {
@@ -385,7 +385,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NoContent);
+                    return this.StatusCode((int)HttpStatusCode.NotFound);
                 }
             }
 

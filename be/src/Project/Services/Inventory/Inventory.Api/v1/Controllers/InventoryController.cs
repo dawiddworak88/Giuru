@@ -381,7 +381,7 @@ namespace Inventory.Api.v1.Controllers
         [Route("product/{id}")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetInventoryByProductId(Guid? id)
@@ -433,7 +433,7 @@ namespace Inventory.Api.v1.Controllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NoContent);
+                    return this.StatusCode((int)HttpStatusCode.NotFound);
                 }
             }
 

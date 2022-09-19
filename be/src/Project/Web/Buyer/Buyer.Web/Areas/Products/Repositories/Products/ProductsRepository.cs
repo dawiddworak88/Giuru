@@ -188,7 +188,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 };
             }
 
-            if (response.StatusCode == HttpStatusCode.NoContent)
+            if (response.StatusCode == HttpStatusCode.NotFound)
             {
                 return null;
             }
@@ -222,7 +222,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 };
             }
 
-            if (response.StatusCode == HttpStatusCode.NoContent)
+            if (response.StatusCode == HttpStatusCode.NotFound)
             {
                 return null;
             }
