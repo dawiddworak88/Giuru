@@ -81,10 +81,11 @@ namespace Seller.Web.Areas.Media.Repositories.Files
             }
         }
 
-        public async Task<Guid> SaveChunksCompleteAsync(string token, string language, string filename)
+        public async Task<Guid> SaveChunksCompleteAsync(string token, string language, Guid? id, string filename)
         {
             var requestModel = new FileChunksSaveCompleteRequestModel
             {
+                Id = id,
                 Filename = filename
             };
 

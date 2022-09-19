@@ -25,6 +25,10 @@ const MediaForm = (props) => {
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
                                 files={images}
+                                isUploadInChunksEnabled={true}
+                                chunkSize={props.chunkSize}
+                                saveMediaChunkUrl={props.saveMediaChunkUrl}
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl}
                                 setFieldValue={({value}) => setImages(value)}
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
@@ -56,7 +60,11 @@ MediaForm.propTypes = {
     dropOrSelectImagesLabel: PropTypes.string.isRequired,
     saveMediaUrl: PropTypes.string.isRequired,
     backToMediaText: PropTypes.string.isRequired,
-    mediaUrl: PropTypes.string.isRequired
+    mediaUrl: PropTypes.string.isRequired,
+    isUploadInChunksEnabled: PropTypes.bool.isRequired,
+    chunkSize: PropTypes.string.isRequired,
+    saveMediaChunkUrl: PropTypes.string.isRequired,
+    saveMediaChunkCompleteUrl: PropTypes.string.isRequired
 }
 
 export default MediaForm;

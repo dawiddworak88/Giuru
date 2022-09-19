@@ -26,6 +26,10 @@ namespace Seller.Web.Areas.Media.ViewModel
         public string MetaDataLabel { get; set; }
         public string MediaUrl { get; set;}
         public string IdLabel { get; set; }
+        public string SaveMediaChunkUrl { get; set; }
+        public string SaveMediaChunkCompleteUrl { get; set; }
+        public bool IsUploadInChunksEnabled { get; set; }
+        public int? ChunkSize { get; set; }
         public IEnumerable<MediaItem> Versions { get; set; }
     }
 }
