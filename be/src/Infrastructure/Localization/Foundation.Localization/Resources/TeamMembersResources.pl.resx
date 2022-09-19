@@ -133,7 +133,7 @@
     <value>Pomyślnie usunięto członka zespołu.</value>
   </data>
   <data name="SuccessfullySavedTeamMember" xml:space="preserve">
-    <value>Pomyślnie dodano członka zespołu.</value>
+    <value>Pomyślnie zapisano członka zespołu.</value>
   </data>
   <data name="TeamMemberNotFound" xml:space="preserve">
     <value>Nie znaleziono członka zespołu.</value>

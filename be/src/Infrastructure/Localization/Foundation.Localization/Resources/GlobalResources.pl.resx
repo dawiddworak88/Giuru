@@ -657,4 +657,10 @@
   <data name="Thumbnail" xml:space="preserve">
     <value>Miniaturka</value>
   </data>
+  <data name="QRCode" xml:space="preserve">
+    <value>Kod QR</value>
+  </data>
+  <data name="GenerateQRCode" xml:space="preserve">
+    <value>Generuj kod QR</value>
+  </data>
 </root>
