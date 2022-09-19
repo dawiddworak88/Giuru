@@ -2,6 +2,7 @@
 using Buyer.Web.Areas.DownloadCenter.Repositories;
 using Buyer.Web.Areas.DownloadCenter.ViewModel;
 using Buyer.Web.Shared.ComponentModels.Files;
+using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.ViewModels.Files;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
@@ -49,7 +50,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
                     });
                 }
 
-                var downloadCenterFiles = await this.downloadCenterRepository.GetCategoryFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null, $"{nameof(DownloadCenterFile.CreatedDate)} desc");
+                var downloadCenterFiles = await this.downloadCenterRepository.GetCategoryFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(DownloadCenterFile.CreatedDate)} desc");
 
                 if (downloadCenterFiles is not null)
                 {
