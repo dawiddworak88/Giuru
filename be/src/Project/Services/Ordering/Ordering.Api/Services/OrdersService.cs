@@ -386,14 +386,14 @@ namespace Ordering.Api.Services
 
             if (order == null)
             {
-                throw new CustomException(this.orderLocalizer.GetString("OrderNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.orderLocalizer.GetString("OrderNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var newOrderOstatus = await this.context.OrderStatuses.FirstOrDefaultAsync(x => x.Id == serviceModel.OrderStatusId && x.IsActive);
 
             if (newOrderOstatus == null)
             {
-                throw new CustomException(this.orderLocalizer.GetString("OrderStatusNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.orderLocalizer.GetString("OrderStatusNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             order.OrderStatusId = newOrderOstatus.Id;
