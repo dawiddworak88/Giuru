@@ -6,6 +6,7 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Media.Services.FileTypeServices;
 using Foundation.Media.Services.MediaServices;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Media.ApiRequestModels;
@@ -25,15 +26,18 @@ namespace Seller.Web.Areas.Media.Repositories.Media
         private readonly IApiClientService apiService;
         private readonly IOptions<AppSettings> settings;
         private readonly IMediaService mediaService;
+        private readonly IFileTypeService fileTypeService;
 
         public MediaRepository(
             IApiClientService apiService,
             IOptions<AppSettings> settings,
+            IFileTypeService fileTypeService,
             IMediaService mediaService)
         {
             this.apiService = apiService;
             this.settings = settings;
             this.mediaService = mediaService;
+            this.fileTypeService = fileTypeService;
         }
 
         public async Task DeleteAsync(string token, string language, Guid? mediaId)
@@ -85,7 +89,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                         Id = mediaItem.Id,
                         FileName = mediaItem.FileName,
                         Name = mediaItem.Name,
-                        Url = mediaItem.MimeType.StartsWith("image") ? this.mediaService.GetMediaVersionUrl(mediaItem.MediaItemVersionId.Value, Constants.PreviewMaxWidth) : null,
+                        Url = this.fileTypeService.IsImage(mediaItem.MimeType) ? this.mediaService.GetMediaVersionUrl(mediaItem.MediaItemVersionId.Value, Constants.PreviewMaxWidth) : null,
                         LastModifiedDate = mediaItem.LastModifiedDate,
                         CreatedDate = mediaItem.CreatedDate
                     };
@@ -136,7 +140,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                     {
                         Id = x.Id,
                         FileName = x.FileName,
-                        Url = x.MimeType.StartsWith("image") ? this.mediaService.GetMediaVersionUrl(x.MediaItemVersionId.Value, Constants.PreviewMaxWidth) : this.mediaService.GetMediaVersionUrl(x.MediaItemVersionId.Value),
+                        Url = this.fileTypeService.IsImage(x.MimeType) ? this.mediaService.GetMediaVersionUrl(x.MediaItemVersionId.Value, Constants.PreviewMaxWidth) : this.mediaService.GetMediaVersionUrl(x.MediaItemVersionId.Value),
                         MimeType = x.MimeType,
                         LastModifiedDate = x.LastModifiedDate,
                         CreatedDate = x.CreatedDate,
