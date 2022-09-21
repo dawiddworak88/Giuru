@@ -4,6 +4,9 @@ import { resetServerContext } from 'react-beautiful-dnd';
 import { ServerStyleSheets } from "@mui/styles";
 
 // AspNetCore
+import DownloadCenterBuyerCategoryPage from "../../src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage";
+import DownloadCenterBuyerPage from "../../src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage";
+import ApplicationPage from "../../src/project/AspNetCore/areas/Home/pages/ApplicationPage/ApplicationPage";
 import OutletCatalogPage from "../../src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage";
 import NewsItemDetails from "../../src/project/AspNetCore/areas/News/pages/NewsItemPage/NewsItemPage";
 import NewsBuyerPage from "../../src/project/AspNetCore/areas/News/pages/NewsPage/NewsPage";
@@ -24,11 +27,17 @@ import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetP
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
 
 // Seller Portal
+import TeamMemberPage from "../../src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/TeamMember";
+import TeamMembersPage from "../../src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/TeamMembers";
+import DownloadCenterItemPage from "../../src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/DownloadCenterItemPage";
+import DownloadCenterPage from "../../src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage";
+import DownloadCenterCategoryPage from "../../src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage";
+import DownloadCenterCategoriesPage from "../../src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoriesPage/DownloadCenterCategoriesPage";
 import ClientRolePage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientRolePage/ClientRolePage";
 import ClientRolesPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/ClientRolesPage";
 import ClientApplicationPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/ClientApplicationPage";
 import ClientsApplicationsPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientsApplicationsPage/ClientsApplicationsPage";
-import MediaPage from "../../src/project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/MediaItemPage";
+import MediaPage from "../../src/project/Seller.Portal/areas/MediaItems/pages/MediaPage/MediaPage";
 import MediaItemPage from "../../src/project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/MediaItemPage";
 import ClientAccountManagerPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagerPage/ClientAccountManagerPage";
 import ClientAccountManagersPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagersPage/ClientAccountManagersPage";
@@ -60,6 +69,9 @@ import SellerCategoryPage from "../../src/project/Seller.Portal/areas/Products/p
 import SettingsPage from "../../src/project/Seller.Portal/areas/Settings/pages/SettingsPage/SettingsPage";
 
 const Components = {
+	DownloadCenterBuyerCategoryPage,
+	DownloadCenterBuyerPage,
+	ApplicationPage,
 	OutletCatalogPage,
 	NewsItemDetails,
 	NewsBuyerPage,
@@ -78,6 +90,12 @@ const Components = {
 	SetPasswordPage,
 	ContentPage,
 
+	TeamMemberPage,
+	TeamMembersPage,
+	DownloadCenterItemPage,
+	DownloadCenterPage,
+	DownloadCenterCategoryPage,
+	DownloadCenterCategoriesPage,
 	ClientRolePage,
 	ClientRolesPage,
 	ClientApplicationPage,

@@ -138,9 +138,6 @@
   <data name="BackToLoginText" xml:space="preserve">
     <value>Powróć do logowania</value>
   </data>
-  <data name="BusinessInformationDescription" xml:space="preserve">
-    <value>Podaj informacje o twojej firmie</value>
-  </data>
   <data name="EmailIsConfirmedText" xml:space="preserve">
     <value>Konto Potwierdzone</value>
   </data>
@@ -149,6 +146,9 @@
   </data>
   <data name="ForgotPasswordLabel" xml:space="preserve">
     <value>Resetowanie hasła</value>
+  </data>
+  <data name="IncorrectEmailOrPassword" xml:space="preserve">
+    <value>Nieprawidłowy email lub hasło. Spróbuj ponownie lub kliknij „Resetuj hasło”, aby je zresetować.</value>
   </data>
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Wprowadź swoje nazwisko</value>
@@ -204,34 +204,13 @@
   <data name="SignInText" xml:space="preserve">
     <value>Zaloguj się</value>
   </data>
-  <data name="SuccessfullyClientApply" xml:space="preserve">
-    <value>Pomyślnie przesłano prośbę o współpracę.</value>
-  </data>
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>Link do resetowania hasła został wysłany, jeśli Twoje konto istnieje na naszej platformie. Proszę sprawdź swoją skrzynkę e-mail w celu uzyskania dalszych instrukcji.</value>
-  </data>
-  <data name="OnlineRetailers" xml:space="preserve">
-    <value>Gdzie prowadzisz największą sprzedaż online?</value>
   </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>Nie odnaleziono użytkownika.</value>
   </data>
   <data name="VerifyDateExpired" xml:space="preserve">
     <value>Link wygasł. Skontaktuj się z administratorem.</value>
-  </data>
-  <data name="ContactInformationDescription" xml:space="preserve">
-    <value>Twoją główną osobą kontaktową z ELTAP będzie osoba kontaktowa podana w formularzu</value>
-  </data>
-  <data name="ApplySubmit" xml:space="preserve">
-    <value>Wyślij wniosek teraz</value>
-  </data>
-  <data name="SelectJobTitle" xml:space="preserve">
-    <value>Wybierz stanowisko pracy</value>
-  </data>
-  <data name="PrivacyPolicy" xml:space="preserve">
-    <value>politykę prywatności</value>
-  </data>
-  <data name="Regulations" xml:space="preserve">
-    <value>regulamin</value>
   </data>
 </root>

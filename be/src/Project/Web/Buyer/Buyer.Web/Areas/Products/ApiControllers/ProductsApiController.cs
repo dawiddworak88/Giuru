@@ -4,6 +4,9 @@ using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Shared.Definitions.Files;
+using Buyer.Web.Shared.DomainModels.Media;
+using Buyer.Web.Shared.Repositories.Media;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
@@ -35,6 +38,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IProductsRepository productsRepository;
         private readonly IInventoryRepository inventoryRepository;
         private readonly IOutletRepository outletRepository;
+        private readonly IMediaItemsRepository mediaRepository;
         private readonly IMediaService mediaService;
         private readonly LinkGenerator linkGenerator;
 
@@ -42,6 +46,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IProductsService productsService,
             IProductsRepository productsRepository,
             IStringLocalizer<ProductResources> productLocalizer,
+            IMediaItemsRepository mediaRepository,
             IMediaService mediaService,
             IInventoryRepository inventoryRepository,
             IOutletRepository outletRepository,
@@ -55,6 +60,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             this.productLocalizer = productLocalizer;
             this.inventoryRepository = inventoryRepository;
             this.outletRepository = outletRepository;
+            this.mediaRepository = mediaRepository;
         }
 
         [HttpGet]
@@ -182,6 +188,48 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             }
 
             return this.StatusCode((int)HttpStatusCode.OK);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetFiles(Guid? id, string searchTerm, int pageIndex, int itemsPerPage)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            var productFiles = await this.productsRepository.GetProductFilesAsync(token, language, id, pageIndex, itemsPerPage, searchTerm, $"{nameof(ProductFile.CreatedDate)} desc");
+
+            var filesModel = new List<FileItem>();
+            var filesIds = productFiles.Data.Select(x => x.Id);
+
+            if (productFiles is not null && filesIds.Any())
+            {
+                var files = await this.mediaRepository.GetMediaItemsAsync(token, language, filesIds, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize);
+
+                foreach (var file in files.OrEmptyIfNull())
+                {
+                    var fileModel = new FileItem
+                    {
+                        Id = file.Id,
+                        Name = file.Name,
+                        Filename = file.Filename,
+                        Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
+                        Description = file.Description ?? "-",
+                        IsProtected = file.IsProtected,
+                        Size = this.mediaService.ConvertToMB(file.Size),
+                        LastModifiedDate = file.LastModifiedDate,
+                        CreatedDate = file.CreatedDate
+                    };
+
+                    filesModel.Add(fileModel);
+                }
+            }
+
+            var pagedFiles = new PagedResults<IEnumerable<FileItem>>(filesModel.Count, FilesConstants.DefaultPageSize)
+            {
+                Data = filesModel
+            };
+
+            return this.StatusCode((int)HttpStatusCode.OK, pagedFiles);
         }
     } 
 }

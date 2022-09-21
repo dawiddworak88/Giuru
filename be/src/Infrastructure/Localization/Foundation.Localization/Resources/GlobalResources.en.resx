@@ -189,8 +189,8 @@
   <data name="DisplayedRows" xml:space="preserve">
     <value>of</value>
   </data>
-  <data name="Download" xml:space="preserve">
-    <value>Download</value>
+  <data name="DownloadCenter" xml:space="preserve">
+    <value>Download center</value>
   </data>
   <data name="DropFile" xml:space="preserve">
     <value>Drop here...</value>
@@ -423,8 +423,8 @@
   <data name="LastName" xml:space="preserve">
     <value>Last name</value>
   </data>
-  <data name="Miniature" xml:space="preserve">
-    <value>Miniature</value>
+  <data name="Thumbnail" xml:space="preserve">
+    <value>Thumbnail</value>
   </data>
   <data name="BasketLabel" xml:space="preserve">
     <value>Add to cart</value>
@@ -599,5 +599,65 @@
   </data>
   <data name="NewProducts" xml:space="preserve">
     <value>New products</value>
+  </data>
+  <data name="Attachment" xml:space="preserve">
+    <value>Attachment</value>
+  </data>
+  <data name="ApplyApplicationSubmit" xml:space="preserve">
+    <value>Submit your application now</value>
+  </data>
+  <data name="BusinessInformationDescription" xml:space="preserve">
+    <value>Let us know your business details</value>
+  </data>
+  <data name="ContactInformationDescription" xml:space="preserve">
+    <value>Your primary contact person for ELTAP will be the contact person provided in the form</value>
+  </data>
+  <data name="LowerPrivacyPolicy" xml:space="preserve">
+    <value>privacy policy</value>
+  </data>
+  <data name="LowerRegulations" xml:space="preserve">
+    <value>regulations</value>
+  </data>
+  <data name="OnlineRetailers" xml:space="preserve">
+    <value>Where do you sell the most online?</value>
+  </data>
+  <data name="SuccessfullyClientApply" xml:space="preserve">
+    <value>The cooperation request was successfully submitted.</value>
+  </data>
+  <data name="TeamMembers" xml:space="preserve">
+    <value>Team members</value>
+  </data>
+  <data name="DownloadCenterCategories" xml:space="preserve">
+    <value>Download center categories</value>
+  </data>
+  <data name="EditCategory" xml:space="preserve">
+    <value>Edit category</value>
+  </data>
+  <data name="EditDownloadCenter" xml:space="preserve">
+    <value>Edit download center</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="DownloadEverything" xml:space="preserve">
+    <value>Download everything</value>
+  </data>
+  <data name="DownloadSelected" xml:space="preserve">
+    <value>Download selected</value>
+  </data>
+  <data name="NoCategories" xml:space="preserve">
+    <value>No categories</value>
+  </data>
+  <data name="SelectFile" xml:space="preserve">
+    <value>Select file</value>
+  </data>
+  <data name="Thumbnail" xml:space="preserve">
+    <value>Thumbnail</value>
+  </data>
+  <data name="QRCode" xml:space="preserve">
+    <value>QR Code</value>
+  </data>
+  <data name="GenerateQRCode" xml:space="preserve">
+    <value>Generate QR code</value>
   </data>
 </root>

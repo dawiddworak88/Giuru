@@ -1,11 +1,9 @@
 ﻿using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Identity.Api.Areas.Accounts.ComponentModels;
 using Identity.Api.Areas.Accounts.ModelBuilders;
-using Identity.Api.Areas.Accounts.Repositories.Clients;
 using Identity.Api.Areas.Accounts.ViewModels;
 using Identity.Api.ModelBuilders;
 using Identity.Api.ModelBuilders.SignInForm;
@@ -24,14 +22,11 @@ namespace Identity.Api.Areas.Accounts.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<SetPasswordFormComponentModel, SetPasswordFormViewModel>, SetPasswordFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ResetPasswordComponentModel, ResetPasswordFormViewModel>, ResetPasswordFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ResetPasswordComponentModel, ResetPasswordViewModel>, ResetPasswordModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, RegisterPageViewModel>, RegisterPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, RegisterFormViewModel>, RegisterFormModelBuilder>();
+            
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
             services.AddScoped<IApiClientService, ApiClientService>();
-
-            services.AddScoped<IClientsRepository, ClientsRepository>();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Media.Repositories.Media;
@@ -48,12 +49,18 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                 UpdateMediaVersionUrl = this.linkGenerator.GetPathByAction("UpdateVersion", "MediaApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 LatestVersionsLabel = this.mediaResources.GetString("LatestVersionsLabel"),
                 MetaDataLabel = this.mediaResources.GetString("MetaDataLabel"),
-                MediaUrl = this.linkGenerator.GetPathByAction("Index", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
+                IdLabel = this.globalLocalizer.GetString("Id"),
+                MediaUrl = this.linkGenerator.GetPathByAction("Index", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveMediaChunkUrl = this.linkGenerator.GetPathByAction("PostChunk", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveMediaChunkCompleteUrl = this.linkGenerator.GetPathByAction("PostChunksComplete", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                IsUploadInChunksEnabled = true,
+                ChunkSize = MediaConstants.DefaultChunkSize,
             };
 
             if (componentModel.Id.HasValue)
             {
                 var itemVersions = await this.mediaRepository.GetMediaItemVersionsAsync(componentModel.Id.Value, componentModel.Token, componentModel.Language);
+
                 if (itemVersions is not null)
                 {
                     viewModel.Id = componentModel.Id.Value;

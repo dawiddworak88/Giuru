@@ -3,13 +3,15 @@ import React, { useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import moment from "moment";
-import { Plus } from "react-feather";
+import { Plus, Tool } from "react-feather";
 import {
-    Delete, Edit, FileCopyOutlined, Link
+    Delete, Edit, FileCopyOutlined, Link,
+    QrCode2
 } from "@mui/icons-material";
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, TablePagination, CircularProgress, Fab
+    TableHead, TableRow, Paper, TablePagination, CircularProgress, Fab,
+    Tooltip
 } from "@mui/material";
 import KeyConstants from "../../constants/KeyConstants";
 import { Context } from "../../stores/Store";
@@ -18,6 +20,8 @@ import PaginationConstants from "../../constants/PaginationConstants";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
 import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
+import { TextSnippet } from "@mui/icons-material";
+import QRCodeDialog from "../QRCodeDialog/QRCodeDialog";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -29,6 +33,8 @@ function Catalog(props) {
     const [total, setTotal] = React.useState(props.pagedItems ? props.pagedItems.total : 0);
     const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
     const [entityToDelete, setEntityToDelete] = React.useState(null);
+    const [selectedItem, setSelectedItem] = React.useState(null);
+    const [openQRCodeDialog, setOpenQRCodeDialog] = React.useState(false);
 
     const handleSearchTermKeyPress = (event) => {
 
@@ -181,6 +187,12 @@ function Catalog(props) {
     const copyToClipboard = (text) => {
         ClipboardHelper.copyToClipboard(text);
     }
+
+    const handleQRCodeDialog = (item) => {
+        setSelectedItem(item);
+        setOpenQRCodeDialog(true);
+    }
+
     useEffect(() => {
         setMounted(true)
     }, [])
@@ -231,21 +243,35 @@ function Catalog(props) {
                                                     <TableCell width="12%">
                                                         {props.table.actions.map((actionItem, index) => {
                                                             if (actionItem.isEdit) return (
-                                                                <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel} key={index}>
-                                                                    <Edit />
-                                                                </Fab>)
+                                                                <Tooltip title={props.editLabel} aria-label={props.editLabel} key={index}>
+                                                                    <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary">
+                                                                        <Edit />
+                                                                    </Fab>
+                                                                </Tooltip>)
                                                             else if (actionItem.isDelete) return (
-                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel} key={index}>
-                                                                    <Delete />
-                                                                </Fab>)
+                                                                <Tooltip title={props.deleteLabel} aria-label={props.deleteLabel} key={index}>
+                                                                    <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary">
+                                                                        <Delete />
+                                                                    </Fab>
+                                                                </Tooltip>)
                                                             else if (actionItem.isDuplicate) return (
-                                                                <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" aria-label={props.duplicateLabel} key={index}>
-                                                                    <FileCopyOutlined />
-                                                                </Fab>)
+                                                                <Tooltip title={props.duplicateLabel} aria-label={props.duplicateLabel} key={index}>
+                                                                    <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary">
+                                                                        <FileCopyOutlined />
+                                                                    </Fab>
+                                                                </Tooltip>)
                                                             else if (actionItem.isPicture) return (
-                                                                <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary" aria-label={props.duplicateLabel}>
-                                                                    <Link />
-                                                                </Fab>)
+                                                                <Tooltip title={props.copyLinkLabel} aria-label={props.copyLinkLabel} key={index}>
+                                                                    <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary">
+                                                                        <Link />
+                                                                    </Fab>
+                                                                </Tooltip>)
+                                                            else if (actionItem.qrCode) return (
+                                                                <Tooltip title={props.generateQRCodeLabel} aria-label={props.generateQRCodeLabel} key={index}>
+                                                                    <Fab onClick={() => handleQRCodeDialog(item)} size="small" color="secondary">
+                                                                        <QrCode2 />
+                                                                    </Fab>
+                                                                </Tooltip>)
                                                             else return (
                                                                 <div></div>)})}
                                                     </TableCell>
@@ -253,7 +279,17 @@ function Catalog(props) {
                                                 {props.table.properties && props.table.properties.map((property, index) => {
                                                     if (property.isPicture){
                                                         return (
-                                                            <TableCell key={index}><img src={item[property.title]} /></TableCell>
+                                                            <TableCell key={index}>
+                                                                <div className="property-image">
+                                                                    {item[property.title] ? (
+                                                                        <img src={item[property.title]}/>
+                                                                    ) : (
+                                                                        <div className="is-flex is-justify-content-center">
+                                                                            <TextSnippet className="is-size-2" color="primary"/>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </TableCell>
                                                         )
                                                     }
                                                     else if (property.isDateTime){
@@ -305,6 +341,14 @@ function Catalog(props) {
                     noLabel={props.noLabel}
                     yesLabel={props.yesLabel}
                 />
+                {props.qrCodeDialog &&
+                    <QRCodeDialog 
+                        open={openQRCodeDialog}
+                        setOpen={setOpenQRCodeDialog}
+                        item={selectedItem}
+                        labels={props.qrCodeDialog}
+                    />
+                }
                 {state.isLoading && <CircularProgress className="progressBar" />}
             </div>
         </section>
@@ -332,7 +376,9 @@ Catalog.propTypes = {
     duplicateUrl: PropTypes.string,
     noResultsLabel: PropTypes.string.isRequired,
     table: PropTypes.object.isRequired,
-    confirmationDialogDeleteNameProperty: PropTypes.array
+    confirmationDialogDeleteNameProperty: PropTypes.array,
+    generateQRCodeLabel: PropTypes.string.isRequired,
+    copyLinkLabel: PropTypes.string.isRequired
 }
 
 export default Catalog;

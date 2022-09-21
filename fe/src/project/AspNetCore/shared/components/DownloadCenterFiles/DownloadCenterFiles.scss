@@ -1,0 +1,55 @@
+.files {
+    .MuiFormControlLabel-root {
+        margin: 0;
+    }
+
+    @media only screen and (max-width: $widescreen) {
+
+        &__header {
+            flex-direction: column;
+        }
+    }
+    
+    &__tooltip {
+
+        .MuiButtonBase-root:not(:first-child) {
+            margin-left: 0.5rem;
+        }
+
+        @media only screen and (max-width: $widescreen) {
+
+            .MuiButtonBase-root:not(:first-child) {
+                margin-left: 0;
+                margin-top: 0.5rem;
+            }
+        }
+    }
+
+    &__search {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 3rem;
+        margin-top: 3rem;
+
+        @media only screen and (max-width: $tablet) {
+            margin-bottom: 1.5rem;
+            margin-top: 1.5rem;
+        }
+    }
+
+    &__search-field {
+        width: 40%;
+
+        @media only screen and (max-width: $tablet) {
+            width: 100%;
+        }
+    }
+
+    @media only screen and (max-width: $tablet) {
+        &__content-box {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+    }
+}

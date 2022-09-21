@@ -49,6 +49,9 @@ const browserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        downloadcentercategorypage: ["./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/index.js", "./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage.scss"],
+        downloadcenterpage: ["./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterPage/index.js", "./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage.scss"],
+        applicationpage: ["./src/project/AspNetCore/areas/Home/pages/ApplicationPage/index.js", "./src/project/AspNetCore/areas/Home/pages/ApplicationPage/ApplicationPage.scss"],
         outletpage: ["./src/project/AspNetCore/areas/Products/pages/OutletPage/index.js", "./src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage.scss"],
         newsItemPage: ["./src/project/AspNetCore/areas/News/pages/NewsItemPage/index.js", "./src/project/AspNetCore/areas/News/pages/NewsItemPage/NewsItemPage.scss"],
         newsPage: ["./src/project/AspNetCore/areas/News/pages/NewsPage/index.js", "./src/project/AspNetCore/areas/News/pages/NewsPage/NewsPage.scss"],
@@ -182,12 +185,16 @@ const sellerPortalBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        teammember: ["./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/index.js", "./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/TeamMember.scss"],
+        teammembers: ["./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/index.js", "./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/TeamMembers.scss"],
+        downloadcenteritempage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/DownloadCenterItemPage.scss"],
+        downloadcenterpage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage.scss"],
+        downloadcentercategorypage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoryPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage.scss"],
+        downloadcentercategoriespage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoriesPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoriesPage/DownloadCenterCategoriesPage.scss"],
         clientrolepage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientRolePage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientRolePage/ClientRolePage.scss"],
         clientrolespage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/ClientRolesPage.scss"],
         clientapplicationpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/ClientApplicationPage.scss"],
         clientsapplicationspage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientsApplicationsPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientsApplicationsPage/ClientsApplicationsPage.scss"],
-        mediapage: ["./src/project/Seller.Portal/areas/Medias/pages/MediaPage/index.js", "./src/project/Seller.Portal/areas/Medias/pages/MediaPage/MediaPage.scss"],
-        mediaitempage: ["./src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/index.js", "./src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage.scss"],
         mediapage: ["./src/project/Seller.Portal/areas/MediaItems/pages/MediaPage/index.js", "./src/project/Seller.Portal/areas/MediaItems/pages/MediaPage/MediaPage.scss"],
         mediaitempage: ["./src/project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/index.js", "./src/project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/MediaItemPage.scss"],
         clientaccountmanagerpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagerPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagerPage/ClientAccountManagerPage.scss"],

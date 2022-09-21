@@ -20,6 +20,9 @@ using System.Net;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
+using Media.Api.IntegrationEvents;
+using Foundation.EventBus.Abstractions;
+using Microsoft.AspNetCore.Http;
 
 namespace Media.Api.Services.Media
 {
@@ -29,16 +32,19 @@ namespace Media.Api.Services.Media
         private readonly IMediaRepository mediaRepository;
         private readonly IChecksumService checksumService;
         private readonly IStringLocalizer mediaResources;
+        private readonly IEventBus eventBus;
 
         public MediaService(MediaContext context, 
             IMediaRepository mediaRepository, 
             IChecksumService checksumService,
+            IEventBus eventBus,
             IStringLocalizer<MediaResources> mediaResources)
         {
             this.context = context;
             this.mediaRepository = mediaRepository;
             this.mediaResources = mediaResources;
             this.checksumService = checksumService;
+            this.eventBus = eventBus;
         }
 
         public async Task<Guid> CreateFileAsync(CreateMediaItemServiceModel serviceModel)
@@ -93,6 +99,7 @@ namespace Media.Api.Services.Media
         public async Task<Guid> UpdateFileAsync(UpdateMediaItemServiceModel serviceModel)
         {
             var existingMediaItemVersion = this.context.MediaItemVersions.Where(x => x.MediaItemId == serviceModel.Id.Value && x.IsActive).OrderBy(o => o.Version);
+
             if (existingMediaItemVersion is not null)
             {
                 var checksum = this.checksumService.GetMd5(serviceModel.File);
@@ -113,6 +120,7 @@ namespace Media.Api.Services.Media
                 this.context.MediaItemVersions.Add(mediaItemVersion.FillCommonProperties());
                 
                 var translations = this.context.MediaItemTranslations.Where(x => x.MediaItemVersionId == existingMediaItemVersion.LastOrDefault().Id);
+
                 foreach(var translation in translations)
                 {
                     translation.MediaItemVersionId = mediaItemVersion.Id;
@@ -126,7 +134,7 @@ namespace Media.Api.Services.Media
             return existingMediaItemVersion.FirstOrDefault().MediaItemId;
         }
 
-        public MediaFileServiceModel GetFile(Guid? mediaId, int? width, int? height, bool optimize, string? extension)
+        public MediaFileServiceModel GetFile(Guid? mediaId)
         {
             if (mediaId.HasValue)
             {
@@ -231,6 +239,7 @@ namespace Media.Api.Services.Media
                 mediaItemResult.Size = mediaItemVersion.Size;
                 mediaItemResult.MimeType = mediaItemVersion.MimeType;
                 mediaItemResult.Extension = mediaItemVersion.Extension;
+                mediaItemResult.MediaItemVersionId = mediaItemVersion.Id;
 
                 var mediaItemVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaItemVersion.Id && x.Language == language && x.IsActive);
 
@@ -249,26 +258,13 @@ namespace Media.Api.Services.Media
             return mediaItemResult;
         }
 
-        private bool IsImage(string contentType)
-        {
-            var imageContentTypes = new List<string>
-            {
-                MediaConstants.MimeTypes.Jpeg,
-                MediaConstants.MimeTypes.Png,
-                MediaConstants.MimeTypes.Svg,
-                MediaConstants.MimeTypes.Webp
-            };
-
-            return imageContentTypes.Contains(contentType);
-        }
-
         public async Task<PagedResults<IEnumerable<MediaItemServiceModel>>> GetAsync(GetMediaItemsServiceModel serviceModel)
         {
             var mediaItems = this.context.MediaItems.Where(x => x.IsActive && x.OrganisationId == serviceModel.OrganisationId.Value);
 
             if (string.IsNullOrWhiteSpace(serviceModel.SearchTerm) is false)
             {
-                mediaItems = mediaItems.Where(x => x.Versions.Any(x => x.Filename.StartsWith(serviceModel.SearchTerm)));
+                mediaItems = mediaItems.Where(x => x.Id.ToString() == serviceModel.SearchTerm || x.Versions.Any(x => x.Filename.StartsWith(serviceModel.SearchTerm) || x.Id.ToString() == serviceModel.SearchTerm));
             }
 
             mediaItems = mediaItems.ApplySort(serviceModel.OrderBy);
@@ -323,7 +319,7 @@ namespace Media.Api.Services.Media
             var mediaItem = this.context.MediaItems.FirstOrDefault(x => x.Id == model.MediaId.Value && x.IsActive);
             if (mediaItem == null)
             {
-                throw new CustomException(this.mediaResources.GetString("MediaNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.mediaResources.GetString("MediaNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             mediaItem.IsActive = false;
@@ -335,7 +331,7 @@ namespace Media.Api.Services.Media
         public async Task<MediaItemVerionsByIdServiceModel> GetMediaItemVerionsByIdAsync(GetMediaItemsByIdServiceModel model)
         {
             var mediaItemVersions = this.context.MediaItemVersions
-                .Where(x => x.MediaItemId == model.Id.Value)
+                .Where(x => x.MediaItemId == model.Id && x.IsActive)
                 .Select(x => new MediaItemServiceModel
                 {
                     Id = x.Id,
@@ -348,7 +344,7 @@ namespace Media.Api.Services.Media
                     Description = x.Translations.FirstOrDefault(x => x.Language == model.Language).Description,
                     MetaData = x.Translations.FirstOrDefault(x => x.Language == model.Language).Metadata,
                     LastModifiedDate = x.LastModifiedDate,
-                    CreatedDate = x.CreatedDate,
+                    CreatedDate = x.CreatedDate
                 }).OrderByDescending(x => x.CreatedDate).Take(5);
 
             if (mediaItemVersions.OrEmptyIfNull().Any())
@@ -396,6 +392,150 @@ namespace Media.Api.Services.Media
                 }
 
                 await this.context.SaveChangesAsync();
+
+                var message = new UpdatedFileIntegrationEvent
+                {
+                    FileId = model.Id.Value,
+                    Name = model.Name
+                };
+
+                this.eventBus.Publish(message);
+            }
+        }
+
+        public MediaFileServiceModel GetFileVersion(Guid? versionId)
+        {
+            if (versionId.HasValue)
+            {
+                var mediaItemVersion = (from mv in this.context.MediaItemVersions
+                                          join m in this.context.MediaItems on mv.MediaItemId equals m.Id
+                                          where mv.Id == versionId && m.IsProtected == false
+                                          select new MediaFileItemServiceModel
+                                          {
+                                              Id = mv.Id,
+                                              ContentType = mv.MimeType,
+                                              Filename = mv.Filename,
+                                              Extension = mv.Extension,
+                                              Folder = mv.Folder
+                                          }).FirstOrDefault();
+
+                if (mediaItemVersion is not null)
+                {
+                    var file = this.mediaRepository.GetFile(mediaItemVersion.Folder, $"{mediaItemVersion.Id}{mediaItemVersion.Extension}");
+
+                    if (file is not null)
+                    {
+                        return new MediaFileServiceModel
+                        {
+                            Id = mediaItemVersion.Id,
+                            Filename = $"{mediaItemVersion.Filename}{mediaItemVersion.Extension}",
+                            ContentType = mediaItemVersion.ContentType,
+                            File = file
+                        };
+                    }
+                }
+            }
+
+            return default;
+        }
+        
+        public async Task CreateFileChunkAsync(CreateFileChunkServiceModel model)
+        {
+            var path = Path.Combine($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}", $"{model.File.FileName}{model.ChunkSumber}");
+
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+            using (var fs = File.Create(path))
+            {
+                await model.File.CopyToAsync(fs);
+            }
+        }
+
+        public async Task<Guid> CreateFileFromChunksAsync(CreateMediaItemFromChunksServiceModel model)
+        {
+            string newPath = Path.Combine($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}", model.Filename);
+
+            string[] filePaths = Directory.GetFiles($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}").Where(p => p.Contains(model.Filename)).OrderBy(p => Int32.Parse(p.Replace(model.Filename, "$").Split('$')[1])).ToArray();
+
+            foreach (var filePath in filePaths)
+            {
+                MergeChunks(newPath, filePath);
+                File.Delete(filePath);
+            }
+
+            using var stream = new MemoryStream(File.ReadAllBytes(newPath).ToArray());
+
+            var formFile = new FormFile(stream, 0, stream.Length, model.Filename, model.Filename);
+
+            var id = await this.CreateFileAsync(new CreateMediaItemServiceModel
+            {
+                File = formFile,
+                OrganisationId = model.OrganisationId,
+                Language = model.Language,
+                Username = model.Username
+            });
+
+            File.Delete(newPath);
+
+            return id;
+        }
+
+        public async Task<Guid> UpdateFileFromChunksAsync(UpdateMediaItemFromChunksServiceModel model)
+        {
+            string newPath = Path.Combine($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}", model.Filename);
+
+            string[] filePaths = Directory.GetFiles($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}").Where(p => p.Contains(model.Filename)).OrderBy(p => Int32.Parse(p.Replace(model.Filename, "$").Split('$')[1])).ToArray();
+
+            foreach (var filePath in filePaths)
+            {
+                MergeChunks(newPath, filePath);
+                File.Delete(filePath);
+            }
+
+            using var stream = new MemoryStream(File.ReadAllBytes(newPath).ToArray());
+
+            var formFile = new FormFile(stream, 0, stream.Length, model.Filename, model.Filename);
+
+            var id = await this.UpdateFileAsync(new UpdateMediaItemServiceModel
+            {
+                File = formFile,
+                Id = model.Id,
+                Language = model.Language,
+                OrganisationId = model.OrganisationId,
+                Username = model.Username
+            });
+
+            File.Delete(newPath);
+
+            return id;
+        }
+
+        private static void MergeChunks(string chunk1, string chunk2)
+        {
+            FileStream fs1 = null;
+            FileStream fs2 = null;
+
+            try
+            {
+                fs1 = File.Open(chunk1, FileMode.Append);
+                fs2 = File.Open(chunk2, FileMode.Open);
+                var fs2Content = new byte[fs2.Length];
+                fs2.Read(fs2Content, 0, (int)fs2.Length);
+                fs1.Write(fs2Content, 0, (int)fs2.Length);
+            }
+            finally
+            {
+                if (fs1 is not null)
+                {
+                    fs1.Close();
+                }
+
+                if (fs2 is not null)
+                {
+                    fs2.Close();
+                }
+
+                File.Delete(chunk2);
             }
         }
     }

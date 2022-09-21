@@ -10,7 +10,6 @@ namespace Media.Api.Services.Media
     public interface IMediaService
     {
         Task<PagedResults<IEnumerable<MediaItemServiceModel>>> GetAsync(GetMediaItemsServiceModel serviceModel);
-        MediaFileServiceModel GetFile(Guid? mediaId, int? width, int? height, bool optimize, string? extension);
         Task<Guid> CreateFileAsync(CreateMediaItemServiceModel serviceModel);
         Task<Guid> UpdateFileAsync(UpdateMediaItemServiceModel serviceModel);
         Task<MediaItemVerionsByIdServiceModel> GetMediaItemVerionsByIdAsync(GetMediaItemsByIdServiceModel model);
@@ -18,5 +17,10 @@ namespace Media.Api.Services.Media
         PagedResults<IEnumerable<MediaItemServiceModel>> GetMediaItemsByIds(GetMediaItemsByIdsServiceModel model);
         MediaItemServiceModel GetMediaItemById(GetMediaItemsByIdServiceModel model);
         Task DeleteAsync(DeleteFileServiceModel model);
+        MediaFileServiceModel GetFile(Guid? mediaId);
+        MediaFileServiceModel GetFileVersion(Guid? versionId);
+        Task CreateFileChunkAsync(CreateFileChunkServiceModel model);
+        Task<Guid> CreateFileFromChunksAsync(CreateMediaItemFromChunksServiceModel model);
+        Task<Guid> UpdateFileFromChunksAsync(UpdateMediaItemFromChunksServiceModel model);
     }
 }

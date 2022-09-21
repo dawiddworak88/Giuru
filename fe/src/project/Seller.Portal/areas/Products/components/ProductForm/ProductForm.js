@@ -1,8 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
+import { EditorState } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import { stateToMarkdown } from "draft-js-export-markdown";
+import { stateFromMarkdown } from 'draft-js-import-markdown';
 import { 
     TextField, Button, CircularProgress, FormControlLabel, 
     Switch, InputLabel, NoSsr, Autocomplete 
@@ -16,6 +20,8 @@ import SearchConstants from "../../../../../../shared/constants/SearchConstants"
 
 function ProductForm(props) {
     const [state, dispatch] = useContext(Context);
+    const [convertedToRaw, setConvertedToRaw] = useState(props.description ? props.description : null);
+    const [editorState, setEditorState] = useState(EditorState.createEmpty());
     const [primaryProducts, setPrimaryProducts] = useState(props.primaryProducts ? props.primaryProducts : []);
 
     const categoriesProps = {
@@ -60,6 +66,16 @@ function ProductForm(props) {
         }
     };
 
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            if (props.description){
+                setEditorState(EditorState.createWithContent(
+                    stateFromMarkdown(props.description)
+                ))
+            }
+        }
+    }, [])
+
     const onCategoryChange = (event, newValue) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
@@ -98,6 +114,13 @@ function ProductForm(props) {
             });
     };
 
+    const handleEditorChange = (state) => {
+        setEditorState(state);
+
+        const convertedToMarkdown = stateToMarkdown(state.getCurrentContent());
+        setConvertedToRaw(convertedToMarkdown);
+    }
+
     const onSubmitForm = (state) => {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -107,7 +130,7 @@ function ProductForm(props) {
             categoryId: category ? category.id : null,
             sku,
             name,
-            description,
+            description: convertedToRaw,
             primaryProductId: primaryProduct ? primaryProduct.id : null,
             images,
             files,
@@ -177,19 +200,51 @@ function ProductForm(props) {
         }
     }
 
+    const uploadCallback = (file) => {
+        return new Promise((resolve, reject) => {
+            const formData = new FormData();
+
+            formData.append("file", file)
+
+            const requestOptions = {
+                method: "POST",
+                body: formData
+            };
+
+            fetch(props.saveMediaUrl, requestOptions)
+                .then(function (response) {
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
+                    
+                    AuthenticationHelper.HandleResponse(response);
+
+                    response.json().then((media) => {
+                        if (response.ok) {
+
+                            resolve({
+                                data: {
+                                    link: media.url
+                                }
+                            })
+                        }
+                        else {
+                            toast.error(props.generalErrorMessage);
+                        }
+                    });
+                }).catch(() => {
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
+                    toast.error(props.generalErrorMessage);
+                });
+        });
+    }
+
     const {
-        values,
-        errors,
-        dirty,
-        disable,
-        setFieldValue,
-        handleOnChange,
-        handleOnSubmit
+        values, errors, dirty, disable,
+        setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { 
-        id, category, sku, name, description, primaryProduct, images, 
-        files, isNew, schema, uiSchema, formData, isPublished, ean 
+        id, category, sku, name, primaryProduct, images, files, 
+        isNew, schema, uiSchema, formData, isPublished, ean 
     } = values;
 
     return (
@@ -233,8 +288,24 @@ function ProductForm(props) {
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
-                            <TextField id="description" name="description" label={props.descriptionLabel} fullWidth={true} variant="standard"
-                                value={description} onChange={handleOnChange} multiline />
+                            <InputLabel id="description-label">{props.descriptionLabel}</InputLabel>
+                            <NoSsr>
+                                <Editor 
+                                    editorState={editorState} 
+                                    onEditorStateChange={handleEditorChange}
+                                    localization={{
+                                        locale: props.locale
+                                    }}
+                                    toolbar={{
+                                        image: {
+                                            uploadEnabled: true,
+                                            previewImage: true,
+                                            inputAccept: 'image/jpeg,image/jpg,image/png,image/webp',
+                                            uploadCallback: uploadCallback
+                                        }
+                                    }}
+                                />
+                            </NoSsr>
                         </div>
                         <div className="field">
                             <Autocomplete
@@ -263,7 +334,11 @@ function ProductForm(props) {
                                 dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
                                 files={images}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl}
+                                isUploadInChunksEnabled={true}
+                                chunkSize={props.chunkSize}
+                                saveMediaChunkUrl={props.saveMediaChunkUrl}
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} />
                         </div>
                         <div className="field">
                             <MediaCloud
@@ -279,7 +354,11 @@ function ProductForm(props) {
                                 imagePreviewEnabled={false}
                                 files={files}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl}
+                                isUploadInChunksEnabled={props.isUploadInChunksEnabled}
+                                chunkSize={props.chunkSize}
+                                saveMediaChunkUrl={props.saveMediaChunkUrl}
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} />
                         </div>
                         <div className="field">
                             <NoSsr>
@@ -323,7 +402,7 @@ function ProductForm(props) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable}>
+                                disabled={state.isLoading || disable || !convertedToRaw}>
                                 {props.saveText}
                             </Button>
                             <Button 
@@ -379,6 +458,10 @@ ProductForm.propTypes = {
     generalErrorMessage: PropTypes.string.isRequired,
     eanLabel: PropTypes.string.isRequired,
     idLabel: PropTypes.string,
+    isUploadInChunksEnabled: PropTypes.bool,
+    chunkSize: PropTypes.number,
+    saveMediaChunkUrl: PropTypes.string,
+    saveMediaChunkCompleteUrl: PropTypes.string,
     productsSuggestionUrl: PropTypes.string.isRequired
 };
 

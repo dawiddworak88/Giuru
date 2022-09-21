@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Home.ViewModel;
-using Foundation.Extensions.ModelBuilders;
+﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
 using Foundation.PageContent.Components.HeroSliders.ViewModels;
@@ -7,6 +6,7 @@ using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.ViewModels.Headers;
 using System.Globalization;
+using Buyer.Web.Areas.Home.ViewModel;
 
 namespace Buyer.Web.Areas.Home.ModelBuilders
 {
@@ -44,12 +44,12 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             var viewModel = new HomePageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
-                MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
-                HeroSlider = await this.heroSliderModelBuilder.BuildModelAsync(componentModel),
-                CarouselGrid = await this.carouselGridModelBuilder.BuildModelAsync(componentModel),
-                ContentGrid = await this.contentGridModelBuilder.BuildModelAsync(componentModel),
-                NewsCarouselGrid = await this.newsModelBuilder.BuildModelAsync(componentModel),
+                Header = await headerModelBuilder.BuildModelAsync(componentModel),
+                MainNavigation = await mainNavigationModelBuilder.BuildModelAsync(componentModel),
+                HeroSlider = await heroSliderModelBuilder.BuildModelAsync(componentModel),
+                CarouselGrid = await carouselGridModelBuilder.BuildModelAsync(componentModel),
+                ContentGrid = await contentGridModelBuilder.BuildModelAsync(componentModel),
+                NewsCarouselGrid = await newsModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
 

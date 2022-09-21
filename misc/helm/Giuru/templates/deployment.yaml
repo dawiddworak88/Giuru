@@ -50,6 +50,12 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: EventBusConnection
+          value: {{ .Values.eventBusConnection }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         ports:
         - containerPort: 80
 ---
@@ -166,6 +172,8 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: MediaUrl
           value: {{ .Values.mediaUrl }}
         - name: ElasticsearchUrl
@@ -234,6 +242,8 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: ElasticsearchUrl
           value: {{ .Values.elasticsearchUrl }}
         - name: ElasticsearchIndex
@@ -298,6 +308,8 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType
@@ -358,6 +370,8 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: SenderEmail
           value: {{ .Values.senderEmail }}
         - name: SenderName
@@ -455,8 +469,6 @@ spec:
           value: {{ .Values.mediaUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
-        - name: ClientUrl
-          value: {{ .Values.clientUrl }}
         - name: BuyerUrl
           value: {{ .Values.buyerUrl }}
         - name: Clients
@@ -493,6 +505,8 @@ spec:
           value: {{ .Values.identityApi.actionSendGridCreateTemplateId }}
         - name: ActionSendGridResetTemplateId
           value: {{ .Values.identityApi.actionSendGridResetTemplateId }}
+        - name: ActionSendGridTeamMemberInvitationTemplateId
+          value: {{ .Values.identityApi.actionSendGridTeamMemberInvitationTemplateId }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType
@@ -553,6 +567,8 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType
@@ -611,10 +627,6 @@ spec:
           value: {{ .Values.identityUrl }}
         - name: CdnUrl
           value: {{ .Values.cdnUrl }}
-        - name: EventBusConnection
-          value: {{ .Values.eventBusConnection }}
-        - name: EventBusRetryCount
-          value: {{ .Values.eventBusRetryCount }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType
@@ -625,6 +637,70 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: download-center-api-deployment
+  labels:
+    app: downloadcenter-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: downloadcenter-api
+  template:
+    metadata:
+      labels:
+        app: downloadcenter-api
+    spec:
+      containers:
+      - name: downloadcenter-api-container
+        image: {{ .Values.image.registry }}/downloadcenter-api:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
+        resources:
+          limits:
+            memory: "250Mi"
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: OrganisationId
+          value: {{ .Values.organisationId }}
+        - name: ConnectionString
+          value: {{ .Values.downloadCenterApi.connectionString }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        - name: EventBusConnection
+          value: {{ .Values.eventBusConnection }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         ports:
         - containerPort: 80
 ---
@@ -687,6 +763,8 @@ spec:
           value: {{ .Values.orderUrl }}
         - name: NewsUrl
           value: {{ .Values.newsUrl }}
+        - name: DownloadCenterUrl
+          value: {{ .Values.downloadCenterUrl }}
         - name: MakeComplaintUrl
           value: {{ .Values.makeComplaintUrl }}
         - name: CdnUrl
@@ -771,6 +849,8 @@ spec:
           value: {{ .Values.newsUrl }}
         - name: BuyerUrl
           value: {{ .Values.buyerUrl }}
+        - name: DownloadCenterUrl
+          value: {{ .Values.downloadCenterUrl }}
         - name: ClientId
           value: {{ .Values.sellerWeb.clientId }}
         - name: ClientSecret
@@ -785,5 +865,7 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: SellerUrl
+          value: {{ .Values.sellerUrl }}
         ports:
         - containerPort: 80
