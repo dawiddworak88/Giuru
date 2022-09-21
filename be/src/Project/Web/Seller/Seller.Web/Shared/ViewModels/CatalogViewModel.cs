@@ -24,7 +24,7 @@ namespace Seller.Web.Shared.ViewModels
         public string DeleteApiUrl { get; set; }
         public string EditUrl { get; set; }
         public string DuplicateUrl { get; set; }
-        public string IsAttachmentLabel { get; set; }
+        public string AttachmentLabel { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string OrderBy { get; set; }
         public string GenerateQRCodeLabel { get; set; }

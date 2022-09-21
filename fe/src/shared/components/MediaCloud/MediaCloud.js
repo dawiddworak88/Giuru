@@ -186,7 +186,7 @@ function MediaCloud(props) {
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify({ filename: fileToUploadInChunksFilename })
+            body: JSON.stringify({ id: mediaId, filename: fileToUploadInChunksFilename })
         };
 
         fetch(props.saveMediaChunkCompleteUrl, requestOptions)

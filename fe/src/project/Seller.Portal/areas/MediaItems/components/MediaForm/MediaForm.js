@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
-function UploadForm(props) {
+const MediaForm = (props) => {
     const [images, setImages] = useState([]);
     
     return (
@@ -25,6 +25,10 @@ function UploadForm(props) {
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
                                 files={images}
+                                isUploadInChunksEnabled={true}
+                                chunkSize={props.chunkSize}
+                                saveMediaChunkUrl={props.saveMediaChunkUrl}
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl}
                                 setFieldValue={({value}) => setImages(value)}
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
@@ -47,7 +51,7 @@ function UploadForm(props) {
     );
 }
 
-UploadForm.propTypes = {
+MediaForm.propTypes = {
     title: PropTypes.string.isRequired,
     mediaItemsLabel: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
@@ -56,7 +60,11 @@ UploadForm.propTypes = {
     dropOrSelectImagesLabel: PropTypes.string.isRequired,
     saveMediaUrl: PropTypes.string.isRequired,
     backToMediaText: PropTypes.string.isRequired,
-    mediaUrl: PropTypes.string.isRequired
+    mediaUrl: PropTypes.string.isRequired,
+    isUploadInChunksEnabled: PropTypes.bool.isRequired,
+    chunkSize: PropTypes.string.isRequired,
+    saveMediaChunkUrl: PropTypes.string.isRequired,
+    saveMediaChunkCompleteUrl: PropTypes.string.isRequired
 }
 
-export default UploadForm;
+export default MediaForm;

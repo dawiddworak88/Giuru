@@ -7,6 +7,6 @@ namespace Seller.Web.Areas.Media.Repositories.Files
     {
         Task<Guid> SaveAsync(string token, string language, byte[] file, string filename, string id);
         Task SaveChunkAsync(string token, string language, byte[] file, string filename, int? chunkNumber);
-        Task<Guid> SaveChunksCompleteAsync(string token, string language, string filename);
+        Task<Guid> SaveChunksCompleteAsync(string token, string language, Guid? id, string filename);
     }
 }
