@@ -164,8 +164,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
 
             var fileId = await this.filesRepository.SaveChunksCompleteAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                CultureInfo.CurrentUICulture.Name,
-                model.Filename);
+                CultureInfo.CurrentUICulture.Name, model.Id, model.Filename);
 
             var mediaItem = await this.mediaItemsRepository.GetMediaItemAsync(
                         await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),

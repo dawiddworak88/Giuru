@@ -423,8 +423,8 @@
   <data name="LastName" xml:space="preserve">
     <value>Nachname</value>
   </data>
-  <data name="Miniature" xml:space="preserve">
-    <value>Miniatur</value>
+  <data name="Thumbnail" xml:space="preserve">
+    <value>Miniaturansicht</value>
   </data>
   <data name="BasketLabel" xml:space="preserve">
     <value>zum Warenkorb hinzufügen</value>
@@ -599,6 +599,9 @@
   </data>
   <data name="NewProducts" xml:space="preserve">
     <value>Neue Produkte</value>
+  </data>
+  <data name="Attachment" xml:space="preserve">
+    <value>Anhang</value>
   </data>
   <data name="ApplyApplicationSubmit" xml:space="preserve">
     <value>Reichen Sie jetzt Ihre Bewerbung ein</value>

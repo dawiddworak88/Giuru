@@ -157,7 +157,11 @@ DownloadCenterItemForm.propTypes = {
     idLabel: PropTypes.string,
     id: PropTypes.string,
     title: PropTypes.string.isRequired,
-    files: PropTypes.array
+    files: PropTypes.array,
+    isUploadInChunksEnabled: PropTypes.bool.isRequired,
+    chunkSize: PropTypes.string.isRequired,
+    saveMediaChunkUrl: PropTypes.string.isRequired,
+    saveMediaChunkCompleteUrl: PropTypes.string.isRequired
 }
 
 export default DownloadCenterItemForm;
