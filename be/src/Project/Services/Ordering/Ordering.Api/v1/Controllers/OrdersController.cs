@@ -471,9 +471,8 @@ namespace Ordering.Api.v1.Controllers
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrderItems = request.OrderItems.OrEmptyIfNull().Select(x => new UpdateOrderItemsStatusServiceModel
                 {
-                    OrderId = x.OrderId,
-                    OrderItemIndex = x.OrderItemIndex,
-                    IsDone = x.IsDone
+                    Id = x.Id,
+                    StatusId = x.StatusId
                 })
             };
 

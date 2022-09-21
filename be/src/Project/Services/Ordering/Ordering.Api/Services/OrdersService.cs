@@ -611,29 +611,31 @@ namespace Ordering.Api.Services
 
         public async Task SyncOrderItemsStatusesAsync(UpdateOrderItemsStatusesServiceModel model)
         {
-            foreach (var orderItem in model.OrderItems.OrEmptyIfNull())
+            foreach (var item in model.OrderItems.OrEmptyIfNull())
             {
-                var order = await this.context.Orders.FirstOrDefaultAsync(x => x.Id == orderItem.OrderId);
+                var orderItem = await this.context.OrderItems.FirstOrDefaultAsync(x => x.Id == item.Id && x.IsActive);
 
-                if (order is not null)
+                if (orderItem is not null)
                 {
-                    var orderItems = order.OrderItems.ToList();
+                    var newOrderItemStatus = await this.context.OrderStatuses.FirstOrDefaultAsync(x => x.Id == item.StatusId && x.IsActive);
 
-                    var item = orderItems[orderItem.OrderItemIndex];
-
-                    var orderItemStatusChange = new OrderItemStatusChange
+                    if (newOrderItemStatus is not null)
                     {
-                        OrderItemId = item.Id,
-                        OrderItemStateId = OrderStatesConstants.CompleteId,
-                        OrderItemStatusId = OrderStatusesConstants.CompleteId
-                    };
+                        var orderItemStatusChange = new OrderItemStatusChange
+                        {
+                            OrderItemId = item.Id,
+                            OrderItemStateId = newOrderItemStatus.OrderStateId,
+                            OrderItemStatusId = newOrderItemStatus.Id
+                        };
 
-                    this.context.OrderItemStatusChanges.Add(orderItemStatusChange.FillCommonProperties());
+                        await this.context.OrderItemStatusChanges.AddAsync(orderItemStatusChange.FillCommonProperties());
 
-                    item.LastOrderItemStatusChangeId = orderItemStatusChange.Id;
-                    item.LastModifiedDate = DateTime.UtcNow;
+                        orderItem.LastOrderItemStatusChangeId = orderItemStatusChange.Id;
+                        orderItem.LastModifiedDate = DateTime.UtcNow;
 
-                    await this.context.SaveChangesAsync();
+                        await this.context.SaveChangesAsync();
+                        await this.MapStatusesToOrderStatusId(orderItem.OrderId);
+                    }
                 }
             };
         }
@@ -644,14 +646,14 @@ namespace Ordering.Api.Services
 
             if (orderItem is null)
             {
-                throw new CustomException(this.orderLocalizer.GetString("OrderItemNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.orderLocalizer.GetString("OrderItemNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var newOrderItemStatus = await this.context.OrderStatuses.FirstOrDefaultAsync(x => x.Id == model.OrderItemStatusId && x.IsActive);
 
             if (newOrderItemStatus is null)
             {
-                throw new CustomException(this.orderLocalizer.GetString("OrderStatusNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.orderLocalizer.GetString("OrderStatusNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var orderItemStatusChange = new OrderItemStatusChange
@@ -679,8 +681,12 @@ namespace Ordering.Api.Services
             orderItem.LastModifiedDate = DateTime.UtcNow;
 
             await this.context.SaveChangesAsync();
+            await this.MapStatusesToOrderStatusId(orderItem.OrderId);
+        }
 
-            var order = await this.context.Orders.FirstOrDefaultAsync(x => x.Id == orderItem.OrderId && x.IsActive);
+        private async Task MapStatusesToOrderStatusId(Guid? orderId)
+        {
+            var order = await this.context.Orders.FirstOrDefaultAsync(x => x.Id == orderId && x.IsActive);
 
             if (order is not null)
             {
