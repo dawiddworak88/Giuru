@@ -74,11 +74,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 
             if (componentModel.Id.HasValue)
             {
-                if (order.OrderStatusId == OrdersConstants.OrderStatuses.NewId)
-                {
-                    viewModel.CanCancelOrder = true;
-                }
-
                 var order = await this.ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                 if (order is not null)
@@ -104,6 +99,11 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         ImageAlt = x.ProductName,
                         ImageSrc = x.PictureUrl
                     });
+
+                    if (order.OrderStatusId == OrdersConstants.OrderStatuses.NewId)
+                    {
+                        viewModel.CanCancelOrder = true;
+                    }
                 }
 
                 var orderFiles = await this.ordersRepository.GetOrderFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(OrderFile.CreatedDate)} desc");
