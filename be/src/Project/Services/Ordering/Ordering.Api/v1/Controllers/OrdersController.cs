@@ -92,6 +92,7 @@ namespace Ordering.Api.v1.Controllers
         /// <summary>
         /// Gets list of orders.
         /// </summary>
+        /// <param name="ids">The orders ids.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
@@ -102,100 +103,196 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string orderBy, DateTime? createdDateGreaterThan)
+        public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy, DateTime? createdDateGreaterThan)
         {
+            var ordersIds = ids.ToEnumerableGuidIds();
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new GetOrdersServiceModel
+            if (ordersIds is not null)
             {
-                Language = CultureInfo.CurrentCulture.Name,
-                SearchTerm = searchTerm,
-                PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage,
-                OrderBy = orderBy,
-                CreatedDateGreaterThan = createdDateGreaterThan,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                IsSeller = this.User.IsInRole("Seller")
-            };
-
-            var validator = new GetOrdersModelValidator();
-
-            var validationResult = await validator.ValidateAsync(serviceModel);
-
-            if (validationResult.IsValid)
-            {
-                var orders = await this.ordersService.GetAsync(serviceModel);
-
-                if (orders != null)
+                var serviceModel = new GetOrdersByIdsServiceModel
                 {
-                    var response = new PagedResults<IEnumerable<OrderResponseModel>>(orders.Total, orders.PageSize)
+                    Ids = ordersIds,
+                    SearchTerm = searchTerm,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    OrderBy = orderBy,
+                    CreatedDateGreaterThan = createdDateGreaterThan,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    Language = CultureInfo.CurrentCulture.Name,
+                    IsSeller = this.User.IsInRole("Seller")
+                };
+
+                var validator = new GetOrdersByIdsModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var orders = await this.ordersService.GetAsync(serviceModel);
+
+                    if (orders is not null)
                     {
-                        Data = orders.Data.OrEmptyIfNull().Select(x => new OrderResponseModel
+                        var response = new PagedResults<IEnumerable<OrderResponseModel>>(orders.Total, orders.PageSize)
                         {
-                            Id = x.Id,
-                            ClientId = x.ClientId,
-                            ClientName = x.ClientName,
-                            BillingAddressId = x.BillingAddressId,
-                            BillingCity = x.BillingCity,
-                            BillingCompany = x.BillingCompany,
-                            BillingCountryCode = x.BillingCountryCode,
-                            BillingFirstName = x.BillingFirstName,
-                            BillingLastName = x.BillingLastName,
-                            BillingPhone = x.BillingPhone,
-                            BillingPhonePrefix = x.BillingPhonePrefix,
-                            BillingPostCode = x.BillingPostCode,
-                            BillingRegion = x.BillingRegion,
-                            BillingStreet = x.BillingStreet,
-                            ShippingAddressId = x.ShippingAddressId,
-                            ShippingCity = x.ShippingCity,
-                            ShippingCompany = x.ShippingCompany,
-                            ShippingCountryCode = x.ShippingCountryCode,
-                            ShippingFirstName = x.ShippingFirstName,
-                            ShippingLastName = x.ShippingLastName,
-                            ShippingPhone = x.ShippingPhone,
-                            ShippingPhonePrefix = x.ShippingPhonePrefix,
-                            ShippingPostCode = x.ShippingPostCode,
-                            ShippingRegion = x.ShippingRegion,
-                            ShippingStreet = x.ShippingStreet,
-                            ExpectedDeliveryDate = x.ExpectedDeliveryDate,
-                            MoreInfo = x.MoreInfo,
-                            Reason = x.Reason,
-                            OrderStateId = x.OrderStateId,
-                            OrderStatusId = x.OrderStatusId,
-                            OrderStatusName = x.OrderStatusName,
-                            OrderItems = x.OrderItems.Select(y => new OrderItemResponseModel
+                            Data = orders.Data.OrEmptyIfNull().Select(x => new OrderResponseModel
                             {
-                                Id = y.Id,
-                                ProductId = y.ProductId,
-                                ProductSku = y.ProductSku,
-                                ProductName = y.ProductName,
-                                PictureUrl = y.PictureUrl,
-                                Quantity = y.Quantity,
-                                StockQuantity = y.StockQuantity,
-                                OutletQuantity = y.OutletQuantity,
-                                ExternalReference = y.ExternalReference,
-                                ExpectedDeliveryFrom = y.ExpectedDeliveryFrom,
-                                ExpectedDeliveryTo = y.ExpectedDeliveryTo,
-                                MoreInfo = y.MoreInfo,
-                                OrderItemStateId = y.OrderItemStateId,
-                                OrderItemStatusId = y.OrderItemStatusId,
-                                OrderItemStatusName = y.OrderItemStatusName,
-                                OrderItemStatusChangeComment = y.OrderItemStatusChangeComment,
-                                LastModifiedDate = y.LastModifiedDate,
-                                CreatedDate = y.CreatedDate
-                            }),
-                            Attachments = x.Attachments,
-                            LastModifiedDate = x.LastModifiedDate,
-                            CreatedDate = x.CreatedDate
-                        })
-                    };
+                                Id = x.Id,
+                                ClientId = x.ClientId,
+                                ClientName = x.ClientName,
+                                BillingAddressId = x.BillingAddressId,
+                                BillingCity = x.BillingCity,
+                                BillingCompany = x.BillingCompany,
+                                BillingCountryCode = x.BillingCountryCode,
+                                BillingFirstName = x.BillingFirstName,
+                                BillingLastName = x.BillingLastName,
+                                BillingPhone = x.BillingPhone,
+                                BillingPhonePrefix = x.BillingPhonePrefix,
+                                BillingPostCode = x.BillingPostCode,
+                                BillingRegion = x.BillingRegion,
+                                BillingStreet = x.BillingStreet,
+                                ShippingAddressId = x.ShippingAddressId,
+                                ShippingCity = x.ShippingCity,
+                                ShippingCompany = x.ShippingCompany,
+                                ShippingCountryCode = x.ShippingCountryCode,
+                                ShippingFirstName = x.ShippingFirstName,
+                                ShippingLastName = x.ShippingLastName,
+                                ShippingPhone = x.ShippingPhone,
+                                ShippingPhonePrefix = x.ShippingPhonePrefix,
+                                ShippingPostCode = x.ShippingPostCode,
+                                ShippingRegion = x.ShippingRegion,
+                                ShippingStreet = x.ShippingStreet,
+                                ExpectedDeliveryDate = x.ExpectedDeliveryDate,
+                                MoreInfo = x.MoreInfo,
+                                Reason = x.Reason,
+                                OrderStateId = x.OrderStateId,
+                                OrderStatusId = x.OrderStatusId,
+                                OrderStatusName = x.OrderStatusName,
+                                OrderItems = x.OrderItems.Select(y => new OrderItemResponseModel
+                                {
+                                    Id = y.Id,
+                                    ProductId = y.ProductId,
+                                    ProductSku = y.ProductSku,
+                                    ProductName = y.ProductName,
+                                    PictureUrl = y.PictureUrl,
+                                    Quantity = y.Quantity,
+                                    StockQuantity = y.StockQuantity,
+                                    OutletQuantity = y.OutletQuantity,
+                                    ExternalReference = y.ExternalReference,
+                                    ExpectedDeliveryFrom = y.ExpectedDeliveryFrom,
+                                    ExpectedDeliveryTo = y.ExpectedDeliveryTo,
+                                    MoreInfo = y.MoreInfo,
+                                    OrderItemStateId = y.OrderItemStateId,
+                                    OrderItemStatusId = y.OrderItemStatusId,
+                                    OrderItemStatusName = y.OrderItemStatusName,
+                                    OrderItemStatusChangeComment = y.OrderItemStatusChangeComment,
+                                    LastModifiedDate = y.LastModifiedDate,
+                                    CreatedDate = y.CreatedDate
+                                }),
+                                Attachments = x.Attachments,
+                                LastModifiedDate = x.LastModifiedDate,
+                                CreatedDate = x.CreatedDate
+                            })
+                        };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                    }
                 }
-            }
 
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
+            else
+            {
+                var serviceModel = new GetOrdersServiceModel
+                {
+                    Language = CultureInfo.CurrentCulture.Name,
+                    SearchTerm = searchTerm,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    OrderBy = orderBy,
+                    CreatedDateGreaterThan = createdDateGreaterThan,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    IsSeller = this.User.IsInRole("Seller")
+                };
+
+                var validator = new GetOrdersModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var orders = await this.ordersService.GetAsync(serviceModel);
+
+                    if (orders is not null)
+                    {
+                        var response = new PagedResults<IEnumerable<OrderResponseModel>>(orders.Total, orders.PageSize)
+                        {
+                            Data = orders.Data.OrEmptyIfNull().Select(x => new OrderResponseModel
+                            {
+                                Id = x.Id,
+                                ClientId = x.ClientId,
+                                ClientName = x.ClientName,
+                                BillingAddressId = x.BillingAddressId,
+                                BillingCity = x.BillingCity,
+                                BillingCompany = x.BillingCompany,
+                                BillingCountryCode = x.BillingCountryCode,
+                                BillingFirstName = x.BillingFirstName,
+                                BillingLastName = x.BillingLastName,
+                                BillingPhone = x.BillingPhone,
+                                BillingPhonePrefix = x.BillingPhonePrefix,
+                                BillingPostCode = x.BillingPostCode,
+                                BillingRegion = x.BillingRegion,
+                                BillingStreet = x.BillingStreet,
+                                ShippingAddressId = x.ShippingAddressId,
+                                ShippingCity = x.ShippingCity,
+                                ShippingCompany = x.ShippingCompany,
+                                ShippingCountryCode = x.ShippingCountryCode,
+                                ShippingFirstName = x.ShippingFirstName,
+                                ShippingLastName = x.ShippingLastName,
+                                ShippingPhone = x.ShippingPhone,
+                                ShippingPhonePrefix = x.ShippingPhonePrefix,
+                                ShippingPostCode = x.ShippingPostCode,
+                                ShippingRegion = x.ShippingRegion,
+                                ShippingStreet = x.ShippingStreet,
+                                ExpectedDeliveryDate = x.ExpectedDeliveryDate,
+                                MoreInfo = x.MoreInfo,
+                                Reason = x.Reason,
+                                OrderStateId = x.OrderStateId,
+                                OrderStatusId = x.OrderStatusId,
+                                OrderStatusName = x.OrderStatusName,
+                                OrderItems = x.OrderItems.Select(y => new OrderItemResponseModel
+                                {
+                                    Id = y.Id,
+                                    ProductId = y.ProductId,
+                                    ProductSku = y.ProductSku,
+                                    ProductName = y.ProductName,
+                                    PictureUrl = y.PictureUrl,
+                                    Quantity = y.Quantity,
+                                    StockQuantity = y.StockQuantity,
+                                    OutletQuantity = y.OutletQuantity,
+                                    ExternalReference = y.ExternalReference,
+                                    ExpectedDeliveryFrom = y.ExpectedDeliveryFrom,
+                                    ExpectedDeliveryTo = y.ExpectedDeliveryTo,
+                                    MoreInfo = y.MoreInfo,
+                                    OrderItemStateId = y.OrderItemStateId,
+                                    OrderItemStatusId = y.OrderItemStatusId,
+                                    OrderItemStatusName = y.OrderItemStatusName,
+                                    OrderItemStatusChangeComment = y.OrderItemStatusChangeComment,
+                                    LastModifiedDate = y.LastModifiedDate,
+                                    CreatedDate = y.CreatedDate
+                                }),
+                                Attachments = x.Attachments,
+                                LastModifiedDate = x.LastModifiedDate,
+                                CreatedDate = x.CreatedDate
+                            })
+                        };
+
+                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                    }
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
         }
 
         /// <summary>
