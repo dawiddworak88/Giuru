@@ -8,32 +8,32 @@ using Seller.Web.Areas.Products.ComponentModels;
 
 namespace Seller.Web.Areas.ModelBuilders.Products
 {
-    public class DuplicateProductPageModelBuilder : IAsyncComponentModelBuilder<DuplicateProductComponentModel, ProductPageViewModel>
+    public class DuplicateCategoryPageModelBuilder : IAsyncComponentModelBuilder<DuplicateCategoryComponentModel, CategoryPageViewModel>
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<DuplicateProductComponentModel, ProductFormViewModel> duplicateProductFormModelBuilder;
+        private readonly IAsyncComponentModelBuilder<DuplicateCategoryComponentModel, CategoryFormViewModel> duplicateCategoryFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
-        public DuplicateProductPageModelBuilder(
+        public DuplicateCategoryPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IAsyncComponentModelBuilder<DuplicateProductComponentModel, ProductFormViewModel> productFormModelBuilder,
+            IAsyncComponentModelBuilder<DuplicateCategoryComponentModel, CategoryFormViewModel> duplicateCategoryFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.duplicateProductFormModelBuilder = productFormModelBuilder;
+            this.duplicateCategoryFormModelBuilder = duplicateCategoryFormModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
 
-        public async Task<ProductPageViewModel> BuildModelAsync(DuplicateProductComponentModel componentModel)
+        public async Task<CategoryPageViewModel> BuildModelAsync(DuplicateCategoryComponentModel componentModel)
         {
-            var viewModel = new ProductPageViewModel
+            var viewModel = new CategoryPageViewModel
             {
                 Header = this.headerModelBuilder.BuildModel(),
                 MenuTiles = this.menuTilesModelBuilder.BuildModel(),
-                ProductForm = await this.duplicateProductFormModelBuilder.BuildModelAsync(componentModel),
+                CategoryForm = await this.duplicateCategoryFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = this.footerModelBuilder.BuildModel()
             };
 

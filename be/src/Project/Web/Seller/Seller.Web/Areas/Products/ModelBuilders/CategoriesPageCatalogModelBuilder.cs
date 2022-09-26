@@ -49,6 +49,7 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
             
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DuplicateUrl = this.linkGenerator.GetPathByAction("Duplicate", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(Category.CreatedDate)} desc";
 
@@ -71,6 +72,10 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
                     new CatalogActionViewModel
                     {
                         IsDelete = true
+                    },
+                    new CatalogActionViewModel
+                    {
+                        IsDuplicate = true
                     }
                 },
                 Properties = new List<CatalogPropertyViewModel>
