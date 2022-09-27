@@ -101,6 +101,14 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                             };
                         }
                     }
+
+                    var categorySchema = await this.categoriesRepository.GetCategorySchemaAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+
+                    if (categorySchema is not null)
+                    {
+                        viewModel.Schema = categorySchema.Schema;
+                        viewModel.UiSchema = categorySchema.UiSchema;
+                    }
                 }
             }
 

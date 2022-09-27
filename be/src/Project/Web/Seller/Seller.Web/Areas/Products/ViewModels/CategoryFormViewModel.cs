@@ -27,6 +27,8 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string CategoriesUrl { get; set; }
         public string NavigateToCategoriesLabel { get; set; }
         public string IdLabel { get; set; }
+        public string Schema { get; set; }
+        public string UiSchema { get; set; }
         public IEnumerable<ListItemViewModel> ParentCategories { get; set; }
     }
 }

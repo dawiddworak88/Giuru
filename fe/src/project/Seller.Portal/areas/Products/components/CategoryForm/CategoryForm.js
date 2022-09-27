@@ -10,16 +10,17 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 
 function CategoryForm(props) {
     const [state, dispatch] = useContext(Context);
-    const stateSchema = {
 
+    const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
         parentCategoryId: { value: props.parentCategoryId ? props.parentCategoryId : "" },
-        files: { value: props.files ? props.files : [] }
+        files: { value: props.files ? props.files : [] },
+        schema: { value: props.schema ? JSON.parse(props.schema) : {} },
+        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : {} },
     };
 
     const stateValidatorSchema = {
-
         name: {
             required: {
                 isRequired: true,
@@ -29,13 +30,21 @@ function CategoryForm(props) {
     };
 
     function onSubmitForm(state) {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const requestPayload = {
+            id,
+            name,
+            parentCategoryId,
+            files,
+            schema: JSON.stringify(schema),
+            uiSchema: JSON.stringify(uiSchema)
+        }
 
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(state)
+            body: JSON.stringify(requestPayload)
         };
 
         fetch(props.saveUrl, requestOptions)
@@ -62,16 +71,11 @@ function CategoryForm(props) {
     }
 
     const {
-        values,
-        errors,
-        dirty,
-        disable,
-        setFieldValue,
-        handleOnChange,
-        handleOnSubmit
+        values, errors, dirty, disable, 
+        setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, parentCategoryId, files } = values;
+    const { id, name, parentCategoryId, files, schema, uiSchema } = values;
 
     return (
         <section className="section section-small-padding category">
@@ -152,6 +156,8 @@ CategoryForm.propTypes = {
     name: PropTypes.string,
     parentCategoryId: PropTypes.string,
     files: PropTypes.array,
+    uiSchema: PropTypes.object,
+    schema: PropTypes.object,
     selectCategoryLabel: PropTypes.string.isRequired,
     parentCategoryLabel: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,

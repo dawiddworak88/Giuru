@@ -65,24 +65,18 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 NavigateToCategoriesLabel = this.productLocalizer.GetString("NavigateToCategoriesLabel")
             };
 
-            var parentCategories = await this.categoriesRepository.GetAllCategoriesAsync(
-                componentModel.Token,
-                componentModel.Language,
-                null, $"{nameof(Category.Level)}");
+            var parentCategories = await this.categoriesRepository.GetAllCategoriesAsync(componentModel.Token, componentModel.Language, null, $"{nameof(Category.Level)}");
 
-            if (parentCategories != null)
+            if (parentCategories is not null)
             {
                 viewModel.ParentCategories = parentCategories.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
             if (componentModel.Id.HasValue)
             {
-                var category = await this.categoriesRepository.GetCategoryAsync(
-                    componentModel.Token,
-                    componentModel.Language,
-                    componentModel.Id);
+                var category = await this.categoriesRepository.GetCategoryAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
-                if (category != null)
+                if (category is not null)
                 {
                     viewModel.Id = category.Id;
                     viewModel.Name = category.Name;
@@ -90,12 +84,9 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                     if (category.ThumbnailMediaId.HasValue)
                     {
-                        var mediaItem = await this.mediaItemsRepository.GetMediaItemAsync(
-                            componentModel.Token, 
-                            componentModel.Language,
-                            category.ThumbnailMediaId.Value);
+                        var mediaItem = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, category.ThumbnailMediaId.Value);
 
-                        if (mediaItem != null)
+                        if (mediaItem is not null)
                         {
                             viewModel.Files = new List<FileViewModel>
                             {
