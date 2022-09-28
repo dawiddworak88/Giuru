@@ -651,9 +651,6 @@
   <data name="SelectFile" xml:space="preserve">
     <value>Select file</value>
   </data>
-  <data name="Thumbnail" xml:space="preserve">
-    <value>Thumbnail</value>
-  </data>
   <data name="QRCode" xml:space="preserve">
     <value>QR Code</value>
   </data>
