@@ -101,7 +101,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 }
             }
 
-            var basket = await this.basketRepository.SaveAsync(token, language, model.Id, basketItems);
+            var basket = await this.basketRepository.SaveAsync(token, language, model.BasketId, basketItems);
 
             var basketResponseModel = new BasketResponseModel
             {
