@@ -569,7 +569,8 @@ namespace Ordering.Api.v1.Controllers
                 OrderItems = request.OrderItems.OrEmptyIfNull().Select(x => new UpdateOrderItemsStatusServiceModel
                 {
                     Id = x.Id,
-                    StatusId = x.StatusId
+                    StatusId = x.StatusId,
+                    StatusChangeComment = x.StatusChangeComment
                 })
             };
 

@@ -759,6 +759,18 @@ namespace Ordering.Api.Services
                         orderItem.LastOrderItemStatusChangeId = orderItemStatusChange.Id;
                         orderItem.LastModifiedDate = DateTime.UtcNow;
 
+                        if (item.StatusChangeComment is not null)
+                        {
+                            var orderItemStatusChangeTranslation = new OrderItemStatusChangeCommentTranslation
+                            {
+                                OrderItemStatusChangeComment = item.StatusChangeComment,
+                                Language = model.Language,
+                                OrderItemStatusChangeId = orderItemStatusChange.Id
+                            };
+
+                            await this.context.OrderItemStatusChangesCommentTranslations.AddAsync(orderItemStatusChangeTranslation.FillCommonProperties());
+                        }
+
                         await this.context.SaveChangesAsync();
                         await this.MapStatusesToOrderStatusId(orderItem.OrderId);
                     }

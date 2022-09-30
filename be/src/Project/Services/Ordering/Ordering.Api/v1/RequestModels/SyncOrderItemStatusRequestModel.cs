@@ -6,5 +6,6 @@ namespace Ordering.Api.v1.RequestModels
     {
         public Guid Id { get; set; }
         public Guid StatusId { get; set; }
+        public string StatusChangeComment { get; set; }
     }
 }
