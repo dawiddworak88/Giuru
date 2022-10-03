@@ -570,7 +570,8 @@ namespace Ordering.Api.v1.Controllers
                 {
                     Id = x.Id,
                     StatusId = x.StatusId,
-                    StatusChangeComment = x.StatusChangeComment
+                    StatusChangeComment = x.StatusChangeComment,
+                    Language = x.Language
                 })
             };
 

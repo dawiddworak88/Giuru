@@ -764,7 +764,7 @@ namespace Ordering.Api.Services
                             var orderItemStatusChangeTranslation = new OrderItemStatusChangeCommentTranslation
                             {
                                 OrderItemStatusChangeComment = item.StatusChangeComment,
-                                Language = model.Language,
+                                Language = item.Language,
                                 OrderItemStatusChangeId = orderItemStatusChange.Id
                             };
 
