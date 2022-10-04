@@ -11,6 +11,7 @@ using Seller.Web.Areas.Categories.Repositories;
 using Seller.Web.Areas.ProductAttributes.Repositories;
 using Seller.Web.Areas.ProductAttributeItems.ModelBuilders;
 using Seller.Web.Areas.Products.ComponentModels;
+using Seller.Web.Areas.Products.ModelBuilders;
 
 namespace Seller.Web.Areas.Products.DependencyInjection
 {
@@ -42,6 +43,7 @@ namespace Seller.Web.Areas.Products.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<DuplicateCategoryComponentModel, CategoryPageViewModel>, DuplicateCategoryPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<DuplicateCategoryComponentModel, CategoryFormViewModel>, DuplicateCategoryFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Product>>, ProductsPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CategoryBaseFormViewModel>, CategoryBaseFormModelBuilder>();
         }
     }
 }

@@ -10,6 +10,7 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 
 function CategoryForm(props) {
     const [state, dispatch] = useContext(Context);
+    const { categoryBase } = props;
 
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -24,7 +25,7 @@ function CategoryForm(props) {
         name: {
             required: {
                 isRequired: true,
-                error: props.nameRequiredErrorMessage
+                error: categoryBase.nameRequiredErrorMessage
             }
         }
     };
@@ -61,40 +62,40 @@ function CategoryForm(props) {
                         toast.success(jsonResponse.message);
                     }
                     else {
-                        toast.error(props.generalErrorMessage);
+                        toast.error(categoryBase.generalErrorMessage);
                     }
                 });
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
+                toast.error(categoryBase.generalErrorMessage);
             });
     }
 
     const {
         values, errors, dirty, disable, 
         setFieldValue, handleOnChange, handleOnSubmit
-    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
+    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !categoryBase.id);
 
     const { id, name, parentCategoryId, files, schema, uiSchema } = values;
 
     return (
         <section className="section section-small-padding category">
-            <h1 className="subtitle is-4">{props.title}</h1>
+            <h1 className="subtitle is-4">{categoryBase.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
                             <div className="field">
-                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                                <InputLabel id="id-label">{categoryBase.idLabel} {id}</InputLabel>
                             </div>
                         }
                         <div className="field">
-                            <TextField id="name" name="name" label={props.nameLabel} fullWidth={true} variant="standard"
+                            <TextField id="name" name="name" label={categoryBase.nameLabel} fullWidth={true} variant="standard"
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} variant="standard">
-                                <InputLabel id="parent-category">{props.parentCategoryLabel}</InputLabel>
+                                <InputLabel id="parent-category">{categoryBase.parentCategoryLabel}</InputLabel>
                                 <Select
                                     labelId="parent-category"
                                     id="parentCategoryId"
@@ -102,7 +103,7 @@ function CategoryForm(props) {
                                     value={parentCategoryId}
                                     onChange={handleOnChange}>
                                     <MenuItem value="">&nbsp;</MenuItem>
-                                    {props.parentCategories && props.parentCategories.map(category =>
+                                    {categoryBase.parentCategories && categoryBase.parentCategories.map(category =>
                                         <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
                                     )}
                                 </Select>
@@ -112,16 +113,16 @@ function CategoryForm(props) {
                             <MediaCloud
                                 id="files"
                                 name="files"
-                                label={props.productPicturesLabel}
+                                label={categoryBase.productPicturesLabel}
                                 accept=".png, .jpg"
                                 multiple={false}
-                                generalErrorMessage={props.generalErrorMessage}
-                                deleteLabel={props.deleteLabel}
-                                dropFilesLabel={props.dropFilesLabel}
-                                dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
+                                generalErrorMessage={categoryBase.generalErrorMessage}
+                                deleteLabel={categoryBase.deleteLabel}
+                                dropFilesLabel={categoryBase.dropFilesLabel}
+                                dropOrSelectFilesLabel={categoryBase.dropOrSelectFilesLabel}
                                 files={files}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={categoryBase.saveMediaUrl} />
                         </div>
                         <div className="field">
                             <Button 
@@ -129,7 +130,7 @@ function CategoryForm(props) {
                                 variant="contained" 
                                 color="primary" 
                                 disabled={state.isLoading || disable}>
-                                {props.saveText}
+                                {categoryBase.saveText}
                             </Button>
                             <Button
                                 className="ml-2"
@@ -138,9 +139,9 @@ function CategoryForm(props) {
                                 color="secondary"
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    NavigationHelper.redirect(props.categoriesUrl);
+                                    NavigationHelper.redirect(categoryBase.categoriesUrl);
                                 }}>
-                                {props.navigateToCategoriesLabel}
+                                {categoryBase.navigateToCategoriesLabel}
                             </Button>
                         </div>
                     </form>
@@ -158,20 +159,7 @@ CategoryForm.propTypes = {
     files: PropTypes.array,
     uiSchema: PropTypes.object,
     schema: PropTypes.object,
-    selectCategoryLabel: PropTypes.string.isRequired,
-    parentCategoryLabel: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    nameLabel: PropTypes.string.isRequired,
-    saveText: PropTypes.string.isRequired,
-    generalErrorMessage: PropTypes.string.isRequired,
-    parentCategories: PropTypes.array.isRequired,
-    dropOrSelectFilesLabel: PropTypes.string.isRequired,
-    dropFilesLabel: PropTypes.string.isRequired,
-    saveMediaUrl: PropTypes.string.isRequired,
-    deleteLabel: PropTypes.string.isRequired,
-    categoryPictureLabel: PropTypes.string.isRequired,
-    saveUrl: PropTypes.string.isRequired,
-    idLabel: PropTypes.string
+    categoryBase: PropTypes.object
 };
 
 export default CategoryForm;
