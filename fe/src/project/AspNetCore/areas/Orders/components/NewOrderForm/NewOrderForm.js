@@ -252,12 +252,18 @@ function NewOrderForm(props) {
 
             const requestOptions = {
                 method: "POST",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 body: formData
             };
 
             fetch(props.uploadOrderFileUrl, requestOptions)
                 .then(function (response) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                    AuthenticationHelper.HandleResponse(response);
+
                     return response.json().then((jsonResponse) => {
                         if (response.ok) {
                             setBasketId(jsonResponse.id)
