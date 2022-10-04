@@ -17,6 +17,7 @@ using Foundation.Localization.Definitions;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Foundation.Mailing.DependencyInjection;
+using Foundation.Extensions.Formatters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,7 +57,7 @@ builder.Services.AddControllers(options =>
 {
     options.RespectBrowserAcceptHeader = true;
     options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
+}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters().AddCsvSerializerFormatters();
 
 builder.Services.AddLocalization();
 

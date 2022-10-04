@@ -18,6 +18,7 @@ using Media.Api.Services.Checksums;
 using Foundation.Extensions.Filters;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
+using Foundation.Extensions.Formatters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,7 +60,7 @@ builder.Services.AddControllers(options =>
 {
     options.RespectBrowserAcceptHeader = true;
     options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
+}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters().AddCsvSerializerFormatters();
 
 builder.Services.AddLocalization();
 
