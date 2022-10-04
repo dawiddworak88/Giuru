@@ -22,14 +22,14 @@ namespace Buyer.Web.Areas.Orders.Controllers
     [Authorize]
     public class OrderController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusPageViewModel> editOrderPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusPageViewModel> orderStatusPageModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder;
 
         public OrderController(
-            IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusPageViewModel> editOrderPageModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusPageViewModel> orderStatusPageModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder)
         {
-            this.editOrderPageModelBuilder = editOrderPageModelBuilder;
+            this.orderStatusPageModelBuilder = orderStatusPageModelBuilder;
             this.orderPageModelBuilder = orderPageModelBuilder;
         }
 
@@ -62,7 +62,7 @@ namespace Buyer.Web.Areas.Orders.Controllers
                 Name = this.User.Identity.Name
             };
 
-            var viewModel = await this.editOrderPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await this.orderStatusPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
         }
