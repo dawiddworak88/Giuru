@@ -6,6 +6,7 @@
 	<NoWarn>$(NoWarn);1591</NoWarn>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..\..</DockerfileContext>
+    <UserSecretsId>d6730361-68a2-4e41-81a6-496b3a41c5d7</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
