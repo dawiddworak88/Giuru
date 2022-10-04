@@ -40,6 +40,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         public async Task<CatalogOrderViewModel<Order>> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogOrderViewModel<Order>, Order>();
+
             viewModel.Title = this.orderLocalizer.GetString("Orders");
             viewModel.NewText = this.orderLocalizer.GetString("NewOrder");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });

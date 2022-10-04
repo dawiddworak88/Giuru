@@ -10,9 +10,9 @@ import ApplicationPage from "../../src/project/AspNetCore/areas/Home/pages/Appli
 import OutletCatalogPage from "../../src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage";
 import NewsItemDetails from "../../src/project/AspNetCore/areas/News/pages/NewsItemPage/NewsItemPage";
 import NewsBuyerPage from "../../src/project/AspNetCore/areas/News/pages/NewsPage/NewsPage";
-import NewOrderPage from "../../src/project/AspNetCore/areas/Orders/pages/NewOrder/NewOrderPage";
-import ListOrdersPage from "../../src/project/AspNetCore/areas/Orders/pages/ListOrders/ListOrdersPage";
-import StatusOrderPage from "../../src/project/AspNetCore/areas/Orders/pages/StatusOrder/StatusOrderPage";
+import BuyerOrderPage from "../../src/project/AspNetCore/areas/Orders/pages/OrderPage/OrderPage";
+import BuyerOrdersPage from "../../src/project/AspNetCore/areas/Orders/pages/OrdersPage/OrdersPage";
+import BuyerOrderStatusPage from "../../src/project/AspNetCore/areas/Orders/pages/OrderStatusPage/OrderStatusPage";
 import HomePage from "../../src/project/AspNetCore/areas/Home/pages/HomePage/HomePage";
 import CategoryPage from "../../src/project/AspNetCore/areas/Products/pages/CategoryPage/CategoryPage";
 import SearchProductsPage from "../../src/project/AspNetCore/areas/Products/pages/SearchProductsPage/SearchProductsPage";
@@ -56,7 +56,7 @@ import WarehousePage from "../../src/project/Seller.Portal/areas/Inventory/pages
 import WarehousesPage from "../../src/project/Seller.Portal/areas/Inventory/pages/WarehousesPage/WarehousesPage";
 import OrdersPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrdersPage/OrdersPage";
 import OrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage";
-import EditOrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/EditOrderPage/EditOrderPage";
+import EditOrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderStatusPage/OrderStatusPage";
 import ClientsPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientsPage/ClientsPage";
 import ClientPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage";
 import ProductsPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductsPage/ProductsPage";
@@ -75,9 +75,9 @@ const Components = {
 	OutletCatalogPage,
 	NewsItemDetails,
 	NewsBuyerPage,
-	ListOrdersPage,
-	NewOrderPage,
-	StatusOrderPage,
+	BuyerOrderPage,
+	BuyerOrdersPage,
+	BuyerOrderStatusPage,
 	HomePage,
 	CategoryPage,
 	SearchProductsPage,

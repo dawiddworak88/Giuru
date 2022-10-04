@@ -19,14 +19,14 @@ namespace Seller.Web.Areas.Orders.Controllers
     public class OrderController : BaseController
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, EditOrderPageViewModel> editOrderPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusPageViewModel> orderStatusPageModelBuilder;
 
         public OrderController(
             IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, EditOrderPageViewModel> editOrderPageModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusPageViewModel> orderStatusPageModelBuilder)
         {
             this.orderPageModelBuilder = orderPageModelBuilder;
-            this.editOrderPageModelBuilder = editOrderPageModelBuilder;
+            this.orderStatusPageModelBuilder = orderStatusPageModelBuilder;
         }
 
         public async Task<IActionResult> Index()
@@ -43,7 +43,7 @@ namespace Seller.Web.Areas.Orders.Controllers
             return this.View(viewModel);
         }
 
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Status(Guid? id)
         {
             var componentModel = new ComponentModelBase
             {
@@ -53,7 +53,7 @@ namespace Seller.Web.Areas.Orders.Controllers
                 SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
             };
 
-            var viewModel = await this.editOrderPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await this.orderStatusPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
         }

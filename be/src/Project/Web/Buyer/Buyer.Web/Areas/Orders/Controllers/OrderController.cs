@@ -22,11 +22,11 @@ namespace Buyer.Web.Areas.Orders.Controllers
     [Authorize]
     public class OrderController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, StatusOrderPageViewModel> editOrderPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusPageViewModel> editOrderPageModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder;
 
         public OrderController(
-            IAsyncComponentModelBuilder<ComponentModelBase, StatusOrderPageViewModel> editOrderPageModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusPageViewModel> editOrderPageModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder)
         {
             this.editOrderPageModelBuilder = editOrderPageModelBuilder;

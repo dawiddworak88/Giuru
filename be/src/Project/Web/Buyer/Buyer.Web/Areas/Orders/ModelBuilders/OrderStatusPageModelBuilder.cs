@@ -9,34 +9,34 @@ using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Orders.ModelBuilders
 {
-    public class OrderPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel>
+    public class OrderStatusPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusPageViewModel>
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderFormViewModel> orderFormModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusDetailViewModel> orderStatusDetailModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
-        public OrderPageModelBuilder(
+        public OrderStatusPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, OrderFormViewModel> orderFormModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusDetailViewModel> orderStatusDetailModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
-            this.orderFormModelBuilder = orderFormModelBuilder;
+            this.orderStatusDetailModelBuilder = orderStatusDetailModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
             this.mainNavigationModelBuilder = mainNavigationModelBuilder;
         }
 
-        public async Task<OrderPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<OrderStatusPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new OrderPageViewModel
+            var viewModel = new OrderStatusPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
                 Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
-                OrderForm = await this.orderFormModelBuilder.BuildModelAsync(componentModel),
-                Footer = footerModelBuilder.BuildModel()
+                OrderStatusDetail = await this.orderStatusDetailModelBuilder.BuildModelAsync(componentModel),
+                Footer = this.footerModelBuilder.BuildModel()
             };
 
             return viewModel;

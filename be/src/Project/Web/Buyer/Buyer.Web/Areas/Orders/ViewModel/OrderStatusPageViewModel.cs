@@ -4,12 +4,12 @@ using Foundation.PageContent.Components.MainNavigations.ViewModels;
 
 namespace Buyer.Web.Areas.Orders.ViewModel
 {
-    public class OrderPageViewModel
+    public class OrderStatusPageViewModel
     {
         public string Locale { get; set; }
         public BuyerHeaderViewModel Header { get; set; }
         public MainNavigationViewModel MainNavigation { get; set; }
         public FooterViewModel Footer { get; set; }
-        public OrderFormViewModel OrderForm { get; set; }
+        public OrderStatusDetailViewModel OrderStatusDetail { get; set; }
     }
 }
