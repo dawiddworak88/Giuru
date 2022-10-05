@@ -423,9 +423,6 @@
   <data name="LastName" xml:space="preserve">
     <value>Last name</value>
   </data>
-  <data name="Thumbnail" xml:space="preserve">
-    <value>Thumbnail</value>
-  </data>
   <data name="BasketLabel" xml:space="preserve">
     <value>Add to cart</value>
   </data>

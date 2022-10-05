@@ -248,20 +248,25 @@ function NewOrderForm(props) {
             const formData = new FormData();
 
             formData.append("file", file);
+            formData.append("basketId", basketId)
 
             const requestOptions = {
                 method: "POST",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 body: formData
             };
 
             fetch(props.uploadOrderFileUrl, requestOptions)
                 .then(function (response) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                    AuthenticationHelper.HandleResponse(response);
+
                     return response.json().then((jsonResponse) => {
                         if (response.ok) {
-                            dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                            setBasketId(jsonResponse.id);
+                            setBasketId(jsonResponse.id)
                             setOrderItems([...orderItems, ...jsonResponse.items]);
                         }
                         else {
