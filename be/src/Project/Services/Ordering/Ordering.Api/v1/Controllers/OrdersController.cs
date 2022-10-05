@@ -450,7 +450,7 @@ namespace Ordering.Api.v1.Controllers
                         OrderItemStatusId = orderItem.OrderItemStatusId,
                         OrderItemStatusName = orderItem.OrderItemStatusName,
                         OrderItemStatusChangeComment = orderItem.OrderItemStatusChangeComment,
-                        LastOrderItemStatusChangeId = orderItem.LastOrderItemStatusChangeId.Value,
+                        LastOrderItemStatusChangeId = orderItem.LastOrderItemStatusChangeId,
                         LastModifiedDate = orderItem.LastModifiedDate,
                         CreatedDate = orderItem.CreatedDate
                     };
