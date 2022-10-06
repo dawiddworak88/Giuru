@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
@@ -41,6 +42,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<Client>, Client>();
 
             viewModel.Title = this.globalLocalizer.GetString("Clients");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
             viewModel.NewText = this.clientLocalizer.GetString("NewClient");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
@@ -102,7 +104,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.clientsRepository.GetClientsAsync(componentModel.Token, componentModel.Language, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, $"{nameof(Client.CreatedDate)} desc");
+            viewModel.PagedItems = await this.clientsRepository.GetClientsAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Client.CreatedDate)} desc");
 
             return viewModel;
         }

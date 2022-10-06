@@ -42,6 +42,8 @@ namespace Seller.Web.Areas.Media.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<MediaItem>, MediaItem>();
 
             viewModel.Title = this.mediaLocalizer.GetString("Media");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
+
             viewModel.NewText = this.mediaLocalizer.GetString("NewText");
             viewModel.IsAttachmentLabel = this.mediaLocalizer.GetString("IsAttachmentLabel");
 
