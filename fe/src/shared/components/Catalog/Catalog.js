@@ -286,8 +286,8 @@ function Catalog(props) {
                                                     }
                                                     else if (property.isDateTime){
                                                         return (
-                                                            <NoSsr>
-                                                                <TableCell key={index}>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
+                                                            <NoSsr key={index}>
+                                                                <TableCell>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
                                                             </NoSsr>
                                                         )
                                                     }
