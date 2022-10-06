@@ -7,11 +7,13 @@ import {
 } from "@mui/material";
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
+import { Context } from "../../stores/Store";
 import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
 import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
 import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 
 function Files(props) {
+    const [state, dispatch] = useContext(Context);
     const [files, setFiles] = useState(props.files ? props.files.data : []);
     const [total, setTotal] = useState(props.files ? props.files.total : 0);
     const [page, setPage] = useState(0);
@@ -27,7 +29,6 @@ function Files(props) {
 
         const searchParameters = {
             id: props.id,
-            searchTerm,
             pageIndex: newPage + 1,
             itemsPerPage: props.defaultPageSize
         };
