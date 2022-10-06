@@ -42,6 +42,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<ClientAccountManager>, ClientAccountManager>();
 
             viewModel.Title = this.clientLocalizer.GetString("ClientManagers");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
             viewModel.NewText = this.clientLocalizer.GetString("NewManager");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "ClientAccountManager", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });

@@ -1,22 +1,20 @@
 
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import moment from "moment";
-import { Plus, Tool } from "react-feather";
+import { Plus } from "react-feather";
 import {
-    Delete, Edit, FileCopyOutlined, Link,
-    QrCode2
+    Delete, Edit, FileCopyOutlined, Link, QrCode2
 } from "@mui/icons-material";
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, TablePagination, CircularProgress, Fab,
-    Tooltip
+    Tooltip, NoSsr
 } from "@mui/material";
 import KeyConstants from "../../constants/KeyConstants";
 import { Context } from "../../stores/Store";
 import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
-import PaginationConstants from "../../constants/PaginationConstants";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
 import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
@@ -25,9 +23,7 @@ import QRCodeDialog from "../QRCodeDialog/QRCodeDialog";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
-    const [isMounted, setMounted] = React.useState(false);
     const [page, setPage] = React.useState(0);
-    const [itemsPerPage,] = React.useState(PaginationConstants.defaultRowsPerPage());
     const [searchTerm, setSearchTerm] = React.useState("");
     const [items, setItems] = React.useState(props.pagedItems ? props.pagedItems.data : []);
     const [total, setTotal] = React.useState(props.pagedItems ? props.pagedItems.total : 0);
@@ -57,7 +53,7 @@ function Catalog(props) {
 
             searchTerm,
             pageIndex: newPage + 1,
-            itemsPerPage
+            itemsPerPage: props.defaultItemsPerPage
         };
 
         const requestOptions = {
@@ -97,7 +93,7 @@ function Catalog(props) {
 
             searchTerm,
             pageIndex: 1,
-            itemsPerPage
+            itemsPerPage: props.defaultItemsPerPage
         };
 
         const requestOptions = {
@@ -192,10 +188,6 @@ function Catalog(props) {
         setSelectedItem(item);
         setOpenQRCodeDialog(true);
     }
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
     
     return (
         <section className="section section-small-padding catalog">
@@ -294,7 +286,9 @@ function Catalog(props) {
                                                     }
                                                     else if (property.isDateTime){
                                                         return (
-                                                            <TableCell key={index}>{isMounted ? moment.utc(item[property.title]).local().format("L LT") : moment.utc(item[property.title]).format("L LT")}</TableCell>
+                                                            <NoSsr>
+                                                                <TableCell key={index}>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
+                                                            </NoSsr>
                                                         )
                                                     }
                                                     else {
@@ -311,12 +305,12 @@ function Catalog(props) {
                             <TablePagination
                                 labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
                                 labelRowsPerPage={props.rowsPerPageLabel}
-                                rowsPerPageOptions={[PaginationConstants.defaultRowsPerPage()]}
+                                rowsPerPageOptions={[props.defaultItemsPerPage]}
                                 component="div"
                                 count={total}
                                 page={page}
                                 onPageChange={handleChangePage}
-                                rowsPerPage={PaginationConstants.defaultRowsPerPage()}
+                                rowsPerPage={props.defaultItemsPerPage}
                             />
                         </div>
                     </div>) :
@@ -378,7 +372,8 @@ Catalog.propTypes = {
     table: PropTypes.object.isRequired,
     confirmationDialogDeleteNameProperty: PropTypes.array,
     generateQRCodeLabel: PropTypes.string.isRequired,
-    copyLinkLabel: PropTypes.string.isRequired
+    copyLinkLabel: PropTypes.string.isRequired,
+    defaultItemsPerPage: PropTypes.string.isRequired
 }
 
 export default Catalog;
