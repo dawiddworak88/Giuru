@@ -55,7 +55,7 @@ const componentProps = {
     ]
 }
 
-export const DashboardPageStory = () => <DashboardPage header={header} mainNavigation={mainNavigation} ordersAnalyticDetails={componentProps} footer={footer} />;
+export const DashboardPageStory = () => <DashboardPage header={header} mainNavigation={mainNavigation} ordersAnalyticsDetails={componentProps} footer={footer} />;
 
 DashboardPageStory.story = {
     name: "Analytics Dashboard"

@@ -7,7 +7,7 @@ import Header from "../../../../shared/components/Header/Header";
 import MainNavigation from "../../../../shared/components/MainNavigation/MainNavigation";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
-import OrdersAnalyticDetail from "../../components/OrdersAnalyticDetail";
+import OrdersAnalyticsDetail from "../../components/OrdersAnalyticsDetail";
 
 const DashboardPage = (props) => {
     
@@ -19,7 +19,7 @@ const DashboardPage = (props) => {
             <Store>
                 <Header {...props.header}/>
                 <MainNavigation {...props.mainNavigation} />
-                <OrdersAnalyticDetail {...props.ordersAnalyticDetails }/>
+                <OrdersAnalyticsDetail {...props.ordersAnalyticsDetails }/>
                 <Footer {...props.footer}/>
             </Store>
         </ThemeProvider>

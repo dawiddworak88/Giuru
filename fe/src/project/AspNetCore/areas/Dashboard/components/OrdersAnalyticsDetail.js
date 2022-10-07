@@ -1,15 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Chart as ChartJs, Title, CategoryScale, LinearScale, BarElement, PointElement, LineElement} from "chart.js";
 import { Line } from "react-chartjs-2";
+import { Chart as ChartJs, Title, CategoryScale, LinearScale, BarElement, PointElement, LineElement} from "chart.js";
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
-import ChartsConstants from "../../../shared/components/Charts/ChartsConstants";
 
 ChartJs.register(
     Title, CategoryScale, LinearScale, BarElement, PointElement, LineElement
 )
 
-const OrdersAnalyticDetail = (props) => {
+const OrdersAnalyticsDetail = (props) => {
     return (
         <div className="section container">
             <h1 className="title is-3">{props.title}</h1>
@@ -63,7 +62,7 @@ const OrdersAnalyticDetail = (props) => {
     )
 }
 
-OrdersAnalyticDetail.propTypes = {
+OrdersAnalyticsDetail.propTypes = {
     title: PropTypes.string.isRequired,
     productNameLabel: PropTypes.string.isRequired,
     noResultsLabel: PropTypes.string.isRequired,
@@ -73,4 +72,4 @@ OrdersAnalyticDetail.propTypes = {
     chartDatasets: PropTypes.array.isRequired
 }
 
-export default OrdersAnalyticDetail;
+export default OrdersAnalyticsDetail;
