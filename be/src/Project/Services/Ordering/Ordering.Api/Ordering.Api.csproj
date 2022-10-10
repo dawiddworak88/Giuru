@@ -49,4 +49,8 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\Media\Foundation.Media\Foundation.Media.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructure\Orders\Definitions\" />
+  </ItemGroup>
+
 </Project>
