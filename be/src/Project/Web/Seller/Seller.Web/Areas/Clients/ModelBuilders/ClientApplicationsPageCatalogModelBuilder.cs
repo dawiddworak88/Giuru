@@ -42,6 +42,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<ClientApplication>, ClientApplication>();
 
             viewModel.NewText = this.clientLocalizer.GetString("NewClientApplication");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
             viewModel.Title = this.clientLocalizer.GetString("ClientsApplications");
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ClientApplication", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });

@@ -42,6 +42,7 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<Category>, Category>();
 
             viewModel.Title = this.globalLocalizer.GetString("Categories");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
             viewModel.NewText = this.productLocalizer.GetString("AddCategory");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });

@@ -1,4 +1,6 @@
-﻿namespace Seller.Web.Areas.Orders.Definitions
+﻿using System;
+
+namespace Seller.Web.Areas.Orders.Definitions
 {
     public static class OrdersConstants
     {

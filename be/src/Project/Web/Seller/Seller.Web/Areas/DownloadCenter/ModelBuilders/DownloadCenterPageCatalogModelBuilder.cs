@@ -45,6 +45,8 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<DownloadCenterItem>, DownloadCenterItem>();
 
             viewModel.Title = this.globalLocalizer.GetString("DownloadCenter");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
+
             viewModel.NewText = this.downloadCenterLocalizer.GetString("NewDownloadCenter");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "DownloadCenterItem", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "DownloadCenterItem", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name });

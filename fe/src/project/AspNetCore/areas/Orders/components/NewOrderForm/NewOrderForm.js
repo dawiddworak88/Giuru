@@ -252,12 +252,18 @@ function NewOrderForm(props) {
 
             const requestOptions = {
                 method: "POST",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 body: formData
             };
 
             fetch(props.uploadOrderFileUrl, requestOptions)
                 .then(function (response) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                    AuthenticationHelper.HandleResponse(response);
+
                     return response.json().then((jsonResponse) => {
                         if (response.ok) {
                             setBasketId(jsonResponse.id)
@@ -417,54 +423,52 @@ function NewOrderForm(props) {
                         <div className="order__items">
                             {(orderItems && orderItems.length > 0) ? (
                                 <Fragment>
-                                    <section className="section">
-                                        <div className="order__items-table">
-                                            <TableContainer component={Paper}>
-                                                <Table aria-label={props.orderItemsLabel}>
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            {!isOrdered &&
-                                                                <TableCell></TableCell>
-                                                            }
+                                    <div className="order__items-table">
+                                        <TableContainer component={Paper}>
+                                            <Table aria-label={props.orderItemsLabel}>
+                                                <TableHead>
+                                                    <TableRow>
+                                                        {!isOrdered &&
                                                             <TableCell></TableCell>
-                                                            <TableCell>{props.skuLabel}</TableCell>
-                                                            <TableCell>{props.nameLabel}</TableCell>
-                                                            <TableCell>{props.quantityLabel}</TableCell>
-                                                            <TableCell>{props.stockQuantityLabel}</TableCell>
-                                                            <TableCell>{props.outletQuantityLabel}</TableCell>
-                                                            <TableCell>{props.externalReferenceLabel}</TableCell>
-                                                            <TableCell>{props.deliveryFromLabel}</TableCell>
-                                                            <TableCell>{props.deliveryToLabel}</TableCell>
-                                                            <TableCell>{props.moreInfoLabel}</TableCell>
+                                                        }
+                                                        <TableCell></TableCell>
+                                                        <TableCell>{props.skuLabel}</TableCell>
+                                                        <TableCell>{props.nameLabel}</TableCell>
+                                                        <TableCell>{props.quantityLabel}</TableCell>
+                                                        <TableCell>{props.stockQuantityLabel}</TableCell>
+                                                        <TableCell>{props.outletQuantityLabel}</TableCell>
+                                                        <TableCell>{props.externalReferenceLabel}</TableCell>
+                                                        <TableCell>{props.deliveryFromLabel}</TableCell>
+                                                        <TableCell>{props.deliveryToLabel}</TableCell>
+                                                        <TableCell>{props.moreInfoLabel}</TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {orderItems.map((item, index) => (
+                                                        <TableRow key={index}>
+                                                            {!isOrdered &&
+                                                                <TableCell width="11%">
+                                                                    <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
+                                                                        <Delete />
+                                                                    </Fab>
+                                                                </TableCell>
+                                                            }
+                                                            <TableCell><a href={item.productUrl} rel="noreferrer" target="_blank"><img className="order__basket-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
+                                                            <TableCell>{item.sku}</TableCell>
+                                                            <TableCell>{item.name}</TableCell>
+                                                            <TableCell>{item.quantity}</TableCell>
+                                                            <TableCell>{item.stockQuantity}</TableCell>
+                                                            <TableCell>{item.outletQuantity}</TableCell>
+                                                            <TableCell>{item.externalReference}</TableCell>
+                                                            <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
+                                                            <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
+                                                            <TableCell>{item.moreInfo}</TableCell>
                                                         </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {orderItems.map((item, index) => (
-                                                            <TableRow key={index}>
-                                                                {!isOrdered &&
-                                                                    <TableCell width="11%">
-                                                                        <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
-                                                                            <Delete />
-                                                                        </Fab>
-                                                                    </TableCell>
-                                                                }
-                                                                <TableCell><a href={item.productUrl} rel="noreferrer" target="_blank"><img className="order__basket-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
-                                                                <TableCell>{item.sku}</TableCell>
-                                                                <TableCell>{item.name}</TableCell>
-                                                                <TableCell>{item.quantity}</TableCell>
-                                                                <TableCell>{item.stockQuantity}</TableCell>
-                                                                <TableCell>{item.outletQuantity}</TableCell>
-                                                                <TableCell>{item.externalReference}</TableCell>
-                                                                <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
-                                                                <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
-                                                                <TableCell>{item.moreInfo}</TableCell>
-                                                            </TableRow>
-                                                        ))}
-                                                    </TableBody>
-                                                </Table>
-                                            </TableContainer>
-                                        </div>
-                                    </section>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </div>
                                 </Fragment>
                             ) : (
                                 <section className="section is-flex-centered has-text-centered is-flex-direction-column">
