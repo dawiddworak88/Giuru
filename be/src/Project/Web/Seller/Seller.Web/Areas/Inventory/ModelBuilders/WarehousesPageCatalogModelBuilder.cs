@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Foundation.Extensions.ExtensionMethods;
 using Seller.Web.Areas.Inventory.DomainModels;
 using Seller.Web.Areas.Inventory.Repositories.Warehouses;
+using Foundation.GenericRepository.Definitions;
 
 namespace Seller.Web.Areas.Inventory.ModelBuilders
 {
@@ -41,6 +42,8 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<Warehouse>, Warehouse>();
 
             viewModel.Title = this.warehouseLocalizer.GetString("Warehouses");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
+
             viewModel.NewText = this.warehouseLocalizer.GetString("NewText");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Warehouse", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Warehouse", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name});
@@ -95,7 +98,7 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.warehousesRepository.GetWarehousesAsync(componentModel.Token, componentModel.Language, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, $"{nameof(Warehouse.CreatedDate)} desc");
+            viewModel.PagedItems = await this.warehousesRepository.GetWarehousesAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Warehouse.CreatedDate)} desc");
 
             return viewModel;
         }

@@ -42,6 +42,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<ClientRole>, ClientRole>();
 
             viewModel.Title = this.clientLocalizer.GetString("ClientsRoles");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
             viewModel.NewText = this.globalLocalizer.GetString("NewRole");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "ClientRole", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });

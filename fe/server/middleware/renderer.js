@@ -5,6 +5,7 @@ import { ServerStyleSheets } from "@mui/styles";
 
 // AspNetCore
 import BuyerOrderItemPage from "../../src/project/AspNetCore/areas/Orders/pages/OrderItemPage/OrderItemPage";
+import BuyerDashboardPage from "../../src/project/AspNetCore/areas/Dashboard/pages/DashboardPage/DashboardPage";
 import DownloadCenterBuyerCategoryPage from "../../src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage";
 import DownloadCenterBuyerPage from "../../src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage";
 import ApplicationPage from "../../src/project/AspNetCore/areas/Home/pages/ApplicationPage/ApplicationPage";
@@ -72,6 +73,7 @@ import SettingsPage from "../../src/project/Seller.Portal/areas/Settings/pages/S
 
 const Components = {
 	BuyerOrderItemPage,
+	BuyerDashboardPage,
 	DownloadCenterBuyerCategoryPage,
 	DownloadCenterBuyerPage,
 	ApplicationPage,

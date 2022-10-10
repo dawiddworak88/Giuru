@@ -42,6 +42,8 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<TeamMember>, TeamMember>();
 
             viewModel.Title = this.globalLocalizer.GetString("TeamMembers");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
+
             viewModel.NewText = this.teamMemberLocalizer.GetString("NewText");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "TeamMember", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "TeamMember", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
