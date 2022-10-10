@@ -10,7 +10,7 @@ const OrderItemStatusChanges = (props) => {
     const { labels, statusChanges } = props;
     
     return (
-        props.statusChanges &&
+        statusChanges && statusChanges.length > 0 &&
             <div className="order-history mt-5 p-5">
                 <h3 className="title is-4">{labels.title}</h3>
                 <div className="table-container">
@@ -24,7 +24,7 @@ const OrderItemStatusChanges = (props) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {props.statusChanges.map((statusChange, index) => 
+                                {statusChanges.map((statusChange, index) => 
                                     <TableRow key={index}>
                                         <TableCell>{statusChange.orderItemStatusName}</TableCell>
                                         <TableCell>{statusChange.orderItemStatusChangeComment}</TableCell>
@@ -42,8 +42,8 @@ const OrderItemStatusChanges = (props) => {
 }
 
 OrderItemStatusChanges.propTypes = {
-    labels: PropTypes.object.isRequired,
-    statusChanges: PropTypes.array.isRequired
+    labels: PropTypes.object,
+    statusChanges: PropTypes.array
 }
 
 export default OrderItemStatusChanges;
