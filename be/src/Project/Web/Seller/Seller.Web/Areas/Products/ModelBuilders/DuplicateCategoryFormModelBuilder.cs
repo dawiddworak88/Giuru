@@ -1,6 +1,9 @@
 ﻿using Foundation.Extensions.ModelBuilders;
+using Foundation.Localization;
 using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
+using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Products.ComponentModels;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Areas.Products.ViewModels;
 using Seller.Web.Areas.Shared.Repositories.Media;
@@ -11,26 +14,29 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.ModelBuilders.Products
 {
-    public class CategoryFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoryFormViewModel>
+    public class DuplicateCategoryFormModelBuilder : IAsyncComponentModelBuilder<DuplicateCategoryComponentModel, CategoryFormViewModel>
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryBaseFormViewModel> categoryBaseFormModelBuilder;
         private readonly ICategoriesRepository categoriesRepository;
         private readonly IMediaItemsRepository mediaItemsRepository;
+        private readonly IStringLocalizer globalLocalizer;
         private readonly IMediaService mediaService;
 
-        public CategoryFormModelBuilder(
+        public DuplicateCategoryFormModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, CategoryBaseFormViewModel> categoryBaseFormModelBuilder,
             ICategoriesRepository categoriesRepository,
             IMediaItemsRepository mediaItemsRepository,
+            IStringLocalizer<GlobalResources> globalLocalizer,
             IMediaService mediaService)
         {
             this.categoriesRepository = categoriesRepository;
             this.mediaItemsRepository = mediaItemsRepository;
+            this.globalLocalizer = globalLocalizer;
             this.mediaService = mediaService;
             this.categoryBaseFormModelBuilder = categoryBaseFormModelBuilder;
         }
 
-        public async Task<CategoryFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<CategoryFormViewModel> BuildModelAsync(DuplicateCategoryComponentModel componentModel)
         {
             var viewModel = new CategoryFormViewModel
             {
@@ -43,13 +49,12 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                 if (category is not null)
                 {
-                    viewModel.Id = category.Id;
-                    viewModel.Name = category.Name;
+                    viewModel.Name = $"{category.Name} {this.globalLocalizer.GetString("Copy")}";
                     viewModel.ParentCategoryId = category.ParentId;
 
                     if (category.ThumbnailMediaId.HasValue)
                     {
-                        var mediaItem = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, category.ThumbnailMediaId.Value);
+                        var mediaItem = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token,componentModel.Language,category.ThumbnailMediaId.Value);
 
                         if (mediaItem is not null)
                         {
@@ -66,6 +71,14 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                                 }
                             };
                         }
+                    }
+
+                    var categorySchema = await this.categoriesRepository.GetCategorySchemaAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+
+                    if (categorySchema is not null)
+                    {
+                        viewModel.Schema = categorySchema.Schema;
+                        viewModel.UiSchema = categorySchema.UiSchema;
                     }
                 }
             }
