@@ -3,10 +3,9 @@ import PropTypes from "prop-types";
 import {
     Button, TextField
 } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/lab";
-import AdapterMoment from '@mui/lab/AdapterMoment';
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import OrderItemStatusChanges from "../../../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
+import moment from "moment";
 
 const OrderItemForm = (props) => {
     return (
@@ -14,7 +13,7 @@ const OrderItemForm = (props) => {
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
-                    {props.orderItemStatusId &&
+                    {props.orderItemStatusName &&
                         <div className="order-item__status">{props.orderStatusLabel}: {props.orderItemStatusName}</div>
                     }
                     <div className="mt-2 mb-3 order-item__image">
@@ -115,30 +114,30 @@ const OrderItemForm = (props) => {
                         />
                     </div>
                     <div className="field">
-                        <LocalizationProvider dateAdapter={AdapterMoment}>
-                            <DatePicker
-                                id="deliveryFrom"
-                                name="deliveryFrom"
-                                label={props.deliveryFromLabel}
-                                value={props.deliveryFrom}
-                                disableOpenPicker={true}
-                                renderInput={(params) => 
-                                    <TextField {...params} fullWidth={true} variant="standard" inputProps={{ readOnly: true }} />
-                                }/>
-                        </LocalizationProvider>
+                        <TextField 
+                            id="deliveryFrom" 
+                            name="deliveryFrom" 
+                            label={props.deliveryFromLabel}
+                            value={props.deliveryFrom ? moment(props.deliveryFrom).format("L") : ""}
+                            fullWidth={true}
+                            variant="standard"
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />
                     </div>
                     <div className="field">
-                            <LocalizationProvider dateAdapter={AdapterMoment}>
-                                <DatePicker
-                                    id="deliveryTo"
-                                    name="deliveryTo"
-                                    label={props.deliveryToLabel}
-                                    value={props.deliveryTo}
-                                    disableOpenPicker={true}
-                                    renderInput={(params) => 
-                                        <TextField {...params} fullWidth={true} variant="standard" inputProps={{ readOnly: true }}/>
-                                    }/>
-                            </LocalizationProvider>
+                        <TextField 
+                            id="deliveryTo" 
+                            name="deliveryTo" 
+                            label={props.deliveryToLabel}
+                            value={props.deliveryTo ? moment(props.deliveryTo).format("L") : ""}
+                            fullWidth={true}
+                            variant="standard"
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />
                     </div>
                     <div className="field">
                         <Button 
@@ -172,9 +171,11 @@ OrderItemForm.propTypes = {
     nameLabel: PropTypes.string.isRequired,
     quantityLabel: PropTypes.string.isRequired,
     stockQuantityLabel: PropTypes.string.isRequired,
-    outletQuantity: PropTypes.string.isRequired,
     orderStatusLabel: PropTypes.string.isRequired,
-    orderItemStatusName: PropTypes.string.isRequired,
+    orderItemStatusName: PropTypes.string,
+    outletQuantity: PropTypes.number,
+    stockQuantity: PropTypes.number,
+    quantity: PropTypes.number,
     orderStatusCommentLabel: PropTypes.string.isRequired,
     orderUrl: PropTypes.string.isRequired,
     navigateToOrderLabel: PropTypes.string.isRequired,

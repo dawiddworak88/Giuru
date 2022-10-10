@@ -6,16 +6,15 @@ import {
     FormControl, InputLabel, Select, MenuItem, 
     Button, TextField, CircularProgress
 } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/lab";
-import AdapterMoment from '@mui/lab/AdapterMoment';
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import OrderItemStatusChanges from "../../../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
+import moment from "moment";
 
 const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [orderItemStatusId, setOrderItemStatusId] = useState(props.orderItemStatusId ? props.orderItemStatusId : "");
-    const [orderItemStatusChangeComment, setOrderItemStatusChangeComment] = useState(null);
+    const [orderItemStatusChangeComment, setOrderItemStatusChangeComment] = useState("");
     const [orderItemStatusChanges, setOrderItemStatusChanges] = useState(props.statusChanges ? props.statusChanges : []);
 
     const handleSubmitForm = (e) => {
@@ -45,7 +44,7 @@ const OrderItemForm = (props) => {
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
-                        setOrderItemStatusChangeComment("");
+                        setOrderItemStatusChangeComment(null);
                         setOrderItemStatusChanges(jsonResponse.statusChanges);
                     }
                     else {
@@ -171,30 +170,30 @@ const OrderItemForm = (props) => {
                             />
                         </div>
                         <div className="field">
-                            <LocalizationProvider dateAdapter={AdapterMoment}>
-                                <DatePicker
-                                    id="deliveryFrom"
-                                    name="deliveryFrom"
-                                    label={props.deliveryFromLabel}
-                                    value={props.deliveryFrom}
-                                    disableOpenPicker={true}
-                                    renderInput={(params) => 
-                                        <TextField {...params} fullWidth={true} variant="standard" inputProps={{ readOnly: true }} />
-                                    }/>
-                            </LocalizationProvider>
+                            <TextField 
+                                id="deliveryFrom" 
+                                name="deliveryFrom" 
+                                label={props.deliveryFromLabel}
+                                value={props.deliveryFrom ? moment(props.deliveryFrom).format("L") : ""}
+                                fullWidth={true}
+                                variant="standard"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
                         </div>
                         <div className="field">
-                                <LocalizationProvider dateAdapter={AdapterMoment}>
-                                    <DatePicker
-                                        id="deliveryTo"
-                                        name="deliveryTo"
-                                        label={props.deliveryToLabel}
-                                        value={props.deliveryTo}
-                                        disableOpenPicker={true}
-                                        renderInput={(params) => 
-                                            <TextField {...params} fullWidth={true} variant="standard" inputProps={{ readOnly: true }}/>
-                                        }/>
-                                </LocalizationProvider>
+                            <TextField 
+                                id="deliveryTo" 
+                                name="deliveryTo" 
+                                label={props.deliveryToLabel}
+                                value={props.deliveryTo ? moment(props.deliveryTo).format("L") : ""}
+                                fullWidth={true}
+                                variant="standard"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
                         </div>
                         {orderItemStatusId &&
                             <div className="field">
@@ -249,7 +248,7 @@ const OrderItemForm = (props) => {
                     </form>
                 </div>
             </div>
-            {orderItemStatusChanges &&
+            {props.orderItemStatusChanges &&
                 <OrderItemStatusChanges
                     statusChanges={orderItemStatusChanges}
                     labels={props.orderItemStatusChanges}
@@ -262,16 +261,16 @@ const OrderItemForm = (props) => {
 
 OrderItemForm.propTypes = {
     title: PropTypes.string.isRequired,
-    idLabel: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
     imageAlt: PropTypes.string.isRequired,
     imageUrl: PropTypes.string.isRequired,
     skuLabel: PropTypes.string.isRequired,
     nameLabel: PropTypes.string.isRequired,
     quantityLabel: PropTypes.string.isRequired,
     stockQuantityLabel: PropTypes.string.isRequired,
-    outletQuantity: PropTypes.string.isRequired,
     orderStatusLabel: PropTypes.string.isRequired,
+    outletQuantity: PropTypes.number,
+    stockQuantity: PropTypes.number,
+    quantity: PropTypes.number,
     orderStatusCommentLabel: PropTypes.string.isRequired,
     orderUrl: PropTypes.string.isRequired,
     navigateToOrderLabel: PropTypes.string.isRequired,

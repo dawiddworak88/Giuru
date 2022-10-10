@@ -366,6 +366,7 @@ namespace Ordering.Api.Services
                 var orderItem = new OrderItemServiceModel
                 {
                     Id = orderedItem.Id,
+                    OrderId = orderedItem.OrderId,
                     ProductId = orderedItem.ProductId,
                     ProductSku = orderedItem.ProductSku,
                     ProductName = orderedItem.ProductName,

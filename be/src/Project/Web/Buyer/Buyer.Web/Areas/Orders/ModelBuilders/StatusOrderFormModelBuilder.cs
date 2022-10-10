@@ -63,7 +63,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
 
-            if (orderStatuses != null)
+            if (orderStatuses is not null)
             {
                 viewModel.OrderStatuses = orderStatuses.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
@@ -72,7 +72,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             {
                 var order = await this.ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
-                if (order != null)
+                if (order is not null)
                 {
                     viewModel.Id = order.Id;
                     viewModel.OrderStatusId = order.OrderStatusId;

@@ -11,13 +11,14 @@ import Files from "../../../../../../shared/components/Files/Files";
 function StatusOrder(props) {
 
     const status = props.orderStatuses.find((item) => item.id === props.orderStatusId);
+    
     return (
         <section className="section status-order">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 {status &&
                     <div className="column is-3">
-                        <div className="status-ordder__details">{props.orderStatusLabel}: {status.name}</div>
+                        <div className="status-ordder__details">{props.orderStatusLabel} {status.name}</div>
                         {props.expectedDelivery && 
                             <div className="status-ordder__details">{props.expectedDeliveryLabel}: {moment(props.expectedDelivery).format("L")}</div>
                         }

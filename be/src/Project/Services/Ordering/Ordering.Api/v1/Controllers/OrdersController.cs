@@ -364,6 +364,7 @@ namespace Ordering.Api.v1.Controllers
                         OrderItems = order.OrderItems.OrEmptyIfNull().Select(x => new OrderItemResponseModel
                         {
                             Id = x.Id, 
+                            OrderId = x.OrderId,
                             OrderItemStateId = x.OrderItemStateId,
                             OrderItemStatusId = x.OrderItemStatusId,
                             OrderItemStatusName = x.OrderItemStatusName,
