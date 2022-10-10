@@ -142,6 +142,14 @@ services:
     depends_on:
       - sqldata
 
+  analytics-api:
+    image: ${REGISTRY:-giuru}/analytics-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Analytics/Analytics.Api/Dockerfile
+    depends_on:
+      - sqldata
+
   seller-web:
     image: ${REGISTRY:-giuru}/seller-web:${PLATFORM:-linux}-${TAG:-latest}
     build:
