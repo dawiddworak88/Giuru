@@ -132,6 +132,12 @@
   <data name="BasketDeletedSuccessfully" xml:space="preserve">
     <value>The basket has been cleared successfully</value>
   </data>
+  <data name="CancellationOrderError" xml:space="preserve">
+    <value>Only newly created orders can be cancelled.</value>
+  </data>
+  <data name="CancelOrder" xml:space="preserve">
+    <value>Cancel order</value>
+  </data>
   <data name="ChangeDeliveryFrom" xml:space="preserve">
     <value>Change delivery from date</value>
   </data>
@@ -162,6 +168,9 @@
   <data name="EditOrder" xml:space="preserve">
     <value>Edit order</value>
   </data>
+  <data name="EditOrderItem" xml:space="preserve">
+    <value>Edit order item</value>
+  </data>
   <data name="EnterSkuOrName" xml:space="preserve">
     <value>Enter SKU or product name</value>
   </data>
@@ -173,6 +182,9 @@
   </data>
   <data name="GoToDetails" xml:space="preserve">
     <value>Go to details</value>
+  </data>
+  <data name="HistoryOfStatusChanges" xml:space="preserve">
+    <value>History of status changes</value>
   </data>
   <data name="ImportOrder" xml:space="preserve">
     <value>Import order</value>
@@ -195,6 +207,9 @@
   <data name="NameLabel" xml:space="preserve">
     <value>Name:</value>
   </data>
+  <data name="NavigateToOrder" xml:space="preserve">
+    <value>Back to order</value>
+  </data>
   <data name="NavigateToOrdersList" xml:space="preserve">
     <value>Back to orders list</value>
   </data>
@@ -213,6 +228,9 @@
   <data name="OrderFileError" xml:space="preserve">
     <value>The order file is incorrect. Upload the correct order file.</value>
   </data>
+  <data name="OrderItem" xml:space="preserve">
+    <value>Order item</value>
+  </data>
   <data name="OrderItemsLabel" xml:space="preserve">
     <value>Order items</value>
   </data>
@@ -226,7 +244,10 @@
     <value>Orders</value>
   </data>
   <data name="OrderStatus" xml:space="preserve">
-    <value>Order status</value>
+    <value>Order status:</value>
+  </data>
+  <data name="OrderStatusComment" xml:space="preserve">
+    <value>Order status comment:</value>
   </data>
   <data name="OrderStatusNotFound" xml:space="preserve">
     <value>Order status has not been found</value>
@@ -255,6 +276,9 @@
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
   </data>
+  <data name="SuccessfullyCanceledOrder" xml:space="preserve">
+    <value>Successfully canceled order.</value>
+  </data>
   <data name="StockQuantityLabel" xml:space="preserve">
     <value>Stock quantity:</value>
   </data>
@@ -263,5 +287,11 @@
   </data>
   <data name="UpdateOrderStatus" xml:space="preserve">
     <value>Update order status</value>
+  </data>
+  <data name="AreYouSureToCancelOrder" xml:space="preserve">
+    <value>Are you sure you want to cancel the order. Along with the ordered products.</value>
+  </data>
+  <data name="CancelationConfirmationDialog" xml:space="preserve">
+    <value>Confirm the cancellation of the order</value>
   </data>
 </root>

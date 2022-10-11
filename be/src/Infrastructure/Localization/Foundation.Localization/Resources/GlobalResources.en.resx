@@ -651,6 +651,9 @@
   <data name="Thumbnail" xml:space="preserve">
     <value>Thumbnail</value>
   </data>
+  <data name="OrderStatusComment" xml:space="preserve">
+    <value>Order status comment</value>
+  </data>
   <data name="QRCode" xml:space="preserve">
     <value>QR Code</value>
   </data>

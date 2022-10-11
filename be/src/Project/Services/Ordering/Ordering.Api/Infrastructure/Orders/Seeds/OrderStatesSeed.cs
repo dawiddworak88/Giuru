@@ -1,6 +1,5 @@
 ﻿using Foundation.GenericRepository.Extensions;
-using Microsoft.Extensions.Configuration;
-using Ordering.Api.Infrastructure.Orders.Definitions;
+using Ordering.Api.Definitions;
 using Ordering.Api.Infrastructure.Orders.Entities;
 using System;
 using System.Linq;
