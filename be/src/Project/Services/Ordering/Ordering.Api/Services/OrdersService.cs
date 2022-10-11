@@ -710,20 +710,37 @@ namespace Ordering.Api.Services
 
             var order = await orders.FirstOrDefaultAsync();
 
-            if (order == null)
+            if (order is null)
             {
                 throw new CustomException(this.orderLocalizer.GetString("OrderNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var newOrderStatus = await this.context.OrderStatuses.FirstOrDefaultAsync(x => x.Id == serviceModel.OrderStatusId && x.IsActive);
 
-            if (newOrderStatus == null)
+            if (newOrderStatus is null)
             {
                 throw new CustomException(this.orderLocalizer.GetString("OrderStatusNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             order.OrderStatusId = newOrderStatus.Id;
             order.OrderStateId = newOrderStatus.OrderStateId;
+
+            if (serviceModel.OrderStatusId == OrderStatusesConstants.CanceledId)
+            {
+                foreach (var orderItem in order.OrderItems.OrEmptyIfNull())
+                {
+                    var newOrderItemStatusChange = new OrderItemStatusChange
+                    {
+                        OrderItemId = orderItem.Id,
+                        OrderItemStateId = OrderStatesConstants.CanceledId,
+                        OrderItemStatusId = OrderStatusesConstants.CanceledId
+                    };
+
+                    this.context.OrderItemStatusChanges.Add(newOrderItemStatusChange.FillCommonProperties());
+
+                    orderItem.LastOrderItemStatusChangeId = newOrderItemStatusChange.Id;
+                }
+            }
 
             await this.context.SaveChangesAsync();
 
