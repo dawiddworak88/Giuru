@@ -63,7 +63,11 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
-                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment")
+                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
+                YesLabel = this.globalLocalizer.GetString("Yes"),
+                NoLabel = this.globalLocalizer.GetString("No"),
+                CancelationConfirmationDialogLabel = this.orderLocalizer.GetString("CancelationConfirmationDialog"),
+                AreYouSureToCancelOrderLabel = this.orderLocalizer.GetString("AreYouSureToCancelOrder")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);

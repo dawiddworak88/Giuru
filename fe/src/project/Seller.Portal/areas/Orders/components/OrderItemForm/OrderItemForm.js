@@ -21,6 +21,8 @@ const OrderItemForm = (props) => {
     const handleCancelOrderItem = (e) => {
         e.preventDefault();
 
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
         const requestPayload = {
             id: props.id
         }
@@ -56,6 +58,8 @@ const OrderItemForm = (props) => {
 
     const handleSubmitForm = (e) => {
         e.preventDefault();
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const requestPayload = {
             id: props.id,

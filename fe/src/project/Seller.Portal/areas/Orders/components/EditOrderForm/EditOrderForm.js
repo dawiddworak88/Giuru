@@ -169,8 +169,7 @@ function EditOrderForm(props) {
                                 type="text" 
                                 variant="contained" 
                                 color="primary"
-                                onClick={handleCancelationClick}
-                            >
+                                onClick={handleCancelationClick}>
                                 {props.cancelOrderLabel}
                             </Button>
                         </div>

@@ -8,6 +8,7 @@ using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.ViewModels;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -58,7 +59,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 ExternalReferenceLabel = this.orderLocalizer.GetString("ExternalReferenceLabel"),
                 MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
                 CancelOrderItemLabel = this.orderLocalizer.GetString("CancelOrder"),
-                CancelOrderItemStatusUrl = this.linkGenerator.GetPathByAction("CancelOrderItem", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                CancelOrderItemStatusUrl = this.linkGenerator.GetPathByAction("CancelOrderItem", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             if (componentModel.Id.HasValue)
@@ -89,7 +90,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     viewModel.ExternalReference = orderItem.ExternalReference;
                     viewModel.MoreInfo = orderItem.MoreInfo;
 
-                    if (orderItem.OrderItemStatusId == OrdersConstants.OrderStatuses.NewId)
+                    if (orderItem.OrderItemStatusId == OrdersConstants.OrderStatuses.NewId || 
+                        orderItem.OrderItemStatusId == Guid.Empty)
                     {
                         viewModel.CanCancelOrderItem = true;
                     }

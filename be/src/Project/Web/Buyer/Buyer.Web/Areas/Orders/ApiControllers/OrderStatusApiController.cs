@@ -43,5 +43,18 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             return this.StatusCode((int)HttpStatusCode.OK, new { OrderStatusId = orderStatusId, Message = this.orderLocalizer.GetString("SuccessfullyCanceledOrder").Value });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CancelOrderItem([FromBody] UpdateOrderItemStatusRequestModel request)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            await this.ordersRepository.UpdateOrderItemStatusAsync(token, language, request.Id, OrdersConstants.OrderStatuses.CancelId);
+
+            var orderItemStatusChanges = await this.ordersRepository.GetOrderItemStatusesAsync(token, language, request.Id);
+
+            return this.StatusCode((int)HttpStatusCode.OK, new { StatusChanges = orderItemStatusChanges.StatusChanges, Message = this.orderLocalizer.GetString("SuccessfullyCanceledOrder").Value });
+        }
     }
 }
