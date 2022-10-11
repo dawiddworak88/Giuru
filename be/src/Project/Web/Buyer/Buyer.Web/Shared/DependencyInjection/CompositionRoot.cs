@@ -31,6 +31,8 @@ using Buyer.Web.Shared.Repositories.News;
 using Buyer.Web.Shared.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Files;
 using Foundation.Media.Configurations;
+using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
+using Buyer.Web.Shared.ModelBuilders.OrderItemStatusChanges;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -50,6 +52,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel>, ModalModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel>, BuyerHeaderModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>, MainNavigationModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel>, OrderItemStatusChangesModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();

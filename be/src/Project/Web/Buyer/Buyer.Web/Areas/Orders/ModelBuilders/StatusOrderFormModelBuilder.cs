@@ -62,16 +62,17 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 UpdateOrderStatusUrl = this.linkGenerator.GetPathByAction("Cancel", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
-                StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel")
+                StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
+                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
 
-            if (orderStatuses != null)
+            if (orderStatuses is not null)
             {
                 viewModel.OrderStatuses = orderStatuses.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
-
+            
             if (componentModel.Id.HasValue)
             {
                 var order = await this.ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
@@ -82,8 +83,10 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.OrderStatusId = order.OrderStatusId;
                     viewModel.ExpectedDelivery = order.ExpectedDeliveryDate;
                     viewModel.CustomOrder = order.MoreInfo;
+                    viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
                     viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                     {
+                        Id = x.Id,
                         ProductId = x.ProductId,
                         Sku = x.ProductSku,
                         Name = x.ProductName,
@@ -93,6 +96,9 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         OutletQuantity = x.OutletQuantity,
                         ExternalReference = x.ExternalReference,
                         MoreInfo = x.MoreInfo,
+                        OrderItemStatusId = x.OrderItemStatusId,
+                        OrderItemStatusName = x.OrderItemStatusName,
+                        OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
                         ProductAttributes = x.ProductAttributes,
                         DeliveryFrom = x.ExpectedDeliveryFrom,
                         DeliveryTo = x.ExpectedDeliveryTo,

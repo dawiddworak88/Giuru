@@ -11,6 +11,7 @@ using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Products.DomainModels;
 using System.Collections.Generic;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 
 namespace Seller.Web.Areas.ModelBuilders.Products
 {
@@ -41,6 +42,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<ProductAttribute>, ProductAttribute>();
 
             viewModel.Title = this.globalLocalizer.GetString("ProductAttributes");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
             viewModel.NewText = this.productLocalizer.GetString("NewProductAttribute");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "ProductAttribute", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
@@ -90,7 +92,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 }
             };
 
-            viewModel.PagedItems = await this.productAttributesRepository.GetAsync(componentModel.Token, componentModel.Language, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, $"{nameof(ProductAttribute.CreatedDate)} desc");
+            viewModel.PagedItems = await this.productAttributesRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ProductAttribute.CreatedDate)} desc");
 
             return viewModel;
         }

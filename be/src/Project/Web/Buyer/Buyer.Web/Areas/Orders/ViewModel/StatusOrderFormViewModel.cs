@@ -28,8 +28,10 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string CancelOrderLabel { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string UpdateOrderStatusUrl { get; set; }
+        public string OrderStatusCommentLabel { get; set; }
         public string CustomOrder { get; set; }
         public string CustomOrderLabel { get; set; }
+        public string EditUrl { get; set; }
         public IEnumerable<ListItemViewModel> OrderStatuses { get; set; }
         public IEnumerable<OrderItemViewModel> OrderItems { get; set; }
         public FilesViewModel Attachments { get; set; }

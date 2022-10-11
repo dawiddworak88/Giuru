@@ -13,6 +13,7 @@ using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.ComponentModels.Files;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -64,16 +65,18 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 CancelOrderStatusUrl = this.linkGenerator.GetPathByAction("Cancel", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
-                CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel")
+                CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
+                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
+                UpdateOrderItemStatusUrl = this.linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
 
-            if (orderStatuses != null)
+            if (orderStatuses is not null)
             {
                 viewModel.OrderStatuses = orderStatuses.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
-
+            
             if (componentModel.Id.HasValue)
             {
                 var order = await this.ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
@@ -85,8 +88,10 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     viewModel.ClientUrl = this.linkGenerator.GetPathByAction("Edit", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
                     viewModel.ClientName = order.ClientName;
                     viewModel.UpdateOrderStatusUrl = this.linkGenerator.GetPathByAction("Index", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
+                    viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
                     viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                     {
+                        Id = x.Id,
                         ProductId = x.ProductId,
                         Sku = x.ProductSku,
                         Name = x.ProductName,
@@ -96,6 +101,9 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                         OutletQuantity = x.OutletQuantity,
                         ExternalReference = x.ExternalReference,
                         MoreInfo = x.MoreInfo,
+                        OrderItemStatusId = x.OrderItemStatusId,
+                        OrderItemStatusName = x.OrderItemStatusName,
+                        OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
                         DeliveryFrom = x.ExpectedDeliveryFrom,
                         DeliveryTo = x.ExpectedDeliveryTo,
                         ImageAlt = x.ProductName,
@@ -107,6 +115,19 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     {
                         viewModel.CanCancelOrder = true;
                     }
+
+                    var orderItemsStatuses = new List<OrderItemStatusViewModel>();
+
+                    foreach (var orderItem in order.OrderItems.OrEmptyIfNull())
+                    {
+                        orderItemsStatuses.Add(new OrderItemStatusViewModel
+                        {
+                            Id = orderItem.Id,
+                            OrderStatusId = orderItem.OrderItemStatusId
+                        });
+                    }
+
+                    viewModel.OrderItemsStatuses = orderItemsStatuses;
                 }
 
                 var orderFiles = await this.ordersRepository.GetOrderFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(OrderFile.CreatedDate)} desc");

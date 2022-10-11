@@ -12,17 +12,19 @@ COPY ["Infrastructure/Account/Foundation.Account/Foundation.Account.csproj", "In
 COPY ["Infrastructure/ApiExtensions/Foundation.ApiExtensions/Foundation.ApiExtensions.csproj", "Infrastructure/ApiExtensions/Foundation.ApiExtensions/"]
 COPY ["Infrastructure/Localization/Foundation.Localization/Foundation.Localization.csproj", "Infrastructure/Localization/Foundation.Localization/"]
 COPY ["Infrastructure/Extensions/Foundation.Extensions/Foundation.Extensions.csproj", "Infrastructure/Extensions/Foundation.Extensions/"]
-COPY ["Infrastructure/Security/Foundation.Security/Foundation.Security.csproj", "Infrastructure/Security/Foundation.Security/"]
-COPY ["Infrastructure/Prerendering/Foundation.Prerendering/Foundation.Prerendering.csproj", "Infrastructure/Prerendering/Foundation.Prerendering/"]
-COPY ["Infrastructure/PageContent/Foundation.PageContent/Foundation.PageContent.csproj", "Infrastructure/PageContent/Foundation.PageContent/"]
 COPY ["Infrastructure/GenericRepository/Foundation.GenericRepository/Foundation.GenericRepository.csproj", "Infrastructure/GenericRepository/Foundation.GenericRepository/"]
+COPY ["Infrastructure/Media/Foundation.Media/Foundation.Media.csproj", "Infrastructure/Media/Foundation.Media/"]
+COPY ["Infrastructure/Prerendering/Foundation.Prerendering/Foundation.Prerendering.csproj", "Infrastructure/Prerendering/Foundation.Prerendering/"]
+COPY ["Infrastructure/Presentation/Foundation.Presentation/Foundation.Presentation.csproj", "Infrastructure/Presentation/Foundation.Presentation/"]
+COPY ["Infrastructure/Security/Foundation.Security/Foundation.Security.csproj", "Infrastructure/Security/Foundation.Security/"]
+COPY ["Infrastructure/PageContent/Foundation.PageContent/Foundation.PageContent.csproj", "Infrastructure/PageContent/Foundation.PageContent/"]
 RUN dotnet restore "Project/Web/Buyer/Buyer.Web/Buyer.Web.csproj"
 COPY . .
 WORKDIR "/src/Project/Web/Buyer/Buyer.Web"
 RUN dotnet build "Buyer.Web.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Buyer.Web.csproj" -c Release -o /app/publish
+RUN dotnet publish "Buyer.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

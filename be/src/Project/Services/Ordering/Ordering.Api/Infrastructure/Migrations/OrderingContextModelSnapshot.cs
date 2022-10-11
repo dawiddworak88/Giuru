@@ -17,7 +17,7 @@ namespace Ordering.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.4")
+                .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -243,6 +243,9 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("LastOrderItemStatusChangeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("MoreInfo")
                         .HasColumnType("nvarchar(max)");
 
@@ -282,6 +285,78 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("Ordering.Api.Infrastructure.Orders.Entities.OrderItemStatusChange", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("OrderItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderItemStateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderItemStatusId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderItemStatusChanges");
+                });
+
+            modelBuilder.Entity("Ordering.Api.Infrastructure.Orders.Entities.OrderItemStatusChangeCommentTranslation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Language")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OrderItemStatusChangeComment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("OrderItemStatusChangeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderItemStatusChangeId")
+                        .IsUnique();
+
+                    b.ToTable("OrderItemStatusChangesCommentTranslations");
                 });
 
             modelBuilder.Entity("Ordering.Api.Infrastructure.Orders.Entities.OrderState", b =>
@@ -388,6 +463,15 @@ namespace Ordering.Api.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Ordering.Api.Infrastructure.Orders.Entities.OrderItemStatusChangeCommentTranslation", b =>
+                {
+                    b.HasOne("Ordering.Api.Infrastructure.Orders.Entities.OrderItemStatusChange", null)
+                        .WithOne("OrderItemStatusChangeCommentTranslation")
+                        .HasForeignKey("Ordering.Api.Infrastructure.Orders.Entities.OrderItemStatusChangeCommentTranslation", "OrderItemStatusChangeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Ordering.Api.Infrastructure.Orders.Entities.OrderStatusTranslation", b =>
                 {
                     b.HasOne("Ordering.Api.Infrastructure.Orders.Entities.OrderStatus", null)
@@ -400,6 +484,11 @@ namespace Ordering.Api.Infrastructure.Migrations
             modelBuilder.Entity("Ordering.Api.Infrastructure.Orders.Entities.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("Ordering.Api.Infrastructure.Orders.Entities.OrderItemStatusChange", b =>
+                {
+                    b.Navigation("OrderItemStatusChangeCommentTranslation");
                 });
 
             modelBuilder.Entity("Ordering.Api.Infrastructure.Orders.Entities.OrderStatus", b =>
