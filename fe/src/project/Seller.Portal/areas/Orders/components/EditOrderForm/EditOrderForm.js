@@ -5,22 +5,19 @@ import { Context } from "../../../../../../shared/stores/Store";
 import {
     FormControl, InputLabel, Select, MenuItem, Button,
     Table, TableBody, TableCell, TableContainer, TextField,
-    TableHead, TableRow, Paper, CircularProgress, Dialog,
-    DialogActions, DialogContent, DialogTitle, Fab
+    TableHead, TableRow, Paper, CircularProgress, Fab
 } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import Files from "../../../../../../shared/components/Files/Files";
+import ConfirmationDialog from "../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
 
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [openCancelationDialog, setOpenCancelationDialog] = useState(false);
     const [canceledOrder, setCanceledOrder] = useState(false);
-    const [orderItem, setOrderItem] = useState(null);
-    const [orderItemStatusComment, setOrderItemStatusComment] = useState("");
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
-    const [orderItemsStatuses, setOrderItemsStatuses] = useState(props.orderItemsStatuses ? props.orderItemsStatuses : []);
 
     const handleOrderStatusSubmit = (e) => {
         e.preventDefault();
@@ -61,10 +58,12 @@ function EditOrderForm(props) {
             });
     };
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-        setOrderItem(null);
-        setOrderItemStatusComment("");
+    const handleCancelationDialogClose = () => {
+        setOpenCancelationDialog(false);
+    }
+
+    const handleCancelationClick = () => {
+        setOpenCancelationDialog(true)
     }
 
     const handleCancelOrderSubmit = (e) => {
@@ -95,6 +94,7 @@ function EditOrderForm(props) {
                     if (response.ok) {
                         setCanceledOrder(true);
                         setOrderStatusId(jsonResponse.orderStatusId);
+                        setOpenCancelationDialog(false);
                         toast.success(jsonResponse.message);
                     }
                     else {
@@ -106,40 +106,6 @@ function EditOrderForm(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
-
-    const handleOrderItemStatusComment = () => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const requestPayload = {
-            orderItemId: orderItem.id,
-            orderItemStatusComment
-        };
-
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(requestPayload)
-        };
-
-        fetch(props.saveOrderItemStatusCommentUrl, requestOptions)
-            .then((response) => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        toast.success(jsonResponse.message);
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
-    }
 
     return (
         <section className="section section-small-padding edit-order">
@@ -203,7 +169,7 @@ function EditOrderForm(props) {
                                 type="text" 
                                 variant="contained" 
                                 color="primary"
-                                onClick={handleCancelOrderSubmit}
+                                onClick={handleCancelationClick}
                             >
                                 {props.cancelOrderLabel}
                             </Button>
@@ -291,27 +257,18 @@ function EditOrderForm(props) {
                     }
                 </Fragment>
             }
+            <ConfirmationDialog 
+                open={openCancelationDialog}
+                handleClose={handleCancelationDialogClose}
+                handleConfirm={handleCancelOrderSubmit}
+                noLabel={props.noLabel}
+                yesLabel={props.yesLabel}
+                title={props.cancelationConfirmationDialogLabel}
+                text={props.areYouSureToCancelOrderLabel}
+                titleId="alert-dialog-title"
+                textId="alert-dialog-description"
+            />
             {state.isLoading && <CircularProgress className="progressBar" />}
-            <Dialog 
-                open={isModalOpen} 
-                fullWidth={true}
-            >
-                <DialogTitle>Komontarz do zmiany statusu</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        id="orderItemStatusComment"
-                        name="orderItemStatusComment"
-                        variant="standard"
-                        value={orderItemStatusComment}
-                        onChange={(e) => setOrderItemStatusComment(e.target.value)}
-                        fullWidth={true}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button type="button" onClick={handleCloseModal}>Anuluj</Button>
-                    <Button type="button" onClick={handleOrderItemStatusComment}>Dodaj</Button>
-                </DialogActions>
-            </Dialog>
         </section >
     );
 }
@@ -339,7 +296,11 @@ EditOrderForm.propTypes = {
     idLabel: PropTypes.string,
     updateOrderItemStatusUrl: PropTypes.string.isRequired,
     orderItemsStatuses: PropTypes.array,
-    orderStatusCommentLabel: PropTypes.string.isRequired
+    orderStatusCommentLabel: PropTypes.string.isRequired,
+    yesLabel: PropTypes.string.isRequired,
+    noLabel: PropTypes.string.isRequired,
+    cancelationConfirmationDialogLabel: PropTypes.string.isRequired,
+    areYouSureToCancelOrderLabel: PropTypes.string.isRequired
 };
 
 export default EditOrderForm;

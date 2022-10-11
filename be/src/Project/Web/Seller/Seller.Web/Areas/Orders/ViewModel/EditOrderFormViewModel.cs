@@ -36,6 +36,10 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string UpdateOrderItemStatusUrl { get; set; }
         public string EditUrl { get; set; }
         public string OrderStatusCommentLabel { get; set; }
+        public string YesLabel { get; set; }
+        public string NoLabel { get; set; }
+        public string CancelationConfirmationDialogLabel { get; set; }
+        public string AreYouSureToCancelOrderLabel { get; set; }
         public FilesViewModel Attachments { get; set; }
         public IEnumerable<ListItemViewModel> OrderStatuses { get; set; }
         public IEnumerable<OrderItemViewModel> OrderItems { get; set; }
