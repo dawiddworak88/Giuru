@@ -132,6 +132,12 @@
   <data name="BasketDeletedSuccessfully" xml:space="preserve">
     <value>Koszyk został pomyślnie wyczyszczony</value>
   </data>
+  <data name="CancellationOrderError" xml:space="preserve">
+    <value>Tylko nowo utworzone zamówienia można anulować.</value>
+  </data>
+  <data name="CancelOrder" xml:space="preserve">
+    <value>Anuluj zamówienie</value>
+  </data>
   <data name="ChangeDeliveryFrom" xml:space="preserve">
     <value>Zmień początkową datę dostawy</value>
   </data>
@@ -270,6 +276,9 @@
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
   </data>
+  <data name="SuccessfullyCanceledOrder" xml:space="preserve">
+    <value>Pomyślnie anulowano zamówienie.</value>
+  </data>
   <data name="StockQuantityLabel" xml:space="preserve">
     <value>Ilość z magazynu:</value>
   </data>
@@ -278,5 +287,11 @@
   </data>
   <data name="UpdateOrderStatus" xml:space="preserve">
     <value>Aktualizuj status zamówienia</value>
+  </data>
+  <data name="AreYouSureToCancelOrder" xml:space="preserve">
+    <value>Czy na pewno chcesz anulować zamówienie. Wraz z zamówionymi produktami.</value>
+  </data>
+  <data name="CancelationConfirmationDialog" xml:space="preserve">
+    <value>Potwierdź anulacje zamówienia</value>
   </data>
 </root>

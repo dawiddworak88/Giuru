@@ -35,6 +35,9 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string MoreInfo { get; set; }
         public string DeliveryFromLabel { get; set; }
         public string DeliveryToLabel { get; set; }
+        public string CancelOrderItemLabel { get; set; }
+        public bool CanCancelOrderItem { get; set; }
+        public string CancelOrderItemStatusUrl { get; set; }
         public DateTime? DeliveryFrom { get; set; }
         public DateTime? DeliveryTo { get; set; }
         public IEnumerable<OrderItemStatusChangeViewModel> StatusChanges { get; set; }

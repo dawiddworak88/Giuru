@@ -1,32 +1,101 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import PropTypes from "prop-types";
+import { Context } from "../../../../../../shared/stores/Store";
+import { toast } from "react-toastify";
 import {
     Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, TextField, Fab
+    TableHead, TableRow, Paper, TextField, Fab, Button,
+    CircularProgress 
 } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 import moment from "moment";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import Files from "../../../../../../shared/components/Files/Files";
+import ConfirmationDialog from "../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
 
 function StatusOrder(props) {
+    const [state, dispatch] = useContext(Context);
+    const [openCancelationDialog, setOpenCancelationDialog] = useState(false);
+    const [canceledOrder, setCanceledOrder] = useState(false);
+    const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId ? props.orderStatusId : null);
 
-    const status = props.orderStatuses.find((item) => item.id === props.orderStatusId);
+    const handleCancelationDialogClose = () => {
+        setOpenCancelationDialog(false);
+    }
+
+    const handleCancelationClick = () => {
+        setOpenCancelationDialog(true)
+    }
+
+    const handleCancelOrderSubmit = (e) => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const requestBody = {
+            orderId: props.id,
+            orderStatusId: orderStatusId
+        };
+
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+            body: JSON.stringify(requestBody)
+        };
+
+        fetch(props.updateOrderStatusUrl, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setCanceledOrder(true);
+                        setOrderStatusId(jsonResponse.orderStatusId);
+                        setOpenCancelationDialog(false);
+                        toast.success(jsonResponse.message);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    };
+
+    const status = props.orderStatuses.find((item) => item.id === orderStatusId);
     
     return (
         <section className="section status-order">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
-                {status &&
-                    <div className="column is-3">
-                        <div className="status-ordder__details">{props.orderStatusLabel} {status.name}</div>
-                        {props.expectedDelivery && 
-                            <div className="status-ordder__details">{props.expectedDeliveryLabel}: {moment(props.expectedDelivery).format("L")}</div>
-                        }
-                    </div>
-                }
+                <div className="column">
+                    {status &&
+                        <div className="status-order">
+                            <div className="status-ordder__details">{props.orderStatusLabel} {status.name}</div>
+                            {props.expectedDelivery &&
+                                <div className="status-ordder__details">{props.expectedDeliveryLabel}: {moment(props.expectedDelivery).format("L")}</div>
+                            }
+                        </div>
+                    }
+                    {props.canCancelOrder && !canceledOrder &&
+                        <div className="mt-2">
+                            <Button 
+                                type="text" 
+                                variant="contained" 
+                                color="primary"
+                                onClick={handleCancelationClick}
+                            >
+                                {props.cancelOrderLabel}
+                            </Button>
+                        </div>
+                    }
+                </div>
             </div>
             {props.orderItems && props.orderItems.length > 0 &&
-                <div className="mt-5">
+                <div className="mt-5">  
                     <h2 className="subtitle is-5 mb-2">{props.orderItemsLabel}</h2>
                     <div className="status-order__items">
                         <div className="orderitems__table">
@@ -107,6 +176,18 @@ function StatusOrder(props) {
                     }
                 </Fragment>
             }
+            <ConfirmationDialog 
+                open={openCancelationDialog}
+                handleClose={handleCancelationDialogClose}
+                handleConfirm={handleCancelOrderSubmit}
+                noLabel={props.noLabel}
+                yesLabel={props.yesLabel}
+                title={props.cancelationConfirmationDialogLabel}
+                text={props.areYouSureToCancelOrderLabel}
+                titleId="alert-dialog-title"
+                textId="alert-dialog-description"
+            />
+            {state.isLoading && <CircularProgress className="progressBar" />}
         </section >
     );
 }

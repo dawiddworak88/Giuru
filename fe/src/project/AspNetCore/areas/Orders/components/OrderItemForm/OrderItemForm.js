@@ -1,13 +1,56 @@
-import React from "react";
+import React, { useState, useContext } from "react";
+import { toast } from "react-toastify";
+import { Context } from "../../../../../../shared/stores/Store";
 import PropTypes from "prop-types";
 import {
-    Button, TextField
+    Button, TextField, CircularProgress
 } from "@mui/material";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import OrderItemStatusChanges from "../../../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
 import moment from "moment";
 
 const OrderItemForm = (props) => {
+    const [state, dispatch] = useContext(Context);
+    const [canceledOrderItem, setCanceledOrderItem] = useState(false);
+    const [orderItemStatusChanges, setOrderItemStatusChanges] = useState(props.statusChanges ? props.statusChanges : [])
+
+    const handleCancelOrderItem = (e) => {
+        e.preventDefault();
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const requestPayload = {
+            id: props.id
+        }
+
+        const requestOptions = {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json", 
+                "X-Requested-With": "XMLHttpRequest" 
+            },
+            body: JSON.stringify(requestPayload)
+        }
+
+        return fetch(props.cancelOrderItemStatusUrl, requestOptions)
+            .then((response) => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        toast.success(jsonResponse.message);
+                        setCanceledOrderItem(true);
+                        setOrderItemStatusChanges(jsonResponse.statusChanges);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    }
+
     return (
         <section className="section section-small-padding order-item">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -140,6 +183,16 @@ const OrderItemForm = (props) => {
                         />
                     </div>
                     <div className="field">
+                        {props.canCancelOrderItem && !canceledOrderItem &&
+                            <Button 
+                                className="mr-2"
+                                type="button" 
+                                variant="contained"
+                                onClick={handleCancelOrderItem}
+                                color="secondary">
+                                {props.cancelOrderItemLabel}
+                            </Button>
+                        }
                         <Button 
                             type="button" 
                             variant="contained" 
@@ -153,12 +206,13 @@ const OrderItemForm = (props) => {
                     </div>
                 </div>
             </div>
-            {props.statusChanges &&
+            {orderItemStatusChanges &&
                 <OrderItemStatusChanges
-                    statusChanges={props.statusChanges}
+                    statusChanges={orderItemStatusChanges}
                     labels={props.orderItemStatusChanges}
                 />
             }
+            {state.isLoading && <CircularProgress className="progressBar" />}
         </section>
     );
 }
@@ -184,7 +238,9 @@ OrderItemForm.propTypes = {
     deliveryToLabel: PropTypes.string.isRequired,
     externalReferenceLabel: PropTypes.string.isRequired,
     moreInfoLabel: PropTypes.string.isRequired,
-    statusChanges: PropTypes.array
+    statusChanges: PropTypes.array,
+    cancelOrderItemLabel: PropTypes.string.isRequired,
+    cancelOrderItemStatusUrl: PropTypes.string.isRequired
 };
 
 export default OrderItemForm;

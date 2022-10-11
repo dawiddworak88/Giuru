@@ -4,9 +4,11 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.ViewModels;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,7 +57,9 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 DeliveryFromLabel = this.orderLocalizer.GetString("DeliveryFrom"),
                 DeliveryToLabel = this.orderLocalizer.GetString("DeliveryTo"),
                 ExternalReferenceLabel = this.orderLocalizer.GetString("ExternalReferenceLabel"),
-                MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel")
+                MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
+                CancelOrderItemLabel = this.orderLocalizer.GetString("CancelOrder"),
+                CancelOrderItemStatusUrl = this.linkGenerator.GetPathByAction("CancelOrderItem", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             if (componentModel.Id.HasValue)
@@ -85,6 +89,12 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     viewModel.DeliveryTo = orderItem.ExpectedDeliveryTo;
                     viewModel.ExternalReference = orderItem.ExternalReference;
                     viewModel.MoreInfo = orderItem.MoreInfo;
+
+                    if (orderItem.OrderItemStatusId == OrdersConstants.OrderStatuses.NewId || 
+                        orderItem.OrderItemStatusId == Guid.Empty)
+                    {
+                        viewModel.CanCancelOrderItem = true;
+                    }
                 }
 
                 if (orderItem.LastOrderItemStatusChangeId is not null)

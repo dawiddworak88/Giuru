@@ -24,10 +24,18 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string MoreInfoLabel { get; set; }
         public string OrderItemsLabel { get; set; }
         public string OrderStatusLabel { get; set; }
+        public bool CanCancelOrder { get; set; }
+        public string CancelOrderLabel { get; set; }
+        public string GeneralErrorMessage { get; set; }
+        public string UpdateOrderStatusUrl { get; set; }
         public string OrderStatusCommentLabel { get; set; }
         public string CustomOrder { get; set; }
         public string CustomOrderLabel { get; set; }
         public string EditUrl { get; set; }
+        public string YesLabel { get; set; }
+        public string NoLabel { get; set; }
+        public string CancelationConfirmationDialogLabel { get; set; }
+        public string AreYouSureToCancelOrderLabel { get; set; }
         public IEnumerable<ListItemViewModel> OrderStatuses { get; set; }
         public IEnumerable<OrderItemViewModel> OrderItems { get; set; }
         public FilesViewModel Attachments { get; set; }

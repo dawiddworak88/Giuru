@@ -132,6 +132,12 @@
   <data name="BasketDeletedSuccessfully" xml:space="preserve">
     <value>Der Warenkorb wurde erfolgreich geleert</value>
   </data>
+  <data name="CancellationOrderError" xml:space="preserve">
+    <value>Nur neu erstellte Bestellungen können storniert werden.</value>
+  </data>
+  <data name="CancelOrder" xml:space="preserve">
+    <value>Bestellung stornieren</value>
+  </data>
   <data name="ChangeDeliveryFrom" xml:space="preserve">
     <value>Lieferung ab Datum ändern</value>
   </data>
@@ -270,6 +276,9 @@
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
   </data>
+  <data name="SuccessfullyCanceledOrder" xml:space="preserve">
+    <value>Bestellung erfolgreich storniert.</value>
+  </data>
   <data name="StockQuantityLabel" xml:space="preserve">
     <value>Menge ab Lager:</value>
   </data>
@@ -278,5 +287,11 @@
   </data>
   <data name="UpdateOrderStatus" xml:space="preserve">
     <value>Bestellstatus aktualisieren</value>
+  </data>
+  <data name="AreYouSureToCancelOrder" xml:space="preserve">
+    <value>Möchten Sie die Bestellung wirklich stornieren? Zusammen mit den bestellten Produkten.</value>
+  </data>
+  <data name="CancelationConfirmationDialog" xml:space="preserve">
+    <value>Bestätigen Sie die Stornierung der Bestellung</value>
   </data>
 </root>

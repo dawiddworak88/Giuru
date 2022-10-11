@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Orders.DomainModels;
+using Buyer.Web.Areas.Orders.Definitions;
+using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.ViewModel;
 using Buyer.Web.Shared.ComponentModels.Files;
@@ -11,6 +12,7 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,10 +57,17 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
                 ExpectedDeliveryLabel = this.orderLocalizer.GetString("ExpectedDeliveryLabel"),
                 FabricsLabel = this.orderLocalizer.GetString("FabricsLabel"),
+                CancelOrderLabel = this.orderLocalizer.GetString("CancelOrder"),
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                UpdateOrderStatusUrl = this.linkGenerator.GetPathByAction("Cancel", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
-                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment")
+                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
+                YesLabel = this.globalLocalizer.GetString("Yes"),
+                NoLabel = this.globalLocalizer.GetString("No"),
+                CancelationConfirmationDialogLabel = this.orderLocalizer.GetString("CancelationConfirmationDialog"),
+                AreYouSureToCancelOrderLabel = this.orderLocalizer.GetString("AreYouSureToCancelOrder")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -100,6 +109,11 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         ImageAlt = x.ProductName,
                         ImageSrc = x.PictureUrl
                     });
+
+                    if (order.OrderStatusId == OrdersConstants.OrderStatuses.NewId)
+                    {
+                        viewModel.CanCancelOrder = true;
+                    }
                 }
 
                 var orderFiles = await this.ordersRepository.GetOrderFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(OrderFile.CreatedDate)} desc");

@@ -1,9 +1,11 @@
-﻿using Buyer.Web.Areas.Orders.DomainModels;
+﻿using Buyer.Web.Areas.Orders.ApiRequestModels;
+using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
+using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
@@ -32,6 +34,37 @@ namespace Buyer.Web.Areas.Orders.Repositories
             this.productsRepository = productsRepository;
             this.apiClientService = apiClientService;
             this.productsService = productsService;
+        }
+
+        public async Task<Guid> SaveOrderStatusAsync(string token, string language, Guid orderId, Guid orderStatusId)
+        {
+            var requestModel = new UpdateOrderStatusRequestModel
+            {
+                OrderId = orderId,
+                OrderStatusId = orderStatusId
+            };
+
+            var apiRequest = new ApiRequest<UpdateOrderStatusRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.UpdateOrderStatusApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.PostAsync<ApiRequest<UpdateOrderStatusRequestModel>, UpdateOrderStatusRequestModel, Order>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.OrderStatusId != null)
+            {
+                return response.Data.OrderStatusId;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
         }
 
         public async Task<OrderItem> GetOrderItemAsync(string token, string language, Guid? id)
@@ -231,12 +264,37 @@ namespace Buyer.Web.Areas.Orders.Repositories
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<OrderStatus>>(apiRequest);
+
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return response.Data;
             }
 
             return default;
+        }
+
+        public async Task UpdateOrderItemStatusAsync(string token, string language, Guid id, Guid orderItemStatusId)
+        {
+            var requestModel = new UpdateOrderItemStatusApiRequestModel
+            {
+                Id = id,
+                OrderItemStatusId = orderItemStatusId,
+            };
+
+            var apiRequest = new ApiRequest<UpdateOrderItemStatusApiRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.UpdateOrderItemStatusApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.PostAsync<ApiRequest<UpdateOrderItemStatusApiRequestModel>, UpdateOrderItemStatusApiRequestModel, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
         }
     }
 }

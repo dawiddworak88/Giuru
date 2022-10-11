@@ -6,6 +6,7 @@ using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.Definitions;
+using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
@@ -60,11 +61,17 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
                 SaveText = this.orderLocalizer.GetString("UpdateOrderStatus"),
                 ClientLabel = this.globalLocalizer.GetString("Client"),
+                CancelOrderLabel = this.orderLocalizer.GetString("CancelOrder"),
+                CancelOrderStatusUrl = this.linkGenerator.GetPathByAction("Cancel", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
                 CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
                 OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
-                UpdateOrderItemStatusUrl = this.linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                UpdateOrderItemStatusUrl = this.linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                YesLabel = this.globalLocalizer.GetString("Yes"),
+                NoLabel = this.globalLocalizer.GetString("No"),
+                CancelationConfirmationDialogLabel = this.orderLocalizer.GetString("CancelationConfirmationDialog"),
+                AreYouSureToCancelOrderLabel = this.orderLocalizer.GetString("AreYouSureToCancelOrder")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -108,6 +115,11 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     });
                     viewModel.CustomOrder = order.MoreInfo;
 
+                    if (order.OrderStatusId == OrdersConstants.OrderStatuses.NewId)
+                    {
+                        viewModel.CanCancelOrder = true;
+                    }
+
                     var orderItemsStatuses = new List<OrderItemStatusViewModel>();
 
                     foreach (var orderItem in order.OrderItems.OrEmptyIfNull())
@@ -120,8 +132,6 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     }
 
                     viewModel.OrderItemsStatuses = orderItemsStatuses;
-
-                    viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = order.Attachments });
                 }
 
                 var orderFiles = await this.ordersRepository.GetOrderFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(OrderFile.CreatedDate)} desc");

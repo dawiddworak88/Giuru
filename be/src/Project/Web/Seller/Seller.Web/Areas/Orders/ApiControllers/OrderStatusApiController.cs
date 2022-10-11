@@ -1,10 +1,12 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Exceptions;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.ApiRequestModels;
+using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using System.Globalization;
 using System.Net;
@@ -24,6 +26,36 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         {
             this.ordersRepository = ordersRepository;
             this.orderLocalizer = orderLocalizer;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Cancel([FromBody] UpdateOrderStatusRequestModel model)
+        {
+            if (!model.OrderStatusId.Equals(OrdersConstants.OrderStatuses.NewId))
+            {
+                throw new CustomException(this.orderLocalizer.GetString("CancellationOrderError"), (int)HttpStatusCode.BadRequest);
+            }
+
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            var orderStatusId = await this.ordersRepository.SaveOrderStatusAsync(token, language, model.OrderId, OrdersConstants.OrderStatuses.CancelId);
+
+            return this.StatusCode((int)HttpStatusCode.OK, new { OrderStatusId = orderStatusId, Message = this.orderLocalizer.GetString("SuccessfullyCanceledOrder").Value });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CancelOrderItem([FromBody] UpdateOrderItemStatusRequestModel request)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+            var cancelStatusId = OrdersConstants.OrderStatuses.CancelId;
+
+            await this.ordersRepository.UpdateOrderItemStatusAsync(token, language, request.Id, cancelStatusId, null);
+
+            var orderItemStatusChanges = await this.ordersRepository.GetOrderItemStatusesAsync(token, language, request.Id);
+
+            return this.StatusCode((int)HttpStatusCode.OK, new { OrderItemStatus = cancelStatusId, StatusChanges = orderItemStatusChanges.StatusChanges, Message = this.orderLocalizer.GetString("SuccessfullyCanceledOrder").Value });
         }
 
         [HttpPost]
