@@ -3,10 +3,9 @@ using System;
 
 namespace Analytics.Api.Infrastructure.Entities.SalesAnalytics
 {
-    public class ClientDimensionItem : Entity
+    public class ProductTranslationDimension : EntityTranslation
     {
-        public Guid ClientId { get; set; }
+        public Guid ProductDimensionId { get; set; }
         public string Name { get; set; }
-        public string Email { get; set; }
     }
 }

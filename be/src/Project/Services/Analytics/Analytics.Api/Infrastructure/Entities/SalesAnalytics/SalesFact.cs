@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Analytics.Api.Infrastructure.Entities.SalesAnalytics
 {
-    public class SalesFactItem : Entity
+    public class SalesFact : Entity
     {
         public Guid TimeDimensionId { get; set; }
         public Guid ClientDimensionId { get; set; }
@@ -12,8 +12,8 @@ namespace Analytics.Api.Infrastructure.Entities.SalesAnalytics
         public double Quantity { get; set; }
         public bool IsStock { get; set; }
         public bool IsOutlet { get; set; }
-        public virtual IEnumerable<TimeDimensionItem> TimeDimensions { get; set; }
-        public virtual IEnumerable<ClientDimensionItem> ClientDimensions { get; set; }
-        public virtual IEnumerable<ProductDimensionItem> ProductDimensions { get; set; }
+        public virtual IEnumerable<TimeDimension> TimeDimensions { get; set; }
+        public virtual IEnumerable<ClientDimension> ClientDimensions { get; set; }
+        public virtual IEnumerable<ProductDimension> ProductDimensions { get; set; }
     }
 }

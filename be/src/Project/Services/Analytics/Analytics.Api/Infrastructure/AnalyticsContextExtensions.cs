@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System.Linq;
 
 namespace Analytics.Api.Infrastructure
 {

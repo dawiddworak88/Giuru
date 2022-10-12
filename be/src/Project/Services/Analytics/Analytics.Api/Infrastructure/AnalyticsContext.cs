@@ -14,10 +14,10 @@ namespace Analytics.Api.Infrastructure
             optionsBuilder.UseLazyLoadingProxies();
         }
 
-        public DbSet<SalesFactItem> SalesFacts { get; set; }
-        public DbSet<TimeDimensionItem> TimeDimensions { get; set; }
-        public DbSet<ProductDimensionItem> ProductDimensions { get; set; }
-        public DbSet<ClientDimensionItem> ClientDimensions { get; set; }
-        public DbSet<ProductTranslationDimensionItem> ProductTranslationDimensions { get; set; }
+        public DbSet<SalesFact> SalesFacts { get; set; }
+        public DbSet<TimeDimension> TimeDimensions { get; set; }
+        public DbSet<ProductDimension> ProductDimensions { get; set; }
+        public DbSet<ClientDimension> ClientDimensions { get; set; }
+        public DbSet<ProductTranslationDimension> ProductTranslationDimensions { get; set; }
     }
 }

@@ -2,11 +2,11 @@
 
 namespace Analytics.Api.Infrastructure.Entities.SalesAnalytics
 {
-    public class TimeDimensionItem : Entity
+    public class TimeDimension : Entity
     {
         public int Hour { get; set; }
-        public int Minutes { get; set; }
-        public int Seconds { get; set; }
+        public int Minute { get; set; }
+        public int Second { get; set; }
         public int DayOfWeek { get; set; }
         public int Day { get; set; }
         public int Month { get; set; }
