@@ -9,6 +9,7 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function CategoryForm(props) {
+    console.log(props)
     const [state, dispatch] = useContext(Context);
     const { categoryBase } = props;
 
@@ -48,7 +49,7 @@ function CategoryForm(props) {
             body: JSON.stringify(requestPayload)
         };
 
-        fetch(props.saveUrl, requestOptions)
+        fetch(categoryBase.saveUrl, requestOptions)
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
