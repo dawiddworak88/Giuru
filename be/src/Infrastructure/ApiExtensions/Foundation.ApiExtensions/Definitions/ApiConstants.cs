@@ -79,8 +79,11 @@
         public struct Order
         {
             public static readonly string OrdersApiEndpoint = "/api/v1/orders";
+            public static readonly string OrderItemsApiEndpoint = "/api/v1/orders/orderitems";
+            public static readonly string OrderItemStatusesApiEndpoint = "/api/v1/orders/orderitemstatuses";
             public static readonly string OrderStatusesApiEndpoint = "/api/v1/orderstatuses";
             public static readonly string UpdateOrderStatusApiEndpoint = "/api/v1/orders/orderstatus";
+            public static readonly string UpdateOrderItemStatusApiEndpoint = "/api/v1/orders/orderitemstatus";
             public static readonly string OrderFilesApiEndpoint = "/api/v1/orders/files";
         }
 

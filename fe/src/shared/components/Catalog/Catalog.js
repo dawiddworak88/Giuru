@@ -371,9 +371,9 @@ Catalog.propTypes = {
     noResultsLabel: PropTypes.string.isRequired,
     table: PropTypes.object.isRequired,
     confirmationDialogDeleteNameProperty: PropTypes.array,
-    generateQRCodeLabel: PropTypes.string.isRequired,
-    copyLinkLabel: PropTypes.string.isRequired,
-    defaultItemsPerPage: PropTypes.string.isRequired
+    defaultItemsPerPage: PropTypes.number.isRequired,
+    generateQRCodeLabel: PropTypes.string,
+    copyLinkLabel: PropTypes.string
 }
 
 export default Catalog;

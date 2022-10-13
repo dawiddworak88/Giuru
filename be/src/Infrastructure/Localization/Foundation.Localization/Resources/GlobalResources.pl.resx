@@ -121,7 +121,7 @@
     <value>Wystąpił błąd. Proszę skontaktuj się z administratorem.</value>
   </data>
   <data name="AreYouSureLabel" xml:space="preserve">
-    <value>Czy napewno chcesz usunąć</value>
+    <value>Czy na pewno chcesz usunąć</value>
   </data>
   <data name="Back" xml:space="preserve">
     <value>wstecz</value>
@@ -656,6 +656,9 @@
   </data>
   <data name="Thumbnail" xml:space="preserve">
     <value>Miniaturka</value>
+  </data>
+  <data name="OrderStatusComment" xml:space="preserve">
+    <value>Komentarz do statusu zamówienia</value>
   </data>
   <data name="QRCode" xml:space="preserve">
     <value>Kod QR</value>

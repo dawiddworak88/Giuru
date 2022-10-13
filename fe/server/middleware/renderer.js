@@ -4,6 +4,7 @@ import { resetServerContext } from 'react-beautiful-dnd';
 import { ServerStyleSheets } from "@mui/styles";
 
 // AspNetCore
+import BuyerOrderItemPage from "../../src/project/AspNetCore/areas/Orders/pages/OrderItemPage/OrderItemPage";
 import BuyerDashboardPage from "../../src/project/AspNetCore/areas/Dashboard/pages/DashboardPage/DashboardPage";
 import DownloadCenterBuyerCategoryPage from "../../src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage";
 import DownloadCenterBuyerPage from "../../src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage";
@@ -57,6 +58,7 @@ import WarehousePage from "../../src/project/Seller.Portal/areas/Inventory/pages
 import WarehousesPage from "../../src/project/Seller.Portal/areas/Inventory/pages/WarehousesPage/WarehousesPage";
 import OrdersPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrdersPage/OrdersPage";
 import OrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage";
+import OrderItemPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderItemPage/OrderItemPage";
 import EditOrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/EditOrderPage/EditOrderPage";
 import ClientsPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientsPage/ClientsPage";
 import ClientPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage";
@@ -70,6 +72,7 @@ import SellerCategoryPage from "../../src/project/Seller.Portal/areas/Products/p
 import SettingsPage from "../../src/project/Seller.Portal/areas/Settings/pages/SettingsPage/SettingsPage";
 
 const Components = {
+	BuyerOrderItemPage,
 	BuyerDashboardPage,
 	DownloadCenterBuyerCategoryPage,
 	DownloadCenterBuyerPage,
@@ -121,6 +124,7 @@ const Components = {
 	WarehousesPage,
 	OrdersPage,
 	OrderPage,
+	OrderItemPage,
 	EditOrderPage,
 	ClientsPage,
 	ClientPage,

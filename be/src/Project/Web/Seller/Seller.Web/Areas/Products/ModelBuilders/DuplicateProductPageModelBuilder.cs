@@ -4,7 +4,6 @@ using Foundation.PageContent.MenuTiles.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Products.ViewModels;
-using Foundation.PageContent.ComponentModels;
 using Seller.Web.Areas.Products.ComponentModels;
 
 namespace Seller.Web.Areas.ModelBuilders.Products

@@ -132,6 +132,12 @@
   <data name="BasketDeletedSuccessfully" xml:space="preserve">
     <value>Der Warenkorb wurde erfolgreich geleert</value>
   </data>
+  <data name="CancellationOrderError" xml:space="preserve">
+    <value>Nur neu erstellte Bestellungen können storniert werden.</value>
+  </data>
+  <data name="CancelOrder" xml:space="preserve">
+    <value>Bestellung stornieren</value>
+  </data>
   <data name="ChangeDeliveryFrom" xml:space="preserve">
     <value>Lieferung ab Datum ändern</value>
   </data>
@@ -162,6 +168,9 @@
   <data name="EditOrder" xml:space="preserve">
     <value>Bestellung editieren</value>
   </data>
+  <data name="EditOrderItem" xml:space="preserve">
+    <value>Bestellposition bearbeiten</value>
+  </data>
   <data name="EnterSkuOrName" xml:space="preserve">
     <value>SKU oder den Namen eingeben</value>
   </data>
@@ -173,6 +182,9 @@
   </data>
   <data name="GoToDetails" xml:space="preserve">
     <value>Zu den Details gehen</value>
+  </data>
+  <data name="HistoryOfStatusChanges" xml:space="preserve">
+    <value>Historie von Statusänderungen</value>
   </data>
   <data name="ImportOrder" xml:space="preserve">
     <value>Bestellung importieren</value>
@@ -195,6 +207,9 @@
   <data name="NameLabel" xml:space="preserve">
     <value>Name:</value>
   </data>
+  <data name="NavigateToOrder" xml:space="preserve">
+    <value>Zurück zur Bestellung</value>
+  </data>
   <data name="NavigateToOrdersList" xml:space="preserve">
     <value>Zurück zur Bestellliste</value>
   </data>
@@ -213,6 +228,9 @@
   <data name="OrderFileError" xml:space="preserve">
     <value>Die Bestelldatei ist falsch. Laden Sie die richtige Bestelldatei hoch.</value>
   </data>
+  <data name="OrderItem" xml:space="preserve">
+    <value>Bestellungsartikel</value>
+  </data>
   <data name="OrderItemsLabel" xml:space="preserve">
     <value>Positionen der Bestellung</value>
   </data>
@@ -226,7 +244,10 @@
     <value>Bestellungen</value>
   </data>
   <data name="Orderstatus" xml:space="preserve">
-    <value>Bestellstatus</value>
+    <value>Bestellstatus:</value>
+  </data>
+  <data name="OrderStatusComment" xml:space="preserve">
+    <value>Kommentar zum Bestellstatus:</value>
   </data>
   <data name="OrderStatusNotFound" xml:space="preserve">
     <value>Bestellstatus nicht gefunden</value>
@@ -255,6 +276,9 @@
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
   </data>
+  <data name="SuccessfullyCanceledOrder" xml:space="preserve">
+    <value>Bestellung erfolgreich storniert.</value>
+  </data>
   <data name="StockQuantityLabel" xml:space="preserve">
     <value>Menge ab Lager:</value>
   </data>
@@ -263,5 +287,11 @@
   </data>
   <data name="UpdateOrderStatus" xml:space="preserve">
     <value>Bestellstatus aktualisieren</value>
+  </data>
+  <data name="AreYouSureToCancelOrder" xml:space="preserve">
+    <value>Möchten Sie die Bestellung wirklich stornieren? Zusammen mit den bestellten Produkten.</value>
+  </data>
+  <data name="CancelationConfirmationDialog" xml:space="preserve">
+    <value>Bestätigen Sie die Stornierung der Bestellung</value>
   </data>
 </root>
