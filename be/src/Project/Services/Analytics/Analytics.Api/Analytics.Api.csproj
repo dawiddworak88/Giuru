@@ -10,8 +10,9 @@
 
   <ItemGroup>
 	<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
+	<PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="6.0.2" />
 	<PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="6.0.2" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.9" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.10" />
 	<PackageReference Include="Microsoft.IdentityModel.Logging" Version="6.8.0" />
 	<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 	<PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
@@ -21,15 +22,17 @@
 	<PackageReference Include="Serilog.Sinks.Http" Version="8.0.0" />
 	<PackageReference Include="Serilog.Sinks.Logz.Io" Version="6.0.0" />
 	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-	<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.9" />
+	<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.10" />
 	<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.9" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="6.0.9" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.10" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="6.0.10" />
   </ItemGroup>
 	
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
   </ItemGroup>

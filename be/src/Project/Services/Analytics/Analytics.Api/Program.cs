@@ -64,6 +64,8 @@ builder.Services.ConigureHealthChecks(builder.Configuration);
 
 builder.Services.ConfigureSettings(builder.Configuration);
 
+builder.Services.RegisterDatabaseDependencies(builder.Configuration);
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Analytics API", Version = "v1" });
@@ -90,6 +92,8 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.ConfigureDatabaseMigrations();
 
 app.UseCustomHeaderRequestLocalizationProvider(builder.Configuration, app.Services.GetService<IOptionsMonitor<LocalizationSettings>>());
 
