@@ -48,7 +48,7 @@ function CategoryForm(props) {
             body: JSON.stringify(requestPayload)
         };
 
-        fetch(props.saveUrl, requestOptions)
+        fetch(categoryBase.saveUrl, requestOptions)
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
