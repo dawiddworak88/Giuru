@@ -294,4 +294,7 @@
   <data name="CancelationConfirmationDialog" xml:space="preserve">
     <value>Confirm the cancellation of the order</value>
   </data>
+  <data name="CancelOrderItem" xml:space="preserve">
+    <value>Cancel the order item</value>
+  </data>
 </root>

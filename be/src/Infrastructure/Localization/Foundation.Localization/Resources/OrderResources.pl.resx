@@ -294,4 +294,7 @@
   <data name="CancelationConfirmationDialog" xml:space="preserve">
     <value>Potwierdź anulacje zamówienia</value>
   </data>
+  <data name="CancelOrderItem" xml:space="preserve">
+    <value>Anuluj pozycję zamówienia</value>
+  </data>
 </root>
