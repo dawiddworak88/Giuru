@@ -289,7 +289,7 @@
     <value>Aktualizuj status zamówienia</value>
   </data>
   <data name="AreYouSureToCancelOrder" xml:space="preserve">
-    <value>Czy na pewno chcesz anulować zamówienie. Wraz z zamówionymi produktami.</value>
+    <value>Czy na pewno chcesz anulować zamówienie.</value>
   </data>
   <data name="CancelationConfirmationDialog" xml:space="preserve">
     <value>Potwierdź anulacje zamówienia</value>
