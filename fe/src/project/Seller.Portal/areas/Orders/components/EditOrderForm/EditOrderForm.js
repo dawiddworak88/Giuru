@@ -37,7 +37,6 @@ function EditOrderForm(props) {
 
         fetch(props.updateOrderStatusUrl, requestOptions)
             .then((response) => {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -85,7 +84,6 @@ function EditOrderForm(props) {
 
         fetch(props.cancelOrderStatusUrl, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
