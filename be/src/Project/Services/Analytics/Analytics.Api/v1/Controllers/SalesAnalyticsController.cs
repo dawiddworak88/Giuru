@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Analytics.Api.v1.Controllers
@@ -30,14 +31,42 @@ namespace Analytics.Api.v1.Controllers
             this.salesService = salesService;
         }
 
+        /// <summary>
+        /// Gets top sales products
+        /// </summary>
+        /// <returns>Top sales products.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string a)
+        public async Task<IActionResult> Get()
         {
-            return default;
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetSalesAnalyticsServiceModel
+            {
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                IsSeller = this.User.IsInRole("Seller")
+            };
+
+            var validator = new GetSalesAnalyticsModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var salesAnalytics = await this.salesService.GetSalesAnalyticsAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK, salesAnalytics);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
+        /// <summary>
+        /// Creates  (if inventory skus are set).
+        /// </summary>
+        /// <param name="request">The list of inventory items.</param>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
@@ -49,6 +78,7 @@ namespace Analytics.Api.v1.Controllers
             {
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 SalesAnalyticsItems = request.SalesAnalyticsItems.Select(x => new CreateSalesAnalyticsItemServiceModel
                 {
                     ClientId = x.ClientId,
@@ -65,7 +95,7 @@ namespace Analytics.Api.v1.Controllers
                 })
             };
 
-            var validator = new CreateSalesAnalyticsValidatorModel();
+            var validator = new CreateSalesAnalyticsModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)

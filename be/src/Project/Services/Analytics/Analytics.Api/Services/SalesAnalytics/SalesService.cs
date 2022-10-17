@@ -5,6 +5,8 @@ using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Analytics.Api.Services.SalesAnalytics
@@ -87,6 +89,53 @@ namespace Analytics.Api.Services.SalesAnalytics
                 await this.context.SalesFacts.AddAsync(salesFact.FillCommonProperties());
                 await this.context.SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<SalesAnalyticsServiceModel>> GetSalesAnalyticsAsync(GetSalesAnalyticsServiceModel model)
+        {
+            var salesAnalytics = from s in this.context.SalesFacts
+                                 join p in this.context.ProductDimensions on s.ProductDimensionId equals p.Id
+                                 join t in this.context.TimeDimensions on s.TimeDimensionId equals t.Id
+                                 join c in this.context.ClientDimensions on s.ClientDimensionId equals c.Id
+                                 where s.IsActive
+                                 select new 
+                                 {
+                                     Id = s.Id,
+                                     ProductId = p.ProductId,
+                                     ProductSku = p.Sku,
+                                     Ean = p.Ean,
+                                     ClientId = c.ClientId,
+                                     ClientName = c.Name,
+                                     Email = c.Email,
+                                     IsOutlet = s.IsOutlet,
+                                     IsStock = s.IsStock,
+                                     Quantity = s.Quantity
+                                 };
+
+            if (model.IsSeller is false)
+            {
+                salesAnalytics = salesAnalytics.Where(x => x.Email == model.Username);
+            }
+
+            var productGroups = salesAnalytics.OrEmptyIfNull().GroupBy(g => g.ProductId);
+
+            var salesAnalyticsItems = new List<SalesAnalyticsServiceModel>();
+
+            foreach (var productGroup in productGroups.OrEmptyIfNull())
+            {
+                var salesAnalyticsItem = new SalesAnalyticsServiceModel
+                {
+                    Id = productGroup.FirstOrDefault().Id,
+                    ProductId = productGroup.FirstOrDefault().ProductId,
+                    ProductSku = productGroup.FirstOrDefault().ProductSku,
+                    Ean = productGroup.FirstOrDefault().Ean,
+                    Quantity = productGroup.Sum(x => x.Quantity)
+                };
+
+                salesAnalyticsItems.Add(salesAnalyticsItem);
+            }
+
+            return salesAnalyticsItems;
         }
     }
 }
