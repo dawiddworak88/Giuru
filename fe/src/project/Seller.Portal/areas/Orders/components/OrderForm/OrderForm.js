@@ -16,7 +16,6 @@ import AdapterMoment from '@mui/lab/AdapterMoment';
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
 import ConfirmationDialog from "../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import IconConstants from "../../../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
@@ -477,17 +476,7 @@ function OrderForm(props) {
                         disabled={state.isLoading || orderItems.length === 0 || disableSaveButton}>
                         {props.saveText}
                     </Button>
-                    <Button
-                        className="ml-2"
-                        type="button" 
-                        variant="contained" 
-                        color="secondary" 
-                        onClick={(e) => {
-                            e.preventDefault();
-                            NavigationHelper.redirect(props.ordersUrl)
-                        }}>
-                        {props.navigateToOrdersListText}
-                    </Button>
+                    <a href={props.ordersUrl} className="ml-2 button is-text">{props.navigateToOrdersListText}</a>
                 </div>
             </div>
             <ConfirmationDialog

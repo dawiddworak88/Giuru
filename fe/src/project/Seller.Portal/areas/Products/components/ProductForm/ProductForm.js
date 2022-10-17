@@ -15,7 +15,6 @@ import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaClou
 import DynamicForm from "../../../../../../shared/components/DynamicForm/DynamicForm";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import SearchConstants from "../../../../../../shared/constants/SearchConstants";
 
 function ProductForm(props) {
@@ -403,17 +402,7 @@ function ProductForm(props) {
                                 disabled={state.isLoading || disable || !convertedToRaw}>
                                 {props.saveText}
                             </Button>
-                            <Button 
-                                className="ml-2"
-                                type="button" 
-                                variant="contained" 
-                                color="secondary"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.productsUrl);
-                                }}>
-                                {props.navigateToProductsLabel}
-                            </Button>
+                            <a href={props.productsUrl} className="ml-2 button is-text">{props.navigateToProductsLabel}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

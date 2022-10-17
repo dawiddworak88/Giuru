@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import {
     Button, TextField, CircularProgress
 } from "@mui/material";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import OrderItemStatusChanges from "../../../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
 import moment from "moment";
 
@@ -193,16 +192,7 @@ const OrderItemForm = (props) => {
                                 {props.cancelOrderItemLabel}
                             </Button>
                         }
-                        <Button 
-                            type="button" 
-                            variant="contained" 
-                            color="secondary" 
-                            onClick={(e) => {
-                                e.preventDefault();
-                                NavigationHelper.redirect(props.orderUrl);
-                            }}>
-                            {props.navigateToOrderLabel}
-                        </Button> 
+                        <a href={props.orderUrl} className="ml-2 button is-text">{props.navigateToOrderLabel}</a>
                     </div>
                 </div>
             </div>

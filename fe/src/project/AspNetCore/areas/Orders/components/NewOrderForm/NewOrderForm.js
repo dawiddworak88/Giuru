@@ -16,7 +16,6 @@ import moment from "moment";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
 import ConfirmationDialog from "../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import IconConstants from "../../../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
@@ -235,11 +234,6 @@ function NewOrderForm(props) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
-    };
-
-    const handleBackToOrdersClick = (e) => {
-        e.preventDefault();
-        NavigationHelper.redirect(props.ordersUrl);
     };
 
     const onDrop = useCallback(acceptedFiles => {
@@ -537,9 +531,7 @@ function NewOrderForm(props) {
                 </div>
                 <div className="field">
                     {isOrdered ? (
-                        <Button type="button" variant="contained" color="primary" onClick={handleBackToOrdersClick}>
-                            {props.navigateToOrdersListText}
-                        </Button> 
+                        <a href={props.ordersUrl} className="button is-text">{props.navigateToOrdersListText}</a>
                     ) : (
                         <>
                             <Button type="button" variant="contained"

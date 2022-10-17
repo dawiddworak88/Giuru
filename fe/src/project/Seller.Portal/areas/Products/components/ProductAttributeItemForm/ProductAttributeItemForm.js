@@ -5,7 +5,6 @@ import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { TextField, Button, CircularProgress, InputLabel } from "@mui/material";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function ProductAttributeItemForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -92,17 +91,7 @@ function ProductAttributeItemForm(props) {
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <Button
-                                className="ml-2"
-                                type="button"
-                                variant="contained" 
-                                color="secondary"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.productAttributeUrl);
-                                }}>
-                                {props.navigateToProductAttributesLabel}
-                            </Button>
+                            <a href={props.productAttributeUrl} className="ml-2 button is-text">{props.navigateToProductAttributesLabel}</a>
                         </div>
                     </form>
                 </div>
