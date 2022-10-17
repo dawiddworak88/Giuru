@@ -66,6 +66,8 @@ builder.Services.ConfigureSettings(builder.Configuration);
 
 builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 
+builder.Services.RegisterAnalyticsApiDependencies();
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Analytics API", Version = "v1" });
