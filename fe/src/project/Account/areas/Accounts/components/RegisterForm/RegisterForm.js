@@ -116,7 +116,7 @@ const RegisterForm = (props) => {
             .then(response => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                Aut
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
