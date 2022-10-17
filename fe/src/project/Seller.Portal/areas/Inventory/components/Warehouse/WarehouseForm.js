@@ -5,6 +5,7 @@ import { Context } from "../../../../../../shared/stores/Store";
 import { TextField, Button, InputLabel } from "@mui/material";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 const WarehouseForm = (props) => {
 
@@ -44,6 +45,9 @@ const WarehouseForm = (props) => {
         fetch(props.saveUrl, requestOptions)
             .then((res) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(res);
+
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);

@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../../../shared/constants/LazyLoadConstants";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import ResponsiveImage from "../../../../../../shared/components/Picture/ResponsiveImage";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
@@ -23,6 +24,7 @@ const NewsCatalog = (props) => {
         if (!loadMore) return;
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
+        
         const requestOptions = {
             method: "GET",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
@@ -37,8 +39,9 @@ const NewsCatalog = (props) => {
 
         fetch(getNewsUrl, requestOptions)
             .then((response) => {
-                
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
                     if (response.ok){

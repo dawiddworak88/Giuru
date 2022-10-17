@@ -289,9 +289,12 @@
     <value>Update order status</value>
   </data>
   <data name="AreYouSureToCancelOrder" xml:space="preserve">
-    <value>Are you sure you want to cancel the order. Along with the ordered products.</value>
+    <value>Are you sure you want to cancel the order.</value>
   </data>
   <data name="CancelationConfirmationDialog" xml:space="preserve">
     <value>Confirm the cancellation of the order</value>
+  </data>
+  <data name="CancelOrderItem" xml:space="preserve">
+    <value>Cancel the order item</value>
   </data>
 </root>

@@ -289,9 +289,12 @@
     <value>Bestellstatus aktualisieren</value>
   </data>
   <data name="AreYouSureToCancelOrder" xml:space="preserve">
-    <value>Möchten Sie die Bestellung wirklich stornieren? Zusammen mit den bestellten Produkten.</value>
+    <value>Möchten Sie die Bestellung wirklich stornieren?</value>
   </data>
   <data name="CancelationConfirmationDialog" xml:space="preserve">
     <value>Bestätigen Sie die Stornierung der Bestellung</value>
+  </data>
+  <data name="CancelOrderItem" xml:space="preserve">
+    <value>Bestellposition stornieren</value>
   </data>
 </root>
