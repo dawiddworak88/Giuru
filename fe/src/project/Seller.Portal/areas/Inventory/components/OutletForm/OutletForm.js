@@ -11,8 +11,6 @@ import QuantityValidator from "../../../../../../shared/helpers/validators/Quant
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import SearchConstants from "../../../../../../shared/constants/SearchConstants";
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import { response } from "express";
 
 const OutletForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -79,7 +77,7 @@ const OutletForm = (props) => {
             .then((res) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                AuthenticationHelper.HandleResponse(response);
+                AuthenticationHelper.HandleResponse(res);
 
                 return res.json().then(jsonRes => {
                     if (res.ok) {
