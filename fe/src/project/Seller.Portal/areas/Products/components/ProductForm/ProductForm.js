@@ -93,7 +93,6 @@ function ProductForm(props) {
 
         fetch(getCategorySchemaUrl, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -147,7 +146,6 @@ function ProductForm(props) {
 
         fetch(props.saveUrl, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);

@@ -36,7 +36,6 @@ function ProductAttributeItemForm(props) {
 
         fetch(props.saveUrl, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);

@@ -183,6 +183,7 @@ function NewOrderForm(props) {
                     if (response.ok) {
                         setBasketId(jsonResponse.id);
                         setOpenDeleteDialog(false);
+                        
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
                             setOrderItems(jsonResponse.items);
                         }

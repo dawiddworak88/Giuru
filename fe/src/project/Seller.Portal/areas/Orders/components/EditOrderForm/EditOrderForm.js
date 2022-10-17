@@ -11,12 +11,9 @@ import { Edit } from "@mui/icons-material";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import Files from "../../../../../../shared/components/Files/Files";
-import ConfirmationDialog from "../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
 
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
-    const [openCancelationDialog, setOpenCancelationDialog] = useState(false);
-    const [canceledOrder, setCanceledOrder] = useState(false);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
 
     const handleOrderStatusSubmit = (e) => {
@@ -37,7 +34,6 @@ function EditOrderForm(props) {
 
         fetch(props.updateOrderStatusUrl, requestOptions)
             .then((response) => {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -46,55 +42,6 @@ function EditOrderForm(props) {
 
                     if (response.ok) {
                         setOrderStatusId(jsonResponse.orderStatusId);
-                        toast.success(jsonResponse.message);
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
-    };
-
-    const handleCancelationDialogClose = () => {
-        setOpenCancelationDialog(false);
-    }
-
-    const handleCancelationClick = () => {
-        setOpenCancelationDialog(true)
-    }
-
-    const handleCancelOrderSubmit = (e) => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const requestBody = {
-            orderId: props.id,
-            orderStatusId: orderStatusId
-        };
-
-        const requestOptions = {
-            method: "POST",
-            headers: { 
-                "Content-Type": "application/json", 
-                "X-Requested-With": "XMLHttpRequest" 
-            },
-            body: JSON.stringify(requestBody)
-        };
-
-        fetch(props.cancelOrderStatusUrl, requestOptions)
-            .then(function (response) {
-
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setCanceledOrder(true);
-                        setOrderStatusId(jsonResponse.orderStatusId);
-                        setOpenCancelationDialog(false);
                         toast.success(jsonResponse.message);
                     }
                     else {
@@ -163,17 +110,6 @@ function EditOrderForm(props) {
                             <a href={props.clientUrl}>{props.clientName}</a>
                         </div>
                     </div>
-                    {props.canCancelOrder && !canceledOrder &&
-                        <div className="mt-5">
-                            <Button 
-                                type="text" 
-                                variant="contained" 
-                                color="primary"
-                                onClick={handleCancelationClick}>
-                                {props.cancelOrderLabel}
-                            </Button>
-                        </div>
-                    }
                 </div>
             </div>
             {props.orderItems && props.orderItems.length > 0 &&
@@ -256,17 +192,6 @@ function EditOrderForm(props) {
                     }
                 </Fragment>
             }
-            <ConfirmationDialog 
-                open={openCancelationDialog}
-                handleClose={handleCancelationDialogClose}
-                handleConfirm={handleCancelOrderSubmit}
-                noLabel={props.noLabel}
-                yesLabel={props.yesLabel}
-                title={props.cancelationConfirmationDialogLabel}
-                text={props.areYouSureToCancelOrderLabel}
-                titleId="alert-dialog-title"
-                textId="alert-dialog-description"
-            />
             {state.isLoading && <CircularProgress className="progressBar" />}
         </section >
     );
@@ -293,13 +218,7 @@ EditOrderForm.propTypes = {
     clientUrl: PropTypes.string.isRequired,
     updateOrderStatusUrl: PropTypes.string.isRequired,
     idLabel: PropTypes.string,
-    updateOrderItemStatusUrl: PropTypes.string.isRequired,
-    orderItemsStatuses: PropTypes.array,
-    orderStatusCommentLabel: PropTypes.string.isRequired,
-    yesLabel: PropTypes.string.isRequired,
-    noLabel: PropTypes.string.isRequired,
-    cancelationConfirmationDialogLabel: PropTypes.string.isRequired,
-    areYouSureToCancelOrderLabel: PropTypes.string.isRequired
+    orderStatusCommentLabel: PropTypes.string.isRequired
 };
 
 export default EditOrderForm;

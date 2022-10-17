@@ -867,5 +867,7 @@ spec:
           value: {{ .Values.supportedCultures }}
         - name: SellerUrl
           value: {{ .Values.sellerUrl }}
+        - name: CdnUrl
+          value: {{ .Values.cdnUrl }}
         ports:
         - containerPort: 80

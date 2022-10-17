@@ -120,7 +120,6 @@ function OrderForm(props) {
 
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -190,7 +189,6 @@ function OrderForm(props) {
 
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -239,7 +237,6 @@ function OrderForm(props) {
 
         fetch(props.placeOrderUrl, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -273,9 +270,7 @@ function OrderForm(props) {
             };
 
             fetch(props.uploadOrderFileUrl, requestOptions)
-
                 .then(function (response) {
-
                     dispatch({ type: "SET_IS_LOADING", payload: false });
 
                     return response.json().then((jsonResponse) => {
