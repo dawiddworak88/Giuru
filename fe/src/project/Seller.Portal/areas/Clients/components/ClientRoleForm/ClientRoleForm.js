@@ -92,17 +92,7 @@ const ClientRoleForm = (props) => {
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <Button 
-                                className="ml-2"
-                                type="text" 
-                                variant="contained" 
-                                color="secondary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.rolesUrl)
-                                }}>
-                                {props.navigateToCliensRoles}
-                            </Button>
+                            <a href={props.rolesUrl} className="ml-2 button is-text">{props.navigateToCliensRoles}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

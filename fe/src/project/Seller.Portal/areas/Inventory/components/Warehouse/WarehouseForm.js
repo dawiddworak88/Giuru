@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
 import { TextField, Button, InputLabel } from "@mui/material";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 const WarehouseForm = (props) => {
 
@@ -105,17 +104,7 @@ const WarehouseForm = (props) => {
                             disabled={state.isLoading || disable}>
                             {props.saveText}
                         </Button>
-                        <Button 
-                            className="ml-2"
-                            type="button" 
-                            variant="contained" 
-                            color="secondary" 
-                            onClick={(e) => {
-                                e.preventDefault();
-                                NavigationHelper.redirect(props.warehouseUrl);
-                            }}>
-                            {props.navigateToWarehouseListText}
-                        </Button> 
+                        <a href={props.warehouseUrl} className="ml-2 button is-text">{props.navigateToWarehouseListText}</a>
                     </div>
                 </form>
             </div>

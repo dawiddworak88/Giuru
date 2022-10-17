@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { TextField, Button, InputLabel, CircularProgress } from "@mui/material";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import { Context } from "../../../../../../shared/stores/Store";
 import { toast } from "react-toastify";
@@ -93,17 +92,7 @@ const ClientGroupForm = (props) => {
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <Button
-                                className="ml-2"
-                                type="button" 
-                                variant="contained" 
-                                color="secondary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.groupsUrl);
-                                }}>
-                                {props.navigateToGroupsText}
-                            </Button>
+                            <a href={props.groupsUrl} className="ml-2 button is-text">{props.navigateToGroupsText}</a>
                         </div>
                     </form>
                 </div>

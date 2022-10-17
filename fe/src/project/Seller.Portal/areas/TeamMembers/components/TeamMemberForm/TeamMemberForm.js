@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import { 
     TextField, InputLabel, Button, CircularProgress
@@ -140,17 +139,7 @@ const TeamMemberForm = (props) => {
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <Button 
-                                className="ml-2"
-                                type="button" 
-                                variant="contained" 
-                                color="secondary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.teamMembersUrl);
-                                }}>
-                                {props.navigateToTeamMembersListText}
-                            </Button> 
+                            <a href={props.teamMembersUrl} className="ml-2 button is-text">{props.navigateToTeamMembersListText}</a>
                         </div>
                     </form>
                 </div>

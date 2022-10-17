@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import { 
     TextField, Button, InputLabel, CircularProgress,
     FormControl, Select, MenuItem, FormHelperText
@@ -302,17 +301,7 @@ const ClientApplicationForm = (props) => {
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <Button
-                                className="ml-2"
-                                type="text" 
-                                variant="contained" 
-                                color="secondary"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.clientsApplicationsUrl);
-                                }}>
-                                {props.backToClientsApplicationsText}
-                            </Button>
+                            <a href={props.clientsApplicationsUrl} className="ml-2 button is-text">{props.backToClientsApplicationsText}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}
