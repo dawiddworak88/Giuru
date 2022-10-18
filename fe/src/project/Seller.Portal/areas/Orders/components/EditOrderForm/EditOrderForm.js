@@ -192,6 +192,9 @@ function EditOrderForm(props) {
                     }
                 </Fragment>
             }
+            <div className="field">
+                <a href={props.ordersUrl} className="button is-text">{props.navigateToOrders}</a>
+            </div>
             {state.isLoading && <CircularProgress className="progressBar" />}
         </section >
     );
@@ -218,7 +221,9 @@ EditOrderForm.propTypes = {
     clientUrl: PropTypes.string.isRequired,
     updateOrderStatusUrl: PropTypes.string.isRequired,
     idLabel: PropTypes.string,
-    orderStatusCommentLabel: PropTypes.string.isRequired
+    orderStatusCommentLabel: PropTypes.string.isRequired,
+    ordersUrl: PropTypes.string.isRequired,
+    navigateToOrders: PropTypes.string.isRequired
 };
 
 export default EditOrderForm;
