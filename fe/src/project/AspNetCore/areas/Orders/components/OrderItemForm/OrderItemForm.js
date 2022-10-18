@@ -6,12 +6,13 @@ import {
     Button, TextField, CircularProgress
 } from "@mui/material";
 import OrderItemStatusChanges from "../../../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
 
 const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [canceledOrderItem, setCanceledOrderItem] = useState(false);
-    const [orderItemStatusChanges, setOrderItemStatusChanges] = useState(props.statusChanges ? props.statusChanges : [])
+    const [statusChanges, setStatusChanges] = useState(props.statusChanges ? props.statusChanges : [])
 
     const handleCancelOrderItem = (e) => {
         e.preventDefault();
@@ -41,7 +42,7 @@ const OrderItemForm = (props) => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
                         setCanceledOrderItem(true);
-                        setOrderItemStatusChanges(jsonResponse.statusChanges);
+                        setStatusChanges(jsonResponse.statusChanges);
                     }
                 });
             }).catch(() => {
@@ -196,9 +197,9 @@ const OrderItemForm = (props) => {
                     </div>
                 </div>
             </div>
-            {orderItemStatusChanges &&
+            {statusChanges && props.orderItemStatusChanges &&
                 <OrderItemStatusChanges
-                    statusChanges={orderItemStatusChanges}
+                    statusChanges={statusChanges}
                     labels={props.orderItemStatusChanges}
                 />
             }
