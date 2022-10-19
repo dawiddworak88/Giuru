@@ -193,7 +193,7 @@ const OrderItemForm = (props) => {
                                 {props.cancelOrderItemLabel}
                             </Button>
                         }
-                        <a href={props.orderUrl} className="ml-2 button is-text">{props.navigateToOrderLabel}</a>
+                        <a href={props.orderUrl} className="button is-text">{props.navigateToOrderLabel}</a>
                     </div>
                 </div>
             </div>
