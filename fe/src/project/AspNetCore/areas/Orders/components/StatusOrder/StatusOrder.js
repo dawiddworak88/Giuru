@@ -176,7 +176,7 @@ function StatusOrder(props) {
                     }
                 </Fragment>
             }
-            <div className="field">
+            <div className="field mt-3">
                 <a href={props.ordersUrl} className="button is-text">{props.navigateToOrders}</a>
             </div>
             <ConfirmationDialog 
