@@ -6,7 +6,6 @@ import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelpe
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -240,17 +239,7 @@ function ClientForm(props) {
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <Button
-                                className="field-button"
-                                type="button"
-                                variant="contained" 
-                                color="primary"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.clientsUrl);
-                                }}>
-                                    {props.navigateToClientsLabel}
-                            </Button>
+                            <a href={props.clientsUrl} className="ml-2 button is-text">{props.navigateToClientsLabel}</a>
                             <Button 
                                 className="field-button"
                                 type="button" 

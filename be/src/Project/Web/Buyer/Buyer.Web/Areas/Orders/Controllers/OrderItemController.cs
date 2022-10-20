@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Orders.ViewModel;
+using Buyer.Web.Shared.Definitions.Basket;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
@@ -32,9 +33,12 @@ namespace Buyer.Web.Areas.Orders.Controllers
             var componentModel = new ComponentModelBase
             {
                 Id = id,
+                IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Language = CultureInfo.CurrentUICulture.Name,
+                Name = this.User.Identity.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
+                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
+                BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName])
             };
 
             var viewModel = await this.orderItemPageModelBuilder.BuildModelAsync(componentModel);

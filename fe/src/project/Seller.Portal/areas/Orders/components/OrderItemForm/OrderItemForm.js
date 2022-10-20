@@ -7,54 +7,14 @@ import {
     Button, TextField, CircularProgress
 } from "@mui/material";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import OrderItemStatusChanges from "../../../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
 import moment from "moment";
 
 const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [canceledOrderItem, setCanceledOrderItem] = useState(false);
     const [orderItemStatusId, setOrderItemStatusId] = useState(props.orderItemStatusId ? props.orderItemStatusId : "");
     const [orderItemStatusChangeComment, setOrderItemStatusChangeComment] = useState("");
     const [orderItemStatusChanges, setOrderItemStatusChanges] = useState(props.statusChanges ? props.statusChanges : []);
-
-    const handleCancelOrderItem = (e) => {
-        e.preventDefault();
-
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const requestPayload = {
-            id: props.id
-        }
-
-        const requestOptions = {
-            method: "POST",
-            headers: { 
-                "Content-Type": "application/json", 
-                "X-Requested-With": "XMLHttpRequest" 
-            },
-            body: JSON.stringify(requestPayload)
-        }
-
-        return fetch(props.cancelOrderItemStatusUrl, requestOptions)
-            .then((response) => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        toast.success(jsonResponse.message);
-                        setCanceledOrderItem(true);
-                        setOrderItemStatusId(jsonResponse.orderItemStatus);
-                        setOrderItemStatusChanges(jsonResponse.statusChanges);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
-    }
 
     const handleSubmitForm = (e) => {
         e.preventDefault();
@@ -274,27 +234,7 @@ const OrderItemForm = (props) => {
                                 disabled={state.isLoading || props.orderItemStatusId === orderItemStatusId}>
                                 {props.saveText}
                             </Button>
-                            {props.canCancelOrderItem && !canceledOrderItem &&
-                                <Button 
-                                    className="ml-2"
-                                    type="button" 
-                                    variant="contained"
-                                    onClick={handleCancelOrderItem}
-                                    color="secondary">
-                                    {props.cancelOrderItemLabel}
-                                </Button>
-                            }
-                            <Button 
-                                className="ml-2"
-                                type="button" 
-                                variant="contained" 
-                                color="secondary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.orderUrl);
-                                }}>
-                                {props.navigateToOrderLabel}
-                            </Button>
+                            <a href={props.orderUrl} className="ml-2 button is-text">{props.navigateToOrderLabel}</a>
                         </div>
                     </form>
                 </div>
@@ -331,7 +271,6 @@ OrderItemForm.propTypes = {
     externalReferenceLabel: PropTypes.string.isRequired,
     moreInfoLabel: PropTypes.string.isRequired,
     statusChanges: PropTypes.array,
-    cancelOrderItemLabel: PropTypes.string.isRequired,
     cancelOrderItemStatusUrl: PropTypes.string.isRequired
 };
 

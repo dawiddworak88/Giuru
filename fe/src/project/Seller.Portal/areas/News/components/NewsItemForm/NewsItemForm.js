@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
@@ -303,17 +302,7 @@ const NewsItemForm = (props) => {
                                 >
                                 {props.saveText}
                             </Button>
-                            <Button 
-                                className="ml-2"
-                                type="button" 
-                                variant="contained" 
-                                color="secondary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.newsUrl);
-                                }}>
-                                {props.navigateToNewsLabel}
-                            </Button> 
+                            <a href={props.newsUrl} className="ml-2 button is-text">{props.navigateToNewsLabel}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

@@ -172,17 +172,7 @@ const MediaItemForm = (props) => {
                                 disabled={disable || state.isLoading}>
                                 {props.saveMediaText}
                             </Button>
-                            <Button 
-                                className="ml-2"
-                                type="button" 
-                                variant="contained" 
-                                color="secondary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.mediaUrl);
-                                }}>
-                                {props.backToMediaText}
-                            </Button> 
+                            <a href={props.mediaUrl} className="ml-2 button is-text">{props.backToMediaText}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

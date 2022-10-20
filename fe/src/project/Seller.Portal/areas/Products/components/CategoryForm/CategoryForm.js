@@ -6,7 +6,6 @@ import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress } from "@mui/material";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function CategoryForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -48,9 +47,8 @@ function CategoryForm(props) {
             body: JSON.stringify(requestPayload)
         };
 
-        fetch(props.saveUrl, requestOptions)
+        fetch(categoryBase.saveUrl, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -132,17 +130,7 @@ function CategoryForm(props) {
                                 disabled={state.isLoading || disable}>
                                 {categoryBase.saveText}
                             </Button>
-                            <Button
-                                className="ml-2"
-                                type="button"
-                                variant="contained" 
-                                color="secondary"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(categoryBase.categoriesUrl);
-                                }}>
-                                {categoryBase.navigateToCategoriesLabel}
-                            </Button>
+                            <a href={categoryBase.categoriesUrl} className="ml-2 button is-text">{categoryBase.navigateToCategoriesLabel}</a>
                         </div>
                     </form>
                 </div>

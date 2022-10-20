@@ -191,6 +191,11 @@ namespace Ordering.Api.Services
                 || x.Id.ToString().ToLower() == model.SearchTerm.ToLower());
             }
 
+            if (model.CreatedDateGreaterThan.HasValue)
+            {
+                orders = orders.Where(x => x.CreatedDate >= model.CreatedDateGreaterThan);
+            }
+
             orders = orders.ApplySort(model.OrderBy);
 
             var pagedResults = orders.PagedIndex(new Pagination(orders.Count(), model.ItemsPerPage), model.PageIndex);

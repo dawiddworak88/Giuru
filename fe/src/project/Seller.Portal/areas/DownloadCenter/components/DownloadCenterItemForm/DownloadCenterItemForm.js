@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import PropTypes from "prop-types";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import { 
@@ -121,17 +120,7 @@ const DownloadCenterItemForm = (props) => {
                                 disabled={state.isLoading || disable || files.length == 0}>
                                 {props.saveText}
                             </Button>
-                            <Button
-                                className="ml-2"
-                                type="button" 
-                                variant="contained" 
-                                color="secondary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.downloadCenterUrl);
-                                }}>
-                                {props.navigateToDownloadCenterLabel}
-                            </Button> 
+                            <a href={props.downloadCenterUrl} className="ml-2 button is-text">{props.navigateToDownloadCenterLabel}</a>
                         </div>
                     </form>
                 </div>

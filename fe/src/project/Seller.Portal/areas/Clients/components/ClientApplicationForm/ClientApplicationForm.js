@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import { 
     TextField, Button, InputLabel, CircularProgress,
     FormControl, Select, MenuItem, FormHelperText
@@ -9,6 +8,7 @@ import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 const ClientApplicationForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -112,6 +112,8 @@ const ClientApplicationForm = (props) => {
         fetch(props.saveUrl, requestOptions)
             .then(response => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
@@ -302,17 +304,7 @@ const ClientApplicationForm = (props) => {
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <Button
-                                className="ml-2"
-                                type="text" 
-                                variant="contained" 
-                                color="secondary"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.clientsApplicationsUrl);
-                                }}>
-                                {props.backToClientsApplicationsText}
-                            </Button>
+                            <a href={props.clientsApplicationsUrl} className="ml-2 button is-text">{props.backToClientsApplicationsText}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

@@ -36,7 +36,6 @@ function ProductAttributeForm(props) {
 
         fetch(props.saveUrl, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -95,17 +94,7 @@ function ProductAttributeForm(props) {
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <Button 
-                                className="ml-2"
-                                type="button" 
-                                variant="contained" 
-                                color="secondary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.attributesUrl)
-                                }}>
-                                {props.navigateToAttributesLabel}
-                            </Button>
+                            <a href={props.attributesUrl} className="ml-2 button is-text">{props.navigateToAttributesLabel}</a>
                         </div>
                     </form>
                 </div>

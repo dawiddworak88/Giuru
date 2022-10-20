@@ -68,10 +68,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
                 OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
                 UpdateOrderItemStatusUrl = this.linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                YesLabel = this.globalLocalizer.GetString("Yes"),
-                NoLabel = this.globalLocalizer.GetString("No"),
-                CancelationConfirmationDialogLabel = this.orderLocalizer.GetString("CancelationConfirmationDialog"),
-                AreYouSureToCancelOrderLabel = this.orderLocalizer.GetString("AreYouSureToCancelOrder")
+                OrdersUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                NavigateToOrders = this.orderLocalizer.GetString("NavigateToOrdersList")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
