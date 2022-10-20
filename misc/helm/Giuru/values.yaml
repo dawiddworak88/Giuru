@@ -31,6 +31,8 @@ senderName: "#{SenderName}#"
 googleTagManagerIdentifier: "#{GoogleTagManagerIdentifier}#"
 defaultCulture: "en"
 supportedCultures: "en,de,pl"
+analyticsApi:
+  connectionString: "#{AnalyticsApi--ConnectionString}#"
 downloadCenterApi:
   connectionString: "#{DownloadCenterApi--ConnectionString}#"
 newsApi:

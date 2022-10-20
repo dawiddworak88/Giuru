@@ -93,6 +93,13 @@ spec:
           serviceName: download-center-api-service
           servicePort: 80
         path: /
+  - host: {{ .Values.ingress.analyticsapidomain }}
+    http:
+      paths:
+      - backend:
+          serviceName: analytics-api-service
+          servicePort: 80
+        path: /
   - host: {{ .Values.ingress.buyerapidomain }}
     http:
       paths:
