@@ -58,3 +58,4 @@ namespace Analytics.Api.DependencyInjection
         }
     }
 }
+
