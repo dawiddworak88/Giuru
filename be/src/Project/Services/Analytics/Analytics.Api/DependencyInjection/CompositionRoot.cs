@@ -1,4 +1,5 @@
 ﻿using Analytics.Api.Infrastructure;
+using Analytics.Api.Services.Products;
 using Analytics.Api.Services.SalesAnalytics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +12,7 @@ namespace Analytics.Api.DependencyInjection
         public static void RegisterAnalyticsApiDependencies(this IServiceCollection services)
         {
             services.AddScoped<ISalesService, SalesService>();
+            services.AddScoped<IProductService, ProductService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
