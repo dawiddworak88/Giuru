@@ -1,4 +1,6 @@
 ﻿using Analytics.Api.Infrastructure;
+using Analytics.Api.IntegrationEvents;
+using Foundation.EventBus.Abstractions;
 using Foundation.Localization.Definitions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +30,13 @@ namespace Analytics.Api.DependencyInjection
         public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<LocalizationSettings>(configuration);
+        }
+
+        public static void ConfigureEventBus(this IApplicationBuilder app)
+        {
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+
+            eventBus.Subscribe<UpdatedProductIntegrationEvent, IIntegrationEventHandler<UpdatedProductIntegrationEvent>>();
         }
 
         public static IServiceCollection ConigureHealthChecks(this IServiceCollection services, IConfiguration configuration)
