@@ -23,6 +23,7 @@ using HealthChecks.UI.Client;
 using Foundation.Media.DependencyInjection;
 using Buyer.Web.Areas.Clients.DependencyInjection;
 using Buyer.Web.Areas.DownloadCenter.DependencyInjection;
+using Foundation.Extensions.Definitions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -113,7 +114,21 @@ app.UseGeneralException();
 
 app.UseResponseCompression();
 
-app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
+if (app.Environment.EnvironmentName == EnvironmentConstants.DevelopmentEnvironmentName)
+{
+    app.UseCookiePolicy(new CookiePolicyOptions
+    {
+        MinimumSameSitePolicy = SameSiteMode.Lax
+    });
+}
+else
+{
+    app.UseCookiePolicy(new CookiePolicyOptions
+    {
+        MinimumSameSitePolicy = SameSiteMode.None,
+        Secure = CookieSecurePolicy.Always
+    });
+}
 
 app.UseGeneralStaticFiles();
 

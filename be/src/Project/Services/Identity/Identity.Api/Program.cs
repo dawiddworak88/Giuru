@@ -124,7 +124,21 @@ var scope = app.Services.CreateAsyncScope();
 
 app.ConfigureDatabaseMigrations(builder.Configuration, scope.ServiceProvider.GetService<IUserService>());
 
-app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
+if (app.Environment.EnvironmentName == EnvironmentConstants.DevelopmentEnvironmentName)
+{
+    app.UseCookiePolicy(new CookiePolicyOptions
+    {
+        MinimumSameSitePolicy = SameSiteMode.Lax
+    });
+}
+else
+{
+    app.UseCookiePolicy(new CookiePolicyOptions
+    {
+        MinimumSameSitePolicy = SameSiteMode.None,
+        Secure = CookieSecurePolicy.Always
+    });
+}
 
 app.UseRouting();
 
