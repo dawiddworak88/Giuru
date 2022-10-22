@@ -137,7 +137,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
                 {
                     var product = await this.productsRepository.GetProductAsync(item.ProductId, null, null);
 
-                    if (product is not null)
+                    if (product is null)
                     {
                         orderItems.Add(new OrderItem
                         {
@@ -155,7 +155,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
                             OrderItemStatusName = item.OrderItemStatusName,
                             OrderItemStatusChangeComment = item.OrderItemStatusChangeComment,
                             ExpectedDeliveryFrom = item.ExpectedDeliveryFrom,
-                            ProductAttributes = await this.productsService.GetProductAttributesAsync(product.ProductAttributes),
+                            //ProductAttributes = await this.productsService.GetProductAttributesAsync(product.ProductAttributes),
                             ExpectedDeliveryTo = item.ExpectedDeliveryTo,
                             MoreInfo = item.MoreInfo,
                             LastModifiedDate = item.LastModifiedDate,
