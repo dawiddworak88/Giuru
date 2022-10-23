@@ -28,6 +28,8 @@ namespace Seller.Web.Areas.Clients.Controllers
             {
                 Id = id,
                 Language = CultureInfo.CurrentUICulture.Name,
+                Name = this.User.Identity.Name,
+                IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName)
             };
 
