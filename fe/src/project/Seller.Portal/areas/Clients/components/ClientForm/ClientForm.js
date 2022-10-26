@@ -16,7 +16,7 @@ function ClientForm(props) {
         email: { value: props.email ? props.email : "", error: "" },
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
-        country: { value: props.country ? props.country : null },
+        country: { value: props.country ? props.country : "", error: "" },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
         hasAccount: { value: props.hasAccount ? props.hasAccount : false }
@@ -197,9 +197,9 @@ function ClientForm(props) {
                                     name="communicationLanguage"
                                     value={communicationLanguage}
                                     onChange={handleOnChange}>
-                                    {props.languages.map(language => {
+                                    {props.languages && props.languages.length > 0 && props.languages.map((language, index) => {
                                         return (
-                                            <MenuItem key={language.value} value={language.value}>{language.text}</MenuItem>
+                                            <MenuItem key={index} value={language.value}>{language.text}</MenuItem>
                                         );
                                     })}
                                 </Select>
