@@ -4,6 +4,7 @@ using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
 using Seller.Web.Areas.Media.ViewModel;
+using Seller.Web.Shared.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -11,13 +12,13 @@ namespace Seller.Web.Areas.Media.ModelBuilders
 {
     public class MediaFormPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel>
     {
-        private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MediaFormViewModel> mediaFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public MediaFormPageModelBuilder(
-            IModelBuilder<HeaderViewModel> headerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MediaFormViewModel> mediaFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
@@ -33,7 +34,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
             var viewModel = new MediaPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = this.headerModelBuilder.BuildModel(),
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MenuTiles = this.menuTilesModelBuilder.BuildModel(),
                 MediaForm = await this.mediaFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()

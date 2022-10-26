@@ -4,6 +4,7 @@ using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
 using Seller.Web.Areas.Clients.ViewModels;
+using Seller.Web.Shared.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -11,13 +12,13 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 {
     public class ClientApplicationPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientApplicationPageViewModel>
     {
-        private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientApplicationFormViewModel> clientApplicationFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public ClientApplicationPageModelBuilder(
-            IModelBuilder<HeaderViewModel> headerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ClientApplicationFormViewModel> clientApplicationFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
@@ -33,7 +34,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             var viewModel = new ClientApplicationPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = headerModelBuilder.BuildModel(),
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
                 ClientApplicationForm = await this.clientApplicationFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()

@@ -4,6 +4,7 @@ using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
 using Seller.Web.Areas.Products.ViewModels;
+using Seller.Web.Shared.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -11,13 +12,13 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 {
     public class CategoryPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoryPageViewModel>
     {
-        private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryFormViewModel> categoryFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public CategoryPageModelBuilder(
-            IModelBuilder<HeaderViewModel> headerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, CategoryFormViewModel> categoryFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
@@ -33,7 +34,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             var viewModel = new CategoryPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = this.headerModelBuilder.BuildModel(),
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MenuTiles = this.menuTilesModelBuilder.BuildModel(),
                 CategoryForm = await this.categoryFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = this. footerModelBuilder.BuildModel()
