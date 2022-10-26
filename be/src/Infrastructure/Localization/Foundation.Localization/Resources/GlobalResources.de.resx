@@ -660,4 +660,7 @@
   <data name="GenerateQRCode" xml:space="preserve">
     <value>QR-Code generieren</value>
   </data>
+  <data name="TrySignIn" xml:space="preserve">
+    <value>Bitte versuchen Sie sich anzumelden</value>
+  </data>
 </root>
