@@ -16,6 +16,7 @@ function ClientForm(props) {
         email: { value: props.email ? props.email : "", error: "" },
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
+        country: { value: props.country ? props.country : null },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
         hasAccount: { value: props.hasAccount ? props.hasAccount : false }
@@ -42,6 +43,12 @@ function ClientForm(props) {
             required: {
                 isRequired: true,
                 error: props.languageRequiredErrorMessage
+            }
+        },
+        country: {
+            required: {
+                isRequired: true,
+                error: props.fieldRequiredErrorMessage
             }
         }
     };
@@ -118,7 +125,11 @@ function ClientForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, email, clientGroupIds, communicationLanguage, phoneNumber, clientManagerIds } = values;
+    const { 
+        id, name, email, country, clientGroupIds, 
+        communicationLanguage, phoneNumber, clientManagerIds 
+    } = values;
+
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -156,6 +167,26 @@ function ClientForm(props) {
                                 InputProps={{
                                     readOnly: props.email ? true : false,
                                 }} />
+                        </div>
+                        <div className="field">
+                            <FormControl fullWidth={true} error={(errors.country.length > 0) && dirty.country} variant="standard">
+                                <InputLabel id="country-label">{props.countryLabel}</InputLabel>
+                                <Select
+                                    labelId="country-label"
+                                    id="country"
+                                    name="country"
+                                    value={country}
+                                    onChange={handleOnChange}>
+                                    {props.countries && props.countries.length > 0 && props.countries.map((country, index) => {
+                                        return (
+                                            <MenuItem key={index} value={country.name}>{country.name}</MenuItem>
+                                        );
+                                    })}
+                                </Select>
+                                {errors.countries && dirty.countries && (
+                                    <FormHelperText>{errors.countries}</FormHelperText>
+                                )}
+                            </FormControl>
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage} variant="standard">
@@ -286,7 +317,10 @@ ClientForm.propTypes = {
     clientManagerLabel: PropTypes.string.isRequired,
     clientManagers: PropTypes.array,
     noManagersText: PropTypes.string.isRequired,
-    clientManagerIds: PropTypes.array
+    clientManagerIds: PropTypes.array,
+    fieldRequiredErrorMessage: PropTypes.string.isRequired,
+    country: PropTypes.string,
+    countryLabel: PropTypes.string.isRequired
 };
 
 export default ClientForm;
