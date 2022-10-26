@@ -39,6 +39,7 @@ spec:
             port:
               number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.clientapidomain }}
     http:
       paths:
@@ -48,6 +49,7 @@ spec:
             port:
               number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.basketapidomain }}
     http:
       paths:
@@ -57,6 +59,7 @@ spec:
             port:
               number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.orderingapidomain }}
     http:
       paths:
@@ -66,6 +69,7 @@ spec:
             port:
               number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.identityapidomain }}
     http:
       paths:
@@ -75,6 +79,7 @@ spec:
             port:
               number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.catalogapidomain }}
     http:
       paths:
@@ -84,6 +89,7 @@ spec:
             port:
               number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.inventoryapidomain }}
     http:
       paths:
@@ -93,6 +99,7 @@ spec:
             port:
               number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.newsapidomain }}
     http:
       paths:
@@ -102,6 +109,7 @@ spec:
             port:
               number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.downloadcenterapidomain }}
     http:
       paths:
@@ -111,6 +119,7 @@ spec:
             port:
               number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.buyerapidomain }}
     http:
       paths:
@@ -120,6 +129,7 @@ spec:
             port:
               number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.sellerapidomain }}
     http:
       paths:
@@ -129,3 +139,4 @@ spec:
             port:
               number: 80
         path: /
+        pathType: Prefix
