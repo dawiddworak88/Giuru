@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
 using Microsoft.IdentityModel.Logging;
 using Analytics.Api.DependencyInjection;
+using Foundation.Account.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +60,8 @@ builder.Services.AddControllers(options =>
 builder.Services.AddApiVersioning();
 
 builder.Services.AddLocalization();
+
+builder.Services.RegisterApiAccountDependencies(builder.Configuration);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
 
