@@ -777,6 +777,8 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         ports:
         - containerPort: 80
 ---
