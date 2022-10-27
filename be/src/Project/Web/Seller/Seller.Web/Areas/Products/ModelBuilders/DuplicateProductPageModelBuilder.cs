@@ -5,18 +5,20 @@ using Foundation.Extensions.ModelBuilders;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Products.ViewModels;
 using Seller.Web.Areas.Products.ComponentModels;
+using Foundation.PageContent.ComponentModels;
+using Seller.Web.Shared.ViewModels;
 
 namespace Seller.Web.Areas.ModelBuilders.Products
 {
     public class DuplicateProductPageModelBuilder : IAsyncComponentModelBuilder<DuplicateProductComponentModel, ProductPageViewModel>
     {
-        private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IAsyncComponentModelBuilder<DuplicateProductComponentModel, ProductFormViewModel> duplicateProductFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public DuplicateProductPageModelBuilder(
-            IModelBuilder<HeaderViewModel> headerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
             IAsyncComponentModelBuilder<DuplicateProductComponentModel, ProductFormViewModel> productFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
@@ -31,7 +33,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
         {
             var viewModel = new ProductPageViewModel
             {
-                Header = this.headerModelBuilder.BuildModel(),
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MenuTiles = this.menuTilesModelBuilder.BuildModel(),
                 ProductForm = await this.duplicateProductFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = this.footerModelBuilder.BuildModel()

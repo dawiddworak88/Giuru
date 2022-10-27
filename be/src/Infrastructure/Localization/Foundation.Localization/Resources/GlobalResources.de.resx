@@ -741,4 +741,7 @@
   <data name="USACountry" xml:space="preserve">
     <value>Vereinigte Staaten</value>
   </data>
+  <data name="TrySignIn" xml:space="preserve">
+    <value>Bitte versuchen Sie sich anzumelden</value>
+  </data>
 </root>

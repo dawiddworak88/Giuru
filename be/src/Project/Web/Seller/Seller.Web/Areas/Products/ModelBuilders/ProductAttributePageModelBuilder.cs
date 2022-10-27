@@ -13,14 +13,14 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 {
     public class ProductAttributePageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributePageViewModel>
     {
-        private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributeFormViewModel> productAttributeFormModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttributeItem>> productAttributeItemsCatalogModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public ProductAttributePageModelBuilder(
-            IModelBuilder<HeaderViewModel> headerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributeFormViewModel> productAttributeFormModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttributeItem>> productAttributeItemsCatalogModelBuilder,
@@ -39,7 +39,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
                 Id = componentModel.Id,
-                Header = this.headerModelBuilder.BuildModel(),
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MenuTiles = this.menuTilesModelBuilder.BuildModel(),
                 ProductAttributeForm = await this.productAttributeFormModelBuilder.BuildModelAsync(componentModel),
                 Catalog = componentModel.Id.HasValue ? await this.productAttributeItemsCatalogModelBuilder.BuildModelAsync(componentModel) : null,
