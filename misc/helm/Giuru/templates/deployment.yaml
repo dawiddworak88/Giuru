@@ -757,12 +757,6 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
-        - name: EventBusConnection
-          value: {{ .Values.eventBusConnection }}
-        - name: EventBusRetryCount
-          value: {{ .Values.eventBusRetryCount }}
-        - name: EventBusRequestedHeartbeat
-          value: {{ .Values.eventBusRequestedHeartbeat }}
         ports:
         - containerPort: 80
 ---

@@ -1,6 +1,4 @@
 ﻿using Analytics.Api.Infrastructure;
-using Analytics.Api.IntegrationEvents;
-using Foundation.EventBus.Abstractions;
 using Foundation.Localization.Definitions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -32,13 +30,6 @@ namespace Analytics.Api.DependencyInjection
             services.Configure<LocalizationSettings>(configuration);
         }
 
-        public static void ConfigureEventBus(this IApplicationBuilder app)
-        {
-            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-
-            eventBus.Subscribe<UpdatedProductIntegrationEvent, IIntegrationEventHandler<UpdatedProductIntegrationEvent>>();
-        }
-
         public static IServiceCollection ConigureHealthChecks(this IServiceCollection services, IConfiguration configuration)
         {
             var hcBuilder = services.AddHealthChecks();
@@ -52,15 +43,6 @@ namespace Analytics.Api.DependencyInjection
                     configuration["ConnectionString"],
                     name: "analytics-api-db",
                     tags: new string[] { "analyticsapidb" });
-            }
-
-            if (string.IsNullOrWhiteSpace(configuration["EventBusConnection"]) is false)
-            {
-                hcBuilder
-                    .AddRabbitMQ(
-                        configuration["EventBusConnection"],
-                        name: "analytics-api-messagebus",
-                        tags: new string[] { "messagebus" });
             }
 
             return services;

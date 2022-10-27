@@ -68,8 +68,6 @@ builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 
 builder.Services.RegisterAnalyticsApiDependencies();
 
-builder.Services.RegisterEventBus(builder.Configuration);
-
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Analytics API", Version = "v1" });
@@ -90,7 +88,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Analytics API");
     c.RoutePrefix = string.Empty;
 });
-
+ 
 app.UseRouting();
 
 app.UseAuthentication();
@@ -100,8 +98,6 @@ app.UseAuthorization();
 app.ConfigureDatabaseMigrations();
 
 app.UseCustomHeaderRequestLocalizationProvider(builder.Configuration, app.Services.GetService<IOptionsMonitor<LocalizationSettings>>());
-
-app.ConfigureEventBus();
 
 app.UseEndpoints(endpoints =>
 {

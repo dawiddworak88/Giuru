@@ -11,7 +11,6 @@
   <ItemGroup>
 	<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
 	<PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="6.0.2" />
-	<PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="6.0.2" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.10" />
 	<PackageReference Include="Microsoft.IdentityModel.Logging" Version="6.8.0" />
 	<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
@@ -34,8 +33,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\Account\Foundation.Account\Foundation.Account.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
-    <ProjectReference Include="..\..\..\..\Infrastructure\EventBus\Foundation.EventBusRabbitMq\Foundation.EventBusRabbitMq.csproj" />
-    <ProjectReference Include="..\..\..\..\Infrastructure\EventBus\Foundation.EventBus\Foundation.EventBus.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
   </ItemGroup>
