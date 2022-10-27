@@ -158,6 +158,7 @@ services:
       dockerfile: Project/Services/Analytics/Analytics.Api/Dockerfile
     depends_on:
       - sqldata
+      - redis
 
   seller-web:
     image: ${REGISTRY:-giuru}/seller-web:${PLATFORM:-linux}-${TAG:-latest}
