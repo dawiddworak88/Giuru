@@ -2,7 +2,7 @@
 
 namespace Analytics.Api.ServicesModels.SalesAnalytics
 {
-    public class GetSalesAnalyticsServiceModel : BaseServiceModel
+    public class GetTopSalesProductsAnalyticsServiceModel : BaseServiceModel
     {
         public bool IsSeller { get; set; }
     }

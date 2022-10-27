@@ -1,6 +1,7 @@
 ﻿using Analytics.Api.Services.SalesAnalytics;
 using Analytics.Api.ServicesModels.SalesAnalytics;
 using Analytics.Api.v1.RequestModels;
+using Analytics.Api.v1.ResponseModels;
 using Analytics.Api.Validators;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
@@ -32,17 +33,17 @@ namespace Analytics.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Gets top sales products
+        /// Gets best selling products
         /// </summary>
-        /// <returns>Top sales products.</returns>
-        [HttpGet, MapToApiVersion("1.0")]
+        /// <returns>Best selling products</returns>
+        [HttpGet("products"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new GetSalesAnalyticsServiceModel
+            var serviceModel = new GetTopSalesProductsAnalyticsServiceModel
             {
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
@@ -50,14 +51,27 @@ namespace Analytics.Api.v1.Controllers
                 IsSeller = this.User.IsInRole("Seller")
             };
 
-            var validator = new GetSalesAnalyticsModelValidator();
+            var validator = new GetTopSalesAnalyticsModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var salesAnalytics = await this.salesService.GetSalesAnalyticsAsync(serviceModel);
+                var topSalesProducts = await this.salesService.GetTopSalesProductsAnalyticsAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK, salesAnalytics);
+                if (topSalesProducts is not null)
+                {
+                    var response = topSalesProducts.Select(x => new TopSalesProductsAnalyticsResponseModel
+                    {
+                        Id = x.Id,
+                        ProductId = x.ProductId,
+                        ProductSku = x.ProductSku,
+                        ProductName = x.ProductName,
+                        Ean = x.Ean,
+                        Quantity = x.Quantity
+                    });
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -66,7 +80,8 @@ namespace Analytics.Api.v1.Controllers
         /// <summary>
         /// Creates  (if inventory skus are set).
         /// </summary>
-        /// <param name="request">The list of inventory items.</param>
+        /// <param name="request">The list of best selling products.</param>
+        /// <returns>OK.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]

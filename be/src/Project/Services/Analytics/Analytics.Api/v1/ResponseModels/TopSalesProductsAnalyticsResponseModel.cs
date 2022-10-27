@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Analytics.Api.ServicesModels.SalesAnalytics
+namespace Analytics.Api.v1.ResponseModels
 {
-    public class SalesAnalyticsServiceModel
+    public class TopSalesProductsAnalyticsResponseModel
     {
-        public Guid? Id { get; set; }
-        public Guid? ProductId { get; set; }
+        public Guid Id { get; set; }
+        public Guid ProductId { get; set; }
         public string ProductName { get; set; }
         public string ProductSku { get; set; }
         public string Ean { get; set; }

@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Analytics.Api.Services.SalesAnalytics
 {
@@ -91,51 +92,47 @@ namespace Analytics.Api.Services.SalesAnalytics
             }
         }
 
-        public async Task<IEnumerable<SalesAnalyticsServiceModel>> GetSalesAnalyticsAsync(GetSalesAnalyticsServiceModel model)
+        public async Task<IEnumerable<TopSalesProductsAnalyticsServiceModel>> GetTopSalesProductsAnalyticsAsync(GetTopSalesProductsAnalyticsServiceModel model)
         {
-            var salesAnalytics = from s in this.context.SalesFacts
-                                 join p in this.context.ProductDimensions on s.ProductDimensionId equals p.Id
-                                 join t in this.context.TimeDimensions on s.TimeDimensionId equals t.Id
-                                 join c in this.context.ClientDimensions on s.ClientDimensionId equals c.Id
-                                 where s.IsActive
-                                 select new 
-                                 {
-                                     Id = s.Id,
-                                     ProductId = p.ProductId,
-                                     ProductSku = p.Sku,
-                                     Ean = p.Ean,
-                                     ClientId = c.ClientId,
-                                     ClientName = c.Name,
-                                     Email = c.Email,
-                                     IsOutlet = s.IsOutlet,
-                                     IsStock = s.IsStock,
-                                     Quantity = s.Quantity
-                                 };
+            var topProducts = from s in this.context.SalesFacts
+                               join p in this.context.ProductDimensions on s.ProductDimensionId equals p.Id
+                               where s.IsActive
+                               group s by new { p.ProductId } into gp
+                               where gp.Sum(x => x.Quantity) > 0
+                               select new
+                               {
+                                   Id = gp.FirstOrDefault().ProductDimensionId,
+                                   ProductId = gp.Key.ProductId,
+                                   ProductSku = this.context.ProductDimensions.FirstOrDefault(x => x.ProductId == gp.Key.ProductId && x.IsActive).Sku,
+                                   ProductName = this.context.ProductTranslationDimensions.FirstOrDefault(x => x.ProductDimensionId == gp.FirstOrDefault().ProductDimensionId && x.IsActive).Name,
+                                   Ean = this.context.ProductDimensions.FirstOrDefault(x => x.ProductId == gp.Key.ProductId && x.IsActive).Ean,
+                                   Email = this.context.ClientDimensions.FirstOrDefault(x => x.Id == gp.FirstOrDefault().ClientDimensionId && x.IsActive).Email,
+                                   Quantity = gp.Sum(y => y.Quantity)
+                               };
 
             if (model.IsSeller is false)
             {
-                salesAnalytics = salesAnalytics.Where(x => x.Email == model.Username);
+                topProducts = topProducts.Where(x => x.Email == model.Username);
             }
 
-            var productGroups = salesAnalytics.OrEmptyIfNull().GroupBy(g => g.ProductId);
+            var topSalesProducts = new List<TopSalesProductsAnalyticsServiceModel>();
 
-            var salesAnalyticsItems = new List<SalesAnalyticsServiceModel>();
-
-            foreach (var productGroup in productGroups.OrEmptyIfNull())
+            foreach (var topProduct in topProducts.OrEmptyIfNull())
             {
-                var salesAnalyticsItem = new SalesAnalyticsServiceModel
+                var topSalesProduct = new TopSalesProductsAnalyticsServiceModel
                 {
-                    Id = productGroup.FirstOrDefault().Id,
-                    ProductId = productGroup.FirstOrDefault().ProductId,
-                    ProductSku = productGroup.FirstOrDefault().ProductSku,
-                    Ean = productGroup.FirstOrDefault().Ean,
-                    Quantity = productGroup.Sum(x => x.Quantity)
+                    Id = topProduct.Id,
+                    ProductId = topProduct.ProductId,
+                    ProductSku = topProduct.ProductSku,
+                    ProductName = topProduct.ProductName,
+                    Ean = topProduct.Ean,
+                    Quantity = topProduct.Quantity
                 };
 
-                salesAnalyticsItems.Add(salesAnalyticsItem);
+                topSalesProducts.Add(topSalesProduct);
             }
 
-            return salesAnalyticsItems;
+            return topSalesProducts.OrderByDescending(x => x.Quantity);
         }
     }
 }

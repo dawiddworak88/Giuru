@@ -4,9 +4,9 @@ using Foundation.Extensions.Validators;
 
 namespace Analytics.Api.Validators
 {
-    public class GetSalesAnalyticsModelValidator : BaseServiceModelValidator<GetSalesAnalyticsServiceModel>
+    public class GetTopSalesAnalyticsModelValidator : BaseServiceModelValidator<GetTopSalesProductsAnalyticsServiceModel>
     {
-        public GetSalesAnalyticsModelValidator()
+        public GetTopSalesAnalyticsModelValidator()
         {
             this.RuleFor(x => x.Username).NotEmpty().NotNull();
         }
