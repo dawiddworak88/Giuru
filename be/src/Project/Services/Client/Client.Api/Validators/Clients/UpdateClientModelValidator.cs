@@ -11,7 +11,6 @@ namespace Client.Api.Validators.Clients
             this.RuleFor(x => x.Id).NotNull().NotEmpty();
             this.RuleFor(x => x.Name).NotNull().NotEmpty();
             this.RuleFor(x => x.ClientOrganisationId).NotNull().NotEmpty();
-            this.RuleFor(x => x.Country).NotNull().NotEmpty();
         }
     }
 }

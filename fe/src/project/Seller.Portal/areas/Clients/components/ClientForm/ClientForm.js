@@ -16,7 +16,7 @@ function ClientForm(props) {
         email: { value: props.email ? props.email : "", error: "" },
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
-        country: { value: props.country ? props.country : "", error: "" },
+        country: { value: props.country ? props.country : null },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
         hasAccount: { value: props.hasAccount ? props.hasAccount : false }
@@ -43,12 +43,6 @@ function ClientForm(props) {
             required: {
                 isRequired: true,
                 error: props.languageRequiredErrorMessage
-            }
-        },
-        country: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
             }
         }
     };
@@ -169,7 +163,7 @@ function ClientForm(props) {
                                 }} />
                         </div>
                         <div className="field">
-                            <FormControl fullWidth={true} error={(errors.country.length > 0) && dirty.country} variant="standard">
+                            <FormControl fullWidth={true} variant="standard">
                                 <InputLabel id="country-label">{props.countryLabel}</InputLabel>
                                 <Select
                                     labelId="country-label"
@@ -183,9 +177,6 @@ function ClientForm(props) {
                                         );
                                     })}
                                 </Select>
-                                {errors.countries && dirty.countries && (
-                                    <FormHelperText>{errors.countries}</FormHelperText>
-                                )}
                             </FormControl>
                         </div>
                         <div className="field">
@@ -318,7 +309,6 @@ ClientForm.propTypes = {
     clientManagers: PropTypes.array,
     noManagersText: PropTypes.string.isRequired,
     clientManagerIds: PropTypes.array,
-    fieldRequiredErrorMessage: PropTypes.string.isRequired,
     country: PropTypes.string,
     countryLabel: PropTypes.string.isRequired
 };

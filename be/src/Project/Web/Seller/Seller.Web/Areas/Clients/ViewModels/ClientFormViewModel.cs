@@ -21,7 +21,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string EmailRequiredErrorMessage { get; set; }
         public string LanguageRequiredErrorMessage { get; set; }
         public string EmailFormatErrorMessage { get; set; }
-        public string FieldRequiredErrorMessage { get; set; }
         public string ClientDetailText { get; set; }
         public string EnterNameText { get; set; }
         public string EnterEmailText { get; set; }

@@ -122,8 +122,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 NoManagersText = this.clientLocalizer.GetString("NoManagers"),
                 ClientManagerLabel = this.globalLocalizer.GetString("Manager"),
                 CountryLabel = this.globalLocalizer.GetString("Country"),
-                Countries = countries,
-                FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage")
+                Countries = countries
             };
 
             if (componentModel.Id.HasValue)

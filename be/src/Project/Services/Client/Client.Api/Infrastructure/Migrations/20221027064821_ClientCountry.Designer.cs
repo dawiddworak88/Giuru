@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Client.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(ClientContext))]
-    [Migration("20221026121241_ClientCountry")]
+    [Migration("20221027064821_ClientCountry")]
     partial class ClientCountry
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,7 +93,6 @@ namespace Client.Api.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
