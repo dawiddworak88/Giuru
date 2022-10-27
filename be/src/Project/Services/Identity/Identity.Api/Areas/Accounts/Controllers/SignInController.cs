@@ -66,9 +66,13 @@ namespace Identity.Api.Areas.Accounts.Controllers
             {
                 var context = await interactionService.GetAuthorizationContextAsync(model.ReturnUrl);
 
-                if (context != null)
+                if (context is not null)
                 {
                     if (await this.userService.SignInAsync(model.Email, model.Password, model.ReturnUrl, context.Client.ClientId))
+                    {
+                        return this.Redirect(model.ReturnUrl);
+                    }
+                    else
                     {
                         return this.Redirect(model.ReturnUrl);
                     }
