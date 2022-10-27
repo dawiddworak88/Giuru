@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Button } from "@mui/material";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 const MediaForm = (props) => {
     const [images, setImages] = useState([]);
@@ -33,16 +31,7 @@ const MediaForm = (props) => {
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
                         <div className="field">
-                            <Button 
-                                type="submit" 
-                                variant="contained" 
-                                color="primary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.mediaUrl);
-                                }}>
-                                {props.backToMediaText}
-                            </Button>
+                            <a href={props.mediaUrl} className="button is-text">{props.backToMediaText}</a>
                         </div>
                     </form>
                 </div>

@@ -114,6 +114,7 @@ function Header(props) {
                     <div className="navbar-end">
                         {props.isLoggedIn && props.signOutLink &&
                             <div className="navbar-item">
+                                <span className="welcome-text">{props.welcomeText} {props.name}, </span>
                                 <a className="button is-text" href={props.signOutLink.url}>
                                     {props.signOutLink.text}
                                 </a>
@@ -136,7 +137,9 @@ Header.propTypes = {
     links: PropTypes.array.isRequired,
     drawerMenuCategories: PropTypes.array,
     isLoggedIn: PropTypes.bool,
-    signOutLink: PropTypes.object
+    signOutLink: PropTypes.object,
+    welcomeText: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired
 };
 
 export default Header;

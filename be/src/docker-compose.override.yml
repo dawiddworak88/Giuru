@@ -64,6 +64,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=MediaDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - StorageConnectionString=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
@@ -80,6 +81,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=ClientDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
@@ -96,6 +98,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=InventoryDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
@@ -110,6 +113,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=NewsDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
@@ -121,6 +125,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventBusConnection=amqp://rabbitmq
@@ -139,6 +144,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventBusConnection=amqp://rabbitmq
@@ -155,6 +161,7 @@ services:
   identity-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - RedisUrl=redis
       - ServerSideRenderingEndpoint=http://react-ssr:3000
       - CatalogUrl=http://catalog-api
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
@@ -181,16 +188,17 @@ services:
     ports:
       - "5105:80"
 
-  basketdata:
+  redis:
     ports:
       - "6379:6379"
     volumes:
-      - basketdata:/data
+      - redis:/data
 
   basket-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=basketdata
+      - ConnectionString=redis
+      - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
       - EventBusConnection=amqp://rabbitmq
@@ -205,6 +213,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
       - EventBusConnection=amqp://rabbitmq
@@ -225,6 +234,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=DownloadCenterDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
@@ -253,6 +263,7 @@ services:
       - ServerSideRenderingEndpoint=http://react-ssr:3000
       - ClientId=663bba90-0036-4a58-8516-39faa8baba87
       - ClientSecret=c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9
+      - RedisUrl=redis
       - CatalogUrl=http://catalog-api
       - BasketUrl=http://basket-api
       - ClientUrl=http://client-api
@@ -276,6 +287,7 @@ services:
       - ServerSideRenderingEndpoint=http://react-ssr:3000
       - ClientId=d9316849-7e98-4c5b-853b-5a322aecdc75
       - ClientSecret=693667b0-545e-48b6-9ef8-02ada81be946
+      - RedisUrl=redis
       - CatalogUrl=http://catalog-api
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -297,7 +309,7 @@ services:
 volumes:
   mssqldata:
     external: false
-  basketdata:
+  redis:
     external: false
   azuritedata:
     external: false

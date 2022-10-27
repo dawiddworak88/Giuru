@@ -176,6 +176,9 @@ function StatusOrder(props) {
                     }
                 </Fragment>
             }
+            <div className="field mt-3">
+                <a href={props.ordersUrl} className="button is-text">{props.navigateToOrders}</a>
+            </div>
             <ConfirmationDialog 
                 open={openCancelationDialog}
                 handleClose={handleCancelationDialogClose}
@@ -205,7 +208,9 @@ StatusOrder.propTypes = {
     orderItemsLabel: PropTypes.string.isRequired,
     orderStatusLabel: PropTypes.string.isRequired,
     orderStatusId: PropTypes.string.isRequired,
-    customOrderLabel: PropTypes.string.isRequired
+    customOrderLabel: PropTypes.string.isRequired,
+    ordersUrl: PropTypes.string.isRequired,
+    navigateToOrders: PropTypes.string.isRequired
 };
 
 export default StatusOrder;

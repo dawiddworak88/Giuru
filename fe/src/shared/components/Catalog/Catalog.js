@@ -65,7 +65,6 @@ function Catalog(props) {
 
         return fetch(url, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -105,7 +104,6 @@ function Catalog(props) {
 
         return fetch(url, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -156,7 +154,6 @@ function Catalog(props) {
 
         return fetch(url, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);

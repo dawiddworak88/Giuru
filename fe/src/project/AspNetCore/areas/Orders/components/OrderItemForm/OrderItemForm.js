@@ -5,14 +5,14 @@ import PropTypes from "prop-types";
 import {
     Button, TextField, CircularProgress
 } from "@mui/material";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import OrderItemStatusChanges from "../../../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
 
 const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [canceledOrderItem, setCanceledOrderItem] = useState(false);
-    const [orderItemStatusChanges, setOrderItemStatusChanges] = useState(props.statusChanges ? props.statusChanges : [])
+    const [statusChanges, setStatusChanges] = useState(props.statusChanges ? props.statusChanges : [])
 
     const handleCancelOrderItem = (e) => {
         e.preventDefault();
@@ -42,7 +42,7 @@ const OrderItemForm = (props) => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
                         setCanceledOrderItem(true);
-                        setOrderItemStatusChanges(jsonResponse.statusChanges);
+                        setStatusChanges(jsonResponse.statusChanges);
                     }
                 });
             }).catch(() => {
@@ -56,9 +56,7 @@ const OrderItemForm = (props) => {
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
-                    {props.orderItemStatusName &&
-                        <div className="order-item__status">{props.orderStatusLabel}: {props.orderItemStatusName}</div>
-                    }
+                    <div className="order-item__status">{props.orderStatusLabel}: {props.orderItemStatusName}</div>
                     <div className="mt-2 mb-3 order-item__image">
                         <img src={props.imageUrl} alt={props.imageAlt} />
                     </div>
@@ -193,22 +191,13 @@ const OrderItemForm = (props) => {
                                 {props.cancelOrderItemLabel}
                             </Button>
                         }
-                        <Button 
-                            type="button" 
-                            variant="contained" 
-                            color="secondary" 
-                            onClick={(e) => {
-                                e.preventDefault();
-                                NavigationHelper.redirect(props.orderUrl);
-                            }}>
-                            {props.navigateToOrderLabel}
-                        </Button> 
+                        <a href={props.orderUrl} className="button is-text">{props.navigateToOrderLabel}</a>
                     </div>
                 </div>
             </div>
-            {orderItemStatusChanges &&
+            {statusChanges && props.orderItemStatusChanges &&
                 <OrderItemStatusChanges
-                    statusChanges={orderItemStatusChanges}
+                    statusChanges={statusChanges}
                     labels={props.orderItemStatusChanges}
                 />
             }

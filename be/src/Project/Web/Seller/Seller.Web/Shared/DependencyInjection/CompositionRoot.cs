@@ -34,7 +34,6 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IClientsRepository, ClientsRepository>();
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IIdentityRepository, IdentityRepository>();
-            services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IModelBuilder<MenuTilesViewModel>, MenuTilesModelBuilder>();
             services.AddScoped<IModelBuilder<IEnumerable<DrawerMenuViewModel>>, DrawerMenuModelBuilder>();
             services.AddScoped<ICatalogModelBuilder, CatalogModelBuilder>();
@@ -43,6 +42,7 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel>, FilesModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel>, OrderItemStatusChangesModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, QRCodeDialogViewModel>, QRCodeDialogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel>, HeaderModelBuilder>();
         }
     }
 }

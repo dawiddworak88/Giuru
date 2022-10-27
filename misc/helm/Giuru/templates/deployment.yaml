@@ -38,6 +38,8 @@ spec:
           value: {{ .Values.mediaApi.connectionString }}
         - name: StorageConnectionString
           value: {{ .Values.mediaApi.storageConnectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: LogzIoToken
@@ -100,6 +102,8 @@ spec:
           value: {{ .Values.environment }}
         - name: ConnectionString
           value: {{ .Values.clientApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: LogzIoToken
@@ -166,6 +170,8 @@ spec:
           value: {{ .Values.environment }}
         - name: ConnectionString
           value: {{ .Values.catalogApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: EventBusConnection
@@ -236,6 +242,8 @@ spec:
           value: {{ .Values.environment }}
         - name: ConnectionString
           value: {{ .Values.catalogApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: EventBusConnection
@@ -302,6 +310,8 @@ spec:
           value: {{ .Values.environment }}
         - name: ConnectionString
           value: {{ .Values.basketApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: EventBusConnection
@@ -364,6 +374,8 @@ spec:
           value: {{ .Values.environment }}
         - name: ConnectionString
           value: {{ .Values.orderingApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: EventBusConnection
@@ -463,6 +475,8 @@ spec:
           value: {{ .Values.serverSideRenderingEndpoint }}
         - name: ConnectionString
           value: {{ .Values.identityApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: CatalogUrl
           value: {{ .Values.catalogUrl }}
         - name: MediaUrl
@@ -561,6 +575,8 @@ spec:
           value: {{ .Values.environment }}
         - name: ConnectionString
           value: {{ .Values.inventoryApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: EventBusConnection
@@ -623,6 +639,8 @@ spec:
           value: {{ .Values.environment }}
         - name: ConnectionString
           value: {{ .Values.newsApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: CdnUrl
@@ -683,6 +701,8 @@ spec:
           value: {{ .Values.organisationId }}
         - name: ConnectionString
           value: {{ .Values.downloadCenterApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: LogzIoToken
@@ -799,6 +819,8 @@ spec:
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: OrganisationId
           value: {{ .Values.organisationId }}
         - name: ServerSideRenderingEndpoint
@@ -885,6 +907,8 @@ spec:
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: ServerSideRenderingEndpoint
           value: {{ .Values.serverSideRenderingEndpoint }}
         - name: CatalogUrl
@@ -923,5 +947,7 @@ spec:
           value: {{ .Values.supportedCultures }}
         - name: SellerUrl
           value: {{ .Values.sellerUrl }}
+        - name: CdnUrl
+          value: {{ .Values.cdnUrl }}
         ports:
         - containerPort: 80

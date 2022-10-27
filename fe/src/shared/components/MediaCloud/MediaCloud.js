@@ -162,6 +162,9 @@ function MediaCloud(props) {
 
         fetch(props.saveMediaChunkUrl, requestOptions)
             .then(function (response) {
+
+                AuthenticationHelper.HandleResponse(response);
+
                 if (response.ok) {
                     setBeginingOfTheChunk(endOfTheChunk);
                     setEndOfTheChunk(endOfTheChunk + props.chunkSize);
@@ -192,6 +195,9 @@ function MediaCloud(props) {
         fetch(props.saveMediaChunkCompleteUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
                 return response.json().then(media => {
                     if (response.ok) {
                         if (props.multiple) {

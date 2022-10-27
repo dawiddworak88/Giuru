@@ -56,7 +56,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 DeliveryToLabel = this.orderLocalizer.GetString("DeliveryTo"),
                 ExternalReferenceLabel = this.orderLocalizer.GetString("ExternalReferenceLabel"),
                 MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
-                CancelOrderItemLabel = this.orderLocalizer.GetString("CancelOrder"),
+                CancelOrderItemLabel = this.orderLocalizer.GetString("CancelOrderItem"),
                 CancelOrderItemStatusUrl = this.linkGenerator.GetPathByAction("CancelOrderItem", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
