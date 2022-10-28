@@ -16,7 +16,6 @@ const MediaForm = (props) => {
                                 id="images"
                                 name="images"
                                 label={props.mediaItemsLabel}
-                                accept=".png, .jpg, .pdf, .zip, .webp, .docx"
                                 multiple={true}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
@@ -28,7 +27,11 @@ const MediaForm = (props) => {
                                 saveMediaChunkUrl={props.saveMediaChunkUrl}
                                 saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl}
                                 setFieldValue={({value}) => setImages(value)}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl} 
+                                accept={{
+                                    "image/*": [".png", ".jpg", ".webp"],
+                                    "application/*": [".pdf", ".docx", ".doc", ".zip"]
+                                }}/>
                         </div>
                         <div className="field">
                             <a href={props.mediaUrl} className="button is-text">{props.backToMediaText}</a>

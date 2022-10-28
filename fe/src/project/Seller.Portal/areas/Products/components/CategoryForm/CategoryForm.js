@@ -112,7 +112,6 @@ function CategoryForm(props) {
                                 id="files"
                                 name="files"
                                 label={categoryBase.productPicturesLabel}
-                                accept=".png, .jpg"
                                 multiple={false}
                                 generalErrorMessage={categoryBase.generalErrorMessage}
                                 deleteLabel={categoryBase.deleteLabel}
@@ -120,7 +119,10 @@ function CategoryForm(props) {
                                 dropOrSelectFilesLabel={categoryBase.dropOrSelectFilesLabel}
                                 files={files}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={categoryBase.saveMediaUrl} />
+                                saveMediaUrl={categoryBase.saveMediaUrl} 
+                                accept={{
+                                    "image/*": [".png", ".jpg", ".webp"]
+                                }}/>
                         </div>
                         <div className="field">
                             <Button 
