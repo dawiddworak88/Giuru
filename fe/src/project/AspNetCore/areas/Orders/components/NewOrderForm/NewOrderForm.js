@@ -278,8 +278,10 @@ function NewOrderForm(props) {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
-        accept: ".xlsx, .xls",
-        multiple: false
+        multiple: false,
+        accept: {
+            "application/*": [".xls", ".xlsx"]
+        }
     });
 
     const clearBasket = () => {
@@ -513,7 +515,6 @@ function NewOrderForm(props) {
                                     id="attachments"
                                     name="attachments"
                                     label={props.attachmentsLabel}
-                                    accept=".pdf, .docx, .zip, .xls, .xlsx, .png, .jpg"
                                     multiple={true}
                                     generalErrorMessage={props.generalErrorMessage}
                                     deleteLabel={props.deleteLabel}
@@ -524,7 +525,10 @@ function NewOrderForm(props) {
                                         setAttachments(value);
                                     }}
                                     saveMediaUrl={props.saveMediaUrl}
-                                />
+                                    accept={{
+                                        "image/*": [".png", ".jpg", ".webp"],
+                                        "application/*": [".pdf", ".docx", ".doc", ".zip", ".xls", ".xlsx"]
+                                    }}/>
                             </div>
                         </Fragment>
                     }
