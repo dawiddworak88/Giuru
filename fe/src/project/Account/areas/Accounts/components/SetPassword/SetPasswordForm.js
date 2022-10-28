@@ -13,7 +13,8 @@ function SetPasswordForm(props) {
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
-        password: { value: null, error: "" }
+        password: { value: null, error: "" },
+        returnUrl: { value: props.returnUrl ? props.returnUrl : null }
     };
 
     const stateValidatorSchema = {
@@ -44,17 +45,15 @@ function SetPasswordForm(props) {
                     if (response.status === ResponseStatusConstants.found()) {
                         toast.success(props.passwordSetSuccessMessage);
                         setTimeout(() => {
-                            NavigationHelper.redirect(props.returnUrl)
+                            NavigationHelper.redirect(jsonResponse.url)
                         }, 2000);
                     } else {
                         dispatch({ type: "SET_IS_LOADING", payload: false });
-                        console.log(response);
                         toast.error(ToastHelper.withLink(jsonResponse.emailIsConfirmedLabel, jsonResponse.signInUrl, jsonResponse.signInLabel))
                     }
                 })
-            }).catch((e) => {
+            }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                console.log(e);
                 toast.error(props.generalErrorMessage);
             });
     };
