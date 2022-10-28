@@ -404,7 +404,7 @@ function ProductForm(props) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable || !convertedToRaw}>
+                                disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
                             <a href={props.productsUrl} className="ml-2 button is-text">{props.navigateToProductsLabel}</a>

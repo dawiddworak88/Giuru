@@ -232,7 +232,7 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
                                                     Value = valueIdsArray.Select(x => new
                                                     {
                                                         Id = x,
-                                                        Name = ((JValue)categorySchemaObject.SelectToken($"$.definitions...anyOf[?(@.enum[0] == '{x}')].title")).Value<string>()
+                                                        Name = ((JValue)categorySchemaObject.SelectTokens($"$.definitions...anyOf[?(@.enum[0] == '{x}')].title").FirstOrDefault())?.Value<string>()
                                                     })
                                                 };
 

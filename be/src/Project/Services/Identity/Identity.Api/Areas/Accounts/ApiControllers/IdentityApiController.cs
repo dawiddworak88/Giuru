@@ -103,7 +103,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                 {
                     if (await this.userService.SignInAsync(user.Email, model.Password, null, null))
                     {
-                        return this.StatusCode((int)HttpStatusCode.Redirect);
+                        return this.StatusCode((int)HttpStatusCode.Redirect, new { Url = model.ReturnUrl });
                     }
                 }
                 else
