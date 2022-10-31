@@ -377,7 +377,6 @@ namespace Inventory.Api.Services.InventoryItems
                                join product in this.context.Products on i.ProductId equals product.Id
                                where product.IsActive
                                group i by new { product.Id } into gpi
-                               where gpi.Sum(x => x.AvailableQuantity) > 0
                                select new InventorySumServiceModel
                                {
                                     ProductId = gpi.Key.Id,
@@ -390,7 +389,7 @@ namespace Inventory.Api.Services.InventoryItems
                                     RestockableInDays = gpi.Min(x => x.RestockableInDays)
                                }).OrderByDescending(x => x.AvailableQuantity);
 
-                return inventories.PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage), model.PageIndex);
+            return inventories.PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage), model.PageIndex);
         }
 
         public async Task UpdateInventoryQuantity(Guid? productId, double bookedQuantity)
