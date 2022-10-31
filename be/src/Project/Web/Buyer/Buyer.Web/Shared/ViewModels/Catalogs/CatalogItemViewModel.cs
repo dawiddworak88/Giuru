@@ -15,6 +15,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public bool IsNew { get; set; }
         public bool InStock { get; set; }
         public bool InOutlet { get; set; }
+        public bool CanOrder { get; set; }
         public double? AvailableQuantity { get; set; }
         public double? AvailableOutletQuantity { get; set; }
         public DateTime? ExpectedDelivery { get; set; }

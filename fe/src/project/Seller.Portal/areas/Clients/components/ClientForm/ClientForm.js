@@ -16,6 +16,7 @@ function ClientForm(props) {
         email: { value: props.email ? props.email : "", error: "" },
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
+        country: { value: props.country ? props.country : null },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
         hasAccount: { value: props.hasAccount ? props.hasAccount : false }
@@ -118,7 +119,11 @@ function ClientForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, email, clientGroupIds, communicationLanguage, phoneNumber, clientManagerIds } = values;
+    const { 
+        id, name, email, country, clientGroupIds, 
+        communicationLanguage, phoneNumber, clientManagerIds 
+    } = values;
+
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -158,6 +163,23 @@ function ClientForm(props) {
                                 }} />
                         </div>
                         <div className="field">
+                            <FormControl fullWidth={true} variant="standard">
+                                <InputLabel id="country-label">{props.countryLabel}</InputLabel>
+                                <Select
+                                    labelId="country-label"
+                                    id="country"
+                                    name="country"
+                                    value={country}
+                                    onChange={handleOnChange}>
+                                    {props.countries && props.countries.length > 0 && props.countries.map((country, index) => {
+                                        return (
+                                            <MenuItem key={index} value={country.name}>{country.name}</MenuItem>
+                                        );
+                                    })}
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <div className="field">
                             <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage} variant="standard">
                                 <InputLabel id="language-label">{props.languageLabel}</InputLabel>
                                 <Select
@@ -166,9 +188,9 @@ function ClientForm(props) {
                                     name="communicationLanguage"
                                     value={communicationLanguage}
                                     onChange={handleOnChange}>
-                                    {props.languages.map(language => {
+                                    {props.languages && props.languages.length > 0 && props.languages.map((language, index) => {
                                         return (
-                                            <MenuItem key={language.value} value={language.value}>{language.text}</MenuItem>
+                                            <MenuItem key={index} value={language.value}>{language.text}</MenuItem>
                                         );
                                     })}
                                 </Select>
@@ -286,7 +308,9 @@ ClientForm.propTypes = {
     clientManagerLabel: PropTypes.string.isRequired,
     clientManagers: PropTypes.array,
     noManagersText: PropTypes.string.isRequired,
-    clientManagerIds: PropTypes.array
+    clientManagerIds: PropTypes.array,
+    country: PropTypes.string,
+    countryLabel: PropTypes.string.isRequired
 };
 
 export default ClientForm;
