@@ -261,9 +261,8 @@ function ClientForm(props) {
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <a href={props.clientsUrl} className="ml-2 button is-text">{props.navigateToClientsLabel}</a>
                             <Button 
-                                className="field-button"
+                                className="ml-2 "
                                 type="button" 
                                 color="secondary" 
                                 variant="contained" 
@@ -271,6 +270,7 @@ function ClientForm(props) {
                                 disabled={state.isLoading || !canCreateAccount}>
                                 {props.hasAccount ? props.resetPasswordText : props.accountText}
                             </Button>
+                            <a href={props.clientsUrl} className="field-button button is-text">{props.navigateToClientsLabel}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}
