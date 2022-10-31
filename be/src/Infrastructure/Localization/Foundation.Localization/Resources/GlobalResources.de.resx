@@ -660,6 +660,87 @@
   <data name="GenerateQRCode" xml:space="preserve">
     <value>QR-Code generieren</value>
   </data>
+  <data name="AustriaCountry" xml:space="preserve">
+    <value>Österreich</value>
+  </data>
+  <data name="BelgiumCountry" xml:space="preserve">
+    <value>Belgien</value>
+  </data>
+  <data name="BulgariaCountry" xml:space="preserve">
+    <value>Bulgarien</value>
+  </data>
+  <data name="CroatiaCountry" xml:space="preserve">
+    <value>Kroatien</value>
+  </data>
+  <data name="CzechCountry" xml:space="preserve">
+    <value>Tschechische Republik</value>
+  </data>
+  <data name="DenmarkCountry" xml:space="preserve">
+    <value>Dänemark</value>
+  </data>
+  <data name="EstoniaCountry" xml:space="preserve">
+    <value>Estland</value>
+  </data>
+  <data name="FranceCountry" xml:space="preserve">
+    <value>Frankreich</value>
+  </data>
+  <data name="GermanyCountry" xml:space="preserve">
+    <value>Deutschland</value>
+  </data>
+  <data name="GreatBritainCountry" xml:space="preserve">
+    <value>Großbritannien</value>
+  </data>
+  <data name="GreeceCountry" xml:space="preserve">
+    <value>Griechenland</value>
+  </data>
+  <data name="HollandCountry" xml:space="preserve">
+    <value>Holland</value>
+  </data>
+  <data name="HungaryCountry" xml:space="preserve">
+    <value>Ungarn</value>
+  </data>
+  <data name="ItalyCountry" xml:space="preserve">
+    <value>Italien</value>
+  </data>
+  <data name="LatviaCountry" xml:space="preserve">
+    <value>Lettland</value>
+  </data>
+  <data name="LithuaniaCountry" xml:space="preserve">
+    <value>Litauen</value>
+  </data>
+  <data name="MoldovaCountry" xml:space="preserve">
+    <value>Moldau</value>
+  </data>
+  <data name="MongoliaCountry" xml:space="preserve">
+    <value>Mongolei</value>
+  </data>
+  <data name="NorwayCountry" xml:space="preserve">
+    <value>Norwegen</value>
+  </data>
+  <data name="PolandCountry" xml:space="preserve">
+    <value>Polen</value>
+  </data>
+  <data name="RomaniaCountry" xml:space="preserve">
+    <value>Rumänien</value>
+  </data>
+  <data name="RussiaCountry" xml:space="preserve">
+    <value>Russland</value>
+  </data>
+  <data name="SlovakiaCountry" xml:space="preserve">
+    <value>Slowakei</value>
+  </data>
+  <data name="SloveniaCountry" xml:space="preserve">
+    <value>Slowenien</value>
+  </data>
+  <data name="SpainCountry" xml:space="preserve">
+    <value>Spanien</value>
+  </data>
+  <data name="SwedenCountry" xml:space="preserve">
+    <value>Schweden</value>
+  </data>
+  <data name="USACountry" xml:space="preserve">
+    <value>Vereinigte Staaten</value>
+  </data>
   <data name="TrySignIn" xml:space="preserve">
     <value>Bitte versuchen Sie sich anzumelden</value>
   </data>
