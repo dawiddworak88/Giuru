@@ -49,7 +49,7 @@ function SetPasswordForm(props) {
                         }, 2000);
                     } else {
                         dispatch({ type: "SET_IS_LOADING", payload: false });
-                        toast.error(ToastHelper.withLink(jsonResponse.emailIsConfirmedLabel, jsonResponse.signInUrl, jsonResponse.signInLabel))
+                        toast.error(ToastHelper.withLink(jsonResponse.message, jsonResponse.url, jsonResponse.urlLabel))
                     }
                 })
             }).catch(() => {

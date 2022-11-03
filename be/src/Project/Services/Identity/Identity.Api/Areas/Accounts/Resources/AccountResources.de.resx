@@ -210,10 +210,13 @@
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>Der Link zum Zurücksetzen des Passworts wurde gesendet, wenn Ihr Konto auf unserer Plattform existiert. Bitte überprüfen Sie Ihre Mailbox für weitere Anweisungen.</value>
   </data>
+  <data name="TryResetPassword" xml:space="preserve">
+    <value>Setzen Sie Ihr Passwort erneut zurück.</value>
+  </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>Benutzer nicht gefunden.</value>
   </data>
   <data name="VerifyDateExpired" xml:space="preserve">
-    <value>Der Link ist abgelaufen. Bitte wenden Sie sich an einen Administrator.</value>
+    <value>Der Link zum Zurücksetzen des Passworts ist abgelaufen.</value>
   </data>
 </root>

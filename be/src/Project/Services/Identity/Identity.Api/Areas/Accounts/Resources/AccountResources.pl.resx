@@ -210,10 +210,13 @@
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>Link do resetowania hasła został wysłany, jeśli Twoje konto istnieje na naszej platformie. Proszę sprawdź swoją skrzynkę e-mail w celu uzyskania dalszych instrukcji.</value>
   </data>
+  <data name="TryResetPassword" xml:space="preserve">
+    <value>Zresetuj ponownie hasło.</value>
+  </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>Nie odnaleziono użytkownika.</value>
   </data>
   <data name="VerifyDateExpired" xml:space="preserve">
-    <value>Link wygasł. Skontaktuj się z administratorem.</value>
+    <value>Link do resetowania hasła wygasł.</value>
   </data>
 </root>

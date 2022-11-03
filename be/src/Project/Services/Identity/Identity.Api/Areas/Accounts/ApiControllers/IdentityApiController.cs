@@ -94,8 +94,15 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                 {
                     ExpirationId = model.Id.Value,
                     Password = model.Password,
-                    Language = language
+                    Language = language 
                 };
+
+                var expirationDateValid = await this.usersService.IsExpirationDateValid(model.Id);
+
+                if (expirationDateValid is false)
+                {
+                    return this.StatusCode((int)HttpStatusCode.BadRequest, new { Message = this.accountLocalizer.GetString("VerifyDateExpired").Value, UrlLabel = this.accountLocalizer.GetString("TryResetPassword").Value, Url = this.linkGenerator.GetPathByAction("Index", "ResetPassword", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }) });
+                }
 
                 var user = await this.usersService.SetPasswordAsync(serviceModel);
 
@@ -108,7 +115,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.BadRequest, new { EmailIsConfirmedLabel = this.accountLocalizer.GetString("EmailIsConfirmed").Value, SignInLabel = this.globalLocalizer.GetString("TrySignIn").Value, SignInUrl = this.linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })});
+                    return this.StatusCode((int)HttpStatusCode.BadRequest, new { Message = this.accountLocalizer.GetString("EmailIsConfirmed").Value, UrlLabel = this.globalLocalizer.GetString("TrySignIn").Value, Url = this.linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })});
                 }
             }   
 

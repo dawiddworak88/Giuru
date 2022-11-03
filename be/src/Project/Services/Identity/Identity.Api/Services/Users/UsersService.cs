@@ -1,4 +1,5 @@
-﻿using Feature.Account;
+﻿using Elastic.CommonSchema;
+using Feature.Account;
 using Foundation.Extensions.Exceptions;
 using Foundation.Localization;
 using Foundation.Mailing.Configurations;
@@ -195,15 +196,12 @@ namespace Identity.Api.Services.Users
 
             if (existingUser.EmailConfirmed is false)
             {
-                if (existingUser.VerifyExpirationDate >= DateTime.UtcNow)
-                {
-                    existingUser.EmailConfirmed = true;
-                    existingUser.PasswordHash = this.userService.GeneratePasswordHash(existingUser, serviceModel.Password);
+                existingUser.EmailConfirmed = true;
+                existingUser.PasswordHash = this.userService.GeneratePasswordHash(existingUser, serviceModel.Password);
 
-                    await this.identityContext.SaveChangesAsync();
+                await this.identityContext.SaveChangesAsync();
 
-                    return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
-                }
+                return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
             }
 
             return default;
@@ -304,6 +302,23 @@ namespace Identity.Api.Services.Users
             }
 
             return default;
+        }
+
+        public async Task<bool> IsExpirationDateValid(Guid? expirationId)
+        {
+            var existingUser = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.ExpirationId == expirationId);
+
+            if (existingUser is null)
+            {
+                throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NoContent);
+            }
+
+            if (existingUser.VerifyExpirationDate >= DateTime.UtcNow)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Identity.Api.ServicesModels.Users;
+using System;
 using System.Threading.Tasks;
 
 namespace Identity.Api.Services.Users
@@ -12,5 +13,6 @@ namespace Identity.Api.Services.Users
         Task<UserServiceModel> SetPasswordAsync(SetUserPasswordServiceModel serviceModel);
         Task ResetPasswordAsync(ResetUserPasswordServiceModel serviceModel);
         Task<UserServiceModel> GetByEmail(GetUserByEmailServiceModel serviceModel);
+        Task<bool> IsExpirationDateValid(Guid? expirationId);
     }
 }
