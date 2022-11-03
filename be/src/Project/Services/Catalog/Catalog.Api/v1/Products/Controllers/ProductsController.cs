@@ -272,6 +272,7 @@ namespace Catalog.Api.v1.Products.Controllers
                 Description = request.Description,
                 FormData = request.FormData,
                 Ean = request.Ean,
+                GroupIds = request.GroupIds,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Language = CultureInfo.CurrentCulture.Name
@@ -451,6 +452,7 @@ namespace Catalog.Api.v1.Products.Controllers
                 Description = product.Description,
                 Files = product.Files,
                 Images = product.Images,
+                Groups = product.Groups,
                 FormData = product.FormData,
                 IsNew = product.IsNew,
                 IsProtected = product.IsProtected,

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Seller.Web.Areas.Clients.DomainModels
+namespace Seller.Web.Shared.DomainModels.Clients
 {
     public class ClientGroup
     {

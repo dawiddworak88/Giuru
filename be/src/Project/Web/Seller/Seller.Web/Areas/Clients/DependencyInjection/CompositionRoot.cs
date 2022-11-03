@@ -9,6 +9,7 @@ using Seller.Web.Areas.Clients.Repositories.Managers;
 using Seller.Web.Areas.Clients.ViewModels;
 using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Clients.Repositories.Applications;
+using Seller.Web.Shared.DomainModels.Clients;
 
 namespace Seller.Web.Areas.Clients.DependencyInjection
 {

@@ -14,6 +14,7 @@ namespace Seller.Web.Areas.Products.ApiRequestModels
         public Guid? PrimaryProductId { get; set; }
         public IEnumerable<ListItemRequestModel> Images { get; set; }
         public IEnumerable<ListItemRequestModel> Files { get; set; }
+        public IEnumerable<Guid> GroupIds { get; set; }
         public bool IsNew { get; set; }
         public string Ean { get; set; }
         public bool IsPublished { get; set; }

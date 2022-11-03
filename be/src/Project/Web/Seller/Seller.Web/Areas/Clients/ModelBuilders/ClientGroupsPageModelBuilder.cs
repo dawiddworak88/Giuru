@@ -1,10 +1,9 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
-using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
-using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.ViewModels;
+using Seller.Web.Shared.DomainModels.Clients;
 using Seller.Web.Shared.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;

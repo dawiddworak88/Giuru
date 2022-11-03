@@ -7,6 +7,7 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.Groups;
+using Seller.Web.Shared.DomainModels.Clients;
 using System;
 using System.Globalization;
 using System.Net;

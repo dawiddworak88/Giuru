@@ -750,4 +750,7 @@
   <data name="TrySignIn" xml:space="preserve">
     <value>Spróbuj się zalogować</value>
   </data>
+  <data name="NoGroupsText" xml:space="preserve">
+    <value>Brak dostępnych grup</value>
+  </data>
 </root>

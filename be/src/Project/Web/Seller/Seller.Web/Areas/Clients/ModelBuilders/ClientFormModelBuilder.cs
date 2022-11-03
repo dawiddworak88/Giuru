@@ -12,7 +12,6 @@ using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
 using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Identity;
-using Seller.Web.Areas.Clients.Repositories.Groups;
 using System.Linq;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Seller.Web.Areas.Clients.Repositories.Managers;
@@ -117,7 +116,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 ClientsUrl = this.linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 NavigateToClientsLabel = this.clientLocalizer.GetString("NavigateToClientsLabel"),
                 ResetPasswordText = this.clientLocalizer.GetString("ResetPasswordText"),
-                NoGroupsText = this.clientLocalizer.GetString("NoGroupsText"),
+                NoGroupsText = this.globalLocalizer.GetString("NoGroupsText"),
                 GroupsLabel = this.globalLocalizer.GetString("Groups"),
                 NoManagersText = this.clientLocalizer.GetString("NoManagers"),
                 ClientManagerLabel = this.globalLocalizer.GetString("Manager"),

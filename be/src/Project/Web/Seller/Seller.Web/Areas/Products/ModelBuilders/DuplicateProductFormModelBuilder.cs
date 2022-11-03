@@ -12,107 +12,53 @@ using Foundation.GenericRepository.Paginations;
 using System.Linq;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Foundation.Extensions.ExtensionMethods;
-using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.ComponentModels;
 using Seller.Web.Areas.Shared.Repositories.Products;
 using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Definitions;
 using Foundation.Media.Services.MediaServices;
-using Foundation.PageContent.Definitions;
+using Foundation.PageContent.ComponentModels;
 
 namespace Seller.Web.Areas.ModelBuilders.Products
 {
     public class DuplicateProductFormModelBuilder : IAsyncComponentModelBuilder<DuplicateProductComponentModel, ProductFormViewModel>
     {
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductBaseFormViewModel> productBaseFormModelBuilder;
         private readonly IProductsRepository productsRepository;
         private readonly ICategoriesRepository categoriesRepository;
         private readonly IMediaItemsRepository mediaItemsRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly IMediaService mediaService;
-        private readonly LinkGenerator linkGenerator;
 
         public DuplicateProductFormModelBuilder(
+            IAsyncComponentModelBuilder<ComponentModelBase, ProductBaseFormViewModel> productBaseFormModelBuilder,
             IProductsRepository productsRepository,
             ICategoriesRepository categoriesRepository,
             IMediaItemsRepository mediaItemsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<ProductResources> productLocalizer,
-            IMediaService mediaService,
-            LinkGenerator linkGenerator)
+            IMediaService mediaService)
         {
             this.productsRepository = productsRepository;
             this.categoriesRepository = categoriesRepository;
             this.mediaItemsRepository = mediaItemsRepository;
             this.globalLocalizer = globalLocalizer;
-            this.productLocalizer = productLocalizer;
             this.mediaService = mediaService;
-            this.linkGenerator = linkGenerator;
+            this.globalLocalizer = globalLocalizer;
+            this.productBaseFormModelBuilder = productBaseFormModelBuilder;
         }
 
         public async Task<ProductFormViewModel> BuildModelAsync(DuplicateProductComponentModel componentModel)
         {
             var viewModel = new ProductFormViewModel
             {
-                IdLabel = this.globalLocalizer.GetString("Id"),
-                Title = this.productLocalizer.GetString("EditProduct"),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                NameLabel = this.globalLocalizer.GetString("NameLabel"),
-                DescriptionLabel = this.globalLocalizer.GetString("DescriptionLabel"),
-                NameRequiredErrorMessage = this.globalLocalizer.GetString("NameRequiredErrorMessage"),
-                EnterNameText = this.globalLocalizer.GetString("EnterNameText"),
-                EnterSkuText = this.productLocalizer.GetString("EnterSkuText"),
-                SkuRequiredErrorMessage = this.productLocalizer.GetString("SkuRequiredErrorMessage"),
-                SkuLabel = this.productLocalizer.GetString("SkuLabel"),
-                DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
-                DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
-                DeleteLabel = this.globalLocalizer.GetString("Delete"),
-                SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
-                SaveMediaChunkUrl = this.linkGenerator.GetPathByAction("PostChunk", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
-                SaveMediaChunkCompleteUrl = this.linkGenerator.GetPathByAction("PostChunksComplete", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
-                IsUploadInChunksEnabled = true,
-                ChunkSize = MediaConstants.DefaultChunkSize,
-                SaveText = this.globalLocalizer.GetString("SaveText"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                ProductPicturesLabel = this.productLocalizer.GetString("ProductPicturesLabel"),
-                ProductFilesLabel = this.productLocalizer.GetString("ProductFilesLabel"),
-                SelectCategoryLabel = this.productLocalizer.GetString("SelectCategory"),
-                SelectPrimaryProductLabel = this.productLocalizer.GetString("SelectPrimaryProduct"),
-                IsNewLabel = this.productLocalizer.GetString("IsNew"),
-                IsPublishedLabel = this.productLocalizer.GetString("IsPublished"),
-                GetCategorySchemaUrl = this.linkGenerator.GetPathByAction("Get", "CategorySchemasApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                ProductsUrl = this.linkGenerator.GetPathByAction("Index", "Products", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                EanLabel = this.globalLocalizer.GetString("Ean"),
-                NavigateToProductsLabel = this.productLocalizer.GetString("NavigateToProductsLabel"),
-                ProductsSuggestionUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                ProductBase = await this.productBaseFormModelBuilder.BuildModelAsync(componentModel)
             };
-
-            var categories = await this.categoriesRepository.GetAllCategoriesAsync(
-                componentModel.Token,
-                componentModel.Language,
-                true,
-                $"{nameof(Category.Level)}");
-
-            if (categories != null)
-            {
-                viewModel.Categories = categories.OrderBy(x => x.Level).ThenBy(x => x.Name).Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
-            }
-
-            var primaryProducts = await this.productsRepository.GetProductsAsync(componentModel.Token, componentModel.Language, null, false, componentModel.SellerId, Constants.ProductsSuggestionDefaultPageIndex, Constants.ProductsSuggestionDefaultItemsPerPage, $"{nameof(Product.Name)} ASC");
-
-            if (primaryProducts != null)
-            {
-                viewModel.PrimaryProducts = primaryProducts.Data.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
-            }
 
             if (componentModel.Id.HasValue)
             {
-                var product = await this.productsRepository.GetProductAsync(
-                    componentModel.Token,
-                    componentModel.Language,
-                    componentModel.Id);
+                var product = await this.productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
-                if (product != null)
+                if (product is not null)
                 {
                     viewModel.Name = $"{product.Name} {this.globalLocalizer.GetString("Copy")}";
                     viewModel.Sku = $"{product.Sku} {this.globalLocalizer.GetString("Copy")}";
@@ -122,13 +68,11 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                     viewModel.IsPublished = product.IsPublished;
                     viewModel.CategoryId = product.CategoryId;
                     viewModel.FormData = product.FormData;
+                    viewModel.GroupIds = product.Groups;
 
-                    var categorySchema = await this.categoriesRepository.GetCategorySchemaAsync(
-                        componentModel.Token,
-                        componentModel.Language,
-                        product.CategoryId);
+                    var categorySchema = await this.categoriesRepository.GetCategorySchemaAsync(componentModel.Token, componentModel.Language, product.CategoryId);
 
-                    if (categorySchema != null)
+                    if (categorySchema is not null)
                     {
                         viewModel.Schema = categorySchema.Schema;
                         viewModel.UiSchema = categorySchema.UiSchema;
@@ -144,14 +88,9 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                         }
                     }
 
-                    if (product.Images != null && product.Images.Any())
+                    if (product.Images is not null && product.Images.Any())
                     {
-                        var imageMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
-                            componentModel.Token,
-                            componentModel.Language,
-                            product.Images.ToEndpointParameterString(),
-                            PaginationConstants.DefaultPageIndex,
-                            PaginationConstants.DefaultPageSize);
+                        var imageMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(componentModel.Token, componentModel.Language, product.Images.ToEndpointParameterString(), PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize);
 
                         var images = new List<FileViewModel>();
 
@@ -173,12 +112,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                     if (product.Files != null && product.Files.Any())
                     {
-                        var fileMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
-                            componentModel.Token,
-                            componentModel.Language,
-                            product.Files.ToEndpointParameterString(),
-                            PaginationConstants.DefaultPageIndex,
-                            PaginationConstants.DefaultPageSize);
+                        var fileMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(componentModel.Token, componentModel.Language, product.Files.ToEndpointParameterString(), PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize);
 
                         var files = new List<FileViewModel>();
 

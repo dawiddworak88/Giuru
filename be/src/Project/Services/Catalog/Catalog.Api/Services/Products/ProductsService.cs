@@ -121,6 +121,17 @@ namespace Catalog.Api.Services.Products
                 await this.catalogContext.ProductFiles.AddAsync(productFile.FillCommonProperties());
             }
 
+            foreach (var groupId in model.GroupIds.OrEmptyIfNull())
+            {
+                var productGroup = new ProductsGroup
+                {
+                    GroupId = groupId,
+                    ProductId = product.Id
+                };
+
+                await this.catalogContext.ProductsGroups.AddAsync(productGroup.FillCommonProperties());
+            }
+
             await this.catalogContext.SaveChangesAsync();
 
             await this.productIndexingRepository.IndexAsync(product.Id);
@@ -247,6 +258,24 @@ namespace Catalog.Api.Services.Products
                 };
 
                 await this.catalogContext.ProductFiles.AddAsync(productFile.FillCommonProperties());
+            }
+
+            var productGroups = this.catalogContext.ProductsGroups.Where(x => x.ProductId == model.Id && x.IsActive);
+
+            foreach (var productGroup in productGroups.OrEmptyIfNull())
+            {
+                this.catalogContext.ProductsGroups.Remove(productGroup);
+            }
+
+            foreach (var groupId in model.GroupIds.OrEmptyIfNull())
+            {
+                var group = new ProductsGroup
+                {
+                    ProductId = product.Id,
+                    GroupId = groupId
+                };
+
+                await this.catalogContext.ProductsGroups.AddAsync(group.FillCommonProperties());
             }
 
             var message = new UpdatedProductIntegrationEvent
@@ -466,6 +495,7 @@ namespace Catalog.Api.Services.Products
                 Images = searchResultItem.Images,
                 Files = searchResultItem.Files,
                 Videos = searchResultItem.Videos,
+                Groups = searchResultItem.Groups,
                 SellerId = searchResultItem.SellerId,
                 BrandName = searchResultItem.BrandName,
                 CategoryId = searchResultItem.CategoryId,

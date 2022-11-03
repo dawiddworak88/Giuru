@@ -243,6 +243,7 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
             Guid? categoryId,
             IEnumerable<Guid> images, 
             IEnumerable<Guid> files,
+            IEnumerable<Guid> groupIds,
             string ean,
             string formData)
         {
@@ -258,6 +259,7 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
                 CategoryId = categoryId,
                 Images = images,
                 Files = files,
+                GroupIds = groupIds,
                 Ean = ean,
                 FormData = formData
             };

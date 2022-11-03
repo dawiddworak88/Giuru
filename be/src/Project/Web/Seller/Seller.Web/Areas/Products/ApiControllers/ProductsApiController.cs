@@ -68,6 +68,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 model.CategoryId,
                 model.Images?.Select(x => x.Id),
                 model.Files?.Select(x => x.Id),
+                model.GroupIds,
                 model.Ean,
                 model.FormData);
 

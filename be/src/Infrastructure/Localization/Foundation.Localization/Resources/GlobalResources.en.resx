@@ -564,7 +564,7 @@
   <data name="SalesRep" xml:space="preserve">
     <value>Sales Representative</value>
   </data>
-  <data name="V" xml:space="preserve">
+  <data name="VicePresident" xml:space="preserve">
     <value>Vicepresident</value>
   </data>
   <data name="AttachedAttachments" xml:space="preserve">
@@ -743,5 +743,8 @@
   </data>
   <data name="TrySignIn" xml:space="preserve">
     <value>Please try to sign in</value>
+  </data>
+  <data name="NoGroupsText" xml:space="preserve">
+    <value>No groups available</value>
   </data>
 </root>

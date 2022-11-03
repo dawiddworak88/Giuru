@@ -44,6 +44,7 @@ namespace Seller.Web.Areas.Products.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<DuplicateCategoryComponentModel, CategoryFormViewModel>, DuplicateCategoryFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Product>>, ProductsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CategoryBaseFormViewModel>, CategoryBaseFormModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductBaseFormViewModel>, ProductBaseFormModelBuilder>();
         }
     }
 }
