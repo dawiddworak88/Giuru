@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Catalog.Api.ServicesModels.Categories
 {
@@ -12,6 +13,7 @@ namespace Catalog.Api.ServicesModels.Categories
         public string ParentCategoryName { get; set; }
         public bool IsLeaf { get; set; }
         public Guid? ThumbnailMediaId { get; set; }
+        public IEnumerable<Guid> Groups { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

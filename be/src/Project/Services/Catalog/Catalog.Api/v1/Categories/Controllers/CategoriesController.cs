@@ -72,7 +72,7 @@ namespace Catalog.Api.v1.Categories.Controllers
             {
                 var categories = await this.categoryService.GetAsync(serviceModel);
 
-                if (categories != null)
+                if (categories is not null)
                 {
                     var response = new PagedResults<IEnumerable<CategoryResponseModel>>(categories.Total, categories.PageSize)
                     {
@@ -86,6 +86,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                             ParentId = x.ParentId,
                             ThumbnailMediaId = x.ThumbnailMediaId,
                             ParentCategoryName = x.ParentCategoryName,
+                            Groups = x.Groups,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         })
@@ -126,7 +127,7 @@ namespace Catalog.Api.v1.Categories.Controllers
             {
                 var category = await this.categoryService.GetAsync(serviceModel);
 
-                if (category != null)
+                if (category is not null)
                 {
                     var response = new CategoryResponseModel
                     { 
@@ -138,6 +139,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                         ParentCategoryName = category.ParentCategoryName,
                         ParentId = category.ParentId,
                         ThumbnailMediaId = category.ThumbnailMediaId,
+                        Groups = category.Groups,
                         LastModifiedDate = category.LastModifiedDate,
                         CreatedDate = category.CreatedDate
                     };
@@ -177,6 +179,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                     Schema = request.Schema,
                     UiSchema = request.UiSchema,
                     ParentId = request.ParentCategoryId,
+                    GroupIds = request.GroupIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -190,7 +193,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 {
                     var category = await this.categoryService.UpdateAsync(serviceModel);
 
-                    if (category != null)
+                    if (category is not null)
                     {
                         var response = new CategoryResponseModel
                         {
@@ -202,6 +205,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                             ParentCategoryName = category.ParentCategoryName,
                             ParentId = category.ParentId,
                             ThumbnailMediaId = category.ThumbnailMediaId,
+                            Groups = category.Groups,
                             LastModifiedDate = category.LastModifiedDate,
                             CreatedDate = category.CreatedDate
                         };
@@ -234,7 +238,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 {
                     var category = await this.categoryService.CreateAsync(serviceModel);
 
-                    if (category != null)
+                    if (category is not null)
                     {
                         var response = new CategoryResponseModel
                         {
@@ -246,6 +250,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                             ParentCategoryName = category.ParentCategoryName,
                             ParentId = category.ParentId,
                             ThumbnailMediaId = category.ThumbnailMediaId,
+                            Groups = category.Groups,
                             LastModifiedDate = category.LastModifiedDate,
                             CreatedDate = category.CreatedDate
                         };
@@ -327,7 +332,7 @@ namespace Catalog.Api.v1.Categories.Controllers
             {
                 var categorySchema = await this.categoryService.UpdateCategorySchemaAsync(serviceModel);
 
-                if (categorySchema != null)
+                if (categorySchema is not null)
                 {
                     var response = new CategorySchemaResponseModel
                     {
@@ -373,7 +378,7 @@ namespace Catalog.Api.v1.Categories.Controllers
             {
                 var categorySchema = await this.categoryService.GetCategorySchemaAsync(serviceModel);
 
-                if (categorySchema != null)
+                if (categorySchema is not null)
                 {
                     var response = new CategorySchemaResponseModel
                     {

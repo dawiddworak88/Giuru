@@ -22,10 +22,11 @@ function ProductForm(props) {
     const [state, dispatch] = useContext(Context);
     const [convertedToRaw, setConvertedToRaw] = useState(props.description ? props.description : null);
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
-    const [primaryProducts, setPrimaryProducts] = useState(props.productBase.primaryProducts ? props.productBase.primaryProducts : []);
+    const [primaryProducts, setPrimaryProducts] = useState(productBase.primaryProducts ? productBase.primaryProducts : []);
+    const { productBase } = props;
 
     const categoriesProps = {
-        options: props.productBase.categories,
+        options: productBase.categories,
         getOptionLabel: (option) => option.name
     };
 
@@ -36,7 +37,7 @@ function ProductForm(props) {
 
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
-        category: { value: props.categoryId ? props.productBase.categories.find((item) => item.id === props.categoryId) : null },
+        category: { value: props.categoryId ? productBase.categories.find((item) => item.id === props.categoryId) : null },
         name: { value: props.name ? props.name : "", error: "" },
         description: { value: props.description ? props.description : "", error: "" },
         sku: { value: props.sku ? props.sku : "", error: "" },
@@ -49,20 +50,20 @@ function ProductForm(props) {
         formData: { value: props.formData ? JSON.parse(props.formData) : {} },
         isPublished: { value: props.isPublished ? props.isPublished : false },
         ean: { value: props.ean ? props.ean : "" },
-        groupIds: { value: props.groupIds ? props.groupIds : []},
+        groupIds: { value: props.groupIds ? props.groupIds : []}
     };
 
     const stateValidatorSchema = {
         sku: {
             required: {
                 isRequired: true,
-                error: props.productBase.skuRequiredErrorMessage
+                error: productBase.skuRequiredErrorMessage
             }
         },
         name: {
             required: {
                 isRequired: true,
-                error: props.productBase.nameRequiredErrorMessage
+                error: productBase.nameRequiredErrorMessage
             }
         }
     };
@@ -91,7 +92,7 @@ function ProductForm(props) {
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
         };
 
-        const getCategorySchemaUrl = props.productBase.getCategorySchemaUrl + "?" + QueryStringSerializer.serialize(payload);
+        const getCategorySchemaUrl = productBase.getCategorySchemaUrl + "?" + QueryStringSerializer.serialize(payload);
 
         fetch(getCategorySchemaUrl, requestOptions)
             .then(function (response) {
@@ -105,12 +106,12 @@ function ProductForm(props) {
                         setFieldValue({ name: "uiSchema", value: jsonResponse.uiSchema ? JSON.parse(jsonResponse.uiSchema) : {} });
                     }
                     else {
-                        toast.error(props.productBase.generalErrorMessage);
+                        toast.error(productBase.generalErrorMessage);
                     }
                 });
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.productBase.generalErrorMessage);
+                toast.error(productBase.generalErrorMessage);
             });
     };
 
@@ -147,7 +148,7 @@ function ProductForm(props) {
             body: JSON.stringify(product)
         };
 
-        fetch(props.productBase.saveUrl, requestOptions)
+        fetch(productBase.saveUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
@@ -160,12 +161,12 @@ function ProductForm(props) {
                         toast.success(jsonResponse.message);
                     }
                     else {
-                        toast.error(props.productBase.generalErrorMessage);
+                        toast.error(productBase.generalErrorMessage);
                     }
                 });
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.productBase.generalErrorMessage);
+                toast.error(productBase.generalErrorMessage);
             });
     };
 
@@ -185,7 +186,7 @@ function ProductForm(props) {
                 headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
             };
 
-            const url = props.productBase.productsSuggestionUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+            const url = productBase.productsSuggestionUrl + "?" + QueryStringSerializer.serialize(searchParameters);
             return fetch(url, requestOptions)
                 .then((response) => {
 
@@ -211,7 +212,7 @@ function ProductForm(props) {
                 body: formData
             };
 
-            fetch(props.productBase.saveMediaUrl, requestOptions)
+            fetch(productBase.saveMediaUrl, requestOptions)
                 .then(function (response) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
                     
@@ -227,12 +228,12 @@ function ProductForm(props) {
                             })
                         }
                         else {
-                            toast.error(props.productBase.generalErrorMessage);
+                            toast.error(productBase.generalErrorMessage);
                         }
                     });
                 }).catch(() => {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
-                    toast.error(props.productBase.generalErrorMessage);
+                    toast.error(productBase.generalErrorMessage);
                 });
         });
     }
@@ -249,13 +250,13 @@ function ProductForm(props) {
 
     return (
         <section className="section section-small-padding product">
-            <h1 className="subtitle is-4">{props.productBase.title}</h1>
+            <h1 className="subtitle is-4">{productBase.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
                             <div className="field">
-                                <InputLabel id="id-label">{props.productBase.idLabel} {id}</InputLabel>
+                                <InputLabel id="id-label">{productBase.idLabel} {id}</InputLabel>
                             </div>}
                         <div className="field">
                             <Autocomplete
@@ -266,12 +267,12 @@ function ProductForm(props) {
                                 value={category}
                                 onChange={onCategoryChange}
                                 autoComplete
-                                renderInput={(params) => <TextField {...params} label={props.productBase.selectCategoryLabel} margin="normal" variant="standard" />}
+                                renderInput={(params) => <TextField {...params} label={productBase.selectCategoryLabel} margin="normal" variant="standard" />}
                             />
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} variant="standard">
-                                <InputLabel id="groups-label">{props.productBase.groupsLabel}</InputLabel>
+                                <InputLabel id="groups-label">{productBase.groupsLabel}</InputLabel>
                                 <Select
                                     labelId="groups-label"
                                     id="groupIds"
@@ -279,14 +280,14 @@ function ProductForm(props) {
                                     value={groupIds}
                                     multiple={true}
                                     onChange={handleOnChange}>
-                                    {props.productBase.groups && props.productBase.groups.length > 0 ? (
-                                        props.productBase.groups.map((group, index) => {
+                                    {productBase.groups && productBase.groups.length > 0 ? (
+                                        productBase.groups.map((group, index) => {
                                             return (
                                                 <MenuItem key={index} value={group.id}>{group.name}</MenuItem>
                                             );
                                         })
                                     ) : (
-                                        <MenuItem disabled>{props.productBase.noGroupsText}</MenuItem>
+                                        <MenuItem disabled>{productBase.noGroupsText}</MenuItem>
                                     )}
                                 </Select>
                             </FormControl>
@@ -295,7 +296,7 @@ function ProductForm(props) {
                             <TextField 
                                 id="sku" 
                                 name="sku" 
-                                label={props.productBase.skuLabel} 
+                                label={productBase.skuLabel} 
                                 fullWidth={true} 
                                 variant="standard"
                                 value={sku} 
@@ -307,7 +308,7 @@ function ProductForm(props) {
                             <TextField 
                                 id="ean" 
                                 name="ean" 
-                                label={props.productBase.eanLabel} 
+                                label={productBase.eanLabel} 
                                 fullWidth={true}
                                 value={ean} 
                                 variant="standard"
@@ -317,7 +318,7 @@ function ProductForm(props) {
                             <TextField 
                                 id="name" 
                                 name="name" 
-                                label={props.productBase.nameLabel} 
+                                label={productBase.nameLabel} 
                                 fullWidth={true} 
                                 variant="standard"
                                 value={name} 
@@ -326,7 +327,7 @@ function ProductForm(props) {
                                 error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
-                            <InputLabel id="description-label">{props.productBase.descriptionLabel}</InputLabel>
+                            <InputLabel id="description-label">{productBase.descriptionLabel}</InputLabel>
                             <NoSsr>
                                 <Editor 
                                     editorState={editorState} 
@@ -359,7 +360,7 @@ function ProductForm(props) {
                                 renderInput={(params) => (
                                     <TextField 
                                         {...params} 
-                                        label={props.productBase.selectPrimaryProductLabel} 
+                                        label={productBase.selectPrimaryProductLabel} 
                                         margin="normal" 
                                         variant="standard" 
                                         onChange={productsSuggesstionFetchRequest} />)}
@@ -369,19 +370,19 @@ function ProductForm(props) {
                             <MediaCloud
                                 id="images"
                                 name="images"
-                                label={props.productBase.productPicturesLabel}
+                                label={productBase.productPicturesLabel}
                                 multiple={true}
-                                generalErrorMessage={props.productBase.generalErrorMessage}
-                                deleteLabel={props.productBase.deleteLabel}
-                                dropFilesLabel={props.productBase.dropFilesLabel}
-                                dropOrSelectFilesLabel={props.productBase.dropOrSelectFilesLabel}
+                                generalErrorMessage={productBase.generalErrorMessage}
+                                deleteLabel={productBase.deleteLabel}
+                                dropFilesLabel={productBase.dropFilesLabel}
+                                dropOrSelectFilesLabel={productBase.dropOrSelectFilesLabel}
                                 files={images}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.productBase.saveMediaUrl}
-                                isUploadInChunksEnabled={props.productBase.isUploadInChunksEnabled}
-                                chunkSize={props.productBase.chunkSize}
-                                saveMediaChunkUrl={props.productBase.saveMediaChunkUrl}
-                                saveMediaChunkCompleteUrl={props.productBase.saveMediaChunkCompleteUrl} 
+                                saveMediaUrl={productBase.saveMediaUrl}
+                                isUploadInChunksEnabled={productBase.isUploadInChunksEnabled}
+                                chunkSize={productBase.chunkSize}
+                                saveMediaChunkUrl={productBase.saveMediaChunkUrl}
+                                saveMediaChunkCompleteUrl={productBase.saveMediaChunkCompleteUrl} 
                                 accept={{
                                     'image/*': [".png", ".jpg", ".webp"],
                                 }}/>
@@ -390,20 +391,20 @@ function ProductForm(props) {
                             <MediaCloud
                                 id="files"
                                 name="files"
-                                label={props.productBase.productFilesLabel}
+                                label={productBase.productFilesLabel}
                                 multiple={true}
-                                generalErrorMessage={props.productBase.generalErrorMessage}
-                                deleteLabel={props.productBase.deleteLabel}
-                                dropFilesLabel={props.productBase.dropFilesLabel}
-                                dropOrSelectFilesLabel={props.productBase.dropOrSelectFilesLabel}
+                                generalErrorMessage={productBase.generalErrorMessage}
+                                deleteLabel={productBase.deleteLabel}
+                                dropFilesLabel={productBase.dropFilesLabel}
+                                dropOrSelectFilesLabel={productBase.dropOrSelectFilesLabel}
                                 imagePreviewEnabled={false}
                                 files={files}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.productBase.saveMediaUrl}
-                                isUploadInChunksEnabled={props.productBase.isUploadInChunksEnabled}
-                                chunkSize={props.productBase.chunkSize}
-                                saveMediaChunkUrl={props.productBase.saveMediaChunkUrl}
-                                saveMediaChunkCompleteUrl={props.productBase.saveMediaChunkCompleteUrl} 
+                                saveMediaUrl={productBase.saveMediaUrl}
+                                isUploadInChunksEnabled={productBase.isUploadInChunksEnabled}
+                                chunkSize={productBase.chunkSize}
+                                saveMediaChunkUrl={productBase.saveMediaChunkUrl}
+                                saveMediaChunkCompleteUrl={productBase.saveMediaChunkCompleteUrl} 
                                 accept={{
                                     "image/*": [".png", ".jpg", ".webp"],
                                     "application/*": [".pdf", ".docx", ".doc", ".zip"]
@@ -422,7 +423,7 @@ function ProductForm(props) {
                                         name="isNew"
                                         color="secondary" />
                                     }
-                                    label={props.productBase.isNewLabel} />
+                                    label={productBase.isNewLabel} />
                             </NoSsr>
                         </div>
                         <DynamicForm 
@@ -443,7 +444,7 @@ function ProductForm(props) {
                                         name="isPublished"
                                         color="secondary" />
                                     }
-                                    label={props.productBase.isPublishedLabel} />
+                                    label={productBase.isPublishedLabel} />
                             </NoSsr>
                         </div>
                         <div className="field">
@@ -452,9 +453,9 @@ function ProductForm(props) {
                                 variant="contained" 
                                 color="primary" 
                                 disabled={state.isLoading || disable}>
-                                {props.productBase.saveText}
+                                {productBase.saveText}
                             </Button>
-                            <a href={props.productBase.productsUrl} className="ml-2 button is-text">{props.productBase.navigateToProductsLabel}</a>
+                            <a href={productBase.productsUrl} className="ml-2 button is-text">{productBase.navigateToProductsLabel}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

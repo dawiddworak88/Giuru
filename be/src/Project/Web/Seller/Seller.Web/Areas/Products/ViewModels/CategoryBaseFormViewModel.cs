@@ -23,6 +23,9 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string SaveMediaUrl { get; set; }
         public string NameLabel { get; set; }
         public string SaveText { get; set; }
+        public string NoGroupsText { get; set; }
+        public string GroupsLabel { get; set; }
         public IEnumerable<ListItemViewModel> ParentCategories { get; set; }
+        public IEnumerable<ListItemViewModel> Groups { get; set; }
     }
 }

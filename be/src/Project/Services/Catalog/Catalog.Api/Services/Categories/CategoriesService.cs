@@ -98,6 +98,13 @@ namespace Catalog.Api.Services.Categories
                     categoryItem.ParentCategoryName = parentCategoryTranslations?.Name;
                 }
 
+                var categoryGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == category.Id && x.IsActive);
+
+                if (categoryGroups is not null)
+                {
+                    categoryItem.Groups = categoryGroups.Select(x => x.GroupId);
+                }
+
                 categoriesItems.Add(categoryItem);
             }
 
@@ -122,6 +129,13 @@ namespace Catalog.Api.Services.Categories
                     LastModifiedDate = categoryItem.LastModifiedDate,
                     CreatedDate = categoryItem.CreatedDate
                 };
+
+                var categoryGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == categoryItem.Id && x.IsActive);
+
+                if (categoryGroups is not null)
+                {
+                    category.Groups = categoryGroups.Select(x => x.GroupId);
+                }
 
                 var thumbnailMedia = this.context.CategoryImages.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive);
 
@@ -239,6 +253,24 @@ namespace Catalog.Api.Services.Categories
                 this.context.CategoryImages.Add(categoryImage.FillCommonProperties());
             }
 
+            var categoryGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == category.Id && x.IsActive);
+
+            foreach (var categoryGroup in categoryGroups.OrEmptyIfNull())
+            {
+                this.context.CategoriesGroups.Remove(categoryGroup);
+            }
+
+            foreach (var groupId in model.GroupIds.OrEmptyIfNull())
+            {
+                var group = new CategoriesGroup
+                {
+                    GroupId = groupId,
+                    CategoryId = category.Id
+                };
+
+                this.context.CategoriesGroups.Add(group.FillCommonProperties());
+            }
+
             await this.context.SaveChangesAsync();
 
             return await this.GetAsync(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
@@ -276,6 +308,17 @@ namespace Catalog.Api.Services.Categories
                 };
 
                 this.context.CategoryImages.Add(categoryImage.FillCommonProperties());
+            }
+
+            foreach (var groupId in model.GroupIds.OrEmptyIfNull())
+            {
+                var group = new CategoriesGroup
+                {
+                    CategoryId = category.Id,
+                    GroupId = groupId
+                };
+
+                this.context.CategoriesGroups.Add(group.FillCommonProperties());
             }
 
             if (model.Schema is not null)

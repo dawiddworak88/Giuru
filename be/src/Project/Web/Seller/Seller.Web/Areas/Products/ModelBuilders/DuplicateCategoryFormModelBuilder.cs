@@ -51,6 +51,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 {
                     viewModel.Name = $"{category.Name} {this.globalLocalizer.GetString("Copy")}";
                     viewModel.ParentCategoryId = category.ParentId;
+                    viewModel.GroupIds = category.Groups;
 
                     if (category.ThumbnailMediaId.HasValue)
                     {
