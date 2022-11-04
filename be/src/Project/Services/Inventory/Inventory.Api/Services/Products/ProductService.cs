@@ -1,6 +1,10 @@
-﻿using Inventory.Api.Infrastructure;
+﻿using Foundation.Extensions.ExtensionMethods;
+using Inventory.Api.Infrastructure;
+using Inventory.Api.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Inventory.Api.Services.Products
@@ -27,7 +31,7 @@ namespace Inventory.Api.Services.Products
             }
         }
 
-        public async Task UpdateProductAsync(Guid? productId, string productName, string productSku, string productEan)
+        public async Task UpdateProductAsync(Guid? productId, string productName, string productSku, string productEan, IEnumerable<Guid> groupIds)
         {
             var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == productId.Value && x.IsActive);
 
@@ -37,6 +41,24 @@ namespace Inventory.Api.Services.Products
                 product.Sku = productSku;
                 product.Ean = productEan;
                 product.LastModifiedDate = DateTime.UtcNow;
+
+                var productGroups = this.context.ProductsGroups.Where(x => x.ProductId == productId && x.IsActive);
+
+                foreach (var productGroup in productGroups.OrEmptyIfNull())
+                {
+                    this.context.ProductsGroups.Remove(productGroup);
+                }
+
+                foreach (var groupId in groupIds.OrEmptyIfNull())
+                {
+                    var group = new ProductsGroup
+                    {
+                        ProductId = product.Id,
+                        GroupId = groupId
+                    };
+
+                    await this.context.ProductsGroups.AddAsync(group);
+                }
 
                 await this.context.SaveChangesAsync();
             }

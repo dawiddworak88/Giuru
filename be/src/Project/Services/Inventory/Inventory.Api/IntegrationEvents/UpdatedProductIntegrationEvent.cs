@@ -1,5 +1,6 @@
 ﻿using Foundation.EventBus.Events;
 using System;
+using System.Collections.Generic;
 
 namespace Inventory.Api.IntegrationEvents
 {
@@ -9,5 +10,6 @@ namespace Inventory.Api.IntegrationEvents
         public string ProductName { get; set; }
         public string ProductSku { get; set; }
         public string ProductEan { get; set; }
+        public IEnumerable<Guid> GroupIds { get; set; }
     }
 }

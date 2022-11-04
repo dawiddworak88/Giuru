@@ -286,7 +286,8 @@ namespace Catalog.Api.Services.Products
                 ProductId = model.Id,
                 ProductName = model.Name,
                 ProductSku = model.Sku,
-                ProductEan = model.Ean
+                ProductEan = model.Ean,
+                GroupIds = model.GroupIds
             };
 
             this.eventBus.Publish(message);
