@@ -14,10 +14,7 @@
     &__image-gallery {
         position: sticky;
         top: 8px;
-
-        div.fullscreen {
-            z-index: 10000;
-        }
+        z-index: 10000;
     }
 
     &__discount {

@@ -94,6 +94,7 @@ const Sidebar = (props) => {
             open={isOpen}
             onOpen={toggleDrawer(true)}
             onClose={toggleDrawer(false)}
+            className="sidebar"
         >
         <div className="sidebar-content">
                 <div className="sidebar-content__close">

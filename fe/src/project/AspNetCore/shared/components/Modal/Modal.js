@@ -45,6 +45,7 @@ const Modal = (props) => {
         <Dialog
             open={isOpen}
             onClose={handleClose}
+            className=""
             PaperProps={{
                 className:"basket-modal"
             }}>
