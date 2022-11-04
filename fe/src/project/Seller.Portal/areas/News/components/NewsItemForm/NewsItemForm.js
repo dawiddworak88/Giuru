@@ -28,7 +28,8 @@ const NewsItemForm = (props) => {
         description: { value: props.description ? props.description : null, error: "" },
         content: { value: props.content ? props.content : "", error: "" },
         files: { value: props.files ? props.files : [], error: "" },
-        isPublished: {value: props.isPublished ? props.isPublished : false, error: ""}
+        isPublished: {value: props.isPublished ? props.isPublished : false, error: ""},
+        groupIds: { value: props.groupIds ? props.groupIds : []}
     }
 
     useEffect(() => {
@@ -57,6 +58,7 @@ const NewsItemForm = (props) => {
             description: state.description,
             content: convertedToRaw,
             files: state.files,
+            groupIds: state.groupIds,
             isPublished: state.isPublished
         }
 
@@ -153,7 +155,10 @@ const NewsItemForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
     
-    const { id, title, previewImage, thumbnailImage, description, isPublished, files, categoryId } = values;
+    const { 
+        id, title, previewImage, thumbnailImage, description, 
+        isPublished, files, categoryId, groupIds 
+    } = values;
     
     return (
         <section className="section section-small-padding">
@@ -196,6 +201,28 @@ const NewsItemForm = (props) => {
                                 {errors.categoryId && dirty.categoryId && (
                                     <FormHelperText>{errors.categoryId}</FormHelperText>
                                 )}
+                            </FormControl>
+                        </div>
+                        <div className="field">
+                            <FormControl fullWidth={true} variant="standard">
+                                <InputLabel id="groups-label">{props.groupsLabel}</InputLabel>
+                                <Select
+                                    labelId="groups-label"
+                                    id="groupIds"
+                                    name="groupIds"
+                                    value={groupIds}
+                                    multiple={true}
+                                    onChange={handleOnChange}>
+                                    {props.groups && props.groups.length > 0 ? (
+                                        props.groups.map((group, index) => {
+                                            return (
+                                                <MenuItem key={index} value={group.id}>{group.name}</MenuItem>
+                                            );
+                                        })
+                                    ) : (
+                                        <MenuItem disabled>{props.noGroupsText}</MenuItem>
+                                    )}
+                                </Select>
                             </FormControl>
                         </div>
                         <div className="field">

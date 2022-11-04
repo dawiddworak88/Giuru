@@ -58,6 +58,7 @@ namespace Seller.Web.Areas.News.Repositories.News
                     Content = response.Data.Content,
                     CategoryName = response.Data.CategoryName,
                     IsPublished = response.Data.IsPublished,
+                    Groups = response.Data.Groups,
                     Files = response.Data.Files,
                     LastModifiedDate = response.Data.LastModifiedDate,
                     CreatedDate = response.Data.CreatedDate
@@ -88,9 +89,11 @@ namespace Seller.Web.Areas.News.Repositories.News
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<NewsItemResponseModel>>>(apiRequest);
+
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
                 var newsItems = new List<NewsItem>();
+
                 foreach (var newsItem in response.Data.Data)
                 {
                     var news = new NewsItem
@@ -105,6 +108,7 @@ namespace Seller.Web.Areas.News.Repositories.News
                         CategoryName = newsItem.CategoryName,
                         IsPublished = newsItem.IsPublished,
                         Files = newsItem.Files,
+                        Groups = newsItem.Groups,
                         LastModifiedDate = newsItem.LastModifiedDate,
                         CreatedDate = newsItem.CreatedDate
                     };
@@ -128,7 +132,7 @@ namespace Seller.Web.Areas.News.Repositories.News
 
         public async Task<Guid> SaveAsync(
             string token, string language, Guid? id, Guid? thumbnailImageId, Guid? categoryId, Guid? previewImageId, 
-            string title, string description,  string content, bool isPublished, IEnumerable<Guid> files)
+            string title, string description,  string content, bool isPublished, IEnumerable<Guid> files, IEnumerable<Guid> groupIds)
         {
             var requestModel = new NewsApiRequestModel
             {
@@ -140,7 +144,8 @@ namespace Seller.Web.Areas.News.Repositories.News
                 Description = description,
                 Content = content,
                 IsPublished = isPublished,
-                Files = files
+                Files = files,
+                GroupIds = groupIds
             };
 
             var apiRequest = new ApiRequest<NewsApiRequestModel>

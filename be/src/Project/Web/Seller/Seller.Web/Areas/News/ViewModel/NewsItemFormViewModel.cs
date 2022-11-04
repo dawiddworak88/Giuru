@@ -37,9 +37,14 @@ namespace Seller.Web.Areas.News.ViewModel
         public string SaveText { get; set; }
         public bool IsPublished { get; set; }
         public string IdLabel { get; set; }
+        public string NoGroupsText { get; set; }
+        public string GroupsLabel { get; set; }
+        public IEnumerable<Guid> GroupIds { get; set; }
         public IEnumerable<FileViewModel> ThumbnailImages { get; set; }
         public IEnumerable<FileViewModel> PreviewImages { get; set; }
         public IEnumerable<FileViewModel> Files { get; set; }
         public IEnumerable<ListItemViewModel> Categories { get; set; }
+        public IEnumerable<ListItemViewModel> Groups { get; set; }
+
     }
 }

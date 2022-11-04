@@ -12,6 +12,7 @@ using Seller.Web.Areas.News.Repositories.News;
 using Seller.Web.Areas.News.ViewModel;
 using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Definitions;
+using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
 using System.Globalization;
@@ -29,6 +30,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
         private readonly IMediaItemsRepository mediaItemsRepository;
         private readonly IMediaService mediaService;
         private readonly INewsRepository newsRepository;
+        private readonly IClientGroupsRepository clientGroupsRepository;
 
         public NewsItemFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -37,6 +39,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
             IMediaItemsRepository mediaItemsRepository,
             INewsRepository newsRepository,
             IMediaService mediaService,
+            IClientGroupsRepository clientGroupsRepository,
             LinkGenerator linkGenerator)
         {
             this.linkGenerator = linkGenerator;
@@ -46,6 +49,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
             this.newsRepository = newsRepository;
             this.mediaItemsRepository = mediaItemsRepository;
             this.mediaService = mediaService;
+            this.clientGroupsRepository = clientGroupsRepository;
         }
 
         public async Task<NewsItemFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -74,18 +78,29 @@ namespace Seller.Web.Areas.News.ModelBuilders
                 ThumbImageLabel = this.newsLocalizer.GetString("ThumbImageLabel"),
                 TitleRequiredErrorMessage = this.newsLocalizer.GetString("TitleRequiredErrorMessage"),
                 CategoryRequiredErrorMessage = this.newsLocalizer.GetString("CategoryRequiredErrorMessage"),
-                DescriptionRequiredErrorMessage = this.newsLocalizer.GetString("DescriptionRequiredErrorMessage")
+                DescriptionRequiredErrorMessage = this.newsLocalizer.GetString("DescriptionRequiredErrorMessage"),
+                NoGroupsText = this.globalLocalizer.GetString("NoGroupsText"),
+                GroupsLabel = this.globalLocalizer.GetString("Groups")
             };
 
             var categories = await this.categoriesRepository.GetAllCategoriesAsync(componentModel.Token, componentModel.Language);
+
             if (categories is not null)
             {
                 viewModel.Categories = categories.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
+            var groups = await this.clientGroupsRepository.GetAsync(componentModel.Token, componentModel.Language);
+
+            if (groups is not null)
+            {
+                viewModel.Groups = groups.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
+            }
+
             if (componentModel.Id.HasValue)
             {
                 var existingNews = await this.newsRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+
                 if (existingNews is not null)
                 { 
 
@@ -95,6 +110,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
                             componentModel.Token, componentModel.Language, existingNews.Files.Distinct().ToEndpointParameterString(), PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize);
 
                         var files = new List<FileViewModel>();
+
                         foreach (var file in fileMediaItems)
                         {
                             files.Add(new FileViewModel
@@ -114,6 +130,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
                     if (existingNews.ThumbnailImageId.HasValue)
                     {
                         var thumbnailImage = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, existingNews.ThumbnailImageId.Value);
+
                         if (thumbnailImage is not null)
                         {
 
@@ -135,6 +152,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
                     if (existingNews.PreviewImageId.HasValue)
                     {
                         var previewImage = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, existingNews.PreviewImageId.Value);
+
                         if (previewImage is not null)
                         {
                             viewModel.PreviewImages = new List<FileViewModel>
@@ -158,6 +176,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
                     viewModel.Content = existingNews.Content;
                     viewModel.Description = existingNews.Description;
                     viewModel.IsPublished = existingNews.IsPublished;
+                    viewModel.GroupIds = existingNews.Groups;
                 }
             }
 

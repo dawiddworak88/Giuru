@@ -63,6 +63,7 @@ namespace News.Api.v1.News.Controllers
                     PreviewImageId = request.PreviewImageId,
                     ThumbnailImageId = request.ThumbnailImageId,
                     Files = request.Files,
+                    GroupIds = request.GroupIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -92,6 +93,7 @@ namespace News.Api.v1.News.Controllers
                     ThumbnailImageId = request.ThumbnailImageId,
                     PreviewImageId = request.PreviewImageId,
                     Files = request.Files,
+                    GroupIds = request.GroupIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -99,7 +101,6 @@ namespace News.Api.v1.News.Controllers
 
                 var validator = new CreateNewsItemModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
-
 
                 if (validationResult.IsValid)
                 {
@@ -141,6 +142,7 @@ namespace News.Api.v1.News.Controllers
 
             var validator = new GetNewsItemsModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
+
             if (validationResult.IsValid)
             {
                 var newsItems = await this.newsService.GetAsync(serviceModel);
@@ -161,6 +163,7 @@ namespace News.Api.v1.News.Controllers
                             Content = x.Content,
                             IsPublished = x.IsPublished,
                             Files = x.Files,
+                            Groups = x.Groups,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         })
@@ -216,6 +219,7 @@ namespace News.Api.v1.News.Controllers
                         Content = newsItem.Content,
                         IsPublished = newsItem.IsPublished,
                         Files = newsItem.Files,
+                        Groups = newsItem.Groups,
                         LastModifiedDate = newsItem.LastModifiedDate,
                         CreatedDate = newsItem.CreatedDate
                     };

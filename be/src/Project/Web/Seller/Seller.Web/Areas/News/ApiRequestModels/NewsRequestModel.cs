@@ -13,6 +13,7 @@ namespace Seller.Web.Areas.News.ApiRequestModels
         public string Description { get; set; }
         public string Content { get; set; }
         public bool IsPublished { get; set; }
+        public IEnumerable<Guid> GroupIds { get; set; }
         public IEnumerable<ListItemRequestModel> Files { get; set; }
     }
 }

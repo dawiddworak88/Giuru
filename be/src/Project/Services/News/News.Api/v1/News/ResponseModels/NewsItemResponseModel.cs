@@ -15,6 +15,7 @@ namespace News.Api.v1.News.ResponseModels
         public string Description { get; set; }
         public string Content { get; set; }
         public bool IsPublished { get; set; }
+        public IEnumerable<Guid> Groups { get; set; }
         public IEnumerable<Guid> Files { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? LastModifiedDate { get; set; }
