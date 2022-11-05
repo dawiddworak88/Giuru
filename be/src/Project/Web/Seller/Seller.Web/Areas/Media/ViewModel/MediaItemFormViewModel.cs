@@ -1,4 +1,5 @@
-﻿using Seller.Web.Areas.Media.DomainModels;
+﻿using Foundation.PageContent.Components.ListItems.ViewModels;
+using Seller.Web.Areas.Media.DomainModels;
 using System;
 using System.Collections.Generic;
 
@@ -30,6 +31,10 @@ namespace Seller.Web.Areas.Media.ViewModel
         public string SaveMediaChunkCompleteUrl { get; set; }
         public bool IsUploadInChunksEnabled { get; set; }
         public int? ChunkSize { get; set; }
+        public string NoGroupsText { get; set; }
+        public string GroupsLabel { get; set; }
+        public IEnumerable<ListItemViewModel> Groups { get; set; }
         public IEnumerable<MediaItem> Versions { get; set; }
+        public IEnumerable<Guid> GroupIds { get; set; }
     }
 }

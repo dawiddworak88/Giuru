@@ -1,14 +1,13 @@
 ﻿using Foundation.ApiExtensions.Models.Request;
+using Seller.Web.Areas.Products.ApiRequestModels;
 using System;
 using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Media.ApiRequestModels
 {
-    public class UpdateMediaItemVersionRequestModel : RequestModelBase
+    public class MediaItemGroupsRequestModel : RequestModelBase
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string MetaData { get; set; }
+        public IEnumerable<FileRequestModel> Files { get; set; }
         public IEnumerable<Guid> GroupIds { get; set; }
     }
 }

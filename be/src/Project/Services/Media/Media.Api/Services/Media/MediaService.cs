@@ -23,6 +23,7 @@ using Microsoft.EntityFrameworkCore;
 using Media.Api.IntegrationEvents;
 using Foundation.EventBus.Abstractions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 namespace Media.Api.Services.Media
 {
@@ -51,7 +52,7 @@ namespace Media.Api.Services.Media
         {
             var checksum = this.checksumService.GetMd5(serviceModel.File);
 
-            var existingMediaItemVersion = context.MediaItemVersions.FirstOrDefault(x => x.Checksum == checksum && x.Filename == Path.GetFileNameWithoutExtension(serviceModel.File.FileName) && x.IsActive);
+            var existingMediaItemVersion = this.context.MediaItemVersions.FirstOrDefault(x => x.Checksum == checksum && x.Filename == Path.GetFileNameWithoutExtension(serviceModel.File.FileName) && x.IsActive);
 
             if (existingMediaItemVersion != null)
             {
@@ -64,7 +65,7 @@ namespace Media.Api.Services.Media
                 IsProtected = false
             };
 
-            context.MediaItems.Add(mediaItem.FillCommonProperties());
+            this.context.MediaItems.Add(mediaItem.FillCommonProperties());
 
             var mediaItemVersion = new MediaItemVersion
             {
@@ -79,7 +80,7 @@ namespace Media.Api.Services.Media
                 Version = 1
             };
 
-            context.MediaItemVersions.Add(mediaItemVersion.FillCommonProperties());
+            this.context.MediaItemVersions.Add(mediaItemVersion.FillCommonProperties());
 
             var mediaItemTranslation = new MediaItemTranslation
             {
@@ -88,8 +89,8 @@ namespace Media.Api.Services.Media
                 Name = Path.GetFileNameWithoutExtension(serviceModel.File.FileName)
             };
 
-            context.MediaItemTranslations.Add(mediaItemTranslation.FillCommonProperties());
-            context.SaveChanges();
+            this.context.MediaItemTranslations.Add(mediaItemTranslation.FillCommonProperties());
+            this.context.SaveChanges();
 
             await this.mediaRepository.CreateFileAsync(mediaItemVersion.Id, serviceModel.OrganisationId.ToString(), serviceModel.File, serviceModel.File.FileName);
 
@@ -121,7 +122,7 @@ namespace Media.Api.Services.Media
                 
                 var translations = this.context.MediaItemTranslations.Where(x => x.MediaItemVersionId == existingMediaItemVersion.LastOrDefault().Id);
 
-                foreach(var translation in translations)
+                foreach(var translation in translations.OrEmptyIfNull())
                 {
                     translation.MediaItemVersionId = mediaItemVersion.Id;
                     translation.LastModifiedDate = DateTime.UtcNow;
@@ -233,7 +234,7 @@ namespace Media.Api.Services.Media
 
             var mediaItemVersion = this.context.MediaItemVersions.Where(x => x.MediaItemId == mediaItem.Id && x.IsActive).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
 
-            if (mediaItemVersion != null)
+            if (mediaItemVersion is not null)
             {
                 mediaItemResult.Filename = $"{mediaItemVersion.Filename}{mediaItemVersion.Extension}";
                 mediaItemResult.Size = mediaItemVersion.Size;
@@ -243,16 +244,20 @@ namespace Media.Api.Services.Media
 
                 var mediaItemVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaItemVersion.Id && x.Language == language && x.IsActive);
 
-                if (mediaItemVersionTranslation == null)
+                if (mediaItemVersionTranslation is null)
                 {
                     mediaItemVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaItemVersion.Id && x.IsActive);
                 }
 
-                if (mediaItemVersionTranslation != null)
-                {
-                    mediaItemResult.Name = mediaItemVersionTranslation.Name;
-                    mediaItemResult.Description = mediaItemVersionTranslation.Description;
-                }
+                mediaItemResult.Name = mediaItemVersionTranslation.Name;
+                mediaItemResult.Description = mediaItemVersionTranslation.Description;
+            }
+
+            var groups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == mediaItem.Id).Select(x => x.GroupId);
+
+            if (groups is not null)
+            {
+                mediaItemResult.Groups = groups;
             }
 
             return mediaItemResult;
@@ -306,6 +311,13 @@ namespace Media.Api.Services.Media
                     item.MetaData = mediaItemVersionTranslation?.Metadata;
                 }
 
+                var groups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == mediaItem.Id && x.IsActive).Select(x => x.GroupId);
+
+                if (groups is not null)
+                {
+                    item.Groups = groups;
+                }
+
                 items.Add(item);
             }
 
@@ -317,6 +329,7 @@ namespace Media.Api.Services.Media
         public async Task DeleteAsync(DeleteFileServiceModel model)
         {
             var mediaItem = this.context.MediaItems.FirstOrDefault(x => x.Id == model.MediaId.Value && x.IsActive);
+
             if (mediaItem == null)
             {
                 throw new CustomException(this.mediaResources.GetString("MediaNotFound"), (int)HttpStatusCode.NoContent);
@@ -357,6 +370,13 @@ namespace Media.Api.Services.Media
                     MetaData = mediaItemVersions.FirstOrDefault().MetaData,
                     Versions = mediaItemVersions
                 };
+
+                var groups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == model.Id && x.IsActive);
+
+                if (groups is not null)
+                {
+                    mediaItems.Groups = groups.Select(x => x.GroupId);
+                }
                 
                 return mediaItems;
             }
@@ -367,9 +387,29 @@ namespace Media.Api.Services.Media
         public async Task UpdateMediaItemVersionAsync(UpdateMediaItemVersionServiceModel model)
         {
             var mediaVersion = this.context.MediaItemVersions.OrderBy(o => o.Version).LastOrDefault(x => x.MediaItemId == model.Id.Value && x.IsActive);
+            
             if (mediaVersion is not null)
             {
+                var groups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == model.Id && x.IsActive);
+
+                foreach (var group in groups.OrEmptyIfNull())
+                {
+                    this.context.MediaItemsGroups.Remove(group);
+                }
+
+                foreach (var groupId in model.GroupIds.OrEmptyIfNull())
+                {
+                    var mediaItemGroup = new MediaItemsGroup
+                    {
+                        GroupId = groupId,
+                        MediaItemId = model.Id.Value
+                    };
+
+                    await this.context.MediaItemsGroups.AddAsync(mediaItemGroup.FillCommonProperties());
+                }
+
                 var mediaVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaVersion.Id && x.Language == model.Language);
+                
                 if (mediaVersionTranslation is not null)
                 {
                     mediaVersionTranslation.Name = model.Name;
@@ -377,7 +417,8 @@ namespace Media.Api.Services.Media
                     mediaVersionTranslation.Metadata = model.MetaData;
                     mediaVersionTranslation.LastModifiedDate = DateTime.UtcNow;
                     mediaVersion.LastModifiedDate = DateTime.UtcNow;
-                } else
+                } 
+                else
                 {
                     var mediaItemTranslation = new MediaItemTranslation
                     {
@@ -537,6 +578,36 @@ namespace Media.Api.Services.Media
 
                 File.Delete(chunk2);
             }
+        }
+
+        public async Task SaveMediaItemGroupsAsync(MediaItemGroupsServiceModel model)
+        {
+            var mediaItem = await this.context.MediaItems.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+
+            if (mediaItem is null)
+            {
+                throw new CustomException(this.mediaResources.GetString("MediaNotFound"), (int)HttpStatusCode.NoContent);
+            }
+
+            var groups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == model.Id && x.IsActive);
+
+            foreach (var group in groups.OrEmptyIfNull())
+            {
+                this.context.MediaItemsGroups.Remove(group);
+            }
+
+            foreach (var groupId in model.GroupIds.OrEmptyIfNull())
+            {
+                var mediaItemGroup = new MediaItemsGroup
+                {
+                    MediaItemId = mediaItem.Id,
+                    GroupId = groupId
+                };
+
+                await this.context.MediaItemsGroups.AddAsync(mediaItemGroup.FillCommonProperties());
+            }
+
+            await this.context.SaveChangesAsync();
         }
     }
 }

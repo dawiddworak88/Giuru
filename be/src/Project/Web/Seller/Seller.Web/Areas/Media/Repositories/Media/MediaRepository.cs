@@ -136,6 +136,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                     Name = response.Data.Name,
                     Description = response.Data.Description,
                     MetaData = response.Data.MetaData,
+                    Groups = response.Data.Groups,
                     Versions = response.Data.Versions.OrEmptyIfNull().Select(x => new MediaItem
                     {
                         Id = x.Id,
@@ -151,7 +152,31 @@ namespace Seller.Web.Areas.Media.Repositories.Media
             return default;
         }
 
-        public async Task UpdateMediaItemVersionAsync(Guid? mediaId, string name, string description, string metadata, string token, string language)
+        public async Task SaveMediaItemGroupsAsync(string token, string language, Guid? mediaItemId, IEnumerable<Guid> groupIds)
+        {
+            var requestModel = new MediaItemGroupsApiRequestModel
+            {
+                Id = mediaItemId,
+                GroupIds = groupIds
+            };
+
+            var apiRequest = new ApiRequest<MediaItemGroupsApiRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.MediaUrl}{ApiConstants.Media.MediaItemsGroupsApiEndpoint}"
+            };
+
+            var response = await this.apiService.PostAsync<ApiRequest<MediaItemGroupsApiRequestModel>, MediaItemGroupsApiRequestModel, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode && response?.Data != null)
+            {
+                throw new CustomException(response.Data.Message, (int)response.StatusCode);
+            }
+        }
+
+        public async Task UpdateMediaItemVersionAsync(Guid? mediaId, string name, string description, string metadata, IEnumerable<Guid> groupIds, string token, string language)
         {
             var requestModel = new UpdateMediaItemVersionRequestModel
             {
@@ -159,6 +184,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                 Name = name,
                 Description = description,
                 MetaData = metadata,
+                GroupIds = groupIds
             };
 
             var apiRequest = new ApiRequest<UpdateMediaItemVersionRequestModel>

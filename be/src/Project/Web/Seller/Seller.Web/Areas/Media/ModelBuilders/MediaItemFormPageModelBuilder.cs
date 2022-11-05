@@ -1,25 +1,30 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.ListItems.ViewModels;
 using Foundation.PageContent.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Media.Repositories.Media;
 using Seller.Web.Areas.Media.ViewModel;
+using Seller.Web.Shared.Repositories.Clients;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Media.ModelBuilders
 {
     public class MediaItemFormPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, MediaItemFormViewModel>
     {
+        private readonly IClientGroupsRepository clientGroupsRepository;
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer mediaResources;
         private readonly IMediaRepository mediaRepository;
         private readonly LinkGenerator linkGenerator;
 
         public MediaItemFormPageModelBuilder(
+            IClientGroupsRepository clientGroupsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<MediaResources> mediaResources,
             IMediaRepository mediaRepository,
@@ -29,6 +34,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
             this.mediaResources = mediaResources;
             this.linkGenerator = linkGenerator;
             this.mediaRepository = mediaRepository;
+            this.clientGroupsRepository = clientGroupsRepository;
         }
 
         public async Task<MediaItemFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -55,7 +61,16 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                 SaveMediaChunkCompleteUrl = this.linkGenerator.GetPathByAction("PostChunksComplete", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 IsUploadInChunksEnabled = true,
                 ChunkSize = MediaConstants.DefaultChunkSize,
+                NoGroupsText = this.globalLocalizer.GetString("NoGroupsText"),
+                GroupsLabel = this.globalLocalizer.GetString("Groups")
             };
+
+            var groups = await this.clientGroupsRepository.GetAsync(componentModel.Token, componentModel.Language);
+
+            if (groups is not null)
+            {
+                viewModel.Groups = groups.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
+            }
 
             if (componentModel.Id.HasValue)
             {
@@ -68,6 +83,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                     viewModel.Description = itemVersions.Description;
                     viewModel.Versions = itemVersions.Versions;
                     viewModel.MetaData = itemVersions.MetaData;
+                    viewModel.GroupIds = itemVersions.Groups;
                 }
             }
 

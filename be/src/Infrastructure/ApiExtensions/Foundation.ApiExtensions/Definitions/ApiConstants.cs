@@ -68,6 +68,7 @@
             public static readonly string FilesApiEndpoint = "/api/v1/files";
             public static readonly string FileChunksApiEndpoint = "/api/v1/files/chunks";
             public static readonly string FileChunksSaveCompleteApiEndpoint = "/api/v1/files/chunkssavecomplete";
+            public static readonly string MediaItemsGroupsApiEndpoint = "/api/v1/mediaitems/groups";
         }
 
         public struct Baskets

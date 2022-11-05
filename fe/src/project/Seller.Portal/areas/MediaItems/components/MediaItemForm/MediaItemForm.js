@@ -2,7 +2,8 @@ import React, { useState, useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types"; 
 import {
-    TextField, Button,  CircularProgress, InputLabel
+    TextField, Button,  CircularProgress, InputLabel, 
+    FormControl, Select, MenuItem
 } from "@mui/material";
 import {
     PictureAsPdf, Attachment
@@ -21,6 +22,7 @@ const MediaItemForm = (props) => {
         name: { value: props.name ? props.name : "", error: "" },
         description: { value: props.description ? props.description : "", error: "" },
         metadata: { value: props.metaData ? props.metaData : "", error: "" },
+        groupIds: { value: props.groupIds ? props.groupIds : []}
     };
 
     const stateValidatorSchema = {
@@ -66,7 +68,8 @@ const MediaItemForm = (props) => {
         values, disable, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
-    const { id, name, description, metadata } = values;
+    const { id, name, description, metadata, groupIds } = values;
+    
     return (
         <section className="section section-small-padding product client-form media-edit">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -134,6 +137,28 @@ const MediaItemForm = (props) => {
                                 </div>
                             </div>
                         }
+                        <div className="field">
+                            <FormControl fullWidth={true} variant="standard">
+                                <InputLabel id="groups-label">{props.groupsLabel}</InputLabel>
+                                <Select
+                                    labelId="groups-label"
+                                    id="groupIds"
+                                    name="groupIds"
+                                    value={groupIds}
+                                    multiple={true}
+                                    onChange={handleOnChange}>
+                                    {props.groups && props.groups.length > 0 ? (
+                                        props.groups.map((group, index) => {
+                                            return (
+                                                <MenuItem key={index} value={group.id}>{group.name}</MenuItem>
+                                            );
+                                        })
+                                    ) : (
+                                        <MenuItem disabled>{props.noGroupsText}</MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                        </div>
                         <div className="field">
                             <TextField 
                                 id="name" 
@@ -205,7 +230,9 @@ MediaItemForm.propTypes = {
     isUploadInChunksEnabled: PropTypes.bool.isRequired,
     chunkSize: PropTypes.string.isRequired,
     saveMediaChunkUrl: PropTypes.string.isRequired,
-    saveMediaChunkCompleteUrl: PropTypes.string.isRequired
+    saveMediaChunkCompleteUrl: PropTypes.string.isRequired,
+    noGroupsText: PropTypes.string.isRequired,
+    groupsLabel: PropTypes.string.isRequired
 }
 
 export default MediaItemForm;
