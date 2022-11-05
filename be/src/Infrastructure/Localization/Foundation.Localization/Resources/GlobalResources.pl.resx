@@ -510,10 +510,10 @@
   <data name="DropOrSelectAttachments" xml:space="preserve">
     <value>Upuść lub wybierz załącznik</value>
   </data>
-  <data name="EltapPartner" xml:space="preserve">
+  <data name="ApplicationPartner" xml:space="preserve">
     <value>Współpracuj z ELTAP</value>
   </data>
-  <data name="EltapPartnerDescription" xml:space="preserve">
+  <data name="ApplicationPartnerDescription" xml:space="preserve">
     <value>Dziękujemy za zainteresowanie ELTAP. Zapraszamy do współpracy!</value>
   </data>
   <data name="FieldRequiredErrorMessage" xml:space="preserve">
