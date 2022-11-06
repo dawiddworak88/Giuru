@@ -87,10 +87,12 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 new CountryViewModel { Name = this.globalLocalizer.GetString("SlovakiaCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("SloveniaCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("SwedenCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("SwitzerlandCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("USACountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("HungaryCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("GreatBritainCountry") },
-                new CountryViewModel { Name = this.globalLocalizer.GetString("ItalyCountry") }
+                new CountryViewModel { Name = this.globalLocalizer.GetString("ItalyCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("IsraelCountry") }
             };
 
             var viewModel = new ClientFormViewModel
