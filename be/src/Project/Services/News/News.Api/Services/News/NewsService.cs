@@ -136,11 +136,11 @@ namespace News.Api.Services.News
                     item.Files = files.Select(x => x.MediaId);
                 }
 
-                var groups = this.newsContext.NewsItemsGroups.Where(x => x.NewsItemId == newsItem.Id && x.IsActive);
+                var groups = this.newsContext.NewsItemsGroups.Where(x => x.NewsItemId == newsItem.Id && x.IsActive).Select(x => x.GroupId);
 
                 if (groups is not null)
                 {
-                    item.Groups = groups.Select(x => x.GroupId);
+                    item.Groups = groups;
                 }
 
                 var newsItemTranslations = this.newsContext.NewsItemTranslations.FirstOrDefault(x => x.Language == model.Language && x.NewsItemId == newsItem.Id && x.IsActive);
@@ -215,11 +215,11 @@ namespace News.Api.Services.News
                     item.Files = files.Select(x => x.MediaId);
                 }
 
-                var groups = this.newsContext.NewsItemsGroups.Where(x => x.NewsItemId == newsItem.Id && x.IsActive);
+                var groups = this.newsContext.NewsItemsGroups.Where(x => x.NewsItemId == newsItem.Id && x.IsActive).Select(x => x.GroupId);
 
                 if (groups is not null)
                 {
-                    item.Groups = groups.Select(x => x.GroupId);
+                    item.Groups = groups;
                 }
 
                 return item;

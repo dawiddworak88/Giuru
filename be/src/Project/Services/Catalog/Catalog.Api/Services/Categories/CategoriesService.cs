@@ -98,11 +98,11 @@ namespace Catalog.Api.Services.Categories
                     categoryItem.ParentCategoryName = parentCategoryTranslations?.Name;
                 }
 
-                var categoryGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == category.Id && x.IsActive);
+                var categoryGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == category.Id && x.IsActive).Select(x => x.GroupId);
 
                 if (categoryGroups is not null)
                 {
-                    categoryItem.Groups = categoryGroups.Select(x => x.GroupId);
+                    categoryItem.Groups = categoryGroups;
                 }
 
                 categoriesItems.Add(categoryItem);
@@ -130,11 +130,11 @@ namespace Catalog.Api.Services.Categories
                     CreatedDate = categoryItem.CreatedDate
                 };
 
-                var categoryGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == categoryItem.Id && x.IsActive);
+                var categoryGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == categoryItem.Id && x.IsActive).Select(x => x.GroupId);
 
                 if (categoryGroups is not null)
                 {
-                    category.Groups = categoryGroups.Select(x => x.GroupId);
+                    category.Groups = categoryGroups;
                 }
 
                 var thumbnailMedia = this.context.CategoryImages.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive);

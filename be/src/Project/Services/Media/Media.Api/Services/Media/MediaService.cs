@@ -371,11 +371,11 @@ namespace Media.Api.Services.Media
                     Versions = mediaItemVersions
                 };
 
-                var groups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == model.Id && x.IsActive);
+                var groups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == model.Id && x.IsActive).Select(x => x.GroupId);
 
                 if (groups is not null)
                 {
-                    mediaItems.Groups = groups.Select(x => x.GroupId);
+                    mediaItems.Groups = groups;
                 }
                 
                 return mediaItems;
