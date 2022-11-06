@@ -220,11 +220,13 @@ function Catalog(props) {
                                             {props.isLoggedIn &&
                                                 <div className="catalog-item__add-to-cart-button-container">
                                                     {props.showAddToCartButton ? (
-                                                        <div className="row is-flex is-flex-centered">
-                                                            <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => toggleModal(item)} color="primary">
-                                                                {props.basketLabel}
-                                                            </Button>
-                                                        </div>
+                                                        item.canOrder && (
+                                                            <div className="row is-flex is-flex-centered">
+                                                                <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => toggleModal(item)} color="primary">
+                                                                    {props.basketLabel}
+                                                                </Button>
+                                                            </div>
+                                                        )
                                                     ) : (
                                                         <Button variant="contained" onClick={() => toggleSidebar(item)} color="primary">
                                                             {props.basketLabel}

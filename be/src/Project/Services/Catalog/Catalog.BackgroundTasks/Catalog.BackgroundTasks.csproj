@@ -12,6 +12,7 @@
 	<PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="6.0.2" />
 	<PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="6.0.2" />
 	<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
+	<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.10" />

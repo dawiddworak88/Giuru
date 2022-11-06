@@ -29,6 +29,12 @@ using HealthChecks.UI.Client;
 using Foundation.Media.DependencyInjection;
 using Seller.Web.Areas.TeamMembers.DependencyInjection;
 using Seller.Web.Areas.DownloadCenter.DependencyInjection;
+using Foundation.Extensions.Definitions;
+using Microsoft.AspNetCore.DataProtection;
+using StackExchange.Redis;
+using System.Reflection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +69,13 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 
     loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
 });
+
+builder.Services.AddDataProtection().UseCryptographicAlgorithms(
+    new AuthenticatedEncryptorConfiguration
+    {
+        EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+        ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+    }).PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(builder.Configuration["RedisUrl"]), $"{Assembly.GetExecutingAssembly().GetName().Name}-DataProtection-Keys");
 
 builder.Services.AddRazorPages();
 
@@ -127,7 +140,21 @@ app.UseGeneralException();
 
 app.UseResponseCompression();
 
-app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
+if (app.Environment.EnvironmentName == EnvironmentConstants.DevelopmentEnvironmentName)
+{
+    app.UseCookiePolicy(new CookiePolicyOptions
+    {
+        MinimumSameSitePolicy = SameSiteMode.Lax
+    });
+}
+else
+{
+    app.UseCookiePolicy(new CookiePolicyOptions
+    {
+        MinimumSameSitePolicy = SameSiteMode.None,
+        Secure = CookieSecurePolicy.Always
+    });
+}
 
 app.UseGeneralStaticFiles();
 

@@ -16,6 +16,7 @@ using Seller.Web.Areas.Clients.Repositories.Groups;
 using System.Linq;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Seller.Web.Areas.Clients.Repositories.Managers;
+using Seller.Web.Shared.ViewModels;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -62,6 +63,36 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 languages.Add(new LanguageViewModel { Text = language.ToUpperInvariant(), Value = language.ToLowerInvariant() });
             }
 
+            var countries = new List<CountryViewModel>
+            {
+                new CountryViewModel { Name = this.globalLocalizer.GetString("AustriaCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("BelgiumCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("BulgariaCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("CroatiaCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("CzechCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("DenmarkCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("EstoniaCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("FranceCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("GreeceCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("SpainCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("HollandCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("LithuaniaCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("LatviaCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("MoldovaCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("MongoliaCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("GermanyCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("NorwayCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("PolandCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("RussiaCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("SlovakiaCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("SloveniaCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("SwedenCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("USACountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("HungaryCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("GreatBritainCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("ItalyCountry") }
+            };
+
             var viewModel = new ClientFormViewModel
             {
                 Title = this.clientLocalizer.GetString("EditClient"),
@@ -89,12 +120,15 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 NoGroupsText = this.clientLocalizer.GetString("NoGroupsText"),
                 GroupsLabel = this.globalLocalizer.GetString("Groups"),
                 NoManagersText = this.clientLocalizer.GetString("NoManagers"),
-                ClientManagerLabel = this.globalLocalizer.GetString("Manager")
+                ClientManagerLabel = this.globalLocalizer.GetString("Manager"),
+                CountryLabel = this.globalLocalizer.GetString("Country"),
+                Countries = countries
             };
 
             if (componentModel.Id.HasValue)
             {
                 var client = await this.clientsRepository.GetClientAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+
                 if (client is not null)
                 {
                     viewModel.Id = client.Id;
@@ -104,6 +138,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.PhoneNumber = client.PhoneNumber;
                     viewModel.ClientGroupsIds = client.ClientGroupIds;
                     viewModel.ClientManagersIds = client.ClientManagerIds;
+                    viewModel.Country = client.Country;
 
                     var user = await this.identityRepository.GetAsync(componentModel.Token, componentModel.Language, client.Email);
 
@@ -115,6 +150,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             }
 
             var groups = await this.clientGroupsRepository.GetAsync(componentModel.Token, componentModel.Language);
+
             if (groups is not null)
             {
                 viewModel.ClientGroups = groups.Select(x => new ListItemViewModel

@@ -36,79 +36,79 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
         {
             var viewModel = new ApplicationFormViewModel
             {
-                Title = globalLocalizer.GetString("EltapPartner"),
-                Subtitle = globalLocalizer.GetString("EltapPartnerDescription"),
-                ContactInformationTitle = globalLocalizer.GetString("ContactInformation"),
-                BusinessInformationTitle = globalLocalizer.GetString("BusinessInformation"),
-                FirstNameLabel = globalLocalizer.GetString("FirstName"),
-                LastNameLabel = globalLocalizer.GetString("LastName"),
-                EmailLabel = globalLocalizer.GetString("Email"),
-                PhoneNumberLabel = globalLocalizer.GetString("PhoneNumberLabel"),
-                EmailFormatErrorMessage = globalLocalizer.GetString("EmailFormatErrorMessage"),
-                ContactJobTitleLabel = globalLocalizer.GetString("ContactJobTitle"),
-                CompanyPostalCodeLabel = globalLocalizer.GetString("PostalCode"),
-                FieldRequiredErrorMessage = globalLocalizer.GetString("FieldRequiredErrorMessage"),
-                CompanyNameLabel = globalLocalizer.GetString("CompanyName"),
-                CompanyAddressLabel = globalLocalizer.GetString("Address"),
-                CompanyCityLabel = globalLocalizer.GetString("City"),
-                CompanyRegionLabel = globalLocalizer.GetString("Region"),
-                CompanyCountryLabel = globalLocalizer.GetString("Country"),
-                SaveUrl = linkGenerator.GetPathByAction("Application", "ApplicationsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
-                OnlineRetailersLabel = globalLocalizer.GetString("OnlineRetailers"),
-                YesLabel = globalLocalizer.GetString("Yes"),
-                NoLabel = globalLocalizer.GetString("No"),
-                GeneralErrorMessage = globalLocalizer.GetString("AnErrorOccurred"),
-                SaveText = globalLocalizer.GetString("ApplyApplicationSubmit"),
-                SelectJobTitle = globalLocalizer.GetString("SelectJobTitle"),
-                SignInUrl = linkGenerator.GetPathByAction("Index", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
-                AcceptTermsText = cookieConsentLocalizer.GetString("Accept"),
+                Title = this.globalLocalizer.GetString("ApplicationPartner"),
+                Subtitle = this.globalLocalizer.GetString("ApplicationPartnerDescription"),
+                ContactInformationTitle = this.globalLocalizer.GetString("ContactInformation"),
+                BusinessInformationTitle = this.globalLocalizer.GetString("BusinessInformation"),
+                FirstNameLabel = this.globalLocalizer.GetString("FirstName"),
+                LastNameLabel = this.globalLocalizer.GetString("LastName"),
+                EmailLabel = this.globalLocalizer.GetString("Email"),
+                PhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel"),
+                EmailFormatErrorMessage = this.globalLocalizer.GetString("EmailFormatErrorMessage"),
+                ContactJobTitleLabel = this.globalLocalizer.GetString("ContactJobTitle"),
+                CompanyPostalCodeLabel = this.globalLocalizer.GetString("PostalCode"),
+                FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
+                CompanyNameLabel = this.globalLocalizer.GetString("CompanyName"),
+                CompanyAddressLabel = this.globalLocalizer.GetString("Address"),
+                CompanyCityLabel = this.globalLocalizer.GetString("City"),
+                CompanyRegionLabel = this.globalLocalizer.GetString("Region"),
+                CompanyCountryLabel = this.globalLocalizer.GetString("Country"),
+                SaveUrl = this.linkGenerator.GetPathByAction("Application", "ApplicationsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                OnlineRetailersLabel = this.globalLocalizer.GetString("OnlineRetailers"),
+                YesLabel = this.globalLocalizer.GetString("Yes"),
+                NoLabel = this.globalLocalizer.GetString("No"),
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                SaveText = this.globalLocalizer.GetString("ApplyApplicationSubmit"),
+                SelectJobTitle = this.globalLocalizer.GetString("SelectJobTitle"),
+                SignInUrl = this.linkGenerator.GetPathByAction("Index", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
+                AcceptTermsText = this.cookieConsentLocalizer.GetString("Accept"),
                 PrivacyPolicyUrl = $"{options.Value.IdentityUrl}{SecurityConstants.PrivacyPolicyEndpoint}",
                 RegulationsUrl = $"{options.Value.IdentityUrl}{SecurityConstants.RegulationsEndpoint}",
-                PrivacyPolicy = globalLocalizer.GetString("LowerPrivacyPolicy"),
-                Regulations = globalLocalizer.GetString("LowerRegulations")
+                PrivacyPolicy = this.globalLocalizer.GetString("LowerPrivacyPolicy"),
+                Regulations = this.globalLocalizer.GetString("LowerRegulations")
             };
 
             viewModel.ContactJobTitles = new List<ContactJobTitle>
             {
                 new ContactJobTitle {
-                    Name = globalLocalizer.GetString("SalesRep").Name,
-                    Value = globalLocalizer.GetString("SalesRep").Value
+                    Name = this.globalLocalizer.GetString("SalesRep").Name,
+                    Value = this.globalLocalizer.GetString("SalesRep").Value
                 },
                 new ContactJobTitle {
-                    Name = globalLocalizer.GetString("SalesManager").Name,
-                    Value = globalLocalizer.GetString("SalesManager").Value
+                    Name = this.globalLocalizer.GetString("SalesManager").Name,
+                    Value = this.globalLocalizer.GetString("SalesManager").Value
                 },
                 new ContactJobTitle {
-                    Name = globalLocalizer.GetString("President").Name,
-                    Value = globalLocalizer.GetString("President").Value
+                    Name = this.globalLocalizer.GetString("President").Name,
+                    Value = this.globalLocalizer.GetString("President").Value
                 },
                 new ContactJobTitle {
-                    Name = globalLocalizer.GetString("CEO").Name,
-                    Value = globalLocalizer.GetString("CEO").Value
+                    Name = this.globalLocalizer.GetString("CEO").Name,
+                    Value = this.globalLocalizer.GetString("CEO").Value
                 },
                 new ContactJobTitle {
-                    Name = globalLocalizer.GetString("AccountManager").Name,
-                    Value = globalLocalizer.GetString("AccountManager").Value
+                    Name = this.globalLocalizer.GetString("AccountManager").Name,
+                    Value = this.globalLocalizer.GetString("AccountManager").Value
                 },
                 new ContactJobTitle {
-                    Name = globalLocalizer.GetString("Owner").Name,
-                    Value = globalLocalizer.GetString("Owner").Value
+                    Name = this.globalLocalizer.GetString("Owner").Name,
+                    Value = this.globalLocalizer.GetString("Owner").Value
                 },
                 new ContactJobTitle {
-                    Name = globalLocalizer.GetString("VicePresident").Name,
-                    Value = globalLocalizer.GetString("VicePresident").Value
+                    Name = this.globalLocalizer.GetString("VicePresident").Name,
+                    Value = this.globalLocalizer.GetString("VicePresident").Value
                 },
                 new ContactJobTitle {
-                    Name = globalLocalizer.GetString("GeneralManager").Name,
-                    Value = globalLocalizer.GetString("GeneralManager").Value
+                    Name = this.globalLocalizer.GetString("GeneralManager").Name,
+                    Value = this.globalLocalizer.GetString("GeneralManager").Value
                 },
                 new ContactJobTitle {
-                    Name = globalLocalizer.GetString("OperationsManager").Name,
-                    Value = globalLocalizer.GetString("OperationsManager").Value
+                    Name = this.globalLocalizer.GetString("OperationsManager").Name,
+                    Value = this.globalLocalizer.GetString("OperationsManager").Value
                 },
                 new ContactJobTitle {
-                    Name = globalLocalizer.GetString("Other").Name,
-                    Value = globalLocalizer.GetString("Other").Value
+                    Name = this.globalLocalizer.GetString("Other").Name,
+                    Value = this.globalLocalizer.GetString("Other").Value
                 }
             };
 
@@ -116,13 +116,13 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
             {
                 new StepViewModel
                 {
-                    Title = globalLocalizer.GetString("ContactInformation"),
-                    Subtitle = globalLocalizer.GetString("ContactInformationDescription")
+                    Title = this.globalLocalizer.GetString("ContactInformation"),
+                    Subtitle = this.globalLocalizer.GetString("ContactInformationDescription")
                 },
                 new StepViewModel
                 {
-                    Title = globalLocalizer.GetString("BusinessInformation"),
-                    Subtitle = globalLocalizer.GetString("BusinessInformationDescription")
+                    Title = this.globalLocalizer.GetString("BusinessInformation"),
+                    Subtitle = this.globalLocalizer.GetString("BusinessInformationDescription")
                 }
             };
 

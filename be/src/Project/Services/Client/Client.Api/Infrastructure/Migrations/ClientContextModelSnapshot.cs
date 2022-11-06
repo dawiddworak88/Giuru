@@ -17,7 +17,7 @@ namespace Client.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -89,6 +89,9 @@ namespace Client.Api.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -367,7 +370,7 @@ namespace Client.Api.Infrastructure.Migrations
                     b.ToTable("ClientsAccountManagers");
                 });
 
-                modelBuilder.Entity("Client.Api.Infrastructure.Roles.Entities.ClientRole", b =>
+            modelBuilder.Entity("Client.Api.Infrastructure.Roles.Entities.ClientRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

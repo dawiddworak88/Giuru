@@ -18,6 +18,10 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using DownloadCenter.Api.DependencyInjection;
 using Foundation.EventBus.Abstractions;
 using DownloadCenter.Api.IntegrationEvents;
+using Microsoft.AspNetCore.DataProtection;
+using StackExchange.Redis;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +56,13 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 
     loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
 });
+
+builder.Services.AddDataProtection().UseCryptographicAlgorithms(
+    new AuthenticatedEncryptorConfiguration
+    {
+        EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+        ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+    }).PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(builder.Configuration["RedisUrl"]), $"{Assembly.GetExecutingAssembly().GetName().Name}-DataProtection-Keys");
 
 builder.Services.AddControllers(options =>
 {

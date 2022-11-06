@@ -7,12 +7,14 @@ import PasswordValidator from "../../../../../../shared/helpers/validators/Passw
 import { toast } from "react-toastify";
 import ResponseStatusConstants from "../../../../../../shared/constants/ResponseStatusConstants";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
+import ToastHelper from "../../../../../../shared/helpers/globals/ToastHelper";
 
 function SetPasswordForm(props) {
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
-        password: { value: null, error: "" }
+        password: { value: null, error: "" },
+        returnUrl: { value: props.returnUrl ? props.returnUrl : null }
     };
 
     const stateValidatorSchema = {
@@ -39,15 +41,17 @@ function SetPasswordForm(props) {
 
         fetch(props.submitUrl, requestOptions)
             .then(response => {
-                if (response.status === ResponseStatusConstants.found()) {
-                    toast.success(props.passwordSetSuccessMessage);
-                    setTimeout(() => {
-                        NavigationHelper.redirect(props.returnUrl)
-                    }, 2000);
-                } else {
-                    toast.error(props.generalErrorMessage);
-                }
-                
+                return response.json().then(jsonResponse => {
+                    if (response.status === ResponseStatusConstants.found()) {
+                        toast.success(props.passwordSetSuccessMessage);
+                        setTimeout(() => {
+                            NavigationHelper.redirect(jsonResponse.url)
+                        }, 2000);
+                    } else {
+                        dispatch({ type: "SET_IS_LOADING", payload: false });
+                        toast.error(ToastHelper.withLink(jsonResponse.emailIsConfirmedLabel, jsonResponse.signInUrl, jsonResponse.signInLabel))
+                    }
+                })
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
@@ -102,7 +106,6 @@ SetPasswordForm.propTypes = {
     passwordSetSuccessMessage: PropTypes.string.isRequired,
     passwordRequiredErrorMessage: PropTypes.string.isRequired,
     passwordFormatErrorMessage: PropTypes.string.isRequired,
-    enterPasswordText: PropTypes.string.isRequired,
     returnUrl: PropTypes.string.isRequired,
     submitUrl: PropTypes.string.isRequired,
 };

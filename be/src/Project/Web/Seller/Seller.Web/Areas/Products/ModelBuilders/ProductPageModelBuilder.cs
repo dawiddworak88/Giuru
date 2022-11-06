@@ -5,18 +5,19 @@ using Foundation.Extensions.ModelBuilders;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Products.ViewModels;
 using Foundation.PageContent.ComponentModels;
+using Seller.Web.Shared.ViewModels;
 
 namespace Seller.Web.Areas.ModelBuilders.Products
 {
     public class ProductPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel>
     {
-        private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductFormViewModel> productFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public ProductPageModelBuilder(
-            IModelBuilder<HeaderViewModel> headerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ProductFormViewModel> productFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
@@ -31,7 +32,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
         {
             var viewModel = new ProductPageViewModel
             {
-                Header = this.headerModelBuilder.BuildModel(),
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MenuTiles = this.menuTilesModelBuilder.BuildModel(),
                 ProductForm = await this.productFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = this.footerModelBuilder.BuildModel()

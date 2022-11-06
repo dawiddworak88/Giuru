@@ -56,9 +56,7 @@ const OrderItemForm = (props) => {
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
-                    {props.orderItemStatusName &&
-                        <div className="order-item__status">{props.orderStatusLabel}: {props.orderItemStatusName}</div>
-                    }
+                    <div className="order-item__status">{props.orderStatusLabel}: {props.orderItemStatusName}</div>
                     <div className="mt-2 mb-3 order-item__image">
                         <img src={props.imageUrl} alt={props.imageAlt} />
                     </div>

@@ -1,15 +1,11 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
-using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Seller.Web.Areas.Clients.Repositories;
 using Seller.Web.Areas.Clients.Repositories.Managers;
 using Seller.Web.Areas.Clients.ViewModels;
-using Seller.Web.Shared.Repositories.Clients;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
