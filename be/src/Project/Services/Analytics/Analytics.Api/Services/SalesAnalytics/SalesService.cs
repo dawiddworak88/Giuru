@@ -77,11 +77,24 @@ namespace Analytics.Api.Services.SalesAnalytics
                     await this.context.ClientDimensions.AddAsync(clientDimension.FillCommonProperties());
                 }
 
+                var locationDimension = await this.context.LocationDimensions.FirstOrDefaultAsync(x => x.Country == salesAnalyticsItem.Country);
+
+                if (locationDimension is null)
+                {
+                    locationDimension = new LocationDimension
+                    {
+                        Country = salesAnalyticsItem.Country
+                    };
+
+                    await this.context.LocationDimensions.AddAsync(locationDimension.FillCommonProperties());
+                }
+
                 var salesFact = new SalesFact
                 {
                     TimeDimensionId = timeDimension.Id,
                     ClientDimensionId = clientDimension.Id,
                     ProductDimensionId = productDimension.Id,
+                    LocationDimensionId = locationDimension.Id,
                     IsOutlet = salesAnalyticsItem.IsOutlet,
                     IsStock = salesAnalyticsItem.IsStock,
                     Quantity = salesAnalyticsItem.Quantity

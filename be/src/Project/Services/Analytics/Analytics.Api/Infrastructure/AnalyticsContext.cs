@@ -18,6 +18,7 @@ namespace Analytics.Api.Infrastructure
         public DbSet<TimeDimension> TimeDimensions { get; set; }
         public DbSet<ProductDimension> ProductDimensions { get; set; }
         public DbSet<ClientDimension> ClientDimensions { get; set; }
+        public DbSet<LocationDimension> LocationDimensions { get; set; }
         public DbSet<ProductTranslationDimension> ProductTranslationDimensions { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace Analytics.Api.ServicesModels.SalesAnalytics
         public bool IsStock { get; set; }
         public bool IsOutlet { get; set; }
         public double Quantity { get; set; }
+        public string Country { get; set; }
         public DateTime? CreatedDate { get; set; }
     }
 }

@@ -106,6 +106,7 @@ namespace Analytics.Api.v1.Controllers
                     IsOutlet = x.IsOutlet,
                     IsStock = x.IsStock,
                     Quantity = x.Quantity,
+                    Country = x.Country,
                     CreatedDate = x.CreatedDate
                 })
             };
