@@ -72,6 +72,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 new CountryViewModel { Name = this.globalLocalizer.GetString("CzechCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("DenmarkCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("EstoniaCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("FinlandCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("FranceCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("GreeceCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("SpainCountry") },
@@ -83,14 +84,17 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 new CountryViewModel { Name = this.globalLocalizer.GetString("GermanyCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("NorwayCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("PolandCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("RomaniaCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("RussiaCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("SlovakiaCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("SloveniaCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("SwedenCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("SwitzerlandCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("USACountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("HungaryCountry") },
                 new CountryViewModel { Name = this.globalLocalizer.GetString("GreatBritainCountry") },
-                new CountryViewModel { Name = this.globalLocalizer.GetString("ItalyCountry") }
+                new CountryViewModel { Name = this.globalLocalizer.GetString("ItalyCountry") },
+                new CountryViewModel { Name = this.globalLocalizer.GetString("IsraelCountry") }
             };
 
             var viewModel = new ClientFormViewModel
