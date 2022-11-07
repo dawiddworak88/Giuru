@@ -259,7 +259,7 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
 
                 if (response.IsValid is false)
                 {
-                    this.logger.LogDebug("Invalid response on indexing products in ProductIndexingRepository");
+                    this.logger.LogError(response.DebugInformation);
                 }
             }
         }
