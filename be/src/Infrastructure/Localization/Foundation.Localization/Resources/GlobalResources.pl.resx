@@ -756,4 +756,7 @@
   <data name="SwitzerlandCountry" xml:space="preserve">
     <value>Szwajcaria</value>
   </data>
+  <data name="FinlandCountry" xml:space="preserve">
+    <value>Finlandia</value>
+  </data>
 </root>

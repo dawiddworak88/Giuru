@@ -564,7 +564,7 @@
   <data name="SalesRep" xml:space="preserve">
     <value>Sales Representative</value>
   </data>
-  <data name="V" xml:space="preserve">
+  <data name="VicePresident" xml:space="preserve">
     <value>Vicepresident</value>
   </data>
   <data name="AttachedAttachments" xml:space="preserve">
@@ -749,5 +749,8 @@
   </data>
   <data name="SwitzerlandCountry" xml:space="preserve">
     <value>Switzerland</value>
+  </data>
+  <data name="FinlandCountry" xml:space="preserve">
+    <value>FinlandCountry</value>
   </data>
 </root>
