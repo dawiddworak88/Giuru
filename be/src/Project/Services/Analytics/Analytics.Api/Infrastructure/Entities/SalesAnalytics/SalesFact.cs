@@ -8,6 +8,18 @@ namespace Analytics.Api.Infrastructure.Entities.SalesAnalytics
     public class SalesFact : Entity
     {
         [Required]
+        public Guid ProductDimensionId { get; set; }
+
+        [Required]
+        public Guid ClientDimensionId { get; set; }
+
+        [Required]
+        public Guid TimeDimensionId { get; set; }
+
+        [Required]
+        public Guid LocationDimensionId { get; set; }
+
+        [Required]
         public double Quantity { get; set; }
 
         [Required]

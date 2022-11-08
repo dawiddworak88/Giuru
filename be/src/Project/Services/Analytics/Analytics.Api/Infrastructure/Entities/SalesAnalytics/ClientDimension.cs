@@ -7,9 +7,6 @@ namespace Analytics.Api.Infrastructure.Entities.SalesAnalytics
     public class ClientDimension : Entity
     {
         [Required]
-        public Guid SalesFactId { get; set; }
-
-        [Required]
         public Guid ClientId { get; set; }
 
         [Required]

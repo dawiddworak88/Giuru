@@ -8,7 +8,7 @@ namespace Analytics.Api.Validators
     {
         public GetTopSalesAnalyticsModelValidator()
         {
-            this.RuleFor(x => x.Username).NotEmpty().NotNull();
+            this.RuleFor(x => x.OrganisationId).NotEmpty().NotNull();
         }
     }
 }

@@ -8,9 +8,6 @@ namespace Analytics.Api.Infrastructure.Entities.SalesAnalytics
     public class ProductDimension : Entity
     {
         [Required]
-        public Guid SalesFactId { get; set; }
-
-        [Required]
         public Guid ProductId { get; set; }
 
         [Required]

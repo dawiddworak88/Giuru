@@ -56,7 +56,7 @@ namespace Analytics.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid>("SalesFactId")
+                    b.Property<Guid?>("SalesFactId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -90,7 +90,7 @@ namespace Analytics.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid>("SalesFactId")
+                    b.Property<Guid?>("SalesFactId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -127,7 +127,7 @@ namespace Analytics.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid>("SalesFactId")
+                    b.Property<Guid?>("SalesFactId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Sku")
@@ -184,6 +184,9 @@ namespace Analytics.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ClientDimensionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -199,6 +202,12 @@ namespace Analytics.Api.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("LocationDimensionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductDimensionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<double>("Quantity")
                         .HasColumnType("float");
 
@@ -206,6 +215,9 @@ namespace Analytics.Api.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
+
+                    b.Property<Guid>("TimeDimensionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -250,7 +262,7 @@ namespace Analytics.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid>("SalesFactId")
+                    b.Property<Guid?>("SalesFactId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Second")
@@ -270,27 +282,21 @@ namespace Analytics.Api.Infrastructure.Migrations
                 {
                     b.HasOne("Analytics.Api.Infrastructure.Entities.SalesAnalytics.SalesFact", null)
                         .WithMany("ClientDimensions")
-                        .HasForeignKey("SalesFactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SalesFactId");
                 });
 
             modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.LocationDimension", b =>
                 {
                     b.HasOne("Analytics.Api.Infrastructure.Entities.SalesAnalytics.SalesFact", null)
                         .WithMany("LocationDimensions")
-                        .HasForeignKey("SalesFactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SalesFactId");
                 });
 
             modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.ProductDimension", b =>
                 {
                     b.HasOne("Analytics.Api.Infrastructure.Entities.SalesAnalytics.SalesFact", null)
                         .WithMany("ProductDimensions")
-                        .HasForeignKey("SalesFactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SalesFactId");
                 });
 
             modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.ProductTranslationDimension", b =>
@@ -306,9 +312,7 @@ namespace Analytics.Api.Infrastructure.Migrations
                 {
                     b.HasOne("Analytics.Api.Infrastructure.Entities.SalesAnalytics.SalesFact", null)
                         .WithMany("TimeDimensions")
-                        .HasForeignKey("SalesFactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SalesFactId");
                 });
 
             modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.ProductDimension", b =>

@@ -7,9 +7,6 @@ namespace Analytics.Api.Infrastructure.Entities.SalesAnalytics
     public class TimeDimension : Entity
     {
         [Required]
-        public Guid SalesFactId { get; set; }
-
-        [Required]
         public int Hour { get; set; }
 
         [Required]
