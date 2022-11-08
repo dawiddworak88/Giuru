@@ -6,8 +6,8 @@ namespace Analytics.Api.Services.SalesAnalytics
 {
     public interface ISalesService
     {
-        Task CreateSalesAnalyticsAsync(CreateSalesAnalyticsServiceModel model);
+        Task CreateAsync(CreateSalesAnalyticsServiceModel model);
         Task<IEnumerable<TopSalesProductsAnalyticsServiceModel>> GetTopSalesProductsAnalyticsAsync(GetTopSalesProductsAnalyticsServiceModel model);
-        Task<IEnumerable<AnnualProductSalesServiceModel>> GetAnnualProductSalesAsync(GetAnnualProductSalesServiceModel model);
+        Task<IEnumerable<AnnualSalesServiceModel>> GetAnnualSalesServiceModel(GetAnnualSalesServiceModel model);
     }
 }

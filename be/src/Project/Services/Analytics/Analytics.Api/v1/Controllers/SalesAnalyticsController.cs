@@ -10,7 +10,6 @@ using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -21,7 +20,7 @@ namespace Analytics.Api.v1.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class SalesAnalyticsController : BaseApiController
     {
@@ -44,22 +43,20 @@ namespace Analytics.Api.v1.Controllers
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new GetAnnualProductSalesServiceModel
+            var serviceModel = new GetAnnualSalesServiceModel
             {
                 Language = CultureInfo.CurrentCulture.Name,
-                OrganisationId = Guid.Parse("09AFFCC9-1665-45D6-919F-3D2026106BA1"),
-                Username = "seller@user.com",
-                //OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                //Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 IsSeller = this.User.IsInRole("Seller")
             };
 
-            var validator = new GetAnnualProductSalesModelValidator();
+            var validator = new GetAnnualSalesModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var annualSales = await this.salesService.GetAnnualProductSalesAsync(serviceModel);
+                var annualSales = await this.salesService.GetAnnualSalesServiceModel(serviceModel);
 
                 if (annualSales is not null)
                 {
@@ -91,12 +88,9 @@ namespace Analytics.Api.v1.Controllers
             var serviceModel = new GetTopSalesProductsAnalyticsServiceModel
             {
                 Language = CultureInfo.CurrentCulture.Name,
-                /*OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                IsSeller = this.User.IsInRole("Seller")*/
-                OrganisationId = Guid.Parse("09AFFCC9-1665-45D6-919F-3D2026106BA1"),
-                Username = "seller@user.com",
-                IsSeller = true
+                IsSeller = this.User.IsInRole("Seller")
             };
 
             var validator = new GetTopSalesAnalyticsModelValidator();
@@ -139,10 +133,8 @@ namespace Analytics.Api.v1.Controllers
             var serviceModel = new CreateSalesAnalyticsServiceModel
             {
                 Language = CultureInfo.CurrentCulture.Name,
-                //OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                OrganisationId = Guid.Parse("09AFFCC9-1665-45D6-919F-3D2026106BA1"),
-                Username = "seller@user.com",
-                //Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 SalesAnalyticsItems = request.SalesAnalyticsItems.Select(x => new CreateSalesAnalyticsItemServiceModel
                 {
                     ClientId = x.ClientId,
@@ -165,7 +157,7 @@ namespace Analytics.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.salesService.CreateSalesAnalyticsAsync(serviceModel);
+                await this.salesService.CreateAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }

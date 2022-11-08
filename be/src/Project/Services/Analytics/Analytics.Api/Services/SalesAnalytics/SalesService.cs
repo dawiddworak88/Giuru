@@ -21,7 +21,7 @@ namespace Analytics.Api.Services.SalesAnalytics
             this.context = context;
         }
 
-        public async Task CreateSalesAnalyticsAsync(CreateSalesAnalyticsServiceModel model)
+        public async Task CreateAsync(CreateSalesAnalyticsServiceModel model)
         {
             foreach (var salesAnalyticsItem in model.SalesAnalyticsItems.OrEmptyIfNull())
             {
@@ -105,7 +105,7 @@ namespace Analytics.Api.Services.SalesAnalytics
             }
         }
 
-        public async Task<IEnumerable<AnnualProductSalesServiceModel>> GetAnnualProductSalesAsync(GetAnnualProductSalesServiceModel model)
+        public async Task<IEnumerable<AnnualSalesServiceModel>> GetAnnualSalesServiceModel(GetAnnualSalesServiceModel model)
         {
             var sales = from s in this.context.SalesFacts
                           join t in this.context.TimeDimensions on s.TimeDimensionId equals t.Id
@@ -145,7 +145,7 @@ namespace Analytics.Api.Services.SalesAnalytics
                         Month = rev.Month,
                         Year = rev.Year
                     }, 
-                (s, g) => new AnnualProductSalesServiceModel 
+                (s, g) => new AnnualSalesServiceModel 
                     { 
                         Month = s.Month, 
                         Year = s.Year, 
