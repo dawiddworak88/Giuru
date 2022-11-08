@@ -8,5 +8,6 @@ namespace Analytics.Api.Services.SalesAnalytics
     {
         Task CreateSalesAnalyticsAsync(CreateSalesAnalyticsServiceModel model);
         Task<IEnumerable<TopSalesProductsAnalyticsServiceModel>> GetTopSalesProductsAnalyticsAsync(GetTopSalesProductsAnalyticsServiceModel model);
+        Task<IEnumerable<AnnualProductSalesServiceModel>> GetAnnualProductSalesAsync(GetAnnualProductSalesServiceModel model);
     }
 }

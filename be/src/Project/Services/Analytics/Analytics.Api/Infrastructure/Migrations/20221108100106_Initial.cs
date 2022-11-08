@@ -14,10 +14,6 @@ namespace Analytics.Api.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TimeDimensionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClientDimensionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductDimensionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LocationDimensionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Quantity = table.Column<double>(type: "float", nullable: false),
                     IsStock = table.Column<bool>(type: "bit", nullable: false),
                     IsOutlet = table.Column<bool>(type: "bit", nullable: false),
@@ -36,10 +32,11 @@ namespace Analytics.Api.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SalesFactId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrganisationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SalesFactId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -52,7 +49,8 @@ namespace Analytics.Api.Infrastructure.Migrations
                         name: "FK_ClientDimensions_SalesFacts_SalesFactId",
                         column: x => x.SalesFactId,
                         principalTable: "SalesFacts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -60,8 +58,8 @@ namespace Analytics.Api.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SalesFactId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SalesFactId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -74,7 +72,8 @@ namespace Analytics.Api.Infrastructure.Migrations
                         name: "FK_LocationDimensions_SalesFacts_SalesFactId",
                         column: x => x.SalesFactId,
                         principalTable: "SalesFacts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -82,10 +81,10 @@ namespace Analytics.Api.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SalesFactId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Sku = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Ean = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SalesFactId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -98,7 +97,8 @@ namespace Analytics.Api.Infrastructure.Migrations
                         name: "FK_ProductDimensions_SalesFacts_SalesFactId",
                         column: x => x.SalesFactId,
                         principalTable: "SalesFacts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,6 +106,7 @@ namespace Analytics.Api.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SalesFactId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Hour = table.Column<int>(type: "int", nullable: false),
                     Minute = table.Column<int>(type: "int", nullable: false),
                     Second = table.Column<int>(type: "int", nullable: false),
@@ -114,7 +115,6 @@ namespace Analytics.Api.Infrastructure.Migrations
                     Month = table.Column<int>(type: "int", nullable: false),
                     Quarter = table.Column<int>(type: "int", nullable: false),
                     Year = table.Column<int>(type: "int", nullable: false),
-                    SalesFactId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -127,7 +127,8 @@ namespace Analytics.Api.Infrastructure.Migrations
                         name: "FK_TimeDimensions_SalesFacts_SalesFactId",
                         column: x => x.SalesFactId,
                         principalTable: "SalesFacts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

@@ -33,13 +33,55 @@ namespace Analytics.Api.v1.Controllers
         }
 
         /// <summary>
+        /// Get annual sales
+        /// </summary>
+        /// <returns>Annual sales.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetAnnualSales()
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetAnnualProductSalesServiceModel
+            {
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                IsSeller = this.User.IsInRole("Seller")
+            };
+
+            var validator = new GetAnnualProductSalesModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var annualSales = await this.salesService.GetAnnualProductSalesAsync(serviceModel);
+
+                if (annualSales is not null)
+                {
+                    var response = annualSales.Select(x => new AnnualSalesResponseModel
+                    {
+                        Month = x.Month,
+                        Year = x.Year,
+                        Quantity = x.Quantity
+                    });
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
         /// Gets best selling products
         /// </summary>
         /// <returns>Best selling products</returns>
         [HttpGet("products"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string orderBy)
+        public async Task<IActionResult> Get()
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -62,7 +104,6 @@ namespace Analytics.Api.v1.Controllers
                 {
                     var response = topSalesProducts.Select(x => new TopSalesProductsAnalyticsResponseModel
                     {
-                        Id = x.Id,
                         ProductId = x.ProductId,
                         ProductSku = x.ProductSku,
                         ProductName = x.ProductName,
@@ -78,9 +119,9 @@ namespace Analytics.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Creates  (if inventory skus are set).
+        /// Creates sales facts
         /// </summary>
-        /// <param name="request">The list of best selling products.</param>
+        /// <param name="request">The model.</param>
         /// <returns>OK.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]

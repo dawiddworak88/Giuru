@@ -75,6 +75,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ordering", "Ordering", "{A7DB17C9-B90C-4A22-8B07-B5D5D34F31B7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Basket", "Basket", "{B190BA70-9CCD-4FAC-A695-3F85D2EE07B7}"
+	ProjectSection(SolutionItems) = preProject
+		Project\Services\Analytics\Analytics.Api\Program.cs = Project\Services\Analytics\Analytics.Api\Program.cs
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Api", "Project\Services\Basket\Basket.Api\Basket.Api.csproj", "{F823DC2A-54CA-409B-93AE-9D31E0567778}"
 EndProject
@@ -139,7 +142,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DownloadCenter.Api", "Proje
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analytics", "Analytics", "{548D19E5-3E82-4643-8483-A41938FDB6B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analytics.Api", "Project\Services\Analytics\Analytics.Api\Analytics.Api.csproj", "{2F3C1449-5054-455E-8F2D-20F8E36F5BFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analytics.Api", "Project\Services\Analytics\Analytics.Api\Analytics.Api.csproj", "{2F3C1449-5054-455E-8F2D-20F8E36F5BFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
