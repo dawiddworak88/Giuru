@@ -864,8 +864,7 @@ namespace Ordering.Api.Services
                         lastOrderItemStatusChanges.Add(new OrderItemStatusServiceModel
                         {
                             OrderItemStateId = lastOrderItemStatusChange.OrderItemStateId,
-                            OrderItemStatusId = lastOrderItemStatusChange.OrderItemStatusId,
-                            CreatedDate = lastOrderItemStatusChange.CreatedDate
+                            OrderItemStatusId = lastOrderItemStatusChange.OrderItemStatusId
                         });
                     }
                 }
@@ -880,7 +879,7 @@ namespace Ordering.Api.Services
                     order.OrderStateId = lastOrderItemStatus.OrderItemStateId;
                     order.LastModifiedDate = DateTime.UtcNow;
                 }
-                else if (lastOrderItemStatus.OrderItemStatusId != OrderStatusesConstants.CanceledId)
+                else if (lastOrderItemStatus.OrderItemStatusId != OrderStatusesConstants.CanceledId && lastOrderItemStatus is not null)
                 {
                     order.OrderStatusId = OrderStatusesConstants.ProcessingId;
                     order.OrderStateId = OrderStatesConstants.ProcessingId;
