@@ -2,6 +2,7 @@
 using Foundation.Catalog.SearchModels.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Nest;
 using Newtonsoft.Json.Linq;
 using System;
@@ -16,8 +17,10 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
         private readonly CatalogContext catalogContext;
         private readonly IElasticClient elasticClient;
         private readonly IConfiguration configuration;
+        private readonly ILogger<ProductIndexingRepository> logger;
 
         public ProductIndexingRepository(
+            ILogger<ProductIndexingRepository> logger,
             CatalogContext catalogContext, 
             IElasticClient elasticClient,
             IConfiguration configuration)
@@ -25,6 +28,7 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
             this.catalogContext = catalogContext;
             this.elasticClient = elasticClient;
             this.configuration = configuration;
+            this.logger = logger;
         }
 
         public async Task DeleteAsync(Guid sellerId)
@@ -251,7 +255,12 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
                     }
                 }
 
-                await this.elasticClient.BulkAsync(descriptor);
+                var response = await this.elasticClient.BulkAsync(descriptor);
+
+                if (response.IsValid is false)
+                {
+                    this.logger.LogError(response.DebugInformation);
+                }
             }
         }
     }

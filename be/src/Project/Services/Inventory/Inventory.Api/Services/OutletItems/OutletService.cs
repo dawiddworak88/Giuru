@@ -541,7 +541,7 @@ namespace Inventory.Api.Services.OutletItems
         {
             var outletItems = (from o in this.context.Outlet
                                join product in this.context.Products on o.ProductId equals product.Id
-                               where product.IsActive
+                               where product.IsActive && o.IsActive
                                group o by new { product.Id } into gpi
                                where gpi.Sum(x => x.AvailableQuantity) > 0
                                select new OutletSumServiceModel

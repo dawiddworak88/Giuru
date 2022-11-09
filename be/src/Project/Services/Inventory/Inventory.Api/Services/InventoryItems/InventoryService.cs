@@ -375,7 +375,7 @@ namespace Inventory.Api.Services.InventoryItems
         {
             var inventories = (from i in this.context.Inventory
                                join product in this.context.Products on i.ProductId equals product.Id
-                               where product.IsActive
+                               where product.IsActive && i.IsActive
                                group i by new { product.Id } into gpi
                                select new InventorySumServiceModel
                                {
