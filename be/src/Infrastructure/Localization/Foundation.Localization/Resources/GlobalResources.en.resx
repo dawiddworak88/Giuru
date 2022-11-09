@@ -747,4 +747,13 @@
   <data name="NoGroupsText" xml:space="preserve">
     <value>No groups available</value>
   </data>
+  <data name="IsraelCountry" xml:space="preserve">
+    <value>Israel</value>
+  </data>
+  <data name="SwitzerlandCountry" xml:space="preserve">
+    <value>Switzerland</value>
+  </data>
+  <data name="FinlandCountry" xml:space="preserve">
+    <value>FinlandCountry</value>
+  </data>
 </root>
