@@ -6,5 +6,6 @@ namespace Ordering.Api.ServicesModels
     {
         public Guid OrderItemStateId { get; set; }
         public Guid OrderItemStatusId { get; set; }
+        public DateTime? CreatedDate { get; set; }
     }
 }

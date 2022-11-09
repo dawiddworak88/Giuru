@@ -864,20 +864,23 @@ namespace Ordering.Api.Services
                         lastOrderItemStatusChanges.Add(new OrderItemStatusServiceModel
                         {
                             OrderItemStateId = lastOrderItemStatusChange.OrderItemStateId,
-                            OrderItemStatusId = lastOrderItemStatusChange.OrderItemStatusId
+                            OrderItemStatusId = lastOrderItemStatusChange.OrderItemStatusId,
+                            CreatedDate = lastOrderItemStatusChange.CreatedDate
                         });
                     }
                 }
 
                 bool isSameStatus = lastOrderItemStatusChanges.DistinctBy(x => x.OrderItemStatusId).Count() == 1;
 
+                var lastOrderItemStatus = lastOrderItemStatusChanges.FirstOrDefault();
+
                 if (isSameStatus is true)
                 {
-                    order.OrderStatusId = lastOrderItemStatusChanges.FirstOrDefault().OrderItemStatusId;
-                    order.OrderStateId = lastOrderItemStatusChanges.FirstOrDefault().OrderItemStateId;
+                    order.OrderStatusId = lastOrderItemStatus.OrderItemStatusId;
+                    order.OrderStateId = lastOrderItemStatus.OrderItemStateId;
                     order.LastModifiedDate = DateTime.UtcNow;
                 }
-                else
+                else if (lastOrderItemStatus.OrderItemStatusId != OrderStatusesConstants.CanceledId)
                 {
                     order.OrderStatusId = OrderStatusesConstants.ProcessingId;
                     order.OrderStateId = OrderStatesConstants.ProcessingId;
