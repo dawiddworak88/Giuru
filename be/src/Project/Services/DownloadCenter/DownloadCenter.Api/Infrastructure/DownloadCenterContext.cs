@@ -17,5 +17,6 @@ namespace DownloadCenter.Api.Infrastructure
         public DbSet<DownloadCenterCategory> DownloadCenterCategories { get; set; }
         public DbSet<DownloadCenterCategoryTranslation> DownloadCenterCategoryTranslations { get; set; }
         public DbSet<DownloadCenterCategoryFile> DownloadCenterCategoryFiles { get; set; }
+        public DbSet<DownloadCenterFilesGroup> DownloadCenterFilesGroups { get; set; }
     }
 }
