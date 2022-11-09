@@ -57,7 +57,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers
                 SearchLabel = this.globalLocalizer.GetString("Search"),
                 SearchPlaceholderLabel = this.globalLocalizer.GetString("Search"),
                 Logo = this.logoModelBuilder.BuildModel(),
-                BasketUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                BasketUrl = this.linkGenerator.GetPathByAction("Index", "Basket", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 LanguageSwitcher = this.languageSwitcherViewModel.BuildModel(),
                 GetSuggestionsUrl = this.linkGenerator.GetPathByAction("Get", "SearchSuggestionsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),

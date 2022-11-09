@@ -1,7 +1,6 @@
 ﻿using Seller.Web.Areas.Orders.ViewModel;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.MenuTiles.ViewModels;
-using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
@@ -14,18 +13,18 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderFormViewModel> orderFormModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderDetailViewModel> orderDetailModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public OrderPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, OrderFormViewModel> orderFormModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, OrderDetailViewModel> orderDetailModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.orderFormModelBuilder = orderFormModelBuilder;
+            this.orderDetailModelBuilder = orderDetailModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
 
@@ -36,7 +35,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 Locale = CultureInfo.CurrentUICulture.Name,
                 Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MenuTiles = this.menuTilesModelBuilder.BuildModel(),
-                OrderForm = await this.orderFormModelBuilder.BuildModelAsync(componentModel),
+                OrderDetail = await this.orderDetailModelBuilder.BuildModelAsync(componentModel),
                 Footer = this.footerModelBuilder.BuildModel()
             };
 

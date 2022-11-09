@@ -52,7 +52,7 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
             links.Add(new LinkViewModel
             {
                 Text = this.orderLocalizer.GetString("PlaceOrder").Value,
-                Url = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                Url = this.linkGenerator.GetPathByAction("Index", "Basket", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             });
 
             links.Add(new LinkViewModel

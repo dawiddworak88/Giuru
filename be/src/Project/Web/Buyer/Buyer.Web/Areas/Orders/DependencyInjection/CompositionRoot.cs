@@ -20,10 +20,10 @@ namespace Buyer.Web.Areas.Orders.DependencyInjection
             services.AddScoped<IOrderFileService, OrderFileService>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogOrderViewModel<Order>>, OrdersPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrdersPageViewModel>, OrdersPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel>, OrderPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderFormViewModel>, OrderFormModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusPageViewModel>, OrderStatusPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusDetailViewModel>, OrderStatusDetailModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BasketPageViewModel>, BasketPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BasketFormViewModel>, BasketFormModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderDetailPageViewModel>, OrderDetailPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderDetailViewModel>, OrderDetailModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemPageViewModel>, OrderItemPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemFormViewModel>, OrderItemFormModelBuilder>();
         }

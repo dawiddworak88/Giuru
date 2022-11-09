@@ -1,4 +1,5 @@
-﻿using Foundation.Account.Definitions;
+﻿using DocumentFormat.OpenXml.Vml.Spreadsheet;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.Helpers;
@@ -19,33 +20,15 @@ namespace Seller.Web.Areas.Orders.Controllers
     public class OrderController : BaseController
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusPageViewModel> orderStatusPageModelBuilder;
 
         public OrderController(
-            IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusPageViewModel> orderStatusPageModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder)
         {
             this.orderPageModelBuilder = orderPageModelBuilder;
-            this.orderStatusPageModelBuilder = orderStatusPageModelBuilder;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            var componentModel = new ComponentModelBase
-            {
-                IsAuthenticated = this.User.Identity.IsAuthenticated,
-                Name = this.User.Identity.Name,
-                Language = CultureInfo.CurrentUICulture.Name,
-                Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
-            };
-
-            var viewModel = await this.orderPageModelBuilder.BuildModelAsync(componentModel);
-
-            return this.View(viewModel);
-        }
-
-        public async Task<IActionResult> Status(Guid? id)
+        [HttpGet]
+        public async Task<IActionResult> Detail(Guid? id)
         {
             var componentModel = new ComponentModelBase
             {
@@ -57,7 +40,7 @@ namespace Seller.Web.Areas.Orders.Controllers
                 SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
             };
 
-            var viewModel = await this.orderStatusPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await this.orderPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
         }

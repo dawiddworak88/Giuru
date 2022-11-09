@@ -22,35 +22,15 @@ namespace Buyer.Web.Areas.Orders.Controllers
     [Authorize]
     public class OrderController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusPageViewModel> orderStatusPageModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderDetailPageViewModel> orderDetailPageModelBuilder;
 
         public OrderController(
-            IAsyncComponentModelBuilder<ComponentModelBase, OrderStatusPageViewModel> orderStatusPageModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, OrderDetailPageViewModel> orderDetailPageModelBuilder)
         {
-            this.orderStatusPageModelBuilder = orderStatusPageModelBuilder;
-            this.orderPageModelBuilder = orderPageModelBuilder;
+            this.orderDetailPageModelBuilder = orderDetailPageModelBuilder;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            var componentModel = new ComponentModelBase
-            {
-                Language = CultureInfo.CurrentUICulture.Name,
-                IsAuthenticated = this.User.Identity.IsAuthenticated,
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
-                Name = this.User.Identity.Name,
-                Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName])
-            };
-
-            var viewModel = await this.orderPageModelBuilder.BuildModelAsync(componentModel);
-
-            return this.View(viewModel);
-        }
-
-        public async Task<IActionResult> Status(Guid? id)
+        public async Task<IActionResult> Detail(Guid? id)
         {
             var componentModel = new ComponentModelBase
             {
@@ -58,11 +38,12 @@ namespace Buyer.Web.Areas.Orders.Controllers
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName]),
                 SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
                 Name = this.User.Identity.Name
             };
 
-            var viewModel = await this.orderStatusPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await this.orderDetailPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
         }

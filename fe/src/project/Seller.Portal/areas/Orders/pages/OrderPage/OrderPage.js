@@ -7,19 +7,19 @@ import LocaleHelper from "../../../../../../shared/helpers/globals/LocaleHelper"
 import Header from "../../../../../../shared/components/Header/Header";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
-import OrderForm from "../../components/OrderForm/OrderForm";
+import OrderDetail from "../../components/OrderDetail/OrderDetail";
 
 function OrderPage(props) {
 
   LocaleHelper.setMomentLocale(props.locale);
-
+  
   return (
       <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
         <ToastContainer />
         <Store>
           <Header {...props.header}></Header>
           <MenuTiles {...props.menuTiles} />
-          <OrderForm {...props.orderForm} />
+          <OrderDetail {...props.orderDetail} />
           <Footer {...props.footer}></Footer>
         </Store>
       </ThemeProvider>

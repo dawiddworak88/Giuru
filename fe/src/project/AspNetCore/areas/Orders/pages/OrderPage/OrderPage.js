@@ -6,7 +6,7 @@ import Store from "../../../../../../shared/stores/Store";
 import Header from "../../../../shared/components/Header/Header";
 import MainNavigation from "../../../../shared/components/MainNavigation/MainNavigation";
 import Footer from "../../../../../../shared/components/Footer/Footer";
-import OrderForm from "../../components/OrderForm/OrderForm";
+import OrderDetail from "../../components/OrderDetail/OrderDetail";
 import LocaleHelper from "../../../../../../shared/helpers/globals/LocaleHelper";
 
 const OrderPage = (props) => {
@@ -19,7 +19,7 @@ const OrderPage = (props) => {
             <Store>
                 <Header {...props.header}></Header>
                 <MainNavigation {...props.mainNavigation}></MainNavigation>
-                <OrderForm {...props.orderForm} />
+                <OrderDetail {...props.orderDetail} />
                 <Footer {...props.footer}></Footer>
             </Store>
         </ThemeProvider>
