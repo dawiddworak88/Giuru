@@ -167,8 +167,8 @@ function ClientForm(props) {
                                 <InputLabel id="country-label">{props.countryLabel}</InputLabel>
                                 <Select
                                     labelId="country-label"
-                                    id="country"
-                                    name="country"
+                                    id="countryId"
+                                    name="countryId"
                                     value={countryId}
                                     onChange={handleOnChange}>
                                     {props.countries && props.countries.length > 0 && props.countries.map((country, index) => {

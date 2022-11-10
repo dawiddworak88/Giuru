@@ -121,7 +121,7 @@ namespace Seller.Web.Areas.Clients.Repositories.Countries
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.GlobalUrl}{ApiConstants.Global.CountriesApiEndpoint}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientCountry>>>(apiRequest);
