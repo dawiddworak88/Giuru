@@ -41,13 +41,6 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Localization\Foundation.Localization\Foundation.Localization.csproj" />
-  </ItemGroup>	    
-
-  <ItemGroup>
-    <Folder Include="ServicesModels\" />
-    <Folder Include="Services\" />
-    <Folder Include="validators\" />
-    <Folder Include="v1\" />
   </ItemGroup>
 
 </Project>

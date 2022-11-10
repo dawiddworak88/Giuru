@@ -663,4 +663,7 @@
   <data name="TrySignIn" xml:space="preserve">
     <value>Bitte versuchen Sie sich anzumelden</value>
   </data>
+  <data name="CountryNotFound" xml:space="preserve">
+    <value>Land nicht gefunden.</value>
+  </data>
 </root>

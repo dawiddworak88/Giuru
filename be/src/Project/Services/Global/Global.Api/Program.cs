@@ -72,6 +72,8 @@ builder.Services.AddLocalization();
 
 builder.Services.AddApiVersioning();
 
+builder.Services.RegisterGlobalApiDependencies();
+
 builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 
 builder.Services.RegisterApiAccountDependencies(builder.Configuration);
