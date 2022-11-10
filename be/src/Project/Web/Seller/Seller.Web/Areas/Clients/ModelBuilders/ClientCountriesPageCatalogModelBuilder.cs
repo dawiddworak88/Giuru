@@ -8,7 +8,6 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.Countries;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
-using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
 using System.Globalization;

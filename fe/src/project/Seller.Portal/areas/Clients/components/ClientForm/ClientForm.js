@@ -16,7 +16,7 @@ function ClientForm(props) {
         email: { value: props.email ? props.email : "", error: "" },
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
-        country: { value: props.country ? props.country : null },
+        countryId: { value: props.countryId ? props.countryId : null },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
         hasAccount: { value: props.hasAccount ? props.hasAccount : false }
@@ -120,7 +120,7 @@ function ClientForm(props) {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { 
-        id, name, email, country, clientGroupIds, 
+        id, name, email, countryId, clientGroupIds, 
         communicationLanguage, phoneNumber, clientManagerIds 
     } = values;
 
@@ -169,11 +169,11 @@ function ClientForm(props) {
                                     labelId="country-label"
                                     id="country"
                                     name="country"
-                                    value={country}
+                                    value={countryId}
                                     onChange={handleOnChange}>
                                     {props.countries && props.countries.length > 0 && props.countries.map((country, index) => {
                                         return (
-                                            <MenuItem key={index} value={country.name}>{country.name}</MenuItem>
+                                            <MenuItem key={index} value={country.id}>{country.name}</MenuItem>
                                         );
                                     })}
                                 </Select>

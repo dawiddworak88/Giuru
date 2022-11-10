@@ -11,6 +11,7 @@ namespace Seller.Web.Areas.Clients.Repositories.Countries
         Task SaveAsync(string token, string language, Guid? id, string name);
         Task DeleteAsync(string token, string language, Guid? id);
         Task<PagedResults<IEnumerable<ClientCountry>>> GetAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
+        Task<IEnumerable<ClientCountry>> GetAsync(string token, string language);
         Task<ClientCountry> GetAsync(string token, string language, Guid? id);
     }
 }
