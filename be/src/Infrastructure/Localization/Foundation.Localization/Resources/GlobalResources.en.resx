@@ -666,4 +666,7 @@
   <data name="CountryNotFound" xml:space="preserve">
     <value>Country not found.</value>
   </data>
+  <data name="Countries" xml:space="preserve">
+    <value>Countries</value>
+  </data>
 </root>

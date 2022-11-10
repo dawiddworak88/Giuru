@@ -6,10 +6,10 @@
 </script>
 
 @section MetaTags {
-    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("Country"))</title>
-    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("Country")))
+    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("EditCountry"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("EditCountry")))
     {
-        <meta name="description" content="@this.Localizer.GetString("Country")" />
+        <meta name="description" content="@this.Localizer.GetString("EditCountry")" />
     }
 }
 

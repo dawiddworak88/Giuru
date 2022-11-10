@@ -35,7 +35,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         {
             var viewModel = new ClientCountryFormViewModel
             {
-                Title = this.clientLocalizer.GetString("EditGroup"),
+                Title = this.clientLocalizer.GetString("EditCountry"),
                 IdLabel = this.globalLocalizer.GetString("Id"),
                 NameLabel = this.globalLocalizer.GetString("Name"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),

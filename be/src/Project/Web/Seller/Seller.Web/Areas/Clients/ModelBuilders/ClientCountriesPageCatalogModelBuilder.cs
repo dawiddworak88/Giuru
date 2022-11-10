@@ -42,10 +42,10 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         {
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<ClientCountry>, ClientCountry>();
 
-            viewModel.Title = this.clientLocalizer.GetString("ClientsRoles");
+            viewModel.Title = this.globalLocalizer.GetString("Countries");
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
-            viewModel.NewText = this.globalLocalizer.GetString("NewRole");
+            viewModel.NewText = this.clientLocalizer.GetString("NewCountry");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "ClientCountry", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ClientCountry", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
