@@ -76,7 +76,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                var searchFiles = downloadCenterFiles.Where(x => x.Id.ToString() == model.SearchTerm || x.Filename.StartsWith(model.SearchTerm));
+                var searchFiles = downloadCenterFiles.Where(x => x.Id.ToString() == model.SearchTerm || x.Filename.Contains(model.SearchTerm));
 
                 var categoryTranslation = await this.context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.Name.StartsWith(model.SearchTerm));
 
