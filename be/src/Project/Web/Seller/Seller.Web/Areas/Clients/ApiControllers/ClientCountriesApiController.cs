@@ -56,10 +56,10 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var roles = await this.clientCountriesRepository.GetAsync(
+            var countries = await this.clientCountriesRepository.GetAsync(
                 token, language, searchTerm, pageIndex, itemsPerPage, $"{nameof(ClientCountry.CreatedDate)} desc");
 
-            return this.StatusCode((int)HttpStatusCode.OK, roles);
+            return this.StatusCode((int)HttpStatusCode.OK, countries);
         }
     }
 }

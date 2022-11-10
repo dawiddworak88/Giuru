@@ -29,6 +29,7 @@ namespace Global.Api.v1.Controllers
     public class CountriesController : BaseApiController
     {
         private readonly ICountriesService countriesService;
+
         public CountriesController(
             ICountriesService countriesService)
         {
