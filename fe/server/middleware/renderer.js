@@ -29,6 +29,8 @@ import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetP
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
 
 // Seller Portal
+import ClientCountryPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientCountryPage/ClientCountryPage";
+import ClientCountriesPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientCountriesPage/ClientCountriesPage";
 import TeamMemberPage from "../../src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/TeamMember";
 import TeamMembersPage from "../../src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/TeamMembers";
 import DownloadCenterItemPage from "../../src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/DownloadCenterItemPage";

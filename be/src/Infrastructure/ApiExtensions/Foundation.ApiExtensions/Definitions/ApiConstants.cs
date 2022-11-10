@@ -2,6 +2,11 @@
 {
     public static class ApiConstants
     {
+        public struct Global
+        {
+            public static readonly string CountriesApiEndpoint = "/api/v1/countries";
+        }
+
         public struct Catalog
         {
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";

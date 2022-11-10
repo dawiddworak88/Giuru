@@ -19,5 +19,6 @@
         public static readonly string List = "List";
         public static readonly string Briefcase = "Briefcase";
         public static readonly string Download = "DownloadCloud";
+        public static readonly string MapPin = "MapPin";
     }
 }

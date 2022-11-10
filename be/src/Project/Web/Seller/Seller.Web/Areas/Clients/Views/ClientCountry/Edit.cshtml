@@ -1,0 +1,22 @@
+﻿<div id="root" asp-prerender-module="ClientCountryPage" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("Country"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("Country")))
+    {
+        <meta name="description" content="@this.Localizer.GetString("Country")" />
+    }
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/clientcountrypage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/clientcountrypage.js" asp-append-version="true"></script>
+}
