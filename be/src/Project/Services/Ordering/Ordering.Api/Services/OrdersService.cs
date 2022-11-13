@@ -801,6 +801,49 @@ namespace Ordering.Api.Services
             };
         }
 
+        public async Task SyncOrderLinesStatusesAsync(UpdateOrderLinesStatusesServiceModel model)
+        {
+            foreach (var item in model.OrderItems.OrEmptyIfNull().OrderBy(x => x.Id))
+            {
+                var orderItem = this.context.OrderItems.Where(x => x.OrderId == item.Id && x.IsActive).ElementAtOrDefault(item.OrderLineIndex - 1);
+
+                if (orderItem is not null)
+                {
+                    var newOrderItemStatus = await this.context.OrderStatuses.FirstOrDefaultAsync(x => x.Id == item.StatusId && x.IsActive);
+
+                    if (newOrderItemStatus is not null)
+                    {
+                        var orderItemStatusChange = new OrderItemStatusChange
+                        {
+                            OrderItemId = item.Id,
+                            OrderItemStateId = newOrderItemStatus.OrderStateId,
+                            OrderItemStatusId = newOrderItemStatus.Id
+                        };
+
+                        await this.context.OrderItemStatusChanges.AddAsync(orderItemStatusChange.FillCommonProperties());
+
+                        orderItem.LastOrderItemStatusChangeId = orderItemStatusChange.Id;
+                        orderItem.LastModifiedDate = DateTime.UtcNow;
+
+                        foreach(var commentItem in item.CommentTranslations.OrEmptyIfNull())
+                        {
+                            var orderItemStatusChangeTranslation = new OrderItemStatusChangeCommentTranslation
+                            {
+                                OrderItemStatusChangeComment = commentItem.Text,
+                                Language = commentItem.Language,
+                                OrderItemStatusChangeId = orderItemStatusChange.Id
+                            };
+
+                            await this.context.OrderItemStatusChangesCommentTranslations.AddAsync(orderItemStatusChangeTranslation.FillCommonProperties());
+                        }
+
+                        await this.context.SaveChangesAsync();
+                        await this.MapStatusesToOrderStatusId(orderItem.OrderId);
+                    }
+                }
+            };
+        }
+
         public async Task UpdateOrderItemStatusAsync(UpdateOrderItemStatusServiceModel model)
         {
             var orderItem = await this.context.OrderItems.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
