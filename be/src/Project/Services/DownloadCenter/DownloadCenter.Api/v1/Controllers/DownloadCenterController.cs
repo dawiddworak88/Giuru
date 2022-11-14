@@ -247,6 +247,7 @@ namespace DownloadCenter.Api.v1.Controllers
                         {
                             Id = x.Id,
                             Filename = x.Filename,
+                            ClientGroupIds = x.ClientGroupIds,
                             Categories = x.Categories,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
@@ -331,6 +332,7 @@ namespace DownloadCenter.Api.v1.Controllers
                     {
                         Id = downloadCenterFile.Id,
                         CategoriesIds = downloadCenterFile.CategoriesIds,
+                        ClientGroupIds = downloadCenterFile.ClientGroupIds,
                         LastModifiedDate = downloadCenterFile.LastModifiedDate,
                         CreatedDate = downloadCenterFile.CreatedDate
                     };

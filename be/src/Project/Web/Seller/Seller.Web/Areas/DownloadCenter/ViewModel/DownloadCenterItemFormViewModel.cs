@@ -29,8 +29,12 @@ namespace Seller.Web.Areas.DownloadCenter.ViewModel
         public string DeleteLabel { get; set; }
         public string DropFilesLabel { get; set; }
         public string DropOrSelectFilesLabel { get; set; }
+        public string NoGroupsText { get; set; }
+        public string GroupsLabel { get; set; }
         public IEnumerable<Guid> CategoriesIds { get; set; }
+        public IEnumerable<Guid> GroupIds { get; set; }
         public IEnumerable<FileViewModel> Files { get; set; }
         public IEnumerable<ListItemViewModel> Categories { get; set; }
+        public IEnumerable<ListItemViewModel> Groups { get; set; }
     }
 }

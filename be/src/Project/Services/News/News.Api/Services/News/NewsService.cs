@@ -70,12 +70,12 @@ namespace News.Api.Services.News
                 await this.newsContext.NewsItemFiles.AddAsync(file.FillCommonProperties());
             }
 
-            foreach (var groupId in model.GroupIds.OrEmptyIfNull())
+            foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
             {
                 var group = new NewsItemsGroup
                 {
                     NewsItemId = newsItem.Id,
-                    GroupId = groupId
+                    GroupId = clientGroupId
                 };
 
                 await this.newsContext.NewsItemsGroups.AddAsync(group.FillCommonProperties());
@@ -89,6 +89,7 @@ namespace News.Api.Services.News
         public async Task DeleteAsync(DeleteNewsItemServiceModel model)
         {
             var newsItem = this.newsContext.NewsItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+
             if (newsItem is null)
             {
                 throw new CustomException(this.newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NoContent);
@@ -136,11 +137,11 @@ namespace News.Api.Services.News
                     item.Files = files.Select(x => x.MediaId);
                 }
 
-                var groups = this.newsContext.NewsItemsGroups.Where(x => x.NewsItemId == newsItem.Id && x.IsActive).Select(x => x.GroupId);
+                var clientGroups = this.newsContext.NewsItemsGroups.Where(x => x.NewsItemId == newsItem.Id && x.IsActive).Select(x => x.GroupId);
 
-                if (groups is not null)
+                if (clientGroups is not null)
                 {
-                    item.Groups = groups;
+                    item.ClientGroupIds = clientGroups;
                 }
 
                 var newsItemTranslations = this.newsContext.NewsItemTranslations.FirstOrDefault(x => x.Language == model.Language && x.NewsItemId == newsItem.Id && x.IsActive);
@@ -208,18 +209,18 @@ namespace News.Api.Services.News
                 
                 item.CategoryName = newsCategoryTranslation?.Name;
 
-                var files = this.newsContext.NewsItemFiles.Where(x => x.NewsItemId == newsItem.Id && x.IsActive);
+                var files = this.newsContext.NewsItemFiles.Where(x => x.NewsItemId == newsItem.Id && x.IsActive).Select(x => x.MediaId);
 
-                if (files.Any())
+                if (files is not null)
                 {
-                    item.Files = files.Select(x => x.MediaId);
+                    item.Files = files;
                 }
 
-                var groups = this.newsContext.NewsItemsGroups.Where(x => x.NewsItemId == newsItem.Id && x.IsActive).Select(x => x.GroupId);
+                var clientGroups = this.newsContext.NewsItemsGroups.Where(x => x.NewsItemId == newsItem.Id && x.IsActive).Select(x => x.GroupId);
 
-                if (groups is not null)
+                if (clientGroups is not null)
                 {
-                    item.Groups = groups;
+                    item.ClientGroupIds = clientGroups;
                 }
 
                 return item;
@@ -291,22 +292,22 @@ namespace News.Api.Services.News
                 await this.newsContext.NewsItemFiles.AddAsync(file.FillCommonProperties());
             }
 
-            var groups = this.newsContext.NewsItemsGroups.Where(x => x.NewsItemId == news.Id);
+            var clientGroups = this.newsContext.NewsItemsGroups.Where(x => x.NewsItemId == news.Id);
 
-            foreach (var group in groups.OrEmptyIfNull())
+            foreach (var clientGroup in clientGroups.OrEmptyIfNull())
             {
-                this.newsContext.NewsItemsGroups.Remove(group);
+                this.newsContext.NewsItemsGroups.Remove(clientGroup);
             }
 
-            foreach (var groupId in model.GroupIds.OrEmptyIfNull())
+            foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
             {
-                var newsGroup = new NewsItemsGroup
+                var group = new NewsItemsGroup
                 {
                     NewsItemId = news.Id,
-                    GroupId = groupId
+                    GroupId = clientGroupId
                 };
 
-                await this.newsContext.NewsItemsGroups.AddAsync(newsGroup.FillCommonProperties());
+                await this.newsContext.NewsItemsGroups.AddAsync(group.FillCommonProperties());
             }
 
             await this.newsContext.SaveChangesAsync();

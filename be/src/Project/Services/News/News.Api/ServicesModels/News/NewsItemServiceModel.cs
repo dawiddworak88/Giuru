@@ -15,7 +15,7 @@ namespace News.Api.ServicesModels.News
         public string Description { get; set; }
         public string Content { get; set; }
         public bool IsPublished { get; set; }
-        public IEnumerable<Guid> Groups { get; set; }
+        public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> Files { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }

@@ -121,11 +121,11 @@ namespace Catalog.Api.Services.Products
                 await this.catalogContext.ProductFiles.AddAsync(productFile.FillCommonProperties());
             }
 
-            foreach (var groupId in model.GroupIds.OrEmptyIfNull())
+            foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
             {
                 var productGroup = new ProductsGroup
                 {
-                    GroupId = groupId,
+                    ClientGroupId = clientGroupId,
                     ProductId = product.Id
                 };
 
@@ -267,12 +267,12 @@ namespace Catalog.Api.Services.Products
                 this.catalogContext.ProductsGroups.Remove(productGroup);
             }
 
-            foreach (var groupId in model.GroupIds.OrEmptyIfNull())
+            foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
             {
                 var group = new ProductsGroup
                 {
                     ProductId = product.Id,
-                    GroupId = groupId
+                    ClientGroupId = clientGroupId
                 };
 
                 await this.catalogContext.ProductsGroups.AddAsync(group.FillCommonProperties());
@@ -287,7 +287,7 @@ namespace Catalog.Api.Services.Products
                 ProductName = model.Name,
                 ProductSku = model.Sku,
                 ProductEan = model.Ean,
-                GroupIds = model.GroupIds
+                ClientGroupIds = model.ClientGroupIds
             };
 
             this.eventBus.Publish(message);

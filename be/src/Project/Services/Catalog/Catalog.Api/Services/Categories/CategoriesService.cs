@@ -98,7 +98,7 @@ namespace Catalog.Api.Services.Categories
                     categoryItem.ParentCategoryName = parentCategoryTranslations?.Name;
                 }
 
-                var categoryGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == category.Id && x.IsActive).Select(x => x.GroupId);
+                var categoryGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == category.Id && x.IsActive).Select(x => x.ClientGroupId);
 
                 if (categoryGroups is not null)
                 {
@@ -130,7 +130,7 @@ namespace Catalog.Api.Services.Categories
                     CreatedDate = categoryItem.CreatedDate
                 };
 
-                var categoryGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == categoryItem.Id && x.IsActive).Select(x => x.GroupId);
+                var categoryGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == categoryItem.Id && x.IsActive).Select(x => x.ClientGroupId);
 
                 if (categoryGroups is not null)
                 {
@@ -260,11 +260,11 @@ namespace Catalog.Api.Services.Categories
                 this.context.CategoriesGroups.Remove(categoryGroup);
             }
 
-            foreach (var groupId in model.GroupIds.OrEmptyIfNull())
+            foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
             {
                 var group = new CategoriesGroup
                 {
-                    GroupId = groupId,
+                    ClientGroupId = clientGroupId,
                     CategoryId = category.Id
                 };
 
@@ -310,12 +310,12 @@ namespace Catalog.Api.Services.Categories
                 this.context.CategoryImages.Add(categoryImage.FillCommonProperties());
             }
 
-            foreach (var groupId in model.GroupIds.OrEmptyIfNull())
+            foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
             {
                 var group = new CategoriesGroup
                 {
                     CategoryId = category.Id,
-                    GroupId = groupId
+                    ClientGroupId = clientGroupId
                 };
 
                 this.context.CategoriesGroups.Add(group.FillCommonProperties());

@@ -179,7 +179,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                     Schema = request.Schema,
                     UiSchema = request.UiSchema,
                     ParentId = request.ParentCategoryId,
-                    GroupIds = request.GroupIds,
+                    ClientGroupIds = request.ClientGroupIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)

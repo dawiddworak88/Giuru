@@ -1,6 +1,7 @@
 ﻿using DownloadCenter.Api.Infrastructure;
 using DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories;
 using DownloadCenter.Api.ServicesModels.DownloadCenter;
+using Elastic.CommonSchema;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Extensions;
@@ -8,6 +9,7 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using NetTopologySuite.Index.HPRtree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +46,17 @@ namespace DownloadCenter.Api.Services.DownloadCenter
                     };
 
                     await this.context.DownloadCenterCategoryFiles.AddAsync(categoryFile.FillCommonProperties());
+
+                    foreach (var clientGroup in model.ClientGroupIds.OrEmptyIfNull())
+                    {
+                        var group = new DownloadCenterFilesGroup
+                        {
+                            GroupId = clientGroup,
+                            MediaItemId = file.Id
+                        };
+
+                        await this.context.DownloadCenterFilesGroups.AddAsync(group.FillCommonProperties());
+                    }
                 }
             }
 
@@ -124,6 +137,13 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
                 fileGroup.Categories = namesOfCategories;
 
+                var clientGroups = this.context.DownloadCenterFilesGroups.Where(x => x.MediaItemId == fileGroup.Id && x.IsActive).Select(x => x.GroupId);
+
+                if (clientGroups is not null)
+                {
+                    fileGroup.ClientGroupIds = clientGroups;
+                }
+
                 downloadCenterFilesList.Add(fileGroup);
             }
 
@@ -153,6 +173,13 @@ namespace DownloadCenter.Api.Services.DownloadCenter
             if (downloadCenterFileCategories is not null)
             {
                 downloadCenterFileItem.CategoriesIds = downloadCenterFileCategories.Select(x => x.CategoryId);
+            }
+
+            var clientGroups = this.context.DownloadCenterFilesGroups.Where(x => x.MediaItemId == downloadCenterFile.Id && x.IsActive).Select(x => x.GroupId);
+
+            if (clientGroups is not null)
+            {
+                downloadCenterFileItem.ClientGroupIds = clientGroups;
             }
 
             return downloadCenterFileItem;
@@ -347,6 +374,24 @@ namespace DownloadCenter.Api.Services.DownloadCenter
                     };
 
                     await this.context.DownloadCenterCategoryFiles.AddAsync(file.FillCommonProperties());
+
+                    var clientGroups = this.context.DownloadCenterFilesGroups.Where(x => x.MediaItemId == file.Id && x.IsActive);
+
+                    foreach (var clientGroup in clientGroups.OrEmptyIfNull())
+                    {
+                        this.context.DownloadCenterFilesGroups.Remove(clientGroup);
+                    }
+
+                    foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
+                    {
+                        var group = new DownloadCenterFilesGroup
+                        {
+                            MediaItemId = file.Id,
+                            GroupId = clientGroupId
+                        };
+
+                        await this.context.DownloadCenterFilesGroups.AddAsync(group.FillCommonProperties());
+                    }
                 }
             }
 

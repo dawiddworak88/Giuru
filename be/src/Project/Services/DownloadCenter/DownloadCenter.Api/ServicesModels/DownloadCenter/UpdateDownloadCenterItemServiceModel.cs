@@ -7,6 +7,7 @@ namespace DownloadCenter.Api.ServicesModels.DownloadCenter
     public class UpdateDownloadCenterItemServiceModel : BaseServiceModel
     {
         public Guid? Id { get; set; }
+        public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> CategoriesIds { get; set; }
         public IEnumerable<DownloadCenterFileServiceModel> Files { get; set; }
     }

@@ -15,7 +15,8 @@ const DownloadCenterItemForm = (props) => {
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         categoriesIds: { value: props.categoriesIds ? props.categoriesIds : [], error: "" },
-        files: { value: props.files ? props.files : [] }
+        files: { value: props.files ? props.files : [] },
+        groupIds: { value: props.groupIds ? props.groupIds : []}
     };
 
     const onSubmitForm = (state) => {
@@ -61,7 +62,7 @@ const DownloadCenterItemForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, categoriesIds, files } = values;
+    const { id, categoriesIds, files, groupIds } = values;
 
     return (
         <section className="section section-small-padding category">
@@ -91,6 +92,28 @@ const DownloadCenterItemForm = (props) => {
                                 {errors.categoriesIds && dirty.categoriesIds && (
                                     <FormHelperText>{errors.categoriesIds}</FormHelperText>
                                 )}
+                            </FormControl>
+                        </div>
+                        <div className="field">
+                            <FormControl fullWidth={true} variant="standard">
+                                <InputLabel id="groups-label">{props.groupsLabel}</InputLabel>
+                                <Select
+                                    labelId="groups-label"
+                                    id="groupIds"
+                                    name="groupIds"
+                                    value={groupIds}
+                                    multiple={true}
+                                    onChange={handleOnChange}>
+                                    {props.groups && props.groups.length > 0 ? (
+                                        props.groups.map((group, index) => {
+                                            return (
+                                                <MenuItem key={index} value={group.id}>{group.name}</MenuItem>
+                                            );
+                                        })
+                                    ) : (
+                                        <MenuItem disabled>{props.noGroupsText}</MenuItem>
+                                    )}
+                                </Select>
                             </FormControl>
                         </div>
                         <div className="field">
@@ -154,7 +177,9 @@ DownloadCenterItemForm.propTypes = {
     isUploadInChunksEnabled: PropTypes.bool.isRequired,
     chunkSize: PropTypes.string.isRequired,
     saveMediaChunkUrl: PropTypes.string.isRequired,
-    saveMediaChunkCompleteUrl: PropTypes.string.isRequired
+    saveMediaChunkCompleteUrl: PropTypes.string.isRequired,
+    noGroupsText: PropTypes.string.isRequired,
+    groupsLabel: PropTypes.string.isRequired
 }
 
 export default DownloadCenterItemForm;

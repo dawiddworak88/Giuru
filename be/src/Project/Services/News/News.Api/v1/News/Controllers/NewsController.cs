@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using News.Api.Services.News;
 using News.Api.ServicesModels.News;
-using News.Api.v1.Categories.RequestModels;
+using News.Api.v1.News.RequestModels;
 using News.Api.v1.News.ResponseModels;
 using News.Api.Validators.News;
 using System;
@@ -63,7 +63,7 @@ namespace News.Api.v1.News.Controllers
                     PreviewImageId = request.PreviewImageId,
                     ThumbnailImageId = request.ThumbnailImageId,
                     Files = request.Files,
-                    GroupIds = request.GroupIds,
+                    ClientGroupIds = request.ClientGroupIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -93,7 +93,7 @@ namespace News.Api.v1.News.Controllers
                     ThumbnailImageId = request.ThumbnailImageId,
                     PreviewImageId = request.PreviewImageId,
                     Files = request.Files,
-                    GroupIds = request.GroupIds,
+                    ClientGroupIds = request.ClientGroupIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -163,7 +163,7 @@ namespace News.Api.v1.News.Controllers
                             Content = x.Content,
                             IsPublished = x.IsPublished,
                             Files = x.Files,
-                            Groups = x.Groups,
+                            ClientGroupIds = x.ClientGroupIds,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         })
@@ -201,6 +201,7 @@ namespace News.Api.v1.News.Controllers
 
             var validator = new GetNewsItemModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
+
             if (validationResult.IsValid)
             {
                 var newsItem = await this.newsService.GetAsync(serviceModel);
@@ -219,7 +220,7 @@ namespace News.Api.v1.News.Controllers
                         Content = newsItem.Content,
                         IsPublished = newsItem.IsPublished,
                         Files = newsItem.Files,
-                        Groups = newsItem.Groups,
+                        ClientGroupIds = newsItem.ClientGroupIds,
                         LastModifiedDate = newsItem.LastModifiedDate,
                         CreatedDate = newsItem.CreatedDate
                     };

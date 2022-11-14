@@ -109,7 +109,7 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
                             Images = this.catalogContext.ProductImages.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId),
                             Videos = this.catalogContext.ProductVideos.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId),
                             Files = this.catalogContext.ProductFiles.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId),
-                            Groups = this.catalogContext.ProductsGroups.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.GroupId),
+                            Groups = this.catalogContext.ProductsGroups.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.ClientGroupId),
                             IsActive = product.IsActive,
                             Sku = product.Sku,
                             FormData = productTranslations.FormData,

@@ -11,6 +11,7 @@ using Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenterCategories;
 using Seller.Web.Areas.DownloadCenter.ViewModel;
 using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Definitions;
+using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
 using System.Globalization;
@@ -28,6 +29,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
         private readonly IDownloadCenterRepository downloadCenterRepository;
         private readonly IMediaItemsRepository mediaItemsRepository;
         private readonly IMediaService mediaService;
+        private readonly IClientGroupsRepository clientGroupsRepository;
 
         public DownloadCenterItemFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -35,6 +37,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             IDownloadCenterRepository downloadCenterRepository,
             IDownloadCenterCategoriesRepository downloadCenterCategoriesRepository,
             IMediaItemsRepository mediaItemsRepository,
+            IClientGroupsRepository clientGroupsRepository,
             IMediaService mediaService,
             LinkGenerator linkGenerator)
         {
@@ -45,6 +48,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             this.downloadCenterRepository = downloadCenterRepository;
             this.mediaService = mediaService;
             this.mediaItemsRepository = mediaItemsRepository;
+            this.clientGroupsRepository = clientGroupsRepository;
         }
 
         public async Task<DownloadCenterItemFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -70,7 +74,9 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 ChunkSize = MediaConstants.DefaultChunkSize,
                 DeleteLabel = this.globalLocalizer.GetString("Delete"),
                 DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
-                DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile")
+                DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
+                NoGroupsText = this.globalLocalizer.GetString("NoGroupsText"),
+                GroupsLabel = this.globalLocalizer.GetString("Groups")
             };
 
             var categories = await this.downloadCenterCategoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language);
@@ -78,6 +84,13 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             if (categories is not null)
             {
                 viewModel.Categories = categories.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
+            }
+
+            var groups = await this.clientGroupsRepository.GetAsync(componentModel.Token, componentModel.Language);
+
+            if (groups is not null)
+            {
+                viewModel.Groups = groups.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
             if (componentModel.Id.HasValue)
