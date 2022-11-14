@@ -83,7 +83,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                     viewModel.Description = itemVersions.Description;
                     viewModel.Versions = itemVersions.Versions;
                     viewModel.MetaData = itemVersions.MetaData;
-                    viewModel.GroupIds = itemVersions.Groups;
+                    viewModel.ClientGroupIds = itemVersions.ClientGroupIds;
                 }
             }
 

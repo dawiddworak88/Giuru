@@ -18,7 +18,7 @@ function CategoryForm(props) {
         files: { value: props.files ? props.files : [] },
         schema: { value: props.schema ? JSON.parse(props.schema) : {} },
         uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : {} },
-        groupIds: { value: props.groupIds ? props.groupIds : []}
+        clientGroupIds: { value: props.clientGroupIds ? props.clientGroupIds : []}
     };
 
     const stateValidatorSchema = {
@@ -38,7 +38,7 @@ function CategoryForm(props) {
             name,
             parentCategoryId,
             files,
-            groupIds,
+            clientGroupIds,
             schema: JSON.stringify(schema),
             uiSchema: JSON.stringify(uiSchema)
         }
@@ -76,7 +76,7 @@ function CategoryForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !categoryBase.id);
 
-    const { id, name, parentCategoryId, files, schema, uiSchema, groupIds } = values;
+    const { id, name, parentCategoryId, files, schema, uiSchema, clientGroupIds } = values;
 
     return (
         <section className="section section-small-padding category">
@@ -111,12 +111,12 @@ function CategoryForm(props) {
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} variant="standard">
-                                <InputLabel id="groups-label">{categoryBase.groupsLabel}</InputLabel>
+                                <InputLabel id="clientGroups-label">{categoryBase.groupsLabel}</InputLabel>
                                 <Select
-                                    labelId="groups-label"
-                                    id="groupIds"
-                                    name="groupIds"
-                                    value={groupIds}
+                                    labelId="clientGroups-label"
+                                    id="clientGroupIds"
+                                    name="clientGroupIds"
+                                    value={clientGroupIds}
                                     multiple={true}
                                     onChange={handleOnChange}>
                                     {categoryBase.groups && categoryBase.groups.length > 0 ? (

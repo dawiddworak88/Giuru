@@ -15,7 +15,7 @@ namespace Media.Api.v1.ResponseModels
         public string MimeType { get; set; }
         public long Size { get; set; }
         public bool IsProtected { get; set; }
-        public IEnumerable<Guid> Groups { get; set; }
+        public IEnumerable<Guid> ClientGroupIds { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

@@ -214,7 +214,7 @@ namespace Media.Api.Services.Media
         {
             var mediaItem = this.context.MediaItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
 
-            if (mediaItem != null)
+            if (mediaItem is not null)
             {
                 return this.MapMediaItemToMediaItemResultModel(mediaItem, model.Language);
             }
@@ -249,15 +249,15 @@ namespace Media.Api.Services.Media
                     mediaItemVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaItemVersion.Id && x.IsActive);
                 }
 
-                mediaItemResult.Name = mediaItemVersionTranslation.Name;
-                mediaItemResult.Description = mediaItemVersionTranslation.Description;
+                mediaItemResult.Name = mediaItemVersionTranslation?.Name;
+                mediaItemResult.Description = mediaItemVersionTranslation?.Description;
             }
 
-            var groups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == mediaItem.Id).Select(x => x.GroupId);
+            var clientGroups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == mediaItem.Id).Select(x => x.GroupId);
 
-            if (groups is not null)
+            if (clientGroups is not null)
             {
-                mediaItemResult.Groups = groups;
+                mediaItemResult.ClientGroupIds = clientGroups;
             }
 
             return mediaItemResult;
@@ -311,11 +311,11 @@ namespace Media.Api.Services.Media
                     item.MetaData = mediaItemVersionTranslation?.Metadata;
                 }
 
-                var groups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == mediaItem.Id && x.IsActive).Select(x => x.GroupId);
+                var clientGroups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == mediaItem.Id && x.IsActive).Select(x => x.GroupId);
 
-                if (groups is not null)
+                if (clientGroups is not null)
                 {
-                    item.Groups = groups;
+                    item.ClientGroupIds = clientGroups;
                 }
 
                 items.Add(item);
@@ -371,11 +371,11 @@ namespace Media.Api.Services.Media
                     Versions = mediaItemVersions
                 };
 
-                var groups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == model.Id && x.IsActive).Select(x => x.GroupId);
+                var clientGroups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == model.Id && x.IsActive).Select(x => x.GroupId);
 
-                if (groups is not null)
+                if (clientGroups is not null)
                 {
-                    mediaItems.Groups = groups;
+                    mediaItems.ClientGroupIds = clientGroups;
                 }
                 
                 return mediaItems;
@@ -390,22 +390,22 @@ namespace Media.Api.Services.Media
             
             if (mediaVersion is not null)
             {
-                var groups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == model.Id && x.IsActive);
+                var clientGroups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == model.Id && x.IsActive);
 
-                foreach (var group in groups.OrEmptyIfNull())
+                foreach (var clientGroup in clientGroups.OrEmptyIfNull())
                 {
-                    this.context.MediaItemsGroups.Remove(group);
+                    this.context.MediaItemsGroups.Remove(clientGroup);
                 }
 
-                foreach (var groupId in model.GroupIds.OrEmptyIfNull())
+                foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
                 {
-                    var mediaItemGroup = new MediaItemsGroup
+                    var group = new MediaItemsGroup
                     {
-                        GroupId = groupId,
+                        GroupId = clientGroupId,
                         MediaItemId = model.Id.Value
                     };
 
-                    await this.context.MediaItemsGroups.AddAsync(mediaItemGroup.FillCommonProperties());
+                    await this.context.MediaItemsGroups.AddAsync(group.FillCommonProperties());
                 }
 
                 var mediaVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaVersion.Id && x.Language == model.Language);
@@ -589,22 +589,22 @@ namespace Media.Api.Services.Media
                 throw new CustomException(this.mediaResources.GetString("MediaNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            var groups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == model.Id && x.IsActive);
+            var clientGroups = this.context.MediaItemsGroups.Where(x => x.MediaItemId == model.Id && x.IsActive);
 
-            foreach (var group in groups.OrEmptyIfNull())
+            foreach (var clientGroup in clientGroups.OrEmptyIfNull())
             {
-                this.context.MediaItemsGroups.Remove(group);
+                this.context.MediaItemsGroups.Remove(clientGroup);
             }
 
-            foreach (var groupId in model.GroupIds.OrEmptyIfNull())
+            foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
             {
-                var mediaItemGroup = new MediaItemsGroup
+                var group = new MediaItemsGroup
                 {
                     MediaItemId = mediaItem.Id,
-                    GroupId = groupId
+                    GroupId = clientGroupId
                 };
 
-                await this.context.MediaItemsGroups.AddAsync(mediaItemGroup.FillCommonProperties());
+                await this.context.MediaItemsGroups.AddAsync(group.FillCommonProperties());
             }
 
             await this.context.SaveChangesAsync();

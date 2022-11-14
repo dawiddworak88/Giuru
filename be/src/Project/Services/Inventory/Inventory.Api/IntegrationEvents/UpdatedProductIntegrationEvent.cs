@@ -10,6 +10,6 @@ namespace Inventory.Api.IntegrationEvents
         public string ProductName { get; set; }
         public string ProductSku { get; set; }
         public string ProductEan { get; set; }
-        public IEnumerable<Guid> GroupIds { get; set; }
+        public IEnumerable<Guid> ClientGroupIds { get; set; }
     }
 }

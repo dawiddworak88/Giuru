@@ -10,8 +10,8 @@ namespace Seller.Web.Areas.Media.Repositories.Media
     {
         Task<PagedResults<IEnumerable<MediaItem>>> GetMediaItemsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
         Task<MediaItemVersions> GetMediaItemVersionsAsync(Guid? mediaId, string token, string language);
-        Task UpdateMediaItemVersionAsync(Guid? mediaId, string name, string description, string metadata, IEnumerable<Guid> groupIds, string token, string language);
+        Task UpdateMediaItemVersionAsync(Guid? mediaId, string name, string description, string metadata, IEnumerable<Guid> clientGroupIds, string token, string language);
         Task DeleteAsync(string token, string language, Guid? mediaId);
-        Task SaveMediaItemGroupsAsync(string token, string language, Guid? mediaItemId, IEnumerable<Guid> groupIds);
+        Task SaveMediaItemGroupsAsync(string token, string language, Guid? mediaItemId, IEnumerable<Guid> clientGroupIds);
     }
 }

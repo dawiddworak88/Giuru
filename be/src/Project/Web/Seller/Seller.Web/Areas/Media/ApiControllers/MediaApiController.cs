@@ -39,7 +39,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
             {
                 foreach (var fileId in request.Files.Select(x => x.Id))
                 {
-                    await this.mediaRepository.SaveMediaItemGroupsAsync(token, language, fileId, request.GroupIds);
+                    await this.mediaRepository.SaveMediaItemGroupsAsync(token, language, fileId, request.ClientGroupIds);
                 }
 
                 return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.mediaLocalizer.GetString("SuccessfullySavedMedia").Value });
@@ -67,7 +67,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             await this.mediaRepository.UpdateMediaItemVersionAsync(
-                model.Id, model.Name, model.Description, model.MetaData, model.GroupIds, token, language);
+                model.Id, model.Name, model.Description, model.MetaData, model.ClientGroupIds, token, language);
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.mediaLocalizer.GetString("MediaUpdatedSuccessfully").Value });
         }

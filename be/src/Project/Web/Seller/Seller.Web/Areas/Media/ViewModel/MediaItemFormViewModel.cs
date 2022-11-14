@@ -35,6 +35,6 @@ namespace Seller.Web.Areas.Media.ViewModel
         public string GroupsLabel { get; set; }
         public IEnumerable<ListItemViewModel> Groups { get; set; }
         public IEnumerable<MediaItem> Versions { get; set; }
-        public IEnumerable<Guid> GroupIds { get; set; }
+        public IEnumerable<Guid> ClientGroupIds { get; set; }
     }
 }

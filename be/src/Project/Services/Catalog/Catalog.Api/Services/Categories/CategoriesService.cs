@@ -98,11 +98,11 @@ namespace Catalog.Api.Services.Categories
                     categoryItem.ParentCategoryName = parentCategoryTranslations?.Name;
                 }
 
-                var categoryGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == category.Id && x.IsActive).Select(x => x.ClientGroupId);
+                var clientGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == category.Id && x.IsActive).Select(x => x.GroupId);
 
-                if (categoryGroups is not null)
+                if (clientGroups is not null)
                 {
-                    categoryItem.Groups = categoryGroups;
+                    categoryItem.ClientGroupIds = clientGroups;
                 }
 
                 categoriesItems.Add(categoryItem);
@@ -130,11 +130,11 @@ namespace Catalog.Api.Services.Categories
                     CreatedDate = categoryItem.CreatedDate
                 };
 
-                var categoryGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == categoryItem.Id && x.IsActive).Select(x => x.ClientGroupId);
+                var clientGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == categoryItem.Id && x.IsActive).Select(x => x.GroupId);
 
-                if (categoryGroups is not null)
+                if (clientGroups is not null)
                 {
-                    category.Groups = categoryGroups;
+                    category.ClientGroupIds = clientGroups;
                 }
 
                 var thumbnailMedia = this.context.CategoryImages.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive);
@@ -253,18 +253,18 @@ namespace Catalog.Api.Services.Categories
                 this.context.CategoryImages.Add(categoryImage.FillCommonProperties());
             }
 
-            var categoryGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == category.Id && x.IsActive);
+            var clientGroups = this.context.CategoriesGroups.Where(x => x.CategoryId == category.Id && x.IsActive);
 
-            foreach (var categoryGroup in categoryGroups.OrEmptyIfNull())
+            foreach (var clientGroup in clientGroups.OrEmptyIfNull())
             {
-                this.context.CategoriesGroups.Remove(categoryGroup);
+                this.context.CategoriesGroups.Remove(clientGroup);
             }
 
             foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
             {
                 var group = new CategoriesGroup
                 {
-                    ClientGroupId = clientGroupId,
+                    GroupId = clientGroupId,
                     CategoryId = category.Id
                 };
 
@@ -315,7 +315,7 @@ namespace Catalog.Api.Services.Categories
                 var group = new CategoriesGroup
                 {
                     CategoryId = category.Id,
-                    ClientGroupId = clientGroupId
+                    GroupId = clientGroupId
                 };
 
                 this.context.CategoriesGroups.Add(group.FillCommonProperties());

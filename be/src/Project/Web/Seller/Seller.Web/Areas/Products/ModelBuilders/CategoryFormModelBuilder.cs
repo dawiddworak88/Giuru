@@ -46,7 +46,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                     viewModel.Id = category.Id;
                     viewModel.Name = category.Name;
                     viewModel.ParentCategoryId = category.ParentId;
-                    viewModel.GroupIds = category.Groups;
+                    viewModel.ClientGroupIds = category.ClientGroupIds;
 
                     if (category.ThumbnailMediaId.HasValue)
                     {

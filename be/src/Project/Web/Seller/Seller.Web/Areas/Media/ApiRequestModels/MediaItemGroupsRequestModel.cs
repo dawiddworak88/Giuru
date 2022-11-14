@@ -8,6 +8,6 @@ namespace Seller.Web.Areas.Media.ApiRequestModels
     public class MediaItemGroupsRequestModel : RequestModelBase
     {
         public IEnumerable<FileRequestModel> Files { get; set; }
-        public IEnumerable<Guid> GroupIds { get; set; }
+        public IEnumerable<Guid> ClientGroupIds { get; set; }
     }
 }

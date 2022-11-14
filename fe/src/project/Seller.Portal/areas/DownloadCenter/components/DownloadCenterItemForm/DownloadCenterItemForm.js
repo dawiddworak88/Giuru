@@ -16,7 +16,7 @@ const DownloadCenterItemForm = (props) => {
         id: { value: props.id ? props.id : null, error: "" },
         categoriesIds: { value: props.categoriesIds ? props.categoriesIds : [], error: "" },
         files: { value: props.files ? props.files : [] },
-        groupIds: { value: props.groupIds ? props.groupIds : []}
+        clientGroupIds: { value: props.clientGroupIds ? props.clientGroupIds : []}
     };
 
     const onSubmitForm = (state) => {
@@ -62,7 +62,7 @@ const DownloadCenterItemForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, categoriesIds, files, groupIds } = values;
+    const { id, categoriesIds, files, clientGroupIds } = values;
 
     return (
         <section className="section section-small-padding category">
@@ -96,12 +96,12 @@ const DownloadCenterItemForm = (props) => {
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} variant="standard">
-                                <InputLabel id="groups-label">{props.groupsLabel}</InputLabel>
+                                <InputLabel id="clientGroups-label">{props.groupsLabel}</InputLabel>
                                 <Select
-                                    labelId="groups-label"
-                                    id="groupIds"
-                                    name="groupIds"
-                                    value={groupIds}
+                                    labelId="clientGroups-label"
+                                    id="clientGroupIds"
+                                    name="clientGroupIds"
+                                    value={clientGroupIds}
                                     multiple={true}
                                     onChange={handleOnChange}>
                                     {props.groups && props.groups.length > 0 ? (

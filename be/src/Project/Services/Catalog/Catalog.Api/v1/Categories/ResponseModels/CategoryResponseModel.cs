@@ -13,7 +13,7 @@ namespace Catalog.Api.v1.Categories.ResultModels
         public string ParentCategoryName { get; set; }
         public bool IsLeaf { get; set; }
         public Guid? ThumbnailMediaId { get; set; }
-        public IEnumerable<Guid> Groups { get; set; }
+        public IEnumerable<Guid> ClientGroupIds { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

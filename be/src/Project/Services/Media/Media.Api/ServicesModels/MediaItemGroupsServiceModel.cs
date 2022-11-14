@@ -7,6 +7,6 @@ namespace Media.Api.ServicesModels
     public class MediaItemGroupsServiceModel : BaseServiceModel
     {
         public Guid? Id { get; set; }
-        public IEnumerable<Guid> GroupIds { get; set; }
+        public IEnumerable<Guid> ClientGroupIds { get; set; }
     }
 }

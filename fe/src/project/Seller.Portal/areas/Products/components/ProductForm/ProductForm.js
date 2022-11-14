@@ -19,11 +19,11 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 import SearchConstants from "../../../../../../shared/constants/SearchConstants";
 
 function ProductForm(props) {
+    const { productBase } = props;
     const [state, dispatch] = useContext(Context);
     const [convertedToRaw, setConvertedToRaw] = useState(props.description ? props.description : null);
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     const [primaryProducts, setPrimaryProducts] = useState(productBase.primaryProducts ? productBase.primaryProducts : []);
-    const { productBase } = props;
 
     const categoriesProps = {
         options: productBase.categories,
@@ -50,7 +50,7 @@ function ProductForm(props) {
         formData: { value: props.formData ? JSON.parse(props.formData) : {} },
         isPublished: { value: props.isPublished ? props.isPublished : false },
         ean: { value: props.ean ? props.ean : "" },
-        groupIds: { value: props.groupIds ? props.groupIds : []}
+        clientGroupIds: { value: props.clientGroupIds ? props.clientGroupIds : []}
     };
 
     const stateValidatorSchema = {
@@ -135,7 +135,7 @@ function ProductForm(props) {
             primaryProductId: primaryProduct ? primaryProduct.id : null,
             images,
             files,
-            groupIds,
+            clientGroupIds,
             isNew,
             ean,
             formData: JSON.stringify(formData),
@@ -245,7 +245,7 @@ function ProductForm(props) {
 
     const { 
         id, category, sku, name, primaryProduct, images, files, 
-        isNew, schema, uiSchema, formData, isPublished, ean, groupIds 
+        isNew, schema, uiSchema, formData, isPublished, ean, clientGroupIds 
     } = values;
 
     return (
@@ -272,12 +272,12 @@ function ProductForm(props) {
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} variant="standard">
-                                <InputLabel id="groups-label">{productBase.groupsLabel}</InputLabel>
+                                <InputLabel id="clientGroups-label">{productBase.groupsLabel}</InputLabel>
                                 <Select
-                                    labelId="groups-label"
-                                    id="groupIds"
-                                    name="groupIds"
-                                    value={groupIds}
+                                    labelId="clientGroups-label"
+                                    id="clientGroupIds"
+                                    name="clientGroupIds"
+                                    value={clientGroupIds}
                                     multiple={true}
                                     onChange={handleOnChange}>
                                     {productBase.groups && productBase.groups.length > 0 ? (

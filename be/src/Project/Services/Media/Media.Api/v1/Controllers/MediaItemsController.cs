@@ -86,7 +86,7 @@ namespace Media.Api.v1.Controllers
                                 Filename = x.Filename,
                                 MimeType = x.MimeType,
                                 Size = x.Size,
-                                Groups = x.Groups,
+                                ClientGroupIds = x.ClientGroupIds,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -132,7 +132,7 @@ namespace Media.Api.v1.Controllers
                                 MimeType = x.MimeType,
                                 Name = x.Name,
                                 Size = x.Size,
-                                Groups = x.Groups,
+                                ClientGroupIds = x.ClientGroupIds,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -190,7 +190,7 @@ namespace Media.Api.v1.Controllers
                         Name = mediaItem.Name,
                         MetaData = mediaItem.MetaData,
                         Size = mediaItem.Size,
-                        Groups = mediaItem.Groups,
+                        ClientGroupIds = mediaItem.ClientGroupIds,
                         LastModifiedDate = mediaItem.LastModifiedDate,
                         CreatedDate = mediaItem.CreatedDate
                     };
@@ -222,7 +222,7 @@ namespace Media.Api.v1.Controllers
             var serviceModel = new MediaItemGroupsServiceModel
             {
                 Id = request.Id,
-                GroupIds = request.GroupIds,
+                ClientGroupIds = request.GroupIds,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
@@ -261,7 +261,7 @@ namespace Media.Api.v1.Controllers
                 Description = request.Description,
                 Language = CultureInfo.CurrentCulture.Name,
                 MetaData = request.MetaData,
-                GroupIds = request.GroupIds,
+                ClientGroupIds = request.ClientGroupIds,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
@@ -316,7 +316,7 @@ namespace Media.Api.v1.Controllers
                         Name = mediaItemVersions.Name,
                         Description = mediaItemVersions.Description,
                         MetaData = mediaItemVersions.MetaData,
-                        Groups = mediaItemVersions.Groups,
+                        ClientGroupIds = mediaItemVersions.ClientGroupIds,
                         Versions = mediaItemVersions.Versions.Select(x => new MediaItemServiceModel
                         {
                             Id = x.MediaItemId.Value,

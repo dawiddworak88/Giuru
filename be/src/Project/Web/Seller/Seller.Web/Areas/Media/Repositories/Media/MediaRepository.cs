@@ -136,7 +136,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                     Name = response.Data.Name,
                     Description = response.Data.Description,
                     MetaData = response.Data.MetaData,
-                    Groups = response.Data.Groups,
+                    ClientGroupIds = response.Data.ClientGroupIds,
                     Versions = response.Data.Versions.OrEmptyIfNull().Select(x => new MediaItem
                     {
                         Id = x.Id,
@@ -152,12 +152,12 @@ namespace Seller.Web.Areas.Media.Repositories.Media
             return default;
         }
 
-        public async Task SaveMediaItemGroupsAsync(string token, string language, Guid? mediaItemId, IEnumerable<Guid> groupIds)
+        public async Task SaveMediaItemGroupsAsync(string token, string language, Guid? mediaItemId, IEnumerable<Guid> clientGroupIds)
         {
             var requestModel = new MediaItemGroupsApiRequestModel
             {
                 Id = mediaItemId,
-                GroupIds = groupIds
+                GroupIds = clientGroupIds
             };
 
             var apiRequest = new ApiRequest<MediaItemGroupsApiRequestModel>
@@ -176,7 +176,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
             }
         }
 
-        public async Task UpdateMediaItemVersionAsync(Guid? mediaId, string name, string description, string metadata, IEnumerable<Guid> groupIds, string token, string language)
+        public async Task UpdateMediaItemVersionAsync(Guid? mediaId, string name, string description, string metadata, IEnumerable<Guid> clientGroupIds, string token, string language)
         {
             var requestModel = new UpdateMediaItemVersionRequestModel
             {
@@ -184,7 +184,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                 Name = name,
                 Description = description,
                 MetaData = metadata,
-                GroupIds = groupIds
+                ClientGroupIds = clientGroupIds
             };
 
             var apiRequest = new ApiRequest<UpdateMediaItemVersionRequestModel>

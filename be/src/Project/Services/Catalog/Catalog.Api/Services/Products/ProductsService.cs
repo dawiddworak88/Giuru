@@ -125,7 +125,7 @@ namespace Catalog.Api.Services.Products
             {
                 var productGroup = new ProductsGroup
                 {
-                    ClientGroupId = clientGroupId,
+                    GroupId = clientGroupId,
                     ProductId = product.Id
                 };
 
@@ -260,11 +260,11 @@ namespace Catalog.Api.Services.Products
                 await this.catalogContext.ProductFiles.AddAsync(productFile.FillCommonProperties());
             }
 
-            var productGroups = this.catalogContext.ProductsGroups.Where(x => x.ProductId == model.Id && x.IsActive);
+            var clientGroups = this.catalogContext.ProductsGroups.Where(x => x.ProductId == model.Id && x.IsActive);
 
-            foreach (var productGroup in productGroups.OrEmptyIfNull())
+            foreach (var clientGroup in clientGroups.OrEmptyIfNull())
             {
-                this.catalogContext.ProductsGroups.Remove(productGroup);
+                this.catalogContext.ProductsGroups.Remove(clientGroup);
             }
 
             foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
@@ -272,7 +272,7 @@ namespace Catalog.Api.Services.Products
                 var group = new ProductsGroup
                 {
                     ProductId = product.Id,
-                    ClientGroupId = clientGroupId
+                    GroupId = clientGroupId
                 };
 
                 await this.catalogContext.ProductsGroups.AddAsync(group.FillCommonProperties());
@@ -496,7 +496,7 @@ namespace Catalog.Api.Services.Products
                 Images = searchResultItem.Images,
                 Files = searchResultItem.Files,
                 Videos = searchResultItem.Videos,
-                Groups = searchResultItem.Groups,
+                ClientGroupIds = searchResultItem.ClientGroupIds,
                 SellerId = searchResultItem.SellerId,
                 BrandName = searchResultItem.BrandName,
                 CategoryId = searchResultItem.CategoryId,

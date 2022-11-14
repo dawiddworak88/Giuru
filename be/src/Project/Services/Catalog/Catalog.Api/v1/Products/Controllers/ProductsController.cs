@@ -452,7 +452,7 @@ namespace Catalog.Api.v1.Products.Controllers
                 Description = product.Description,
                 Files = product.Files,
                 Images = product.Images,
-                Groups = product.Groups,
+                ClientGroupIds = product.ClientGroupIds,
                 FormData = product.FormData,
                 IsNew = product.IsNew,
                 IsProtected = product.IsProtected,

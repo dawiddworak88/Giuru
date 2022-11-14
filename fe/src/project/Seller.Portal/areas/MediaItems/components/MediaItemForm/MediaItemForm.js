@@ -22,7 +22,7 @@ const MediaItemForm = (props) => {
         name: { value: props.name ? props.name : "", error: "" },
         description: { value: props.description ? props.description : "", error: "" },
         metadata: { value: props.metaData ? props.metaData : "", error: "" },
-        groupIds: { value: props.groupIds ? props.groupIds : []}
+        clientGroupIds: { value: props.clientGroupIds ? props.clientGroupIds : []}
     };
 
     const stateValidatorSchema = {
@@ -68,7 +68,7 @@ const MediaItemForm = (props) => {
         values, disable, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
-    const { id, name, description, metadata, groupIds } = values;
+    const { id, name, description, metadata, clientGroupIds } = values;
     
     return (
         <section className="section section-small-padding product client-form media-edit">
@@ -139,12 +139,12 @@ const MediaItemForm = (props) => {
                         }
                         <div className="field">
                             <FormControl fullWidth={true} variant="standard">
-                                <InputLabel id="groups-label">{props.groupsLabel}</InputLabel>
+                                <InputLabel id="clientGroups-label">{props.groupsLabel}</InputLabel>
                                 <Select
-                                    labelId="groups-label"
-                                    id="groupIds"
-                                    name="groupIds"
-                                    value={groupIds}
+                                    labelId="clientGroups-label"
+                                    id="clientGroupIds"
+                                    name="clientGroupIds"
+                                    value={clientGroupIds}
                                     multiple={true}
                                     onChange={handleOnChange}>
                                     {props.groups && props.groups.length > 0 ? (

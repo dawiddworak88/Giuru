@@ -18,7 +18,7 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string Ean { get; set; }
         public Guid? Id { get; set; }
         public Guid? CategoryId { get; set; }
-        public IEnumerable<Guid> GroupIds { get; set; }
+        public IEnumerable<Guid> ClientGroupIds { get; set; }
         public ListItemViewModel PrimaryProduct { get; set; }
         public IEnumerable<FileViewModel> Images { get; set; }
         public IEnumerable<FileViewModel> Files { get; set; }

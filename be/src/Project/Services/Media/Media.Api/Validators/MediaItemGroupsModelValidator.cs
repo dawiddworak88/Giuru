@@ -9,7 +9,7 @@ namespace Media.Api.Validators
         public MediaItemGroupsModelValidator()
         {
             this.RuleFor(x => x.Id).NotEmpty().NotNull();
-            this.RuleFor(x => x.GroupIds).NotEmpty().NotNull();
+            this.RuleFor(x => x.ClientGroupIds).NotEmpty().NotNull();
         }
     }
 }

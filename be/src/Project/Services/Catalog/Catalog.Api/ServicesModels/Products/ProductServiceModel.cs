@@ -22,7 +22,7 @@ namespace Catalog.Api.ServicesModels.Products
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<Guid> Videos { get; set; }
         public IEnumerable<Guid> Files { get; set; }
-        public IEnumerable<Guid> Groups { get; set; }
+        public IEnumerable<Guid> ClientGroupIds { get; set; }
         public string Sku { get; set; }
         public IEnumerable<ProductAttributeServiceModel> ProductAttributes { get; set; }
         public DateTime LastModifiedDate { get; set; }

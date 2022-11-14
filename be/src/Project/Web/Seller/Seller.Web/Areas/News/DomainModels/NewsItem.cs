@@ -14,7 +14,7 @@ namespace Seller.Web.Areas.News.DomainModels
         public string Content { get; set; }
         public string CategoryName { get; set; }
         public bool IsPublished { get; set; }
-        public IEnumerable<Guid> Groups { get; set; }
+        public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> Files { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }

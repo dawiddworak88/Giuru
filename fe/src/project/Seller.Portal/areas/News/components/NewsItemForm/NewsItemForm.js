@@ -29,7 +29,7 @@ const NewsItemForm = (props) => {
         content: { value: props.content ? props.content : "", error: "" },
         files: { value: props.files ? props.files : [], error: "" },
         isPublished: {value: props.isPublished ? props.isPublished : false, error: ""},
-        groupIds: { value: props.groupIds ? props.groupIds : []}
+        clientGroupIds: { value: props.clientGroupIds ? props.clientGroupIds : []}
     }
 
     useEffect(() => {
@@ -58,7 +58,7 @@ const NewsItemForm = (props) => {
             description: state.description,
             content: convertedToRaw,
             files: state.files,
-            groupIds: state.groupIds,
+            clientGroupIds: state.clientGroupIds,
             isPublished: state.isPublished
         }
 
@@ -157,7 +157,7 @@ const NewsItemForm = (props) => {
     
     const { 
         id, title, previewImage, thumbnailImage, description, 
-        isPublished, files, categoryId, groupIds 
+        isPublished, files, categoryId, clientGroupIds 
     } = values;
     
     return (
@@ -205,12 +205,12 @@ const NewsItemForm = (props) => {
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} variant="standard">
-                                <InputLabel id="groups-label">{props.groupsLabel}</InputLabel>
+                                <InputLabel id="clientGroups-label">{props.groupsLabel}</InputLabel>
                                 <Select
-                                    labelId="groups-label"
-                                    id="groupIds"
-                                    name="groupIds"
-                                    value={groupIds}
+                                    labelId="clientGroups-label"
+                                    id="clientGroupIds"
+                                    name="clientGroupIds"
+                                    value={clientGroupIds}
                                     multiple={true}
                                     onChange={handleOnChange}>
                                     {props.groups && props.groups.length > 0 ? (

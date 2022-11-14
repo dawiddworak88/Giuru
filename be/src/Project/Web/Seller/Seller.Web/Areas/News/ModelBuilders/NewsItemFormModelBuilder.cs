@@ -176,7 +176,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
                     viewModel.Content = existingNews.Content;
                     viewModel.Description = existingNews.Description;
                     viewModel.IsPublished = existingNews.IsPublished;
-                    viewModel.GroupIds = existingNews.Groups;
+                    viewModel.ClientGroupIds = existingNews.ClientGroupIds;
                 }
             }
 

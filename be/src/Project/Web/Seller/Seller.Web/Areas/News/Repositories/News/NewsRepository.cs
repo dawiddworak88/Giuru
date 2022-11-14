@@ -40,6 +40,7 @@ namespace Seller.Web.Areas.News.Repositories.News
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, NewsItemResponseModel>(apiRequest);
+
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
@@ -58,7 +59,7 @@ namespace Seller.Web.Areas.News.Repositories.News
                     Content = response.Data.Content,
                     CategoryName = response.Data.CategoryName,
                     IsPublished = response.Data.IsPublished,
-                    Groups = response.Data.Groups,
+                    ClientGroupIds = response.Data.ClientGroupIds,
                     Files = response.Data.Files,
                     LastModifiedDate = response.Data.LastModifiedDate,
                     CreatedDate = response.Data.CreatedDate
@@ -108,7 +109,7 @@ namespace Seller.Web.Areas.News.Repositories.News
                         CategoryName = newsItem.CategoryName,
                         IsPublished = newsItem.IsPublished,
                         Files = newsItem.Files,
-                        Groups = newsItem.Groups,
+                        ClientGroupIds = newsItem.ClientGroupIds,
                         LastModifiedDate = newsItem.LastModifiedDate,
                         CreatedDate = newsItem.CreatedDate
                     };
@@ -157,6 +158,7 @@ namespace Seller.Web.Areas.News.Repositories.News
             };
 
             var response = await this.apiClientService.PostAsync<ApiRequest<NewsApiRequestModel>, NewsApiRequestModel, BaseResponseModel>(apiRequest);
+
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
@@ -181,6 +183,7 @@ namespace Seller.Web.Areas.News.Repositories.News
             };
 
             var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+
             if (!response.IsSuccessStatusCode && response?.Data != null)
             {
                 throw new CustomException(response.Data.Message, (int)response.StatusCode);

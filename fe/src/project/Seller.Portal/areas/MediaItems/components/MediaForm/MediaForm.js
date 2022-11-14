@@ -13,14 +13,14 @@ const MediaForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         files: { value: [] },
-        groupIds: { value: props.groupIds ? props.groupIds : []}
+        clientGroupIds: { value: props.clientGroupIds ? props.clientGroupIds : []}
     }
 
     const stateValidatorSchema = {
         files: {
             required: {
                 isRequired: true,
-                error: "adasd"
+                error: props.fieldRequiredErrorMessage
             }
         }
     }
@@ -58,7 +58,7 @@ const MediaForm = (props) => {
         values, disable, setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
     
-    const { files, groupIds } = values;
+    const { files, clientGroupIds } = values;
     
     return (
         <section className="section section-small-padding product client-form">
@@ -68,12 +68,12 @@ const MediaForm = (props) => {
                     <form className="is-modern-form" onSubmit={handleOnSubmit}>
                         <div className="field">
                             <FormControl fullWidth={true} variant="standard">
-                                <InputLabel id="groups-label">{props.groupsLabel}</InputLabel>
+                                <InputLabel id="clientGroups-label">{props.groupsLabel}</InputLabel>
                                 <Select
-                                    labelId="groups-label"
-                                    id="groupIds"
-                                    name="groupIds"
-                                    value={groupIds}
+                                    labelId="clientGroups-label"
+                                    id="clientGroupIds"
+                                    name="clientGroupIds"
+                                    value={clientGroupIds}
                                     multiple={true}
                                     onChange={handleOnChange}>
                                     {props.groups && props.groups.length > 0 ? (

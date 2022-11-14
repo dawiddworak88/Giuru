@@ -86,7 +86,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                             ParentId = x.ParentId,
                             ThumbnailMediaId = x.ThumbnailMediaId,
                             ParentCategoryName = x.ParentCategoryName,
-                            Groups = x.Groups,
+                            ClientGroupIds = x.ClientGroupIds,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         })
@@ -139,7 +139,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                         ParentCategoryName = category.ParentCategoryName,
                         ParentId = category.ParentId,
                         ThumbnailMediaId = category.ThumbnailMediaId,
-                        Groups = category.Groups,
+                        ClientGroupIds = category.ClientGroupIds,
                         LastModifiedDate = category.LastModifiedDate,
                         CreatedDate = category.CreatedDate
                     };
@@ -205,7 +205,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                             ParentCategoryName = category.ParentCategoryName,
                             ParentId = category.ParentId,
                             ThumbnailMediaId = category.ThumbnailMediaId,
-                            Groups = category.Groups,
+                            ClientGroupIds = category.ClientGroupIds,
                             LastModifiedDate = category.LastModifiedDate,
                             CreatedDate = category.CreatedDate
                         };
@@ -250,7 +250,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                             ParentCategoryName = category.ParentCategoryName,
                             ParentId = category.ParentId,
                             ThumbnailMediaId = category.ThumbnailMediaId,
-                            Groups = category.Groups,
+                            ClientGroupIds = category.ClientGroupIds,
                             LastModifiedDate = category.LastModifiedDate,
                             CreatedDate = category.CreatedDate
                         };

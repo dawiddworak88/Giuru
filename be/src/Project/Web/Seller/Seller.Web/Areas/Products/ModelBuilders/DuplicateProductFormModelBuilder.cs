@@ -68,7 +68,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                     viewModel.IsPublished = product.IsPublished;
                     viewModel.CategoryId = product.CategoryId;
                     viewModel.FormData = product.FormData;
-                    viewModel.GroupIds = product.Groups;
+                    viewModel.ClientGroupIds = product.ClientGroupIds;
 
                     var categorySchema = await this.categoriesRepository.GetCategorySchemaAsync(componentModel.Token, componentModel.Language, product.CategoryId);
 
