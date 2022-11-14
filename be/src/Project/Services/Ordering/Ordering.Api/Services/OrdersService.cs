@@ -805,7 +805,7 @@ namespace Ordering.Api.Services
         {
             foreach (var item in model.OrderItems.OrEmptyIfNull().OrderBy(x => x.Id))
             {
-                var orderItem = this.context.OrderItems.Where(x => x.OrderId == item.Id && x.IsActive).ElementAtOrDefault(item.OrderLineIndex - 1);
+                var orderItem = this.context.OrderItems.Where(x => x.OrderId == item.Id && x.IsActive).ToList().ElementAtOrDefault(item.OrderLineIndex - 1);
 
                 if (orderItem is not null)
                 {
