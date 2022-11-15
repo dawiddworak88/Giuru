@@ -822,7 +822,7 @@ namespace Ordering.Api.Services
                     {
                         var orderItemStatusChange = new OrderItemStatusChange
                         {
-                            OrderItemId = item.Id,
+                            OrderItemId = orderItem.Id,
                             OrderItemStateId = newOrderItemStatus.OrderStateId,
                             OrderItemStatusId = newOrderItemStatus.Id
                         };
@@ -832,8 +832,10 @@ namespace Ordering.Api.Services
                         orderItem.LastOrderItemStatusChangeId = orderItemStatusChange.Id;
                         orderItem.LastModifiedDate = DateTime.UtcNow;
 
-                        foreach(var commentItem in item.CommentTranslations.OrEmptyIfNull())
+                        foreach(var commentItem in item.CommentTranslations.OrEmptyIfNull().Where(x => string.IsNullOrWhiteSpace(x.Text) is false))
                         {
+                            this.logger.LogError("commentItem " + JsonConvert.SerializeObject(commentItem));
+
                             var orderItemStatusChangeTranslation = new OrderItemStatusChangeCommentTranslation
                             {
                                 OrderItemStatusChangeComment = commentItem.Text,
