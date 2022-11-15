@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
+using Foundation.Media.Services.FileTypeServices;
 using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
@@ -30,6 +31,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
         private readonly IMediaItemsRepository mediaItemsRepository;
         private readonly IMediaService mediaService;
         private readonly IClientGroupsRepository clientGroupsRepository;
+        private readonly IFileTypeService fileTypeService;
 
         public DownloadCenterItemFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -39,6 +41,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             IMediaItemsRepository mediaItemsRepository,
             IClientGroupsRepository clientGroupsRepository,
             IMediaService mediaService,
+            IFileTypeService fileTypeService,
             LinkGenerator linkGenerator)
         {
             this.linkGenerator = linkGenerator;
@@ -49,6 +52,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             this.mediaService = mediaService;
             this.mediaItemsRepository = mediaItemsRepository;
             this.clientGroupsRepository = clientGroupsRepository;
+            this.fileTypeService = fileTypeService;
         }
 
         public async Task<DownloadCenterItemFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -101,6 +105,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 {
                     viewModel.Id = downloadCenterItem.Id;
                     viewModel.CategoriesIds = downloadCenterItem.CategoriesIds;
+                    viewModel.ClientGroupIds = downloadCenterItem.ClientGroupIds;
 
                     var file = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, downloadCenterItem.Id);
 
@@ -111,7 +116,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                            new FileViewModel
                            {
                                Id = file.Id,
-                               Url = file.MimeType.StartsWith("image") ? this.mediaService.GetMediaUrl(file.Id, Constants.PreviewMaxWidth) : this.mediaService.GetNonCdnMediaUrl(file.Id),
+                               Url = this.fileTypeService.IsImage(file.MimeType) ? this.mediaService.GetMediaUrl(file.Id, Constants.PreviewMaxWidth) : this.mediaService.GetNonCdnMediaUrl(file.Id),
                                Name = file.Name,
                                MimeType = file.MimeType,
                                Filename = file.Filename,

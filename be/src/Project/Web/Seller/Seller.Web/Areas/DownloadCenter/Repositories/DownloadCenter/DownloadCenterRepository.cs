@@ -146,12 +146,13 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
             return default;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, IEnumerable<Guid> categoriesIds, IEnumerable<DownloadCenterApiFile> files)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, IEnumerable<Guid> categoriesIds, IEnumerable<Guid> clientGroupIds, IEnumerable<DownloadCenterApiFile> files)
         {
             var requestModel = new DownloadCenterItemRequestModel
             {
                 Id = id,
                 CategoriesIds = categoriesIds,
+                ClientGroupIds = clientGroupIds,
                 Files = files
             };
 

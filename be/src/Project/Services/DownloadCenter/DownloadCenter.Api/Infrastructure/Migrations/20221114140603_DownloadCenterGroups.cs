@@ -15,7 +15,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MediaItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryFileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),

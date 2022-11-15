@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DownloadCenter.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(DownloadCenterContext))]
-    [Migration("20221109141417_DownloadCenterGroups")]
+    [Migration("20221114140603_DownloadCenterGroups")]
     partial class DownloadCenterGroups
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -146,11 +146,11 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryFileId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");

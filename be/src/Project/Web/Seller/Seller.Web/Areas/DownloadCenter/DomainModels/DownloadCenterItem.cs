@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace Seller.Web.Areas.DownloadCenter.DomainModels
 {
     public class DownloadCenterItem
