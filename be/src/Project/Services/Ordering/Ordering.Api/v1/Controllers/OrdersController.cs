@@ -19,6 +19,8 @@ using Ordering.Api.ServicesModels;
 using Ordering.Api.Validators;
 using Ordering.Api.v1.ResponseModels;
 using Ordering.Api.v1.RequestModels;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Ordering.Api.v1.Controllers
 {
@@ -29,10 +31,14 @@ namespace Ordering.Api.v1.Controllers
     public class OrdersController : BaseApiController
     {
         private readonly IOrdersService ordersService;
+        private readonly ILogger logger;
 
-        public OrdersController(IOrdersService ordersService)
+        public OrdersController(
+            IOrdersService ordersService,
+            ILogger<OrdersController> logger)
         {
             this.ordersService = ordersService;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -600,6 +606,8 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> SyncOrderLines(SyncOrderLinesStatusesRequestModel request)
         {
+            this.logger.LogError("OrdersController SyncOrderLines " + JsonConvert.SerializeObject(request));
+
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new UpdateOrderLinesStatusesServiceModel
