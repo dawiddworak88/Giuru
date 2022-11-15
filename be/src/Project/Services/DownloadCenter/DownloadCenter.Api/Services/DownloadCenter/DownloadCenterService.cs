@@ -1,7 +1,6 @@
 ﻿using DownloadCenter.Api.Infrastructure;
 using DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories;
 using DownloadCenter.Api.ServicesModels.DownloadCenter;
-using Elastic.CommonSchema;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Extensions;
