@@ -9,7 +9,10 @@ using Foundation.Mailing.Services;
 using Foundation.Media.Services.MediaServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Nest;
+using Newtonsoft.Json;
 using Ordering.Api.Configurations;
 using Ordering.Api.Definitions;
 using Ordering.Api.Infrastructure;
@@ -36,6 +39,7 @@ namespace Ordering.Api.Services
         private readonly IMailingService mailingService;
         private readonly IOptions<AppSettings> configuration;
         private readonly IMediaService mediaService;
+        private readonly ILogger logger;
 
         public OrdersService(
             OrderingContext context,
@@ -45,7 +49,8 @@ namespace Ordering.Api.Services
             IStringLocalizer<GlobalResources> globalLocalizer,
             IOptionsMonitor<AppSettings> orderingOptions,
             IOptions<AppSettings> configuration,
-            IMediaService mediaService)
+            IMediaService mediaService,
+            ILogger<OrdersService> logger)
         {
             this.context = context;
             this.eventBus = eventBus;
@@ -55,6 +60,7 @@ namespace Ordering.Api.Services
             this.globalLocalizer = globalLocalizer;
             this.orderingOptions = orderingOptions;
             this.mediaService = mediaService;
+            this.logger = logger;
         }
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel serviceModel)
@@ -813,6 +819,13 @@ namespace Ordering.Api.Services
 
                     if (newOrderItemStatus is not null)
                     {
+                        if (newOrderItemStatus.Id == OrderStatusesConstants.NewId)
+                        {
+                            this.logger.LogError($"OrdersService New item: {JsonConvert.SerializeObject(item)}");
+                            this.logger.LogError($"OrdersService New orderItem: {JsonConvert.SerializeObject(orderItem)}");
+                            this.logger.LogError($"OrdersService New newOrderItemStatus: {JsonConvert.SerializeObject(newOrderItemStatus)}");
+                        }
+
                         var orderItemStatusChange = new OrderItemStatusChange
                         {
                             OrderItemId = orderItem.Id,
