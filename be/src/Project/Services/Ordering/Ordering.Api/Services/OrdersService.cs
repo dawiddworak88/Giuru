@@ -9,9 +9,7 @@ using Foundation.Mailing.Services;
 using Foundation.Media.Services.MediaServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Ordering.Api.Configurations;
 using Ordering.Api.Definitions;
 using Ordering.Api.Infrastructure;
@@ -38,7 +36,6 @@ namespace Ordering.Api.Services
         private readonly IMailingService mailingService;
         private readonly IOptions<AppSettings> configuration;
         private readonly IMediaService mediaService;
-        private readonly ILogger logger;
 
         public OrdersService(
             OrderingContext context,
@@ -48,8 +45,7 @@ namespace Ordering.Api.Services
             IStringLocalizer<GlobalResources> globalLocalizer,
             IOptionsMonitor<AppSettings> orderingOptions,
             IOptions<AppSettings> configuration,
-            IMediaService mediaService,
-            ILogger<OrdersService> logger)
+            IMediaService mediaService)
         {
             this.context = context;
             this.eventBus = eventBus;
@@ -59,7 +55,6 @@ namespace Ordering.Api.Services
             this.globalLocalizer = globalLocalizer;
             this.orderingOptions = orderingOptions;
             this.mediaService = mediaService;
-            this.logger = logger;
         }
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel serviceModel)
@@ -808,8 +803,6 @@ namespace Ordering.Api.Services
 
         public async Task SyncOrderLinesStatusesAsync(UpdateOrderLinesStatusesServiceModel model)
         {
-            this.logger.LogError("OrdersService SyncOrderLinesStatusesAsync " + JsonConvert.SerializeObject(model));
-
             foreach (var item in model.OrderItems.OrEmptyIfNull())
             {
                 var orderItem = await this.context.OrderItems.Where(x => x.OrderId == item.Id && x.IsActive).Skip(item.OrderLineIndex - 1).FirstOrDefaultAsync();
@@ -829,13 +822,15 @@ namespace Ordering.Api.Services
 
                         await this.context.OrderItemStatusChanges.AddAsync(orderItemStatusChange.FillCommonProperties());
 
+                        await this.context.SaveChangesAsync();
+
                         orderItem.LastOrderItemStatusChangeId = orderItemStatusChange.Id;
                         orderItem.LastModifiedDate = DateTime.UtcNow;
 
-                        foreach(var commentItem in item.CommentTranslations.OrEmptyIfNull().Where(x => string.IsNullOrWhiteSpace(x.Text) is false))
-                        {
-                            this.logger.LogError("commentItem " + JsonConvert.SerializeObject(commentItem));
+                        await this.context.SaveChangesAsync();
 
+                        foreach (var commentItem in item.CommentTranslations.OrEmptyIfNull().Where(x => string.IsNullOrWhiteSpace(x.Text) is false))
+                        {
                             var orderItemStatusChangeTranslation = new OrderItemStatusChangeCommentTranslation
                             {
                                 OrderItemStatusChangeComment = commentItem.Text,
@@ -844,9 +839,10 @@ namespace Ordering.Api.Services
                             };
 
                             await this.context.OrderItemStatusChangesCommentTranslations.AddAsync(orderItemStatusChangeTranslation.FillCommonProperties());
+
+                            await this.context.SaveChangesAsync();
                         }
 
-                        await this.context.SaveChangesAsync();
                         await this.MapStatusesToOrderStatusId(orderItem.OrderId);
                     }
                 }
