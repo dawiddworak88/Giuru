@@ -16,6 +16,6 @@ namespace Buyer.Web.Areas.News.ViewModel
         public string FilesLabel { get; set; }
         public DateTime CreatedDate { get; set; }
         public IEnumerable<SourceViewModel> PreviewImages { get; set; }
-        public IEnumerable<FileViewModel> Files { get; set; }
+        public FilesViewModel Files { get; set; }
     }
 }

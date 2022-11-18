@@ -196,6 +196,27 @@ namespace News.Api.Services.News
             return default;
         }
 
+        public async Task<PagedResults<IEnumerable<NewsItemFileServiceModel>>> GetFilesAsync(GetNewsItemFilesServiceModel model)
+        {
+            var files = from f in this.newsContext.NewsItemFiles
+                               where f.NewsItemId == model.Id && f.IsActive
+                               select new NewsItemFileServiceModel
+                               {
+                                   Id = f.MediaId,
+                                   LastModifiedDate = f.LastModifiedDate,
+                                   CreatedDate = f.CreatedDate
+                               };
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                files = files.Where(x => x.Id.ToString() == model.SearchTerm);
+            }
+
+            files = files.ApplySort(model.OrderBy);
+
+            return files.PagedIndex(new Pagination(files.Count(), model.ItemsPerPage), model.PageIndex);
+        }
+
         public async Task<Guid> UpdateAsync(UpdateNewsItemServiceModel model)
         {
             var category = this.newsContext.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
