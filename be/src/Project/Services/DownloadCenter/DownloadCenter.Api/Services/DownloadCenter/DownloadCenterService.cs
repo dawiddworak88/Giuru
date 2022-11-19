@@ -313,7 +313,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                downloadCenterCategoryFiles = downloadCenterCategoryFiles.Where(x => x.Filename.StartsWith(model.SearchTerm) || x.Id.ToString() == model.SearchTerm);
+                downloadCenterCategoryFiles = downloadCenterCategoryFiles.Where(x => x.Filename.Contains(model.SearchTerm) || x.Id.ToString() == model.SearchTerm);
             }
 
             downloadCenterCategoryFiles = downloadCenterCategoryFiles.ApplySort(model.OrderBy);
