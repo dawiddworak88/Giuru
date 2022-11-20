@@ -50,6 +50,7 @@
         {
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
             public static readonly string NewsApiEndpoint = "/api/v1/news";
+            public static readonly string NewsFilesApiEndpoint = "/api/v1/news/files";
         }
 
         public struct Inventory

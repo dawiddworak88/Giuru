@@ -30,7 +30,8 @@ namespace Ordering.Api.v1.Controllers
     {
         private readonly IOrdersService ordersService;
 
-        public OrdersController(IOrdersService ordersService)
+        public OrdersController(
+            IOrdersService ordersService)
         {
             this.ordersService = ordersService;
         }
@@ -582,6 +583,50 @@ namespace Ordering.Api.v1.Controllers
             if (validationResult.IsValid)
             {
                 await this.ordersService.SyncOrderItemsStatusesAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        ///  Updates the order line items statuses.
+        /// </summary>
+        /// <returns>The updated order line status.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [Route("orderlinesstatuses")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> SyncOrderLines(SyncOrderLinesStatusesRequestModel request)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new UpdateOrderLinesStatusesServiceModel
+            {
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrderItems = request.OrderItems.OrEmptyIfNull().Select(x => new UpdateOrderLinesStatusServiceModel
+                {
+                    Id = x.OrderId,
+                    OrderLineIndex = x.OrderLineIndex,
+                    StatusId = x.StatusId,
+                    CommentTranslations = x.CommentTranslations.OrEmptyIfNull().Select(x => new UpdateOrderLineCommentServiceModel 
+                    { 
+                        Text = x.Text,
+                        Language = x.Language
+                    })
+                })
+            };
+
+            var validator = new UpdateOrderLinesStatusesModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                await this.ordersService.SyncOrderLinesStatusesAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
