@@ -8,7 +8,7 @@ import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
-const ClientCountryForm = (props) => {
+const CountryForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null },
@@ -102,7 +102,7 @@ const ClientCountryForm = (props) => {
     )
 }
 
-ClientCountryForm.propTypes = {
+CountryForm.propTypes = {
     id: PropTypes.string,
     saveUrl: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -115,4 +115,4 @@ ClientCountryForm.propTypes = {
     fieldRequiredErrorMessage: PropTypes.string.isRequired
 }
 
-export default ClientCountryForm;
+export default CountryForm;

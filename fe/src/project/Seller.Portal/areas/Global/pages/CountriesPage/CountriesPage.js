@@ -9,7 +9,7 @@ import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
 import LocaleHelper from "../../../../../../shared/helpers/globals/LocaleHelper";
 import Catalog from "../../../../../../shared/components/Catalog/Catalog";
 
-const ClientCountriesPage = (props) => {
+const CountriesPage = (props) => {
 
   LocaleHelper.setMomentLocale(props.locale);
 
@@ -26,4 +26,4 @@ const ClientCountriesPage = (props) => {
   );
 }
 
-export default ClientCountriesPage;
+export default CountriesPage;
