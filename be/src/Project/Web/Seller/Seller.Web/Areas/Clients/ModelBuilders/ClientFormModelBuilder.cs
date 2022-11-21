@@ -16,7 +16,6 @@ using Seller.Web.Areas.Clients.Repositories.Groups;
 using System.Linq;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Seller.Web.Areas.Clients.Repositories.Managers;
-using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Global.Repositories;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
@@ -31,7 +30,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly LinkGenerator linkGenerator;
         private readonly IClientGroupsRepository clientGroupsRepository;
         private readonly IClientAccountManagersRepository clientManagersRepository;
-        private readonly ICountriesRepository clientCountriesRepository;
+        private readonly ICountriesRepository countriesRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -41,7 +40,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IIdentityRepository identityRepository,
             IClientGroupsRepository clientGroupsRepository,
             IClientAccountManagersRepository clientManagersRepository,
-            ICountriesRepository clientCountriesRepository,
+            ICountriesRepository countriesRepository,
             LinkGenerator linkGenerator)
         {
             this.clientsRepository = clientsRepository;
@@ -52,7 +51,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             this.identityRepository = identityRepository;
             this.clientGroupsRepository = clientGroupsRepository;
             this.clientManagersRepository = clientManagersRepository;
-            this.clientCountriesRepository = clientCountriesRepository;
+            this.countriesRepository = countriesRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -145,7 +144,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 });
             }
 
-            var countries = await this.clientCountriesRepository.GetAsync(componentModel.Token, componentModel.Language);
+            var countries = await this.countriesRepository.GetAsync(componentModel.Token, componentModel.Language);
 
             if (countries is not null)
             {

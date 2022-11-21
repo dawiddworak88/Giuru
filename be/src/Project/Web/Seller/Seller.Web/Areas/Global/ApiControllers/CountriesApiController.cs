@@ -18,14 +18,14 @@ namespace Seller.Web.Areas.Global.ApiControllers
     public class CountriesApiController : BaseApiController
     {
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
-        private readonly ICountriesRepository clientCountriesRepository;
+        private readonly ICountriesRepository countriesRepository;
 
         public CountriesApiController(
             IStringLocalizer<ClientResources> clientLocalizer,
-            ICountriesRepository clientCountriesRepository)
+            ICountriesRepository countriesRepository)
         {
             this.clientLocalizer = clientLocalizer;
-            this.clientCountriesRepository = clientCountriesRepository;
+            this.countriesRepository = countriesRepository;
         }
 
         [HttpPost]
@@ -34,7 +34,7 @@ namespace Seller.Web.Areas.Global.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await clientCountriesRepository.SaveAsync(token, language, model.Id, model.Name);
+            await this.countriesRepository.SaveAsync(token, language, model.Id, model.Name);
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = clientLocalizer.GetString("CountrySavedSuccessfully").Value });
         }
@@ -45,7 +45,7 @@ namespace Seller.Web.Areas.Global.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await clientCountriesRepository.DeleteAsync(token, language, id);
+            await this.countriesRepository.DeleteAsync(token, language, id);
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = clientLocalizer.GetString("CountryDeletedSuccessfully").Value });
         }
@@ -56,7 +56,7 @@ namespace Seller.Web.Areas.Global.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var countries = await clientCountriesRepository.GetAsync(
+            var countries = await this.countriesRepository.GetAsync(
                 token, language, searchTerm, pageIndex, itemsPerPage, $"{nameof(Country.CreatedDate)} desc");
 
             return this.StatusCode((int)HttpStatusCode.OK, countries);
