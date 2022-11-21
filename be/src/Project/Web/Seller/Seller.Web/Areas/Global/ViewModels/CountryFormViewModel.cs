@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Seller.Web.Areas.Clients.ViewModels
+namespace Seller.Web.Areas.Global.ViewModels
 {
-    public class ClientCountryFormViewModel
+    public class CountryFormViewModel
     {
         public Guid? Id { get; set; }
         public string Title { get; set; }

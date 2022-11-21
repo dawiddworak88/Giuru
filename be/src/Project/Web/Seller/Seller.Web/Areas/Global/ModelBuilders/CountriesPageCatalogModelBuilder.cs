@@ -5,61 +5,61 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Seller.Web.Areas.Clients.DomainModels;
-using Seller.Web.Areas.Clients.Repositories.Countries;
+using Seller.Web.Areas.Global.DomainModels;
+using Seller.Web.Areas.Global.Repositories;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Clients.ModelBuilders
+namespace Seller.Web.Areas.Global.ModelBuilders
 {
-    public class ClientCountriesPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientCountry>>
+    public class CountriesPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Country>>
     {
         private readonly ICatalogModelBuilder catalogModelBuilder;
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer clientLocalizer;
         private readonly LinkGenerator linkGenerator;
-        private readonly IClientCountriesRepository clientCountriesRepository;
+        private readonly ICountriesRepository countriesRepository;
 
-        public ClientCountriesPageCatalogModelBuilder(
+        public CountriesPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
-            IClientCountriesRepository clientCountriesRepository,
+            ICountriesRepository countriesRepository,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;
             this.globalLocalizer = globalLocalizer;
             this.clientLocalizer = clientLocalizer;
             this.linkGenerator = linkGenerator;
-            this.clientCountriesRepository = clientCountriesRepository;
+            this.countriesRepository = countriesRepository;
         }
 
-        public async Task<CatalogViewModel<ClientCountry>> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<CatalogViewModel<Country>> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<ClientCountry>, ClientCountry>();
+            var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<Country>, Country>();
 
             viewModel.Title = this.globalLocalizer.GetString("Countries");
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
             viewModel.NewText = this.clientLocalizer.GetString("NewCountry");
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "ClientCountry", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ClientCountry", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Country", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Country", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ClientCountriesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ClientCountriesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "CountriesApi", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "CountriesApi", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.OrderBy = $"{nameof(ClientCountry.CreatedDate)} desc";
+            viewModel.OrderBy = $"{nameof(Country.CreatedDate)} desc";
 
             viewModel.Table = new CatalogTableViewModel
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("Name"),
-                    this.globalLocalizer.GetString("LastModifiedDate"),
-                    this.globalLocalizer.GetString("CreatedDate")
+                    globalLocalizer.GetString("Name"),
+                    globalLocalizer.GetString("LastModifiedDate"),
+                    globalLocalizer.GetString("CreatedDate")
                 },
                 Actions = new List<CatalogActionViewModel>
                 {
@@ -76,23 +76,23 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientRole.Name).ToCamelCase(),
+                        Title = nameof(Country.Name).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientRole.LastModifiedDate).ToCamelCase(),
+                        Title = nameof(Country.LastModifiedDate).ToCamelCase(),
                         IsDateTime = true
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientRole.CreatedDate).ToCamelCase(),
+                        Title = nameof(Country.CreatedDate).ToCamelCase(),
                         IsDateTime = true
                     }
                 }
             };
 
-            viewModel.PagedItems = await this.clientCountriesRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientCountry.CreatedDate)} desc");
+            viewModel.PagedItems = await this.countriesRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Country.CreatedDate)} desc");
 
             return viewModel;
         }

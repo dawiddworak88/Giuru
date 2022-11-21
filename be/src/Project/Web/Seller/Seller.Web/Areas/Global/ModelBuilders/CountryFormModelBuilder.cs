@@ -3,24 +3,22 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Seller.Web.Areas.Clients.Repositories.Countries;
-using Seller.Web.Areas.Clients.Repositories.Groups;
-using Seller.Web.Areas.Clients.ViewModels;
-using Seller.Web.Shared.Repositories.Clients;
+using Seller.Web.Areas.Global.Repositories;
+using Seller.Web.Areas.Global.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Clients.ModelBuilders
+namespace Seller.Web.Areas.Global.ModelBuilders
 {
-    public class ClientCountryFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientCountryFormViewModel>
+    public class CountryFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CountryFormViewModel>
     {
-        private readonly IClientCountriesRepository clientCountriesRepository;
+        private readonly ICountriesRepository countriesRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
         private readonly LinkGenerator linkGenerator;
 
-        public ClientCountryFormModelBuilder(
-            IClientCountriesRepository clientCountriesRepository,
+        public CountryFormModelBuilder(
+            ICountriesRepository countriesRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
             LinkGenerator linkGenerator)
@@ -28,12 +26,12 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             this.globalLocalizer = globalLocalizer;
             this.clientLocalizer = clientLocalizer;
             this.linkGenerator = linkGenerator;
-            this.clientCountriesRepository = clientCountriesRepository;
+            this.countriesRepository = countriesRepository;
         }
 
-        public async Task<ClientCountryFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<CountryFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new ClientCountryFormViewModel
+            var viewModel = new CountryFormViewModel
             {
                 Title = this.clientLocalizer.GetString("EditCountry"),
                 IdLabel = this.globalLocalizer.GetString("Id"),
@@ -42,13 +40,13 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 NavigateToCountries = this.clientLocalizer.GetString("NavigateToCountriesText"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ClientCountriesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
-                CountriesUrl = this.linkGenerator.GetPathByAction("Index", "ClientCountries", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                SaveUrl = this.linkGenerator.GetPathByAction("Index", "CountriesApi", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name }),
+                CountriesUrl = this.linkGenerator.GetPathByAction("Index", "Countries", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             if (componentModel.Id.HasValue)
             {
-                var country = await this.clientCountriesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                var country = await this.countriesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                 if (country is not null)
                 {

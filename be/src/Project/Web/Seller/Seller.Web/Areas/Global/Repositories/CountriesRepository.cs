@@ -6,22 +6,22 @@ using Foundation.GenericRepository.Paginations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
-using Seller.Web.Areas.Clients.DomainModels;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Microsoft.Extensions.Options;
 using Seller.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Models.Response;
-using Seller.Web.Areas.Clients.ApiRequestModels;
 using System.Linq;
+using Seller.Web.Areas.Global.ApiRequestModels;
+using Seller.Web.Areas.Global.DomainModels;
 
-namespace Seller.Web.Areas.Clients.Repositories.Countries
+namespace Seller.Web.Areas.Global.Repositories
 {
-    public class ClientCountriesRepository : IClientCountriesRepository
+    public class CountriesRepository : ICountriesRepository
     {
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
 
-        public ClientCountriesRepository(
+        public CountriesRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> settings)
         {
@@ -36,10 +36,10 @@ namespace Seller.Web.Areas.Clients.Repositories.Countries
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.GlobalUrl}{ApiConstants.Global.CountriesApiEndpoint}/{id}"
+                EndpointAddress = $"{settings.Value.GlobalUrl}{ApiConstants.Global.CountriesApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+            var response = await apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode && response?.Data is not null)
             {
@@ -47,7 +47,7 @@ namespace Seller.Web.Areas.Clients.Repositories.Countries
             }
         }
 
-        public async Task<PagedResults<IEnumerable<ClientCountry>>> GetAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<PagedResults<IEnumerable<Country>>> GetAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var requestModel = new PagedRequestModelBase
             {
@@ -62,14 +62,14 @@ namespace Seller.Web.Areas.Clients.Repositories.Countries
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.GlobalUrl}{ApiConstants.Global.CountriesApiEndpoint}"
+                EndpointAddress = $"{settings.Value.GlobalUrl}{ApiConstants.Global.CountriesApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientCountry>>>(apiRequest);
+            var response = await apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Country>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
-                return new PagedResults<IEnumerable<ClientCountry>>(response.Data.Total, response.Data.PageSize)
+                return new PagedResults<IEnumerable<Country>>(response.Data.Total, response.Data.PageSize)
                 {
                     Data = response.Data.Data
                 };
@@ -83,17 +83,17 @@ namespace Seller.Web.Areas.Clients.Repositories.Countries
             return default;
         }
 
-        public async Task<ClientCountry> GetAsync(string token, string language, Guid? id)
+        public async Task<Country> GetAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.GlobalUrl}{ApiConstants.Global.CountriesApiEndpoint}/{id}"
+                EndpointAddress = $"{settings.Value.GlobalUrl}{ApiConstants.Global.CountriesApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ClientCountry>(apiRequest);
+            var response = await apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Country>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -108,7 +108,7 @@ namespace Seller.Web.Areas.Clients.Repositories.Countries
             return default;
         }
 
-        public async Task<IEnumerable<ClientCountry>> GetAsync(string token, string language)
+        public async Task<IEnumerable<Country>> GetAsync(string token, string language)
         {
             var requestModel = new PagedRequestModelBase
             {
@@ -121,14 +121,14 @@ namespace Seller.Web.Areas.Clients.Repositories.Countries
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.GlobalUrl}{ApiConstants.Global.CountriesApiEndpoint}"
+                EndpointAddress = $"{settings.Value.GlobalUrl}{ApiConstants.Global.CountriesApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientCountry>>>(apiRequest);
+            var response = await apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Country>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
-                var countries = new List<ClientCountry>();
+                var countries = new List<Country>();
 
                 countries.AddRange(response.Data.Data);
 
@@ -138,7 +138,7 @@ namespace Seller.Web.Areas.Clients.Repositories.Countries
                 {
                     apiRequest.Data.PageIndex = i;
 
-                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientCountry>>>(apiRequest);
+                    var nextPagesResponse = await apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Country>>>(apiRequest);
 
                     if (!nextPagesResponse.IsSuccessStatusCode)
                     {
@@ -175,10 +175,10 @@ namespace Seller.Web.Areas.Clients.Repositories.Countries
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.GlobalUrl}{ApiConstants.Global.CountriesApiEndpoint}"
+                EndpointAddress = $"{settings.Value.GlobalUrl}{ApiConstants.Global.CountriesApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<CountryRequestModel>, CountryRequestModel, BaseResponseModel>(apiRequest);
+            var response = await apiClientService.PostAsync<ApiRequest<CountryRequestModel>, CountryRequestModel, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {

@@ -1,6 +1,6 @@
 ﻿using Foundation.ApiExtensions.Models.Request;
 
-namespace Seller.Web.Areas.Clients.ApiRequestModels
+namespace Seller.Web.Areas.Global.ApiRequestModels
 {
     public class CountryRequestModel : RequestModelBase
     {

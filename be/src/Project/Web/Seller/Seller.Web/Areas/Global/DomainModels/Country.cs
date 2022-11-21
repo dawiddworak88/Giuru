@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Seller.Web.Areas.Clients.DomainModels
+namespace Seller.Web.Areas.Global.DomainModels
 {
-    public class ClientCountry
+    public class Country
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

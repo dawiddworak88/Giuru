@@ -3,40 +3,41 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
 using Seller.Web.Areas.Clients.DomainModels;
-using Seller.Web.Areas.Clients.ViewModels;
+using Seller.Web.Areas.Global.DomainModels;
+using Seller.Web.Areas.Global.ViewModels;
 using Seller.Web.Shared.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Clients.ModelBuilders
+namespace Seller.Web.Areas.Global.ModelBuilders
 {
-    public class ClientCountriesPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientCountriesPageViewModel>
+    public class CountriesPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CountriesPageViewModel>
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientCountry>> clientCountryCatalogModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Country>> countryCatalogModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
-        public ClientCountriesPageModelBuilder(
+        public CountriesPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientCountry>> clientCountryCatalogModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Country>> countryCatalogModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.clientCountryCatalogModelBuilder = clientCountryCatalogModelBuilder;
+            this.countryCatalogModelBuilder = countryCatalogModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
 
-        public async Task<ClientCountriesPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<CountriesPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new ClientCountriesPageViewModel
+            var viewModel = new CountriesPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
+                Header = await headerModelBuilder.BuildModelAsync(componentModel),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
-                Catalog = await this.clientCountryCatalogModelBuilder.BuildModelAsync(componentModel),
+                Catalog = await this.countryCatalogModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
 

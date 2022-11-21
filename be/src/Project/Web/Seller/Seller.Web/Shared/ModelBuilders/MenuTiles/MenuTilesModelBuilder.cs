@@ -104,7 +104,7 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                     {
                         Icon = IconsConstants.MapPin,
                         Title = this.globalLocalizer.GetString("Countries"),
-                        Url = this.linkGenerator.GetPathByAction("Index", "ClientCountries", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                        Url = this.linkGenerator.GetPathByAction("Index", "Countries", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name })
                     },
                     new MenuTileViewModel
                     {

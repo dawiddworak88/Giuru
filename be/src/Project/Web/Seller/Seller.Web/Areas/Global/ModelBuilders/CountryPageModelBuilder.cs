@@ -2,40 +2,40 @@
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
-using Seller.Web.Areas.Clients.ViewModels;
+using Seller.Web.Areas.Global.ViewModels;
 using Seller.Web.Shared.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Clients.ModelBuilders
+namespace Seller.Web.Areas.Global.ModelBuilders
 {
-    public class ClientCountryPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientCountryPageViewModel>
+    public class CountryPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CountryPageViewModel>
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientCountryFormViewModel> clientCountryFormModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CountryFormViewModel> countryFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
-        public ClientCountryPageModelBuilder(
+        public CountryPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, ClientCountryFormViewModel> clientCountryFormModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, CountryFormViewModel> countryFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.clientCountryFormModelBuilder = clientCountryFormModelBuilder;
+            this.countryFormModelBuilder = countryFormModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
 
-        public async Task<ClientCountryPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<CountryPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new ClientCountryPageViewModel
+            var viewModel = new CountryPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
+                Header = await headerModelBuilder.BuildModelAsync(componentModel),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
-                ClientCountryForm = await this.clientCountryFormModelBuilder.BuildModelAsync(componentModel),
+                CountryForm = await this.countryFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
 

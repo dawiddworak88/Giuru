@@ -17,7 +17,7 @@ using System.Linq;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Seller.Web.Areas.Clients.Repositories.Managers;
 using Seller.Web.Shared.ViewModels;
-using Seller.Web.Areas.Clients.Repositories.Countries;
+using Seller.Web.Areas.Global.Repositories;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -31,7 +31,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly LinkGenerator linkGenerator;
         private readonly IClientGroupsRepository clientGroupsRepository;
         private readonly IClientAccountManagersRepository clientManagersRepository;
-        private readonly IClientCountriesRepository clientCountriesRepository;
+        private readonly ICountriesRepository clientCountriesRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -41,7 +41,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IIdentityRepository identityRepository,
             IClientGroupsRepository clientGroupsRepository,
             IClientAccountManagersRepository clientManagersRepository,
-            IClientCountriesRepository clientCountriesRepository,
+            ICountriesRepository clientCountriesRepository,
             LinkGenerator linkGenerator)
         {
             this.clientsRepository = clientsRepository;
