@@ -13,5 +13,6 @@ namespace News.Api.Services.News
         Task DeleteAsync(DeleteNewsItemServiceModel model);
         Task<Guid> CreateAsync(CreateNewsItemServiceModel model);
         Task<Guid> UpdateAsync(UpdateNewsItemServiceModel model);
+        Task<PagedResults<IEnumerable<NewsItemFileServiceModel>>> GetFilesAsync(GetNewsItemFilesServiceModel model);
     }
 }

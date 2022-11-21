@@ -30,7 +30,8 @@ namespace Ordering.Api.v1.Controllers
     {
         private readonly IOrdersService ordersService;
 
-        public OrdersController(IOrdersService ordersService)
+        public OrdersController(
+            IOrdersService ordersService)
         {
             this.ordersService = ordersService;
         }

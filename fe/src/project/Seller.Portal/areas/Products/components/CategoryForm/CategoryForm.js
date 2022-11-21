@@ -16,9 +16,9 @@ function CategoryForm(props) {
         name: { value: props.name ? props.name : "", error: "" },
         parentCategoryId: { value: props.parentCategoryId ? props.parentCategoryId : "" },
         files: { value: props.files ? props.files : [] },
-        schema: { value: props.schema ? JSON.parse(props.schema) : {} },
-        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : {} },
-        clientGroupIds: { value: props.clientGroupIds ? props.clientGroupIds : []}
+        clientGroupIds: { value: props.clientGroupIds ? props.clientGroupIds : []},
+        schema: { value: props.schema ? JSON.parse(props.schema) : null },
+        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : null }
     };
 
     const stateValidatorSchema = {
@@ -39,8 +39,8 @@ function CategoryForm(props) {
             parentCategoryId,
             files,
             clientGroupIds,
-            schema: JSON.stringify(schema),
-            uiSchema: JSON.stringify(uiSchema)
+            schema: schema ? JSON.stringify(schema) : null,
+            uiSchema: uiSchema ? JSON.stringify(uiSchema) : null
         }
 
         const requestOptions = {
