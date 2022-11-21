@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, Button, Tooltip, TablePagination
+    TableHead, TableRow, Paper, Button, Tooltip, TablePagination, NoSsr
 } from "@mui/material";
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
@@ -111,8 +111,10 @@ function Files(props) {
                                                 <TableCell>{file.name}</TableCell>
                                                 <TableCell>{file.description}</TableCell>
                                                 <TableCell>{file.size}</TableCell>
-                                                <TableCell>{moment(file.lastModifiedDate).local().format("L LT")}</TableCell>
-                                                <TableCell>{moment(file.createdDate).local().format("L LT")}</TableCell>
+                                                <NoSsr>
+                                                    <TableCell>{moment(file.lastModifiedDate).local().format("L LT")}</TableCell>
+                                                    <TableCell>{moment(file.createdDate).local().format("L LT")}</TableCell>
+                                                </NoSsr>
                                             </TableRow>
                                         ))}
                                     </TableBody>

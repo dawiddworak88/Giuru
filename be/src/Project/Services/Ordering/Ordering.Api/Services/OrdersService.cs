@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Nest;
 using Newtonsoft.Json;
 using Ordering.Api.Configurations;
 using Ordering.Api.Definitions;
@@ -808,8 +809,6 @@ namespace Ordering.Api.Services
 
         public async Task SyncOrderLinesStatusesAsync(UpdateOrderLinesStatusesServiceModel model)
         {
-            this.logger.LogError("OrdersService SyncOrderLinesStatusesAsync " + JsonConvert.SerializeObject(model));
-
             foreach (var item in model.OrderItems.OrEmptyIfNull())
             {
                 var orderItem = await this.context.OrderItems.Where(x => x.OrderId == item.Id && x.IsActive).Skip(item.OrderLineIndex - 1).FirstOrDefaultAsync();
@@ -820,6 +819,13 @@ namespace Ordering.Api.Services
 
                     if (newOrderItemStatus is not null)
                     {
+                        if (newOrderItemStatus.Id == OrderStatusesConstants.NewId)
+                        {
+                            this.logger.LogError($"OrdersService New item: {JsonConvert.SerializeObject(item)}");
+                            this.logger.LogError($"OrdersService New orderItem: {JsonConvert.SerializeObject(orderItem)}");
+                            this.logger.LogError($"OrdersService New newOrderItemStatus: {JsonConvert.SerializeObject(newOrderItemStatus)}");
+                        }
+
                         var orderItemStatusChange = new OrderItemStatusChange
                         {
                             OrderItemId = orderItem.Id,
@@ -829,13 +835,15 @@ namespace Ordering.Api.Services
 
                         await this.context.OrderItemStatusChanges.AddAsync(orderItemStatusChange.FillCommonProperties());
 
+                        await this.context.SaveChangesAsync();
+
                         orderItem.LastOrderItemStatusChangeId = orderItemStatusChange.Id;
                         orderItem.LastModifiedDate = DateTime.UtcNow;
 
-                        foreach(var commentItem in item.CommentTranslations.OrEmptyIfNull().Where(x => string.IsNullOrWhiteSpace(x.Text) is false))
-                        {
-                            this.logger.LogError("commentItem " + JsonConvert.SerializeObject(commentItem));
+                        await this.context.SaveChangesAsync();
 
+                        foreach (var commentItem in item.CommentTranslations.OrEmptyIfNull().Where(x => string.IsNullOrWhiteSpace(x.Text) is false))
+                        {
                             var orderItemStatusChangeTranslation = new OrderItemStatusChangeCommentTranslation
                             {
                                 OrderItemStatusChangeComment = commentItem.Text,
@@ -844,9 +852,10 @@ namespace Ordering.Api.Services
                             };
 
                             await this.context.OrderItemStatusChangesCommentTranslations.AddAsync(orderItemStatusChangeTranslation.FillCommonProperties());
+
+                            await this.context.SaveChangesAsync();
                         }
 
-                        await this.context.SaveChangesAsync();
                         await this.MapStatusesToOrderStatusId(orderItem.OrderId);
                     }
                 }
@@ -923,13 +932,15 @@ namespace Ordering.Api.Services
 
                 bool isSameStatus = lastOrderItemStatusChanges.DistinctBy(x => x.OrderItemStatusId).Count() == 1;
 
+                var lastOrderItemStatus = lastOrderItemStatusChanges.FirstOrDefault();
+
                 if (isSameStatus is true)
                 {
-                    order.OrderStatusId = lastOrderItemStatusChanges.FirstOrDefault().OrderItemStatusId;
-                    order.OrderStateId = lastOrderItemStatusChanges.FirstOrDefault().OrderItemStateId;
+                    order.OrderStatusId = lastOrderItemStatus.OrderItemStatusId;
+                    order.OrderStateId = lastOrderItemStatus.OrderItemStateId;
                     order.LastModifiedDate = DateTime.UtcNow;
                 }
-                else
+                else if (lastOrderItemStatus.OrderItemStatusId != OrderStatusesConstants.CanceledId && lastOrderItemStatus is not null)
                 {
                     order.OrderStatusId = OrderStatusesConstants.ProcessingId;
                     order.OrderStateId = OrderStatesConstants.ProcessingId;
