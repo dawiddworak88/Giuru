@@ -66,7 +66,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
                 CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
-                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
+                OrderStatusCommentLabel = string.Empty,
                 UpdateOrderItemStatusUrl = this.linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 OrdersUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 NavigateToOrders = this.orderLocalizer.GetString("NavigateToOrdersList")

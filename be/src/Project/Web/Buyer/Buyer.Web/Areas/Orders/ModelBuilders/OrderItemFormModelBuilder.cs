@@ -48,7 +48,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 NameLabel = this.globalLocalizer.GetString("Name"),
                 OrderStatusLabel = this.globalLocalizer.GetString("OrderStatus"),
                 NavigateToOrderLabel = this.orderLocalizer.GetString("NavigateToOrder"),
-                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
+                OrderStatusCommentLabel = string.Empty,
                 QuantityLabel = this.orderLocalizer.GetString("QuantityLabel"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
