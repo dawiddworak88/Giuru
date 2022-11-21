@@ -3,7 +3,6 @@ using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Seller.Web.Areas.Global.ViewModels;
 using System.Globalization;

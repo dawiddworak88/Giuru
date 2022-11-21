@@ -35,6 +35,7 @@ using StackExchange.Redis;
 using System.Reflection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Seller.Web.Areas.Global.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -117,6 +118,8 @@ builder.Services.RegisterProductsAreaDependencies();
 builder.Services.RegisterSettingsAreaDependencies();
 
 builder.Services.RegisterMediaAreaDependencies();
+
+builder.Services.RegisterGlobalAreaDependencies();
 
 builder.Services.ConfigureSettings(builder.Configuration);
 

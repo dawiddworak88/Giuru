@@ -33,8 +33,8 @@ namespace Seller.Web.Areas.Global.Controllers
                 Id = id,
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                Name = User.Identity.Name,
-                IsAuthenticated = User.Identity.IsAuthenticated,
+                Name = this.User.Identity.Name,
+                IsAuthenticated = this.User.Identity.IsAuthenticated,
                 SellerId = GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
             };
 

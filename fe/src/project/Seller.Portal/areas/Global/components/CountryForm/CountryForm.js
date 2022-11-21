@@ -92,7 +92,7 @@ const CountryForm = (props) => {
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <a href={props.countriesUrl} className="field-button button is-text">{props.navigateToCountries}</a>
+                            <a href={props.countriesUrl} className="ml-2 button is-text">{props.navigateToCountries}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}
