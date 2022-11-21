@@ -268,10 +268,10 @@
     <value>Successfully saved role.</value>
   </data>
   <data name="CountryDeletedSuccessfully" xml:space="preserve">
-    <value>Successfully deleted country.</value>
+    <value>Country deleted successfully.</value>
   </data>
   <data name="CountrySavedSuccessfully" xml:space="preserve">
-    <value>Successfully saved country.</value>
+    <value>Country saved successfully.</value>
   </data>
   <data name="EditCountry" xml:space="preserve">
     <value>Edit country</value>
