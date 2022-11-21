@@ -73,7 +73,7 @@ namespace News.Api.v1.News.Controllers
 
                 if (files is not null)
                 {
-                    var response = new PagedResults<IEnumerable<NewsItemFileResponseModel>>(productFiles.Total, productFiles.PageSize)
+                    var response = new PagedResults<IEnumerable<NewsItemFileResponseModel>>(files.Total, files.PageSize)
                     {
                         Data = files.Data.OrEmptyIfNull().Select(x => new NewsItemFileResponseModel
                         {
