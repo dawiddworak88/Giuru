@@ -69,13 +69,13 @@ namespace News.Api.v1.News.Controllers
 
             if (validationResult.IsValid)
             {
-                var productFiles = await this.newsService.GetFilesAsync(serviceModel);
+                var files = await this.newsService.GetFilesAsync(serviceModel);
 
-                if (productFiles is not null)
+                if (files is not null)
                 {
-                    var response = new PagedResults<IEnumerable<NewsItemFileResponseModel>>(productFiles.Total, productFiles.PageSize)
+                    var response = new PagedResults<IEnumerable<NewsItemFileResponseModel>>(files.Total, files.PageSize)
                     {
-                        Data = productFiles.Data.OrEmptyIfNull().Select(x => new NewsItemFileResponseModel
+                        Data = files.Data.OrEmptyIfNull().Select(x => new NewsItemFileResponseModel
                         {
                             Id = x.Id,
                             LastModifiedDate = x.LastModifiedDate,
