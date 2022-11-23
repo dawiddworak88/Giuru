@@ -70,6 +70,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         public async Task<IActionResult> Index([FromForm] UploadMediaRequestModel model)
         {
             var importedOrderLines = this.orderFileService.ImportOrderLines(model.File);
+
             var basketItems = new List<BasketItem>();
 
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
@@ -77,8 +78,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             foreach (var orderLine in importedOrderLines)
             {
-                var product = await this.productsRepository.GetProductAsync(orderLine.Sku, token, language);
-                if (product == null)
+                var product = await this.productsRepository.GetProductAsync(orderLine.Sku, language, token);
+
+                if (product is null)
                 {
                     this.logger.LogError($"Product for SKU {orderLine.Sku} and language {language} couldn't be found.");
                 }

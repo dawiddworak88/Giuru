@@ -135,7 +135,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
 
                 foreach (var item in response.Data.OrderItems)
                 {
-                    var product = await this.productsRepository.GetProductAsync(item.ProductId, null, null);
+                    var product = await this.productsRepository.GetProductAsync(item.ProductId, language, token);
 
                     if (product is not null)
                     {

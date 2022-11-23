@@ -73,7 +73,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     CultureInfo.CurrentUICulture.Name,
                     orderLine.Sku);
 
-                if (product == null)
+                if (product is null)
                 {
                     this.logger.LogError($"Product for SKU {orderLine.Sku} and language {CultureInfo.CurrentUICulture.Name} couldn't be found.");
                 }
