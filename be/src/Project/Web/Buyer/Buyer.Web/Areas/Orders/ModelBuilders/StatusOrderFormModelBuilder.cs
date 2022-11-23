@@ -90,6 +90,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.ExpectedDelivery = order.ExpectedDeliveryDate;
                     viewModel.CustomOrder = order.MoreInfo;
                     viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
+                    viewModel.CanCancelOrder = false;
                     viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                     {
                         Id = x.Id,
@@ -111,11 +112,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         ImageAlt = x.ProductName,
                         ImageSrc = x.PictureUrl
                     });
-
-                    if (order.OrderStatusId == OrdersConstants.OrderStatuses.NewId)
-                    {
-                        viewModel.CanCancelOrder = true;
-                    }
                 }
 
                 var orderFiles = await this.ordersRepository.GetOrderFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(OrderFile.CreatedDate)} desc");
