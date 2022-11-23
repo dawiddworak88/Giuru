@@ -6,7 +6,6 @@ using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.Definitions;
-using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
@@ -66,7 +65,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
                 CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
-                OrderStatusCommentLabel = string.Empty,
+                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
                 UpdateOrderItemStatusUrl = this.linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 OrdersUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 NavigateToOrders = this.orderLocalizer.GetString("NavigateToOrdersList")
