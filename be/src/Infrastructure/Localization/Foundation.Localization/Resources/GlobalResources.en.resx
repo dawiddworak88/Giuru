@@ -753,4 +753,10 @@
   <data name="FinlandCountry" xml:space="preserve">
     <value>FinlandCountry</value>
   </data>
+  <data name="ProductCard" xml:space="preserve">
+    <value>Product card</value>
+  </data>
+  <data name="ProductCards" xml:space="preserve">
+    <value>Product cards</value>
+  </data>
 </root>

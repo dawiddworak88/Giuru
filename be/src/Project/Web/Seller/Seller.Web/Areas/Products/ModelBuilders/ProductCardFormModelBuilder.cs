@@ -34,11 +34,11 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             var viewModel = new ProductCardFormViewModel
             {
                 IdLabel = this.globalLocalizer.GetString("Id"),
-                Title = this.productLocalizer.GetString("EditProductAttribute"),
+                Title = this.productLocalizer.GetString("EditProductCard"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductAttributesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                NavigateToProductCardsLabel = this.productLocalizer.GetString("NavigateToProductCards")
+                NavigateToProductCardsLabel = this.productLocalizer.GetString("NavigateToProductCards"),
+                ProductCardsUrl = this.linkGenerator.GetPathByAction("Index", "ProductCards", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             if (componentModel.Id.HasValue)
@@ -47,6 +47,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 
                 if (categorySchema is not null)
                 {
+                    viewModel.Id = componentModel.Id;
                     viewModel.Schema = categorySchema.Schema;
                     viewModel.UiSchema = categorySchema.UiSchema;
                 }

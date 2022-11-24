@@ -6,10 +6,10 @@
 </script>
 
 @section MetaTags {
-    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("ProductCard"))</title>
-    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("ProductCard")))
+    <title>@MetaTagsService.GenerateTitle(this.GlobalLocalizer.GetString("ProductCard"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.GlobalLocalizer.GetString("ProductCard")))
     {
-        <meta name="description" content="@this.Localizer.GetString("ProductCard")" />
+        <meta name="description" content="@this.GlobalLocalizer.GetString("ProductCard")" />
     }
 }
 

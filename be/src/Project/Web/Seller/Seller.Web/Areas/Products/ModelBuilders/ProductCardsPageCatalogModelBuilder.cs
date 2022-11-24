@@ -44,13 +44,9 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             viewModel.Title = this.globalLocalizer.GetString("ProductCards");
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
-            //viewModel.NewText = this.productLocalizer.GetString("AddCategory");
-            //viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-            
+            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ProductCard", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.DuplicateUrl = this.linkGenerator.GetPathByAction("Duplicate", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(Category.CreatedDate)} desc";
 
