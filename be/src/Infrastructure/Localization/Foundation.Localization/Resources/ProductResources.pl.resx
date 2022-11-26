@@ -144,6 +144,9 @@
   <data name="EditProductAttributeItem" xml:space="preserve">
     <value>Edytuj wartość atrybutu</value>
   </data>
+  <data name="EditProductCard" xml:space="preserve">
+    <value>Edytuj kartę produktu</value>
+  </data>
   <data name="EnterCategoryName" xml:space="preserve">
     <value>Wprowadź nazwę kategorii</value>
   </data>

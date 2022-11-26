@@ -187,6 +187,8 @@ const sellerPortalBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        productcardpage: ["./src/project/Seller.Portal/areas/Products/pages/ProductCardPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/ProductCardPage/ProductCardPage.scss"],
+        productcardspage: ["./src/project/Seller.Portal/areas/Products/pages/ProductCardsPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/ProductCardsPage/ProductCardsPage.scss"],
         teammember: ["./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/index.js", "./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/TeamMember.scss"],
         teammembers: ["./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/index.js", "./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/TeamMembers.scss"],
         downloadcenteritempage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/DownloadCenterItemPage.scss"],
