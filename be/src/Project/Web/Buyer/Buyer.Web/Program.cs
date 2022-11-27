@@ -114,6 +114,7 @@ builder.Services.ConfigureSettings(builder.Configuration);
 
 builder.Services.RegisterOpenTelemetry(
     builder.Configuration,
+    Assembly.GetExecutingAssembly().GetName().Name,
     false,
     false,
     false,

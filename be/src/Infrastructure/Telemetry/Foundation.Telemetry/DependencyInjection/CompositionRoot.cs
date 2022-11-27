@@ -13,6 +13,7 @@ namespace Foundation.Telemetry.DependencyInjection
         public static void RegisterOpenTelemetry(
             this IServiceCollection services,
             IConfiguration configuration,
+            string name,
             bool enableRedisInstrumentation,
             bool enableSqlClientInstrumentation,
             bool enableEntityFrameworkInstrumentation,
@@ -23,10 +24,10 @@ namespace Foundation.Telemetry.DependencyInjection
             services.AddOpenTelemetryTracing(tracerProviderBuilder =>
             {
                 tracerProviderBuilder
-                    .AddSource(Assembly.GetExecutingAssembly().GetName().Name)
+                    .AddSource(name)
                     .SetResourceBuilder(
                         ResourceBuilder.CreateDefault()
-                            .AddService(Assembly.GetExecutingAssembly().GetName().Name));
+                            .AddService(name));
 
                 if (enableSqlClientInstrumentation)
                 {

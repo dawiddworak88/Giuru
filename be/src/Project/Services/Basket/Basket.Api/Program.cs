@@ -110,6 +110,7 @@ builder.Services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
 
 builder.Services.RegisterOpenTelemetry(
     builder.Configuration,
+    Assembly.GetExecutingAssembly().GetName().Name,
     true,
     false,
     false,

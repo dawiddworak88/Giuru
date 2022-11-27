@@ -91,6 +91,7 @@ builder.Services.RegisterGeneralDependencies();
 
 builder.Services.RegisterOpenTelemetry(
     builder.Configuration,
+    Assembly.GetExecutingAssembly().GetName().Name,
     false,
     false,
     true,

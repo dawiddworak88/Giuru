@@ -83,6 +83,7 @@ builder.Services.RegisterCatalogBackgroundTasksDependencies();
 
 builder.Services.RegisterOpenTelemetry(
     builder.Configuration,
+    Assembly.GetExecutingAssembly().GetName().Name,
     false,
     false,
     true,

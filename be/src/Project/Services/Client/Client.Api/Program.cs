@@ -95,6 +95,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.RegisterOpenTelemetry(
     builder.Configuration,
+    Assembly.GetExecutingAssembly().GetName().Name,
     false,
     false,
     true,

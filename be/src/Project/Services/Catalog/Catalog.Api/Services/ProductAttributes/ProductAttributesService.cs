@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -426,6 +427,8 @@ namespace Catalog.Api.Services.ProductAttributes
             string language,
             string username)
         {
+            using var source = new ActivitySource(this.GetType().Name);
+            
             var message = new RebuildCategorySchemasIntegrationEvent
             {
                 OrganisationId = organisationId,
@@ -433,6 +436,7 @@ namespace Catalog.Api.Services.ProductAttributes
                 Username = username
             };
 
+            using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
             this.eventBus.Publish(message);
         }
     }

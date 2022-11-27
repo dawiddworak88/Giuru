@@ -128,6 +128,7 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.RegisterOpenTelemetry(
     builder.Configuration,
+    Assembly.GetExecutingAssembly().GetName().Name,
     false,
     false,
     false,
