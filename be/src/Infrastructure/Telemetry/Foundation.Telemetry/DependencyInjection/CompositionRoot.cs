@@ -4,7 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System;
-using System.Reflection;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Foundation.Telemetry.DependencyInjection
 {
@@ -19,6 +20,7 @@ namespace Foundation.Telemetry.DependencyInjection
             bool enableEntityFrameworkInstrumentation,
             bool enableHttpClientInstrumentation,
             bool enableAspNetCoreInstrumentation,
+            IEnumerable<string> pathsToIgnore,
             string environmentName)
         {
             services.AddOpenTelemetryTracing(tracerProviderBuilder =>
@@ -51,7 +53,18 @@ namespace Foundation.Telemetry.DependencyInjection
 
                 if (enableAspNetCoreInstrumentation)
                 {
-                    tracerProviderBuilder.AddAspNetCoreInstrumentation();
+                    tracerProviderBuilder.AddAspNetCoreInstrumentation(o =>
+                    {
+                        if (pathsToIgnore is not null && pathsToIgnore.Any())
+                        {
+                            var pathsToIgnoreList = pathsToIgnore.ToList();
+
+                            o.Filter = context =>
+                            {
+                                return !pathsToIgnoreList.Contains(context.Request.Path);
+                            };
+                        }
+                    });
                 }
 
                 if (environmentName == EnvironmentConstants.DevelopmentEnvironmentName

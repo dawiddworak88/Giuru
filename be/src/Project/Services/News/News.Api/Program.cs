@@ -89,6 +89,7 @@ builder.Services.RegisterOpenTelemetry(
     true,
     false,
     true,
+    new[] { "/hc", "/liveness" },
     builder.Environment.EnvironmentName);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
