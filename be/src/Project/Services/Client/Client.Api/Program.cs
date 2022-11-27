@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Foundation.Telemetry.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -91,6 +92,15 @@ builder.Services.AddSwaggerGen(c =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
 });
+
+builder.Services.RegisterOpenTelemetry(
+    builder.Configuration,
+    false,
+    false,
+    true,
+    false,
+    true,
+    builder.Environment.EnvironmentName);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
 

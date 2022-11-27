@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Foundation.Telemetry.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -106,6 +107,15 @@ builder.Services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
 
     return new DefaultRabbitMQPersistentConnection(factory, logger, int.Parse(builder.Configuration["EventBusRetryCount"]));
 });
+
+builder.Services.RegisterOpenTelemetry(
+    builder.Configuration,
+    true,
+    false,
+    false,
+    false,
+    true,
+    builder.Environment.EnvironmentName);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
 

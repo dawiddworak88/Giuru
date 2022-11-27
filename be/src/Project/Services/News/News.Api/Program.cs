@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Foundation.Telemetry.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,6 +80,15 @@ builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 builder.Services.RegisterApiAccountDependencies(builder.Configuration);
 
 builder.Services.ConfigureSettings(builder.Configuration);
+
+builder.Services.RegisterOpenTelemetry(
+    builder.Configuration,
+    false,
+    false,
+    true,
+    false,
+    true,
+    builder.Environment.EnvironmentName);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
 

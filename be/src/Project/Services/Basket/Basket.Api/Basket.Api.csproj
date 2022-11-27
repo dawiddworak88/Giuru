@@ -39,6 +39,7 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Localization\Foundation.Localization\Foundation.Localization.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\Telemetry\Foundation.Telemetry\Foundation.Telemetry.csproj" />
   </ItemGroup>
 
 </Project>
