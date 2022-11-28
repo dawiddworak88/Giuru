@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationM
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
+using Foundation.Telemetry.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,6 +82,17 @@ builder.Services.ConfigureSettings(builder.Configuration);
 builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 
 builder.Services.RegisterAnalyticsApiDependencies();
+
+builder.Services.RegisterOpenTelemetry(
+    builder.Configuration,
+    Assembly.GetExecutingAssembly().GetName().Name,
+    false,
+    false,
+    true,
+    false,
+    true,
+    new[] { "/hc", "/liveness" },
+    builder.Environment.EnvironmentName);
 
 builder.Services.AddSwaggerGen(c =>
 {

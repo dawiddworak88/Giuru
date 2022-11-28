@@ -12,6 +12,7 @@ COPY ["Infrastructure/ApiExtensions/Foundation.ApiExtensions/Foundation.ApiExten
 COPY ["Infrastructure/Localization/Foundation.Localization/Foundation.Localization.csproj", "Infrastructure/Localization/Foundation.Localization/"]
 COPY ["Infrastructure/Extensions/Foundation.Extensions/Foundation.Extensions.csproj", "Infrastructure/Extensions/Foundation.Extensions/"]
 COPY ["Infrastructure/GenericRepository/Foundation.GenericRepository/Foundation.GenericRepository.csproj", "Infrastructure/GenericRepository/Foundation.GenericRepository/"]
+COPY ["Infrastructure/Telemetry/Foundation.Telemetry/Foundation.Telemetry.csproj", "Infrastructure/Telemetry/Foundation.Telemetry/"]
 RUN dotnet restore "Project/Services/Analytics/Analytics.Api/Analytics.Api.csproj"
 COPY . .
 WORKDIR "/src/Project/Services/Analytics/Analytics.Api"
