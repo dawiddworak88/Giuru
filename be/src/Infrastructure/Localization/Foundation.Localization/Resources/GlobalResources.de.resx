@@ -652,7 +652,7 @@
     <value>Miniaturansicht</value>
   </data>
   <data name="OrderStatusComment" xml:space="preserve">
-    <value>Kommentar zum Bestellstatus</value>
+    <value>Zusätzliche Informationen zum Bestellstatus</value>
   </data>
   <data name="QRCode" xml:space="preserve">
     <value>QR-Code</value>

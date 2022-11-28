@@ -58,6 +58,8 @@ spec:
           value: {{ .Values.eventBusRetryCount }}
         - name: EventBusRequestedHeartbeat
           value: {{ .Values.eventBusRequestedHeartbeat }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -126,6 +128,8 @@ spec:
           value: {{ .Values.clientApi.actionSendGridClientApplyConfirmationTemplateId }}
         - name: ActionSendGridClientApplyTemplateId
           value: {{ .Values.clientApi.actionSendGridClientApplyTemplateId }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -198,6 +202,8 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -266,6 +272,8 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -326,6 +334,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -400,6 +410,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -527,6 +539,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -591,6 +605,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -651,6 +667,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -721,6 +739,8 @@ spec:
           value: {{ .Values.eventBusRetryCount }}
         - name: EventBusRequestedHeartbeat
           value: {{ .Values.eventBusRequestedHeartbeat }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -865,6 +885,8 @@ spec:
           value: {{ .Values.logzIoDataCenterSubDomain }}
         - name: GoogleTagManagerIdentifier
           value: {{ .Values.googleTagManagerIdentifier }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -945,6 +967,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures

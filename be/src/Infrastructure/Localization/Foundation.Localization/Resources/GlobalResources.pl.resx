@@ -658,7 +658,7 @@
     <value>Miniaturka</value>
   </data>
   <data name="OrderStatusComment" xml:space="preserve">
-    <value>Komentarz do statusu zamówienia</value>
+    <value>Dodatkowe informacje o statusie zamówienia</value>
   </data>
   <data name="QRCode" xml:space="preserve">
     <value>Kod QR</value>

@@ -652,7 +652,7 @@
     <value>Thumbnail</value>
   </data>
   <data name="OrderStatusComment" xml:space="preserve">
-    <value>Order status comment</value>
+    <value>Additional order status info</value>
   </data>
   <data name="QRCode" xml:space="preserve">
     <value>QR Code</value>

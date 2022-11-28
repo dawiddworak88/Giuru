@@ -7,6 +7,7 @@ using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Areas.Orders.Services.OrderFiles;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.DomainModels.Media;
 using Buyer.Web.Shared.Repositories.Media;
@@ -17,6 +18,7 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Media.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
@@ -101,7 +103,20 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 }
             }
 
-            var basket = await this.basketRepository.SaveAsync(token, language, model.BasketId, basketItems);
+            var reqCookie = this.Request.Cookies[BasketConstants.BasketCookieName];
+            if (reqCookie is null)
+            {
+                reqCookie = Guid.NewGuid().ToString();
+                var cookieOptions = new CookieOptions
+                {
+                    MaxAge = TimeSpan.FromDays(BasketConstants.BasketCookieMaxAge)
+                };
+                this.Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
+            }
+
+            var id = Guid.Parse(reqCookie);
+
+            var basket = await this.basketRepository.SaveAsync(token, language, id, basketItems);
 
             var basketResponseModel = new BasketResponseModel
             {

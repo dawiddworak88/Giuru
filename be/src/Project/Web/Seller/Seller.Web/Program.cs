@@ -36,6 +36,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Seller.Web.Areas.Global.DependencyInjection;
+using Foundation.Telemetry.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -127,6 +128,17 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("SellerOnly", policy => policy.RequireRole(AccountConstants.Roles.Seller));
 });
+
+builder.Services.RegisterOpenTelemetry(
+    builder.Configuration,
+    Assembly.GetExecutingAssembly().GetName().Name,
+    false,
+    false,
+    false,
+    true,
+    true,
+    new [] { "/hc", "/liveness" },
+    builder.Environment.EnvironmentName);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
 

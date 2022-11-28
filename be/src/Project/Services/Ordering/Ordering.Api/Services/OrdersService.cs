@@ -21,6 +21,7 @@ using Ordering.Api.IntegrationEvents;
 using Ordering.Api.ServicesModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -65,6 +66,8 @@ namespace Ordering.Api.Services
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel serviceModel)
         {
+            using var source = new ActivitySource(this.GetType().Name);
+
             var order = new Order
             {
                 OrderStateId = OrderStatesConstants.NewId,
@@ -178,6 +181,7 @@ namespace Ordering.Api.Services
                 BasketId =  serviceModel.BasketId
             };
 
+            using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
             this.eventBus.Publish(message);
         }
 
