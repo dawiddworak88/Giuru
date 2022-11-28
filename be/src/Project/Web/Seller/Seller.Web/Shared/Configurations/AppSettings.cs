@@ -14,5 +14,6 @@
         public string DownloadCenterUrl { get; set; }
         public string BuyerUrl { get; set; }
         public string SellerUrl { get; set; }
+        public string GlobalUrl { get; set; }
     }
 }
