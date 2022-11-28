@@ -53,6 +53,7 @@ namespace Client.Api.Services.Clients
                     Id = client.Id,
                     Name = client.Name,
                     Email = client.Email,
+                    Country = client.Country,
                     CommunicationLanguage = client.Language,
                     PhoneNumber = client.PhoneNumber,
                     LastModifiedDate = client.LastModifiedDate,
@@ -95,6 +96,7 @@ namespace Client.Api.Services.Clients
                 Id = existingClient.Id,
                 Name = existingClient.Name,
                 Email = existingClient.Email,
+                Country = existingClient.Country,
                 CommunicationLanguage = existingClient.Language,
                 PhoneNumber = existingClient.PhoneNumber,
                 LastModifiedDate = existingClient.LastModifiedDate,
@@ -143,6 +145,7 @@ namespace Client.Api.Services.Clients
 
             client.Name = serviceModel.Name;
             client.Email = serviceModel.Email;
+            client.Country = serviceModel.Country;
             client.Language = serviceModel.CommunicationLanguage;
             client.PhoneNumber = serviceModel.PhoneNumber;
             client.OrganisationId = serviceModel.ClientOrganisationId.Value;
@@ -201,6 +204,7 @@ namespace Client.Api.Services.Clients
             {
                 Name = serviceModel.Name,
                 Email = serviceModel.Email,
+                Country = serviceModel.Country,
                 Language = serviceModel.CommunicationLanguage,
                 OrganisationId = serviceModel.ClientOrganisationId.Value,
                 PhoneNumber = serviceModel.PhoneNumber,
@@ -245,6 +249,7 @@ namespace Client.Api.Services.Clients
                               Id = c.Id,
                               Name = c.Name,
                               Email = c.Email,
+                              Country = c.Country,
                               CommunicationLanguage = c.Language,
                               PhoneNumber = c.PhoneNumber,
                               LastModifiedDate = c.LastModifiedDate,
@@ -263,6 +268,7 @@ namespace Client.Api.Services.Clients
                               Id = c.Id,
                               Name = c.Name,
                               Email = c.Email,
+                              Country = c.Country,
                               CommunicationLanguage = c.Language,
                               PhoneNumber = c.PhoneNumber,
                               LastModifiedDate = c.LastModifiedDate,

@@ -19,6 +19,8 @@ using Foundation.EventBus.Abstractions;
 using Catalog.Api.IntegrationEvents;
 using Newtonsoft.Json.Linq;
 using Foundation.Catalog.Repositories.ProductSearchRepositories;
+using System.Diagnostics;
+using Elastic.CommonSchema;
 
 namespace Catalog.Api.Services.Products
 {
@@ -142,6 +144,8 @@ namespace Catalog.Api.Services.Products
 
         public async Task<Guid?> UpdateAsync(CreateUpdateProductModel model)
         {
+            using var source = new ActivitySource(this.GetType().Name);
+
             var brand = catalogContext.Brands.FirstOrDefault(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
 
             if (brand == null)
@@ -260,6 +264,7 @@ namespace Catalog.Api.Services.Products
                 ProductEan = model.Ean
             };
 
+            using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
             this.eventBus.Publish(message);
 
             await this.catalogContext.SaveChangesAsync();
@@ -271,6 +276,8 @@ namespace Catalog.Api.Services.Products
 
         public async Task DeleteAsync(DeleteProductServiceModel model)
         {
+            using var source = new ActivitySource(this.GetType().Name);
+
             var product = await this.catalogContext.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
 
             if (product == null)
@@ -295,6 +302,7 @@ namespace Catalog.Api.Services.Products
                 OrganisationId = model.OrganisationId
             };
 
+            using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
             this.eventBus.Publish(message);
 
             await this.productIndexingRepository.IndexAsync(product.Id);
@@ -486,6 +494,8 @@ namespace Catalog.Api.Services.Products
 
         public async Task TriggerCatalogIndexRebuildAsync(RebuildCatalogIndexServiceModel model)
         {
+            using var source = new ActivitySource(this.GetType().Name);
+
             var message = new RebuildCatalogSearchIndexIntegrationEvent
             {
                 OrganisationId = model.OrganisationId,
@@ -493,6 +503,7 @@ namespace Catalog.Api.Services.Products
                 Username = model.Username
             };
 
+            using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
             this.eventBus.Publish(message);
         }
 

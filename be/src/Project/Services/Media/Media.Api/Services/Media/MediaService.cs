@@ -23,6 +23,7 @@ using Microsoft.EntityFrameworkCore;
 using Media.Api.IntegrationEvents;
 using Foundation.EventBus.Abstractions;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 
 namespace Media.Api.Services.Media
 {
@@ -366,6 +367,8 @@ namespace Media.Api.Services.Media
 
         public async Task UpdateMediaItemVersionAsync(UpdateMediaItemVersionServiceModel model)
         {
+            using var source = new ActivitySource(this.GetType().Name);
+
             var mediaVersion = this.context.MediaItemVersions.OrderBy(o => o.Version).LastOrDefault(x => x.MediaItemId == model.Id.Value && x.IsActive);
             if (mediaVersion is not null)
             {
@@ -399,6 +402,7 @@ namespace Media.Api.Services.Media
                     Name = model.Name
                 };
 
+                using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
                 this.eventBus.Publish(message);
             }
         }

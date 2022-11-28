@@ -81,12 +81,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.DeliveryTo = orderItem.ExpectedDeliveryTo;
                     viewModel.ExternalReference = orderItem.ExternalReference;
                     viewModel.MoreInfo = orderItem.MoreInfo;
-
-                    if (orderItem.OrderItemStatusId == OrdersConstants.OrderStatuses.NewId || 
-                        orderItem.OrderItemStatusId == Guid.Empty)
-                    {
-                        viewModel.CanCancelOrderItem = true;
-                    }
+                    viewModel.CanCancelOrderItem = false;
                 }
 
                 if (orderItem.LastOrderItemStatusChangeId is not null)

@@ -13,6 +13,7 @@ using Identity.Api.Configurations;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Localization;
 using Feature.Account;
+using Microsoft.Extensions.Logging;
 
 namespace Identity.Api.Areas.Accounts.Controllers
 {
@@ -25,20 +26,22 @@ namespace Identity.Api.Areas.Accounts.Controllers
         private readonly IIdentityServerInteractionService interactionService;
         private readonly IUserService userService;
         private readonly IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder;
+        private readonly ILogger<SignInController> logger;
 
         public SignInController(
             IOptions<AppSettings> settings,
             IStringLocalizer<AccountResources> accountLocalizer,
             IIdentityServerInteractionService interactionService,
             IUserService userService,
-            IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder
-            )
+            IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder,
+            ILogger<SignInController> logger)
         {
             this.interactionService = interactionService;
             this.userService = userService;
             this.signInModelBuilder = signInModelBuilder;
             this.settings = settings;
             this.accountLocalizer = accountLocalizer;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -71,6 +74,10 @@ namespace Identity.Api.Areas.Accounts.Controllers
                     if (await this.userService.SignInAsync(model.Email, model.Password, model.ReturnUrl, context.Client.ClientId))
                     {
                         return this.Redirect(model.ReturnUrl);
+                    } 
+                    else
+                    {
+                        this.logger.LogError("Unsuccessful login for {0} user", model.Email);
                     }
                 }                
             }

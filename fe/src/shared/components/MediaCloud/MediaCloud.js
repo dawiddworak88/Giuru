@@ -333,7 +333,7 @@ MediaCloud.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     label: PropTypes.string,
-    accept: PropTypes.string.isRequired,
+    accept: PropTypes.object.isRequired,
     multiple: PropTypes.bool.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
     dropOrSelectFilesLabel: PropTypes.string.isRequired,

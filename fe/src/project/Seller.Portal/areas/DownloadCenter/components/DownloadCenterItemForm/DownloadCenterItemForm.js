@@ -98,7 +98,6 @@ const DownloadCenterItemForm = (props) => {
                                 id="files"
                                 name="files"
                                 label={props.filesLabel}
-                                accept=".png, .jpg, .webp, .zip, .pdf, .docx, .xls, .xlsx, .mp4"
                                 multiple={true}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
@@ -110,7 +109,12 @@ const DownloadCenterItemForm = (props) => {
                                 isUploadInChunksEnabled={props.isUploadInChunksEnabled}
                                 chunkSize={props.chunkSize}
                                 saveMediaChunkUrl={props.saveMediaChunkUrl}
-                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} />
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} 
+                                accept={{
+                                    "image/*": [".png", ".jpg", ".webp"],
+                                    "application/*": [".pdf", ".docx", ".doc", ".zip", ".xls", ".xlsx"],
+                                    "video/*": [".mp4"]
+                                }}/>
                         </div>
                         <div className="field">
                             <Button 

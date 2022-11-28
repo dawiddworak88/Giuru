@@ -16,8 +16,8 @@ function CategoryForm(props) {
         name: { value: props.name ? props.name : "", error: "" },
         parentCategoryId: { value: props.parentCategoryId ? props.parentCategoryId : "" },
         files: { value: props.files ? props.files : [] },
-        schema: { value: props.schema ? JSON.parse(props.schema) : {} },
-        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : {} },
+        schema: { value: props.schema ? JSON.parse(props.schema) : null },
+        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : null },
     };
 
     const stateValidatorSchema = {
@@ -37,8 +37,8 @@ function CategoryForm(props) {
             name,
             parentCategoryId,
             files,
-            schema: JSON.stringify(schema),
-            uiSchema: JSON.stringify(uiSchema)
+            schema: schema ? JSON.stringify(schema) : null,
+            uiSchema: uiSchema ? JSON.stringify(uiSchema) : null
         }
 
         const requestOptions = {
@@ -112,7 +112,6 @@ function CategoryForm(props) {
                                 id="files"
                                 name="files"
                                 label={categoryBase.productPicturesLabel}
-                                accept=".png, .jpg"
                                 multiple={false}
                                 generalErrorMessage={categoryBase.generalErrorMessage}
                                 deleteLabel={categoryBase.deleteLabel}
@@ -120,7 +119,10 @@ function CategoryForm(props) {
                                 dropOrSelectFilesLabel={categoryBase.dropOrSelectFilesLabel}
                                 files={files}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={categoryBase.saveMediaUrl} />
+                                saveMediaUrl={categoryBase.saveMediaUrl} 
+                                accept={{
+                                    "image/*": [".png", ".jpg", ".webp"]
+                                }}/>
                         </div>
                         <div className="field">
                             <Button 

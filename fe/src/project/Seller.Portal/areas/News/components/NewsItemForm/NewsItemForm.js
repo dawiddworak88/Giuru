@@ -217,7 +217,6 @@ const NewsItemForm = (props) => {
                                 id="thumbnailImage"
                                 name="thumbnailImage"
                                 label={props.thumbImageLabel}
-                                accept=".png, .jpg, .webp"
                                 multiple={false}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
@@ -225,14 +224,16 @@ const NewsItemForm = (props) => {
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
                                 files={thumbnailImage}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl} 
+                                accept={{
+                                    "image/*": [".png", ".jpg", ".webp"]
+                                }}/>
                         </div>
                         <div className="field">
                             <MediaCloud
                                 id="previewImage"
                                 name="previewImage"
                                 label={props.previewImageLabel}
-                                accept=".png, .jpg, .webp"
                                 multiple={false}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
@@ -240,7 +241,10 @@ const NewsItemForm = (props) => {
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
                                 files={previewImage}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl} 
+                                accept={{
+                                    "image/*": [".png", ".jpg", ".webp"]
+                                }}/>
                         </div>
                         <div className="field">
                             <NoSsr>
@@ -266,7 +270,6 @@ const NewsItemForm = (props) => {
                                 id="files"
                                 name="files"
                                 label={props.filesLabel}
-                                accept=".pdf, .docx, .zip"
                                 multiple={true}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
@@ -274,7 +277,10 @@ const NewsItemForm = (props) => {
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
                                 files={files}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl} 
+                                accept={{
+                                    "application/*": [".pdf", ".docx", ".doc", ".zip"]
+                                }}/>
                         </div>
                         <div className="field">
                             <NoSsr>
