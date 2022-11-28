@@ -20,6 +20,7 @@ using StackExchange.Redis;
 using Foundation.Extensions.Filters;
 using Foundation.Account.DependencyInjection;
 using Global.Api.DependencyInjection;
+using Foundation.Telemetry.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -90,6 +91,17 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.ConfigureSettings(builder.Configuration);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
+
+builder.Services.RegisterOpenTelemetry(
+    builder.Configuration,
+    Assembly.GetExecutingAssembly().GetName().Name,
+    false,
+    false,
+    true,
+    false,
+    true,
+    new[] { "/hc", "/liveness" },
+    builder.Environment.EnvironmentName);
 
 var app = builder.Build();
 
