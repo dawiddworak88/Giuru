@@ -16,6 +16,7 @@ newsUrl: "#{NewsUrl}#"
 buyerUrl: "#{BuyerUrl}#"
 sellerUrl: "#{SellerUrl}#"
 downloadCenterUrl: "#{DownloadCenterUrl}#"
+globalUrl: "#{GlobalApi}#"
 makeComplaintUrl: "#{MakeComplaintUrl}#"
 cdnUrl: "#{CdnUrl}#"
 elasticsearchUrl: "#{ElasticsearchUrl}#"
@@ -33,6 +34,8 @@ senderName: "#{SenderName}#"
 googleTagManagerIdentifier: "#{GoogleTagManagerIdentifier}#"
 defaultCulture: "en"
 supportedCultures: "en,de,pl"
+globalApi:
+  connectionString: "#{GlobalApi--ConnectionString}#"
 downloadCenterApi:
   connectionString: "#{DownloadCenterApi--ConnectionString}#"
 newsApi:

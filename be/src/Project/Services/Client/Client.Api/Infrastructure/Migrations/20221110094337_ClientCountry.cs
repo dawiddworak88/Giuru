@@ -9,17 +9,17 @@ namespace Client.Api.Infrastructure.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Country",
+            migrationBuilder.AddColumn<Guid>(
+                name: "CountryId",
                 table: "Clients",
-                type: "nvarchar(max)",
+                type: "uniqueidentifier",
                 nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Country",
+                name: "CountryId",
                 table: "Clients");
         }
     }
