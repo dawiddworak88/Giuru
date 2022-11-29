@@ -40,12 +40,12 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string NoManagersText { get; set; }
         public string ClientManagerLabel { get; set; }
         public string CountryLabel { get; set; }
-        public string Country { get; set; }
+        public Guid? CountryId { get; set; }
         public IEnumerable<Guid> ClientGroupsIds { get; set; }
         public IEnumerable<Guid> ClientManagersIds { get; set; }
         public IEnumerable<LanguageViewModel> Languages { get; set; }
         public IEnumerable<ListItemViewModel> ClientGroups { get; set; }
-        public IEnumerable<CountryViewModel> Countries { get; set; }
+        public IEnumerable<ListItemViewModel> Countries { get; set; }
         public IEnumerable<ClientAccountManagerViewModel> ClientManagers { get; set; }
     }
 }

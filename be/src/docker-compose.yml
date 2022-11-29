@@ -159,6 +159,15 @@ services:
     depends_on:
       - sqldata
       - redis
+      
+  global-api:
+    image: ${REGISTRY:-giuru}/global-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Global/Global.Api/Dockerfile
+    depends_on:
+      - redis
+      - sqldata
 
   seller-web:
     image: ${REGISTRY:-giuru}/seller-web:${PLATFORM:-linux}-${TAG:-latest}

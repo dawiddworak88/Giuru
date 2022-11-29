@@ -250,13 +250,25 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=AnalyticsDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - RedisUrl=redis
     ports:
       - "5137:80"
+
+  global-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=GlobalDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
+      - LogstashUrl=http://logstash:31311
+      - SupportedCultures=${SUPPORTED_CULTURES}
+      - DefaultCulture=${DEFAULT_CULTURE}
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+    ports:
+      - "5138:80"
 
   seller-web:
     environment:
@@ -273,6 +285,7 @@ services:
       - NewsUrl=http://news-api
       - SellerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5104
       - DownloadCenterUrl=http://downloadcenter-api
+      - GlobalUrl=http://global-api
       - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105

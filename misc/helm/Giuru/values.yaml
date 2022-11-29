@@ -16,6 +16,7 @@ newsUrl: "#{NewsUrl}#"
 buyerUrl: "#{BuyerUrl}#"
 sellerUrl: "#{SellerUrl}#"
 downloadCenterUrl: "#{DownloadCenterUrl}#"
+globalUrl: "#{GlobalApi}#"
 makeComplaintUrl: "#{MakeComplaintUrl}#"
 cdnUrl: "#{CdnUrl}#"
 elasticsearchUrl: "#{ElasticsearchUrl}#"
@@ -35,6 +36,8 @@ defaultCulture: "en"
 supportedCultures: "en,de,pl"
 analyticsApi:
   connectionString: "#{AnalyticsApi--ConnectionString}#"
+globalApi:
+  connectionString: "#{GlobalApi--ConnectionString}#"
 downloadCenterApi:
   connectionString: "#{DownloadCenterApi--ConnectionString}#"
 newsApi:
