@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Edit, Delete } from "@mui/icons-material"
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const ProductCardForm = (props) => {
 
@@ -74,7 +75,29 @@ const ProductCardForm = (props) => {
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
-                    {generateElementComponentsFromSchema(schema)}
+                    <DragDropContext>
+                        <Droppable droppableId="droppable">
+                            {(providedDroppable) => (
+                                <div ref={providedDroppable.innerRef} {...providedDroppable.droppableProps}>
+                                    {generateElementComponentsFromSchema(schema).map((element, index) => {
+                                        return (
+                                            <Draggable
+                                                key={element.key}
+                                                index={index}
+                                                draggableId={element.key}
+                                            >
+                                                {(providedDraggable) => (
+                                                    <div ref={providedDraggable.innerRef} {...providedDraggable.draggableProps} {...providedDraggable.dragHandleProps}>
+                                                        {element}
+                                                    </div>
+                                                )}
+                                            </Draggable>
+                                        )
+                                    })}
+                                </div>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
                     <div className="mt-2">
                         <a href={props.productCardsUrl} className="button is-text">{props.navigateToProductCardsLabel}</a>
                     </div>
