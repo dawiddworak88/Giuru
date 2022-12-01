@@ -6,6 +6,11 @@ import "../project/Seller.Portal/areas/Products/pages/ProductCardPage/ProductCar
 const componentProps = {
   title: "Edit product card",
   navigateToProductCardsLabel: "Back to products cards",
+  uiSchema: null,
+  fieldRequiredErrorMessage: "Field is required",
+  generalErrorMessage: "An Error Occurred",
+  saveUrl: "",
+  saveText: "Save",
   schema: `{
     "definitions": {
       "a04b3368-fa25-4b4a-e4eb-08d907680a85": {
