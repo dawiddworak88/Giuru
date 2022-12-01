@@ -57,10 +57,6 @@ const ProductCardForm = (props) => {
             });
     }
 
-
-    // const requiredNames = schema.required ? schema.required : [];
-    const requiredNames = [];
-
     const generateElementsFromSchema = (schema) => {
         if (!schema.properties)
             return [];
@@ -127,17 +123,7 @@ const ProductCardForm = (props) => {
         const prop = {};
 
         Object.keys(element.dataOptions).forEach((key) => {
-          if (
-            ![
-              'category',
-              'hideKey',
-              'path',
-              'definitionData',
-              'definitionUi',
-              'allFormInputs',
-            ].includes(key) &&
-            element.dataOptions[key] !== ''
-          )
+          if (element.dataOptions[key] !== '')
             prop[key] = element.dataOptions[key];
         });
 
@@ -166,7 +152,6 @@ const ProductCardForm = (props) => {
                     });
                 });
             }
-                
         }
 
         Object.keys(elementDict).forEach((elementName) => {
@@ -178,8 +163,7 @@ const ProductCardForm = (props) => {
         });
       
         newSchema.properties = props;
-        newSchema.required = elements.filter(({ required, dependent }) => required && !dependent)
-          .map(({ name }) => name);
+        newSchema.required = elements.filter(({ required, dependent }) => required && !dependent).map(({ name }) => name);
       
         return newSchema;
     }
@@ -198,9 +182,9 @@ const ProductCardForm = (props) => {
 
         const newElements = generateElementsFromSchema(schema);
 
-        const tmpBLock = newElements[src];
+        const tmpBlock = newElements[src];
         newElements[src] = newElements[dest];
-        newElements[dest] = tmpBLock;
+        newElements[dest] = tmpBlock;
 
         updateSchema(newElements, schema)
     }
@@ -209,7 +193,8 @@ const ProductCardForm = (props) => {
         values, disable, setFieldValue
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
-    const { schema, uiSchema } = values;
+    const { schema } = values;
+    const requiredNames = schema.required ? schema.required : [];
 
     return (
         <section className="section section-small-padding category">
@@ -264,7 +249,8 @@ ProductCardForm.propTypes = {
     schema: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     saveUrl: PropTypes.string.isRequired,
-    navigateToProductCardsLabel: PropTypes.string.isRequired
+    navigateToProductCardsLabel: PropTypes.string.isRequired,
+    productCardsUrl: PropTypes.string.isRequired
 }
 
 export default ProductCardForm;

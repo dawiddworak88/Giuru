@@ -38,7 +38,8 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 NavigateToProductCardsLabel = this.productLocalizer.GetString("NavigateToProductCards"),
-                ProductCardsUrl = this.linkGenerator.GetPathByAction("Index", "ProductCards", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                ProductCardsUrl = this.linkGenerator.GetPathByAction("Index", "ProductCards", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage")
             };
 
             if (componentModel.Id.HasValue)
