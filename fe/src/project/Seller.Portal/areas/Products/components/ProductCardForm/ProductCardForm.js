@@ -1,11 +1,61 @@
-import React from "react";
+import React, { useContext } from "react";
+import { toast } from "react-toastify";
 import PropTypes from "prop-types";
+import { Context } from "../../../../../../shared/stores/Store";
+import { Button, CircularProgress } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material"
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import useForm from "../../../../../../shared/helpers/forms/useForm";
 
 const ProductCardForm = (props) => {
+    const [state, dispatch] = useContext(Context);
+    const stateSchema = {
+        id: { value: props.id ? props.id : null },
+        schema: { value: props.schema ? JSON.parse(props.schema) : null },
+        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : null }
+    }
+    
+    const stateValidatorSchema = {
+        schema: {
+            required: {
+                isRequired: true,
+                error: props.fieldRequiredErrorMessage
+            }
+        }
+    }
 
-    const schema = props.schema ? JSON.parse(props.schema) : null;
-    const requiredNames = schema.required ? schema.required : [];
+    const onSubmitForm = (state) => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const requestOptions = {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json", 
+                "X-Requested-With": "XMLHttpRequest" 
+            },
+            body: JSON.stringify(state)
+        };
+
+        fetch(props.saveUrl, requestOptions)
+            .then(function (response) {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        toast.success(jsonResponse.message);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    }
 
     const generateElementsFromSchema = (schema) => {
         if (!schema.properties)
@@ -69,17 +119,127 @@ const ProductCardForm = (props) => {
         return elementList;
     }
 
+    const generateSchemaElementFromElement = (element) => {
+        const prop = {};
+
+        Object.keys(element.dataOptions).forEach((key) => {
+          if (element.dataOptions[key] !== '')
+            prop[key] = element.dataOptions[key];
+        });
+
+        return prop;
+    }
+
+    const generateSchemaFromElementProps = (elements) => {
+        if (!elements) 
+            return {};
+
+        const newSchema = {};
+      
+        const props = {};
+        const elementDict = {};
+        const dependentElements = new Set([]);
+
+        for (let i = 0; i < elements.length; i += 1) {
+            const element = elements[i];
+
+            elementDict[element.name] = { ...element };
+
+            if (element.dependents){
+                element.dependents.forEach((possibility) => {
+                    possibility.children.forEach((dependentElement) => {
+                        dependentElements.add(dependentElement);
+                    });
+                });
+            }
+        }
+
+        Object.keys(elementDict).forEach((elementName) => {
+            const element = elementDict[elementName];
+            
+            if (!dependentElements.has(elementName)) {
+                props[element.name] = generateSchemaElementFromElement(element);
+            }
+        });
+      
+        newSchema.properties = props;
+        newSchema.required = elements.filter(({ required, dependent }) => required && !dependent).map(({ name }) => name);
+      
+        return newSchema;
+    }
+
+    const updateSchema = (newElement, schema) => {
+        const newSchema = Object.assign({...schema}, generateSchemaFromElementProps(newElement));
+
+        newSchema.type = "object";
+
+        setFieldValue({ name: "schema", value: newSchema })
+    }
+
+    const dragEnd = (result, schema) => {
+        const src = result.source.index;
+        const dest = result.destination.index;
+
+        const newElements = generateElementsFromSchema(schema);
+
+        const tmpBlock = newElements[src];
+        newElements[src] = newElements[dest];
+        newElements[dest] = tmpBlock;
+
+        updateSchema(newElements, schema)
+    }
+
+    const {
+        values, disable, setFieldValue
+    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
+
+    const { schema } = values;
+    const requiredNames = schema.required ? schema.required : [];
+
     return (
         <section className="section section-small-padding category">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
-                    {generateElementComponentsFromSchema(schema)}
-                    <div className="mt-2">
-                        <a href={props.productCardsUrl} className="button is-text">{props.navigateToProductCardsLabel}</a>
-                    </div>
+                    <form className="is-modern-form">
+                        <DragDropContext onDragEnd={(result) => dragEnd(result, schema)}>
+                            <Droppable droppableId="droppable">
+                                {(providedDroppable) => (
+                                    <div ref={providedDroppable.innerRef} {...providedDroppable.droppableProps}>
+                                        {generateElementComponentsFromSchema(schema).map((element, index) => {
+                                            return (
+                                                <Draggable
+                                                    key={element.key}
+                                                    draggableId={element.key}
+                                                    index={index}
+                                                >
+                                                    {(providedDraggable) => (
+                                                        <div ref={providedDraggable.innerRef} {...providedDraggable.draggableProps} {...providedDraggable.dragHandleProps}>
+                                                            {element}
+                                                        </div>
+                                                    )}
+                                                </Draggable>
+                                            )
+                                        })}
+                                        {providedDroppable.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
+                        </DragDropContext>
+                        <div className="field">
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary" 
+                                disabled={state.isLoading || disable}>
+                                {props.saveText}
+                            </Button>
+                            <a href={props.productCardsUrl} className="ml-2 button is-text">{props.navigateToProductCardsLabel}</a>
+                        </div>
+                    </form>
                 </div>
             </div>
+            {state.isLoading && <CircularProgress className="progressBar" />}
         </section>
     )
 }
@@ -87,7 +247,10 @@ const ProductCardForm = (props) => {
 ProductCardForm.propTypes = {
     title: PropTypes.string.isRequired,
     schema: PropTypes.string.isRequired,
-    navigateToProductCardsLabel: PropTypes.string.isRequired
+    saveText: PropTypes.string.isRequired,
+    saveUrl: PropTypes.string.isRequired,
+    navigateToProductCardsLabel: PropTypes.string.isRequired,
+    productCardsUrl: PropTypes.string.isRequired
 }
 
 export default ProductCardForm;
