@@ -4,6 +4,7 @@ using Client.Api.Infrastructure.Managers.Entities;
 using Client.Api.ServicesModels.Clients;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -40,7 +41,18 @@ namespace Client.Api.Services.Clients
 
             clients = clients.ApplySort(model.OrderBy);
 
-            var pagedResults = clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = clients.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                clients = clients.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = clients.PagedIndex(new Pagination(clients.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedClientServiceModel = new PagedResults<IEnumerable<ClientServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -256,7 +268,14 @@ namespace Client.Api.Services.Clients
                               CreatedDate = c.CreatedDate
                           };
 
-            return clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                clients = clients.Take(Constants.MaxItemsPerPageLimit);
+
+                return clients.PagedIndex(new Pagination(clients.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<ClientServiceModel> GetByOrganisationAsync(GetClientByOrganisationServiceModel model)

@@ -1,6 +1,7 @@
 ﻿using Foundation.EventBus.Abstractions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -208,7 +209,18 @@ namespace Ordering.Api.Services
 
             orders = orders.ApplySort(model.OrderBy);
 
-            var pagedResults = orders.PagedIndex(new Pagination(orders.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = orders.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                orders = orders.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = orders.PagedIndex(new Pagination(orders.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = orders.PagedIndex(new Pagination(orders.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedOrdersServiceModel = new PagedResults<IEnumerable<OrderServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -566,7 +578,18 @@ namespace Ordering.Api.Services
 
             orders = orders.ApplySort(model.OrderBy);
 
-            var pagedResults = orders.PagedIndex(new Pagination(orders.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = orders.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                orders = orders.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = orders.PagedIndex(new Pagination(orders.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = orders.PagedIndex(new Pagination(orders.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedOrdersServiceModel = new PagedResults<IEnumerable<OrderServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -692,7 +715,14 @@ namespace Ordering.Api.Services
 
             orderFiles = orderFiles.ApplySort(model.OrderBy);
 
-            return orderFiles.PagedIndex(new Pagination(orderFiles.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                orderFiles = orderFiles.Take(Constants.MaxItemsPerPageLimit);
+
+                return orderFiles.PagedIndex(new Pagination(orderFiles.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return orderFiles.PagedIndex(new Pagination(orderFiles.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<IEnumerable<OrderStatusServiceModel>> GetOrderStatusesAsync(GetOrderStatusesServiceModel serviceModel)

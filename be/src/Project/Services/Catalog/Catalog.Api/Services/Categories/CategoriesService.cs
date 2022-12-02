@@ -14,6 +14,7 @@ using Foundation.GenericRepository.Extensions;
 using Foundation.Catalog.Infrastructure;
 using Foundation.Catalog.Infrastructure.Categories.Entites;
 using Foundation.Catalog.Infrastructure.Categories.Entities;
+using Foundation.GenericRepository.Definitions;
 
 namespace Catalog.Api.Services.Categories
 {
@@ -51,7 +52,18 @@ namespace Catalog.Api.Services.Categories
 
             categories = categories.ApplySort(model.OrderBy);
 
-            var pagedResults = categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = categories.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                categories = categories.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = categories.PagedIndex(new Pagination(categories.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedCategoriesServiceModel = new PagedResults<IEnumerable<CategoryServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 

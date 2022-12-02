@@ -50,8 +50,8 @@ namespace Catalog.Api.v1.Products.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Get(
             string searchTerm,
-            int pageIndex,
-            int itemsPerPage,
+            int? pageIndex,
+            int? itemsPerPage,
             string orderBy)
         {
             var serviceModel = new GetProductAttributesServiceModel

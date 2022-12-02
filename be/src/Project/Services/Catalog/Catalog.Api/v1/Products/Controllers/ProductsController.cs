@@ -48,7 +48,7 @@ namespace Catalog.Api.v1.Products.Controllers
         [HttpGet("files/{id}"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<ProductFileResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Files(Guid? id, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Files(Guid? id, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -104,7 +104,7 @@ namespace Catalog.Api.v1.Products.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetBySkus(string skus, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> GetBySkus(string skus, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var productSkus = skus.ToEnumerableString();
@@ -167,8 +167,8 @@ namespace Catalog.Api.v1.Products.Controllers
             bool? hasPrimaryProduct,
             bool? isNew,
             string searchTerm, 
-            int pageIndex, 
-            int itemsPerPage,
+            int? pageIndex, 
+            int? itemsPerPage,
             string orderBy)
         {
             var productIds = ids.ToEnumerableGuidIds();

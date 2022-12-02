@@ -3,6 +3,7 @@ using DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories;
 using DownloadCenter.Api.ServicesModels.Categories;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -131,7 +132,18 @@ namespace DownloadCenter.Api.Services.Categories
 
             categories = categories.ApplySort(model.OrderBy);
 
-            var pagedResults = categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = categories.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                categories = categories.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = categories.PagedIndex(new Pagination(categories.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedCategoriesServiceModel = new PagedResults<IEnumerable<CategoryServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 

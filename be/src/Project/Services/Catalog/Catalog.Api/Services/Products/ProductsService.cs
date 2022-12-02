@@ -21,6 +21,7 @@ using Newtonsoft.Json.Linq;
 using Foundation.Catalog.Repositories.ProductSearchRepositories;
 using System.Diagnostics;
 using Elastic.CommonSchema;
+using Foundation.GenericRepository.Definitions;
 
 namespace Catalog.Api.Services.Products
 {
@@ -525,7 +526,14 @@ namespace Catalog.Api.Services.Products
 
             productFiles = productFiles.ApplySort(model.OrderBy);
 
-            return productFiles.PagedIndex(new Pagination(productFiles.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                productFiles = productFiles.Take(Constants.MaxItemsPerPageLimit);
+
+                return productFiles.PagedIndex(new Pagination(productFiles.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return productFiles.PagedIndex(new Pagination(productFiles.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
     }
 }

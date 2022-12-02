@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -13,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using static Pipelines.Sockets.Unofficial.SocketConnection;
 
 namespace News.Api.Services.Categories
 {
@@ -123,14 +125,25 @@ namespace News.Api.Services.Categories
             {
                 categories = categories.Where(x => x.Translations.Any(x => x.Name.StartsWith(model.SearchTerm)));
             }
-
             categories = categories.ApplySort(model.OrderBy);
 
-            var pagedResults = categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = categories.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                categories = categories.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = categories.PagedIndex(new Pagination(categories.Count(), Constants.MaxItemsPerPage), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedCategoriesServiceModel = new PagedResults<IEnumerable<CategoryServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
             var categoriesItems = new List<CategoryServiceModel>();
+
             foreach (var categoryItem in pagedResults.Data.ToList())
             {
                 var category = new CategoryServiceModel

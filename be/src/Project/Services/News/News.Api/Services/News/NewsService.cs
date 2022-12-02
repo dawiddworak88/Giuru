@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -99,7 +100,18 @@ namespace News.Api.Services.News
 
             news = news.ApplySort(model.OrderBy);
 
-            var pagedResults = news.PagedIndex(new Pagination(news.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = news.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                news = news.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = news.PagedIndex(new Pagination(news.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = news.PagedIndex(new Pagination(news.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedNewsServiceModel = new PagedResults<IEnumerable<NewsItemServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -214,7 +226,14 @@ namespace News.Api.Services.News
 
             files = files.ApplySort(model.OrderBy);
 
-            return files.PagedIndex(new Pagination(files.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                files = files.Take(Constants.MaxItemsPerPageLimit);
+
+                return files.PagedIndex(new Pagination(files.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return files.PagedIndex(new Pagination(files.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<Guid> UpdateAsync(UpdateNewsItemServiceModel model)

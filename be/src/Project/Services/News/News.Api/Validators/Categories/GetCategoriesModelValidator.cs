@@ -3,7 +3,7 @@ using News.Api.ServicesModels.Categories;
 
 namespace News.Api.Validators.Categories
 {
-    public class GetCategoriesModelValidator : BasePagedServiceModelValidator<GetCategoriesServiceModel>
+    public class GetCategoriesModelValidator : BaseServiceModelValidator<GetCategoriesServiceModel>
     {
     }
 }

@@ -24,6 +24,7 @@ using Media.Api.IntegrationEvents;
 using Foundation.EventBus.Abstractions;
 using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
+using Foundation.GenericRepository.Definitions;
 
 namespace Media.Api.Services.Media
 {
@@ -180,7 +181,16 @@ namespace Media.Api.Services.Media
 
             var predicateBuilder = PredicateBuilder.False<MediaItem>();
 
-            foreach (var id in model.Ids.Skip((model.PageIndex - 1) * model.ItemsPerPage).Take(model.ItemsPerPage))
+            var pageIndex = model.PageIndex;
+            var itemsPerPage = model.ItemsPerPage;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                pageIndex = Constants.DefaultPageIndex;
+                itemsPerPage = Constants.MaxItemsPerPageLimit;
+            }
+
+            foreach (var id in model.Ids.Skip((pageIndex.Value - 1) * itemsPerPage.Value).Take(itemsPerPage.Value))
             {
                 predicateBuilder = predicateBuilder.Or(x => x.Id == id);
             }
@@ -204,7 +214,7 @@ namespace Media.Api.Services.Media
                 }
             }
 
-            return new PagedResults<IEnumerable<MediaItemServiceModel>>(model.Ids.Count(), model.ItemsPerPage)
+            return new PagedResults<IEnumerable<MediaItemServiceModel>>(model.Ids.Count(), itemsPerPage.Value)
             { 
                    Data = mediaItemsResults
             };
@@ -270,7 +280,18 @@ namespace Media.Api.Services.Media
 
             mediaItems = mediaItems.ApplySort(serviceModel.OrderBy);
 
-            var pagedResults = mediaItems.PagedIndex(new Pagination(mediaItems.Count(), serviceModel.ItemsPerPage), serviceModel.PageIndex);
+            var pagedResults = mediaItems.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+
+            if (serviceModel.PageIndex.HasValue is false || serviceModel.ItemsPerPage.HasValue is false)
+            {
+                mediaItems = mediaItems.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = mediaItems.PagedIndex(new Pagination(mediaItems.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = mediaItems.PagedIndex(new Pagination(mediaItems.Count(), serviceModel.ItemsPerPage.Value), serviceModel.PageIndex.Value);
+            }
 
             var pagedMediaItemsServiceModel = new PagedResults<IEnumerable<MediaItemServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 

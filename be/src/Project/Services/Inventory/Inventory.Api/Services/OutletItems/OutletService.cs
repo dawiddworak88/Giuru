@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -297,7 +298,18 @@ namespace Inventory.Api.Services.OutletItems
 
             outletItems = outletItems.ApplySort(model.OrderBy);
 
-            var pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = outletItems.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                outletItems = outletItems.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedItemsServiceModel = new PagedResults<IEnumerable<OutletServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -365,7 +377,18 @@ namespace Inventory.Api.Services.OutletItems
 
             outletItems = outletItems.ApplySort(model.OrderBy);
 
-            var pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = outletItems.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                outletItems = outletItems.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedItemsServiceModel = new PagedResults<IEnumerable<OutletServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -553,9 +576,20 @@ namespace Inventory.Api.Services.OutletItems
                                    ProductEan = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Ean,
                                    AvailableQuantity = gpi.Sum(x => x.AvailableQuantity),
                                    Quantity = gpi.Sum(x => x.Quantity)
-                               }).OrderByDescending(x => x.AvailableQuantity);
+                               });
 
-            var pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = outletItems.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                outletItems = outletItems.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedItemsServiceModel = new PagedResults<IEnumerable<OutletSumServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -576,7 +610,7 @@ namespace Inventory.Api.Services.OutletItems
                 outlet.Add(outletItem);
             }
 
-            pagedItemsServiceModel.Data = outlet;
+            pagedItemsServiceModel.Data = outlet.OrderByDescending(x => x.AvailableQuantity);
 
             return pagedItemsServiceModel;
         }

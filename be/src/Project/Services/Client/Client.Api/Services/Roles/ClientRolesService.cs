@@ -3,6 +3,7 @@ using Client.Api.Infrastructure.Roles.Entities;
 using Client.Api.ServicesModels.Roles;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -82,7 +84,14 @@ namespace Client.Api.Services.Roles
 
             roles = roles.ApplySort(model.OrderBy);
 
-            return roles.PagedIndex(new Pagination(roles.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                roles = roles.Take(Constants.MaxItemsPerPageLimit);
+
+                return roles.PagedIndex(new Pagination(roles.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return roles.PagedIndex(new Pagination(roles.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<ClientRoleServiceModel> GetAsync(GetClientRoleServiceModel model)
@@ -122,7 +131,14 @@ namespace Client.Api.Services.Roles
 
             roles = roles.ApplySort(model.OrderBy);
 
-            return roles.PagedIndex(new Pagination(roles.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                roles = roles.Take(Constants.MaxItemsPerPageLimit);
+
+                return roles.PagedIndex(new Pagination(roles.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return roles.PagedIndex(new Pagination(roles.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<Guid> UpdateAsync(UpdateClientRoleServiceModel model)

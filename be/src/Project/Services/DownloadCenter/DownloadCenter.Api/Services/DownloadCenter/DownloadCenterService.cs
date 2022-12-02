@@ -3,6 +3,7 @@ using DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories;
 using DownloadCenter.Api.ServicesModels.DownloadCenter;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -92,7 +93,18 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             var downloadCenterFileGroups = downloadCenterFiles.ToList().GroupBy(x => x.MediaId);
 
-            var pagedResults = downloadCenterFiles.PagedIndex(new Pagination(downloadCenterFileGroups.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = downloadCenterFiles.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                downloadCenterFiles = downloadCenterFiles.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = downloadCenterFiles.PagedIndex(new Pagination(downloadCenterFileGroups.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = downloadCenterFiles.PagedIndex(new Pagination(downloadCenterFileGroups.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedDownloadCenterFilesServiceModel = new PagedResults<IEnumerable<DownloadCenterItemServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -169,7 +181,18 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             downloadCenterCategories = downloadCenterCategories.ApplySort(model.OrderBy);
 
-            var pagedResults = downloadCenterCategories.PagedIndex(new Pagination(downloadCenterCategories.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = downloadCenterCategories.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                downloadCenterCategories = downloadCenterCategories.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = downloadCenterCategories.PagedIndex(new Pagination(downloadCenterCategories.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = downloadCenterCategories.PagedIndex(new Pagination(downloadCenterCategories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedDownloadCenterServiceModel = new PagedResults<IEnumerable<DownloadCenterCategoryItemServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -318,7 +341,14 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             downloadCenterCategoryFiles = downloadCenterCategoryFiles.ApplySort(model.OrderBy);
 
-            return downloadCenterCategoryFiles.PagedIndex(new Pagination(downloadCenterCategoryFiles.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                downloadCenterCategoryFiles = downloadCenterCategoryFiles.Take(Constants.MaxItemsPerPageLimit);
+
+                return downloadCenterCategoryFiles.PagedIndex(new Pagination(downloadCenterCategoryFiles.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return downloadCenterCategoryFiles.PagedIndex(new Pagination(downloadCenterCategoryFiles.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<Guid> UpdateAsync(UpdateDownloadCenterItemServiceModel model)
