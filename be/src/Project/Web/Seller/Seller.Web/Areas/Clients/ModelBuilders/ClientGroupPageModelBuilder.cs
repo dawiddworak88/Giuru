@@ -4,6 +4,7 @@ using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
 using Seller.Web.Areas.Clients.ViewModels;
+using Seller.Web.Shared.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -11,13 +12,13 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 {
     public class ClientGroupPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientGroupPageViewModel>
     {
-        private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientGroupFormViewModel> groupFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public ClientGroupPageModelBuilder(
-            IModelBuilder<HeaderViewModel> headerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ClientGroupFormViewModel> groupFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
@@ -33,7 +34,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             var viewModel = new ClientGroupPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = headerModelBuilder.BuildModel(),
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
                 ClientGroupForm = await groupFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()

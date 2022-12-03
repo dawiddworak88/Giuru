@@ -56,6 +56,7 @@ namespace Catalog.Api.Services.Categories
             var pagedCategoriesServiceModel = new PagedResults<IEnumerable<CategoryServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
             var categoriesItems = new List<CategoryServiceModel>();
+
             foreach (var category in pagedResults.Data.ToList())
             {
                 var categoryItem = new CategoryServiceModel
@@ -70,12 +71,14 @@ namespace Catalog.Api.Services.Categories
                 };
 
                 var thumbnailMedia = this.context.CategoryImages.FirstOrDefault(x => x.CategoryId == category.Id && x.IsActive);
+
                 if (thumbnailMedia is not null)
                 {
                     categoryItem.ThumbnailMediaId = thumbnailMedia.MediaId;
                 }
 
                 var categoryItemTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == category.Id && x.IsActive);
+
                 if (categoryItemTranslations is null)
                 {
                     categoryItemTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == category.Id && x.IsActive);
@@ -86,6 +89,7 @@ namespace Catalog.Api.Services.Categories
                 if (category.Parentid.HasValue)
                 {
                     var parentCategoryTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == category.Parentid && x.IsActive);
+
                     if (parentCategoryTranslations is null)
                     {
                         parentCategoryTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == category.Parentid && x.IsActive);
@@ -105,6 +109,7 @@ namespace Catalog.Api.Services.Categories
         public async Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model)
         {
             var categoryItem = this.context.Categories.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+
             if (categoryItem is not null)
             {
                 var category = new CategoryServiceModel
@@ -119,12 +124,14 @@ namespace Catalog.Api.Services.Categories
                 };
 
                 var thumbnailMedia = this.context.CategoryImages.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive);
+
                 if (thumbnailMedia is not null)
                 {
                     category.ThumbnailMediaId = thumbnailMedia.MediaId;
                 }
 
                 var categoryItemTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == categoryItem.Id && x.IsActive);
+
                 if (categoryItemTranslations is null)
                 {
                     categoryItemTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive);
@@ -135,6 +142,7 @@ namespace Catalog.Api.Services.Categories
                 if (categoryItem.Parentid.HasValue)
                 {
                     var parentCategoryTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == categoryItem.Parentid && x.IsActive);
+
                     if (parentCategoryTranslations is null)
                     {
                         parentCategoryTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == categoryItem.Parentid && x.IsActive);
@@ -155,7 +163,7 @@ namespace Catalog.Api.Services.Categories
 
             if (category == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             if (await this.context.Categories.AnyAsync(x => x.Parentid == category.Id && x.IsActive))
@@ -179,14 +187,14 @@ namespace Catalog.Api.Services.Categories
 
             if (category == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var parentCategory = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == model.ParentId && x.IsActive);
 
             if (parentCategory == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             category.Parentid = model.ParentId;
@@ -245,6 +253,7 @@ namespace Catalog.Api.Services.Categories
             };
 
             var parentCategory = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == model.ParentId && x.IsActive);
+
             category.Level = parentCategory.Level + 1;
 
             this.context.Categories.Add(category.FillCommonProperties());
@@ -267,6 +276,19 @@ namespace Catalog.Api.Services.Categories
                 };
 
                 this.context.CategoryImages.Add(categoryImage.FillCommonProperties());
+            }
+
+            if (model.Schema is not null)
+            {
+                var categorySchema = new CategorySchema
+                {
+                    Schema = model.Schema,
+                    UiSchema = model.UiSchema,
+                    CategoryId = category.Id,
+                    Language = model.Language
+                };
+
+                this.context.CategorySchemas.Add(categorySchema.FillCommonProperties());
             }
 
             await this.context.SaveChangesAsync();

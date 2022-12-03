@@ -107,7 +107,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
         public async Task<ProductSearchModel> GetBySkuAsync(string sku, string language, Guid? organisationId)
         {
-            var query = Query<ProductSearchModel>.Term(t => t.Field(x => x.Sku.Suffix("keyword")).Value(sku))
+            var query = Query<ProductSearchModel>.Term(t => t.Field(x => x.Sku.Suffix("keyword")).Value(sku.ToLowerInvariant()))
                 && Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 

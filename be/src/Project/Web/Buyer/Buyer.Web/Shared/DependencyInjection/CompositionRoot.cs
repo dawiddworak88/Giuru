@@ -36,6 +36,8 @@ using GraphQL.Client.Abstractions;
 using Foundation.Media.Configurations;
 using GraphQL.Client.Serializer.Newtonsoft;
 using GraphQL.Client.Http;
+using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
+using Buyer.Web.Shared.ModelBuilders.OrderItemStatusChanges;
 using Buyer.Web.Shared.Repositories.Metadatas;
 
 namespace Buyer.Web.Shared.DependencyInjection
@@ -51,13 +53,16 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped(typeof(ICatalogModelBuilder<,>), typeof(CatalogModelBuilder<,>));
             services.AddScoped(typeof(IBreadcrumbsModelBuilder<,>), typeof(BreadcrumbsModelBuilder<,>));
             services.AddScoped<IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel>, FilesModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<FilesComponentModel, DownloadCenterFilesViewModel>, DownloadCenterFilesModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel>, SidebarModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel>, ModalModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel>, HeaderModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel>, BuyerHeaderModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>, MainNavigationModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel>, MetadataModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel>, OrderItemStatusChangesModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
+            services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
 
             // Repositories
             services.AddScoped<IMetadataRepository, MetadataRepository>();

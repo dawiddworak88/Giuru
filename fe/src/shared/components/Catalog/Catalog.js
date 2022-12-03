@@ -1,34 +1,36 @@
 
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { Plus } from "react-feather";
 import {
-    Delete, Edit, FileCopyOutlined, Link
+    Delete, Edit, FileCopyOutlined, Link, QrCode2
 } from "@mui/icons-material";
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, TablePagination, CircularProgress, Fab
+    TableHead, TableRow, Paper, TablePagination, CircularProgress, Fab,
+    Tooltip, NoSsr
 } from "@mui/material";
 import KeyConstants from "../../constants/KeyConstants";
 import { Context } from "../../stores/Store";
 import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
-import PaginationConstants from "../../constants/PaginationConstants";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
 import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
+import { TextSnippet } from "@mui/icons-material";
+import QRCodeDialog from "../QRCodeDialog/QRCodeDialog";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
-    const [isMounted, setMounted] = React.useState(false);
     const [page, setPage] = React.useState(0);
-    const [itemsPerPage,] = React.useState(PaginationConstants.defaultRowsPerPage());
     const [searchTerm, setSearchTerm] = React.useState("");
     const [items, setItems] = React.useState(props.pagedItems ? props.pagedItems.data : []);
     const [total, setTotal] = React.useState(props.pagedItems ? props.pagedItems.total : 0);
     const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
     const [entityToDelete, setEntityToDelete] = React.useState(null);
+    const [selectedItem, setSelectedItem] = React.useState(null);
+    const [openQRCodeDialog, setOpenQRCodeDialog] = React.useState(false);
 
     const handleSearchTermKeyPress = (event) => {
 
@@ -51,7 +53,7 @@ function Catalog(props) {
 
             searchTerm,
             pageIndex: newPage + 1,
-            itemsPerPage
+            itemsPerPage: props.defaultItemsPerPage
         };
 
         const requestOptions = {
@@ -63,7 +65,6 @@ function Catalog(props) {
 
         return fetch(url, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -91,7 +92,7 @@ function Catalog(props) {
 
             searchTerm,
             pageIndex: 1,
-            itemsPerPage
+            itemsPerPage: props.defaultItemsPerPage
         };
 
         const requestOptions = {
@@ -103,7 +104,6 @@ function Catalog(props) {
 
         return fetch(url, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -154,7 +154,6 @@ function Catalog(props) {
 
         return fetch(url, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -181,25 +180,27 @@ function Catalog(props) {
     const copyToClipboard = (text) => {
         ClipboardHelper.copyToClipboard(text);
     }
-    useEffect(() => {
-        setMounted(true)
-    }, [])
+
+    const handleQRCodeDialog = (item) => {
+        setSelectedItem(item);
+        setOpenQRCodeDialog(true);
+    }
     
     return (
         <section className="section section-small-padding catalog">
             <h1 className="subtitle is-4">{props.title}</h1>
-            <div>
-              {props.newUrl &&
-                <a href={props.newUrl} className="button is-primary">
-                  <span className="icon">
-                    <Plus />
-                  </span>
-                  <span>
-                    {props.newText}
-                  </span>
-                </a>
-              }
-            </div>
+            {props.newUrl &&
+                <div>
+                    <a href={props.newUrl} className="button is-primary">
+                    <span className="icon">
+                        <Plus />
+                    </span>
+                    <span>
+                        {props.newText}
+                    </span>
+                    </a>
+                </div>
+            }
             <div>
                 {props.searchLabel &&
                     <div className="catalog__search is-flex-centered">
@@ -231,21 +232,35 @@ function Catalog(props) {
                                                     <TableCell width="12%">
                                                         {props.table.actions.map((actionItem, index) => {
                                                             if (actionItem.isEdit) return (
-                                                                <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel} key={index}>
-                                                                    <Edit />
-                                                                </Fab>)
+                                                                <Tooltip title={props.editLabel} aria-label={props.editLabel} key={index}>
+                                                                    <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary">
+                                                                        <Edit />
+                                                                    </Fab>
+                                                                </Tooltip>)
                                                             else if (actionItem.isDelete) return (
-                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel} key={index}>
-                                                                    <Delete />
-                                                                </Fab>)
+                                                                <Tooltip title={props.deleteLabel} aria-label={props.deleteLabel} key={index}>
+                                                                    <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary">
+                                                                        <Delete />
+                                                                    </Fab>
+                                                                </Tooltip>)
                                                             else if (actionItem.isDuplicate) return (
-                                                                <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" aria-label={props.duplicateLabel} key={index}>
-                                                                    <FileCopyOutlined />
-                                                                </Fab>)
+                                                                <Tooltip title={props.duplicateLabel} aria-label={props.duplicateLabel} key={index}>
+                                                                    <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary">
+                                                                        <FileCopyOutlined />
+                                                                    </Fab>
+                                                                </Tooltip>)
                                                             else if (actionItem.isPicture) return (
-                                                                <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary" aria-label={props.duplicateLabel}>
-                                                                    <Link />
-                                                                </Fab>)
+                                                                <Tooltip title={props.copyLinkLabel} aria-label={props.copyLinkLabel} key={index}>
+                                                                    <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary">
+                                                                        <Link />
+                                                                    </Fab>
+                                                                </Tooltip>)
+                                                            else if (actionItem.qrCode) return (
+                                                                <Tooltip title={props.generateQRCodeLabel} aria-label={props.generateQRCodeLabel} key={index}>
+                                                                    <Fab onClick={() => handleQRCodeDialog(item)} size="small" color="secondary">
+                                                                        <QrCode2 />
+                                                                    </Fab>
+                                                                </Tooltip>)
                                                             else return (
                                                                 <div></div>)})}
                                                     </TableCell>
@@ -253,12 +268,24 @@ function Catalog(props) {
                                                 {props.table.properties && props.table.properties.map((property, index) => {
                                                     if (property.isPicture){
                                                         return (
-                                                            <TableCell key={index}><img src={item[property.title]} /></TableCell>
+                                                            <TableCell key={index}>
+                                                                <div className="property-image">
+                                                                    {item[property.title] ? (
+                                                                        <img src={item[property.title]}/>
+                                                                    ) : (
+                                                                        <div className="is-flex is-justify-content-center">
+                                                                            <TextSnippet className="is-size-2" color="primary"/>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </TableCell>
                                                         )
                                                     }
                                                     else if (property.isDateTime){
                                                         return (
-                                                            <TableCell key={index}>{isMounted ? moment.utc(item[property.title]).local().format("L LT") : moment.utc(item[property.title]).format("L LT")}</TableCell>
+                                                            <NoSsr key={index}>
+                                                                <TableCell>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
+                                                            </NoSsr>
                                                         )
                                                     }
                                                     else {
@@ -275,12 +302,12 @@ function Catalog(props) {
                             <TablePagination
                                 labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
                                 labelRowsPerPage={props.rowsPerPageLabel}
-                                rowsPerPageOptions={[PaginationConstants.defaultRowsPerPage()]}
+                                rowsPerPageOptions={[props.defaultItemsPerPage]}
                                 component="div"
                                 count={total}
                                 page={page}
                                 onPageChange={handleChangePage}
-                                rowsPerPage={PaginationConstants.defaultRowsPerPage()}
+                                rowsPerPage={props.defaultItemsPerPage}
                             />
                         </div>
                     </div>) :
@@ -295,10 +322,24 @@ function Catalog(props) {
                     titleId="alert-dialog-title"
                     title={props.deleteConfirmationLabel}
                     textId="alert-dialog-description"
-                    text={props.areYouSureLabel + (entityToDelete ? (entityToDelete.name ? ": " + entityToDelete.name : ": " + entityToDelete.productName) : "")}
+                    text={props.areYouSureLabel + ": " + (
+                        entityToDelete ? props.confirmationDialogDeleteNameProperty && props.confirmationDialogDeleteNameProperty.length > 0 ? 
+                            props.confirmationDialogDeleteNameProperty.map((property) => {
+                                return entityToDelete[`${property}`]
+                            }
+                        ).join(" ") : entityToDelete["name"] : ""
+                    )}
                     noLabel={props.noLabel}
                     yesLabel={props.yesLabel}
                 />
+                {props.qrCodeDialog &&
+                    <QRCodeDialog 
+                        open={openQRCodeDialog}
+                        setOpen={setOpenQRCodeDialog}
+                        item={selectedItem}
+                        labels={props.qrCodeDialog}
+                    />
+                }
                 {state.isLoading && <CircularProgress className="progressBar" />}
             </div>
         </section>
@@ -325,7 +366,11 @@ Catalog.propTypes = {
     deleteUrl: PropTypes.string,
     duplicateUrl: PropTypes.string,
     noResultsLabel: PropTypes.string.isRequired,
-    table: PropTypes.object.isRequired
+    table: PropTypes.object.isRequired,
+    confirmationDialogDeleteNameProperty: PropTypes.array,
+    defaultItemsPerPage: PropTypes.number.isRequired,
+    generateQRCodeLabel: PropTypes.string,
+    copyLinkLabel: PropTypes.string
 }
 
 export default Catalog;

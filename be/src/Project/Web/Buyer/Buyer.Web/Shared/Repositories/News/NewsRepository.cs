@@ -1,5 +1,6 @@
 ﻿using Buyer.Web.Areas.News.ApiResponseModels;
 using Buyer.Web.Areas.News.DomainModels;
+using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
@@ -49,6 +50,7 @@ namespace Buyer.Web.Shared.Repositories.News
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, NewsItem>(apiRequest);
+
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
@@ -57,6 +59,43 @@ namespace Buyer.Web.Shared.Repositories.News
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return response.Data;
+            }
+
+            return default;
+        }
+
+        public async Task<PagedResults<IEnumerable<NewsItemFile>>> GetNewsItemFilesAsync(string token, string language, Guid? id, int pageIndex, int itemsPerPage, string searchTerm, string orderBy)
+        {
+            var requestModel = new PagedRequestModelBase
+            {
+                Id = id,
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
+            };
+
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.NewsUrl}{ApiConstants.News.NewsFilesApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<NewsItemFile>>>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                return new PagedResults<IEnumerable<NewsItemFile>>(response.Data.Total, response.Data.PageSize)
+                {
+                    Data = response.Data.Data
+                };
             }
 
             return default;

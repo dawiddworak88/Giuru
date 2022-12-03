@@ -35,7 +35,6 @@ function ConfirmationDialog(props) {
 }
 
 ConfirmationDialog.propTypes = {
-
     open: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
     titleId: PropTypes.string.isRequired,

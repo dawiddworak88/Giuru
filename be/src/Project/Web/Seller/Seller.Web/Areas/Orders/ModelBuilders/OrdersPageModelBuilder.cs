@@ -13,13 +13,13 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 {
     public class OrdersPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrdersPageViewModel>
     {
-        private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Order>> ordersCatalogModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public OrdersPageModelBuilder(
-            IModelBuilder<HeaderViewModel> headerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Order>> ordersCatalogModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
@@ -35,7 +35,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             var viewModel = new OrdersPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = this.headerModelBuilder.BuildModel(),
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MenuTiles = this.menuTilesModelBuilder.BuildModel(),
                 Catalog = await this.ordersCatalogModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()

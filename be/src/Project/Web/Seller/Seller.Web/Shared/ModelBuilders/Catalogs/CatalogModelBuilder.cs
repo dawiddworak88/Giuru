@@ -30,8 +30,10 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 DisplayedRowsLabel = this.globalLocalizer.GetString("DisplayedRows"),
                 RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage"),
                 NoResultsLabel = this.globalLocalizer.GetString("NoResultsLabel"),
+                GenerateQRCodeLabel = this.globalLocalizer.GetString("GenerateQRCode"),
+                CopyLinkLabel = this.globalLocalizer.GetString("CopyLink"),
                 SearchTerm = string.Empty
-        };
+            };
 
             return viewModel;
         }

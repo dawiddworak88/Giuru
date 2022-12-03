@@ -186,8 +186,8 @@
   <data name="DisplayedRows" xml:space="preserve">
     <value>von</value>
   </data>
-  <data name="Download" xml:space="preserve">
-    <value>Herunterladen</value>
+  <data name="DownloadCenter" xml:space="preserve">
+    <value>Download-Center</value>
   </data>
   <data name="DropFile" xml:space="preserve">
     <value>Hier ablegen...</value>
@@ -423,9 +423,6 @@
   <data name="LastName" xml:space="preserve">
     <value>Nachname</value>
   </data>
-  <data name="Miniature" xml:space="preserve">
-    <value>Miniatur</value>
-  </data>
   <data name="BasketLabel" xml:space="preserve">
     <value>zum Warenkorb hinzufügen</value>
   </data>
@@ -510,10 +507,10 @@
   <data name="DropOrSelectAttachments" xml:space="preserve">
     <value>Legen Sie einen Anhang ab oder wählen Sie ihn aus</value>
   </data>
-  <data name="EltapPartner" xml:space="preserve">
+  <data name="ApplicationPartner" xml:space="preserve">
     <value>Partner von ELTAP</value>
   </data>
-  <data name="EltapPartnerDescription" xml:space="preserve">
+  <data name="ApplicationPartnerDescription" xml:space="preserve">
     <value>Vielen Dank für Ihr Interesse an ELTAP. Wir freuen uns mit dir zu arbeiten!</value>
   </data>
   <data name="FieldRequiredErrorMessage" xml:space="preserve">
@@ -567,16 +564,109 @@
   <data name="SalesRep" xml:space="preserve">
     <value>Außendienstmitarbeiter</value>
   </data>
-  <data name="V" xml:space="preserve">
+  <data name="VicePresident" xml:space="preserve">
     <value>Vizepräsident</value>
   </data>
   <data name="AttachedAttachments" xml:space="preserve">
     <value>Der Kunde hat folgende Dateien angehängt</value>
+  </data>
+  <data name="ClientsRoles" xml:space="preserve">
+    <value>Rollen</value>
+  </data>
+  <data name="NewRole" xml:space="preserve">
+    <value>Neue Rolle</value>
+  </data>
+  <data name="SelectJobTitle" xml:space="preserve">
+    <value>Wähle einen Arbeitsplatz</value>
+  </data>
+  <data name="ClientsApplications" xml:space="preserve">
+    <value>Client-Anwendungen</value>
   </data>
   <data name="ClientManagers" xml:space="preserve">
     <value>Kundenmanager</value>
   </data>
   <data name="Manager" xml:space="preserve">
     <value>Account Manager</value>
+  </data>
+  <data name="BusinessInformation" xml:space="preserve">
+    <value>Geschäftsinformationen</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>Kontaktinformationen</value>
+  </data>
+  <data name="NewProducts" xml:space="preserve">
+    <value>Neue Produkte</value>
+  </data>
+  <data name="Attachment" xml:space="preserve">
+    <value>Anhang</value>
+  </data>
+  <data name="ApplyApplicationSubmit" xml:space="preserve">
+    <value>Reichen Sie jetzt Ihre Bewerbung ein</value>
+  </data>
+  <data name="BusinessInformationDescription" xml:space="preserve">
+    <value>Teilen Sie uns Ihren Firmennamen und Standort mit</value>
+  </data>
+  <data name="ContactInformationDescription" xml:space="preserve">
+    <value>Ihr primärer Ansprechpartner für ELTAP ist der im Formular angegebene Ansprechpartner</value>
+  </data>
+  <data name="LowerPrivacyPolicy" xml:space="preserve">
+    <value>Datenschutz-Bestimmungen</value>
+  </data>
+  <data name="LowerRegulations" xml:space="preserve">
+    <value>Geschäftsbedingungen</value>
+  </data>
+  <data name="OnlineRetailers" xml:space="preserve">
+    <value>Wo verkaufen Sie online am meisten?</value>
+  </data>
+  <data name="SuccessfullyClientApply" xml:space="preserve">
+    <value>Die Kooperationsanfrage wurde erfolgreich übermittelt.</value>
+  </data>
+  <data name="TeamMembers" xml:space="preserve">
+    <value>Teammitglieder</value>
+  </data>
+  <data name="DownloadCenterCategories" xml:space="preserve">
+    <value>Download-Center-Kategorien</value>
+  </data>
+  <data name="EditCategory" xml:space="preserve">
+    <value>Kategorie bearbeiten</value>
+  </data>
+  <data name="EditDownloadCenter" xml:space="preserve">
+    <value>Download-Center bearbeiten</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Kategorie</value>
+  </data>
+  <data name="DownloadEverything" xml:space="preserve">
+    <value>Laden Sie alles herunter</value>
+  </data>
+  <data name="DownloadSelected" xml:space="preserve">
+    <value>Herunterladen ausgewählt</value>
+  </data>
+  <data name="NoCategories" xml:space="preserve">
+    <value>Keine Kategorien</value>
+  </data>
+  <data name="SelectFile" xml:space="preserve">
+    <value>Datei aussuchen</value>
+  </data>
+  <data name="Thumbnail" xml:space="preserve">
+    <value>Miniaturansicht</value>
+  </data>
+  <data name="OrderStatusComment" xml:space="preserve">
+    <value>Zusätzliche Informationen zum Bestellstatus</value>
+  </data>
+  <data name="QRCode" xml:space="preserve">
+    <value>QR-Code</value>
+  </data>
+  <data name="GenerateQRCode" xml:space="preserve">
+    <value>QR-Code generieren</value>
+  </data>
+  <data name="TrySignIn" xml:space="preserve">
+    <value>Bitte versuchen Sie sich anzumelden</value>
+  </data>
+  <data name="CountryNotFound" xml:space="preserve">
+    <value>Land nicht gefunden.</value>
+  </data>
+  <data name="Countries" xml:space="preserve">
+    <value>Länder</value>
   </data>
 </root>

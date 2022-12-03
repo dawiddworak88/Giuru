@@ -3,6 +3,7 @@ using Media.Api.Services.Checksums;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Linq;
 
 namespace Media.Api.Infrastructure
@@ -24,9 +25,9 @@ namespace Media.Api.Infrastructure
 
         public static void EnsureSeeded(this MediaContext context, IConfiguration configuration, IChecksumService checksumService)
         {
-            MediaSeed.SeedHeaders(context, configuration["StorageConnectionString"], checksumService);
-            MediaSeed.SeedCategories(context, configuration["StorageConnectionString"], checksumService);
-            MediaSeed.SeedHeroSliderItems(context, configuration["StorageConnectionString"], checksumService);
+            MediaSeed.SeedHeaders(context, configuration["StorageConnectionString"], Guid.Parse(configuration["OrganisationId"]), checksumService);
+            MediaSeed.SeedCategories(context, configuration["StorageConnectionString"], Guid.Parse(configuration["OrganisationId"]), checksumService);
+            MediaSeed.SeedHeroSliderItems(context, configuration["StorageConnectionString"], Guid.Parse(configuration["OrganisationId"]), checksumService);
         }
     }
 }

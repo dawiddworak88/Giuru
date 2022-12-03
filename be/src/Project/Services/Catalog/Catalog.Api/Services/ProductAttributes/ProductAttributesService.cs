@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -162,12 +163,12 @@ namespace Catalog.Api.Services.ProductAttributes
 
             if (existingProductAttribute == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductAttributeNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("ProductAttributeNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             if (existingProductAttribute.ProductAttributeItems.Any(x => x.IsActive))
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductAttributeNotEmpty"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("ProductAttributeNotEmpty"), (int)HttpStatusCode.NoContent);
             }
 
             existingProductAttribute.IsActive = false;
@@ -186,7 +187,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
             if (existingProductAttributeItem == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductAttributeItemNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("ProductAttributeItemNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             existingProductAttributeItem.IsActive = false;
@@ -426,6 +427,8 @@ namespace Catalog.Api.Services.ProductAttributes
             string language,
             string username)
         {
+            using var source = new ActivitySource(this.GetType().Name);
+            
             var message = new RebuildCategorySchemasIntegrationEvent
             {
                 OrganisationId = organisationId,
@@ -433,6 +436,7 @@ namespace Catalog.Api.Services.ProductAttributes
                 Username = username
             };
 
+            using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
             this.eventBus.Publish(message);
         }
     }

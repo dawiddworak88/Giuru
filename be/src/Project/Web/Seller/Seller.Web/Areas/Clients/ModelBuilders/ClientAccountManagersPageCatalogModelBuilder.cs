@@ -42,6 +42,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<ClientAccountManager>, ClientAccountManager>();
 
             viewModel.Title = this.clientLocalizer.GetString("ClientManagers");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
             viewModel.NewText = this.clientLocalizer.GetString("NewManager");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "ClientAccountManager", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
@@ -51,6 +52,12 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ClientAccountManagersApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(ClientAccountManager.CreatedDate)} desc";
+
+            viewModel.ConfirmationDialogDeleteNameProperty = new List<string>
+            {
+                nameof(ClientAccountManager.FirstName).ToCamelCase(),
+                nameof(ClientAccountManager.LastName).ToCamelCase()
+            };
 
             viewModel.Table = new CatalogTableViewModel
             {

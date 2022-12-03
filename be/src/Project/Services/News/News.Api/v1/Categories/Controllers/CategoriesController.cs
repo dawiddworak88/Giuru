@@ -43,7 +43,7 @@ namespace News.Api.v1.Categories.Controllers
         /// <returns>The category id.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategoryResponseModel))]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(CategoryRequestModel request)
@@ -83,7 +83,7 @@ namespace News.Api.v1.Categories.Controllers
                         return this.StatusCode((int)HttpStatusCode.OK, response);
                     }
 
-                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                    return this.StatusCode((int)HttpStatusCode.NoContent);
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -137,7 +137,7 @@ namespace News.Api.v1.Categories.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<CategoryResponseModel>>))]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
@@ -191,7 +191,7 @@ namespace News.Api.v1.Categories.Controllers
         [Route("{id}")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategoryResponseModel))]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
@@ -227,7 +227,7 @@ namespace News.Api.v1.Categories.Controllers
                     return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
 
-                return this.StatusCode((int)HttpStatusCode.NotFound);
+                return this.StatusCode((int)HttpStatusCode.NoContent);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -241,7 +241,7 @@ namespace News.Api.v1.Categories.Controllers
         [HttpDelete, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)

@@ -24,10 +24,15 @@ namespace Seller.Web.Shared.ViewModels
         public string DeleteApiUrl { get; set; }
         public string EditUrl { get; set; }
         public string DuplicateUrl { get; set; }
-        public string IsAttachmentLabel { get; set; }
+        public string AttachmentLabel { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string OrderBy { get; set; }
+        public string GenerateQRCodeLabel { get; set; }
+        public string CopyLinkLabel { get; set; }
+        public int DefaultItemsPerPage { get; set; }
+        public IEnumerable<string> ConfirmationDialogDeleteNameProperty { get; set; }
         public CatalogTableViewModel Table { get; set; }
+        public QRCodeDialogViewModel QrCodeDialog { get; set; }
         public PagedResults<IEnumerable<T>> PagedItems { get; set; }
     }
 }

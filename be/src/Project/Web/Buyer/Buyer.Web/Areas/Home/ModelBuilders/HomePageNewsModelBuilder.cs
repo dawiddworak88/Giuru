@@ -29,12 +29,12 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
         {
             var viewModel = new HomePageNewsCarouselGridViewModel
             {
-                Title = this.newsLocalizer.GetString("News")
+                Title = newsLocalizer.GetString("News")
             };
 
             var items = new List<CarouselGridItemViewModel>();
 
-            var news = await this.newsRepository.GetNewsItemsAsync(
+            var news = await newsRepository.GetNewsItemsAsync(
                 componentModel.Token, componentModel.Language, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, null, $"{nameof(NewsItem.CreatedDate)} desc");
 
             if (news is not null && news.Total > 0)
@@ -58,7 +58,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                     contentGridCarouselItems.Add(carouselItem);
                 }
 
-                items.Add(new CarouselGridItemViewModel { Id = HomeConstants.News.NewsId, Title = this.newsLocalizer.GetString("News"), CarouselItems = contentGridCarouselItems });
+                items.Add(new CarouselGridItemViewModel { Id = HomeConstants.News.NewsId, Title = newsLocalizer.GetString("News"), CarouselItems = contentGridCarouselItems });
 
                 viewModel.Items = items;
             }

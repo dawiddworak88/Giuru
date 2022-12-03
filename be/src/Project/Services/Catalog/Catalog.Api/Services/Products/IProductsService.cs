@@ -19,5 +19,6 @@ namespace Catalog.Api.Services.Products
         Task DeleteAsync(DeleteProductServiceModel deleteProductModel);
         IEnumerable<string> GetProductSuggestions(GetProductSuggestionsServiceModel model);
         Task TriggerCatalogIndexRebuildAsync(RebuildCatalogIndexServiceModel model);
+        Task<PagedResults<IEnumerable<ProductFileServiceModel>>> GetProductFiles(GetProductFilesServiceModel model);
     }
 }

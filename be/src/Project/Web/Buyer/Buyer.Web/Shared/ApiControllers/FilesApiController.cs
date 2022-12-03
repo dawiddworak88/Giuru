@@ -3,6 +3,7 @@ using Buyer.Web.Areas.Products.Repositories.Files;
 using Buyer.Web.Shared.Repositories.Files;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Media.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +35,7 @@ namespace Buyer.Web.Shared.ApiControllers
         }
 
         [HttpPost]
-        [DisableRequestSizeLimit]
+        [RequestSizeLimit(ApiConstants.Request.RequestSizeLimit)]
         public async Task<IActionResult> Post([FromForm] IFormFile file, List<IFormFile> files)
         {
             if (file == null && (files == null || !files.Any()))

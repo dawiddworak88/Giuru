@@ -42,12 +42,20 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<InventoryItem>, InventoryItem>();
 
             viewModel.Title = this.inventoryLocalizer.GetString("Inventory");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
+
             viewModel.NewText = this.inventoryLocalizer.GetString("NewTextInventory");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Inventory", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "InventoriesApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Inventory", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "InventoriesApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
+
             viewModel.OrderBy = $"{nameof(InventoryItem.Sku)} ASC";
+
+            viewModel.ConfirmationDialogDeleteNameProperty = new List<string>
+            {
+                nameof(InventoryItem.ProductName).ToCamelCase()
+            };
 
             viewModel.Table = new CatalogTableViewModel
             {

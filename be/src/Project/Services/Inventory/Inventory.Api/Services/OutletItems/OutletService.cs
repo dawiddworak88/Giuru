@@ -37,7 +37,7 @@ namespace Inventory.Api.Services.OutletItems
 
             if (product is null || outlet is null)
             {
-                throw new CustomException(this.inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             product.Name = model.ProductName;
@@ -529,7 +529,7 @@ namespace Inventory.Api.Services.OutletItems
 
             if (outlet == null)
             {
-                throw new CustomException(this.inventoryLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.inventoryLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             outlet.IsActive = false;
@@ -541,7 +541,7 @@ namespace Inventory.Api.Services.OutletItems
         {
             var outletItems = (from o in this.context.Outlet
                                join product in this.context.Products on o.ProductId equals product.Id
-                               where product.IsActive
+                               where product.IsActive && o.IsActive
                                group o by new { product.Id } into gpi
                                where gpi.Sum(x => x.AvailableQuantity) > 0
                                select new OutletSumServiceModel

@@ -1,100 +1,63 @@
-﻿using Foundation.Extensions.ModelBuilders;
-using System.Collections.Generic;
-using Foundation.PageContent.Components.Links.ViewModels;
-using Microsoft.Extensions.Localization;
+﻿using Buyer.Web.Shared.Configurations;
+using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
-using Foundation.PageContent.Components.LanguageSwitchers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
-using Buyer.Web.Shared.ViewModels.Headers;
-using System.Globalization;
-using Microsoft.AspNetCore.Routing;
+using Foundation.PageContent.Components.LanguageSwitchers.ViewModels;
+using Foundation.PageContent.Components.Links.ViewModels;
+using Foundation.Presentation.Definitions;
+using Foundation.Security.Definitions;
 using Microsoft.AspNetCore.Http;
-using Foundation.PageContent.ComponentModels;
-using System.Threading.Tasks;
-using Buyer.Web.Areas.Orders.Repositories.Baskets;
-using Foundation.Extensions.ExtensionMethods;
-using System.Linq;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 
 namespace Buyer.Web.Shared.ModelBuilders.Headers
 {
-    public class HeaderModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel>
+    public class HeaderModelBuilder : IModelBuilder<HeaderViewModel>
     {
         private readonly IModelBuilder<LogoViewModel> logoModelBuilder;
         private readonly IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel;
+        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IBasketRepository basketRepository;
+        private readonly IOptions<AppSettings> options;
 
         public HeaderModelBuilder(
             IModelBuilder<LogoViewModel> logoModelBuilder,
             IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel,
-            IStringLocalizer<GlobalResources> globalLocalizer,
-            IBasketRepository basketRepository,
-            LinkGenerator linkGenerator)
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<AppSettings> options,
+            IStringLocalizer<GlobalResources> globalLocalizer)
         {
             this.logoModelBuilder = logoModelBuilder;
             this.languageSwitcherViewModel = languageSwitcherViewModel;
+            this.httpContextAccessor = httpContextAccessor;
             this.globalLocalizer = globalLocalizer;
-            this.linkGenerator = linkGenerator;
-            this.basketRepository = basketRepository;
+            this.options = options;
         }
 
-        public async Task<BuyerHeaderViewModel> BuildModelAsync(ComponentModelBase model)
+        public HeaderViewModel BuildModel()
         {
-            var links = new List<LinkViewModel>
+            return new HeaderViewModel
             {
-                new LinkViewModel { Text = this.globalLocalizer["PriceList"], Url = "#price-list" },
-                new LinkViewModel { Text = this.globalLocalizer["Contact"], Url = "#contact" }
-            };
-
-            var viewModel = new BuyerHeaderViewModel
-            {
-                WelcomeText = this.globalLocalizer.GetString("Welcome").Value,
-                GoToCartLabel = this.globalLocalizer.GetString("Basket"),
-                Name = model.Name,
-                IsLoggedIn = model.IsAuthenticated,
-                SearchUrl = this.linkGenerator.GetPathByAction("Index", "SearchProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                SearchLabel = this.globalLocalizer.GetString("Search"),
-                SearchPlaceholderLabel = this.globalLocalizer.GetString("Search"),
+                IsLoggedIn = this.httpContextAccessor.HttpContext.User.Identity.IsAuthenticated,
+                DrawerBackLabel = this.globalLocalizer.GetString("Back"),
+                DrawerBackIcon = IconsConstants.ArrowLeft,
                 Logo = this.logoModelBuilder.BuildModel(),
-                BasketUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 LanguageSwitcher = this.languageSwitcherViewModel.BuildModel(),
-                GetSuggestionsUrl = this.linkGenerator.GetPathByAction("Get", "SearchSuggestionsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                SearchTerm = string.Empty,
-                SignInLink = new LinkViewModel
+                Links = new List<LinkViewModel>()
                 {
-                    Url = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                    Text = this.globalLocalizer.GetString("SignIn")
-                },
-                SignOutLink = new LinkViewModel
-                {
-                    Url = this.linkGenerator.GetPathByAction("SignOutNow", "Account", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
-                    Text = this.globalLocalizer.GetString("SignOut")
-                },
-                Links = links
-            };
-
-            if (model.IsAuthenticated && model.BasketId.HasValue)
-            {
-                var existingBasket = await this.basketRepository.GetBasketById(model.Token, model.Language, model.BasketId);
-                if (existingBasket is not null)
-                {
-                    var basketItems = existingBasket.Items.OrEmptyIfNull();
-                    if (basketItems.Any())
+                    new LinkViewModel
                     {
-                        double sum = 0;
-                        foreach (var item in basketItems)
-                        {
-                            sum += item.StockQuantity + item.OutletQuantity + item.Quantity;
-                        }
-       
-                        viewModel.TotalBasketItems = sum;
+                        Text = this.globalLocalizer["TermsConditions"],
+                        Url = $"{this.options.Value.IdentityUrl}{SecurityConstants.RegulationsEndpoint}"
+                    },
+                    new LinkViewModel
+                    {
+                        Text = this.globalLocalizer["PrivacyPolicy"],
+                        Url = $"{this.options.Value.IdentityUrl}{SecurityConstants.PrivacyPolicyEndpoint}"
                     }
                 }
-            }
-
-            return viewModel;
+            };
         }
     }
 }

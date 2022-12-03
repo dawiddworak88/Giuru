@@ -1,6 +1,7 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Media.ViewModel;
@@ -35,9 +36,13 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                 DropOrSelectImagesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
                 MediaItemsLabel = this.mediaResources.GetString("MediaItemsLabel"),
                 BackToMediaText = this.mediaResources.GetString("BackToMediaText"),
-                MediaUrl = this.linkGenerator.GetPathByAction("Index", "Medias", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                MediaUrl = this.linkGenerator.GetPathByAction("Index", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                DeleteLabel = this.globalLocalizer.GetString("Delete")
+                DeleteLabel = this.globalLocalizer.GetString("Delete"),
+                SaveMediaChunkUrl = this.linkGenerator.GetPathByAction("PostChunk", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveMediaChunkCompleteUrl = this.linkGenerator.GetPathByAction("PostChunksComplete", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                IsUploadInChunksEnabled = true,
+                ChunkSize = MediaConstants.DefaultChunkSize,
             };
 
             return viewModel;

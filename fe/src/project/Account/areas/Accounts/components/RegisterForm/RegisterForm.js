@@ -9,6 +9,7 @@ import {
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 const RegisterForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -115,6 +116,8 @@ const RegisterForm = (props) => {
             .then(response => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
+                AuthenticationHelper.HandleResponse(response);
+
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
@@ -204,7 +207,7 @@ const RegisterForm = (props) => {
                                         <MenuItem key={0} value="">{props.selectJobTitle}</MenuItem>
                                         {props.contactJobTitles && props.contactJobTitles.map((title, index) => {
                                             return (
-                                                <MenuItem key={index} value={title.name}>{title.name}</MenuItem>
+                                                <MenuItem key={index} value={title.name}>{title.value}</MenuItem>
                                             )
                                         })}
                                     </Select>

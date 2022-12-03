@@ -5,6 +5,7 @@ import { Context } from "../../../../../../shared/stores/Store";
 import { TextField, Button, CircularProgress } from "@mui/material";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 const ResetPasswordForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -38,6 +39,8 @@ const ResetPasswordForm = (props) => {
         fetch(props.submitUrl, requestOptions)
             .then(response => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {

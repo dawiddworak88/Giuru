@@ -1,5 +1,7 @@
 ﻿using Feature.Account;
 using Foundation.ApiExtensions.Controllers;
+using Foundation.Extensions.Exceptions;
+using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
 using Identity.Api.Areas.Accounts.Services.UserServices;
 using Identity.Api.Areas.Accounts.Validators;
@@ -7,6 +9,7 @@ using Identity.Api.Configurations;
 using Identity.Api.Services.Users;
 using Identity.Api.ServicesModels.Users;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
@@ -23,17 +26,23 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         private readonly IUsersService usersService;
         private readonly IOptions<AppSettings> options;
         private readonly IStringLocalizer<AccountResources> accountLocalizer;
+        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly LinkGenerator linkGenerator;
 
         public IdentityApiController(
             IUserService userService,
             IOptions<AppSettings> options,
             IStringLocalizer<AccountResources> accountLocalizer,
+            IStringLocalizer<GlobalResources> globalLocalizer,
+            LinkGenerator linkGenerator,
             IUsersService usersService)
         {
             this.userService = userService;
             this.usersService = usersService;
             this.options = options;
             this.accountLocalizer = accountLocalizer;
+            this.globalLocalizer = globalLocalizer;
+            this.linkGenerator = linkGenerator;
         }
 
         [HttpGet]
@@ -48,36 +57,6 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             });
 
             return this.StatusCode((int)HttpStatusCode.OK, user);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterRequestModel model)
-        {
-            var validator = new RegisterModelValidator();
-            var result = await validator.ValidateAsync(model);
-            if (result.IsValid)
-            {
-                var serviceModel = new RegisterServiceModel
-                {
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Email = model.Email,
-                    ContactJobTitle = model.ContactJobTitle,
-                    PhoneNumber = model.PhoneNumber,
-                    CompanyName = model.CompanyName,
-                    CompanyAddress = model.CompanyAddress,
-                    CompanyCountry = model.CompanyCountry,
-                    CompanyCity = model.CompanyCity,
-                    CompanyPostalCode = model.CompanyPostalCode,
-                    CompanyRegion = model.CompanyRegion
-                };
-
-                await this.usersService.RegisterAsync(serviceModel);
-
-                return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.accountLocalizer.GetString("SuccessfullyClientApply").Value });
-            }
-
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         [HttpPost]
@@ -107,6 +86,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         {
             var validator = new SetPasswordModelValidator();
             var result = await validator.ValidateAsync(model);
+
             if (result.IsValid)
             {
                 var language = CultureInfo.CurrentUICulture.Name;
@@ -123,10 +103,14 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                 {
                     if (await this.userService.SignInAsync(user.Email, model.Password, null, null))
                     {
-                        return this.StatusCode((int)HttpStatusCode.Redirect);
+                        return this.StatusCode((int)HttpStatusCode.Redirect, new { Url = model.ReturnUrl });
                     }
                 }
-            }
+                else
+                {
+                    return this.StatusCode((int)HttpStatusCode.BadRequest, new { EmailIsConfirmedLabel = this.accountLocalizer.GetString("EmailIsConfirmed").Value, SignInLabel = this.globalLocalizer.GetString("TrySignIn").Value, SignInUrl = this.linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })});
+                }
+            }   
 
             return this.StatusCode((int)HttpStatusCode.BadRequest);
         }

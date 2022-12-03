@@ -7,6 +7,8 @@ namespace Catalog.Api.ServicesModels.Categories
     public class CreateCategoryServiceModel : BaseServiceModel
     {
         public string Name { get; set; }
+        public string Schema { get; set; }
+        public string UiSchema { get; set; }
         public Guid? ParentId { get; set; }
         public IEnumerable<Guid> Files { get; set; }
     }

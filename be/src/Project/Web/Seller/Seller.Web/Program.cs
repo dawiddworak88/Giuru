@@ -27,6 +27,16 @@ using Seller.Web.Areas.News.DependencyInjection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
 using Foundation.Media.DependencyInjection;
+using Seller.Web.Areas.TeamMembers.DependencyInjection;
+using Seller.Web.Areas.DownloadCenter.DependencyInjection;
+using Foundation.Extensions.Definitions;
+using Microsoft.AspNetCore.DataProtection;
+using StackExchange.Redis;
+using System.Reflection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Seller.Web.Areas.Global.DependencyInjection;
+using Foundation.Telemetry.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +72,13 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
 });
 
+builder.Services.AddDataProtection().UseCryptographicAlgorithms(
+    new AuthenticatedEncryptorConfiguration
+    {
+        EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+        ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+    }).PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(builder.Configuration["RedisUrl"]), $"{Assembly.GetExecutingAssembly().GetName().Name}-DataProtection-Keys");
+
 builder.Services.AddRazorPages();
 
 builder.Services.AddLocalization();
@@ -91,7 +108,11 @@ builder.Services.RegisterClientsAreaDependencies();
 
 builder.Services.RegisterInventoryAreaDependencies();
 
+builder.Services.RegisterDownloadCenterAreaDependencies();
+
 builder.Services.RegisterNewsAreaDependencies();
+
+builder.Services.RegisterTeamMembersAreaDependencies();
 
 builder.Services.RegisterProductsAreaDependencies();
 
@@ -99,12 +120,25 @@ builder.Services.RegisterSettingsAreaDependencies();
 
 builder.Services.RegisterMediaAreaDependencies();
 
+builder.Services.RegisterGlobalAreaDependencies();
+
 builder.Services.ConfigureSettings(builder.Configuration);
 
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("SellerOnly", policy => policy.RequireRole(AccountConstants.Roles.Seller));
 });
+
+builder.Services.RegisterOpenTelemetry(
+    builder.Configuration,
+    Assembly.GetExecutingAssembly().GetName().Name,
+    false,
+    false,
+    false,
+    true,
+    true,
+    new [] { "/hc", "/liveness" },
+    builder.Environment.EnvironmentName);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
 
@@ -121,7 +155,21 @@ app.UseGeneralException();
 
 app.UseResponseCompression();
 
-app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
+if (app.Environment.EnvironmentName == EnvironmentConstants.DevelopmentEnvironmentName)
+{
+    app.UseCookiePolicy(new CookiePolicyOptions
+    {
+        MinimumSameSitePolicy = SameSiteMode.Lax
+    });
+}
+else
+{
+    app.UseCookiePolicy(new CookiePolicyOptions
+    {
+        MinimumSameSitePolicy = SameSiteMode.None,
+        Secure = CookieSecurePolicy.Always
+    });
+}
 
 app.UseGeneralStaticFiles();
 

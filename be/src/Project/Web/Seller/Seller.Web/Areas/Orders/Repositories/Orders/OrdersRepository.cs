@@ -1,5 +1,6 @@
 ﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
+using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
@@ -38,6 +39,94 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
             };
 
             var response = await this.apiOrderService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Order>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
+
+        public async Task<OrderItem> GetOrderItemAsync(string token, string language, Guid? id)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.OrderItemsApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiOrderService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OrderItem>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
+        
+        public async Task<PagedResults<IEnumerable<OrderFile>>> GetOrderFilesAsync(string token, string language, Guid? id, int pageIndex, int itemsPerPage, string searchTerm, string orderBy)
+        {
+            var requestModel = new PagedRequestModelBase
+            {
+                Id = id,
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
+            };
+
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.OrderFilesApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiOrderService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<OrderFile>>>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                return new PagedResults<IEnumerable<OrderFile>>(response.Data.Total, response.Data.PageSize)
+                {
+                    Data = response.Data.Data
+                };
+            }
+
+            return default;
+        }
+
+
+        public async Task<OrderItemStatusChanges> GetOrderItemStatusesAsync(string token, string language, Guid? id)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.OrderItemStatusesApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiOrderService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OrderItemStatusChanges>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -140,6 +229,31 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
             }
 
             return default;
+        }
+
+        public async Task UpdateOrderItemStatusAsync(string token, string language, Guid id, Guid orderItemStatusId, string orderItemStatusChangeComment)
+        {
+            var requestModel = new UpdateOrderItemStatusRequestModel
+            {
+                Id = id,
+                OrderItemStatusId = orderItemStatusId,
+                OrderItemStatusChangeComment = orderItemStatusChangeComment
+            };
+
+            var apiRequest = new ApiRequest<UpdateOrderItemStatusRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.UpdateOrderItemStatusApiEndpoint}"
+            };
+
+            var response = await this.apiOrderService.PostAsync<ApiRequest<UpdateOrderItemStatusRequestModel>, UpdateOrderItemStatusRequestModel, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
         }
     }
 }

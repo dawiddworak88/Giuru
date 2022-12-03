@@ -14,11 +14,15 @@
     &__image-gallery {
         position: sticky;
         top: 8px;
+
+        div.fullscreen {
+            z-index: 10000;
+        }
     }
 
     &__discount {
         margin-top: 1rem;
-        color: $inventory-color;
+        color: $greenonion;
         font-size: 1.1rem;
         font-weight: 600;
     }
@@ -59,7 +63,7 @@
 
     &__in-stock {
         margin-top: 1rem;
-        color: $inventory-color;
+        color: $greenonion;
         font-size: 1.1rem;
         font-weight: 600;
 

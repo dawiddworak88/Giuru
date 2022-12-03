@@ -2,20 +2,28 @@
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Orders.Definitions;
 using Buyer.Web.Areas.Orders.DomainModels;
+using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Areas.Orders.Services.OrderFiles;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Definitions.Basket;
+using Buyer.Web.Shared.Definitions.Files;
+using Buyer.Web.Shared.DomainModels.Media;
+using Buyer.Web.Shared.Repositories.Media;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Paginations;
 using Foundation.Media.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -35,6 +43,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IOptions<AppSettings> options;
         private readonly IMediaService mediaService;
         private readonly ILogger<OrderFileApiController> logger;
+        private readonly IMediaItemsRepository mediaRepository;
+        private readonly IOrdersRepository ordersRepository;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
@@ -43,6 +53,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             LinkGenerator linkGenerator,
             IOptions<AppSettings> options,
             IMediaService mediaService,
+            IMediaItemsRepository mediaRepository,
+            IOrdersRepository ordersRepository,
             ILogger<OrderFileApiController> logger)
         {
             this.orderFileService = orderFileService;
@@ -52,6 +64,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             this.options = options;
             this.mediaService = mediaService;
             this.logger = logger;
+            this.mediaRepository = mediaRepository;
+            this.ordersRepository = ordersRepository;
         }
 
         [HttpPost]
@@ -66,6 +80,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             foreach (var orderLine in importedOrderLines)
             {
                 var product = await this.productsRepository.GetProductAsync(orderLine.Sku, token, language);
+
                 if (product == null)
                 {
                     this.logger.LogError($"Product for SKU {orderLine.Sku} and language {language} couldn't be found.");
@@ -89,7 +104,20 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 }
             }
 
-            var basket = await this.basketRepository.SaveAsync(token, language, model.Id, basketItems);
+            var reqCookie = this.Request.Cookies[BasketConstants.BasketCookieName];
+            if (reqCookie is null)
+            {
+                reqCookie = Guid.NewGuid().ToString();
+                var cookieOptions = new CookieOptions
+                {
+                    MaxAge = TimeSpan.FromDays(BasketConstants.BasketCookieMaxAge)
+                };
+                this.Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
+            }
+
+            var id = Guid.Parse(reqCookie);
+
+            var basket = await this.basketRepository.SaveAsync(token, language, id, basketItems);
 
             var basketResponseModel = new BasketResponseModel
             {
@@ -117,6 +145,48 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             }
 
             return this.StatusCode((int)HttpStatusCode.OK, basketResponseModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetFiles(Guid? id, string searchTerm, int pageIndex, int itemsPerPage)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            var productFiles = await this.ordersRepository.GetOrderFilesAsync(token, language, id, pageIndex, itemsPerPage, searchTerm, $"{nameof(OrderFile.CreatedDate)} desc");
+
+            var filesModel = new List<FileItem>();
+            var filesIds = productFiles.Data.Select(x => x.Id);
+
+            if (productFiles is not null && filesIds.Any())
+            {
+                var files = await this.mediaRepository.GetMediaItemsAsync(token, language, filesIds, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize);
+
+                foreach (var file in files.OrEmptyIfNull())
+                {
+                    var fileModel = new FileItem
+                    {
+                        Id = file.Id,
+                        Name = file.Name,
+                        Filename = file.Filename,
+                        Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
+                        Description = file.Description ?? "-",
+                        IsProtected = file.IsProtected,
+                        Size = this.mediaService.ConvertToMB(file.Size),
+                        LastModifiedDate = file.LastModifiedDate,
+                        CreatedDate = file.CreatedDate
+                    };
+
+                    filesModel.Add(fileModel);
+                }
+            }
+
+            var pagedFiles = new PagedResults<IEnumerable<FileItem>>(filesModel.Count, FilesConstants.DefaultPageSize)
+            {
+                Data = filesModel
+            };
+
+            return this.StatusCode((int)HttpStatusCode.OK, pagedFiles);
         }
     }
 }

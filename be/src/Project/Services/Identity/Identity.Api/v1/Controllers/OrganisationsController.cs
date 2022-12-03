@@ -41,7 +41,7 @@ namespace Identity.Api.v1.Controllers
         [Route("{email}")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string email)
         {
@@ -75,7 +75,7 @@ namespace Identity.Api.v1.Controllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                    return this.StatusCode((int)HttpStatusCode.NoContent);
                 }
             }
 

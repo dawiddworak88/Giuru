@@ -3,10 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>b0d2569c-4f52-48cc-93c5-f214e2ce767b</ProjectGuid>
-    <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>http://giuru.localhost:{ServicePort}</DockerServiceUrl>
-    <DockerServiceName>buyer-web</DockerServiceName>
+    <ProjectGuid>b8075472-6de5-434e-bb94-b559e100efd9</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">

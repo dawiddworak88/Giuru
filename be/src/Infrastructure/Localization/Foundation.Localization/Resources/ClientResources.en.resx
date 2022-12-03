@@ -123,11 +123,35 @@
   <data name="AccountText" xml:space="preserve">
     <value>Create account</value>
   </data>
+  <data name="BackToRoles" xml:space="preserve">
+    <value>Back to roles</value>
+  </data>
+  <data name="ApplicationDeletedSuccessfully" xml:space="preserve">
+    <value>Successfully deleted customer application</value>
+  </data>
+  <data name="BackToClientsApplications" xml:space="preserve">
+    <value>Back to clients applications</value>
+  </data>
   <data name="Client" xml:space="preserve">
     <value>Client</value>
   </data>
   <data name="ClientAlreadyExists" xml:space="preserve">
     <value>User with this e-mail address has been already created.</value>
+  </data>
+  <data name="ClientApplicationNotFound" xml:space="preserve">
+    <value>Customer application not found</value>
+  </data>
+  <data name="ClientApplicationSavedSuccessfully" xml:space="preserve">
+    <value>Successfully saved client application</value>
+  </data>
+  <data name="ClientApplyConfirmation" xml:space="preserve">
+    <value>Thank you for registering on our B2B platform. Your application has been sent and is waiting for verification by our team. We will notify you by e-mail about activating the account.</value>
+  </data>
+  <data name="ClientApplyConfirmationSubject" xml:space="preserve">
+    <value>Confirmation of sending the request for cooperation.</value>
+  </data>
+  <data name="ClientApplySubject" xml:space="preserve">
+    <value>New cooperation request</value>
   </data>
   <data name="ClientDeletedSuccessfully" xml:space="preserve">
     <value>Client has been deleted successfully.</value>
@@ -144,14 +168,26 @@
   <data name="Clients" xml:space="preserve">
     <value>Clients</value>
   </data>
+  <data name="ClientsApplications" xml:space="preserve">
+    <value>Clients applications</value>
+  </data>
   <data name="ClientSavedSuccessfully" xml:space="preserve">
     <value>Client has been saved successfully.</value>
   </data>
   <data name="ClientsGroups" xml:space="preserve">
     <value>Clients groups</value>
   </data>
+  <data name="ClientsRoles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
   <data name="EditClient" xml:space="preserve">
     <value>Edit client</value>
+  </data>
+  <data name="EditClientRole" xml:space="preserve">
+    <value>Edit role</value>
+  </data>
+  <data name="EditClientApplication" xml:space="preserve">
+    <value>Edit client application</value>
   </data>
   <data name="EditClientManager" xml:space="preserve">
     <value>Edit client account manager</value>
@@ -198,6 +234,9 @@
   <data name="NewClient" xml:space="preserve">
     <value>New client</value>
   </data>
+  <data name="NewClientApplication" xml:space="preserve">
+    <value>Add application</value>
+  </data>
   <data name="NewGroup" xml:space="preserve">
     <value>New client group</value>
   </data>
@@ -215,5 +254,32 @@
   </data>
   <data name="ResetPasswordText" xml:space="preserve">
     <value>Reset password</value>
+  </data>
+  <data name="RoleDeletedSuccessfully" xml:space="preserve">
+    <value>Successfully deleted role.</value>
+  </data>
+  <data name="RoleIsExisting" xml:space="preserve">
+    <value>Role exist</value>
+  </data>
+  <data name="RoleNotFound" xml:space="preserve">
+    <value>Role not found</value>
+  </data>
+  <data name="RoleSavedSuccessfully" xml:space="preserve">
+    <value>Successfully saved role.</value>
+  </data>
+  <data name="CountryDeletedSuccessfully" xml:space="preserve">
+    <value>Country deleted successfully.</value>
+  </data>
+  <data name="CountrySavedSuccessfully" xml:space="preserve">
+    <value>Country saved successfully.</value>
+  </data>
+  <data name="EditCountry" xml:space="preserve">
+    <value>Edit country</value>
+  </data>
+  <data name="NavigateToCountriesText" xml:space="preserve">
+    <value>Back to countries</value>
+  </data>
+  <data name="NewCountry" xml:space="preserve">
+    <value>Add country</value>
   </data>
 </root>

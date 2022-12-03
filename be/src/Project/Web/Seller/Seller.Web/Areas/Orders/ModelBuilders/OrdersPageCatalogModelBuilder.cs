@@ -11,6 +11,7 @@ using Seller.Web.Areas.Orders.DomainModels;
 using System.Collections.Generic;
 using Foundation.Extensions.ExtensionMethods;
 using Seller.Web.Areas.Orders.Repositories.Orders;
+using Foundation.GenericRepository.Definitions;
 
 namespace Seller.Web.Areas.Orders.ModelBuilders
 {
@@ -41,6 +42,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<Order>, Order>();
 
             viewModel.Title = this.orderLocalizer.GetString("Orders");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
             viewModel.NewText = this.orderLocalizer.GetString("NewOrder");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
@@ -91,7 +93,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.ordersRepository.GetOrdersAsync(componentModel.Token, componentModel.Language, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, $"{nameof(Order.CreatedDate)} desc");
+            viewModel.PagedItems = await this.ordersRepository.GetOrdersAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Order.CreatedDate)} desc");
 
             return viewModel;
         }

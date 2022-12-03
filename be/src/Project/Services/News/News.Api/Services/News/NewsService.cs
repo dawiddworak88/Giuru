@@ -34,7 +34,7 @@ namespace News.Api.Services.News
 
             if (category is null)
             {
-                throw new CustomException(this.newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var newsItem = new NewsItem
@@ -80,7 +80,7 @@ namespace News.Api.Services.News
             var newsItem = this.newsContext.NewsItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
             if (newsItem is null)
             {
-                throw new CustomException(this.newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             newsItem.IsActive = false;
@@ -196,19 +196,40 @@ namespace News.Api.Services.News
             return default;
         }
 
+        public async Task<PagedResults<IEnumerable<NewsItemFileServiceModel>>> GetFilesAsync(GetNewsItemFilesServiceModel model)
+        {
+            var files = from f in this.newsContext.NewsItemFiles
+                               where f.NewsItemId == model.Id && f.IsActive
+                               select new NewsItemFileServiceModel
+                               {
+                                   Id = f.MediaId,
+                                   LastModifiedDate = f.LastModifiedDate,
+                                   CreatedDate = f.CreatedDate
+                               };
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                files = files.Where(x => x.Id.ToString() == model.SearchTerm);
+            }
+
+            files = files.ApplySort(model.OrderBy);
+
+            return files.PagedIndex(new Pagination(files.Count(), model.ItemsPerPage), model.PageIndex);
+        }
+
         public async Task<Guid> UpdateAsync(UpdateNewsItemServiceModel model)
         {
             var category = this.newsContext.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
 
             if (category is null)
             {
-                throw new CustomException(this.newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var news = this.newsContext.NewsItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
             if (news is null)
             {
-                throw new CustomException(this.newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             news.ThumbnailImageId = model.ThumbnailImageId;

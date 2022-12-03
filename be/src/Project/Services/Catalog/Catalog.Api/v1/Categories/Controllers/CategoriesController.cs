@@ -49,7 +49,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<CategoryResponseModel>>))]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string searchTerm, int? level, bool? leafOnly, int pageIndex, int itemsPerPage, string orderBy)
         {
@@ -160,7 +160,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         /// <returns>The category id.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategoryResponseModel))]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(CategoryRequestModel request)
@@ -174,6 +174,8 @@ namespace Catalog.Api.v1.Categories.Controllers
                     Id = request.Id,
                     Files = request.Files,
                     Name = request.Name,
+                    Schema = request.Schema,
+                    UiSchema = request.UiSchema,
                     ParentId = request.ParentCategoryId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
@@ -215,6 +217,8 @@ namespace Catalog.Api.v1.Categories.Controllers
                 var serviceModel = new CreateCategoryServiceModel
                 {
                     Name = request.Name,
+                    Schema = request.Schema,
+                    UiSchema = request.UiSchema,
                     ParentId = request.ParentCategoryId,
                     Files = request.Files,
                     Language = CultureInfo.CurrentCulture.Name,
@@ -262,7 +266,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [HttpDelete, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
@@ -298,7 +302,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [HttpPost, MapToApiVersion("1.0")]
         [Route("CategorySchemas")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemaResponseModel))]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> SaveCategorySchema(CategorySchemaRequestModel request)

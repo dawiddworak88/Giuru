@@ -16,7 +16,6 @@ import AdapterMoment from '@mui/lab/AdapterMoment';
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
 import ConfirmationDialog from "../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import IconConstants from "../../../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
@@ -121,7 +120,6 @@ function OrderForm(props) {
 
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -191,7 +189,6 @@ function OrderForm(props) {
 
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -240,7 +237,6 @@ function OrderForm(props) {
 
         fetch(props.placeOrderUrl, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -274,9 +270,7 @@ function OrderForm(props) {
             };
 
             fetch(props.uploadOrderFileUrl, requestOptions)
-
                 .then(function (response) {
-
                     dispatch({ type: "SET_IS_LOADING", payload: false });
 
                     return response.json().then((jsonResponse) => {
@@ -301,8 +295,10 @@ function OrderForm(props) {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
-        accept: ".xlsx, .xls",
-        multiple: false
+        multiple: false,
+        accept: {
+            "application/*": [".xls", ".xlsx"]
+        }
     });
 
     return (
@@ -407,7 +403,7 @@ function OrderForm(props) {
                                         }}
                                         renderInput={(params) => 
                                             <TextField {...params} variant="standard" />}
-                                        disablePast={true}/>
+                                       disablePast={true}/>
                                 </LocalizationProvider>
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
@@ -426,46 +422,44 @@ function OrderForm(props) {
                         <div className="order__items">
                             {(orderItems && orderItems.length > 0) ?
                                 (<Fragment>
-                                    <section className="section">
-                                        <div className="orderitems__table">
-                                            <TableContainer component={Paper}>
-                                                <Table aria-label={props.orderItemsLabel}>
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell></TableCell>
-                                                            <TableCell></TableCell>
-                                                            <TableCell>{props.skuLabel}</TableCell>
-                                                            <TableCell>{props.nameLabel}</TableCell>
-                                                            <TableCell>{props.quantityLabel}</TableCell>
-                                                            <TableCell>{props.externalReferenceLabel}</TableCell>
-                                                            <TableCell>{props.deliveryFromLabel}</TableCell>
-                                                            <TableCell>{props.deliveryToLabel}</TableCell>
-                                                            <TableCell>{props.moreInfoLabel}</TableCell>
+                                    <div className="orderitems__table">
+                                        <TableContainer component={Paper}>
+                                            <Table aria-label={props.orderItemsLabel}>
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell></TableCell>
+                                                        <TableCell></TableCell>
+                                                        <TableCell>{props.skuLabel}</TableCell>
+                                                        <TableCell>{props.nameLabel}</TableCell>
+                                                        <TableCell>{props.quantityLabel}</TableCell>
+                                                        <TableCell>{props.externalReferenceLabel}</TableCell>
+                                                        <TableCell>{props.deliveryFromLabel}</TableCell>
+                                                        <TableCell>{props.deliveryToLabel}</TableCell>
+                                                        <TableCell>{props.moreInfoLabel}</TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {orderItems.map((item, index) => (
+                                                        <TableRow key={index}>
+                                                            <TableCell width="11%">
+                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
+                                                                    <Delete />
+                                                                </Fab>
+                                                            </TableCell>
+                                                            <TableCell><a href={item.productUrl} target="_blank"><img className="order__basket-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
+                                                            <TableCell>{item.sku}</TableCell>
+                                                            <TableCell>{item.name}</TableCell>
+                                                            <TableCell>{item.quantity}</TableCell>
+                                                            <TableCell>{item.externalReference}</TableCell>
+                                                            <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
+                                                            <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
+                                                            <TableCell>{item.moreInfo}</TableCell>
                                                         </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {orderItems.map((item, index) => (
-                                                            <TableRow key={index}>
-                                                                <TableCell width="11%">
-                                                                    <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
-                                                                        <Delete />
-                                                                    </Fab>
-                                                                </TableCell>
-                                                                <TableCell><a href={item.productUrl} target="_blank"><img className="order__basket-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
-                                                                <TableCell>{item.sku}</TableCell>
-                                                                <TableCell>{item.name}</TableCell>
-                                                                <TableCell>{item.quantity}</TableCell>
-                                                                <TableCell>{item.externalReference}</TableCell>
-                                                                <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
-                                                                <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
-                                                                <TableCell>{item.moreInfo}</TableCell>
-                                                            </TableRow>
-                                                        ))}
-                                                    </TableBody>
-                                                </Table>
-                                            </TableContainer>
-                                        </div>
-                                    </section>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </div>
                                 </Fragment>) :
                                 (<section className="section is-flex-centered has-text-centered is-flex-direction-column">
                                     <AddShoppingCartRounded fontSize="large" className="m-2" />
@@ -484,17 +478,7 @@ function OrderForm(props) {
                         disabled={state.isLoading || orderItems.length === 0 || disableSaveButton}>
                         {props.saveText}
                     </Button>
-                    <Button
-                        className="ml-2"
-                        type="button" 
-                        variant="contained" 
-                        color="secondary" 
-                        onClick={(e) => {
-                            e.preventDefault();
-                            NavigationHelper.redirect(props.ordersUrl)
-                        }}>
-                        {props.navigateToOrdersListText}
-                    </Button>
+                    <a href={props.ordersUrl} className="ml-2 button is-text">{props.navigateToOrdersListText}</a>
                 </div>
             </div>
             <ConfirmationDialog

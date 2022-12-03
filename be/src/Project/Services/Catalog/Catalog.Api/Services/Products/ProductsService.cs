@@ -19,6 +19,8 @@ using Foundation.EventBus.Abstractions;
 using Catalog.Api.IntegrationEvents;
 using Newtonsoft.Json.Linq;
 using Foundation.Catalog.Repositories.ProductSearchRepositories;
+using System.Diagnostics;
+using Elastic.CommonSchema;
 
 namespace Catalog.Api.Services.Products
 {
@@ -53,14 +55,14 @@ namespace Catalog.Api.Services.Products
 
             if (brand == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var category = catalogContext.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
 
             if (category == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var product = new Product
@@ -142,25 +144,27 @@ namespace Catalog.Api.Services.Products
 
         public async Task<Guid?> UpdateAsync(CreateUpdateProductModel model)
         {
+            using var source = new ActivitySource(this.GetType().Name);
+
             var brand = catalogContext.Brands.FirstOrDefault(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
 
             if (brand == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var category = catalogContext.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
 
             if (category == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var product = await this.catalogContext.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
 
             if (product == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NoContent);
             }
             
             product.IsNew = model.IsNew;
@@ -260,6 +264,7 @@ namespace Catalog.Api.Services.Products
                 ProductEan = model.Ean
             };
 
+            using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
             this.eventBus.Publish(message);
 
             await this.catalogContext.SaveChangesAsync();
@@ -271,11 +276,13 @@ namespace Catalog.Api.Services.Products
 
         public async Task DeleteAsync(DeleteProductServiceModel model)
         {
+            using var source = new ActivitySource(this.GetType().Name);
+
             var product = await this.catalogContext.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
 
             if (product == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             if (await this.catalogContext.Products.AnyAsync(x => x.PrimaryProductId == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive))
@@ -295,6 +302,7 @@ namespace Catalog.Api.Services.Products
                 OrganisationId = model.OrganisationId
             };
 
+            using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
             this.eventBus.Publish(message);
 
             await this.productIndexingRepository.IndexAsync(product.Id);
@@ -486,6 +494,8 @@ namespace Catalog.Api.Services.Products
 
         public async Task TriggerCatalogIndexRebuildAsync(RebuildCatalogIndexServiceModel model)
         {
+            using var source = new ActivitySource(this.GetType().Name);
+
             var message = new RebuildCatalogSearchIndexIntegrationEvent
             {
                 OrganisationId = model.OrganisationId,
@@ -493,7 +503,29 @@ namespace Catalog.Api.Services.Products
                 Username = model.Username
             };
 
+            using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
             this.eventBus.Publish(message);
+        }
+
+        public async Task<PagedResults<IEnumerable<ProductFileServiceModel>>> GetProductFiles(GetProductFilesServiceModel model)
+        {
+            var productFiles = from f in this.catalogContext.ProductFiles
+                                              where f.ProductId == model.Id && f.IsActive
+                                              select new ProductFileServiceModel
+                                              {
+                                                  Id = f.MediaId,
+                                                  LastModifiedDate = f.LastModifiedDate,
+                                                  CreatedDate = f.CreatedDate
+                                              };
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                productFiles = productFiles.Where(x => x.Id.ToString() == model.SearchTerm);
+            }
+
+            productFiles = productFiles.ApplySort(model.OrderBy);
+
+            return productFiles.PagedIndex(new Pagination(productFiles.Count(), model.ItemsPerPage), model.PageIndex);
         }
     }
 }

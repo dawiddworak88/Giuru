@@ -6,7 +6,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.DomainModels;
-using Seller.Web.Areas.Clients.Repositories;
+using Seller.Web.Areas.Clients.Repositories.Groups;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
@@ -42,6 +42,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<ClientGroup>, ClientGroup>();
 
             viewModel.Title = this.clientLocalizer.GetString("ClientsGroups");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
             viewModel.NewText = this.clientLocalizer.GetString("NewGroup");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "ClientGroup", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });

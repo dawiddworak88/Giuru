@@ -2,6 +2,11 @@
 {
     public static class ApiConstants
     {
+        public struct Global
+        {
+            public static readonly string CountriesApiEndpoint = "/api/v1/countries";
+        }
+
         public struct Catalog
         {
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
@@ -11,11 +16,14 @@
             public static readonly string ProductAttributeItemsApiEndpoint = "/api/v1/productattributeitems";
             public static readonly string ProductsSearchIndexApiEndpoint = "/api/v1/productssearchindex";
             public static readonly string ProductSuggestionsApiEndpoint = "/api/v1/productsuggestions";
+            public static readonly string ProductFilesApiEndpoint = "/api/v1/products/files";
         }
 
         public struct Client
         {
             public static readonly string GroupsApiEndpoint = "/api/v1/clientgroups";
+            public static readonly string RolesApiEndpoint = "/api/v1/clientroles";
+            public static readonly string ApplicationsApiEndpoint = "/api/v1/clientsapplications";
             public static readonly string ManagersApiEndpoint = "/api/v1/clientaccountmanagers";
         }
 
@@ -26,12 +34,23 @@
             public static readonly string ClientsApiEndpoint = "/api/v1/clients";
             public static readonly string ClientByOrganisationApiEndpoint = "/api/v1/clients/organisation";
             public static readonly string UsersApiEndpoint = "/api/v1/users";
+            public static readonly string RolesApiEndpoint = "/api/v1/roles";
+            public static readonly string TeamMembersEndpoint = "/api/v1/teammembers";
+        }
+
+        public struct DownloadCenter
+        {
+            public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
+            public static readonly string DownloadCenterApiEndponint = "/api/v1/downloadcenter";
+            public static readonly string DownloadCenterCategoriesApiEndpoint = "/api/v1/downloadcenter/categories";
+            public static readonly string DownloadCenterCategoryFilesApiEndpoint = "/api/v1/downloadcenter/categories/files";
         }
 
         public struct News
         {
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
             public static readonly string NewsApiEndpoint = "/api/v1/news";
+            public static readonly string NewsFilesApiEndpoint = "/api/v1/news/files";
         }
 
         public struct Inventory
@@ -53,6 +72,8 @@
             public static readonly string MediaItemsApiEndpoint = "/api/v1/mediaitems";
             public static readonly string MediaItemsVersionsApiEndpoint = "/api/v1/mediaitems/versions";
             public static readonly string FilesApiEndpoint = "/api/v1/files";
+            public static readonly string FileChunksApiEndpoint = "/api/v1/files/chunks";
+            public static readonly string FileChunksSaveCompleteApiEndpoint = "/api/v1/files/chunkssavecomplete";
         }
 
         public struct Baskets
@@ -64,8 +85,12 @@
         public struct Order
         {
             public static readonly string OrdersApiEndpoint = "/api/v1/orders";
+            public static readonly string OrderItemsApiEndpoint = "/api/v1/orders/orderitems";
+            public static readonly string OrderItemStatusesApiEndpoint = "/api/v1/orders/orderitemstatuses";
             public static readonly string OrderStatusesApiEndpoint = "/api/v1/orderstatuses";
             public static readonly string UpdateOrderStatusApiEndpoint = "/api/v1/orders/orderstatus";
+            public static readonly string UpdateOrderItemStatusApiEndpoint = "/api/v1/orders/orderitemstatus";
+            public static readonly string OrderFilesApiEndpoint = "/api/v1/orders/files";
         }
 
         public struct ContentNames
@@ -73,6 +98,7 @@
             public static readonly string FileContentName = "file";
             public static readonly string LanguageContentName = "language";
             public static readonly string GuidContentName = "id";
+            public static readonly string ChunkNumberContentName = "chunkNumber";
         }
 
         public struct Request

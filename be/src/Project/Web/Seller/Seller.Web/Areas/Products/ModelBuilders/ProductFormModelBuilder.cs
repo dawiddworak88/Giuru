@@ -19,6 +19,7 @@ using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Definitions;
 using System;
 using Foundation.Media.Services.MediaServices;
+using Foundation.PageContent.Definitions;
 
 namespace Seller.Web.Areas.ModelBuilders.Products
 {
@@ -68,6 +69,10 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
                 DeleteLabel = this.globalLocalizer.GetString("Delete"),
                 SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveMediaChunkUrl = this.linkGenerator.GetPathByAction("PostChunk", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveMediaChunkCompleteUrl = this.linkGenerator.GetPathByAction("PostChunksComplete", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                IsUploadInChunksEnabled = true,
+                ChunkSize = MediaConstants.DefaultChunkSize,
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 ProductPicturesLabel = this.productLocalizer.GetString("ProductPicturesLabel"),

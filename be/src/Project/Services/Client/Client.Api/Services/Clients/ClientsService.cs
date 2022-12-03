@@ -53,6 +53,7 @@ namespace Client.Api.Services.Clients
                     Id = client.Id,
                     Name = client.Name,
                     Email = client.Email,
+                    CountryId = client.CountryId,
                     CommunicationLanguage = client.Language,
                     PhoneNumber = client.PhoneNumber,
                     LastModifiedDate = client.LastModifiedDate,
@@ -87,7 +88,7 @@ namespace Client.Api.Services.Clients
             
             if (existingClient is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var client = new ClientServiceModel
@@ -95,6 +96,7 @@ namespace Client.Api.Services.Clients
                 Id = existingClient.Id,
                 Name = existingClient.Name,
                 Email = existingClient.Email,
+                CountryId = existingClient.CountryId,
                 CommunicationLanguage = existingClient.Language,
                 PhoneNumber = existingClient.PhoneNumber,
                 LastModifiedDate = existingClient.LastModifiedDate,
@@ -124,7 +126,7 @@ namespace Client.Api.Services.Clients
 
             if (client == null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             client.IsActive = false;
@@ -138,11 +140,12 @@ namespace Client.Api.Services.Clients
 
             if (client == null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             client.Name = serviceModel.Name;
             client.Email = serviceModel.Email;
+            client.CountryId = serviceModel.CountryId;
             client.Language = serviceModel.CommunicationLanguage;
             client.PhoneNumber = serviceModel.PhoneNumber;
             client.OrganisationId = serviceModel.ClientOrganisationId.Value;
@@ -194,13 +197,14 @@ namespace Client.Api.Services.Clients
 
             if (exsitingClient is not null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientExists"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("ClientExists"), (int)HttpStatusCode.NoContent);
             }
 
             var client = new Infrastructure.Clients.Entities.Client
             {
                 Name = serviceModel.Name,
                 Email = serviceModel.Email,
+                CountryId = serviceModel.CountryId,
                 Language = serviceModel.CommunicationLanguage,
                 OrganisationId = serviceModel.ClientOrganisationId.Value,
                 PhoneNumber = serviceModel.PhoneNumber,
@@ -245,6 +249,7 @@ namespace Client.Api.Services.Clients
                               Id = c.Id,
                               Name = c.Name,
                               Email = c.Email,
+                              CountryId = c.CountryId,
                               CommunicationLanguage = c.Language,
                               PhoneNumber = c.PhoneNumber,
                               LastModifiedDate = c.LastModifiedDate,
@@ -263,6 +268,7 @@ namespace Client.Api.Services.Clients
                               Id = c.Id,
                               Name = c.Name,
                               Email = c.Email,
+                              CountryId = c.CountryId,
                               CommunicationLanguage = c.Language,
                               PhoneNumber = c.PhoneNumber,
                               LastModifiedDate = c.LastModifiedDate,
