@@ -1,5 +1,6 @@
 ﻿using Buyer.Web.Areas.Home.DomainModels;
 using Buyer.Web.Areas.Home.GraphQlResponseModels;
+using Buyer.Web.Areas.Home.RepositoryModels;
 using GraphQL;
 using GraphQL.Client.Abstractions;
 using Microsoft.Extensions.Logging;
@@ -36,15 +37,15 @@ namespace Buyer.Web.Areas.Home.Repositories
 
                 return response?.Data?.HomePage?.Data?.Attributes.HeroSlider?.HeroSliderItems?.Select(x => new HeroSliderItem
                 {
-                    CtaText = x.Link?.Label,
-                    CtaUrl = x.Link?.Href?.ToString(),
+                    CtaText = x.Cta?.Label,
+                    CtaUrl = x.Cta?.Href?.ToString(),
                     TeaserTitle = x.Title,
-                    TeaserText = x.Subtitle,
+                    TeaserText = x.Text,
                     Image = new HeroSliderItemImage
                     {
-                        ImageSrc = x.Media?.Data?.Attributes?.Url?.ToString(),
-                        ImageAlt = x.Media?.Data?.Attributes?.AlternativeText,
-                        ImageTitle = x.Media?.Data?.Attributes?.Caption
+                        ImageSrc = x.Image?.Data?.Attributes?.Url?.ToString(),
+                        ImageAlt = x.Image?.Data?.Attributes?.AlternativeText,
+                        ImageTitle = x.Image?.Data?.Attributes?.Caption
                     }
 
                 });
@@ -71,13 +72,13 @@ namespace Buyer.Web.Areas.Home.Repositories
                               heroSliderItems
                               {{
                                 title,
-                                subtitle,
-                                link {{
+                                text,
+                                cta {{
                                   href,
                                   label,
                                   target
                                 }},
-                                media {{
+                                image {{
                                   data {{
                                     attributes {{
                                       url,

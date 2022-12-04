@@ -16,13 +16,13 @@ namespace Foundation.Content.GraphQlResponseModels.HeroSliders
         [JsonProperty("title")]
         public string Title { get; set; }
 
-        [JsonProperty("subtitle")]
-        public string Subtitle { get; set; }
+        [JsonProperty("text")]
+        public string Text { get; set; }
 
-        [JsonProperty("link")]
-        public LinkGraphQlResponseModel Link { get; set; }
+        [JsonProperty("cta")]
+        public LinkGraphQlResponseModel Cta { get; set; }
 
-        [JsonProperty("media")]
-        public MediaGraphQlResponseModel Media { get; set; }
+        [JsonProperty("image")]
+        public MediaGraphQlResponseModel Image { get; set; }
     }
 }

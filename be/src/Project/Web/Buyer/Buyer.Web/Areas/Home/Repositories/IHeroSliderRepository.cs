@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Home.DomainModels;
+﻿using Buyer.Web.Areas.Home.RepositoryModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

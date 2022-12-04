@@ -1,4 +1,4 @@
-﻿namespace Buyer.Web.Areas.Home.DomainModels
+﻿namespace Buyer.Web.Areas.Home.RepositoryModels
 {
     public class HeroSliderItemImage
     {
