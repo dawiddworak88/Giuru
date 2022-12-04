@@ -6,9 +6,9 @@ WORKDIR /content
 
 COPY . .
 
-RUN npm install
-
 RUN npm install --platform=linuxmusl --arch=x64 sharp
+
+RUN yarn install
 
 ARG DATABASE_CLIENT
 ARG DATABASE_NAME
