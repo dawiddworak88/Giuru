@@ -275,20 +275,20 @@ namespace Inventory.Api.Services.OutletItems
                               join p in this.context.Products on o.ProductId equals p.Id
                               join t in this.context.OutletTranslations on o.Id equals t.OutletItemId
                               where p.IsActive && o.IsActive
-                              select new
+                              select new OutletServiceModel
                               {
-                                  o.Id,
-                                  t.Title,
-                                  t.Description,
-                                  o.ProductId,
+                                  Id = o.Id,
+                                  Title = t.Title,
+                                  Description = t.Description,
+                                  ProductId = o.ProductId,
                                   ProductName = p.Name,
                                   ProductSku = p.Sku,
                                   ProductEan = p.Ean,
-                                  o.WarehouseId,
-                                  o.Quantity,
-                                  o.AvailableQuantity,
-                                  o.LastModifiedDate,
-                                  o.CreatedDate
+                                  WarehouseId = o.WarehouseId,
+                                  Quantity = o.Quantity,
+                                  AvailableQuantity = o.AvailableQuantity,
+                                  LastModifiedDate = o.LastModifiedDate,
+                                  CreatedDate = o.CreatedDate
                               };
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
@@ -298,7 +298,7 @@ namespace Inventory.Api.Services.OutletItems
 
             outletItems = outletItems.ApplySort(model.OrderBy);
 
-            var pagedResults = outletItems.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<OutletServiceModel>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
@@ -361,23 +361,23 @@ namespace Inventory.Api.Services.OutletItems
             var outletItems = from o in this.context.Outlet
                               join p in this.context.Products on o.ProductId equals p.Id
                               where model.Ids.Contains(o.Id) && p.IsActive && o.IsActive
-                              select new
+                              select new OutletServiceModel
                               {
-                                  o.Id,
-                                  o.ProductId,
+                                  Id = o.Id,
+                                  ProductId = o.ProductId,
                                   ProductName = p.Name,
                                   ProductSku = p.Sku,
                                   ProductEan = p.Ean,
-                                  o.WarehouseId,
-                                  o.Quantity,
-                                  o.AvailableQuantity,
-                                  o.LastModifiedDate,
-                                  o.CreatedDate
+                                  WarehouseId = o.WarehouseId,
+                                  Quantity = o.Quantity,
+                                  AvailableQuantity = o.AvailableQuantity,
+                                  LastModifiedDate = o.LastModifiedDate,
+                                  CreatedDate = o.CreatedDate
                               };
 
             outletItems = outletItems.ApplySort(model.OrderBy);
 
-            var pagedResults = outletItems.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<OutletServiceModel>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
@@ -578,7 +578,7 @@ namespace Inventory.Api.Services.OutletItems
                                    Quantity = gpi.Sum(x => x.Quantity)
                                });
 
-            var pagedResults = outletItems.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<OutletSumServiceModel>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {

@@ -209,7 +209,7 @@ namespace Ordering.Api.Services
 
             orders = orders.ApplySort(model.OrderBy);
 
-            var pagedResults = orders.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<Order>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
@@ -578,7 +578,7 @@ namespace Ordering.Api.Services
 
             orders = orders.ApplySort(model.OrderBy);
 
-            var pagedResults = orders.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<Order>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {

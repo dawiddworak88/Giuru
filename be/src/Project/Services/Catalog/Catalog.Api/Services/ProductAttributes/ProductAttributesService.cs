@@ -47,7 +47,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
             productAttributes = productAttributes.ApplySort(model.OrderBy);
 
-            var pagedProductAttributes = productAttributes.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<ProductAttribute>> pagedProductAttributes;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
@@ -400,7 +400,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
             productAttributesItems = productAttributesItems.ApplySort(model.OrderBy);
 
-            var pagedProductAttributeItems = productAttributesItems.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<ProductAttributeItem>> pagedProductAttributeItems;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {

@@ -93,7 +93,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             var downloadCenterFileGroups = downloadCenterFiles.ToList().GroupBy(x => x.MediaId);
 
-            var pagedResults = downloadCenterFiles.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<DownloadCenterCategoryFile>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
@@ -181,7 +181,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             downloadCenterCategories = downloadCenterCategories.ApplySort(model.OrderBy);
 
-            var pagedResults = downloadCenterCategories.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<DownloadCenterCategory>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {

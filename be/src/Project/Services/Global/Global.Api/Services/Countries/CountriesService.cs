@@ -73,7 +73,7 @@ namespace Global.Api.Services.Countries
 
             countries = countries.ApplySort(model.OrderBy);
 
-            var pagedResults = countries.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<Country>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {

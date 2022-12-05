@@ -132,7 +132,7 @@ namespace DownloadCenter.Api.Services.Categories
 
             categories = categories.ApplySort(model.OrderBy);
 
-            var pagedResults = categories.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<DownloadCenterCategory>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {

@@ -280,7 +280,7 @@ namespace Media.Api.Services.Media
 
             mediaItems = mediaItems.ApplySort(serviceModel.OrderBy);
 
-            var pagedResults = mediaItems.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<MediaItem>> pagedResults;
 
             if (serviceModel.PageIndex.HasValue is false || serviceModel.ItemsPerPage.HasValue is false)
             {

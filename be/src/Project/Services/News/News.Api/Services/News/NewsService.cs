@@ -100,7 +100,7 @@ namespace News.Api.Services.News
 
             news = news.ApplySort(model.OrderBy);
 
-            var pagedResults = news.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<NewsItem>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {

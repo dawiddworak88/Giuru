@@ -107,7 +107,7 @@ namespace Client.Api.Services.Groups
 
             groups = groups.ApplySort(model.OrderBy);
 
-            var pagedResults = groups.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<ClientGroup>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
@@ -160,7 +160,7 @@ namespace Client.Api.Services.Groups
 
             groups = groups.ApplySort(model.OrderBy);
 
-            var pagedResults = groups.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<ClientGroup>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {

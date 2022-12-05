@@ -41,7 +41,7 @@ namespace Client.Api.Services.Clients
 
             clients = clients.ApplySort(model.OrderBy);
 
-            var pagedResults = clients.PagedIndex(new Pagination(Constants.EmptyTotal, Constants.DefaultItemsPerPage), Constants.DefaultPageIndex);
+            PagedResults<IEnumerable<Infrastructure.Clients.Entities.Client>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
