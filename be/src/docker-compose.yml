@@ -151,6 +151,15 @@ services:
       - redis
       - sqldata
 
+  analytics-api:
+    image: ${REGISTRY:-giuru}/analytics-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Analytics/Analytics.Api/Dockerfile
+    depends_on:
+      - sqldata
+      - redis
+      
   global-api:
     image: ${REGISTRY:-giuru}/global-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
