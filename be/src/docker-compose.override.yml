@@ -75,6 +75,7 @@ services:
         - '5438:5432'
     volumes: 
         - postgresdata:/var/lib/postgresql/data
+        - ./Project/Services/Content/Content.Api/scripts/docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
 
   media-api:
     environment:
@@ -259,6 +260,7 @@ services:
       - GIURU_API_EMAIL=seller@user.com
       - GIURU_API_ORGANISATION_ID=09affcc9-1665-45d6-919f-3d2026106ba1
       - GIURU_MEDIA_API_URL=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
+      - GIURU_CONTENT_API_URL=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5111
       - GIURU_IDENTITY_API_URL=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105/api/v1/token
     volumes:
       - ./Project/Services/Content/Content.Api/src:/content/src

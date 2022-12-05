@@ -6,7 +6,7 @@ module.exports = ({ env }) => [
       contentSecurityPolicy: {
         useDefaults: true,
         directives: {
-          'img-src': ["'self'", 'data:', 'blob:', `${env("GIURU_MEDIA_API_URL")}`, 'http://host.docker.internal:5111'],
+          'img-src': ["'self'", 'data:', 'blob:', `${env("GIURU_MEDIA_API_URL")}`, `${env("GIURU_CONTENT_API_URL")}`],
         }
       }
     }
