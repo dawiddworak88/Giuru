@@ -108,6 +108,7 @@ namespace Catalog.Api.v1.Products.Controllers
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var productSkus = skus.ToEnumerableString();
+
             if (productSkus is not null)
             {
                 var serviceModel = new GetProductsBySkusServiceModel
@@ -123,10 +124,12 @@ namespace Catalog.Api.v1.Products.Controllers
 
                 var validator = new GetProductsBySkusModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
+
                 if (validationResult.IsValid)
                 {
                     var products = await this.productService.GetBySkusAsync(serviceModel);
-                    if (products != null)
+
+                    if (products is not null)
                     {
                         var response = new PagedResults<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
                         {
@@ -173,7 +176,7 @@ namespace Catalog.Api.v1.Products.Controllers
         {
             var productIds = ids.ToEnumerableGuidIds();
 
-            if (productIds != null)
+            if (productIds is not null)
             {
                 var serviceModel = new GetProductsByIdsServiceModel
                 {
@@ -185,14 +188,13 @@ namespace Catalog.Api.v1.Products.Controllers
                 };
 
                 var validator = new GetProductsByIdsModelValidator();
-
                 var validationResult = await validator.ValidateAsync(serviceModel);
 
                 if (validationResult.IsValid)
                 {
                     var products = await this.productService.GetByIdsAsync(serviceModel);
 
-                    if (products != null)
+                    if (products is not null)
                     {
                         var response = new PagedResults<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
                         { 
@@ -220,26 +222,19 @@ namespace Catalog.Api.v1.Products.Controllers
                     IsNew = isNew
                 };
 
-                var validator = new GetProductsModelValidator();
+                var products = await this.productService.GetAsync(serviceModel);
 
-                var validationResult = await validator.ValidateAsync(serviceModel);
-
-                if (validationResult.IsValid)
+                if (products is not null)
                 {
-                    var products = await this.productService.GetAsync(serviceModel);
-
-                    if (products != null)
+                    var response = new PagedResults<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
                     {
-                        var response = new PagedResults<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
-                        {
-                            Data = products.Data.OrEmptyIfNull().Select(x => MapProductServiceModelToProductResponseModel(x))
-                        };
+                        Data = products.Data.OrEmptyIfNull().Select(x => MapProductServiceModelToProductResponseModel(x))
+                    };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
-                    }
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
 
-                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+                throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
             }
         }
 

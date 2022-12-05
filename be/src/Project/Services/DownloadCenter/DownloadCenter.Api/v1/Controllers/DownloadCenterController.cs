@@ -173,36 +173,30 @@ namespace DownloadCenter.Api.v1.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new GetDownloadCenterItemsModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var downloadCenterFiles = await this.downloadCenterService.GetAsync(serviceModel);
 
-            if (validationResult.IsValid)
+            if (downloadCenterFiles is not null)
             {
-                var downloadCenterFiles = await this.downloadCenterService.GetAsync(serviceModel);
-
-                if (downloadCenterFiles is not null)
+                var response = new PagedResults<IEnumerable<DownloadCenterCategoryItemResponseModel>>(downloadCenterFiles.Total, downloadCenterFiles.PageSize)
                 {
-                    var response = new PagedResults<IEnumerable<DownloadCenterCategoryItemResponseModel>>(downloadCenterFiles.Total, downloadCenterFiles.PageSize)
+                    Data = downloadCenterFiles.Data.OrEmptyIfNull().Select(x => new DownloadCenterCategoryItemResponseModel
                     {
-                        Data = downloadCenterFiles.Data.OrEmptyIfNull().Select(x => new DownloadCenterCategoryItemResponseModel
+                        Id = x.Id,
+                        Name = x.Name,
+                        Subcategories = x.Subcategories.OrEmptyIfNull().Select(y => new DownloadCenterSubcategoryResponseModel
                         {
-                            Id = x.Id,
-                            Name = x.Name,
-                            Subcategories = x.Subcategories.OrEmptyIfNull().Select(y => new DownloadCenterSubcategoryResponseModel
-                            {
-                                Id = y.Id,
-                                Name = y.Name
-                            }),
-                            LastModifiedDate = x.LastModifiedDate,
-                            CreatedDate = x.CreatedDate
-                        })
-                    };
+                            Id = y.Id,
+                            Name = y.Name
+                        }),
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    })
+                };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
+                return this.StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
@@ -232,32 +226,26 @@ namespace DownloadCenter.Api.v1.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new GetDownloadCenterFilesModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var downloadCenterFiles = await this.downloadCenterService.GetAsync(serviceModel);
 
-            if (validationResult.IsValid)
+            if (downloadCenterFiles is not null)
             {
-                var downloadCenterFiles = await this.downloadCenterService.GetAsync(serviceModel);
-
-                if (downloadCenterFiles is not null)
+                var response = new PagedResults<IEnumerable<DownloadCenterItemResponseModel>>(downloadCenterFiles.Total, downloadCenterFiles.PageSize)
                 {
-                    var response = new PagedResults<IEnumerable<DownloadCenterItemResponseModel>>(downloadCenterFiles.Total, downloadCenterFiles.PageSize)
+                    Data = downloadCenterFiles.Data.OrEmptyIfNull().Select(x => new DownloadCenterItemResponseModel
                     {
-                        Data = downloadCenterFiles.Data.OrEmptyIfNull().Select(x => new DownloadCenterItemResponseModel
-                        {
-                            Id = x.Id,
-                            Filename = x.Filename,
-                            Categories = x.Categories,
-                            LastModifiedDate = x.LastModifiedDate,
-                            CreatedDate = x.CreatedDate
-                        })
-                    };
+                        Id = x.Id,
+                        Filename = x.Filename,
+                        Categories = x.Categories,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    })
+                };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
+                return this.StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>

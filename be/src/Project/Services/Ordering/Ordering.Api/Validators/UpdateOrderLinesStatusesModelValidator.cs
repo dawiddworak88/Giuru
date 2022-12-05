@@ -7,8 +7,8 @@ namespace Ordering.Api.Validators
     public class UpdateOrderLinesStatusesModelValidator : BaseServiceModelValidator<UpdateOrderLinesStatusesServiceModel>
     {
         public UpdateOrderLinesStatusesModelValidator()
-    {
+        {
             this.RuleFor(x => x.OrderItems).NotNull().NotEmpty();
+        }
     }
-}
 }

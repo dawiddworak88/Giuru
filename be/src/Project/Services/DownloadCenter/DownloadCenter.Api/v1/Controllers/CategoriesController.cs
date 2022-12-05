@@ -212,33 +212,27 @@ namespace DownloadCenter.Api.v1.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new GetCategoriesModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var categories = await this.categoriesService.GetAsync(serviceModel);
 
-            if (validationResult.IsValid)
+            if (categories is not null)
             {
-                var categories = await this.categoriesService.GetAsync(serviceModel);
-
-                if (categories is not null)
+                var response = new PagedResults<IEnumerable<CategoryResponseModel>>(categories.Total, categories.PageSize)
                 {
-                    var response = new PagedResults<IEnumerable<CategoryResponseModel>>(categories.Total, categories.PageSize)
+                    Data = categories.Data.OrEmptyIfNull().Select(x => new CategoryResponseModel
                     {
-                        Data = categories.Data.OrEmptyIfNull().Select(x => new CategoryResponseModel
-                        {
-                            Id = x.Id,
-                            Name = x.Name,
-                            ParentCategoryId = x.ParentCategoryId,
-                            ParentCategoryName = x.ParentCategoryName,
-                            LastModifiedDate = x.LastModifiedDate,
-                            CreatedDate = x.CreatedDate
-                        })
-                    };
+                        Id = x.Id,
+                        Name = x.Name,
+                        ParentCategoryId = x.ParentCategoryId,
+                        ParentCategoryName = x.ParentCategoryName,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    })
+                };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
+                return this.StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }

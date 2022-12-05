@@ -63,31 +63,25 @@ namespace Global.Api.v1.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new GetCountriesModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var countries = await this.countriesService.GetAsync(serviceModel);
 
-            if (validationResult.IsValid)
+            if (countries is not null)
             {
-                var countries = await this.countriesService.GetAsync(serviceModel);
-
-                if (countries is not null)
+                var response = new PagedResults<IEnumerable<CountryResponseModel>>(countries.Total, countries.PageSize)
                 {
-                    var response = new PagedResults<IEnumerable<CountryResponseModel>>(countries.Total, countries.PageSize)
+                    Data = countries.Data.OrEmptyIfNull().Select(x => new CountryResponseModel
                     {
-                        Data = countries.Data.OrEmptyIfNull().Select(x => new CountryResponseModel
-                        {
-                            Id = x.Id,
-                            Name = x.Name,
-                            LastModifiedDate = x.LastModifiedDate,
-                            CreatedDate = x.CreatedDate
-                        })
-                    };
+                        Id = x.Id,
+                        Name = x.Name,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    })
+                };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
+                return this.StatusCode((int)HttpStatusCode.OK, response);
             }
-
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+                
+            throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>

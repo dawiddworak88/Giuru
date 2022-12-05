@@ -54,7 +54,7 @@ namespace Client.Api.v1.Controllers
 
             var clientIds = ids.ToEnumerableGuidIds();
 
-            if (clientIds != null)
+            if (clientIds is not null)
             {
                 var serviceModel = new GetClientsByIdsServiceModel
                 {
@@ -75,7 +75,7 @@ namespace Client.Api.v1.Controllers
                 {
                     var clients = await this.clientsService.GetByIdsAsync(serviceModel);
 
-                    if (clients != null)
+                    if (clients is not null)
                     {
                         var response = new PagedResults<IEnumerable<ClientResponseModel>>(clients.Total, clients.PageSize)
                         {
@@ -121,7 +121,7 @@ namespace Client.Api.v1.Controllers
                 {
                     var clients = await this.clientsService.GetAsync(serviceModel);
 
-                    if (clients != null)
+                    if (clients is not null)
                     {
                         var response = new PagedResults<IEnumerable<ClientResponseModel>>(clients.Total, clients.PageSize)
                         {

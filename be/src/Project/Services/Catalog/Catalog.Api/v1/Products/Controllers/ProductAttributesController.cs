@@ -63,33 +63,26 @@ namespace Catalog.Api.v1.Products.Controllers
                 Language = CultureInfo.CurrentCulture.Name
             };
 
-            var validator = new GetProductAttributesModelValidator();
+            var productAttributes = await this.productAttributesService.GetAsync(serviceModel);
 
-            var validationResult = await validator.ValidateAsync(serviceModel);
-
-            if (validationResult.IsValid)
+            if (productAttributes != null)
             {
-                var productAttributes = await this.productAttributesService.GetAsync(serviceModel);
-
-                if (productAttributes != null)
+                var response = new PagedResults<IEnumerable<ProductAttributeResponseModel>>(productAttributes.Total, productAttributes.PageSize)
                 {
-                    var response = new PagedResults<IEnumerable<ProductAttributeResponseModel>>(productAttributes.Total, productAttributes.PageSize)
+                    Data = productAttributes.Data.OrEmptyIfNull().Select(x => new ProductAttributeResponseModel
                     {
-                        Data = productAttributes.Data.OrEmptyIfNull().Select(x => new ProductAttributeResponseModel
-                        {
-                            Id = x.Id,
-                            Name = x.Name,
-                            Order = x.Order,
-                            LastModifiedDate = x.LastModifiedDate,
-                            CreatedDate = x.CreatedDate
-                        })
-                    };
+                        Id = x.Id,
+                        Name = x.Name,
+                        Order = x.Order,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    })
+                };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
+                return this.StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>

@@ -53,7 +53,8 @@ namespace Outlet.Api.v1.Controllers
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var outletIds = ids.ToEnumerableGuidIds();
-            if (outletIds != null)
+
+            if (outletIds is not null)
             {
                 var serviceModel = new GetOutletsByIdsServiceModel
                 {
@@ -70,7 +71,8 @@ namespace Outlet.Api.v1.Controllers
                 if (validationResult.IsValid)
                 {
                     var outlets = await this.outletsService.GetByIdsAsync(serviceModel);
-                    if (outlets != null)
+
+                    if (outlets is not null)
                     {
                         var response = new PagedResults<IEnumerable<OutletResponseModel>>(outlets.Total, outlets.PageSize)
                         {
@@ -111,7 +113,8 @@ namespace Outlet.Api.v1.Controllers
                 };
 
                 var outlets = await this.outletsService.GetAsync(serviceModel);
-                if (outlets != null)
+
+                if (outlets is not null)
                 {
                     var response = new PagedResults<IEnumerable<OutletResponseModel>>(outlets.Total, outlets.PageSize)
                     {
@@ -166,7 +169,7 @@ namespace Outlet.Api.v1.Controllers
 
             var outlets = await this.outletsService.GetAvailableProductsOutletsAsync(serviceModel);
 
-            if (outlets != null)
+            if (outlets is not null)
             {
                 var response = new PagedResults<IEnumerable<OutletSumResponseModel>>(outlets.Total, outlets.PageSize)
                 {

@@ -53,7 +53,8 @@ namespace Inventory.Api.v1.Controllers
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var inventoryIds = ids.ToEnumerableGuidIds();
-            if (inventoryIds != null)
+
+            if (inventoryIds is not null)
             {
                 var serviceModel = new GetInventoriesByIdsServiceModel
                 {
@@ -70,7 +71,8 @@ namespace Inventory.Api.v1.Controllers
                 if (validationResult.IsValid)
                 {
                     var inventories = await this.inventoriesService.GetByIdsAsync(serviceModel);
-                    if (inventories != null)
+
+                    if (inventories is not null)
                     {
                         var response = new PagedResults<IEnumerable<InventoryResponseModel>>(inventories.Total, inventories.PageSize)
                         {
@@ -111,7 +113,8 @@ namespace Inventory.Api.v1.Controllers
                 };
 
                 var inventories = await this.inventoriesService.GetAsync(serviceModel);
-                if (inventories != null)
+
+                if (inventories is not null)
                 {
                     var response = new PagedResults<IEnumerable<InventoryResponseModel>>(inventories.Total, inventories.PageSize)
                     {

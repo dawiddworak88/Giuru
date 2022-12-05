@@ -64,38 +64,31 @@ namespace Catalog.Api.v1.Categories.Controllers
                 OrderBy = orderBy
             };
 
-            var validator = new GetCategoriesModelValidator();
+            var categories = await this.categoryService.GetAsync(serviceModel);
 
-            var validationResult = await validator.ValidateAsync(serviceModel);
-
-            if (validationResult.IsValid)
+            if (categories is not null)
             {
-                var categories = await this.categoryService.GetAsync(serviceModel);
-
-                if (categories != null)
+                var response = new PagedResults<IEnumerable<CategoryResponseModel>>(categories.Total, categories.PageSize)
                 {
-                    var response = new PagedResults<IEnumerable<CategoryResponseModel>>(categories.Total, categories.PageSize)
+                    Data = categories.Data.OrEmptyIfNull().Select(x => new CategoryResponseModel
                     {
-                        Data = categories.Data.OrEmptyIfNull().Select(x => new CategoryResponseModel
-                        {
-                            Id = x.Id,
-                            IsLeaf = x.IsLeaf,
-                            Level = x.Level,
-                            Name = x.Name,
-                            Order = x.Order,
-                            ParentId = x.ParentId,
-                            ThumbnailMediaId = x.ThumbnailMediaId,
-                            ParentCategoryName = x.ParentCategoryName,
-                            LastModifiedDate = x.LastModifiedDate,
-                            CreatedDate = x.CreatedDate
-                        })
-                    };
+                        Id = x.Id,
+                        IsLeaf = x.IsLeaf,
+                        Level = x.Level,
+                        Name = x.Name,
+                        Order = x.Order,
+                        ParentId = x.ParentId,
+                        ThumbnailMediaId = x.ThumbnailMediaId,
+                        ParentCategoryName = x.ParentCategoryName,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    })
+                };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
+                return this.StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
