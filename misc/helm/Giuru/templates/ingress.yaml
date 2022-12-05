@@ -121,6 +121,16 @@ spec:
               number: 80
         path: /
         pathType: Prefix
+  - host: {{ .Values.ingress.analyticsapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: analytics-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.globalapidomain }}
     http:
       paths:

@@ -285,6 +285,18 @@ services:
     ports:
       - "5136:80"
 
+  analytics-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=AnalyticsDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
+      - LogstashUrl=http://logstash:31311
+      - SupportedCultures=${SUPPORTED_CULTURES}
+      - DefaultCulture=${DEFAULT_CULTURE}
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+    ports:
+      - "5137:80"
+
   global-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
