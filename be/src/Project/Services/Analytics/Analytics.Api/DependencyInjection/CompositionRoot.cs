@@ -19,7 +19,7 @@ namespace Analytics.Api.DependencyInjection
         {
             services.AddScoped<AnalyticsContext>();
 
-            services.AddDbContext<AnalyticsContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite().MigrationsAssembly("Analytics.Api")));
+            services.AddDbContext<AnalyticsContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
         }
     }
 }

@@ -27,14 +27,14 @@ namespace Analytics.Api.Services.SalesAnalytics
             {
                 var timeDimension = new TimeDimension
                 {
-                    Hour = Convert.ToInt32(salesAnalyticsItem.CreatedDate.Value.ToString("HH")),
-                    Minute = Convert.ToInt32(salesAnalyticsItem.CreatedDate.Value.ToString("mm")),
-                    Second = Convert.ToInt32(salesAnalyticsItem.CreatedDate.Value.ToString("ss")),
-                    DayOfWeek = Convert.ToInt32(salesAnalyticsItem.CreatedDate.Value.DayOfWeek),
-                    Day = Convert.ToInt32(salesAnalyticsItem.CreatedDate.Value.ToString("dd")),
-                    Quarter = (Convert.ToInt32(salesAnalyticsItem.CreatedDate.Value.ToString("MM")) + 2) / 3,
-                    Month = Convert.ToInt32(salesAnalyticsItem.CreatedDate.Value.ToString("MM")),
-                    Year = Convert.ToInt32(salesAnalyticsItem.CreatedDate.Value.ToString("yyyy"))
+                    Hour = Convert.ToInt32(salesAnalyticsItem.CreatedDate.ToString("HH")),
+                    Minute = Convert.ToInt32(salesAnalyticsItem.CreatedDate.ToString("mm")),
+                    Second = Convert.ToInt32(salesAnalyticsItem.CreatedDate.ToString("ss")),
+                    DayOfWeek = Convert.ToInt32(salesAnalyticsItem.CreatedDate.DayOfWeek),
+                    Day = Convert.ToInt32(salesAnalyticsItem.CreatedDate.ToString("dd")),
+                    Quarter = (Convert.ToInt32(salesAnalyticsItem.CreatedDate.ToString("MM")) + 2) / 3,
+                    Month = Convert.ToInt32(salesAnalyticsItem.CreatedDate.ToString("MM")),
+                    Year = Convert.ToInt32(salesAnalyticsItem.CreatedDate.ToString("yyyy"))
                 };
 
                 await this.context.TimeDimensions.AddAsync(timeDimension.FillCommonProperties());
@@ -77,16 +77,28 @@ namespace Analytics.Api.Services.SalesAnalytics
                     await this.context.ClientDimensions.AddAsync(clientDimension.FillCommonProperties());
                 }
 
-                var locationDimension = await this.context.LocationDimensions.FirstOrDefaultAsync(x => x.Country == salesAnalyticsItem.Country);
+                var locationDimension = await this.context.LocationDimensions.FirstOrDefaultAsync(x => x.CountryId == salesAnalyticsItem.CountryId);
 
                 if (locationDimension is null)
                 {
                     locationDimension = new LocationDimension
                     {
-                        Country = salesAnalyticsItem.Country
+                        CountryId = salesAnalyticsItem.CountryId.Value
                     };
 
                     await this.context.LocationDimensions.AddAsync(locationDimension.FillCommonProperties());
+
+                    foreach (var countryTranslation in salesAnalyticsItem.CountryTranslations.OrEmptyIfNull())
+                    {
+                        var locationDimensionTranslation = new LocationTranslationDimension
+                        {
+                            LocationDimensionId = locationDimension.Id,
+                            Name = countryTranslation.Text,
+                            Language = countryTranslation.Language
+                        };
+
+                        await this.context.AddAsync(locationDimensionTranslation.FillCommonProperties());
+                    }
                 }
 
                 var salesFact = new SalesFact

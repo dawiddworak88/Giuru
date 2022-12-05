@@ -61,7 +61,7 @@ namespace Analytics.Api.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SalesFactId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),

@@ -7,6 +7,7 @@ using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -135,7 +136,7 @@ namespace Analytics.Api.v1.Controllers
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                SalesAnalyticsItems = request.SalesAnalyticsItems.Select(x => new CreateSalesAnalyticsItemServiceModel
+                SalesAnalyticsItems = request.SalesAnalyticsItems.OrEmptyIfNull().Select(x => new CreateSalesAnalyticsItemServiceModel
                 {
                     ClientId = x.ClientId,
                     ClientName = x.ClientName,
@@ -147,7 +148,12 @@ namespace Analytics.Api.v1.Controllers
                     IsOutlet = x.IsOutlet,
                     IsStock = x.IsStock,
                     Quantity = x.Quantity,
-                    Country = x.Country,
+                    CountryId = x.CountryId,
+                    CountryTranslations = x.CountryTranslations.OrEmptyIfNull().Select(x => new CreateSalesAnalyticsCountryServiceModel
+                    {
+                        Text = x.Text,
+                        Language = x.Language
+                    }),
                     CreatedDate = x.CreatedDate
                 })
             };
