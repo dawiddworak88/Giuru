@@ -3,6 +3,7 @@ using Client.Api.Infrastructure.Groups.Entities;
 using Client.Api.ServicesModels.Groups;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -106,7 +107,18 @@ namespace Client.Api.Services.Groups
 
             groups = groups.ApplySort(model.OrderBy);
 
-            var pagedResults = groups.PagedIndex(new Pagination(groups.Count(), model.ItemsPerPage), model.PageIndex);
+            PagedResults<IEnumerable<ClientGroup>> pagedResults;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                groups = groups.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = groups.PagedIndex(new Pagination(groups.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = groups.PagedIndex(new Pagination(groups.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedGroupServiceModel = new PagedResults<IEnumerable<ClientGroupServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -148,7 +160,18 @@ namespace Client.Api.Services.Groups
 
             groups = groups.ApplySort(model.OrderBy);
 
-            var pagedResults = groups.PagedIndex(new Pagination(groups.Count(), model.ItemsPerPage), model.PageIndex);
+            PagedResults<IEnumerable<ClientGroup>> pagedResults;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                groups = groups.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = groups.PagedIndex(new Pagination(groups.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = groups.PagedIndex(new Pagination(groups.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedGroupServiceModel = new PagedResults<IEnumerable<ClientGroupServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 

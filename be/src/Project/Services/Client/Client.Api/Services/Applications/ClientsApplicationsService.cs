@@ -4,6 +4,7 @@ using Client.Api.Infrastructure.Clients.Entities;
 using Client.Api.ServicesModels.Applications;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -164,7 +165,14 @@ namespace Client.Api.Services.Applications
 
             clientsApplications = clientsApplications.ApplySort(model.OrderBy);
 
-            return clientsApplications.PagedIndex(new Pagination(clientsApplications.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                clientsApplications = clientsApplications.Take(Constants.MaxItemsPerPageLimit);
+
+                return clientsApplications.PagedIndex(new Pagination(clientsApplications.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return clientsApplications.PagedIndex(new Pagination(clientsApplications.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<ClientApplicationServiceModel> GetAsync(GetClientApplicationServiceModel model)
@@ -226,7 +234,14 @@ namespace Client.Api.Services.Applications
 
             clientsApplications = clientsApplications.ApplySort(model.OrderBy);
 
-            return clientsApplications.PagedIndex(new Pagination(clientsApplications.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                clientsApplications = clientsApplications.Take(Constants.MaxItemsPerPageLimit);
+
+                return clientsApplications.PagedIndex(new Pagination(clientsApplications.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return clientsApplications.PagedIndex(new Pagination(clientsApplications.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<Guid> UpdateAsync(UpdateClientApplicationServiceModel model)
