@@ -29,6 +29,7 @@ spec:
     - {{ .Values.ingress.sellerapidomain }}
     - {{ .Values.ingress.downloadcenterapidomain }}
     - {{ .Values.ingress.globalapidomain }}
+    - {{ .Values.ingress.contentapidomain }}
     secretName: tls-secret
   rules:
   - host: {{ .Values.ingress.mediaapidomain }}
@@ -137,6 +138,16 @@ spec:
       - backend:
           service:
             name: global-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.contentapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: content-api-service
             port:
               number: 80
         path: /

@@ -328,6 +328,7 @@ services:
       - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - ContentUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5111
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
