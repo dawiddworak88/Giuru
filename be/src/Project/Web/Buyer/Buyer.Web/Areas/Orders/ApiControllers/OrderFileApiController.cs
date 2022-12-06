@@ -80,6 +80,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             foreach (var orderLine in importedOrderLines)
             {
                 var product = await this.productsRepository.GetProductAsync(orderLine.Sku, token, language);
+
                 if (product == null)
                 {
                     this.logger.LogError($"Product for SKU {orderLine.Sku} and language {language} couldn't be found.");
