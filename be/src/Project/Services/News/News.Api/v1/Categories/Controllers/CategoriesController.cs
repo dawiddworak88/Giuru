@@ -173,7 +173,7 @@ namespace News.Api.v1.Categories.Controllers
                 return this.StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>

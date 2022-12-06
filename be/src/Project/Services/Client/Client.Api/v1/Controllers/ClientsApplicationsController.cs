@@ -318,7 +318,7 @@ namespace Client.Api.v1.Controllers
                     return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
 
-                throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
     }
