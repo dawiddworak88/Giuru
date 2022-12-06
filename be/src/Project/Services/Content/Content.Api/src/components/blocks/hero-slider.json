@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_blocks_hero_sliders",
+  "info": {
+    "displayName": "Hero Slider",
+    "icon": "images"
+  },
+  "options": {},
+  "attributes": {
+    "heroSliderItems": {
+      "displayName": "Hero Slider Item",
+      "type": "component",
+      "repeatable": true,
+      "component": "blocks.hero-slider-item"
+    }
+  }
+}
