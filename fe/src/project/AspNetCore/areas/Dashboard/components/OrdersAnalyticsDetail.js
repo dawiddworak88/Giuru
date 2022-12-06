@@ -26,14 +26,14 @@ const OrdersAnalyticsDetail = (props) => {
                             }}/>
                     </div>
                     <div className="column is-one-third">
-                        <h3 className="subtitle">{props.top10OrderedProducts}</h3>
+                        <h3 className="subtitle">{props.topOrderedProducts}</h3>
                         <div className="table-container">
                             <TableContainer component={Paper} className="orders-analytics__table">
                                 <Table>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>{props.productNameLabel}</TableCell>
-                                            <TableCell>{props.productQuantityLabel}</TableCell>
+                                            <TableCell>{props.nameLabel}</TableCell>
+                                            <TableCell>{props.quantityLabel}</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     {props.products && props.products.length > 0 ? (
@@ -64,10 +64,11 @@ const OrdersAnalyticsDetail = (props) => {
 
 OrdersAnalyticsDetail.propTypes = {
     title: PropTypes.string.isRequired,
-    productNameLabel: PropTypes.string.isRequired,
+    nameLabel: PropTypes.string.isRequired,
+    quantityLabel: PropTypes.string.isRequired,
     noResultsLabel: PropTypes.string.isRequired,
     numberOfOrdersLabel: PropTypes.string.isRequired,
-    top10OrderedProducts: PropTypes.string.isRequired,
+    topOrderedProducts: PropTypes.string.isRequired,
     chartLables: PropTypes.array.isRequired,
     chartDatasets: PropTypes.array.isRequired
 }

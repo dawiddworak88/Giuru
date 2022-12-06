@@ -30,6 +30,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Foundation.Telemetry.DependencyInjection;
+using Buyer.Web.Areas.Dashboard.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -103,6 +104,8 @@ builder.Services.RegisterClientsDependencies();
 builder.Services.RegisterNewsDependencies();
 
 builder.Services.RegisterDownloadCenterDependencies();
+
+builder.Services.RegisterDashboardAreaDependencies();
 
 builder.Services.RegisterGeneralDependencies();
 

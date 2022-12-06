@@ -2,6 +2,12 @@
 {
     public static class ApiConstants
     {
+        public struct Analytics
+        {
+            public static readonly string SalesAnalyticsApiEndpoint = "/api/v1/salesanalytics";
+            public static readonly string ProductsSalesAnalyticsApiEndpoint = "/api/v1/salesanalytics/products";
+        }
+
         public struct Global
         {
             public static readonly string CountriesApiEndpoint = "/api/v1/countries";

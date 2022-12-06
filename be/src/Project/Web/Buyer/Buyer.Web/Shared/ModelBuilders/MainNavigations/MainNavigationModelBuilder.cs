@@ -81,6 +81,12 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
 
             links.Add(new LinkViewModel
             {
+                Text = this.globalLocalizer.GetString("Dashboard"),
+                Url = this.linkGenerator.GetPathByAction("Index", "Dashboard", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name })
+            });
+
+            links.Add(new LinkViewModel
+            {
                 Text = this.globalLocalizer.GetString("MakeComplaint"),
                 Target = "_blank",
                 Url = this.settings.CurrentValue.MakeComplaintUrl
