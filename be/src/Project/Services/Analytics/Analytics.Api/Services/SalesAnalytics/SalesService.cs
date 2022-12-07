@@ -142,8 +142,8 @@ namespace Analytics.Api.Services.SalesAnalytics
             var months = Enumerable.Range(-12, 12)
                 .Select(x => new    
                     {
-                        Year = now.AddMonths(x).Year,
-                        Month = now.AddMonths(x).Month
+                        Year = now.AddMonths(x+1).Year,
+                        Month = now.AddMonths(x+1).Month
                     });
 
             var annualSales = months.GroupJoin(sales, 
