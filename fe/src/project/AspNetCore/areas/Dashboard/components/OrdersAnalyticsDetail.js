@@ -4,9 +4,11 @@ import { Line } from "react-chartjs-2";
 import { Chart as ChartJs, Title, CategoryScale, LinearScale, BarElement, PointElement, LineElement} from "chart.js";
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 
-ChartJs.register(
-    Title, CategoryScale, LinearScale, BarElement, PointElement, LineElement
-)
+if (typeof window !== "undefined") {
+    ChartJs.register(
+        Title, CategoryScale, LinearScale, BarElement, PointElement, LineElement
+    )
+}
 
 const OrdersAnalyticsDetail = (props) => {
     return (

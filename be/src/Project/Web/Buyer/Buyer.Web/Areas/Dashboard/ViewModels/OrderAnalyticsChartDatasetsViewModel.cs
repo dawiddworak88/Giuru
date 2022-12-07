@@ -4,6 +4,6 @@ namespace Buyer.Web.Areas.Dashboard.ViewModels
 {
     public class OrderAnalyticsChartDatasetsViewModel
     {
-        public IEnumerable<double> Quantity { get; set; }
+        public IEnumerable<double> Data { get; set; }
     }
 }
