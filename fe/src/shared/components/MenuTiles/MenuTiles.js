@@ -18,7 +18,7 @@ function MenuTiles(props) {
                 {props.tiles.map((tile, index) => {
                     return(
                         <SplideSlide key={index}>
-                            <Tile icon={tile.icon} title={tile.title} url={tile.url} />
+                            <Tile icon={tile.icon} title={tile.title} url={tile.url} target={tile.target} />
                         </SplideSlide>
                     );
                 })}
