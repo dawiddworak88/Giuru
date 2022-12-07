@@ -19,7 +19,7 @@ const DashboardPage = (props) => {
             <Store>
                 <Header {...props.header}/>
                 <MainNavigation {...props.mainNavigation} />
-                <OrdersAnalyticsDetail {...props.ordersAnalyticsDetails }/>
+                <OrdersAnalyticsDetail {...props.ordersAnalyticsDetail }/>
                 <Footer {...props.footer}/>
             </Store>
         </ThemeProvider>

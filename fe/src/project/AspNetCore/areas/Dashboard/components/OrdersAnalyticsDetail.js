@@ -38,22 +38,22 @@ const OrdersAnalyticsDetail = (props) => {
                                             <TableCell>{props.quantityLabel}</TableCell>
                                         </TableRow>
                                     </TableHead>
-                                    {props.products && props.products.length > 0 ? (
-                                        <TableBody>
-                                            {props.products.map((product, index) => {
+                                    <TableBody>
+                                        {props.products && props.products.length > 0 ? (
+                                            props.products.map((product, index) => {
                                                 return (
                                                     <TableRow key={index}>
                                                         <TableCell>{product.name} ({product.sku})</TableCell>
                                                         <TableCell>{product.quantity}</TableCell>
                                                     </TableRow>
                                                 )
-                                            })}
-                                        </TableBody>
-                                    ) : (
-                                        <TableRow>
-                                            <TableCell colSpan={2}>{props.noResultsLabel}</TableCell>
-                                        </TableRow>
-                                    )}
+                                            })
+                                        ) : (
+                                            <TableRow>
+                                                <TableCell colSpan={2}>{props.noResultsLabel}</TableCell>
+                                            </TableRow>
+                                        )}
+                                    </TableBody>
                                 </Table>
                             </TableContainer>
                         </div>
