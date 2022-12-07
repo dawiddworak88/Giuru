@@ -675,4 +675,7 @@
   <data name="Countries" xml:space="preserve">
     <value>Kraje</value>
   </data>
+  <data name="Content" xml:space="preserve">
+    <value>CMS</value>
+  </data>
 </root>

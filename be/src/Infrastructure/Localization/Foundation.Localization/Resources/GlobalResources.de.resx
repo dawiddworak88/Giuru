@@ -669,4 +669,7 @@
   <data name="Countries" xml:space="preserve">
     <value>Länder</value>
   </data>
+  <data name="Content" xml:space="preserve">
+    <value>Inhalt</value>
+  </data>
 </root>
