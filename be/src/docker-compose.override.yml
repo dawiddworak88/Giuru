@@ -351,6 +351,7 @@ services:
       - BasketUrl=http://basket-api
       - ClientUrl=http://client-api
       - NewsUrl=http://news-api
+      - AnalyticsUrl=http://analytics-api
       - ContentGraphQlUrl=http://content-api:1337/graphql
       - DownloadCenterUrl=http://downloadcenter-api
       - ContentGraphQlAuthorizationKey=${STRAPI_AUTHORIZATION_KEY}

@@ -4,9 +4,11 @@ import { Line } from "react-chartjs-2";
 import { Chart as ChartJs, Title, CategoryScale, LinearScale, BarElement, PointElement, LineElement} from "chart.js";
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 
-ChartJs.register(
-    Title, CategoryScale, LinearScale, BarElement, PointElement, LineElement
-)
+if (typeof window !== "undefined") {
+    ChartJs.register(
+        Title, CategoryScale, LinearScale, BarElement, PointElement, LineElement
+    )
+}
 
 const OrdersAnalyticsDetail = (props) => {
     return (
@@ -26,32 +28,32 @@ const OrdersAnalyticsDetail = (props) => {
                             }}/>
                     </div>
                     <div className="column is-one-third">
-                        <h3 className="subtitle">{props.top10OrderedProducts}</h3>
+                        <h3 className="subtitle">{props.topOrderedProducts}</h3>
                         <div className="table-container">
                             <TableContainer component={Paper} className="orders-analytics__table">
                                 <Table>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>{props.productNameLabel}</TableCell>
-                                            <TableCell>{props.productQuantityLabel}</TableCell>
+                                            <TableCell>{props.nameLabel}</TableCell>
+                                            <TableCell>{props.quantityLabel}</TableCell>
                                         </TableRow>
                                     </TableHead>
-                                    {props.products && props.products.length > 0 ? (
-                                        <TableBody>
-                                            {props.products.map((product, index) => {
+                                    <TableBody>
+                                        {props.products && props.products.length > 0 ? (
+                                            props.products.map((product, index) => {
                                                 return (
                                                     <TableRow key={index}>
                                                         <TableCell>{product.name} ({product.sku})</TableCell>
                                                         <TableCell>{product.quantity}</TableCell>
                                                     </TableRow>
                                                 )
-                                            })}
-                                        </TableBody>
-                                    ) : (
-                                        <TableRow>
-                                            <TableCell colSpan={2}>{props.noResultsLabel}</TableCell>
-                                        </TableRow>
-                                    )}
+                                            })
+                                        ) : (
+                                            <TableRow>
+                                                <TableCell colSpan={2}>{props.noResultsLabel}</TableCell>
+                                            </TableRow>
+                                        )}
+                                    </TableBody>
                                 </Table>
                             </TableContainer>
                         </div>
@@ -64,10 +66,11 @@ const OrdersAnalyticsDetail = (props) => {
 
 OrdersAnalyticsDetail.propTypes = {
     title: PropTypes.string.isRequired,
-    productNameLabel: PropTypes.string.isRequired,
+    nameLabel: PropTypes.string.isRequired,
+    quantityLabel: PropTypes.string.isRequired,
     noResultsLabel: PropTypes.string.isRequired,
     numberOfOrdersLabel: PropTypes.string.isRequired,
-    top10OrderedProducts: PropTypes.string.isRequired,
+    topOrderedProducts: PropTypes.string.isRequired,
     chartLables: PropTypes.array.isRequired,
     chartDatasets: PropTypes.array.isRequired
 }

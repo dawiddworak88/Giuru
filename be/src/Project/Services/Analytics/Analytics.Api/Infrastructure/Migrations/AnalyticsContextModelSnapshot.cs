@@ -99,6 +99,41 @@ namespace Analytics.Api.Infrastructure.Migrations
                     b.ToTable("LocationDimensions");
                 });
 
+            modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.LocationTranslationDimension", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Language")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("LocationDimensionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LocationTranslationDimensions");
+                });
+
             modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.ProductDimension", b =>
                 {
                     b.Property<Guid>("Id")

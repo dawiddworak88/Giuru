@@ -13,6 +13,7 @@ namespace Buyer.Web.Shared.Configurations
         public string NewsUrl { get; set; }
         public string ContentGraphQlUrl { get; set; }
         public string MediaUrl { get; set; }
+        public string AnalyticsUrl { get; set; }
         public string DownloadCenterUrl { get; set; }
         public string CdnUrl { get; set; }
         public Guid? OrganisationId { get; set; }

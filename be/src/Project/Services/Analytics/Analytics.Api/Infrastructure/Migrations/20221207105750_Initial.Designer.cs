@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Analytics.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(AnalyticsContext))]
-    [Migration("20221205122234_Initial")]
+    [Migration("20221207105750_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,6 +99,41 @@ namespace Analytics.Api.Infrastructure.Migrations
                     b.HasIndex("SalesFactId");
 
                     b.ToTable("LocationDimensions");
+                });
+
+            modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.LocationTranslationDimension", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Language")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("LocationDimensionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LocationTranslationDimensions");
                 });
 
             modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.ProductDimension", b =>

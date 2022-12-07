@@ -4,11 +4,11 @@ import "../project/AspNetCore/areas/Dashboard/pages/DashboardPage/DashboardPage.
 
 const componentProps = {
     title: "Order analysis",
-    productNameLabel: "Product name",
-    productQuantityLabel: "Number of products",
+    nameLabel: "Product name",
+    quntityLabel: "Number of products",
     noResultsLabel: "There are no results",
     numberOfOrdersLabel: "Number of orders",
-    top10OrderedProducts: "TOP 10 - Ordered products",
+    topOrderedProducts: "TOP 10 - Ordered products",
     chartLables: [
         "January",
         "February",
@@ -55,7 +55,7 @@ const componentProps = {
     ]
 }
 
-export const DashboardPageStory = () => <DashboardPage header={header} mainNavigation={mainNavigation} ordersAnalyticsDetails={componentProps} footer={footer} />;
+export const DashboardPageStory = () => <DashboardPage header={header} mainNavigation={mainNavigation} ordersAnalyticsDetail={componentProps} footer={footer} />;
 
 DashboardPageStory.story = {
     name: "Analytics Dashboard"
