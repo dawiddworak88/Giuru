@@ -7,7 +7,6 @@ namespace Buyer.Web.Areas.Dashboard.ViewModels
 {
     public class DashboardPageViewModel
     {
-
         public string Locale { get; set; }
         public BuyerHeaderViewModel Header { get; set; }
         public MainNavigationViewModel MainNavigation { get; set; }

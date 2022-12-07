@@ -8,7 +8,7 @@ const componentProps = {
     quntityLabel: "Number of products",
     noResultsLabel: "There are no results",
     numberOfOrdersLabel: "Number of orders",
-    top10OrderedProducts: "TOP 10 - Ordered products",
+    topOrderedProducts: "TOP 10 - Ordered products",
     chartLables: [
         "January",
         "February",
