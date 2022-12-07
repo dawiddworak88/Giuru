@@ -266,8 +266,6 @@ services:
       - ./Project/Services/Content/Content.Api/src:/content/src
     ports:
       - "5111:1337"
-      
-
 
   downloadcenter-api:
     environment:

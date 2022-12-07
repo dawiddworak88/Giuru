@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Home.DomainModels;
-using Buyer.Web.Areas.Home.GraphQlResponseModels;
+﻿using Buyer.Web.Areas.Home.GraphQlResponseModels;
 using Buyer.Web.Areas.Home.RepositoryModels;
 using GraphQL;
 using GraphQL.Client.Abstractions;
