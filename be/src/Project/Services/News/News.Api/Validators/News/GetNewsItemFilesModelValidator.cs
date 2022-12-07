@@ -4,7 +4,7 @@ using News.Api.ServicesModels.News;
 
 namespace News.Api.Validators.News
 {
-    public class GetNewsItemFilesModelValidator : BasePagedServiceModelValidator<GetNewsItemFilesServiceModel>
+    public class GetNewsItemFilesModelValidator : BaseServiceModelValidator<GetNewsItemFilesServiceModel>
     {
         public GetNewsItemFilesModelValidator()
         {

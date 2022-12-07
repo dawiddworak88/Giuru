@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -274,20 +275,20 @@ namespace Inventory.Api.Services.OutletItems
                               join p in this.context.Products on o.ProductId equals p.Id
                               join t in this.context.OutletTranslations on o.Id equals t.OutletItemId
                               where p.IsActive && o.IsActive
-                              select new
+                              select new OutletServiceModel
                               {
-                                  o.Id,
-                                  t.Title,
-                                  t.Description,
-                                  o.ProductId,
+                                  Id = o.Id,
+                                  Title = t.Title,
+                                  Description = t.Description,
+                                  ProductId = o.ProductId,
                                   ProductName = p.Name,
                                   ProductSku = p.Sku,
                                   ProductEan = p.Ean,
-                                  o.WarehouseId,
-                                  o.Quantity,
-                                  o.AvailableQuantity,
-                                  o.LastModifiedDate,
-                                  o.CreatedDate
+                                  WarehouseId = o.WarehouseId,
+                                  Quantity = o.Quantity,
+                                  AvailableQuantity = o.AvailableQuantity,
+                                  LastModifiedDate = o.LastModifiedDate,
+                                  CreatedDate = o.CreatedDate
                               };
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
@@ -297,7 +298,18 @@ namespace Inventory.Api.Services.OutletItems
 
             outletItems = outletItems.ApplySort(model.OrderBy);
 
-            var pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), model.ItemsPerPage), model.PageIndex);
+            PagedResults<IEnumerable<OutletServiceModel>> pagedResults;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                outletItems = outletItems.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedItemsServiceModel = new PagedResults<IEnumerable<OutletServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -349,23 +361,34 @@ namespace Inventory.Api.Services.OutletItems
             var outletItems = from o in this.context.Outlet
                               join p in this.context.Products on o.ProductId equals p.Id
                               where model.Ids.Contains(o.Id) && p.IsActive && o.IsActive
-                              select new
+                              select new OutletServiceModel
                               {
-                                  o.Id,
-                                  o.ProductId,
+                                  Id = o.Id,
+                                  ProductId = o.ProductId,
                                   ProductName = p.Name,
                                   ProductSku = p.Sku,
                                   ProductEan = p.Ean,
-                                  o.WarehouseId,
-                                  o.Quantity,
-                                  o.AvailableQuantity,
-                                  o.LastModifiedDate,
-                                  o.CreatedDate
+                                  WarehouseId = o.WarehouseId,
+                                  Quantity = o.Quantity,
+                                  AvailableQuantity = o.AvailableQuantity,
+                                  LastModifiedDate = o.LastModifiedDate,
+                                  CreatedDate = o.CreatedDate
                               };
 
             outletItems = outletItems.ApplySort(model.OrderBy);
 
-            var pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), model.ItemsPerPage), model.PageIndex);
+            PagedResults<IEnumerable<OutletServiceModel>> pagedResults;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                outletItems = outletItems.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedItemsServiceModel = new PagedResults<IEnumerable<OutletServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -553,9 +576,20 @@ namespace Inventory.Api.Services.OutletItems
                                    ProductEan = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Ean,
                                    AvailableQuantity = gpi.Sum(x => x.AvailableQuantity),
                                    Quantity = gpi.Sum(x => x.Quantity)
-                               }).OrderByDescending(x => x.AvailableQuantity);
+                               });
 
-            var pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), model.ItemsPerPage), model.PageIndex);
+            PagedResults<IEnumerable<OutletSumServiceModel>> pagedResults;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                outletItems = outletItems.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedItemsServiceModel = new PagedResults<IEnumerable<OutletSumServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -576,7 +610,7 @@ namespace Inventory.Api.Services.OutletItems
                 outlet.Add(outletItem);
             }
 
-            pagedItemsServiceModel.Data = outlet;
+            pagedItemsServiceModel.Data = outlet.OrderByDescending(x => x.AvailableQuantity);
 
             return pagedItemsServiceModel;
         }

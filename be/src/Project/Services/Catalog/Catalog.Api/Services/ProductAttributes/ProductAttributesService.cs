@@ -5,6 +5,7 @@ using Foundation.Catalog.Infrastructure.ProductAttributes.Entities;
 using Foundation.EventBus.Abstractions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -46,7 +47,18 @@ namespace Catalog.Api.Services.ProductAttributes
 
             productAttributes = productAttributes.ApplySort(model.OrderBy);
 
-            var pagedProductAttributes = productAttributes.PagedIndex(new Pagination(productAttributes.Count(), model.ItemsPerPage), model.PageIndex);
+            PagedResults<IEnumerable<ProductAttribute>> pagedProductAttributes;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                productAttributes = productAttributes.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedProductAttributes = productAttributes.PagedIndex(new Pagination(productAttributes.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedProductAttributes = productAttributes.PagedIndex(new Pagination(productAttributes.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedProductAttributeServiceModels = new PagedResults<IEnumerable<ProductAttributeServiceModel>>(pagedProductAttributes.Total, pagedProductAttributes.PageSize);
 
@@ -388,7 +400,18 @@ namespace Catalog.Api.Services.ProductAttributes
 
             productAttributesItems = productAttributesItems.ApplySort(model.OrderBy);
 
-            var pagedProductAttributeItems = productAttributesItems.PagedIndex(new Pagination(productAttributesItems.Count(), model.ItemsPerPage), model.PageIndex);
+            PagedResults<IEnumerable<ProductAttributeItem>> pagedProductAttributeItems;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                productAttributesItems = productAttributesItems.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedProductAttributeItems = productAttributesItems.PagedIndex(new Pagination(productAttributesItems.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedProductAttributeItems = productAttributesItems.PagedIndex(new Pagination(productAttributesItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedProductAttributeItemServiceModels = new PagedResults<IEnumerable<ProductAttributeItemServiceModel>>(pagedProductAttributeItems.Total, pagedProductAttributeItems.PageSize);
 

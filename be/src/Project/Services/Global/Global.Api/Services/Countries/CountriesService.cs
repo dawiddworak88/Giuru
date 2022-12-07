@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -72,7 +73,18 @@ namespace Global.Api.Services.Countries
 
             countries = countries.ApplySort(model.OrderBy);
 
-            var pagedResults = countries.PagedIndex(new Pagination(countries.Count(), model.ItemsPerPage), model.PageIndex);
+            PagedResults<IEnumerable<Country>> pagedResults;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                countries = countries.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = countries.PagedIndex(new Pagination(countries.Count(), Constants.MaxItemsPerPage), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = countries.PagedIndex(new Pagination(countries.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedCountriesServiceModel = new PagedResults<IEnumerable<CountryServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 

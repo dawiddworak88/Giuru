@@ -8,18 +8,11 @@
     <DockerfileContext>..\..\..\..</DockerfileContext>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Shared\ApiResponseModels\**" />
-    <Content Remove="Shared\ApiResponseModels\**" />
-    <EmbeddedResource Remove="Shared\ApiResponseModels\**" />
-    <None Remove="Shared\ApiResponseModels\**" />
-  </ItemGroup>
-  <ItemGroup>
+	<PackageReference Include="GraphQL.Client" Version="4.0.2" />
+	<PackageReference Include="GraphQL.Client.Serializer.Newtonsoft" Version="4.0.2" />
 	<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
 	<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.11">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.11" />
 	<PackageReference Include="ClosedXML" Version="0.96.0" />
 	<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.11" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
@@ -36,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\Account\Foundation.Account\Foundation.Account.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\Content\Foundation.Content\Foundation.Content.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Localization\Foundation.Localization\Foundation.Localization.csproj" />

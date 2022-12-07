@@ -48,7 +48,7 @@ namespace News.Api.v1.News.Controllers
         [HttpGet("files/{id}"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<NewsItemFileResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Files(Guid? id, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Files(Guid? id, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -179,7 +179,7 @@ namespace News.Api.v1.News.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<NewsItemResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetNewsItemsServiceModel
@@ -193,38 +193,33 @@ namespace News.Api.v1.News.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new GetNewsItemsModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
-            if (validationResult.IsValid)
-            {
-                var newsItems = await this.newsService.GetAsync(serviceModel);
+             var newsItems = await this.newsService.GetAsync(serviceModel);
 
-                if (newsItems is not null)
+             if (newsItems is not null)
+             {
+                var response = new PagedResults<IEnumerable<NewsItemResponseModel>>(newsItems.Total, newsItems.PageSize)
                 {
-                    var response = new PagedResults<IEnumerable<NewsItemResponseModel>>(newsItems.Total, newsItems.PageSize)
+                    Data = newsItems.Data.OrEmptyIfNull().Select(x => new NewsItemResponseModel
                     {
-                        Data = newsItems.Data.OrEmptyIfNull().Select(x => new NewsItemResponseModel
-                        {
-                            Id = x.Id,
-                            ThumbnailImageId = x.ThumbnailImageId,
-                            PreviewImageId = x.PreviewImageId,
-                            CategoryId = x.CategoryId,
-                            CategoryName = x.CategoryName,
-                            Title = x.Title,
-                            Description = x.Description,
-                            Content = x.Content,
-                            IsPublished = x.IsPublished,
-                            Files = x.Files,
-                            LastModifiedDate = x.LastModifiedDate,
-                            CreatedDate = x.CreatedDate
-                        })
-                    };
+                        Id = x.Id,
+                        ThumbnailImageId = x.ThumbnailImageId,
+                        PreviewImageId = x.PreviewImageId,
+                        CategoryId = x.CategoryId,
+                        CategoryName = x.CategoryName,
+                        Title = x.Title,
+                        Description = x.Description,
+                        Content = x.Content,
+                        IsPublished = x.IsPublished,
+                        Files = x.Files,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    })
+                };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
+                return this.StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>

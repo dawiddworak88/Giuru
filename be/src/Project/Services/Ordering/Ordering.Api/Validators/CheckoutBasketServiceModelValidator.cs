@@ -2,7 +2,6 @@
 using Foundation.Extensions.ExtensionMethods;
 using Ordering.Api.ServicesModels;
 using System;
-using System.Linq;
 
 namespace Ordering.Api.Validators
 {

@@ -49,12 +49,12 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<MediaItemResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy )
+        public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy )
         {
             var sellerClaims = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var mediaItemsIds = ids.ToEnumerableGuidIds();
 
-            if (mediaItemsIds != null)
+            if (mediaItemsIds is not null)
             {
                 var serviceModel = new GetMediaItemsByIdsServiceModel
                 {
@@ -73,7 +73,7 @@ namespace Media.Api.v1.Controllers
                 {
                     var mediaItems = this.mediaService.GetMediaItemsByIds(serviceModel);
 
-                    if (mediaItems != null)
+                    if (mediaItems is not null)
                     {
                         var response = new PagedResults<IEnumerable<MediaItemResponseModel>>(mediaItems.Total, mediaItems.PageSize)
                         { 
@@ -110,37 +110,31 @@ namespace Media.Api.v1.Controllers
                     OrderBy = orderBy,
                 };
 
-                var validator = new GetMediaItemsModelValidator();
-                var validationResult = await validator.ValidateAsync(serviceModel);
+                var mediaItems = this.mediaService.GetAsync(serviceModel);
 
-                if (validationResult.IsValid)
+                if (mediaItems is not null)
                 {
-                    var mediaItems = this.mediaService.GetAsync(serviceModel);
-
-                    if (mediaItems != null)
+                    var response = new PagedResults<IEnumerable<MediaItemResponseModel>>(mediaItems.Result.Total, mediaItems.Result.PageSize)
                     {
-                        var response = new PagedResults<IEnumerable<MediaItemResponseModel>>(mediaItems.Result.Total, mediaItems.Result.PageSize)
+                        Data = mediaItems.Result.Data.OrEmptyIfNull().Select(x => new MediaItemResponseModel
                         {
-                            Data = mediaItems.Result.Data.OrEmptyIfNull().Select(x => new MediaItemResponseModel
-                            {
-                                Id = x.Id,
-                                MediaItemVersionId = x.MediaItemVersionId,
-                                Description = x.Description,
-                                Extension = x.Extension,
-                                Filename = x.Filename,
-                                MimeType = x.MimeType,
-                                Name = x.Name,
-                                Size = x.Size,
-                                LastModifiedDate = x.LastModifiedDate,
-                                CreatedDate = x.CreatedDate
-                            })
-                        };
+                            Id = x.Id,
+                            MediaItemVersionId = x.MediaItemVersionId,
+                            Description = x.Description,
+                            Extension = x.Extension,
+                            Filename = x.Filename,
+                            MimeType = x.MimeType,
+                            Name = x.Name,
+                            Size = x.Size,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
+                    };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
-                    }
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
 
-                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
 

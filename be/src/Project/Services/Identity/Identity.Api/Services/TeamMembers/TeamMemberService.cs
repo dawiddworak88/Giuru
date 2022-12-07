@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.Mailing.Configurations;
@@ -149,7 +150,14 @@ namespace Identity.Api.Services.TeamMembers
 
             teamMembers = teamMembers.ApplySort(model.OrderBy);
 
-            return teamMembers.PagedIndex(new Pagination(teamMembers.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                teamMembers = teamMembers.Take(Constants.MaxItemsPerPageLimit);
+
+                return teamMembers.PagedIndex(new Pagination(teamMembers.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return teamMembers.PagedIndex(new Pagination(teamMembers.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<TeamMemberServiceModel> GetAsync(GetTeamMemberServiceModel model)

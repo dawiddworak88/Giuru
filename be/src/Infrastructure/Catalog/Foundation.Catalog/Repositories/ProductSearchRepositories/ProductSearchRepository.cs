@@ -1,5 +1,6 @@
 ﻿using Foundation.Catalog.Definitions;
 using Foundation.Catalog.SearchModels.Products;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Search.Extensions;
 using Nest;
@@ -26,8 +27,8 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             bool? hasPrimaryProduct,
             bool? isNew,
             string searchTerm, 
-            int pageIndex, 
-            int itemsPerPage,
+            int? pageIndex, 
+            int? itemsPerPage,
             string orderBy)
         {
             var query = Query<ProductSearchModel>.Term(t => t.Language, language)
@@ -67,11 +68,17 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                         || Query<ProductSearchModel>.Prefix(x => x.Name.Suffix("keyword"), searchTerm));
             }
 
+            if (pageIndex.HasValue is false || itemsPerPage.HasValue is false)
+            {
+                pageIndex = Constants.DefaultPageIndex;
+                itemsPerPage = Constants.MaxItemsPerPageLimit;
+            }
+
             var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
 
             if (response.IsValid)
             {
-                return new PagedResults<IEnumerable<ProductSearchModel>>(response.Total, itemsPerPage)
+                return new PagedResults<IEnumerable<ProductSearchModel>>(response.Total, itemsPerPage.Value)
                 {
                     Data = response.Documents
                 };
