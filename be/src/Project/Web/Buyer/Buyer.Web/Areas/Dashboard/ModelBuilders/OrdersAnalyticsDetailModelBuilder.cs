@@ -16,17 +16,20 @@ namespace Buyer.Web.Areas.Dashboard.ModelBuilders
 {
     public class OrdersAnalyticsDetailModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrdersAnalyticsDetailViewModel>
     {
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SalesAnalyticsViewModel> salesAnalyticsModelBuilder;
         private readonly ISalesAnalyticsRepository salesAnalyticsRepository;
         private readonly IProductsRepository productsRepository;
         private readonly IStringLocalizer<DashboardResources> dashboardResources;
         private readonly IStringLocalizer<GlobalResources> globalResources;
 
         public OrdersAnalyticsDetailModelBuilder(
+            IAsyncComponentModelBuilder<ComponentModelBase, SalesAnalyticsViewModel> salesAnalyticsModelBuilder,
             ISalesAnalyticsRepository salesAnalyticsRepository,
             IStringLocalizer<DashboardResources> dashboardResources,
             IStringLocalizer<GlobalResources> globalResources,
             IProductsRepository productsRepository)
         {
+            this.salesAnalyticsModelBuilder = salesAnalyticsModelBuilder;
             this.salesAnalyticsRepository = salesAnalyticsRepository;
             this.productsRepository = productsRepository;
             this.dashboardResources = dashboardResources;
@@ -38,38 +41,12 @@ namespace Buyer.Web.Areas.Dashboard.ModelBuilders
             var viewModel = new OrdersAnalyticsDetailViewModel
             {
                 Title = this.dashboardResources.GetString("OrdersAnalysis"),
-                NumberOfOrdersLabel = this.dashboardResources.GetString("NumberOfOrders"),
                 TopOrderedProducts = this.dashboardResources.GetString("TopOrderedProducts"),
                 NameLabel = this.dashboardResources.GetString("ProductName"),
                 QuantityLabel = this.dashboardResources.GetString("ProductQuantity"),
-                NoResultsLabel = this.globalResources.GetString("NoResultsLabel")
+                NoResultsLabel = this.globalResources.GetString("NoResultsLabel"),
+                SalesAnalytics = await this.salesAnalyticsModelBuilder.BuildModelAsync(componentModel)
             };
-
-            var annualSales = await this.salesAnalyticsRepository.GetAnnualSales(componentModel.Token, componentModel.Language);
-
-            if (annualSales is not null)
-            {
-                var chartDataset = new List<double>();
-                var chartLabels = new List<string>();
-
-                foreach (var annualSalesItem in annualSales.OrEmptyIfNull())
-                {
-                    chartDataset.Add(annualSalesItem.Quantity);
-
-                    var monthName = CultureInfo.CurrentUICulture.DateTimeFormat.GetMonthName(annualSalesItem.Month);
-
-                    chartLabels.Add($"{monthName.ToUpperInvariant()} - {annualSalesItem.Year}");
-                }
-
-                viewModel.ChartLables = chartLabels;
-                viewModel.ChartDatasets = new List<OrderAnalyticsChartDatasetsViewModel>
-                {
-                    new OrderAnalyticsChartDatasetsViewModel
-                    {
-                        Data = chartDataset
-                    }
-                };
-            }
 
             var salesProducts = await this.salesAnalyticsRepository.GetProductsSales(componentModel.Token, componentModel.Language);
 

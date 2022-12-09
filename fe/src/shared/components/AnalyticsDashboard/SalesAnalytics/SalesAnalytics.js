@@ -15,7 +15,7 @@ if (typeof window !== "undefined") {
 
 const SalesAnalytics = (props) => {
     return (
-        <div className="daily-sales">
+        <div className="sales-analytics">
             <h3 className="subtitle">{props.title}</h3>
             <Line 
                 options={{
