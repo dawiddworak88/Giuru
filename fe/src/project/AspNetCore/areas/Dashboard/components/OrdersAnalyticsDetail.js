@@ -1,31 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Line } from "react-chartjs-2";
-import { Chart as ChartJs, Title, CategoryScale, LinearScale, BarElement, PointElement, LineElement} from "chart.js";
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
-
-if (typeof window !== "undefined") {
-    ChartJs.register(
-        Title, CategoryScale, LinearScale, BarElement, PointElement, LineElement
-    )
-}
+import SalesAnalytics from "../../../../../shared/components/AnalyticsDashboard/SalesAnalytics/SalesAnalytics";
+import { 
+    TableContainer, Paper, Table, TableHead, 
+    TableRow, TableCell, TableBody 
+} from "@mui/material";
 
 const OrdersAnalyticsDetail = (props) => {
     return (
-        <div className="section container">
+        <div className="section">
             <h1 className="title is-3">{props.title}</h1>
             <div className="mt-6">
                 <div className="columns">
                     <div className="column is-two-thirds">
-                        <h3 className="subtitle">{props.numberOfOrdersLabel}</h3>
-                        <Line 
-                            options={{
-                                responsive: true,
-                            }} 
-                            data={{
-                                labels: props.chartLables,
-                                datasets: props.chartDatasets
-                            }}/>
+                        {props.salesAnalytics && 
+                            <SalesAnalytics {...props.salesAnalytics} />
+                        }
                     </div>
                     <div className="column is-one-third">
                         <h3 className="subtitle">{props.topOrderedProducts}</h3>

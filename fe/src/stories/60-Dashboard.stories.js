@@ -5,32 +5,34 @@ import "../project/AspNetCore/areas/Dashboard/pages/DashboardPage/DashboardPage.
 const componentProps = {
     title: "Order analysis",
     nameLabel: "Product name",
-    quntityLabel: "Number of products",
+    quantityLabel: "Number of products",
     noResultsLabel: "There are no results",
-    numberOfOrdersLabel: "Number of orders",
     topOrderedProducts: "TOP 10 - Ordered products",
-    chartLables: [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-    ],
-    chartDatasets: [
-        {
-            data: [95, 75, 0, 120, 31, 19, 55, 32, 241, 311, 32, 85],
-        },
-        {
-            data: [12, 55, 34, 120, 320, 19, 67, 121, 241, 87, 85, 85]
-        }
-    ],
+    salesAnalytics: {
+        title: "Number of orders",
+        chartLables: [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        ],
+        chartDatasets: [
+            {
+                data: [95, 75, 0, 120, 31, 19, 55, 32, 241, 311, 32, 85],
+            },
+            {
+                data: [12, 55, 34, 120, 320, 19, 67, 121, 241, 87, 85, 85]
+            }
+        ]
+    },
     products: [
         {
             name: "Anton",
