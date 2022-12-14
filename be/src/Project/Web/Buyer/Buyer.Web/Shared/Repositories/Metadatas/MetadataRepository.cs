@@ -1,9 +1,13 @@
 ﻿using Buyer.Web.Shared.DomainModels.Metadata;
 using Buyer.Web.Shared.GraphQlResponseModels;
+using Foundation.Extensions.ExtensionMethods;
 using GraphQL;
 using GraphQL.Client.Abstractions;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Shared.Repositories.Metadatas
@@ -43,13 +47,20 @@ namespace Buyer.Web.Shared.Repositories.Metadatas
                     }}"
                 };
 
-                var response = await this.graphQlClient.SendQueryAsync<SeoGraphQlResponseModel>(query);
+                var response = await this.graphQlClient.SendQueryAsync<JObject>(query);
 
-                return new Metadata
+                if (response.Errors.OrEmptyIfNull().Any() is false && response?.Data != null)
                 {
-                    MetaTitle = response?.Data?.HomePage?.Data?.Attributes?.Seo?.MetaTitle,
-                    MetaDescription = response?.Data?.HomePage?.Data?.Attributes?.Seo?.MetaDescription
-                };
+                    var replacedContentPageKey = response.Data.ToString().Replace(contentPageKey, "page");
+
+                    var metaData = JsonConvert.DeserializeObject<SeoGraphQlResponseModel>(replacedContentPageKey);
+
+                    return new Metadata
+                    {
+                        MetaTitle = metaData?.Page?.Data?.Attributes?.Seo?.MetaTitle,
+                        MetaDescription = metaData?.Page?.Data?.Attributes?.Seo?.MetaDescription
+                    };
+                }
             }
             catch (Exception exception)
             {

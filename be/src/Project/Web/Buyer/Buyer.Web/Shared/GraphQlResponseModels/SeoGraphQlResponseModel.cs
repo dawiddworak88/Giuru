@@ -11,12 +11,12 @@ namespace Buyer.Web.Shared.GraphQlResponseModels
         [property: JsonProperty("attributes")] Attributes Attributes
     );
 
-    public record HomePage(
+    public record Page(
         [property: JsonProperty("data")] Data Data
     );
 
     public record SeoGraphQlResponseModel(
-        [property: JsonProperty("homePage")] HomePage HomePage
+        [property: JsonProperty("page")] Page Page
     );
 
     public record Seo(
