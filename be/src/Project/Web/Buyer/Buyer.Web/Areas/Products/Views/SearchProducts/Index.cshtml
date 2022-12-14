@@ -6,13 +6,12 @@
 </script>
 
 @section MetaTags {
-    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("SiteTitle"), false)</title>
-    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("SiteTitle")))
+    <title>@Model.Metadata.MetaTitle</title>
+    @if (string.IsNullOrWhiteSpace(@Model.Metadata.MetaDescription) is false)
     {
-        <meta name="description" content="@this.Localizer.GetString("SiteTitle")" />
+        <meta name="description" content="@Model.Metadata.MetaDescription" />
     }
 }
-
 @section HeadStyles {
     <link rel="stylesheet" href="~/dist/css/searchproductspage.css" type="text/css" asp-append-version="true" />
 }
