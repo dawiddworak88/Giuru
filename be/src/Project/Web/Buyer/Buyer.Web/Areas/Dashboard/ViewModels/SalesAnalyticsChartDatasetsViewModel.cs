@@ -2,7 +2,7 @@
 
 namespace Buyer.Web.Areas.Dashboard.ViewModels
 {
-    public class OrderAnalyticsChartDatasetsViewModel
+    public class SalesAnalyticsChartDatasetsViewModel
     {
         public IEnumerable<double> Data { get; set; }
     }

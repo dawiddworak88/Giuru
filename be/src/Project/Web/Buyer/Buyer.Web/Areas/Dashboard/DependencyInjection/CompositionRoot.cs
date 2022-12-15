@@ -15,6 +15,7 @@ namespace Buyer.Web.Areas.Dashboard.DependencyInjection
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DashboardPageViewModel>, DashboardPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrdersAnalyticsDetailViewModel>, OrdersAnalyticsDetailModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SalesAnalyticsViewModel>, SalesAnalyticsModelBuilder>();
         }
     }
 }
