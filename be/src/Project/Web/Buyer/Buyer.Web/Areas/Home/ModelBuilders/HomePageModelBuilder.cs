@@ -49,13 +49,13 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
                 Metadata = await this.seoModelBuilder.BuildModelAsync(componentModel),
-                Header = await headerModelBuilder.BuildModelAsync(componentModel),
-                MainNavigation = await mainNavigationModelBuilder.BuildModelAsync(componentModel),
-                HeroSlider = await heroSliderModelBuilder.BuildModelAsync(componentModel),
-                CarouselGrid = await carouselGridModelBuilder.BuildModelAsync(componentModel),
-                ContentGrid = await contentGridModelBuilder.BuildModelAsync(componentModel),
-                NewsCarouselGrid = await newsModelBuilder.BuildModelAsync(componentModel),
-                Footer = footerModelBuilder.BuildModel()
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
+                MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
+                HeroSlider = await this.heroSliderModelBuilder.BuildModelAsync(componentModel),
+                CarouselGrid = await this.carouselGridModelBuilder.BuildModelAsync(componentModel),
+                ContentGrid = await this.contentGridModelBuilder.BuildModelAsync(componentModel),
+                NewsCarouselGrid = await this.newsModelBuilder.BuildModelAsync(componentModel),
+                Footer = this.footerModelBuilder.BuildModel()
             };
 
             return viewModel;

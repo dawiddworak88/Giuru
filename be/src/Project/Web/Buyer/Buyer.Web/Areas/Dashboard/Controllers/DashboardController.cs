@@ -27,6 +27,7 @@ namespace Buyer.Web.Areas.Dashboard.Controllers
         {
             var componentModel = new ComponentModelBase
             {
+                ContentPageKey = "dashboardPage",
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name,

@@ -37,6 +37,7 @@ namespace Buyer.Web.Areas.Orders.Controllers
         {
             var componentModel = new ComponentModelBase
             {
+                ContentPageKey = "basketPage",
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
@@ -55,6 +56,7 @@ namespace Buyer.Web.Areas.Orders.Controllers
             var componentModel = new ComponentModelBase
             {
                 Id = id,
+                ContentPageKey = "orderPage",
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),

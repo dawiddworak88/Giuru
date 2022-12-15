@@ -32,7 +32,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
         {
             var heroSliderItemViewModels = new List<HeroSliderItemViewModel>();
 
-            var heroSliderItems = await heroSliderRepository.GetHeroSliderItemsAsync(componentModel.Language, this.options.CurrentValue.DefaultCulture);
+            var heroSliderItems = await this.heroSliderRepository.GetHeroSliderItemsAsync(componentModel.Language, this.options.CurrentValue.DefaultCulture);
 
             if (heroSliderItems is not null)
             {
