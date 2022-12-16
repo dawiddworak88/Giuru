@@ -264,4 +264,19 @@
   <data name="RoleSavedSuccessfully" xml:space="preserve">
     <value>Rolle erfolgreich gespeichert.</value>
   </data>
+  <data name="CountryDeletedSuccessfully" xml:space="preserve">
+    <value>Land erfolgreich gelöscht.</value>
+  </data>
+  <data name="CountrySavedSuccessfully" xml:space="preserve">
+    <value>Land erfolgreich gespeichert.</value>
+  </data>
+  <data name="EditCountry" xml:space="preserve">
+    <value>Land bearbeiten</value>
+  </data>
+  <data name="NavigateToCountriesText" xml:space="preserve">
+    <value>Zurück zu den Ländern</value>
+  </data>
+  <data name="NewCountry" xml:space="preserve">
+    <value>Land hinzufügen</value>
+  </data>
 </root>

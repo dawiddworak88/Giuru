@@ -1,0 +1,22 @@
+﻿<div id="root" asp-prerender-module="BuyerDashboardPage" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    <title>@Model.Metadata.MetaTitle</title>
+    @if (string.IsNullOrWhiteSpace(@Model.Metadata.MetaDescription) is false)
+    {
+        <meta name="description" content="@Model.Metadata.MetaDescription" />
+    }
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/dashboardpage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/dashboardpage.js" asp-append-version="true"></script>
+}

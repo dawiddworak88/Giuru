@@ -247,7 +247,7 @@
     <value>Bestellstatus:</value>
   </data>
   <data name="OrderStatusComment" xml:space="preserve">
-    <value>Kommentar zum Bestellstatus:</value>
+    <value>Zusätzliche Informationen zum Bestellstatus:</value>
   </data>
   <data name="OrderStatusNotFound" xml:space="preserve">
     <value>Bestellstatus nicht gefunden</value>

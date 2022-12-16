@@ -48,7 +48,7 @@ namespace Catalog.Api.v1.Products.Controllers
         [HttpGet("files/{id}"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<ProductFileResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Files(Guid? id, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Files(Guid? id, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -104,10 +104,11 @@ namespace Catalog.Api.v1.Products.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetBySkus(string skus, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> GetBySkus(string skus, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var productSkus = skus.ToEnumerableString();
+
             if (productSkus is not null)
             {
                 var serviceModel = new GetProductsBySkusServiceModel
@@ -123,10 +124,12 @@ namespace Catalog.Api.v1.Products.Controllers
 
                 var validator = new GetProductsBySkusModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
+
                 if (validationResult.IsValid)
                 {
                     var products = await this.productService.GetBySkusAsync(serviceModel);
-                    if (products != null)
+
+                    if (products is not null)
                     {
                         var response = new PagedResults<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
                         {
@@ -167,13 +170,13 @@ namespace Catalog.Api.v1.Products.Controllers
             bool? hasPrimaryProduct,
             bool? isNew,
             string searchTerm, 
-            int pageIndex, 
-            int itemsPerPage,
+            int? pageIndex, 
+            int? itemsPerPage,
             string orderBy)
         {
             var productIds = ids.ToEnumerableGuidIds();
 
-            if (productIds != null)
+            if (productIds is not null)
             {
                 var serviceModel = new GetProductsByIdsServiceModel
                 {
@@ -185,14 +188,13 @@ namespace Catalog.Api.v1.Products.Controllers
                 };
 
                 var validator = new GetProductsByIdsModelValidator();
-
                 var validationResult = await validator.ValidateAsync(serviceModel);
 
                 if (validationResult.IsValid)
                 {
                     var products = await this.productService.GetByIdsAsync(serviceModel);
 
-                    if (products != null)
+                    if (products is not null)
                     {
                         var response = new PagedResults<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
                         { 
@@ -220,26 +222,19 @@ namespace Catalog.Api.v1.Products.Controllers
                     IsNew = isNew
                 };
 
-                var validator = new GetProductsModelValidator();
+                var products = await this.productService.GetAsync(serviceModel);
 
-                var validationResult = await validator.ValidateAsync(serviceModel);
-
-                if (validationResult.IsValid)
+                if (products is not null)
                 {
-                    var products = await this.productService.GetAsync(serviceModel);
-
-                    if (products != null)
+                    var response = new PagedResults<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
                     {
-                        var response = new PagedResults<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
-                        {
-                            Data = products.Data.OrEmptyIfNull().Select(x => MapProductServiceModelToProductResponseModel(x))
-                        };
+                        Data = products.Data.OrEmptyIfNull().Select(x => MapProductServiceModelToProductResponseModel(x))
+                    };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
-                    }
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
 
-                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
 

@@ -27,6 +27,7 @@ namespace Buyer.Web.Areas.DownloadCenter.Controllers
         {
             var componentModel = new ComponentModelBase
             {
+                ContentPageKey = "downloadCenterPage",
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name,

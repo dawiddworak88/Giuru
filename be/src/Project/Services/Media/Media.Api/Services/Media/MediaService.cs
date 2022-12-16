@@ -24,6 +24,8 @@ using Media.Api.IntegrationEvents;
 using Foundation.EventBus.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using System.Diagnostics;
+using Foundation.GenericRepository.Definitions;
 
 namespace Media.Api.Services.Media
 {
@@ -180,7 +182,16 @@ namespace Media.Api.Services.Media
 
             var predicateBuilder = PredicateBuilder.False<MediaItem>();
 
-            foreach (var id in model.Ids.Skip((model.PageIndex - 1) * model.ItemsPerPage).Take(model.ItemsPerPage))
+            var pageIndex = model.PageIndex;
+            var itemsPerPage = model.ItemsPerPage;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                pageIndex = Constants.DefaultPageIndex;
+                itemsPerPage = Constants.MaxItemsPerPageLimit;
+            }
+
+            foreach (var id in model.Ids.Skip((pageIndex.Value - 1) * itemsPerPage.Value).Take(itemsPerPage.Value))
             {
                 predicateBuilder = predicateBuilder.Or(x => x.Id == id);
             }
@@ -204,7 +215,7 @@ namespace Media.Api.Services.Media
                 }
             }
 
-            return new PagedResults<IEnumerable<MediaItemServiceModel>>(model.Ids.Count(), model.ItemsPerPage)
+            return new PagedResults<IEnumerable<MediaItemServiceModel>>(model.Ids.Count(), itemsPerPage.Value)
             { 
                    Data = mediaItemsResults
             };
@@ -274,7 +285,18 @@ namespace Media.Api.Services.Media
 
             mediaItems = mediaItems.ApplySort(serviceModel.OrderBy);
 
-            var pagedResults = mediaItems.PagedIndex(new Pagination(mediaItems.Count(), serviceModel.ItemsPerPage), serviceModel.PageIndex);
+            PagedResults<IEnumerable<MediaItem>> pagedResults;
+
+            if (serviceModel.PageIndex.HasValue is false || serviceModel.ItemsPerPage.HasValue is false)
+            {
+                mediaItems = mediaItems.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = mediaItems.PagedIndex(new Pagination(mediaItems.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = mediaItems.PagedIndex(new Pagination(mediaItems.Count(), serviceModel.ItemsPerPage.Value), serviceModel.PageIndex.Value);
+            }
 
             var pagedMediaItemsServiceModel = new PagedResults<IEnumerable<MediaItemServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -386,6 +408,8 @@ namespace Media.Api.Services.Media
 
         public async Task UpdateMediaItemVersionAsync(UpdateMediaItemVersionServiceModel model)
         {
+            using var source = new ActivitySource(this.GetType().Name);
+
             var mediaVersion = this.context.MediaItemVersions.OrderBy(o => o.Version).LastOrDefault(x => x.MediaItemId == model.Id.Value && x.IsActive);
             
             if (mediaVersion is not null)
@@ -440,6 +464,7 @@ namespace Media.Api.Services.Media
                     Name = model.Name
                 };
 
+                using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
                 this.eventBus.Publish(message);
             }
         }

@@ -4,7 +4,7 @@ using Foundation.Extensions.Validators;
 
 namespace Client.Api.Validators.Managers
 {
-    public class GetClientAccountManagersByIdsModelValidator : BasePagedServiceModelValidator<GetClientAccountManagersByIdsServiceModel>
+    public class GetClientAccountManagersByIdsModelValidator : BaseServiceModelValidator<GetClientAccountManagersByIdsServiceModel>
     {
         public GetClientAccountManagersByIdsModelValidator()
         {

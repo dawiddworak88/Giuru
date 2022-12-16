@@ -264,4 +264,19 @@
   <data name="RoleSavedSuccessfully" xml:space="preserve">
     <value>Successfully saved role.</value>
   </data>
+  <data name="CountryDeletedSuccessfully" xml:space="preserve">
+    <value>Country deleted successfully.</value>
+  </data>
+  <data name="CountrySavedSuccessfully" xml:space="preserve">
+    <value>Country saved successfully.</value>
+  </data>
+  <data name="EditCountry" xml:space="preserve">
+    <value>Edit country</value>
+  </data>
+  <data name="NavigateToCountriesText" xml:space="preserve">
+    <value>Back to countries</value>
+  </data>
+  <data name="NewCountry" xml:space="preserve">
+    <value>Add country</value>
+  </data>
 </root>

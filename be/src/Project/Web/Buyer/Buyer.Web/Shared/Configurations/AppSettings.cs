@@ -11,12 +11,15 @@ namespace Buyer.Web.Shared.Configurations
         public string OrderUrl { get; set; }
         public string BasketUrl { get; set; }
         public string NewsUrl { get; set; }
+        public string ContentGraphQlUrl { get; set; }
         public string MediaUrl { get; set; }
+        public string AnalyticsUrl { get; set; }
         public string DownloadCenterUrl { get; set; }
         public string CdnUrl { get; set; }
         public Guid? OrganisationId { get; set; }
         public string ProductAttributes { get; set; }
         public string GoogleTagManagerIdentifier { get; set; }
         public string MakeComplaintUrl { get; set; }
+        public string DefaultCulture { get; set; }
     }
 }

@@ -33,6 +33,7 @@ namespace Buyer.Web.Areas.Orders.Controllers
             var componentModel = new ComponentModelBase
             {
                 Id = id,
+                ContentPageKey = "orderItemPage",
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Language = CultureInfo.CurrentUICulture.Name,
                 Name = this.User.Identity.Name,

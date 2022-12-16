@@ -652,94 +652,13 @@
     <value>Thumbnail</value>
   </data>
   <data name="OrderStatusComment" xml:space="preserve">
-    <value>Order status comment</value>
+    <value>Additional order status info</value>
   </data>
   <data name="QRCode" xml:space="preserve">
     <value>QR Code</value>
   </data>
   <data name="GenerateQRCode" xml:space="preserve">
     <value>Generate QR code</value>
-  </data>
-  <data name="AustriaCountry" xml:space="preserve">
-    <value>Austria</value>
-  </data>
-  <data name="BelgiumCountry" xml:space="preserve">
-    <value>Belgium</value>
-  </data>
-  <data name="BulgariaCountry" xml:space="preserve">
-    <value>Bulgaria</value>
-  </data>
-  <data name="CroatiaCountry" xml:space="preserve">
-    <value>Croatia</value>
-  </data>
-  <data name="CzechCountry" xml:space="preserve">
-    <value>Czech Republic</value>
-  </data>
-  <data name="DenmarkCountry" xml:space="preserve">
-    <value>Denmark</value>
-  </data>
-  <data name="EstoniaCountry" xml:space="preserve">
-    <value>Estonia</value>
-  </data>
-  <data name="FranceCountry" xml:space="preserve">
-    <value>France</value>
-  </data>
-  <data name="GermanyCountry" xml:space="preserve">
-    <value>Germany</value>
-  </data>
-  <data name="GreatBritainCountry" xml:space="preserve">
-    <value>Great Britain</value>
-  </data>
-  <data name="GreeceCountry" xml:space="preserve">
-    <value>Greece</value>
-  </data>
-  <data name="HollandCountry" xml:space="preserve">
-    <value>Holland</value>
-  </data>
-  <data name="HungaryCountry" xml:space="preserve">
-    <value>Hungary</value>
-  </data>
-  <data name="ItalyCountry" xml:space="preserve">
-    <value>Italy</value>
-  </data>
-  <data name="LatviaCountry" xml:space="preserve">
-    <value>Latvia</value>
-  </data>
-  <data name="LithuaniaCountry" xml:space="preserve">
-    <value>Lithuania</value>
-  </data>
-  <data name="MoldovaCountry" xml:space="preserve">
-    <value>Moldova</value>
-  </data>
-  <data name="MongoliaCountry" xml:space="preserve">
-    <value>Mongolia</value>
-  </data>
-  <data name="NorwayCountry" xml:space="preserve">
-    <value>Norway</value>
-  </data>
-  <data name="PolandCountry" xml:space="preserve">
-    <value>Poland</value>
-  </data>
-  <data name="RomaniaCountry" xml:space="preserve">
-    <value>Romania</value>
-  </data>
-  <data name="RussiaCountry" xml:space="preserve">
-    <value>Russia</value>
-  </data>
-  <data name="SlovakiaCountry" xml:space="preserve">
-    <value>Slovakia</value>
-  </data>
-  <data name="SloveniaCountry" xml:space="preserve">
-    <value>Slovenia</value>
-  </data>
-  <data name="SpainCountry" xml:space="preserve">
-    <value>Spain</value>
-  </data>
-  <data name="SwedenCountry" xml:space="preserve">
-    <value>Sweden</value>
-  </data>
-  <data name="USACountry" xml:space="preserve">
-    <value>United States</value>
   </data>
   <data name="TrySignIn" xml:space="preserve">
     <value>Please try to sign in</value>
@@ -750,10 +669,13 @@
   <data name="IsraelCountry" xml:space="preserve">
     <value>Israel</value>
   </data>
-  <data name="SwitzerlandCountry" xml:space="preserve">
-    <value>Switzerland</value>
+  <data name="CountryNotFound" xml:space="preserve">
+    <value>Country not found.</value>
   </data>
-  <data name="FinlandCountry" xml:space="preserve">
-    <value>FinlandCountry</value>
+  <data name="Countries" xml:space="preserve">
+    <value>Countries</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>Content</value>
   </data>
 </root>

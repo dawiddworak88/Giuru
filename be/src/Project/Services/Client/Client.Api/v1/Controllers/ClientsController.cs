@@ -48,13 +48,13 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var clientIds = ids.ToEnumerableGuidIds();
 
-            if (clientIds != null)
+            if (clientIds is not null)
             {
                 var serviceModel = new GetClientsByIdsServiceModel
                 {
@@ -75,7 +75,7 @@ namespace Client.Api.v1.Controllers
                 {
                     var clients = await this.clientsService.GetByIdsAsync(serviceModel);
 
-                    if (clients != null)
+                    if (clients is not null)
                     {
                         var response = new PagedResults<IEnumerable<ClientResponseModel>>(clients.Total, clients.PageSize)
                         {
@@ -85,7 +85,7 @@ namespace Client.Api.v1.Controllers
                                 Name = x.Name,
                                 Email = x.Email,
                                 CommunicationLanguage = x.CommunicationLanguage,
-                                Country = x.Country,
+                                CountryId = x.CountryId,
                                 PhoneNumber = x.PhoneNumber,
                                 ClientGroupIds = x.ClientGroupIds,
                                 ClientManagerIds = x.ClientManagerIds,
@@ -121,7 +121,7 @@ namespace Client.Api.v1.Controllers
                 {
                     var clients = await this.clientsService.GetAsync(serviceModel);
 
-                    if (clients != null)
+                    if (clients is not null)
                     {
                         var response = new PagedResults<IEnumerable<ClientResponseModel>>(clients.Total, clients.PageSize)
                         {
@@ -130,7 +130,7 @@ namespace Client.Api.v1.Controllers
                                 Id = x.Id,
                                 Name = x.Name,
                                 Email = x.Email,
-                                Country = x.Country,
+                                CountryId = x.CountryId,
                                 CommunicationLanguage = x.CommunicationLanguage,
                                 PhoneNumber = x.PhoneNumber,
                                 ClientGroupIds = x.ClientGroupIds,
@@ -185,7 +185,7 @@ namespace Client.Api.v1.Controllers
                         Email = client.Email,
                         Name = client.Name,
                         CommunicationLanguage = client.CommunicationLanguage,
-                        Country = client.Country,
+                        CountryId = client.CountryId,
                         PhoneNumber = client.PhoneNumber,
                         ClientGroupIds = client.ClientGroupIds,
                         ClientManagerIds = client.ClientManagerIds,
@@ -236,7 +236,7 @@ namespace Client.Api.v1.Controllers
                         Email = client.Email,
                         Name = client.Name,
                         CommunicationLanguage = client.CommunicationLanguage,
-                        Country = client.Country,
+                        CountryId = client.CountryId,
                         PhoneNumber = client.PhoneNumber,
                         ClientGroupIds = client.ClientGroupIds,
                         ClientManagerIds = client.ClientManagerIds,
@@ -277,7 +277,7 @@ namespace Client.Api.v1.Controllers
                     Id = request.Id,
                     Name = request.Name,
                     Email = request.Email,
-                    Country = request.Country,
+                    CountryId = request.CountryId,
                     CommunicationLanguage = request.CommunicationLanguage,
                     PhoneNumber = request.PhoneNumber,
                     ClientOrganisationId = request.OrganisationId,
@@ -307,7 +307,7 @@ namespace Client.Api.v1.Controllers
                 {
                     Name = request.Name,
                     Email = request.Email,
-                    Country = request.Country,
+                    CountryId = request.CountryId,
                     CommunicationLanguage = request.CommunicationLanguage,
                     PhoneNumber = request.PhoneNumber,
                     ClientOrganisationId = request.OrganisationId,

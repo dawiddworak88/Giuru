@@ -49,7 +49,8 @@ namespace Media.Api.v1.Controllers
         [Authorize]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<MediaItemResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy )
+        [AllowAnonymous]
+        public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy )
         {
             var sellerClaims = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var mediaItemsIds = ids.ToEnumerableGuidIds();
@@ -111,38 +112,31 @@ namespace Media.Api.v1.Controllers
                     OrderBy = orderBy
                 };
 
-                var validator = new GetMediaItemsModelValidator();
-                var validationResult = await validator.ValidateAsync(serviceModel);
+                var mediaItems = this.mediaService.GetAsync(serviceModel);
 
-                if (validationResult.IsValid)
+                if (mediaItems is not null)
                 {
-                    var mediaItems = this.mediaService.GetAsync(serviceModel);
-
-                    if (mediaItems is not null)
+                    var response = new PagedResults<IEnumerable<MediaItemResponseModel>>(mediaItems.Result.Total, mediaItems.Result.PageSize)
                     {
-                        var response = new PagedResults<IEnumerable<MediaItemResponseModel>>(mediaItems.Result.Total, mediaItems.Result.PageSize)
+                        Data = mediaItems.Result.Data.OrEmptyIfNull().Select(x => new MediaItemResponseModel
                         {
-                            Data = mediaItems.Result.Data.OrEmptyIfNull().Select(x => new MediaItemResponseModel
-                            {
-                                Id = x.Id,
-                                MediaItemVersionId = x.MediaItemVersionId,
-                                Description = x.Description,
-                                Extension = x.Extension,
-                                Filename = x.Filename,
-                                MimeType = x.MimeType,
-                                Name = x.Name,
-                                Size = x.Size,
-                                ClientGroupIds = x.ClientGroupIds,
-                                LastModifiedDate = x.LastModifiedDate,
-                                CreatedDate = x.CreatedDate
-                            })
-                        };
+                            Id = x.Id,
+                            MediaItemVersionId = x.MediaItemVersionId,
+                            Description = x.Description,
+                            Extension = x.Extension,
+                            Filename = x.Filename,
+                            MimeType = x.MimeType,
+                            Name = x.Name,
+                            Size = x.Size,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
+                    };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
-                    }
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
 
-                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
 

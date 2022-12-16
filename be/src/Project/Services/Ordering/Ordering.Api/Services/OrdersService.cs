@@ -1,6 +1,7 @@
 ﻿using Foundation.EventBus.Abstractions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -21,6 +22,7 @@ using Ordering.Api.IntegrationEvents;
 using Ordering.Api.ServicesModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -65,6 +67,8 @@ namespace Ordering.Api.Services
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel serviceModel)
         {
+            using var source = new ActivitySource(this.GetType().Name);
+
             var order = new Order
             {
                 OrderStateId = OrderStatesConstants.NewId,
@@ -178,6 +182,7 @@ namespace Ordering.Api.Services
                 BasketId =  serviceModel.BasketId
             };
 
+            using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
             this.eventBus.Publish(message);
         }
 
@@ -204,7 +209,18 @@ namespace Ordering.Api.Services
 
             orders = orders.ApplySort(model.OrderBy);
 
-            var pagedResults = orders.PagedIndex(new Pagination(orders.Count(), model.ItemsPerPage), model.PageIndex);
+            PagedResults<IEnumerable<Order>> pagedResults;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                orders = orders.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = orders.PagedIndex(new Pagination(orders.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = orders.PagedIndex(new Pagination(orders.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedOrdersServiceModel = new PagedResults<IEnumerable<OrderServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -562,7 +578,18 @@ namespace Ordering.Api.Services
 
             orders = orders.ApplySort(model.OrderBy);
 
-            var pagedResults = orders.PagedIndex(new Pagination(orders.Count(), model.ItemsPerPage), model.PageIndex);
+            PagedResults<IEnumerable<Order>> pagedResults;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                orders = orders.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = orders.PagedIndex(new Pagination(orders.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = orders.PagedIndex(new Pagination(orders.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedOrdersServiceModel = new PagedResults<IEnumerable<OrderServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -688,7 +715,14 @@ namespace Ordering.Api.Services
 
             orderFiles = orderFiles.ApplySort(model.OrderBy);
 
-            return orderFiles.PagedIndex(new Pagination(orderFiles.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                orderFiles = orderFiles.Take(Constants.MaxItemsPerPageLimit);
+
+                return orderFiles.PagedIndex(new Pagination(orderFiles.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return orderFiles.PagedIndex(new Pagination(orderFiles.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<IEnumerable<OrderStatusServiceModel>> GetOrderStatusesAsync(GetOrderStatusesServiceModel serviceModel)
