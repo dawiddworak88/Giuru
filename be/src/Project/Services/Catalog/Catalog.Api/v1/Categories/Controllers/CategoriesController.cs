@@ -65,7 +65,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 OrderBy = orderBy
             };
 
-            var categories = _categoryService.GetAsync(serviceModel);
+            var categories = _categoryService.Get(serviceModel);
 
             if (categories is not null)
             {

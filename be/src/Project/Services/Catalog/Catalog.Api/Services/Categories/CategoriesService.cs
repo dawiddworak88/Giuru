@@ -31,7 +31,7 @@ namespace Catalog.Api.Services.Categories
             _productLocalizer = productLocalizer;
         }
 
-        public PagedResults<IEnumerable<CategoryServiceModel>> GetAsync(GetCategoriesServiceModel model)
+        public PagedResults<IEnumerable<CategoryServiceModel>> Get(GetCategoriesServiceModel model)
         {
             var categories = _context.Categories.Where(x => x.IsActive);
 
