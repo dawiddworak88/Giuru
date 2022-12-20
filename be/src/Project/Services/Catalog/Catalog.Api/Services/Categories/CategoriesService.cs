@@ -15,7 +15,6 @@ using Foundation.Catalog.Infrastructure;
 using Foundation.Catalog.Infrastructure.Categories.Entites;
 using Foundation.Catalog.Infrastructure.Categories.Entities;
 using Foundation.GenericRepository.Definitions;
-using Nest;
 
 namespace Catalog.Api.Services.Categories
 {
