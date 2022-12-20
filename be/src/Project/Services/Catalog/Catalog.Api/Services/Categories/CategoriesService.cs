@@ -15,6 +15,7 @@ using Foundation.Catalog.Infrastructure;
 using Foundation.Catalog.Infrastructure.Categories.Entites;
 using Foundation.Catalog.Infrastructure.Categories.Entities;
 using Foundation.GenericRepository.Definitions;
+using Nest;
 
 namespace Catalog.Api.Services.Categories
 {
@@ -33,31 +34,11 @@ namespace Catalog.Api.Services.Categories
 
         public PagedResults<IEnumerable<CategoryServiceModel>> GetAsync(GetCategoriesServiceModel model)
         {
-            var categories = from c in _context.Categories
-                     join ci in _context.CategoryImages on c.Id equals ci.CategoryId into jtci
-                     from jci in jtci.DefaultIfEmpty()
-                     join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId into jtct
-                     from jct in jtct.DefaultIfEmpty()
-                     join pct in _context.CategoryTranslations on c.Parentid equals pct.CategoryId into jtpct
-                     from jpct in jtpct.DefaultIfEmpty()
-                     where jct.Language == model.Language && jpct.Language == model.Language && c.IsActive
-                     select new CategoryServiceModel
-                     {
-                         Id = c.Id,
-                         ThumbnailMediaId = jci != null ? jci.MediaId : null,
-                         IsLeaf = c.IsLeaf,
-                         Level= c.Level,
-                         ParentId = c.Parentid,
-                         Order = c.Order,
-                         Name = jct.Name,
-                         ParentCategoryName = jpct.Name,
-                         LastModifiedDate = c.LastModifiedDate,
-                         CreatedDate = c.CreatedDate
-                     };
+            var categories = _context.Categories.Where(x => x.IsActive);
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
-                categories = categories.Where(x => x.Name.StartsWith(model.SearchTerm));
+                categories = categories.Where(x => x.Translations.Any(x => x.Language == model.Language && x.Name.StartsWith(model.SearchTerm) && x.IsActive));
             }
 
             if (model.Level.HasValue)
@@ -72,16 +53,39 @@ namespace Catalog.Api.Services.Categories
 
             categories = categories.ApplySort(model.OrderBy);
 
+            PagedResults<IEnumerable<Category>> pagedResults;
+
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
                 categories = categories.Take(Constants.MaxItemsPerPageLimit);
 
-                return categories.PagedIndex(new Pagination(categories.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+                pagedResults = categories.PagedIndex(new Pagination(categories.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
             }
             else
             {
-                return categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+                pagedResults = categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
+
+            var translations = _context.CategoryTranslations.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.CategoryId) && x.IsActive || pagedResults.Data.Select(y => y.Parentid).Contains(x.CategoryId) && x.IsActive).ToList();
+
+            var image = _context.CategoryImages.FirstOrDefault(x => pagedResults.Data.Select(y => y.Id).Contains(x.CategoryId) && x.IsActive);
+
+            return new PagedResults<IEnumerable<CategoryServiceModel>>(pagedResults.Total, pagedResults.PageSize)
+            {
+                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new CategoryServiceModel
+                {
+                    Id = x.Id,
+                    Order = x.Order,
+                    Level = x.Level,
+                    IsLeaf = x.IsLeaf,
+                    ParentId = x.Parentid,
+                    LastModifiedDate = x.LastModifiedDate,
+                    CreatedDate = x.CreatedDate,
+                    Name = translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
+                    ParentCategoryName = translations.FirstOrDefault(t => t.CategoryId == x.Parentid && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == x.Parentid)?.Name,
+                    ThumbnailMediaId = image?.MediaId
+                })
+            };
         }
 
         public async Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model)
