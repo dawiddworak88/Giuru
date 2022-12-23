@@ -20,6 +20,7 @@ using Foundation.GenericRepository.Paginations;
 using Catalog.Api.v1.Categories.ResultModels;
 using Foundation.Extensions.ExtensionMethods;
 using Catalog.Api.v1.Categories.ResponseModels;
+using System.Diagnostics;
 
 namespace Catalog.Api.v1.Categories.Controllers
 {
@@ -29,11 +30,11 @@ namespace Catalog.Api.v1.Categories.Controllers
     [ApiController]
     public class CategoriesController : BaseApiController
     {
-        private readonly ICategoriesService categoryService;
+        private readonly ICategoriesService _categoryService;
 
         public CategoriesController(ICategoriesService categoryService)
         {
-            this.categoryService = categoryService;
+            _categoryService = categoryService;
         }
 
         /// <summary>
@@ -51,7 +52,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<CategoryResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string searchTerm, int? level, bool? leafOnly, int? pageIndex, int? itemsPerPage, string orderBy)
+        public IActionResult Get(string searchTerm, int? level, bool? leafOnly, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var serviceModel = new GetCategoriesServiceModel
             {
@@ -64,7 +65,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 OrderBy = orderBy
             };
 
-            var categories = await this.categoryService.GetAsync(serviceModel);
+            var categories = _categoryService.Get(serviceModel);
 
             if (categories is not null)
             {
@@ -85,10 +86,10 @@ namespace Catalog.Api.v1.Categories.Controllers
                     })
                 };
 
-                return this.StatusCode((int)HttpStatusCode.OK, response);
+                return StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            return StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
@@ -117,7 +118,7 @@ namespace Catalog.Api.v1.Categories.Controllers
 
             if (validationResult.IsValid)
             {
-                var category = await this.categoryService.GetAsync(serviceModel);
+                var category = await _categoryService.GetAsync(serviceModel);
 
                 if (category != null)
                 {
@@ -135,11 +136,11 @@ namespace Catalog.Api.v1.Categories.Controllers
                         CreatedDate = category.CreatedDate
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                    return StatusCode((int)HttpStatusCode.NotFound);
                 }
             }
 
@@ -158,7 +159,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(CategoryRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             if (request.Id.HasValue)
             {
@@ -171,7 +172,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                     UiSchema = request.UiSchema,
                     ParentId = request.ParentCategoryId,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -181,7 +182,7 @@ namespace Catalog.Api.v1.Categories.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var category = await this.categoryService.UpdateAsync(serviceModel);
+                    var category = await _categoryService.UpdateAsync(serviceModel);
 
                     if (category != null)
                     {
@@ -199,7 +200,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                             CreatedDate = category.CreatedDate
                         };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                        return StatusCode((int)HttpStatusCode.OK, response);
                     }
                 }
 
@@ -215,7 +216,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                     ParentId = request.ParentCategoryId,
                     Files = request.Files,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -225,7 +226,7 @@ namespace Catalog.Api.v1.Categories.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var category = await this.categoryService.CreateAsync(serviceModel);
+                    var category = await _categoryService.CreateAsync(serviceModel);
 
                     if (category != null)
                     {
@@ -243,7 +244,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                             CreatedDate = category.CreatedDate
                         };
 
-                        return this.StatusCode((int)HttpStatusCode.Created, response);
+                        return StatusCode((int)HttpStatusCode.Created, response);
                     }
                 }
 
@@ -264,12 +265,12 @@ namespace Catalog.Api.v1.Categories.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new DeleteCategoryServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -279,9 +280,9 @@ namespace Catalog.Api.v1.Categories.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.categoryService.DeleteAsync(serviceModel);
+                await _categoryService.DeleteAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -300,7 +301,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> SaveCategorySchema(CategorySchemaRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new UpdateCategorySchemaServiceModel
             {
@@ -308,7 +309,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 Schema = request.Schema,
                 UiSchema = request.UiSchema,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -318,7 +319,7 @@ namespace Catalog.Api.v1.Categories.Controllers
 
             if (validationResult.IsValid)
             {
-                var categorySchema = await this.categoryService.UpdateCategorySchemaAsync(serviceModel);
+                var categorySchema = await _categoryService.UpdateCategorySchemaAsync(serviceModel);
 
                 if (categorySchema != null)
                 {
@@ -332,7 +333,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                         CreatedDate = categorySchema.CreatedDate
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
             }
 
@@ -364,7 +365,7 @@ namespace Catalog.Api.v1.Categories.Controllers
 
             if (validationResult.IsValid)
             {
-                var categorySchema = await this.categoryService.GetCategorySchemaAsync(serviceModel);
+                var categorySchema = await _categoryService.GetCategorySchemaAsync(serviceModel);
 
                 if (categorySchema != null)
                 {
@@ -378,11 +379,11 @@ namespace Catalog.Api.v1.Categories.Controllers
                         CreatedDate = categorySchema.CreatedDate
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                    return StatusCode((int)HttpStatusCode.NotFound);
                 }
             }
 
