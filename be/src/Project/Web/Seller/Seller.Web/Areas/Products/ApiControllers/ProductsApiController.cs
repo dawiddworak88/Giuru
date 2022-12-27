@@ -47,7 +47,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
                 pageIndex,
                 itemsPerPage,
-                $"{nameof(Product.CreatedDate)} desc");
+                null);
 
             return this.StatusCode((int)HttpStatusCode.OK, products);
         }

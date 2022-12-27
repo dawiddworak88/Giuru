@@ -28,12 +28,12 @@ namespace Ordering.Api.v1.Controllers
     [ApiController]
     public class OrdersController : BaseApiController
     {
-        private readonly IOrdersService ordersService;
+        private readonly IOrdersService _ordersService;
 
         public OrdersController(
             IOrdersService ordersService)
         {
-            this.ordersService = ordersService;
+            _ordersService = ordersService;
         }
 
         /// <summary>
@@ -48,9 +48,9 @@ namespace Ordering.Api.v1.Controllers
         [HttpGet("files/{id}"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<OrderFileResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Files(Guid? id, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Files(Guid? id, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetOrderFilesServiceModel
             {
@@ -60,7 +60,7 @@ namespace Ordering.Api.v1.Controllers
                 ItemsPerPage = itemsPerPage,
                 OrderBy = orderBy,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -69,7 +69,7 @@ namespace Ordering.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var orderFiles = await this.ordersService.GetOrderFilesAsync(serviceModel);
+                var orderFiles = await _ordersService.GetOrderFilesAsync(serviceModel);
 
                 if (orderFiles is not null)
                 {
@@ -83,7 +83,7 @@ namespace Ordering.Api.v1.Controllers
                         })
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
             }
 
@@ -104,10 +104,10 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy, DateTime? createdDateGreaterThan)
+        public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy, DateTime? createdDateGreaterThan)
         {
             var ordersIds = ids.ToEnumerableGuidIds();
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             if (ordersIds is not null)
             {
@@ -119,10 +119,10 @@ namespace Ordering.Api.v1.Controllers
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
                     CreatedDateGreaterThan = createdDateGreaterThan,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = CultureInfo.CurrentCulture.Name,
-                    IsSeller = this.User.IsInRole("Seller")
+                    IsSeller = User.IsInRole("Seller")
                 };
 
                 var validator = new GetOrdersByIdsModelValidator();
@@ -130,7 +130,7 @@ namespace Ordering.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var orders = await this.ordersService.GetAsync(serviceModel);
+                    var orders = _ordersService.Get(serviceModel);
 
                     if (orders is not null)
                     {
@@ -196,7 +196,7 @@ namespace Ordering.Api.v1.Controllers
                             })
                         };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                        return StatusCode((int)HttpStatusCode.OK, response);
                     }
                 }
 
@@ -212,9 +212,9 @@ namespace Ordering.Api.v1.Controllers
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
                     CreatedDateGreaterThan = createdDateGreaterThan,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    IsSeller = this.User.IsInRole("Seller")
+                    IsSeller = User.IsInRole("Seller")
                 };
 
                 var validator = new GetOrdersModelValidator();
@@ -222,7 +222,7 @@ namespace Ordering.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var orders = await this.ordersService.GetAsync(serviceModel);
+                    var orders =  _ordersService.Get(serviceModel);
 
                     if (orders is not null)
                     {
@@ -288,7 +288,7 @@ namespace Ordering.Api.v1.Controllers
                             })
                         };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                        return StatusCode((int)HttpStatusCode.OK, response);
                     }
                 }
 
@@ -309,14 +309,14 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetOrderServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                IsSeller = this.User.IsInRole("Seller")
+                IsSeller = User.IsInRole("Seller")
             };
 
             var validator = new GetOrderModelValidator();
@@ -325,7 +325,7 @@ namespace Ordering.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var order = await this.ordersService.GetAsync(serviceModel);
+                var order = await _ordersService.GetAsync(serviceModel);
 
                 if (order != null)
                 {
@@ -390,11 +390,11 @@ namespace Ordering.Api.v1.Controllers
                         CreatedDate = order.CreatedDate
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NoContent);
+                    return StatusCode((int)HttpStatusCode.NoContent);
                 }
 
             }
@@ -414,14 +414,14 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetOrderItem(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetOrderItemServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
             };
 
             var validator = new GetOrderItemModelValidator();
@@ -429,7 +429,7 @@ namespace Ordering.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var orderItem = await this.ordersService.GetAsync(serviceModel);
+                var orderItem = await _ordersService.GetAsync(serviceModel);
 
                 if (orderItem is not null)
                 {
@@ -457,7 +457,7 @@ namespace Ordering.Api.v1.Controllers
                         CreatedDate = orderItem.CreatedDate
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
             }
 
@@ -476,14 +476,14 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetOrderItemStatuses(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetOrderItemStatusChangesServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
             };
 
             var validator = new GetOrderItemStatusChangesModelValidator();
@@ -491,7 +491,7 @@ namespace Ordering.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var statusChanges = await this.ordersService.GetAsync(serviceModel);
+                var statusChanges = await _ordersService.GetAsync(serviceModel);
 
                 if (statusChanges is not null)
                 {
@@ -507,7 +507,7 @@ namespace Ordering.Api.v1.Controllers
                         })
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
             }
 
@@ -525,7 +525,7 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Status(UpdateOrderItemStatusRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new UpdateOrderItemStatusServiceModel
             {
@@ -534,7 +534,7 @@ namespace Ordering.Api.v1.Controllers
                 OrderItemStatusChangeComment = request.OrderItemStatusChangeComment,
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
             };
 
             var validator = new UpdateOrderItemStatusModelValidator();
@@ -542,9 +542,9 @@ namespace Ordering.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.ordersService.UpdateOrderItemStatusAsync(serviceModel);
+                await _ordersService.UpdateOrderItemStatusAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -561,13 +561,13 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Sync(SyncOrderItemsStatusesRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new UpdateOrderItemsStatusesServiceModel
             {
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrderItems = request.OrderItems.OrEmptyIfNull().Select(x => new UpdateOrderItemsStatusServiceModel
                 {
                     Id = x.Id,
@@ -582,9 +582,9 @@ namespace Ordering.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.ordersService.SyncOrderItemsStatusesAsync(serviceModel);
+                await _ordersService.SyncOrderItemsStatusesAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -601,13 +601,13 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> SyncOrderLines(SyncOrderLinesStatusesRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new UpdateOrderLinesStatusesServiceModel
             {
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrderItems = request.OrderItems.OrEmptyIfNull().Select(x => new UpdateOrderLinesStatusServiceModel
                 {
                     Id = x.OrderId,
@@ -626,9 +626,9 @@ namespace Ordering.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.ordersService.SyncOrderLinesStatusesAsync(serviceModel);
+                await _ordersService.SyncOrderLinesStatusesAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -645,7 +645,7 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Post(UpdateOrderStatusRequestModel model)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new UpdateOrderStatusServiceModel
             {
@@ -653,8 +653,8 @@ namespace Ordering.Api.v1.Controllers
                 OrderStatusId = model.OrderStatusId,
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                IsSeller = this.User.IsInRole("Seller")
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                IsSeller = User.IsInRole("Seller")
             };
 
             var validator = new UpdateOrderStatusModelValidator();
@@ -663,7 +663,7 @@ namespace Ordering.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var order = await this.ordersService.SaveOrderStatusAsync(serviceModel);
+                var order = await _ordersService.SaveOrderStatusAsync(serviceModel);
 
                 if (order != null)
                 {
@@ -725,11 +725,11 @@ namespace Ordering.Api.v1.Controllers
                         CreatedDate = order.CreatedDate
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NoContent);
+                    return StatusCode((int)HttpStatusCode.NoContent);
                 }
             }
 

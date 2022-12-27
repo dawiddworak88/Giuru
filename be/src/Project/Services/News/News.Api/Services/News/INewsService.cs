@@ -8,7 +8,7 @@ namespace News.Api.Services.News
 {
     public interface INewsService
     {
-        Task<PagedResults<IEnumerable<NewsItemServiceModel>>> GetAsync(GetNewsItemsServiceModel model);
+        PagedResults<IEnumerable<NewsItemServiceModel>> Get(GetNewsItemsServiceModel model);
         Task<NewsItemServiceModel> GetAsync(GetNewsItemServiceModel model);
         Task DeleteAsync(DeleteNewsItemServiceModel model);
         Task<Guid> CreateAsync(CreateNewsItemServiceModel model);

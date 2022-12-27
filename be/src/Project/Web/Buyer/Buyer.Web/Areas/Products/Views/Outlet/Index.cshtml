@@ -6,10 +6,10 @@
 </script>
 
 @section MetaTags {
-    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("Outlet"), false)</title>
-    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("Outlet")))
+    <title>@Model.Metadata.MetaTitle</title>
+    @if (string.IsNullOrWhiteSpace(@Model.Metadata.MetaDescription) is false)
     {
-        <meta name="description" content="@this.Localizer.GetString("Outlet")" />
+        <meta name="description" content="@Model.Metadata.MetaDescription" />
     }
 }
 

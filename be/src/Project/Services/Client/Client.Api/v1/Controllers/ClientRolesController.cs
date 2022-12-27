@@ -49,7 +49,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -107,31 +107,25 @@ namespace Client.Api.v1.Controllers
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
-                var validator = new GetClientRolesModelValidator();
-                var validationResult = await validator.ValidateAsync(serviceModel);
+                var clients = await this.clientRolesService.GetAsync(serviceModel);
 
-                if (validationResult.IsValid)
+                if (clients is not null)
                 {
-                    var clients = await this.clientRolesService.GetAsync(serviceModel);
-
-                    if (clients != null)
+                    var response = new PagedResults<IEnumerable<ClientRoleResponseModel>>(clients.Total, clients.PageSize)
                     {
-                        var response = new PagedResults<IEnumerable<ClientRoleResponseModel>>(clients.Total, clients.PageSize)
+                        Data = clients.Data.OrEmptyIfNull().Select(x => new ClientRoleResponseModel
                         {
-                            Data = clients.Data.OrEmptyIfNull().Select(x => new ClientRoleResponseModel
-                            {
-                                Id = x.Id,
-                                Name = x.Name,
-                                LastModifiedDate = x.LastModifiedDate,
-                                CreatedDate = x.CreatedDate
-                            })
-                        };
+                            Id = x.Id,
+                            Name = x.Name,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
+                    };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
-                    }
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
 
-                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
 

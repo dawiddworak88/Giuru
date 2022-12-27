@@ -100,6 +100,7 @@ const InventoryForm = (props) => {
             const searchParameters = {
                 searchTerm: value,
                 pageIndex: 1,
+                hasPrimaryProduct: true,
                 itemsPerPage: SearchConstants.productsSuggestionItemsPerPage()
             };
 

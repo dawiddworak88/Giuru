@@ -15,8 +15,8 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             bool? hasPrimaryProduct,
             bool? isNew,
             string searchTerm,
-            int pageIndex, 
-            int itemsPerPage,
+            int? pageIndex, 
+            int? itemsPerPage,
             string orderBy);
         Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? organisationId, IEnumerable<Guid> ids, string orderBy);
         Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? organisationId, IEnumerable<string> skus, string orderBy);

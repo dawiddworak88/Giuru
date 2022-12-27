@@ -140,6 +140,12 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         },
                         new DrawerMenuItemViewModel
                         {
+                            Icon = IconsConstants.MapPin,
+                            Title = this.globalLocalizer.GetString("Countries"),
+                            Url = this.linkGenerator.GetPathByAction("Index", "Countries", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name })
+                        },
+                        new DrawerMenuItemViewModel
+                        {
                             Icon = IconsConstants.Briefcase,
                             Title = this.globalLocalizer.GetString("ClientManagers"),
                             Url = this.linkGenerator.GetPathByAction("Index", "ClientAccountManagers", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })

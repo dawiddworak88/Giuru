@@ -1,0 +1,26 @@
+{
+    "name": "strapi-provider-upload-giuru",
+    "version": "1.0.0",
+    "description": "Giuru provider for uploading and storing media files",
+    "main": "./lib/index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "strapi",
+        "upload",
+        "provider"
+    ],
+    "strapi": {
+        "isProvider": true
+    },
+    "author": "GIURU",
+    "license": "MIT",
+    "directories": {
+        "lib": "lib"
+    },
+    "dependencies": {
+        "form-data": "4.0.0",
+        "node-fetch": "2.6.7"
+    }
+}

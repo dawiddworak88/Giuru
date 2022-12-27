@@ -7,8 +7,8 @@ namespace Ordering.Api.Services
 {
     public interface IOrdersService
     {
-        Task<PagedResults<IEnumerable<OrderServiceModel>>> GetAsync(GetOrdersServiceModel model);
-        Task<PagedResults<IEnumerable<OrderServiceModel>>> GetAsync(GetOrdersByIdsServiceModel model);
+        PagedResults<IEnumerable<OrderServiceModel>> Get(GetOrdersServiceModel model);
+        PagedResults<IEnumerable<OrderServiceModel>> Get(GetOrdersByIdsServiceModel model);
         Task<OrderServiceModel> GetAsync(GetOrderServiceModel model);
         Task CheckoutAsync(CheckoutBasketServiceModel serviceModel);
         Task<IEnumerable<OrderStatusServiceModel>> GetOrderStatusesAsync(GetOrderStatusesServiceModel serviceModel);

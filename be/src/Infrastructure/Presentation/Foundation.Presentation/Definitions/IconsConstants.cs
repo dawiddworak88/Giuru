@@ -20,5 +20,7 @@
         public static readonly string Briefcase = "Briefcase";
         public static readonly string Download = "DownloadCloud";
         public static readonly string Layout = "Layout";
+        public static readonly string MapPin = "MapPin";
+        public static readonly string Content = "FileText";
     }
 }

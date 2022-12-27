@@ -19,6 +19,8 @@ namespace Foundation.Catalog.Infrastructure.Categories.Entities
         [Required]
         public bool IsLeaf { get; set; }
 
+        public virtual IEnumerable<CategoryImage> Images { get; set; }
+
         public virtual IEnumerable<CategoryTranslation> Translations { get; set; }
 
         public virtual IEnumerable<CategorySchema> Schemas { get; set; }

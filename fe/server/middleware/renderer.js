@@ -31,6 +31,9 @@ import ContentPage from "../../src/project/Account/areas/Home/pages/Content/Cont
 // Seller Portal
 import ProductCardPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductCardPage/ProductCardPage";
 import ProductCardsPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductCardsPage/ProductCardsPage";
+import DashboardPage from "../../src/project/Seller.Portal/areas/Dashboard/pages/DashboardPage/DashboardPage";
+import CountryPage from "../../src/project/Seller.Portal/areas/Global/pages/CountryPage/CountryPage";
+import CountriesPage from "../../src/project/Seller.Portal/areas/Global/pages/CountriesPage/CountriesPage";
 import TeamMemberPage from "../../src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/TeamMember";
 import TeamMembersPage from "../../src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/TeamMembers";
 import DownloadCenterItemPage from "../../src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/DownloadCenterItemPage";
@@ -99,6 +102,9 @@ const Components = {
 
 	ProductCardPage,
 	ProductCardsPage,
+	DashboardPage,
+	CountriesPage,
+	CountryPage,
 	TeamMemberPage,
 	TeamMembersPage,
 	DownloadCenterItemPage,
