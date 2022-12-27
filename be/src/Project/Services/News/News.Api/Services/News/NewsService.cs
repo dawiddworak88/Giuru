@@ -79,7 +79,7 @@ namespace News.Api.Services.News
                     GroupId = clientGroupId
                 };
 
-                await this.newsContext.NewsItemsGroups.AddAsync(group.FillCommonProperties());
+                await _context.NewsItemsGroups.AddAsync(group.FillCommonProperties());
             }
 
             await _context.SaveChangesAsync();
@@ -131,7 +131,7 @@ namespace News.Api.Services.News
 
             var files = _context.NewsItemFiles.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.NewsItemId) && x.IsActive).ToList();
 
-            var clientGroups = _context.NewsItemsGroups.Where(x => x.pagedResults.Data.Select(y => y.Id).Contains(x.NewsItemId) && x.IsActive).ToList();
+            var clientGroups = _context.NewsItemsGroups.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.NewsItemId) && x.IsActive).ToList();
 
             return new PagedResults<IEnumerable<NewsItemServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
@@ -149,7 +149,7 @@ namespace News.Api.Services.News
                     ThumbnailImageId = x.ThumbnailImageId,
                     IsPublished = x.IsPublished,
                     Files = files.Select(x => x.Id),
-                    ClientGroupIds = clientGroups.Select(x => x.Id);
+                    ClientGroupIds = clientGroups.Select(x => x.Id),
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
                 })
@@ -197,7 +197,7 @@ namespace News.Api.Services.News
                
                if (files.Any())
                 {
-                    item.Files = files;
+                    item.Files = files.Select(x => x.Id);
                 }
 
                 var clientGroups = _context.NewsItemsGroups.Where(x => x.NewsItemId == newsItem.Id && x.IsActive).Select(x => x.GroupId);

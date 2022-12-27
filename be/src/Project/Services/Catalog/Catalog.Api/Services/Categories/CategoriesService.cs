@@ -69,7 +69,7 @@ namespace Catalog.Api.Services.Categories
 
             var image = _context.CategoryImages.FirstOrDefault(x => pagedResults.Data.Select(y => y.Id).Contains(x.CategoryId) && x.IsActive);
 
-            var clientGroups = _context.CategoriesGroups.Where(x => x.pagedResults.Data.Select(y => y.Id).Contains(x.CategoryId) && x.IsActive);
+            var clientGroups = _context.CategoriesGroups.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.CategoryId) && x.IsActive);
 
             return new PagedResults<IEnumerable<CategoryServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
@@ -84,7 +84,7 @@ namespace Catalog.Api.Services.Categories
                     CreatedDate = x.CreatedDate,
                     Name = translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
                     ParentCategoryName = translations.FirstOrDefault(t => t.CategoryId == x.Parentid && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == x.Parentid)?.Name,
-                    ClientGroupIds = clientGroups.Select(x => x.Id);
+                    ClientGroupIds = clientGroups.Select(x => x.Id),
                     ThumbnailMediaId = image?.MediaId
                 })
             };
@@ -295,7 +295,7 @@ namespace Catalog.Api.Services.Categories
                     GroupId = clientGroupId
                 };
 
-                this.context.CategoriesGroups.Add(group.FillCommonProperties());
+                _context.CategoriesGroups.Add(group.FillCommonProperties());
             }
 
             if (model.Schema is not null)
