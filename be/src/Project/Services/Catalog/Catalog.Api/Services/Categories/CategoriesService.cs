@@ -87,62 +87,39 @@ namespace Catalog.Api.Services.Categories
             };
         }
 
-        public async Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model)
+        public CategoryServiceModel Get(GetCategoryServiceModel model)
         {
             var categoryItem = _context.Categories.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
 
-            if (categoryItem is not null)
+            if (categoryItem is null)
             {
-                var category = new CategoryServiceModel
-                {
-                    Id = categoryItem.Id,
-                    Order = categoryItem.Order,
-                    Level = categoryItem.Level,
-                    IsLeaf = categoryItem.IsLeaf,
-                    ParentId = categoryItem.Parentid,
-                    LastModifiedDate = categoryItem.LastModifiedDate,
-                    CreatedDate = categoryItem.CreatedDate
-                };
-
-                var thumbnailMedia = _context.CategoryImages.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive);
-
-                if (thumbnailMedia is not null)
-                {
-                    category.ThumbnailMediaId = thumbnailMedia.MediaId;
-                }
-
-                var categoryItemTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == categoryItem.Id && x.IsActive);
-
-                if (categoryItemTranslations is null)
-                {
-                    categoryItemTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive);
-                }
-
-                category.Name = categoryItemTranslations?.Name;
-
-                if (categoryItem.Parentid.HasValue)
-                {
-                    var parentCategoryTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == categoryItem.Parentid && x.IsActive);
-
-                    if (parentCategoryTranslations is null)
-                    {
-                        parentCategoryTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == categoryItem.Parentid && x.IsActive);
-                    }
-
-                    category.ParentCategoryName = parentCategoryTranslations?.Name;
-                }
-
-                return category;
+                throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            return default;
+            var translations = _context.CategoryTranslations.Where(x => x.CategoryId == categoryItem.Id && x.IsActive || x.CategoryId == categoryItem.Parentid && x.IsActive).ToList();
+
+            var thumbnailMedia = _context.CategoryImages.Where(x => x.CategoryId == categoryItem.Id && x.IsActive).ToList();
+
+            return new CategoryServiceModel
+            {
+                Id = categoryItem.Id,
+                Name = translations.FirstOrDefault(t => t.CategoryId == categoryItem.Id && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == categoryItem.Id)?.Name,
+                Order = categoryItem.Order,
+                Level = categoryItem.Level,
+                IsLeaf = categoryItem.IsLeaf,
+                ThumbnailMediaId = thumbnailMedia.FirstOrDefault(x => x.CategoryId == categoryItem.Id)?.Id ?? null,
+                ParentId = categoryItem.Parentid,
+                ParentCategoryName = translations.FirstOrDefault(t => t.CategoryId == categoryItem.Parentid && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == categoryItem.Parentid)?.Name,
+                LastModifiedDate = categoryItem.LastModifiedDate,
+                CreatedDate = categoryItem.CreatedDate
+            };
         }
 
         public async Task DeleteAsync(DeleteCategoryServiceModel model)
         {
             var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
-            if (category == null)
+            if (category is null)
             {
                 throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
@@ -166,14 +143,14 @@ namespace Catalog.Api.Services.Categories
         {
             var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
-            if (category == null)
+            if (category is null)
             {
                 throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var parentCategory = await _context.Categories.FirstOrDefaultAsync(x => x.Id == model.ParentId && x.IsActive);
 
-            if (parentCategory == null)
+            if (parentCategory is null)
             {
                 throw new CustomException(_productLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
@@ -222,7 +199,7 @@ namespace Catalog.Api.Services.Categories
 
             await _context.SaveChangesAsync();
 
-            return await GetAsync(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
+            return Get(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
         public async Task<CategoryServiceModel> CreateAsync(CreateCategoryServiceModel model)
@@ -274,14 +251,14 @@ namespace Catalog.Api.Services.Categories
 
             await _context.SaveChangesAsync();
 
-            return await GetAsync(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
+            return Get(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
         public async Task<CategorySchemaServiceModel> UpdateCategorySchemaAsync(UpdateCategorySchemaServiceModel model)
         {
             var categorySchema = await _context.CategorySchemas.FirstOrDefaultAsync(x => x.CategoryId == model.CategoryId && x.Language == model.Language && x.IsActive);
 
-            if (categorySchema != null)
+            if (categorySchema is not null)
             {
                 categorySchema.Schema = model.Schema;
                 categorySchema.UiSchema = model.UiSchema;
