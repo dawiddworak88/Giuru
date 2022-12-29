@@ -186,6 +186,8 @@ namespace Catalog.Api.Services.Categories
                 _context.CategoryImages.Remove(categoryImage);
             }
 
+            var images = new List<CategoryImage>();
+
             foreach (var file in model.Files.OrEmptyIfNull())
             {
                 var categoryImage = new CategoryImage
@@ -194,8 +196,10 @@ namespace Catalog.Api.Services.Categories
                     MediaId = file
                 };
 
-                _context.CategoryImages.Add(categoryImage.FillCommonProperties());
+                images.Add(categoryImage.FillCommonProperties());
             }
+            
+            await _context.CategoryImages.AddRangeAsync(images);
 
             await _context.SaveChangesAsync();
 
@@ -225,6 +229,8 @@ namespace Catalog.Api.Services.Categories
 
             _context.CategoryTranslations.Add(categoryTranslation.FillCommonProperties());
 
+            var images = new List<CategoryImage>();
+
             foreach (var file in model.Files.OrEmptyIfNull())
             {
                 var categoryImage = new CategoryImage
@@ -233,8 +239,10 @@ namespace Catalog.Api.Services.Categories
                     MediaId = file,
                 };
 
-                _context.CategoryImages.Add(categoryImage.FillCommonProperties());
+                images.Add(categoryImage.FillCommonProperties());
             }
+
+            await _context.CategoryImages.AddRangeAsync(images);
 
             if (model.Schema is not null)
             {

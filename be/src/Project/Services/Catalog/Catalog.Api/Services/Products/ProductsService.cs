@@ -103,7 +103,7 @@ namespace Catalog.Api.Services.Products
                 images.Add(productImage.FillCommonProperties());
             }
 
-            _context.ProductImages.AddRange(images);
+            await _context.ProductImages.AddRangeAsync(images);
 
             var videos = new List<ProductVideo>();
 
@@ -118,7 +118,7 @@ namespace Catalog.Api.Services.Products
                 videos.Add(productVideo.FillCommonProperties());
             }
 
-            _context.ProductVideos.AddRange(videos);
+            await _context.ProductVideos.AddRangeAsync(videos);
 
             var files = new List<ProductFile>();
 
@@ -133,7 +133,7 @@ namespace Catalog.Api.Services.Products
                 files.Add(productFile.FillCommonProperties());
             }
 
-            _context.ProductFiles.AddRange(files);
+            await  _context.ProductFiles.AddRangeAsync(files);
 
             await _context.SaveChangesAsync();
 
@@ -218,6 +218,8 @@ namespace Catalog.Api.Services.Products
                 _context.ProductImages.Remove(productImage);
             }
 
+            var images = new List<ProductImage>();
+
             foreach (var imageId in model.Images.OrEmptyIfNull())
             {
                 var productImage = new ProductImage
@@ -226,8 +228,10 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                await _context.ProductImages.AddAsync(productImage.FillCommonProperties());
+                images.Add(productImage.FillCommonProperties());
             }
+
+            await _context.ProductImages.AddRangeAsync(images);
 
             var productVideos = _context.ProductVideos.Where(x => x.ProductId == model.Id && x.IsActive);
 
@@ -235,6 +239,8 @@ namespace Catalog.Api.Services.Products
             {
                 _context.ProductVideos.Remove(productVideo);
             }
+
+            var videos = new List<ProductVideo>();
 
             foreach (var videoId in model.Videos.OrEmptyIfNull())
             {
@@ -244,8 +250,10 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                await _context.ProductVideos.AddAsync(productVideo.FillCommonProperties());
+                videos.Add(productVideo.FillCommonProperties());
             }
+
+            await _context.ProductVideos.AddRangeAsync(videos);
 
             var productFiles = _context.ProductFiles.Where(x => x.ProductId == model.Id && x.IsActive);
 
@@ -253,6 +261,8 @@ namespace Catalog.Api.Services.Products
             {
                 _context.ProductFiles.Remove(productFile);
             }
+
+            var files = new List<ProductFile>();
 
             foreach (var fileId in model.Files.OrEmptyIfNull())
             {
@@ -262,8 +272,10 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                await _context.ProductFiles.AddAsync(productFile.FillCommonProperties());
+                files.Add(productFile.FillCommonProperties());
             }
+
+            await _context.ProductFiles.AddRangeAsync(files);
 
             var message = new UpdatedProductIntegrationEvent
             {
