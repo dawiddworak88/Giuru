@@ -90,8 +90,6 @@ namespace Catalog.Api.Services.Products
 
             await _context.ProductTranslations.AddAsync(productTranslation.FillCommonProperties());
 
-            var images = new List<ProductImage>();
-
             foreach (var imageId in model.Images.OrEmptyIfNull())
             {
                 var productImage = new ProductImage
@@ -100,12 +98,8 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                images.Add(productImage.FillCommonProperties());
+                await _context.ProductImages.AddAsync(productImage.FillCommonProperties());
             }
-
-            await _context.ProductImages.AddRangeAsync(images);
-
-            var videos = new List<ProductVideo>();
 
             foreach (var videoId in model.Videos.OrEmptyIfNull())
             {
@@ -115,12 +109,8 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                videos.Add(productVideo.FillCommonProperties());
+                await _context.ProductVideos.AddAsync(productVideo.FillCommonProperties());
             }
-
-            await _context.ProductVideos.AddRangeAsync(videos);
-
-            var files = new List<ProductFile>();
 
             foreach (var fileId in model.Files.OrEmptyIfNull())
             {
@@ -130,10 +120,8 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                files.Add(productFile.FillCommonProperties());
+                await _context.ProductFiles.AddAsync(productFile.FillCommonProperties());
             }
-
-            await  _context.ProductFiles.AddRangeAsync(files);
 
             await _context.SaveChangesAsync();
 
@@ -160,21 +148,21 @@ namespace Catalog.Api.Services.Products
 
             var brand = _context.Brands.FirstOrDefault(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
 
-            if (brand is not null)
+            if (brand is null)
             {
                 throw new CustomException(_productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var category = _context.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
 
-            if (category is not null)
+            if (category is null)
             {
                 throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
 
-            if (product is not null)
+            if (product is null)
             {
                 throw new CustomException(_productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NoContent);
             }
@@ -218,8 +206,6 @@ namespace Catalog.Api.Services.Products
                 _context.ProductImages.Remove(productImage);
             }
 
-            var images = new List<ProductImage>();
-
             foreach (var imageId in model.Images.OrEmptyIfNull())
             {
                 var productImage = new ProductImage
@@ -228,10 +214,8 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                images.Add(productImage.FillCommonProperties());
+                await _context.ProductImages.AddAsync(productImage.FillCommonProperties());
             }
-
-            await _context.ProductImages.AddRangeAsync(images);
 
             var productVideos = _context.ProductVideos.Where(x => x.ProductId == model.Id && x.IsActive);
 
@@ -239,8 +223,6 @@ namespace Catalog.Api.Services.Products
             {
                 _context.ProductVideos.Remove(productVideo);
             }
-
-            var videos = new List<ProductVideo>();
 
             foreach (var videoId in model.Videos.OrEmptyIfNull())
             {
@@ -250,10 +232,8 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                videos.Add(productVideo.FillCommonProperties());
+                await _context.ProductVideos.AddAsync(productVideo.FillCommonProperties());
             }
-
-            await _context.ProductVideos.AddRangeAsync(videos);
 
             var productFiles = _context.ProductFiles.Where(x => x.ProductId == model.Id && x.IsActive);
 
@@ -261,8 +241,6 @@ namespace Catalog.Api.Services.Products
             {
                 _context.ProductFiles.Remove(productFile);
             }
-
-            var files = new List<ProductFile>();
 
             foreach (var fileId in model.Files.OrEmptyIfNull())
             {
@@ -272,10 +250,8 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                files.Add(productFile.FillCommonProperties());
+                await _context.ProductFiles.AddAsync(productFile.FillCommonProperties());
             }
-
-            await _context.ProductFiles.AddRangeAsync(files);
 
             var message = new UpdatedProductIntegrationEvent
             {
@@ -305,7 +281,7 @@ namespace Catalog.Api.Services.Products
 
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
 
-            if (product is not null)
+            if (product is null)
             {
                 throw new CustomException(_productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NoContent);
             }
@@ -532,6 +508,7 @@ namespace Catalog.Api.Services.Products
             };
 
             using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
+            
             _eventBus.Publish(message);
         }
 

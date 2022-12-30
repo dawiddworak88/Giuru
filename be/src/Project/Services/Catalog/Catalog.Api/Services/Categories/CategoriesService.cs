@@ -98,8 +98,6 @@ namespace Catalog.Api.Services.Categories
 
             var translations = _context.CategoryTranslations.Where(x => x.CategoryId == categoryItem.Id && x.IsActive || x.CategoryId == categoryItem.Parentid && x.IsActive).ToList();
 
-            var thumbnailMedia = _context.CategoryImages.Where(x => x.CategoryId == categoryItem.Id && x.IsActive).ToList();
-
             return new CategoryServiceModel
             {
                 Id = categoryItem.Id,
@@ -107,7 +105,7 @@ namespace Catalog.Api.Services.Categories
                 Order = categoryItem.Order,
                 Level = categoryItem.Level,
                 IsLeaf = categoryItem.IsLeaf,
-                ThumbnailMediaId = thumbnailMedia.FirstOrDefault(x => x.CategoryId == categoryItem.Id)?.Id ?? null,
+                ThumbnailMediaId = _context.CategoryImages.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive)?.MediaId ?? null,
                 ParentId = categoryItem.Parentid,
                 ParentCategoryName = translations.FirstOrDefault(t => t.CategoryId == categoryItem.Parentid && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == categoryItem.Parentid)?.Name,
                 LastModifiedDate = categoryItem.LastModifiedDate,
