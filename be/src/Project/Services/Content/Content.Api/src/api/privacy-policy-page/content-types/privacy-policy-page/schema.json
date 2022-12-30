@@ -26,13 +26,16 @@
       },
       "component": "shared.seo"
     },
-    "Text": {
+    "Content": {
+      "displayName": "Content",
+      "type": "component",
+      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "type": "richtext"
+      "component": "blocks.content"
     }
   }
 }
