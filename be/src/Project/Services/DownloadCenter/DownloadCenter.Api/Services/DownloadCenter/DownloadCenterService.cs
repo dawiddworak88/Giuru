@@ -122,16 +122,13 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
                 var namesOfCategories = new List<string>();
 
-                foreach(var categoryId in downloadCenterFileGroup.OrEmptyIfNull().Select(x => x.CategoryId))
+                var translations = _context.DownloadCenterCategoryTranslations.Where(x => downloadCenterFileGroup.Select(y => y.CategoryId).Contains(x.CategoryId)).ToList();
+
+                foreach (var categoryId in downloadCenterFileGroup.OrEmptyIfNull().Select(x => x.CategoryId))
                 {
-                    var downloadCenterFileCategory = _context.DownloadCenterCategoryTranslations.FirstOrDefault(x => x.CategoryId == categoryId && x.Language == model.Language && x.IsActive);
+                    var categoryName = translations.FirstOrDefault(x => x.CategoryId == categoryId && x.Language == model.Language && x.IsActive)?.Name ?? translations.FirstOrDefault(x => x.CategoryId == categoryId && x.IsActive)?.Name;
 
-                    if (downloadCenterFileCategory is null)
-                    {
-                        downloadCenterFileCategory = _context.DownloadCenterCategoryTranslations.FirstOrDefault(x => x.CategoryId == categoryId && x.IsActive);
-                    }
-
-                    namesOfCategories.Add(downloadCenterFileCategory?.Name);
+                    namesOfCategories.Add(categoryName);
                 }
 
                 fileGroup.Categories = namesOfCategories;

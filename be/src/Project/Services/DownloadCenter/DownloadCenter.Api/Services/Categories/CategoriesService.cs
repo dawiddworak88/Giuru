@@ -145,9 +145,7 @@ namespace DownloadCenter.Api.Services.Categories
                 pagedResults = categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            var translations = _context.DownloadCenterCategoryTranslations.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.CategoryId)).ToList();
-
-            var parentCategoriesTranslations = _context.DownloadCenterCategoryTranslations.Where(x => pagedResults.Data.Select(y => y.ParentCategoryId).Contains(x.CategoryId)).ToList();
+            var translations = _context.DownloadCenterCategoryTranslations.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.CategoryId) || pagedResults.Data.Select(y => y.ParentCategoryId).Contains(x.CategoryId)).ToList();
 
             return new PagedResults<IEnumerable<CategoryServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
@@ -156,7 +154,7 @@ namespace DownloadCenter.Api.Services.Categories
                     Id = x.Id,
                     Name = translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
                     ParentCategoryId = x.ParentCategoryId,
-                    ParentCategoryName = parentCategoriesTranslations.FirstOrDefault(t => t.CategoryId == x.ParentCategoryId && t.Language == model.Language)?.Name ?? parentCategoriesTranslations.FirstOrDefault(t => t.CategoryId == x.ParentCategoryId)?.Name,
+                    ParentCategoryName = translations.FirstOrDefault(t => t.CategoryId == x.ParentCategoryId && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == x.ParentCategoryId)?.Name,
                     IsVisible = x.IsVisible,
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
