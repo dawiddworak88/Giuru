@@ -202,6 +202,8 @@ services:
       - ActionSendGridResetTemplateId=${SENDGRID_RESET_PASSWORD_TEMPLATE_ID}
       - ActionSendGridTeamMemberInvitationTemplateId=${SENDGRID_TEAM_MEMBER_INVITATION_TEMPLATE_ID}
       - DevelopersEmail=it.developers@eltap.com
+      - ContentGraphQlUrl=http://content-api:1337/graphql
+      - ContentGraphQlAuthorizationKey=${STRAPI_AUTHORIZATION_KEY}
     ports:
       - "5105:80"
 
