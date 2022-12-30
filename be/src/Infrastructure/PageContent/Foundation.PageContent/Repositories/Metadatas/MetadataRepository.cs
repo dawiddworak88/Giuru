@@ -1,6 +1,6 @@
-﻿using Buyer.Web.Shared.DomainModels.Metadata;
-using Buyer.Web.Shared.GraphQlResponseModels;
-using Foundation.Extensions.ExtensionMethods;
+﻿using Foundation.Extensions.ExtensionMethods;
+using Foundation.PageContent.DomainModels.Metadatas;
+using Foundation.PageContent.ResponseModels.Seo;
 using GraphQL;
 using GraphQL.Client.Abstractions;
 using Microsoft.Extensions.Logging;
@@ -10,19 +10,19 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Shared.Repositories.Metadatas
+namespace Foundation.PageContent.Repositories.Metadatas
 {
     public class MetadataRepository : IMetadataRepository
     {
-        private readonly IGraphQLClient graphQlClient;
-        private readonly ILogger<MetadataRepository> logger;
+        private readonly IGraphQLClient _graphQlClient;
+        private readonly ILogger<MetadataRepository> _logger;
 
         public MetadataRepository(
             IGraphQLClient graphQlClient,
             ILogger<MetadataRepository> logger)
         {
-            this.graphQlClient = graphQlClient;
-            this.logger = logger;
+            _graphQlClient = graphQlClient;
+            _logger = logger;
         }
 
         public async Task<Metadata> GetMetadataAsync(string contentPageKey, string language)
@@ -47,7 +47,7 @@ namespace Buyer.Web.Shared.Repositories.Metadatas
                     }}"
                 };
 
-                var response = await this.graphQlClient.SendQueryAsync<JObject>(query);
+                var response = await _graphQlClient.SendQueryAsync<JObject>(query);
 
                 if (response.Errors.OrEmptyIfNull().Any() is false && response?.Data != null)
                 {
@@ -64,7 +64,7 @@ namespace Buyer.Web.Shared.Repositories.Metadatas
             }
             catch (Exception exception)
             {
-                this.logger.LogError(exception, $"Couldn't get content for ${contentPageKey} in language ${language}");
+                _logger.LogError(exception, $"Couldn't get content for ${contentPageKey} in language ${language}");
             }
 
             return default;

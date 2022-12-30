@@ -3,6 +3,7 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
+using Foundation.PageContent.Components.Metadatas.ViewModels;
 using Identity.Api.Areas.Home.ViewModels;
 using Identity.Api.Configurations;
 using Microsoft.Extensions.Localization;
@@ -14,34 +15,38 @@ namespace Identity.Api.Areas.Home.ModelBuilders
 {
     public class RegulationsPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, RegulationsPageViewModel>
     {
-        private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
-        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IOptionsMonitor<AppSettings> options;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> _seoModelBuilder;
+        private readonly IModelBuilder<HeaderViewModel> _headerModelBuilder;
+        private readonly IModelBuilder<FooterViewModel> _footerModelBuilder;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IOptionsMonitor<AppSettings> _options;
 
         public RegulationsPageModelBuilder(
+            IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder,
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IOptionsMonitor<AppSettings> options)
         {
-            this.headerModelBuilder = headerModelBuilder;
-            this.footerModelBuilder = footerModelBuilder;
-            this.globalLocalizer = globalLocalizer;
-            this.options = options;
+            _seoModelBuilder = seoModelBuilder;
+            _headerModelBuilder = headerModelBuilder;
+            _footerModelBuilder = footerModelBuilder;
+            _globalLocalizer = globalLocalizer;
+            _options = options;
         }
 
         public async Task<RegulationsPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new RegulationsPageViewModel
             {
-                Header = this.headerModelBuilder.BuildModel(),
+                Metadata = await _seoModelBuilder.BuildModelAsync(componentModel),
+                Header = _headerModelBuilder.BuildModel(),
                 Content = new ContentPageViewModel
                 { 
-                    Title = this.globalLocalizer.GetString("Regulations"),
-                    Content = HttpUtility.UrlDecode(this.options.CurrentValue.Regulations)
+                    Title = _globalLocalizer.GetString("Regulations"),
+                    Content = HttpUtility.UrlDecode(_options.CurrentValue.Regulations)
                 },
-                Footer = this.footerModelBuilder.BuildModel()
+                Footer = _footerModelBuilder.BuildModel()
             };
 
             return viewModel;

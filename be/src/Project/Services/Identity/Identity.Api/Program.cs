@@ -100,6 +100,8 @@ builder.Services.RegisterAccountsApiDependencies();
 
 builder.Services.RegisterHomeViewsDependencies();
 
+builder.Services.RegisterStrapiDependencies(builder.Configuration);
+
 builder.Services.RegisterMailingDependencies(builder.Configuration);
 
 builder.Services.ConfigureSettings(builder.Configuration);

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Buyer.Web.Shared.GraphQlResponseModels
+namespace Foundation.PageContent.ResponseModels.Seo
 {
     public record Attributes(
         [property: JsonProperty("seo")] Seo Seo

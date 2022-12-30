@@ -111,6 +111,8 @@ builder.Services.RegisterGeneralDependencies();
 
 builder.Services.RegisterDependencies(builder.Configuration);
 
+builder.Services.RegisterStrapiDependencies(builder.Configuration);
+
 builder.Services.RegisterApiExtensionsDependencies();
 
 builder.Services.ConfigureSettings(builder.Configuration);
