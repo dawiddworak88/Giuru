@@ -19,15 +19,15 @@ namespace DownloadCenter.Api.Services.Categories
 {
     public class CategoriesService : ICategoriesService
     {
-        private readonly IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer;
-        private readonly DownloadCenterContext context;
+        private readonly IStringLocalizer<DownloadCenterResources> _downloadCenterLocalizer;
+        private readonly DownloadCenterContext _context;
 
         public CategoriesService(
             IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer,
             DownloadCenterContext context)
         {
-            this.downloadCenterLocalizer = downloadCenterLocalizer;
-            this.context = context;
+            _downloadCenterLocalizer = downloadCenterLocalizer;
+            _context = context;
         }
 
         public async Task<Guid> CreateAsync(CreateCategoryServiceModel model)
@@ -40,7 +40,7 @@ namespace DownloadCenter.Api.Services.Categories
                 Order = 0
             };
 
-            await this.context.DownloadCenterCategories.AddAsync(category.FillCommonProperties());
+            await _context.DownloadCenterCategories.AddAsync(category.FillCommonProperties());
 
             var categoryTranslation = new DownloadCenterCategoryTranslation
             {
@@ -49,43 +49,43 @@ namespace DownloadCenter.Api.Services.Categories
                 CategoryId = category.Id
             };
 
-            await this.context.DownloadCenterCategoryTranslations.AddAsync(categoryTranslation.FillCommonProperties());
-            await this.context.SaveChangesAsync();
+            await _context.DownloadCenterCategoryTranslations.AddAsync(categoryTranslation.FillCommonProperties());
+            await _context.SaveChangesAsync();
 
             return category.Id;
         }
 
         public async Task DeleteAsync(DeleteCategoryServiceModel model)
         {
-            var category = await this.context.DownloadCenterCategories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var category = await _context.DownloadCenterCategories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (category is null)
             {
-                throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            if (await this.context.DownloadCenterCategories.AnyAsync(x => x.ParentCategoryId == category.Id && x.IsActive))
+            if (await _context.DownloadCenterCategories.AnyAsync(x => x.ParentCategoryId == category.Id && x.IsActive))
             {
-                throw new CustomException(this.downloadCenterLocalizer.GetString("SubcategoriesDeleteCategoryConflict"), (int)HttpStatusCode.Conflict);
+                throw new CustomException(_downloadCenterLocalizer.GetString("SubcategoriesDeleteCategoryConflict"), (int)HttpStatusCode.Conflict);
             }
 
-            if (await this.context.DownloadCenterCategoryFiles.AnyAsync(x => x.CategoryId == model.Id && x.IsActive))
+            if (await _context.DownloadCenterCategoryFiles.AnyAsync(x => x.CategoryId == model.Id && x.IsActive))
             {
-                throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryFileConflict"), (int)HttpStatusCode.Conflict);
+                throw new CustomException(_downloadCenterLocalizer.GetString("CategoryFileConflict"), (int)HttpStatusCode.Conflict);
             }
 
             category.IsActive = false;
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model)
         {
-            var category = await this.context.DownloadCenterCategories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var category = await _context.DownloadCenterCategories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (category is null)
             {
-                throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var item = new CategoryServiceModel
@@ -97,22 +97,22 @@ namespace DownloadCenter.Api.Services.Categories
                 CreatedDate = category.CreatedDate
             };
 
-            var categoryTranslations = await this.context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.Language == model.Language && x.CategoryId == category.Id && x.IsActive);
+            var categoryTranslations = await _context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.Language == model.Language && x.CategoryId == category.Id && x.IsActive);
 
             if (categoryTranslations is null)
             {
-                categoryTranslations = await this.context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.IsActive);
+                categoryTranslations = await _context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.IsActive);
             }
 
             item.Name = categoryTranslations?.Name;
 
             if (category.ParentCategoryId.HasValue)
             {
-                var categoryParentTranslations = await this.context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.Language == model.Language && x.CategoryId == category.ParentCategoryId && x.IsActive);
+                var categoryParentTranslations = await _context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.Language == model.Language && x.CategoryId == category.ParentCategoryId && x.IsActive);
 
                 if (categoryParentTranslations is null)
                 {
-                    categoryParentTranslations = await this.context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == category.ParentCategoryId && x.IsActive);
+                    categoryParentTranslations = await _context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == category.ParentCategoryId && x.IsActive);
                 }
 
                 item.ParentCategoryName = categoryParentTranslations?.Name;
@@ -121,9 +121,9 @@ namespace DownloadCenter.Api.Services.Categories
             return item;
         }
 
-        public async Task<PagedResults<IEnumerable<CategoryServiceModel>>> GetAsync(GetCategoriesServiceModel model)
+        public PagedResults<IEnumerable<CategoryServiceModel>> Get(GetCategoriesServiceModel model)
         {
-            var categories = this.context.DownloadCenterCategories.Where(x => x.IsActive);
+            var categories = _context.DownloadCenterCategories.Where(x => x.IsActive);
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -145,59 +145,33 @@ namespace DownloadCenter.Api.Services.Categories
                 pagedResults = categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            var pagedCategoriesServiceModel = new PagedResults<IEnumerable<CategoryServiceModel>>(pagedResults.Total, pagedResults.PageSize);
+            var translations = _context.DownloadCenterCategoryTranslations.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.CategoryId) || pagedResults.Data.Select(y => y.ParentCategoryId).Contains(x.CategoryId)).ToList();
 
-            var categoriesItems = new List<CategoryServiceModel>();
-
-            foreach (var categoryItem in pagedResults.Data.ToList())
+            return new PagedResults<IEnumerable<CategoryServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
-                var category = new CategoryServiceModel
+                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new CategoryServiceModel
                 {
-                    Id = categoryItem.Id,
-                    ParentCategoryId = categoryItem.ParentCategoryId,
-                    LastModifiedDate = categoryItem.LastModifiedDate,
-                    CreatedDate = categoryItem.CreatedDate
-                };
-
-                var categoryTranslations = this.context.DownloadCenterCategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == category.Id && x.IsActive);
-
-                if (categoryTranslations is null)
-                {
-                    categoryTranslations = this.context.DownloadCenterCategoryTranslations.FirstOrDefault(x => x.IsActive);
-                }
-
-                category.Name = categoryTranslations?.Name;
-
-                if (categoryItem.ParentCategoryId.HasValue)
-                {
-                    var categoryParentTranslations = this.context.DownloadCenterCategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == category.ParentCategoryId && x.IsActive);
-
-                    if (categoryParentTranslations is null)
-                    {
-                        categoryParentTranslations = this.context.DownloadCenterCategoryTranslations.FirstOrDefault(x => x.IsActive);
-                    }
-
-                    category.ParentCategoryName = categoryParentTranslations?.Name;
-                }
-
-                categoriesItems.Add(category);
+                    Id = x.Id,
+                    Name = translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
+                    ParentCategoryId = x.ParentCategoryId,
+                    ParentCategoryName = translations.FirstOrDefault(t => t.CategoryId == x.ParentCategoryId && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == x.ParentCategoryId)?.Name,
+                    IsVisible = x.IsVisible,
+                    LastModifiedDate = x.LastModifiedDate,
+                    CreatedDate = x.CreatedDate
+                })
             };
-
-            pagedCategoriesServiceModel.Data = categoriesItems;
-
-            return pagedCategoriesServiceModel;
         }
 
         public async Task<Guid> UpdateAsync(UpdateCategoryServiceModel model)
         {
-            var category = await this.context.DownloadCenterCategories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var category = await _context.DownloadCenterCategories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (category is null)
             {
-                throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            var categoryTranslation = await this.context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);
+            var categoryTranslation = await _context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);
 
             if (categoryTranslation is not null)
             {
@@ -213,14 +187,14 @@ namespace DownloadCenter.Api.Services.Categories
                     Language = model.Language
                 };
 
-                this.context.DownloadCenterCategoryTranslations.Add(newCategoryTranslation.FillCommonProperties());
+                _context.DownloadCenterCategoryTranslations.Add(newCategoryTranslation.FillCommonProperties());
             }
 
             category.ParentCategoryId = model.ParentCategoryId;
             category.IsVisible = model.IsVisible;
             category.LastModifiedDate = DateTime.UtcNow;
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return category.Id;
         }
