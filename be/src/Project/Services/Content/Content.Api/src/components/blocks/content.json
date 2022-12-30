@@ -6,11 +6,11 @@
   },
   "options": {},
   "attributes": {
-    "Title": {
+    "title": {
       "type": "string",
       "required": true
     },
-    "Text": {
+    "text": {
       "type": "richtext"
     }
   }

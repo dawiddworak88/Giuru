@@ -26,7 +26,7 @@
       },
       "component": "shared.seo"
     },
-    "Content": {
+    "content": {
       "displayName": "Content",
       "type": "component",
       "repeatable": false,
