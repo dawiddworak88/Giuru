@@ -67,7 +67,7 @@ namespace Catalog.Api.Services.Categories
 
             var translations = _context.CategoryTranslations.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.CategoryId) && x.IsActive || pagedResults.Data.Select(y => y.Parentid).Contains(x.CategoryId) && x.IsActive).ToList();
 
-            var image = _context.CategoryImages.FirstOrDefault(x => pagedResults.Data.Select(y => y.Id).Contains(x.CategoryId) && x.IsActive);
+            var image = _context.CategoryImages.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.CategoryId) && x.IsActive).ToList();
 
             return new PagedResults<IEnumerable<CategoryServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
@@ -82,7 +82,7 @@ namespace Catalog.Api.Services.Categories
                     CreatedDate = x.CreatedDate,
                     Name = translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
                     ParentCategoryName = translations.FirstOrDefault(t => t.CategoryId == x.Parentid && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == x.Parentid)?.Name,
-                    ThumbnailMediaId = image?.MediaId
+                    ThumbnailMediaId = image.FirstOrDefault(m => m.CategoryId == x.Id)?.MediaId
                 })
             };
         }
