@@ -961,6 +961,8 @@ spec:
           value: {{ .Values.organisationId }}
         - name: ServerSideRenderingEndpoint
           value: {{ .Values.serverSideRenderingEndpoint }}
+        - name: AnalyticsUrl
+          value: {{ .Values.analyticsUrl }}
         - name: CatalogUrl
           value: {{ .Values.catalogUrl }}
         - name: MediaUrl
@@ -1074,7 +1076,7 @@ spec:
         - name: DownloadCenterUrl
           value: {{ .Values.downloadCenterUrl }}
         - name: ContentUrl
-          value: {{ .Values.contentUrl }}
+          value: {{ .Values.contentAdminUrl }}
         - name: ClientId
           value: {{ .Values.sellerWeb.clientId }}
         - name: ClientSecret

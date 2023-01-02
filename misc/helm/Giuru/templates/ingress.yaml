@@ -17,6 +17,7 @@ metadata:
 spec:
   tls:
   - hosts:
+    - {{ .Values.ingress.analyticsapidomain }}
     - {{ .Values.ingress.clientapidomain }}
     - {{ .Values.ingress.basketapidomain }}
     - {{ .Values.ingress.orderingapidomain }}
