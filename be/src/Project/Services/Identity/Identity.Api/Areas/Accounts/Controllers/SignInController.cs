@@ -78,9 +78,7 @@ namespace Identity.Api.Areas.Accounts.Controllers
                     else
                     {
                         this.logger.LogError("Unsuccessful login for {0} user", model.Email);
-                    }
-                    else
-                    {
+
                         return this.Redirect(model.ReturnUrl);
                     }
                 }                
