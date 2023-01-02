@@ -507,10 +507,10 @@
   <data name="DropOrSelectAttachments" xml:space="preserve">
     <value>Legen Sie einen Anhang ab oder wählen Sie ihn aus</value>
   </data>
-  <data name="EltapPartner" xml:space="preserve">
+  <data name="ApplicationPartner" xml:space="preserve">
     <value>Partner von ELTAP</value>
   </data>
-  <data name="EltapPartnerDescription" xml:space="preserve">
+  <data name="ApplicationPartnerDescription" xml:space="preserve">
     <value>Vielen Dank für Ihr Interesse an ELTAP. Wir freuen uns mit dir zu arbeiten!</value>
   </data>
   <data name="FieldRequiredErrorMessage" xml:space="preserve">
@@ -564,7 +564,7 @@
   <data name="SalesRep" xml:space="preserve">
     <value>Außendienstmitarbeiter</value>
   </data>
-  <data name="V" xml:space="preserve">
+  <data name="VicePresident" xml:space="preserve">
     <value>Vizepräsident</value>
   </data>
   <data name="AttachedAttachments" xml:space="preserve">
@@ -652,7 +652,7 @@
     <value>Miniaturansicht</value>
   </data>
   <data name="OrderStatusComment" xml:space="preserve">
-    <value>Kommentar zum Bestellstatus</value>
+    <value>Zusätzliche Informationen zum Bestellstatus</value>
   </data>
   <data name="QRCode" xml:space="preserve">
     <value>QR-Code</value>
@@ -662,5 +662,14 @@
   </data>
   <data name="TrySignIn" xml:space="preserve">
     <value>Bitte versuchen Sie sich anzumelden</value>
+  </data>
+  <data name="CountryNotFound" xml:space="preserve">
+    <value>Land nicht gefunden.</value>
+  </data>
+  <data name="Countries" xml:space="preserve">
+    <value>Länder</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>Inhalt</value>
   </data>
 </root>

@@ -28,12 +28,66 @@ namespace News.Api.v1.News.Controllers
     [ApiController]
     public class NewsController : BaseApiController
     {
-        private readonly INewsService newsService;
+        private readonly INewsService _newsService;
 
         public NewsController(
             INewsService newsService)
         {
-            this.newsService = newsService;
+            _newsService = newsService;
+        }
+
+        /// <summary>
+        /// Get list of news item files.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
+        /// <param name="id">The news item id.</param>
+        /// <returns>The list of news item files.</returns>
+        [HttpGet("files/{id}"), MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<NewsItemFileResponseModel>>))]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Files(Guid? id, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetNewsItemFilesServiceModel
+            {
+                Id = id,
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new GetNewsItemFilesModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var files = await _newsService.GetFilesAsync(serviceModel);
+
+                if (files is not null)
+                {
+                    var response = new PagedResults<IEnumerable<NewsItemFileResponseModel>>(files.Total, files.PageSize)
+                    {
+                        Data = files.Data.OrEmptyIfNull().Select(x => new NewsItemFileResponseModel
+                        {
+                            Id = x.Id,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
+                    };
+
+                    return StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
@@ -48,7 +102,7 @@ namespace News.Api.v1.News.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(NewsRequestModel request) 
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             if (request.Id.HasValue)
             {
@@ -64,7 +118,7 @@ namespace News.Api.v1.News.Controllers
                     ThumbnailImageId = request.ThumbnailImageId,
                     Files = request.Files,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -73,9 +127,9 @@ namespace News.Api.v1.News.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var newsId = await this.newsService.UpdateAsync(serviceModel);
+                    var newsId = await _newsService.UpdateAsync(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = newsId });
+                    return StatusCode((int)HttpStatusCode.OK, new { Id = newsId });
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -93,7 +147,7 @@ namespace News.Api.v1.News.Controllers
                     PreviewImageId = request.PreviewImageId,
                     Files = request.Files,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -103,9 +157,9 @@ namespace News.Api.v1.News.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var newsId = await this.newsService.CreateAsync(serviceModel);
+                    var newsId = await _newsService.CreateAsync(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = newsId });
+                    return StatusCode((int)HttpStatusCode.OK, new { Id = newsId });
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -125,9 +179,10 @@ namespace News.Api.v1.News.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<NewsItemResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public IActionResult Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
             var serviceModel = new GetNewsItemsServiceModel
             {
                 SearchTerm = searchTerm,
@@ -135,42 +190,37 @@ namespace News.Api.v1.News.Controllers
                 ItemsPerPage = itemsPerPage,
                 OrderBy = orderBy,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new GetNewsItemsModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
-            if (validationResult.IsValid)
-            {
-                var newsItems = await this.newsService.GetAsync(serviceModel);
+             var newsItems = _newsService.Get(serviceModel);
 
-                if (newsItems is not null)
+             if (newsItems is not null)
+             {
+                var response = new PagedResults<IEnumerable<NewsItemResponseModel>>(newsItems.Total, newsItems.PageSize)
                 {
-                    var response = new PagedResults<IEnumerable<NewsItemResponseModel>>(newsItems.Total, newsItems.PageSize)
+                    Data = newsItems.Data.OrEmptyIfNull().Select(x => new NewsItemResponseModel
                     {
-                        Data = newsItems.Data.OrEmptyIfNull().Select(x => new NewsItemResponseModel
-                        {
-                            Id = x.Id,
-                            ThumbnailImageId = x.ThumbnailImageId,
-                            PreviewImageId = x.PreviewImageId,
-                            CategoryId = x.CategoryId,
-                            CategoryName = x.CategoryName,
-                            Title = x.Title,
-                            Description = x.Description,
-                            Content = x.Content,
-                            IsPublished = x.IsPublished,
-                            Files = x.Files,
-                            LastModifiedDate = x.LastModifiedDate,
-                            CreatedDate = x.CreatedDate
-                        })
-                    };
+                        Id = x.Id,
+                        ThumbnailImageId = x.ThumbnailImageId,
+                        PreviewImageId = x.PreviewImageId,
+                        CategoryId = x.CategoryId,
+                        CategoryName = x.CategoryName,
+                        Title = x.Title,
+                        Description = x.Description,
+                        Content = x.Content,
+                        IsPublished = x.IsPublished,
+                        Files = x.Files,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    })
+                };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
+                return StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            return StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
@@ -187,12 +237,12 @@ namespace News.Api.v1.News.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetNewsItemServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -200,7 +250,7 @@ namespace News.Api.v1.News.Controllers
             var validationResult = await validator.ValidateAsync(serviceModel);
             if (validationResult.IsValid)
             {
-                var newsItem = await this.newsService.GetAsync(serviceModel);
+                var newsItem = await _newsService.GetAsync(serviceModel);
 
                 if (newsItem is not null)
                 {
@@ -220,10 +270,10 @@ namespace News.Api.v1.News.Controllers
                         CreatedDate = newsItem.CreatedDate
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
 
-                return this.StatusCode((int)HttpStatusCode.NoContent);
+                return StatusCode((int)HttpStatusCode.NoContent);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -242,12 +292,12 @@ namespace News.Api.v1.News.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new DeleteNewsItemServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -256,9 +306,9 @@ namespace News.Api.v1.News.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.newsService.DeleteAsync(serviceModel);
+                await _newsService.DeleteAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);

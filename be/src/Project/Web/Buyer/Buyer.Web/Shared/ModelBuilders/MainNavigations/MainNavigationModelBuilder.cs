@@ -17,12 +17,14 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
+        private readonly IStringLocalizer<DashboardResources> dashboardResources;
         private readonly LinkGenerator linkGenerator;
         private readonly IOptionsMonitor<AppSettings> settings;
 
         public MainNavigationModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
+            IStringLocalizer<DashboardResources> dashboardResources,
             LinkGenerator linkGenerator,
             IOptionsMonitor<AppSettings> settings)
         {
@@ -30,6 +32,7 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
             this.settings = settings;
+            this.dashboardResources = dashboardResources;
         }
 
         public async Task<MainNavigationViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -77,6 +80,12 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
             {
                 Text = this.globalLocalizer.GetString("DownloadCenter"),
                 Url = this.linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
+            });
+
+            links.Add(new LinkViewModel
+            {
+                Text = this.dashboardResources.GetString("Dashboard"),
+                Url = this.linkGenerator.GetPathByAction("Index", "Dashboard", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name })
             });
 
             links.Add(new LinkViewModel

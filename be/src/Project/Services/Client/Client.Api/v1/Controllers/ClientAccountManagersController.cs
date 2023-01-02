@@ -135,7 +135,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<ClientAccountManagerResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var clientManagerIds = ids.ToEnumerableGuidIds();
@@ -196,34 +196,28 @@ namespace Client.Api.v1.Controllers
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
-                var validator = new GetClientAccountManagersModelValidator();
-                var validationResult = await validator.ValidateAsync(serviceModel);
+                var managers = await this.clientManagersService.GetAsync(serviceModel);
 
-                if (validationResult.IsValid)
+                if (managers is not null)
                 {
-                    var managers = await this.clientManagersService.GetAsync(serviceModel);
-
-                    if (managers is not null)
+                    var response = new PagedResults<IEnumerable<ClientAccountManagerResponseModel>>(managers.Total, managers.PageSize)
                     {
-                        var response = new PagedResults<IEnumerable<ClientAccountManagerResponseModel>>(managers.Total, managers.PageSize)
+                        Data = managers.Data.OrEmptyIfNull().Select(x => new ClientAccountManagerResponseModel
                         {
-                            Data = managers.Data.OrEmptyIfNull().Select(x => new ClientAccountManagerResponseModel
-                            {
-                                Id = x.Id,
-                                FirstName = x.FirstName,
-                                LastName = x.LastName,
-                                Email = x.Email,
-                                PhoneNumber = x.PhoneNumber,
-                                LastModifiedDate = x.LastModifiedDate,
-                                CreatedDate = x.CreatedDate
-                            })
-                        };
+                            Id = x.Id,
+                            FirstName = x.FirstName,
+                            LastName = x.LastName,
+                            Email = x.Email,
+                            PhoneNumber = x.PhoneNumber,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
+                    };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
-                    }
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
 
-                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
 

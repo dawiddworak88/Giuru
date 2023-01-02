@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -65,7 +66,14 @@ namespace Inventory.Api.Services.Warehouses
 
             warehouses = warehouses.ApplySort(model.OrderBy);
 
-            return warehouses.PagedIndex(new Pagination(warehouses.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                warehouses = warehouses.Take(Constants.MaxItemsPerPageLimit);
+
+                return warehouses.PagedIndex(new Pagination(warehouses.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return warehouses.PagedIndex(new Pagination(warehouses.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<WarehouseServiceModel> GetAsync(GetWarehouseServiceModel model)
@@ -113,7 +121,14 @@ namespace Inventory.Api.Services.Warehouses
                               CreatedDate = c.CreatedDate
                           };
 
-            return warehouses.PagedIndex(new Pagination(warehouses.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                warehouses = warehouses.Take(Constants.MaxItemsPerPageLimit);
+
+                return warehouses.PagedIndex(new Pagination(warehouses.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return warehouses.PagedIndex(new Pagination(warehouses.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task DeleteAsync(DeleteWarehouseServiceModel model)

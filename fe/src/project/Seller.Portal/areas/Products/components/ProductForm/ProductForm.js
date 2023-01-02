@@ -323,7 +323,6 @@ function ProductForm(props) {
                                 id="images"
                                 name="images"
                                 label={props.productPicturesLabel}
-                                accept=".png, .jpg"
                                 multiple={true}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
@@ -335,14 +334,16 @@ function ProductForm(props) {
                                 isUploadInChunksEnabled={true}
                                 chunkSize={props.chunkSize}
                                 saveMediaChunkUrl={props.saveMediaChunkUrl}
-                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} />
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} 
+                                accept={{
+                                    'image/*': [".png", ".jpg", ".webp"],
+                                }}/>
                         </div>
                         <div className="field">
                             <MediaCloud
                                 id="files"
                                 name="files"
                                 label={props.productFilesLabel}
-                                accept=".png, .jpg, .pdf, .docx, .zip, .webp"
                                 multiple={true}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
@@ -355,7 +356,11 @@ function ProductForm(props) {
                                 isUploadInChunksEnabled={props.isUploadInChunksEnabled}
                                 chunkSize={props.chunkSize}
                                 saveMediaChunkUrl={props.saveMediaChunkUrl}
-                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} />
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} 
+                                accept={{
+                                    "image/*": [".png", ".jpg", ".webp"],
+                                    "application/*": [".pdf", ".docx", ".doc", ".zip"]
+                                }}/>
                         </div>
                         <div className="field">
                             <NoSsr>
@@ -399,7 +404,7 @@ function ProductForm(props) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable || !convertedToRaw}>
+                                disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
                             <a href={props.productsUrl} className="ml-2 button is-text">{props.navigateToProductsLabel}</a>

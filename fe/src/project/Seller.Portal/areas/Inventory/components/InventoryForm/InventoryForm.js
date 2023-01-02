@@ -79,7 +79,7 @@ const InventoryForm = (props) => {
             .then((res) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                AuthenticationHelper.HandleResponse(response);
+                AuthenticationHelper.HandleResponse(res);
 
                 return res.json().then(jsonRes => {
                     if (res.ok) {
@@ -100,6 +100,7 @@ const InventoryForm = (props) => {
             const searchParameters = {
                 searchTerm: value,
                 pageIndex: 1,
+                hasPrimaryProduct: true,
                 itemsPerPage: SearchConstants.productsSuggestionItemsPerPage()
             };
 

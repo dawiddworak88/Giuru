@@ -16,6 +16,7 @@ using Seller.Web.Areas.Clients.Repositories.Groups;
 using System.Linq;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Seller.Web.Areas.Clients.Repositories.Managers;
+using Seller.Web.Areas.Global.Repositories;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -29,6 +30,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly LinkGenerator linkGenerator;
         private readonly IClientGroupsRepository clientGroupsRepository;
         private readonly IClientAccountManagersRepository clientManagersRepository;
+        private readonly ICountriesRepository countriesRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -38,6 +40,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IIdentityRepository identityRepository,
             IClientGroupsRepository clientGroupsRepository,
             IClientAccountManagersRepository clientManagersRepository,
+            ICountriesRepository countriesRepository,
             LinkGenerator linkGenerator)
         {
             this.clientsRepository = clientsRepository;
@@ -48,6 +51,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             this.identityRepository = identityRepository;
             this.clientGroupsRepository = clientGroupsRepository;
             this.clientManagersRepository = clientManagersRepository;
+            this.countriesRepository = countriesRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -89,12 +93,14 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 NoGroupsText = this.clientLocalizer.GetString("NoGroupsText"),
                 GroupsLabel = this.globalLocalizer.GetString("Groups"),
                 NoManagersText = this.clientLocalizer.GetString("NoManagers"),
-                ClientManagerLabel = this.globalLocalizer.GetString("Manager")
+                ClientManagerLabel = this.globalLocalizer.GetString("Manager"),
+                CountryLabel = this.globalLocalizer.GetString("Country"),
             };
 
             if (componentModel.Id.HasValue)
             {
                 var client = await this.clientsRepository.GetClientAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+
                 if (client is not null)
                 {
                     viewModel.Id = client.Id;
@@ -104,6 +110,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.PhoneNumber = client.PhoneNumber;
                     viewModel.ClientGroupsIds = client.ClientGroupIds;
                     viewModel.ClientManagersIds = client.ClientManagerIds;
+                    viewModel.CountryId = client.CountryId;
 
                     var user = await this.identityRepository.GetAsync(componentModel.Token, componentModel.Language, client.Email);
 
@@ -115,6 +122,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             }
 
             var groups = await this.clientGroupsRepository.GetAsync(componentModel.Token, componentModel.Language);
+
             if (groups is not null)
             {
                 viewModel.ClientGroups = groups.Select(x => new ListItemViewModel
@@ -134,6 +142,13 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     FirstName = x.FirstName,
                     LastName = x.LastName
                 });
+            }
+
+            var countries = await this.countriesRepository.GetAsync(componentModel.Token, componentModel.Language);
+
+            if (countries is not null)
+            {
+                viewModel.Countries = countries.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
             return viewModel;

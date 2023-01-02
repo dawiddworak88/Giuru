@@ -510,10 +510,10 @@
   <data name="DropOrSelectAttachments" xml:space="preserve">
     <value>Upuść lub wybierz załącznik</value>
   </data>
-  <data name="EltapPartner" xml:space="preserve">
+  <data name="ApplicationPartner" xml:space="preserve">
     <value>Współpracuj z ELTAP</value>
   </data>
-  <data name="EltapPartnerDescription" xml:space="preserve">
+  <data name="ApplicationPartnerDescription" xml:space="preserve">
     <value>Dziękujemy za zainteresowanie ELTAP. Zapraszamy do współpracy!</value>
   </data>
   <data name="FieldRequiredErrorMessage" xml:space="preserve">
@@ -658,7 +658,7 @@
     <value>Miniaturka</value>
   </data>
   <data name="OrderStatusComment" xml:space="preserve">
-    <value>Komentarz do statusu zamówienia</value>
+    <value>Dodatkowe informacje o statusie zamówienia</value>
   </data>
   <data name="QRCode" xml:space="preserve">
     <value>Kod QR</value>
@@ -668,5 +668,14 @@
   </data>
   <data name="TrySignIn" xml:space="preserve">
     <value>Spróbuj się zalogować</value>
+  </data>
+  <data name="CountryNotFound" xml:space="preserve">
+    <value>Nie znaleziono kraju.</value>
+  </data>
+  <data name="Countries" xml:space="preserve">
+    <value>Kraje</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>CMS</value>
   </data>
 </root>

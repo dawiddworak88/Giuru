@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.Extensions.Options;
+using Seller.Web.Shared.Configurations;
 
 namespace Seller.Web.Shared.ModelBuilders.MenuTiles
 {
@@ -13,13 +15,16 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly LinkGenerator linkGenerator;
+        private readonly IOptionsMonitor<AppSettings> options;
 
         public MenuTilesModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
+            IOptionsMonitor<AppSettings> options,
             LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
             this.linkGenerator = linkGenerator;
+            this.options = options;
         }
 
         public MenuTilesViewModel BuildModel()
@@ -102,6 +107,12 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                     },
                     new MenuTileViewModel
                     {
+                        Icon = IconsConstants.MapPin,
+                        Title = this.globalLocalizer.GetString("Countries"),
+                        Url = this.linkGenerator.GetPathByAction("Index", "Countries", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name })
+                    },
+                    new MenuTileViewModel
+                    {
                         Icon = IconsConstants.Briefcase,
                         Title = this.globalLocalizer.GetString("ClientManagers"),
                         Url = this.linkGenerator.GetPathByAction("Index", "ClientAccountManagers", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
@@ -123,6 +134,13 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                         Icon = IconsConstants.Media,
                         Title = this.globalLocalizer.GetString("Media"),
                         Url = this.linkGenerator.GetPathByAction("Index", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
+                    },
+                    new MenuTileViewModel
+                    {
+                        Icon = IconsConstants.Content,
+                        Title = this.globalLocalizer.GetString("Content"),
+                        Target = "_blank",
+                        Url = this.options.CurrentValue.ContentUrl
                     },
                     new MenuTileViewModel
                     {

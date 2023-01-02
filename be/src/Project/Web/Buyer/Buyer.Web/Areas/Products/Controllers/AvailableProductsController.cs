@@ -25,7 +25,8 @@ namespace Buyer.Web.Areas.Products.Controllers
         public async Task<IActionResult> Index()
         {
             var componentModel = new ComponentModelBase
-            {
+            { 
+                ContentPageKey = "availableProductsPage",
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name,

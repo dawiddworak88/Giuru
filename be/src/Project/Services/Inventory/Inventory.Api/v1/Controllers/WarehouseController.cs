@@ -212,12 +212,12 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-
             var warehouseIds = ids.ToEnumerableGuidIds();
-            if (warehouseIds != null)
+
+            if (warehouseIds is not null)
             {
                 var serviceModel = new GetWarehousesByIdsServiceModel
                 {
@@ -236,7 +236,7 @@ namespace Inventory.Api.v1.Controllers
                 {
                     var warehouses = await this.warehouseService.GetByIdsAsync(serviceModel);
 
-                    if (warehouses != null)
+                    if (warehouses is not null)
                     {
                         var response = new PagedResults<IEnumerable<WarehouseResponseModel>>(warehouses.Total, warehouses.PageSize)
                         {
@@ -270,7 +270,7 @@ namespace Inventory.Api.v1.Controllers
 
                 var warehouses = await this.warehouseService.GetAsync(serviceModel);
 
-                if (warehouses != null)
+                if (warehouses is not null)
                 {
                     var response = new PagedResults<IEnumerable<WarehouseResponseModel>>(warehouses.Total, warehouses.PageSize)
                     {
@@ -286,7 +286,8 @@ namespace Inventory.Api.v1.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
-                throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
+
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
 

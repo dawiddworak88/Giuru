@@ -30,6 +30,7 @@ namespace Buyer.Web.Areas.News.Controllers
         {
             var componentModel = new ComponentModelBase
             {
+                ContentPageKey = "newsPage",
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name,

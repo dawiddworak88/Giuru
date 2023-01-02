@@ -295,8 +295,10 @@ function OrderForm(props) {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
-        accept: ".xlsx, .xls",
-        multiple: false
+        multiple: false,
+        accept: {
+            "application/*": [".xls", ".xlsx"]
+        }
     });
 
     return (
