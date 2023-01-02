@@ -49,6 +49,7 @@ const browserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        settingspage: ["./src/project/AspNetCore/areas/Dashboard/pages/SettingsPage/index.js", "./src/project/AspNetCore/areas/Dashboard/pages/SettingsPage/SettingsPage.scss"],
         orderitempage: ["./src/project/AspNetCore/areas/Orders/pages/OrderItemPage/index.js", "./src/project/AspNetCore/areas/Orders/pages/OrderItemPage/OrderItemPage.scss"],
         dashboardpage: ["./src/project/AspNetCore/areas/Dashboard/pages/DashboardPage/index.js", "./src/project/AspNetCore/areas/Dashboard/pages/DashboardPage/DashboardPage.scss"],
         downloadcentercategorypage: ["./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/index.js", "./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage.scss"],

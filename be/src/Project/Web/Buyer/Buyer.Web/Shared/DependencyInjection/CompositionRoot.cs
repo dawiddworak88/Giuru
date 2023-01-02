@@ -32,6 +32,8 @@ using Buyer.Web.Shared.ModelBuilders.Seo;
 using Foundation.PageContent.Components.Metadatas.ViewModels;
 using Buyer.Web.Shared.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Files;
+using Buyer.Web.Shared.ViewModels.DashboardNavigation;
+using Buyer.Web.Shared.ModelBuilders.DashboardNavigation;
 using GraphQL.Client.Abstractions;
 using Foundation.Media.Configurations;
 using GraphQL.Client.Serializer.Newtonsoft;
@@ -62,6 +64,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel>, OrderItemStatusChangesModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
+            services.AddScoped<IModelBuilder<DashboardNavigationViewModel>, DashboardNavigationModelBuilder>();
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
 
             // Repositories

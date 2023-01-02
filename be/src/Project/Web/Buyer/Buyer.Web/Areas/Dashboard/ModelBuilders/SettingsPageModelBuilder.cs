@@ -1,0 +1,51 @@
+﻿using Buyer.Web.Areas.Dashboard.ViewModel;
+using Buyer.Web.Shared.ViewModels.DashboardNavigation;
+using Buyer.Web.Shared.ViewModels.Headers;
+using Foundation.Extensions.ModelBuilders;
+using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.Footers.ViewModels;
+using Foundation.PageContent.Components.MainNavigations.ViewModels;
+using System.Globalization;
+using System.Threading.Tasks;
+
+namespace Buyer.Web.Areas.Dashboard.ModelBuilders
+{
+    public class SettingsPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, SettingsPageViewModel>
+    {
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SettingsFormViewModel> settingsFormModelBuilder;
+        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IModelBuilder<DashboardNavigationViewModel> dashboardNavigationModelBuilder;
+
+        public SettingsPageModelBuilder(
+            IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, SettingsFormViewModel> settingsFormModelBuilder,
+            IModelBuilder<DashboardNavigationViewModel> dashboardNavigationModelBuilder,
+            IModelBuilder<FooterViewModel> footerModelBuilder)
+        {
+            this.headerModelBuilder = headerModelBuilder;
+            this.mainNavigationModelBuilder = mainNavigationModelBuilder;
+            this.footerModelBuilder = footerModelBuilder;
+            this.dashboardNavigationModelBuilder = dashboardNavigationModelBuilder;
+            this.settingsFormModelBuilder = settingsFormModelBuilder;
+        }
+
+        public async Task<SettingsPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        {
+
+            var viewModel = new SettingsPageViewModel
+            {
+                Locale = CultureInfo.CurrentUICulture.Name,
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
+                MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
+                DashboardNavigation = dashboardNavigationModelBuilder.BuildModel(),
+                SettingsForm = await this.settingsFormModelBuilder.BuildModelAsync(componentModel),
+                Footer = footerModelBuilder.BuildModel()
+            };
+
+            return viewModel;
+        }
+    }
+}

@@ -4,6 +4,7 @@ import { resetServerContext } from 'react-beautiful-dnd';
 import { ServerStyleSheets } from "@mui/styles";
 
 // AspNetCore
+import ClientSettingsPage from "../../src/project/AspNetCore/areas/Dashboard/pages/SettingsPage/SettingsPage";
 import BuyerOrderItemPage from "../../src/project/AspNetCore/areas/Orders/pages/OrderItemPage/OrderItemPage";
 import BuyerDashboardPage from "../../src/project/AspNetCore/areas/Dashboard/pages/DashboardPage/DashboardPage";
 import DownloadCenterBuyerCategoryPage from "../../src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage";
@@ -75,6 +76,7 @@ import SellerCategoryPage from "../../src/project/Seller.Portal/areas/Products/p
 import SettingsPage from "../../src/project/Seller.Portal/areas/Settings/pages/SettingsPage/SettingsPage";
 
 const Components = {
+	ClientSettingsPage,
 	BuyerOrderItemPage,
 	BuyerDashboardPage,
 	DownloadCenterBuyerCategoryPage,

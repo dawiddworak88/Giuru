@@ -18,6 +18,7 @@ using Buyer.Web.Areas.Orders.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using Foundation.Extensions.Filters;
 using Buyer.Web.Areas.News.DependencyInjection;
+using Buyer.Web.Areas.Dashboard.DependencyInjection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
 using Foundation.Media.DependencyInjection;
@@ -103,9 +104,11 @@ builder.Services.RegisterClientsDependencies();
 
 builder.Services.RegisterNewsDependencies();
 
+builder.Services.RegisterDashboardDependencies();
+
 builder.Services.RegisterDownloadCenterDependencies();
 
-builder.Services.RegisterDashboardAreaDependencies();
+builder.Services.RegisterDashboardDependencies();
 
 builder.Services.RegisterGeneralDependencies();
 

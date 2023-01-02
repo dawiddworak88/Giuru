@@ -40,6 +40,7 @@
             public static readonly string ClientsApiEndpoint = "/api/v1/clients";
             public static readonly string ClientByOrganisationApiEndpoint = "/api/v1/clients/organisation";
             public static readonly string UsersApiEndpoint = "/api/v1/users";
+            public static readonly string SecretsApiEndpoint = "/api/v1/secrets";
             public static readonly string RolesApiEndpoint = "/api/v1/roles";
             public static readonly string TeamMembersEndpoint = "/api/v1/teammembers";
         }
