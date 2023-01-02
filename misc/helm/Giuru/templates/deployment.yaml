@@ -852,7 +852,7 @@ spec:
         - name: GIURU_CONTENT_API_URL
           value: {{ .Values.contentUrl }}
         - name: GIURU_IDENTITY_API_URL
-          value: {{ .Values.identityUrl }}
+          value: {{ .Values.identityTokenUrl }}
         ports:
         - containerPort: 1337
 ---
