@@ -108,7 +108,7 @@ builder.Services.RegisterDashboardDependencies();
 
 builder.Services.RegisterDownloadCenterDependencies();
 
-builder.Services.RegisterDashboardAreaDependencies();
+builder.Services.RegisterDashboardDependencies();
 
 builder.Services.RegisterGeneralDependencies();
 
