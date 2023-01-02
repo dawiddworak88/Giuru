@@ -1096,6 +1096,6 @@ spec:
         - name: CdnUrl
           value: {{ .Values.cdnUrl }}
         - name: GlobalUrl
-          value: {{ .Values.globalApi }}
+          value: {{ .Values.globalUrl }}
         ports:
         - containerPort: 80
