@@ -7,6 +7,7 @@ import ResponsiveImage from "../../../../../../shared/components/Picture/Respons
 import { Hash } from "react-feather"
 import {marked} from "marked";
 import moment from "moment";
+import Files from "../../../../../../shared/components/Files/Files";
 
 const NewsItemDetails = (props) => {
     return (
@@ -44,33 +45,8 @@ const NewsItemDetails = (props) => {
                             </div>
                         </div>
                         <div className="news-details__content subtitle is-5" dangerouslySetInnerHTML={{__html: marked.parse(props.content)}}></div>
-                        {props.files && props.files.length > 0 &&
-                            <div className="news-details__files">
-                                <h2 className="subtitle">{props.filesLabel}</h2>
-                                <div className="columns">
-                                    {props.files.map((file, index) => {
-                                        const iconType = {
-                                            "application/zip": <Folder />,
-                                            "application/pdf": <PictureAsPdf />
-                                        }
-
-                                        return (
-                                            <div className="column is-3" key={index}>
-                                                <a href={file.url}>
-                                                    <div className="card">
-                                                        <div className="card-image">
-                                                            {iconType[file.mimeType] ? iconType[file.mimeType] : <Attachment />}
-                                                        </div>
-                                                        <div className="media-content">
-                                                            <span className="file">{file.filename}</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            </div>
+                        {props.files &&
+                            <Files {...props.files} />
                         }
                     </div>
                 </div>

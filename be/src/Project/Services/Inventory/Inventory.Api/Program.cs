@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Foundation.Telemetry.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -83,6 +84,17 @@ builder.Services.RegisterInventoryApiDependencies();
 builder.Services.RegisterEventBus(builder.Configuration);
 
 builder.Services.ConfigureSettings(builder.Configuration);
+
+builder.Services.RegisterOpenTelemetry(
+    builder.Configuration,
+    Assembly.GetExecutingAssembly().GetName().Name,
+    false,
+    false,
+    true,
+    false,
+    true,
+    new[] { "/hc", "/liveness" },
+    builder.Environment.EnvironmentName);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
 

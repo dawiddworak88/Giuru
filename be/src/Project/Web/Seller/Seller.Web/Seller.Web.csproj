@@ -10,13 +10,10 @@
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
 		<PackageReference Include="IdentityServer4" Version="4.1.2" />
-		<PackageReference Include="ClosedXML" Version="0.96.0" />
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.10" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.10" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.10">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
+		<PackageReference Include="ClosedXML" Version="0.97.0" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.12" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.12" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />
@@ -36,6 +33,7 @@
 		<ProjectReference Include="..\..\..\..\Infrastructure\Presentation\Foundation.Presentation\Foundation.Presentation.csproj" />
 		<ProjectReference Include="..\..\..\..\Infrastructure\Security\Foundation.Security\Foundation.Security.csproj" />
 		<ProjectReference Include="..\..\..\..\Infrastructure\PageContent\Foundation.PageContent\Foundation.PageContent.csproj" />
+		<ProjectReference Include="..\..\..\..\Infrastructure\Telemetry\Foundation.Telemetry\Foundation.Telemetry.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Areas\Inventory\Views\Inventory\" />

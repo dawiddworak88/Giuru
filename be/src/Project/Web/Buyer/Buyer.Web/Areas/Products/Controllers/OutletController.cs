@@ -27,6 +27,7 @@ namespace Buyer.Web.Areas.Products.Controllers
         {
             var componentModel = new ComponentModelBase
             {
+                ContentPageKey = "outletPage",
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,

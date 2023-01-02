@@ -29,6 +29,8 @@ using StackExchange.Redis;
 using System.Reflection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Foundation.Telemetry.DependencyInjection;
+using Buyer.Web.Areas.Dashboard.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -103,13 +105,26 @@ builder.Services.RegisterNewsDependencies();
 
 builder.Services.RegisterDownloadCenterDependencies();
 
+builder.Services.RegisterDashboardAreaDependencies();
+
 builder.Services.RegisterGeneralDependencies();
 
-builder.Services.RegisterDependencies();
+builder.Services.RegisterDependencies(builder.Configuration);
 
 builder.Services.RegisterApiExtensionsDependencies();
 
 builder.Services.ConfigureSettings(builder.Configuration);
+
+builder.Services.RegisterOpenTelemetry(
+    builder.Configuration,
+    Assembly.GetExecutingAssembly().GetName().Name,
+    false,
+    false,
+    false,
+    true,
+    true,
+    new[] { "/hc", "/liveness" },
+    builder.Environment.EnvironmentName);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
 
