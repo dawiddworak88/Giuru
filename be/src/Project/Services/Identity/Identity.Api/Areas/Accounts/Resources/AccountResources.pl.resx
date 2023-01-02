@@ -141,6 +141,9 @@
   <data name="BackToLoginText" xml:space="preserve">
     <value>Powróć do logowania</value>
   </data>
+  <data name="EmailIsConfirmed" xml:space="preserve">
+    <value>Konto zostało już potwierdzone.</value>
+  </data>
   <data name="EmailIsConfirmedText" xml:space="preserve">
     <value>Konto Potwierdzone</value>
   </data>

@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types"; 
 import {
-    TextField, Button,  CircularProgress
+    TextField, Button,  CircularProgress, InputLabel
 } from "@mui/material";
 import {
     PictureAsPdf, Attachment
@@ -15,13 +15,12 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 
 const MediaItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [versions, setVersions] = useState(props.versions ? props.versions : []);
     const [images, setImages] = useState([]);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
-        name: { value: props.name ? props.name : null, error: "" },
-        description: { value: props.description ? props.description : null, error: "" },
-        metadata: { value: props.metaData ? props.metaData : null, error: "" },
+        name: { value: props.name ? props.name : "", error: "" },
+        description: { value: props.description ? props.description : "", error: "" },
+        metadata: { value: props.metaData ? props.metaData : "", error: "" },
     };
 
     const stateValidatorSchema = {
@@ -67,19 +66,23 @@ const MediaItemForm = (props) => {
         values, disable, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
-    const {name, description, metadata} = values;
+    const { id, name, description, metadata } = values;
     return (
         <section className="section section-small-padding product client-form media-edit">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit}>
+                        {id &&
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
+                        }
                         <div className="field">
                             <MediaCloud
                                 id="images"
                                 name="images"
                                 label={props.mediaItemsLabel}
-                                accept=".png, .jpg, .pdf, .zip, .webp, .docx"
                                 multiple={false}
                                 mediaId={props.id}
                                 generalErrorMessage={props.generalErrorMessage}
@@ -87,18 +90,26 @@ const MediaItemForm = (props) => {
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
                                 files={images}
+                                isUploadInChunksEnabled={true}
+                                chunkSize={props.chunkSize}
+                                saveMediaChunkUrl={props.saveMediaChunkUrl}
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl}
                                 setFieldValue={({value}) => setImages(value)}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl} 
+                                accept={{
+                                    "image/*": [".png", ".jpg", ".webp"],
+                                    "application/*": [".pdf", ".docx", ".doc", ".zip"]
+                                }}/>
                         </div>
-                        {versions && versions.length > 0 &&
+                        {props.versions && props.versions.length > 0 &&
                             <div className="media-edit__last-files">
                                 <h2>{props.latestVersionsLabel}</h2>
                                 <div className="media-edit__versions">
-                                    {versions.map((version) => {
+                                    {props.versions.map((version, index) => {
                                         const url = version.url;
                                         if (version.mimeType.includes("pdf")) {
                                             return (
-                                                <div className="version icon-version" key={version.id} onClick={() => mediaHandle(url)}>
+                                                <div className="version icon-version" key={index} onClick={() => mediaHandle(url)}>
                                                     <div className="icon">
                                                         <PictureAsPdf />
                                                     </div>
@@ -106,13 +117,13 @@ const MediaItemForm = (props) => {
                                             )
                                         } else if (version.mimeType.startsWith("image")) {
                                             return (
-                                                <div className="version" key={version.id} onClick={() => mediaHandle(url)}>
+                                                <div className="version" key={index} onClick={() => mediaHandle(url)}>
                                                     <img src={url} alt={version.filename} />
                                                 </div>
                                             )
                                         } else  {
                                             return (
-                                                <div className="version icon-version" key={version.id} onClick={() => mediaHandle(url)}>
+                                                <div className="version icon-version" key={index} onClick={() => mediaHandle(url)}>
                                                     <div className="icon">
                                                         <Attachment/>
                                                     </div>
@@ -164,17 +175,7 @@ const MediaItemForm = (props) => {
                                 disabled={disable || state.isLoading}>
                                 {props.saveMediaText}
                             </Button>
-                            <Button 
-                                className="ml-2"
-                                type="button" 
-                                variant="contained" 
-                                color="secondary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.mediaUrl);
-                                }}>
-                                {props.backToMediaText}
-                            </Button> 
+                            <a href={props.mediaUrl} className="ml-2 button is-text">{props.backToMediaText}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}
@@ -186,6 +187,8 @@ const MediaItemForm = (props) => {
 
 MediaItemForm.propTypes = {
     title: PropTypes.string.isRequired,
+    id: PropTypes.string,
+    idLabel: PropTypes.string,
     descriptionLabel: PropTypes.string.isRequired,
     nameLabel: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
@@ -198,7 +201,11 @@ MediaItemForm.propTypes = {
     saveMediaText: PropTypes.string.isRequired,
     latestVersionsLabel: PropTypes.string.isRequired,
     mediaUrl: PropTypes.string.isRequired,
-    backToMediaText: PropTypes.string.isRequired
+    backToMediaText: PropTypes.string.isRequired,
+    isUploadInChunksEnabled: PropTypes.bool.isRequired,
+    chunkSize: PropTypes.string.isRequired,
+    saveMediaChunkUrl: PropTypes.string.isRequired,
+    saveMediaChunkCompleteUrl: PropTypes.string.isRequired
 }
 
 export default MediaItemForm;

@@ -141,6 +141,9 @@
   <data name="BackToLoginText" xml:space="preserve">
     <value>Back to login</value>
   </data>
+  <data name="EmailIsConfirmed" xml:space="preserve">
+    <value>The account has already been confirmed.</value>
+  </data>
   <data name="EmailIsConfirmedText" xml:space="preserve">
     <value>Account Confirmed</value>
   </data>

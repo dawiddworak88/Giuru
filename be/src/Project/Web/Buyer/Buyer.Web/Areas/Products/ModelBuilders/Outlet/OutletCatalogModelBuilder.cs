@@ -69,8 +69,15 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                 {
                     foreach (var product in products.Data)
                     {
+                        var availableQuantity = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
+
+                        if (availableQuantity > 0)
+                        {
+                            product.CanOrder = true;
+                            product.AvailableOutletQuantity = availableQuantity;
+                        }
+
                         product.InOutlet = true;
-                        product.AvailableOutletQuantity = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
                         product.OutletTitle = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Title;
                         product.OutletDescription = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Description;
                     }

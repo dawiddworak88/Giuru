@@ -3,6 +3,7 @@ using Ordering.Api.IntegrationEvents;
 using Ordering.Api.Services;
 using Ordering.Api.ServicesModels;
 using Ordering.Api.Validators;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,6 +30,9 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
         /// <returns></returns>
         public async Task Handle(BasketCheckoutAcceptedIntegrationEvent @event)
         {
+            using var source = new ActivitySource(this.GetType().Name);
+            using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {@event.GetType().Name}");
+
             var serviceModel = new CheckoutBasketServiceModel
             {
                 ClientId = @event.ClientId,

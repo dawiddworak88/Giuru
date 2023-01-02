@@ -162,6 +162,9 @@ function MediaCloud(props) {
 
         fetch(props.saveMediaChunkUrl, requestOptions)
             .then(function (response) {
+
+                AuthenticationHelper.HandleResponse(response);
+
                 if (response.ok) {
                     setBeginingOfTheChunk(endOfTheChunk);
                     setEndOfTheChunk(endOfTheChunk + props.chunkSize);
@@ -186,12 +189,15 @@ function MediaCloud(props) {
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify({ filename: fileToUploadInChunksFilename })
+            body: JSON.stringify({ id: mediaId, filename: fileToUploadInChunksFilename })
         };
 
         fetch(props.saveMediaChunkCompleteUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
                 return response.json().then(media => {
                     if (response.ok) {
                         if (props.multiple) {
@@ -327,7 +333,7 @@ MediaCloud.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     label: PropTypes.string,
-    accept: PropTypes.string.isRequired,
+    accept: PropTypes.object.isRequired,
     multiple: PropTypes.bool.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
     dropOrSelectFilesLabel: PropTypes.string.isRequired,

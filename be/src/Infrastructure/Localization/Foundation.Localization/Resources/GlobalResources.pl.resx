@@ -121,7 +121,7 @@
     <value>Wystąpił błąd. Proszę skontaktuj się z administratorem.</value>
   </data>
   <data name="AreYouSureLabel" xml:space="preserve">
-    <value>Czy napewno chcesz usunąć</value>
+    <value>Czy na pewno chcesz usunąć</value>
   </data>
   <data name="Back" xml:space="preserve">
     <value>wstecz</value>
@@ -426,9 +426,6 @@
   <data name="LastName" xml:space="preserve">
     <value>Nazwisko</value>
   </data>
-  <data name="Miniature" xml:space="preserve">
-    <value>Miniaturka</value>
-  </data>
   <data name="BasketLabel" xml:space="preserve">
     <value>Dodaj do koszyka</value>
   </data>
@@ -513,10 +510,10 @@
   <data name="DropOrSelectAttachments" xml:space="preserve">
     <value>Upuść lub wybierz załącznik</value>
   </data>
-  <data name="EltapPartner" xml:space="preserve">
+  <data name="ApplicationPartner" xml:space="preserve">
     <value>Współpracuj z ELTAP</value>
   </data>
-  <data name="EltapPartnerDescription" xml:space="preserve">
+  <data name="ApplicationPartnerDescription" xml:space="preserve">
     <value>Dziękujemy za zainteresowanie ELTAP. Zapraszamy do współpracy!</value>
   </data>
   <data name="FieldRequiredErrorMessage" xml:space="preserve">
@@ -630,6 +627,9 @@
   <data name="NewProducts" xml:space="preserve">
     <value>Nowe produkty</value>
   </data>
+  <data name="Attachment" xml:space="preserve">
+    <value>Załącznik</value>
+  </data>
   <data name="ApplyApplicationSubmit" xml:space="preserve">
     <value>Wyślij wniosek teraz</value>
   </data>
@@ -684,10 +684,25 @@
   <data name="Thumbnail" xml:space="preserve">
     <value>Miniaturka</value>
   </data>
+  <data name="OrderStatusComment" xml:space="preserve">
+    <value>Dodatkowe informacje o statusie zamówienia</value>
+  </data>
   <data name="QRCode" xml:space="preserve">
     <value>Kod QR</value>
   </data>
   <data name="GenerateQRCode" xml:space="preserve">
     <value>Generuj kod QR</value>
+  </data>
+  <data name="TrySignIn" xml:space="preserve">
+    <value>Spróbuj się zalogować</value>
+  </data>
+  <data name="CountryNotFound" xml:space="preserve">
+    <value>Nie znaleziono kraju.</value>
+  </data>
+  <data name="Countries" xml:space="preserve">
+    <value>Kraje</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>CMS</value>
   </data>
 </root>

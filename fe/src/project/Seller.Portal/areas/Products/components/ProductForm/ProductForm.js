@@ -15,7 +15,6 @@ import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaClou
 import DynamicForm from "../../../../../../shared/components/DynamicForm/DynamicForm";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import SearchConstants from "../../../../../../shared/constants/SearchConstants";
 
 function ProductForm(props) {
@@ -94,7 +93,6 @@ function ProductForm(props) {
 
         fetch(getCategorySchemaUrl, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -148,7 +146,6 @@ function ProductForm(props) {
 
         fetch(props.saveUrl, requestOptions)
             .then(function (response) {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -326,7 +323,6 @@ function ProductForm(props) {
                                 id="images"
                                 name="images"
                                 label={props.productPicturesLabel}
-                                accept=".png, .jpg"
                                 multiple={true}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
@@ -338,14 +334,16 @@ function ProductForm(props) {
                                 isUploadInChunksEnabled={true}
                                 chunkSize={props.chunkSize}
                                 saveMediaChunkUrl={props.saveMediaChunkUrl}
-                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} />
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} 
+                                accept={{
+                                    'image/*': [".png", ".jpg", ".webp"],
+                                }}/>
                         </div>
                         <div className="field">
                             <MediaCloud
                                 id="files"
                                 name="files"
                                 label={props.productFilesLabel}
-                                accept=".png, .jpg, .pdf, .docx, .zip, .webp"
                                 multiple={true}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
@@ -358,7 +356,11 @@ function ProductForm(props) {
                                 isUploadInChunksEnabled={props.isUploadInChunksEnabled}
                                 chunkSize={props.chunkSize}
                                 saveMediaChunkUrl={props.saveMediaChunkUrl}
-                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} />
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} 
+                                accept={{
+                                    "image/*": [".png", ".jpg", ".webp"],
+                                    "application/*": [".pdf", ".docx", ".doc", ".zip"]
+                                }}/>
                         </div>
                         <div className="field">
                             <NoSsr>
@@ -402,20 +404,10 @@ function ProductForm(props) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable || !convertedToRaw}>
+                                disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <Button 
-                                className="ml-2"
-                                type="button" 
-                                variant="contained" 
-                                color="secondary"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.productsUrl);
-                                }}>
-                                {props.navigateToProductsLabel}
-                            </Button>
+                            <a href={props.productsUrl} className="ml-2 button is-text">{props.navigateToProductsLabel}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

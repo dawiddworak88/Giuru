@@ -13,6 +13,7 @@ using System.Net;
 using System.Linq;
 using System.Threading.Tasks;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 
 namespace Client.Api.Services.Managers
 {
@@ -114,7 +115,14 @@ namespace Client.Api.Services.Managers
 
             managers = managers.ApplySort(model.OrderBy);
 
-            return managers.PagedIndex(new Pagination(managers.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                managers = managers.Take(Constants.MaxItemsPerPageLimit);
+
+                return managers.PagedIndex(new Pagination(managers.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return managers.PagedIndex(new Pagination(managers.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<PagedResults<IEnumerable<ClientAccountManagerServiceModel>>> GetByIdsAsync(GetClientAccountManagersByIdsServiceModel model)
@@ -132,7 +140,14 @@ namespace Client.Api.Services.Managers
                                CreatedDate = m.CreatedDate
                            };
 
-            return managers.PagedIndex(new Pagination(managers.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                managers = managers.Take(Constants.MaxItemsPerPageLimit);
+
+                return managers.PagedIndex(new Pagination(managers.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            } 
+
+            return managers.PagedIndex(new Pagination(managers.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<Guid> UpdateAsync(UpdateClientAccountManagerServiceModel model)

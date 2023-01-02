@@ -3,7 +3,7 @@ using Identity.Api.ServicesModels.TeamMembers;
 
 namespace Identity.Api.Validators.TeamMembers
 {
-    public class GetTeamMembersModelValidator : BasePagedServiceModelValidator<GetTeamMembersServiceModel>
+    public class GetTeamMembersModelValidator : BaseServiceModelValidator<GetTeamMembersServiceModel>
     {
     }
 }

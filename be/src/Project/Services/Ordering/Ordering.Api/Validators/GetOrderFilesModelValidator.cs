@@ -4,7 +4,7 @@ using Ordering.Api.ServicesModels;
 
 namespace Ordering.Api.Validators
 {
-    public class GetOrderFilesModelValidator : BasePagedServiceModelValidator<GetOrderFilesServiceModel>
+    public class GetOrderFilesModelValidator : BaseServiceModelValidator<GetOrderFilesServiceModel>
     {
         public GetOrderFilesModelValidator()
         {

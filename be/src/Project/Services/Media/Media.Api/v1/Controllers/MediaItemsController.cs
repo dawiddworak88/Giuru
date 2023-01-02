@@ -49,11 +49,12 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<MediaItemResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy )
+        public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy )
         {
             var sellerClaims = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var mediaItemsIds = ids.ToEnumerableGuidIds();
-            if (mediaItemsIds != null)
+
+            if (mediaItemsIds is not null)
             {
                 var serviceModel = new GetMediaItemsByIdsServiceModel
                 {
@@ -67,10 +68,12 @@ namespace Media.Api.v1.Controllers
 
                 var validator = new GetMediaItemsByIdsModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
+
                 if (validationResult.IsValid)
                 {
                     var mediaItems = this.mediaService.GetMediaItemsByIds(serviceModel);
-                    if (mediaItems != null)
+
+                    if (mediaItems is not null)
                     {
                         var response = new PagedResults<IEnumerable<MediaItemResponseModel>>(mediaItems.Total, mediaItems.PageSize)
                         { 
@@ -108,7 +111,8 @@ namespace Media.Api.v1.Controllers
                 };
 
                 var mediaItems = this.mediaService.GetAsync(serviceModel);
-                if (mediaItems != null)
+
+                if (mediaItems is not null)
                 {
                     var response = new PagedResults<IEnumerable<MediaItemResponseModel>>(mediaItems.Result.Total, mediaItems.Result.PageSize)
                     {
@@ -129,7 +133,8 @@ namespace Media.Api.v1.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
-                throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
+
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
 
@@ -146,14 +151,17 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Get(Guid? id)
         {
+            var sellerClaims = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
             var serviceModel = new GetMediaItemsByIdServiceModel
             {
                 Id = id,
-                Language = CultureInfo.CurrentCulture.Name
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaims?.Value)
             };
 
             var validator = new GetMediaItemsByIdModelValidator();
-
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
@@ -165,6 +173,7 @@ namespace Media.Api.v1.Controllers
                     var response = new MediaItemResponseModel
                     {
                         Id = mediaItem.Id,
+                        MediaItemVersionId = mediaItem.MediaItemVersionId,
                         Description = mediaItem.Description,
                         Extension = mediaItem.Extension,
                         Filename = mediaItem.Filename,
@@ -214,12 +223,14 @@ namespace Media.Api.v1.Controllers
 
             var validator = new UpdateMediaItemVersionModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
+
             if (validationResult.IsValid)
             {
                 await this.mediaService.UpdateMediaItemVersionAsync(serviceModel);
                 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
+
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
@@ -236,14 +247,18 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetVersions(Guid? id)
         {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetMediaItemsByIdServiceModel
             {
                 Id = id,
-                Language = CultureInfo.CurrentCulture.Name
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new GetMediaItemsByIdModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
+
             if (validationResult.IsValid)
             {
                 var mediaItemVersions = await this.mediaService.GetMediaItemVerionsByIdAsync(serviceModel);
@@ -258,13 +273,15 @@ namespace Media.Api.v1.Controllers
                         MetaData = mediaItemVersions.MetaData,
                         Versions = mediaItemVersions.Versions.Select(x => new MediaItemServiceModel
                         {
-                            Id = x.Id,
+                            Id = x.MediaItemId.Value,
+                            MediaItemVersionId = x.Id,
                             Name = x.Name,
                             Description= x.Description,
                             MetaData = x.MetaData,
                             Filename = x.Filename,
                             IsProtected = x.IsProtected,
                             Size = x.Size,
+                            MimeType = x.MimeType,
                             Extension = x.Extension,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate

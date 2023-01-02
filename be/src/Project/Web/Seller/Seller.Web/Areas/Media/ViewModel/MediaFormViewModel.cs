@@ -11,5 +11,9 @@
         public string DropOrSelectImagesLabel { get; set; }
         public string DropFilesLabel { get; set; }
         public string DeleteLabel { get; set; }
+        public string SaveMediaChunkUrl { get; set; }
+        public string SaveMediaChunkCompleteUrl { get; set; }
+        public bool IsUploadInChunksEnabled { get; set; }
+        public int? ChunkSize { get; set; }
     }
 }

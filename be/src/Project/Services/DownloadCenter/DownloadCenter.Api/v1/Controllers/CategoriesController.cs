@@ -28,12 +28,12 @@ namespace DownloadCenter.Api.v1.Controllers
     [ApiController]
     public class CategoriesController : BaseApiController
     {
-        private readonly ICategoriesService categoriesService;
+        private readonly ICategoriesService _categoriesService;
 
         public CategoriesController(
             ICategoriesService categoriesService)
         {
-            this.categoriesService = categoriesService;
+            _categoriesService = categoriesService;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace DownloadCenter.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(CategoryRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             if (request.Id.HasValue)
             {
@@ -58,7 +58,7 @@ namespace DownloadCenter.Api.v1.Controllers
                     Name = request.Name,
                     IsVisible = request.IsVisible,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -67,7 +67,7 @@ namespace DownloadCenter.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var categoryId = await this.categoriesService.UpdateAsync(serviceModel);
+                    var categoryId = await _categoriesService.UpdateAsync(serviceModel);
 
                     return this.StatusCode((int)HttpStatusCode.OK, new { Id = categoryId });
                 }
@@ -82,7 +82,7 @@ namespace DownloadCenter.Api.v1.Controllers
                     Name = request.Name,
                     IsVisible = request.IsVisible,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -91,7 +91,7 @@ namespace DownloadCenter.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var categoryId = await this.categoriesService.CreateAsync(serviceModel);
+                    var categoryId = await _categoriesService.CreateAsync(serviceModel);
 
                     return this.StatusCode((int)HttpStatusCode.OK, new { Id = categoryId });
                 }
@@ -113,13 +113,13 @@ namespace DownloadCenter.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new DeleteCategoryServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -128,7 +128,7 @@ namespace DownloadCenter.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.categoriesService.DeleteAsync(serviceModel);
+                await _categoriesService.DeleteAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
@@ -148,13 +148,13 @@ namespace DownloadCenter.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetCategoryServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -163,7 +163,7 @@ namespace DownloadCenter.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var category = await this.categoriesService.GetAsync(serviceModel);
+                var category = await _categoriesService.GetAsync(serviceModel);
 
                 if (category is not null)
                 {
@@ -197,9 +197,9 @@ namespace DownloadCenter.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<CategoryResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public IActionResult Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetCategoriesServiceModel
             {
@@ -208,37 +208,31 @@ namespace DownloadCenter.Api.v1.Controllers
                 ItemsPerPage = itemsPerPage,
                 OrderBy = orderBy,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new GetCategoriesModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var categories = _categoriesService.Get(serviceModel);
 
-            if (validationResult.IsValid)
+            if (categories is not null)
             {
-                var categories = await this.categoriesService.GetAsync(serviceModel);
-
-                if (categories is not null)
+                var response = new PagedResults<IEnumerable<CategoryResponseModel>>(categories.Total, categories.PageSize)
                 {
-                    var response = new PagedResults<IEnumerable<CategoryResponseModel>>(categories.Total, categories.PageSize)
+                    Data = categories.Data.OrEmptyIfNull().Select(x => new CategoryResponseModel
                     {
-                        Data = categories.Data.OrEmptyIfNull().Select(x => new CategoryResponseModel
-                        {
-                            Id = x.Id,
-                            Name = x.Name,
-                            ParentCategoryId = x.ParentCategoryId,
-                            ParentCategoryName = x.ParentCategoryName,
-                            LastModifiedDate = x.LastModifiedDate,
-                            CreatedDate = x.CreatedDate
-                        })
-                    };
+                        Id = x.Id,
+                        Name = x.Name,
+                        ParentCategoryId = x.ParentCategoryId,
+                        ParentCategoryName = x.ParentCategoryName,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    })
+                };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
+                return this.StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }

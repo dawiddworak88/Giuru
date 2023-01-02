@@ -2,12 +2,11 @@ import React, { useContext } from "react"
 import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
 import PropTypes from "prop-types";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { 
-    TextField, Button, InputLabel, CircularProgress, FormControl, Select, MenuItem
+    TextField, Button, InputLabel, CircularProgress
 } from "@mui/material";
 
 const ClientAccountManagerForm = (props) => {
@@ -149,17 +148,7 @@ const ClientAccountManagerForm = (props) => {
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <Button
-                                className="ml-2"
-                                type="button" 
-                                variant="contained" 
-                                color="secondary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.managersUrl);
-                                }}>
-                                {props.navigateToManagersText}
-                            </Button>
+                            <a href={props.managersUrl} className="ml-2 button is-text">{props.navigateToManagersText}</a>
                         </div>
                     </form>
                 </div>

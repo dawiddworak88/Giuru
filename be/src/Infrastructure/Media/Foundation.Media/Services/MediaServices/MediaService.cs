@@ -34,6 +34,12 @@ namespace Foundation.Media.Services.MediaServices
             return this.cdnService.GetCdnMediaUrl(mediaUrl, maxWidth);
         }
 
+        public string GetMediaVersionUrl(Guid mediaVersionId, int? maxWidth = null)
+        {
+            var mediaUrl = $"{this.options.Value.MediaUrl}/api/v1/files/version/{mediaVersionId}";
+            return this.cdnService.GetCdnMediaUrl(mediaUrl, maxWidth);
+        }
+
         public string GetNonCdnMediaUrl(Guid mediaId, int? maxWidth = null)
         {
             return $"{this.options.Value.MediaUrl}/api/v1/files/{mediaId}";

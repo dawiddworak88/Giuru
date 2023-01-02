@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Button } from "@mui/material";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
-function UploadForm(props) {
+const MediaForm = (props) => {
     const [images, setImages] = useState([]);
     
     return (
@@ -18,27 +16,25 @@ function UploadForm(props) {
                                 id="images"
                                 name="images"
                                 label={props.mediaItemsLabel}
-                                accept=".png, .jpg, .pdf, .zip, .webp, .docx"
                                 multiple={true}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
                                 files={images}
+                                isUploadInChunksEnabled={true}
+                                chunkSize={props.chunkSize}
+                                saveMediaChunkUrl={props.saveMediaChunkUrl}
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl}
                                 setFieldValue={({value}) => setImages(value)}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl} 
+                                accept={{
+                                    "image/*": [".png", ".jpg", ".webp"],
+                                    "application/*": [".pdf", ".docx", ".doc", ".zip"]
+                                }}/>
                         </div>
                         <div className="field">
-                            <Button 
-                                type="submit" 
-                                variant="contained" 
-                                color="primary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.mediaUrl);
-                                }}>
-                                {props.backToMediaText}
-                            </Button>
+                            <a href={props.mediaUrl} className="button is-text">{props.backToMediaText}</a>
                         </div>
                     </form>
                 </div>
@@ -47,7 +43,7 @@ function UploadForm(props) {
     );
 }
 
-UploadForm.propTypes = {
+MediaForm.propTypes = {
     title: PropTypes.string.isRequired,
     mediaItemsLabel: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
@@ -56,7 +52,11 @@ UploadForm.propTypes = {
     dropOrSelectImagesLabel: PropTypes.string.isRequired,
     saveMediaUrl: PropTypes.string.isRequired,
     backToMediaText: PropTypes.string.isRequired,
-    mediaUrl: PropTypes.string.isRequired
+    mediaUrl: PropTypes.string.isRequired,
+    isUploadInChunksEnabled: PropTypes.bool.isRequired,
+    chunkSize: PropTypes.string.isRequired,
+    saveMediaChunkUrl: PropTypes.string.isRequired,
+    saveMediaChunkCompleteUrl: PropTypes.string.isRequired
 }
 
-export default UploadForm;
+export default MediaForm;

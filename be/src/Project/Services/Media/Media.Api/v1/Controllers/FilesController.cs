@@ -35,22 +35,18 @@ namespace Media.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Gets a file by media id. Provide width and height to resize the image files.
+        /// Gets a file by media id.
         /// </summary>
         /// <param name="mediaId">The media id to get.</param>
-        /// <param name="w">The image max width.</param>
-        /// <param name="h">The image max height.</param>
-        /// <param name="o">Decrease the image quality to 50 percent and file size.</param>
-        /// <param name="extension">The extension to convert an image to: webp, jpg or png.</param>
         /// <returns>The file.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [Route("{mediaId}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof (FileContentResult))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult Get(Guid? mediaId, int? w, int? h, bool o, string? extension)
+        public IActionResult Get(Guid? mediaId)
         {
-            var mediaFile = this.mediaService.GetFile(mediaId, w, h, o, extension);
+            var mediaFile = this.mediaService.GetFile(mediaId);
 
             if (mediaFile != null)
             {
@@ -61,6 +57,31 @@ namespace Media.Api.v1.Controllers
 
             return this.BadRequest();
         }
+
+        /// <summary>
+        /// Gets a file by media item version id.
+        /// </summary>
+        /// <param name="versionId">The media item version id.</param>
+        /// <returns>The file.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [AllowAnonymous]
+        [Route("version/{versionId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(FileContentResult))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public IActionResult GetFileVersion(Guid? versionId)
+        {
+            var mediaVersionFile = this.mediaService.GetFileVersion(versionId);
+
+            if (mediaVersionFile is not null)
+            {
+                this.Response.Headers[HeaderNames.CacheControl] = "public,max-age=" + CacheControlConstants.CacheControlMaxAgeSeconds;
+
+                return this.File(mediaVersionFile.File, mediaVersionFile.ContentType, mediaVersionFile.Filename);
+            }
+
+            return this.BadRequest();
+        }
+
 
         /// <param name = "mediaId" > The media id</param>
         /// /// <returns>OK</returns>

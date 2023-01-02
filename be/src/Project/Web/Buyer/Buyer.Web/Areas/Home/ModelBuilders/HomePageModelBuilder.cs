@@ -6,12 +6,14 @@ using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.ViewModels.Headers;
 using System.Globalization;
+using Foundation.PageContent.Components.Metadatas.ViewModels;
 using Buyer.Web.Areas.Home.ViewModel;
 
 namespace Buyer.Web.Areas.Home.ModelBuilders
 {
     public class HomePageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, HomePageViewModel>
     {
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, HeroSliderViewModel> heroSliderModelBuilder;
@@ -21,6 +23,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public HomePageModelBuilder(
+            IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, HeroSliderViewModel> heroSliderModelBuilder,
@@ -29,6 +32,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             IAsyncComponentModelBuilder<ComponentModelBase, HomePageNewsCarouselGridViewModel> newsModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
+            this.seoModelBuilder = seoModelBuilder;
             this.headerModelBuilder = headerModelBuilder;
             this.mainNavigationModelBuilder = mainNavigationModelBuilder;
             this.heroSliderModelBuilder = heroSliderModelBuilder;
@@ -44,13 +48,14 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             var viewModel = new HomePageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = await headerModelBuilder.BuildModelAsync(componentModel),
-                MainNavigation = await mainNavigationModelBuilder.BuildModelAsync(componentModel),
-                HeroSlider = await heroSliderModelBuilder.BuildModelAsync(componentModel),
-                CarouselGrid = await carouselGridModelBuilder.BuildModelAsync(componentModel),
-                ContentGrid = await contentGridModelBuilder.BuildModelAsync(componentModel),
-                NewsCarouselGrid = await newsModelBuilder.BuildModelAsync(componentModel),
-                Footer = footerModelBuilder.BuildModel()
+                Metadata = await this.seoModelBuilder.BuildModelAsync(componentModel),
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
+                MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
+                HeroSlider = await this.heroSliderModelBuilder.BuildModelAsync(componentModel),
+                CarouselGrid = await this.carouselGridModelBuilder.BuildModelAsync(componentModel),
+                ContentGrid = await this.contentGridModelBuilder.BuildModelAsync(componentModel),
+                NewsCarouselGrid = await this.newsModelBuilder.BuildModelAsync(componentModel),
+                Footer = this.footerModelBuilder.BuildModel()
             };
 
             return viewModel;

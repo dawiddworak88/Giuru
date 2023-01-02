@@ -42,6 +42,8 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<OutletItem>, OutletItem>();
 
             viewModel.Title = this.globalLocalizer.GetString("Outlet");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
+
             viewModel.NewText = this.inventoryLocalizer.GetString("NewOutletText");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Outlet", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Outlet", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });

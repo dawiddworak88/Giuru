@@ -42,8 +42,10 @@ namespace Seller.Web.Areas.Media.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<MediaItem>, MediaItem>();
 
             viewModel.Title = this.mediaLocalizer.GetString("Media");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
+
             viewModel.NewText = this.mediaLocalizer.GetString("NewText");
-            viewModel.IsAttachmentLabel = this.mediaLocalizer.GetString("IsAttachmentLabel");
+            viewModel.AttachmentLabel = this.globalLocalizer.GetString("Attachment");
 
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Index", "Media", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Item", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });
@@ -57,7 +59,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("Miniature"),
+                    this.globalLocalizer.GetString("Thumbnail"),
                     this.globalLocalizer.GetString("Filename"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")

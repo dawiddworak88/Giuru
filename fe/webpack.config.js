@@ -50,6 +50,8 @@ const browserConfig = {
     },
     entry: {
         settingspage: ["./src/project/AspNetCore/areas/Dashboard/pages/SettingsPage/index.js", "./src/project/AspNetCore/areas/Dashboard/pages/SettingsPage/SettingsPage.scss"],
+        orderitempage: ["./src/project/AspNetCore/areas/Orders/pages/OrderItemPage/index.js", "./src/project/AspNetCore/areas/Orders/pages/OrderItemPage/OrderItemPage.scss"],
+        dashboardpage: ["./src/project/AspNetCore/areas/Dashboard/pages/DashboardPage/index.js", "./src/project/AspNetCore/areas/Dashboard/pages/DashboardPage/DashboardPage.scss"],
         downloadcentercategorypage: ["./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/index.js", "./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage.scss"],
         downloadcenterpage: ["./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterPage/index.js", "./src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage.scss"],
         applicationpage: ["./src/project/AspNetCore/areas/Home/pages/ApplicationPage/index.js", "./src/project/AspNetCore/areas/Home/pages/ApplicationPage/ApplicationPage.scss"],
@@ -186,6 +188,9 @@ const sellerPortalBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        dashboardpage: ["./src/project/Seller.Portal/areas/Dashboard/pages/DashboardPage/index.js", "./src/project/Seller.Portal/areas/Dashboard/pages/DashboardPage/DashboardPage.scss"],
+        countrypage: ["./src/project/Seller.Portal/areas/Global/pages/CountryPage/index.js", "./src/project/Seller.Portal/areas/Global/pages/CountryPage/CountryPage.scss"],
+        countriespage: ["./src/project/Seller.Portal/areas/Global/pages/CountriesPage/index.js", "./src/project/Seller.Portal/areas/Global/pages/CountriesPage/CountriesPage.scss"],
         teammember: ["./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/index.js", "./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/TeamMember.scss"],
         teammembers: ["./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/index.js", "./src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/TeamMembers.scss"],
         downloadcenteritempage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/DownloadCenterItemPage.scss"],
@@ -196,8 +201,6 @@ const sellerPortalBrowserConfig = {
         clientrolespage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/ClientRolesPage.scss"],
         clientapplicationpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/ClientApplicationPage.scss"],
         clientsapplicationspage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientsApplicationsPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientsApplicationsPage/ClientsApplicationsPage.scss"],
-        mediapage: ["./src/project/Seller.Portal/areas/Medias/pages/MediaPage/index.js", "./src/project/Seller.Portal/areas/Medias/pages/MediaPage/MediaPage.scss"],
-        mediaitempage: ["./src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/index.js", "./src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage.scss"],
         mediapage: ["./src/project/Seller.Portal/areas/MediaItems/pages/MediaPage/index.js", "./src/project/Seller.Portal/areas/MediaItems/pages/MediaPage/MediaPage.scss"],
         mediaitempage: ["./src/project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/index.js", "./src/project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/MediaItemPage.scss"],
         clientaccountmanagerpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagerPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagerPage/ClientAccountManagerPage.scss"],
@@ -215,6 +218,7 @@ const sellerPortalBrowserConfig = {
         inventoriespage: ["./src/project/Seller.Portal/areas/Inventory/pages/InventoriesPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/InventoriesPage/InventoriesPage.scss"],
         warehousespage: ["./src/project/Seller.Portal/areas/Inventory/pages/WarehousesPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/WarehousesPage/WarehousesPage.scss"],
         warehousepage: ["./src/project/Seller.Portal/areas/Inventory/pages/WarehousePage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/WarehousePage/WarehousePage.scss"],
+        orderitempage: ["./src/project/Seller.Portal/areas/Orders/pages/OrderItemPage/index.js", "./src/project/Seller.Portal/areas/Orders/pages/OrderItemPage/OrderItemPage.scss"],
         orderspage: ["./src/project/Seller.Portal/areas/Orders/pages/OrdersPage/index.js", "./src/project/Seller.Portal/areas/Orders/pages/OrdersPage/OrdersPage.scss"],
         orderpage: ["./src/project/Seller.Portal/areas/Orders/pages/OrderPage/index.js", "./src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage.scss"],
         editorderpage: ["./src/project/Seller.Portal/areas/Orders/pages/EditOrderPage/index.js", "./src/project/Seller.Portal/areas/Orders/pages/EditOrderPage/EditOrderPage.scss"],

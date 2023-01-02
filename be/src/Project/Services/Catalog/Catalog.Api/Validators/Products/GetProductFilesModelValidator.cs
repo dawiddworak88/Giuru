@@ -4,7 +4,7 @@ using Foundation.Extensions.Validators;
 
 namespace Catalog.Api.Validators.Products
 {
-    public class GetProductFilesModelValidator : BasePagedServiceModelValidator<GetProductFilesServiceModel>
+    public class GetProductFilesModelValidator : BaseServiceModelValidator<GetProductFilesServiceModel>
     {
         public GetProductFilesModelValidator()
         {

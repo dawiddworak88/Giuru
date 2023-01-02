@@ -34,8 +34,17 @@ namespace Foundation.Extensions.Filters
 
                 if (((int?)context.Exception.Data[FilterConstants.StatusCodeKeyName]).HasValue)
                 {
-                    context.Result = new ObjectResult(response);
-                    context.HttpContext.Response.StatusCode = ((int?)context.Exception.Data[FilterConstants.StatusCodeKeyName]).Value;
+                    var statusCodeValue = ((int?)context.Exception.Data[FilterConstants.StatusCodeKeyName]).Value;
+
+                    if (statusCodeValue == FilterConstants.NoContentStatusCode)
+                    {
+                        context.HttpContext.Response.StatusCode = statusCodeValue;
+                    }
+                    else
+                    {
+                        context.Result = new ObjectResult(response);
+                        context.HttpContext.Response.StatusCode = statusCodeValue;
+                    }
                 }
             }
         }

@@ -50,6 +50,9 @@ services:
   react-ssr:
     environment: 
       NODE_ENV: development
+    volumes:
+      - ../../fe/server:/home/node/aspnetcore-react-ssr/server
+      - ../../fe/src:/home/node/aspnetcore-react-ssr/src
 
   sqldata:
     environment:
@@ -60,10 +63,25 @@ services:
     volumes:
       - mssqldata:/var/opt/mssql
 
+  postgres:
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+    logging:
+        options:
+          max-size: 10m
+          max-file: "3"
+    ports:
+        - '5438:5432'
+    volumes: 
+        - postgresdata:/var/lib/postgresql/data
+        - ./Project/Services/Content/Content.Api/scripts/docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+
   media-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=MediaDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - StorageConnectionString=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
@@ -80,6 +98,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=ClientDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
@@ -96,6 +115,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=InventoryDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
@@ -110,6 +130,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=NewsDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
@@ -121,6 +142,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventBusConnection=amqp://rabbitmq
@@ -139,6 +161,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventBusConnection=amqp://rabbitmq
@@ -155,6 +178,7 @@ services:
   identity-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - RedisUrl=redis
       - ServerSideRenderingEndpoint=http://react-ssr:3000
       - CatalogUrl=http://catalog-api
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
@@ -181,16 +205,17 @@ services:
     ports:
       - "5105:80"
 
-  basketdata:
+  redis:
     ports:
       - "6379:6379"
     volumes:
-      - basketdata:/data
+      - redis:/data
 
   basket-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=basketdata
+      - ConnectionString=redis
+      - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
       - EventBusConnection=amqp://rabbitmq
@@ -205,6 +230,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
       - EventBusConnection=amqp://rabbitmq
@@ -221,10 +247,31 @@ services:
     ports:
       - "5102:80"
 
+  content-api:
+    environment:
+      - DATABASE_CLIENT=postgres
+      - DATABASE_NAME=postgres
+      - DATABASE_HOST=host.docker.internal
+      - DATABASE_PORT=5438
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_SSL=false
+      - GIURU_API_SECRET=98daf0da-89ac-48db-8b9f-edc6383153ed
+      - GIURU_API_EMAIL=seller@user.com
+      - GIURU_API_ORGANISATION_ID=09affcc9-1665-45d6-919f-3d2026106ba1
+      - GIURU_MEDIA_API_URL=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
+      - GIURU_CONTENT_API_URL=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5111
+      - GIURU_IDENTITY_API_URL=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105/api/v1/token
+    volumes:
+      - ./Project/Services/Content/Content.Api/src:/content/src
+    ports:
+      - "5111:1337"
+
   downloadcenter-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=DownloadCenterDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
@@ -236,12 +283,37 @@ services:
     ports:
       - "5136:80"
 
+  analytics-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=AnalyticsDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
+      - LogstashUrl=http://logstash:31311
+      - SupportedCultures=${SUPPORTED_CULTURES}
+      - DefaultCulture=${DEFAULT_CULTURE}
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+    ports:
+      - "5137:80"
+
+  global-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=GlobalDb;User Id=sa;Password=Gre@tPassw0rd
+      - RedisUrl=redis
+      - LogstashUrl=http://logstash:31311
+      - SupportedCultures=${SUPPORTED_CULTURES}
+      - DefaultCulture=${DEFAULT_CULTURE}
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+    ports:
+      - "5138:80"
+
   seller-web:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ServerSideRenderingEndpoint=http://react-ssr:3000
       - ClientId=663bba90-0036-4a58-8516-39faa8baba87
       - ClientSecret=c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9
+      - RedisUrl=redis
       - CatalogUrl=http://catalog-api
       - BasketUrl=http://basket-api
       - ClientUrl=http://client-api
@@ -250,12 +322,16 @@ services:
       - NewsUrl=http://news-api
       - SellerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5104
       - DownloadCenterUrl=http://downloadcenter-api
+      - GlobalUrl=http://global-api
       - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - ContentUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5111
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
+    volumes:
+      - ./Project/Web/Buyer/Buyer.Web/wwwroot/dist:/src/wwwroot/dist
     ports:
       - "5104:80"
 
@@ -265,6 +341,7 @@ services:
       - ServerSideRenderingEndpoint=http://react-ssr:3000
       - ClientId=d9316849-7e98-4c5b-853b-5a322aecdc75
       - ClientSecret=693667b0-545e-48b6-9ef8-02ada81be946
+      - RedisUrl=redis
       - CatalogUrl=http://catalog-api
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -274,19 +351,26 @@ services:
       - BasketUrl=http://basket-api
       - ClientUrl=http://client-api
       - NewsUrl=http://news-api
+      - AnalyticsUrl=http://analytics-api
+      - ContentGraphQlUrl=http://content-api:1337/graphql
       - DownloadCenterUrl=http://downloadcenter-api
+      - ContentGraphQlAuthorizationKey=${STRAPI_AUTHORIZATION_KEY}
       - MakeComplaintUrl=https://complaints.com
       - ProductAttributes=${PRODUCT_ATTRIBUTES}
       - OrganisationId=${ORGANISATION_ID}
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
+    volumes:
+      - ./Project/Web/Seller/Seller.Web/wwwroot/dist:/src/wwwroot/dist
     ports:
       - "5107:80"
 
 volumes:
   mssqldata:
     external: false
-  basketdata:
+  postgresdata:
+    external: false
+  redis:
     external: false
   azuritedata:
     external: false
