@@ -27,11 +27,11 @@ namespace Media.Api.v1.Controllers
     [ApiController]
     public class FilesController : BaseApiController
     {
-        private readonly IMediaService mediaService;
+        private readonly IMediaService _mediaService;
 
         public FilesController(IMediaService mediaService)
         {
-            this.mediaService = mediaService;
+            _mediaService = mediaService;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Get(Guid? mediaId)
         {
-            var mediaFile = this.mediaService.GetFile(mediaId);
+            var mediaFile = _mediaService.GetFile(mediaId);
 
             if (mediaFile != null)
             {
@@ -70,7 +70,7 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetFileVersion(Guid? versionId)
         {
-            var mediaVersionFile = this.mediaService.GetFileVersion(versionId);
+            var mediaVersionFile = _mediaService.GetFileVersion(versionId);
 
             if (mediaVersionFile is not null)
             {
@@ -92,12 +92,12 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? mediaId)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new DeleteFileServiceModel
             {
                 MediaId = mediaId,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -105,7 +105,7 @@ namespace Media.Api.v1.Controllers
             var validationResult = await validator.ValidateAsync(serviceModel);
             if(validationResult.IsValid)
             {
-                await this.mediaService.DeleteAsync(serviceModel);
+                await _mediaService.DeleteAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
@@ -129,7 +129,7 @@ namespace Media.Api.v1.Controllers
                 return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
 
-            var organisationClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var organisationClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             if (model.Id is not null)
             {
@@ -137,7 +137,7 @@ namespace Media.Api.v1.Controllers
                 {
                     Id = Guid.Parse(model.Id),
                     File = model.File,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
                     Language = CultureInfo.CurrentCulture.Name
                 };
@@ -146,7 +146,7 @@ namespace Media.Api.v1.Controllers
                 var validationResult = await validator.ValidateAsync(serviceModel);
                 if (validationResult.IsValid)
                 {
-                    var mediaItemId = await this.mediaService.UpdateFileAsync(serviceModel);
+                    var mediaItemId = await _mediaService.UpdateFileAsync(serviceModel);
 
                     return this.StatusCode((int)HttpStatusCode.OK, new { Id = mediaItemId });
                 }
@@ -157,7 +157,7 @@ namespace Media.Api.v1.Controllers
             {
                 var serviceModel = new CreateMediaItemServiceModel
                 {
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
                     Language = CultureInfo.CurrentCulture.Name,
                     File = model.File
@@ -167,7 +167,7 @@ namespace Media.Api.v1.Controllers
                 var validationResult = await validator.ValidateAsync(serviceModel);
                 if (validationResult.IsValid)
                 {
-                    var mediaItemId = await this.mediaService.CreateFileAsync(serviceModel);
+                    var mediaItemId = await _mediaService.CreateFileAsync(serviceModel);
 
                     return this.StatusCode((int)HttpStatusCode.Created, new { Id = mediaItemId });
                 }
@@ -188,13 +188,13 @@ namespace Media.Api.v1.Controllers
         [Route("chunks")]
         public async Task<IActionResult> PostChunk([FromForm] UploadMediaRequestModel model)
         {
-            var organisationClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var organisationClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new CreateFileChunkServiceModel
             {
                 File = model.File,
                 ChunkSumber = model.ChunkNumber,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
                 Language = CultureInfo.CurrentCulture.Name
             };
@@ -205,7 +205,7 @@ namespace Media.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.mediaService.CreateFileChunkAsync(serviceModel);
+                await _mediaService.CreateFileChunkAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
@@ -224,7 +224,7 @@ namespace Media.Api.v1.Controllers
         [Route("chunkssavecomplete")]
         public async Task<IActionResult> PostChunksComplete(UploadMediaChunksCompleteRequestModel model)
         {
-            var organisationClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var organisationClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             if (model.Id.HasValue)
             {
@@ -232,7 +232,7 @@ namespace Media.Api.v1.Controllers
                 {
                     Id = model.Id,
                     Filename = model.Filename,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
                     Language = CultureInfo.CurrentCulture.Name
                 };
@@ -243,7 +243,7 @@ namespace Media.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var mediaItemId = await this.mediaService.UpdateFileFromChunksAsync(serviceModel);
+                    var mediaItemId = await _mediaService.UpdateFileFromChunksAsync(serviceModel);
 
                     return this.StatusCode((int)HttpStatusCode.OK, new { Id = mediaItemId });
                 }
@@ -254,7 +254,7 @@ namespace Media.Api.v1.Controllers
             {
                 var serviceModel = new CreateMediaItemFromChunksServiceModel
                 {
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
                     Language = CultureInfo.CurrentCulture.Name,
                     Filename = model.Filename
@@ -266,7 +266,7 @@ namespace Media.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var mediaItemId = await this.mediaService.CreateFileFromChunksAsync(serviceModel);
+                    var mediaItemId = await _mediaService.CreateFileFromChunksAsync(serviceModel);
 
                     return this.StatusCode((int)HttpStatusCode.Created, new { Id = mediaItemId });
                 }
