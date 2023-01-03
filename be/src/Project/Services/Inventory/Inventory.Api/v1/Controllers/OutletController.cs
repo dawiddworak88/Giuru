@@ -28,11 +28,11 @@ namespace Outlet.Api.v1.Controllers
     [ApiController]
     public class OutletController : BaseApiController
     {
-        private readonly IOutletService outletsService;
+        private readonly IOutletService _outletsService;
 
         public OutletController(IOutletService outletsService)
         {
-            this.outletsService = outletsService;
+            _outletsService = outletsService;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Outlet.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var outletIds = ids.ToEnumerableGuidIds();
 
             if (outletIds is not null)
@@ -70,7 +70,7 @@ namespace Outlet.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var outlets = await this.outletsService.GetByIdsAsync(serviceModel);
+                    var outlets = await _outletsService.GetByIdsAsync(serviceModel);
 
                     if (outlets is not null)
                     {
@@ -112,7 +112,7 @@ namespace Outlet.Api.v1.Controllers
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
-                var outlets = await this.outletsService.GetAsync(serviceModel);
+                var outlets = await _outletsService.GetAsync(serviceModel);
 
                 if (outlets is not null)
                 {
@@ -157,7 +157,7 @@ namespace Outlet.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetAvailableOutletProducts(int? pageIndex, int? itemsPerPage)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetOutletsServiceModel
             {
@@ -167,7 +167,7 @@ namespace Outlet.Api.v1.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var outlets = await this.outletsService.GetAvailableProductsOutletsAsync(serviceModel);
+            var outlets = await _outletsService.GetAvailableProductsOutletsAsync(serviceModel);
 
             if (outlets is not null)
             {
@@ -205,7 +205,7 @@ namespace Outlet.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> SaveProductOutletItems(SaveOutletsBySkusRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new UpdateOutletProductsServiceModel
             {
@@ -230,7 +230,7 @@ namespace Outlet.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.outletsService.SyncProductsOutlet(serviceModel);
+                await _outletsService.SyncProductsOutlet(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
@@ -250,9 +250,9 @@ namespace Outlet.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(OutletRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            if (request.Id.HasValue && request.Id != null)
+            if (request.Id.HasValue && request.Id is not null)
             {
                 var serviceModel = new UpdateOutletServiceModel
                 {
@@ -275,7 +275,7 @@ namespace Outlet.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var outletProduct = await this.outletsService.UpdateAsync(serviceModel);
+                    var outletProduct = await _outletsService.UpdateAsync(serviceModel);
 
                     return this.StatusCode((int)HttpStatusCode.OK, new { outletProduct.Id });
                 }
@@ -304,7 +304,7 @@ namespace Outlet.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var outletProduct = await this.outletsService.CreateAsync(serviceModel);
+                    var outletProduct = await _outletsService.CreateAsync(serviceModel);
 
                     return this.StatusCode((int)HttpStatusCode.Created, new { outletProduct.Id });
                 }
@@ -327,7 +327,7 @@ namespace Outlet.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetOutletServiceModel
             {
                 Id = id.Value,
@@ -340,9 +340,9 @@ namespace Outlet.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var outletProduct = await this.outletsService.GetAsync(serviceModel);
+                var outletProduct = await _outletsService.GetAsync(serviceModel);
 
-                if (outletProduct != null)
+                if (outletProduct is not null)
                 {
                     var response = new OutletResponseModel
                     {
@@ -382,12 +382,12 @@ namespace Outlet.Api.v1.Controllers
         [Route("product/{id}")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetOutletByProductId(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetOutletByProductIdServiceModel
             {
                 ProductId = id,
@@ -398,9 +398,9 @@ namespace Outlet.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var outletProduct = await this.outletsService.GetOutletByProductId(serviceModel);
+                var outletProduct = await _outletsService.GetOutletByProductId(serviceModel);
 
-                if (outletProduct != null)
+                if (outletProduct is not null)
                 {
                     var response = new OutletSumResponseModel
                     {
@@ -434,7 +434,7 @@ namespace Outlet.Api.v1.Controllers
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                    return this.StatusCode((int)HttpStatusCode.NoContent);
                 }
             }
 
@@ -466,9 +466,9 @@ namespace Outlet.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var outletProduct = await this.outletsService.GetOutletByProductSku(serviceModel);
+                var outletProduct = await _outletsService.GetOutletByProductSku(serviceModel);
 
-                if (outletProduct != null)
+                if (outletProduct is not null)
                 {
                     var response = new OutletSumResponseModel
                     {
@@ -523,12 +523,12 @@ namespace Outlet.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new DeleteOutletServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -537,7 +537,7 @@ namespace Outlet.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.outletsService.DeleteAsync(serviceModel);
+                await _outletsService.DeleteAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
