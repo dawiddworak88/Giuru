@@ -168,7 +168,7 @@ namespace Media.Api.v1.Controllers
             {
                 var mediaItem = _mediaService.GetMediaItemById(serviceModel);
 
-                if (mediaItem != null)
+                if (mediaItem is not null)
                 {
                     var response = new MediaItemResponseModel
                     {
