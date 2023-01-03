@@ -83,7 +83,6 @@ const MediaItemForm = (props) => {
                                 id="images"
                                 name="images"
                                 label={props.mediaItemsLabel}
-                                accept=".png, .jpg, .pdf, .zip, .webp, .docx"
                                 multiple={false}
                                 mediaId={props.id}
                                 generalErrorMessage={props.generalErrorMessage}
@@ -96,7 +95,11 @@ const MediaItemForm = (props) => {
                                 saveMediaChunkUrl={props.saveMediaChunkUrl}
                                 saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl}
                                 setFieldValue={({value}) => setImages(value)}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl} 
+                                accept={{
+                                    "image/*": [".png", ".jpg", ".webp"],
+                                    "application/*": [".pdf", ".docx", ".doc", ".zip"]
+                                }}/>
                         </div>
                         {props.versions && props.versions.length > 0 &&
                             <div className="media-edit__last-files">
@@ -172,17 +175,7 @@ const MediaItemForm = (props) => {
                                 disabled={disable || state.isLoading}>
                                 {props.saveMediaText}
                             </Button>
-                            <Button 
-                                className="ml-2"
-                                type="button" 
-                                variant="contained" 
-                                color="secondary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.mediaUrl);
-                                }}>
-                                {props.backToMediaText}
-                            </Button> 
+                            <a href={props.mediaUrl} className="ml-2 button is-text">{props.backToMediaText}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

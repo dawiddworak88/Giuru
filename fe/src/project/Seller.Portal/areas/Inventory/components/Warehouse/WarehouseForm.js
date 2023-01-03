@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
 import { TextField, Button, InputLabel } from "@mui/material";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 const WarehouseForm = (props) => {
 
@@ -44,6 +44,9 @@ const WarehouseForm = (props) => {
         fetch(props.saveUrl, requestOptions)
             .then((res) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(res);
+
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
@@ -105,17 +108,7 @@ const WarehouseForm = (props) => {
                             disabled={state.isLoading || disable}>
                             {props.saveText}
                         </Button>
-                        <Button 
-                            className="ml-2"
-                            type="button" 
-                            variant="contained" 
-                            color="secondary" 
-                            onClick={(e) => {
-                                e.preventDefault();
-                                NavigationHelper.redirect(props.warehouseUrl);
-                            }}>
-                            {props.navigateToWarehouseListText}
-                        </Button> 
+                        <a href={props.warehouseUrl} className="ml-2 button is-text">{props.navigateToWarehouseListText}</a>
                     </div>
                 </form>
             </div>

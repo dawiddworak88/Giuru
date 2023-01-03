@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
@@ -218,7 +217,6 @@ const NewsItemForm = (props) => {
                                 id="thumbnailImage"
                                 name="thumbnailImage"
                                 label={props.thumbImageLabel}
-                                accept=".png, .jpg, .webp"
                                 multiple={false}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
@@ -226,14 +224,16 @@ const NewsItemForm = (props) => {
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
                                 files={thumbnailImage}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl} 
+                                accept={{
+                                    "image/*": [".png", ".jpg", ".webp"]
+                                }}/>
                         </div>
                         <div className="field">
                             <MediaCloud
                                 id="previewImage"
                                 name="previewImage"
                                 label={props.previewImageLabel}
-                                accept=".png, .jpg, .webp"
                                 multiple={false}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
@@ -241,7 +241,10 @@ const NewsItemForm = (props) => {
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
                                 files={previewImage}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl} 
+                                accept={{
+                                    "image/*": [".png", ".jpg", ".webp"]
+                                }}/>
                         </div>
                         <div className="field">
                             <NoSsr>
@@ -267,7 +270,6 @@ const NewsItemForm = (props) => {
                                 id="files"
                                 name="files"
                                 label={props.filesLabel}
-                                accept=".pdf, .docx, .zip"
                                 multiple={true}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
@@ -275,7 +277,10 @@ const NewsItemForm = (props) => {
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
                                 files={files}
                                 setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
+                                saveMediaUrl={props.saveMediaUrl} 
+                                accept={{
+                                    "application/*": [".pdf", ".docx", ".doc", ".zip"]
+                                }}/>
                         </div>
                         <div className="field">
                             <NoSsr>
@@ -303,17 +308,7 @@ const NewsItemForm = (props) => {
                                 >
                                 {props.saveText}
                             </Button>
-                            <Button 
-                                className="ml-2"
-                                type="button" 
-                                variant="contained" 
-                                color="secondary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.newsUrl);
-                                }}>
-                                {props.navigateToNewsLabel}
-                            </Button> 
+                            <a href={props.newsUrl} className="ml-2 button is-text">{props.navigateToNewsLabel}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

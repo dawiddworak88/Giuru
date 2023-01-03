@@ -1,50 +1,51 @@
 ﻿using Foundation.Extensions.ModelBuilders;
-using System.Collections.Generic;
-using Foundation.PageContent.Components.Links.ViewModels;
-using Microsoft.Extensions.Localization;
-using Microsoft.AspNetCore.Routing;
-using System.Globalization;
 using Foundation.Localization;
+using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.DrawerMenu.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.LanguageSwitchers.ViewModels;
-using Foundation.PageContent.Components.DrawerMenu.ViewModels;
+using Foundation.PageContent.Components.Links.ViewModels;
 using Foundation.Presentation.Definitions;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Localization;
+using Seller.Web.Shared.ViewModels;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Seller.Web.Shared.ModelBuilders.Headers
 {
-    public class HeaderModelBuilder : IModelBuilder<HeaderViewModel>
+    public class HeaderModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel>
     {
         private readonly IModelBuilder<LogoViewModel> logoModelBuilder;
-        private readonly IModelBuilder<IEnumerable<DrawerMenuViewModel>> drawerMenuModelBuilder;
         private readonly IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IModelBuilder<IEnumerable<DrawerMenuViewModel>> drawerMenuModelBuilder;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly LinkGenerator linkGenerator;
 
         public HeaderModelBuilder(
             IModelBuilder<LogoViewModel> logoModelBuilder,
-            IModelBuilder<IEnumerable<DrawerMenuViewModel>> drawerMenuModelBuilder,
             IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel,
-            LinkGenerator linkGenerator,
-            IHttpContextAccessor httpContextAccessor,
-            IStringLocalizer<GlobalResources> globalLocalizer)
+            IModelBuilder<IEnumerable<DrawerMenuViewModel>> drawerMenuModelBuilder,
+            IStringLocalizer<GlobalResources> globalLocalizer,
+            LinkGenerator linkGenerator)
         {
             this.logoModelBuilder = logoModelBuilder;
-            this.drawerMenuModelBuilder = drawerMenuModelBuilder;
             this.languageSwitcherViewModel = languageSwitcherViewModel;
-            this.linkGenerator = linkGenerator;
-            this.httpContextAccessor = httpContextAccessor;
             this.globalLocalizer = globalLocalizer;
+            this.linkGenerator = linkGenerator;
+            this.drawerMenuModelBuilder = drawerMenuModelBuilder;
         }
 
-        public HeaderViewModel BuildModel()
+        public async Task<SellerHeaderViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            return new HeaderViewModel
+            var viewModel = new SellerHeaderViewModel
             {
-                IsLoggedIn = this.httpContextAccessor.HttpContext.User.Identity.IsAuthenticated,
+                WelcomeText = this.globalLocalizer.GetString("Welcome"),
+                Name = componentModel.Name,
+                IsLoggedIn = componentModel.IsAuthenticated,
                 SignOutLink = new LinkViewModel
-                { 
+                {
                     Url = this.linkGenerator.GetPathByAction("SignOutNow", "Account", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
                     Text = this.globalLocalizer.GetString("SignOut")
                 },
@@ -55,6 +56,8 @@ namespace Seller.Web.Shared.ModelBuilders.Headers
                 LanguageSwitcher = this.languageSwitcherViewModel.BuildModel(),
                 Links = new List<LinkViewModel>()
             };
+
+            return viewModel;
         }
     }
 }

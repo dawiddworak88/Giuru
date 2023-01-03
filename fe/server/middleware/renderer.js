@@ -4,6 +4,8 @@ import { resetServerContext } from 'react-beautiful-dnd';
 import { ServerStyleSheets } from "@mui/styles";
 
 // AspNetCore
+import BuyerOrderItemPage from "../../src/project/AspNetCore/areas/Orders/pages/OrderItemPage/OrderItemPage";
+import BuyerDashboardPage from "../../src/project/AspNetCore/areas/Dashboard/pages/DashboardPage/DashboardPage";
 import DownloadCenterBuyerCategoryPage from "../../src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage";
 import DownloadCenterBuyerPage from "../../src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage";
 import ApplicationPage from "../../src/project/AspNetCore/areas/Home/pages/ApplicationPage/ApplicationPage";
@@ -27,6 +29,9 @@ import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetP
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
 
 // Seller Portal
+import DashboardPage from "../../src/project/Seller.Portal/areas/Dashboard/pages/DashboardPage/DashboardPage";
+import CountryPage from "../../src/project/Seller.Portal/areas/Global/pages/CountryPage/CountryPage";
+import CountriesPage from "../../src/project/Seller.Portal/areas/Global/pages/CountriesPage/CountriesPage";
 import TeamMemberPage from "../../src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/TeamMember";
 import TeamMembersPage from "../../src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/TeamMembers";
 import DownloadCenterItemPage from "../../src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/DownloadCenterItemPage";
@@ -56,6 +61,7 @@ import WarehousePage from "../../src/project/Seller.Portal/areas/Inventory/pages
 import WarehousesPage from "../../src/project/Seller.Portal/areas/Inventory/pages/WarehousesPage/WarehousesPage";
 import OrdersPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrdersPage/OrdersPage";
 import OrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage";
+import OrderItemPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderItemPage/OrderItemPage";
 import EditOrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/EditOrderPage/EditOrderPage";
 import ClientsPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientsPage/ClientsPage";
 import ClientPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage";
@@ -69,6 +75,8 @@ import SellerCategoryPage from "../../src/project/Seller.Portal/areas/Products/p
 import SettingsPage from "../../src/project/Seller.Portal/areas/Settings/pages/SettingsPage/SettingsPage";
 
 const Components = {
+	BuyerOrderItemPage,
+	BuyerDashboardPage,
 	DownloadCenterBuyerCategoryPage,
 	DownloadCenterBuyerPage,
 	ApplicationPage,
@@ -90,6 +98,9 @@ const Components = {
 	SetPasswordPage,
 	ContentPage,
 
+	DashboardPage,
+	CountriesPage,
+	CountryPage,
 	TeamMemberPage,
 	TeamMembersPage,
 	DownloadCenterItemPage,
@@ -119,6 +130,7 @@ const Components = {
 	WarehousesPage,
 	OrdersPage,
 	OrderPage,
+	OrderItemPage,
 	EditOrderPage,
 	ClientsPage,
 	ClientPage,

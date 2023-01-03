@@ -6,7 +6,6 @@ import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelpe
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -17,6 +16,7 @@ function ClientForm(props) {
         email: { value: props.email ? props.email : "", error: "" },
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
+        countryId: { value: props.countryId ? props.countryId : null },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
         hasAccount: { value: props.hasAccount ? props.hasAccount : false }
@@ -119,7 +119,11 @@ function ClientForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, email, clientGroupIds, communicationLanguage, phoneNumber, clientManagerIds } = values;
+    const { 
+        id, name, email, countryId, clientGroupIds, 
+        communicationLanguage, phoneNumber, clientManagerIds 
+    } = values;
+
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -159,6 +163,23 @@ function ClientForm(props) {
                                 }} />
                         </div>
                         <div className="field">
+                            <FormControl fullWidth={true} variant="standard">
+                                <InputLabel id="country-label">{props.countryLabel}</InputLabel>
+                                <Select
+                                    labelId="country-label"
+                                    id="countryId"
+                                    name="countryId"
+                                    value={countryId}
+                                    onChange={handleOnChange}>
+                                    {props.countries && props.countries.length > 0 && props.countries.map((country, index) => {
+                                        return (
+                                            <MenuItem key={index} value={country.id}>{country.name}</MenuItem>
+                                        );
+                                    })}
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <div className="field">
                             <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage} variant="standard">
                                 <InputLabel id="language-label">{props.languageLabel}</InputLabel>
                                 <Select
@@ -167,9 +188,9 @@ function ClientForm(props) {
                                     name="communicationLanguage"
                                     value={communicationLanguage}
                                     onChange={handleOnChange}>
-                                    {props.languages.map(language => {
+                                    {props.languages && props.languages.length > 0 && props.languages.map((language, index) => {
                                         return (
-                                            <MenuItem key={language.value} value={language.value}>{language.text}</MenuItem>
+                                            <MenuItem key={index} value={language.value}>{language.text}</MenuItem>
                                         );
                                     })}
                                 </Select>
@@ -240,19 +261,8 @@ function ClientForm(props) {
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <Button
-                                className="field-button"
-                                type="button"
-                                variant="contained" 
-                                color="primary"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.clientsUrl);
-                                }}>
-                                    {props.navigateToClientsLabel}
-                            </Button>
                             <Button 
-                                className="field-button"
+                                className="ml-2 "
                                 type="button" 
                                 color="secondary" 
                                 variant="contained" 
@@ -260,6 +270,7 @@ function ClientForm(props) {
                                 disabled={state.isLoading || !canCreateAccount}>
                                 {props.hasAccount ? props.resetPasswordText : props.accountText}
                             </Button>
+                            <a href={props.clientsUrl} className="field-button button is-text">{props.navigateToClientsLabel}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}
@@ -297,7 +308,9 @@ ClientForm.propTypes = {
     clientManagerLabel: PropTypes.string.isRequired,
     clientManagers: PropTypes.array,
     noManagersText: PropTypes.string.isRequired,
-    clientManagerIds: PropTypes.array
+    clientManagerIds: PropTypes.array,
+    country: PropTypes.string,
+    countryLabel: PropTypes.string.isRequired
 };
 
 export default ClientForm;

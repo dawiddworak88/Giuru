@@ -222,7 +222,7 @@ namespace Client.Api.v1.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<ClientApplicationResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var clientsApplicationIds = ids.ToEnumerableGuidIds();
@@ -290,41 +290,35 @@ namespace Client.Api.v1.Controllers
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
-                var validator = new GetClientsApplicationsModelValidator();
-                var validationResult = await validator.ValidateAsync(serviceModel);
+                var clientsApplications = await this.clientsApplicationService.GetAsync(serviceModel);
 
-                if (validationResult.IsValid)
+                if (clientsApplications is not null)
                 {
-                    var clientsApplications = await this.clientsApplicationService.GetAsync(serviceModel);
-
-                    if (clientsApplications is not null)
+                    var response = new PagedResults<IEnumerable<ClientApplicationResponseModel>>(clientsApplications.Total, clientsApplications.PageSize)
                     {
-                        var response = new PagedResults<IEnumerable<ClientApplicationResponseModel>>(clientsApplications.Total, clientsApplications.PageSize)
+                        Data = clientsApplications.Data.OrEmptyIfNull().Select(x => new ClientApplicationResponseModel
                         {
-                            Data = clientsApplications.Data.OrEmptyIfNull().Select(x => new ClientApplicationResponseModel
-                            {
-                                Id = x.Id,
-                                FirstName = x.FirstName,
-                                LastName = x.LastName,
-                                ContactJobTitle = x.ContactJobTitle,
-                                PhoneNumber = x.PhoneNumber,
-                                Email = x.Email,
-                                CompanyName = x.CompanyName,
-                                CompanyAddress = x.CompanyAddress,
-                                CompanyCity = x.CompanyCity,
-                                CompanyCountry = x.CompanyCountry,
-                                CompanyPostalCode = x.CompanyPostalCode,
-                                CompanyRegion = x.CompanyRegion,
-                                LastModifiedDate = x.LastModifiedDate,
-                                CreatedDate = x.CreatedDate
-                            })
-                        };
+                            Id = x.Id,
+                            FirstName = x.FirstName,
+                            LastName = x.LastName,
+                            ContactJobTitle = x.ContactJobTitle,
+                            PhoneNumber = x.PhoneNumber,
+                            Email = x.Email,
+                            CompanyName = x.CompanyName,
+                            CompanyAddress = x.CompanyAddress,
+                            CompanyCity = x.CompanyCity,
+                            CompanyCountry = x.CompanyCountry,
+                            CompanyPostalCode = x.CompanyPostalCode,
+                            CompanyRegion = x.CompanyRegion,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
+                    };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
-                    }
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
 
-                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
     }

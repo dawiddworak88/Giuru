@@ -46,13 +46,11 @@ namespace Seller.Web.Areas.Products.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] SaveCategoryRequestModel model)
         {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
             var categoryId = await this.categoriesRepository.SaveAsync(
-                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                CultureInfo.CurrentUICulture.Name,
-                model.Id,
-                model.ParentCategoryId,
-                model.Name,
-                model.Files.Select(x => x.Id.Value));
+                token, language, model.Id, model.ParentCategoryId, model.Name, model.Files.Select(x => x.Id.Value), model.Schema, model.UiSchema);
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Id = categoryId, Message = this.productLocalizer.GetString("CategorySavedSuccessfully").Value });
         }

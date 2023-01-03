@@ -20,4 +20,4 @@ ENV NODE_ENV=development
 
 EXPOSE 3000
 
-CMD ["node", "server/bootstrap.js" ]
+CMD ["npm", "run", "watch-ssr"]

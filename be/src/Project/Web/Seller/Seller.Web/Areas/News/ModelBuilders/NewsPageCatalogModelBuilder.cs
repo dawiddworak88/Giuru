@@ -42,6 +42,8 @@ namespace Seller.Web.Areas.News.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<NewsItem>, NewsItem>();
 
             viewModel.Title = this.newsLocalizer.GetString("News");
+            viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
+
             viewModel.NewText = this.newsLocalizer.GetString("NewsNewText");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "NewsItem", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "NewsItem", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });

@@ -1,11 +1,10 @@
-﻿using Buyer.Web.Areas.Products.DomainModels;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace Buyer.Web.Areas.Orders.ViewModel
 {
     public class OrderItemViewModel
     {
+        public Guid? Id { get; set; }
         public Guid? ProductId { get; set; }
         public string Sku { get; set; }
         public string Name { get; set; }
@@ -16,9 +15,12 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public double StockQuantity { get; set; }
         public double OutletQuantity { get; set; }
         public string ExternalReference { get; set; }
-        public DateTime? DeliveryFrom { get; set; }
-        public DateTime? DeliveryTo { get; set; }
+        public string OrderItemStatusName { get; set; }
+        public string OrderItemStatusChangeComment { get; set; }
         public string MoreInfo { get; set; }
         public string ProductAttributes { get; set; }
+        public Guid? OrderItemStatusId { get; set; }
+        public DateTime? DeliveryFrom { get; set; }
+        public DateTime? DeliveryTo { get; set; }
     }
 }

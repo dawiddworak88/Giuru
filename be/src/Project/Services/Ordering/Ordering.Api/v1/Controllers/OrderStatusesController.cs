@@ -49,29 +49,22 @@ namespace Ordering.Api.v1.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new GetOrderStatusesModelValidator();
+            var orders = await this.ordersService.GetOrderStatusesAsync(serviceModel);
 
-            var validationResult = await validator.ValidateAsync(serviceModel);
-
-            if (validationResult.IsValid)
+            if (orders != null)
             {
-                var orders = await this.ordersService.GetOrderStatusesAsync(serviceModel);
+                var response = orders.Select(x => new OrderStatusResponseModel 
+                { 
+                    Id = x.Id,
+                    Name = x.Name,
+                    LastModifiedDate = x.LastModifiedDate,
+                    CreatedDate = x.CreatedDate
+                });
 
-                if (orders != null)
-                {
-                    var response = orders.Select(x => new OrderStatusResponseModel 
-                    { 
-                        Id = x.Id,
-                        Name = x.Name,
-                        LastModifiedDate = x.LastModifiedDate,
-                        CreatedDate = x.CreatedDate
-                    });
-
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
+                return this.StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }

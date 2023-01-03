@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: giuru-ingress
@@ -17,6 +17,7 @@ metadata:
 spec:
   tls:
   - hosts:
+    - {{ .Values.ingress.analyticsapidomain }}
     - {{ .Values.ingress.clientapidomain }}
     - {{ .Values.ingress.basketapidomain }}
     - {{ .Values.ingress.orderingapidomain }}
@@ -28,82 +29,147 @@ spec:
     - {{ .Values.ingress.buyerapidomain }}
     - {{ .Values.ingress.sellerapidomain }}
     - {{ .Values.ingress.downloadcenterapidomain }}
+    - {{ .Values.ingress.globalapidomain }}
+    - {{ .Values.ingress.contentapidomain }}
     secretName: tls-secret
   rules:
   - host: {{ .Values.ingress.mediaapidomain }}
     http:
       paths:
       - backend:
-          serviceName: media-api-service
-          servicePort: 80
+          service:
+            name: media-api-service
+            port:
+              number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.clientapidomain }}
     http:
       paths:
       - backend:
-          serviceName: client-api-service
-          servicePort: 80
+          service:
+            name: client-api-service
+            port:
+              number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.basketapidomain }}
     http:
       paths:
       - backend:
-          serviceName: basket-api-service
-          servicePort: 80
+          service:
+            name: basket-api-service
+            port:
+              number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.orderingapidomain }}
     http:
       paths:
       - backend:
-          serviceName: ordering-api-service
-          servicePort: 80
+          service:
+            name: ordering-api-service
+            port:
+              number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.identityapidomain }}
     http:
       paths:
       - backend:
-          serviceName: identity-api-service
-          servicePort: 80
+          service:
+            name: identity-api-service
+            port:
+              number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.catalogapidomain }}
     http:
       paths:
       - backend:
-          serviceName: catalog-api-service
-          servicePort: 80
+          service:
+            name: catalog-api-service
+            port:
+              number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.inventoryapidomain }}
     http:
       paths:
       - backend:
-          serviceName: inventory-api-service
-          servicePort: 80
+          service:
+            name: inventory-api-service
+            port:
+              number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.newsapidomain }}
     http:
       paths:
       - backend:
-          serviceName: news-api-service
-          servicePort: 80
+          service:
+            name: news-api-service
+            port:
+              number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.downloadcenterapidomain }}
     http:
       paths:
       - backend:
-          serviceName: download-center-api-service
-          servicePort: 80
+          service:
+            name: download-center-api-service
+            port:
+              number: 80
         path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.analyticsapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: analytics-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.globalapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: global-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.contentapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: content-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.buyerapidomain }}
     http:
       paths:
       - backend:
-          serviceName: buyer-web-service
-          servicePort: 80
+          service:
+            name: buyer-web-service
+            port:
+              number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.sellerapidomain }}
     http:
       paths:
       - backend:
-          serviceName: seller-web-service
-          servicePort: 80
+          service:
+            name: seller-web-service
+            port:
+              number: 80
         path: /
+        pathType: Prefix

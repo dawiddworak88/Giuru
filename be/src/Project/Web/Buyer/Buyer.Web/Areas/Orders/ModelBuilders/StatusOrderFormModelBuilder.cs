@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Orders.DomainModels;
+using Buyer.Web.Areas.Orders.Definitions;
+using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.ViewModel;
 using Buyer.Web.Shared.ComponentModels.Files;
@@ -11,6 +12,7 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,18 +57,28 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
                 ExpectedDeliveryLabel = this.orderLocalizer.GetString("ExpectedDeliveryLabel"),
                 FabricsLabel = this.orderLocalizer.GetString("FabricsLabel"),
+                CancelOrderLabel = this.orderLocalizer.GetString("CancelOrder"),
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                UpdateOrderStatusUrl = this.linkGenerator.GetPathByAction("Cancel", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
-                StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel")
+                StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
+                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
+                YesLabel = this.globalLocalizer.GetString("Yes"),
+                NoLabel = this.globalLocalizer.GetString("No"),
+                CancelationConfirmationDialogLabel = this.orderLocalizer.GetString("CancelationConfirmationDialog"),
+                AreYouSureToCancelOrderLabel = this.orderLocalizer.GetString("AreYouSureToCancelOrder"),
+                OrdersUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                NavigateToOrders = this.orderLocalizer.GetString("NavigateToOrdersList")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
 
-            if (orderStatuses != null)
+            if (orderStatuses is not null)
             {
                 viewModel.OrderStatuses = orderStatuses.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
-
+            
             if (componentModel.Id.HasValue)
             {
                 var order = await this.ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
@@ -77,8 +89,11 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.OrderStatusId = order.OrderStatusId;
                     viewModel.ExpectedDelivery = order.ExpectedDeliveryDate;
                     viewModel.CustomOrder = order.MoreInfo;
+                    viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
+                    viewModel.CanCancelOrder = false;
                     viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                     {
+                        Id = x.Id,
                         ProductId = x.ProductId,
                         Sku = x.ProductSku,
                         Name = x.ProductName,
@@ -88,6 +103,9 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         OutletQuantity = x.OutletQuantity,
                         ExternalReference = x.ExternalReference,
                         MoreInfo = x.MoreInfo,
+                        OrderItemStatusId = x.OrderItemStatusId,
+                        OrderItemStatusName = x.OrderItemStatusName,
+                        OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
                         ProductAttributes = x.ProductAttributes,
                         DeliveryFrom = x.ExpectedDeliveryFrom,
                         DeliveryTo = x.ExpectedDeliveryTo,

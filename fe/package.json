@@ -21,6 +21,7 @@
     "ajv": "8.11.0",
     "babel-plugin-file-loader": "2.0.0",
     "bulma": "0.9.4",
+    "chart.js": "3.9.1",
     "draft-js": "0.11.7",
     "draft-js-export-markdown": "1.4.0",
     "draft-js-import-markdown": "1.4.0",
@@ -36,10 +37,11 @@
     "lodash.union": "4.6.0",
     "marked": "4.0.16",
     "moment": "2.29.3",
-    "qrcode.react": "^3.1.0",
+    "qrcode.react": "3.1.0",
     "react": "18.1.0",
     "react-autosuggest": "10.1.0",
     "react-beautiful-dnd": "13.1.0",
+    "react-chartjs-2": "4.3.1",
     "react-dom": "18.1.0",
     "react-draft-wysiwyg": "1.13.2",
     "react-dropzone": "14.2.1",
@@ -59,7 +61,8 @@
     "build-fe-dev": "SET NODE_ENV=development&&webpack --mode development",
     "build-fe": "SET NODE_ENV=production&&webpack --mode production",
     "watch-fe": "SET NODE_ENV=development&&webpack --mode development -w",
-    "ssr": "node server/bootstrap.js"
+    "ssr": "node server/bootstrap.js",
+    "watch-ssr": "nodemon server/bootstrap.js --watch \".\" --legacy-watch --polling-interval 4000"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -97,6 +100,7 @@
     "style-loader": "3.3.1",
     "url-loader": "4.1.1",
     "webpack": "5.72.1",
-    "webpack-cli": "4.9.2"
+    "webpack-cli": "4.9.2",
+    "nodemon": "2.0.16"
   }
 }

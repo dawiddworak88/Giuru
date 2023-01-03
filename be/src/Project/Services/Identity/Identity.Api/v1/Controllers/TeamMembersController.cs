@@ -129,7 +129,7 @@ namespace Identity.Api.v1.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<TeamMemberResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -144,31 +144,25 @@ namespace Identity.Api.v1.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new GetTeamMembersModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var teamMembers = await this.teamMemberService.GetAsync(serviceModel);
 
-            if (validationResult.IsValid)
+            if (teamMembers is not null)
             {
-                var teamMembers = await this.teamMemberService.GetAsync(serviceModel);
-
-                if (teamMembers is not null)
+                var response = new PagedResults<IEnumerable<TeamMemberResponseModel>>(teamMembers.Total, teamMembers.PageSize)
                 {
-                    var response = new PagedResults<IEnumerable<TeamMemberResponseModel>>(teamMembers.Total, teamMembers.PageSize)
+                    Data = teamMembers.Data.OrEmptyIfNull().Select(x => new TeamMemberResponseModel
                     {
-                        Data = teamMembers.Data.OrEmptyIfNull().Select(x => new TeamMemberResponseModel
-                        {
-                            Id = x.Id,
-                            FirstName = x.FirstName,
-                            LastName = x.LastName,
-                            Email = x.Email
-                        })
-                    };
+                        Id = x.Id,
+                        FirstName = x.FirstName,
+                        LastName = x.LastName,
+                        Email = x.Email
+                    })
+                };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
+                return this.StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>

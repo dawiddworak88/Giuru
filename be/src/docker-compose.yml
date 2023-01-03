@@ -14,7 +14,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
     restart: always
 
-  basketdata:
+  redis:
     image: redis:alpine
 
   kibana:
@@ -43,6 +43,10 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
     restart: always
 
+  postgres:
+    image: postgres:10.5
+    restart: always
+
   media-api:
     image: ${REGISTRY:-giuru}/media-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
@@ -52,6 +56,7 @@ services:
     depends_on:
       - azurite
       - sqldata
+      - redis
 
   client-api:
     image: ${REGISTRY:-giuru}/client-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -61,6 +66,7 @@ services:
     restart: always
     depends_on: 
       - sqldata
+      - redis
 
   inventory-api:
     image: ${REGISTRY:-giuru}/inventory-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -70,6 +76,7 @@ services:
     restart: always
     depends_on: 
       - sqldata
+      - redis
       - catalog-api
       - rabbitmq
   
@@ -81,6 +88,7 @@ services:
     restart: always
     depends_on: 
       - sqldata
+      - redis
 
   catalog-api:
     image: ${REGISTRY:-giuru}/catalog-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -90,6 +98,7 @@ services:
     restart: always
     depends_on: 
       - sqldata
+      - redis
       - elasticsearch
       - rabbitmq
       - media-api
@@ -103,6 +112,7 @@ services:
     depends_on: 
       - catalog-api
       - sqldata
+      - redis
       - rabbitmq
 
   identity-api:
@@ -113,6 +123,7 @@ services:
     restart: always
     depends_on: 
       - sqldata
+      - redis
       - react-ssr
 
   basket-api:
@@ -121,7 +132,7 @@ services:
       context: .
       dockerfile: Project/Services/Basket/Basket.Api/Dockerfile
     depends_on:
-      - basketdata
+      - redis
       - identity-api
       - rabbitmq
 
@@ -132,7 +143,16 @@ services:
       dockerfile: Project/Services/Ordering/Ordering.Api/Dockerfile
     depends_on:
       - catalog-api
+      - redis
       - rabbitmq
+
+  content-api:
+    image: ${REGISTRY:-giuru}/content-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: Project/Services/Content/Content.Api
+      dockerfile: Dockerfile-dev-local
+    depends_on:
+      - postgres
 
   downloadcenter-api:
     image: ${REGISTRY:-giuru}/download-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -140,6 +160,25 @@ services:
       context: .
       dockerfile: Project/Services/DownloadCenter/DownloadCenter.Api/Dockerfile
     depends_on:
+      - redis
+      - sqldata
+
+  analytics-api:
+    image: ${REGISTRY:-giuru}/analytics-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Analytics/Analytics.Api/Dockerfile
+    depends_on:
+      - sqldata
+      - redis
+      
+  global-api:
+    image: ${REGISTRY:-giuru}/global-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Global/Global.Api/Dockerfile
+    depends_on:
+      - redis
       - sqldata
 
   seller-web:
@@ -150,6 +189,7 @@ services:
     restart: always
     depends_on: 
       - react-ssr
+      - redis
       - identity-api
 
   buyer-web:
@@ -160,4 +200,5 @@ services:
     restart: always
     depends_on: 
       - react-ssr
+      - redis
       - identity-api

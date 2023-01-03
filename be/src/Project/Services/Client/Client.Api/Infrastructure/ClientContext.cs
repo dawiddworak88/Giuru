@@ -2,7 +2,6 @@
 using Client.Api.Infrastructure.Clients.Entities;
 using Client.Api.Infrastructure.Groups.Entities;
 using Client.Api.Infrastructure.Roles.Entities;
-using Client.Api.Infrastructure.Managers.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Client.Api.Infrastructure

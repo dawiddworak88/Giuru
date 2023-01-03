@@ -8,7 +8,7 @@ function Tile(props) {
     const IconTag = Icon[props.icon];
 
     return (
-        <a href={props.url} className="tile">
+        <a href={props.url} className="tile" target={props.target}>
             <div className="tile__icon">
                 <IconTag size={IconConstants.defaultSize()} />
             </div>

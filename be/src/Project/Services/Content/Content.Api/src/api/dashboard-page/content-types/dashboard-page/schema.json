@@ -1,0 +1,29 @@
+{
+  "kind": "singleType",
+  "collectionName": "dashboard_pages",
+  "info": {
+    "singularName": "dashboard-page",
+    "pluralName": "dashboard-pages",
+    "displayName": "Dashboard Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo"
+    }
+  }
+}

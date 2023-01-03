@@ -14,6 +14,12 @@ using Microsoft.Extensions.Options;
 using Foundation.Localization.Definitions;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.DataProtection;
+using StackExchange.Redis;
+using System.Reflection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Foundation.Telemetry.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +55,13 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
 });
 
+builder.Services.AddDataProtection().UseCryptographicAlgorithms(
+    new AuthenticatedEncryptorConfiguration
+    {
+        EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+        ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+    }).PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(builder.Configuration["RedisUrl"]), $"{Assembly.GetExecutingAssembly().GetName().Name}-DataProtection-Keys");
+
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add(typeof(HttpGlobalExceptionFilter));
@@ -67,6 +80,17 @@ builder.Services.RegisterEventBus(builder.Configuration);
 builder.Services.RegisterCatalogBaseDependencies();
 
 builder.Services.RegisterCatalogBackgroundTasksDependencies();
+
+builder.Services.RegisterOpenTelemetry(
+    builder.Configuration,
+    Assembly.GetExecutingAssembly().GetName().Name,
+    false,
+    false,
+    true,
+    false,
+    false,
+    new[] { "/hc", "/liveness" },
+    builder.Environment.EnvironmentName);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
 

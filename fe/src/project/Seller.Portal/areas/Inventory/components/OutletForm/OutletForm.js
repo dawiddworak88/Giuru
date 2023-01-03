@@ -7,7 +7,6 @@ import {
 import { Context } from "../../../../../../shared/stores/Store";
 import { toast } from "react-toastify";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import QuantityValidator from "../../../../../../shared/helpers/validators/QuantityValidator";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
@@ -77,6 +76,9 @@ const OutletForm = (props) => {
         fetch(props.saveUrl, requestOptions)
             .then((res) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(res);
+
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
@@ -96,6 +98,7 @@ const OutletForm = (props) => {
             const searchParameters = {
                 searchTerm: value,
                 pageIndex: 1,
+                hasPrimaryProduct: true,
                 itemsPerPage: SearchConstants.productsSuggestionItemsPerPage()
             };
 
@@ -250,17 +253,7 @@ const OutletForm = (props) => {
                                 disabled={state.isLoading || disable || !product}>
                                 {props.saveText}
                             </Button>
-                            <Button 
-                                className="ml-2"
-                                type="button" 
-                                variant="contained" 
-                                color="secondary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.outletUrl);
-                                }}>
-                                {props.navigateToOutletListText}
-                            </Button> 
+                            <a href={props.outletUrl} className="ml-2 button is-text">{props.navigateToOutletListText}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

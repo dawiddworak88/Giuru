@@ -16,7 +16,6 @@ import moment from "moment";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
 import ConfirmationDialog from "../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import IconConstants from "../../../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
@@ -184,6 +183,7 @@ function NewOrderForm(props) {
                     if (response.ok) {
                         setBasketId(jsonResponse.id);
                         setOpenDeleteDialog(false);
+                        
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
                             setOrderItems(jsonResponse.items);
                         }
@@ -236,11 +236,6 @@ function NewOrderForm(props) {
             });
     };
 
-    const handleBackToOrdersClick = (e) => {
-        e.preventDefault();
-        NavigationHelper.redirect(props.ordersUrl);
-    };
-
     const onDrop = useCallback(acceptedFiles => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
@@ -252,12 +247,18 @@ function NewOrderForm(props) {
 
             const requestOptions = {
                 method: "POST",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 body: formData
             };
 
             fetch(props.uploadOrderFileUrl, requestOptions)
                 .then(function (response) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                    AuthenticationHelper.HandleResponse(response);
+
                     return response.json().then((jsonResponse) => {
                         if (response.ok) {
                             setBasketId(jsonResponse.id)
@@ -277,8 +278,10 @@ function NewOrderForm(props) {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
-        accept: ".xlsx, .xls",
-        multiple: false
+        multiple: false,
+        accept: {
+            "application/*": [".xls", ".xlsx"]
+        }
     });
 
     const clearBasket = () => {
@@ -417,54 +420,52 @@ function NewOrderForm(props) {
                         <div className="order__items">
                             {(orderItems && orderItems.length > 0) ? (
                                 <Fragment>
-                                    <section className="section">
-                                        <div className="order__items-table">
-                                            <TableContainer component={Paper}>
-                                                <Table aria-label={props.orderItemsLabel}>
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            {!isOrdered &&
-                                                                <TableCell></TableCell>
-                                                            }
+                                    <div className="order__items-table">
+                                        <TableContainer component={Paper}>
+                                            <Table aria-label={props.orderItemsLabel}>
+                                                <TableHead>
+                                                    <TableRow>
+                                                        {!isOrdered &&
                                                             <TableCell></TableCell>
-                                                            <TableCell>{props.skuLabel}</TableCell>
-                                                            <TableCell>{props.nameLabel}</TableCell>
-                                                            <TableCell>{props.quantityLabel}</TableCell>
-                                                            <TableCell>{props.stockQuantityLabel}</TableCell>
-                                                            <TableCell>{props.outletQuantityLabel}</TableCell>
-                                                            <TableCell>{props.externalReferenceLabel}</TableCell>
-                                                            <TableCell>{props.deliveryFromLabel}</TableCell>
-                                                            <TableCell>{props.deliveryToLabel}</TableCell>
-                                                            <TableCell>{props.moreInfoLabel}</TableCell>
+                                                        }
+                                                        <TableCell></TableCell>
+                                                        <TableCell>{props.skuLabel}</TableCell>
+                                                        <TableCell>{props.nameLabel}</TableCell>
+                                                        <TableCell>{props.quantityLabel}</TableCell>
+                                                        <TableCell>{props.stockQuantityLabel}</TableCell>
+                                                        <TableCell>{props.outletQuantityLabel}</TableCell>
+                                                        <TableCell>{props.externalReferenceLabel}</TableCell>
+                                                        <TableCell>{props.deliveryFromLabel}</TableCell>
+                                                        <TableCell>{props.deliveryToLabel}</TableCell>
+                                                        <TableCell>{props.moreInfoLabel}</TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {orderItems.map((item, index) => (
+                                                        <TableRow key={index}>
+                                                            {!isOrdered &&
+                                                                <TableCell width="11%">
+                                                                    <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
+                                                                        <Delete />
+                                                                    </Fab>
+                                                                </TableCell>
+                                                            }
+                                                            <TableCell><a href={item.productUrl} rel="noreferrer" target="_blank"><img className="order__basket-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
+                                                            <TableCell>{item.sku}</TableCell>
+                                                            <TableCell>{item.name}</TableCell>
+                                                            <TableCell>{item.quantity}</TableCell>
+                                                            <TableCell>{item.stockQuantity}</TableCell>
+                                                            <TableCell>{item.outletQuantity}</TableCell>
+                                                            <TableCell>{item.externalReference}</TableCell>
+                                                            <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
+                                                            <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
+                                                            <TableCell>{item.moreInfo}</TableCell>
                                                         </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {orderItems.map((item, index) => (
-                                                            <TableRow key={index}>
-                                                                {!isOrdered &&
-                                                                    <TableCell width="11%">
-                                                                        <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
-                                                                            <Delete />
-                                                                        </Fab>
-                                                                    </TableCell>
-                                                                }
-                                                                <TableCell><a href={item.productUrl} rel="noreferrer" target="_blank"><img className="order__basket-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
-                                                                <TableCell>{item.sku}</TableCell>
-                                                                <TableCell>{item.name}</TableCell>
-                                                                <TableCell>{item.quantity}</TableCell>
-                                                                <TableCell>{item.stockQuantity}</TableCell>
-                                                                <TableCell>{item.outletQuantity}</TableCell>
-                                                                <TableCell>{item.externalReference}</TableCell>
-                                                                <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
-                                                                <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
-                                                                <TableCell>{item.moreInfo}</TableCell>
-                                                            </TableRow>
-                                                        ))}
-                                                    </TableBody>
-                                                </Table>
-                                            </TableContainer>
-                                        </div>
-                                    </section>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </div>
                                 </Fragment>
                             ) : (
                                 <section className="section is-flex-centered has-text-centered is-flex-direction-column">
@@ -514,7 +515,6 @@ function NewOrderForm(props) {
                                     id="attachments"
                                     name="attachments"
                                     label={props.attachmentsLabel}
-                                    accept=".pdf, .docx, .zip, .xls, .xlsx, .png, .jpg"
                                     multiple={true}
                                     generalErrorMessage={props.generalErrorMessage}
                                     deleteLabel={props.deleteLabel}
@@ -525,16 +525,17 @@ function NewOrderForm(props) {
                                         setAttachments(value);
                                     }}
                                     saveMediaUrl={props.saveMediaUrl}
-                                />
+                                    accept={{
+                                        "image/*": [".png", ".jpg", ".webp"],
+                                        "application/*": [".pdf", ".docx", ".doc", ".zip", ".xls", ".xlsx"]
+                                    }}/>
                             </div>
                         </Fragment>
                     }
                 </div>
                 <div className="field">
                     {isOrdered ? (
-                        <Button type="button" variant="contained" color="primary" onClick={handleBackToOrdersClick}>
-                            {props.navigateToOrdersListText}
-                        </Button> 
+                        <a href={props.ordersUrl} className="button is-text">{props.navigateToOrdersListText}</a>
                     ) : (
                         <>
                             <Button type="button" variant="contained"

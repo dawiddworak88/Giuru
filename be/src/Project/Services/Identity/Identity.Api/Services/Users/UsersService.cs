@@ -67,7 +67,8 @@ namespace Identity.Api.Services.Users
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 
             var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
-            if (user != null)
+
+            if (user is not null)
             {
                 user.EmailConfirmed = false;
                 user.VerifyExpirationDate = timeExpiration;
@@ -205,7 +206,7 @@ namespace Identity.Api.Services.Users
                 }
             }
 
-            throw new CustomException(this.accountLocalizer.GetString("EmailIsConfirmed"), (int)HttpStatusCode.BadRequest);
+            return default;
         }
 
         public async Task<UserServiceModel> UpdateAsync(UpdateUserServiceModel serviceModel)

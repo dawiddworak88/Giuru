@@ -4,6 +4,7 @@ using Client.Api.Infrastructure.Managers.Entities;
 using Client.Api.ServicesModels.Clients;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -40,7 +41,18 @@ namespace Client.Api.Services.Clients
 
             clients = clients.ApplySort(model.OrderBy);
 
-            var pagedResults = clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage), model.PageIndex);
+            PagedResults<IEnumerable<Infrastructure.Clients.Entities.Client>> pagedResults;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                clients = clients.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = clients.PagedIndex(new Pagination(clients.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
 
             var pagedClientServiceModel = new PagedResults<IEnumerable<ClientServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
@@ -53,6 +65,7 @@ namespace Client.Api.Services.Clients
                     Id = client.Id,
                     Name = client.Name,
                     Email = client.Email,
+                    CountryId = client.CountryId,
                     CommunicationLanguage = client.Language,
                     PhoneNumber = client.PhoneNumber,
                     LastModifiedDate = client.LastModifiedDate,
@@ -95,6 +108,7 @@ namespace Client.Api.Services.Clients
                 Id = existingClient.Id,
                 Name = existingClient.Name,
                 Email = existingClient.Email,
+                CountryId = existingClient.CountryId,
                 CommunicationLanguage = existingClient.Language,
                 PhoneNumber = existingClient.PhoneNumber,
                 LastModifiedDate = existingClient.LastModifiedDate,
@@ -143,6 +157,7 @@ namespace Client.Api.Services.Clients
 
             client.Name = serviceModel.Name;
             client.Email = serviceModel.Email;
+            client.CountryId = serviceModel.CountryId;
             client.Language = serviceModel.CommunicationLanguage;
             client.PhoneNumber = serviceModel.PhoneNumber;
             client.OrganisationId = serviceModel.ClientOrganisationId.Value;
@@ -201,6 +216,7 @@ namespace Client.Api.Services.Clients
             {
                 Name = serviceModel.Name,
                 Email = serviceModel.Email,
+                CountryId = serviceModel.CountryId,
                 Language = serviceModel.CommunicationLanguage,
                 OrganisationId = serviceModel.ClientOrganisationId.Value,
                 PhoneNumber = serviceModel.PhoneNumber,
@@ -245,13 +261,21 @@ namespace Client.Api.Services.Clients
                               Id = c.Id,
                               Name = c.Name,
                               Email = c.Email,
+                              CountryId = c.CountryId,
                               CommunicationLanguage = c.Language,
                               PhoneNumber = c.PhoneNumber,
                               LastModifiedDate = c.LastModifiedDate,
                               CreatedDate = c.CreatedDate
                           };
 
-            return clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                clients = clients.Take(Constants.MaxItemsPerPageLimit);
+
+                return clients.PagedIndex(new Pagination(clients.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<ClientServiceModel> GetByOrganisationAsync(GetClientByOrganisationServiceModel model)
@@ -263,6 +287,7 @@ namespace Client.Api.Services.Clients
                               Id = c.Id,
                               Name = c.Name,
                               Email = c.Email,
+                              CountryId = c.CountryId,
                               CommunicationLanguage = c.Language,
                               PhoneNumber = c.PhoneNumber,
                               LastModifiedDate = c.LastModifiedDate,

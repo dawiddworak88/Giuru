@@ -7,8 +7,8 @@ namespace Catalog.Api.Services.Categories
 {
     public interface ICategoriesService
     {
-        Task<PagedResults<IEnumerable<CategoryServiceModel>>> GetAsync(GetCategoriesServiceModel model);
-        Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model);
+        PagedResults<IEnumerable<CategoryServiceModel>> Get(GetCategoriesServiceModel model);
+        CategoryServiceModel Get(GetCategoryServiceModel model);
         Task DeleteAsync(DeleteCategoryServiceModel model);
         Task<CategoryServiceModel> UpdateAsync(UpdateCategoryServiceModel model);
         Task<CategoryServiceModel> CreateAsync(CreateCategoryServiceModel model);

@@ -7,9 +7,6 @@ using Client.Api.Services.Managers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Reflection;
 
 namespace Client.Api.DependencyInjection
 {

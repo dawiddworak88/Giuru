@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -211,7 +212,14 @@ namespace Inventory.Api.Services.InventoryItems
 
             inventories = inventories.ApplySort(model.OrderBy);
 
-            return inventories.PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                inventories = inventories.Take(Constants.MaxItemsPerPageLimit);
+
+                return inventories.PagedIndex(new Pagination(inventories.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return inventories.PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<PagedResults<IEnumerable<InventoryServiceModel>>> GetByIdsAsync(GetInventoriesByIdsServiceModel model)
@@ -237,7 +245,14 @@ namespace Inventory.Api.Services.InventoryItems
                                  CreatedDate = c.CreatedDate
                              };
 
-            return inventoryProducts.PagedIndex(new Pagination(inventoryProducts.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                inventoryProducts = inventoryProducts.Take(Constants.MaxItemsPerPageLimit);
+
+                return inventoryProducts.PagedIndex(new Pagination(inventoryProducts.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return inventoryProducts.PagedIndex(new Pagination(inventoryProducts.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task<InventorySumServiceModel> GetInventoryByProductId(GetInventoryByProductIdServiceModel model)
@@ -375,9 +390,8 @@ namespace Inventory.Api.Services.InventoryItems
         {
             var inventories = (from i in this.context.Inventory
                                join product in this.context.Products on i.ProductId equals product.Id
-                               where product.IsActive
+                               where product.IsActive && i.IsActive
                                group i by new { product.Id } into gpi
-                               where gpi.Sum(x => x.AvailableQuantity) > 0
                                select new InventorySumServiceModel
                                {
                                     ProductId = gpi.Key.Id,
@@ -388,9 +402,14 @@ namespace Inventory.Api.Services.InventoryItems
                                     Quantity = gpi.Sum(x => x.Quantity),
                                     ExpectedDelivery = gpi.Min(x => x.ExpectedDelivery),
                                     RestockableInDays = gpi.Min(x => x.RestockableInDays)
-                               }).OrderByDescending(x => x.AvailableQuantity);
+                               });
 
-                return inventories.PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage), model.PageIndex);
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                inventories = inventories.Take(Constants.MaxItemsPerPageLimit).OrderByDescending(x => x.AvailableQuantity);
+            }
+
+            return inventories.OrderByDescending(x => x.AvailableQuantity).PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
 
         public async Task UpdateInventoryQuantity(Guid? productId, double bookedQuantity)

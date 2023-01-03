@@ -21,5 +21,7 @@ namespace Ordering.Api.Infrastructure
         public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<OrderStatusTranslation> OrderStatusTranslations { get; set; }
         public DbSet<OrderAttachment> OrderAttachments { get; set; }
+        public DbSet<OrderItemStatusChange> OrderItemStatusChanges { get; set; }
+        public DbSet<OrderItemStatusChangeCommentTranslation> OrderItemStatusChangesCommentTranslations { get; set; }
     }
 }

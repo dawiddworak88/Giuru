@@ -1,17 +1,19 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, Button, Tooltip, TablePagination
+    TableHead, TableRow, Paper, Button, Tooltip, TablePagination, NoSsr
 } from "@mui/material";
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
+import { Context } from "../../stores/Store";
 import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
 import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
 import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 
 function Files(props) {
+    const [state, dispatch] = useContext(Context);
     const [files, setFiles] = useState(props.files ? props.files.data : []);
     const [total, setTotal] = useState(props.files ? props.files.total : 0);
     const [page, setPage] = useState(0);
@@ -27,7 +29,6 @@ function Files(props) {
 
         const searchParameters = {
             id: props.id,
-            searchTerm,
             pageIndex: newPage + 1,
             itemsPerPage: props.defaultPageSize
         };
@@ -110,8 +111,10 @@ function Files(props) {
                                                 <TableCell>{file.name}</TableCell>
                                                 <TableCell>{file.description}</TableCell>
                                                 <TableCell>{file.size}</TableCell>
-                                                <TableCell>{moment(file.lastModifiedDate).local().format("L LT")}</TableCell>
-                                                <TableCell>{moment(file.createdDate).local().format("L LT")}</TableCell>
+                                                <NoSsr>
+                                                    <TableCell>{moment(file.lastModifiedDate).local().format("L LT")}</TableCell>
+                                                    <TableCell>{moment(file.createdDate).local().format("L LT")}</TableCell>
+                                                </NoSsr>
                                             </TableRow>
                                         ))}
                                     </TableBody>

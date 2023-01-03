@@ -1,0 +1,30 @@
+{
+  "kind": "singleType",
+  "collectionName": "orders_pages",
+  "info": {
+    "singularName": "orders-page",
+    "pluralName": "orders-pages",
+    "displayName": "Orders Page",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.seo",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    }
+  }
+}

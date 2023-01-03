@@ -25,6 +25,8 @@ namespace Seller.Web.Areas.DownloadCenter.Controllers
         {
             var componentModel = new ComponentModelBase
             {
+                IsAuthenticated = this.User.Identity.IsAuthenticated,
+                Name = this.User.Identity.Name,
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName)
             };

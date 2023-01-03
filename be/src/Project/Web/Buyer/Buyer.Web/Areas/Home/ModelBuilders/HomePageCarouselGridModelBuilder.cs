@@ -39,7 +39,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
         {
             var items = new List<CarouselGridItemViewModel>();
 
-            var newProducts = await catalogService.GetCatalogProductsAsync(
+            var newProducts = await this.catalogService.GetCatalogProductsAsync(
                 componentModel.Token,
                 componentModel.Language,
                 null,

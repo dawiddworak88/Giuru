@@ -38,6 +38,8 @@ spec:
           value: {{ .Values.mediaApi.connectionString }}
         - name: StorageConnectionString
           value: {{ .Values.mediaApi.storageConnectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: LogzIoToken
@@ -56,6 +58,8 @@ spec:
           value: {{ .Values.eventBusRetryCount }}
         - name: EventBusRequestedHeartbeat
           value: {{ .Values.eventBusRequestedHeartbeat }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -100,6 +104,8 @@ spec:
           value: {{ .Values.environment }}
         - name: ConnectionString
           value: {{ .Values.clientApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: LogzIoToken
@@ -122,6 +128,8 @@ spec:
           value: {{ .Values.clientApi.actionSendGridClientApplyConfirmationTemplateId }}
         - name: ActionSendGridClientApplyTemplateId
           value: {{ .Values.clientApi.actionSendGridClientApplyTemplateId }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -166,6 +174,8 @@ spec:
           value: {{ .Values.environment }}
         - name: ConnectionString
           value: {{ .Values.catalogApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: EventBusConnection
@@ -192,6 +202,8 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -236,6 +248,8 @@ spec:
           value: {{ .Values.environment }}
         - name: ConnectionString
           value: {{ .Values.catalogApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: EventBusConnection
@@ -258,6 +272,8 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -302,6 +318,8 @@ spec:
           value: {{ .Values.environment }}
         - name: ConnectionString
           value: {{ .Values.basketApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: EventBusConnection
@@ -316,6 +334,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -364,6 +384,8 @@ spec:
           value: {{ .Values.environment }}
         - name: ConnectionString
           value: {{ .Values.orderingApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: EventBusConnection
@@ -388,6 +410,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -463,6 +487,8 @@ spec:
           value: {{ .Values.serverSideRenderingEndpoint }}
         - name: ConnectionString
           value: {{ .Values.identityApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: CatalogUrl
           value: {{ .Values.catalogUrl }}
         - name: MediaUrl
@@ -513,6 +539,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -561,6 +589,8 @@ spec:
           value: {{ .Values.environment }}
         - name: ConnectionString
           value: {{ .Values.inventoryApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: EventBusConnection
@@ -575,6 +605,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -623,6 +655,8 @@ spec:
           value: {{ .Values.environment }}
         - name: ConnectionString
           value: {{ .Values.newsApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: CdnUrl
@@ -633,6 +667,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -683,6 +719,8 @@ spec:
           value: {{ .Values.organisationId }}
         - name: ConnectionString
           value: {{ .Values.downloadCenterApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: LogzIoToken
@@ -701,6 +739,180 @@ spec:
           value: {{ .Values.eventBusRetryCount }}
         - name: EventBusRequestedHeartbeat
           value: {{ .Values.eventBusRequestedHeartbeat }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: global-api-deployment
+  labels:
+    app: global-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: global-api
+  template:
+    metadata:
+      labels:
+        app: global-api
+    spec:
+      containers:
+      - name: global-api-container
+        image: {{ .Values.image.registry }}/global-api:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
+        resources:
+          limits:
+            memory: "250Mi"
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ConnectionString
+          value: {{ .Values.globalApi.connectionString }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: content-api-deployment
+  labels:
+    app: content-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: content-api
+  template:
+    metadata:
+      labels:
+        app: content-api
+    spec:
+      containers:
+      - name: content-api-container
+        image: {{ .Values.image.registry }}/content-api:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: "250Mi"
+        env:
+        - name: DATABASE_CLIENT
+          value: {{ .Values.contentApi.databaseClient }}
+        - name: DATABASE_NAME
+          value: {{ .Values.contentApi.databaseName }}
+        - name: DATABASE_HOST
+          value: {{ .Values.contentApi.databaseHost }}
+        - name: DATABASE_PORT
+          value: {{ .Values.contentApi.databasePort }}
+        - name: DATABASE_USERNAME
+          value: {{ .Values.contentApi.databaseUsername }}
+        - name: DATABASE_PASSWORD
+          value: {{ .Values.contentApi.databasePassword }}
+        - name: DATABASE_SSL
+          value: {{ .Values.contentApi.databaseSsl }}
+        - name: GIURU_API_SECRET
+          value: {{ .Values.giuruApiSecret }}
+        - name: GIURU_API_EMAIL
+          value: {{ .Values.giuruApiEmail }}
+        - name: GIURU_API_ORGANISATION_ID
+          value: {{ .Values.organisationId }}
+        - name: GIURU_MEDIA_API_URL
+          value: {{ .Values.mediaUrl }}
+        - name: GIURU_CONTENT_API_URL
+          value: {{ .Values.contentUrl }}
+        - name: GIURU_IDENTITY_API_URL
+          value: {{ .Values.identityTokenUrl }}
+        ports:
+        - containerPort: 1337
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-api-deployment
+  labels:
+    app: analytics-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: analytics-api
+  template:
+    metadata:
+      labels:
+        app: analytics-api
+    spec:
+      containers:
+      - name: analytics-api-container
+        image: {{ .Values.image.registry }}/analytics-api:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
+        resources:
+          limits:
+            memory: "250Mi"
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ConnectionString
+          value: {{ .Values.analyticsApi.connectionString }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -743,10 +955,14 @@ spec:
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: OrganisationId
           value: {{ .Values.organisationId }}
         - name: ServerSideRenderingEndpoint
           value: {{ .Values.serverSideRenderingEndpoint }}
+        - name: AnalyticsUrl
+          value: {{ .Values.analyticsUrl }}
         - name: CatalogUrl
           value: {{ .Values.catalogUrl }}
         - name: MediaUrl
@@ -769,6 +985,10 @@ spec:
           value: {{ .Values.makeComplaintUrl }}
         - name: CdnUrl
           value: {{ .Values.cdnUrl }}
+        - name: ContentGraphQlUrl
+          value: {{ .Values.contentGraphQlUrl }}
+        - name: ContentGraphQlAuthorizationKey
+          value: {{ .Values.contentGraphQlAuthorizationKey }}
         - name: ClientId
           value: {{ .Values.buyerWeb.clientId }}
         - name: ClientSecret
@@ -783,6 +1003,8 @@ spec:
           value: {{ .Values.logzIoDataCenterSubDomain }}
         - name: GoogleTagManagerIdentifier
           value: {{ .Values.googleTagManagerIdentifier }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -829,6 +1051,8 @@ spec:
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
+        - name: RedisUrl
+          value: {{ .Values.redisUrl }}
         - name: ServerSideRenderingEndpoint
           value: {{ .Values.serverSideRenderingEndpoint }}
         - name: CatalogUrl
@@ -851,6 +1075,8 @@ spec:
           value: {{ .Values.buyerUrl }}
         - name: DownloadCenterUrl
           value: {{ .Values.downloadCenterUrl }}
+        - name: ContentUrl
+          value: {{ .Values.contentAdminUrl }}
         - name: ClientId
           value: {{ .Values.sellerWeb.clientId }}
         - name: ClientSecret
@@ -861,11 +1087,17 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
         - name: SellerUrl
           value: {{ .Values.sellerUrl }}
+        - name: CdnUrl
+          value: {{ .Values.cdnUrl }}
+        - name: GlobalUrl
+          value: {{ .Values.globalUrl }}
         ports:
         - containerPort: 80

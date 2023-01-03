@@ -5,7 +5,9 @@ import { Context } from "../../../../../../shared/stores/Store";
 import {
     FormControl, InputLabel, Select, MenuItem, Button,
     Table, TableBody, TableCell, TableContainer, TextField,
-    TableHead, TableRow, Paper, CircularProgress } from "@mui/material";
+    TableHead, TableRow, Paper, CircularProgress, Fab
+} from "@mui/material";
+import { Edit } from "@mui/icons-material";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import Files from "../../../../../../shared/components/Files/Files";
@@ -15,13 +17,11 @@ function EditOrderForm(props) {
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
 
     const handleOrderStatusSubmit = (e) => {
-
         e.preventDefault();
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         var orderStatus = {
-
             orderId: props.id,
             orderStatusId
         };
@@ -33,8 +33,7 @@ function EditOrderForm(props) {
         };
 
         fetch(props.updateOrderStatusUrl, requestOptions)
-            .then(function (response) {
-
+            .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
@@ -64,10 +63,11 @@ function EditOrderForm(props) {
                     <form className="is-modern-form" onSubmit={handleOrderStatusSubmit} method="post">
                         <div className="columns is-desktop">
                             <div className="column">
-                            {props.id &&
-                                <div className="field">
-                                    <InputLabel id="id-label">{props.idLabel} {props.id}</InputLabel>
-                                </div>}
+                                {props.id &&
+                                    <div className="field">
+                                        <InputLabel id="id-label">{props.idLabel} {props.id}</InputLabel>
+                                    </div>
+                                }
                                 <div className="columns is-desktop">
                                     <div className="column is-half">
                                         <div className="field">
@@ -82,14 +82,14 @@ function EditOrderForm(props) {
                                                         e.preventDefault();
                                                         setOrderStatusId(e.target.value);
                                                     }}>
-                                                    {props.orderStatuses.map(status => {
+                                                    {props.orderStatuses.map((status, index) => {
                                                         return (
-                                                            <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>
+                                                            <MenuItem key={index} value={status.id}>{status.name}</MenuItem>
                                                         );
                                                     })}
                                                 </Select>
                                             </FormControl>
-                                    </div>
+                                        </div>
                                     </div>
                                     <div className="column is-half">
                                         <div className="column">
@@ -110,51 +110,60 @@ function EditOrderForm(props) {
                             <a href={props.clientUrl}>{props.clientName}</a>
                         </div>
                     </div>
-                    
                 </div>
             </div>
             {props.orderItems && props.orderItems.length > 0 &&
                 <div className="mt-5">
                     <h2 className="subtitle is-5 mb-2">{props.orderItemsLabel}</h2>
                     <div className="edit-order__items">
-                        <section className="section">
-                            <div className="orderitems__table">
-                                <TableContainer component={Paper}>
-                                    <Table aria-label={props.orderItemsLabel}>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell></TableCell>
-                                                <TableCell>{props.skuLabel}</TableCell>
-                                                <TableCell>{props.nameLabel}</TableCell>
-                                                <TableCell>{props.quantityLabel}</TableCell>
-                                                <TableCell>{props.stockQuantityLabel}</TableCell>
-                                                <TableCell>{props.outletQuantityLabel}</TableCell>
-                                                <TableCell>{props.externalReferenceLabel}</TableCell>
-                                                <TableCell>{props.deliveryFromLabel}</TableCell>
-                                                <TableCell>{props.deliveryToLabel}</TableCell>
-                                                <TableCell>{props.moreInfoLabel}</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {props.orderItems.map((item, index) => (
+                        <div className="orderitems__table">
+                            <TableContainer component={Paper}>
+                                <Table aria-label={props.orderItemsLabel}>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell></TableCell>
+                                            <TableCell></TableCell>
+                                            <TableCell>{props.skuLabel}</TableCell>
+                                            <TableCell>{props.nameLabel}</TableCell>
+                                            <TableCell>{props.quantityLabel}</TableCell>
+                                            <TableCell>{props.stockQuantityLabel}</TableCell>
+                                            <TableCell>{props.outletQuantityLabel}</TableCell>
+                                            <TableCell>{props.orderStatusLabel}</TableCell>
+                                            <TableCell>{props.orderStatusCommentLabel}</TableCell>
+                                            <TableCell>{props.externalReferenceLabel}</TableCell>
+                                            <TableCell>{props.deliveryFromLabel}</TableCell>
+                                            <TableCell>{props.deliveryToLabel}</TableCell>
+                                            <TableCell>{props.moreInfoLabel}</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {props.orderItems.map((item, index) => {
+                                            return (
                                                 <TableRow key={index}>
-                                                    <TableCell><a href={item.productUrl} target="_blank"><img className="edit-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
+                                                    <TableCell>
+                                                        <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel}>
+                                                            <Edit />
+                                                        </Fab>
+                                                    </TableCell>
+                                                    <TableCell><a href={item.productUrl} target="_blank"><img className="edit-order__item-product-image" src={item.imageSrc} alt={item.imageAlt}/></a></TableCell>
                                                     <TableCell>{item.sku}</TableCell>
                                                     <TableCell>{item.name}</TableCell>
                                                     <TableCell>{item.quantity}</TableCell>
                                                     <TableCell>{item.stockQuantity}</TableCell>
                                                     <TableCell>{item.outletQuantity}</TableCell>
+                                                    <TableCell>{item.orderItemStatusName}</TableCell>
+                                                    <TableCell>{item.orderItemStatusChangeComment}</TableCell>
                                                     <TableCell>{item.externalReference}</TableCell>
                                                     <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                     <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
                                                     <TableCell>{item.moreInfo}</TableCell>
                                                 </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            </div>
-                        </section>
+                                            )
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </div>
                     </div>
                 </div>
             }
@@ -183,6 +192,9 @@ function EditOrderForm(props) {
                     }
                 </Fragment>
             }
+            <div className="field mt-3">
+                <a href={props.ordersUrl} className="button is-text">{props.navigateToOrders}</a>
+            </div>
             {state.isLoading && <CircularProgress className="progressBar" />}
         </section >
     );
@@ -208,7 +220,10 @@ EditOrderForm.propTypes = {
     clientName: PropTypes.string.isRequired,
     clientUrl: PropTypes.string.isRequired,
     updateOrderStatusUrl: PropTypes.string.isRequired,
-    idLabel: PropTypes.string
+    idLabel: PropTypes.string,
+    orderStatusCommentLabel: PropTypes.string.isRequired,
+    ordersUrl: PropTypes.string.isRequired,
+    navigateToOrders: PropTypes.string.isRequired
 };
 
 export default EditOrderForm;

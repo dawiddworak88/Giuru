@@ -507,10 +507,10 @@
   <data name="DropOrSelectAttachments" xml:space="preserve">
     <value>Drop or select an attachment</value>
   </data>
-  <data name="EltapPartner" xml:space="preserve">
+  <data name="ApplicationPartner" xml:space="preserve">
     <value>Partner with ELTAP</value>
   </data>
-  <data name="EltapPartnerDescription" xml:space="preserve">
+  <data name="ApplicationPartnerDescription" xml:space="preserve">
     <value>Thank you for your interest in ELTAP. We look forward to working with you!</value>
   </data>
   <data name="FieldRequiredErrorMessage" xml:space="preserve">
@@ -564,7 +564,7 @@
   <data name="SalesRep" xml:space="preserve">
     <value>Sales Representative</value>
   </data>
-  <data name="V" xml:space="preserve">
+  <data name="VicePresident" xml:space="preserve">
     <value>Vicepresident</value>
   </data>
   <data name="AttachedAttachments" xml:space="preserve">
@@ -648,10 +648,28 @@
   <data name="SelectFile" xml:space="preserve">
     <value>Select file</value>
   </data>
+  <data name="Thumbnail" xml:space="preserve">
+    <value>Thumbnail</value>
+  </data>
+  <data name="OrderStatusComment" xml:space="preserve">
+    <value>Additional order status info</value>
+  </data>
   <data name="QRCode" xml:space="preserve">
     <value>QR Code</value>
   </data>
   <data name="GenerateQRCode" xml:space="preserve">
     <value>Generate QR code</value>
+  </data>
+  <data name="TrySignIn" xml:space="preserve">
+    <value>Please try to sign in</value>
+  </data>
+  <data name="CountryNotFound" xml:space="preserve">
+    <value>Country not found.</value>
+  </data>
+  <data name="Countries" xml:space="preserve">
+    <value>Countries</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>Content</value>
   </data>
 </root>

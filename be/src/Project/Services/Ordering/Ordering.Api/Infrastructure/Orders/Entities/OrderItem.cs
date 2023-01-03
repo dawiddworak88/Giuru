@@ -27,6 +27,8 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
         [Required]
         public double Quantity { get; set; }
 
+        public Guid? LastOrderItemStatusChangeId { get; set; }
+
         public string PictureUrl { get; set; }
 
         public string ExternalReference { get; set; }

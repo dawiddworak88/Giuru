@@ -52,8 +52,8 @@ namespace Catalog.Api.v1.Products.Controllers
         public async Task<IActionResult> Get(
             Guid? productAttributeId,
             string searchTerm,
-            int pageIndex,
-            int itemsPerPage,
+            int? pageIndex,
+            int? itemsPerPage,
             string orderBy)
         {
             var serviceModel = new GetProductAttributeItemsServiceModel

@@ -50,7 +50,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<ClientGroupResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var clientGroupIds = ids.ToEnumerableGuidIds();
@@ -71,6 +71,7 @@ namespace Client.Api.v1.Controllers
 
                 var validator = new GetClientGroupsByIdsModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
+
                 if (validationResult.IsValid)
                 {
                     var groups = await this.clientGroupsService.GetByIdsAsync(serviceModel);
@@ -107,30 +108,25 @@ namespace Client.Api.v1.Controllers
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
-                var validator = new GetClientGroupsModelValidator();
-                var validationResult = await validator.ValidateAsync(serviceModel);
-                if (validationResult.IsValid)
+                var groups = await this.clientGroupsService.GetAsync(serviceModel);
+
+                if (groups is not null)
                 {
-                    var groups = await this.clientGroupsService.GetAsync(serviceModel);
-
-                    if (groups is not null)
+                    var response = new PagedResults<IEnumerable<ClientGroupResponseModel>>(groups.Total, groups.PageSize)
                     {
-                        var response = new PagedResults<IEnumerable<ClientGroupResponseModel>>(groups.Total, groups.PageSize)
+                        Data = groups.Data.OrEmptyIfNull().Select(x => new ClientGroupResponseModel
                         {
-                            Data = groups.Data.OrEmptyIfNull().Select(x => new ClientGroupResponseModel
-                            {
-                                Id = x.Id,
-                                Name = x.Name,
-                                LastModifiedDate = x.LastModifiedDate,
-                                CreatedDate = x.CreatedDate
-                            })
-                        };
+                            Id = x.Id,
+                            Name = x.Name,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
+                    };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
-                    }
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
 
-                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
 
@@ -158,6 +154,7 @@ namespace Client.Api.v1.Controllers
 
             var validator = new DeleteClientGroupModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
+
             if (validationResult.IsValid)
             {
                 await this.clientGroupsService.DeleteAsync(serviceModel);

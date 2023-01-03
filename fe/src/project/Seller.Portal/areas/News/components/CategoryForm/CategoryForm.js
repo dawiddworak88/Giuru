@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import { 
     TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress 
 } from "@mui/material";
@@ -109,17 +108,7 @@ const CategoryForm = (props) => {
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <Button
-                                className="ml-2"
-                                type="button" 
-                                variant="contained" 
-                                color="secondary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.categoriesUrl);
-                                }}>
-                                {props.navigateToCategoriesLabel}
-                            </Button> 
+                            <a href={props.categoriesUrl} className="ml-2 button is-text">{props.navigateToCategoriesLabel}</a>
                         </div>
                     </form>
                 </div>

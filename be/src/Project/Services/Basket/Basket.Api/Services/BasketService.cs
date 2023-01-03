@@ -9,6 +9,7 @@ using Basket.Api.RepositoriesModels;
 using Basket.Api.IntegrationEvents;
 using Basket.Api.IntegrationEventsModels;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Basket.Api.Services
 {
@@ -27,6 +28,8 @@ namespace Basket.Api.Services
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel checkoutBasketServiceModel)
         {
+            using var source = new ActivitySource(this.GetType().Name);
+
             var message = new BasketCheckoutAcceptedIntegrationEvent
             {
                 BasketId = checkoutBasketServiceModel.BasketId,
@@ -125,10 +128,14 @@ namespace Basket.Api.Services
                     })
                 };
 
+                using var outletBookedItemsActivity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {outletBookedItems.GetType().Name}");
                 this.eventBus.Publish(outletBookedItems);
+
+                using var stockBookedItemsActivity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {stockBookedItems.GetType().Name}");
                 this.eventBus.Publish(stockBookedItems);
             }
-            
+
+            using var messageActivity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
             this.eventBus.Publish(message);
         }
 
