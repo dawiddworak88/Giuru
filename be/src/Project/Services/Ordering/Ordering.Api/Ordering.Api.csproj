@@ -9,7 +9,7 @@
     <DockerfileContext>..\..\..\..</DockerfileContext>
     <UserSecretsId>a33b86d9-15b4-4d96-b9ab-fc23cd2a5107</UserSecretsId>
   </PropertyGroup>
-  
+	
   <ItemGroup>
 	<PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="6.0.2" />
 	<PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="6.0.2" />
@@ -49,10 +49,6 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\Mailing\Foundation.Mailing\Foundation.Mailing.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Media\Foundation.Media\Foundation.Media.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Telemetry\Foundation.Telemetry\Foundation.Telemetry.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Infrastructure\Orders\Definitions\" />
   </ItemGroup>
 
 </Project>

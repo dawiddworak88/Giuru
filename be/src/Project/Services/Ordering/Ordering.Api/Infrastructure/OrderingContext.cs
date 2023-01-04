@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Foundation.Extensions.ModelBuilders;
+using Microsoft.EntityFrameworkCore;
 using Ordering.Api.Infrastructure.Orders.Entities;
+using System.ComponentModel;
 
 namespace Ordering.Api.Infrastructure
 {
@@ -12,6 +14,15 @@ namespace Ordering.Api.Infrastructure
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseLazyLoadingProxies();
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<OrderItemStatusChange>(entity =>
+            {
+                entity.HasIndex(e => new { e.IsActive, e.OrderItemId })
+                .IncludeProperties(e => new { e.CreatedDate, e.LastModifiedDate, e.OrderItemStateId, e.OrderItemStatusId, e.RowVersion });
+            });
         }
 
         public DbSet<Order> Orders { get; set; }
