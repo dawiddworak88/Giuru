@@ -20,25 +20,25 @@ namespace Inventory.Api.Services.InventoryItems
 {
     public class InventoryService : IInventoryService
     {
-        private readonly InventoryContext context;
-        private readonly IStringLocalizer inventoryLocalizer;
+        private readonly InventoryContext _context;
+        private readonly IStringLocalizer _inventoryLocalizer;
 
         public InventoryService(
             InventoryContext context,
             IStringLocalizer<InventoryResources> inventoryLocalizer)
         {
-            this.context = context;
-            this.inventoryLocalizer = inventoryLocalizer;
+            _context = context;
+            _inventoryLocalizer = inventoryLocalizer;
         }
 
         public async Task<InventoryServiceModel> UpdateAsync(UpdateInventoryServiceModel serviceModel)
         {
-            var inventory = await this.context.Inventory.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
-            var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == inventory.ProductId && x.IsActive);
+            var inventory = await _context.Inventory.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == inventory.ProductId && x.IsActive);
 
             if (product is null || inventory is null)
             {
-                throw new CustomException(this.inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             product.Name = serviceModel.ProductName;
@@ -54,14 +54,14 @@ namespace Inventory.Api.Services.InventoryItems
             inventory.ExpectedDelivery = serviceModel.ExpectedDelivery;
             inventory.LastModifiedDate = DateTime.UtcNow;
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return await this.GetAsync(new GetInventoryServiceModel { Id = inventory.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
         public async Task<InventoryServiceModel> CreateAsync(CreateInventoryServiceModel serviceModel)
         {
-            var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == serviceModel.ProductId && x.IsActive);
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == serviceModel.ProductId && x.IsActive);
 
             if (product is null)
             {
@@ -73,7 +73,7 @@ namespace Inventory.Api.Services.InventoryItems
                     Name = serviceModel.ProductName
                 };
 
-                this.context.Products.Add(product.FillCommonProperties());
+                _context.Products.Add(product.FillCommonProperties());
             }
 
             var inventory = new InventoryItem
@@ -87,9 +87,9 @@ namespace Inventory.Api.Services.InventoryItems
                 SellerId = serviceModel.OrganisationId.Value
             };
 
-            this.context.Inventory.Add(inventory.FillCommonProperties());
+            _context.Inventory.Add(inventory.FillCommonProperties());
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return await this.GetAsync(new GetInventoryServiceModel { Id = inventory.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
@@ -98,11 +98,11 @@ namespace Inventory.Api.Services.InventoryItems
         {
             foreach (var item in model.InventoryItems.OrEmptyIfNull())
             {
-                var inventoryProduct = await this.context.Inventory.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.WarehouseId == item.WarehouseId && x.IsActive);
+                var inventoryProduct = await _context.Inventory.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.WarehouseId == item.WarehouseId && x.IsActive);
 
                 if (inventoryProduct is not null)
                 {
-                    var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == inventoryProduct.ProductId && x.IsActive);
+                    var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == inventoryProduct.ProductId && x.IsActive);
 
                     if (product is not null)
                     {
@@ -119,11 +119,11 @@ namespace Inventory.Api.Services.InventoryItems
                 }
                 else
                 {
-                    var warehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Id == item.WarehouseId);
+                    var warehouse = await _context.Warehouses.FirstOrDefaultAsync(x => x.Id == item.WarehouseId);
 
                     if (warehouse is not null)
                     {
-                        var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == item.ProductId && x.IsActive);
+                        var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == item.ProductId && x.IsActive);
 
                         if (product is null)
                         {
@@ -135,7 +135,7 @@ namespace Inventory.Api.Services.InventoryItems
                                 Ean = item.ProductEan
                             };
 
-                            this.context.Products.Add(product.FillCommonProperties());
+                            _context.Products.Add(product.FillCommonProperties());
                         }
 
                         var inventoryItem = new InventoryItem
@@ -148,19 +148,19 @@ namespace Inventory.Api.Services.InventoryItems
                             SellerId = model.OrganisationId.Value
                         };
 
-                        this.context.Inventory.Add(inventoryItem.FillCommonProperties());
+                        _context.Inventory.Add(inventoryItem.FillCommonProperties());
                     }
                 }
 
-                await this.context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
         }
 
         public async Task<InventoryServiceModel> GetAsync(GetInventoryServiceModel model)
         {
-            var inventoryProduct = from c in this.context.Inventory
-                                   join warehouse in this.context.Warehouses on c.WarehouseId equals warehouse.Id
-                                   join product in this.context.Products on c.ProductId equals product.Id
+            var inventoryProduct = from c in _context.Inventory
+                                   join warehouse in _context.Warehouses on c.WarehouseId equals warehouse.Id
+                                   join product in _context.Products on c.ProductId equals product.Id
                                    where c.Id == model.Id.Value && product.IsActive && c.IsActive
                                    select new InventoryServiceModel
                                    {
@@ -184,9 +184,9 @@ namespace Inventory.Api.Services.InventoryItems
 
         public async Task<PagedResults<IEnumerable<InventoryServiceModel>>> GetAsync(GetInventoriesServiceModel model)
         {
-            var inventories = from c in this.context.Inventory
-                              join warehouse in this.context.Warehouses on c.WarehouseId equals warehouse.Id
-                              join product in this.context.Products on c.ProductId equals product.Id
+            var inventories = from c in _context.Inventory
+                              join warehouse in _context.Warehouses on c.WarehouseId equals warehouse.Id
+                              join product in _context.Products on c.ProductId equals product.Id
                               where c.SellerId == model.OrganisationId.Value && product.IsActive && c.IsActive
                               select new InventoryServiceModel
                               {
@@ -224,9 +224,9 @@ namespace Inventory.Api.Services.InventoryItems
 
         public async Task<PagedResults<IEnumerable<InventoryServiceModel>>> GetByIdsAsync(GetInventoriesByIdsServiceModel model)
         {
-            var inventoryProducts = from c in this.context.Inventory
-                             join warehouse in this.context.Warehouses on c.WarehouseId equals warehouse.Id
-                             join product in this.context.Products on c.ProductId equals product.Id
+            var inventoryProducts = from c in _context.Inventory
+                             join warehouse in _context.Warehouses on c.WarehouseId equals warehouse.Id
+                             join product in _context.Products on c.ProductId equals product.Id
                              where model.Ids.Contains(c.Id) && c.SellerId == model.OrganisationId.Value && product.IsActive && c.IsActive
                              select new InventoryServiceModel
                              {
@@ -257,9 +257,9 @@ namespace Inventory.Api.Services.InventoryItems
 
         public async Task<InventorySumServiceModel> GetInventoryByProductId(GetInventoryByProductIdServiceModel model)
         {
-            var inventory = from i in this.context.Inventory
-                            join warehouse in this.context.Warehouses on i.WarehouseId equals warehouse.Id
-                            join product in this.context.Products on i.ProductId equals product.Id
+            var inventory = from i in _context.Inventory
+                            join warehouse in _context.Warehouses on i.WarehouseId equals warehouse.Id
+                            join product in _context.Products on i.ProductId equals product.Id
                             where i.ProductId == model.ProductId.Value && product.IsActive && i.IsActive
                             select new
                             {
@@ -316,9 +316,9 @@ namespace Inventory.Api.Services.InventoryItems
 
         public async Task<InventorySumServiceModel> GetInventoryByProductSku(GetInventoryByProductSkuServiceModel model)
         {
-            var inventory = from i in this.context.Inventory
-                            join warehouse in this.context.Warehouses on i.WarehouseId equals warehouse.Id
-                            join product in this.context.Products on i.ProductId equals product.Id
+            var inventory = from i in _context.Inventory
+                            join warehouse in _context.Warehouses on i.WarehouseId equals warehouse.Id
+                            join product in _context.Products on i.ProductId equals product.Id
                             where product.Sku == model.ProductSku && product.IsActive && i.IsActive
                             select new
                             {
@@ -375,29 +375,30 @@ namespace Inventory.Api.Services.InventoryItems
 
         public async Task DeleteAsync(DeleteInventoryServiceModel model)
         {
-            var inventory = await this.context.Inventory.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
+            var inventory = await _context.Inventory.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
 
-            if (inventory == null)
+            if (inventory is null)
             {
-                throw new CustomException(this.inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             inventory.IsActive = false;
-            await this.context.SaveChangesAsync();
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<PagedResults<IEnumerable<InventorySumServiceModel>>> GetAvailableProductsInventoriesAsync(GetInventoriesServiceModel model)
         {
-            var inventories = (from i in this.context.Inventory
-                               join product in this.context.Products on i.ProductId equals product.Id
+            var inventories = (from i in _context.Inventory
+                               join product in _context.Products on i.ProductId equals product.Id
                                where product.IsActive && i.IsActive
                                group i by new { product.Id } into gpi
                                select new InventorySumServiceModel
                                {
                                     ProductId = gpi.Key.Id,
-                                    ProductName = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Name,
-                                    ProductSku = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Sku,
-                                    ProductEan = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Ean,
+                                    ProductName = _context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Name,
+                                    ProductSku = _context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Sku,
+                                    ProductEan = _context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Ean,
                                     AvailableQuantity = gpi.Sum(x => x.AvailableQuantity),
                                     Quantity = gpi.Sum(x => x.Quantity),
                                     ExpectedDelivery = gpi.Min(x => x.ExpectedDelivery),
@@ -414,7 +415,7 @@ namespace Inventory.Api.Services.InventoryItems
 
         public async Task UpdateInventoryQuantity(Guid? productId, double bookedQuantity)
         {
-            var inventory = this.context.Inventory.FirstOrDefault(x => x.ProductId == productId.Value && x.IsActive);
+            var inventory = _context.Inventory.FirstOrDefault(x => x.ProductId == productId.Value && x.IsActive);
 
             if (inventory is not null)
             {
@@ -429,7 +430,7 @@ namespace Inventory.Api.Services.InventoryItems
                 inventory.AvailableQuantity = productQuantity;
                 inventory.LastModifiedDate = DateTime.UtcNow;
 
-                await this.context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
         }
     }

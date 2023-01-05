@@ -15,9 +15,7 @@ using System.Threading.Tasks;
 using Buyer.Web.Areas.Products.DomainModels;
 using Foundation.Extensions.Exceptions;
 using System.Net;
-using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Orders.ApiRequestModels;
-using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.Repositories.Products
 {
@@ -143,6 +141,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<ProductsRequestModel>, ProductsRequestModel, PagedResults<IEnumerable<ProductResponseModel>>>(apiRequest);
+
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
                 var products = new List<Product>();
@@ -165,18 +164,13 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
 
         public async Task<ProductStock> GetProductStockAsync(Guid? id)
         {
-            var productRequestModel = new ProductStockRequestModel
+            var apiRequest = new ApiRequest<RequestModelBase>
             {
-                ProductId = id.Value,
-            };
-
-            var apiRequest = new ApiRequest<ProductStockRequestModel>
-            {
-                Data = productRequestModel,
+                Data = new RequestModelBase(),
                 EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Inventory.InventoryApiEndpoint}/product/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<ProductStockRequestModel>, ProductStockRequestModel, ProductStockResponseModel>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ProductStockResponseModel>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
@@ -188,28 +182,18 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 };
             }
 
-            if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                return null;
-            }
-
             throw new CustomException(response.Data.Message, (int)response.StatusCode);
         }
 
         public async Task<ProductStock> GetProductOutletAsync(Guid? id)
         {
-            var productRequestModel = new ProductStockRequestModel
+            var apiRequest = new ApiRequest<RequestModelBase>
             {
-                ProductId = id.Value,
-            };
-
-            var apiRequest = new ApiRequest<ProductStockRequestModel>
-            {
-                Data = productRequestModel,
+                Data = new RequestModelBase(),
                 EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Outlet.ProductOutletApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<ProductStockRequestModel>, ProductStockRequestModel, ProductStockResponseModel>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ProductStockResponseModel>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
@@ -220,11 +204,6 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                     ExpectedDelivery = response.Data.ExpectedDelivery,
                     Title = response.Data.Title
                 };
-            }
-
-            if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                return null;
             }
 
             throw new CustomException(response.Data.Message, (int)response.StatusCode);

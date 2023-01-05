@@ -53,6 +53,7 @@ namespace Inventory.Api.Services.OutletItems
             outlet.LastModifiedDate = DateTime.UtcNow;
 
             var outletProductTranslation = await this.context.OutletTranslations.FirstOrDefaultAsync(x => x.OutletItemId == model.Id && x.Language == model.Language && x.IsActive);
+
             if (outletProductTranslation is not null)
             {
                 outletProductTranslation.Title = model.Title;

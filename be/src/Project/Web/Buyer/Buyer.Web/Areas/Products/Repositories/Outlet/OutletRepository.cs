@@ -13,14 +13,14 @@ namespace Buyer.Web.Areas.Products.Repositories
 {
     public class OutletRepository : IOutletRepository
     {
-        private readonly IApiClientService apiClientService;
-        private readonly IOptions<AppSettings> settings;
+        private readonly IApiClientService _apiClientService;
+        private readonly IOptions<AppSettings> _settings;
         public OutletRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> settgins)
         {
-            this.apiClientService = apiClientService;
-            this.settings = settgins;
+            _apiClientService = apiClientService;
+            _settings = settgins;
         }
 
         public async Task<PagedResults<IEnumerable<OutletSum>>> GetOutletProductsAsync(string language, int pageIndex, int itemsPerPage, string token)
@@ -36,10 +36,11 @@ namespace Buyer.Web.Areas.Products.Repositories
                 Data = requestModel,
                 Language = language,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Outlet.AvailableOutletProductsApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.AvailableOutletProductsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, PagedResults<IEnumerable<OutletSum>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, PagedResults<IEnumerable<OutletSum>>>(apiRequest);
+
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
                 return new PagedResults<IEnumerable<OutletSum>>(response.Data.Total, response.Data.PageSize)
