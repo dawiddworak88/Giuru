@@ -169,7 +169,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
         public PagedResults<IEnumerable<DownloadCenterCategoryItemServiceModel>> Get(GetDownloadCenterItemsServiceModel model)
         {
-            var downloadCenterCategories = _context.DownloadCenterCategories.Where(x => x.IsActive && x.IsVisible && x.ParentCategoryId == null);
+            var downloadCenterCategories = _context.DownloadCenterCategories.Where(x => x.IsActive && x.IsVisible);
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -193,15 +193,15 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             var translations = _context.DownloadCenterCategoryTranslations.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.CategoryId)).ToList();
 
-            var subcategories = _context.DownloadCenterCategories.Where(x => pagedResults.Data.Select(y => y.ParentCategoryId).Contains(x.Id)).ToList();
+            var subcategories = downloadCenterCategories.Where(x => x.ParentCategoryId.HasValue).ToList();
 
             return new PagedResults<IEnumerable<DownloadCenterCategoryItemServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
-                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new DownloadCenterCategoryItemServiceModel
+                Data = pagedResults.Data.Where(x => x.ParentCategoryId == null).OrEmptyIfNull().Select(x => new DownloadCenterCategoryItemServiceModel
                 {
                     Id = x.Id,
                     Name = translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
-                    Subcategories = subcategories.Select(s => new DownloadCenterSubcategoryServiceModel
+                    Subcategories = subcategories.Where(c => c.ParentCategoryId == x.Id).Select(s => new DownloadCenterSubcategoryServiceModel
                     {
                         Id = s.Id,
                         Name = translations.FirstOrDefault(t => t.CategoryId == s.Id && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == s.Id)?.Name,
