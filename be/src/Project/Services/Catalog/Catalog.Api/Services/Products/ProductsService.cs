@@ -53,14 +53,14 @@ namespace Catalog.Api.Services.Products
         {
             var brand = _context.Brands.FirstOrDefault(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
 
-            if (brand is not null)
+            if (brand is null)
             {
                 throw new CustomException(_productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var category = _context.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
 
-            if (category is not null)
+            if (category is null)
             {
                 throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }

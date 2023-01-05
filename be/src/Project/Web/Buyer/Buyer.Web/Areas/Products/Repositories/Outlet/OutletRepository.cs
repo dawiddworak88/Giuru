@@ -41,7 +41,7 @@ namespace Buyer.Web.Areas.Products.Repositories
 
             var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, PagedResults<IEnumerable<OutletSum>>>(apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            if (response.IsSuccessStatusCode && response.Data?.Data is not null)
             {
                 return new PagedResults<IEnumerable<OutletSum>>(response.Data.Total, response.Data.PageSize)
                 {
