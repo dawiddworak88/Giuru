@@ -3,6 +3,7 @@ using Foundation.GenericRepository.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Foundation.Catalog.Infrastructure.Categories.Entities
 {
@@ -18,6 +19,9 @@ namespace Foundation.Catalog.Infrastructure.Categories.Entities
 
         [Required]
         public bool IsLeaf { get; set; }
+
+        [ForeignKey("Parentid")]
+        public virtual Category ParentCategory { get; set; }
 
         public virtual IEnumerable<CategoryImage> Images { get; set; }
 
