@@ -17,6 +17,7 @@ using System.Linq;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Seller.Web.Areas.Clients.Repositories.Managers;
 using Seller.Web.Areas.Global.Repositories;
+using Seller.Web.Areas.Global.DomainModels;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -144,7 +145,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 });
             }
 
-            var countries = await this.countriesRepository.GetAsync(componentModel.Token, componentModel.Language);
+            var countries = await this.countriesRepository.GetAsync(componentModel.Token, componentModel.Language, $"{nameof(Country.Name)} asc");
 
             if (countries is not null)
             {
