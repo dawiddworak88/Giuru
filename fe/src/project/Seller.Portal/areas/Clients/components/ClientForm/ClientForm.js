@@ -187,23 +187,6 @@ function ClientForm(props) {
                                         margin="normal"/>
                                 )} />
                         </div>
-                        {/* <div className="field">
-                            <FormControl fullWidth={true} variant="standard">
-                                <InputLabel id="country-label">{props.countryLabel}</InputLabel>
-                                <Select
-                                    labelId="country-label"
-                                    id="countryId"
-                                    name="countryId"
-                                    value={countryId}
-                                    onChange={handleOnChange}>
-                                    {props.countries && props.countries.length > 0 && props.countries.map((country, index) => {
-                                        return (
-                                            <MenuItem key={index} value={country.id}>{country.name}</MenuItem>
-                                        );
-                                    })}
-                                </Select>
-                            </FormControl>
-                        </div> */}
                         <div className="field">
                             <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage} variant="standard">
                                 <InputLabel id="language-label">{props.languageLabel}</InputLabel>
