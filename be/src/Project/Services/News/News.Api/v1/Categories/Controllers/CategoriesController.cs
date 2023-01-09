@@ -28,12 +28,12 @@ namespace News.Api.v1.Categories.Controllers
     [ApiController]
     public class CategoriesController : BaseApiController
     {
-        private readonly ICategoriesService categoriesService;
+        private readonly ICategoriesService _categoriesService;
 
         public CategoriesController(
             ICategoriesService categoriesService)
         {
-            this.categoriesService = categoriesService;
+            _categoriesService = categoriesService;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace News.Api.v1.Categories.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(CategoryRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             if (request.Id.HasValue)
             {
                 var serviceModel = new UpdateCategoryServiceModel
@@ -57,7 +57,7 @@ namespace News.Api.v1.Categories.Controllers
                     ParentCategoryId = request.ParentCategoryId,
                     Name = request.Name,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -66,7 +66,7 @@ namespace News.Api.v1.Categories.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var category = await this.categoriesService.UpdateAsync(serviceModel);
+                    var category = await _categoriesService.UpdateAsync(serviceModel);
 
                     if (category is not null)
                     {
@@ -95,7 +95,7 @@ namespace News.Api.v1.Categories.Controllers
                     ParentCategoryId = request.ParentCategoryId,
                     Name = request.Name,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -104,7 +104,7 @@ namespace News.Api.v1.Categories.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var category = await this.categoriesService.CreateAsync(serviceModel);
+                    var category = await _categoriesService.CreateAsync(serviceModel);
 
                     if (category is not null)
                     {
@@ -139,9 +139,9 @@ namespace News.Api.v1.Categories.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<CategoryResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
+        public IActionResult Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetCategoriesServiceModel
             {
                 SearchTerm = searchTerm,
@@ -149,11 +149,11 @@ namespace News.Api.v1.Categories.Controllers
                 ItemsPerPage = itemsPerPage,
                 OrderBy = orderBy,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var categories = await this.categoriesService.GetAsync(serviceModel);
+            var categories = _categoriesService.Get(serviceModel);
 
             if (categories is not null)
             {
@@ -186,25 +186,24 @@ namespace News.Api.v1.Categories.Controllers
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategoryResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(Guid? id)
+        public IActionResult Get(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetCategoryServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new GetCategoryModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var validationResult = validator.Validate(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var category = await this.categoriesService.GetAsync(serviceModel);
+                var category = _categoriesService.Get(serviceModel);
 
                 if (category is not null)
                 {
@@ -220,8 +219,6 @@ namespace News.Api.v1.Categories.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
-
-                return this.StatusCode((int)HttpStatusCode.NoContent);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -240,12 +237,12 @@ namespace News.Api.v1.Categories.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new DeleteCategoryServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -254,7 +251,7 @@ namespace News.Api.v1.Categories.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.categoriesService.DeleteAsync(serviceModel);
+                await _categoriesService.DeleteAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }

@@ -4,6 +4,7 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using News.Api.Infrastructure;
 using News.Api.Infrastructure.Entities.News;
@@ -79,6 +80,7 @@ namespace News.Api.Services.News
         public async Task DeleteAsync(DeleteNewsItemServiceModel model)
         {
             var newsItem = _context.NewsItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+
             if (newsItem is null)
             {
                 throw new CustomException(_newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NoContent);
@@ -91,7 +93,12 @@ namespace News.Api.Services.News
 
         public PagedResults<IEnumerable<NewsItemServiceModel>> Get(GetNewsItemsServiceModel model)
         {
-            var news = _context.NewsItems.Where(x => x.IsActive);
+            var news = _context.NewsItems.Where(x => x.IsActive)
+                    .Include(x => x.Files)
+                    .Include(x => x.Category)
+                    .Include(x => x.Category.Translations)
+                    .Include(x => x.Translations)
+                    .AsSingleQuery();
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -113,78 +120,52 @@ namespace News.Api.Services.News
                 pagedResults = news.PagedIndex(new Pagination(news.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            var translations = _context.NewsItemTranslations.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.NewsItemId) && x.IsActive && x.IsActive).ToList();
-
-            var categoryTranslations = _context.CategoryTranslations.Where(x => pagedResults.Data.Select(y => y.CategoryId).Contains(x.CategoryId)).ToList();
-
-            var files = _context.NewsItemFiles.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.NewsItemId) && x.IsActive).ToList();
-
             return new PagedResults<IEnumerable<NewsItemServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
                 Data = pagedResults.Data.OrEmptyIfNull().Select(x => new NewsItemServiceModel
                 {
                     Id = x.Id,
                     CategoryId = x.CategoryId,
-                    Title = translations.FirstOrDefault(t => t.NewsItemId == x.Id && t.Language == model.Language)?.Title ?? translations.FirstOrDefault(t => t.NewsItemId == x.Id)?.Title,
-                    Content = translations.FirstOrDefault(t => t.NewsItemId == x.Id && t.Language == model.Language)?.Content ?? translations.FirstOrDefault(t => t.NewsItemId == x.Id)?.Content,
-                    Description = translations.FirstOrDefault(t => t.NewsItemId == x.Id && t.Language == model.Language)?.Description ?? translations.FirstOrDefault(t => t.NewsItemId == x.Id)?.Description,
+                    Title = x.Translations.FirstOrDefault(t => t.NewsItemId == x.Id && t.Language == model.Language)?.Title ?? x.Translations.FirstOrDefault(t => t.NewsItemId == x.Id)?.Title,
+                    Content = x.Translations.FirstOrDefault(t => t.NewsItemId == x.Id && t.Language == model.Language)?.Content ?? x.Translations.FirstOrDefault(t => t.NewsItemId == x.Id)?.Content,
+                    Description = x.Translations.FirstOrDefault(t => t.NewsItemId == x.Id && t.Language == model.Language)?.Description ?? x.Translations.FirstOrDefault(t => t.NewsItemId == x.Id)?.Description,
                     Language = model.Language,
                     OrganisationId = x.OrganisationId,
-                    CategoryName = categoryTranslations.FirstOrDefault(t => t.CategoryId == x.CategoryId && t.Language == model.Language)?.Name ?? categoryTranslations.FirstOrDefault(t => t.CategoryId == x.CategoryId)?.Name,
+                    CategoryName = x.Category?.Translations?.FirstOrDefault(t => t.CategoryId == x.CategoryId && t.Language == model.Language)?.Name ?? x.Category?.Translations?.FirstOrDefault(t => t.CategoryId == x.CategoryId)?.Name,
                     PreviewImageId = x.PreviewImageId,
                     ThumbnailImageId = x.ThumbnailImageId,
                     IsPublished = x.IsPublished,
-                    Files = files.Select(x => x.Id),
+                    Files = x.Files.Where(f => f.NewsItemId == x.Id && f.IsActive).OrEmptyIfNull().Select(f => f.MediaId),
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
                 })
             };
         }
 
-        public async Task<NewsItemServiceModel> GetAsync(GetNewsItemServiceModel model)
+        public NewsItemServiceModel Get(GetNewsItemServiceModel model)
         {
             var newsItem = _context.NewsItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
-            if (newsItem is not null)
+
+            if (newsItem is null)
             {
-                var item = new NewsItemServiceModel
-                {
-                    Id = newsItem.Id,
-                    ThumbnailImageId = newsItem.ThumbnailImageId,
-                    PreviewImageId = newsItem.PreviewImageId,
-                    CategoryId = newsItem.CategoryId,
-                    IsPublished = newsItem.IsPublished,
-                    LastModifiedDate = newsItem.LastModifiedDate,
-                    CreatedDate = newsItem.CreatedDate
-                };
-
-                var newsItemTranslations = _context.NewsItemTranslations.FirstOrDefault(x => x.Language == model.Language && x.NewsItemId == newsItem.Id && x.IsActive);
-                if (newsItemTranslations is null)
-                {
-                    newsItemTranslations = _context.NewsItemTranslations.FirstOrDefault(x => x.NewsItemId == newsItem.Id && x.IsActive);
-                }
-
-                item.Title = newsItemTranslations?.Title;
-                item.Description = newsItemTranslations?.Description;
-                item.Content = newsItemTranslations?.Content;
-
-                var newsCategoryTranslation = _context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == newsItem.CategoryId && x.IsActive);
-                if (newsCategoryTranslation is null)
-                {
-                    newsCategoryTranslation = _context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == newsItem.CategoryId && x.IsActive);
-                }
-                
-                item.CategoryName = newsCategoryTranslation?.Name;
-
-                var files = _context.NewsItemFiles.Where(x => x.NewsItemId == newsItem.Id && x.IsActive);
-                if (files.Any())
-                {
-                    item.Files = files.Select(x => x.MediaId);
-                }
-
-                return item;
+                throw new CustomException(_newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            return default;
+            return new NewsItemServiceModel
+            {
+                Id = newsItem.Id,
+                CategoryId = newsItem.CategoryId,
+                CategoryName = newsItem.Category?.Translations?.FirstOrDefault(t => t.CategoryId == newsItem.CategoryId && t.Language == model.Language && t.IsActive)?.Name ?? newsItem.Category?.Translations?.FirstOrDefault(t => t.CategoryId == newsItem.CategoryId && t.IsActive)?.Name,
+                Title = newsItem.Translations.FirstOrDefault(t => t.NewsItemId == newsItem.Id && t.IsActive && t.Language == model.Language)?.Title ?? newsItem.Translations.FirstOrDefault(t => t.NewsItemId == newsItem.Id && t.IsActive)?.Title,
+                Description = newsItem.Translations.FirstOrDefault(t => t.NewsItemId == newsItem.Id && t.IsActive && t.Language == model.Language)?.Description ?? newsItem.Translations.FirstOrDefault(t => t.NewsItemId == newsItem.Id && t.IsActive)?.Description,
+                Content = newsItem.Translations.FirstOrDefault(t => t.NewsItemId == newsItem.Id && t.IsActive && t.Language == model.Language)?.Content ?? newsItem.Translations.FirstOrDefault(t => t.NewsItemId == newsItem.Id && t.IsActive)?.Content,
+                PreviewImageId = newsItem.PreviewImageId,
+                ThumbnailImageId = newsItem.ThumbnailImageId,
+                IsPublished = newsItem.IsPublished,
+                Files = newsItem.Files.Where(f => f.NewsItemId == newsItem.Id && f.IsActive).OrEmptyIfNull().Select(f => f.MediaId),
+                LastModifiedDate = newsItem.LastModifiedDate,
+                CreatedDate = newsItem.CreatedDate,
+            };
         }
 
         public async Task<PagedResults<IEnumerable<NewsItemFileServiceModel>>> GetFilesAsync(GetNewsItemFilesServiceModel model)
