@@ -131,11 +131,11 @@ namespace News.Api.Services.News
                     Description = x.Translations.FirstOrDefault(t => t.NewsItemId == x.Id && t.Language == model.Language)?.Description ?? x.Translations.FirstOrDefault(t => t.NewsItemId == x.Id)?.Description,
                     Language = model.Language,
                     OrganisationId = x.OrganisationId,
-                    CategoryName = x.Category?.Translations?.FirstOrDefault(t => t.CategoryId == x.CategoryId && t.Language == model.Language)?.Name ?? x.Category?.Translations?.FirstOrDefault(t => t.CategoryId == x.CategoryId)?.Name,
+                    CategoryName = x.Category.Translations.FirstOrDefault(t => t.CategoryId == x.CategoryId && t.Language == model.Language)?.Name ?? x.Category.Translations.FirstOrDefault(t => t.CategoryId == x.CategoryId)?.Name,
                     PreviewImageId = x.PreviewImageId,
                     ThumbnailImageId = x.ThumbnailImageId,
                     IsPublished = x.IsPublished,
-                    Files = x.Files.Where(f => f.NewsItemId == x.Id && f.IsActive).OrEmptyIfNull().Select(f => f.MediaId),
+                    Files = x.Files.Select(x => x.Id),
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
                 })
