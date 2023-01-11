@@ -164,7 +164,7 @@ namespace News.Api.Services.News
                 IsPublished = newsItem.IsPublished,
                 Files = newsItem.Files.Where(f => f.NewsItemId == newsItem.Id && f.IsActive).OrEmptyIfNull().Select(f => f.MediaId),
                 LastModifiedDate = newsItem.LastModifiedDate,
-                CreatedDate = newsItem.CreatedDate,
+                CreatedDate = newsItem.CreatedDate
             };
         }
 

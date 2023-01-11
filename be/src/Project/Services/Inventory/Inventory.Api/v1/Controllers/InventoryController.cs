@@ -66,11 +66,11 @@ namespace Inventory.Api.v1.Controllers
                 };
 
                 var validator = new GetInventoriesByIdsModelValidator();
-                var validationResult = await validator.ValidateAsync(serviceModel);
+                var validationResult = validator.Validate(serviceModel);
 
                 if (validationResult.IsValid)
                 {
-                    var inventories = await _inventoriesService.GetByIdsAsync(serviceModel);
+                    var inventories = _inventoriesService.GetByIds(serviceModel);
 
                     if (inventories is not null)
                     {
@@ -112,7 +112,7 @@ namespace Inventory.Api.v1.Controllers
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
-                var inventories = await _inventoriesService.GetAsync(serviceModel);
+                var inventories = _inventoriesService.Get(serviceModel);
 
                 if (inventories is not null)
                 {
@@ -155,7 +155,7 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetAvailableProductsInventories(
+        public IActionResult GetAvailableProductsInventories(
             int pageIndex, 
             int itemsPerPage)
         {
@@ -169,7 +169,7 @@ namespace Inventory.Api.v1.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var inventories = await _inventoriesService.GetAvailableProductsInventoriesAsync(serviceModel);
+            var inventories = _inventoriesService.GetAvailableProductsInventories(serviceModel);
 
             if (inventories is not null)
             {
@@ -327,7 +327,7 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(Guid? id)
+        public IActionResult Get(Guid? id)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetInventoryServiceModel
@@ -338,11 +338,11 @@ namespace Inventory.Api.v1.Controllers
             };
 
             var validator = new GetInventoryModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var validationResult = validator.Validate(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var inventoryProduct = await _inventoriesService.GetAsync(serviceModel);
+                var inventoryProduct = _inventoriesService.Get(serviceModel);
 
                 if (inventoryProduct is not null)
                 {
@@ -364,10 +364,6 @@ namespace Inventory.Api.v1.Controllers
                     };
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
-                else
-                {
-                    return this.StatusCode((int)HttpStatusCode.NoContent);
                 }
 
             }
