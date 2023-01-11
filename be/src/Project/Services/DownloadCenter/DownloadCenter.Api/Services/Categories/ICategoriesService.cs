@@ -11,7 +11,7 @@ namespace DownloadCenter.Api.Services.Categories
         PagedResults<IEnumerable<CategoryServiceModel>> Get(GetCategoriesServiceModel model);
         Task<Guid> CreateAsync(CreateCategoryServiceModel model);
         Task<Guid> UpdateAsync(UpdateCategoryServiceModel model);
-        Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model);
+        CategoryServiceModel Get(GetCategoryServiceModel model);
         Task DeleteAsync(DeleteCategoryServiceModel model);
     }
 }
