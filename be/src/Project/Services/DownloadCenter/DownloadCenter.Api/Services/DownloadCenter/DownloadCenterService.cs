@@ -234,7 +234,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
                     Id = x.Id,
                     Name = x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.IsActive)?.Name ?? x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.IsActive)?.Name,
                 }),
-                Files= downloadCenterCategory.Files.Where(x => x.CategoryId == downloadCenterCategory.Id).OrEmptyIfNull().Select(x => x.MediaId),
+                Files = downloadCenterCategory.Files.Select(x => x.MediaId),
                 LastModifiedDate = downloadCenterCategory.LastModifiedDate,
                 CreatedDate = downloadCenterCategory.CreatedDate
             };
