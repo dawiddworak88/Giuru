@@ -102,7 +102,7 @@ namespace DownloadCenter.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DownloadCenterCategoryResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult Get(Guid? id)
+        public async Task<IActionResult> Get(Guid? id)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -119,7 +119,7 @@ namespace DownloadCenter.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var downloadCenterCategory = _downloadCenterService.GetDownloadCenterCategory(serviceModel);
+                var downloadCenterCategory = await _downloadCenterService.GetDownloadCenterCategoryAsync (serviceModel);
 
                 if (downloadCenterCategory is not null)
                 {
@@ -294,7 +294,7 @@ namespace DownloadCenter.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DownloadCenterItemFileResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult GetDownloadCenterFile(Guid? id)
+        public async Task<IActionResult> GetDownloadCenterFile(Guid? id)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -307,11 +307,11 @@ namespace DownloadCenter.Api.v1.Controllers
             };
 
             var validator = new GetDownloadCenterFileModelValidator();
-            var validationResult = validator.Validate(serviceModel);
+            var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var downloadCenterFile = _downloadCenterService.Get(serviceModel);
+                var downloadCenterFile = await _downloadCenterService.GetAsync(serviceModel);
 
                 if (downloadCenterFile is not null)
                 {

@@ -9,7 +9,7 @@ namespace News.Api.Services.News
     public interface INewsService
     {
         PagedResults<IEnumerable<NewsItemServiceModel>> Get(GetNewsItemsServiceModel model);
-        NewsItemServiceModel Get(GetNewsItemServiceModel model);
+        Task<NewsItemServiceModel> GetAsync(GetNewsItemServiceModel model);
         Task DeleteAsync(DeleteNewsItemServiceModel model);
         Task<Guid> CreateAsync(CreateNewsItemServiceModel model);
         Task<Guid> UpdateAsync(UpdateNewsItemServiceModel model);

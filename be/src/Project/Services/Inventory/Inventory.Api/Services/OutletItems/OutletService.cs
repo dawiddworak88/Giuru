@@ -75,7 +75,7 @@ namespace Inventory.Api.Services.OutletItems
 
             await _context.SaveChangesAsync();
 
-            return this.Get(new GetOutletServiceModel { Id = outlet.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
+            return await this.GetAsync(new GetOutletServiceModel { Id = outlet.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
         public async Task<OutletServiceModel> CreateAsync(CreateOutletServiceModel model)
@@ -118,7 +118,7 @@ namespace Inventory.Api.Services.OutletItems
 
             await _context.SaveChangesAsync();
 
-            return this.Get(new GetOutletServiceModel { Id = outletItem.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
+            return await this.GetAsync(new GetOutletServiceModel { Id = outletItem.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
         public async Task SyncProductsOutlet(UpdateOutletProductsServiceModel model)
@@ -212,9 +212,12 @@ namespace Inventory.Api.Services.OutletItems
             }
         }
 
-        public OutletServiceModel Get(GetOutletServiceModel model)
+        public async Task<OutletServiceModel> GetAsync(GetOutletServiceModel model)
         {
-            var outletItem = _context.Outlet.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+            var outletItem = await _context.Outlet
+                    .Include(x => x.Translations)
+                    .AsSingleQuery()
+                    .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (outletItem is null)
             {

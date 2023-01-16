@@ -234,7 +234,7 @@ namespace News.Api.v1.News.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult Get(Guid? id)
+        public async Task<IActionResult> Get(Guid? id)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetNewsItemServiceModel
@@ -246,11 +246,11 @@ namespace News.Api.v1.News.Controllers
             };
 
             var validator = new GetNewsItemModelValidator();
-            var validationResult = validator.Validate(serviceModel);
+            var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var newsItem =  _newsService.Get(serviceModel);
+                var newsItem =  await _newsService.GetAsync(serviceModel);
 
                 if (newsItem is not null)
                 {

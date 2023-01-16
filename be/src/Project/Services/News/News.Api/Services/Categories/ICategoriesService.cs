@@ -9,7 +9,7 @@ namespace News.Api.Services.Categories
     {
         Task<CategoryServiceModel> CreateAsync(CreateCategoryServiceModel model);
         Task<CategoryServiceModel> UpdateAsync(UpdateCategoryServiceModel model);
-        CategoryServiceModel Get(GetCategoryServiceModel model);
+        Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model);
         PagedResults<IEnumerable<CategoryServiceModel>> Get(GetCategoriesServiceModel model);
         Task DeleteAsync(DeleteCategoryServiceModel model);
     }

@@ -11,7 +11,7 @@ namespace Inventory.Api.Services.InventoryItems
         PagedResults<IEnumerable<InventoryServiceModel>> Get(GetInventoriesServiceModel getInventoriesModel);
         PagedResults<IEnumerable<InventoryServiceModel>> GetByIds(GetInventoriesByIdsServiceModel model);
         Task<InventoryServiceModel> UpdateAsync(UpdateInventoryServiceModel serviceModel);
-        InventoryServiceModel Get(GetInventoryServiceModel model);
+        Task<InventoryServiceModel> GetAsync(GetInventoryServiceModel model);
         Task<InventoryServiceModel> CreateAsync(CreateInventoryServiceModel serviceModel);
         Task<InventorySumServiceModel> GetInventoryByProductId(GetInventoryByProductIdServiceModel model);
         Task<InventorySumServiceModel> GetInventoryByProductSku(GetInventoryByProductSkuServiceModel model);

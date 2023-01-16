@@ -7,7 +7,6 @@ using Foundation.Localization;
 using Inventory.Api.Infrastructure;
 using Inventory.Api.Infrastructure.Entities;
 using Inventory.Api.ServicesModels.InventoryServiceModels;
-using Inventory.Api.ServicesModels.OutletServiceModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
@@ -57,7 +56,7 @@ namespace Inventory.Api.Services.InventoryItems
 
             await _context.SaveChangesAsync();
 
-            return this.Get(new GetInventoryServiceModel { Id = inventory.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
+            return await this.GetAsync(new GetInventoryServiceModel { Id = inventory.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
         public async Task<InventoryServiceModel> CreateAsync(CreateInventoryServiceModel serviceModel)
@@ -92,7 +91,7 @@ namespace Inventory.Api.Services.InventoryItems
 
             await _context.SaveChangesAsync();
 
-            return this.Get(new GetInventoryServiceModel { Id = inventory.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
+            return await this.GetAsync(new GetInventoryServiceModel { Id = inventory.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
         public async Task SyncProductsInventories(UpdateProductsInventoryServiceModel model)
@@ -157,9 +156,9 @@ namespace Inventory.Api.Services.InventoryItems
             }
         }
 
-        public InventoryServiceModel Get(GetInventoryServiceModel model)
+        public async Task<InventoryServiceModel> GetAsync(GetInventoryServiceModel model)
         {
-            var inventoryProduct = _context.Inventory.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+            var inventoryProduct = await _context.Inventory.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (inventoryProduct is null)
             {

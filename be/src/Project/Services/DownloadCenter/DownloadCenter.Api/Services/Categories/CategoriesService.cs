@@ -79,9 +79,14 @@ namespace DownloadCenter.Api.Services.Categories
             await _context.SaveChangesAsync();
         }
 
-        public CategoryServiceModel Get(GetCategoryServiceModel model)
+        public async Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model)
         {
-            var category = _context.DownloadCenterCategories.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+            var category = await _context.DownloadCenterCategories
+                    .Include(x => x.Translations)
+                    .Include(x => x.ParentCategory)
+                    .Include(x => x.ParentCategory.Translations)
+                    .AsSingleQuery()
+                    .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (category is null)
             {

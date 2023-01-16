@@ -142,9 +142,14 @@ namespace News.Api.Services.News
             };
         }
 
-        public NewsItemServiceModel Get(GetNewsItemServiceModel model)
+        public async Task<NewsItemServiceModel> GetAsync(GetNewsItemServiceModel model)
         {
-            var newsItem = _context.NewsItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+            var newsItem = await _context.NewsItems
+                    .Include(x => x.Category)
+                    .Include(x => x.Category.Translations)
+                    .Include(x => x.Translations)
+                    .AsSingleQuery()
+                    .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (newsItem is null)
             {

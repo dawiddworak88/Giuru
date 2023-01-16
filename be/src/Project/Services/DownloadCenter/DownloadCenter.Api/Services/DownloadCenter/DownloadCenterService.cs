@@ -141,9 +141,9 @@ namespace DownloadCenter.Api.Services.DownloadCenter
             return pagedDownloadCenterFilesServiceModel;
         }
 
-        public DownloadCenterItemFileServiceModel Get(GetDownloadCenterFileServiceModel model)
+        public async Task<DownloadCenterItemFileServiceModel> GetAsync(GetDownloadCenterFileServiceModel model)
         {
-            var downloadCenterFile = _context.DownloadCenterCategoryFiles.FirstOrDefault(x => x.MediaId == model.Id && x.IsActive);
+            var downloadCenterFile = await _context.DownloadCenterCategoryFiles.FirstOrDefaultAsync(x => x.MediaId == model.Id && x.IsActive);
 
             if (downloadCenterFile is null)
             {
@@ -212,9 +212,11 @@ namespace DownloadCenter.Api.Services.DownloadCenter
             };
         }
 
-        public DownloadCenterCategoryServiceModel GetDownloadCenterCategory(GetDownloadCenterCategoryServiceModel model)
+        public async Task<DownloadCenterCategoryServiceModel> GetDownloadCenterCategoryAsync(GetDownloadCenterCategoryServiceModel model)
         {
-            var downloadCenterCategory = _context.DownloadCenterCategories.FirstOrDefault(x => x.Id == model.Id && x.IsActive && x.IsVisible);
+            var downloadCenterCategory = await _context.DownloadCenterCategories
+                    .Include(x => x.Translations)
+                    .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive && x.IsVisible);
 
             if (downloadCenterCategory is null)
             {

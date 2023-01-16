@@ -50,7 +50,7 @@ namespace News.Api.Services.Categories
 
             await _context.SaveChangesAsync();
 
-            return this.Get(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, Username = model.Username, OrganisationId = model.OrganisationId });
+            return await this.GetAsync(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, Username = model.Username, OrganisationId = model.OrganisationId });
         }
 
         public async Task DeleteAsync(DeleteCategoryServiceModel model)
@@ -77,9 +77,14 @@ namespace News.Api.Services.Categories
             await _context.SaveChangesAsync();
         }
 
-        public CategoryServiceModel Get(GetCategoryServiceModel model)
+        public async Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model)
         {
-            var category = _context.Categories.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+            var category = await _context.Categories
+                    .Include(x => x.Translations)
+                    .Include(x => x.ParentCategory)
+                    .Include(x => x.ParentCategory.Translations)
+                    .AsSingleQuery()
+                    .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (category is null)
             {
@@ -181,7 +186,7 @@ namespace News.Api.Services.Categories
 
             await _context.SaveChangesAsync();
 
-            return this.Get(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
+            return await this.GetAsync(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
     }
 }

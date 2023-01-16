@@ -187,7 +187,7 @@ namespace News.Api.v1.Categories.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategoryResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult Get(Guid? id)
+        public async Task<IActionResult> Get(Guid? id)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetCategoryServiceModel
@@ -199,11 +199,11 @@ namespace News.Api.v1.Categories.Controllers
             };
 
             var validator = new GetCategoryModelValidator();
-            var validationResult = validator.Validate(serviceModel);
+            var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var category = _categoriesService.Get(serviceModel);
+                var category = await _categoriesService.GetAsync(serviceModel);
 
                 if (category is not null)
                 {

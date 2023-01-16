@@ -325,7 +325,7 @@ namespace Outlet.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult Get(Guid? id)
+        public async Task<IActionResult> Get(Guid? id)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetOutletServiceModel
@@ -336,11 +336,11 @@ namespace Outlet.Api.v1.Controllers
             };
 
             var validator = new GetOutletModelValidator();
-            var validationResult = validator.Validate(serviceModel);
+            var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var outletProduct = _outletsService.Get(serviceModel);
+                var outletProduct = await _outletsService.GetAsync(serviceModel);
 
                 if (outletProduct is not null)
                 {

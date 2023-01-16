@@ -11,7 +11,7 @@ namespace Inventory.Api.Services.OutletItems
         PagedResults<IEnumerable<OutletServiceModel>> Get(GetOutletsServiceModel model);
         PagedResults<IEnumerable<OutletServiceModel>> GetByIds(GetOutletsByIdsServiceModel model);
         Task<OutletServiceModel> UpdateAsync(UpdateOutletServiceModel model);
-        OutletServiceModel Get(GetOutletServiceModel model);
+        Task<OutletServiceModel> GetAsync(GetOutletServiceModel model);
         Task<OutletServiceModel> CreateAsync(CreateOutletServiceModel serviceModel);
         Task<OutletSumServiceModel> GetOutletByProductId(GetOutletByProductIdServiceModel model);
         Task<OutletSumServiceModel> GetOutletByProductSku(GetOutletByProductSkuServiceModel model);

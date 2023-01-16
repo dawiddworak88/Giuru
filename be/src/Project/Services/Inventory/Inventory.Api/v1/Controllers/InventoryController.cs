@@ -327,7 +327,7 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult Get(Guid? id)
+        public async Task<IActionResult> Get(Guid? id)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetInventoryServiceModel
@@ -338,11 +338,11 @@ namespace Inventory.Api.v1.Controllers
             };
 
             var validator = new GetInventoryModelValidator();
-            var validationResult = validator.Validate(serviceModel);
+            var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var inventoryProduct = _inventoriesService.Get(serviceModel);
+                var inventoryProduct = await _inventoriesService.GetAsync(serviceModel);
 
                 if (inventoryProduct is not null)
                 {
