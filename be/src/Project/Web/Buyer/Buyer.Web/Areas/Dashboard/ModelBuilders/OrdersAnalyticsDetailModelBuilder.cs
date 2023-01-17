@@ -1,4 +1,6 @@
-﻿using Buyer.Web.Areas.Dashboard.Repositories;
+﻿using Buyer.Web.Areas.Dashboard.Constants;
+using Buyer.Web.Areas.Dashboard.DomainModels;
+using Buyer.Web.Areas.Dashboard.Repositories;
 using Buyer.Web.Areas.Dashboard.ViewModels;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Foundation.Extensions.ExtensionMethods;
@@ -8,7 +10,6 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,44 +17,39 @@ namespace Buyer.Web.Areas.Dashboard.ModelBuilders
 {
     public class OrdersAnalyticsDetailModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrdersAnalyticsDetailViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SalesAnalyticsViewModel> salesAnalyticsModelBuilder;
-        private readonly ISalesAnalyticsRepository salesAnalyticsRepository;
-        private readonly IProductsRepository productsRepository;
-        private readonly IStringLocalizer<DashboardResources> dashboardResources;
-        private readonly IStringLocalizer<GlobalResources> globalResources;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SalesAnalyticsViewModel> _salesAnalyticsModelBuilder;
+        private readonly ISalesAnalyticsRepository _salesAnalyticsRepository;
+        private readonly IStringLocalizer<DashboardResources> _dashboardResources;
+        private readonly IStringLocalizer<GlobalResources> _globalResources;
 
         public OrdersAnalyticsDetailModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, SalesAnalyticsViewModel> salesAnalyticsModelBuilder,
             ISalesAnalyticsRepository salesAnalyticsRepository,
             IStringLocalizer<DashboardResources> dashboardResources,
-            IStringLocalizer<GlobalResources> globalResources,
-            IProductsRepository productsRepository)
+            IStringLocalizer<GlobalResources> globalResources)
         {
-            this.salesAnalyticsModelBuilder = salesAnalyticsModelBuilder;
-            this.salesAnalyticsRepository = salesAnalyticsRepository;
-            this.productsRepository = productsRepository;
-            this.dashboardResources = dashboardResources;
-            this.globalResources = globalResources;
+            _salesAnalyticsModelBuilder = salesAnalyticsModelBuilder;
+            _salesAnalyticsRepository = salesAnalyticsRepository;
+            _dashboardResources = dashboardResources;
+            _globalResources = globalResources;
         }
 
         public async Task<OrdersAnalyticsDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new OrdersAnalyticsDetailViewModel
             {
-                Title = this.dashboardResources.GetString("OrdersAnalysis"),
-                TopOrderedProducts = this.dashboardResources.GetString("TopOrderedProducts"),
-                NameLabel = this.dashboardResources.GetString("ProductName"),
-                QuantityLabel = this.dashboardResources.GetString("ProductQuantity"),
-                NoResultsLabel = this.globalResources.GetString("NoResultsLabel"),
-                SalesAnalytics = await this.salesAnalyticsModelBuilder.BuildModelAsync(componentModel)
+                Title = _dashboardResources.GetString("OrdersAnalysis"),
+                TopOrderedProducts = _dashboardResources.GetString("TopOrderedProducts"),
+                NameLabel = _dashboardResources.GetString("ProductName"),
+                QuantityLabel = _dashboardResources.GetString("ProductQuantity"),
+                NoResultsLabel = _globalResources.GetString("NoResultsLabel"),
+                SalesAnalytics = await _salesAnalyticsModelBuilder.BuildModelAsync(componentModel)
             };
 
-            var salesProducts = await this.salesAnalyticsRepository.GetProductsSales(componentModel.Token, componentModel.Language);
+            var salesProducts = await _salesAnalyticsRepository.GetProductsSales(componentModel.Token, componentModel.Language, DashboardConstants.SalesAnalytics.DefaultSalesSize, $"{nameof(Product.Quantity)} desc");
 
             if (salesProducts is not null)
             {
-                var products = await this.productsRepository.GetProductsAsync(salesProducts.Select(x => x.ProductId), null, null, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, componentModel.Token, null);
-
                 var analyticsProducts = new List<OrderAnalyticsProductViewModel>();
 
                 foreach (var salesProduct in salesProducts.OrEmptyIfNull())
@@ -61,15 +57,9 @@ namespace Buyer.Web.Areas.Dashboard.ModelBuilders
                     var analyticsProduct = new OrderAnalyticsProductViewModel
                     {
                         Sku = salesProduct.ProductSku,
-                        Quantity = salesProduct.Quantity
+                        Quantity = salesProduct.Quantity,
+                        Name = salesProduct.ProductName,
                     };
-
-                    var product = products?.Data?.FirstOrDefault(x => x.Id == salesProduct.ProductId);
-
-                    if (product is not null)
-                    {
-                        analyticsProduct.Name = product.Name;
-                    }
 
                     analyticsProducts.Add(analyticsProduct);
                 }

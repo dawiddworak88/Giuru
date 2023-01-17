@@ -13,7 +13,6 @@ namespace Analytics.Api.Infrastructure.Entities.SalesAnalytics
         [Required]
         public string Sku { get; set; }
 
-        [Required]
         public string Ean { get; set; }
 
         public virtual IEnumerable<ProductTranslationDimension> Translations { get; set; }

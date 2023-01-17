@@ -25,12 +25,12 @@ namespace Analytics.Api.v1.Controllers
     [ApiController]
     public class SalesAnalyticsController : BaseApiController
     {
-        private readonly ISalesService salesService;
+        private readonly ISalesService _salesService;
 
         public SalesAnalyticsController(
             ISalesService salesService)
         {
-            this.salesService = salesService;
+            _salesService = salesService;
         }
 
         /// <summary>
@@ -42,14 +42,14 @@ namespace Analytics.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetAnnualSales()
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetAnnualSalesServiceModel
             {
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                IsSeller = this.User.IsInRole("Seller")
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                IsSeller = User.IsInRole("Seller")
             };
 
             var validator = new GetAnnualSalesModelValidator();
@@ -57,7 +57,7 @@ namespace Analytics.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var annualSales = await this.salesService.GetAnnualSalesServiceModel(serviceModel);
+                var annualSales = await _salesService.GetAnnualSalesServiceModel(serviceModel);
 
                 if (annualSales is not null)
                 {
@@ -78,20 +78,24 @@ namespace Analytics.Api.v1.Controllers
         /// <summary>
         /// Gets best selling products
         /// </summary>
+        /// <param name="size">The display limit.</param>
+        /// <param name="orderBy">The optional order by.</param>
         /// <returns>Best selling products</returns>
         [HttpGet("products"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(int? size, string orderBy)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetTopSalesProductsAnalyticsServiceModel
             {
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                IsSeller = this.User.IsInRole("Seller")
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                IsSeller = User.IsInRole("Seller"),
+                OrderBy = orderBy,
+                Size = size
             };
 
             var validator = new GetTopSalesAnalyticsModelValidator();
@@ -99,7 +103,7 @@ namespace Analytics.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var topSalesProducts = await this.salesService.GetTopSalesProductsAnalyticsAsync(serviceModel);
+                var topSalesProducts = await _salesService.GetTopSalesProductsAnalyticsAsync(serviceModel);
 
                 if (topSalesProducts is not null)
                 {
@@ -129,26 +133,29 @@ namespace Analytics.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(SalesAnalyticsRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new CreateSalesAnalyticsServiceModel
             {
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 SalesAnalyticsItems = request.SalesAnalyticsItems.OrEmptyIfNull().Select(x => new CreateSalesAnalyticsItemServiceModel
                 {
                     ClientId = x.ClientId,
                     ClientName = x.ClientName,
                     Email = x.Email,
-                    ProductId = x.ProductId,
-                    ProductName = x.ProductName,
-                    ProductSku = x.ProductSku,
-                    Ean = x.Ean,
-                    IsOutlet = x.IsOutlet,
-                    IsStock = x.IsStock,
-                    Quantity = x.Quantity,
                     CountryId = x.CountryId,
+                    Products = x.Products.OrEmptyIfNull().Select(x => new CreateSalesAnalyticsProductServiceModel
+                    {
+                        Id = x.Id,
+                        Sku = x.Sku,
+                        Name = x.Name,
+                        Ean = x.Ean,
+                        IsOutlet = x.IsOutlet,
+                        IsStock = x.IsStock,
+                        Quantity = x.Quantity,
+                    }),
                     CountryTranslations = x.CountryTranslations.OrEmptyIfNull().Select(x => new CreateSalesAnalyticsCountryServiceModel
                     {
                         Text = x.Text,
@@ -163,7 +170,7 @@ namespace Analytics.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.salesService.CreateAsync(serviceModel);
+                await _salesService.CreateAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
