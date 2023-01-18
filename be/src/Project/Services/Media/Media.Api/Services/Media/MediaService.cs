@@ -201,25 +201,23 @@ namespace Media.Api.Services.Media
 
             var mediaItemsTranslations = _context.MediaItemTranslations.Where(x => mediaItemVersions.Select(y => y.Id).Contains(x.MediaItemVersionId)).ToList();
 
-            var mediaItemVersion = mediaItemVersions.FirstOrDefault();
-
             unorderedMediaItemsResults.AddRange(mediaItems.OrEmptyIfNull().Select(x => new MediaItemServiceModel
             {
                 Id = x.Id,
                 IsProtected = x.IsProtected,
-                Filename = $"{mediaItemVersion.Filename}{mediaItemVersion.Extension}",
-                Size = mediaItemVersion.Size,
-                MimeType = mediaItemVersion.MimeType,
-                Extension= mediaItemVersion.Extension,
-                MediaItemVersionId = mediaItemVersion.Id,
-                Name = mediaItemsTranslations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersion.Id && t.IsActive && t.Language == model.Language)?.Name ?? mediaItemsTranslations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersion.Id && t.IsActive)?.Name,
-                Description = mediaItemsTranslations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersion.Id && t.IsActive && t.Language == model.Language)?.Description ?? mediaItemsTranslations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersion.Id && t.IsActive)?.Description,
-                MetaData = mediaItemsTranslations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersion.Id && t.IsActive && t.Language == model.Language)?.Metadata ?? mediaItemsTranslations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersion.Id && t.IsActive)?.Metadata,
+                Filename = $"{mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Filename}{mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Extension}",
+                Size = mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Size,
+                MimeType = mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).MimeType,
+                Extension= mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Extension,
+                MediaItemVersionId = mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Id,
+                Name = mediaItemsTranslations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Id && t.IsActive && t.Language == model.Language)?.Name ?? mediaItemsTranslations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Id && t.IsActive)?.Name,
+                Description = mediaItemsTranslations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Id && t.IsActive && t.Language == model.Language)?.Description ?? mediaItemsTranslations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Id && t.IsActive)?.Description,
+                MetaData = mediaItemsTranslations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Id && t.IsActive && t.Language == model.Language)?.Metadata ?? mediaItemsTranslations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Id && t.IsActive)?.Metadata,
                 LastModifiedDate = x.LastModifiedDate,
                 CreatedDate = x.CreatedDate
             }));
 
-            foreach(var id in model.Ids.OrEmptyIfNull())
+            foreach (var id in model.Ids.OrEmptyIfNull())
             {
                 var mediaItemResult = unorderedMediaItemsResults.OrEmptyIfNull().FirstOrDefault(x => x.Id == id);
 

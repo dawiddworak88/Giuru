@@ -6,7 +6,6 @@ using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.ViewModels.Files;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.GenericRepository.Definitions;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using System.Globalization;
