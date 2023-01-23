@@ -1,5 +1,5 @@
 ﻿using Buyer.Web.Areas.Dashboard.Repositories;
-using Buyer.Web.Areas.Dashboard.ViewModels;
+using Buyer.Web.Shared.ViewModels.Analytics;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Dashboard.ModelBuilders
+namespace Buyer.Web.Shared.ModelBuilders.Analytics
 {
     public class SalesAnalyticsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, SalesAnalyticsViewModel>
     {

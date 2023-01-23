@@ -1,7 +1,6 @@
 ﻿using Buyer.Web.Areas.Home.Definitions;
 using Buyer.Web.Areas.Home.ViewModel;
 using Buyer.Web.Areas.Shared.Definitions.Products;
-using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Services.Catalogs;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
@@ -14,7 +13,6 @@ using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -24,31 +22,28 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 {
     public class HomePageContentGridModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, HomePageContentGridViewModel>
     {
-        private readonly ICatalogService catalogService;
-        private readonly IOptions<AppSettings> options;
-        private readonly IMediaService mediaService;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly ICatalogService _catalogService;
+        private readonly IMediaService _mediaService;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
 
         public HomePageContentGridModelBuilder(
             ICatalogService catalogService,
-            IOptions<AppSettings> options,
             IMediaService mediaService,
             LinkGenerator linkGenerator,
             IStringLocalizer<GlobalResources> globalLocalizer)
         {
-            this.catalogService = catalogService;
-            this.options = options;
-            this.mediaService = mediaService;
-            this.linkGenerator = linkGenerator;
-            this.globalLocalizer = globalLocalizer;
+            _catalogService = catalogService;
+            _mediaService = mediaService;
+            _linkGenerator = linkGenerator;
+            _globalLocalizer = globalLocalizer;
         }
 
         public async Task<HomePageContentGridViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var items = new List<ContentGridItemViewModel>();
 
-            var categories = await catalogService.GetCatalogCategoriesAsync(
+            var categories = await _catalogService.GetCatalogCategoriesAsync(
                 componentModel.Language, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, "Order");
 
             foreach (var category in categories.OrEmptyIfNull().Where(x => x.Level == HomeConstants.Categories.FirstLevel))
@@ -58,23 +53,23 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                     Id = category.Id,
                     Title = category.Name,
                     ImageAlt = category.Name,
-                    Url = linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, category.Id })
+                    Url = _linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, category.Id })
                 };
 
                 if (category.ThumbnailMediaId.HasValue)
                 {
-                    contentItem.ImageUrl = mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, ProductConstants.ProductsCatalogItemImageWidth);
+                    contentItem.ImageUrl = _mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, ProductConstants.ProductsCatalogItemImageWidth);
                     contentItem.Sources = new List<SourceViewModel>
                     {
-                        new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 1366) },
-                        new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 470) },
-                        new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 342) },
-                        new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 768) },
+                        new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 1366) },
+                        new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 470) },
+                        new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 342) },
+                        new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 768) },
 
-                        new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 1366) },
-                        new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 470) },
-                        new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 342) },
-                        new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 768) }
+                        new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 1366) },
+                        new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 470) },
+                        new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 342) },
+                        new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 768) }
                     };
                 }
 
@@ -83,7 +78,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 
             var viewModel = new HomePageContentGridViewModel
             {
-                Title = globalLocalizer.GetString("Categories"),
+                Title = _globalLocalizer.GetString("Categories"),
                 Items = items
             };
 

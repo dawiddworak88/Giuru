@@ -1,19 +1,15 @@
 ﻿using Buyer.Web.Areas.Dashboard.Constants;
 using Buyer.Web.Areas.Dashboard.DomainModels;
 using Buyer.Web.Areas.Dashboard.Repositories;
-using Buyer.Web.Areas.Dashboard.ViewModels;
-using Buyer.Web.Areas.Products.Repositories.Products;
-using Foundation.Extensions.ExtensionMethods;
+using Buyer.Web.Shared.ViewModels.Analytics;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.Localization;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Dashboard.ModelBuilders
+namespace Buyer.Web.Shared.ModelBuilders.Analytics
 {
     public class OrdersAnalyticsDetailModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrdersAnalyticsDetailViewModel>
     {
@@ -50,21 +46,12 @@ namespace Buyer.Web.Areas.Dashboard.ModelBuilders
 
             if (salesProducts is not null)
             {
-                var analyticsProducts = new List<OrderAnalyticsProductViewModel>();
-
-                foreach (var salesProduct in salesProducts.OrEmptyIfNull())
-                {
-                    var analyticsProduct = new OrderAnalyticsProductViewModel
-                    {
-                        Sku = salesProduct.ProductSku,
-                        Quantity = salesProduct.Quantity,
-                        Name = salesProduct.ProductName,
-                    };
-
-                    analyticsProducts.Add(analyticsProduct);
-                }
-
-                viewModel.Products = analyticsProducts;
+                viewModel.Products = salesProducts.Select(x => new OrderAnalyticsProductViewModel 
+                { 
+                    Sku = x.ProductSku,
+                    Quantity = x.Quantity,
+                    Name = x.ProductName
+                });
             }
 
             return viewModel;

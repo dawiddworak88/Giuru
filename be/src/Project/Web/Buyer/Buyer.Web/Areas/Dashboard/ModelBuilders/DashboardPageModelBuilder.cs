@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Dashboard.ViewModels;
+using Buyer.Web.Shared.ViewModels.Analytics;
 using Buyer.Web.Shared.ViewModels.Headers;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
