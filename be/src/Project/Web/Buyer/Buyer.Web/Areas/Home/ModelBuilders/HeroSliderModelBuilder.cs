@@ -14,25 +14,25 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 {
     public class HeroSliderModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, HeroSliderViewModel>
     {
-        private readonly IHeroSliderRepository heroSliderRepository;
-        private readonly IOptionsMonitor<AppSettings> options;
-        private readonly IMediaService mediaService;
+        private readonly IHeroSliderRepository _heroSliderRepository;
+        private readonly IOptionsMonitor<AppSettings> _options;
+        private readonly IMediaService _mediaService;
 
         public HeroSliderModelBuilder(
             IHeroSliderRepository heroSliderRepository,
             IOptionsMonitor<AppSettings> options,
             IMediaService mediaService)
         {
-            this.heroSliderRepository = heroSliderRepository;
-            this.options = options;
-            this.mediaService = mediaService;
+            _heroSliderRepository = heroSliderRepository;
+            _options = options;
+            _mediaService = mediaService;
         }
 
         public async Task<HeroSliderViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var heroSliderItemViewModels = new List<HeroSliderItemViewModel>();
 
-            var heroSliderItems = await this.heroSliderRepository.GetHeroSliderItemsAsync(componentModel.Language, this.options.CurrentValue.DefaultCulture);
+            var heroSliderItems = await _heroSliderRepository.GetHeroSliderItemsAsync(componentModel.Language, _options.CurrentValue.DefaultCulture);
 
             if (heroSliderItems is not null)
             {
@@ -47,18 +47,18 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                         Image = new ImageViewModel
                         {
                             ImageAlt = heroSliderItem.Image?.ImageAlt,
-                            ImageSrc = this.mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc),
+                            ImageSrc = _mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc),
                             ImageTitle = heroSliderItem.Image?.ImageTitle,
                             Sources = new List<SourceViewModel>
                             {
-                                new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc, 1920) },
-                                new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc, 1600) },
-                                new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc, 1024) },
-                                new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc, 414) },
-                                new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc) },
-                                new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc, 1600) },
-                                new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc, 1024) },
-                                new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc, 414) }
+                                new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc, 1920) },
+                                new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc, 1600) },
+                                new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc, 1024) },
+                                new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc, 414) },
+                                new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc) },
+                                new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc, 1600) },
+                                new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc, 1024) },
+                                new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(heroSliderItem.Image?.ImageSrc, 414) }
                             }
                         }
                     });
