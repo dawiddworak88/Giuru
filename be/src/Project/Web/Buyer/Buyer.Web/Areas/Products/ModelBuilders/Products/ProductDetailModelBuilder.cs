@@ -30,17 +30,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
     public class ProductDetailModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder;
-        private readonly IProductsRepository productsRepository;
-        private readonly IStringLocalizer<InventoryResources> inventoryResources;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<OrderResources> orderResources;
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
-        private readonly IMediaService mediaService;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IBasketService basketService;
+        private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> _filesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> _sidebarModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> _modalModelBuilder;
+        private readonly IProductsRepository _productsRepository;
+        private readonly IStringLocalizer<InventoryResources> _inventoryResources;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<OrderResources> _orderResources;
+        private readonly IStringLocalizer<ProductResources> _productLocalizer;
+        private readonly IMediaService _mediaService;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IBasketService _basketService;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -55,48 +55,48 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IBasketService basketService,
             LinkGenerator linkGenerator)
         {
-            this.filesModelBuilder = filesModelBuilder;
-            this.productsRepository = productsRepository;
-            this.globalLocalizer = globalLocalizer;
-            this.productLocalizer = productLocalizer;
-            this.mediaService = mediaService;
-            this.sidebarModelBuilder = sidebarModelBuilder;
-            this.inventoryResources = inventoryResources;
-            this.linkGenerator = linkGenerator;
-            this.basketService = basketService;
-            this.orderResources = orderResources;
-            this.modalModelBuilder = modalModelBuilder;
+            _filesModelBuilder = filesModelBuilder;
+            _productsRepository = productsRepository;
+            _globalLocalizer = globalLocalizer;
+            _productLocalizer = productLocalizer;
+            _mediaService = mediaService;
+            _sidebarModelBuilder = sidebarModelBuilder;
+            _inventoryResources = inventoryResources;
+            _linkGenerator = linkGenerator;
+            _basketService = basketService;
+            _orderResources = orderResources;
+            _modalModelBuilder = modalModelBuilder;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new ProductDetailViewModel
             {
-                ByLabel = this.globalLocalizer.GetString("By"),
-                DescriptionLabel = this.globalLocalizer.GetString("Description"),
+                ByLabel = _globalLocalizer.GetString("By"),
+                DescriptionLabel = _globalLocalizer.GetString("Description"),
                 IsAuthenticated = componentModel.IsAuthenticated,
-                ProductInformationLabel = this.productLocalizer.GetString("ProductInformation"),
-                PricesLabel = this.globalLocalizer.GetString("Prices"),
-                SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct"),
-                QuantityErrorMessage = this.globalLocalizer.GetString("QuantityErrorMessage"),
-                SignInToSeePricesLabel = this.globalLocalizer.GetString("SignInToSeePrices"),
+                ProductInformationLabel = _productLocalizer.GetString("ProductInformation"),
+                PricesLabel = _globalLocalizer.GetString("Prices"),
+                SuccessfullyAddedProduct = _globalLocalizer.GetString("SuccessfullyAddedProduct"),
+                QuantityErrorMessage = _globalLocalizer.GetString("QuantityErrorMessage"),
+                SignInToSeePricesLabel = _globalLocalizer.GetString("SignInToSeePrices"),
                 SignInUrl = "#",
-                UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                BasketLabel = this.globalLocalizer.GetString("BasketLabel"),
-                SkuLabel = this.productLocalizer.GetString("Sku"),
-                InStockLabel = this.globalLocalizer.GetString("InStock"),
-                InOutletLabel = this.globalLocalizer.GetString("InOutlet"),
+                UpdateBasketUrl = _linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                BasketLabel = _globalLocalizer.GetString("BasketLabel"),
+                SkuLabel = _productLocalizer.GetString("Sku"),
+                InStockLabel = _globalLocalizer.GetString("InStock"),
+                InOutletLabel = _globalLocalizer.GetString("InOutlet"),
                 BasketId = componentModel.BasketId,
-                AddedProduct = this.orderResources.GetString("AddedProduct"),
-                Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel),
-                Modal = await this.modalModelBuilder.BuildModelAsync(componentModel),
-                EanLabel = this.globalLocalizer.GetString("Ean"),
-                OutletTitleLabel = this.globalLocalizer.GetString("Discount"),
-                ReadMoreText = this.globalLocalizer.GetString("ReadMore"),
-                ReadLessText = this.globalLocalizer.GetString("ReadLess")
+                AddedProduct = _orderResources.GetString("AddedProduct"),
+                Sidebar = await _sidebarModelBuilder.BuildModelAsync(componentModel),
+                Modal = await _modalModelBuilder.BuildModelAsync(componentModel),
+                EanLabel = _globalLocalizer.GetString("Ean"),
+                OutletTitleLabel = _globalLocalizer.GetString("Discount"),
+                ReadMoreText = _globalLocalizer.GetString("ReadMore"),
+                ReadLessText = _globalLocalizer.GetString("ReadLess")
             };
 
-            var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
+            var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
 
             if (product != null)
             {
@@ -104,7 +104,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 viewModel.ProductId = product.Id;
                 viewModel.Title = product.Name;
                 viewModel.BrandName = product.BrandName;
-                viewModel.BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId });
+                viewModel.BrandUrl = _linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId });
                 viewModel.Description = product.Description;
                 viewModel.Sku = product.Sku;
                 viewModel.IsProductVariant = product.PrimaryProductId.HasValue;
@@ -117,8 +117,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     var imageViewModel = new ImageViewModel
                     {
                         Id = image,
-                        Original = this.mediaService.GetMediaUrl(image, ProductConstants.OriginalMaxWidth),
-                        Thumbnail = this.mediaService.GetMediaUrl(image, ProductConstants.ThumbnailMaxWidth)
+                        Original = _mediaService.GetMediaUrl(image, ProductConstants.OriginalMaxWidth),
+                        Thumbnail = _mediaService.GetMediaUrl(image, ProductConstants.ThumbnailMaxWidth)
                     };
 
                     images.Add(imageViewModel);
@@ -126,7 +126,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 viewModel.Images = images;
 
-                var productFiles = await this.productsRepository.GetProductFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(ProductFile.CreatedDate)} desc");
+                var productFiles = await _productsRepository.GetProductFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(ProductFile.CreatedDate)} desc");
 
                 if (productFiles is not null)
                 {
@@ -136,26 +136,26 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         IsAuthenticated = componentModel.IsAuthenticated,
                         Language = componentModel.Language,
                         Token = componentModel.Token,
-                        SearchApiUrl = this.linkGenerator.GetPathByAction("GetFiles", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                        SearchApiUrl = _linkGenerator.GetPathByAction("GetFiles", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                         Files = productFiles.Data.OrEmptyIfNull().Select(x => x.Id)
                     };
 
-                    viewModel.Files = await this.filesModelBuilder.BuildModelAsync(fileComponentModel);
+                    viewModel.Files = await _filesModelBuilder.BuildModelAsync(fileComponentModel);
                 }
 
-                var inventory = await this.productsRepository.GetProductStockAsync(componentModel.Id);
+                var inventory = await _productsRepository.GetProductStockAsync(componentModel.Id);
 
-                if (inventory != null && inventory.AvailableQuantity.HasValue && inventory.AvailableQuantity.Value > 0)
+                if (inventory is not null && inventory.AvailableQuantity.HasValue && inventory.AvailableQuantity.Value > 0)
                 {
                     viewModel.InStock = true;
                     viewModel.AvailableQuantity = inventory.AvailableQuantity;
                     viewModel.ExpectedDelivery = inventory.ExpectedDelivery;
-                    viewModel.ExpectedDeliveryLabel = this.inventoryResources.GetString("ExpectedDeliveryLabel");
+                    viewModel.ExpectedDeliveryLabel = _inventoryResources.GetString("ExpectedDeliveryLabel");
                     viewModel.RestockableInDays = inventory.RestockableInDays;
-                    viewModel.RestockableInDaysLabel = this.inventoryResources.GetString("RestockableInDaysLabel");
+                    viewModel.RestockableInDaysLabel = _inventoryResources.GetString("RestockableInDaysLabel");
                 }
 
-                var outlet = await this.productsRepository.GetProductOutletAsync(componentModel.Id);
+                var outlet = await _productsRepository.GetProductOutletAsync(componentModel.Id);
 
                 if (outlet is not null && outlet.AvailableQuantity.HasValue && outlet.AvailableQuantity.Value > 0)
                 {
@@ -167,7 +167,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
                 {
-                    var basketItems = await this.basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
+                    var basketItems = await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
                     if (basketItems is not null)
                     {
                         viewModel.OrderItems = basketItems;
@@ -176,7 +176,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 if (product.ProductVariants is not null)
                 {
-                    var productVariants = await this.productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, nameof(Product.CreatedDate));
+                    var productVariants = await _productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, nameof(Product.CreatedDate));
 
                     if (productVariants != null)
                     {
@@ -190,22 +190,22 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 Title = productVariant.Name,
                                 Subtitle = productVariant.Sku,
                                 ImageAlt = productVariant.Name,
-                                Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id })
+                                Url = _linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id })
                             };
 
                             if (productVariant.Images != null && productVariant.Images.Any())
                             {
-                                carouselItem.ImageUrl = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), CarouselGridConstants.CarouselItemImageMaxWidth);
+                                carouselItem.ImageUrl = _mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), CarouselGridConstants.CarouselItemImageMaxWidth);
                                 carouselItem.Sources = new List<SourceViewModel>
                                 {
-                                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 1366) },
-                                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 470) },
-                                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 342) },
-                                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 768) },
-                                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 1366) },
-                                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 470) },
-                                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 342) },
-                                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 768) }
+                                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 1366) },
+                                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 470) },
+                                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 342) },
+                                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 768) },
+                                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 1366) },
+                                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 470) },
+                                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 342) },
+                                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 768) }
                                 };
                             }
 
@@ -217,7 +217,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             new CarouselGridItemViewModel
                             {
                                 Id = product.Id,
-                                Title = this.productLocalizer.GetString("ProductVariants"),
+                                Title = _productLocalizer.GetString("ProductVariants"),
                                 CarouselItems = carouselItems
                             }
                         };

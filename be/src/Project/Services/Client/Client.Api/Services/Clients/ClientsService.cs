@@ -10,6 +10,7 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -161,6 +162,7 @@ namespace Client.Api.Services.Clients
             client.Language = serviceModel.CommunicationLanguage;
             client.PhoneNumber = serviceModel.PhoneNumber;
             client.OrganisationId = serviceModel.ClientOrganisationId.Value;
+            client.LastModifiedDate = DateTime.UtcNow;
 
             var clientGroups = this.context.ClientsGroups.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
 

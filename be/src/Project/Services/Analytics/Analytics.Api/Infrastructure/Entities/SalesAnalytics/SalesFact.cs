@@ -16,8 +16,7 @@ namespace Analytics.Api.Infrastructure.Entities.SalesAnalytics
         [Required]
         public Guid TimeDimensionId { get; set; }
 
-        [Required]
-        public Guid LocationDimensionId { get; set; }
+        public Guid? LocationDimensionId { get; set; }
 
         [Required]
         public double Quantity { get; set; }

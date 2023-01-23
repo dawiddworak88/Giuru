@@ -2,7 +2,11 @@ import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from "@mui/material";
+import { 
+    TextField, Button, FormControl, InputLabel, 
+    Select, MenuItem, FormHelperText, CircularProgress, 
+    Autocomplete
+} from "@mui/material";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
@@ -163,21 +167,25 @@ function ClientForm(props) {
                                 }} />
                         </div>
                         <div className="field">
-                            <FormControl fullWidth={true} variant="standard">
-                                <InputLabel id="country-label">{props.countryLabel}</InputLabel>
-                                <Select
-                                    labelId="country-label"
-                                    id="countryId"
-                                    name="countryId"
-                                    value={countryId}
-                                    onChange={handleOnChange}>
-                                    {props.countries && props.countries.length > 0 && props.countries.map((country, index) => {
-                                        return (
-                                            <MenuItem key={index} value={country.id}>{country.name}</MenuItem>
-                                        );
-                                    })}
-                                </Select>
-                            </FormControl>
+                            <Autocomplete
+                                options={props.countries}
+                                getOptionLabel={(option) => option.name}
+                                id="countryId"
+                                name="countryId"
+                                fullWidth={true}
+                                value={countryId}
+                                variant="standard"
+                                onChange={(event, newValue) => {
+                                    setFieldValue({name: "countryId", value: newValue.id});
+                                }}
+                                autoComplete
+                                renderInput={(params) => (
+                                    <TextField 
+                                        {...params} 
+                                        label={props.countryLabel} 
+                                        variant="standard"
+                                        margin="normal"/>
+                                )} />
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage} variant="standard">

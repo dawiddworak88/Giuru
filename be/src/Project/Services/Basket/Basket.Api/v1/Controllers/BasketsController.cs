@@ -126,12 +126,12 @@ namespace Basket.Api.v1.Controllers
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
-        /// <param name="id">The user id</param>
+        /// <param name="id">The basket id</param>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(BasketResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(Guid id)
+        public async Task<IActionResult> Get(Guid? id)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetBasketByIdServiceModel
@@ -147,7 +147,7 @@ namespace Basket.Api.v1.Controllers
             if (validationResult.IsValid)
             {
                 var basket = await this.basketService.GetBasketById(serviceModel);
-                if (basket != null)
+                if (basket is not null)
                 {
                     var response = new BasketResponseModel
                     {

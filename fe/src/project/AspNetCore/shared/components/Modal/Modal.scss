@@ -17,4 +17,10 @@
     &__ean {
         font-size: 0.75rem;
     }
+
+    @media only screen and (max-width: $tablet) {
+        .quantity-input {
+            max-width: 100%;
+        }
+    }
 }

@@ -852,7 +852,7 @@ spec:
         - name: GIURU_CONTENT_API_URL
           value: {{ .Values.contentUrl }}
         - name: GIURU_IDENTITY_API_URL
-          value: {{ .Values.identityUrl }}
+          value: {{ .Values.identityTokenUrl }}
         ports:
         - containerPort: 1337
 ---
@@ -961,6 +961,8 @@ spec:
           value: {{ .Values.organisationId }}
         - name: ServerSideRenderingEndpoint
           value: {{ .Values.serverSideRenderingEndpoint }}
+        - name: AnalyticsUrl
+          value: {{ .Values.analyticsUrl }}
         - name: CatalogUrl
           value: {{ .Values.catalogUrl }}
         - name: MediaUrl
@@ -1074,7 +1076,7 @@ spec:
         - name: DownloadCenterUrl
           value: {{ .Values.downloadCenterUrl }}
         - name: ContentUrl
-          value: {{ .Values.contentUrl }}
+          value: {{ .Values.contentAdminUrl }}
         - name: ClientId
           value: {{ .Values.sellerWeb.clientId }}
         - name: ClientSecret
@@ -1096,6 +1098,6 @@ spec:
         - name: CdnUrl
           value: {{ .Values.cdnUrl }}
         - name: GlobalUrl
-          value: {{ .Values.globalApi }}
+          value: {{ .Values.globalUrl }}
         ports:
         - containerPort: 80

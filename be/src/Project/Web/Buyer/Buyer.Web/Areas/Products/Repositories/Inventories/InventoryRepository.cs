@@ -15,13 +15,13 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
 {
     public class InventoryRepository : IInventoryRepository
     {
-        private readonly IApiClientService apiClientService;
-        private readonly IOptions<AppSettings> settings;
+        private readonly IApiClientService _apiClientService;
+        private readonly IOptions<AppSettings> _settings;
 
         public InventoryRepository(IApiClientService apiClientService, IOptions<AppSettings> settings)
         {
-            this.apiClientService = apiClientService;
-            this.settings = settings;
+            _apiClientService = apiClientService;
+            _settings = settings;
         }
 
         public async Task<PagedResults<IEnumerable<InventorySum>>> GetAvailbleProductsInventory(
@@ -41,10 +41,10 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
                 Data = requestModel,
                 Language = language,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Inventory.AvailableProductsApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Inventory.AvailableProductsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, PagedResults<IEnumerable<InventorySumResponseModel>>> (apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, PagedResults<IEnumerable<InventorySumResponseModel>>> (apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
