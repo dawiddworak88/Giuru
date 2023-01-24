@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.Formatters;
+﻿using Foundation.GenericRepository.Paginations;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,79 +23,124 @@ namespace Foundation.Extensions.Formatters
             SupportedEncodings.Add(Encoding.Unicode);
         }
 
-        public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
+        public override Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
         {
-            var response = context.HttpContext.Response;
+            StringBuilder csv = new StringBuilder();
 
-            //var buffer = new StringBuilder();
+            var type = context.Object.GetType();
 
-            using (var writer = context.WriterFactory(response.Body, selectedEncoding))
+            if (type.GetGenericTypeDefinition() == typeof(PagedResults<>))
             {
-                await writer.WriteAsync("Example-1");
-                /*await writer.WriteAsync("Example");
+                var dataObjects = type.GetProperty("Data").GetValue(context.Object);
 
-                await writer.FlushAsync();*/
-          /*      Type type = context.Object.GetType();
-                Type itemType = type.GetGenericArguments()[0];
+                var dataObjectsList = (IEnumerable<object>)dataObjects;
 
-                if (type.GetGenericArguments().Length > 0)
-                {
-                    itemType = type.GetGenericArguments()[0];
-                }
-                else
-                {
-                    itemType = type.GetElementType();
-                }*/
+                csv.AppendLine(
+                        string.Join(",", dataObjectsList.FirstOrDefault().GetType().GetProperties().Select(x => x.Name))
+                    );
 
-               /* foreach (var obj in (IEnumerable<object>)context.Object)
+                foreach (var obj in (IEnumerable<object>)dataObjects)
                 {
-                    Console.WriteLine(obj.ToString());*/
-                    /*var vals = obj.GetType().GetProperties().Select(pi => new
+                    var properties = obj.GetType().GetProperties().Select(
+                                pi => new
+                                {
+                                    Name = pi.Name,
+                                    Value = pi.GetValue(obj, null)
+                                }
+                            );
+
+                    var values = new List<string>();
+
+                    foreach (var property in properties)
                     {
-                        Value = pi.GetValue(obj, null)
-                    });
-
-                    string valueLine = string.Empty;
-
-                    foreach (var val in vals)
-                    {
-                        if (val.Value is not null)
+                        if (property.Value is not null)
                         {
-                            var _val = val.Value.ToString();
-                             
-                            if (_val.Contains(","))
-                                _val = string.Concat("\"", _val, "\"");
+                            var value = property.Value.ToString();
 
-                            if (_val.Contains("\r"))
-                                _val = _val.Replace("\r", " ");
-                            if (_val.Contains("\n"))
-                                _val = _val.Replace("\n", " ");
+                            if (property.Value.GetType() != typeof(string))
+                            {
+                                value = JsonConvert.SerializeObject(property.Value);
+                            }
 
-                            valueLine = string.Concat(valueLine, _val, ";");
+                            if (value.Contains(","))
+                            {
+                                value = string.Concat("\"", value, "\"");
+                            }
+
+                            value = value.Replace("\r", " ", StringComparison.InvariantCultureIgnoreCase);
+                            value = value.Replace("\n", " ", StringComparison.InvariantCultureIgnoreCase);
+
+                            values.Add(value);
                         }
                         else
                         {
-                            valueLine = string.Concat(valueLine, string.Empty, ";");
+                            values.Add(string.Empty);
                         }
                     }
 
-                    await writer.WriteLineAsync(valueLine.TrimEnd(";".ToCharArray()));*/
-                //}
-
-                await writer.FlushAsync();
-                writer.Close();
-
+                    csv.AppendLine(string.Join(",", values));
+                }
             }
+            else
+            {
+                csv.AppendLine(
+                        string.Join(",", type.GetProperties().Select(x => x.Name))
+                    );
+
+                foreach (var obj in (IEnumerable<object>)context.Object)
+                {
+                    var properties = obj.GetType().GetProperties().Select(
+                                pi => new
+                                {
+                                    Name = pi.Name,
+                                    Value = pi.GetValue(obj, null)
+                                }
+                            );
+
+                    var values = new List<string>();
+
+                    foreach (var property in properties)
+                    {
+                        if (property.Value is not null)
+                        {
+                            var value = property.Value.ToString();
+
+                            if (property.Value.GetType() != typeof(string))
+                            {
+                                value = JsonConvert.SerializeObject(property.Value);
+                            }
+
+                            if (value.Contains(","))
+                            {
+                                value = string.Concat("\"", value, "\"");
+                            }
+
+                            value = value.Replace("\r", " ", StringComparison.InvariantCultureIgnoreCase);
+                            value = value.Replace("\n", " ", StringComparison.InvariantCultureIgnoreCase);
+
+                            values.Add(value);
+                        }
+                        else
+                        {
+                            values.Add(string.Empty);
+                        }
+                    }
+
+                    csv.AppendLine(string.Join(",", values));
+                }
+            }
+           
+            return context.HttpContext.Response.WriteAsync(csv.ToString(), selectedEncoding);
         }
 
-        /*protected override bool CanWriteType(Type type)
+        protected override bool CanWriteType(Type type)
         {
-            if (typeof(IEnumerable).IsAssignableFrom(type))
+            if (type.IsGenericType)
             {
-                return base.CanWriteType(type);
+                return true;
             }
 
             return false;
-        }*/
+        }
     }
 }
