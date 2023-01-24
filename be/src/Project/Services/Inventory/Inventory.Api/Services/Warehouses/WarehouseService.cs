@@ -18,15 +18,15 @@ namespace Inventory.Api.Services.Warehouses
 {
     public class WarehouseService : IWarehouseService
     {
-        private readonly InventoryContext context;
-        private readonly IStringLocalizer warehouseLocalizer;
+        private readonly InventoryContext _context;
+        private readonly IStringLocalizer _warehouseLocalizer;
 
         public WarehouseService(
             InventoryContext context,
             IStringLocalizer<InventoryResources> warehouseLocalizer)
         {
-            this.context = context;
-            this.warehouseLocalizer = warehouseLocalizer;
+            _context = context;
+            _warehouseLocalizer = warehouseLocalizer;
         }
 
         public async Task<WarehouseServiceModel> CreateAsync(CreateWarehouseServiceModel serviceModel)
@@ -38,16 +38,16 @@ namespace Inventory.Api.Services.Warehouses
                 SellerId = serviceModel.OrganisationId.Value
             };
 
-            this.context.Warehouses.Add(warehouse.FillCommonProperties());
+            _context.Warehouses.Add(warehouse.FillCommonProperties());
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return await this.GetAsync(new GetWarehouseServiceModel { Id = warehouse.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
         public async Task<PagedResults<IEnumerable<WarehouseServiceModel>>> GetAsync(GetWarehousesServiceModel model)
         {
-            var warehouses = from c in this.context.Warehouses
+            var warehouses = from c in _context.Warehouses
                              where c.SellerId == model.OrganisationId.Value && c.IsActive
                              select new WarehouseServiceModel
                              {
@@ -78,7 +78,7 @@ namespace Inventory.Api.Services.Warehouses
 
         public async Task<WarehouseServiceModel> GetAsync(GetWarehouseServiceModel model)
         {
-            var warehouse = from c in this.context.Warehouses
+            var warehouse = from c in _context.Warehouses
                             where c.SellerId == model.OrganisationId.Value && c.Id == model.Id && c.IsActive
                             select new WarehouseServiceModel
                           {
@@ -94,7 +94,7 @@ namespace Inventory.Api.Services.Warehouses
 
         public async Task<WarehouseServiceModel> GetAsync(GetWarehouseByNameServiceModel model)
         {
-            var warehouse = from c in this.context.Warehouses
+            var warehouse = from c in _context.Warehouses
                             where c.Name == model.Name && c.IsActive
                             select new WarehouseServiceModel
                             {
@@ -110,7 +110,7 @@ namespace Inventory.Api.Services.Warehouses
 
         public async Task<PagedResults<IEnumerable<WarehouseServiceModel>>> GetByIdsAsync(GetWarehousesByIdsServiceModel model)
         {
-            var warehouses = from c in this.context.Warehouses
+            var warehouses = from c in _context.Warehouses
                           where model.Ids.Contains(c.Id) && c.SellerId == model.OrganisationId.Value && c.IsActive
                           select new WarehouseServiceModel
                           {
@@ -133,34 +133,34 @@ namespace Inventory.Api.Services.Warehouses
 
         public async Task DeleteAsync(DeleteWarehouseServiceModel model)
         {
-            var warehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
-            if (warehouse == null)
+            var warehouse = await _context.Warehouses.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
+            if (warehouse is null)
             {
-                throw new CustomException(this.warehouseLocalizer.GetString("WarehouseNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_warehouseLocalizer.GetString("WarehouseNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            if (await this.context.Inventory.AnyAsync(x => x.WarehouseId == warehouse.Id && x.IsActive))
+            if (await _context.Inventory.AnyAsync(x => x.WarehouseId == warehouse.Id && x.IsActive))
             {
-                throw new CustomException(this.warehouseLocalizer.GetString("WarehouseDeleteInventoryConflict"), (int)HttpStatusCode.Conflict);
+                throw new CustomException(_warehouseLocalizer.GetString("WarehouseDeleteInventoryConflict"), (int)HttpStatusCode.Conflict);
             }
 
             warehouse.IsActive = false;
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<WarehouseServiceModel> UpdateAsync(UpdateWarehouseServiceModel serviceModel)
         {
-            var warehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
-            if (warehouse == null)
+            var warehouse = await _context.Warehouses.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
+            if (warehouse is null)
             {
-                throw new CustomException(this.warehouseLocalizer.GetString("WarehouseNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_warehouseLocalizer.GetString("WarehouseNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             warehouse.Name = serviceModel.Name;
             warehouse.Location = serviceModel.Location;
             warehouse.LastModifiedDate = DateTime.UtcNow;
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return await this.GetAsync(new GetWarehouseServiceModel { Id = warehouse.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }

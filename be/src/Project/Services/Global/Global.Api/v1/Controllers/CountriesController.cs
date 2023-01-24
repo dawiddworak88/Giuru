@@ -28,12 +28,12 @@ namespace Global.Api.v1.Controllers
     [ApiController]
     public class CountriesController : BaseApiController
     {
-        private readonly ICountriesService countriesService;
+        private readonly ICountriesService _countriesService;
 
         public CountriesController(
             ICountriesService countriesService)
         {
-            this.countriesService = countriesService;
+            _countriesService = countriesService;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Global.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetCountriesServiceModel
             {
@@ -59,11 +59,11 @@ namespace Global.Api.v1.Controllers
                 ItemsPerPage = itemsPerPage,
                 OrderBy = orderBy,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var countries = await this.countriesService.GetAsync(serviceModel);
+            var countries = _countriesService.Get(serviceModel);
 
             if (countries is not null)
             {
@@ -112,7 +112,7 @@ namespace Global.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    await this.countriesService.UpdateAsync(serviceModel);
+                    await _countriesService.UpdateAsync(serviceModel);
 
                     return StatusCode((int)HttpStatusCode.OK);
                 }
@@ -134,7 +134,7 @@ namespace Global.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    await this.countriesService.CreateAsync(serviceModel);
+                    await _countriesService.CreateAsync(serviceModel);
 
                     return StatusCode((int)HttpStatusCode.OK);
                 }
@@ -155,13 +155,13 @@ namespace Global.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new DeleteCountryServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -170,7 +170,7 @@ namespace Global.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.countriesService.DeleteAsync(serviceModel);
+                await _countriesService.DeleteAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
@@ -190,13 +190,13 @@ namespace Global.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetCountryServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -205,7 +205,7 @@ namespace Global.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var country = await this.countriesService.GetAsync(serviceModel);
+                var country = await _countriesService.GetAsync(serviceModel);
 
                 if (country is not null)
                 {

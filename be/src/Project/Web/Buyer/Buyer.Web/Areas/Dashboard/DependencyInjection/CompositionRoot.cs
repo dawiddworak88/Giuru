@@ -1,6 +1,8 @@
 ﻿using Buyer.Web.Areas.Dashboard.ModelBuilders;
 using Buyer.Web.Areas.Dashboard.Repositories;
 using Buyer.Web.Areas.Dashboard.ViewModels;
+using Buyer.Web.Shared.ModelBuilders.Analytics;
+using Buyer.Web.Shared.ViewModels.Analytics;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.DependencyInjection;

@@ -4,6 +4,7 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using News.Api.Infrastructure;
 using News.Api.Infrastructure.Entities.News;
@@ -91,7 +92,12 @@ namespace News.Api.Services.News
 
         public PagedResults<IEnumerable<NewsItemServiceModel>> Get(GetNewsItemsServiceModel model)
         {
-            var news = _context.NewsItems.Where(x => x.IsActive);
+            var news = _context.NewsItems.Where(x => x.IsActive)
+                .Include(x => x.Translations)
+                .Include(x => x.Category)
+                .Include(x => x.Category.Translations)
+                .Include(x => x.Files)
+                .AsSingleQuery(); ;
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -113,28 +119,22 @@ namespace News.Api.Services.News
                 pagedResults = news.PagedIndex(new Pagination(news.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            var translations = _context.NewsItemTranslations.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.NewsItemId) && x.IsActive && x.IsActive).ToList();
-
-            var categoryTranslations = _context.CategoryTranslations.Where(x => pagedResults.Data.Select(y => y.CategoryId).Contains(x.CategoryId)).ToList();
-
-            var files = _context.NewsItemFiles.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.NewsItemId) && x.IsActive).ToList();
-
             return new PagedResults<IEnumerable<NewsItemServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
                 Data = pagedResults.Data.OrEmptyIfNull().Select(x => new NewsItemServiceModel
                 {
                     Id = x.Id,
                     CategoryId = x.CategoryId,
-                    Title = translations.FirstOrDefault(t => t.NewsItemId == x.Id && t.Language == model.Language)?.Title ?? translations.FirstOrDefault(t => t.NewsItemId == x.Id)?.Title,
-                    Content = translations.FirstOrDefault(t => t.NewsItemId == x.Id && t.Language == model.Language)?.Content ?? translations.FirstOrDefault(t => t.NewsItemId == x.Id)?.Content,
-                    Description = translations.FirstOrDefault(t => t.NewsItemId == x.Id && t.Language == model.Language)?.Description ?? translations.FirstOrDefault(t => t.NewsItemId == x.Id)?.Description,
+                    Title = x.Translations.FirstOrDefault(t => t.NewsItemId == x.Id && t.Language == model.Language)?.Title ?? x.Translations.FirstOrDefault(t => t.NewsItemId == x.Id)?.Title,
+                    Content = x.Translations.FirstOrDefault(t => t.NewsItemId == x.Id && t.Language == model.Language)?.Content ?? x.Translations.FirstOrDefault(t => t.NewsItemId == x.Id)?.Content,
+                    Description = x.Translations.FirstOrDefault(t => t.NewsItemId == x.Id && t.Language == model.Language)?.Description ?? x.Translations.FirstOrDefault(t => t.NewsItemId == x.Id)?.Description,
                     Language = model.Language,
                     OrganisationId = x.OrganisationId,
-                    CategoryName = categoryTranslations.FirstOrDefault(t => t.CategoryId == x.CategoryId && t.Language == model.Language)?.Name ?? categoryTranslations.FirstOrDefault(t => t.CategoryId == x.CategoryId)?.Name,
+                    CategoryName = x.Category.Translations.FirstOrDefault(t => t.CategoryId == x.CategoryId && t.Language == model.Language)?.Name ?? x.Category.Translations.FirstOrDefault(t => t.CategoryId == x.CategoryId)?.Name,
                     PreviewImageId = x.PreviewImageId,
                     ThumbnailImageId = x.ThumbnailImageId,
                     IsPublished = x.IsPublished,
-                    Files = files.Select(x => x.Id),
+                    Files = x.Files.Select(x => x.Id),
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
                 })

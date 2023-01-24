@@ -1,5 +1,5 @@
 ﻿using Buyer.Web.Areas.Dashboard.Repositories;
-using Buyer.Web.Areas.Dashboard.ViewModels;
+using Buyer.Web.Shared.ViewModels.Analytics;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
@@ -9,29 +9,29 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Dashboard.ModelBuilders
+namespace Buyer.Web.Shared.ModelBuilders.Analytics
 {
     public class SalesAnalyticsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, SalesAnalyticsViewModel>
     {
-        private readonly IStringLocalizer<DashboardResources> dashboardResources;
-        private readonly ISalesAnalyticsRepository salesAnalyticsRepository;
+        private readonly IStringLocalizer<DashboardResources> _dashboardResources;
+        private readonly ISalesAnalyticsRepository _salesAnalyticsRepository;
 
         public SalesAnalyticsModelBuilder(
             IStringLocalizer<DashboardResources> dashboardResources,
             ISalesAnalyticsRepository salesAnalyticsRepository)
         {
-            this.dashboardResources = dashboardResources;
-            this.salesAnalyticsRepository = salesAnalyticsRepository;
+            _dashboardResources = dashboardResources;
+            _salesAnalyticsRepository = salesAnalyticsRepository;
         }
 
         public async Task<SalesAnalyticsViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new SalesAnalyticsViewModel
             {
-                Title = this.dashboardResources.GetString("NumberOfOrders")
+                Title = _dashboardResources.GetString("NumberOfOrders")
             };
 
-            var annualSales = await this.salesAnalyticsRepository.GetAnnualSales(componentModel.Token, componentModel.Language);
+            var annualSales = await _salesAnalyticsRepository.GetAnnualSales(componentModel.Token, componentModel.Language);
 
             if (annualSales is not null)
             {

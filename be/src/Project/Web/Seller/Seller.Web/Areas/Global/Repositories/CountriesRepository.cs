@@ -108,12 +108,13 @@ namespace Seller.Web.Areas.Global.Repositories
             return default;
         }
 
-        public async Task<IEnumerable<Country>> GetAsync(string token, string language)
+        public async Task<IEnumerable<Country>> GetAsync(string token, string language, string orderBy)
         {
             var requestModel = new PagedRequestModelBase
             {
                 PageIndex = PaginationConstants.DefaultPageIndex,
-                ItemsPerPage = PaginationConstants.DefaultPageSize
+                ItemsPerPage = PaginationConstants.DefaultPageSize,
+                OrderBy = orderBy
             };
 
             var apiRequest = new ApiRequest<PagedRequestModelBase>

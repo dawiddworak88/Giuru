@@ -8,7 +8,7 @@ namespace Global.Api.Services.Countries
 {
     public interface ICountriesService
     {
-        Task<PagedResults<IEnumerable<CountryServiceModel>>> GetAsync(GetCountriesServiceModel model);
+        PagedResults<IEnumerable<CountryServiceModel>> Get(GetCountriesServiceModel model);
         Task CreateAsync(CreateCountryServiceModel model);
         Task UpdateAsync(UpdateCountryServiceModel model);
         Task<CountryServiceModel> GetAsync(GetCountryServiceModel model);

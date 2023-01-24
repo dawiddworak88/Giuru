@@ -10,17 +10,17 @@ namespace Media.Api.Repositories
 {
     public class MediaRepository : IMediaRepository
     {
-        private readonly IOptions<AppSettings> configuration;
+        private readonly IOptions<AppSettings> _configuration;
 
         public MediaRepository(
             IOptions<AppSettings> configuration)
         {
-            this.configuration = configuration;
+            _configuration = configuration;
         }
 
         public byte[] GetFile(string folder, string filename)
         {
-            var blobServiceClient = new BlobServiceClient(this.configuration.Value.StorageConnectionString);
+            var blobServiceClient = new BlobServiceClient(_configuration.Value.StorageConnectionString);
 
             var containerClient = blobServiceClient.GetBlobContainerClient(folder);
 
@@ -39,7 +39,7 @@ namespace Media.Api.Repositories
 
         public async Task CreateFileAsync(Guid mediaItemVersionId, string folderName, IFormFile file, string filename)
         {
-            var container = new BlobContainerClient(this.configuration.Value.StorageConnectionString, folderName);
+            var container = new BlobContainerClient(_configuration.Value.StorageConnectionString, folderName);
 
             await container.CreateIfNotExistsAsync();
 

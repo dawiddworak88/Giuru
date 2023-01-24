@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Buyer.Web.Areas.Dashboard.ViewModels
+namespace Buyer.Web.Shared.ViewModels.Analytics
 {
     public class SalesAnalyticsChartDatasetsViewModel
     {

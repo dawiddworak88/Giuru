@@ -17,7 +17,7 @@ namespace Analytics.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.11")
+                .HasAnnotation("ProductVersion", "6.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -144,7 +144,6 @@ namespace Analytics.Api.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Ean")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -236,7 +235,7 @@ namespace Analytics.Api.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("LocationDimensionId")
+                    b.Property<Guid?>("LocationDimensionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ProductDimensionId")

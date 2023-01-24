@@ -17,7 +17,7 @@ namespace Ordering.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "6.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -317,6 +317,10 @@ namespace Ordering.Api.Infrastructure.Migrations
                         .HasColumnType("rowversion");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IsActive", "OrderItemId");
+
+                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("IsActive", "OrderItemId"), new[] { "CreatedDate", "LastModifiedDate", "OrderItemStateId", "OrderItemStatusId", "RowVersion" });
 
                     b.ToTable("OrderItemStatusChanges");
                 });
