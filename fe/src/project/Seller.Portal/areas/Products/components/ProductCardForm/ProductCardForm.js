@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -7,9 +7,12 @@ import { Edit, Delete } from "@mui/icons-material"
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
+import ProductCardModal from "../ProductCardModal/ProductCardModal";
 
 const ProductCardForm = (props) => {
     const [state, dispatch] = useContext(Context);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [productAttribute, setProductAttribute] = useState(null);
     const stateSchema = {
         id: { value: props.id ? props.id : null },
         schema: { value: props.schema ? JSON.parse(props.schema) : null },
@@ -92,7 +95,7 @@ const ProductCardForm = (props) => {
             <div className="card p-4 mb-2 is-flex is-justify-content-space-between is-align-items-center">
                 <div className="card-title">{props.title}</div>
                 <div className="card-content is-flex">
-                    <div className="card-icon"><Edit/></div>
+                    <div className="card-icon" onClick={() => handleProductAttribute(props)}><Edit/></div>
                     <div className="card-icon"><Delete/></div>
                 </div>
             </div>
@@ -189,6 +192,20 @@ const ProductCardForm = (props) => {
         updateSchema(newElements, schema)
     }
 
+    const handleProductAttribute = (attribute) => {
+        setProductAttribute(attribute);
+        setIsModalOpen(true);
+    }
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setProductAttribute(null)
+    }
+
+    const handleDeleteAttribite = () => {
+
+    }
+
     const {
         values, disable, setFieldValue
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
@@ -240,6 +257,24 @@ const ProductCardForm = (props) => {
                 </div>
             </div>
             {state.isLoading && <CircularProgress className="progressBar" />}
+            <ProductCardModal 
+                isOpen={isModalOpen}
+                attribute={productAttribute}
+                handleClose={handleCloseModal}
+                labels={{
+                    title: "Editing a product attribute",
+                    saveText: "Save",
+                    cancelLabel: "Cancel",
+                    inputTypeLabel: "Input type",
+                    inputTypes: [
+                        { name: "Array" },
+                        { name: "Boolean" },
+                        { name: "Checkbox" },
+                        { name: "Number" },
+                        { name: "String" }
+                    ]
+                }}
+            />
         </section>
     )
 }
