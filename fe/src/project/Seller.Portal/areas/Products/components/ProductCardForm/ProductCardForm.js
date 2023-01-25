@@ -206,6 +206,48 @@ const ProductCardForm = (props) => {
 
     }
 
+    const getIdFromElements = (elements) => {
+        const names = elements.map((element) => element.name);
+        const defaultNameLength = props.defaultInputName.length;
+      
+        return names.length > 0
+          ? Math.max(
+              ...names.map((name) => {
+                if (name.startsWith(props.defaultInputName)) {
+                  const index = name.substring(defaultNameLength, name.length);
+                  const value = Number.parseInt(index);
+      
+                  if (!isNaN(value)) {
+                    return value;
+                  }
+                }
+      
+                return 0;
+              }),
+            ) + 1
+          : 1;
+      }
+
+    const addCard = (schema) => {
+
+        const newElements = generateElementsFromSchema(schema);
+        const i = getIdFromElements(newElements);
+
+        const newElement = {
+            name: `${props.defaultInputName}${i}`,
+            required: false,
+            dataOptions: {
+                title: `${props.defaultInputName}${i}`,
+                type: "string",
+                default: ""
+            }
+        }
+
+        newElements.splice(0, 0, newElement)
+
+        updateSchema(newElements, schema)
+    }
+
     const {
         values, disable, setFieldValue
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
@@ -218,6 +260,7 @@ const ProductCardForm = (props) => {
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
+                    <Button type="button" color="primary" variant="contained" className="mb-2" onClick={() => addCard(schema)}>{props.newText}</Button>
                     <form className="is-modern-form">
                         <DragDropContext onDragEnd={(result) => dragEnd(result, schema)}>
                             <Droppable droppableId="droppable">
@@ -285,7 +328,9 @@ ProductCardForm.propTypes = {
     saveText: PropTypes.string.isRequired,
     saveUrl: PropTypes.string.isRequired,
     navigateToProductCardsLabel: PropTypes.string.isRequired,
-    productCardsUrl: PropTypes.string.isRequired
+    productCardsUrl: PropTypes.string.isRequired,
+    defaultInputName: PropTypes.string.isRequired,
+    newText: PropTypes.string.isRequired
 }
 
 export default ProductCardForm;
