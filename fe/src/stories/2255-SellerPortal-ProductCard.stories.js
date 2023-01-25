@@ -11,6 +11,8 @@ const componentProps = {
   generalErrorMessage: "An Error Occurred",
   saveUrl: "",
   saveText: "Save",
+  defaultInputName: "NewElement",
+  newText: "Add new card",
   schema: `{
     "definitions": {
       "a04b3368-fa25-4b4a-e4eb-08d907680a85": {
