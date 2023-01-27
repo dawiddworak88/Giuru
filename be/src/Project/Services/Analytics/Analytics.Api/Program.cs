@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
 using Foundation.Telemetry.DependencyInjection;
+using Foundation.ApiExtensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,6 +74,8 @@ builder.Services.AddApiVersioning();
 
 builder.Services.AddLocalization();
 
+builder.Services.RegisterApiExtensionsDependencies();
+
 builder.Services.RegisterApiAccountDependencies(builder.Configuration);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
@@ -82,6 +85,8 @@ builder.Services.ConfigureSettings(builder.Configuration);
 builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 
 builder.Services.RegisterAnalyticsApiDependencies();
+
+builder.Services.RegisterEventBus(builder.Configuration);
 
 builder.Services.RegisterOpenTelemetry(
     builder.Configuration,
@@ -114,7 +119,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Analytics API");
     c.RoutePrefix = string.Empty;
 });
- 
+
 app.UseRouting();
 
 app.UseAuthentication();
@@ -140,5 +145,7 @@ app.UseEndpoints(endpoints =>
         Predicate = r => r.Name.Contains("self")
     });
 });
+
+app.ConfigureEventBus();
 
 app.Run();

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Analytics.Api.ServicesModels.SalesAnalytics
+namespace Ordering.Api.IntegrationEventsModels
 {
-    public class CreateSalesAnalyticsProductServiceModel
+    public class OrderItemStartedEventModel
     {
         public Guid? Id { get; set; }
         public double Quantity { get; set; }

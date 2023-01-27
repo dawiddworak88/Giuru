@@ -12,13 +12,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Nest;
 using Newtonsoft.Json;
 using Ordering.Api.Configurations;
 using Ordering.Api.Definitions;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.Infrastructure.Orders.Entities;
 using Ordering.Api.IntegrationEvents;
+using Ordering.Api.IntegrationEventsModels;
 using Ordering.Api.ServicesModels;
 using System;
 using System.Collections.Generic;
@@ -179,7 +179,16 @@ namespace Ordering.Api.Services
 
             var message = new OrderStartedIntegrationEvent
             { 
-                BasketId =  serviceModel.BasketId
+                BasketId = serviceModel.BasketId,
+                ClientId = serviceModel.ClientId,
+                OrderItems = serviceModel.Items.OrEmptyIfNull().Select(x => new OrderItemStartedEventModel
+                {
+                    Id = x.ProductId,
+                    Quantity = x.Quantity,
+                    StockQuantity = x.StockQuantity,
+                    OutletQuantity = x.OutletQuantity
+                }),
+                CreatedDate = order.CreatedDate
             };
 
             using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
