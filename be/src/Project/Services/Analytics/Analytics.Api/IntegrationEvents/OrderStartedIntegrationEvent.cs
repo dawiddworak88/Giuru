@@ -1,13 +1,12 @@
 ﻿using Foundation.EventBus.Events;
-using Ordering.Api.IntegrationEventsModels;
-using System;
 using System.Collections.Generic;
+using System;
+using Analytics.Api.IntegrationEventsModels;
 
-namespace Ordering.Api.IntegrationEvents
+namespace Analytics.Api.IntegrationEvents
 {
     public class OrderStartedIntegrationEvent : IntegrationEvent
     {
-        public Guid? BasketId { get; set; }
         public Guid? ClientId { get; set; }
         public IEnumerable<OrderItemStartedEventModel> OrderItems { get; set; }
         public DateTime CreatedDate { get; set; }

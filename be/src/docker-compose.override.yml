@@ -292,6 +292,16 @@ services:
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - GiuruApiAppSecret=98daf0da-89ac-48db-8b9f-edc6383153ed
+      - GiuruApiEmail=seller@user.com
+      - GiuruApiOrganisationId=09affcc9-1665-45d6-919f-3d2026106ba1
+      - GiuruTokenUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105/api/v1/token
+      - EventBusConnection=amqp://rabbitmq
+      - EventBusRetryCount=5
+      - EventBusRequestedHeartbeat=60
+      - ClientUrl=http://client-api
+      - CatalogUrl=http://catalog-api
+      - GlobalUrl=http://global-api
     ports:
       - "5137:80"
 

@@ -1,10 +1,13 @@
-﻿using Foundation.Extensions.Models;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Analytics.Api.ServicesModels.SalesAnalytics
 {
-    public class CreateSalesAnalyticsServiceModel : BaseServiceModel
+    public class CreateSalesAnalyticsServiceModel
     {
-        public IEnumerable<CreateSalesAnalyticsItemServiceModel> SalesAnalyticsItems { get; set; }
+        public Guid? ClientId { get; set; }
+        public string Token { get; set; }
+        public IEnumerable<CreateSalesAnalyticsProductServiceModel> Products { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }
