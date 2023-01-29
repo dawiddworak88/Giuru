@@ -165,17 +165,17 @@ namespace Analytics.Api.Services.SalesAnalytics
         public IEnumerable<AnnualSalesServiceModel> GetAnnualSalesServiceModel(GetAnnualSalesServiceModel model)
         {
             var sales = from s in _context.SalesFacts
-                          join t in _context.TimeDimensions on s.TimeDimensionId equals t.Id
-                          join c in _context.ClientDimensions on s.ClientDimensionId equals c.Id
-                          where s.IsActive && t.IsActive
-                          group s by new { t.Year, t.Month, c.OrganisationId } into sa
-                          select new
-                          {
-                              Year = sa.Key.Year,
-                              Month = sa.Key.Month,
-                              Quantity = sa.Sum(x => x.Quantity),
-                              OrganisationId = sa.Key.OrganisationId
-                          };
+                        join t in _context.TimeDimensions on s.TimeDimensionId equals t.Id
+                        join c in _context.ClientDimensions on s.ClientDimensionId equals c.Id
+                        where s.IsActive && t.IsActive
+                        group s by new { t.Year, t.Month, c.OrganisationId } into sa
+                        select new
+                        {
+                            Year = sa.Key.Year,
+                            Month = sa.Key.Month,
+                            Quantity = sa.Sum(x => x.Quantity),
+                            OrganisationId = sa.Key.OrganisationId
+                        };
 
             if (model.IsSeller is false)
             {
@@ -215,19 +215,22 @@ namespace Analytics.Api.Services.SalesAnalytics
         public IEnumerable<TopSalesProductsAnalyticsServiceModel> GetTopSalesProductsAnalyticsAsync(GetTopSalesProductsAnalyticsServiceModel model)
         {
             var products = from s in _context.SalesFacts
-                              join p in _context.ProductDimensions on s.ProductDimensionId equals p.Id
-                              where s.IsActive && p.IsActive
-                              group s by new { p.ProductId } into gp
-                              where gp.Sum(x => x.Quantity) > 0
-                              select new
-                              {
-                                  ProductId = gp.Key.ProductId,
-                                  ProductSku = _context.ProductDimensions.FirstOrDefault(x => x.Id == gp.First().ProductDimensionId).Sku,
-                                  ProductName = _context.ProductTranslationDimensions.FirstOrDefault(x => x.ProductDimensionId == gp.First().ProductDimensionId).Name,
-                                  Ean = _context.ProductDimensions.FirstOrDefault(x => x.Id == gp.First().ProductDimensionId).Ean,
-                                  OrganisationId = _context.ClientDimensions.FirstOrDefault(x => x.Id == gp.FirstOrDefault().ClientDimensionId && x.IsActive).OrganisationId,
-                                  Quantity = gp.Sum(y => y.Quantity)
-                              };
+                           join p in _context.ProductDimensions on s.ProductDimensionId equals p.Id
+                           where s.IsActive && p.IsActive
+                           group s by new { p.ProductId } into gp
+                           let productDimension = _context.ProductDimensions.FirstOrDefault(x => x.Id == gp.First().ProductDimensionId)
+                           let productTranslation = _context.ProductTranslationDimensions.FirstOrDefault(x => x.ProductDimensionId == gp.First().ProductDimensionId)
+                           let clientDimension = _context.ClientDimensions.FirstOrDefault(x => x.Id == gp.FirstOrDefault().ClientDimensionId && x.IsActive)
+                           where gp.Sum(x => x.Quantity) > 0
+                           select new
+                           {
+                               ProductId = gp.Key.ProductId,
+                               ProductSku = productDimension.Sku,
+                               ProductName = productTranslation.Name,
+                               Ean = productDimension.Ean,
+                               OrganisationId = clientDimension.OrganisationId,
+                               Quantity = gp.Sum(y => y.Quantity)
+                           };
 
             products = products.ApplySort(model.OrderBy);
 
