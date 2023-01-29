@@ -7,6 +7,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Shared.ModelBuilders.Analytics
@@ -26,15 +27,15 @@ namespace Buyer.Web.Shared.ModelBuilders.Analytics
 
         public async Task<SalesAnalyticsViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new SalesAnalyticsViewModel
-            {
-                Title = _dashboardResources.GetString("NumberOfOrders")
-            };
-
             var annualSales = await _salesAnalyticsRepository.GetAnnualSales(componentModel.Token, componentModel.Language);
 
-            if (annualSales is not null)
+            if (annualSales is not null && annualSales.Any(x => x.Quantity > 0))
             {
+                var viewModel = new SalesAnalyticsViewModel
+                {
+                    Title = _dashboardResources.GetString("NumberOfOrders")
+                };
+
                 var chartDataset = new List<double>();
                 var chartLabels = new List<string>();
 
@@ -57,7 +58,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Analytics
                 };
             }
 
-            return viewModel;
+            return default;
         }
     }
 }

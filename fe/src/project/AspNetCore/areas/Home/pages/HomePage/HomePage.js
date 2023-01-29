@@ -26,11 +26,11 @@ function HomePage(props) {
         {props.carouselGrid && 
           <CarouselGrid {...props.carouselGrid}></CarouselGrid>
         }
-        {props.ordersAnalytics &&
-          <OrdersAnalyticsDetail {...props.ordersAnalytics } />
-        }
         {props.newsCarouselGrid &&
           <CarouselGrid {...props.newsCarouselGrid} />
+        }
+        {props.ordersAnalytics && props.ordersAnalytics.salesAnalytics &&
+          <OrdersAnalyticsDetail {...props.ordersAnalytics } />
         }
         {props.contentGrid &&
           <ContentGrid {...props.contentGrid}></ContentGrid>

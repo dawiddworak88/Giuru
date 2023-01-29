@@ -8,9 +8,7 @@ const OrdersAnalyticsDetail = (props) => {
             <div className="orders-analytics__content">
                 <h1 className="title is-3">{props.title}</h1>
                 <div className="mt-6">
-                    {props.salesAnalytics && 
-                        <SalesAnalytics {...props.salesAnalytics} />
-                    }
+                    <SalesAnalytics {...props.salesAnalytics} />
                 </div>
             </div>
         </div>

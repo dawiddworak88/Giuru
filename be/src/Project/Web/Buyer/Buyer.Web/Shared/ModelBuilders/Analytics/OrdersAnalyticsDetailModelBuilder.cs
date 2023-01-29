@@ -32,7 +32,6 @@ namespace Buyer.Web.Shared.ModelBuilders.Analytics
             var viewModel = new OrdersAnalyticsDetailViewModel
             {
                 Title = _dashboardResources.GetString("OrdersAnalysis"),
-                TopOrderedProducts = _dashboardResources.GetString("TopOrderedProducts"),
                 NameLabel = _dashboardResources.GetString("ProductName"),
                 QuantityLabel = _dashboardResources.GetString("ProductQuantity"),
                 NoResultsLabel = _globalResources.GetString("NoResultsLabel"),
