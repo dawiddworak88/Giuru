@@ -1,6 +1,6 @@
-﻿using Analytics.Api.Infrastructure;
+﻿using Analytics.Api.Configurations;
+using Analytics.Api.Infrastructure;
 using Analytics.Api.IntegrationEvents;
-using Analytics.Api.Shared.Configurations;
 using Foundation.EventBus.Abstractions;
 using Foundation.Localization.Definitions;
 using Microsoft.AspNetCore.Builder;

@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text;
-using Analytics.Api.Shared.Configurations;
+using Analytics.Api.Configurations;
 
-namespace Analytics.Api.Shared.Repositories.AccessToken
+namespace Analytics.Api.Repositories.AccessToken
 {
     public class AccessTokenRepository : IAccessTokenRepository
     {

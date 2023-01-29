@@ -1,7 +1,7 @@
 ﻿using Analytics.Api.IntegrationEvents;
+using Analytics.Api.Repositories.AccessToken;
 using Analytics.Api.Services.SalesAnalytics;
 using Analytics.Api.ServicesModels.SalesAnalytics;
-using Analytics.Api.Shared.Repositories.AccessToken;
 using Foundation.EventBus.Abstractions;
 using Foundation.Extensions.ExtensionMethods;
 using System.Collections.Generic;

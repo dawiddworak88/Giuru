@@ -1,7 +1,6 @@
 ﻿using Analytics.Api.Infrastructure;
 using Analytics.Api.Services.Products;
 using Analytics.Api.Services.SalesAnalytics;
-using Analytics.Api.Shared.Repositories.AccessToken;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +16,7 @@ using Analytics.Api.IntegrationEventHandlers;
 using Analytics.Api.Repositories.Clients;
 using Analytics.Api.Repositories.Global;
 using Analytics.Api.Repositories.Products;
+using Analytics.Api.Repositories.AccessToken;
 
 namespace Analytics.Api.DependencyInjection
 {

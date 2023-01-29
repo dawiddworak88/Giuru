@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Analytics.Api.Shared.Repositories.AccessToken
+namespace Analytics.Api.Repositories.AccessToken
 {
     public interface IAccessTokenRepository
     {

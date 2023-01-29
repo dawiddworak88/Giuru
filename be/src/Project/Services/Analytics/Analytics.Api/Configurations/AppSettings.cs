@@ -1,4 +1,4 @@
-﻿namespace Analytics.Api.Shared.Configurations
+﻿namespace Analytics.Api.Configurations
 {
     public class AppSettings
     {

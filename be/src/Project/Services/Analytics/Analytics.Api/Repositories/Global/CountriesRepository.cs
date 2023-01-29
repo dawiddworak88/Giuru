@@ -1,5 +1,5 @@
-﻿using Analytics.Api.DomainModels;
-using Analytics.Api.Shared.Configurations;
+﻿using Analytics.Api.Configurations;
+using Analytics.Api.DomainModels;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;

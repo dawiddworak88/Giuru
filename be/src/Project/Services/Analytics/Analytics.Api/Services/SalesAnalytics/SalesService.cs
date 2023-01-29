@@ -162,7 +162,7 @@ namespace Analytics.Api.Services.SalesAnalytics
             await _context.SalesFacts.AddAsync(salesFact.FillCommonProperties());
         }
 
-        public async Task<IEnumerable<AnnualSalesServiceModel>> GetAnnualSalesServiceModel(GetAnnualSalesServiceModel model)
+        public IEnumerable<AnnualSalesServiceModel> GetAnnualSalesServiceModel(GetAnnualSalesServiceModel model)
         {
             var sales = from s in _context.SalesFacts
                           join t in _context.TimeDimensions on s.TimeDimensionId equals t.Id
@@ -212,7 +212,7 @@ namespace Analytics.Api.Services.SalesAnalytics
             return annualSales;
         }
 
-        public async Task<IEnumerable<TopSalesProductsAnalyticsServiceModel>> GetTopSalesProductsAnalyticsAsync(GetTopSalesProductsAnalyticsServiceModel model)
+        public IEnumerable<TopSalesProductsAnalyticsServiceModel> GetTopSalesProductsAnalyticsAsync(GetTopSalesProductsAnalyticsServiceModel model)
         {
             var products = from s in _context.SalesFacts
                               join p in _context.ProductDimensions on s.ProductDimensionId equals p.Id

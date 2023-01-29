@@ -1,13 +1,11 @@
 ﻿using Analytics.Api.Services.SalesAnalytics;
 using Analytics.Api.ServicesModels.SalesAnalytics;
-using Analytics.Api.v1.RequestModels;
 using Analytics.Api.v1.ResponseModels;
 using Analytics.Api.Validators;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
-using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -57,7 +55,7 @@ namespace Analytics.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var annualSales = await _salesService.GetAnnualSalesServiceModel(serviceModel);
+                var annualSales = _salesService.GetAnnualSalesServiceModel(serviceModel);
 
                 if (annualSales is not null)
                 {
@@ -103,7 +101,7 @@ namespace Analytics.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var topSalesProducts = await _salesService.GetTopSalesProductsAnalyticsAsync(serviceModel);
+                var topSalesProducts = _salesService.GetTopSalesProductsAnalyticsAsync(serviceModel);
 
                 if (topSalesProducts is not null)
                 {
