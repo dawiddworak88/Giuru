@@ -26,7 +26,7 @@ function HomePage(props) {
         {props.carouselGrid && 
           <CarouselGrid {...props.carouselGrid}></CarouselGrid>
         }
-        {props.ordersAnalytics && props.ordersAnalytics.products.length > 0 &&
+        {props.ordersAnalytics &&
           <OrdersAnalyticsDetail {...props.ordersAnalytics } />
         }
         {props.newsCarouselGrid &&
