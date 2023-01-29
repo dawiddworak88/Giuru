@@ -1,12 +1,9 @@
-﻿using Buyer.Web.Areas.Dashboard.Constants;
-using Buyer.Web.Areas.Dashboard.DomainModels;
-using Buyer.Web.Areas.Dashboard.Repositories;
+﻿using Buyer.Web.Areas.Dashboard.Repositories;
 using Buyer.Web.Shared.ViewModels.Analytics;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.Localization;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Shared.ModelBuilders.Analytics
@@ -41,18 +38,6 @@ namespace Buyer.Web.Shared.ModelBuilders.Analytics
                 NoResultsLabel = _globalResources.GetString("NoResultsLabel"),
                 SalesAnalytics = await _salesAnalyticsModelBuilder.BuildModelAsync(componentModel)
             };
-
-            var salesProducts = await _salesAnalyticsRepository.GetProductsSales(componentModel.Token, componentModel.Language, DashboardConstants.SalesAnalytics.DefaultSalesSize, $"{nameof(Product.Quantity)} desc");
-
-            if (salesProducts is not null)
-            {
-                viewModel.Products = salesProducts.Select(x => new OrderAnalyticsProductViewModel 
-                { 
-                    Sku = x.ProductSku,
-                    Quantity = x.Quantity,
-                    Name = x.ProductName
-                });
-            }
 
             return viewModel;
         }

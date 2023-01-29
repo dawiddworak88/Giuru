@@ -72,53 +72,5 @@ namespace Analytics.Api.v1.Controllers
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
-
-        /// <summary>
-        /// Gets best selling products
-        /// </summary>
-        /// <param name="size">The display limit.</param>
-        /// <param name="orderBy">The optional order by.</param>
-        /// <returns>Best selling products</returns>
-        [HttpGet("products"), MapToApiVersion("1.0")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(int? size, string orderBy)
-        {
-            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-
-            var serviceModel = new GetTopSalesProductsAnalyticsServiceModel
-            {
-                Language = CultureInfo.CurrentCulture.Name,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                IsSeller = User.IsInRole("Seller"),
-                OrderBy = orderBy,
-                Size = size
-            };
-
-            var validator = new GetTopSalesAnalyticsModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
-
-            if (validationResult.IsValid)
-            {
-                var topSalesProducts = _salesService.GetTopSalesProductsAnalyticsAsync(serviceModel);
-
-                if (topSalesProducts is not null)
-                {
-                    var response = topSalesProducts.Select(x => new TopSalesProductsAnalyticsResponseModel
-                    {
-                        ProductId = x.ProductId,
-                        ProductSku = x.ProductSku,
-                        ProductName = x.ProductName,
-                        Ean = x.Ean,
-                        Quantity = x.Quantity
-                    });
-
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
-            }
-
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
-        }
     }
 }

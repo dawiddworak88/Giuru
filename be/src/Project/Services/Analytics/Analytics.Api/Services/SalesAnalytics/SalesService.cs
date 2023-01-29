@@ -211,56 +211,5 @@ namespace Analytics.Api.Services.SalesAnalytics
 
             return annualSales;
         }
-
-        public IEnumerable<TopSalesProductsAnalyticsServiceModel> GetTopSalesProductsAnalyticsAsync(GetTopSalesProductsAnalyticsServiceModel model)
-        {
-            var products = from s in _context.SalesFacts
-                           join p in _context.ProductDimensions on s.ProductDimensionId equals p.Id
-                           where s.IsActive && p.IsActive
-                           group s by new { p.ProductId } into gp
-                           let productDimension = _context.ProductDimensions.FirstOrDefault(x => x.Id == gp.First().ProductDimensionId)
-                           let productTranslation = _context.ProductTranslationDimensions.FirstOrDefault(x => x.ProductDimensionId == gp.First().ProductDimensionId)
-                           let clientDimension = _context.ClientDimensions.FirstOrDefault(x => x.Id == gp.FirstOrDefault().ClientDimensionId && x.IsActive)
-                           where gp.Sum(x => x.Quantity) > 0
-                           select new
-                           {
-                               ProductId = gp.Key.ProductId,
-                               ProductSku = productDimension.Sku,
-                               ProductName = productTranslation.Name,
-                               Ean = productDimension.Ean,
-                               OrganisationId = clientDimension.OrganisationId,
-                               Quantity = gp.Sum(y => y.Quantity)
-                           };
-
-            products = products.ApplySort(model.OrderBy);
-
-            if (model.IsSeller is false)
-            {
-                products = products.Where(x => x.OrganisationId == model.OrganisationId);
-            }
-
-            if (model.Size.HasValue)
-            {
-                products = products.Take(model.Size.Value);
-            }
-
-            var topProducts = new List<TopSalesProductsAnalyticsServiceModel>();
-
-            foreach (var product in products.OrEmptyIfNull())
-            {
-                var topProduct = new TopSalesProductsAnalyticsServiceModel
-                {
-                    ProductId = product.ProductId,
-                    ProductSku = product.ProductSku,
-                    ProductName = product.ProductName,
-                    Ean = product.Ean,
-                    Quantity = product.Quantity
-                };
-
-                topProducts.Add(topProduct);
-            }
-
-            return topProducts.OrderByDescending(x => x.Quantity);
-        }
     }
 }
