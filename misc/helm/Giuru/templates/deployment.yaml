@@ -913,6 +913,26 @@ spec:
           value: {{ .Values.redisUrl }}
         - name: OpenTelemetryCollectorUrl
           value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: GiuruApiAppSecret
+          value: {{ .Values.giuruApiSecret }}
+        - name: GiuruApiEmail
+          value: {{ .Values.giuruApiEmail }}
+        - name: GiuruApiOrganisationId
+          value: {{ .Values.organisationId }}
+        - name: GiuruTokenUrl
+          value: {{ .Values.identityTokenUrl }}
+        - name: EventBusConnection
+          value: {{ .Values.eventBusConnection }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
+        - name: ClientUrl
+          value: {{ .Values.clientUrl }}
+        - name: CatalogUrl
+          value: {{ .Values.catalogUrl }}
+        - name: GlobalUrl
+          value: {{ .Values.globalUrl }}
         ports:
         - containerPort: 80
 ---
