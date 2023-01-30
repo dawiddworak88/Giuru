@@ -106,6 +106,7 @@ services:
       - SenderEmail=${SENDER_EMAIL}
       - SenderName=${SENDER_NAME}
       - SendGridApiKey=${SENDGRID_API_KEY}
+      - ApplyRecipientEmail=office@eltap.com
       - ActionSendGridClientApplyConfirmationTemplateId=${SENDGRID_CLIENT_APPLY_CONFIRMATION_TEMPLATE_ID}
       - ActionSendGridClientApplyTemplateId=${SENDGRID_CLIENT_APPLY_TEMPLATE_ID}
     ports:
