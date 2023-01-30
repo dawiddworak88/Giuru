@@ -110,6 +110,7 @@ namespace Client.Api.Services.Clients
                 Name = existingClient.Name,
                 Email = existingClient.Email,
                 CountryId = existingClient.CountryId,
+                OrganisationId = existingClient.OrganisationId,
                 CommunicationLanguage = existingClient.Language,
                 PhoneNumber = existingClient.PhoneNumber,
                 LastModifiedDate = existingClient.LastModifiedDate,
