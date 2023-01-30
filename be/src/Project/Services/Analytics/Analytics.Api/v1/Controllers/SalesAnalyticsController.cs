@@ -13,7 +13,6 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Analytics.Api.v1.Controllers
 {
@@ -106,6 +105,49 @@ namespace Analytics.Api.v1.Controllers
             }
 
             return this.StatusCode((int)HttpStatusCode.NoContent);
+        }
+
+        /// <summary>
+        /// Get daily sales
+        /// </summary>
+        /// <returns>Daily sales.</returns>
+        [HttpGet("daily"), MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public IActionResult GetDailySales()
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetDailySalesServiceModel
+            {
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                IsSeller = User.IsInRole("Seller")
+            };
+
+            var validator = new GetDailySalesModelValidator();
+            var validationResult = validator.Validate(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var dailySales = _salesService.GetDailySales(serviceModel);
+
+                if (dailySales is not null)
+                {
+                    var response = dailySales.Select(x => new DailySalesResponseModel
+                    {
+                        Day = x.Day,
+                        Month = x.Month,
+                        Year = x.Year,
+                        Quantity = x.Quantity
+                    });
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }

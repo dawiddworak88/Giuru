@@ -249,5 +249,60 @@ namespace Analytics.Api.Services.SalesAnalytics
 
             return default;
         }
+
+        public IEnumerable<DailySalesServiceModel> GetDailySales(GetDailySalesServiceModel model)
+        {
+            var sales = from s in _context.SalesFacts
+                        join t in _context.TimeDimensions on s.TimeDimensionId equals t.Id
+                        join c in _context.ClientDimensions on s.ClientDimensionId equals c.Id
+                        where s.IsActive && t.IsActive
+                        group s by new { t.Year, t.Month, t.Day, c.OrganisationId } into sa
+                        select new
+                        {
+                            Year = sa.Key.Year,
+                            Month = sa.Key.Month,
+                            Day = sa.Key.Day,
+                            Quantity = sa.Sum(x => x.Quantity),
+                            OrganisationId = sa.Key.OrganisationId
+                        };
+
+            if (model.IsSeller is false)
+            {
+                sales = sales.Where(x => x.OrganisationId == model.OrganisationId);
+            }
+
+            var now = DateTime.UtcNow;
+
+            var days = Enumerable.Range(-7, 7)
+                .Select(x => new
+                {
+                    Year = now.AddDays(x + 1).Year,
+                    Month = now.AddDays(x + 1).Month,
+                    Day = now.AddDays(x + 1).Day
+                });
+
+            var dailySales = days.GroupJoin(sales,
+                m => new
+                {
+                    Day = m.Day,
+                    Month = m.Month,
+                    Year = m.Year
+                },
+                rev => new
+                {
+                    Day = rev.Day,
+                    Month = rev.Month,
+                    Year = rev.Year
+                },
+                (s, g) => new DailySalesServiceModel
+                {
+                    Day = s.Day,
+                    Month = s.Month,
+                    Year = s.Year,
+                    Quantity = g.Sum(x => x.Quantity)
+                }).OrderBy(x => x.Year).ThenBy(x => x.Month).ThenBy(x => x.Day);
+
+            return dailySales;
+        }
     }
 }
