@@ -124,6 +124,8 @@ spec:
           value: {{ .Values.senderEmail }}
         - name: SendGridApiKey
           value: {{ .Values.sendGridApiKey }}
+        - name: ApplyRecipientEmail
+          value: {{ .Values.identityApi.applyRecipientEmail }}
         - name: ActionSendGridClientApplyConfirmationTemplateId
           value: {{ .Values.clientApi.actionSendGridClientApplyConfirmationTemplateId }}
         - name: ActionSendGridClientApplyTemplateId
