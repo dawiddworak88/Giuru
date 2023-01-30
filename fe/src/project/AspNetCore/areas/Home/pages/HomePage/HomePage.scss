@@ -13,5 +13,10 @@
     &__content {
         background: $white;
         padding: 1rem;
+
+        .sales-analytics {
+            max-height: 20rem;
+            padding-bottom: 3rem;
+        }
     }
 }

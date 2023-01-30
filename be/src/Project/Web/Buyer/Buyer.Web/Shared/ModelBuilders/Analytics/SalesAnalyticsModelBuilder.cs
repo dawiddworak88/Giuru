@@ -56,6 +56,8 @@ namespace Buyer.Web.Shared.ModelBuilders.Analytics
                         Data = chartDataset
                     }
                 };
+
+                return viewModel;
             }
 
             return default;

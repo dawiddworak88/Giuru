@@ -19,6 +19,7 @@ const SalesAnalytics = (props) => {
             <h3 className="subtitle">{props.title}</h3>
             <Line 
                 options={{
+                    maintainAspectRatio: false,
                     responsive: true,
                     plugins: {
                         legend: {
