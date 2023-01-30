@@ -52,31 +52,47 @@ namespace Analytics.Api.Services.SalesAnalytics
                     };
 
                     await _context.ClientDimensions.AddAsync(clientDimension.FillCommonProperties());
+                } 
+                else
+                {
+                    clientDimension.Name = client.Name;
+                    clientDimension.OrganisationId = client.OrganisationId;
                 }
 
-                var locationDimension = await _context.LocationDimensions.FirstOrDefaultAsync(x => x.CountryId == client.CountryId);
+                Nullable<Guid> locationDimensionId = null;
 
-                if (locationDimension is null)
+                if (client.CountryId is not null)
                 {
-                    var country = await _countriesRepository.GetAsync(model.Token, client.CommunicationLanguage, client.CountryId);
+                    var locationDimension = await _context.LocationDimensions.FirstOrDefaultAsync(x => x.CountryId == client.CountryId);
 
-                    if (country is not null)
+                    if (locationDimension is null)
                     {
-                        locationDimension = new LocationDimension
+                        var country = await _countriesRepository.GetAsync(model.Token, client.CommunicationLanguage, client.CountryId);
+
+                        if (country is not null)
                         {
-                            CountryId = country.Id
-                        };
+                            locationDimension = new LocationDimension
+                            {
+                                CountryId = country.Id
+                            };
 
-                        await _context.LocationDimensions.AddAsync(locationDimension.FillCommonProperties());
+                            await _context.LocationDimensions.AddAsync(locationDimension.FillCommonProperties());
 
-                        var locationTranslationDimension = new LocationTranslationDimension
-                        {
-                            Name = country.Name,
-                            LocationDimensionId = locationDimension.Id,
-                            Language = client.CommunicationLanguage
-                        };
+                            var locationTranslationDimension = new LocationTranslationDimension
+                            {
+                                Name = country.Name,
+                                LocationDimensionId = locationDimension.Id,
+                                Language = client.CommunicationLanguage
+                            };
 
-                        await _context.LocationTranslationDimensions.AddAsync(locationTranslationDimension.FillCommonProperties());
+                            await _context.LocationTranslationDimensions.AddAsync(locationTranslationDimension.FillCommonProperties());
+
+                            locationDimensionId = locationDimension.Id;
+                        }
+                    } 
+                    else
+                    {
+                        locationDimensionId = locationDimension.Id;
                     }
                 }
 
@@ -126,17 +142,17 @@ namespace Analytics.Api.Services.SalesAnalytics
 
                     for (int i = 0; i < product.Quantity; i++)
                     {
-                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension.Id, false, false);
+                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimensionId, false, false);
                     }
 
                     for (int i = 0; i < product.StockQuantity; i++)
                     {
-                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension.Id, true, false);
+                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimensionId, true, false);
                     }
 
                     for (int i = 0; i < product.OutletQuantity; i++)
                     {
-                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension.Id, false, true);
+                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimensionId, false, true);
                     }
                 }
 
@@ -162,7 +178,7 @@ namespace Analytics.Api.Services.SalesAnalytics
             await _context.SalesFacts.AddAsync(salesFact.FillCommonProperties());
         }
 
-        public IEnumerable<AnnualSalesServiceModel> GetAnnualSalesServiceModel(GetAnnualSalesServiceModel model)
+        public IEnumerable<AnnualSalesServiceModel> GetAnnualSales(GetAnnualSalesServiceModel model)
         {
             var sales = from s in _context.SalesFacts
                         join t in _context.TimeDimensions on s.TimeDimensionId equals t.Id
@@ -210,6 +226,28 @@ namespace Analytics.Api.Services.SalesAnalytics
                     }).OrderBy(x => x.Year).ThenBy(x => x.Month);
 
             return annualSales;
+        }
+
+        public IEnumerable<CountrySalesServiceModel> GetCountrySales(GetCountriesSalesServiceModel model)
+        {
+            var countriesSales = from s in _context.SalesFacts
+                                 join l in _context.LocationDimensions on s.LocationDimensionId equals l.Id
+                                 where s.IsActive && l.IsActive && s.LocationDimensionId != null
+                                 group s by new { l.CountryId } into gpl
+                                 where gpl.Sum(x => x.Quantity) > 0
+                                 select new CountrySalesServiceModel
+                                 {
+                                     Id = gpl.Key.CountryId,
+                                     Name = _context.LocationTranslationDimensions.FirstOrDefault(x => x.LocationDimensionId == gpl.First().LocationDimensionId && x.Language == model.Language).Name,
+                                     Quantity = gpl.Sum(x => x.Quantity)
+                                 };
+
+            if (countriesSales is not null)
+            {
+                return countriesSales;
+            }
+
+            return default;
         }
     }
 }
