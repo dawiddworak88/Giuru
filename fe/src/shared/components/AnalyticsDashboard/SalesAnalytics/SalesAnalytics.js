@@ -16,7 +16,6 @@ if (typeof window !== "undefined") {
 const SalesAnalytics = (props) => {
     return (
         <div className="sales-analytics">
-            <h3 className="subtitle">{props.title}</h3>
             <Line 
                 options={{
                     maintainAspectRatio: false,
@@ -36,7 +35,6 @@ const SalesAnalytics = (props) => {
 }
 
 SalesAnalytics.propTypes = {
-    title: PropTypes.string.isRequired,
     chartLables: PropTypes.array.isRequired,
     chartDatasets: PropTypes.array.isRequired
 }
