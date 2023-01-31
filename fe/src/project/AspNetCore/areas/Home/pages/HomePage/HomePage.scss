@@ -8,15 +8,26 @@
 @import "../../../../shared/components/OrdersAnalytics/OrdersAnalyticsDetail.scss";
 
 .orders-analytics {
+    padding-top: 0;
     background: $grey;
 
     &__content {
         background: $white;
-        padding: 1rem;
+        padding: 2rem;
+    }
+
+    &__container {
+        height: 20rem;
 
         .sales-analytics {
-            max-height: 20rem;
-            padding-bottom: 3rem;
+            height: 100%;
+        }
+    }
+
+    @media only screen and (max-width: $tablet) {
+        
+        &__container {
+            height: 12rem;
         }
     }
 }

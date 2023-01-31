@@ -6,8 +6,8 @@ const OrdersAnalyticsDetail = (props) => {
     return (
         <div className="section orders-analytics">
             <div className="orders-analytics__content">
-                <h1 className="title is-3">{props.title}</h1>
-                <div className="mt-6">
+                <h1 className="title is-4">{props.title}</h1>
+                <div className="orders-analytics__container mt-4">
                     <SalesAnalytics {...props.salesAnalytics} />
                 </div>
             </div>
