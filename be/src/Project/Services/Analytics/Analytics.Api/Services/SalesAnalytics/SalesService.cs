@@ -59,40 +59,29 @@ namespace Analytics.Api.Services.SalesAnalytics
                     clientDimension.OrganisationId = client.OrganisationId;
                 }
 
-                Nullable<Guid> locationDimensionId = null;
+                var locationDimension = await _context.LocationDimensions.FirstOrDefaultAsync(x => x.CountryId == client.CountryId);
 
-                if (client.CountryId is not null)
+                if (locationDimension is null && client.CountryId is not null)
                 {
-                    var locationDimension = await _context.LocationDimensions.FirstOrDefaultAsync(x => x.CountryId == client.CountryId);
+                    var country = await _countriesRepository.GetAsync(model.Token, client.CommunicationLanguage, client.CountryId);
 
-                    if (locationDimension is null)
+                    if (country is not null)
                     {
-                        var country = await _countriesRepository.GetAsync(model.Token, client.CommunicationLanguage, client.CountryId);
-
-                        if (country is not null)
+                        locationDimension = new LocationDimension
                         {
-                            locationDimension = new LocationDimension
-                            {
-                                CountryId = country.Id
-                            };
+                            CountryId = country.Id
+                        };
 
-                            await _context.LocationDimensions.AddAsync(locationDimension.FillCommonProperties());
+                        await _context.LocationDimensions.AddAsync(locationDimension.FillCommonProperties());
 
-                            var locationTranslationDimension = new LocationTranslationDimension
-                            {
-                                Name = country.Name,
-                                LocationDimensionId = locationDimension.Id,
-                                Language = client.CommunicationLanguage
-                            };
+                        var locationTranslationDimension = new LocationTranslationDimension
+                        {
+                            Name = country.Name,
+                            LocationDimensionId = locationDimension.Id,
+                            Language = client.CommunicationLanguage
+                        };
 
-                            await _context.LocationTranslationDimensions.AddAsync(locationTranslationDimension.FillCommonProperties());
-
-                            locationDimensionId = locationDimension.Id;
-                        }
-                    } 
-                    else
-                    {
-                        locationDimensionId = locationDimension.Id;
+                        await _context.LocationTranslationDimensions.AddAsync(locationTranslationDimension.FillCommonProperties());
                     }
                 }
 
@@ -142,17 +131,17 @@ namespace Analytics.Api.Services.SalesAnalytics
 
                     for (int i = 0; i < product.Quantity; i++)
                     {
-                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimensionId, false, false);
+                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension?.Id, false, false);
                     }
 
                     for (int i = 0; i < product.StockQuantity; i++)
                     {
-                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimensionId, true, false);
+                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension?.Id, true, false);
                     }
 
                     for (int i = 0; i < product.OutletQuantity; i++)
                     {
-                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimensionId, false, true);
+                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension?.Id, false, true);
                     }
                 }
 
