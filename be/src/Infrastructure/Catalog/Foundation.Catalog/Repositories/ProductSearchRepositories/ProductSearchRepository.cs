@@ -74,7 +74,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 itemsPerPage = Constants.MaxItemsPerPageLimit;
             }
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.TrackTotalHits().From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
 
             if (response.IsValid)
             {
