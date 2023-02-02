@@ -21,5 +21,6 @@
         public static readonly string Download = "DownloadCloud";
         public static readonly string MapPin = "MapPin";
         public static readonly string Content = "FileText";
+        public static readonly string TrendingUp = "TrendingUp";
     }
 }
