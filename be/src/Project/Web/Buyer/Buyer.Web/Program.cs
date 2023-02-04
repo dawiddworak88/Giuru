@@ -31,8 +31,21 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationM
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Foundation.Telemetry.DependencyInjection;
 using Buyer.Web.Areas.Dashboard.DependencyInjection;
+using OpenTelemetry.Metrics;
+using System;
+using OpenTelemetry.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddOpenTelemetryMetrics(metricProviderBuilder =>
+{
+    metricProviderBuilder
+        .AddOtlpExporter(o => { o.Endpoint = new Uri(builder.Configuration["OpenTelemetryMetricsCollectorUrl"]); })
+        .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                            .AddService("dawid"))
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation();
+});
 
 builder.Host.ConfigureAppConfiguration((_, config) =>
 {
@@ -46,9 +59,9 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.Enrich.FromLogContext();
     loggerConfiguration.WriteTo.Console();
 
-    if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogstashUrl"]))
+    if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["OpenTelemetryLogsCollectorUrl"]))
     {
-        loggerConfiguration.WriteTo.Http(requestUri: hostingContext.Configuration["LogstashUrl"], queueLimitBytes: null);
+        loggerConfiguration.WriteTo.OpenTelemetry(endpoint: hostingContext.Configuration["OpenTelemetryLogsCollectorUrl"]);
     }
 
     if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoToken"])

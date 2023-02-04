@@ -25,6 +25,8 @@ services:
       - "55679:55679"
     links:
       - jaeger
+      - prometheus
+      - loki
 
   rabbitmq:
     ports:
@@ -56,20 +58,6 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
-
-  kibana:
-    environment:
-      - ELASTICSEARCH_HOSTS=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:9200
-    ports:
-      - 5601:5601
-
-  logstash:
-    volumes:
-      - ./DockerServices/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
-      - ./DockerServices/logstash/pipeline:/usr/share/logstash/pipeline:ro
-    ports:
-      - "5000:5000"
-      - "31311:31311"
 
   react-ssr:
     environment: 
@@ -393,7 +381,7 @@ services:
       - CatalogUrl=http://catalog-api
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - LogstashUrl=http://logstash:31311
+      - LogsUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4318
       - InventoryUrl=http://inventory-api
       - OrderUrl=http://ordering-api
       - BasketUrl=http://basket-api
@@ -405,6 +393,8 @@ services:
       - ContentGraphQlAuthorizationKey=${STRAPI_AUTHORIZATION_KEY}
       - MakeComplaintUrl=https://complaints.com
       - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317
+      - OpenTelemetryMetricsCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317
+      - OpenTelemetryLogsCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/logs
       - ProductAttributes=${PRODUCT_ATTRIBUTES}
       - OrganisationId=${ORGANISATION_ID}
       - SupportedCultures=${SUPPORTED_CULTURES}

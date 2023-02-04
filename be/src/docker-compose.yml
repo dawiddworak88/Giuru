@@ -2,15 +2,42 @@ version: '3.9'
 
 services:
 
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./DockerServices/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--enable-feature=remote-write-receiver'
+    restart: always
+    ports:
+      - 9090:9090
+
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    restart: always
+    ports:
+      - 3000:3000
+
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+
   jaeger:
     image: jaegertracing/all-in-one:latest
     restart: always
 
   otel-collector:
-    image: otel/opentelemetry-collector
+    image: otel/opentelemetry-collector-contrib
     restart: always
     depends_on:
       - jaeger
+      - prometheus
+      - loki
 
   rabbitmq:
     image: rabbitmq
@@ -26,21 +53,6 @@ services:
 
   redis:
     image: redis:alpine
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
-    restart: always
-    depends_on:
-      - elasticsearch
-
-  logstash:
-    build:
-      context: DockerServices/logstash/
-      args:
-        ELK_VERSION: ${ELK_VERSION}
-    restart: always
-    depends_on:
-      - elasticsearch
 
   react-ssr:
     image: ${REGISTRY:-giuru}/react-ssr:${PLATFORM:-linux}-${TAG:-latest}
