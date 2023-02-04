@@ -2,6 +2,16 @@ version: '3.9'
 
 services:
 
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    restart: always
+
+  otel-collector:
+    image: otel/opentelemetry-collector
+    restart: always
+    depends_on:
+      - jaeger
+
   rabbitmq:
     image: rabbitmq
     restart: always
@@ -200,5 +210,15 @@ services:
     restart: always
     depends_on: 
       - react-ssr
+      - analytics-api
+      - media-api
+      - client-api
+      - inventory-api
+      - global-api
+      - downloadcenter-api
+      - ordering-api
+      - basket-api
+      - content-api
       - redis
       - identity-api
+      - otel-collector

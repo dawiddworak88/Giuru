@@ -67,12 +67,7 @@ namespace Foundation.Telemetry.DependencyInjection
                     });
                 }
 
-                if (environmentName == EnvironmentConstants.DevelopmentEnvironmentName
-                    || string.IsNullOrWhiteSpace(configuration["OpenTelemetryCollectorUrl"]))
-                {
-                    tracerProviderBuilder.AddConsoleExporter();
-                }
-                else
+                if (string.IsNullOrWhiteSpace(configuration["OpenTelemetryCollectorUrl"]) is false)
                 {
                     tracerProviderBuilder.AddOtlpExporter(o =>
                     {

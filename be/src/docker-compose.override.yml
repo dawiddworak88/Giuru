@@ -2,6 +2,30 @@ version: '3.9'
 
 services:
 
+  jaeger:
+    environment:
+      - SPAN_STORAGE_TYPE=memory
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "16686:16686"
+
+  otel-collector:
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./DockerServices/otel-collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "1888:1888"
+      - "8888:8888"
+      - "8889:8889"
+      - "13133:13133"
+      - "4317:4317"
+      - "4318:4317"
+      - "55679:55679"
+    links:
+      - jaeger
+
   rabbitmq:
     ports:
       - "15672:15672"
@@ -91,6 +115,7 @@ services:
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - EventBusRequestedHeartbeat=60
+      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/traces
     ports:
       - "5131:80"
 
@@ -109,6 +134,7 @@ services:
       - ApplyRecipientEmail=office@eltap.com
       - ActionSendGridClientApplyConfirmationTemplateId=${SENDGRID_CLIENT_APPLY_CONFIRMATION_TEMPLATE_ID}
       - ActionSendGridClientApplyTemplateId=${SENDGRID_CLIENT_APPLY_TEMPLATE_ID}
+      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/traces
     ports:
       - "5133:80"
 
@@ -124,6 +150,7 @@ services:
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - EventBusRequestedHeartbeat=60
+      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/traces
     ports:
       - "5134:80"
 
@@ -134,6 +161,7 @@ services:
       - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
+      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/traces
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:
@@ -153,6 +181,7 @@ services:
       - LogstashUrl=http://logstash:31311
       - ElasticsearchIndex=catalog
       - Brands=4a8f8442-43b0-4223-83bb-978d5e81acc7&ELTAP&09affcc9-1665-45d6-919f-3d2026106ba1
+      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/traces
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:
@@ -171,6 +200,7 @@ services:
       - ElasticsearchUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:9200
       - LogstashUrl=http://logstash:31311
       - ElasticsearchIndex=catalog
+      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/traces
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:
@@ -203,6 +233,7 @@ services:
       - ActionSendGridResetTemplateId=${SENDGRID_RESET_PASSWORD_TEMPLATE_ID}
       - ActionSendGridTeamMemberInvitationTemplateId=${SENDGRID_TEAM_MEMBER_INVITATION_TEMPLATE_ID}
       - DevelopersEmail=it.developers@eltap.com
+      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/traces
     ports:
       - "5105:80"
 
@@ -219,6 +250,7 @@ services:
       - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
+      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/traces
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - EventBusRequestedHeartbeat=60
@@ -234,6 +266,7 @@ services:
       - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
+      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/traces
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - EventBusRequestedHeartbeat=60
@@ -281,6 +314,7 @@ services:
       - EventBusRetryCount=5
       - EventBusRequestedHeartbeat=60
       - OrganisationId=${ORGANISATION_ID}
+      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/traces
     ports:
       - "5136:80"
 
@@ -303,6 +337,7 @@ services:
       - ClientUrl=http://client-api
       - CatalogUrl=http://catalog-api
       - GlobalUrl=http://global-api
+      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/traces
     ports:
       - "5137:80"
 
@@ -312,6 +347,7 @@ services:
       - ConnectionString=Server=sqldata;Database=GlobalDb;User Id=sa;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - LogstashUrl=http://logstash:31311
+      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/traces
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -339,6 +375,7 @@ services:
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - ContentUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5111
       - LogstashUrl=http://logstash:31311
+      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/traces
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
     volumes:
@@ -367,6 +404,7 @@ services:
       - DownloadCenterUrl=http://downloadcenter-api
       - ContentGraphQlAuthorizationKey=${STRAPI_AUTHORIZATION_KEY}
       - MakeComplaintUrl=https://complaints.com
+      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317
       - ProductAttributes=${PRODUCT_ATTRIBUTES}
       - OrganisationId=${ORGANISATION_ID}
       - SupportedCultures=${SUPPORTED_CULTURES}
