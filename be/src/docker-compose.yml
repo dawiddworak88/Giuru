@@ -9,7 +9,7 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--enable-feature=remote-write-receiver'
-    restart: always
+    restart: unless-stopped
     ports:
       - 9090:9090
 
@@ -17,7 +17,7 @@ services:
     image: grafana/grafana:latest
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
-    restart: always
+    restart: unless-stopped
     ports:
       - 3000:3000
 
@@ -29,11 +29,11 @@ services:
 
   jaeger:
     image: jaegertracing/all-in-one:latest
-    restart: always
+    restart: unless-stopped
 
   otel-collector:
     image: otel/opentelemetry-collector-contrib
-    restart: always
+    restart: unless-stopped
     depends_on:
       - jaeger
       - prometheus
@@ -41,15 +41,15 @@ services:
 
   rabbitmq:
     image: rabbitmq
-    restart: always
+    restart: unless-stopped
 
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite:latest
-    restart: always
+    restart: unless-stopped
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
-    restart: always
+    restart: unless-stopped
 
   redis:
     image: redis:alpine
@@ -59,22 +59,22 @@ services:
     build: 
       context: ../../fe
       dockerfile: Dockerfile-ssr-local
-    restart: always
+    restart: unless-stopped
 
   sqldata:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
-    restart: always
+    restart: unless-stopped
 
   postgres:
     image: postgres:10.5
-    restart: always
+    restart: unless-stopped
 
   media-api:
     image: ${REGISTRY:-giuru}/media-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Project/Services/Media/Media.Api/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on:
       - azurite
       - sqldata
@@ -85,7 +85,7 @@ services:
     build:
       context: .
       dockerfile: Project/Services/Client/Client.Api/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - sqldata
       - redis
@@ -95,7 +95,7 @@ services:
     build:
       context: .
       dockerfile: Project/Services/Inventory/Inventory.Api/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - sqldata
       - redis
@@ -107,7 +107,7 @@ services:
     build:
       context: .
       dockerfile: Project/Services/News/News.Api/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - sqldata
       - redis
@@ -117,7 +117,7 @@ services:
     build:
       context: .
       dockerfile: Project/Services/Catalog/Catalog.Api/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - sqldata
       - redis
@@ -130,7 +130,7 @@ services:
     build:
       context: .
       dockerfile: Project/Services/Catalog/Catalog.BackgroundTasks/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - catalog-api
       - sqldata
@@ -142,7 +142,7 @@ services:
     build:
       context: .
       dockerfile: Project/Services/Identity/Identity.Api/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - sqldata
       - redis
@@ -208,7 +208,7 @@ services:
     build:
       context: .
       dockerfile: Project/Web/Seller/Seller.Web/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - react-ssr
       - redis
@@ -219,7 +219,7 @@ services:
     build:
       context: .
       dockerfile: Project/Web/Buyer/Buyer.Web/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - react-ssr
       - analytics-api
