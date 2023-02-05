@@ -415,9 +415,9 @@ services:
       - DownloadCenterUrl=http://downloadcenter-api
       - ContentGraphQlAuthorizationKey=${STRAPI_AUTHORIZATION_KEY}
       - MakeComplaintUrl=https://complaints.com
-      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317
-      - OpenTelemetryMetricsCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317
-      - OpenTelemetryLogsCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/logs
+      - OpenTelemetryCollectorUrl=http://otel-collector:4317
+      - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
+      - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
       - ProductAttributes=${PRODUCT_ATTRIBUTES}
       - OrganisationId=${ORGANISATION_ID}
       - SupportedCultures=${SUPPORTED_CULTURES}
