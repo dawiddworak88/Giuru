@@ -3,6 +3,11 @@ receivers:
     protocols:
       grpc:
       http:
+  hostmetrics:
+    scrapers:
+      cpu:
+      load:
+      memory:
 
 processors:
   batch:
@@ -33,7 +38,7 @@ service:
       processors: [batch]
       exporters: [jaeger]
     metrics:
-      receivers: [otlp]
+      receivers: [otlp, hostmetrics]
       processors: [batch]
       exporters: [prometheusremotewrite]
     logs:

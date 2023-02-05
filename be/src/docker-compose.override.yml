@@ -33,6 +33,8 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--enable-feature=remote-write-receiver'
+      - '--storage.tsdb.retention.time=1d'
+      - '--storage.tsdb.retention.size=1GB'
     ports:
       - "9090:9090"
 
