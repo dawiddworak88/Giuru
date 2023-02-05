@@ -22,7 +22,6 @@
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.Http" Version="8.0.0" />
     <PackageReference Include="Serilog.Sinks.Logz.Io" Version="6.0.0" />
-    <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="0.4.0-dev-00073" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />

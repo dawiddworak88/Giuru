@@ -2,24 +2,13 @@ version: '3.9'
 
 services:
 
-  prometheus:
-    image: prom/prometheus:latest
-    restart: unless-stopped
-
   grafana:
     image: grafana/grafana:latest
     restart: unless-stopped
     depends_on:
       - prometheus
       - loki
-
-  loki:
-    image: grafana/loki:latest
-    restart: unless-stopped
-
-  jaeger:
-    image: jaegertracing/all-in-one:latest
-    restart: unless-stopped
+      - jaeger
 
   otel-collector:
     image: otel/opentelemetry-collector-contrib
@@ -28,6 +17,18 @@ services:
       - jaeger
       - prometheus
       - loki
+
+  prometheus:
+    image: prom/prometheus:latest
+    restart: unless-stopped
+
+  loki:
+    image: grafana/loki:latest
+    restart: unless-stopped
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    restart: unless-stopped
 
   rabbitmq:
     image: rabbitmq
@@ -69,6 +70,7 @@ services:
       - azurite
       - sqldata
       - redis
+      - otel-collector
 
   client-api:
     image: ${REGISTRY:-giuru}/client-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -79,6 +81,7 @@ services:
     depends_on: 
       - sqldata
       - redis
+      - otel-collector
 
   inventory-api:
     image: ${REGISTRY:-giuru}/inventory-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -89,8 +92,8 @@ services:
     depends_on: 
       - sqldata
       - redis
-      - catalog-api
       - rabbitmq
+      - otel-collector
   
   news-api:
     image: ${REGISTRY:-giuru}/news-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -101,6 +104,7 @@ services:
     depends_on: 
       - sqldata
       - redis
+      - otel-collector
 
   catalog-api:
     image: ${REGISTRY:-giuru}/catalog-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -114,6 +118,7 @@ services:
       - elasticsearch
       - rabbitmq
       - media-api
+      - otel-collector
 
   catalog-backgroundtasks:
     image: ${REGISTRY:-giuru}/catalog-backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
@@ -126,6 +131,7 @@ services:
       - sqldata
       - redis
       - rabbitmq
+      - otel-collector
 
   identity-api:
     image: ${REGISTRY:-giuru}/identity-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -137,6 +143,7 @@ services:
       - sqldata
       - redis
       - react-ssr
+      - otel-collector
 
   basket-api:
     image: ${REGISTRY:-giuru}/basket-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -147,6 +154,7 @@ services:
       - redis
       - identity-api
       - rabbitmq
+      - otel-collector
 
   ordering-api:
     image: ${REGISTRY:-giuru}/ordering-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -157,6 +165,7 @@ services:
       - catalog-api
       - redis
       - rabbitmq
+      - otel-collector
 
   content-api:
     image: ${REGISTRY:-giuru}/content-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -165,6 +174,7 @@ services:
       dockerfile: Dockerfile-dev-local
     depends_on:
       - postgres
+      - otel-collector
 
   downloadcenter-api:
     image: ${REGISTRY:-giuru}/download-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -174,6 +184,7 @@ services:
     depends_on:
       - redis
       - sqldata
+      - otel-collector
 
   analytics-api:
     image: ${REGISTRY:-giuru}/analytics-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -183,6 +194,7 @@ services:
     depends_on:
       - sqldata
       - redis
+      - otel-collector
       
   global-api:
     image: ${REGISTRY:-giuru}/global-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -192,6 +204,7 @@ services:
     depends_on:
       - redis
       - sqldata
+      - otel-collector
 
   seller-web:
     image: ${REGISTRY:-giuru}/seller-web:${PLATFORM:-linux}-${TAG:-latest}
