@@ -275,8 +275,6 @@ services:
       - ConnectionString=redis
       - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - LogstashUrl=http://logstash:31311
-      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/traces
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - EventBusRequestedHeartbeat=60
@@ -294,8 +292,6 @@ services:
       - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - LogstashUrl=http://logstash:31311
-      - OpenTelemetryCollectorUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:4317/v1/traces
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - EventBusRequestedHeartbeat=60
