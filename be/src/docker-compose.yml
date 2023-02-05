@@ -4,28 +4,18 @@ services:
 
   prometheus:
     image: prom/prometheus:latest
-    volumes:
-      - ./DockerServices/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--enable-feature=remote-write-receiver'
     restart: unless-stopped
-    ports:
-      - 9090:9090
 
   grafana:
     image: grafana/grafana:latest
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
     restart: unless-stopped
-    ports:
-      - 3000:3000
+    depends_on:
+      - prometheus
+      - loki
 
   loki:
     image: grafana/loki:latest
-    ports:
-      - "3100:3100"
-    command: -config.file=/etc/loki/local-config.yaml
+    restart: unless-stopped
 
   jaeger:
     image: jaegertracing/all-in-one:latest
@@ -211,8 +201,21 @@ services:
     restart: unless-stopped
     depends_on: 
       - react-ssr
+      - analytics-api
+      - media-api
+      - client-api
+      - inventory-api
+      - global-api
+      - downloadcenter-api
+      - ordering-api
+      - basket-api
+      - content-api
+      - catalog-api
+      - catalog-backgroundtasks
+      - news-api
       - redis
       - identity-api
+      - otel-collector
 
   buyer-web:
     image: ${REGISTRY:-giuru}/buyer-web:${PLATFORM:-linux}-${TAG:-latest}
@@ -231,6 +234,9 @@ services:
       - ordering-api
       - basket-api
       - content-api
+      - catalog-api
+      - catalog-backgroundtasks
+      - news-api
       - redis
       - identity-api
       - otel-collector

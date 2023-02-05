@@ -2,9 +2,32 @@ version: '3.9'
 
 services:
 
+  prometheus:
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--enable-feature=remote-write-receiver'
+    ports:
+      - "9090:9090"
+
+  grafana:
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./DockerServices/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./DockerServices/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+
+  loki:
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+
   jaeger:
     environment:
       - SPAN_STORAGE_TYPE=memory
+    command: --memory.max-traces=100000
     ports:
       - "5775:5775/udp"
       - "6831:6831/udp"
@@ -415,3 +438,5 @@ volumes:
     external: false
   elasticsearchdata:
     driver: local
+  grafana-data:
+    external: false
