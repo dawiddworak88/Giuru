@@ -54,7 +54,7 @@ stages:
           - script: |
               helm upgrade --install --wait \
               --set image.registry='$(acrLoginServer)' \
-              --set image.repository='$(b2bJobsImageRepository)' \
+              --set image.repository='$(b2bContentApiImageRepository)' \
               --set image.tag='$(Resources.Pipeline.JobsBuild.RunID)' \
               --set environment='$(environment)' \
               --set tokenUrl='$(tokenUrl)' \
