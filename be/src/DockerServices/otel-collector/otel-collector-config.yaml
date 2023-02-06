@@ -23,7 +23,6 @@ exporters:
       insecure: true
   loki:
     endpoint: "http://loki:3100/api/prom/push"
-  
 
 extensions:
   health_check:
