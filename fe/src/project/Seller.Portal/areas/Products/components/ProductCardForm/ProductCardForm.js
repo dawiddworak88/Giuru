@@ -8,6 +8,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import ProductCardModal from "../ProductCardModal/ProductCardModal";
+import { update } from "lodash";
 
 const ProductCardForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -29,7 +30,7 @@ const ProductCardForm = (props) => {
     }
 
     const onSubmitForm = (state) => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
+        // dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const requestOptions = {
             method: "POST",
@@ -40,24 +41,26 @@ const ProductCardForm = (props) => {
             body: JSON.stringify(state)
         };
 
-        fetch(props.saveUrl, requestOptions)
-            .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
+        console.log(state);
 
-                AuthenticationHelper.HandleResponse(response);
+        // fetch(props.saveUrl, requestOptions)
+        //     .then(function (response) {
+        //         dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        toast.success(jsonResponse.message);
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
+        //         AuthenticationHelper.HandleResponse(response);
+
+        //         return response.json().then(jsonResponse => {
+        //             if (response.ok) {
+        //                 toast.success(jsonResponse.message);
+        //             }
+        //             else {
+        //                 toast.error(props.generalErrorMessage);
+        //             }
+        //         });
+        //     }).catch(() => {
+        //         dispatch({ type: "SET_IS_LOADING", payload: false });
+        //         toast.error(props.generalErrorMessage);
+        //     });
     }
 
     const generateElementsFromSchema = (schema) => {
@@ -68,7 +71,7 @@ const ProductCardForm = (props) => {
         const elementDict = {};
 
         Object.entries(schema.properties).forEach(([parameter, element]) => {
-            const newElement = {
+            let newElement = {
                 name: parameter,
                 required: requiredNames.includes(parameter)
             };
@@ -77,6 +80,20 @@ const ProductCardForm = (props) => {
                 newElement.dataOptions = {
                     title: element.title,
                     type: element.type
+                }
+            }
+
+            if (element.$ref !== undefined || element.items !== undefined) {
+                const definitionArr = element.$ref ? element.$ref.split("/") : element.items.$ref.split("/");
+
+                const definitionId = definitionArr[2];
+
+                if (definitionId != null) {
+
+                    newElement = {
+                        ...newElement,
+                        definitionId: definitionId
+                    }
                 }
             }
 
@@ -96,7 +113,7 @@ const ProductCardForm = (props) => {
                 <div className="card-title">{props.title}</div>
                 <div className="card-content is-flex">
                     <div className="card-icon" onClick={() => handleProductAttribute(props)}><Edit/></div>
-                    <div className="card-icon"><Delete/></div>
+                    <div className="card-icon" onClick={() => handleDeleteAttribite(props.index, props.schema)}><Delete/></div>
                 </div>
             </div>
         )
@@ -112,9 +129,12 @@ const ProductCardForm = (props) => {
             return (
                 <Card 
                     key={index}
+                    index={index}
                     name={elementProps.name}
                     title={elementProps.dataOptions.title}
                     type={elementProps.dataOptions.type}
+                    schema={schema}
+                    definitionId={elementProps.definitionId}
                 />
             )
         })
@@ -202,8 +222,21 @@ const ProductCardForm = (props) => {
         setProductAttribute(null)
     }
 
-    const handleDeleteAttribite = () => {
+    const handleOpenModal = (schema) => {
+        const newElement = test(schema)
 
+        console.log(newElement)
+
+        setProductAttribute(newElement);
+        setIsModalOpen(true);
+    }
+
+    const handleDeleteAttribite = (index, schema) => {
+        const newElements = generateElementsFromSchema(schema);
+
+        newElements.splice(index, 1);
+
+        updateSchema(newElements, schema)
     }
 
     const getIdFromElements = (elements) => {
@@ -228,8 +261,7 @@ const ProductCardForm = (props) => {
           : 1;
       }
 
-    const addCard = (schema) => {
-
+    const test = (schema) => {
         const newElements = generateElementsFromSchema(schema);
         const i = getIdFromElements(newElements);
 
@@ -243,14 +275,21 @@ const ProductCardForm = (props) => {
             }
         }
 
+        return newElement;
+    }
+
+    const addCard = (schema) => {
+        const newElement = test(schema);
+
+        const newElements = generateElementsFromSchema(schema);
+
         newElements.splice(0, 0, newElement)
 
         updateSchema(newElements, schema)
+        setIsModalOpen(false);
     }
 
-    const {
-        values, disable, setFieldValue
-    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
+    const { values, setFieldValue, handleOnSubmit } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
     const { schema } = values;
     const requiredNames = schema.required ? schema.required : [];
@@ -260,8 +299,8 @@ const ProductCardForm = (props) => {
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
-                    <Button type="button" color="primary" variant="contained" className="mb-2" onClick={() => addCard(schema)}>{props.newText}</Button>
-                    <form className="is-modern-form">
+                    <Button type="button" color="primary" variant="contained" className="mb-2" onClick={() => handleOpenModal(schema)}>{props.newText}</Button>
+                    <form className="is-modern-form" onSubmit={handleOnSubmit}>
                         <DragDropContext onDragEnd={(result) => dragEnd(result, schema)}>
                             <Droppable droppableId="droppable">
                                 {(providedDroppable) => (
@@ -291,7 +330,7 @@ const ProductCardForm = (props) => {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable}>
+                                disabled={state.isLoading}>
                                 {props.saveText}
                             </Button>
                             <a href={props.productCardsUrl} className="ml-2 button is-text">{props.navigateToProductCardsLabel}</a>
@@ -304,10 +343,15 @@ const ProductCardForm = (props) => {
                 isOpen={isModalOpen}
                 attribute={productAttribute}
                 handleClose={handleCloseModal}
+                handleSave={() => addCard(schema)}
                 labels={{
                     title: "Editing a product attribute",
                     saveText: "Save",
                     cancelLabel: "Cancel",
+                    definitionLabel: "Definition",
+                    definitionsOptions: [
+                        { value: "a04b3368-fa25-4b4a-e4eb-08d907680a85", name: "Color"}
+                    ],
                     inputTypeLabel: "Input type",
                     inputTypes: [
                         { name: "Array" },

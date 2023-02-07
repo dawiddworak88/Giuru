@@ -9,8 +9,6 @@ import {
 const ProductCardModal = (props) => {
     const [productAttribute, setProductAttribute] = useState(props.attribute)
 
-    //console.log(props.attribute)
-
     const updateAttribute = (e) => {
         const value = e.target.value;
         const name = e.target.name;
@@ -52,7 +50,7 @@ const ProductCardModal = (props) => {
                                 id="title"
                                 name="title"
                                 type="text"
-                                value={productAttribute.title} 
+                                value={productAttribute.title ?? productAttribute.dataOptions.title} 
                                 variant="standard" 
                                 label="Display name"
                                 onChange={(e) => updateAttribute(e)}
@@ -68,15 +66,36 @@ const ProductCardModal = (props) => {
                                     value={productAttribute.type ?? "string"}
                                     onChange={(e) => updateAttribute(e)}
                                     >
-                                    <MenuItem key={0} value="">{props.selectJobTitle}</MenuItem>
-                                    {props.labels.inputTypes && props.labels.inputTypes.map((type, index) => {
-                                        return (
-                                            <MenuItem key={index} value={type.name.toLowerCase()}>{type.name}</MenuItem>
-                                        )
-                                    })}
+                                        <MenuItem key={0} value="">{props.selectJobTitle}</MenuItem>
+                                        {props.labels.inputTypes && props.labels.inputTypes.map((type, index) => {
+                                            return (
+                                                <MenuItem key={index} value={type.name.toLowerCase()}>{type.name}</MenuItem>
+                                            )
+                                        })}
                                 </Select>
                             </FormControl>
                         </div>
+                        {productAttribute.definitionId &&
+                            <div className="field">
+                                <FormControl fullWidth={true} variant="standard">
+                                    <InputLabel id="definition-label">{props.labels.definitionLabel}</InputLabel>
+                                    <Select
+                                        labelId="definition-label"
+                                        id="definition"
+                                        name="definition"
+                                        value={productAttribute.definitionId}
+                                        onChange={(e) => updateAttribute(e)}
+                                    >
+                                        <MenuItem key={0} value="">{props.selectJobTitle}</MenuItem>
+                                        {props.labels.definitionsOptions && props.labels.definitionsOptions.map((definition, index) => {
+                                            return (
+                                                <MenuItem key={index} value={definition.value}>{definition.name}</MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                </FormControl>
+                            </div>
+                        }
                     </div>
                 </DialogContent>
             }
@@ -85,7 +104,8 @@ const ProductCardModal = (props) => {
                 <Button 
                     type="text" 
                     variant="contained" 
-                    color="primary">
+                    color="primary"
+                    onClick={props.handleSave}>
                     {props.labels.saveText}
                 </Button>
             </DialogActions>
