@@ -193,7 +193,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
                 pagedResults = downloadCenterCategories.PagedIndex(new Pagination(downloadCenterCategories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            var subcategories = downloadCenterCategories.Where(x => x.ParentCategoryId.HasValue).ToList();
+            var subcategories = downloadCenterCategories.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.ParentCategoryId.Value)).ToList();
 
             return new PagedResults<IEnumerable<DownloadCenterCategoryItemServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
@@ -204,7 +204,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
                     Subcategories = subcategories.Where(c => c.ParentCategoryId == x.Id).Select(s => new DownloadCenterSubcategoryServiceModel
                     {
                         Id = s.Id,
-                        Name = x.Translations.FirstOrDefault(t => t.CategoryId == s.Id && t.Language == model.Language)?.Name ?? x.Translations.FirstOrDefault(t => t.CategoryId == s.Id)?.Name,
+                        Name = s.Translations.FirstOrDefault(t => t.CategoryId == s.Id && t.Language == model.Language)?.Name ?? s.Translations.FirstOrDefault(t => t.CategoryId == s.Id)?.Name
                     }),
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate

@@ -158,7 +158,11 @@ namespace Inventory.Api.Services.InventoryItems
 
         public async Task<InventoryServiceModel> GetAsync(GetInventoryServiceModel model)
         {
-            var inventoryProduct = await _context.Inventory.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var inventoryProduct = await _context.Inventory
+                .Include(x => x.Product)
+                .Include(x => x.Warehouse)
+                .AsSingleQuery()
+                .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (inventoryProduct is null)
             {

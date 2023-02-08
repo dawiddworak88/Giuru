@@ -216,6 +216,8 @@ namespace Inventory.Api.Services.OutletItems
         {
             var outletItem = await _context.Outlet
                     .Include(x => x.Translations)
+                    .Include(x => x.Product)
+                    .Include(x => x.Warehouse)
                     .AsSingleQuery()
                     .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
