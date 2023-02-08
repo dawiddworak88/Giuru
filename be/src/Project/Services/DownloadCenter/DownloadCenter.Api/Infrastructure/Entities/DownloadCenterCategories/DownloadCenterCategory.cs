@@ -20,8 +20,10 @@ namespace DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories
         [ForeignKey("ParentCategoryId")]
         public virtual DownloadCenterCategory ParentCategory { get; set; }
 
+        [ForeignKey("CategoryId")]
         public virtual IEnumerable<DownloadCenterCategoryFile> Files { get; set; }
 
+        [ForeignKey("CategoryId")]
         public virtual IEnumerable<DownloadCenterCategoryTranslation> Translations { get; set; }
     }
 }
