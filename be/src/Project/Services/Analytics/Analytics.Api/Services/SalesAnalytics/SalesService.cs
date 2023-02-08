@@ -52,11 +52,16 @@ namespace Analytics.Api.Services.SalesAnalytics
                     };
 
                     await _context.ClientDimensions.AddAsync(clientDimension.FillCommonProperties());
+                } 
+                else
+                {
+                    clientDimension.Name = client.Name;
+                    clientDimension.OrganisationId = client.OrganisationId;
                 }
 
                 var locationDimension = await _context.LocationDimensions.FirstOrDefaultAsync(x => x.CountryId == client.CountryId);
 
-                if (locationDimension is null)
+                if (locationDimension is null && client.CountryId is not null)
                 {
                     var country = await _countriesRepository.GetAsync(model.Token, client.CommunicationLanguage, client.CountryId);
 
@@ -126,17 +131,17 @@ namespace Analytics.Api.Services.SalesAnalytics
 
                     for (int i = 0; i < product.Quantity; i++)
                     {
-                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension.Id, false, false);
+                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension?.Id, false, false);
                     }
 
                     for (int i = 0; i < product.StockQuantity; i++)
                     {
-                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension.Id, true, false);
+                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension?.Id, true, false);
                     }
 
                     for (int i = 0; i < product.OutletQuantity; i++)
                     {
-                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension.Id, false, true);
+                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension?.Id, false, true);
                     }
                 }
 
@@ -162,7 +167,7 @@ namespace Analytics.Api.Services.SalesAnalytics
             await _context.SalesFacts.AddAsync(salesFact.FillCommonProperties());
         }
 
-        public IEnumerable<AnnualSalesServiceModel> GetAnnualSalesServiceModel(GetAnnualSalesServiceModel model)
+        public IEnumerable<AnnualSalesServiceModel> GetAnnualSales(GetAnnualSalesServiceModel model)
         {
             var sales = from s in _context.SalesFacts
                         join t in _context.TimeDimensions on s.TimeDimensionId equals t.Id
@@ -210,6 +215,83 @@ namespace Analytics.Api.Services.SalesAnalytics
                     }).OrderBy(x => x.Year).ThenBy(x => x.Month);
 
             return annualSales;
+        }
+
+        public IEnumerable<CountrySalesServiceModel> GetCountrySales(GetCountriesSalesServiceModel model)
+        {
+            var countriesSales = from s in _context.SalesFacts
+                                 join l in _context.LocationDimensions on s.LocationDimensionId equals l.Id
+                                 where s.IsActive && l.IsActive && s.LocationDimensionId != null
+                                 group s by new { l.CountryId } into gpl
+                                 where gpl.Sum(x => x.Quantity) > 0
+                                 select new CountrySalesServiceModel
+                                 {
+                                     Id = gpl.Key.CountryId,
+                                     Name = _context.LocationTranslationDimensions.FirstOrDefault(x => x.LocationDimensionId == gpl.First().LocationDimensionId && x.Language == model.Language).Name,
+                                     Quantity = gpl.Sum(x => x.Quantity)
+                                 };
+
+            if (countriesSales is not null)
+            {
+                return countriesSales;
+            }
+
+            return default;
+        }
+
+        public IEnumerable<DailySalesServiceModel> GetDailySales(GetDailySalesServiceModel model)
+        {
+            var sales = from s in _context.SalesFacts
+                        join t in _context.TimeDimensions on s.TimeDimensionId equals t.Id
+                        join c in _context.ClientDimensions on s.ClientDimensionId equals c.Id
+                        where s.IsActive && t.IsActive
+                        group s by new { t.Year, t.Month, t.Day, c.OrganisationId } into sa
+                        select new
+                        {
+                            Year = sa.Key.Year,
+                            Month = sa.Key.Month,
+                            Day = sa.Key.Day,
+                            Quantity = sa.Sum(x => x.Quantity),
+                            OrganisationId = sa.Key.OrganisationId
+                        };
+
+            if (model.IsSeller is false)
+            {
+                sales = sales.Where(x => x.OrganisationId == model.OrganisationId);
+            }
+
+            var now = DateTime.UtcNow;
+
+            var days = Enumerable.Range(-7, 7)
+                .Select(x => new
+                {
+                    Year = now.AddDays(x + 1).Year,
+                    Month = now.AddDays(x + 1).Month,
+                    Day = now.AddDays(x + 1).Day
+                });
+
+            var dailySales = days.GroupJoin(sales,
+                m => new
+                {
+                    Day = m.Day,
+                    Month = m.Month,
+                    Year = m.Year
+                },
+                rev => new
+                {
+                    Day = rev.Day,
+                    Month = rev.Month,
+                    Year = rev.Year
+                },
+                (s, g) => new DailySalesServiceModel
+                {
+                    Day = s.Day,
+                    Month = s.Month,
+                    Year = s.Year,
+                    Quantity = g.Sum(x => x.Quantity)
+                }).OrderBy(x => x.Year).ThenBy(x => x.Month).ThenBy(x => x.Day);
+
+            return dailySales;
         }
     }
 }

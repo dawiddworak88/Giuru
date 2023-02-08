@@ -1,6 +1,7 @@
 ﻿using Foundation.GenericRepository.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Inventory.Api.Infrastructure.Entities
 {
@@ -24,5 +25,11 @@ namespace Inventory.Api.Infrastructure.Entities
 
         [Required]
         public Guid WarehouseId { get; set; }
+
+        [ForeignKey("ProductId")]
+        public virtual Product Product { get; set; }
+
+        [ForeignKey("WarehouseId")]
+        public virtual Warehouse Warehouse { get; set; }
     }
 }

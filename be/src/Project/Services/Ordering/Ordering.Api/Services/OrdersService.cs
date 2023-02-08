@@ -304,7 +304,7 @@ namespace Ordering.Api.Services
                     LastOrderItemStatusChangeId = y.LastOrderItemStatusChangeId,
                     OrderItemStatusId = lastOrderItemStatusChanges.FirstOrDefault(z => z.OrderItemId == y.Id)?.OrderItemStatusId ?? OrderStatusesConstants.NewId,
                     OrderItemStatusChangeComment = orderItemStatusChangesCommentTranslations.FirstOrDefault(z => z.OrderItemStatusChangeId == y.LastOrderItemStatusChangeId && z.Language == model.Language)?.OrderItemStatusChangeComment ?? orderItemStatusChangesCommentTranslations.FirstOrDefault(z => z.OrderItemStatusChangeId == y.LastOrderItemStatusChangeId)?.OrderItemStatusChangeComment,
-                    OrderItemStatusName = orderStatusTranslations.FirstOrDefault(z => z.OrderStatusId == (lastOrderItemStatusChanges.FirstOrDefault(z => z.OrderItemId == y.Id)?.OrderItemStatusId ?? OrderStatusesConstants.NewId))?.Name,
+                    OrderItemStatusName = orderStatusTranslations.FirstOrDefault(z => z.OrderStatusId == (lastOrderItemStatusChanges.FirstOrDefault(z => z.OrderItemId == y.Id)?.OrderItemStatusId ?? OrderStatusesConstants.NewId) && z.Language == model.Language)?.Name,
                     OrderItemStateId = lastOrderItemStatusChanges.FirstOrDefault(z => z.OrderItemId == y.Id)?.OrderItemStateId ?? OrderStatesConstants.NewId,
                     LastModifiedDate = y.LastModifiedDate,
                     CreatedDate = y.CreatedDate

@@ -186,6 +186,7 @@ namespace Client.Api.v1.Controllers
                         Name = client.Name,
                         CommunicationLanguage = client.CommunicationLanguage,
                         CountryId = client.CountryId,
+                        OrganisationId = client.OrganisationId,
                         PhoneNumber = client.PhoneNumber,
                         ClientGroupIds = client.ClientGroupIds,
                         ClientManagerIds = client.ClientManagerIds,

@@ -8,8 +8,8 @@ namespace Inventory.Api.Services.InventoryItems
 {
     public interface IInventoryService
     {
-        Task<PagedResults<IEnumerable<InventoryServiceModel>>> GetAsync(GetInventoriesServiceModel getInventoriesModel);
-        Task<PagedResults<IEnumerable<InventoryServiceModel>>> GetByIdsAsync(GetInventoriesByIdsServiceModel model);
+        PagedResults<IEnumerable<InventoryServiceModel>> Get(GetInventoriesServiceModel getInventoriesModel);
+        PagedResults<IEnumerable<InventoryServiceModel>> GetByIds(GetInventoriesByIdsServiceModel model);
         Task<InventoryServiceModel> UpdateAsync(UpdateInventoryServiceModel serviceModel);
         Task<InventoryServiceModel> GetAsync(GetInventoryServiceModel model);
         Task<InventoryServiceModel> CreateAsync(CreateInventoryServiceModel serviceModel);
@@ -18,6 +18,6 @@ namespace Inventory.Api.Services.InventoryItems
         Task SyncProductsInventories(UpdateProductsInventoryServiceModel model);
         Task DeleteAsync(DeleteInventoryServiceModel model);
         Task UpdateInventoryQuantity(Guid? ProductId, double BookedQuantity);
-        Task<PagedResults<IEnumerable<InventorySumServiceModel>>> GetAvailableProductsInventoriesAsync(GetInventoriesServiceModel serviceModel);
+        PagedResults<IEnumerable<InventorySumServiceModel>> GetAvailableProductsInventories(GetInventoriesServiceModel serviceModel);
     }
 }
