@@ -5,7 +5,6 @@
         public struct Analytics
         {
             public static readonly string SalesAnalyticsApiEndpoint = "/api/v1/salesanalytics";
-            public static readonly string ProductsSalesAnalyticsApiEndpoint = "/api/v1/salesanalytics/products";
         }
 
         public struct Global
@@ -31,13 +30,13 @@
             public static readonly string RolesApiEndpoint = "/api/v1/clientroles";
             public static readonly string ApplicationsApiEndpoint = "/api/v1/clientsapplications";
             public static readonly string ManagersApiEndpoint = "/api/v1/clientaccountmanagers";
+            public static readonly string ClientsApiEndpoint = "/api/v1/clients";
         }
 
         public struct Identity
         {
             public static readonly string OrganisationsApiEndpoint = "/api/v1/organisations";
             public static readonly string SellersApiEndpoint = "/api/v1/sellers";
-            public static readonly string ClientsApiEndpoint = "/api/v1/clients";
             public static readonly string ClientByOrganisationApiEndpoint = "/api/v1/clients/organisation";
             public static readonly string UsersApiEndpoint = "/api/v1/users";
             public static readonly string RolesApiEndpoint = "/api/v1/roles";

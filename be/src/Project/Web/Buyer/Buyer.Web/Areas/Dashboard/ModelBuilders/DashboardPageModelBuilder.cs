@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Dashboard.ViewModels;
+using Buyer.Web.Shared.ViewModels.Analytics;
 using Buyer.Web.Shared.ViewModels.Headers;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
@@ -12,11 +13,11 @@ namespace Buyer.Web.Areas.Dashboard.ModelBuilders
 {
     public class DashboardPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, DashboardPageViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrdersAnalyticsDetailViewModel> ordersAnalyticsDetailModelBuilder;
-        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> _seoModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> _headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> _mainNavigationModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrdersAnalyticsDetailViewModel> _ordersAnalyticsDetailModelBuilder;
+        private readonly IModelBuilder<FooterViewModel> _footerModelBuilder;
 
         public DashboardPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder,
@@ -25,11 +26,11 @@ namespace Buyer.Web.Areas.Dashboard.ModelBuilders
             IAsyncComponentModelBuilder<ComponentModelBase, OrdersAnalyticsDetailViewModel> ordersAnalyticsDetailModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
-            this.seoModelBuilder = seoModelBuilder;
-            this.headerModelBuilder = headerModelBuilder;
-            this.mainNavigationModelBuilder = mainNavigationModelBuilder;
-            this.ordersAnalyticsDetailModelBuilder = ordersAnalyticsDetailModelBuilder;
-            this.footerModelBuilder = footerModelBuilder;
+            _seoModelBuilder = seoModelBuilder;
+            _headerModelBuilder = headerModelBuilder;
+            _mainNavigationModelBuilder = mainNavigationModelBuilder;
+            _ordersAnalyticsDetailModelBuilder = ordersAnalyticsDetailModelBuilder;
+            _footerModelBuilder = footerModelBuilder;
         }
 
         public async Task<DashboardPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -37,11 +38,11 @@ namespace Buyer.Web.Areas.Dashboard.ModelBuilders
             var viewModel = new DashboardPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
-                Metadata = await this.seoModelBuilder.BuildModelAsync(componentModel),
-                MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
-                OrdersAnalyticsDetail = await this.ordersAnalyticsDetailModelBuilder.BuildModelAsync(componentModel),
-                Footer = this.footerModelBuilder.BuildModel()
+                Header = await _headerModelBuilder.BuildModelAsync(componentModel),
+                Metadata = await _seoModelBuilder.BuildModelAsync(componentModel),
+                MainNavigation = await _mainNavigationModelBuilder.BuildModelAsync(componentModel),
+                OrdersAnalyticsDetail = await _ordersAnalyticsDetailModelBuilder.BuildModelAsync(componentModel),
+                Footer = _footerModelBuilder.BuildModel()
             };
 
             return viewModel;

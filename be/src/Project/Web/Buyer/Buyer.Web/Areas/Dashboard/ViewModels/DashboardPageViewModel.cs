@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Shared.ViewModels.Base;
+﻿using Buyer.Web.Shared.ViewModels.Analytics;
 using Buyer.Web.Shared.ViewModels.Headers;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;

@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
 using Foundation.Telemetry.DependencyInjection;
+using Foundation.ApiExtensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,10 +37,7 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.Enrich.FromLogContext();
     loggerConfiguration.WriteTo.Console();
 
-    if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogstashUrl"]))
-    {
-        loggerConfiguration.WriteTo.Http(requestUri: hostingContext.Configuration["LogstashUrl"], queueLimitBytes: null);
-    }
+    loggerConfiguration.AddOpenTelemetrySerilogLogs(hostingContext.Configuration["OpenTelemetryLogsCollectorUrl"]);
 
     if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoToken"])
         && !string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoType"])
@@ -73,6 +71,8 @@ builder.Services.AddApiVersioning();
 
 builder.Services.AddLocalization();
 
+builder.Services.RegisterApiExtensionsDependencies();
+
 builder.Services.RegisterApiAccountDependencies(builder.Configuration);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
@@ -83,16 +83,23 @@ builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 
 builder.Services.RegisterAnalyticsApiDependencies();
 
-builder.Services.RegisterOpenTelemetry(
-    builder.Configuration,
+builder.Services.RegisterEventBus(builder.Configuration);
+
+builder.Services.AddOpenTelemetryTracing(
+    builder.Configuration["OpenTelemetryTracingCollectorUrl"],
     Assembly.GetExecutingAssembly().GetName().Name,
     false,
     false,
     true,
     false,
     true,
-    new[] { "/hc", "/liveness" },
-    builder.Environment.EnvironmentName);
+    new[] { "/hc", "/liveness" });
+
+builder.Services.AddOpenTelemetryMetrics(
+    builder.Configuration["OpenTelemetryMetricsCollectorUrl"],
+    Assembly.GetExecutingAssembly().GetName().Name,
+    true,
+    true);
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -114,7 +121,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Analytics API");
     c.RoutePrefix = string.Empty;
 });
- 
+
 app.UseRouting();
 
 app.UseAuthentication();
@@ -140,5 +147,7 @@ app.UseEndpoints(endpoints =>
         Predicate = r => r.Name.Contains("self")
     });
 });
+
+app.ConfigureEventBus();
 
 app.Run();

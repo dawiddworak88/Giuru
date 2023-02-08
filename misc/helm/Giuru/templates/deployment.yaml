@@ -58,8 +58,8 @@ spec:
           value: {{ .Values.eventBusRetryCount }}
         - name: EventBusRequestedHeartbeat
           value: {{ .Values.eventBusRequestedHeartbeat }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -124,12 +124,14 @@ spec:
           value: {{ .Values.senderEmail }}
         - name: SendGridApiKey
           value: {{ .Values.sendGridApiKey }}
+        - name: ApplyRecipientEmail
+          value: {{ .Values.identityApi.applyRecipientEmail }}
         - name: ActionSendGridClientApplyConfirmationTemplateId
           value: {{ .Values.clientApi.actionSendGridClientApplyConfirmationTemplateId }}
         - name: ActionSendGridClientApplyTemplateId
           value: {{ .Values.clientApi.actionSendGridClientApplyTemplateId }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -202,8 +204,8 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -272,8 +274,8 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -334,8 +336,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -410,8 +412,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -539,8 +541,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -605,8 +607,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -667,8 +669,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -739,8 +741,8 @@ spec:
           value: {{ .Values.eventBusRetryCount }}
         - name: EventBusRequestedHeartbeat
           value: {{ .Values.eventBusRequestedHeartbeat }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -799,8 +801,8 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -911,8 +913,28 @@ spec:
           value: {{ .Values.supportedCultures }}
         - name: RedisUrl
           value: {{ .Values.redisUrl }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
+        - name: GiuruApiAppSecret
+          value: {{ .Values.giuruApiSecret }}
+        - name: GiuruApiEmail
+          value: {{ .Values.giuruApiEmail }}
+        - name: GiuruApiOrganisationId
+          value: {{ .Values.organisationId }}
+        - name: GiuruTokenUrl
+          value: {{ .Values.identityTokenUrl }}
+        - name: EventBusConnection
+          value: {{ .Values.eventBusConnection }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
+        - name: ClientUrl
+          value: {{ .Values.clientUrl }}
+        - name: CatalogUrl
+          value: {{ .Values.catalogUrl }}
+        - name: GlobalUrl
+          value: {{ .Values.globalUrl }}
         ports:
         - containerPort: 80
 ---
@@ -1003,8 +1025,8 @@ spec:
           value: {{ .Values.logzIoDataCenterSubDomain }}
         - name: GoogleTagManagerIdentifier
           value: {{ .Values.googleTagManagerIdentifier }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -1087,8 +1109,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures

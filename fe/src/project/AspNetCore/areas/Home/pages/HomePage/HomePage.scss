@@ -5,3 +5,29 @@
 @import "../../../../shared/components/CarouselGrid/CarouselGrid.scss";
 @import "../../../../shared/components/ContentGrid/ContentGrid.scss";
 @import "../../../.../../../../../shared/components/Footer/Footer.scss";
+@import "../../../../shared/components/OrdersAnalytics/OrdersAnalyticsDetail.scss";
+
+.orders-analytics {
+    padding-top: 0;
+    background: $grey;
+
+    &__content {
+        background: $white;
+        padding: 2rem;
+    }
+
+    &__container {
+        height: 20rem;
+
+        .sales-analytics {
+            height: 100%;
+        }
+    }
+
+    @media only screen and (max-width: $tablet) {
+        
+        &__container {
+            height: 12rem;
+        }
+    }
+}
