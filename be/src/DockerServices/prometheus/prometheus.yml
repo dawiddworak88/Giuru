@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+# Add these two parameters to Docker configuration file before enabling the confguration in Docker -> Settings -> Docker Engine below:  "metrics-addr": "127.0.0.1:9323" and "experimental": true
+# It will scrape the docker instance metrics.
+# scrape_configs:
+#   - job_name: 'docker'
+#     static_configs:
+#       - targets: ['host.docker.internal:9323']
