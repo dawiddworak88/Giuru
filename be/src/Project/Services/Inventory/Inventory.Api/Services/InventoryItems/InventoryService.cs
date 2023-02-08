@@ -158,101 +158,123 @@ namespace Inventory.Api.Services.InventoryItems
 
         public async Task<InventoryServiceModel> GetAsync(GetInventoryServiceModel model)
         {
-            var inventoryProduct = from c in _context.Inventory
-                                   join warehouse in _context.Warehouses on c.WarehouseId equals warehouse.Id
-                                   join product in _context.Products on c.ProductId equals product.Id
-                                   where c.Id == model.Id.Value && product.IsActive && c.IsActive
-                                   select new InventoryServiceModel
-                                   {
-                                       Id = c.Id,
-                                       ProductId = c.ProductId,
-                                       ProductName = product.Name,
-                                       Sku = product.Sku,
-                                       WarehouseId = c.WarehouseId,
-                                       WarehouseName = warehouse.Name,
-                                       Quantity = c.Quantity,
-                                       Ean = product.Ean,
-                                       AvailableQuantity = c.AvailableQuantity,
-                                       RestockableInDays = c.RestockableInDays.Value,
-                                       ExpectedDelivery = c.ExpectedDelivery.Value,
-                                       LastModifiedDate = c.LastModifiedDate,
-                                       CreatedDate = c.CreatedDate
-                                   };
+            var inventoryProduct = await _context.Inventory
+                .Include(x => x.Product)
+                .Include(x => x.Warehouse)
+                .AsSingleQuery()
+                .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
-            return await inventoryProduct.FirstOrDefaultAsync();
-        }
-
-        public async Task<PagedResults<IEnumerable<InventoryServiceModel>>> GetAsync(GetInventoriesServiceModel model)
-        {
-            var inventories = from c in _context.Inventory
-                              join warehouse in _context.Warehouses on c.WarehouseId equals warehouse.Id
-                              join product in _context.Products on c.ProductId equals product.Id
-                              where c.SellerId == model.OrganisationId.Value && product.IsActive && c.IsActive
-                              select new InventoryServiceModel
-                              {
-                                Id = c.Id,
-                                ProductId = c.ProductId,
-                                ProductName = product.Name,
-                                Sku = product.Sku,
-                                WarehouseId = c.WarehouseId,
-                                WarehouseName = warehouse.Name,
-                                Quantity = c.Quantity,
-                                Ean = product.Ean,
-                                AvailableQuantity = c.AvailableQuantity,
-                                RestockableInDays= c.RestockableInDays,
-                                ExpectedDelivery = c.ExpectedDelivery,
-                                LastModifiedDate = c.LastModifiedDate,
-                                CreatedDate = c.CreatedDate
-                              };
-
-            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
+            if (inventoryProduct is null)
             {
-                inventories = inventories.Where(x => x.ProductName.StartsWith(model.SearchTerm) || x.WarehouseName.StartsWith(model.SearchTerm) || x.Sku.StartsWith(model.SearchTerm));
+                throw new CustomException(_inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            inventories = inventories.ApplySort(model.OrderBy);
+            return new InventoryServiceModel
+            {
+                Id = inventoryProduct.Id,
+                ProductId = inventoryProduct.ProductId,
+                ProductName = inventoryProduct.Product?.Name,
+                Sku = inventoryProduct.Product?.Sku,
+                WarehouseId = inventoryProduct.WarehouseId,
+                WarehouseName = inventoryProduct.Warehouse?.Name,
+                Quantity = inventoryProduct.Quantity,
+                Ean = inventoryProduct.Product?.Ean,
+                AvailableQuantity = inventoryProduct.AvailableQuantity,
+                RestockableInDays = inventoryProduct.RestockableInDays,
+                ExpectedDelivery = inventoryProduct.ExpectedDelivery,
+                LastModifiedDate = inventoryProduct.LastModifiedDate,
+                CreatedDate = inventoryProduct.CreatedDate
+            };
+        }
+
+        public PagedResults<IEnumerable<InventoryServiceModel>> Get(GetInventoriesServiceModel model)
+        {
+            var inventoryItems = _context.Inventory.Where(x => x.SellerId == model.OrganisationId && x.IsActive)
+                    .Include(x => x.Warehouse)
+                    .Include(x => x.Product)
+                    .AsSingleQuery();
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                inventoryItems = inventoryItems.Where(x => x.Product.Name.StartsWith(model.SearchTerm) || x.Warehouse.Name.StartsWith(model.SearchTerm) || x.Product.Sku.StartsWith(model.SearchTerm));
+            }
+
+            inventoryItems = inventoryItems.ApplySort(model.OrderBy);
+
+            PagedResults<IEnumerable<InventoryItem>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
-                inventories = inventories.Take(Constants.MaxItemsPerPageLimit);
+                inventoryItems = inventoryItems.Take(Constants.MaxItemsPerPageLimit);
 
-                return inventories.PagedIndex(new Pagination(inventories.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+                pagedResults = inventoryItems.PagedIndex(new Pagination(inventoryItems.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = inventoryItems.PagedIndex(new Pagination(inventoryItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            return inventories.PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            return new PagedResults<IEnumerable<InventoryServiceModel>>(pagedResults.Total, pagedResults.PageSize)
+            {
+                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new InventoryServiceModel
+                {
+                    Id = x.Id,
+                    ProductId = x.ProductId,
+                    ProductName = x.Product?.Name,
+                    Sku = x.Product?.Sku,
+                    Ean = x.Product?.Ean,
+                    AvailableQuantity = x.AvailableQuantity,
+                    Quantity = x.Quantity,
+                    ExpectedDelivery = x.ExpectedDelivery,
+                    RestockableInDays = x.RestockableInDays,
+                    WarehouseId = x.WarehouseId,
+                    WarehouseName = x.Warehouse?.Name,
+                    LastModifiedDate = x.LastModifiedDate,
+                    CreatedDate = x.CreatedDate
+                })
+            };
         }
 
-        public async Task<PagedResults<IEnumerable<InventoryServiceModel>>> GetByIdsAsync(GetInventoriesByIdsServiceModel model)
+        public PagedResults<IEnumerable<InventoryServiceModel>> GetByIds(GetInventoriesByIdsServiceModel model)
         {
-            var inventoryProducts = from c in _context.Inventory
-                             join warehouse in _context.Warehouses on c.WarehouseId equals warehouse.Id
-                             join product in _context.Products on c.ProductId equals product.Id
-                             where model.Ids.Contains(c.Id) && c.SellerId == model.OrganisationId.Value && product.IsActive && c.IsActive
-                             select new InventoryServiceModel
-                             {
-                                 Id = c.Id,
-                                 ProductId = c.ProductId,
-                                 ProductName = product.Name,
-                                 Sku = product.Sku,
-                                 Ean = product.Ean,
-                                 AvailableQuantity = c.AvailableQuantity,
-                                 Quantity = c.Quantity,
-                                 ExpectedDelivery = c.ExpectedDelivery,
-                                 RestockableInDays = c.RestockableInDays,
-                                 WarehouseId = c.WarehouseId,
-                                 WarehouseName = warehouse.Name,
-                                 LastModifiedDate = c.LastModifiedDate,
-                                 CreatedDate = c.CreatedDate
-                             };
+            var inventoryProducts = _context.Inventory.Where(x => model.Ids.Contains(x.Id) && x.SellerId == model.OrganisationId && x.IsActive)
+                    .Include(x => x.Warehouse)
+                    .Include(x => x.Product)
+                    .AsSingleQuery();
+
+            inventoryProducts = inventoryProducts.ApplySort(model.OrderBy);
+
+            PagedResults<IEnumerable<InventoryItem>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
                 inventoryProducts = inventoryProducts.Take(Constants.MaxItemsPerPageLimit);
 
-                return inventoryProducts.PagedIndex(new Pagination(inventoryProducts.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+                pagedResults = inventoryProducts.PagedIndex(new Pagination(inventoryProducts.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            } else
+            {
+                pagedResults = inventoryProducts.PagedIndex(new Pagination(inventoryProducts.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            return inventoryProducts.PagedIndex(new Pagination(inventoryProducts.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            return new PagedResults<IEnumerable<InventoryServiceModel>>(pagedResults.Total, pagedResults.PageSize)
+            {
+                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new InventoryServiceModel
+                {
+                    Id = x.Id,
+                    ProductId = x.ProductId,
+                    ProductName = x.Product?.Name,
+                    Sku = x.Product?.Sku,
+                    Ean = x.Product?.Ean,
+                    AvailableQuantity = x.AvailableQuantity,
+                    Quantity = x.Quantity,
+                    ExpectedDelivery = x.ExpectedDelivery,
+                    RestockableInDays = x.RestockableInDays,
+                    WarehouseId = x.WarehouseId,
+                    WarehouseName = x.Warehouse?.Name,
+                    LastModifiedDate = x.LastModifiedDate,
+                    CreatedDate = x.CreatedDate
+                })
+            };
         }
 
         public async Task<InventorySumServiceModel> GetInventoryByProductId(GetInventoryByProductIdServiceModel model)
@@ -387,30 +409,52 @@ namespace Inventory.Api.Services.InventoryItems
             await _context.SaveChangesAsync();
         }
 
-        public async Task<PagedResults<IEnumerable<InventorySumServiceModel>>> GetAvailableProductsInventoriesAsync(GetInventoriesServiceModel model)
+        public PagedResults<IEnumerable<InventorySumServiceModel>> GetAvailableProductsInventories(GetInventoriesServiceModel model)
         {
-            var inventories = (from i in _context.Inventory
-                               join product in _context.Products on i.ProductId equals product.Id
-                               where product.IsActive && i.IsActive
-                               group i by new { product.Id } into gpi
-                               select new InventorySumServiceModel
-                               {
-                                    ProductId = gpi.Key.Id,
-                                    ProductName = _context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Name,
-                                    ProductSku = _context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Sku,
-                                    ProductEan = _context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Ean,
-                                    AvailableQuantity = gpi.Sum(x => x.AvailableQuantity),
-                                    Quantity = gpi.Sum(x => x.Quantity),
-                                    ExpectedDelivery = gpi.Min(x => x.ExpectedDelivery),
-                                    RestockableInDays = gpi.Min(x => x.RestockableInDays)
-                               });
+            var inventoryItems = _context.Inventory.Where(x => x.IsActive)
+                    .Include(x => x.Product)
+                    .AsSingleQuery()
+                    .Select(y => new InventorySumServiceModel
+                    {
+                        ProductId = y.ProductId,
+                        ProductEan = y.Product.Ean,
+                        ProductName = y.Product.Name,
+                        ProductSku = y.Product.Sku,
+                        AvailableQuantity = y.AvailableQuantity,
+                        Quantity = y.Quantity,
+                        ExpectedDelivery = y.ExpectedDelivery,
+                        RestockableInDays = y.RestockableInDays
+                    });
+
+            PagedResults<IEnumerable<InventorySumServiceModel>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
-                inventories = inventories.Take(Constants.MaxItemsPerPageLimit).OrderByDescending(x => x.AvailableQuantity);
+                inventoryItems = inventoryItems.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = inventoryItems.PagedIndex(new Pagination(inventoryItems.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = inventoryItems.PagedIndex(new Pagination(inventoryItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            return inventories.OrderByDescending(x => x.AvailableQuantity).PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            var groupedResults = pagedResults.Data.GroupBy(x => x.ProductId);
+
+            return new PagedResults<IEnumerable<InventorySumServiceModel>>(groupedResults.Count(), pagedResults.PageSize)
+            {
+                Data = groupedResults.OrEmptyIfNull().Select(x => new InventorySumServiceModel
+                {
+                    ProductId = x.Key,
+                    ProductName = x.FirstOrDefault().ProductName,
+                    ProductEan = x.FirstOrDefault().ProductEan,
+                    ProductSku = x.FirstOrDefault().ProductSku,
+                    AvailableQuantity = x.Sum(y => y.AvailableQuantity),
+                    Quantity = x.Sum(y => y.Quantity),
+                    ExpectedDelivery = x.Min(y => y.ExpectedDelivery),
+                    RestockableInDays = x.Min(y => y.RestockableInDays)
+                })
+            };
         }
 
         public async Task UpdateInventoryQuantity(Guid? productId, double bookedQuantity)

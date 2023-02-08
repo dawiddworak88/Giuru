@@ -49,7 +49,7 @@ namespace Outlet.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
+        public IActionResult Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var outletIds = ids.ToEnumerableGuidIds();
@@ -66,11 +66,11 @@ namespace Outlet.Api.v1.Controllers
                 };
 
                 var validator = new GetOutletsByIdsModelValidator();
-                var validationResult = await validator.ValidateAsync(serviceModel);
+                var validationResult = validator.Validate(serviceModel);
 
                 if (validationResult.IsValid)
                 {
-                    var outlets = await _outletsService.GetByIdsAsync(serviceModel);
+                    var outlets = _outletsService.GetByIds(serviceModel);
 
                     if (outlets is not null)
                     {
@@ -112,7 +112,7 @@ namespace Outlet.Api.v1.Controllers
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
-                var outlets = await _outletsService.GetAsync(serviceModel);
+                var outlets = _outletsService.Get(serviceModel);
 
                 if (outlets is not null)
                 {
@@ -155,7 +155,7 @@ namespace Outlet.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetAvailableOutletProducts(int? pageIndex, int? itemsPerPage)
+        public IActionResult GetAvailableOutletProducts(int? pageIndex, int? itemsPerPage)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -167,7 +167,7 @@ namespace Outlet.Api.v1.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var outlets = await _outletsService.GetAvailableProductsOutletsAsync(serviceModel);
+            var outlets = _outletsService.GetAvailableProductsOutlets(serviceModel);
 
             if (outlets is not null)
             {
@@ -362,10 +362,6 @@ namespace Outlet.Api.v1.Controllers
                     };
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
-                else
-                {
-                    return this.StatusCode((int)HttpStatusCode.NoContent);
                 }
 
             }

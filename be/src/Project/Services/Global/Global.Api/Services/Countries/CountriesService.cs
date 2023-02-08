@@ -64,23 +64,18 @@ namespace Global.Api.Services.Countries
 
         public PagedResults<IEnumerable<CountryServiceModel>> Get(GetCountriesServiceModel model)
         {
-            var countries = from c in _context.Countries
-                            select new CountryServiceModel
-                            {
-                                Id = c.Id,
-                                Name = c.Translations.FirstOrDefault(t => t.CountryId == c.Id && t.Language == model.Language).Name,
-                                LastModifiedDate = c.LastModifiedDate,
-                                CreatedDate = c.CreatedDate
-                            };
+            var countries = _context.Countries.Where(x => x.IsActive)
+                    .Include(x => x.Translations)
+                    .AsSingleQuery();
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                countries = countries.Where(x => x.Name.StartsWith(model.SearchTerm));
+                countries = countries.Where(x => x.Translations.Any(x => x.Name.StartsWith(model.SearchTerm)));
             }
 
             countries = countries.ApplySort(model.OrderBy);
 
-            PagedResults<IEnumerable<CountryServiceModel>> pagedResults;
+            PagedResults<IEnumerable<Country>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
@@ -98,7 +93,7 @@ namespace Global.Api.Services.Countries
                 Data = pagedResults.Data.OrEmptyIfNull().Select(x => new CountryServiceModel
                 {
                     Id = x.Id,
-                    Name = x.Name,
+                    Name = x.Translations.FirstOrDefault(t => t.CountryId == x.Id && t.Language == model.Language)?.Name ?? x.Translations.FirstOrDefault(t => t.CountryId == x.Id)?.Name,
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
                 })
@@ -107,7 +102,9 @@ namespace Global.Api.Services.Countries
 
         public async Task<CountryServiceModel> GetAsync(GetCountryServiceModel model)
         {
-            var country = await _context.Countries.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var country = await _context.Countries
+                    .Include(x => x.Translations)
+                    .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (country is null)
             {
