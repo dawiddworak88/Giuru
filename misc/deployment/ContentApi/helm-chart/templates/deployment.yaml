@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: content-api-deployment
+  labels:
+    app: content-api
+spec:
+  replicas: {{ .Values.contentApi.replicas }}
+  selector:
+    matchLabels:
+      app: content-api
+  template:
+    metadata:
+      labels:
+        app: content-api
+    spec:
+      containers:
+      - name: content-api-container
+        image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: {{ .Values.contentApi.resources.limits.memory }}
+        env:
+        - name: DATABASE_CLIENT
+          value: {{ .Values.contentApi.databaseClient }}
+        - name: GIURU_MEDIA_API_URL
+          value: {{ .Values.mediaUrl }}
+        - name: GIURU_CONTENT_API_URL
+          value: {{ .Values.contentUrl }}
+        - name: GIURU_IDENTITY_API_URL
+          value: {{ .Values.tokenUrl }}
+        envFrom:
+        - secretRef:
+            name: b2b-content-api-secrets
+        ports:
+        - containerPort: 1337
