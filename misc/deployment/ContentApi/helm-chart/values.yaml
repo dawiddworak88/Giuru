@@ -12,6 +12,7 @@ contentApi:
   databaseUsername: "#{ContentApi--DatabaseUsername}#"
   databasePassword: "#{ContentApi--DatabasePassword}#"
   databaseSsl: "#{ContentApi--DatabaseSsl}#"
+  replicas: "1"
   resources:
     limits:
       memory: "250Mi"
