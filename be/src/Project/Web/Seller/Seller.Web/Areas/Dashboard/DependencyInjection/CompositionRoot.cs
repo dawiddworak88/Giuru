@@ -2,6 +2,7 @@
 using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.DependencyInjection;
 using Seller.Web.Areas.Dashboard.ModelBuilders;
+using Seller.Web.Areas.Dashboard.Repositories;
 using Seller.Web.Areas.Dashboard.ViewModels;
 
 namespace Seller.Web.Areas.Dashboard.DependencyInjection
@@ -12,6 +13,10 @@ namespace Seller.Web.Areas.Dashboard.DependencyInjection
         {
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DashboardPageViewModel>, DashboardPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DashboardDetailViewModel>, DashboardDetailModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DailySalesAnalyticsViewModel>, DailySalesAnalyticsModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CountrySalesAnalyticsViewModel>, CountriesSalesAnalyticsModelBuilder>();
+
+            services.AddScoped<ISalesAnalyticsRepository, SalesAnalyticsRepository>();
         }
     }
 }

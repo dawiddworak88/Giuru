@@ -2,6 +2,8 @@
 {
     public class DashboardDetailViewModel
     {
-
+        public string Title { get; set; }
+        public DailySalesAnalyticsViewModel DailySalesAnalytics { get; set; }
+        public CountrySalesAnalyticsViewModel CountrySalesAnalytics { get; set; }
     }
 }
