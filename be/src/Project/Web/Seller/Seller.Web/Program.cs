@@ -37,6 +37,7 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationM
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Seller.Web.Areas.Global.DependencyInjection;
 using Foundation.Telemetry.DependencyInjection;
+using Seller.Web.Areas.Dashboard.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -118,6 +119,8 @@ builder.Services.RegisterSettingsAreaDependencies();
 builder.Services.RegisterMediaAreaDependencies();
 
 builder.Services.RegisterGlobalAreaDependencies();
+
+builder.Services.RegisterDashboardAreaDependencies();
 
 builder.Services.ConfigureSettings(builder.Configuration);
 

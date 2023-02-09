@@ -5,6 +5,8 @@
         public struct Analytics
         {
             public static readonly string SalesAnalyticsApiEndpoint = "/api/v1/salesanalytics";
+            public static readonly string DailySalesAnalyticsApiEndpoint = "/api/v1/salesanalytics/daily";
+            public static readonly string CountriesSalesAnalyticsApiEndpoint = "/api/v1/salesanalytics/countries";
         }
 
         public struct Global

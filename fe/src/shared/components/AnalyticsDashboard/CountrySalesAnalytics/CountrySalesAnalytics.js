@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJs, ArcElement, Tooltip, Legend } from "chart.js";
+import ChartsConstants from "../../../constants/ChartsConstants";
 
 if (typeof window !== "undefined") {
     ChartJs.register(
@@ -15,11 +16,15 @@ const CountrySalesAnalytics = (props) => {
             <h3 className="subtitle">{props.title}</h3>
             <Doughnut
                 options={{
+                    maintainAspectRatio: false,
                     responsive: true,
                 }} 
                 data={{
                     labels: props.chartLables,
-                    datasets: props.chartDatasets
+                    datasets: [{
+                        ...props.chartDatasets[0],
+                        backgroundColor: ChartsConstants.countrySalesColors()    
+                    }]
                 }}/>
         </div>
     )

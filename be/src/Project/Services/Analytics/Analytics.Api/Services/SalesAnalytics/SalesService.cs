@@ -224,19 +224,30 @@ namespace Analytics.Api.Services.SalesAnalytics
                                  where s.IsActive && l.IsActive && s.LocationDimensionId != null
                                  group s by new { l.CountryId } into gpl
                                  where gpl.Sum(x => x.Quantity) > 0
-                                 select new CountrySalesServiceModel
+                                 select new 
                                  {
                                      Id = gpl.Key.CountryId,
-                                     Name = _context.LocationTranslationDimensions.FirstOrDefault(x => x.LocationDimensionId == gpl.First().LocationDimensionId && x.Language == model.Language).Name,
+                                     LocationDimensionId = gpl.First().LocationDimensionId,
                                      Quantity = gpl.Sum(x => x.Quantity)
                                  };
 
-            if (countriesSales is not null)
+            var translations = _context.LocationTranslationDimensions.Where(x => countriesSales.Select(y => y.LocationDimensionId).Contains(x.LocationDimensionId)).ToList();
+
+            var countriesSalesItems = new List<CountrySalesServiceModel>();
+
+            foreach (var countrySalesItem in countriesSales.OrEmptyIfNull())
             {
-                return countriesSales;
+                var countrySales = new CountrySalesServiceModel
+                {
+                    Id = countrySalesItem.Id,
+                    Name = translations.FirstOrDefault(t => t.LocationDimensionId == countrySalesItem.LocationDimensionId && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.LocationDimensionId == countrySalesItem.LocationDimensionId)?.Name,
+                    Quantity = countrySalesItem.Quantity
+                };
+
+                countriesSalesItems.Add(countrySales);
             }
 
-            return default;
+            return countriesSalesItems;
         }
 
         public IEnumerable<DailySalesServiceModel> GetDailySales(GetDailySalesServiceModel model)
@@ -245,12 +256,13 @@ namespace Analytics.Api.Services.SalesAnalytics
                         join t in _context.TimeDimensions on s.TimeDimensionId equals t.Id
                         join c in _context.ClientDimensions on s.ClientDimensionId equals c.Id
                         where s.IsActive && t.IsActive
-                        group s by new { t.Year, t.Month, t.Day, c.OrganisationId } into sa
+                        group s by new { t.Year, t.Month, t.Day, t.DayOfWeek, c.OrganisationId } into sa
                         select new
                         {
                             Year = sa.Key.Year,
                             Month = sa.Key.Month,
                             Day = sa.Key.Day,
+                            DayOfWeek = sa.Key.DayOfWeek,
                             Quantity = sa.Sum(x => x.Quantity),
                             OrganisationId = sa.Key.OrganisationId
                         };
@@ -267,24 +279,28 @@ namespace Analytics.Api.Services.SalesAnalytics
                 {
                     Year = now.AddDays(x + 1).Year,
                     Month = now.AddDays(x + 1).Month,
-                    Day = now.AddDays(x + 1).Day
+                    Day = now.AddDays(x + 1).Day,
+                    DayOfWeek = (int)now.AddDays(x + 1).DayOfWeek
                 });
 
             var dailySales = days.GroupJoin(sales,
                 m => new
                 {
+                    DayOfWeek = m.DayOfWeek,
                     Day = m.Day,
                     Month = m.Month,
                     Year = m.Year
                 },
                 rev => new
                 {
+                    DayOfWeek = rev.DayOfWeek,
                     Day = rev.Day,
                     Month = rev.Month,
                     Year = rev.Year
                 },
                 (s, g) => new DailySalesServiceModel
                 {
+                    DayOfWeek = s.DayOfWeek,
                     Day = s.Day,
                     Month = s.Month,
                     Year = s.Year,

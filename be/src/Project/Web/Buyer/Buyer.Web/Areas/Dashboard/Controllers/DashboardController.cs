@@ -17,7 +17,8 @@ namespace Buyer.Web.Areas.Dashboard.Controllers
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, DashboardPageViewModel> _dashboardPageModelBuilder;
 
-        public DashboardController(IAsyncComponentModelBuilder<ComponentModelBase, DashboardPageViewModel> dashboardPageModelBuilder)
+        public DashboardController(
+            IAsyncComponentModelBuilder<ComponentModelBase, DashboardPageViewModel> dashboardPageModelBuilder)
         {
             _dashboardPageModelBuilder = dashboardPageModelBuilder;
         }

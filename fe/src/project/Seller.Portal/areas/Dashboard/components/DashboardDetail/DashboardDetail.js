@@ -7,16 +7,16 @@ const DashboardDetail = (props) => {
     return (
         <div className="section dashboard">
             <h1 className="title is-3">{props.title}</h1>
-            <div className="mt-6">
+            <div className="mt-4">
                 <div className="columns">
-                    <div className="column is-two-thirds">
-                        {props.salesAnalytics &&
-                            <SalesAnalytics {...props.salesAnalytics} />
+                    <div className="column is-two-thirds dashboard__container">
+                        {props.dailySalesAnalytics &&
+                            <SalesAnalytics {...props.dailySalesAnalytics} />
                         }
                     </div>
-                    <div className="column is-one-third">
-                        {props.countrySales &&
-                            <CountrySalesAnalytics {...props.countrySales} />
+                    <div className="column is-one-third dashboard__container">
+                        {props.countrySalesAnalytics &&
+                            <CountrySalesAnalytics {...props.countrySalesAnalytics} />
                         }
                     </div>
                 </div>
@@ -28,7 +28,7 @@ const DashboardDetail = (props) => {
 DashboardDetail.propTypes = {
     title: PropTypes.string.isRequired,
     salesAnalytics: PropTypes.object.isRequired,
-    countrySales: PropTypes.object.isRequired
+    countrySalesAnalytics: PropTypes.object.isRequired
 }
 
 export default DashboardDetail;

@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Analytics.Api.ServicesModels.SalesAnalytics
+﻿namespace Seller.Web.Areas.Dashboard.DomainModels
 {
-    public class DailySalesServiceModel
+    public class DailySalesItem
     {
         public int DayOfWeek { get; set; }
         public int Day { get; set; }
