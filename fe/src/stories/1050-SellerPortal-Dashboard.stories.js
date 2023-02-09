@@ -5,7 +5,7 @@ import "../project/Seller.Portal/areas/Dashboard/pages/DashboardPage/DashboardPa
 
 const componentProps = {
     title: "Dashboard",
-    countrySales: {
+    countrySalesAnalytics: {
         title: "Last 3 months sales by country",
         chartLables: [
             "Poland",
@@ -20,7 +20,7 @@ const componentProps = {
             }
         ]
     },
-    salesAnalytics: {
+    dailySalesAnalytics: {
         title: "Daily sales",
         chartLables: [
             "Monday - 8.12",

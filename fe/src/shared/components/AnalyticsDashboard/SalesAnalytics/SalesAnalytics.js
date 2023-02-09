@@ -16,6 +16,9 @@ if (typeof window !== "undefined") {
 const SalesAnalytics = (props) => {
     return (
         <div className="sales-analytics">
+            {props.title &&
+                <h3 className="subtitle">{props.title}</h3>
+            }
             <Line 
                 options={{
                     maintainAspectRatio: false,
