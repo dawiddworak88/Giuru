@@ -3,3 +3,5 @@ variables:
   value: 'b2b-content-api'
 - name: b2bGlobalApiImageRepository
   value: 'b2b-global-api'
+- name: b2bNewsApiImageRepository
+  value: 'b2b-news-api'
