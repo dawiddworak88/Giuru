@@ -138,6 +138,7 @@ namespace Analytics.Api.v1.Controllers
                     var response = dailySales.Select(x => new DailySalesResponseModel
                     {
                         Day = x.Day,
+                        DayOfWeek = x.DayOfWeek,
                         Month = x.Month,
                         Year = x.Year,
                         Quantity = x.Quantity
