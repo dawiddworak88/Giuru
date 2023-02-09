@@ -1089,6 +1089,8 @@ spec:
           value: {{ .Values.basketUrl }}
         - name: ClientUrl
           value: {{ .Values.clientUrl }}
+        - name: AnalyticsUrl
+          value: {{ .Values.clientUrl }}
         - name: InventoryUrl
           value: {{ .Values.inventoryUrl }}
         - name: NewsUrl
