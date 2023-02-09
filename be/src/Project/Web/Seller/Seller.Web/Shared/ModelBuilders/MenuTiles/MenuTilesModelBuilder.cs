@@ -14,15 +14,18 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
     public class MenuTilesModelBuilder : IModelBuilder<MenuTilesViewModel>
     {
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<DashboardResources> _dashboardResources;
         private readonly LinkGenerator _linkGenerator;
         private readonly IOptionsMonitor<AppSettings> _options;
 
         public MenuTilesModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
+            IStringLocalizer<DashboardResources> dashboardResources,
             IOptionsMonitor<AppSettings> options,
             LinkGenerator linkGenerator)
         {
             _globalLocalizer = globalLocalizer;
+            _dashboardResources = dashboardResources;
             _linkGenerator = linkGenerator;
             _options = options;
         }
@@ -42,7 +45,7 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                     new MenuTileViewModel
                     {
                         Icon = IconsConstants.TrendingUp,
-                        Title = _globalLocalizer.GetString("Dashboard"),
+                        Title = _dashboardResources.GetString("Dashboard"),
                         Url = _linkGenerator.GetPathByAction("Index", "Dashboard", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name })
                     },
                     new MenuTileViewModel

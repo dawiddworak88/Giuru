@@ -12,14 +12,17 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
     public class DrawerMenuModelBuilder : IModelBuilder<IEnumerable<DrawerMenuViewModel>>
     {
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<DashboardResources> _dashboardLocalizer;
         private readonly LinkGenerator _linkGenerator;
 
         public DrawerMenuModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
+            IStringLocalizer<DashboardResources> dashboardLocalizer,
             LinkGenerator linkGenerator)
         {
             _globalLocalizer = globalLocalizer;
             _linkGenerator = linkGenerator;
+            _dashboardLocalizer = dashboardLocalizer;
         }
 
         public IEnumerable<DrawerMenuViewModel> BuildModel()
@@ -45,7 +48,7 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.TrendingUp,
-                            Title = _globalLocalizer.GetString("Dashboard"),
+                            Title = _dashboardLocalizer.GetString("Dashboard"),
                             Url = _linkGenerator.GetPathByAction("Index", "Dashboard", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name })
                         }
                     }
