@@ -11,7 +11,7 @@ services:
       - jaeger
 
   otel-collector:
-    image: otel/opentelemetry-collector-contrib
+    image: otel/opentelemetry-collector-contrib:latest
     restart: unless-stopped
     depends_on:
       - jaeger
