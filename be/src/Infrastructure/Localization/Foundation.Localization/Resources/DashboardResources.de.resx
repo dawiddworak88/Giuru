@@ -120,6 +120,12 @@
   <data name="AnnualOrdersAnalysis" xml:space="preserve">
     <value>Anzahl der bestellten Artikel in den letzten 12 Monaten</value>
   </data>
+  <data name="CountrySales" xml:space="preserve">
+    <value>Verkäufe der letzten {0} Monate nach Land</value>
+  </data>
+  <data name="DailySales" xml:space="preserve">
+    <value>Tägliche Verkäufe</value>
+  </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Armaturenbrett</value>
   </data>
