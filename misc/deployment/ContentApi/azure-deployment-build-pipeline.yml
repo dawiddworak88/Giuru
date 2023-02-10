@@ -2,13 +2,16 @@ trigger:
   branches:
     include:
     - main
+  paths:
+    include:
+    - be/src/Project/Services/Content/Content.Api
 
 pr: none
 
 variables:
 - group: eltap
 - group: eltap-production
-- template: '../variables.yml'
+- template: './variables.yml'
 - name: b2bContentApiDockerfile
   value: 'be/src/Project/Services/Content/Content.Api/Dockerfile'
 - name: dockerfileBuildContext

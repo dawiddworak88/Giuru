@@ -4,7 +4,7 @@ trigger:
     - main
   paths:
     include:
-    - be/src/Project/Services/News/News.Api
+    - be/src/Project/Services/Media/Media.Api
 
 pr: none
 
@@ -12,12 +12,12 @@ variables:
 - group: eltap
 - group: eltap-production
 - template: './variables.yml'
-- name: b2bNewsApiDockerfile
-  value: 'be/src/Project/Services/News/News.Api/Dockerfile'
+- name: b2bMediaApiDockerfile
+  value: 'be/src/Project/Services/Media/Media.Api/Dockerfile'
 - name: dockerfileBuildContext
   value: 'be/src'
 - name: chartPath
-  value: 'misc/deployment/NewsApi/helm-chart'
+  value: 'misc/deployment/MediaApi/helm-chart'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -37,8 +37,8 @@ steps:
   displayName: Build and Push Docker Image
   inputs:
     command: buildAndPush
-    repository: $(b2bNewsApiImageRepository)
-    dockerfile: $(b2bNewsApiDockerfile)
+    repository: $(b2bMediaApiImageRepository)
+    dockerfile: $(b2bMediaApiDockerfile)
     buildContext: $(dockerfileBuildContext)
     containerRegistry: $(acrServiceConnection)
     tags: |
