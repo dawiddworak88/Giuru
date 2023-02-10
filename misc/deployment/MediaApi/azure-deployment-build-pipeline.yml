@@ -11,7 +11,7 @@ pr: none
 variables:
 - group: eltap
 - group: eltap-production
-- template: '../variables.yml'
+- template: './variables.yml'
 - name: b2bMediaApiDockerfile
   value: 'be/src/Project/Services/Media/Media.Api/Dockerfile'
 - name: dockerfileBuildContext

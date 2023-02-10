@@ -13,7 +13,7 @@ resources:
 
 variables:
 - group: eltap
-- template: '../variables.yml'
+- template: './variables.yml'
 - name: k8sReleaseName
   value: 'b2b-global-api'
 - name: helmVersionToInstall
