@@ -274,7 +274,7 @@ namespace Analytics.Api.Services.SalesAnalytics
 
             var now = DateTime.UtcNow;
 
-            var days = Enumerable.Range(-7, 7)
+            var days = Enumerable.Range(-21, 21)
                 .Select(x => new
                 {
                     Year = now.AddDays(x + 1).Year,

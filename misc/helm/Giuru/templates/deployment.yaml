@@ -1090,7 +1090,7 @@ spec:
         - name: ClientUrl
           value: {{ .Values.clientUrl }}
         - name: AnalyticsUrl
-          value: {{ .Values.clientUrl }}
+          value: {{ .Values.analyticsUrl }}
         - name: InventoryUrl
           value: {{ .Values.inventoryUrl }}
         - name: NewsUrl
