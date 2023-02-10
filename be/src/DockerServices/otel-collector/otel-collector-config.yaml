@@ -24,13 +24,7 @@ exporters:
   loki:
     endpoint: "http://loki:3100/api/prom/push"
 
-extensions:
-  health_check:
-  pprof:
-  zpages:
-
 service:
-  extensions: [health_check, pprof, zpages]
   pipelines:
     traces:
       receivers: [otlp]
