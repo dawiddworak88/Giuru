@@ -1,39 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: news-api-deployment
+  name: media-api-deployment
   labels:
-    app: news-api
+    app: media-api
 spec:
-  replicas: {{ .Values.newsApi.replicas }}
+  replicas: {{ .Values.mediaApi.replicas }}
   selector:
     matchLabels:
-      app: news-api
+      app: media-api
   template:
     metadata:
       labels:
-        app: news-api
+        app: media-api
     spec:
       containers:
-      - name: news-api-container
+      - name: media-api-container
         image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
         readinessProbe:
           httpGet:
             path: /hc
             port: 80
-          initialDelaySeconds: {{ .Values.newsApi.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.newsApi.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.newsApi.readinessProbe.timeoutSeconds }}
+          initialDelaySeconds: {{ .Values.mediaApi.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.mediaApi.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.mediaApi.readinessProbe.timeoutSeconds }}
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
-          initialDelaySeconds: {{ .Values.newsApi.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.newsApi.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.newsApi.livenessProbe.timeoutSeconds }}
-        resources:
-          limits:
-            memory: {{ .Values.newsApi.resources.limits.memory }}
+          initialDelaySeconds: {{ .Values.mediaApi.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.mediaApi.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.mediaApi.livenessProbe.timeoutSeconds }}
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -45,12 +42,16 @@ spec:
           value: {{ .Values.openTelemetryCollectorUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
         envFrom:
         - secretRef:
-            name: b2b-news-api-secrets
+            name: b2b-media-api-secrets
         ports:
         - containerPort: 80

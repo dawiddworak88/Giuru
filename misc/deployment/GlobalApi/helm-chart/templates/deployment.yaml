@@ -5,7 +5,7 @@ metadata:
   labels:
     app: global-api
 spec:
-  replicas: {{ .Values.contentApi.replicas }}
+  replicas: {{ .Values.globalApi.replicas }}
   selector:
     matchLabels:
       app: global-api

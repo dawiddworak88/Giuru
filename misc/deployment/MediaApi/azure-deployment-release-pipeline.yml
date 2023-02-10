@@ -1,0 +1,77 @@
+trigger: none
+
+pr: none
+
+resources:
+  pipelines:
+  - pipeline: MediaApiBuild
+    source: '[Media Api] Build'
+    trigger: 
+      branches:
+        include: 
+        - main
+
+variables:
+- group: eltap
+- template: '../variables.yml'
+- name: k8sReleaseName
+  value: 'b2b-media-api'
+- name: helmVersionToInstall
+  value: '3.3.4'
+- name: helmChartPath
+  value: '$(Pipeline.Workspace)/helm-chart'
+
+stages:
+- stage: Production
+  variables:
+  - group: eltap-production
+  - group: eltap-b2b-media-api-production
+  jobs:
+  - deployment:
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment: Production
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: ExtractFiles@1
+            displayName: Extract Helm Chart
+            inputs:
+              archiveFilePatterns: '$(Pipeline.Workspace)/MediaApiBuild/drop/helm-chart.zip'
+              destinationFolder: $(helmChartPath)
+          - task: HelmInstaller@1
+            displayName: Install Helm
+            inputs:
+              helmVersionToInstall: $(helmVersionToInstall)
+          - task: HelmDeploy@0
+            displayName: Login to Kubernetes
+            inputs:
+              command: login
+              azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+              azureResourceGroup: $(azureResourceGroup)
+              kubernetesCluster: $(kubernetesCluster)
+          - script: |
+              stringConnectionString="$(connectionString)"
+              escapedConnectionString=${stringConnectionString//,/\\,}
+
+              helm upgrade --install --wait \
+              --set image.registry='$(acrLoginServer)' \
+              --set image.repository='$(b2bMediaApiImageRepository)' \
+              --set image.tag='$(Resources.Pipeline.MediaApiBuild.RunID)' \
+              --set environment='$(environment)' \
+              --set identityUrl='$(identityUrl)' \
+              --set redisUrl='$(redisUrl)' \
+              --set eventBusConnection='$(eventBusConnection)' \
+              --set eventBusRetryCount='$(eventBusRetryCount)' \
+              --set eventBusRequestedHeartbeat='$(eventBusRequestedHeartbeat)' \
+              --set logzIoToken='$(logzIoToken)' \
+              --set logzIoType='$(logzIoType)' \
+              --set organisationId='$(organisationId)' \
+              --set logzIoDataCenterSubDomain='$(logzIoDataCenterSubDomain)' \
+              --set openTelemetryCollectorUrl='$(openTelemetryCollectorUrl)' \
+              --set mediaApi.connectionString="$escapedConnectionString" \
+              --set mediaApi.storageConnectionString='$(storageConnectionString)' \
+              --set ingress.mediaapidomain='$(mediaApiDomain)' \
+              $(k8sReleaseName) $(helmChartPath)
+            displayName: Deploy to Kubernetes
