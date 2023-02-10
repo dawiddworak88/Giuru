@@ -7,3 +7,5 @@ variables:
   value: 'b2b-news-api'
 - name: b2bMediaApiImageRepository
   value: 'b2b-media-api'
+- name: b2bInventoryApiImageRepository
+  value: 'b2b-inventory-api'
