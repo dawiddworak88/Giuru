@@ -12,7 +12,7 @@ resources:
         - main
 
 variables:
-- group: eltap
+- group: global
 - template: './variables.yml'
 - name: k8sReleaseName
   value: 'b2b-media-api'
@@ -24,8 +24,8 @@ variables:
 stages:
 - stage: Production
   variables:
-  - group: eltap-production
-  - group: eltap-b2b-media-api-production
+  - group: production
+  - group: b2b-media-api-production
   jobs:
   - deployment:
     pool:
