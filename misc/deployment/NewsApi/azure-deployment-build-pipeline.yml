@@ -9,8 +9,8 @@ trigger:
 pr: none
 
 variables:
-- group: eltap
-- group: eltap-production
+- group: global
+- group: production
 - template: './variables.yml'
 - name: b2bNewsApiDockerfile
   value: 'be/src/Project/Services/News/News.Api/Dockerfile'
