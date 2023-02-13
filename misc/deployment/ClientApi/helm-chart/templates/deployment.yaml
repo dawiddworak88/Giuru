@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-api-deployment
+  labels:
+    app: client-api
+spec:
+  replicas: {{ .Values.clientApi.replicas }}
+  selector:
+    matchLabels:
+      app: client-api
+  template:
+    metadata:
+      labels:
+        app: client-api
+    spec:
+      containers:
+      - name: client-api-container
+        image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: {{ .Values.clientApi.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.clientApi.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.clientApi.readinessProbe.timeoutSeconds }}
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: {{ .Values.clientApi.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.clientApi.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.clientApi.livenessProbe.timeoutSeconds }}
+        resources:
+          limits:
+            memory: {{ .Values.clientApi.resources.limits.memory }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: SenderName
+          value: {{ .Values.senderName }}
+        - name: SenderEmail
+          value: {{ .Values.senderEmail }}
+        - name: ApplyRecipientEmail
+          value: {{ .Values.identityApi.applyRecipientEmail }}
+        - name: ActionSendGridClientApplyConfirmationTemplateId
+          value: {{ .Values.clientApi.actionSendGridClientApplyConfirmationTemplateId }}
+        - name: ActionSendGridClientApplyTemplateId
+          value: {{ .Values.clientApi.actionSendGridClientApplyTemplateId }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        envFrom:
+        - secretRef:
+            name: b2b-client-api-secrets
+        ports:
+        - containerPort: 80
