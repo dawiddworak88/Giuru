@@ -66,16 +66,23 @@ namespace Global.Api.Services.Countries
         {
             var countries = _context.Countries.Where(x => x.IsActive)
                     .Include(x => x.Translations)
-                    .AsSingleQuery();
+                    .AsSingleQuery()
+                    .Select(x => new CountryServiceModel
+                    {
+                        Id = x.Id,
+                        Name = x.Translations.FirstOrDefault(t => t.CountryId == x.Id && t.Language == model.Language) != null ? x.Translations.FirstOrDefault(t => t.CountryId == x.Id && t.Language == model.Language).Name : x.Translations.FirstOrDefault(t => t.CountryId == x.Id).Name,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    });
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                countries = countries.Where(x => x.Translations.Any(x => x.Name.StartsWith(model.SearchTerm)));
+                countries = countries.Where(x => x.Name.StartsWith(model.SearchTerm));
             }
 
             countries = countries.ApplySort(model.OrderBy);
 
-            PagedResults<IEnumerable<Country>> pagedResults;
+            PagedResults<IEnumerable<CountryServiceModel>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
@@ -88,16 +95,7 @@ namespace Global.Api.Services.Countries
                 pagedResults = countries.PagedIndex(new Pagination(countries.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            return new PagedResults<IEnumerable<CountryServiceModel>>(pagedResults.Total, pagedResults.PageSize)
-            {
-                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new CountryServiceModel
-                {
-                    Id = x.Id,
-                    Name = x.Translations.FirstOrDefault(t => t.CountryId == x.Id && t.Language == model.Language)?.Name ?? x.Translations.FirstOrDefault(t => t.CountryId == x.Id)?.Name,
-                    LastModifiedDate = x.LastModifiedDate,
-                    CreatedDate = x.CreatedDate
-                })
-            };
+            return pagedResults;
         }
 
         public async Task<CountryServiceModel> GetAsync(GetCountryServiceModel model)
