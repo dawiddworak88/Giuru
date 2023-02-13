@@ -1,0 +1,77 @@
+trigger: none
+
+pr: none
+
+resources:
+  pipelines:
+  - pipeline: CatalogApiBuild
+    source: '[Catalog Api] Build'
+    trigger: 
+      branches:
+        include: 
+        - main
+
+variables:
+- group: global
+- template: './variables.yml'
+- name: k8sReleaseName
+  value: 'b2b-catalog-api'
+- name: helmVersionToInstall
+  value: '3.3.4'
+- name: helmChartPath
+  value: '$(Pipeline.Workspace)/helm-chart'
+
+stages:
+- stage: Production
+  variables:
+  - group: production
+  - group: b2b-catalog-api-production
+  jobs:
+  - deployment:
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment: Production
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: ExtractFiles@1
+            displayName: Extract Helm Chart
+            inputs:
+              archiveFilePatterns: '$(Pipeline.Workspace)/CatalogApiBuild/drop/helm-chart.zip'
+              destinationFolder: $(helmChartPath)
+          - task: HelmInstaller@1
+            displayName: Install Helm
+            inputs:
+              helmVersionToInstall: $(helmVersionToInstall)
+          - task: HelmDeploy@0
+            displayName: Login to Kubernetes
+            inputs:
+              command: login
+              azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+              azureResourceGroup: $(azureResourceGroup)
+              kubernetesCluster: $(kubernetesCluster)
+          - script: |
+              stringConnectionString="$(connectionString)"
+              escapedConnectionString=${stringConnectionString//,/\\,}
+
+              helm upgrade --install --wait \
+              --set image.registry='$(acrLoginServer)' \
+              --set image.repository='$(b2bCatalogApiImageRepository)' \
+              --set image.tag='$(Resources.Pipeline.CatalogApiBuild.RunID)' \
+              --set environment='$(environment)' \
+              --set identityUrl='$(identityUrl)' \
+              --set mediaUrl='$(mediaUrl)' \
+              --set redisUrl='$(redisUrl)' \
+              --set logzIoToken='$(logzIoToken)' \
+              --set logzIoType='$(logzIoType)' \
+              --set logzIoDataCenterSubDomain='$(logzIoDataCenterSubDomain)' \
+              --set eventBusConnection='$(eventBusConnection)' \
+              --set eventBusRetryCount=`$(eventBusRetryCount)` \
+              --set eventBusRequestedHeartbeat=`$(eventBusRequestedHeartbeat)` \
+              --set openTelemetryCollectorUrl='$(openTelemetryCollectorUrl)' \
+              --set catalogApi.connectionString="$escapedConnectionString" \
+              --set catalogApi.brands=`$(brands)` \
+              --set ingress.catalogapidomain='$(catalogApiDomain)' \
+              $(k8sReleaseName) $(helmChartPath)
+            displayName: Deploy to Kubernetes
