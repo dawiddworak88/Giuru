@@ -31,10 +31,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Analytics
 
             if (annualSales is not null && annualSales.Any(x => x.Quantity > 0))
             {
-                var viewModel = new SalesAnalyticsViewModel
-                {
-                    Title = _dashboardResources.GetString("NumberOfOrders")
-                };
+                var viewModel = new SalesAnalyticsViewModel();
 
                 var chartDataset = new List<double>();
                 var chartLabels = new List<string>();
