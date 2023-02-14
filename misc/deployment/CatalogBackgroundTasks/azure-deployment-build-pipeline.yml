@@ -4,7 +4,7 @@ trigger:
     - main
   paths:
     include:
-    - be/src/Project/Services/Client/Client.Api
+    - be/src/Project/Services/Catalog/Catalog.BackgroundTasks
 
 pr: none
 
@@ -12,12 +12,12 @@ variables:
 - group: global
 - group: production
 - template: './variables.yml'
-- name: b2bClientApiDockerfile
-  value: 'be/src/Project/Services/Client/Client.Api/Dockerfile'
+- name: b2bCatalogBackgroundTasksDockerfile
+  value: 'be/src/Project/Services/Catalog/Catalog.BackgroundTasks/Dockerfile'
 - name: dockerfileBuildContext
   value: 'be/src'
 - name: chartPath
-  value: 'misc/deployment/ClientApi/helm-chart'
+  value: 'misc/deployment/CatalogBackgroundTasks/helm-chart'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -37,8 +37,8 @@ steps:
   displayName: Build and Push Docker Image
   inputs:
     command: buildAndPush
-    repository: $(b2bClientApiImageRepository)
-    dockerfile: $(b2bClientApiDockerfile)
+    repository: $(b2bCatalogBackgroundTasksImageRepository)
+    dockerfile: $(b2bCatalogBackgroundTasksDockerfile)
     buildContext: $(dockerfileBuildContext)
     containerRegistry: $(acrServiceConnection)
     tags: |
