@@ -70,6 +70,7 @@ stages:
               --set eventBusRetryCount=`$(eventBusRetryCount)` \
               --set eventBusRequestedHeartbeat=`$(eventBusRequestedHeartbeat)` \
               --set openTelemetryCollectorUrl='$(openTelemetryCollectorUrl)' \
+              --set elasticsearchUrl='$(elasticsearchUrl)' \
               --set catalogApi.connectionString="$escapedConnectionString" \
               --set catalogApi.brands=`$(brands)` \
               --set ingress.catalogapidomain='$(catalogApiDomain)' \
