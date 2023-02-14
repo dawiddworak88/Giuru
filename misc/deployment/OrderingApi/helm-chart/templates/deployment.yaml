@@ -1,66 +1,70 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: client-api-deployment
+  name: ordering-api-deployment
   labels:
-    app: client-api
+    app: ordering-api
 spec:
-  replicas: {{ .Values.clientApi.replicas }}
+  replicas: {{ .Values.orderingApi.replicas }}
   selector:
     matchLabels:
-      app: client-api
+      app: ordering-api
   template:
     metadata:
       labels:
-        app: client-api
+        app: ordering-api
     spec:
       containers:
-      - name: client-api-container
+      - name: ordering-api-container
         image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
         readinessProbe:
           httpGet:
             path: /hc
             port: 80
-          initialDelaySeconds: {{ .Values.clientApi.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.clientApi.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.clientApi.readinessProbe.timeoutSeconds }}
+          initialDelaySeconds: {{ .Values.orderingApi.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.orderingApi.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.orderingApi.readinessProbe.timeoutSeconds }}
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
-          initialDelaySeconds: {{ .Values.clientApi.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.clientApi.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.clientApi.livenessProbe.timeoutSeconds }}
+          initialDelaySeconds: {{ .Values.orderingApi.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.orderingApi.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.orderingApi.livenessProbe.timeoutSeconds }}
         resources:
           limits:
-            memory: {{ .Values.clientApi.resources.limits.memory }}
+            memory: {{ .Values.orderingApi.resources.limits.memory }}
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
+        - name: MediaUrl
+          value: {{ .Values.mediaUrl }}
         - name: LogzIoType
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
         - name: OpenTelemetryCollectorUrl
           value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: SenderName
           value: {{ .Values.senderName }}
         - name: SenderEmail
           value: {{ .Values.senderEmail }}
         - name: ApplyRecipientEmail
           value: {{ .Values.applyRecipientEmail }}
-        - name: ActionSendGridClientApplyConfirmationTemplateId
-          value: {{ .Values.clientApi.actionSendGridClientApplyConfirmationTemplateId }}
-        - name: ActionSendGridClientApplyTemplateId
-          value: {{ .Values.clientApi.actionSendGridClientApplyTemplateId }}
+        - name: ActionSendGridCustomOrderTemplateId
+          value: {{ .Values.orderingApi.actionSendGridCustomOrderTemplateId }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
         envFrom:
         - secretRef:
-            name: b2b-client-api-secrets
+            name: b2b-ordering-api-secrets
         ports:
         - containerPort: 80
