@@ -9,12 +9,12 @@ const DashboardDetail = (props) => {
             <h1 className="title is-3">{props.title}</h1>
             <div className="mt-4">
                 <div className="columns">
-                    <div className="column is-two-thirds dashboard__container">
+                    <div className="column is-half dashboard__container">
                         {props.dailySalesAnalytics &&
                             <SalesAnalytics {...props.dailySalesAnalytics} />
                         }
                     </div>
-                    <div className="column is-one-third dashboard__container">
+                    <div className="column is-half dashboard__container">
                         {props.countrySalesAnalytics &&
                             <CountrySalesAnalytics {...props.countrySalesAnalytics} />
                         }
@@ -27,7 +27,7 @@ const DashboardDetail = (props) => {
 
 DashboardDetail.propTypes = {
     title: PropTypes.string.isRequired,
-    salesAnalytics: PropTypes.object.isRequired,
+    dailySalesAnalytics: PropTypes.object.isRequired,
     countrySalesAnalytics: PropTypes.object.isRequired
 }
 
