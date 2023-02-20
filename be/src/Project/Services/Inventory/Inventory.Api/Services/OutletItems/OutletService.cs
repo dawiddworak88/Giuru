@@ -250,16 +250,32 @@ namespace Inventory.Api.Services.OutletItems
                     .Include(x => x.Warehouse)
                     .Include(x => x.Product)
                     .Include(x => x.Translations)
-                    .AsSingleQuery();
+                    .AsSingleQuery()
+                    .Select(x => new OutletServiceModel
+                    {
+                        Id = x.Id,
+                        ProductId = x.ProductId,
+                        ProductName = x.Product.Name,
+                        ProductSku = x.Product.Sku,
+                        ProductEan = x.Product.Ean,
+                        Title = x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id && t.Language == model.Language) != null ? x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id && t.Language == model.Language).Title : x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id).Title,
+                        Description = x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id && t.Language == model.Language) != null ? x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id && t.Language == model.Language).Description : x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id).Description,
+                        Quantity = x.Quantity,
+                        WarehouseId = x.WarehouseId,
+                        WarehouseName = x.Warehouse.Name,
+                        AvailableQuantity = x.AvailableQuantity,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    });;
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                outletItems = outletItems.Where(x => x.Translations.Any(t => t.Title.StartsWith(model.SearchTerm) || t.Description.StartsWith(model.SearchTerm)) || x.Product.Sku.StartsWith(model.SearchTerm) || x.Product.Name.StartsWith(model.SearchTerm));
+                outletItems = outletItems.Where(x => x.Title.StartsWith(model.SearchTerm) || x.Description.StartsWith(model.SearchTerm) || x.ProductSku.StartsWith(model.SearchTerm) || x.ProductName.StartsWith(model.SearchTerm) || x.ProductEan.StartsWith(model.SearchTerm));
             }
 
             outletItems = outletItems.ApplySort(model.OrderBy);
 
-            PagedResults<IEnumerable<OutletItem>> pagedResults;
+            PagedResults<IEnumerable<OutletServiceModel>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
@@ -272,25 +288,7 @@ namespace Inventory.Api.Services.OutletItems
                 pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            return new PagedResults<IEnumerable<OutletServiceModel>>(pagedResults.Total, pagedResults.PageSize)
-            {
-                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new OutletServiceModel
-                {
-                    Id = x.Id,
-                    ProductId = x.ProductId,
-                    ProductName = x.Product?.Name,
-                    ProductSku = x.Product?.Sku,
-                    ProductEan = x.Product?.Ean,
-                    Title = x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id && t.Language == model.Language)?.Title ?? x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id)?.Title,
-                    Description = x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id && t.Language == model.Language)?.Description ?? x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id)?.Description,
-                    Quantity = x.Quantity,
-                    WarehouseId = x.WarehouseId,
-                    WarehouseName = x.Warehouse?.Name,
-                    AvailableQuantity = x.AvailableQuantity,
-                    LastModifiedDate = x.LastModifiedDate,
-                    CreatedDate = x.CreatedDate
-                })
-            };
+            return pagedResults;
         }
 
         public PagedResults<IEnumerable<OutletServiceModel>> GetByIds(GetOutletsByIdsServiceModel model)

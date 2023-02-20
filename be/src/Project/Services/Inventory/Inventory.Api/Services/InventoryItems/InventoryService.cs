@@ -192,16 +192,32 @@ namespace Inventory.Api.Services.InventoryItems
             var inventoryItems = _context.Inventory.Where(x => x.SellerId == model.OrganisationId && x.IsActive)
                     .Include(x => x.Warehouse)
                     .Include(x => x.Product)
-                    .AsSingleQuery();
+                    .AsSingleQuery()
+                    .Select(x => new InventoryServiceModel
+                    {
+                        Id = x.Id,
+                        ProductId = x.ProductId,
+                        ProductName = x.Product.Name,
+                        Sku = x.Product.Sku,
+                        Ean = x.Product.Ean,
+                        AvailableQuantity = x.AvailableQuantity,
+                        Quantity = x.Quantity,
+                        ExpectedDelivery = x.ExpectedDelivery,
+                        RestockableInDays = x.RestockableInDays,
+                        WarehouseId = x.WarehouseId,
+                        WarehouseName = x.Warehouse.Name,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    });
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                inventoryItems = inventoryItems.Where(x => x.Product.Name.StartsWith(model.SearchTerm) || x.Warehouse.Name.StartsWith(model.SearchTerm) || x.Product.Sku.StartsWith(model.SearchTerm));
+                inventoryItems = inventoryItems.Where(x => x.ProductName.StartsWith(model.SearchTerm) || x.WarehouseName.StartsWith(model.SearchTerm) || x.Sku.StartsWith(model.SearchTerm));
             }
 
             inventoryItems = inventoryItems.ApplySort(model.OrderBy);
 
-            PagedResults<IEnumerable<InventoryItem>> pagedResults;
+            PagedResults<IEnumerable<InventoryServiceModel>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
@@ -214,25 +230,7 @@ namespace Inventory.Api.Services.InventoryItems
                 pagedResults = inventoryItems.PagedIndex(new Pagination(inventoryItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            return new PagedResults<IEnumerable<InventoryServiceModel>>(pagedResults.Total, pagedResults.PageSize)
-            {
-                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new InventoryServiceModel
-                {
-                    Id = x.Id,
-                    ProductId = x.ProductId,
-                    ProductName = x.Product?.Name,
-                    Sku = x.Product?.Sku,
-                    Ean = x.Product?.Ean,
-                    AvailableQuantity = x.AvailableQuantity,
-                    Quantity = x.Quantity,
-                    ExpectedDelivery = x.ExpectedDelivery,
-                    RestockableInDays = x.RestockableInDays,
-                    WarehouseId = x.WarehouseId,
-                    WarehouseName = x.Warehouse?.Name,
-                    LastModifiedDate = x.LastModifiedDate,
-                    CreatedDate = x.CreatedDate
-                })
-            };
+            return pagedResults;
         }
 
         public PagedResults<IEnumerable<InventoryServiceModel>> GetByIds(GetInventoriesByIdsServiceModel model)
@@ -441,7 +439,7 @@ namespace Inventory.Api.Services.InventoryItems
 
             var groupedResults = pagedResults.Data.GroupBy(x => x.ProductId);
 
-            return new PagedResults<IEnumerable<InventorySumServiceModel>>(groupedResults.Count(), pagedResults.PageSize)
+            return new PagedResults<IEnumerable<InventorySumServiceModel>>(inventoryItems.Count(), pagedResults.PageSize)
             {
                 Data = groupedResults.OrEmptyIfNull().Select(x => new InventorySumServiceModel
                 {
