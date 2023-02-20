@@ -183,6 +183,9 @@
   <data name="NewProductAttributeItem" xml:space="preserve">
     <value>New product attribute item</value>
   </data>
+  <data name="NewProductCard" xml:space="preserve">
+    <value>Add new card</value>
+  </data>
   <data name="ParentCategory" xml:space="preserve">
     <value>Parent category</value>
   </data>

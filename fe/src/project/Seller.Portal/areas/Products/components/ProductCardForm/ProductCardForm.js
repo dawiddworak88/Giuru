@@ -8,7 +8,6 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import ProductCardModal from "../ProductCardModal/ProductCardModal";
-import { update } from "lodash";
 
 const ProductCardForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -143,14 +142,23 @@ const ProductCardForm = (props) => {
     }
 
     const generateSchemaElementFromElement = (element) => {
-        const prop = {};
+        if (element.definitionId != undefined) {
 
-        Object.keys(element.dataOptions).forEach((key) => {
-          if (element.dataOptions[key] !== '')
-            prop[key] = element.dataOptions[key];
-        });
+            return {
+                title: element.dataOptions.title,
+                $ref: `#/definitions/${element.definitionId}`
+            }
+        }
+        else {
+            const prop = {};
 
-        return prop;
+            Object.keys(element.dataOptions).forEach((key) => {
+            if (element.dataOptions[key] !== '')
+                prop[key] = element.dataOptions[key];
+            });
+
+            return prop;
+        }
     }
 
     const generateSchemaFromElementProps = (elements) => {
@@ -164,17 +172,9 @@ const ProductCardForm = (props) => {
         const dependentElements = new Set([]);
 
         for (let i = 0; i < elements.length; i += 1) {
-            const element = elements[i];
+            let element = elements[i];
 
             elementDict[element.name] = { ...element };
-
-            if (element.dependents){
-                element.dependents.forEach((possibility) => {
-                    possibility.children.forEach((dependentElement) => {
-                        dependentElements.add(dependentElement);
-                    });
-                });
-            }
         }
 
         Object.keys(elementDict).forEach((elementName) => {
@@ -219,13 +219,22 @@ const ProductCardForm = (props) => {
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        setProductAttribute(null)
+        //setProductAttribute(null)
     }
 
     const handleOpenModal = (schema) => {
-        const newElement = test(schema)
+        const newElements = generateElementsFromSchema(schema);
+        const i = getIdFromElements(newElements);
 
-        console.log(newElement)
+        const newElement = {
+            name: `${props.defaultInputName}${i}`,
+            required: false,
+            dataOptions: {
+                title: `${props.defaultInputName}${i}`,
+                type: "string",
+                default: ""
+            }
+        }
 
         setProductAttribute(newElement);
         setIsModalOpen(true);
@@ -261,32 +270,35 @@ const ProductCardForm = (props) => {
           : 1;
       }
 
-    const test = (schema) => {
-        const newElements = generateElementsFromSchema(schema);
-        const i = getIdFromElements(newElements);
-
-        const newElement = {
-            name: `${props.defaultInputName}${i}`,
-            required: false,
-            dataOptions: {
-                title: `${props.defaultInputName}${i}`,
-                type: "string",
-                default: ""
-            }
-        }
-
-        return newElement;
-    }
-
     const addCard = (schema) => {
-        const newElement = test(schema);
-
         const newElements = generateElementsFromSchema(schema);
 
-        newElements.splice(0, 0, newElement)
+        if (productAttribute != null) {
 
-        updateSchema(newElements, schema)
-        setIsModalOpen(false);
+            let newElement = {
+                name: productAttribute.name,
+                required: false,
+                dataOptions: {
+                    title: productAttribute.dataOptions.title,
+                    type: productAttribute.dataOptions.type,
+                    default: ""
+                }
+            }
+
+            if (productAttribute.definitionId != undefined) {
+                newElement = {
+                    ...newElement,
+                    definitionId: productAttribute.definitionId
+                }
+            }
+
+            newElements.splice(0, 0, newElement)
+
+            updateSchema(newElements, schema)
+
+            setIsModalOpen(false);
+            setProductAttribute(null);
+        } 
     }
 
     const { values, setFieldValue, handleOnSubmit } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
@@ -354,7 +366,7 @@ const ProductCardForm = (props) => {
                     ],
                     inputTypeLabel: "Input type",
                     inputTypes: [
-                        { name: "Array" },
+                        { name: "Reference" },
                         { name: "Boolean" },
                         { name: "Checkbox" },
                         { name: "Number" },

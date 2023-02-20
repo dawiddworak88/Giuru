@@ -75,14 +75,14 @@ const ProductCardModal = (props) => {
                                 </Select>
                             </FormControl>
                         </div>
-                        {productAttribute.definitionId &&
+                        {productAttribute.type === "reference" &&
                             <div className="field">
                                 <FormControl fullWidth={true} variant="standard">
                                     <InputLabel id="definition-label">{props.labels.definitionLabel}</InputLabel>
                                     <Select
                                         labelId="definition-label"
-                                        id="definition"
-                                        name="definition"
+                                        id="definitionId"
+                                        name="definitionId"
                                         value={productAttribute.definitionId}
                                         onChange={(e) => updateAttribute(e)}
                                     >
