@@ -96,9 +96,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "750Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -242,9 +239,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "750Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -312,9 +306,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "750Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -378,9 +369,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "750Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -479,9 +467,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "750Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -583,9 +568,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "750Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -649,9 +631,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "750Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -711,9 +690,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "750Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -779,9 +755,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "750Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -825,9 +798,6 @@ spec:
       containers:
       - name: content-api-container
         image: {{ .Values.image.registry }}/content-api:{{ .Values.image.tag }}
-        resources:
-          limits:
-            memory: "750Mi"
         env:
         - name: DATABASE_CLIENT
           value: {{ .Values.contentApi.databaseClient }}
@@ -891,9 +861,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "750Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -971,9 +938,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "750Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -1067,9 +1031,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "750Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
