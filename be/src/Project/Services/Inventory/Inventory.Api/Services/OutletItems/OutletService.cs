@@ -482,8 +482,8 @@ namespace Inventory.Api.Services.OutletItems
                         AvailableQuantity = y.AvailableQuantity,
                         Quantity = y.Quantity,
                         OutletId = y.Id,
-                        Title = y.Translations.FirstOrDefault(t => t.OutletItemId == y.Id && t.Language == model.Language).Title,
-                        Description = y.Translations.FirstOrDefault(t => t.OutletItemId == y.Id && t.Language == model.Language).Description
+                        Title = y.Translations.FirstOrDefault(t => t.OutletItemId == y.Id && t.Language == model.Language) != null ? y.Translations.FirstOrDefault(t => t.OutletItemId == y.Id && t.Language == model.Language).Title : y.Translations.FirstOrDefault(t => t.OutletItemId == y.Id).Title,
+                        Description = y.Translations.FirstOrDefault(t => t.OutletItemId == y.Id && t.Language == model.Language) != null ? y.Translations.FirstOrDefault(t => t.OutletItemId == y.Id && t.Language == model.Language).Description : y.Translations.FirstOrDefault(t => t.OutletItemId == y.Id).Description
                     });
 
             PagedResults<IEnumerable<OutletSumServiceModel>> pagedResults;
