@@ -219,9 +219,14 @@ namespace Analytics.Api.Services.SalesAnalytics
 
         public IEnumerable<CountrySalesServiceModel> GetCountrySales(GetCountriesSalesServiceModel model)
         {
+            var endDate = DateTime.UtcNow;
+            var startDate = endDate.AddMonths(-2);
+
             var countriesSales = from s in _context.SalesFacts
                                  join l in _context.LocationDimensions on s.LocationDimensionId equals l.Id
-                                 where s.IsActive && l.IsActive && s.LocationDimensionId != null
+                                 join t in _context.TimeDimensions on s.TimeDimensionId equals t.Id
+                                 where s.IsActive && l.IsActive && s.LocationDimensionId != null && 
+                                    (t.Month >= startDate.Month || t.Month <= endDate.Month) && (t.Year >= startDate.Year && t.Year <= endDate.Year)
                                  group s by new { l.CountryId } into gpl
                                  where gpl.Sum(x => x.Quantity) > 0
                                  select new 
