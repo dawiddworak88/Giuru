@@ -213,6 +213,8 @@ const ProductCardForm = (props) => {
     }
 
     const handleProductAttribute = (attribute) => {
+        console.log(attribute)
+        setProductAttribute(null);
         setProductAttribute(attribute);
         setIsModalOpen(true);
     }
@@ -268,7 +270,7 @@ const ProductCardForm = (props) => {
               }),
             ) + 1
           : 1;
-      }
+    }
 
     const addCard = (schema) => {
         const newElements = generateElementsFromSchema(schema);
@@ -305,6 +307,8 @@ const ProductCardForm = (props) => {
 
     const { schema } = values;
     const requiredNames = schema.required ? schema.required : [];
+
+    console.log(JSON.stringify(schema));
 
     return (
         <section className="section section-small-padding category">

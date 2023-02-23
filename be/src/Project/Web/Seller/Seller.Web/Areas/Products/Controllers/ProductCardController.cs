@@ -5,7 +5,6 @@ using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Seller.Web.Areas.Products.ComponentModels;
 using System.Globalization;
 using System.Security.Claims;
 using System.Threading.Tasks;

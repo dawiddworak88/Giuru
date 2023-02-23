@@ -5,6 +5,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Seller.Web.Areas.Products.ViewModels;
+using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -22,6 +23,7 @@ namespace Seller.Web.Areas.Categoriess.Controllers
 
         public async Task<IActionResult> Index()
         {
+            Console.WriteLine("TEEEEESTYY");
             var componentModel = new ComponentModelBase
             {
                 IsAuthenticated = this.User.Identity.IsAuthenticated,

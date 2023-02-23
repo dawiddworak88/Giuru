@@ -5,6 +5,6 @@ namespace Seller.Web.Areas.Products.ViewModels
 {
     public class ProductCardsPageViewModel : BasePageViewModel
     {
-        public CatalogViewModel<Category> Catalog { get; set; }
+        public CatalogViewModel<ProductCardCategory> Catalog { get; set; }
     }
 }
