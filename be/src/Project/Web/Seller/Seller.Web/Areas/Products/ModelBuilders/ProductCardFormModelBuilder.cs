@@ -19,6 +19,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
         private readonly ICategoriesRepository _categoriesRepository;
 
         public ProductCardFormModelBuilder(
+            IAsyncComponentModelBuilder<ComponentModelBase, ProductCardModalViewModel> productCardModalModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             ICategoriesRepository categoriesRepository,
@@ -28,6 +29,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             _productLocalizer = productLocalizer;
             _linkGenerator = linkGenerator;
             _categoriesRepository = categoriesRepository;
+            _productCardModalModelBuilder = productCardModalModelBuilder;
         }
 
         public async Task<ProductCardFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -36,7 +38,9 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             {
                 IdLabel = _globalLocalizer.GetString("Id"),
                 Title = _productLocalizer.GetString("EditProductCard"),
+                NewText = _productLocalizer.GetString("NewProductCard"),
                 SaveText = _globalLocalizer.GetString("SaveText"),
+                DefaultInputName = _productLocalizer.GetString("ProductCardDefaultInputName"),
                 GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
                 NavigateToProductCardsLabel = _productLocalizer.GetString("NavigateToProductCards"),
                 ProductCardsUrl = _linkGenerator.GetPathByAction("Index", "ProductCards", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),

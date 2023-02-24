@@ -69,7 +69,7 @@ const ProductCardModal = (props) => {
                                         <MenuItem key={0} value="">{props.selectJobTitle}</MenuItem>
                                         {props.labels.inputTypes && props.labels.inputTypes.map((type, index) => {
                                             return (
-                                                <MenuItem key={index} value={type.name.toLowerCase()}>{type.name}</MenuItem>
+                                                <MenuItem key={index} value={type.toLowerCase()}>{type}</MenuItem>
                                             )
                                         })}
                                 </Select>
@@ -86,7 +86,7 @@ const ProductCardModal = (props) => {
                                         value={productAttribute.definitionId}
                                         onChange={(e) => updateAttribute(e)}
                                     >
-                                        <MenuItem key={0} value="">{props.selectJobTitle}</MenuItem>
+                                        <MenuItem key={0} value="" disabled>{props.labels.selectDefinitionLabel}</MenuItem>
                                         {props.labels.definitionsOptions && props.labels.definitionsOptions.map((definition, index) => {
                                             return (
                                                 <MenuItem key={index} value={definition.value}>{definition.name}</MenuItem>

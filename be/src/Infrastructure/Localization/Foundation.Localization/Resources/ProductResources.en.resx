@@ -171,6 +171,9 @@
   <data name="NavigateToCategoriesLabel" xml:space="preserve">
     <value>Back to categories</value>
   </data>
+  <data name="NavigateToProductCards" xml:space="preserve">
+    <value>Back to product cards</value>
+  </data>
   <data name="NavigateToProductsLabel" xml:space="preserve">
     <value>Back to products</value>
   </data>
@@ -218,6 +221,9 @@
   </data>
   <data name="ProductAttributeSavedSuccessfully" xml:space="preserve">
     <value>Product attribute has been saved successfully.</value>
+  </data>
+  <data name="ProductCardDefaultInputName" xml:space="preserve">
+    <value>NewElement</value>
   </data>
   <data name="ProductDeletedSuccessfully" xml:space="preserve">
     <value>Product has been deleted successfully</value>

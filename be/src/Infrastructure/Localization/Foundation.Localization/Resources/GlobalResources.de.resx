@@ -678,4 +678,13 @@
   <data name="ProductCards" xml:space="preserve">
     <value>Produktkarten</value>
   </data>
+  <data name="Definition" xml:space="preserve">
+    <value>Definition</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>Anzeigename</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Typ</value>
+  </data>
 </root>

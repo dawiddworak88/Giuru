@@ -684,4 +684,13 @@
   <data name="ProductCards" xml:space="preserve">
     <value>Karty produktów</value>
   </data>
+  <data name="Definition" xml:space="preserve">
+    <value>Definicja</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>Wyświetlana nazwa</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Typ</value>
+  </data>
 </root>

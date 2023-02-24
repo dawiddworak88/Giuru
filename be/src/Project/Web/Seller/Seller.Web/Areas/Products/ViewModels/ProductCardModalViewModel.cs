@@ -8,6 +8,7 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string Title { get; set; }
         public string NameLabel { get; set; }
         public string DisplayNameLabel { get; set; }
+        public string SelectDefinitionLabel { get; set; }
         public string DefinitionLabel { get; set; }
         public string SaveText { get; set; }
         public string CancelText { get; set; }
