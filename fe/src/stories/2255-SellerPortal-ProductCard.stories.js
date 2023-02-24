@@ -13,6 +13,9 @@ const componentProps = {
   saveText: "Save",
   defaultInputName: "NewElement",
   newText: "Add new card",
+  productCardModal: {
+
+  },
   schema: '{}'
   // schema: `{
   //   "definitions": {

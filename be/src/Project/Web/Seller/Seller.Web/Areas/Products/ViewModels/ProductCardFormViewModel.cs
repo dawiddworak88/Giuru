@@ -15,5 +15,6 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string NavigateToProductCardsLabel { get; set; }
         public string FieldRequiredErrorMessage { get; set; }
         public string ProductCardsUrl { get; set; }
+        public ProductCardModalViewModel ProductCardModal { get; set; }
     }
 }

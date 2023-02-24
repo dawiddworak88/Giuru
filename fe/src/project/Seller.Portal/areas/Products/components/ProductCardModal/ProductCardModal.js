@@ -41,7 +41,7 @@ const ProductCardModal = (props) => {
                                 type="text"
                                 value={productAttribute.name} 
                                 variant="standard" 
-                                label="Name" 
+                                label={props.labels.nameLabel}
                                 onChange={(e) => updateAttribute(e)}
                                 fullWidth={true} />
                         </div>
@@ -52,7 +52,7 @@ const ProductCardModal = (props) => {
                                 type="text"
                                 value={productAttribute.title ?? productAttribute.dataOptions.title} 
                                 variant="standard" 
-                                label="Display name"
+                                label={props.labels.displayNameLabel}
                                 onChange={(e) => updateAttribute(e)}
                                 fullWidth={true} />
                         </div>
@@ -100,7 +100,7 @@ const ProductCardModal = (props) => {
                 </DialogContent>
             }
             <DialogActions>
-                <Button type="text" onClick={props.handleClose}>{props.labels.cancelLabel}</Button>
+                <Button type="text" onClick={props.handleClose}>{props.labels.cancelText}</Button>
                 <Button 
                     type="text" 
                     variant="contained" 

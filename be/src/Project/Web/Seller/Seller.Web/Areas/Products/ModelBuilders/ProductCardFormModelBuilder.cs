@@ -12,10 +12,11 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 {
     public class ProductCardFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductCardFormViewModel>
     {
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
-        private readonly LinkGenerator linkGenerator;
-        private readonly ICategoriesRepository categoriesRepository;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductCardModalViewModel> _productCardModalModelBuilder;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<ProductResources> _productLocalizer;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly ICategoriesRepository _categoriesRepository;
 
         public ProductCardFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -23,28 +24,29 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             ICategoriesRepository categoriesRepository,
             LinkGenerator linkGenerator)
         {
-            this.globalLocalizer = globalLocalizer;
-            this.productLocalizer = productLocalizer;
-            this.linkGenerator = linkGenerator;
-            this.categoriesRepository = categoriesRepository;
+            _globalLocalizer = globalLocalizer;
+            _productLocalizer = productLocalizer;
+            _linkGenerator = linkGenerator;
+            _categoriesRepository = categoriesRepository;
         }
 
         public async Task<ProductCardFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new ProductCardFormViewModel
             {
-                IdLabel = this.globalLocalizer.GetString("Id"),
-                Title = this.productLocalizer.GetString("EditProductCard"),
-                SaveText = this.globalLocalizer.GetString("SaveText"),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                NavigateToProductCardsLabel = this.productLocalizer.GetString("NavigateToProductCards"),
-                ProductCardsUrl = this.linkGenerator.GetPathByAction("Index", "ProductCards", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage")
+                IdLabel = _globalLocalizer.GetString("Id"),
+                Title = _productLocalizer.GetString("EditProductCard"),
+                SaveText = _globalLocalizer.GetString("SaveText"),
+                GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
+                NavigateToProductCardsLabel = _productLocalizer.GetString("NavigateToProductCards"),
+                ProductCardsUrl = _linkGenerator.GetPathByAction("Index", "ProductCards", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                FieldRequiredErrorMessage = _globalLocalizer.GetString("FieldRequiredErrorMessage"),
+                ProductCardModal = await _productCardModalModelBuilder.BuildModelAsync(componentModel)
             };
 
             if (componentModel.Id.HasValue)
             {
-                var categorySchema = await this.categoriesRepository.GetCategorySchemaAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                var categorySchema = await _categoriesRepository.GetCategorySchemaAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                 if (categorySchema is not null)
                 {
