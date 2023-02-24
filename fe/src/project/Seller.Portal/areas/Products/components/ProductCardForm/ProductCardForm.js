@@ -361,23 +361,6 @@ const ProductCardForm = (props) => {
                 handleClose={handleCloseModal}
                 handleSave={() => addCard(schema)}
                 labels={props.productCardModal}
-                // labels={{
-                //     title: "Editing a product attribute",
-                //     saveText: "Save",
-                //     cancelLabel: "Cancel",
-                //     definitionLabel: "Definition",
-                //     definitionsOptions: [
-                //         { value: "a04b3368-fa25-4b4a-e4eb-08d907680a85", name: "Color"}
-                //     ],
-                //     inputTypeLabel: "Input type",
-                //     inputTypes: [
-                //         { name: "Reference" },
-                //         { name: "Boolean" },
-                //         { name: "Checkbox" },
-                //         { name: "Number" },
-                //         { name: "String" }
-                //     ]
-                // }}
             />
         </section>
     )
