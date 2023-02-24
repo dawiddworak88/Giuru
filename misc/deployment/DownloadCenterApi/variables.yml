@@ -1,0 +1,3 @@
+variables:
+- name: b2bDownloadCenterApiImageRepository
+  value: 'b2b-downloadcenter-api'

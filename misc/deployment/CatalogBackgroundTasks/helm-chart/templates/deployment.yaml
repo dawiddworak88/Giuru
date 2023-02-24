@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-backgroundtasks-deployment
+  labels:
+    app: catalog-backgroundtasks
+spec:
+  replicas: {{ .Values.catalogBackgroundTasks.replicas }}
+  selector:
+    matchLabels:
+      app: catalog-backgroundtasks
+  template:
+    metadata:
+      labels:
+        app: catalog-backgroundtasks
+    spec:
+      containers:
+      - name: catalog-backgroundtasks-container
+        image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: {{ .Values.catalogBackgroundTasks.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.catalogBackgroundTasks.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.catalogBackgroundTasks.readinessProbe.timeoutSeconds }}
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: {{ .Values.catalogBackgroundTasks.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.catalogBackgroundTasks.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.catalogBackgroundTasks.livenessProbe.timeoutSeconds }}
+        resources:
+          limits:
+            memory: {{ .Values.catalogBackgroundTasks.resources.limits.memory }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
+        - name: ElasticsearchIndex
+          value: {{ .Values.catalogApi.elasticsearchIndex }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
+        envFrom:
+        - secretRef:
+            name: b2b-catalog-backgroundtasks-secrets
+        ports:
+        - containerPort: 80

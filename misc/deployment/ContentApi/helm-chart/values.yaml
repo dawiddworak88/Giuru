@@ -1,0 +1,18 @@
+tokenUrl: "#{TokenUrl}#"
+contentUrl: "#{ContentUrl}#"
+mediaUrl: "#{MediaUrl}#"
+giuruApiOrganisationId: "#{GiuruApiOrganisationId}#"
+giuruApiEmail: "#{GiuruApiEmail}#"
+giuruApiSecret: "#{GiuruApiSecret}#"
+contentApi:
+  databaseClient: "#{ContentApi--DatabaseClient}#"
+  databaseName: "#{ContentApi--DatabaseName}#"
+  databaseHost: "#{ContentApi--DatabaseHost}#"
+  databasePort: "#{ContentApi--DatabasePort}#"
+  databaseUsername: "#{ContentApi--DatabaseUsername}#"
+  databasePassword: "#{ContentApi--DatabasePassword}#"
+  databaseSsl: "#{ContentApi--DatabaseSsl}#"
+  replicas: "1"
+  resources:
+    limits:
+      memory: "250Mi"
