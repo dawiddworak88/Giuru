@@ -360,7 +360,7 @@ const ProductCardForm = (props) => {
                 attribute={productAttribute}
                 handleClose={handleCloseModal}
                 handleSave={() => addCard(schema)}
-                labels={...props.productCardModal}
+                labels={props.productCardModal}
                 // labels={{
                 //     title: "Editing a product attribute",
                 //     saveText: "Save",
