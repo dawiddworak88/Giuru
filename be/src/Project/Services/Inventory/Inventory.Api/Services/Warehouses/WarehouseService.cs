@@ -145,6 +145,7 @@ namespace Inventory.Api.Services.Warehouses
             }
 
             warehouse.IsActive = false;
+
             await _context.SaveChangesAsync();
         }
 

@@ -3,6 +3,7 @@ using News.Api.Infrastructure.Entities.Categories;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace News.Api.Infrastructure.Entities.News
 {
@@ -21,10 +22,11 @@ namespace News.Api.Infrastructure.Entities.News
         [Required]
         public bool IsPublished { get; set; }
 
+        [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
 
-        public virtual IEnumerable<NewsItemTranslation> Translations { get; set; }
-
         public virtual IEnumerable<NewsItemFile> Files { get; set; }
+
+        public virtual IEnumerable<NewsItemTranslation> Translations { get; set; }
     }
 }

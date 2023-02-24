@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories
 {
@@ -16,6 +17,13 @@ namespace DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories
         [Required]
         public Guid SellerId { get; set; }
 
+        [ForeignKey("ParentCategoryId")]
+        public virtual DownloadCenterCategory ParentCategory { get; set; }
+
+        [ForeignKey("CategoryId")]
+        public virtual IEnumerable<DownloadCenterCategoryFile> Files { get; set; }
+
+        [ForeignKey("CategoryId")]
         public virtual IEnumerable<DownloadCenterCategoryTranslation> Translations { get; set; }
     }
 }

@@ -154,7 +154,6 @@ namespace News.Api.v1.News.Controllers
                 var validator = new CreateNewsItemModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
 
-
                 if (validationResult.IsValid)
                 {
                     var newsId = await _newsService.CreateAsync(serviceModel);
@@ -248,9 +247,10 @@ namespace News.Api.v1.News.Controllers
 
             var validator = new GetNewsItemModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
+
             if (validationResult.IsValid)
             {
-                var newsItem = await _newsService.GetAsync(serviceModel);
+                var newsItem =  await _newsService.GetAsync(serviceModel);
 
                 if (newsItem is not null)
                 {
@@ -272,8 +272,6 @@ namespace News.Api.v1.News.Controllers
 
                     return StatusCode((int)HttpStatusCode.OK, response);
                 }
-
-                return StatusCode((int)HttpStatusCode.NoContent);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
