@@ -9,6 +9,7 @@ using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -75,11 +76,13 @@ namespace Analytics.Api.v1.Controllers
         /// <summary>
         /// Get countries sales
         /// </summary>
+        /// <param name="fromDate">From date.</param>
+        /// <param name="toDate">To date.</param>
         /// <returns>Countries sales.</returns>
         [HttpGet("countries"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult GetCountriesSales()
+        public IActionResult GetCountriesSales(DateTime fromDate, DateTime toDate)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -87,24 +90,32 @@ namespace Analytics.Api.v1.Controllers
             {
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                FromDate = fromDate,
+                ToDate = toDate
             };
 
-            var countrySales = _salesService.GetCountrySales(serviceModel);
+            var validator = new GetCountriesSalesModelValidator();
+            var validationResult = validator.Validate(serviceModel);
 
-            if (countrySales is not null)
+            if (validationResult.IsValid)
             {
-                var response = countrySales.Select(x => new CountrySalesResponseModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Quantity = x.Quantity
-                });
+                var countrySales = _salesService.GetCountrySales(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK, response);
+                if (countrySales is not null)
+                {
+                    var response = countrySales.Select(x => new CountrySalesResponseModel
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Quantity = x.Quantity
+                    });
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
             }
 
-            return this.StatusCode((int)HttpStatusCode.NoContent);
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>

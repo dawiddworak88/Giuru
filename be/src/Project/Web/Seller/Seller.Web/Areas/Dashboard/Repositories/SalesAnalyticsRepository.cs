@@ -5,7 +5,9 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Dashboard.DomainModels;
+using Seller.Web.Areas.Dashboard.RequestModels;
 using Seller.Web.Shared.Configurations;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -24,17 +26,23 @@ namespace Seller.Web.Areas.Dashboard.Repositories
             _settings = settings;
         }
 
-        public async Task<IEnumerable<CountrySalesItem>> GetCountriesSales(string token, string language)
+        public async Task<IEnumerable<CountrySalesItem>> GetCountriesSales(string token, string language, DateTime fromDate, DateTime toDate)
         {
-            var apiRequest = new ApiRequest<RequestModelBase>
+            var requestModel = new CountrySalesAnalyticsRequestModel
+            {
+                FromDate = fromDate,
+                ToDate = toDate,
+            };
+
+            var apiRequest = new ApiRequest<CountrySalesAnalyticsRequestModel>
             {
                 Language = language,
-                Data = new RequestModelBase(),
+                Data = requestModel,
                 AccessToken = token,
                 EndpointAddress = $"{_settings.Value.AnalyticsUrl}{ApiConstants.Analytics.CountriesSalesAnalyticsApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<CountrySalesItem>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<CountrySalesAnalyticsRequestModel>, CountrySalesAnalyticsRequestModel, IEnumerable<CountrySalesItem>>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {

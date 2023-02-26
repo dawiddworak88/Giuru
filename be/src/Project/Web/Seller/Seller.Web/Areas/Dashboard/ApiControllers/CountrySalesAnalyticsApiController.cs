@@ -1,18 +1,51 @@
-﻿using Foundation.ApiExtensions.Controllers;
+﻿using DocumentFormat.OpenXml.Office2010.ExcelAc;
+using Foundation.ApiExtensions.Controllers;
+using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.ExtensionMethods;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Seller.Web.Areas.Dashboard.Repositories;
 using Seller.Web.Areas.Dashboard.RequestModels;
+using Seller.Web.Shared.ApiResponseModels;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Dashboard.ApiControllers
 {
     [Area("Dashboard")]
     public class CountrySalesAnalyticsApiController : BaseApiController
     {
-        [HttpPost]
-        public IActionResult Index([FromBody] CountrySalesAnalyticsRequestModel model)
+        private readonly ISalesAnalyticsRepository _salesAnalyticsRepository;
+
+        public CountrySalesAnalyticsApiController (
+            ISalesAnalyticsRepository salesAnalyticsRepository)
         {
-            var fromDate = model.FromDate;
-            var toDate = model.ToDate;
+            _salesAnalyticsRepository = salesAnalyticsRepository;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index([FromBody] CountrySalesAnalyticsRequestModel model)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            var countriesSales = await _salesAnalyticsRepository.GetCountriesSales(token, language, model.FromDate, model.ToDate);
+
+            if (countriesSales is not null)
+            {
+                var response = new List<ChartDatasetsResponseModel>
+                {
+                    new ChartDatasetsResponseModel
+                    {
+                        Data = countriesSales.OrEmptyIfNull().Select(x => x.Quantity)
+                    }
+                };
+
+                return this.StatusCode((int)HttpStatusCode.OK, new { CountriesSales = response });
+            }
 
             return this.StatusCode((int)HttpStatusCode.OK);
         }

@@ -33,17 +33,20 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
 
         public async Task<CountrySalesAnalyticsViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var countriesSales = await _salesAnalyticsRepository.GetCountriesSales(componentModel.Token, componentModel.Language);
+            var fromDate = DateTime.UtcNow.AddMonths(-3);
+            var toDate = DateTime.UtcNow;
+
+            var countriesSales = await _salesAnalyticsRepository.GetCountriesSales(componentModel.Token, componentModel.Language, fromDate, toDate);
 
             if (countriesSales is not null && countriesSales.Any(x => x.Quantity > 0))
             {
                 var viewModel = new CountrySalesAnalyticsViewModel
                 {
-                    Title = string.Format(_dashboardResources.GetString("CountrySales").Value, 3),
+                    Title = _dashboardResources.GetString("CountrySales"),
                     FromLabel = _dashboardResources.GetString("From"), 
                     ToLabel = _dashboardResources.GetString("To"),
-                    FromDate = DateTime.UtcNow.AddMonths(-3),
-                    ToDate = DateTime.UtcNow,
+                    FromDate = fromDate,
+                    ToDate = toDate,
                     SaveUrl = _linkGenerator.GetPathByAction("Index", "CountrySalesAnalyticsApi", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name }),
                 };
 
