@@ -11,6 +11,7 @@ using System;
 using Seller.Web.Areas.Dashboard.Repositories;
 using System.Linq;
 using Foundation.Extensions.ExtensionMethods;
+using Microsoft.AspNetCore.Routing;
 
 namespace Seller.Web.Areas.Dashboard.ModelBuilders
 {
@@ -18,13 +19,16 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
     {
         private readonly IStringLocalizer<DashboardResources> _dashboardResources;
         private readonly ISalesAnalyticsRepository _salesAnalyticsRepository;
+        private readonly LinkGenerator _linkGenerator;
 
         public CountriesSalesAnalyticsModelBuilder(
             IStringLocalizer<DashboardResources> dashboardResources,
-            ISalesAnalyticsRepository salesAnalyticsRepository)
+            ISalesAnalyticsRepository salesAnalyticsRepository,
+            LinkGenerator linkGenerator)
         {
             _dashboardResources = dashboardResources;
             _salesAnalyticsRepository = salesAnalyticsRepository;
+            _linkGenerator = linkGenerator;
         }
 
         public async Task<CountrySalesAnalyticsViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -35,7 +39,12 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
             {
                 var viewModel = new CountrySalesAnalyticsViewModel
                 {
-                    Title = string.Format(_dashboardResources.GetString("CountrySales").Value, 3)
+                    Title = string.Format(_dashboardResources.GetString("CountrySales").Value, 3),
+                    FromLabel = _dashboardResources.GetString("From"), 
+                    ToLabel = _dashboardResources.GetString("To"),
+                    FromDate = DateTime.UtcNow.AddMonths(-3),
+                    ToDate = DateTime.UtcNow,
+                    SaveUrl = _linkGenerator.GetPathByAction("Index", "CountrySalesAnalyticsApi", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name }),
                 };
 
                 var chartDataset = new List<double>();

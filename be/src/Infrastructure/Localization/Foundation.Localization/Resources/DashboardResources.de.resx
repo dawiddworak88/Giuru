@@ -121,13 +121,16 @@
     <value>Anzahl der bestellten Artikel in den letzten 12 Monaten</value>
   </data>
   <data name="CountrySales" xml:space="preserve">
-    <value>Verkäufe der letzten {0} Monate nach Land</value>
+    <value>Verkäufe nach Land</value>
   </data>
   <data name="DailySales" xml:space="preserve">
     <value>Tägliche Verkäufe</value>
   </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Dashboard</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>Ab</value>
   </data>
   <data name="NumberOfOrders" xml:space="preserve">
     <value>Anzahl der Bestellungen</value>
@@ -140,6 +143,9 @@
   </data>
   <data name="ProductQuantity" xml:space="preserve">
     <value>Produktmenge</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>Bis</value>
   </data>
   <data name="TopOrderedProducts" xml:space="preserve">
     <value>Meistbestellte Produkte</value>
