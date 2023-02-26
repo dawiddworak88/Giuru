@@ -16,8 +16,6 @@ if (typeof window !== "undefined") {
 
 const CountrySalesAnalytics = (props) => {
 
-    console.log(props);
-
     const [fromDate, setFromDate] = useState(props.fromDate);
     const [toDate, setToDate] = useState(props.toDate);
 
