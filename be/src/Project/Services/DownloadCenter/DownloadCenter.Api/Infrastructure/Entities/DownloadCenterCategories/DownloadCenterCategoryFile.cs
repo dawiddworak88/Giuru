@@ -11,5 +11,7 @@ namespace DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories
 
         [Required]
         public string Filename { get; set; }
+
+        public virtual DownloadCenterCategory Category { get; set; }
     }
 }
