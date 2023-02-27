@@ -50,7 +50,7 @@ const ProductCardModal = (props) => {
                                 id="title"
                                 name="title"
                                 type="text"
-                                value={productAttribute.title ?? productAttribute.dataOptions.title} 
+                                value={productAttribute.title} 
                                 variant="standard" 
                                 label={props.labels.displayNameLabel}
                                 onChange={(e) => updateAttribute(e)}
@@ -66,7 +66,6 @@ const ProductCardModal = (props) => {
                                     value={productAttribute.type ?? "string"}
                                     onChange={(e) => updateAttribute(e)}
                                     >
-                                        <MenuItem key={0} value="">{props.selectJobTitle}</MenuItem>
                                         {props.labels.inputTypes && props.labels.inputTypes.map((type, index) => {
                                             return (
                                                 <MenuItem key={index} value={type.toLowerCase()}>{type}</MenuItem>
@@ -80,16 +79,14 @@ const ProductCardModal = (props) => {
                                 <FormControl fullWidth={true} variant="standard">
                                     <InputLabel id="definition-label">{props.labels.definitionLabel}</InputLabel>
                                     <Select
-                                        labelId="definition-label"
                                         id="definitionId"
                                         name="definitionId"
-                                        value={productAttribute.definitionId}
+                                        value={productAttribute.definitionId ?? null}
                                         onChange={(e) => updateAttribute(e)}
                                     >
-                                        <MenuItem key={0} value="" disabled>{props.labels.selectDefinitionLabel}</MenuItem>
                                         {props.labels.definitionsOptions && props.labels.definitionsOptions.map((definition, index) => {
                                             return (
-                                                <MenuItem key={index} value={definition.value}>{definition.name}</MenuItem>
+                                                <MenuItem key={index} value={definition.id}>{definition.name}</MenuItem>
                                             )
                                         })}
                                     </Select>

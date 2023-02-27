@@ -134,7 +134,8 @@ const ProductCardForm = (props) => {
                         name: elementProps.name,
                         title: elementProps.dataOptions.title,
                         type: elementProps.dataOptions.type,
-                        required: elementProps.required
+                        required: elementProps.required,
+                        definitionId: elementProps.definitionId
                     }}
                 />
             )
@@ -215,7 +216,7 @@ const ProductCardForm = (props) => {
     }
 
     const handleProductAttribute = (attribute) => {
-        console.log(attribute)
+        //console.log(attribute)
         const product = {
             name: attribute.name,
 
@@ -356,6 +357,8 @@ const ProductCardForm = (props) => {
 
     // console.log(JSON.stringify(schema));
     // console.log(props.productCardModal)
+
+    console.log(productAttribute)
 
     return (
         <section className="section section-small-padding category">
