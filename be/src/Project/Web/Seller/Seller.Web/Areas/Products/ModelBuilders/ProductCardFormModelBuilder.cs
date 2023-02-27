@@ -45,7 +45,8 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 NavigateToProductCardsLabel = _productLocalizer.GetString("NavigateToProductCards"),
                 ProductCardsUrl = _linkGenerator.GetPathByAction("Index", "ProductCards", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 FieldRequiredErrorMessage = _globalLocalizer.GetString("FieldRequiredErrorMessage"),
-                ProductCardModal = await _productCardModalModelBuilder.BuildModelAsync(componentModel)
+                ProductCardModal = await _productCardModalModelBuilder.BuildModelAsync(componentModel),
+                DefinitionUrl = _linkGenerator.GetPathByAction("Index", "ProductCardApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             if (componentModel.Id.HasValue)

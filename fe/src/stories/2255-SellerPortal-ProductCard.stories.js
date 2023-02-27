@@ -13,8 +13,32 @@ const componentProps = {
   saveText: "Save",
   defaultInputName: "NewElement",
   newText: "Add new card",
-  productCardModal: {
-
+  productCardModal: { 
+    title: "Edit product attribute", 
+    nameLabel: "Name", 
+    displayNameLabel: "Display name", 
+    selectDefinitionLabel: "asdasd", 
+    definitionLabel: "Definition", 
+    saveText: "Save", 
+    cancelText: "Cancel", 
+    inputTypeLabel: "Type", 
+    inputTypes: [
+      "Reference",
+      "String",
+      "Array",
+      "Boolean",
+      "Number"
+    ], 
+    definitionsOptions: [
+      {
+        name: "Color",
+        value: "a04b3368-fa25-4b4a-e4eb-08d907680a85"
+      },
+      {
+        name: "Shape",
+        value: "3cb42bca-84d9-423f-e4ee-08d907680a85"
+      }
+    ]
   },
   schema: '{}'
   // schema: `{

@@ -13,14 +13,14 @@ const ProductCardModal = (props) => {
         const value = e.target.value;
         const name = e.target.name;
 
-        setProductAttribute(attribute => ({
+        props.setAttribute(attribute => ({
             ...attribute, [name]: value
         }))
     }
 
     useEffect(() => {
         setProductAttribute(props.attribute);
-    }, props.attribute)
+    }, [props.attribute])
 
     return (
         <Dialog

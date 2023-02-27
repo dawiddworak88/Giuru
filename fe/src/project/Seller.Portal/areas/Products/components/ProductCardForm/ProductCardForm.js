@@ -109,9 +109,9 @@ const ProductCardForm = (props) => {
     const Card = (props) => {
         return (
             <div className="card p-4 mb-2 is-flex is-justify-content-space-between is-align-items-center">
-                <div className="card-title">{props.title}</div>
+                <div className="card-title">{props.data.title}</div>
                 <div className="card-content is-flex">
-                    <div className="card-icon" onClick={() => handleProductAttribute(props)}><Edit/></div>
+                    <div className="card-icon" onClick={() => handleProductAttribute(props.data)}><Edit/></div>
                     <div className="card-icon" onClick={() => handleDeleteAttribite(props.index, props.schema)}><Delete/></div>
                 </div>
             </div>
@@ -129,11 +129,13 @@ const ProductCardForm = (props) => {
                 <Card 
                     key={index}
                     index={index}
-                    name={elementProps.name}
-                    title={elementProps.dataOptions.title}
-                    type={elementProps.dataOptions.type}
                     schema={schema}
-                    definitionId={elementProps.definitionId}
+                    data={{
+                        name: elementProps.name,
+                        title: elementProps.dataOptions.title,
+                        type: elementProps.dataOptions.type,
+                        required: elementProps.required
+                    }}
                 />
             )
         })
@@ -214,7 +216,10 @@ const ProductCardForm = (props) => {
 
     const handleProductAttribute = (attribute) => {
         console.log(attribute)
-        setProductAttribute(null);
+        const product = {
+            name: attribute.name,
+
+        }
         setProductAttribute(attribute);
         setIsModalOpen(true);
     }
@@ -228,17 +233,25 @@ const ProductCardForm = (props) => {
         const newElements = generateElementsFromSchema(schema);
         const i = getIdFromElements(newElements);
 
+        // const newElement = {
+        //     name: `${props.defaultInputName}${i}`,
+        //     required: false,
+        //     dataOptions: {
+        //         title: `${props.defaultInputName}${i}`,
+        //         type: "string",
+        //         default: ""
+        //     }
+        // }
+
         const newElement = {
             name: `${props.defaultInputName}${i}`,
+            title: `${props.defaultInputName}${i}`,
+            type: "string",
             required: false,
-            dataOptions: {
-                title: `${props.defaultInputName}${i}`,
-                type: "string",
-                default: ""
-            }
+
         }
 
-        setProductAttribute(newElement);
+        setProductAttribute(newElement)
         setIsModalOpen(true);
     }
 
@@ -272,6 +285,37 @@ const ProductCardForm = (props) => {
           : 1;
     }
 
+    const handleDefinitionSchema = (id) => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const requestOptions = {
+            method: "GET",
+            headers: { 
+                "Content-Type": "application/json"
+            }
+        };
+
+        fetch(`${props.definitionUrl}/${id}`, requestOptions)
+            .then((response) => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        //Dodac definicje do schematu
+
+                        console.log(jsonResponse)
+
+                        toast.success(jsonResponse.message);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                })
+            });
+    }
+
     const addCard = (schema) => {
         const newElements = generateElementsFromSchema(schema);
 
@@ -281,8 +325,8 @@ const ProductCardForm = (props) => {
                 name: productAttribute.name,
                 required: false,
                 dataOptions: {
-                    title: productAttribute.dataOptions.title,
-                    type: productAttribute.dataOptions.type,
+                    title: productAttribute.title,
+                    type: productAttribute.type,
                     default: ""
                 }
             }
@@ -292,6 +336,8 @@ const ProductCardForm = (props) => {
                     ...newElement,
                     definitionId: productAttribute.definitionId
                 }
+
+                handleDefinitionSchema(productAttribute.definitionId);
             }
 
             newElements.splice(0, 0, newElement)
@@ -308,7 +354,8 @@ const ProductCardForm = (props) => {
     const { schema } = values;
     const requiredNames = schema.required ? schema.required : [];
 
-    console.log(JSON.stringify(schema));
+    // console.log(JSON.stringify(schema));
+    // console.log(props.productCardModal)
 
     return (
         <section className="section section-small-padding category">
@@ -358,6 +405,7 @@ const ProductCardForm = (props) => {
             <ProductCardModal 
                 isOpen={isModalOpen}
                 attribute={productAttribute}
+                setAttribute={setProductAttribute}
                 handleClose={handleCloseModal}
                 handleSave={() => addCard(schema)}
                 labels={props.productCardModal}
