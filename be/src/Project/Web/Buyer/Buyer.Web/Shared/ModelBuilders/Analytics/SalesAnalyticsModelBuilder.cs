@@ -4,7 +4,9 @@ using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -15,23 +17,40 @@ namespace Buyer.Web.Shared.ModelBuilders.Analytics
     public class SalesAnalyticsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, SalesAnalyticsViewModel>
     {
         private readonly IStringLocalizer<DashboardResources> _dashboardResources;
+        private readonly IStringLocalizer<GlobalResources> _globalResources;
         private readonly ISalesAnalyticsRepository _salesAnalyticsRepository;
+        private readonly LinkGenerator _linkGenerator;
 
         public SalesAnalyticsModelBuilder(
             IStringLocalizer<DashboardResources> dashboardResources,
-            ISalesAnalyticsRepository salesAnalyticsRepository)
+            ISalesAnalyticsRepository salesAnalyticsRepository,
+            IStringLocalizer<GlobalResources> globalResources,
+            LinkGenerator linkGenerator)
         {
             _dashboardResources = dashboardResources;
             _salesAnalyticsRepository = salesAnalyticsRepository;
+            _linkGenerator = linkGenerator;
+            _globalResources = globalResources;
         }
 
         public async Task<SalesAnalyticsViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var annualSales = await _salesAnalyticsRepository.GetAnnualSales(componentModel.Token, componentModel.Language);
+            var fromDate = DateTime.UtcNow.AddMonths(-12);
+            var toDate = DateTime.UtcNow;
+
+            var annualSales = await _salesAnalyticsRepository.GetAnnualSales(componentModel.Token, componentModel.Language, fromDate, toDate);
 
             if (annualSales is not null && annualSales.Any(x => x.Quantity > 0))
             {
-                var viewModel = new SalesAnalyticsViewModel();
+                var viewModel = new SalesAnalyticsViewModel
+                {
+                    FromLabel = _dashboardResources.GetString("From"),
+                    ToLabel = _dashboardResources.GetString("To"),
+                    FromDate = fromDate,
+                    ToDate = toDate,
+                    GeneralErrorMessage = _globalResources.GetString("AnErrorOccurred"),
+                    SaveUrl = _linkGenerator.GetPathByAction("Index", "SalesAnalyticsApi", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name })
+                };
 
                 var chartDataset = new List<double>();
                 var chartLabels = new List<string>();
@@ -45,7 +64,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Analytics
                     chartLabels.Add($"{monthName.ToUpperInvariant()} - {annualSalesItem.Year}");
                 }
 
-                viewModel.ChartLables = chartLabels;
+                viewModel.ChartLabels = chartLabels;
                 viewModel.ChartDatasets = new List<SalesAnalyticsChartDatasetsViewModel>
                 {
                     new SalesAnalyticsChartDatasetsViewModel

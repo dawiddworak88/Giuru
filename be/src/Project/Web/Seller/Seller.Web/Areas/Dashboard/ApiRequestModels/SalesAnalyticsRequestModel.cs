@@ -2,7 +2,7 @@
 
 namespace Seller.Web.Areas.Dashboard.RequestModels
 {
-    public class CountrySalesAnalyticsRequestModel
+    public class SalesAnalyticsRequestModel
     {
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }

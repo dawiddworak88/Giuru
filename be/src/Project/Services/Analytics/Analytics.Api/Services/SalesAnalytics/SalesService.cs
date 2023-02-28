@@ -187,13 +187,13 @@ namespace Analytics.Api.Services.SalesAnalytics
                 sales = sales.Where(x => x.OrganisationId == model.OrganisationId);
             }
 
-            var now = DateTime.UtcNow;
+            var difference = ((model.ToDate.Year - model.FromDate.Year) * 12) + model.ToDate.Month - model.FromDate.Month;
 
-            var months = Enumerable.Range(-12, 12)
+            var months = Enumerable.Range(-difference, difference)
                 .Select(x => new    
                     {
-                        Year = now.AddMonths(x+1).Year,
-                        Month = now.AddMonths(x+1).Month
+                        Year = model.ToDate.AddMonths(x+1).Year,
+                        Month = model.ToDate.AddMonths(x+1).Month
                     });
 
             var annualSales = months.GroupJoin(sales, 
@@ -274,15 +274,15 @@ namespace Analytics.Api.Services.SalesAnalytics
                 sales = sales.Where(x => x.OrganisationId == model.OrganisationId);
             }
 
-            var now = DateTime.UtcNow;
+            var difference = (int)(model.ToDate - model.FromDate).TotalDays;
 
-            var days = Enumerable.Range(-21, 21)
+            var days = Enumerable.Range(-difference, difference)
                 .Select(x => new
                 {
-                    Year = now.AddDays(x + 1).Year,
-                    Month = now.AddDays(x + 1).Month,
-                    Day = now.AddDays(x + 1).Day,
-                    DayOfWeek = (int)now.AddDays(x + 1).DayOfWeek
+                    Year = model.ToDate.AddDays(x + 1).Year,
+                    Month = model.ToDate.AddDays(x + 1).Month,
+                    Day = model.ToDate.AddDays(x + 1).Day,
+                    DayOfWeek = (int)model.ToDate.AddDays(x + 1).DayOfWeek
                 });
 
             var dailySales = days.GroupJoin(sales,

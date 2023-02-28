@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import AdapterMoment from '@mui/lab/AdapterMoment';
+import { toast } from "react-toastify";
 import { DatePicker, LocalizationProvider } from "@mui/lab";
 import { TextField } from "@mui/material";
 import { Bar } from "react-chartjs-2";
@@ -15,7 +16,8 @@ if (typeof window !== "undefined") {
 }
 
 const CountrySalesAnalytics = (props) => {
-
+    const [countriesSales, setCountriesSales] = useState(props.chartDatasets ? props.chartDatasets : [])
+    const [countriesLabels, setCountriesLabels] = useState(props.chartLabels ? props.chartLabels : [])
     const [fromDate, setFromDate] = useState(props.fromDate);
     const [toDate, setToDate] = useState(props.toDate);
 
@@ -29,17 +31,18 @@ const CountrySalesAnalytics = (props) => {
         };
 
         fetch(props.saveUrl, requestOptions)
-            .then(response => {
+            .then((response) => {
                 AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        // action
+                        setCountriesSales(jsonResponse.data.chartDatasets);
+                        setCountriesLabels(jsonResponse.data.chartLabels);
                     }
                 });
 
             }).catch(() => {
-                // error handling
+                toast.error(props.generalErrorMessage);
             });
     }
 
@@ -53,19 +56,18 @@ const CountrySalesAnalytics = (props) => {
         };
 
         fetch(props.saveUrl, requestOptions)
-            .then(response => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
+            .then((response) => {
                 AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        // action
+                        setCountriesSales(jsonResponse.data.chartDatasets);
+                        setCountriesLabels(jsonResponse.data.chartLabels);
                     }
                 });
 
             }).catch(() => {
-                // error handling
+                toast.error(props.generalErrorMessage);
             });
     }
 
@@ -79,6 +81,7 @@ const CountrySalesAnalytics = (props) => {
                             id="country-sales-from-date"
                             label={props.fromLabel}
                             value={fromDate}
+                            name="fromDate"
                             onChange={(date) => {
                                 handleFromDate(date);
                             }}
@@ -92,6 +95,7 @@ const CountrySalesAnalytics = (props) => {
                             id="country-sales-to-date"
                             label={props.toLabel}
                             value={toDate}
+                            name="toDate"
                             onChange={(date) => {
                                 handleToDate(date);
                             }}
@@ -112,9 +116,9 @@ const CountrySalesAnalytics = (props) => {
                     }
                 }} 
                 data={{
-                    labels: props.chartLables,
+                    labels: countriesLabels,
                     datasets: [{
-                        ...props.chartDatasets[0],
+                        ...countriesSales[0],
                         backgroundColor: ChartsConstants.countrySalesColors()    
                     }]
                 }}/>
@@ -124,7 +128,7 @@ const CountrySalesAnalytics = (props) => {
 
 CountrySalesAnalytics.propTypes = {
     title: PropTypes.string.isRequired,
-    chartLables: PropTypes.array.isRequired,
+    chartLabels: PropTypes.array.isRequired,
     chartDatasets: PropTypes.array.isRequired,
     fromLabel: PropTypes.string.isRequired,
     toLabel: PropTypes.string.isRequired,

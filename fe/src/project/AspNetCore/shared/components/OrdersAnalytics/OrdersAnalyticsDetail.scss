@@ -1,8 +1,5 @@
-.orders-analytics {
+@import "../../../../../shared/components/AnalyticsDashboard/SalesAnalytics/SalesAnalytics.scss";
 
-    &__table {
-        th {
-            font-weight: bold;
-        }
-    }
+.sales-analytics-date-ranges {
+    justify-content: start;
 }

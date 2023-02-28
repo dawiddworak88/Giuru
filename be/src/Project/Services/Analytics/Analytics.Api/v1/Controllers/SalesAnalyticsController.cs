@@ -9,6 +9,7 @@ using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -34,11 +35,13 @@ namespace Analytics.Api.v1.Controllers
         /// <summary>
         /// Get annual sales
         /// </summary>
+        /// <param name="fromDate">From date.</param>
+        /// <param name="toDate">To date.</param>
         /// <returns>Annual sales.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult GetAnnualSales()
+        public IActionResult GetAnnualSales(DateTime fromDate, DateTime toDate)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -47,7 +50,9 @@ namespace Analytics.Api.v1.Controllers
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                IsSeller = User.IsInRole("Seller")
+                IsSeller = User.IsInRole("Seller"),
+                FromDate = fromDate,
+                ToDate = toDate
             };
 
             var validator = new GetAnnualSalesModelValidator();
@@ -121,11 +126,13 @@ namespace Analytics.Api.v1.Controllers
         /// <summary>
         /// Get daily sales
         /// </summary>
+        /// <param name="fromDate">From date.</param>
+        /// <param name="toDate">To date.</param>
         /// <returns>Daily sales.</returns>
         [HttpGet("daily"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult GetDailySales()
+        public IActionResult GetDailySales(DateTime fromDate, DateTime toDate)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -134,7 +141,9 @@ namespace Analytics.Api.v1.Controllers
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                IsSeller = User.IsInRole("Seller")
+                IsSeller = User.IsInRole("Seller"),
+                FromDate = fromDate,
+                ToDate = toDate
             };
 
             var validator = new GetDailySalesModelValidator();

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Seller.Web.Areas.Dashboard.Repositories;
 using Seller.Web.Areas.Dashboard.RequestModels;
 using Seller.Web.Shared.ApiResponseModels;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -14,12 +15,11 @@ using System.Threading.Tasks;
 namespace Seller.Web.Areas.Dashboard.ApiControllers
 {
     [Area("Dashboard")]
-    public class CountrySalesAnalyticsApiController : BaseApiController
+    public class DailySalesAnalyticsApiController : BaseApiController
     {
         private readonly ISalesAnalyticsRepository _salesAnalyticsRepository;
 
-        public CountrySalesAnalyticsApiController (
-            ISalesAnalyticsRepository salesAnalyticsRepository)
+        public DailySalesAnalyticsApiController(ISalesAnalyticsRepository salesAnalyticsRepository)
         {
             _salesAnalyticsRepository = salesAnalyticsRepository;
         }
@@ -30,18 +30,34 @@ namespace Seller.Web.Areas.Dashboard.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var countriesSales = await _salesAnalyticsRepository.GetCountriesSales(token, language, model.FromDate, model.ToDate);
+            var dailySales = await _salesAnalyticsRepository.GetDailySales(token, language, model.FromDate, model.ToDate);
 
-            if (countriesSales is not null)
+            if (dailySales is not null)
             {
+                var chartLabels = new List<string>();
+
+                foreach (var dailySalesItem in dailySales)
+                {
+                    var dayName = CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(((DayOfWeek)dailySalesItem.DayOfWeek));
+
+                    var monthNumber = dailySalesItem.Month.ToString();
+
+                    if (dailySalesItem.Month < 10)
+                    {
+                        monthNumber = $"0{monthNumber}";
+                    }
+
+                    chartLabels.Add($"{dayName.ToUpperInvariant()} - {dailySalesItem.Day}.{monthNumber}");
+                }
+
                 var response = new ChartResponseModel
                 {
-                    ChartLabels = countriesSales.Select(x => x.Name),
+                    ChartLabels = chartLabels,
                     ChartDatasets = new List<ChartDatasetsResponseModel>
                     {
                         new ChartDatasetsResponseModel
                         {
-                            Data = countriesSales.Select(x => x.Quantity)
+                            Data = dailySales.Select(x => x.Quantity)
                         }
                     }
                 };

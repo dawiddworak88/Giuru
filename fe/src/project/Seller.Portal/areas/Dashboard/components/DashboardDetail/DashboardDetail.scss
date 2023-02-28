@@ -1,4 +1,5 @@
 @import "../../../../../../shared/components/AnalyticsDashboard/CountrySalesAnalytics/CountrySalesAnalytics.scss";
+@import "../../../../../../shared/components/AnalyticsDashboard/SalesAnalytics/SalesAnalytics.scss";
 
 .dashboard {
     &__container {
@@ -7,7 +8,7 @@
 
         .sales-analytics,
         .country-sales {
-            height: 100%;
+            height: 80%;
         }
     }
 

@@ -18,17 +18,20 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
     public class CountriesSalesAnalyticsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CountrySalesAnalyticsViewModel>
     {
         private readonly IStringLocalizer<DashboardResources> _dashboardResources;
+        private readonly IStringLocalizer<GlobalResources> _globalResources;
         private readonly ISalesAnalyticsRepository _salesAnalyticsRepository;
         private readonly LinkGenerator _linkGenerator;
 
         public CountriesSalesAnalyticsModelBuilder(
             IStringLocalizer<DashboardResources> dashboardResources,
             ISalesAnalyticsRepository salesAnalyticsRepository,
+            IStringLocalizer<GlobalResources> globalResources,
             LinkGenerator linkGenerator)
         {
             _dashboardResources = dashboardResources;
             _salesAnalyticsRepository = salesAnalyticsRepository;
             _linkGenerator = linkGenerator;
+            _globalResources = globalResources;
         }
 
         public async Task<CountrySalesAnalyticsViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -47,7 +50,8 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
                     ToLabel = _dashboardResources.GetString("To"),
                     FromDate = fromDate,
                     ToDate = toDate,
-                    SaveUrl = _linkGenerator.GetPathByAction("Index", "CountrySalesAnalyticsApi", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name }),
+                    GeneralErrorMessage = _globalResources.GetString("AnErrorOccurred"),
+                    SaveUrl = _linkGenerator.GetPathByAction("Index", "CountrySalesAnalyticsApi", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name })
                 };
 
                 var chartDataset = new List<double>();
@@ -59,7 +63,7 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
                     chartLabels.Add(countrySalesItem.Name);
                 }
 
-                viewModel.ChartLables = chartLabels;
+                viewModel.ChartLabels = chartLabels;
                 viewModel.ChartDatasets = new List<ChartDatasetsViewModel>
                 {
                     new ChartDatasetsViewModel
