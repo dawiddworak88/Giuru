@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Dashboard.Repositories;
+﻿using Buyer.Web.Areas.Dashboard.Definitions;
+using Buyer.Web.Areas.Dashboard.Repositories;
 using Buyer.Web.Shared.ViewModels.Analytics;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
@@ -35,7 +36,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Analytics
 
         public async Task<SalesAnalyticsViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var fromDate = DateTime.UtcNow.AddMonths(-12);
+            var fromDate = DateTime.UtcNow.AddMonths(DashboardConstants.AnnualAnalyticsDifferenceInMonths);
             var toDate = DateTime.UtcNow;
 
             var annualSales = await _salesAnalyticsRepository.GetAnnualSales(componentModel.Token, componentModel.Language, fromDate, toDate);

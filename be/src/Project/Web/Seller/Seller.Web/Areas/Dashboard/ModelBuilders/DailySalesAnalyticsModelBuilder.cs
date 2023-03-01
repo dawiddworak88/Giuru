@@ -4,6 +4,7 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Dashboard.Definitions;
 using Seller.Web.Areas.Dashboard.Repositories;
 using Seller.Web.Areas.Dashboard.ViewModels;
 using Seller.Web.Shared.ViewModels;
@@ -36,7 +37,7 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
 
         public async Task<DailySalesAnalyticsViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var fromDate = DateTime.UtcNow.AddDays(-21);
+            var fromDate = DateTime.UtcNow.AddDays(DashboardConstants.DailyAnalyticsDifferenceInDays);
             var toDate = DateTime.UtcNow;
 
             var dailySales = await _salesAnalyticsRepository.GetDailySales(componentModel.Token, componentModel.Language, fromDate, toDate);
@@ -65,7 +66,7 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
 
                     var monthNumber = dailySalesItem.Month.ToString();
 
-                    if (dailySalesItem.Month < 10)
+                    if (dailySalesItem.Month < DashboardConstants.MonthNameUnderMonth)
                     {
                         monthNumber = $"0{monthNumber}";
                     }

@@ -2,6 +2,7 @@
 using Foundation.ApiExtensions.Definitions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Seller.Web.Areas.Dashboard.Definitions;
 using Seller.Web.Areas.Dashboard.Repositories;
 using Seller.Web.Areas.Dashboard.RequestModels;
 using Seller.Web.Shared.ApiResponseModels;
@@ -42,7 +43,7 @@ namespace Seller.Web.Areas.Dashboard.ApiControllers
 
                     var monthNumber = dailySalesItem.Month.ToString();
 
-                    if (dailySalesItem.Month < 10)
+                    if (dailySalesItem.Month < DashboardConstants.MonthNameUnderMonth)
                     {
                         monthNumber = $"0{monthNumber}";
                     }

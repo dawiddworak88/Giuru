@@ -12,6 +12,7 @@ using Seller.Web.Areas.Dashboard.Repositories;
 using System.Linq;
 using Foundation.Extensions.ExtensionMethods;
 using Microsoft.AspNetCore.Routing;
+using Seller.Web.Areas.Dashboard.Definitions;
 
 namespace Seller.Web.Areas.Dashboard.ModelBuilders
 {
@@ -36,7 +37,7 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
 
         public async Task<CountrySalesAnalyticsViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var fromDate = DateTime.UtcNow.AddMonths(-3);
+            var fromDate = DateTime.UtcNow.AddMonths(DashboardConstants.CountriesAnalyticsDifferenceInMonths);
             var toDate = DateTime.UtcNow;
 
             var countriesSales = await _salesAnalyticsRepository.GetCountriesSales(componentModel.Token, componentModel.Language, fromDate, toDate);
