@@ -7,7 +7,7 @@
         
         public bool IsImage(string mimeType)
         {
-            return mimeType.StartsWith("image");
+            return mimeType is not null && mimeType.StartsWith("image");
         }
     }
 }

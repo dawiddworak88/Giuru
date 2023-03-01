@@ -1,0 +1,3 @@
+variables:
+- name: b2bMediaApiImageRepository
+  value: 'b2b-media-api'

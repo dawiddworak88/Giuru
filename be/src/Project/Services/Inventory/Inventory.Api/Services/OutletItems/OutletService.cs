@@ -473,17 +473,19 @@ namespace Inventory.Api.Services.OutletItems
                     .Include(x => x.Product)
                     .Include(x => x.Translations)
                     .AsSingleQuery()
+                    .GroupBy(x => x.ProductId)
+                    .Where(x => x.Sum(y => y.AvailableQuantity) > 0)
                     .Select(y => new OutletSumServiceModel
                     { 
-                        ProductId = y.ProductId,
-                        ProductName = y.Product.Name,
-                        ProductSku = y.Product.Sku,
-                        ProductEan = y.Product.Ean,
-                        AvailableQuantity = y.AvailableQuantity,
-                        Quantity = y.Quantity,
-                        OutletId = y.Id,
-                        Title = y.Translations.FirstOrDefault(t => t.OutletItemId == y.Id && t.Language == model.Language).Title,
-                        Description = y.Translations.FirstOrDefault(t => t.OutletItemId == y.Id && t.Language == model.Language).Description
+                        ProductId = y.FirstOrDefault().ProductId,
+                        ProductName = y.FirstOrDefault().Product.Name,
+                        ProductSku = y.FirstOrDefault().Product.Sku,
+                        ProductEan = y.FirstOrDefault().Product.Ean,
+                        AvailableQuantity = y.FirstOrDefault().AvailableQuantity,
+                        Quantity = y.FirstOrDefault().Quantity,
+                        OutletId = y.FirstOrDefault().Id,
+                        Title = y.FirstOrDefault().Translations.FirstOrDefault(t => t.OutletItemId == y.FirstOrDefault().Id && t.Language == model.Language) != null ? y.FirstOrDefault().Translations.FirstOrDefault(t => t.OutletItemId == y.FirstOrDefault().Id && t.Language == model.Language).Title : y.FirstOrDefault().Translations.FirstOrDefault(t => t.OutletItemId == y.FirstOrDefault().Id).Title,
+                        Description = y.FirstOrDefault().Translations.FirstOrDefault(t => t.OutletItemId == y.FirstOrDefault().Id && t.Language == model.Language) != null ? y.FirstOrDefault().Translations.FirstOrDefault(t => t.OutletItemId == y.FirstOrDefault().Id && t.Language == model.Language).Description : y.FirstOrDefault().Translations.FirstOrDefault(t => t.OutletItemId == y.FirstOrDefault().Id).Description
                     });
 
             PagedResults<IEnumerable<OutletSumServiceModel>> pagedResults;
@@ -499,23 +501,7 @@ namespace Inventory.Api.Services.OutletItems
                 pagedResults = outletItems.PagedIndex(new Pagination(outletItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            var groupedResults = pagedResults.Data.GroupBy(x => x.ProductId).Where(gp => gp.Sum(x => x.AvailableQuantity) > 0);
-
-            return new PagedResults<IEnumerable<OutletSumServiceModel>>(groupedResults.Count(), pagedResults.PageSize)
-            {
-                Data = groupedResults.OrEmptyIfNull().Select(x => new OutletSumServiceModel
-                {
-                    ProductId = x.Key,
-                    ProductEan = x.FirstOrDefault().ProductEan,
-                    ProductName = x.FirstOrDefault().ProductName,
-                    ProductSku = x.FirstOrDefault().ProductSku,
-                    AvailableQuantity = x.Sum(y => y.AvailableQuantity),
-                    OutletId = x.FirstOrDefault().OutletId,
-                    Quantity = x.Sum(y => y.Quantity),
-                    Title = x.FirstOrDefault().Title,
-                    Description = x.FirstOrDefault().Description
-                })
-            };
+            return pagedResults;
         }
 
         public async Task UpdateOutletQuantity(Guid? productId, double bookedQuantity)

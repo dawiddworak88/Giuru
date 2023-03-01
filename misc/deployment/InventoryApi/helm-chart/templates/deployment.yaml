@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-api-deployment
+  labels:
+    app: inventory-api
+spec:
+  replicas: {{ .Values.inventoryApi.replicas }}
+  selector:
+    matchLabels:
+      app: inventory-api
+  template:
+    metadata:
+      labels:
+        app: inventory-api
+    spec:
+      containers:
+      - name: inventory-api-container
+        image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: {{ .Values.inventoryApi.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.inventoryApi.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.inventoryApi.readinessProbe.timeoutSeconds }}
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: {{ .Values.inventoryApi.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.inventoryApi.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.inventoryApi.livenessProbe.timeoutSeconds }}
+        resources:
+          limits:
+            memory: {{ .Values.inventoryApi.resources.limits.memory }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        envFrom:
+        - secretRef:
+            name: b2b-inventory-api-secrets
+        ports:
+        - containerPort: 80

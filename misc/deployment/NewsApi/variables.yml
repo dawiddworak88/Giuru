@@ -1,0 +1,3 @@
+variables:
+- name: b2bNewsApiImageRepository
+  value: 'b2b-news-api'

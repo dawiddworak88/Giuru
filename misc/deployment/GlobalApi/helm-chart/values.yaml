@@ -1,0 +1,23 @@
+environment: "#{Environment}#"
+identityUrl: "#{IdentityUrl}#"
+redisUrl: "#{RedisUrl}#"
+logzIoToken: "#{LogzIoToken}#"
+logzIoType: "#{LogzIoType}#"
+logzIoDataCenterSubDomain: "#{LogzIoDataCenterSubDomain}#"
+openTelemetryCollectorUrl: "#{OpenTelemetryCollectorUrl}#"
+supportedCultures: "en,de,pl"
+defaultCulture: "en"
+globalApi:
+  connectionString: "#{GlobalApi--ConnectionString}#"
+  replicas: "1"
+  readinessProbe:
+    initialDelaySeconds: "15"
+    periodSeconds: "30"
+    timeoutSeconds: "15"
+  livenessProbe:
+    initialDelaySeconds: "15"
+    periodSeconds: "30"
+    timeoutSeconds: "15"
+  resources:
+    limits:
+      memory: "250Mi"
