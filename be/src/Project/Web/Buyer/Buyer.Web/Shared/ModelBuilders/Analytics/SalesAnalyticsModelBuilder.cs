@@ -48,6 +48,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Analytics
                     ToLabel = _dashboardResources.GetString("To"),
                     FromDate = fromDate,
                     ToDate = toDate,
+                    InvalidDateRangeErrorMessage = _dashboardResources.GetString("InvalidDateRange"),
                     GeneralErrorMessage = _globalResources.GetString("AnErrorOccurred"),
                     SaveUrl = _linkGenerator.GetPathByAction("Index", "SalesAnalyticsApi", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name })
                 };

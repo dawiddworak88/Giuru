@@ -10,6 +10,7 @@ import {
     Chart as ChartJs, Tooltip, Legend, CategoryScale, 
     LinearScale, PointElement, LineElement
 } from "chart.js";
+import ChartValidator from "../../../helpers/validators/ChartValidator";
 
 if (typeof window !== "undefined") {
     ChartJs.register(
@@ -25,53 +26,67 @@ const SalesAnalytics = (props) => {
     const [toDate, setToDate] = useState(props.toDate);
 
     const handleFromDate = (date) => {
-        setFromDate(date);
 
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify({ fromDate: date, toDate })
-        };
+        if (ChartValidator.validate(date, toDate)) {
+            setFromDate(date);
 
-        fetch(props.saveUrl, requestOptions)
-            .then((response) => {
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setSalesAnalytics(jsonResponse.data.chartDatasets);
-                        setSalesAnalyticsLabels(jsonResponse.data.chartLabels);
-                    }
+            const requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+                body: JSON.stringify({ fromDate: date, toDate })
+            };
+    
+            fetch(props.saveUrl, requestOptions)
+                .then((response) => {
+                    AuthenticationHelper.HandleResponse(response);
+    
+                    return response.json().then(jsonResponse => {
+                        if (response.ok) {
+                            setSalesAnalytics(jsonResponse.data.chartDatasets);
+                            setSalesAnalyticsLabels(jsonResponse.data.chartLabels);
+                        }
+                    });
+    
+                }).catch(() => {
+                    toast.error(props.generalErrorMessage);
                 });
-
-            }).catch(() => {
-                toast.error(props.generalErrorMessage);
-            });
+        }
+        else {
+            toast.error(props.invalidDateRangeErrorMessage);
+            return;
+        }
     }
 
     const handleToDate = (date) => {
-        setToDate(date);
 
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify({ fromDate, toDate: date })
-        };
+        if (ChartValidator.validate(fromDate, date)) {
+            setToDate(date);
 
-        fetch(props.saveUrl, requestOptions)
-            .then((response) => {
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setSalesAnalytics(jsonResponse.data.chartDatasets);
-                        setSalesAnalyticsLabels(jsonResponse.data.chartLabels);
-                    }
+            const requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+                body: JSON.stringify({ fromDate, toDate: date })
+            };
+    
+            fetch(props.saveUrl, requestOptions)
+                .then((response) => {
+                    AuthenticationHelper.HandleResponse(response);
+    
+                    return response.json().then(jsonResponse => {
+                        if (response.ok) {
+                            setSalesAnalytics(jsonResponse.data.chartDatasets);
+                            setSalesAnalyticsLabels(jsonResponse.data.chartLabels);
+                        }
+                    });
+    
+                }).catch(() => {
+                    toast.error(props.generalErrorMessage);
                 });
-
-            }).catch(() => {
-                toast.error(props.generalErrorMessage);
-            });
+        }
+        else {
+            toast.error(props.invalidDateRangeErrorMessage)
+            return;
+        }
     }
 
     return (
@@ -87,6 +102,7 @@ const SalesAnalytics = (props) => {
                             label={props.fromLabel}
                             value={fromDate}
                             name="fromDate"
+                            views={["month", "year"]}
                             onChange={(date) => {
                                 handleFromDate(date);
                             }}
@@ -100,6 +116,7 @@ const SalesAnalytics = (props) => {
                             id="sales-analytics-to-date"
                             label={props.toLabel}
                             value={toDate}
+                            views={["month", "year"]}
                             name="toDate"
                             onChange={(date) => {
                                 handleToDate(date);
@@ -130,7 +147,11 @@ const SalesAnalytics = (props) => {
 
 SalesAnalytics.propTypes = {
     chartLabels: PropTypes.array.isRequired,
-    chartDatasets: PropTypes.array.isRequired
+    chartDatasets: PropTypes.array.isRequired,
+    fromLabel: PropTypes.string.isRequired,
+    toLabel: PropTypes.string.isRequired,
+    saveUrl: PropTypes.string.isRequired,
+    invalidDateRangeErrorMessage: PropTypes.string.isRequired
 }
 
 export default SalesAnalytics;

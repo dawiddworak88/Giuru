@@ -8,6 +8,7 @@ import { Bar } from "react-chartjs-2";
 import { Chart as ChartJs, CategoryScale, Tooltip, Legend, BarElement } from "chart.js";
 import ChartsConstants from "../../../constants/ChartsConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
+import ChartValidator from "../../../helpers/validators/ChartValidator";
 
 if (typeof window !== "undefined") {
     ChartJs.register(
@@ -22,53 +23,67 @@ const CountrySalesAnalytics = (props) => {
     const [toDate, setToDate] = useState(props.toDate);
 
     const handleFromDate = (date) => {
-        setFromDate(date);
 
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify({ fromDate: date, toDate })
-        };
+        if (ChartValidator.validate(date, toDate)) {
+            setFromDate(date);
 
-        fetch(props.saveUrl, requestOptions)
-            .then((response) => {
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setCountriesSales(jsonResponse.data.chartDatasets);
-                        setCountriesLabels(jsonResponse.data.chartLabels);
-                    }
+            const requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+                body: JSON.stringify({ fromDate: date, toDate })
+            };
+    
+            fetch(props.saveUrl, requestOptions)
+                .then((response) => {
+                    AuthenticationHelper.HandleResponse(response);
+    
+                    return response.json().then(jsonResponse => {
+                        if (response.ok) {
+                            setCountriesSales(jsonResponse.data.chartDatasets);
+                            setCountriesLabels(jsonResponse.data.chartLabels);
+                        }
+                    });
+    
+                }).catch(() => {
+                    toast.error(props.generalErrorMessage);
                 });
-
-            }).catch(() => {
-                toast.error(props.generalErrorMessage);
-            });
+        }
+        else {
+            toast.error(props.invalidDateRangeErrorMessage)
+            return;
+        }
     }
 
     const handleToDate = (date) => {
-        setToDate(date);
 
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify({ fromDate, toDate: date })
-        };
-
-        fetch(props.saveUrl, requestOptions)
-            .then((response) => {
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setCountriesSales(jsonResponse.data.chartDatasets);
-                        setCountriesLabels(jsonResponse.data.chartLabels);
-                    }
+        if (ChartValidator.validate(fromDate, date)) {
+            setToDate(date);
+            
+            const requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+                body: JSON.stringify({ fromDate, toDate: date })
+            };
+    
+            fetch(props.saveUrl, requestOptions)
+                .then((response) => {
+                    AuthenticationHelper.HandleResponse(response);
+    
+                    return response.json().then(jsonResponse => {
+                        if (response.ok) {
+                            setCountriesSales(jsonResponse.data.chartDatasets);
+                            setCountriesLabels(jsonResponse.data.chartLabels);
+                        }
+                    });
+    
+                }).catch(() => {
+                    toast.error(props.generalErrorMessage);
                 });
-
-            }).catch(() => {
-                toast.error(props.generalErrorMessage);
-            });
+        }
+        else {
+            toast.error(props.invalidDateRangeErrorMessage)
+            return;
+        }
     }
 
     return (
@@ -82,6 +97,7 @@ const CountrySalesAnalytics = (props) => {
                             label={props.fromLabel}
                             value={fromDate}
                             name="fromDate"
+                            views={["month", "year"]}
                             onChange={(date) => {
                                 handleFromDate(date);
                             }}
@@ -96,6 +112,7 @@ const CountrySalesAnalytics = (props) => {
                             label={props.toLabel}
                             value={toDate}
                             name="toDate"
+                            views={["month", "year"]}
                             onChange={(date) => {
                                 handleToDate(date);
                             }}
@@ -132,7 +149,8 @@ CountrySalesAnalytics.propTypes = {
     chartDatasets: PropTypes.array.isRequired,
     fromLabel: PropTypes.string.isRequired,
     toLabel: PropTypes.string.isRequired,
-    saveUrl: PropTypes.string.isRequired
+    saveUrl: PropTypes.string.isRequired,
+    invalidDateRangeErrorMessage: PropTypes.string.isRequired
 }
 
 export default CountrySalesAnalytics;

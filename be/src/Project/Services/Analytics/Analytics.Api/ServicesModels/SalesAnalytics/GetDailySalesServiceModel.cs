@@ -1,12 +1,9 @@
-﻿using Foundation.Extensions.Models;
-using System;
+﻿using Analytics.Api.Shared.ServicesModels;
 
 namespace Analytics.Api.ServicesModels.SalesAnalytics
 {
-    public class GetDailySalesServiceModel : BaseServiceModel
+    public class GetDailySalesServiceModel : ChartBaseServiceModel
     {
         public bool IsSeller { get; set; }
-        public DateTime FromDate { get; set; }
-        public DateTime ToDate { get; set; }
     }
 }

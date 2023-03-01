@@ -9,7 +9,6 @@ using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -41,7 +40,7 @@ namespace Analytics.Api.v1.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult GetAnnualSales(DateTime fromDate, DateTime toDate)
+        public IActionResult GetAnnualSales(DateTime? fromDate, DateTime? toDate)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -87,7 +86,7 @@ namespace Analytics.Api.v1.Controllers
         [HttpGet("countries"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult GetCountriesSales(DateTime fromDate, DateTime toDate)
+        public IActionResult GetCountriesSales(DateTime? fromDate, DateTime? toDate)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -132,7 +131,7 @@ namespace Analytics.Api.v1.Controllers
         [HttpGet("daily"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult GetDailySales(DateTime fromDate, DateTime toDate)
+        public IActionResult GetDailySales(DateTime? fromDate, DateTime? toDate)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 

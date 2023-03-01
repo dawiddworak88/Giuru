@@ -1,11 +1,10 @@
-﻿using Foundation.Extensions.Models;
+﻿using Analytics.Api.Shared.ServicesModels;
+using Foundation.Extensions.Models;
 using System;
 
 namespace Analytics.Api.ServicesModels.SalesAnalytics
 {
-    public class GetCountriesSalesServiceModel : BaseServiceModel
+    public class GetCountriesSalesServiceModel : ChartBaseServiceModel
     {
-        public DateTime FromDate { get; set; }
-        public DateTime ToDate { get; set; }
     }
 }
