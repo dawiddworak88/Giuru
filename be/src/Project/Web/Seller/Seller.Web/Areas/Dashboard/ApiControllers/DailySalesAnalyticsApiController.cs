@@ -39,8 +39,6 @@ namespace Seller.Web.Areas.Dashboard.ApiControllers
 
                 foreach (var dailySalesItem in dailySales)
                 {
-                    var dayName = CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(((DayOfWeek)dailySalesItem.DayOfWeek));
-
                     var monthNumber = dailySalesItem.Month.ToString();
 
                     if (dailySalesItem.Month < DashboardConstants.MonthNameUnderMonth)
@@ -48,7 +46,7 @@ namespace Seller.Web.Areas.Dashboard.ApiControllers
                         monthNumber = $"0{monthNumber}";
                     }
 
-                    chartLabels.Add($"{dayName.ToUpperInvariant()} - {dailySalesItem.Day}.{monthNumber}");
+                    chartLabels.Add($"{dailySalesItem.Day}.{monthNumber}");
                 }
 
                 var response = new ChartResponseModel
