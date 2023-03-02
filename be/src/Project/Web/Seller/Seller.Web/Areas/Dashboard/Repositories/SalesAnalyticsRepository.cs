@@ -25,7 +25,7 @@ namespace Seller.Web.Areas.Dashboard.Repositories
             _settings = settings;
         }
 
-        public async Task<IEnumerable<CountrySalesItem>> GetCountriesSales(string token, string language, DateTime fromDate, DateTime toDate)
+        public async Task<IEnumerable<CountrySalesItem>> GetCountriesSales(string token, string language, DateTime? fromDate, DateTime? toDate)
         {
             var requestModel = new SalesAnalyticsRequestModel
             {
@@ -56,7 +56,7 @@ namespace Seller.Web.Areas.Dashboard.Repositories
             return default;
         }
 
-        public async Task<IEnumerable<DailySalesItem>> GetDailySales(string token, string language, DateTime fromDate, DateTime toDate)
+        public async Task<IEnumerable<DailySalesItem>> GetDailySales(string token, string language, DateTime? fromDate, DateTime? toDate)
         {
             var requestModel = new SalesAnalyticsRequestModel
             {
