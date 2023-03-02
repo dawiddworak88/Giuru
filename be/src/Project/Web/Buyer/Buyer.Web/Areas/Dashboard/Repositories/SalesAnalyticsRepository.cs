@@ -26,12 +26,12 @@ namespace Buyer.Web.Areas.Dashboard.Repositories
             _settings = settings;
         }
 
-        public async Task<IEnumerable<AnnualSalesItem>> GetAnnualSales(string token, string language, DateTime? fromDate, DateTime? toDate)
+        public async Task<IEnumerable<AnnualSalesItem>> GetAnnualSales(string token, string language, DateTime fromDate, DateTime toDate)
         {
             var requestModel = new SalesAnalyticsRequestModel
             {
-                FromDate = fromDate.Value,
-                ToDate = toDate.Value,
+                FromDate = fromDate,
+                ToDate = toDate,
             };
 
             var apiRequest = new ApiRequest<SalesAnalyticsRequestModel>
