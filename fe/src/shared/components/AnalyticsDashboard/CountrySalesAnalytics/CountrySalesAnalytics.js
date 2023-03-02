@@ -97,7 +97,7 @@ const CountrySalesAnalytics = (props) => {
                             label={props.fromLabel}
                             value={fromDate}
                             name="fromDate"
-                            views={["month", "year"]}
+                            views={props.datePickerViews}
                             onChange={(date) => {
                                 handleFromDate(date);
                             }}
@@ -112,7 +112,7 @@ const CountrySalesAnalytics = (props) => {
                             label={props.toLabel}
                             value={toDate}
                             name="toDate"
-                            views={["month", "year"]}
+                            views={props.datePickerViews}
                             onChange={(date) => {
                                 handleToDate(date);
                             }}

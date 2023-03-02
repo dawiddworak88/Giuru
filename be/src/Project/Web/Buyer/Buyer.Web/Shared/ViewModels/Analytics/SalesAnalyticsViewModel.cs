@@ -13,6 +13,7 @@ namespace Buyer.Web.Shared.ViewModels.Analytics
         public string SaveUrl { get; set; }
         public string InvalidDateRangeErrorMessage { get; set; }
         public string GeneralErrorMessage { get; set; }
+        public string[] DatePickerViews { get; set; }
         public IEnumerable<string> ChartLabels { get; set; }
         public IEnumerable<SalesAnalyticsChartDatasetsViewModel> ChartDatasets { get; set; }
     }

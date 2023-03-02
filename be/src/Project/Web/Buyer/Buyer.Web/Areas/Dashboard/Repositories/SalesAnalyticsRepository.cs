@@ -30,8 +30,8 @@ namespace Buyer.Web.Areas.Dashboard.Repositories
         {
             var requestModel = new SalesAnalyticsRequestModel
             {
-                FromDate = fromDate,
-                ToDate = toDate,
+                FromDate = fromDate.Value,
+                ToDate = toDate.Value,
             };
 
             var apiRequest = new ApiRequest<SalesAnalyticsRequestModel>

@@ -102,7 +102,7 @@ const SalesAnalytics = (props) => {
                             label={props.fromLabel}
                             value={fromDate}
                             name="fromDate"
-                            views={["month", "year"]}
+                            views={props.datePickerViews}
                             onChange={(date) => {
                                 handleFromDate(date);
                             }}
@@ -116,7 +116,7 @@ const SalesAnalytics = (props) => {
                             id="sales-analytics-to-date"
                             label={props.toLabel}
                             value={toDate}
-                            views={["month", "year"]}
+                            views={props.datePickerViews}
                             name="toDate"
                             onChange={(date) => {
                                 handleToDate(date);

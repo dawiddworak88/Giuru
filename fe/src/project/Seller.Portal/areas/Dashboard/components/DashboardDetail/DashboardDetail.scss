@@ -15,7 +15,17 @@
     @media only screen and (max-width: $tablet) {
         
         &__container {
-            height: 15rem;
+            height: 20rem;
+
+            .sales-analytics,
+            .country-sales {
+                height: 70%;
+            }
+
+            &:nth-child(2) {
+                margin-top: 3rem;
+                margin-bottom: 1rem;
+            }
         }
     }
 }

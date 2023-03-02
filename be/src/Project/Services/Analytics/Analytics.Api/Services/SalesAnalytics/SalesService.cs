@@ -192,7 +192,7 @@ namespace Analytics.Api.Services.SalesAnalytics
                 model.ToDate = DateTime.UtcNow;
             }
 
-            var difference = ((model.ToDate.Value.Year - model.FromDate.Value.Year) * 12) + model.ToDate.Value.Month - model.FromDate.Value.Month;
+            var difference = (((model.ToDate.Value.Year - model.FromDate.Value.Year) * 12) + model.ToDate.Value.Month - model.FromDate.Value.Month) + 1;
 
             var months = Enumerable.Range(-difference, difference)
                 .Select(x => new    
@@ -289,7 +289,7 @@ namespace Analytics.Api.Services.SalesAnalytics
                 model.ToDate = model.ToDate.Value;
             }
 
-            var difference = (int)(model.ToDate.Value - model.FromDate.Value).TotalDays;
+            var difference = (int)(model.ToDate.Value - model.FromDate.Value).TotalDays + 1;
 
             var days = Enumerable.Range(-difference, difference)
                 .Select(x => new

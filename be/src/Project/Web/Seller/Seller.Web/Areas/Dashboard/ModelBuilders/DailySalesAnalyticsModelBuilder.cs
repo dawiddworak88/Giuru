@@ -51,6 +51,8 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
                     ToLabel = _dashboardResources.GetString("To"),
                     FromDate = fromDate,
                     ToDate = toDate,
+                    DatePickerViews = DashboardConstants.FullDatePickerViews,
+                    InvalidDateRangeErrorMessage = _dashboardResources.GetString("InvalidDateRange"),
                     GeneralErrorMessage = _globalResources.GetString("AnErrorOccurred"),
                     SaveUrl = _linkGenerator.GetPathByAction("Index", "DailySalesAnalyticsApi", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name })
                 };
