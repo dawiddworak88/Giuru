@@ -64,8 +64,6 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
                 {
                     chartDataset.Add(dailySalesItem.Quantity);
 
-                    var dayName = CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(((DayOfWeek)dailySalesItem.DayOfWeek));
-
                     var monthNumber = dailySalesItem.Month.ToString();
 
                     if (dailySalesItem.Month < DashboardConstants.MonthNameUnderMonth)
@@ -73,7 +71,7 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
                         monthNumber = $"0{monthNumber}";
                     }
 
-                    chartLabels.Add($"{dayName.ToUpperInvariant()} - {dailySalesItem.Day}.{monthNumber}");
+                    chartLabels.Add($"{dailySalesItem.Day}.{monthNumber}");
                 }
 
                 viewModel.ChartLabels = chartLabels;
