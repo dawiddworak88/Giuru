@@ -30,8 +30,6 @@ const ProductCardForm = (props) => {
     }
 
     const onSubmitForm = (state) => {
-        // dispatch({ type: "SET_IS_LOADING", payload: true });
-
         const requestPayload = {
             id: state.id,
             schema: JSON.stringify(state.schema),
@@ -49,8 +47,6 @@ const ProductCardForm = (props) => {
 
         fetch(props.saveUrl, requestOptions)
             .then(function (response) {
-                //dispatch({ type: "SET_IS_LOADING", payload: false });
-
                 AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
@@ -199,19 +195,6 @@ const ProductCardForm = (props) => {
         return newSchema;
     }
 
-    const generateDefinitionsSchemaFromElementProps = (elements, definition) => {
-        if (!elements)
-            return {};
-
-        elements.forEach((element) => {
-            if (element.$ref !== undefined || element.$ref !== null) {
-                definitions[element.$ref] = definition;
-            }
-        })
-
-        return definitions
-    }
-
     const updateSchema = (newElement, schema) => {
         const newSchema = Object.assign({...schema}, generateSchemaFromElementProps(newElement));
 
@@ -246,16 +229,6 @@ const ProductCardForm = (props) => {
     const handleOpenModal = (schema) => {
         const newElements = generateElementsFromSchema(schema);
         const i = getIdFromElements(newElements);
-
-        // const newElement = {
-        //     name: `${props.defaultInputName}${i}`,
-        //     required: false,
-        //     dataOptions: {
-        //         title: `${props.defaultInputName}${i}`,
-        //         type: "string",
-        //         default: ""
-        //     }
-        // }
 
         const newElement = {
             name: `${props.defaultInputName}${i}`,
@@ -367,11 +340,6 @@ const ProductCardForm = (props) => {
 
     const { schema } = values;
     const requiredNames = schema.required ? schema.required : [];
-
-    // console.log(JSON.stringify(schema));
-    // console.log(props.productCardModal)
-
-    //console.log(productAttribute)
 
     return (
         <section className="section section-small-padding category">
