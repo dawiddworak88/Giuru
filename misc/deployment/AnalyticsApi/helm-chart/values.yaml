@@ -1,0 +1,30 @@
+environment: "#{Environment}#"
+identityUrl: "#{IdentityUrl}#"
+redisUrl: "#{RedisUrl}#"
+clientUrl: "#{ClientUrl}#"
+catalogUrl: "#{CatalogUrl}#"
+tokenUrl: "#{TokenUrl}#"
+globalUrl: "#{GlobalUrl}#"
+logzIoToken: "#{LogzIoToken}#"
+logzIoType: "#{LogzIoType}#"
+logzIoDataCenterSubDomain: "#{LogzIoDataCenterSubDomain}#"
+openTelemetryCollectorUrl: "#{OpenTelemetryCollectorUrl}#"
+giuruApiOrganisationId: "#{GiuruApiOrganisationId}#"
+giuruApiEmail: "#{GiuruApiEmail}#"
+giuruApiSecret: "#{GiuruApiSecret}#"
+supportedCultures: "en,de,pl"
+defaultCulture: "en"
+analyticsApi:
+  connectionString: "#{AnalyticsApi--ConnectionString}#"
+  replicas: "1"
+  readinessProbe:
+    initialDelaySeconds: "15"
+    periodSeconds: "30"
+    timeoutSeconds: "15"
+  livenessProbe:
+    initialDelaySeconds: "15"
+    periodSeconds: "30"
+    timeoutSeconds: "15"
+  resources:
+    limits:
+      memory: "250Mi"

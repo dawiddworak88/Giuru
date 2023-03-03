@@ -2,129 +2,148 @@ version: '3.9'
 
 services:
 
+  grafana:
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+      - loki
+      - jaeger
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    restart: unless-stopped
+    depends_on:
+      - jaeger
+      - prometheus
+      - loki
+
+  prometheus:
+    image: prom/prometheus:latest
+    restart: unless-stopped
+
+  loki:
+    image: grafana/loki:latest
+    restart: unless-stopped
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    restart: unless-stopped
+
   rabbitmq:
     image: rabbitmq
-    restart: always
+    restart: unless-stopped
 
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite:latest
-    restart: always
+    restart: unless-stopped
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
-    restart: always
+    restart: unless-stopped
 
   redis:
     image: redis:alpine
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
-    restart: always
-    depends_on:
-      - elasticsearch
-
-  logstash:
-    build:
-      context: DockerServices/logstash/
-      args:
-        ELK_VERSION: ${ELK_VERSION}
-    restart: always
-    depends_on:
-      - elasticsearch
 
   react-ssr:
     image: ${REGISTRY:-giuru}/react-ssr:${PLATFORM:-linux}-${TAG:-latest}
     build: 
       context: ../../fe
       dockerfile: Dockerfile-ssr-local
-    restart: always
+    restart: unless-stopped
 
   sqldata:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
-    restart: always
+    restart: unless-stopped
 
   postgres:
     image: postgres:10.5
-    restart: always
+    restart: unless-stopped
 
   media-api:
     image: ${REGISTRY:-giuru}/media-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Project/Services/Media/Media.Api/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on:
       - azurite
       - sqldata
       - redis
+      - otel-collector
 
   client-api:
     image: ${REGISTRY:-giuru}/client-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Project/Services/Client/Client.Api/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - sqldata
       - redis
+      - otel-collector
 
   inventory-api:
     image: ${REGISTRY:-giuru}/inventory-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Project/Services/Inventory/Inventory.Api/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - sqldata
       - redis
-      - catalog-api
       - rabbitmq
+      - otel-collector
   
   news-api:
     image: ${REGISTRY:-giuru}/news-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Project/Services/News/News.Api/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - sqldata
       - redis
+      - otel-collector
 
   catalog-api:
     image: ${REGISTRY:-giuru}/catalog-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Project/Services/Catalog/Catalog.Api/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - sqldata
       - redis
       - elasticsearch
       - rabbitmq
       - media-api
+      - otel-collector
 
   catalog-backgroundtasks:
     image: ${REGISTRY:-giuru}/catalog-backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Project/Services/Catalog/Catalog.BackgroundTasks/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - catalog-api
       - sqldata
       - redis
       - rabbitmq
+      - otel-collector
 
   identity-api:
     image: ${REGISTRY:-giuru}/identity-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Project/Services/Identity/Identity.Api/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - sqldata
       - redis
       - react-ssr
+      - otel-collector
 
   basket-api:
     image: ${REGISTRY:-giuru}/basket-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -135,6 +154,7 @@ services:
       - redis
       - identity-api
       - rabbitmq
+      - otel-collector
 
   ordering-api:
     image: ${REGISTRY:-giuru}/ordering-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -145,6 +165,7 @@ services:
       - catalog-api
       - redis
       - rabbitmq
+      - otel-collector
 
   content-api:
     image: ${REGISTRY:-giuru}/content-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -153,6 +174,7 @@ services:
       dockerfile: Dockerfile-dev-local
     depends_on:
       - postgres
+      - otel-collector
 
   downloadcenter-api:
     image: ${REGISTRY:-giuru}/download-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -162,6 +184,7 @@ services:
     depends_on:
       - redis
       - sqldata
+      - otel-collector
 
   analytics-api:
     image: ${REGISTRY:-giuru}/analytics-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -171,6 +194,7 @@ services:
     depends_on:
       - sqldata
       - redis
+      - otel-collector
       
   global-api:
     image: ${REGISTRY:-giuru}/global-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -180,25 +204,52 @@ services:
     depends_on:
       - redis
       - sqldata
+      - otel-collector
 
   seller-web:
     image: ${REGISTRY:-giuru}/seller-web:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Project/Web/Seller/Seller.Web/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - react-ssr
+      - analytics-api
+      - media-api
+      - client-api
+      - inventory-api
+      - global-api
+      - downloadcenter-api
+      - ordering-api
+      - basket-api
+      - content-api
+      - catalog-api
+      - catalog-backgroundtasks
+      - news-api
       - redis
       - identity-api
+      - otel-collector
 
   buyer-web:
     image: ${REGISTRY:-giuru}/buyer-web:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Project/Web/Buyer/Buyer.Web/Dockerfile
-    restart: always
+    restart: unless-stopped
     depends_on: 
       - react-ssr
+      - analytics-api
+      - media-api
+      - client-api
+      - inventory-api
+      - global-api
+      - downloadcenter-api
+      - ordering-api
+      - basket-api
+      - content-api
+      - catalog-api
+      - catalog-backgroundtasks
+      - news-api
       - redis
       - identity-api
+      - otel-collector

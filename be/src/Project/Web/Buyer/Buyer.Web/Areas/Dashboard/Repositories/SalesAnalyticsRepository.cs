@@ -49,36 +49,5 @@ namespace Buyer.Web.Areas.Dashboard.Repositories
 
             return default;
         }
-
-        public async Task<IEnumerable<Product>> GetProductsSales(string token, string language, int? size, string orderBy)
-        {
-            var requestModel = new SalesAnalyticsProductsRequestModel
-            {
-                Size = size,
-                OrderBy = orderBy
-            };
-
-            var apiRequest = new ApiRequest<SalesAnalyticsProductsRequestModel>
-            {
-                Language = language,
-                Data = requestModel,
-                AccessToken = token,
-                EndpointAddress = $"{_settings.Value.AnalyticsUrl}{ApiConstants.Analytics.ProductsSalesAnalyticsApiEndpoint}"
-            };
-
-            var response = await _apiClientService.GetAsync<ApiRequest<SalesAnalyticsProductsRequestModel>, SalesAnalyticsProductsRequestModel, IEnumerable<Product>>(apiRequest);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            if (response.IsSuccessStatusCode && response.Data != null)
-            {
-                return response.Data;
-            }
-
-            return default;
-        }
     }
 }

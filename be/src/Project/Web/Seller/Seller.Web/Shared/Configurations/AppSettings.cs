@@ -16,5 +16,6 @@
         public string SellerUrl { get; set; }
         public string GlobalUrl { get; set; }
         public string ContentUrl { get; set; }
+        public string AnalyticsUrl { get; set; }
     }
 }

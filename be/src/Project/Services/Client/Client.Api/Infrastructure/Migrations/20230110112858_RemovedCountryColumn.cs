@@ -8,9 +8,16 @@ namespace Client.Api.Infrastructure.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Country",
-                table: "Clients");
+            migrationBuilder.Sql(@"IF EXISTS (SELECT 1
+                                    FROM INFORMATION_SCHEMA.COLUMNS
+                                    WHERE TABLE_NAME = 'Clients'
+                                            AND COLUMN_NAME = 'Country'
+                                            AND TABLE_SCHEMA='dbo')
+                                    BEGIN
+                                        ALTER TABLE Clients
+                                        DROP COLUMN Country
+                                    END
+                                GO");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

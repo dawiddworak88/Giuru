@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-api-deployment
+  labels:
+    app: analytics-api
+spec:
+  replicas: {{ .Values.analyticsApi.replicas }}
+  selector:
+    matchLabels:
+      app: analytics-api
+  template:
+    metadata:
+      labels:
+        app: analytics-api
+    spec:
+      containers:
+      - name: analytics-api-container
+        image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: {{ .Values.analyticsApi.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.analyticsApi.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.analyticsApi.readinessProbe.timeoutSeconds }}
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: {{ .Values.analyticsApi.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.analyticsApi.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.analyticsApi.livenessProbe.timeoutSeconds }}
+        resources:
+          limits:
+            memory: {{ .Values.analyticsApi.resources.limits.memory }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
+        - name: GiuruTokenUrl
+          value: {{ .Values.tokenUrl }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
+        - name: ClientUrl
+          value: {{ .Values.clientUrl }}
+        - name: CatalogUrl
+          value: {{ .Values.catalogUrl }}
+        - name: GlobalUrl
+          value: {{ .Values.globalUrl }}
+        envFrom:
+        - secretRef:
+            name: b2b-analytics-api-secrets
+        ports:
+        - containerPort: 80

@@ -7,139 +7,180 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Analytics.Api.Repositories.Clients;
+using Analytics.Api.Repositories.Global;
+using Analytics.Api.Repositories.Products;
 
 namespace Analytics.Api.Services.SalesAnalytics
 {
     public class SalesService : ISalesService
     {
         private readonly AnalyticsContext _context;
+        private readonly IClientRepository _clientRepository;
+        private readonly ICountriesRepository _countriesRepository;
+        private readonly IProductsRepository _productsRepository;
 
         public SalesService(
-            AnalyticsContext context)
+            AnalyticsContext context,
+            ICountriesRepository countriesRepository,
+            IProductsRepository productsRepository,
+            IClientRepository clientRepository)
         {
             _context = context;
+            _clientRepository = clientRepository;
+            _countriesRepository = countriesRepository;
+            _productsRepository = productsRepository;
         }
 
         public async Task CreateAsync(CreateSalesAnalyticsServiceModel model)
         {
-            var productDimensions = _context.ProductDimensions.Where(x => x.IsActive);
+            var client = await _clientRepository.GetAsync(model.Token, model.ClientId);
 
-            var clientDimensions = _context.ClientDimensions.Where(x => x.IsActive);
-
-            var locationDimensions = _context.LocationDimensions.Where(x => x.IsActive);
-
-            foreach (var salesAnalyticsItem in model.SalesAnalyticsItems.OrEmptyIfNull())
+            if (client is not null)
             {
-                var timeDimension = new TimeDimension
-                {
-                    Hour = Convert.ToInt32(salesAnalyticsItem.CreatedDate.ToString("HH")),
-                    Minute = Convert.ToInt32(salesAnalyticsItem.CreatedDate.ToString("mm")),
-                    Second = Convert.ToInt32(salesAnalyticsItem.CreatedDate.ToString("ss")),
-                    DayOfWeek = Convert.ToInt32(salesAnalyticsItem.CreatedDate.DayOfWeek),
-                    Day = Convert.ToInt32(salesAnalyticsItem.CreatedDate.ToString("dd")),
-                    Quarter = (Convert.ToInt32(salesAnalyticsItem.CreatedDate.ToString("MM")) + 2) / 3,
-                    Month = Convert.ToInt32(salesAnalyticsItem.CreatedDate.ToString("MM")),
-                    Year = Convert.ToInt32(salesAnalyticsItem.CreatedDate.ToString("yyyy"))
-                };
-
-                await _context.TimeDimensions.AddAsync(timeDimension.FillCommonProperties());
-
-                var clientDimension = clientDimensions.FirstOrDefault(x => x.ClientId == salesAnalyticsItem.ClientId);
+                var clientDimension = await _context.ClientDimensions.FirstOrDefaultAsync(x => x.ClientId == model.ClientId);
 
                 if (clientDimension is null)
                 {
                     clientDimension = new ClientDimension
                     {
-                        OrganisationId = model.OrganisationId.Value,
-                        ClientId = salesAnalyticsItem.ClientId.Value,
-                        Email = salesAnalyticsItem.Email,
-                        Name = salesAnalyticsItem.ClientName
+                        ClientId = client.Id,
+                        OrganisationId = client.OrganisationId,
+                        Name = client.Name,
+                        Email = client.Email
                     };
 
                     await _context.ClientDimensions.AddAsync(clientDimension.FillCommonProperties());
+                } 
+                else
+                {
+                    clientDimension.Name = client.Name;
+                    clientDimension.OrganisationId = client.OrganisationId;
                 }
 
-                var locationDimension = locationDimensions.FirstOrDefault(x => x.CountryId == salesAnalyticsItem.CountryId);
+                var locationDimension = await _context.LocationDimensions.FirstOrDefaultAsync(x => x.CountryId == client.CountryId);
 
-                if (locationDimension is null)
+                if (locationDimension is null && client.CountryId is not null)
                 {
-                    locationDimension = new LocationDimension
-                    {
-                        CountryId = salesAnalyticsItem.CountryId.Value
-                    };
+                    var country = await _countriesRepository.GetAsync(model.Token, client.CommunicationLanguage, client.CountryId);
 
-                    await _context.LocationDimensions.AddAsync(locationDimension.FillCommonProperties());
-
-                    foreach (var countryTranslation in salesAnalyticsItem.CountryTranslations.OrEmptyIfNull())
+                    if (country is not null)
                     {
-                        var locationDimensionTranslation = new LocationTranslationDimension
+                        locationDimension = new LocationDimension
                         {
-                            LocationDimensionId = locationDimension.Id,
-                            Name = countryTranslation.Text,
-                            Language = countryTranslation.Language
+                            CountryId = country.Id
                         };
 
-                        await _context.AddAsync(locationDimensionTranslation.FillCommonProperties());
+                        await _context.LocationDimensions.AddAsync(locationDimension.FillCommonProperties());
+
+                        var locationTranslationDimension = new LocationTranslationDimension
+                        {
+                            Name = country.Name,
+                            LocationDimensionId = locationDimension.Id,
+                            Language = client.CommunicationLanguage
+                        };
+
+                        await _context.LocationTranslationDimensions.AddAsync(locationTranslationDimension.FillCommonProperties());
                     }
                 }
 
-                foreach (var product in salesAnalyticsItem.Products.OrEmptyIfNull())
+                var timeDimension = new TimeDimension
                 {
-                    var productDimension = productDimensions.FirstOrDefault(x => x.ProductId == product.Id);
+                    Hour = Convert.ToInt32(model.CreatedDate.ToString("HH")),
+                    Minute = Convert.ToInt32(model.CreatedDate.ToString("mm")),
+                    Second = Convert.ToInt32(model.CreatedDate.ToString("ss")),
+                    DayOfWeek = Convert.ToInt32(model.CreatedDate.DayOfWeek),
+                    Day = Convert.ToInt32(model.CreatedDate.ToString("dd")),
+                    Quarter = (Convert.ToInt32(model.CreatedDate.ToString("MM")) + 2) / 3,
+                    Month = Convert.ToInt32(model.CreatedDate.ToString("MM")),
+                    Year = Convert.ToInt32(model.CreatedDate.ToString("yyyy"))
+                };
+
+                await _context.TimeDimensions.AddAsync(timeDimension.FillCommonProperties());
+
+                foreach (var product in model.Products.OrEmptyIfNull())
+                {
+                    var productDimension = await _context.ProductDimensions.FirstOrDefaultAsync(x => x.ProductId == product.Id);
 
                     if (productDimension is null)
                     {
-                        productDimension = new ProductDimension
+                        var catalogProduct = await _productsRepository.GetAsync(model.Token, client.CommunicationLanguage, product.Id);
+
+                        if (catalogProduct is not null)
                         {
-                            ProductId = product.Id.Value,
-                            Sku = product.Sku,
-                            Ean = product.Ean
-                        };
+                            productDimension = new ProductDimension
+                            {
+                                ProductId = catalogProduct.Id,
+                                Sku = catalogProduct.Sku,
+                                Ean = catalogProduct.Ean
+                            };
 
-                        await _context.ProductDimensions.AddAsync(productDimension.FillCommonProperties());
+                            await _context.ProductDimensions.AddAsync(productDimension.FillCommonProperties());
 
-                        var productDimensionTranslation = new ProductTranslationDimension
-                        {
-                            ProductDimensionId = productDimension.Id,
-                            Name = product.Name,
-                            Language = model.Language
-                        };
+                            var productDimensionTranslation = new ProductTranslationDimension
+                            {
+                                Name = catalogProduct.Name,
+                                Language = client.CommunicationLanguage,
+                                ProductDimensionId = productDimension.Id
+                            };
 
-                        await _context.ProductTranslationDimensions.AddAsync(productDimensionTranslation.FillCommonProperties());
+                            await _context.ProductTranslationDimensions.AddAsync(productDimensionTranslation.FillCommonProperties());
+                        }
                     }
 
-                    var salesFact = new SalesFact
+                    for (int i = 0; i < product.Quantity; i++)
                     {
-                        ProductDimensionId = productDimension.Id,
-                        ClientDimensionId = clientDimension.Id,
-                        TimeDimensionId = timeDimension.Id,
-                        LocationDimensionId = locationDimension.Id,
-                        IsOutlet = product.IsOutlet,
-                        IsStock = product.IsStock,
-                        Quantity = product.Quantity
-                    };
+                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension?.Id, false, false);
+                    }
 
-                    await _context.SalesFacts.AddAsync(salesFact.FillCommonProperties());
+                    for (int i = 0; i < product.StockQuantity; i++)
+                    {
+                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension?.Id, true, false);
+                    }
+
+                    for (int i = 0; i < product.OutletQuantity; i++)
+                    {
+                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension?.Id, false, true);
+                    }
                 }
 
                 await _context.SaveChangesAsync();
             }
         }
 
-        public async Task<IEnumerable<AnnualSalesServiceModel>> GetAnnualSalesServiceModel(GetAnnualSalesServiceModel model)
+        private async Task CreateSalesFact(
+            Guid clientDimensionId, Guid productDimensionId, Guid timeDimensionId, 
+            Guid? locationDimensionId, bool isStock, bool isOutlet)
+        {
+            var salesFact = new SalesFact
+            {
+                ProductDimensionId = productDimensionId,
+                ClientDimensionId = clientDimensionId,
+                TimeDimensionId = timeDimensionId,
+                LocationDimensionId = locationDimensionId,
+                IsOutlet = isStock,
+                IsStock = isOutlet,
+                Quantity = 1
+            };
+
+            await _context.SalesFacts.AddAsync(salesFact.FillCommonProperties());
+        }
+
+        public IEnumerable<AnnualSalesServiceModel> GetAnnualSales(GetAnnualSalesServiceModel model)
         {
             var sales = from s in _context.SalesFacts
-                          join t in _context.TimeDimensions on s.TimeDimensionId equals t.Id
-                          join c in _context.ClientDimensions on s.ClientDimensionId equals c.Id
-                          where s.IsActive && t.IsActive
-                          group s by new { t.Year, t.Month, c.OrganisationId } into sa
-                          select new
-                          {
-                              Year = sa.Key.Year,
-                              Month = sa.Key.Month,
-                              Quantity = sa.Sum(x => x.Quantity),
-                              OrganisationId = sa.Key.OrganisationId
-                          };
+                        join t in _context.TimeDimensions on s.TimeDimensionId equals t.Id
+                        join c in _context.ClientDimensions on s.ClientDimensionId equals c.Id
+                        where s.IsActive && t.IsActive
+                        group s by new { t.Year, t.Month, c.OrganisationId } into sa
+                        select new
+                        {
+                            Year = sa.Key.Year,
+                            Month = sa.Key.Month,
+                            Quantity = sa.Sum(x => x.Quantity),
+                            OrganisationId = sa.Key.OrganisationId
+                        };
 
             if (model.IsSeller is false)
             {
@@ -176,52 +217,102 @@ namespace Analytics.Api.Services.SalesAnalytics
             return annualSales;
         }
 
-        public async Task<IEnumerable<TopSalesProductsAnalyticsServiceModel>> GetTopSalesProductsAnalyticsAsync(GetTopSalesProductsAnalyticsServiceModel model)
+        public IEnumerable<CountrySalesServiceModel> GetCountrySales(GetCountriesSalesServiceModel model)
         {
-            var products = from s in _context.SalesFacts
-                              join p in _context.ProductDimensions on s.ProductDimensionId equals p.Id
-                              where s.IsActive && p.IsActive
-                              group s by new { p.ProductId } into gp
-                              where gp.Sum(x => x.Quantity) > 0
-                              select new
-                              {
-                                  ProductId = gp.Key.ProductId,
-                                  ProductSku = _context.ProductDimensions.FirstOrDefault(x => x.Id == gp.First().ProductDimensionId).Sku,
-                                  ProductName = _context.ProductTranslationDimensions.FirstOrDefault(x => x.ProductDimensionId == gp.First().ProductDimensionId).Name,
-                                  Ean = _context.ProductDimensions.FirstOrDefault(x => x.Id == gp.First().ProductDimensionId).Ean,
-                                  OrganisationId = _context.ClientDimensions.FirstOrDefault(x => x.Id == gp.FirstOrDefault().ClientDimensionId && x.IsActive).OrganisationId,
-                                  Quantity = gp.Sum(y => y.Quantity)
-                              };
+            var endDate = DateTime.UtcNow;
+            var startDate = endDate.AddMonths(-2);
 
-            products = products.ApplySort(model.OrderBy);
+            var countriesSales = from s in _context.SalesFacts
+                                 join l in _context.LocationDimensions on s.LocationDimensionId equals l.Id
+                                 join t in _context.TimeDimensions on s.TimeDimensionId equals t.Id
+                                 where s.IsActive && l.IsActive && s.LocationDimensionId != null && 
+                                    (t.Month >= startDate.Month || t.Month <= endDate.Month) && (t.Year >= startDate.Year && t.Year <= endDate.Year)
+                                 group s by new { l.CountryId } into gpl
+                                 where gpl.Sum(x => x.Quantity) > 0
+                                 select new 
+                                 {
+                                     Id = gpl.Key.CountryId,
+                                     LocationDimensionId = gpl.First().LocationDimensionId,
+                                     Quantity = gpl.Sum(x => x.Quantity)
+                                 };
+
+            var translations = _context.LocationTranslationDimensions.Where(x => countriesSales.Select(y => y.LocationDimensionId).Contains(x.LocationDimensionId)).ToList();
+
+            var countriesSalesItems = new List<CountrySalesServiceModel>();
+
+            foreach (var countrySalesItem in countriesSales.OrEmptyIfNull())
+            {
+                var countrySales = new CountrySalesServiceModel
+                {
+                    Id = countrySalesItem.Id,
+                    Name = translations.FirstOrDefault(t => t.LocationDimensionId == countrySalesItem.LocationDimensionId && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.LocationDimensionId == countrySalesItem.LocationDimensionId)?.Name,
+                    Quantity = countrySalesItem.Quantity
+                };
+
+                countriesSalesItems.Add(countrySales);
+            }
+
+            return countriesSalesItems;
+        }
+
+        public IEnumerable<DailySalesServiceModel> GetDailySales(GetDailySalesServiceModel model)
+        {
+            var sales = from s in _context.SalesFacts
+                        join t in _context.TimeDimensions on s.TimeDimensionId equals t.Id
+                        join c in _context.ClientDimensions on s.ClientDimensionId equals c.Id
+                        where s.IsActive && t.IsActive
+                        group s by new { t.Year, t.Month, t.Day, t.DayOfWeek, c.OrganisationId } into sa
+                        select new
+                        {
+                            Year = sa.Key.Year,
+                            Month = sa.Key.Month,
+                            Day = sa.Key.Day,
+                            DayOfWeek = sa.Key.DayOfWeek,
+                            Quantity = sa.Sum(x => x.Quantity),
+                            OrganisationId = sa.Key.OrganisationId
+                        };
 
             if (model.IsSeller is false)
             {
-                products = products.Where(x => x.OrganisationId == model.OrganisationId);
+                sales = sales.Where(x => x.OrganisationId == model.OrganisationId);
             }
 
-            if (model.Size.HasValue)
-            {
-                products = products.Take(model.Size.Value);
-            }
+            var now = DateTime.UtcNow;
 
-            var topProducts = new List<TopSalesProductsAnalyticsServiceModel>();
-
-            foreach (var product in products.OrEmptyIfNull())
-            {
-                var topProduct = new TopSalesProductsAnalyticsServiceModel
+            var days = Enumerable.Range(-21, 21)
+                .Select(x => new
                 {
-                    ProductId = product.ProductId,
-                    ProductSku = product.ProductSku,
-                    ProductName = product.ProductName,
-                    Ean = product.Ean,
-                    Quantity = product.Quantity
-                };
+                    Year = now.AddDays(x + 1).Year,
+                    Month = now.AddDays(x + 1).Month,
+                    Day = now.AddDays(x + 1).Day,
+                    DayOfWeek = (int)now.AddDays(x + 1).DayOfWeek
+                });
 
-                topProducts.Add(topProduct);
-            }
+            var dailySales = days.GroupJoin(sales,
+                m => new
+                {
+                    DayOfWeek = m.DayOfWeek,
+                    Day = m.Day,
+                    Month = m.Month,
+                    Year = m.Year
+                },
+                rev => new
+                {
+                    DayOfWeek = rev.DayOfWeek,
+                    Day = rev.Day,
+                    Month = rev.Month,
+                    Year = rev.Year
+                },
+                (s, g) => new DailySalesServiceModel
+                {
+                    DayOfWeek = s.DayOfWeek,
+                    Day = s.Day,
+                    Month = s.Month,
+                    Year = s.Year,
+                    Quantity = g.Sum(x => x.Quantity)
+                }).OrderBy(x => x.Year).ThenBy(x => x.Month).ThenBy(x => x.Day);
 
-            return topProducts.OrderByDescending(x => x.Quantity);
+            return dailySales;
         }
     }
 }

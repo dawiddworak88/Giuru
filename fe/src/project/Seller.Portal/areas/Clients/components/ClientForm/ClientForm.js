@@ -18,9 +18,9 @@ function ClientForm(props) {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
         email: { value: props.email ? props.email : "", error: "" },
-        communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
+        communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : null, error: "" },
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
-        countryId: { value: props.countryId ? props.countryId : null },
+        country: { value: props.countryId ? props.countries.find((item) => item.id === props.countryId) : null },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
         hasAccount: { value: props.hasAccount ? props.hasAccount : false }
@@ -51,13 +51,23 @@ function ClientForm(props) {
         }
     };
 
+    const countriesProps = {
+        options: props.countries,
+        getOptionLabel: (option) => option.name
+    };
+
     function onSubmitForm(state) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const payload = {
+            ...state,
+            countryId: country ? country.id : null
+        }
 
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(state)
+            body: JSON.stringify(payload)
         }
 
         fetch(props.saveUrl, requestOptions)
@@ -124,7 +134,7 @@ function ClientForm(props) {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { 
-        id, name, email, countryId, clientGroupIds, 
+        id, name, email, country, clientGroupIds, 
         communicationLanguage, phoneNumber, clientManagerIds 
     } = values;
 
@@ -168,15 +178,14 @@ function ClientForm(props) {
                         </div>
                         <div className="field">
                             <Autocomplete
-                                options={props.countries}
-                                getOptionLabel={(option) => option.name}
-                                id="countryId"
-                                name="countryId"
+                                {...countriesProps}
+                                id="country"
+                                name="country"
                                 fullWidth={true}
-                                value={countryId}
+                                value={country}
                                 variant="standard"
                                 onChange={(event, newValue) => {
-                                    setFieldValue({name: "countryId", value: newValue.id});
+                                    setFieldValue({name: "country", value: newValue});
                                 }}
                                 autoComplete
                                 renderInput={(params) => (

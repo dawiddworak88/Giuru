@@ -7,6 +7,7 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
@@ -73,25 +74,17 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
         public async Task<PagedResults<IEnumerable<DownloadCenterItemServiceModel>>> GetAsync(GetDownloadCenterFilesServiceModel model)
         {
-            var downloadCenterFiles = _context.DownloadCenterCategoryFiles.Where(x => x.IsActive);
+            var downloadCenterFiles = _context.DownloadCenterCategoryFiles.Where(x => x.IsActive)
+                .Include(x => x.Category)
+                .Include(x => x.Category.Translations)
+                .AsSingleQuery(); ;
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                var searchFiles = downloadCenterFiles.Where(x => x.Id.ToString() == model.SearchTerm || x.Filename.Contains(model.SearchTerm));
-
-                var categoryTranslation = await _context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.Name.StartsWith(model.SearchTerm));
-
-                if (categoryTranslation is not null)
-                {
-                    searchFiles = downloadCenterFiles.Where(x => x.CategoryId == categoryTranslation.CategoryId);
-                }
-
-                downloadCenterFiles = searchFiles;
+                downloadCenterFiles = downloadCenterFiles.Where(x => x.Id.ToString() == model.SearchTerm || x.Filename.Contains(model.SearchTerm));
             }
 
             downloadCenterFiles = downloadCenterFiles.ApplySort(model.OrderBy);
-
-            var downloadCenterFileGroups = downloadCenterFiles.ToList().GroupBy(x => x.MediaId);
 
             PagedResults<IEnumerable<DownloadCenterCategoryFile>> pagedResults;
 
@@ -99,46 +92,24 @@ namespace DownloadCenter.Api.Services.DownloadCenter
             {
                 downloadCenterFiles = downloadCenterFiles.Take(Constants.MaxItemsPerPageLimit);
 
-                pagedResults = downloadCenterFiles.PagedIndex(new Pagination(downloadCenterFileGroups.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+                pagedResults = downloadCenterFiles.PagedIndex(new Pagination(downloadCenterFiles.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
             }
             else
             {
-                pagedResults = downloadCenterFiles.PagedIndex(new Pagination(downloadCenterFileGroups.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+                pagedResults = downloadCenterFiles.PagedIndex(new Pagination(downloadCenterFiles.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            var pagedDownloadCenterFilesServiceModel = new PagedResults<IEnumerable<DownloadCenterItemServiceModel>>(pagedResults.Total, pagedResults.PageSize);
-
-            var downloadCenterFilesList = new List<DownloadCenterItemServiceModel>();
-
-            foreach (var downloadCenterFileGroup in downloadCenterFileGroups.OrEmptyIfNull())
+            return new PagedResults<IEnumerable<DownloadCenterItemServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
-                var fileGroup = new DownloadCenterItemServiceModel
-                {
-                    Id = downloadCenterFileGroup.FirstOrDefault().MediaId,
-                    Filename = downloadCenterFileGroup.FirstOrDefault().Filename,
-                    LastModifiedDate = downloadCenterFileGroup.FirstOrDefault().LastModifiedDate,
-                    CreatedDate = downloadCenterFileGroup.FirstOrDefault().CreatedDate,
-                };
-
-                var namesOfCategories = new List<string>();
-
-                var translations = _context.DownloadCenterCategoryTranslations.Where(x => downloadCenterFileGroup.Select(y => y.CategoryId).Contains(x.CategoryId)).ToList();
-
-                foreach (var categoryId in downloadCenterFileGroup.OrEmptyIfNull().Select(x => x.CategoryId))
-                {
-                    var categoryName = translations.FirstOrDefault(x => x.CategoryId == categoryId && x.Language == model.Language && x.IsActive)?.Name ?? translations.FirstOrDefault(x => x.CategoryId == categoryId && x.IsActive)?.Name;
-
-                    namesOfCategories.Add(categoryName);
-                }
-
-                fileGroup.Categories = namesOfCategories;
-
-                downloadCenterFilesList.Add(fileGroup);
-            }
-
-            pagedDownloadCenterFilesServiceModel.Data = downloadCenterFilesList;
-
-            return pagedDownloadCenterFilesServiceModel;
+                Data = pagedResults?.Data?.Select(x => new DownloadCenterItemServiceModel
+                { 
+                    Id = x.MediaId,
+                    Filename = x.Filename,
+                    Categories = new[] { x.Category.Translations.FirstOrDefault(x => x.Language == model.Language && x.IsActive)?.Name ?? x.Category.Translations.FirstOrDefault(x => x.IsActive)?.Name },
+                    LastModifiedDate = x.LastModifiedDate,
+                    CreatedDate = x.CreatedDate
+                })
+            };
         }
 
         public async Task<DownloadCenterItemFileServiceModel> GetAsync(GetDownloadCenterFileServiceModel model)
@@ -169,7 +140,9 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
         public PagedResults<IEnumerable<DownloadCenterCategoryItemServiceModel>> Get(GetDownloadCenterItemsServiceModel model)
         {
-            var downloadCenterCategories = _context.DownloadCenterCategories.Where(x => x.IsActive && x.IsVisible);
+            var downloadCenterCategories = _context.DownloadCenterCategories.Where(x => x.IsActive && x.IsVisible)
+                    .Include(x => x.Translations)
+                    .AsSingleQuery();
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -191,20 +164,18 @@ namespace DownloadCenter.Api.Services.DownloadCenter
                 pagedResults = downloadCenterCategories.PagedIndex(new Pagination(downloadCenterCategories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            var translations = _context.DownloadCenterCategoryTranslations.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.CategoryId)).ToList();
-
-            var subcategories = downloadCenterCategories.Where(x => x.ParentCategoryId.HasValue).ToList();
+            var subcategories = downloadCenterCategories.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.ParentCategoryId.Value)).ToList();
 
             return new PagedResults<IEnumerable<DownloadCenterCategoryItemServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
                 Data = pagedResults.Data.Where(x => x.ParentCategoryId == null).OrEmptyIfNull().Select(x => new DownloadCenterCategoryItemServiceModel
                 {
                     Id = x.Id,
-                    Name = translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
+                    Name = x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? x.Translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
                     Subcategories = subcategories.Where(c => c.ParentCategoryId == x.Id).Select(s => new DownloadCenterSubcategoryServiceModel
                     {
                         Id = s.Id,
-                        Name = translations.FirstOrDefault(t => t.CategoryId == s.Id && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == s.Id)?.Name,
+                        Name = s.Translations.FirstOrDefault(t => t.CategoryId == s.Id && t.Language == model.Language)?.Name ?? s.Translations.FirstOrDefault(t => t.CategoryId == s.Id)?.Name
                     }),
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
@@ -214,7 +185,9 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
         public async Task<DownloadCenterCategoryServiceModel> GetDownloadCenterCategoryAsync(GetDownloadCenterCategoryServiceModel model)
         {
-            var downloadCenterCategory = await _context.DownloadCenterCategories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive && x.IsVisible);
+            var downloadCenterCategory = await _context.DownloadCenterCategories
+                    .Include(x => x.Translations)
+                    .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive && x.IsVisible);
 
             if (downloadCenterCategory is null)
             {
@@ -223,28 +196,24 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             var subcategories = _context.DownloadCenterCategories.Where(x => x.ParentCategoryId == downloadCenterCategory.Id).ToList();
 
-            var translations = _context.DownloadCenterCategoryTranslations.Where(x => x.CategoryId == downloadCenterCategory.Id || x.CategoryId == downloadCenterCategory.ParentCategoryId || subcategories.Select(y => y.Id).Contains(x.CategoryId)).ToList();
-
-            var files = _context.DownloadCenterCategoryFiles.Where(x => x.CategoryId == downloadCenterCategory.Id && x.IsActive);
-
             return new DownloadCenterCategoryServiceModel
             {
                 Id = downloadCenterCategory.Id,
-                CategoryName = translations.FirstOrDefault(t => t.CategoryId == model.Id && t.IsActive && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == model.Id && t.IsActive)?.Name,
+                CategoryName = downloadCenterCategory.Translations.FirstOrDefault(t => t.CategoryId == model.Id && t.IsActive && t.Language == model.Language)?.Name ?? downloadCenterCategory.Translations.FirstOrDefault(t => t.CategoryId == model.Id && t.IsActive)?.Name,
                 ParentCategoryId = downloadCenterCategory.ParentCategoryId,
-                ParentCategoryName = translations.FirstOrDefault(t => t.CategoryId == downloadCenterCategory.ParentCategoryId && t.IsActive && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == downloadCenterCategory.ParentCategoryId && t.IsActive)?.Name,
+                ParentCategoryName = downloadCenterCategory.Translations.FirstOrDefault(t => t.CategoryId == downloadCenterCategory.ParentCategoryId && t.IsActive && t.Language == model.Language)?.Name ?? downloadCenterCategory.Translations.FirstOrDefault(t => t.CategoryId == downloadCenterCategory.ParentCategoryId && t.IsActive)?.Name,
                 Subcategories = subcategories.Select(x => new DownloadCenterSubcategoryServiceModel
                 {
                     Id = x.Id,
-                    Name = translations.FirstOrDefault(t => t.CategoryId == x.Id && t.IsActive)?.Name ?? translations.FirstOrDefault(t => t.CategoryId == x.Id && t.IsActive)?.Name,
+                    Name = x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.IsActive)?.Name ?? x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.IsActive)?.Name,
                 }),
-                Files= files.OrEmptyIfNull().Select(x => x.MediaId),
+                Files = downloadCenterCategory.Files.Select(x => x.MediaId),
                 LastModifiedDate = downloadCenterCategory.LastModifiedDate,
                 CreatedDate = downloadCenterCategory.CreatedDate
             };
         }
 
-        public async Task<PagedResults<IEnumerable<DownloadCenterCategoryFileServiceModel>>> GetDownloadCenterCategoryFilesAsync(GetDownloadCenterCategoryFilesServiceModel model)
+        public PagedResults<IEnumerable<DownloadCenterCategoryFileServiceModel>> GetDownloadCenterCategoryFiles(GetDownloadCenterCategoryFilesServiceModel model)
         {
             var downloadCenterCategoryFiles = from f in _context.DownloadCenterCategoryFiles
                                               where f.CategoryId == model.Id && f.IsActive

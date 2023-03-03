@@ -49,7 +49,7 @@ namespace DownloadCenter.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<DownloadCenterCategoryFileResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> CategoryFiles(Guid? id, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
+        public IActionResult CategoryFiles(Guid? id, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -66,11 +66,11 @@ namespace DownloadCenter.Api.v1.Controllers
             };
 
             var validator = new GetDownloadCenterCategoryFilesModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var validationResult = validator.Validate(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var downloadCenterCategoryFiles = await _downloadCenterService.GetDownloadCenterCategoryFilesAsync(serviceModel);
+                var downloadCenterCategoryFiles = _downloadCenterService.GetDownloadCenterCategoryFiles(serviceModel);
 
                 if (downloadCenterCategoryFiles is not null)
                 {
@@ -115,11 +115,11 @@ namespace DownloadCenter.Api.v1.Controllers
             };
 
             var validator = new GetDownloadCenterCategoryModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var validationResult = validator.Validate(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var downloadCenterCategory = await _downloadCenterService.GetDownloadCenterCategoryAsync(serviceModel);
+                var downloadCenterCategory = await _downloadCenterService.GetDownloadCenterCategoryAsync (serviceModel);
 
                 if (downloadCenterCategory is not null)
                 {

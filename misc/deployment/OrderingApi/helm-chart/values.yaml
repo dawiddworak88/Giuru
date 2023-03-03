@@ -1,0 +1,29 @@
+environment: "#{Environment}#"
+identityUrl: "#{IdentityUrl}#"
+redisUrl: "#{RedisUrl}#"
+mediaUrl: "#{MediaUrl}#"
+logzIoToken: "#{LogzIoToken}#"
+logzIoType: "#{LogzIoType}#"
+logzIoDataCenterSubDomain: "#{LogzIoDataCenterSubDomain}#"
+openTelemetryCollectorUrl: "#{OpenTelemetryCollectorUrl}#"
+sendGridApiKey: "#{SendGridApiKey}#"
+senderEmail: "#{SenderEmail}#"
+senderName: "#{SenderName}#"
+applyRecipientEmail: "#{ApplyRecipientEmail}#"
+supportedCultures: "en,de,pl"
+defaultCulture: "en"
+orderingApi:
+  connectionString: "#{OrderingApi--ConnectionString}#"
+  actionSendGridCustomOrderTemplateId: "#{OrderingApi--ActionSendGridCustomOrderTemplateId}#"
+  replicas: "1"
+  readinessProbe:
+    initialDelaySeconds: "15"
+    periodSeconds: "30"
+    timeoutSeconds: "15"
+  livenessProbe:
+    initialDelaySeconds: "15"
+    periodSeconds: "30"
+    timeoutSeconds: "15"
+  resources:
+    limits:
+      memory: "250Mi"

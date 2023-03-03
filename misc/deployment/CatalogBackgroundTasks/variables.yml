@@ -1,0 +1,3 @@
+variables:
+- name: b2bCatalogBackgroundTasksImageRepository
+  value: 'b2b-catalog-backgroundtasks'

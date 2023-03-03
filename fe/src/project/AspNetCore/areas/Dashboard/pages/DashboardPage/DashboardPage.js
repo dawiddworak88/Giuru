@@ -7,7 +7,7 @@ import Header from "../../../../shared/components/Header/Header";
 import MainNavigation from "../../../../shared/components/MainNavigation/MainNavigation";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
-import OrdersAnalyticsDetail from "../../components/OrdersAnalyticsDetail";
+import OrdersAnalyticsDetail from "../../../../shared/components/OrdersAnalytics/OrdersAnalyticsDetail";
 
 const DashboardPage = (props) => {
     

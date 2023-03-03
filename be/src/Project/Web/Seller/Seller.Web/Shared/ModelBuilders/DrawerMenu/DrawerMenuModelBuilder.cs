@@ -11,15 +11,18 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
 {
     public class DrawerMenuModelBuilder : IModelBuilder<IEnumerable<DrawerMenuViewModel>>
     {
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly LinkGenerator linkGenerator;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<DashboardResources> _dashboardLocalizer;
+        private readonly LinkGenerator _linkGenerator;
 
         public DrawerMenuModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
+            IStringLocalizer<DashboardResources> dashboardLocalizer,
             LinkGenerator linkGenerator)
         {
-            this.globalLocalizer = globalLocalizer;
-            this.linkGenerator = linkGenerator;
+            _globalLocalizer = globalLocalizer;
+            _linkGenerator = linkGenerator;
+            _dashboardLocalizer = dashboardLocalizer;
         }
 
         public IEnumerable<DrawerMenuViewModel> BuildModel()
@@ -33,8 +36,20 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.ShoppingCart,
-                            Title = this.globalLocalizer.GetString("Orders"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                            Title = _globalLocalizer.GetString("Orders"),
+                            Url = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                        }
+                    }
+                },
+                new DrawerMenuViewModel
+                {
+                    Items = new List<DrawerMenuItemViewModel>
+                    {
+                        new DrawerMenuItemViewModel
+                        {
+                            Icon = IconsConstants.TrendingUp,
+                            Title = _dashboardLocalizer.GetString("Dashboard"),
+                            Url = _linkGenerator.GetPathByAction("Index", "Dashboard", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name })
                         }
                     }
                 },
@@ -45,8 +60,8 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Package,
-                            Title = this.globalLocalizer.GetString("Products"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "Products", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                            Title = _globalLocalizer.GetString("Products"),
+                            Url = _linkGenerator.GetPathByAction("Index", "Products", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                         },
                         new DrawerMenuItemViewModel
                         {
@@ -57,14 +72,14 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Hexagon,
-                            Title = this.globalLocalizer.GetString("ProductAttributes"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "ProductAttributes", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                            Title = _globalLocalizer.GetString("ProductAttributes"),
+                            Url = _linkGenerator.GetPathByAction("Index", "ProductAttributes", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                         },
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Grid,
-                            Title = this.globalLocalizer.GetString("Categories"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "Categories", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                            Title = _globalLocalizer.GetString("Categories"),
+                            Url = _linkGenerator.GetPathByAction("Index", "Categories", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
                         }
                     }
                 },
@@ -75,14 +90,14 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                          new DrawerMenuItemViewModel
                          {
                             Icon = IconsConstants.News,
-                            Title = this.globalLocalizer.GetString("News"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
+                            Title = _globalLocalizer.GetString("News"),
+                            Url = _linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
                          },
                          new DrawerMenuItemViewModel
                          {
                             Icon = IconsConstants.Grid,
-                            Title = this.globalLocalizer.GetString("NewsCategories"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "Categories", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
+                            Title = _globalLocalizer.GetString("NewsCategories"),
+                            Url = _linkGenerator.GetPathByAction("Index", "Categories", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
                          }
                     }
                 },
@@ -93,8 +108,8 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                          new DrawerMenuItemViewModel
                          {
                             Icon = IconsConstants.Users,
-                            Title = this.globalLocalizer.GetString("TeamMembers"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "TeamMembers", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name })
+                            Title = _globalLocalizer.GetString("TeamMembers"),
+                            Url = _linkGenerator.GetPathByAction("Index", "TeamMembers", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name })
                          }
                     }
                 },
@@ -105,20 +120,20 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                          new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Inventory,
-                            Title = this.globalLocalizer.GetString("Inventory"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "Inventories", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
+                            Title = _globalLocalizer.GetString("Inventory"),
+                            Url = _linkGenerator.GetPathByAction("Index", "Inventories", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
                         },
                          new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Outlet,
-                            Title = this.globalLocalizer.GetString("Outlet"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "Outlets", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
+                            Title = _globalLocalizer.GetString("Outlet"),
+                            Url = _linkGenerator.GetPathByAction("Index", "Outlets", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
                         },
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Warehouses,
-                            Title = this.globalLocalizer.GetString("Warehouses"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "Warehouses", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
+                            Title = _globalLocalizer.GetString("Warehouses"),
+                            Url = _linkGenerator.GetPathByAction("Index", "Warehouses", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
                         }
                     }
                 },
@@ -129,32 +144,32 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Users,
-                            Title = this.globalLocalizer.GetString("Clients"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                            Title = _globalLocalizer.GetString("Clients"),
+                            Url = _linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                         },
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Key,
-                            Title = this.globalLocalizer.GetString("ClientsRoles"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "ClientRoles", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                            Title = _globalLocalizer.GetString("ClientsRoles"),
+                            Url = _linkGenerator.GetPathByAction("Index", "ClientRoles", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                         },
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.MapPin,
-                            Title = this.globalLocalizer.GetString("Countries"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "Countries", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name })
+                            Title = _globalLocalizer.GetString("Countries"),
+                            Url = _linkGenerator.GetPathByAction("Index", "Countries", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name })
                         },
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Briefcase,
-                            Title = this.globalLocalizer.GetString("ClientManagers"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "ClientAccountManagers", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                            Title = _globalLocalizer.GetString("ClientManagers"),
+                            Url = _linkGenerator.GetPathByAction("Index", "ClientAccountManagers", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                         },
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Users,
-                            Title = this.globalLocalizer.GetString("ClientsGroups"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "ClientGroups", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                            Title = _globalLocalizer.GetString("ClientsGroups"),
+                            Url = _linkGenerator.GetPathByAction("Index", "ClientGroups", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                         }
                     }
                 },
@@ -165,20 +180,20 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Media,
-                            Title = this.globalLocalizer.GetString("Media"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
+                            Title = _globalLocalizer.GetString("Media"),
+                            Url = _linkGenerator.GetPathByAction("Index", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
                         },
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Download,
-                            Title = this.globalLocalizer.GetString("DownloadCenter"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
+                            Title = _globalLocalizer.GetString("DownloadCenter"),
+                            Url = _linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
                         },
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Grid,
-                            Title = this.globalLocalizer.GetString("DownloadCenterCategories"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "DownloadCenterCategories", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
+                            Title = _globalLocalizer.GetString("DownloadCenterCategories"),
+                            Url = _linkGenerator.GetPathByAction("Index", "DownloadCenterCategories", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
                         }
                     }
                 },
@@ -189,8 +204,8 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Settings,
-                            Title = this.globalLocalizer.GetString("Settings"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "Settings", new { Area = "Settings", culture = CultureInfo.CurrentUICulture.Name })
+                            Title = _globalLocalizer.GetString("Settings"),
+                            Url = _linkGenerator.GetPathByAction("Index", "Settings", new { Area = "Settings", culture = CultureInfo.CurrentUICulture.Name })
                         }
                     }
                 }
