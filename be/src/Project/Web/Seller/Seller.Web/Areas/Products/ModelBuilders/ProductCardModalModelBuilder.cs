@@ -41,7 +41,8 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                     "String",
                     "Array",
                     "Boolean",
-                    "Reference"
+                    "Reference",
+                    "Number"
                 }
             };
 

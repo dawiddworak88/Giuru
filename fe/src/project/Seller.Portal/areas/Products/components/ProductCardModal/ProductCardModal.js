@@ -81,7 +81,7 @@ const ProductCardModal = (props) => {
                                     <Select
                                         id="definitionId"
                                         name="definitionId"
-                                        value={productAttribute.definitionId ?? null}
+                                        value={productAttribute.definitionId ?? ""}
                                         onChange={(e) => updateAttribute(e)}
                                     >
                                         {props.labels.definitionsOptions && props.labels.definitionsOptions.map((definition, index) => {

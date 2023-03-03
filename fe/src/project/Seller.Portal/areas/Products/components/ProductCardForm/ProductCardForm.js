@@ -13,6 +13,7 @@ const ProductCardForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productAttribute, setProductAttribute] = useState(null);
+    const [definitions, setDefinitions] = useState({});
     const stateSchema = {
         id: { value: props.id ? props.id : null },
         schema: { value: props.schema ? JSON.parse(props.schema) : null },
@@ -194,10 +195,24 @@ const ProductCardForm = (props) => {
         return newSchema;
     }
 
+    const generateDefinitionsSchemaFromElementProps = (elements, definition) => {
+        if (!elements)
+            return {};
+
+        elements.forEach((element) => {
+            if (element.$ref !== undefined || element.$ref !== null) {
+                definitions[element.$ref] = definition;
+            }
+        })
+
+        return definitions
+    }
+
     const updateSchema = (newElement, schema) => {
         const newSchema = Object.assign({...schema}, generateSchemaFromElementProps(newElement));
 
         newSchema.type = "object";
+        newSchema.definitions = definitions;
 
         setFieldValue({ name: "schema", value: newSchema })
     }
@@ -216,18 +231,12 @@ const ProductCardForm = (props) => {
     }
 
     const handleProductAttribute = (attribute) => {
-        //console.log(attribute)
-        const product = {
-            name: attribute.name,
-
-        }
         setProductAttribute(attribute);
         setIsModalOpen(true);
     }
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        //setProductAttribute(null)
     }
 
     const handleOpenModal = (schema) => {
@@ -304,11 +313,11 @@ const ProductCardForm = (props) => {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        //Dodac definicje do schematu
+                        const test = definitions;
 
-                        console.log(jsonResponse)
+                        test[id] = jsonResponse.data;
 
-                        toast.success(jsonResponse.message);
+                        setDefinitions(test);
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -332,7 +341,7 @@ const ProductCardForm = (props) => {
                 }
             }
 
-            if (productAttribute.definitionId != undefined) {
+            if (productAttribute.definitionId !== undefined) {
                 newElement = {
                     ...newElement,
                     definitionId: productAttribute.definitionId
@@ -358,7 +367,7 @@ const ProductCardForm = (props) => {
     // console.log(JSON.stringify(schema));
     // console.log(props.productCardModal)
 
-    console.log(productAttribute)
+    //console.log(productAttribute)
 
     return (
         <section className="section section-small-padding category">

@@ -1,10 +1,13 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.ExtensionMethods;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using Seller.Web.Areas.Products.ApiResponseModels;
+using Seller.Web.Areas.Products.Definitions;
 using Seller.Web.Areas.Products.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -16,27 +19,49 @@ namespace Seller.Web.Areas.Products.ApiControllers
     public class ProductCardApiController : BaseApiController
     {
         private readonly IProductAttributeItemsRepository _productAttributeItemsRepository;
+        private readonly IProductAttributesRepository _productAttributesRepository;
 
         public ProductCardApiController(
-            IProductAttributeItemsRepository productAttributeItemsRepository)
+            IProductAttributeItemsRepository productAttributeItemsRepository, 
+            IProductAttributesRepository productAttributesRepository)
         {
             _productAttributeItemsRepository = productAttributeItemsRepository;
+            _productAttributesRepository = productAttributesRepository;
         }
 
-        public async Task<IActionResult> Index(Guid? id) {
+        public async Task<IActionResult> Definition(Guid? id) {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var attributeItems = await _productAttributeItemsRepository.GetAsync(token, language, id);
+            var productAttribute = await _productAttributesRepository.GetByIdAsync(token, language, id);
 
-            if (attributeItems is not null)
+            if (productAttribute is not null)
             {
-                var response = attributeItems.GroupBy(x => x.ProductAttributeId);
+                var response = new ProductCardDefinitionResponseModel
+                {
+                    Title = productAttribute.Name,
+                    Type = ProductsConstants.ProductCardDefinitions.DefaultDefinitionType
+                };
 
-                Console.WriteLine(JsonConvert.SerializeObject(response));
+                var productAttributeItems = await _productAttributeItemsRepository.GetAsync(token, language, id);
+
+                if (productAttributeItems is not null)
+                {
+                    response.AnyOf = productAttributeItems.OrEmptyIfNull().Select(x => new ProductCardDefinitionItemResponseModel
+                    {
+                        Type = ProductsConstants.ProductCardDefinitions.DefaultDefinitionType,
+                        Enum = new List<Guid>
+                        {
+                            x.Id
+                        },
+                        Title = x.Name
+                    });
+
+                    return this.StatusCode((int)HttpStatusCode.OK, new { Data = response });
+                }
             }
 
-            return this.StatusCode((int)HttpStatusCode.OK);
+            return this.StatusCode((int)HttpStatusCode.BadRequest);
         }
     }
 }
