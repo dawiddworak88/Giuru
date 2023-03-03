@@ -14,5 +14,6 @@ namespace Seller.Web.Areas.Products.Repositories
         Task DeleteAsync(string token, string language, Guid? id);
         Task<Category> GetCategoryAsync(string token, string language, Guid? id);
         Task<CategorySchema> GetCategorySchemaAsync(string token, string language, Guid? categoryId);
+        Task SaveAsync(string token, string language, Guid? id, string schema, string uiSchema);
     }
 }

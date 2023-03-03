@@ -32,35 +32,39 @@ const ProductCardForm = (props) => {
     const onSubmitForm = (state) => {
         // dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        const requestPayload = {
+            id: state.id,
+            schema: JSON.stringify(state.schema),
+            uiSchema: state.uiSchema ? JSON.stringify(state.uiSchema) : null
+        }
+
         const requestOptions = {
             method: "POST",
             headers: { 
                 "Content-Type": "application/json", 
                 "X-Requested-With": "XMLHttpRequest" 
             },
-            body: JSON.stringify(state)
+            body: JSON.stringify(requestPayload)
         };
 
-        console.log(state);
+        fetch(props.saveUrl, requestOptions)
+            .then(function (response) {
+                //dispatch({ type: "SET_IS_LOADING", payload: false });
 
-        // fetch(props.saveUrl, requestOptions)
-        //     .then(function (response) {
-        //         dispatch({ type: "SET_IS_LOADING", payload: false });
+                AuthenticationHelper.HandleResponse(response);
 
-        //         AuthenticationHelper.HandleResponse(response);
-
-        //         return response.json().then(jsonResponse => {
-        //             if (response.ok) {
-        //                 toast.success(jsonResponse.message);
-        //             }
-        //             else {
-        //                 toast.error(props.generalErrorMessage);
-        //             }
-        //         });
-        //     }).catch(() => {
-        //         dispatch({ type: "SET_IS_LOADING", payload: false });
-        //         toast.error(props.generalErrorMessage);
-        //     });
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        toast.success(jsonResponse.message);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
     }
 
     const generateElementsFromSchema = (schema) => {

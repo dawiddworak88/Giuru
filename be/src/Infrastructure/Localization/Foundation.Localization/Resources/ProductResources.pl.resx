@@ -273,4 +273,7 @@
   <data name="SubcategoriesDeleteCategoryConflict" xml:space="preserve">
     <value>Usuń podkategorie należące do tej kategorii.</value>
   </data>
+  <data name="SuccessfullySavedProductCard" xml:space="preserve">
+    <value>Pomyślnie zapisano kartę produktu.</value>
+  </data>
 </root>

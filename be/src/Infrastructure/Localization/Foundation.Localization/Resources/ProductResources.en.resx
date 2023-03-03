@@ -273,4 +273,7 @@
   <data name="SubcategoriesDeleteCategoryConflict" xml:space="preserve">
     <value>Delete subcategories of this category first.</value>
   </data>
+  <data name="SuccessfullySavedProductCard" xml:space="preserve">
+    <value>Successfully saved product card.</value>
+  </data>
 </root>
