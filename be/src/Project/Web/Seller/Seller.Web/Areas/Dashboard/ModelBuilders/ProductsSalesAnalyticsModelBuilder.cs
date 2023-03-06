@@ -44,7 +44,7 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
             {
                 var viewModel = new ProductsSalesAnalyticsViewModel
                 {
-                    Title = _dashboardResources.GetString("DailySales"),
+                    Title = _dashboardResources.GetString("TopProductsSales"),
                     FromLabel = _dashboardResources.GetString("From"),
                     ToLabel = _dashboardResources.GetString("To"),
                     FromDate = fromDate,
@@ -52,7 +52,10 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
                     DatePickerViews = DashboardConstants.FullDatePickerViews,
                     InvalidDateRangeErrorMessage = _dashboardResources.GetString("InvalidDateRange"),
                     GeneralErrorMessage = _globalResources.GetString("AnErrorOccurred"),
-                    SaveUrl = _linkGenerator.GetPathByAction("Index", "ProductsSalesAnalyticsApi", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name })
+                    SaveUrl = _linkGenerator.GetPathByAction("Index", "ProductsSalesAnalyticsApi", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name }),
+                    NameLabel = _globalResources.GetString("Name"),
+                    SkuLabel = _globalResources.GetString("Sku"),
+                    QuantityLabel = _globalResources.GetString("Quantity")
                 };
 
                 viewModel.Products = productsSales.Select(x => new ProductSalesAnalyticsViewModel
