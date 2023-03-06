@@ -7,6 +7,7 @@ using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,17 +26,23 @@ namespace Buyer.Web.Areas.Dashboard.Repositories
             _settings = settings;
         }
 
-        public async Task<IEnumerable<AnnualSalesItem>> GetAnnualSales(string token, string language)
+        public async Task<IEnumerable<AnnualSalesItem>> GetAnnualSales(string token, string language, DateTime fromDate, DateTime toDate)
         {
-            var apiRequest = new ApiRequest<RequestModelBase>
+            var requestModel = new SalesAnalyticsRequestModel
+            {
+                FromDate = fromDate,
+                ToDate = toDate,
+            };
+
+            var apiRequest = new ApiRequest<SalesAnalyticsRequestModel>
             {
                 Language = language,
-                Data = new RequestModelBase(),
+                Data = requestModel,
                 AccessToken = token,
                 EndpointAddress = $"{_settings.Value.AnalyticsUrl}{ApiConstants.Analytics.SalesAnalyticsApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<AnnualSalesItem>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<SalesAnalyticsRequestModel>, SalesAnalyticsRequestModel, IEnumerable<AnnualSalesItem>>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {

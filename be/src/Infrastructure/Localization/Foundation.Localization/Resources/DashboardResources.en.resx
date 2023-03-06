@@ -121,13 +121,19 @@
     <value>Number of items ordered in the last 12 months</value>
   </data>
   <data name="CountrySales" xml:space="preserve">
-    <value>Last {0} months sales by country</value>
+    <value>Sales by country</value>
   </data>
   <data name="DailySales" xml:space="preserve">
     <value>Daily sales</value>
   </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Dashboard</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="InvalidDateRange" xml:space="preserve">
+    <value>The selected date range is invalid</value>
   </data>
   <data name="NumberOfOrders" xml:space="preserve">
     <value>Number of orders</value>
@@ -140,6 +146,9 @@
   </data>
   <data name="ProductQuantity" xml:space="preserve">
     <value>Product quantity</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>To</value>
   </data>
   <data name="TopOrderedProducts" xml:space="preserve">
     <value>Top Ordered Products</value>

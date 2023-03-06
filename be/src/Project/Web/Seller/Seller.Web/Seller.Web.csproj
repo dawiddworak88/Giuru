@@ -36,6 +36,7 @@
 		<ProjectReference Include="..\..\..\..\Infrastructure\Telemetry\Foundation.Telemetry\Foundation.Telemetry.csproj" />
 	</ItemGroup>
 	<ItemGroup>
+		<Folder Include="Areas\Dashboard\ApiResponseModels\" />
 		<Folder Include="Areas\Inventory\Views\Inventory\" />
 		<Folder Include="Areas\Inventory\Views\Warehouse\" />
 		<Folder Include="wwwroot\" />

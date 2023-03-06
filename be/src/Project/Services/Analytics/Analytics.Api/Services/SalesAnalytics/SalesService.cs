@@ -187,13 +187,18 @@ namespace Analytics.Api.Services.SalesAnalytics
                 sales = sales.Where(x => x.OrganisationId == model.OrganisationId);
             }
 
-            var now = DateTime.UtcNow;
+            if (model.ToDate.HasValue is false)
+            {
+                model.ToDate = DateTime.UtcNow;
+            }
 
-            var months = Enumerable.Range(-12, 12)
+            var difference = (((model.ToDate.Value.Year - model.FromDate.Value.Year) * 12) + model.ToDate.Value.Month - model.FromDate.Value.Month) + 1;
+
+            var months = Enumerable.Range(-difference, difference)
                 .Select(x => new    
                     {
-                        Year = now.AddMonths(x+1).Year,
-                        Month = now.AddMonths(x+1).Month
+                        Year = model.ToDate.Value.AddMonths(x+1).Year,
+                        Month = model.ToDate.Value.AddMonths(x+1).Month
                     });
 
             var annualSales = months.GroupJoin(sales, 
@@ -219,14 +224,16 @@ namespace Analytics.Api.Services.SalesAnalytics
 
         public IEnumerable<CountrySalesServiceModel> GetCountrySales(GetCountriesSalesServiceModel model)
         {
-            var endDate = DateTime.UtcNow;
-            var startDate = endDate.AddMonths(-2);
+            if (model.ToDate.HasValue is false)
+            {
+                model.ToDate = model.ToDate.Value;
+            }
 
             var countriesSales = from s in _context.SalesFacts
                                  join l in _context.LocationDimensions on s.LocationDimensionId equals l.Id
                                  join t in _context.TimeDimensions on s.TimeDimensionId equals t.Id
                                  where s.IsActive && l.IsActive && s.LocationDimensionId != null && 
-                                    (t.Month >= startDate.Month || t.Month <= endDate.Month) && (t.Year >= startDate.Year && t.Year <= endDate.Year)
+                                    (t.Month >= model.FromDate.Value.Month || t.Month <= model.ToDate.Value.Month) && (t.Year >= model.FromDate.Value.Year && t.Year <= model.ToDate.Value.Year)
                                  group s by new { l.CountryId } into gpl
                                  where gpl.Sum(x => x.Quantity) > 0
                                  select new 
@@ -277,15 +284,20 @@ namespace Analytics.Api.Services.SalesAnalytics
                 sales = sales.Where(x => x.OrganisationId == model.OrganisationId);
             }
 
-            var now = DateTime.UtcNow;
+            if (model.ToDate.HasValue is false)
+            {
+                model.ToDate = model.ToDate.Value;
+            }
 
-            var days = Enumerable.Range(-21, 21)
+            var difference = (int)(model.ToDate.Value - model.FromDate.Value).TotalDays + 1;
+
+            var days = Enumerable.Range(-difference, difference)
                 .Select(x => new
                 {
-                    Year = now.AddDays(x + 1).Year,
-                    Month = now.AddDays(x + 1).Month,
-                    Day = now.AddDays(x + 1).Day,
-                    DayOfWeek = (int)now.AddDays(x + 1).DayOfWeek
+                    Year = model.ToDate.Value.AddDays(x + 1).Year,
+                    Month = model.ToDate.Value.AddDays(x + 1).Month,
+                    Day = model.ToDate.Value.AddDays(x + 1).Day,
+                    DayOfWeek = (int)model.ToDate.Value.AddDays(x + 1).DayOfWeek
                 });
 
             var dailySales = days.GroupJoin(sales,

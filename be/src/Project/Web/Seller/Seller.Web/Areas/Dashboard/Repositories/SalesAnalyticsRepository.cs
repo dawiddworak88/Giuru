@@ -1,11 +1,12 @@
 ﻿using Foundation.ApiExtensions.Communications;
-using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Dashboard.DomainModels;
+using Seller.Web.Areas.Dashboard.RequestModels;
 using Seller.Web.Shared.Configurations;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -24,17 +25,23 @@ namespace Seller.Web.Areas.Dashboard.Repositories
             _settings = settings;
         }
 
-        public async Task<IEnumerable<CountrySalesItem>> GetCountriesSales(string token, string language)
+        public async Task<IEnumerable<CountrySalesItem>> GetCountriesSales(string token, string language, DateTime fromDate, DateTime toDate)
         {
-            var apiRequest = new ApiRequest<RequestModelBase>
+            var requestModel = new SalesAnalyticsRequestModel
+            {
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+
+            var apiRequest = new ApiRequest<SalesAnalyticsRequestModel>
             {
                 Language = language,
-                Data = new RequestModelBase(),
+                Data = requestModel,
                 AccessToken = token,
                 EndpointAddress = $"{_settings.Value.AnalyticsUrl}{ApiConstants.Analytics.CountriesSalesAnalyticsApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<CountrySalesItem>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<SalesAnalyticsRequestModel>, SalesAnalyticsRequestModel, IEnumerable<CountrySalesItem>>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -49,17 +56,23 @@ namespace Seller.Web.Areas.Dashboard.Repositories
             return default;
         }
 
-        public async Task<IEnumerable<DailySalesItem>> GetDailySales(string token, string language)
+        public async Task<IEnumerable<DailySalesItem>> GetDailySales(string token, string language, DateTime fromDate, DateTime toDate)
         {
-            var apiRequest = new ApiRequest<RequestModelBase>
+            var requestModel = new SalesAnalyticsRequestModel
+            {
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+
+            var apiRequest = new ApiRequest<SalesAnalyticsRequestModel>
             {
                 Language = language,
-                Data = new RequestModelBase(),
+                Data = requestModel,
                 AccessToken = token,
                 EndpointAddress = $"{_settings.Value.AnalyticsUrl}{ApiConstants.Analytics.DailySalesAnalyticsApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<DailySalesItem>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<SalesAnalyticsRequestModel>, SalesAnalyticsRequestModel, IEnumerable<DailySalesItem>>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {

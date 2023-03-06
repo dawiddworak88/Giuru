@@ -140,7 +140,10 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 
                 var properties = from p in request.Data.GetType().GetProperties()
                                  where p.GetValue(request.Data, null) != null
-                                 select p.Name + "=" + HttpUtility.UrlEncode(p.GetValue(request.Data, null).ToString());
+                                 select p.Name + "=" +
+                                 (p.PropertyType == typeof(DateTime) ?
+                                   HttpUtility.UrlEncode(((DateTime)p.GetValue(request.Data, null)).ToString("o")) :
+                                   HttpUtility.UrlEncode(p.GetValue(request.Data, null).ToString()));
 
                 var queryString = string.Join("&", properties.ToArray());
 

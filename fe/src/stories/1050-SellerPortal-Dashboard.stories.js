@@ -7,6 +7,7 @@ const componentProps = {
     title: "Dashboard",
     countrySalesAnalytics: {
         title: "Last 3 months sales by country",
+        datePickerViews: ["month", "year"],
         chartLables: [
             "Poland",
             "Germany",
@@ -22,6 +23,7 @@ const componentProps = {
     },
     dailySalesAnalytics: {
         title: "Daily sales",
+        datePickerViews: ["day", "month", "year"],
         chartLables: [
             "Monday - 8.12",
             "Tuesday - 9.12",
