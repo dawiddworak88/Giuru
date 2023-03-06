@@ -87,7 +87,7 @@ namespace Seller.Web.Areas.Dashboard.Repositories
             return default;
         }
 
-        public async Task<IEnumerable<ProductSalesItem>> GetProductsSales(string token, string language, DateTime fromDate, DateTime toDate, int? size, string orderBy)
+        public async Task<IEnumerable<ProductSalesApiItem>> GetProductsSales(string token, string language, DateTime fromDate, DateTime toDate, int? size, string orderBy)
         {
             var requestModel = new ProductsSalesAnalyticsApiRequestModel
             {
@@ -105,7 +105,7 @@ namespace Seller.Web.Areas.Dashboard.Repositories
                 EndpointAddress = $"{_settings.Value.AnalyticsUrl}{ApiConstants.Analytics.ProductsSalesAnalyticsApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<ProductsSalesAnalyticsApiRequestModel>, ProductsSalesAnalyticsApiRequestModel, IEnumerable<ProductSalesItem>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<ProductsSalesAnalyticsApiRequestModel>, ProductsSalesAnalyticsApiRequestModel, IEnumerable<ProductSalesApiItem>>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {

@@ -31,7 +31,7 @@ namespace Seller.Web.Areas.Dashboard.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var productsSales = await _salesAnalyticsRepository.GetProductsSales(token, language, request.FromDate, request.ToDate, DashboardConstants.DefaultProductsSalesSize, $"{nameof(ProductSalesItem.ProductName)} desc");
+            var productsSales = await _salesAnalyticsRepository.GetProductsSales(token, language, request.FromDate, request.ToDate, DashboardConstants.DefaultProductsSalesSize, $"{nameof(ProductSalesApiItem.ProductName)} desc");
 
             if (productsSales is not null)
             {

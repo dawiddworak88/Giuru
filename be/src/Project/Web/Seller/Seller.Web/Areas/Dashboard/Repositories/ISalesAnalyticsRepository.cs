@@ -9,6 +9,6 @@ namespace Seller.Web.Areas.Dashboard.Repositories
     {
         Task<IEnumerable<DailySalesItem>> GetDailySales(string token, string language, DateTime fromDate, DateTime toDate);
         Task<IEnumerable<CountrySalesItem>> GetCountriesSales(string token, string language, DateTime fromDate, DateTime toDate);
-        Task<IEnumerable<ProductSalesItem>> GetProductsSales(string token, string language, DateTime fromDate, DateTime toDate, int? size, string orderBy);
+        Task<IEnumerable<ProductSalesApiItem>> GetProductsSales(string token, string language, DateTime fromDate, DateTime toDate, int? size, string orderBy);
     }
 }
