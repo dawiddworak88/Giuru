@@ -42,7 +42,7 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
 
             var countriesSales = await _salesAnalyticsRepository.GetCountriesSales(componentModel.Token, componentModel.Language, fromDate, toDate);
 
-            if (countriesSales is not null && countriesSales.Any(x => x.Quantity > 0))
+            if (countriesSales is not null)
             {
                 var viewModel = new CountrySalesAnalyticsViewModel
                 {

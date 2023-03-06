@@ -42,7 +42,7 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
 
             var dailySales = await _salesAnalyticsRepository.GetDailySales(componentModel.Token, componentModel.Language, fromDate, toDate);
 
-            if (dailySales is not null && dailySales.Any(x => x.Quantity > 0))
+            if (dailySales is not null)
             {
                 var viewModel = new DailySalesAnalyticsViewModel
                 {

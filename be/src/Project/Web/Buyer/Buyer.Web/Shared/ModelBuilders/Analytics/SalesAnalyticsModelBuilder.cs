@@ -41,7 +41,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Analytics
 
             var annualSales = await _salesAnalyticsRepository.GetAnnualSales(componentModel.Token, componentModel.Language, fromDate, toDate);
 
-            if (annualSales is not null && annualSales.Any(x => x.Quantity > 0))
+            if (annualSales is not null)
             {
                 var viewModel = new SalesAnalyticsViewModel
                 {
