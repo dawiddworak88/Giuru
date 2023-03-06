@@ -1,0 +1,17 @@
+.products-analytics {
+
+    &__table {
+        
+        th {
+            font-weight: bold;
+        }
+    }
+}
+
+.products-analytics-date-ranges {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 24px;
+}

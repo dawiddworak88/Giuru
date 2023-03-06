@@ -3,10 +3,12 @@ using Foundation.ApiExtensions.Definitions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Seller.Web.Areas.Dashboard.ApiRequestModels;
+using Seller.Web.Areas.Dashboard.ApiResponseModels;
 using Seller.Web.Areas.Dashboard.Definitions;
 using Seller.Web.Areas.Dashboard.DomainModels;
 using Seller.Web.Areas.Dashboard.Repositories;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -29,11 +31,19 @@ namespace Seller.Web.Areas.Dashboard.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var productsSales = _salesAnalyticsRepository.GetProductsSales(token, language, request.FromDate, request.ToDate, DashboardConstants.DefaultProductsSalesSize, $"{nameof(ProductSalesItem.ProductName)} desc");
+            var productsSales = await _salesAnalyticsRepository.GetProductsSales(token, language, request.FromDate, request.ToDate, DashboardConstants.DefaultProductsSalesSize, $"{nameof(ProductSalesItem.ProductName)} desc");
 
             if (productsSales is not null)
             {
-                return this.StatusCode((int)HttpStatusCode.OK, new { Data = productsSales });
+                var response = productsSales.Select(x => new ProductSalesAnalyticsResponseModel
+                {
+                    Id = x.ProductId,
+                    Name = x.ProductName,
+                    Sku = x.ProductSku,
+                    Quantity = x.Quantity
+                });
+
+                return this.StatusCode((int)HttpStatusCode.OK, new { Data = response });
             }
 
             return this.StatusCode((int)HttpStatusCode.BadRequest);
