@@ -1,5 +1,4 @@
 ﻿using Analytics.Api.Shared.ServicesModels;
-using Foundation.Extensions.Models;
 
 namespace Analytics.Api.ServicesModels.SalesAnalytics
 {
