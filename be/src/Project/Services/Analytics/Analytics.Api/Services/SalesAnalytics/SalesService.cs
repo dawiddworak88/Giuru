@@ -326,5 +326,10 @@ namespace Analytics.Api.Services.SalesAnalytics
 
             return dailySales;
         }
+
+        public IEnumerable<TopSalesProductsAnalyticsServiceModel> GetProductsSales(GetTopSalesProductsAnalyticsServiceModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

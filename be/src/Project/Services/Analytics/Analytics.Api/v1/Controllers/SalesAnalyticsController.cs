@@ -14,6 +14,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Analytics.Api.v1.Controllers
 {
@@ -160,6 +161,56 @@ namespace Analytics.Api.v1.Controllers
                         DayOfWeek = x.DayOfWeek,
                         Month = x.Month,
                         Year = x.Year,
+                        Quantity = x.Quantity
+                    });
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Gets best selling products
+        /// </summary>
+        /// <param name="fromDate">From date.</param>
+        /// <param name="toDate">To date.</param>
+        /// <param name="size">Number of displayed products.</param>
+        /// <returns>Best selling products</returns>
+        [HttpGet("products"), MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public IActionResult Get(DateTime? fromDate, DateTime? toDate, int? size)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetTopSalesProductsAnalyticsServiceModel
+            {
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                IsSeller = this.User.IsInRole("Seller"),
+                FromDate = fromDate,
+                ToDate = toDate,
+                Size = size
+            };
+
+            var validator = new GetTopSalesProductsAnalyticsModelValidator();
+            var validationResult = validator.Validate(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var topSalesProducts = _salesService.GetProductsSales(serviceModel);
+
+                if (topSalesProducts is not null)
+                {
+                    var response = topSalesProducts.Select(x => new TopSalesProductsAnalyticsResponseModel
+                    {
+                        ProductId = x.ProductId,
+                        ProductSku = x.ProductSku,
+                        ProductName = x.ProductName,
+                        Ean = x.Ean,
                         Quantity = x.Quantity
                     });
 
