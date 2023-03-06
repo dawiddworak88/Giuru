@@ -131,6 +131,11 @@ const SalesAnalytics = (props) => {
                 options={{
                     maintainAspectRatio: false,
                     responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
                     plugins: {
                         legend: {
                             display: false,
