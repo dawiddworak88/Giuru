@@ -5,6 +5,7 @@ import {
     DialogContent, DialogActions, FormControl,
     InputLabel, MenuItem, Select
 } from "@mui/material";
+import ProductCardConstants from "../../../../../../shared/constants/ProductCardConstants";
 
 const ProductCardModal = (props) => {
     const [productAttribute, setProductAttribute] = useState(props.attribute)
@@ -63,7 +64,7 @@ const ProductCardModal = (props) => {
                                     labelId="inputType-label"
                                     id="type"
                                     name="type"
-                                    value={productAttribute.type ?? "string"}
+                                    value={productAttribute.definitionId !== undefined ? ProductCardConstants.referenceInputType() : productAttribute.type ?? ProductCardConstants.defaultInputType()}
                                     onChange={(e) => updateAttribute(e)}
                                     >
                                         {props.labels.inputTypes && props.labels.inputTypes.map((type, index) => {
@@ -74,7 +75,7 @@ const ProductCardModal = (props) => {
                                 </Select>
                             </FormControl>
                         </div>
-                        {productAttribute.type === "reference" &&
+                        {(productAttribute.type === ProductCardConstants.referenceInputType() || productAttribute.definitionId !== undefined)&&
                             <div className="field">
                                 <FormControl fullWidth={true} variant="standard">
                                     <InputLabel id="definition-label">{props.labels.definitionLabel}</InputLabel>

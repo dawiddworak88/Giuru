@@ -70,6 +70,8 @@ const ProductCardForm = (props) => {
         const objects = [];
         const elementDict = {};
 
+        setDefinitions(schema.definitions);
+
         Object.entries(schema.properties).forEach(([parameter, element]) => {
             let newElement = {
                 name: parameter,
@@ -245,6 +247,20 @@ const ProductCardForm = (props) => {
     const handleDeleteAttribite = (index, schema) => {
         const newElements = generateElementsFromSchema(schema);
 
+        const element = newElements[index];
+
+        if (element.definitionId !== undefined) {
+            const definitionItems = newElements.filter((item) => item.definitionId === element.definitionId)
+
+            if (!(definitionItems.length > 1)) {
+                const newDefinitions = definitions;
+
+                delete newDefinitions[element.definitionId]
+
+                setDefinitions(newDefinitions);
+            }
+        }
+
         newElements.splice(index, 1);
 
         updateSchema(newElements, schema)
@@ -275,6 +291,11 @@ const ProductCardForm = (props) => {
     const handleDefinitionSchema = (id) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        if (definitions[id] !== undefined) {
+            dispatch({ type: "SET_IS_LOADING", payload: false });
+            return;
+        }
+
         const requestOptions = {
             method: "GET",
             headers: { 
@@ -290,11 +311,11 @@ const ProductCardForm = (props) => {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        const test = definitions;
+                        const newDefinitions = definitions;
 
-                        test[id] = jsonResponse.data;
+                        newDefinitions[id] = jsonResponse.data;
 
-                        setDefinitions(test);
+                        setDefinitions(newDefinitions);
                     }
                     else {
                         toast.error(props.generalErrorMessage);
