@@ -2,11 +2,10 @@
 using Foundation.ApiExtensions.Definitions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Seller.Web.Areas.Dashboard.ApiRequestModels;
 using Seller.Web.Areas.Dashboard.Definitions;
 using Seller.Web.Areas.Dashboard.Repositories;
-using Seller.Web.Areas.Dashboard.RequestModels;
 using Seller.Web.Shared.ApiResponseModels;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -26,12 +25,12 @@ namespace Seller.Web.Areas.Dashboard.ApiControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index([FromBody] SalesAnalyticsRequestModel model)
+        public async Task<IActionResult> Index([FromBody] SalesAnalyticsRequestModel request)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var dailySales = await _salesAnalyticsRepository.GetDailySales(token, language, model.FromDate, model.ToDate);
+            var dailySales = await _salesAnalyticsRepository.GetDailySales(token, language, request.FromDate, request.ToDate);
 
             if (dailySales is not null)
             {
