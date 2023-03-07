@@ -171,13 +171,13 @@ namespace Analytics.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Gets best selling Customers
+        /// Gets best selling Clients
         /// </summary>
         /// <param name="fromDate">From date.</param>
         /// <param name="toDate">To date.</param>
         /// <param name="size">Number of displayed items.</param>
         /// <param name="orderBy">The optional order by.</param>
-        /// <returns>Best selling products</returns>
+        /// <returns>Best selling clients</returns>
         [HttpGet("clients"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
