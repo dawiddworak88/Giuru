@@ -169,5 +169,54 @@ namespace Analytics.Api.v1.Controllers
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
+
+        /// <summary>
+        /// Gets best selling Customers
+        /// </summary>
+        /// <param name="fromDate">From date.</param>
+        /// <param name="toDate">To date.</param>
+        /// <param name="size">Number of displayed items.</param>
+        /// <param name="orderBy">The optional order by.</param>
+        /// <returns>Best selling products</returns>
+        [HttpGet("clients"), MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public IActionResult GetClientsSales(DateTime? fromDate, DateTime? toDate, int? size, string orderBy)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetClientsSalesServiceModel
+            {
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                FromDate = fromDate,
+                ToDate = toDate,
+                OrderBy = orderBy,
+                Size = size
+            };
+
+            var validator = new GetClientsSalesModelValidator();
+            var validationResult = validator.Validate(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var clientsSales = _salesService.GetClientsSales(serviceModel);
+
+                if (clientsSales is not null)
+                {
+                    var response = clientsSales.Select(x => new ClientsSalesResponseModel
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Quantity = x.Quantity
+                    });
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
     }
 }
