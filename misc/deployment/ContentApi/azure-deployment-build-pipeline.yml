@@ -15,7 +15,7 @@ variables:
 - name: b2bContentApiDockerfile
   value: 'be/src/Project/Services/Content/Content.Api/Dockerfile'
 - name: dockerfileBuildContext
-  value: 'be/src'
+  value: 'be/srcbe/src/Project/Services/Content/Content.Api'
 - name: chartPath
   value: 'misc/deployment/ContentApi/helm-chart'
 
