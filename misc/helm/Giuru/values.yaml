@@ -85,6 +85,8 @@ basketApi:
 orderingApi:
   connectionString: "#{OrderingApi--ConnectionString}#"
   actionSendGridCustomOrderTemplateId: "#{OrderingApi--ActionSendGridCustomOrderTemplateId}#"
+contentApi:
+  databaseClient: "#{ContentApi--DatabaseClient}#"
   databaseName: "#{ContentApi--DatabaseName}#"
   databaseHost: "#{ContentApi--DatabaseHost}#"
   databasePort: "#{ContentApi--DatabasePort}#"
