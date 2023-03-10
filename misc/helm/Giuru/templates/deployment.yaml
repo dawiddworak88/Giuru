@@ -276,6 +276,58 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: content-api-deployment
+  labels:
+    app: content-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: content-api
+  template:
+    metadata:
+      labels:
+        app: content-api
+    spec:
+      containers:
+      - name: content-api-container
+        image: {{ .Values.image.registry }}/content-api:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: "250Mi"
+        env:
+        - name: DATABASE_CLIENT
+          value: {{ .Values.contentApi.databaseClient }}
+        - name: DATABASE_NAME
+          value: {{ .Values.contentApi.databaseName }}
+        - name: DATABASE_HOST
+          value: {{ .Values.contentApi.databaseHost }}
+        - name: DATABASE_PORT
+          value: {{ .Values.contentApi.databasePort }}
+        - name: DATABASE_USERNAME
+          value: {{ .Values.contentApi.databaseUsername }}
+        - name: DATABASE_PASSWORD
+          value: {{ .Values.contentApi.databasePassword }}
+        - name: DATABASE_SSL
+          value: {{ .Values.contentApi.databaseSsl }}
+        - name: GIURU_API_SECRET
+          value: {{ .Values.giuruApiSecret }}
+        - name: GIURU_API_EMAIL
+          value: {{ .Values.giuruApiEmail }}
+        - name: GIURU_API_ORGANISATION_ID
+          value: {{ .Values.organisationId }}
+        - name: GIURU_MEDIA_API_URL
+          value: {{ .Values.mediaUrl }}
+        - name: GIURU_CONTENT_API_URL
+          value: {{ .Values.contentUrl }}
+        - name: GIURU_IDENTITY_API_URL
+          value: {{ .Values.identityUrl }}
+        ports:
+        - containerPort: 1337
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: basket-api-deployment
   labels:
     app: basket-api

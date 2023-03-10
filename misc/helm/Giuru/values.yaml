@@ -85,6 +85,12 @@ basketApi:
 orderingApi:
   connectionString: "#{OrderingApi--ConnectionString}#"
   actionSendGridCustomOrderTemplateId: "#{OrderingApi--ActionSendGridCustomOrderTemplateId}#"
+  databaseName: "#{ContentApi--DatabaseName}#"
+  databaseHost: "#{ContentApi--DatabaseHost}#"
+  databasePort: "#{ContentApi--DatabasePort}#"
+  databaseUsername: "#{ContentApi--DatabaseUsername}#"
+  databasePassword: "#{ContentApi--DatabasePassword}#"
+  databaseSsl: "#{ContentApi--DatabaseSsl}#"
 buyerWeb:
   clientId: "#{BuyerWeb--ClientId}#"
   clientSecret: "#{BuyerWeb--ClientSecret}#"
