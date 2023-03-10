@@ -1,0 +1,164 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: giuru-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-buffering: "on"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+    nginx.ingress.kubernetes.io/proxy-buffers: "4 256k"
+    nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "256k"
+    nginx.ingress.kubernetes.io/client-header-buffer-size: "64k"
+    nginx.ingress.kubernetes.io/http2-max-field-size: "16k"
+    nginx.ingress.kubernetes.io/http2-max-header-size: "128k"
+    nginx.ingress.kubernetes.io/large-client-header-buffers: "8 64k"
+    nginx.ingress.kubernetes.io/proxy-body-size: "500m"
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.ingress.analyticsapidomain }}
+    - {{ .Values.ingress.clientapidomain }}
+    - {{ .Values.ingress.basketapidomain }}
+    - {{ .Values.ingress.orderingapidomain }}
+    - {{ .Values.ingress.mediaapidomain }}
+    - {{ .Values.ingress.identityapidomain }}
+    - {{ .Values.ingress.inventoryapidomain }}
+    - {{ .Values.ingress.newsapidomain }}
+    - {{ .Values.ingress.catalogapidomain }}
+    - {{ .Values.ingress.buyerapidomain }}
+    - {{ .Values.ingress.sellerapidomain }}
+    - {{ .Values.ingress.downloadcenterapidomain }}
+    - {{ .Values.ingress.globalapidomain }}
+    secretName: tls-secret
+  rules:
+  - host: {{ .Values.ingress.mediaapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: media-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.clientapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: client-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.basketapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: basket-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.orderingapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: ordering-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.identityapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: identity-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.catalogapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: catalog-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.inventoryapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: inventory-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.newsapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: news-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.downloadcenterapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: download-center-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.analyticsapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: analytics-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.globalapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: global-api-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.buyerapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: buyer-web-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.ingress.sellerapidomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: seller-web-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
