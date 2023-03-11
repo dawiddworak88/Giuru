@@ -31,9 +31,6 @@ spec:
           initialDelaySeconds: {{ .Values.downloadCenterApi.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.downloadCenterApi.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.downloadCenterApi.livenessProbe.timeoutSeconds }}
-        resources:
-          limits:
-            memory: {{ .Values.downloadCenterApi.resources.limits.memory }}
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}

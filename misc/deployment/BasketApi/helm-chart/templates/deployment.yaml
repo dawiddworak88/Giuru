@@ -31,9 +31,6 @@ spec:
           initialDelaySeconds: {{ .Values.basketApi.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.basketApi.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.basketApi.livenessProbe.timeoutSeconds }}
-        resources:
-          limits:
-            memory: {{ .Values.basketApi.resources.limits.memory }}
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
