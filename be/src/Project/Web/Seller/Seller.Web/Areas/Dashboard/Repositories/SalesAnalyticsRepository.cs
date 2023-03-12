@@ -87,13 +87,12 @@ namespace Seller.Web.Areas.Dashboard.Repositories
             return default;
         }
 
-        public async Task<IEnumerable<ProductSalesApiItem>> GetProductsSales(string token, string language, DateTime fromDate, DateTime toDate, int? size, string orderBy)
+        public async Task<IEnumerable<ProductSalesApiItem>> GetTopProductsSales(string token, string language, DateTime fromDate, DateTime toDate, int? size)
         {
             var requestModel = new ProductsSalesAnalyticsApiRequestModel
             {
                 FromDate = fromDate,
                 ToDate = toDate,
-                OrderBy = orderBy,
                 Size = size
             };
 
@@ -106,6 +105,38 @@ namespace Seller.Web.Areas.Dashboard.Repositories
             };
 
             var response = await _apiClientService.GetAsync<ApiRequest<ProductsSalesAnalyticsApiRequestModel>, ProductsSalesAnalyticsApiRequestModel, IEnumerable<ProductSalesApiItem>>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
+
+        public async Task<IEnumerable<ClientSalesApiItem>> GetTopClientsSales(string token, string language, DateTime fromDate, DateTime toDate, int? size)
+        {
+            var requestModel = new ClientsSalesAnalyticsApiRequestModel
+            {
+                FromDate = fromDate,
+                ToDate = toDate,
+                Size = size
+            };
+
+            var apiRequest = new ApiRequest<ClientsSalesAnalyticsApiRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.AnalyticsUrl}{ApiConstants.Analytics.ClientsSalesAnalyticsApiEndpoint}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<ClientsSalesAnalyticsApiRequestModel>, ClientsSalesAnalyticsApiRequestModel, IEnumerable<ClientSalesApiItem>>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {

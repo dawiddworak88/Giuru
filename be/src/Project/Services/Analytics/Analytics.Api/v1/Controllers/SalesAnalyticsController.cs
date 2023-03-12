@@ -227,7 +227,6 @@ namespace Analytics.Api.v1.Controllers
         /// <param name="fromDate">From date.</param>
         /// <param name="toDate">To date.</param>
         /// <param name="size">Number of displayed items.</param>
-        /// <param name="orderBy">The optional order by.</param>
         /// <returns>Best selling clients</returns>
         [HttpGet("clients"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]

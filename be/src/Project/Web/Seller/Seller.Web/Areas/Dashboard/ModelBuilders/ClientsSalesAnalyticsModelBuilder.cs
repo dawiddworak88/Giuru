@@ -14,14 +14,14 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Dashboard.ModelBuilders
 {
-    public class ProductsSalesAnalyticsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductsSalesAnalyticsViewModel>
+    public class ClientsSalesAnalyticsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientsSalesAnalyticsViewModel>
     {
         private readonly IStringLocalizer<DashboardResources> _dashboardResources;
         private readonly IStringLocalizer<GlobalResources> _globalResources;
         private readonly ISalesAnalyticsRepository _salesAnalyticsRepository;
         private readonly LinkGenerator _linkGenerator;
 
-        public ProductsSalesAnalyticsModelBuilder(
+        public ClientsSalesAnalyticsModelBuilder(
             IStringLocalizer<DashboardResources> dashboardResources,
             ISalesAnalyticsRepository salesAnalyticsRepository,
             IStringLocalizer<GlobalResources> globalResources,
@@ -33,18 +33,18 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
             _globalResources = globalResources;
         }
 
-        public async Task<ProductsSalesAnalyticsViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<ClientsSalesAnalyticsViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var fromDate = DateTime.UtcNow.AddMonths(DashboardConstants.ProductsAnalyticsDifferenceInMonths);
+            var fromDate = DateTime.UtcNow.AddMonths(DashboardConstants.ClientsAnalyticsDifferenceInMonths);
             var toDate = DateTime.UtcNow;
 
-            var productsSales = await _salesAnalyticsRepository.GetTopProductsSales(componentModel.Token, componentModel.Language, fromDate, toDate, DashboardConstants.DefaultProductsSalesSize);
+            var clientsSales = await _salesAnalyticsRepository.GetTopClientsSales(componentModel.Token, componentModel.Language, fromDate, toDate, DashboardConstants.DefaultClientsSalesSize);
 
-            if (productsSales is not null)
+            if (clientsSales is not null)
             {
-                var viewModel = new ProductsSalesAnalyticsViewModel
+                var viewModel = new ClientsSalesAnalyticsViewModel
                 {
-                    Title = _dashboardResources.GetString("TopProductsSales"),
+                    Title = _dashboardResources.GetString("TopClientsSales"),
                     FromLabel = _dashboardResources.GetString("From"),
                     ToLabel = _dashboardResources.GetString("To"),
                     FromDate = fromDate,
@@ -52,17 +52,16 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
                     DatePickerViews = DashboardConstants.FullDatePickerViews,
                     InvalidDateRangeErrorMessage = _dashboardResources.GetString("InvalidDateRange"),
                     GeneralErrorMessage = _globalResources.GetString("AnErrorOccurred"),
-                    SaveUrl = _linkGenerator.GetPathByAction("Index", "ProductsSalesAnalyticsApi", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name }),
+                    SaveUrl = _linkGenerator.GetPathByAction("Index", "ClientsSalesAnalyticsApi", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name }),
                     NameLabel = _globalResources.GetString("Name"),
                     SkuLabel = _globalResources.GetString("Sku"),
                     QuantityLabel = _globalResources.GetString("Quantity")
                 };
 
-                viewModel.Products = productsSales.Select(x => new ProductSalesAnalyticsViewModel
+                viewModel.Clients = clientsSales.Select(x => new ClientSalesAnalyticsViewModel
                 {
-                    Id = x.ProductId,
-                    Name = x.ProductName,
-                    Sku = x.ProductSku,
+                    Id = x.Id,
+                    Name = x.Name,
                     Quantity = x.Quantity
                 });
 

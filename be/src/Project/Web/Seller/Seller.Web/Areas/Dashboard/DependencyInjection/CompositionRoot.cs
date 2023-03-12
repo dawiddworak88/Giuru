@@ -16,6 +16,7 @@ namespace Seller.Web.Areas.Dashboard.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DailySalesAnalyticsViewModel>, DailySalesAnalyticsModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CountrySalesAnalyticsViewModel>, CountriesSalesAnalyticsModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductsSalesAnalyticsViewModel>, ProductsSalesAnalyticsModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientsSalesAnalyticsViewModel>, ClientsSalesAnalyticsModelBuilder>();
 
             services.AddScoped<ISalesAnalyticsRepository, SalesAnalyticsRepository>();
         }

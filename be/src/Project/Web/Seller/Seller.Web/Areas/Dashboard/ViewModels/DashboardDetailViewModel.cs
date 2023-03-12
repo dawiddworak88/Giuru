@@ -5,5 +5,7 @@
         public string Title { get; set; }
         public DailySalesAnalyticsViewModel DailySalesAnalytics { get; set; }
         public CountrySalesAnalyticsViewModel CountrySalesAnalytics { get; set; }
+        public ClientsSalesAnalyticsViewModel ClientsSalesAnalytics { get; set; }
+        public ProductsSalesAnalyticsViewModel ProductsSalesAnalytics { get; set; }
     }
 }

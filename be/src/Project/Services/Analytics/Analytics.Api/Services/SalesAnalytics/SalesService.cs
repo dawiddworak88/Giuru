@@ -330,8 +330,8 @@ namespace Analytics.Api.Services.SalesAnalytics
         public IEnumerable<TopSalesProductsAnalyticsServiceModel> GetTopProductsSales(GetTopSalesProductsAnalyticsServiceModel model)
         {
             var topSellingProducts = from s in _context.SalesFacts
-                                    join p in _context.ProductDimensions on s.ProductDimensionId equals p.ProductId
-                                    join pt in _context.ProductTranslationDimensions on p.ProductId equals pt.ProductDimensionId
+                                    join p in _context.ProductDimensions on s.ProductDimensionId equals p.Id
+                                    join pt in _context.ProductTranslationDimensions on p.Translations.FirstOrDefault().Id equals pt.Id
                                     where s.CreatedDate >= model.FromDate.Value && s.CreatedDate <= model.ToDate.Value && s.IsActive == true && p.IsActive == true
                                     group new { s.Quantity, p.ProductId, pt.Name, p.Sku, p.Ean } by s.ProductDimensionId into g
                                     orderby g.Sum(sp => sp.Quantity) descending

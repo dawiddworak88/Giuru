@@ -8,6 +8,7 @@
             public static readonly string DailySalesAnalyticsApiEndpoint = "/api/v1/salesanalytics/daily";
             public static readonly string CountriesSalesAnalyticsApiEndpoint = "/api/v1/salesanalytics/countries";
             public static readonly string ProductsSalesAnalyticsApiEndpoint = "/api/v1/salesanalytics/products";
+            public static readonly string ClientsSalesAnalyticsApiEndpoint = "/api/v1/salesanalytics/clients";
         }
 
         public struct Global

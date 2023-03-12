@@ -1,0 +1,26 @@
+.clients-analytics {
+
+    &__table {
+        overflow: scroll;
+        height: 22rem;
+        
+        th {
+            font-weight: bold;
+        }
+    }
+
+    @media only screen and (max-width: $tablet) {
+        
+        &__table {
+            height: 10rem;
+        }
+    }
+}
+
+.clients-analytics-date-ranges {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 24px;
+}

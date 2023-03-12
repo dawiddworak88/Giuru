@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import CountrySalesAnalytics from "../../../../../../shared/components/AnalyticsDashboard/CountrySalesAnalytics/CountrySalesAnalytics";
 import SalesAnalytics from "../../../../../../shared/components/AnalyticsDashboard/SalesAnalytics/SalesAnalytics";
 import ProductsSalesAnalytics from "../../../../../../shared/components/AnalyticsDashboard/ProductsSalesAnalytics/ProductsSalesAnalytics";
+import ClientsSalesAnalytics from "../../../../../../shared/components/AnalyticsDashboard/ClientSalesAnalytics/ClientsSalesAnalytics";
 
 const DashboardDetail = (props) => {
     return (
@@ -21,6 +22,11 @@ const DashboardDetail = (props) => {
                         }
                     </div>
                     <div className="column is-half dashboard__container">
+                        {props.clientsSalesAnalytics &&
+                            <ClientsSalesAnalytics {...props.clientsSalesAnalytics} />
+                        }
+                    </div>
+                    <div className="column is-full dashboard__container">
                         {props.countrySalesAnalytics &&
                             <CountrySalesAnalytics {...props.countrySalesAnalytics} />
                         }
@@ -34,7 +40,9 @@ const DashboardDetail = (props) => {
 DashboardDetail.propTypes = {
     title: PropTypes.string.isRequired,
     dailySalesAnalytics: PropTypes.object.isRequired,
-    countrySalesAnalytics: PropTypes.object.isRequired
+    countrySalesAnalytics: PropTypes.object.isRequired,
+    productsSalesAnalytics: PropTypes.object.isRequired,
+    clientsSalesAnalytics: PropTypes.object.isRequired
 }
 
 export default DashboardDetail;

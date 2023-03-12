@@ -1,6 +1,6 @@
 ﻿namespace Seller.Web.Areas.Dashboard.ApiRequestModels
 {
-    public class ProductsSalesAnalyticsApiRequestModel : SalesAnalyticsRequestModel
+    public class ClientsSalesAnalyticsApiRequestModel : SalesAnalyticsRequestModel
     {
         public int? Size { get; set; }
     }
