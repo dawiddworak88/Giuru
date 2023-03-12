@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Seller.Web.Areas.Dashboard.RequestModels
+namespace Seller.Web.Areas.Dashboard.ApiRequestModels
 {
     public class SalesAnalyticsRequestModel
     {
