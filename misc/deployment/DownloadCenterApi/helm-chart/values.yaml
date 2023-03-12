@@ -22,6 +22,3 @@ downloadCenterApi:
     initialDelaySeconds: "15"
     periodSeconds: "30"
     timeoutSeconds: "15"
-  resources:
-    limits:
-      memory: "250Mi"

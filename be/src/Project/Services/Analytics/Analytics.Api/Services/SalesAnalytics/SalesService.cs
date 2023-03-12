@@ -331,5 +331,28 @@ namespace Analytics.Api.Services.SalesAnalytics
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<ClientSalesServiceModel> GetClientsSales(GetClientsSalesServiceModel model)
+        {
+            var clientsSales = from s in _context.SalesFacts
+                               join c in _context.ClientDimensions on s.ClientDimensionId equals c.Id
+                               group s by new { c.ClientId, c.Name } into sc
+                               where sc.Sum(x => x.Quantity) > 0
+                               select new ClientSalesServiceModel
+                               {
+                                   Id = sc.Key.ClientId,
+                                   Name = sc.Key.Name,
+                                   Quantity = sc.Sum(x => x.Quantity)
+                               };
+
+            clientsSales = clientsSales.ApplySort(model.OrderBy);
+
+            if (model.Size.HasValue is true)
+            {
+                clientsSales = clientsSales.Take(model.Size.Value);
+            }
+
+            return clientsSales;
+        }
     }
 }

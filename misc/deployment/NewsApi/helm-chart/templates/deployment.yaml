@@ -31,9 +31,6 @@ spec:
           initialDelaySeconds: {{ .Values.newsApi.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.newsApi.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.newsApi.livenessProbe.timeoutSeconds }}
-        resources:
-          limits:
-            memory: {{ .Values.newsApi.resources.limits.memory }}
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
