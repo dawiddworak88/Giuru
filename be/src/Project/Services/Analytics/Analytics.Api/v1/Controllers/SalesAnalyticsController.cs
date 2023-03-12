@@ -186,7 +186,40 @@ namespace Analytics.Api.v1.Controllers
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetTopSalesProductsAnalyticsServiceModel
-         }
+            {
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                IsSeller = this.User.IsInRole("Seller"),
+                FromDate = fromDate,
+                ToDate = toDate,
+                Size = size
+            };
+
+            var validator = new GetTopSalesProductsAnalyticsModelValidator();
+            var validationResult = validator.Validate(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var topSalesProducts = _salesService.GetTopProductsSales(serviceModel);
+
+                if (topSalesProducts is not null)
+                {
+                    var response = topSalesProducts.Select(x => new TopSalesProductsAnalyticsResponseModel
+                    {
+                        ProductId = x.ProductId,
+                        ProductSku = x.ProductSku,
+                        ProductName = x.ProductName,
+                        Ean = x.Ean,
+                        Quantity = x.Quantity
+                    });
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
 
         /// <summary>
         /// Gets best selling Clients
@@ -199,7 +232,7 @@ namespace Analytics.Api.v1.Controllers
         [HttpGet("clients"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult GetClientsSales(DateTime? fromDate, DateTime? toDate, int? size, string orderBy)
+        public IActionResult GetClientsSales(DateTime? fromDate, DateTime? toDate, int? size)
             {
                 var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -210,7 +243,6 @@ namespace Analytics.Api.v1.Controllers
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     FromDate = fromDate,
                     ToDate = toDate,
-                    OrderBy = orderBy,
                     Size = size
                 };
 
@@ -219,7 +251,7 @@ namespace Analytics.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var clientsSales = _salesService.GetClientsSales(serviceModel);
+                    var clientsSales = _salesService.GetTopClientsSales(serviceModel);
 
                     if (clientsSales is not null)
                     {

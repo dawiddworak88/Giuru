@@ -327,25 +327,51 @@ namespace Analytics.Api.Services.SalesAnalytics
             return dailySales;
         }
 
-        public IEnumerable<TopSalesProductsAnalyticsServiceModel> GetProductsSales(GetTopSalesProductsAnalyticsServiceModel model)
+        public IEnumerable<TopSalesProductsAnalyticsServiceModel> GetTopProductsSales(GetTopSalesProductsAnalyticsServiceModel model)
         {
-            throw new NotImplementedException();
+            var topSellingProducts = from s in _context.SalesFacts
+                                    join p in _context.ProductDimensions on s.ProductDimensionId equals p.ProductId
+                                    join pt in _context.ProductTranslationDimensions on p.ProductId equals pt.ProductDimensionId
+                                    where s.CreatedDate >= model.FromDate.Value && s.CreatedDate <= model.ToDate.Value && s.IsActive == true && p.IsActive == true
+                                    group new { s.Quantity, p.ProductId, pt.Name, p.Sku, p.Ean } by s.ProductDimensionId into g
+                                    orderby g.Sum(sp => sp.Quantity) descending
+                                    select new 
+                                    { 
+                                        ProductId = g.Key, 
+                                        g.FirstOrDefault().Sku,
+                                        g.FirstOrDefault().Ean,
+                                        TotalQuantity = g.Sum(sp => sp.Quantity), 
+                                        ProductName = g.FirstOrDefault().Name 
+                                    };
+
+           if (model.Size.HasValue)
+            {
+                topSellingProducts = topSellingProducts.Take(model.Size.Value);
+            }
+
+            return topSellingProducts.Select(x => new TopSalesProductsAnalyticsServiceModel
+            {
+                ProductId = x.ProductId,
+                Quantity = x.TotalQuantity,
+                ProductName = x.ProductName,
+                Ean = x.Ean,
+                ProductSku = x.Sku
+            });
         }
 
-        public IEnumerable<ClientSalesServiceModel> GetClientsSales(GetClientsSalesServiceModel model)
+        public IEnumerable<ClientSalesServiceModel> GetTopClientsSales(GetClientsSalesServiceModel model)
         {
             var clientsSales = from s in _context.SalesFacts
                                join c in _context.ClientDimensions on s.ClientDimensionId equals c.Id
+                               where s.CreatedDate >= model.FromDate.Value && s.CreatedDate <= model.ToDate.Value && s.IsActive == true && c.IsActive == true
                                group s by new { c.ClientId, c.Name } into sc
-                               where sc.Sum(x => x.Quantity) > 0
+                               orderby sc.Sum(sp => sp.Quantity) descending
                                select new ClientSalesServiceModel
                                {
                                    Id = sc.Key.ClientId,
                                    Name = sc.Key.Name,
                                    Quantity = sc.Sum(x => x.Quantity)
                                };
-
-            clientsSales = clientsSales.ApplySort(model.OrderBy);
 
             if (model.Size.HasValue is true)
             {

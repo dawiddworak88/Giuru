@@ -9,8 +9,8 @@ namespace Analytics.Api.Services.SalesAnalytics
         IEnumerable<AnnualSalesServiceModel> GetAnnualSales(GetAnnualSalesServiceModel model);
         IEnumerable<CountrySalesServiceModel> GetCountrySales(GetCountriesSalesServiceModel model);
         IEnumerable<DailySalesServiceModel> GetDailySales(GetDailySalesServiceModel model);
-        IEnumerable<TopSalesProductsAnalyticsServiceModel> GetProductsSales(GetTopSalesProductsAnalyticsServiceModel model);
-        IEnumerable<ClientSalesServiceModel> GetClientsSales(GetClientsSalesServiceModel model);
+        IEnumerable<TopSalesProductsAnalyticsServiceModel> GetTopProductsSales(GetTopSalesProductsAnalyticsServiceModel model);
+        IEnumerable<ClientSalesServiceModel> GetTopClientsSales(GetClientsSalesServiceModel model);
         Task CreateAsync(CreateSalesAnalyticsServiceModel model);
     }
 }
