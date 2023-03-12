@@ -186,8 +186,9 @@ namespace Analytics.Api.v1.Controllers
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetTopSalesProductsAnalyticsServiceModel
+         }
 
-            
+        /// <summary>
         /// Gets best selling Clients
         /// </summary>
         /// <param name="fromDate">From date.</param>
@@ -199,58 +200,41 @@ namespace Analytics.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public IActionResult GetClientsSales(DateTime? fromDate, DateTime? toDate, int? size, string orderBy)
-        {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-
-            var serviceModel = new GetClientsSalesServiceModel
             {
-                Language = CultureInfo.CurrentCulture.Name,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                IsSeller = this.User.IsInRole("Seller"),
-                FromDate = fromDate,
-                ToDate = toDate,
-                Size = size
-            };
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var validator = new GetTopSalesProductsAnalyticsModelValidator();
-                FromDate = fromDate,
-                ToDate = toDate,
-                OrderBy = orderBy,
-                Size = size
-            };
-
-            var validator = new GetClientsSalesModelValidator();
-            var validationResult = validator.Validate(serviceModel);
-
-            if (validationResult.IsValid)
-            {
-                var topSalesProducts = _salesService.GetProductsSales(serviceModel);
-
-                if (topSalesProducts is not null)
+                var serviceModel = new GetClientsSalesServiceModel
                 {
-                    var response = topSalesProducts.Select(x => new TopSalesProductsAnalyticsResponseModel
-                    {
-                        ProductId = x.ProductId,
-                        ProductSku = x.ProductSku,
-                        ProductName = x.ProductName,
-                        Ean = x.Ean,
-                var clientsSales = _salesService.GetClientsSales(serviceModel);
+                    Language = CultureInfo.CurrentCulture.Name,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    FromDate = fromDate,
+                    ToDate = toDate,
+                    OrderBy = orderBy,
+                    Size = size
+                };
 
-                if (clientsSales is not null)
+                var validator = new GetClientsSalesModelValidator();
+                var validationResult = validator.Validate(serviceModel);
+
+                if (validationResult.IsValid)
                 {
-                    var response = clientsSales.Select(x => new ClientsSalesResponseModel
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        Quantity = x.Quantity
-                    });
+                    var clientsSales = _salesService.GetClientsSales(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    if (clientsSales is not null)
+                    {
+                        var response = clientsSales.Select(x => new ClientsSalesResponseModel
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            Quantity = x.Quantity
+                        });
+
+                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                    }
                 }
-            }
 
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
         }
-    }
 }
