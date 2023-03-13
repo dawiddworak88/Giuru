@@ -18,6 +18,10 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string ProductCardsUrl { get; set; }
         public string DefinitionUrl { get; set; }
         public string DefaultInputName { get; set; }
+        public string YesLabel { get; set; }
+        public string NoLabel { get; set; }
+        public string AreYouSureLabel { get; set; }
+        public string DeleteConfirmationLabel { get; set; }
         public ProductCardModalViewModel ProductCardModal { get; set; }
     }
 }
