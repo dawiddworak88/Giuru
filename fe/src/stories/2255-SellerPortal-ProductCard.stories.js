@@ -21,22 +21,40 @@ const componentProps = {
     definitionLabel: "Definition", 
     saveText: "Save", 
     cancelText: "Cancel", 
+    toDefinitionText: "Go to definition",
     inputTypeLabel: "Type", 
     inputTypes: [
-      "Reference",
-      "String",
-      "Array",
-      "Boolean",
-      "Number"
+      {
+        value: "reference",
+        text: "Reference"
+      },
+      {
+        value: "string",
+        text: "String"
+      },
+      {
+        value: "array",
+        text: "Array"
+      },
+      {
+        value: "boolean",
+        text: "Boolean"
+      },
+      {
+        value: "number",
+        text: "Number"
+      }
     ], 
     definitionsOptions: [
       {
         name: "Color",
-        id: "a04b3368-fa25-4b4a-e4eb-08d907680a85"
+        id: "a04b3368-fa25-4b4a-e4eb-08d907680a85",
+        url: "#"
       },
       {
         name: "Shape",
-        id: "3cb42bca-84d9-423f-e4ee-08d907680a85"
+        id: "3cb42bca-84d9-423f-e4ee-08d907680a85",
+        url: "#"
       }
     ]
   },

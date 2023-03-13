@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import PropTypes from "prop-types";
 import { 
     TextField, Button, Dialog, DialogTitle, 
@@ -17,6 +18,22 @@ const ProductCardModal = (props) => {
         props.setAttribute(attribute => ({
             ...attribute, [name]: value
         }))
+
+        console.log(productAttribute)
+    }
+
+    const handleDefinition = () => {
+        if (productAttribute.definitionId != undefined) {
+            const currentDefinition = props.labels.definitionsOptions.find((definition) => definition.id === productAttribute.definitionId);
+
+            if (currentDefinition != null) {
+                NavigationHelper.redirect(currentDefinition.url, "_blank");
+            }
+        }
+    }
+
+    const validateName = (e) => {
+        
     }
 
     useEffect(() => {
@@ -36,17 +53,6 @@ const ProductCardModal = (props) => {
                 <DialogContent>
                     <div className="productCard__container">
                         <div className="field">
-                            <TextField
-                                id="name"
-                                name="name"
-                                type="text"
-                                value={productAttribute.name} 
-                                variant="standard" 
-                                label={props.labels.nameLabel}
-                                onChange={(e) => updateAttribute(e)}
-                                fullWidth={true} />
-                        </div>
-                        <div className="field">
                             <TextField 
                                 id="title"
                                 name="title"
@@ -55,6 +61,24 @@ const ProductCardModal = (props) => {
                                 variant="standard" 
                                 label={props.labels.displayNameLabel}
                                 onChange={(e) => updateAttribute(e)}
+                                fullWidth={true} />
+                        </div>
+                        <div className="field">
+                            <TextField
+                                id="name"
+                                name="name"
+                                type="text"
+                                value={productAttribute.name} 
+                                variant="standard" 
+                                label={props.labels.nameLabel}
+                                onChange={(e) => updateAttribute(e)}
+                                inputProps={{
+                                    // inputMode: "text",
+                                    pattern: "[a-z]"
+                                }}
+                                InputProps={{
+                                    pattern: "[a-z]"
+                                }}
                                 fullWidth={true} />
                         </div>
                         <div className="field">
@@ -69,29 +93,44 @@ const ProductCardModal = (props) => {
                                     >
                                         {props.labels.inputTypes && props.labels.inputTypes.map((type, index) => {
                                             return (
-                                                <MenuItem key={index} value={type.toLowerCase()}>{type}</MenuItem>
+                                                <MenuItem key={index} value={type.value}>{type.text}</MenuItem>
                                             )
                                         })}
                                 </Select>
                             </FormControl>
                         </div>
                         {(productAttribute.type === ProductCardConstants.referenceInputType() || productAttribute.definitionId !== undefined)&&
-                            <div className="field">
-                                <FormControl fullWidth={true} variant="standard">
-                                    <InputLabel id="definition-label">{props.labels.definitionLabel}</InputLabel>
-                                    <Select
-                                        id="definitionId"
-                                        name="definitionId"
-                                        value={productAttribute.definitionId ?? ""}
-                                        onChange={(e) => updateAttribute(e)}
-                                    >
-                                        {props.labels.definitionsOptions && props.labels.definitionsOptions.map((definition, index) => {
-                                            return (
-                                                <MenuItem key={index} value={definition.id}>{definition.name}</MenuItem>
-                                            )
-                                        })}
-                                    </Select>
-                                </FormControl>
+                            <div className="field columns">
+                                <div className="column">
+                                    <FormControl fullWidth={true} variant="standard">
+                                        <InputLabel id="definition-label">{props.labels.definitionLabel}</InputLabel>
+                                        <Select
+                                            id="definitionId"
+                                            name="definitionId"
+                                            value={productAttribute.definitionId ?? ""}
+                                            onChange={(e) => updateAttribute(e)}
+                                        >
+                                            {props.labels.definitionsOptions && props.labels.definitionsOptions.map((definition, index) => {
+                                                return (
+                                                    <MenuItem key={index} value={definition.id}>{definition.name}</MenuItem>
+                                                )
+                                            })}
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                                <div className="column">
+                                    <Button 
+                                        type="text" 
+                                        variant="contained" 
+                                        fullWidth={true} 
+                                        color="primary" 
+                                        onClick={handleDefinition} 
+                                        size="large" 
+                                        className="mt-2"
+                                        disabled={productAttribute.definitionId != undefined ? false : true}>
+                                            {props.labels.toDefinitionText}
+                                    </Button>
+                                </div>
                             </div>
                         }
                     </div>

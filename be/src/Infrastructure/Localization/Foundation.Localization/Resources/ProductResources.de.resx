@@ -279,4 +279,7 @@
   <data name="SuccessfullySavedProductCard" xml:space="preserve">
     <value>Produktkarte erfolgreich gespeichert.</value>
   </data>
+  <data name="ToDefinition" xml:space="preserve">
+    <value>Gehen Sie zur Definition</value>
+  </data>
 </root>

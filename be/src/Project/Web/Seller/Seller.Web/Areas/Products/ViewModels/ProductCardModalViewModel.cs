@@ -11,8 +11,9 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string DefinitionLabel { get; set; }
         public string SaveText { get; set; }
         public string CancelText { get; set; }
+        public string ToDefinitionText { get; set; }
         public string InputTypeLabel { get; set; }
         public IEnumerable<ProductCardModalInputTypeViewModel> InputTypes { get; set; }
-        public IEnumerable<ListItemViewModel> DefinitionsOptions { get; set; }
+        public IEnumerable<ProductCardModalDefinitionViewModel> DefinitionsOptions { get; set; }
     }
 }

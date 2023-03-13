@@ -8,12 +8,16 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import ProductCardModal from "../ProductCardModal/ProductCardModal";
+import ConfirmationDialog from "../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
+import ProductCardConstants from "../../../../../../shared/constants/ProductCardConstants";
 
 const ProductCardForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productAttribute, setProductAttribute] = useState(null);
     const [definitions, setDefinitions] = useState({});
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const [entityToDelete, setEntityToDelete] = useState(null);
     const stateSchema = {
         id: { value: props.id ? props.id : null },
         schema: { value: props.schema ? JSON.parse(props.schema) : null },
@@ -115,7 +119,7 @@ const ProductCardForm = (props) => {
                 <div className="card-title">{props.data.title}</div>
                 <div className="card-content is-flex">
                     <div className="card-icon" onClick={() => handleProductAttribute(props.data)}><Edit/></div>
-                    <div className="card-icon" onClick={() => handleDeleteAttribite(props.index, props.schema)}><Delete/></div>
+                    <div className="card-icon" onClick={() => handleDeleteClick(props.data)}><Delete/></div> 
                 </div>
             </div>
         )
@@ -235,35 +239,13 @@ const ProductCardForm = (props) => {
         const newElement = {
             name: `${props.defaultInputName}${i}`,
             title: `${props.defaultInputName}${i}`,
-            type: "string",
+            type: ProductCardConstants.defaultInputType(),
             required: false,
 
         }
 
         setProductAttribute(newElement)
         setIsModalOpen(true);
-    }
-
-    const handleDeleteAttribite = (index, schema) => {
-        const newElements = generateElementsFromSchema(schema);
-
-        const element = newElements[index];
-
-        if (element.definitionId !== undefined) {
-            const definitionItems = newElements.filter((item) => item.definitionId === element.definitionId)
-
-            if (!(definitionItems.length > 1)) {
-                const newDefinitions = definitions;
-
-                delete newDefinitions[element.definitionId]
-
-                setDefinitions(newDefinitions);
-            }
-        }
-
-        newElements.splice(index, 1);
-
-        updateSchema(newElements, schema)
     }
 
     const getIdFromElements = (elements) => {
@@ -357,6 +339,42 @@ const ProductCardForm = (props) => {
         } 
     }
 
+    const handleDeleteDialogClose = () => {
+        setOpenDeleteDialog(false);
+        setEntityToDelete(null);
+    };
+
+    const handleDeleteClick = (item) => {
+        setEntityToDelete(item);
+        setOpenDeleteDialog(true);
+    };
+
+    const handleDeleteEntity = () => {
+        const newElements = generateElementsFromSchema(schema);
+
+        const index = newElements.findIndex((element) => element.name === entityToDelete.name);
+
+        const element = newElements[index];
+
+        if (element.definitionId !== undefined) {
+            const definitionItems = newElements.filter((item) => item.definitionId === element.definitionId);
+
+            if (!(definitionItems.length > 1)) {
+                const newDefinitions = definitions;
+
+                delete newDefinitions[element.definitionId];
+
+                setDefinitions(newDefinitions);
+            }
+        }
+
+        newElements.splice(index, 1);
+
+        updateSchema(newElements, schema);
+
+        handleDeleteDialogClose();
+    }
+
     const { values, setFieldValue, handleOnSubmit } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
     const { schema } = values;
@@ -406,7 +424,17 @@ const ProductCardForm = (props) => {
                     </form>
                 </div>
             </div>
-            {state.isLoading && <CircularProgress className="progressBar" />}
+            <ConfirmationDialog
+                open={openDeleteDialog}
+                handleClose={handleDeleteDialogClose}
+                handleConfirm={handleDeleteEntity}
+                titleId="delete-from-basket-title"
+                title={props.deleteConfirmationLabel}
+                textId="delete-from-basket-text"
+                text={props.areYouSureLabel + ((entityToDelete ? (": " + entityToDelete.title) : "") + "?")}
+                noLabel={props.noLabel}
+                yesLabel={props.yesLabel}
+            />
             <ProductCardModal 
                 isOpen={isModalOpen}
                 attribute={productAttribute}
@@ -415,6 +443,7 @@ const ProductCardForm = (props) => {
                 handleSave={() => addCard(schema)}
                 labels={props.productCardModal}
             />
+            {state.isLoading && <CircularProgress className="progressBar" />}
         </section>
     )
 }
@@ -427,7 +456,9 @@ ProductCardForm.propTypes = {
     navigateToProductCardsLabel: PropTypes.string.isRequired,
     productCardsUrl: PropTypes.string.isRequired,
     defaultInputName: PropTypes.string.isRequired,
-    newText: PropTypes.string.isRequired
+    newText: PropTypes.string.isRequired,
+    yesLabel: PropTypes.string.isRequired,
+    noLabel: PropTypes.string.isRequired
 }
 
 export default ProductCardForm;
