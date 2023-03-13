@@ -15,20 +15,26 @@ using Foundation.Catalog.Infrastructure;
 using Foundation.Catalog.Infrastructure.Categories.Entites;
 using Foundation.Catalog.Infrastructure.Categories.Entities;
 using Foundation.GenericRepository.Definitions;
+using Foundation.EventBus.Abstractions;
+using System.Diagnostics;
+using Catalog.Api.IntegrationEvents;
 
 namespace Catalog.Api.Services.Categories
 {
     public class CategoriesService : ICategoriesService
     {
+        private readonly IEventBus _eventBus;
         private readonly CatalogContext _context;
         private readonly IStringLocalizer<ProductResources> _productLocalizer;
 
         public CategoriesService(
             CatalogContext context,
+            IEventBus eventBus,
             IStringLocalizer<ProductResources> productLocalizer)
         {
             _context = context;
             _productLocalizer = productLocalizer;
+            _eventBus = eventBus;
         }
 
         public PagedResults<IEnumerable<CategoryServiceModel>> Get(GetCategoriesServiceModel model)
@@ -286,6 +292,14 @@ namespace Catalog.Api.Services.Categories
 
             await _context.SaveChangesAsync();
 
+            this.TriggerCategoryProductsIndexRebuild(new RebuildCategoryProductsIndexServiceModel
+            {
+                CategoryId = model.CategoryId,
+                Language = model.Language,
+                OrganisationId = model.OrganisationId,
+                Username = model.Username
+            });
+
             return await GetCategorySchemaAsync(new GetCategorySchemaServiceModel 
             { 
                 CategoryId = model.CategoryId,
@@ -312,6 +326,23 @@ namespace Catalog.Api.Services.Categories
                                   };
 
             return await categorySchemas.FirstOrDefaultAsync();
+        }
+
+        private void TriggerCategoryProductsIndexRebuild(RebuildCategoryProductsIndexServiceModel model)
+        {
+            using var source = new ActivitySource(this.GetType().Name);
+
+            var message = new RebuildCategoryProductsIntegrationEvent
+            {
+                OrganisationId = model.OrganisationId,
+                Language = model.Language,
+                Username = model.Username,
+                CategoryId = model.CategoryId
+            };
+
+            using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
+
+            _eventBus.Publish(message);
         }
     }
 }

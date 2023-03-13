@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Seller.Web.Areas.Products.ApiControllers
+namespace Seller.Web.Areas.Products.ApiRequestModels
 {
     public class ProductCardApiRequestModel
     {

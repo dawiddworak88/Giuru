@@ -496,7 +496,7 @@ namespace Catalog.Api.Services.Products
             };
         }
 
-        public async Task TriggerCatalogIndexRebuildAsync(RebuildCatalogIndexServiceModel model)
+        public void TriggerCatalogIndexRebuild(RebuildCatalogIndexServiceModel model)
         {
             using var source = new ActivitySource(this.GetType().Name);
 

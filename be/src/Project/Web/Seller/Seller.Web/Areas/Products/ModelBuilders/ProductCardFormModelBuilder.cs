@@ -38,7 +38,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             {
                 IdLabel = _globalLocalizer.GetString("Id"),
                 Title = _productLocalizer.GetString("EditProductCard"),
-                NewText = _productLocalizer.GetString("NewProductCard"),
+                NewText = _productLocalizer.GetString("NewProductCardAttribute"),
                 SaveText = _globalLocalizer.GetString("SaveText"),
                 DefaultInputName = _productLocalizer.GetString("ProductCardDefaultInputName"),
                 GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
@@ -47,7 +47,11 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 FieldRequiredErrorMessage = _globalLocalizer.GetString("FieldRequiredErrorMessage"),
                 ProductCardModal = await _productCardModalModelBuilder.BuildModelAsync(componentModel),
                 DefinitionUrl = _linkGenerator.GetPathByAction("Definition", "ProductCardApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                SaveUrl = _linkGenerator.GetPathByAction("Index", "ProductCardApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                SaveUrl = _linkGenerator.GetPathByAction("Index", "ProductCardApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                YesLabel = _globalLocalizer.GetString("Yes"),
+                NoLabel = _globalLocalizer.GetString("No"),
+                DeleteConfirmationLabel = _globalLocalizer.GetString("DeleteConfirmationLabel"),
+                AreYouSureLabel = _globalLocalizer.GetString("AreYouSureLabel")
             };
 
             if (componentModel.Id.HasValue)

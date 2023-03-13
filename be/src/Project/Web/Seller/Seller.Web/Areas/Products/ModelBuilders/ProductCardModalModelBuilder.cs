@@ -30,19 +30,18 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             var viewModel = new ProductCardModalViewModel
             {
                 NameLabel = _globalLocalizer.GetString("Name"),
-                SelectDefinitionLabel = "asdasd",
                 SaveText = _globalLocalizer.GetString("SaveText"),
                 CancelText = _globalLocalizer.GetString("Cancel"),
                 InputTypeLabel = _globalLocalizer.GetString("Type"),
                 DisplayNameLabel = _globalLocalizer.GetString("DisplayName"),
                 DefinitionLabel = _globalLocalizer.GetString("Definition"),
-                InputTypes = new List<string>
+                InputTypes = new List<ProductCardModalInputTypeViewModel>
                 {
-                    "String",
-                    "Array",
-                    "Boolean",
-                    "Reference",
-                    "Number"
+                    new ProductCardModalInputTypeViewModel { Value = "string", Text = _globalLocalizer.GetString("String") },
+                    new ProductCardModalInputTypeViewModel { Value = "array", Text = _globalLocalizer.GetString("Array") },
+                    new ProductCardModalInputTypeViewModel { Value = "boolean", Text = _globalLocalizer.GetString("Boolean") },
+                    new ProductCardModalInputTypeViewModel { Value = "reference", Text = _globalLocalizer.GetString("Reference") },
+                    new ProductCardModalInputTypeViewModel { Value = "number", Text = _globalLocalizer.GetString("Number") }
                 }
             };
 

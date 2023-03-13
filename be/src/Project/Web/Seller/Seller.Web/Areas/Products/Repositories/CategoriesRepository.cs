@@ -6,7 +6,6 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
-using Seller.Web.Areas.Products.ApiControllers;
 using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
