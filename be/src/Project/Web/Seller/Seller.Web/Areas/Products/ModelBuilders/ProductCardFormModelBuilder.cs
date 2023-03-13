@@ -51,7 +51,8 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 YesLabel = _globalLocalizer.GetString("Yes"),
                 NoLabel = _globalLocalizer.GetString("No"),
                 DeleteConfirmationLabel = _globalLocalizer.GetString("DeleteConfirmationLabel"),
-                AreYouSureLabel = _globalLocalizer.GetString("AreYouSureLabel")
+                AreYouSureLabel = _globalLocalizer.GetString("AreYouSureLabel"),
+                ProductAttributeExistsMessage = _productLocalizer.GetString("ProductAttributeExists")
             };
 
             if (componentModel.Id.HasValue)

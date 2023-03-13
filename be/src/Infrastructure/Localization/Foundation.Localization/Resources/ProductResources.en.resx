@@ -207,6 +207,9 @@
   <data name="ProductAttributeDeletedSuccessfully" xml:space="preserve">
     <value>Product attribute has been deleted successfully.</value>
   </data>
+  <data name="ProductAttributeExists" xml:space="preserve">
+    <value>Attribute with that name already exists.</value>
+  </data>
   <data name="ProductAttributeItemDeletedSuccessfully" xml:space="preserve">
     <value>Product attribute item has been deleted successfully.</value>
   </data>
@@ -227,6 +230,9 @@
   </data>
   <data name="ProductCardDefaultInputName" xml:space="preserve">
     <value>NewElement</value>
+  </data>
+  <data name="ProductCardNameErrorMessage" xml:space="preserve">
+    <value>The attribute name shouldn't contain numbers and special characters.</value>
   </data>
   <data name="ProductDeletedSuccessfully" xml:space="preserve">
     <value>Product has been deleted successfully</value>

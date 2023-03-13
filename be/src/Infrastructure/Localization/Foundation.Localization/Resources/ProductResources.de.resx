@@ -207,6 +207,9 @@
   <data name="ProductAttributeDeletedSuccessfully" xml:space="preserve">
     <value>Das Produktattribut wurde erfolgreich gelöscht.</value>
   </data>
+  <data name="ProductAttributeExists" xml:space="preserve">
+    <value>Ein Attribut mit diesem Namen ist bereits vorhanden.</value>
+  </data>
   <data name="ProductAttributeItemDeletedSuccessfully" xml:space="preserve">
     <value>Der Wert des Produktattributs wurde erfolgreich gelöscht.</value>
   </data>
@@ -227,6 +230,9 @@
   </data>
   <data name="ProductCardDefaultInputName" xml:space="preserve">
     <value>NeuerGegenstand</value>
+  </data>
+  <data name="ProductCardNameErrorMessage" xml:space="preserve">
+    <value>Der Attributname sollte keine Zahlen und Sonderzeichen enthalten.</value>
   </data>
   <data name="ProductDeletedSuccessfully" xml:space="preserve">
     <value>Produkt wurde erfolgreich gelöscht.</value>

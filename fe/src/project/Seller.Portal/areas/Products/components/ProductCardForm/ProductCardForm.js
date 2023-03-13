@@ -3,13 +3,14 @@ import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import { Button, CircularProgress } from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material"
+import { Edit, Delete, DragIndicator } from "@mui/icons-material"
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import ProductCardModal from "../ProductCardModal/ProductCardModal";
 import ConfirmationDialog from "../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
 import ProductCardConstants from "../../../../../../shared/constants/ProductCardConstants";
+import CamelcaseHelper from "../../../../../../shared/helpers/globals/CamelCaseHelper";
 
 const ProductCardForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -232,42 +233,16 @@ const ProductCardForm = (props) => {
         setIsModalOpen(false);
     }
 
-    const handleOpenModal = (schema) => {
-        const newElements = generateElementsFromSchema(schema);
-        const i = getIdFromElements(newElements);
-
+    const handleOpenModal = () => {
         const newElement = {
-            name: `${props.defaultInputName}${i}`,
-            title: `${props.defaultInputName}${i}`,
+            title: props.defaultInputName,
+            name: CamelcaseHelper.replace(props.defaultInputName),
             type: ProductCardConstants.defaultInputType(),
             required: false,
-
         }
 
         setProductAttribute(newElement)
         setIsModalOpen(true);
-    }
-
-    const getIdFromElements = (elements) => {
-        const names = elements.map((element) => element.name);
-        const defaultNameLength = props.defaultInputName.length;
-      
-        return names.length > 0
-          ? Math.max(
-              ...names.map((name) => {
-                if (name.startsWith(props.defaultInputName)) {
-                  const index = name.substring(defaultNameLength, name.length);
-                  const value = Number.parseInt(index);
-      
-                  if (!isNaN(value)) {
-                    return value;
-                  }
-                }
-      
-                return 0;
-              }),
-            ) + 1
-          : 1;
     }
 
     const handleDefinitionSchema = (id) => {
@@ -311,31 +286,38 @@ const ProductCardForm = (props) => {
 
         if (productAttribute != null) {
 
-            let newElement = {
-                name: productAttribute.name,
-                required: false,
-                dataOptions: {
-                    title: productAttribute.title,
-                    type: productAttribute.type,
-                    default: ""
-                }
+            const sameAttributes = newElements.filter((element) => element.name === productAttribute.name);
+
+            if (sameAttributes.length > 0) {
+                toast.error(props.productAttributeExistsMessage);
             }
-
-            if (productAttribute.definitionId !== undefined) {
-                newElement = {
-                    ...newElement,
-                    definitionId: productAttribute.definitionId
+            else {
+                let newElement = {
+                    name: productAttribute.name,
+                    required: false,
+                    dataOptions: {
+                        title: productAttribute.title,
+                        type: productAttribute.type,
+                        default: ""
+                    }
                 }
-
-                handleDefinitionSchema(productAttribute.definitionId);
+    
+                if (productAttribute.definitionId !== undefined) {
+                    newElement = {
+                        ...newElement,
+                        definitionId: productAttribute.definitionId
+                    }
+    
+                    handleDefinitionSchema(productAttribute.definitionId);
+                }
+    
+                newElements.splice(0, 0, newElement)
+    
+                updateSchema(newElements, schema)
+    
+                setIsModalOpen(false);
+                setProductAttribute(null);
             }
-
-            newElements.splice(0, 0, newElement)
-
-            updateSchema(newElements, schema)
-
-            setIsModalOpen(false);
-            setProductAttribute(null);
         } 
     }
 
@@ -385,7 +367,7 @@ const ProductCardForm = (props) => {
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
-                    <Button type="button" color="primary" variant="contained" className="mb-2" onClick={() => handleOpenModal(schema)}>{props.newText}</Button>
+                    <Button type="button" color="primary" variant="contained" className="mb-2" onClick={handleOpenModal}>{props.newText}</Button>
                     <form className="is-modern-form" onSubmit={handleOnSubmit}>
                         <DragDropContext onDragEnd={(result) => dragEnd(result, schema)}>
                             <Droppable droppableId="droppable">
@@ -458,7 +440,8 @@ ProductCardForm.propTypes = {
     defaultInputName: PropTypes.string.isRequired,
     newText: PropTypes.string.isRequired,
     yesLabel: PropTypes.string.isRequired,
-    noLabel: PropTypes.string.isRequired
+    noLabel: PropTypes.string.isRequired,
+    productAttributeExistsMessage: PropTypes.string.isRequired
 }
 
 export default ProductCardForm;

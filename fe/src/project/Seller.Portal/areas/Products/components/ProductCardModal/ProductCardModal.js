@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
+import CamelCaseHelper from "../../../../../../shared/helpers/globals/CamelCaseHelper";
 import PropTypes from "prop-types";
 import { 
     TextField, Button, Dialog, DialogTitle, 
@@ -9,7 +10,10 @@ import {
 import ProductCardConstants from "../../../../../../shared/constants/ProductCardConstants";
 
 const ProductCardModal = (props) => {
-    const [productAttribute, setProductAttribute] = useState(props.attribute)
+    const [productAttribute, setProductAttribute] = useState(props.attribute);
+    const [displayNameError, setDisplayNameError] = useState(false);
+    const [nameError, setNameError] = useState(false);
+    const [disabledButton, setDisabledButton] = useState(false);
 
     const updateAttribute = (e) => {
         const value = e.target.value;
@@ -18,8 +22,6 @@ const ProductCardModal = (props) => {
         props.setAttribute(attribute => ({
             ...attribute, [name]: value
         }))
-
-        console.log(productAttribute)
     }
 
     const handleDefinition = () => {
@@ -32,8 +34,47 @@ const ProductCardModal = (props) => {
         }
     }
 
-    const validateName = (e) => {
+    const handleDisplayName = (e) => {
+        updateAttribute(e);
         
+        const format = new RegExp(/(.|\s)*\S(.|\s)*/)
+
+        if (format.test(String(e.target.value))) {
+            setDisabledButton(false);
+            setDisplayNameError(false);
+
+            const newAttributeName = CamelCaseHelper.replace(e.target.value)
+
+            props.setAttribute(attribute => ({
+                ...attribute, ["name"]: newAttributeName
+            }))
+
+            const nameFormat = new RegExp(/^[A-Za-z]+$/);
+
+            if (!nameFormat.test(String(newAttributeName))) { 
+                setDisabledButton(true);
+                setNameError(true);
+            }
+        } 
+        else {
+            setDisabledButton(true);
+            setDisplayNameError(true);
+        }
+    }
+
+    const handleName = (e) => {
+        updateAttribute(e);
+
+        const format = new RegExp(/^[A-Za-z]+$/);
+
+        if (format.test(String(e.target.value))) { 
+            setDisabledButton(false);
+            setNameError(false);
+        }
+        else {
+            setDisabledButton(true);
+            setNameError(true);
+        }
     }
 
     useEffect(() => {
@@ -60,7 +101,9 @@ const ProductCardModal = (props) => {
                                 value={productAttribute.title} 
                                 variant="standard" 
                                 label={props.labels.displayNameLabel}
-                                onChange={(e) => updateAttribute(e)}
+                                onChange={(e) => handleDisplayName(e)}
+                                helperText={displayNameError ? props.labels.displayNameErrorMessage : ""} 
+                                error={displayNameError && disabledButton}
                                 fullWidth={true} />
                         </div>
                         <div className="field">
@@ -71,15 +114,13 @@ const ProductCardModal = (props) => {
                                 value={productAttribute.name} 
                                 variant="standard" 
                                 label={props.labels.nameLabel}
-                                onChange={(e) => updateAttribute(e)}
-                                inputProps={{
-                                    // inputMode: "text",
-                                    pattern: "[a-z]"
-                                }}
+                                onChange={(e) => handleName(e)}
+                                fullWidth={true} 
+                                helperText={nameError ? props.labels.nameErrorMessage : ""} 
+                                error={nameError && disabledButton}
                                 InputProps={{
-                                    pattern: "[a-z]"
-                                }}
-                                fullWidth={true} />
+                                    readOnly: productAttribute.title ? false : true
+                                }}/>
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} variant="standard">
@@ -142,7 +183,8 @@ const ProductCardModal = (props) => {
                     type="text" 
                     variant="contained" 
                     color="primary"
-                    onClick={props.handleSave}>
+                    onClick={props.handleSave}
+                    disabled={disabledButton}>
                     {props.labels.saveText}
                 </Button>
             </DialogActions>

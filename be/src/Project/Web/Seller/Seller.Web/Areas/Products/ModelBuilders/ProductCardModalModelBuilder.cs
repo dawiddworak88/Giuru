@@ -2,7 +2,6 @@
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
-using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Products.Repositories;
@@ -43,6 +42,8 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 ToDefinitionText = _productLocalizer.GetString("ToDefinition"),
                 InputTypeLabel = _globalLocalizer.GetString("Type"),
                 DisplayNameLabel = _globalLocalizer.GetString("DisplayName"),
+                DisplayNameErrorMessage = _globalLocalizer.GetString("FieldRequiredErrorMessage"),
+                NameErrorMessage = _productLocalizer.GetString("ProductCardNameErrorMessage"),
                 DefinitionLabel = _globalLocalizer.GetString("Definition"),
                 InputTypes = new List<ProductCardModalInputTypeViewModel>
                 {

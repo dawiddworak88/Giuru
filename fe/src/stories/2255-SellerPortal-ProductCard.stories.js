@@ -13,6 +13,7 @@ const componentProps = {
   saveText: "Save",
   defaultInputName: "NewElement",
   newText: "Add new card",
+  productAttributeExistsMessage: "Attribute with that name already exists.",
   productCardModal: { 
     title: "Edit product attribute", 
     nameLabel: "Name", 
