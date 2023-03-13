@@ -31,9 +31,6 @@ spec:
           initialDelaySeconds: {{ .Values.catalogBackgroundTasks.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.catalogBackgroundTasks.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.catalogBackgroundTasks.livenessProbe.timeoutSeconds }}
-        resources:
-          limits:
-            memory: {{ .Values.catalogBackgroundTasks.resources.limits.memory }}
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}

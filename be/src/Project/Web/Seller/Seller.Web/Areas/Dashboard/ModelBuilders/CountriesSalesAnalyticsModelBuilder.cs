@@ -11,31 +11,50 @@ using System;
 using Seller.Web.Areas.Dashboard.Repositories;
 using System.Linq;
 using Foundation.Extensions.ExtensionMethods;
+using Microsoft.AspNetCore.Routing;
+using Seller.Web.Areas.Dashboard.Definitions;
 
 namespace Seller.Web.Areas.Dashboard.ModelBuilders
 {
     public class CountriesSalesAnalyticsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CountrySalesAnalyticsViewModel>
     {
         private readonly IStringLocalizer<DashboardResources> _dashboardResources;
+        private readonly IStringLocalizer<GlobalResources> _globalResources;
         private readonly ISalesAnalyticsRepository _salesAnalyticsRepository;
+        private readonly LinkGenerator _linkGenerator;
 
         public CountriesSalesAnalyticsModelBuilder(
             IStringLocalizer<DashboardResources> dashboardResources,
-            ISalesAnalyticsRepository salesAnalyticsRepository)
+            ISalesAnalyticsRepository salesAnalyticsRepository,
+            IStringLocalizer<GlobalResources> globalResources,
+            LinkGenerator linkGenerator)
         {
             _dashboardResources = dashboardResources;
             _salesAnalyticsRepository = salesAnalyticsRepository;
+            _linkGenerator = linkGenerator;
+            _globalResources = globalResources;
         }
 
         public async Task<CountrySalesAnalyticsViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var countriesSales = await _salesAnalyticsRepository.GetCountriesSales(componentModel.Token, componentModel.Language);
+            var fromDate = DateTime.UtcNow.AddMonths(DashboardConstants.CountriesAnalyticsDifferenceInMonths);
+            var toDate = DateTime.UtcNow;
 
-            if (countriesSales is not null && countriesSales.Any(x => x.Quantity > 0))
+            var countriesSales = await _salesAnalyticsRepository.GetCountriesSales(componentModel.Token, componentModel.Language, fromDate, toDate);
+
+            if (countriesSales is not null)
             {
                 var viewModel = new CountrySalesAnalyticsViewModel
                 {
-                    Title = string.Format(_dashboardResources.GetString("CountrySales").Value, 3)
+                    Title = _dashboardResources.GetString("CountrySales"),
+                    FromLabel = _dashboardResources.GetString("From"), 
+                    ToLabel = _dashboardResources.GetString("To"),
+                    FromDate = fromDate,
+                    ToDate = toDate,
+                    DatePickerViews = DashboardConstants.MonthAndYearDatePickerViews,
+                    InvalidDateRangeErrorMessage = _dashboardResources.GetString("InvalidDateRange"),
+                    GeneralErrorMessage = _globalResources.GetString("AnErrorOccurred"),
+                    SaveUrl = _linkGenerator.GetPathByAction("Index", "CountrySalesAnalyticsApi", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name })
                 };
 
                 var chartDataset = new List<double>();
@@ -47,7 +66,7 @@ namespace Seller.Web.Areas.Dashboard.ModelBuilders
                     chartLabels.Add(countrySalesItem.Name);
                 }
 
-                viewModel.ChartLables = chartLabels;
+                viewModel.ChartLabels = chartLabels;
                 viewModel.ChartDatasets = new List<ChartDatasetsViewModel>
                 {
                     new ChartDatasetsViewModel

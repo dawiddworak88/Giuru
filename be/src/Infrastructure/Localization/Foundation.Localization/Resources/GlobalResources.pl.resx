@@ -708,4 +708,10 @@
   <data name="String" xml:space="preserve">
     <value>Tekst</value>
   </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Ilość</value>
+  </data>
+  <data name="Sku" xml:space="preserve">
+    <value>Sku</value>
+  </data>
 </root>

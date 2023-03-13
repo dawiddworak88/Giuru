@@ -20,7 +20,6 @@ using Foundation.GenericRepository.Paginations;
 using Catalog.Api.v1.Categories.ResultModels;
 using Foundation.Extensions.ExtensionMethods;
 using Catalog.Api.v1.Categories.ResponseModels;
-using System.Diagnostics;
 
 namespace Catalog.Api.v1.Categories.Controllers
 {

@@ -10,6 +10,7 @@ const componentProps = {
     topOrderedProducts: "TOP 10 - Ordered products",
     salesAnalytics: {
         title: "Number of orders",
+        datePickerViews: ["day", "month", "year"],
         chartLables: [
             "January",
             "February",

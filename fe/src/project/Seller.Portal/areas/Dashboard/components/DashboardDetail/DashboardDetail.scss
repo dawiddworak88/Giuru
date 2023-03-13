@@ -1,3 +1,8 @@
+@import "../../../../../../shared/components/AnalyticsDashboard/CountrySalesAnalytics/CountrySalesAnalytics.scss";
+@import "../../../../../../shared/components/AnalyticsDashboard/SalesAnalytics/SalesAnalytics.scss";
+@import "../../../../../../shared/components/AnalyticsDashboard/ProductsSalesAnalytics/ProductsSalesAnalytics.scss";
+@import "../../../../../../shared/components/AnalyticsDashboard/ClientSalesAnalytics/ClientsSalesAnalytics.scss";
+
 .dashboard {
     &__container {
         height: 30rem;
@@ -5,14 +10,19 @@
 
         .sales-analytics,
         .country-sales {
-            height: 100%;
+            height: 80%;
         }
     }
 
     @media only screen and (max-width: $tablet) {
         
         &__container {
-            height: 15rem;
+            height: 20rem;
+
+            .sales-analytics,
+            .country-sales {
+                height: 70%;
+            }
         }
     }
 }
