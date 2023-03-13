@@ -186,8 +186,8 @@
   <data name="NewProductAttributeItem" xml:space="preserve">
     <value>Nowa wartość atrybutu produktu</value>
   </data>
-  <data name="NewProductCard" xml:space="preserve">
-    <value>Dodaj nową kartę</value>
+  <data name="NewProductCardAttribute" xml:space="preserve">
+    <value>Dodaj nowy atrybut</value>
   </data>
   <data name="ParentCategory" xml:space="preserve">
     <value>Kategoria nadrzędna</value>
