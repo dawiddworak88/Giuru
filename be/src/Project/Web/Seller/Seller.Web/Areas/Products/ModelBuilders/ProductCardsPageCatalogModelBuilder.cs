@@ -19,11 +19,11 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 {
     public class ProductCardsPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductCardCategory>>
     {
-        private readonly ICatalogModelBuilder catalogModelBuilder;
-        private readonly ICategoriesRepository categoriesRepository;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
-        private readonly LinkGenerator linkGenerator;
+        private readonly ICatalogModelBuilder _catalogModelBuilder;
+        private readonly ICategoriesRepository _categoriesRepository;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<ProductResources> _productLocalizer;
+        private readonly LinkGenerator _linkGenerator;
 
         public ProductCardsPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
@@ -32,23 +32,24 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator)
         {
-            this.catalogModelBuilder = catalogModelBuilder;
-            this.categoriesRepository = categoriesRepository;
-            this.globalLocalizer = globalLocalizer;
-            this.productLocalizer = productLocalizer;
-            this.linkGenerator = linkGenerator;
+            _catalogModelBuilder = catalogModelBuilder;
+            _categoriesRepository = categoriesRepository;
+            _globalLocalizer = globalLocalizer;
+            _productLocalizer = productLocalizer;
+            _linkGenerator = linkGenerator;
         }
 
         public async Task<CatalogViewModel<ProductCardCategory>> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<ProductCardCategory>, ProductCardCategory>();
+            var viewModel = _catalogModelBuilder.BuildModel<CatalogViewModel<ProductCardCategory>, ProductCardCategory>();
 
-            viewModel.Title = this.globalLocalizer.GetString("ProductCards");
+            viewModel.Title = _globalLocalizer.GetString("ProductCards");
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
-
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ProductCard", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewText = _productLocalizer.GetString("NewProductCard");
+            viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "ProductCard", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(ProductCardCategory.CreatedDate)} desc";
 
@@ -56,10 +57,10 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("Name"),
-                    this.globalLocalizer.GetString("ParentCategory"),
-                    this.globalLocalizer.GetString("LastModifiedDate"),
-                    this.globalLocalizer.GetString("CreatedDate")
+                    _globalLocalizer.GetString("Name"),
+                    _globalLocalizer.GetString("ParentCategory"),
+                    _globalLocalizer.GetString("LastModifiedDate"),
+                    _globalLocalizer.GetString("CreatedDate")
                 },
                 Actions = new List<CatalogActionViewModel>
                 {
@@ -93,7 +94,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 }
             };
 
-            var categories = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Category.CreatedDate)} desc");
+            var categories = await _categoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Category.CreatedDate)} desc");
 
             if (categories.Data.OrEmptyIfNull().Any())
             {
