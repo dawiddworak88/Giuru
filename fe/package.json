@@ -58,8 +58,12 @@
   "scripts": {
     "storybook": "SET NODE_ENV=development&&start-storybook -p 9009 -s public",
     "build-storybook": "SET NODE_ENV=development&&build-storybook -s public",
-    "build-fe-dev": "SET NODE_ENV=development&&webpack --mode development",
-    "build-fe": "SET NODE_ENV=production&&webpack --mode production",
+    "build-seller-fe": "SET NODE_ENV=production&&webpack --mode production --config seller-webpack.config.js",
+    "build-seller-fe-dev": "SET NODE_ENV=development&&webpack --mode development --config seller-webpack.config.js",
+    "build-buyer-fe": "SET NODE_ENV=production&&webpack --mode production --config buyer-webpack.config.js",
+    "build-buyer-fe-dev": "SET NODE_ENV=development&&webpack --mode development --config buyer-webpack.config.js",
+    "build-account-fe": "SET NODE_ENV=production&&webpack --mode production --config account-webpack.config.js",
+    "build-account-fe-dev": "SET NODE_ENV=development&&webpack --mode development --config account-webpack.config.js",
     "watch-fe": "SET NODE_ENV=development&&webpack --mode development -w",
     "ssr": "node server/bootstrap.js",
     "watch-ssr": "nodemon server/bootstrap.js --watch \".\" --legacy-watch --polling-interval 4000"
