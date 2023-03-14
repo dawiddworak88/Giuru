@@ -150,7 +150,10 @@
   <data name="To" xml:space="preserve">
     <value>Do</value>
   </data>
-  <data name="TopOrderedProducts" xml:space="preserve">
+  <data name="TopClientsSales" xml:space="preserve">
+    <value>Najczęściej zamawiający klienci</value>
+  </data>
+  <data name="TopProductsSales" xml:space="preserve">
     <value>Najczęściej zamawiane produkty</value>
   </data>
 </root>

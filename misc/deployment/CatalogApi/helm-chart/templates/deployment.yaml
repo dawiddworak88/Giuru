@@ -31,9 +31,6 @@ spec:
           initialDelaySeconds: {{ .Values.catalogApi.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.catalogApi.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.catalogApi.livenessProbe.timeoutSeconds }}
-        resources:
-          limits:
-            memory: {{ .Values.catalogApi.resources.limits.memory }}
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}

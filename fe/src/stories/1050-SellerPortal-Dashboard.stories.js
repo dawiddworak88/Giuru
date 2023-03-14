@@ -40,6 +40,63 @@ const componentProps = {
                 backgroundColor: "#1B5A6E"
             }
         ]
+    },
+    productsSalesAnalytics: {
+        title: "Top sales products",
+        nameLabel: "Name",
+        skuLabel: "Sku",
+        quantityLabel: "Quantity",
+        noResultsLabel: "No results",
+        products: [
+            {
+                id: "1",
+                name: "Anton",
+                sku: "An_01",
+                quantity: 33
+            },
+            {
+                id: "2",
+                name: "Anton",
+                sku: "An_21",
+                quantity: 19
+            },
+            {
+                id: "3",
+                name: "Anton",
+                sku: "An_15",
+                quantity: 17
+            },
+            {
+                id: "4",
+                name: "Anton",
+                sku: "An_11",
+                quantity: 3
+            },
+            {
+                id: "1",
+                name: "Anton",
+                sku: "An_01",
+                quantity: 33
+            },
+            {
+                id: "2",
+                name: "Anton",
+                sku: "An_21",
+                quantity: 19
+            },
+            {
+                id: "3",
+                name: "Anton",
+                sku: "An_15",
+                quantity: 17
+            },
+            {
+                id: "4",
+                name: "Anton",
+                sku: "An_11",
+                quantity: 3
+            }
+        ]
     }
 }
 

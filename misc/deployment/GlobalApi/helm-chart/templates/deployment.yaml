@@ -31,9 +31,6 @@ spec:
           initialDelaySeconds: {{ .Values.globalApi.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.globalApi.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.globalApi.livenessProbe.timeoutSeconds }}
-        resources:
-          limits:
-            memory: {{ .Values.globalApi.resources.limits.memory }}
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}

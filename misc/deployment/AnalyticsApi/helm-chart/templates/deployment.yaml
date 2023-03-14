@@ -31,9 +31,6 @@ spec:
           initialDelaySeconds: {{ .Values.analyticsApi.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.analyticsApi.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.analyticsApi.livenessProbe.timeoutSeconds }}
-        resources:
-          limits:
-            memory: {{ .Values.analyticsApi.resources.limits.memory }}
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
