@@ -18,7 +18,6 @@ const componentProps = {
     title: "Edit product attribute", 
     nameLabel: "Name", 
     displayNameLabel: "Display name", 
-    selectDefinitionLabel: "asdasd", 
     definitionLabel: "Definition", 
     saveText: "Save", 
     cancelText: "Cancel", 
