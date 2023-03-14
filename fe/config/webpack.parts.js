@@ -1,6 +1,7 @@
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 exports.defaultWebpackConfiguration = ({
 
@@ -46,6 +47,15 @@ exports.defaultWebpackConfiguration = ({
             hints: false,
             maxEntrypointSize: 512000,
             maxAssetSize: 512000
-        }
+        },
+        plugins: [
+            new MiniCssExtractPlugin({
+                filename: "../../dist/css/[name].css",
+            }),
+            new CleanWebpackPlugin({
+                dry: false,
+                dangerouslyAllowCleanPatternsOutsideProject: true
+            })
+        ]
     }
 }
