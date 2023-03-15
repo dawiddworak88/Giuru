@@ -1,0 +1,3 @@
+variables:
+- name: b2bInventoryApiImageRepository
+  value: 'b2b-inventory-api'

@@ -28,11 +28,11 @@ namespace Inventory.Api.v1.Controllers
     [ApiController]
     public class WarehouseController : BaseApiController
     {
-        private readonly IWarehouseService warehouseService;
+        private readonly IWarehouseService _warehouseService;
 
         public WarehouseController(IWarehouseService warehouseService)
         {
-            this.warehouseService = warehouseService;
+            _warehouseService = warehouseService;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(WarehouseRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             if (request.Id.HasValue && request.Id != null)
             {
                 var serviceModel = new UpdateWarehouseServiceModel
@@ -64,7 +64,7 @@ namespace Inventory.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var warehouse = await this.warehouseService.UpdateAsync(serviceModel);
+                    var warehouse = await _warehouseService.UpdateAsync(serviceModel);
 
                     return this.StatusCode((int)HttpStatusCode.OK, new { warehouse.Id });
                 }
@@ -85,7 +85,7 @@ namespace Inventory.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var warehouse = await this.warehouseService.CreateAsync(serviceModel);
+                    var warehouse = await _warehouseService.CreateAsync(serviceModel);
 
                     return this.StatusCode((int)HttpStatusCode.Created, new { warehouse.Id });
                 }
@@ -108,7 +108,7 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetWarehouseServiceModel
             {
@@ -123,7 +123,7 @@ namespace Inventory.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var warehouse = await this.warehouseService.GetAsync(serviceModel);
+                var warehouse = await _warehouseService.GetAsync(serviceModel);
 
                 if (warehouse != null)
                 {
@@ -173,7 +173,7 @@ namespace Inventory.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var warehouse = await this.warehouseService.GetAsync(serviceModel);
+                var warehouse = await _warehouseService.GetAsync(serviceModel);
 
                 if (warehouse != null)
                 {
@@ -214,7 +214,7 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var warehouseIds = ids.ToEnumerableGuidIds();
 
             if (warehouseIds is not null)
@@ -234,7 +234,7 @@ namespace Inventory.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var warehouses = await this.warehouseService.GetByIdsAsync(serviceModel);
+                    var warehouses = await _warehouseService.GetByIdsAsync(serviceModel);
 
                     if (warehouses is not null)
                     {
@@ -268,7 +268,7 @@ namespace Inventory.Api.v1.Controllers
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
-                var warehouses = await this.warehouseService.GetAsync(serviceModel);
+                var warehouses = await _warehouseService.GetAsync(serviceModel);
 
                 if (warehouses is not null)
                 {
@@ -304,12 +304,12 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new DeleteWarehouseServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -318,7 +318,7 @@ namespace Inventory.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.warehouseService.DeleteAsync(serviceModel);
+                await _warehouseService.DeleteAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }

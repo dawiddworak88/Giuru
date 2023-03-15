@@ -15,11 +15,12 @@ namespace Buyer.Web.Areas.Dashboard.Controllers
     [Area("Dashboard")]
     public class DashboardController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, DashboardPageViewModel> dashboardPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, DashboardPageViewModel> _dashboardPageModelBuilder;
 
-        public DashboardController(IAsyncComponentModelBuilder<ComponentModelBase, DashboardPageViewModel> dashboardPageModelBuilder)
+        public DashboardController(
+            IAsyncComponentModelBuilder<ComponentModelBase, DashboardPageViewModel> dashboardPageModelBuilder)
         {
-            this.dashboardPageModelBuilder = dashboardPageModelBuilder;
+            _dashboardPageModelBuilder = dashboardPageModelBuilder;
         }
 
         [HttpGet]
@@ -29,13 +30,13 @@ namespace Buyer.Web.Areas.Dashboard.Controllers
             {
                 ContentPageKey = "dashboardPage",
                 Language = CultureInfo.CurrentUICulture.Name,
-                IsAuthenticated = this.User.Identity.IsAuthenticated,
-                Name = this.User.Identity.Name,
+                IsAuthenticated = User.Identity.IsAuthenticated,
+                Name = User.Identity.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName])
+                BasketId = string.IsNullOrWhiteSpace(Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(Request.Cookies[BasketConstants.BasketCookieName])
             };
 
-            var viewModel = await this.dashboardPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _dashboardPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
         }

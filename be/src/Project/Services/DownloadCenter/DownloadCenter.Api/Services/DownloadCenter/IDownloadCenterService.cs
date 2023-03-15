@@ -10,12 +10,12 @@ namespace DownloadCenter.Api.Services.DownloadCenter
     {
         Task<PagedResults<IEnumerable<DownloadCenterItemServiceModel>>> GetAsync(GetDownloadCenterFilesServiceModel model);
         Task<DownloadCenterCategoryServiceModel> GetDownloadCenterCategoryAsync(GetDownloadCenterCategoryServiceModel model);
-        Task<PagedResults<IEnumerable<DownloadCenterCategoryItemServiceModel>>> GetAsync(GetDownloadCenterItemsServiceModel model);
+        PagedResults<IEnumerable<DownloadCenterCategoryItemServiceModel>> Get(GetDownloadCenterItemsServiceModel model);
         Task<DownloadCenterItemFileServiceModel> GetAsync(GetDownloadCenterFileServiceModel model);
         Task DeleteAsync(DeleteDownloadCenterItemServiceModel model);
         Task<Guid> CreateAsync(CreateDownloadCenterItemServiceModel model);
         Task<Guid> UpdateAsync(UpdateDownloadCenterItemServiceModel model);
         Task UpdateFileNameAsync(Guid? id, string name);
-        Task<PagedResults<IEnumerable<DownloadCenterCategoryFileServiceModel>>> GetDownloadCenterCategoryFilesAsync(GetDownloadCenterCategoryFilesServiceModel model);
+        PagedResults<IEnumerable<DownloadCenterCategoryFileServiceModel>> GetDownloadCenterCategoryFiles(GetDownloadCenterCategoryFilesServiceModel model);
     }
 }

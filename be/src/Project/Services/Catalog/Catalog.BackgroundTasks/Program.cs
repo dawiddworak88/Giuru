@@ -35,10 +35,7 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.Enrich.FromLogContext();
     loggerConfiguration.WriteTo.Console();
 
-    if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogstashUrl"]))
-    {
-        loggerConfiguration.WriteTo.Http(requestUri: hostingContext.Configuration["LogstashUrl"], queueLimitBytes: null);
-    }
+    loggerConfiguration.AddOpenTelemetrySerilogLogs(hostingContext.Configuration["OpenTelemetryLogsCollectorUrl"]);
 
     if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoToken"])
         && !string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoType"])
@@ -81,16 +78,21 @@ builder.Services.RegisterCatalogBaseDependencies();
 
 builder.Services.RegisterCatalogBackgroundTasksDependencies();
 
-builder.Services.RegisterOpenTelemetry(
-    builder.Configuration,
+builder.Services.AddOpenTelemetryTracing(
+    builder.Configuration["OpenTelemetryTracingCollectorUrl"],
     Assembly.GetExecutingAssembly().GetName().Name,
     false,
     false,
     true,
     false,
     false,
-    new[] { "/hc", "/liveness" },
-    builder.Environment.EnvironmentName);
+    new[] { "/hc", "/liveness" });
+
+builder.Services.AddOpenTelemetryMetrics(
+    builder.Configuration["OpenTelemetryMetricsCollectorUrl"],
+    Assembly.GetExecutingAssembly().GetName().Name,
+    true,
+    true);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
 

@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: downloadcenter-api-deployment
+  labels:
+    app: downloadcenter-api
+spec:
+  replicas: {{ .Values.downloadCenterApi.replicas }}
+  selector:
+    matchLabels:
+      app: downloadcenter-api
+  template:
+    metadata:
+      labels:
+        app: downloadcenter-api
+    spec:
+      containers:
+      - name: downloadcenter-api-container
+        image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: {{ .Values.downloadCenterApi.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.downloadCenterApi.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.downloadCenterApi.readinessProbe.timeoutSeconds }}
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: {{ .Values.downloadCenterApi.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.downloadCenterApi.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.downloadCenterApi.livenessProbe.timeoutSeconds }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: OrganisationId
+          value: {{ .Values.organisationId }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
+        envFrom:
+        - secretRef:
+            name: b2b-downloadcenter-api-secrets
+        ports:
+        - containerPort: 80

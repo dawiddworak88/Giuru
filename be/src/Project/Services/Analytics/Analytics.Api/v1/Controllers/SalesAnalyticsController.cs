@@ -1,16 +1,15 @@
 ﻿using Analytics.Api.Services.SalesAnalytics;
 using Analytics.Api.ServicesModels.SalesAnalytics;
-using Analytics.Api.v1.RequestModels;
 using Analytics.Api.v1.ResponseModels;
 using Analytics.Api.Validators;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
-using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -25,39 +24,43 @@ namespace Analytics.Api.v1.Controllers
     [ApiController]
     public class SalesAnalyticsController : BaseApiController
     {
-        private readonly ISalesService salesService;
+        private readonly ISalesService _salesService;
 
         public SalesAnalyticsController(
             ISalesService salesService)
         {
-            this.salesService = salesService;
+            _salesService = salesService;
         }
 
         /// <summary>
         /// Get annual sales
         /// </summary>
+        /// <param name="fromDate">From date.</param>
+        /// <param name="toDate">To date.</param>
         /// <returns>Annual sales.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetAnnualSales()
+        public IActionResult GetAnnualSales(DateTime? fromDate, DateTime? toDate)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetAnnualSalesServiceModel
             {
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                IsSeller = this.User.IsInRole("Seller")
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                IsSeller = User.IsInRole("Seller"),
+                FromDate = fromDate,
+                ToDate = toDate
             };
 
             var validator = new GetAnnualSalesModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var validationResult = validator.Validate(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var annualSales = await this.salesService.GetAnnualSalesServiceModel(serviceModel);
+                var annualSales = _salesService.GetAnnualSales(serviceModel);
 
                 if (annualSales is not null)
                 {
@@ -76,13 +79,109 @@ namespace Analytics.Api.v1.Controllers
         }
 
         /// <summary>
+        /// Get countries sales
+        /// </summary>
+        /// <param name="fromDate">From date.</param>
+        /// <param name="toDate">To date.</param>
+        /// <returns>Countries sales.</returns>
+        [HttpGet("countries"), MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public IActionResult GetCountriesSales(DateTime? fromDate, DateTime? toDate)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetCountriesSalesServiceModel
+            {
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+
+            var validator = new GetCountriesSalesModelValidator();
+            var validationResult = validator.Validate(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var countrySales = _salesService.GetCountrySales(serviceModel);
+
+                if (countrySales is not null)
+                {
+                    var response = countrySales.Select(x => new CountrySalesResponseModel
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Quantity = x.Quantity
+                    });
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Get daily sales
+        /// </summary>
+        /// <param name="fromDate">From date.</param>
+        /// <param name="toDate">To date.</param>
+        /// <returns>Daily sales.</returns>
+        [HttpGet("daily"), MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public IActionResult GetDailySales(DateTime? fromDate, DateTime? toDate)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetDailySalesServiceModel
+            {
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                IsSeller = User.IsInRole("Seller"),
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+
+            var validator = new GetDailySalesModelValidator();
+            var validationResult = validator.Validate(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var dailySales = _salesService.GetDailySales(serviceModel);
+
+                if (dailySales is not null)
+                {
+                    var response = dailySales.Select(x => new DailySalesResponseModel
+                    {
+                        Day = x.Day,
+                        DayOfWeek = x.DayOfWeek,
+                        Month = x.Month,
+                        Year = x.Year,
+                        Quantity = x.Quantity
+                    });
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
         /// Gets best selling products
         /// </summary>
+        /// <param name="fromDate">From date.</param>
+        /// <param name="toDate">To date.</param>
+        /// <param name="size">Number of displayed products.</param>
         /// <returns>Best selling products</returns>
         [HttpGet("products"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get()
+        public IActionResult Get(DateTime? fromDate, DateTime? toDate, int? size)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -91,15 +190,18 @@ namespace Analytics.Api.v1.Controllers
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                IsSeller = this.User.IsInRole("Seller")
+                IsSeller = this.User.IsInRole("Seller"),
+                FromDate = fromDate,
+                ToDate = toDate,
+                Size = size
             };
 
-            var validator = new GetTopSalesAnalyticsModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var validator = new GetTopSalesProductsAnalyticsModelValidator();
+            var validationResult = validator.Validate(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var topSalesProducts = await this.salesService.GetTopSalesProductsAnalyticsAsync(serviceModel);
+                var topSalesProducts = _salesService.GetTopProductsSales(serviceModel);
 
                 if (topSalesProducts is not null)
                 {
@@ -120,55 +222,50 @@ namespace Analytics.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Creates sales facts
+        /// Gets best selling Clients
         /// </summary>
-        /// <param name="request">The model.</param>
-        /// <returns>OK.</returns>
-        [HttpPost, MapToApiVersion("1.0")]
+        /// <param name="fromDate">From date.</param>
+        /// <param name="toDate">To date.</param>
+        /// <param name="size">Number of displayed items.</param>
+        /// <returns>Best selling clients</returns>
+        [HttpGet("clients"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Save(SalesAnalyticsRequestModel request)
-        {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-
-            var serviceModel = new CreateSalesAnalyticsServiceModel
+        public IActionResult GetClientsSales(DateTime? fromDate, DateTime? toDate, int? size)
             {
-                Language = CultureInfo.CurrentCulture.Name,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                SalesAnalyticsItems = request.SalesAnalyticsItems.OrEmptyIfNull().Select(x => new CreateSalesAnalyticsItemServiceModel
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+                var serviceModel = new GetClientsSalesServiceModel
                 {
-                    ClientId = x.ClientId,
-                    ClientName = x.ClientName,
-                    Email = x.Email,
-                    ProductId = x.ProductId,
-                    ProductName = x.ProductName,
-                    ProductSku = x.ProductSku,
-                    Ean = x.Ean,
-                    IsOutlet = x.IsOutlet,
-                    IsStock = x.IsStock,
-                    Quantity = x.Quantity,
-                    CountryId = x.CountryId,
-                    CountryTranslations = x.CountryTranslations.OrEmptyIfNull().Select(x => new CreateSalesAnalyticsCountryServiceModel
+                    Language = CultureInfo.CurrentCulture.Name,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    FromDate = fromDate,
+                    ToDate = toDate,
+                    Size = size
+                };
+
+                var validator = new GetClientsSalesModelValidator();
+                var validationResult = validator.Validate(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var clientsSales = _salesService.GetTopClientsSales(serviceModel);
+
+                    if (clientsSales is not null)
                     {
-                        Text = x.Text,
-                        Language = x.Language
-                    }),
-                    CreatedDate = x.CreatedDate
-                })
-            };
+                        var response = clientsSales.Select(x => new ClientsSalesResponseModel
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            Quantity = x.Quantity
+                        });
 
-            var validator = new CreateSalesAnalyticsModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
+                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                    }
+                }
 
-            if (validationResult.IsValid)
-            {
-                await this.salesService.CreateAsync(serviceModel);
-
-                return this.StatusCode((int)HttpStatusCode.OK);
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
-
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
-    }
 }

@@ -26,6 +26,7 @@ namespace Buyer.Web.Shared.Services.Baskets
         public async Task<IEnumerable<BasketItem>> GetBasketAsync(Guid? basketId, string token, string language)
         {
             var existingBasket = await this.basketRepository.GetBasketById(token, language, basketId);
+
             if (existingBasket is not null)
             {
                 var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);

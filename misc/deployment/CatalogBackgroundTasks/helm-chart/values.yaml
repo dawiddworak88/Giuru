@@ -1,0 +1,27 @@
+environment: "#{Environment}#"
+identityUrl: "#{IdentityUrl}#"
+redisUrl: "#{RedisUrl}#"
+mediaUrl: "#{mediaUrl}#"
+elasticsearchUrl: "#{ElasticsearchUrl}#"
+logzIoToken: "#{LogzIoToken}#"
+logzIoType: "#{LogzIoType}#"
+logzIoDataCenterSubDomain: "#{LogzIoDataCenterSubDomain}#"
+openTelemetryCollectorUrl: "#{OpenTelemetryCollectorUrl}#"
+eventBusConnection: "#{EventBusConnection}#"
+eventBusRetryCount: "#{EventBusRetryCount}#"
+eventBusRequestedHeartbeat: "#{EventBusRequestedHeartbeat}#"
+supportedCultures: "en,de,pl"
+defaultCulture: "en"
+catalogApi:
+  connectionString: "#{CatalogApi--ConnectionString}#"
+  elasticsearchIndex: "catalog"
+catalogBackgroundTasks:
+  replicas: "1"
+  readinessProbe:
+    initialDelaySeconds: "15"
+    periodSeconds: "30"
+    timeoutSeconds: "15"
+  livenessProbe:
+    initialDelaySeconds: "15"
+    periodSeconds: "30"
+    timeoutSeconds: "15"

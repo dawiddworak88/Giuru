@@ -2,7 +2,11 @@ import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from "@mui/material";
+import { 
+    TextField, Button, FormControl, InputLabel, 
+    Select, MenuItem, FormHelperText, CircularProgress, 
+    Autocomplete
+} from "@mui/material";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
@@ -14,9 +18,9 @@ function ClientForm(props) {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
         email: { value: props.email ? props.email : "", error: "" },
-        communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
+        communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : null, error: "" },
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
-        countryId: { value: props.countryId ? props.countryId : null },
+        country: { value: props.countryId ? props.countries.find((item) => item.id === props.countryId) : null },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
         hasAccount: { value: props.hasAccount ? props.hasAccount : false }
@@ -47,13 +51,23 @@ function ClientForm(props) {
         }
     };
 
+    const countriesProps = {
+        options: props.countries,
+        getOptionLabel: (option) => option.name
+    };
+
     function onSubmitForm(state) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const payload = {
+            ...state,
+            countryId: country ? country.id : null
+        }
 
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(state)
+            body: JSON.stringify(payload)
         }
 
         fetch(props.saveUrl, requestOptions)
@@ -120,7 +134,7 @@ function ClientForm(props) {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { 
-        id, name, email, countryId, clientGroupIds, 
+        id, name, email, country, clientGroupIds, 
         communicationLanguage, phoneNumber, clientManagerIds 
     } = values;
 
@@ -163,21 +177,24 @@ function ClientForm(props) {
                                 }} />
                         </div>
                         <div className="field">
-                            <FormControl fullWidth={true} variant="standard">
-                                <InputLabel id="country-label">{props.countryLabel}</InputLabel>
-                                <Select
-                                    labelId="country-label"
-                                    id="countryId"
-                                    name="countryId"
-                                    value={countryId}
-                                    onChange={handleOnChange}>
-                                    {props.countries && props.countries.length > 0 && props.countries.map((country, index) => {
-                                        return (
-                                            <MenuItem key={index} value={country.id}>{country.name}</MenuItem>
-                                        );
-                                    })}
-                                </Select>
-                            </FormControl>
+                            <Autocomplete
+                                {...countriesProps}
+                                id="country"
+                                name="country"
+                                fullWidth={true}
+                                value={country}
+                                variant="standard"
+                                onChange={(event, newValue) => {
+                                    setFieldValue({name: "country", value: newValue});
+                                }}
+                                autoComplete
+                                renderInput={(params) => (
+                                    <TextField 
+                                        {...params} 
+                                        label={props.countryLabel} 
+                                        variant="standard"
+                                        margin="normal"/>
+                                )} />
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage} variant="standard">

@@ -194,7 +194,7 @@ function Catalog(props) {
                                                 }
                                                 {item.inStock &&
                                                     <div className="catalog-item__in-stock-details">
-                                                        {item.availableQuantity && item.availableQuantity > 0 && 
+                                                        {item.availableQuantity > 0 && item.availableQuantity &&
                                                             <div className="stock">
                                                                 {props.inStockLabel} {item.availableQuantity}
                                                             </div>
@@ -208,7 +208,7 @@ function Catalog(props) {
                                                 }
                                                 {item.inOutlet &&
                                                     <div className="catalog-item__in-stock-details">
-                                                        {item.availableOutletQuantity && item.availableOutletQuantity > 0 && 
+                                                        {item.availableOutletQuantity > 0 && item.availableOutletQuantity && 
                                                             <div className="stock">
                                                                 {props.inOutletLabel} {item.availableOutletQuantity}
                                                             </div>

@@ -17,6 +17,7 @@ metadata:
 spec:
   tls:
   - hosts:
+    - {{ .Values.ingress.analyticsapidomain }}
     - {{ .Values.ingress.clientapidomain }}
     - {{ .Values.ingress.basketapidomain }}
     - {{ .Values.ingress.orderingapidomain }}
@@ -29,7 +30,7 @@ spec:
     - {{ .Values.ingress.sellerapidomain }}
     - {{ .Values.ingress.downloadcenterapidomain }}
     - {{ .Values.ingress.globalapidomain }}
-    - {{ .Values.ingress.contentapidomain }}
+    # - {{ .Values.ingress.contentapidomain }}
     secretName: tls-secret
   rules:
   - host: {{ .Values.ingress.mediaapidomain }}
@@ -142,16 +143,16 @@ spec:
               number: 80
         path: /
         pathType: Prefix
-  - host: {{ .Values.ingress.contentapidomain }}
-    http:
-      paths:
-      - backend:
-          service:
-            name: content-api-service
-            port:
-              number: 80
-        path: /
-        pathType: Prefix
+  # - host: {{ .Values.ingress.contentapidomain }}
+  #   http:
+  #     paths:
+  #     - backend:
+  #         service:
+  #           name: content-api-service
+  #           port:
+  #             number: 80
+  #       path: /
+  #       pathType: Prefix
   - host: {{ .Values.ingress.buyerapidomain }}
     http:
       paths:

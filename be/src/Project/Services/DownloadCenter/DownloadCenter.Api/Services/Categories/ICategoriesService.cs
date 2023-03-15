@@ -8,7 +8,7 @@ namespace DownloadCenter.Api.Services.Categories
 {
     public interface ICategoriesService
     {
-        Task<PagedResults<IEnumerable<CategoryServiceModel>>> GetAsync(GetCategoriesServiceModel model);
+        PagedResults<IEnumerable<CategoryServiceModel>> Get(GetCategoriesServiceModel model);
         Task<Guid> CreateAsync(CreateCategoryServiceModel model);
         Task<Guid> UpdateAsync(UpdateCategoryServiceModel model);
         Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model);

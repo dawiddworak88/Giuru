@@ -10,6 +10,7 @@ import HeroSlider from "../../components/HeroSlider/HeroSlider";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 import ContentGrid from "../../../../shared/components/ContentGrid/ContentGrid";
 import Footer from "../../../../../../shared/components/Footer/Footer";
+import OrdersAnalyticsDetail from "../../../../shared/components/OrdersAnalytics/OrdersAnalyticsDetail";
 
 function HomePage(props) {
 
@@ -27,6 +28,9 @@ function HomePage(props) {
         }
         {props.newsCarouselGrid &&
           <CarouselGrid {...props.newsCarouselGrid} />
+        }
+        {props.ordersAnalytics && props.ordersAnalytics.salesAnalytics &&
+          <OrdersAnalyticsDetail {...props.ordersAnalytics } />
         }
         {props.contentGrid &&
           <ContentGrid {...props.contentGrid}></ContentGrid>

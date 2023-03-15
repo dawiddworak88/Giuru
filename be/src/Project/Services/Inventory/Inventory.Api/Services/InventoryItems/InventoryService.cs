@@ -20,25 +20,25 @@ namespace Inventory.Api.Services.InventoryItems
 {
     public class InventoryService : IInventoryService
     {
-        private readonly InventoryContext context;
-        private readonly IStringLocalizer inventoryLocalizer;
+        private readonly InventoryContext _context;
+        private readonly IStringLocalizer _inventoryLocalizer;
 
         public InventoryService(
             InventoryContext context,
             IStringLocalizer<InventoryResources> inventoryLocalizer)
         {
-            this.context = context;
-            this.inventoryLocalizer = inventoryLocalizer;
+            _context = context;
+            _inventoryLocalizer = inventoryLocalizer;
         }
 
         public async Task<InventoryServiceModel> UpdateAsync(UpdateInventoryServiceModel serviceModel)
         {
-            var inventory = await this.context.Inventory.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
-            var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == inventory.ProductId && x.IsActive);
+            var inventory = await _context.Inventory.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == inventory.ProductId && x.IsActive);
 
             if (product is null || inventory is null)
             {
-                throw new CustomException(this.inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             product.Name = serviceModel.ProductName;
@@ -54,14 +54,14 @@ namespace Inventory.Api.Services.InventoryItems
             inventory.ExpectedDelivery = serviceModel.ExpectedDelivery;
             inventory.LastModifiedDate = DateTime.UtcNow;
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return await this.GetAsync(new GetInventoryServiceModel { Id = inventory.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
         public async Task<InventoryServiceModel> CreateAsync(CreateInventoryServiceModel serviceModel)
         {
-            var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == serviceModel.ProductId && x.IsActive);
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == serviceModel.ProductId && x.IsActive);
 
             if (product is null)
             {
@@ -73,7 +73,7 @@ namespace Inventory.Api.Services.InventoryItems
                     Name = serviceModel.ProductName
                 };
 
-                this.context.Products.Add(product.FillCommonProperties());
+                _context.Products.Add(product.FillCommonProperties());
             }
 
             var inventory = new InventoryItem
@@ -87,9 +87,9 @@ namespace Inventory.Api.Services.InventoryItems
                 SellerId = serviceModel.OrganisationId.Value
             };
 
-            this.context.Inventory.Add(inventory.FillCommonProperties());
+            _context.Inventory.Add(inventory.FillCommonProperties());
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return await this.GetAsync(new GetInventoryServiceModel { Id = inventory.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
@@ -98,11 +98,11 @@ namespace Inventory.Api.Services.InventoryItems
         {
             foreach (var item in model.InventoryItems.OrEmptyIfNull())
             {
-                var inventoryProduct = await this.context.Inventory.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.WarehouseId == item.WarehouseId && x.IsActive);
+                var inventoryProduct = await _context.Inventory.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.WarehouseId == item.WarehouseId && x.IsActive);
 
                 if (inventoryProduct is not null)
                 {
-                    var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == inventoryProduct.ProductId && x.IsActive);
+                    var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == inventoryProduct.ProductId && x.IsActive);
 
                     if (product is not null)
                     {
@@ -119,11 +119,11 @@ namespace Inventory.Api.Services.InventoryItems
                 }
                 else
                 {
-                    var warehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Id == item.WarehouseId);
+                    var warehouse = await _context.Warehouses.FirstOrDefaultAsync(x => x.Id == item.WarehouseId);
 
                     if (warehouse is not null)
                     {
-                        var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == item.ProductId && x.IsActive);
+                        var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == item.ProductId && x.IsActive);
 
                         if (product is null)
                         {
@@ -135,7 +135,7 @@ namespace Inventory.Api.Services.InventoryItems
                                 Ean = item.ProductEan
                             };
 
-                            this.context.Products.Add(product.FillCommonProperties());
+                            _context.Products.Add(product.FillCommonProperties());
                         }
 
                         var inventoryItem = new InventoryItem
@@ -148,118 +148,138 @@ namespace Inventory.Api.Services.InventoryItems
                             SellerId = model.OrganisationId.Value
                         };
 
-                        this.context.Inventory.Add(inventoryItem.FillCommonProperties());
+                        _context.Inventory.Add(inventoryItem.FillCommonProperties());
                     }
                 }
 
-                await this.context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
         }
 
         public async Task<InventoryServiceModel> GetAsync(GetInventoryServiceModel model)
         {
-            var inventoryProduct = from c in this.context.Inventory
-                                   join warehouse in this.context.Warehouses on c.WarehouseId equals warehouse.Id
-                                   join product in this.context.Products on c.ProductId equals product.Id
-                                   where c.Id == model.Id.Value && product.IsActive && c.IsActive
-                                   select new InventoryServiceModel
-                                   {
-                                       Id = c.Id,
-                                       ProductId = c.ProductId,
-                                       ProductName = product.Name,
-                                       Sku = product.Sku,
-                                       WarehouseId = c.WarehouseId,
-                                       WarehouseName = warehouse.Name,
-                                       Quantity = c.Quantity,
-                                       Ean = product.Ean,
-                                       AvailableQuantity = c.AvailableQuantity,
-                                       RestockableInDays = c.RestockableInDays.Value,
-                                       ExpectedDelivery = c.ExpectedDelivery.Value,
-                                       LastModifiedDate = c.LastModifiedDate,
-                                       CreatedDate = c.CreatedDate
-                                   };
+            var inventoryProduct = await _context.Inventory
+                .Include(x => x.Product)
+                .Include(x => x.Warehouse)
+                .AsSingleQuery()
+                .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
-            return await inventoryProduct.FirstOrDefaultAsync();
-        }
-
-        public async Task<PagedResults<IEnumerable<InventoryServiceModel>>> GetAsync(GetInventoriesServiceModel model)
-        {
-            var inventories = from c in this.context.Inventory
-                              join warehouse in this.context.Warehouses on c.WarehouseId equals warehouse.Id
-                              join product in this.context.Products on c.ProductId equals product.Id
-                              where c.SellerId == model.OrganisationId.Value && product.IsActive && c.IsActive
-                              select new InventoryServiceModel
-                              {
-                                Id = c.Id,
-                                ProductId = c.ProductId,
-                                ProductName = product.Name,
-                                Sku = product.Sku,
-                                WarehouseId = c.WarehouseId,
-                                WarehouseName = warehouse.Name,
-                                Quantity = c.Quantity,
-                                Ean = product.Ean,
-                                AvailableQuantity = c.AvailableQuantity,
-                                RestockableInDays= c.RestockableInDays,
-                                ExpectedDelivery = c.ExpectedDelivery,
-                                LastModifiedDate = c.LastModifiedDate,
-                                CreatedDate = c.CreatedDate
-                              };
-
-            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
+            if (inventoryProduct is null)
             {
-                inventories = inventories.Where(x => x.ProductName.StartsWith(model.SearchTerm) || x.WarehouseName.StartsWith(model.SearchTerm) || x.Sku.StartsWith(model.SearchTerm));
+                throw new CustomException(_inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            inventories = inventories.ApplySort(model.OrderBy);
+            return new InventoryServiceModel
+            {
+                Id = inventoryProduct.Id,
+                ProductId = inventoryProduct.ProductId,
+                ProductName = inventoryProduct.Product?.Name,
+                Sku = inventoryProduct.Product?.Sku,
+                WarehouseId = inventoryProduct.WarehouseId,
+                WarehouseName = inventoryProduct.Warehouse?.Name,
+                Quantity = inventoryProduct.Quantity,
+                Ean = inventoryProduct.Product?.Ean,
+                AvailableQuantity = inventoryProduct.AvailableQuantity,
+                RestockableInDays = inventoryProduct.RestockableInDays,
+                ExpectedDelivery = inventoryProduct.ExpectedDelivery,
+                LastModifiedDate = inventoryProduct.LastModifiedDate,
+                CreatedDate = inventoryProduct.CreatedDate
+            };
+        }
+
+        public PagedResults<IEnumerable<InventoryServiceModel>> Get(GetInventoriesServiceModel model)
+        {
+            var inventoryItems = _context.Inventory.Where(x => x.SellerId == model.OrganisationId && x.IsActive)
+                    .Include(x => x.Warehouse)
+                    .Include(x => x.Product)
+                    .AsSingleQuery()
+                    .Select(x => new InventoryServiceModel
+                    {
+                        Id = x.Id,
+                        ProductId = x.ProductId,
+                        ProductName = x.Product.Name,
+                        Sku = x.Product.Sku,
+                        Ean = x.Product.Ean,
+                        AvailableQuantity = x.AvailableQuantity,
+                        Quantity = x.Quantity,
+                        ExpectedDelivery = x.ExpectedDelivery,
+                        RestockableInDays = x.RestockableInDays,
+                        WarehouseId = x.WarehouseId,
+                        WarehouseName = x.Warehouse.Name,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    });
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                inventoryItems = inventoryItems.Where(x => x.ProductName.StartsWith(model.SearchTerm) || x.WarehouseName.StartsWith(model.SearchTerm) || x.Sku.StartsWith(model.SearchTerm));
+            }
+
+            inventoryItems = inventoryItems.ApplySort(model.OrderBy);
+
+            PagedResults<IEnumerable<InventoryServiceModel>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
-                inventories = inventories.Take(Constants.MaxItemsPerPageLimit);
+                inventoryItems = inventoryItems.Take(Constants.MaxItemsPerPageLimit);
 
-                return inventories.PagedIndex(new Pagination(inventories.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+                pagedResults = inventoryItems.PagedIndex(new Pagination(inventoryItems.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = inventoryItems.PagedIndex(new Pagination(inventoryItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            return inventories.PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            return pagedResults;
         }
 
-        public async Task<PagedResults<IEnumerable<InventoryServiceModel>>> GetByIdsAsync(GetInventoriesByIdsServiceModel model)
+        public PagedResults<IEnumerable<InventoryServiceModel>> GetByIds(GetInventoriesByIdsServiceModel model)
         {
-            var inventoryProducts = from c in this.context.Inventory
-                             join warehouse in this.context.Warehouses on c.WarehouseId equals warehouse.Id
-                             join product in this.context.Products on c.ProductId equals product.Id
-                             where model.Ids.Contains(c.Id) && c.SellerId == model.OrganisationId.Value && product.IsActive && c.IsActive
-                             select new InventoryServiceModel
-                             {
-                                 Id = c.Id,
-                                 ProductId = c.ProductId,
-                                 ProductName = product.Name,
-                                 Sku = product.Sku,
-                                 Ean = product.Ean,
-                                 AvailableQuantity = c.AvailableQuantity,
-                                 Quantity = c.Quantity,
-                                 ExpectedDelivery = c.ExpectedDelivery,
-                                 RestockableInDays = c.RestockableInDays,
-                                 WarehouseId = c.WarehouseId,
-                                 WarehouseName = warehouse.Name,
-                                 LastModifiedDate = c.LastModifiedDate,
-                                 CreatedDate = c.CreatedDate
-                             };
+            var inventoryProducts = _context.Inventory.Where(x => model.Ids.Contains(x.Id) && x.SellerId == model.OrganisationId && x.IsActive)
+                    .Include(x => x.Warehouse)
+                    .Include(x => x.Product)
+                    .AsSingleQuery();
+
+            inventoryProducts = inventoryProducts.ApplySort(model.OrderBy);
+
+            PagedResults<IEnumerable<InventoryItem>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
                 inventoryProducts = inventoryProducts.Take(Constants.MaxItemsPerPageLimit);
 
-                return inventoryProducts.PagedIndex(new Pagination(inventoryProducts.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+                pagedResults = inventoryProducts.PagedIndex(new Pagination(inventoryProducts.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            } else
+            {
+                pagedResults = inventoryProducts.PagedIndex(new Pagination(inventoryProducts.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            return inventoryProducts.PagedIndex(new Pagination(inventoryProducts.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            return new PagedResults<IEnumerable<InventoryServiceModel>>(pagedResults.Total, pagedResults.PageSize)
+            {
+                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new InventoryServiceModel
+                {
+                    Id = x.Id,
+                    ProductId = x.ProductId,
+                    ProductName = x.Product?.Name,
+                    Sku = x.Product?.Sku,
+                    Ean = x.Product?.Ean,
+                    AvailableQuantity = x.AvailableQuantity,
+                    Quantity = x.Quantity,
+                    ExpectedDelivery = x.ExpectedDelivery,
+                    RestockableInDays = x.RestockableInDays,
+                    WarehouseId = x.WarehouseId,
+                    WarehouseName = x.Warehouse?.Name,
+                    LastModifiedDate = x.LastModifiedDate,
+                    CreatedDate = x.CreatedDate
+                })
+            };
         }
 
         public async Task<InventorySumServiceModel> GetInventoryByProductId(GetInventoryByProductIdServiceModel model)
         {
-            var inventory = from i in this.context.Inventory
-                            join warehouse in this.context.Warehouses on i.WarehouseId equals warehouse.Id
-                            join product in this.context.Products on i.ProductId equals product.Id
+            var inventory = from i in _context.Inventory
+                            join warehouse in _context.Warehouses on i.WarehouseId equals warehouse.Id
+                            join product in _context.Products on i.ProductId equals product.Id
                             where i.ProductId == model.ProductId.Value && product.IsActive && i.IsActive
                             select new
                             {
@@ -316,9 +336,9 @@ namespace Inventory.Api.Services.InventoryItems
 
         public async Task<InventorySumServiceModel> GetInventoryByProductSku(GetInventoryByProductSkuServiceModel model)
         {
-            var inventory = from i in this.context.Inventory
-                            join warehouse in this.context.Warehouses on i.WarehouseId equals warehouse.Id
-                            join product in this.context.Products on i.ProductId equals product.Id
+            var inventory = from i in _context.Inventory
+                            join warehouse in _context.Warehouses on i.WarehouseId equals warehouse.Id
+                            join product in _context.Products on i.ProductId equals product.Id
                             where product.Sku == model.ProductSku && product.IsActive && i.IsActive
                             select new
                             {
@@ -375,46 +395,69 @@ namespace Inventory.Api.Services.InventoryItems
 
         public async Task DeleteAsync(DeleteInventoryServiceModel model)
         {
-            var inventory = await this.context.Inventory.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
+            var inventory = await _context.Inventory.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
 
-            if (inventory == null)
+            if (inventory is null)
             {
-                throw new CustomException(this.inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             inventory.IsActive = false;
-            await this.context.SaveChangesAsync();
+
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<PagedResults<IEnumerable<InventorySumServiceModel>>> GetAvailableProductsInventoriesAsync(GetInventoriesServiceModel model)
+        public PagedResults<IEnumerable<InventorySumServiceModel>> GetAvailableProductsInventories(GetInventoriesServiceModel model)
         {
-            var inventories = (from i in this.context.Inventory
-                               join product in this.context.Products on i.ProductId equals product.Id
-                               where product.IsActive && i.IsActive
-                               group i by new { product.Id } into gpi
-                               select new InventorySumServiceModel
-                               {
-                                    ProductId = gpi.Key.Id,
-                                    ProductName = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Name,
-                                    ProductSku = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Sku,
-                                    ProductEan = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Ean,
-                                    AvailableQuantity = gpi.Sum(x => x.AvailableQuantity),
-                                    Quantity = gpi.Sum(x => x.Quantity),
-                                    ExpectedDelivery = gpi.Min(x => x.ExpectedDelivery),
-                                    RestockableInDays = gpi.Min(x => x.RestockableInDays)
-                               });
+            var inventoryItems = _context.Inventory.Where(x => x.IsActive)
+                    .Include(x => x.Product)
+                    .AsSingleQuery()
+                    .Select(y => new InventorySumServiceModel
+                    {
+                        ProductId = y.ProductId,
+                        ProductEan = y.Product.Ean,
+                        ProductName = y.Product.Name,
+                        ProductSku = y.Product.Sku,
+                        AvailableQuantity = y.AvailableQuantity,
+                        Quantity = y.Quantity,
+                        ExpectedDelivery = y.ExpectedDelivery,
+                        RestockableInDays = y.RestockableInDays
+                    });
+
+            PagedResults<IEnumerable<InventorySumServiceModel>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
-                inventories = inventories.Take(Constants.MaxItemsPerPageLimit).OrderByDescending(x => x.AvailableQuantity);
+                inventoryItems = inventoryItems.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = inventoryItems.PagedIndex(new Pagination(inventoryItems.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = inventoryItems.PagedIndex(new Pagination(inventoryItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            return inventories.OrderByDescending(x => x.AvailableQuantity).PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            var groupedResults = pagedResults.Data.GroupBy(x => x.ProductId);
+
+            return new PagedResults<IEnumerable<InventorySumServiceModel>>(inventoryItems.Count(), pagedResults.PageSize)
+            {
+                Data = groupedResults.OrEmptyIfNull().Select(x => new InventorySumServiceModel
+                {
+                    ProductId = x.Key,
+                    ProductName = x.FirstOrDefault().ProductName,
+                    ProductEan = x.FirstOrDefault().ProductEan,
+                    ProductSku = x.FirstOrDefault().ProductSku,
+                    AvailableQuantity = x.Sum(y => y.AvailableQuantity),
+                    Quantity = x.Sum(y => y.Quantity),
+                    ExpectedDelivery = x.Min(y => y.ExpectedDelivery),
+                    RestockableInDays = x.Min(y => y.RestockableInDays)
+                })
+            };
         }
 
         public async Task UpdateInventoryQuantity(Guid? productId, double bookedQuantity)
         {
-            var inventory = this.context.Inventory.FirstOrDefault(x => x.ProductId == productId.Value && x.IsActive);
+            var inventory = _context.Inventory.FirstOrDefault(x => x.ProductId == productId.Value && x.IsActive);
 
             if (inventory is not null)
             {
@@ -429,7 +472,7 @@ namespace Inventory.Api.Services.InventoryItems
                 inventory.AvailableQuantity = productQuantity;
                 inventory.LastModifiedDate = DateTime.UtcNow;
 
-                await this.context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
         }
     }

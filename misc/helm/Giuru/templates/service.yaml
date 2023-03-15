@@ -127,19 +127,19 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: content-api-service
-spec:
-  type: ClusterIP
-  selector:
-    app: content-api
-  ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 1337
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: content-api-service
+# spec:
+#   type: ClusterIP
+#   selector:
+#     app: content-api
+#   ports:
+#   - protocol: TCP
+#     port: 80
+#     targetPort: 1337
 ---
 apiVersion: v1
 kind: Service

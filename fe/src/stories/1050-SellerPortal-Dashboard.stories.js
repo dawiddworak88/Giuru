@@ -5,8 +5,9 @@ import "../project/Seller.Portal/areas/Dashboard/pages/DashboardPage/DashboardPa
 
 const componentProps = {
     title: "Dashboard",
-    countrySales: {
+    countrySalesAnalytics: {
         title: "Last 3 months sales by country",
+        datePickerViews: ["month", "year"],
         chartLables: [
             "Poland",
             "Germany",
@@ -20,8 +21,9 @@ const componentProps = {
             }
         ]
     },
-    salesAnalytics: {
+    dailySalesAnalytics: {
         title: "Daily sales",
+        datePickerViews: ["day", "month", "year"],
         chartLables: [
             "Monday - 8.12",
             "Tuesday - 9.12",
@@ -36,6 +38,63 @@ const componentProps = {
                 data: [12, 55, 34, 120, 320, 19, 67],
                 borderColor: "#1B5A6E",
                 backgroundColor: "#1B5A6E"
+            }
+        ]
+    },
+    productsSalesAnalytics: {
+        title: "Top sales products",
+        nameLabel: "Name",
+        skuLabel: "Sku",
+        quantityLabel: "Quantity",
+        noResultsLabel: "No results",
+        products: [
+            {
+                id: "1",
+                name: "Anton",
+                sku: "An_01",
+                quantity: 33
+            },
+            {
+                id: "2",
+                name: "Anton",
+                sku: "An_21",
+                quantity: 19
+            },
+            {
+                id: "3",
+                name: "Anton",
+                sku: "An_15",
+                quantity: 17
+            },
+            {
+                id: "4",
+                name: "Anton",
+                sku: "An_11",
+                quantity: 3
+            },
+            {
+                id: "1",
+                name: "Anton",
+                sku: "An_01",
+                quantity: 33
+            },
+            {
+                id: "2",
+                name: "Anton",
+                sku: "An_21",
+                quantity: 19
+            },
+            {
+                id: "3",
+                name: "Anton",
+                sku: "An_15",
+                quantity: 17
+            },
+            {
+                id: "4",
+                name: "Anton",
+                sku: "An_11",
+                quantity: 3
             }
         ]
     }

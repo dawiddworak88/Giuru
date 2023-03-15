@@ -14,21 +14,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using static Pipelines.Sockets.Unofficial.SocketConnection;
 
 namespace News.Api.Services.Categories
 {
     public class CategoriesService : ICategoriesService
     {
-        private readonly NewsContext newsContext;
-        private readonly IStringLocalizer<NewsResources> newsLocalizer;
+        private readonly NewsContext _context;
+        private readonly IStringLocalizer<NewsResources> _newsLocalizer;
 
         public CategoriesService(
-            NewsContext newsContext,
+            NewsContext context,
             IStringLocalizer<NewsResources> newsLocalizer)
         {
-            this.newsContext = newsContext;
-            this.newsLocalizer = newsLocalizer;
+            _context = context;
+            _newsLocalizer = newsLocalizer;
         }
 
         public async Task<CategoryServiceModel> CreateAsync(CreateCategoryServiceModel model)
@@ -38,7 +37,8 @@ namespace News.Api.Services.Categories
                 ParentCategoryId = model.ParentCategoryId
             };
 
-            this.newsContext.Categories.Add(category.FillCommonProperties());
+            _context.Categories.Add(category.FillCommonProperties());
+
             var categoryTranslation = new CategoryTranslation
             {
                 Name = model.Name,
@@ -46,80 +46,69 @@ namespace News.Api.Services.Categories
                 CategoryId = category.Id
             };
 
-            this.newsContext.CategoryTranslations.Add(categoryTranslation.FillCommonProperties());
-            await this.newsContext.SaveChangesAsync();
+            _context.CategoryTranslations.Add(categoryTranslation.FillCommonProperties());
+
+            await _context.SaveChangesAsync();
 
             return await this.GetAsync(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, Username = model.Username, OrganisationId = model.OrganisationId });
         }
 
         public async Task DeleteAsync(DeleteCategoryServiceModel model)
         {
-            var category = await this.newsContext.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (category is null)
             {
-                throw new CustomException(this.newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            if (await this.newsContext.Categories.AnyAsync(x => x.ParentCategoryId == category.Id && x.IsActive))
+            if (await _context.Categories.AnyAsync(x => x.ParentCategoryId == category.Id && x.IsActive))
             {
-                throw new CustomException(this.newsLocalizer.GetString("SubcategoriesDeleteCategoryConflict"), (int)HttpStatusCode.Conflict);
+                throw new CustomException(_newsLocalizer.GetString("SubcategoriesDeleteCategoryConflict"), (int)HttpStatusCode.Conflict);
             }
 
-            if (await this.newsContext.NewsItems.AnyAsync(x => x.CategoryId == category.Id && x.IsActive))
+            if (await _context.NewsItems.AnyAsync(x => x.CategoryId == category.Id && x.IsActive))
             {
-                throw new CustomException(this.newsLocalizer.GetString("CategoryDeleteNewsConflict"), (int)HttpStatusCode.Conflict);
+                throw new CustomException(_newsLocalizer.GetString("CategoryDeleteNewsConflict"), (int)HttpStatusCode.Conflict);
             }
 
             category.IsActive = false;
 
-            await this.newsContext.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model)
         {
-            var category = this.newsContext.Categories.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+            var category = await _context.Categories
+                    .Include(x => x.Translations)
+                    .Include(x => x.ParentCategory)
+                    .Include(x => x.ParentCategory.Translations)
+                    .AsSingleQuery()
+                    .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
-            if (category is not null)
+            if (category is null)
             {
-                var item = new CategoryServiceModel
-                {
-                    Id = category.Id,
-                    ParentCategoryId = category.ParentCategoryId,
-                    LastModifiedDate = category.LastModifiedDate,
-                    CreatedDate = category.CreatedDate
-                };
-
-                var categoryTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == category.Id && x.IsActive);
-                
-                if (categoryTranslations is null)
-                {
-                    categoryTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.IsActive);
-                }
-
-                item.Name = categoryTranslations?.Name;
-
-                if (category.ParentCategoryId.HasValue)
-                {
-                    var categoryParentTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == category.ParentCategoryId && x.IsActive);
-                    
-                    if (categoryParentTranslations is null)
-                    {
-                        categoryParentTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.CategoryId == category.ParentCategoryId && x.IsActive);
-                    }
-
-                    item.ParentCategoryName = categoryParentTranslations?.Name;
-                }
-
-                return item;
+                throw new CustomException(_newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            return default;
+            return new CategoryServiceModel
+            {
+                Id = category.Id,
+                Name = category.Translations.FirstOrDefault(t => t.CategoryId == category.Id && t.Language == model.Language && t.IsActive)?.Name ?? category.Translations.FirstOrDefault(t => t.CategoryId == category.Id && t.IsActive)?.Name,
+                ParentCategoryId = category.ParentCategoryId,
+                ParentCategoryName = category.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == category.ParentCategoryId && t.Language == model.Language && t.IsActive)?.Name ?? category.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == category.ParentCategoryId && t.IsActive)?.Name,
+                LastModifiedDate = DateTime.UtcNow,
+                CreatedDate = DateTime.UtcNow
+            };
         }
 
-        public async Task<PagedResults<IEnumerable<CategoryServiceModel>>> GetAsync(GetCategoriesServiceModel model)
+        public PagedResults<IEnumerable<CategoryServiceModel>> Get(GetCategoriesServiceModel model)
         {
-            var categories = this.newsContext.Categories.Where(x => x.IsActive);
+            var categories = _context.Categories.Where(x => x.IsActive)
+                    .Include(x => x.ParentCategory)
+                    .Include(x => x.ParentCategory.Translations)
+                    .Include(x => x.Translations)
+                    .AsSingleQuery();
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
@@ -140,71 +129,42 @@ namespace News.Api.Services.Categories
                 pagedResults = categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            var pagedCategoriesServiceModel = new PagedResults<IEnumerable<CategoryServiceModel>>(pagedResults.Total, pagedResults.PageSize);
-
-            var categoriesItems = new List<CategoryServiceModel>();
-
-            foreach (var categoryItem in pagedResults.Data.ToList())
+            return new PagedResults<IEnumerable<CategoryServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
-                var category = new CategoryServiceModel
+                Data = categories.OrEmptyIfNull().Select(x => new CategoryServiceModel
                 {
-                    Id = categoryItem.Id,
-                    ParentCategoryId = categoryItem.ParentCategoryId,
-                    LastModifiedDate = categoryItem.LastModifiedDate,
-                    CreatedDate = categoryItem.CreatedDate
-                };
-
-                var categoryTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == category.Id && x.IsActive);
-                
-                if (categoryTranslations is null)
-                {
-                    categoryTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.IsActive);
-                }
-
-                category.Name = categoryTranslations?.Name;
-
-                if (categoryItem.ParentCategoryId.HasValue)
-                {
-                    var categoryParentTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == category.ParentCategoryId && x.IsActive);
-                    
-                    if (categoryParentTranslations is null)
-                    {
-                        categoryParentTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.IsActive);
-                    }
-
-                    category.ParentCategoryName = categoryParentTranslations?.Name;
-                }
-
-                categoriesItems.Add(category);
+                    Id = x.Id,
+                    Name = x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language && t.IsActive)?.Name ?? x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.IsActive)?.Name,
+                    ParentCategoryId = x.ParentCategoryId,
+                    ParentCategoryName = x.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == x.ParentCategoryId && t.Language == model.Language && t.IsActive)?.Name ?? x.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == x.ParentCategoryId && t.IsActive)?.Name,
+                    LastModifiedDate= x.LastModifiedDate,
+                    CreatedDate = x.CreatedDate
+                })
             };
-
-            pagedCategoriesServiceModel.Data = categoriesItems;
-
-            return pagedCategoriesServiceModel;
         }
 
         public async Task<CategoryServiceModel> UpdateAsync(UpdateCategoryServiceModel model)
         {
-            var category = await this.newsContext.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
             
             if (category is null)
             {
-                throw new CustomException(this.newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             if (model.ParentCategoryId.HasValue)
             {
-                var parentCategory = await this.newsContext.Categories.FirstOrDefaultAsync(x => x.Id == model.ParentCategoryId && x.IsActive);
+                var parentCategory = await _context.Categories.FirstOrDefaultAsync(x => x.Id == model.ParentCategoryId && x.IsActive);
 
                 if (parentCategory is null)
                 {
-                    throw new CustomException(this.newsLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NoContent);
+                    throw new CustomException(_newsLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NoContent);
                 }
 
                 category.ParentCategoryId = model.ParentCategoryId;
             }
 
-            var categoryTranslation = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);
+            var categoryTranslation = _context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);
             
             if (categoryTranslation is not null)
             {
@@ -219,12 +179,12 @@ namespace News.Api.Services.Categories
                     Name = model.Name
                 };
 
-                this.newsContext.CategoryTranslations.Add(newCategoryTranslation.FillCommonProperties());
+                _context.CategoryTranslations.Add(newCategoryTranslation.FillCommonProperties());
             }
 
             category.LastModifiedDate = DateTime.UtcNow;
 
-            await this.newsContext.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return await this.GetAsync(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
