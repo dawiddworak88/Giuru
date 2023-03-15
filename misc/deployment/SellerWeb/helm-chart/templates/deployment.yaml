@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seller-web-deployment
+  labels:
+    app: seller-web
+spec:
+  replicas: {{ .Values.sellerWeb.replicas }}
+  selector:
+    matchLabels:
+      app: seller-web
+  template:
+    metadata:
+      labels:
+        app: seller-web
+    spec:
+      containers:
+      - name: seller-web-container
+        image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: {{ .Values.sellerWeb.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.sellerWeb.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.sellerWeb.readinessProbe.timeoutSeconds }}
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: {{ .Values.sellerWeb.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.sellerWeb.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.sellerWeb.livenessProbe.timeoutSeconds }}
+        env:
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ServerSideRenderingEndpoint
+          value: {{ .Values.serverSideRenderingEndpoint }}
+        - name: CatalogUrl
+          value: {{ .Values.catalogUrl }}
+        - name: MediaUrl
+          value: {{ .Values.mediaUrl }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: OrderUrl
+          value: {{ .Values.orderUrl }}
+        - name: BasketUrl
+          value: {{ .Values.basketUrl }}
+        - name: ClientUrl
+          value: {{ .Values.clientUrl }}
+        - name: AnalyticsUrl
+          value: {{ .Values.analyticsUrl }}
+        - name: InventoryUrl
+          value: {{ .Values.inventoryUrl }}
+        - name: NewsUrl
+          value: {{ .Values.newsUrl }}
+        - name: BuyerUrl
+          value: {{ .Values.buyerUrl }}
+        - name: DownloadCenterUrl
+          value: {{ .Values.downloadCenterUrl }}
+        - name: ContentUrl
+          value: {{ .Values.contentAdminUrl }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        - name: SellerUrl
+          value: {{ .Values.sellerUrl }}
+        - name: CdnUrl
+          value: {{ .Values.cdnUrl }}
+        - name: GlobalUrl
+          value: {{ .Values.globalUrl }}
+        envFrom:
+        - secretRef:
+            name: b2b-seller-web-secrets
+        ports:
+        - containerPort: 80
