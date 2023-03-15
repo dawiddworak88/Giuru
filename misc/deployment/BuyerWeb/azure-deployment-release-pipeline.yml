@@ -1,0 +1,87 @@
+trigger: none
+
+pr: none
+
+resources:
+  pipelines:
+  - pipeline: BuyerWebBuild
+    source: '[Buyer Web] Build'
+    trigger: 
+      branches:
+        include: 
+        - main
+
+variables:
+- group: global
+- template: './variables.yml'
+- name: k8sReleaseName
+  value: 'b2b-buyer-web'
+- name: helmVersionToInstall
+  value: '3.3.4'
+- name: helmChartPath
+  value: '$(Pipeline.Workspace)/helm-chart'
+
+stages:
+- stage: Production
+  variables:
+  - group: production
+  - group: b2b-buyer-web-production
+  jobs:
+  - deployment:
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment: Production
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: ExtractFiles@1
+            displayName: Extract Helm Chart
+            inputs:
+              archiveFilePatterns: '$(Pipeline.Workspace)/BuyerWebBuild/drop/helm-chart.zip'
+              destinationFolder: $(helmChartPath)
+          - task: HelmInstaller@1
+            displayName: Install Helm
+            inputs:
+              helmVersionToInstall: $(helmVersionToInstall)
+          - task: HelmDeploy@0
+            displayName: Login to Kubernetes
+            inputs:
+              command: login
+              azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+              azureResourceGroup: $(azureResourceGroup)
+              kubernetesCluster: $(kubernetesCluster)
+          - script: |
+              helm upgrade --install --wait \
+              --set image.registry='$(acrLoginServer)' \
+              --set image.repository='$(b2bBuyerWebImageRepository)' \
+              --set image.tag='$(Resources.Pipeline.BuyerWebBuild.RunID)' \
+              --set environment='$(environment)' \
+              --set serverSideRenderingEndpoint='$(serverSideRenderingEndpoint)' \
+              --set organisationId='$(organisationId)' \
+              --set catalogUrl='$(catalogUrl)' \
+              --set analyticsUrl='$(catalogUrl)' \
+              --set mediaUrl='$(mediaUrl)' \
+              --set identityUrl='$(identityUrl)' \
+              --set redisUrl='$(redisUrl)' \
+              --set inventoryUrl='$(inventoryUrl)' \
+              --set clientUrl='$(clientUrl)' \
+              --set basketUrl='$(basketUrl)' \
+              --set orderUrl='$(orderUrl)' \
+              --set newsUrl='$(newsUrl)' \
+              --set downloadCenterUrl='$(downloadCenterUrl)' \
+              --set makeComplaintUrl='$(makeComplaintUrl)' \
+              --set cdnUrl='$(cdnUrl)' \
+              --set contentGraphQlUrl='$(contentGraphQlUrl)' \
+              --set logzIoToken='$(logzIoToken)' \
+              --set logzIoType='$(logzIoType)' \
+              --set logzIoDataCenterSubDomain='$(logzIoDataCenterSubDomain)' \
+              --set openTelemetryTracingCollectorUrl='$(openTelemetryTracingCollectorUrl)' \
+              --set contentGraphQlAuthorizationKey='$(contentGraphQlAuthorizationKey)' \
+              --set buyerWeb.clientId='$(clientId)' \
+              --set buyerWeb.clientSecret='$(clientSecret)' \
+              --set buyerWeb.productAttributes='$(productAttributes)' \
+              --set buyerWeb.googleTagManagerIdentifier='$(googleTagManagerIdentifier)' \
+              --set ingress.buyerwebdomain='$(buyerWebDomain)' \
+              $(k8sReleaseName) $(helmChartPath)
+            displayName: Deploy to Kubernetes
