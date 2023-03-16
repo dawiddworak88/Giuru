@@ -84,12 +84,12 @@ services:
       - 9200:9200
       - 9300:9300
 
-  react-ssr:
+  seller-react-ssr:
     environment: 
       NODE_ENV: development
     volumes:
-      - ../../fe/server:/home/node/aspnetcore-react-ssr/server
-      - ../../fe/src:/home/node/aspnetcore-react-ssr/src
+      - ../../fe/Projects/Seller.Portal/server:/home/node/aspnetcore-react-ssr/server
+      - ../../fe/Projects/Seller.Portal/src:/home/node/aspnetcore-react-ssr/src
 
   sqldata:
     environment:

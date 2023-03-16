@@ -45,11 +45,11 @@ services:
   redis:
     image: redis:alpine
 
-  react-ssr:
-    image: ${REGISTRY:-giuru}/react-ssr:${PLATFORM:-linux}-${TAG:-latest}
+  seller-react-ssr:
+    image: ${REGISTRY:-giuru}/seller-react-ssr:${PLATFORM:-linux}-${TAG:-latest}
     build: 
       context: ../../fe
-      dockerfile: Dockerfile-ssr-local
+      dockerfile: Projects/Seller.Portal/Dockerfile-ssr-local
     restart: unless-stopped
 
   sqldata:
@@ -142,7 +142,7 @@ services:
     depends_on: 
       - sqldata
       - redis
-      - react-ssr
+     # - react-ssr
       - otel-collector
 
   basket-api:
@@ -213,7 +213,7 @@ services:
       dockerfile: Project/Web/Seller/Seller.Web/Dockerfile
     restart: unless-stopped
     depends_on: 
-      - react-ssr
+      - seller-react-ssr
       - analytics-api
       - media-api
       - client-api
@@ -237,7 +237,7 @@ services:
       dockerfile: Project/Web/Buyer/Buyer.Web/Dockerfile
     restart: unless-stopped
     depends_on: 
-      - react-ssr
+      #- react-ssr
       - analytics-api
       - media-api
       - client-api
