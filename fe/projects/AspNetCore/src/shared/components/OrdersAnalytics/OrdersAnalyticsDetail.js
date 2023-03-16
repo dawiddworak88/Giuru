@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import SalesAnalytics from "../../../../../shared/components/AnalyticsDashboard/SalesAnalytics/SalesAnalytics";
+import SalesAnalytics from "../../../../../../shared/components/AnalyticsDashboard/SalesAnalytics/SalesAnalytics";
 
 const OrdersAnalyticsDetail = (props) => {
     return (

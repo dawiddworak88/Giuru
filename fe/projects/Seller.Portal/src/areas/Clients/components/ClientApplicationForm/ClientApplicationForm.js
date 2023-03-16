@@ -5,10 +5,10 @@ import {
     FormControl, Select, MenuItem, FormHelperText
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { Context } from "../../../../../../shared/stores/Store";
-import useForm from "../../../../../../shared/helpers/forms/useForm";
-import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import { Context } from "../../../../../../../shared/stores/Store";
+import useForm from "../../../../../../../shared/helpers/forms/useForm";
+import EmailValidator from "../../../../../../../shared/helpers/validators/EmailValidator";
+import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 const ClientApplicationForm = (props) => {
     const [state, dispatch] = useContext(Context);

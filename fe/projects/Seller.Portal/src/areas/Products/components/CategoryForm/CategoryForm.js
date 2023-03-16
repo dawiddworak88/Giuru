@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import { Context } from "../../../../../../shared/stores/Store";
-import useForm from "../../../../../../shared/helpers/forms/useForm";
+import { Context } from "../../../../../../../shared/stores/Store";
+import useForm from "../../../../../../../shared/helpers/forms/useForm";
 import { TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress } from "@mui/material";
-import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import MediaCloud from "../../../../../../../shared/components/MediaCloud/MediaCloud";
+import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function CategoryForm(props) {
     const [state, dispatch] = useContext(Context);

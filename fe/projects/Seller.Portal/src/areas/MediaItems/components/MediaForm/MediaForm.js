@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
+import MediaCloud from "../../../../../../../shared/components/MediaCloud/MediaCloud";
 
 const MediaForm = (props) => {
     const [images, setImages] = useState([]);

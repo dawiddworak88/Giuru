@@ -3,12 +3,12 @@ import {
     Button, SwipeableDrawer, List, ListItem 
 } from "@mui/material";
 import { Close, AddShoppingCart, ArrowRight } from "@mui/icons-material";
-import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
-import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
+import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import PropTypes from "prop-types";
-import { Context } from "../../../../../shared/stores/Store";
-import ResponsiveImage from "../../../../../shared/components/Picture/ResponsiveImage";
-import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
+import { Context } from "../../../../../../shared/stores/Store";
+import ResponsiveImage from "../../../../../../shared/components/Picture/ResponsiveImage";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
 
 const Sidebar = (props) => {

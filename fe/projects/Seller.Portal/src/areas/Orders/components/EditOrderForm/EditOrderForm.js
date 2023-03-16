@@ -1,7 +1,7 @@
 import React, { useContext, useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import { Context } from "../../../../../../shared/stores/Store";
+import { Context } from "../../../../../../../shared/stores/Store";
 import {
     FormControl, InputLabel, Select, MenuItem, Button,
     Table, TableBody, TableCell, TableContainer, TextField,
@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 import moment from "moment";
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import Files from "../../../../../../shared/components/Files/Files";
+import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
+import Files from "../../../../../../../shared/components/Files/Files";
 
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);

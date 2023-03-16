@@ -1,15 +1,15 @@
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import { Context } from "../../../../../../shared/stores/Store";
+import { Context } from "../../../../../../../shared/stores/Store";
 import { 
     TextField, Button, FormControl, InputLabel, 
     Select, MenuItem, FormHelperText, CircularProgress, 
     Autocomplete
 } from "@mui/material";
-import useForm from "../../../../../../shared/helpers/forms/useForm";
-import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import useForm from "../../../../../../../shared/helpers/forms/useForm";
+import EmailValidator from "../../../../../../../shared/helpers/validators/EmailValidator";
+import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);

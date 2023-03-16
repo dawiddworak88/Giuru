@@ -3,13 +3,13 @@ import { toast } from "react-toastify";
 import Autosuggest from "react-autosuggest";
 import PropTypes from "prop-types";
 import { Button } from "@mui/material";
-import LanguageSwitcher from "../../../../../shared/components/LanguageSwitcher/LanguageSwitcher";
+import LanguageSwitcher from "../../../../../../shared/components/LanguageSwitcher/LanguageSwitcher";
 import HeaderConstants from "./HeaderConstants";
-import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
-import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
-import { Context } from "../../../../../shared/stores/Store";
+import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
+import { Context } from "../../../../../../shared/stores/Store";
 import { ShoppingCart } from '@mui/icons-material';
-import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function Header(props) {
     const [state, dispatch] = useContext(Context);

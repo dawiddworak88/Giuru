@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import useForm from "../../../../../../shared/helpers/forms/useForm";
+import useForm from "../../../../../../../shared/helpers/forms/useForm";
 import { TextField, Button, InputLabel, CircularProgress } from "@mui/material";
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import { Context } from "../../../../../../shared/stores/Store";
+import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
+import { Context } from "../../../../../../../shared/stores/Store";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 

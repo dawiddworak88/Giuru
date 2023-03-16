@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import { Context } from "../../../../../../shared/stores/Store";
-import useForm from "../../../../../../shared/helpers/forms/useForm";
+import { Context } from "../../../../../../../shared/stores/Store";
+import useForm from "../../../../../../../shared/helpers/forms/useForm";
 import { TextField, Button, CircularProgress, InputLabel } from "@mui/material";
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ProductAttributeItemForm(props) {
     const [state, dispatch] = useContext(Context);
