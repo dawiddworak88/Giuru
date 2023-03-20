@@ -3,22 +3,22 @@ import ReactDOMServer from "react-dom/server";
 import { resetServerContext } from 'react-beautiful-dnd';
 import { ServerStyleSheets } from "@mui/styles";
 
-import BuyerOrderItemPage from "../../src/project/AspNetCore/areas/Orders/pages/OrderItemPage/OrderItemPage";
-import BuyerDashboardPage from "../../src/project/AspNetCore/areas/Dashboard/pages/DashboardPage/DashboardPage";
-import DownloadCenterBuyerCategoryPage from "../../src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage";
-import DownloadCenterBuyerPage from "../../src/project/AspNetCore/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage";
-import ApplicationPage from "../../src/project/AspNetCore/areas/Home/pages/ApplicationPage/ApplicationPage";
-import OutletCatalogPage from "../../src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage";
-import NewsItemDetails from "../../src/project/AspNetCore/areas/News/pages/NewsItemPage/NewsItemPage";
-import NewsBuyerPage from "../../src/project/AspNetCore/areas/News/pages/NewsPage/NewsPage";
-import NewOrderPage from "../../src/project/AspNetCore/areas/Orders/pages/NewOrder/NewOrderPage";
-import ListOrdersPage from "../../src/project/AspNetCore/areas/Orders/pages/ListOrders/ListOrdersPage";
-import StatusOrderPage from "../../src/project/AspNetCore/areas/Orders/pages/StatusOrder/StatusOrderPage";
-import HomePage from "../../src/project/AspNetCore/areas/Home/pages/HomePage/HomePage";
-import CategoryPage from "../../src/project/AspNetCore/areas/Products/pages/CategoryPage/CategoryPage";
-import SearchProductsPage from "../../src/project/AspNetCore/areas/Products/pages/SearchProductsPage/SearchProductsPage";
-import AvailableProductsPage from "../../src/project/AspNetCore/areas/Products/pages/AvailableProductsPage/AvailableProductsPage";
-import BuyerProductPage from "../../src/project/AspNetCore/areas/Products/pages/ProductPage/ProductPage";
+import BuyerOrderItemPage from "../../src/areas/Orders/pages/OrderItemPage/OrderItemPage";
+import BuyerDashboardPage from "../../src/areas/Dashboard/pages/DashboardPage/DashboardPage";
+import DownloadCenterBuyerCategoryPage from "../../src/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage";
+import DownloadCenterBuyerPage from "../../src/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage";
+import ApplicationPage from "../../src/areas/Home/pages/ApplicationPage/ApplicationPage";
+import OutletCatalogPage from "../../src/areas/Products/pages/OutletPage/OutletPage";
+import NewsItemDetails from "../../src/areas/News/pages/NewsItemPage/NewsItemPage";
+import NewsBuyerPage from "../../src/areas/News/pages/NewsPage/NewsPage";
+import NewOrderPage from "../../src/areas/Orders/pages/NewOrder/NewOrderPage";
+import ListOrdersPage from "../../src/areas/Orders/pages/ListOrders/ListOrdersPage";
+import StatusOrderPage from "../../src/areas/Orders/pages/StatusOrder/StatusOrderPage";
+import HomePage from "../../src/areas/Home/pages/HomePage/HomePage";
+import CategoryPage from "../../src/areas/Products/pages/CategoryPage/CategoryPage";
+import SearchProductsPage from "../../src/areas/Products/pages/SearchProductsPage/SearchProductsPage";
+import AvailableProductsPage from "../../src/areas/Products/pages/AvailableProductsPage/AvailableProductsPage";
+import BuyerProductPage from "../../src/areas/Products/pages/ProductPage/ProductPage";
 
 const Components = {
 	BuyerOrderItemPage,

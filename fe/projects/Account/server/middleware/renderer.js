@@ -3,11 +3,11 @@ import ReactDOMServer from "react-dom/server";
 import { resetServerContext } from 'react-beautiful-dnd';
 import { ServerStyleSheets } from "@mui/styles";
 
-import RegisterPage from "../../src/project/Account/areas/Accounts/pages/Register/RegisterPage";
-import ResetPasswordPage from "../../src/project/Account/areas/Accounts/pages/ResetPassword/ResetPasswordPage";
-import SignInPage from "../../src/project/Account/areas/Accounts/pages/SignIn/SignInPage";
-import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetPassword/SetPasswordPage";
-import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
+import RegisterPage from "../../src/areas/Accounts/pages/Register/RegisterPage";
+import ResetPasswordPage from "../../src/areas/Accounts/pages/ResetPassword/ResetPasswordPage";
+import SignInPage from "../../src/areas/Accounts/pages/SignIn/SignInPage";
+import SetPasswordPage from "../../src/areas/Accounts/pages/SetPassword/SetPasswordPage";
+import ContentPage from "../../src/areas/Home/pages/Content/ContentPage";
 
 const Components = {
 	RegisterPage,

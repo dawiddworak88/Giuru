@@ -13,8 +13,8 @@ module.exports = {
         contentpage: ["./src/areas/Home/pages/Content/index.js", "./src/areas/Home/pages/Content/ContentPage.scss"]
     },
     output: {
-        publicPath: path.resolve(__dirname, "../be/src/Project/Services/Identity/Identity.Api/wwwroot/dist/js"),
-        path: path.resolve(__dirname, "../be/src/Project/Services/Identity/Identity.Api/wwwroot/dist/js"),
+        publicPath: path.resolve(__dirname, "../../../be/src/Project/Services/Identity/Identity.Api/wwwroot/dist/js"),
+        path: path.resolve(__dirname, "../../../be/src/Project/Services/Identity/Identity.Api/wwwroot/dist/js"),
         filename: "[name].js"
     },
     resolve: {
@@ -27,7 +27,13 @@ module.exports = {
                 exclude: /node_modules/,
                 use: [
                     { 
-                        loader: "babel-loader" 
+                        loader: "babel-loader",
+                        options: {
+                            presets: ["@babel/env", "react-app", "@babel/preset-react"],
+                            ignore: [
+                                "/(node_modules)/"
+                            ]
+                        }
                     }
                 ]
             },
