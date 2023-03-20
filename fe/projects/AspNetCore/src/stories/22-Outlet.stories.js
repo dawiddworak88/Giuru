@@ -1,7 +1,6 @@
-import OutletPage from "../project/AspNetCore/areas/Products/pages/OutletPage/OutletPage";
-import { header, mainNavigation, footer } from "./Shared/AspNetCoreProps";
-import { menuTilesForOrdering } from "./Shared/AspNetCoreProps";
-import "../project/AspNetCore/areas/Products/pages/OutletPage/OutletPage.scss";
+import OutletPage from "../areas/Products/pages/OutletPage/OutletPage";
+import { header, mainNavigation, footer } from "./shared/Props";
+import "../areas/Products/pages/OutletPage/OutletPage.scss";
 
 const catalogForm = {
     title: "Outlet products",
@@ -32,14 +31,14 @@ const catalogForm = {
     }
 };
 
-export const OutletProductsPageStory = () => <OutletPage header={header} menuTiles={menuTilesForOrdering} mainNavigation={mainNavigation} footer={footer} catalog={catalogForm} />;
+export const OutletProductsPageStory = () => <OutletPage header={header} mainNavigation={mainNavigation} footer={footer} catalog={catalogForm} />;
 
 OutletProductsPageStory.story = {
     name: "Outlet products"
 };
 
 const OutletProductStories = {
-    title: "AspNetCore.Products",
+    title: "Products",
     component: OutletProductsPageStory
 };
 

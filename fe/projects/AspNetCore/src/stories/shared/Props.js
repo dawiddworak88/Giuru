@@ -84,9 +84,3 @@ export var footer = {
     { text: "Terms & Conditions", url: "#terms-conditions" }
   ]
 };
-
-export const menuTilesForOrdering = {
-  tiles: [
-    { icon: "ShoppingCart", title: "Orders", url: "#" },
-  ],
-};

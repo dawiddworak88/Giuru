@@ -1,7 +1,7 @@
 import React from "react";
-import "../project/AspNetCore/areas/Products/pages/CategoryPage/CategoryPage.scss";
-import CategoryPage from "../project/AspNetCore/areas/Products/pages/CategoryPage/CategoryPage";
-import { header, mainNavigation, breadcrumbs, footer } from "./Shared/AspNetCoreProps";
+import "../areas/Products/pages/CategoryPage/CategoryPage.scss";
+import CategoryPage from "../areas/Products/pages/CategoryPage/CategoryPage";
+import { header, mainNavigation, breadcrumbs, footer } from "./shared/Props";
 
 function getItems(length) {
 
@@ -55,11 +55,11 @@ var catalog = {
 export const CategoryPageStory = () => <CategoryPage header={header} mainNavigation={mainNavigation} breadcrumbs={breadcrumbs} catalog={catalog} footer={footer} />
 
 CategoryPageStory.story = {
-  name: "Category Page",
+  name: "Category Products Page",
 };
 
 const CategoryStories = {
-  title: "AspNetCore.Category",
+  title: "Products",
   component: CategoryPageStory,
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
-import "../project/AspNetCore/areas/Products/pages/ProductPage/ProductPage.scss";
-import ProductPage from "../project/AspNetCore/areas/Products/pages/ProductPage/ProductPage";
-import { header, breadcrumbs, mainNavigation, files, footer } from "./Shared/AspNetCoreProps";
+import "../areas/Products/pages/ProductPage/ProductPage.scss";
+import ProductPage from "../areas/Products/pages/ProductPage/ProductPage";
+import { header, breadcrumbs, mainNavigation, files, footer } from "./shared/Props";
 
 const images = [
   {
@@ -110,7 +110,7 @@ ProductPageStory.story = {
 };
 
 const ProductStories = {
-  title: "AspNetCore.Product",
+  title: "Products",
   component: ProductPageStory,
 };
 

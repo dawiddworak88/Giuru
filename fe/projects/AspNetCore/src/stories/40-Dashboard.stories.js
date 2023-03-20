@@ -1,6 +1,6 @@
-import DashboardPage from "../project/AspNetCore/areas/Dashboard/pages/DashboardPage/DashboardPage";
-import { header, mainNavigation, footer } from "./Shared/AspNetCoreProps";
-import "../project/AspNetCore/areas/Dashboard/pages/DashboardPage/DashboardPage.scss";
+import DashboardPage from "../areas/Dashboard/pages/DashboardPage/DashboardPage";
+import { header, mainNavigation, footer } from "./shared/Props";
+import "../areas/Dashboard/pages/DashboardPage/DashboardPage.scss";
 
 const componentProps = {
     title: "Order analysis",
@@ -61,11 +61,11 @@ const componentProps = {
 export const DashboardPageStory = () => <DashboardPage header={header} mainNavigation={mainNavigation} ordersAnalyticsDetail={componentProps} footer={footer} />;
 
 DashboardPageStory.story = {
-    name: "Analytics Dashboard"
+    name: "Dashboard"
 };
 
 const DashboardStories = {
-    title: "AspNetCore.Dashboard",
+    title: "Pages",
     component: DashboardPageStory
 };
 

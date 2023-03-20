@@ -1,7 +1,6 @@
-import ListOrders from "../project/AspNetCore/areas/Orders/pages/ListOrders/ListOrdersPage";
-import { header, mainNavigation, footer } from "./Shared/AspNetCoreProps";
-import { menuTilesForOrdering } from "./Shared/AspNetCoreProps";
-import "../project/AspNetCore/areas/Orders/pages/ListOrders/ListOrdersPage.scss";
+import ListOrders from "..//areas/Orders/pages/ListOrders/ListOrdersPage";
+import { header, mainNavigation, footer } from "./shared/Props";
+import "../areas/Orders/pages/ListOrders/ListOrdersPage.scss";
 
 const catalog = {
     title: "Orders",
@@ -71,14 +70,14 @@ const catalog = {
   };
 
 
-export const ListOrdersPageStory = () => <ListOrders header={header} menuTiles={menuTilesForOrdering} mainNavigation={mainNavigation} footer={footer} catalog={catalog} />
+export const ListOrdersPageStory = () => <ListOrders header={header} mainNavigation={mainNavigation} footer={footer} catalog={catalog} />
 
 ListOrdersPageStory.story = {
-    name: "List Orders Page"
+    name: "Orders Page"
 };
 
 const OrdersStories = {
-    title: "AspNetCore.Orders",
+    title: "Orders",
     component: ListOrdersPageStory
 };
 

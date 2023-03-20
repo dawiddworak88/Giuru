@@ -1,7 +1,6 @@
-import NewOrderPage from "../src/project/AspNetCore/areas/Orders/pages/NewOrder/NewOrderPage";
-import { header, mainNavigation, footer } from "./Shared/AspNetCoreProps";
-import { menuTilesForOrdering } from "./Shared/AspNetCoreProps";
-import "../project/AspNetCore/areas/Orders/pages/NewOrder/NewOrderPage.scss";
+import NewOrderPage from "../areas/Orders/pages/NewOrder/NewOrderPage";
+import { header, mainNavigation, footer } from "./shared/Props";
+import "../areas/Orders/pages/NewOrder/NewOrderPage.scss";
 
 const orderForm = {
     title: "Order",
@@ -18,18 +17,17 @@ const orderForm = {
     saveText: "Place order",
     searchLabel: "Search",
     dropOrSelectFilesLabel: "Drag and drop here, or click to select an order file",
-    noResultsLabel: "No results have been found",
-    
+    noResultsLabel: "No results have been found"
 };
 
-export const NewOrderPageStory = () => <NewOrderPage header={header} menuTiles={menuTilesForOrdering}  mainNavigation={mainNavigation} footer={footer} newOrderForm={orderForm} />;
+export const NewOrderPageStory = () => <NewOrderPage header={header} mainNavigation={mainNavigation} footer={footer} newOrderForm={orderForm} />;
 
 NewOrderPageStory.story = {
-    name: "New Order Page"
+    name: "Order Page"
 };
 
 const NewOrderStories = {
-    title: "AspNetCore.Orders",
+    title: "Orders",
     component: NewOrderPageStory
 };
 

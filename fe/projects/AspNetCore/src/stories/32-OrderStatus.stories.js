@@ -1,7 +1,6 @@
-import StatusOrder from "../project/AspNetCore/areas/Orders/pages/StatusOrder/StatusOrderPage";
-import { header, mainNavigation, footer } from "./Shared/AspNetCoreProps";
-import { menuTilesForOrdering } from "./Shared/AspNetCoreProps";
-import "../project/AspNetCore/areas/Orders/pages/StatusOrder/StatusOrderPage.scss";
+import StatusOrder from "../areas/Orders/pages/StatusOrder/StatusOrderPage";
+import { header, mainNavigation, footer } from "./shared/Props";
+import "../areas/Orders/pages/StatusOrder/StatusOrderPage.scss";
 
 const statusOrder = {
     title: "Status order",
@@ -38,14 +37,14 @@ const statusOrder = {
     ]
 };
 
-export const StatusOrderPageStory = () => <StatusOrder header={header} menuTiles={menuTilesForOrdering} mainNavigation={mainNavigation} footer={footer} statusOrder={statusOrder} />;
+export const StatusOrderPageStory = () => <StatusOrder header={header} mainNavigation={mainNavigation} footer={footer} statusOrder={statusOrder} />;
 
 StatusOrderPageStory.story = {
-    name: "Status order Page"
+    name: "Status Order Page"
 };
 
 const StatusOrderStories = {
-    title: "AspNetCore.Orders",
+    title: "Orders",
     component: StatusOrderPageStory
 };
 

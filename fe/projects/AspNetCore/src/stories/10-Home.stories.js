@@ -1,7 +1,7 @@
 import React from "react";
-import "../project/AspNetCore/areas/Home/pages/HomePage/HomePage.scss";
-import HomePage from "../project/AspNetCore/areas/Home/pages/HomePage/HomePage";
-import { header, mainNavigation, footer } from "../../../../stories/Shared/AspNetCoreProps";
+import "../areas/Home/pages/HomePage/HomePage.scss";
+import HomePage from "../areas/Home/pages/HomePage/HomePage";
+import { header, mainNavigation, footer } from "./shared/Props";
 
 var heroSlider = {
   items: [
@@ -298,7 +298,7 @@ HomePageStory.story = {
 };
 
 const HomeStories = {
-  title: "AspNetCore.Pages",
+  title: "Pages",
   component: HomePageStory,
 };
 

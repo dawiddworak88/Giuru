@@ -1,7 +1,6 @@
-import AvailableProducts from "../project/AspNetCore/areas/Products/pages/AvailableProductsPage/AvailableProductsPage";
-import { header, mainNavigation, footer } from "./Shared/AspNetCoreProps";
-import { menuTilesForOrdering } from "./Shared/AspNetCoreProps";
-import "../project/AspNetCore/areas/Products/pages/AvailableProductsPage/AvailableProductsPage.scss";
+import AvailableProducts from "../areas/Products/pages/AvailableProductsPage/AvailableProductsPage";
+import { header, mainNavigation, footer } from "./shared/Props";
+import "../areas/Products/pages/AvailableProductsPage/AvailableProductsPage.scss";
 
 const catalogForm = {
     title: "Available products",
@@ -51,14 +50,14 @@ const catalogForm = {
       }
 };
 
-export const AvailableProductsPageStory = () => <AvailableProducts header={header} menuTiles={menuTilesForOrdering} mainNavigation={mainNavigation} footer={footer} catalog={catalogForm} />;
+export const AvailableProductsPageStory = () => <AvailableProducts header={header} mainNavigation={mainNavigation} footer={footer} catalog={catalogForm} />;
 
 AvailableProductsPageStory.story = {
     name: "Available products"
 };
 
 const AvailableProductStories = {
-    title: "AspNetCore.Products",
+    title: "Products",
     component: AvailableProductsPageStory
 };
 
