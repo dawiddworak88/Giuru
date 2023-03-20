@@ -24,8 +24,8 @@ module.exports = {
         productpage: ["./src/areas/Products/pages/ProductPage/index.js", "./src/areas/Products/pages/ProductPage/ProductPage.scss"]
     },
     output: {
-        publicPath: path.resolve(__dirname, "../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
-        path: path.resolve(__dirname, "../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
+        publicPath: path.resolve(__dirname, "../../../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
+        path: path.resolve(__dirname, "../../../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
         filename: "[name].js"
     },
     resolve: {
