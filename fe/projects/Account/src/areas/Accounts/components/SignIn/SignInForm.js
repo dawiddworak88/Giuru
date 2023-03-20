@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { TextField, Button } from "@mui/material";
-import useForm from "../../../../../../shared/helpers/forms/useForm";
-import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
-import PasswordValidator from "../../../../../../shared/helpers/validators/PasswordValidator";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
+import useForm from "../../../../shared/helpers/forms/useForm";
+import EmailValidator from "../../../../../../../shared/helpers/validators/EmailValidator";
+import PasswordValidator from "../../../../../../../shared/helpers/validators/PasswordValidator";
+import NavigationHelper from "../../../../../../../shared/helpers/globals/NavigationHelper";
 
 function SignInForm(props) {
 
