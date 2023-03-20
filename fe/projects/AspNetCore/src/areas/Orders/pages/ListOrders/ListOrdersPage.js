@@ -6,7 +6,7 @@ import Store from "../../../../../../shared/stores/Store";
 import Header from "../../../../shared/components/Header/Header";
 import MainNavigation from "../../../../shared/components/MainNavigation/MainNavigation";
 import Footer from "../../../../../../shared/components/Footer/Footer";
-import LocaleHelper from "../../../../../../shared/helpers/globals/LocaleHelper";
+import LocaleHelper from "../.../.../../../../shared/helpers/globals/LocaleHelper";
 import Catalog from "../../../../../../shared/components/Catalog/Catalog";
 
 const ListOrdersPage = (props) => {

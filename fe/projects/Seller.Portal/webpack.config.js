@@ -51,6 +51,11 @@ module.exports = {
         categorypage: ["./src/areas/Products/pages/CategoryPage/index.js", "./src/areas/Products/pages/CategoryPage/CategoryPage.scss"],
         settingspage: ["./src/areas/Settings/pages/SettingsPage/index.js", "./src/areas/Settings/pages/SettingsPage/SettingsPage.scss"]
     },
+    output: {
+        publicPath: path.resolve(__dirname, "../../../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),
+        path: path.resolve(__dirname, "../../../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),
+        filename: "[name].js"
+    },
     resolve: {
         extensions: [".js", ".jsx"]
     },
@@ -61,8 +66,14 @@ module.exports = {
                 exclude: /node_modules/,
                 use: [
                     { 
-                        loader: "babel-loader" 
-                    }
+                        loader: "babel-loader",
+                        options: {
+                            presets: ["@babel/env", "react-app", "@babel/preset-react"],
+                            ignore: [
+                                "/(node_modules)/"
+                            ]
+                        }
+                    },
                 ]
             },
             {

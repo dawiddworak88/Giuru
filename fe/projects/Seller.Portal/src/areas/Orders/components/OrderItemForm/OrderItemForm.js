@@ -1,13 +1,13 @@
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import { Context } from "../../../../../../../shared/stores/Store";
+import { Context } from "../../../../shared/stores/Store";
 import {
     FormControl, InputLabel, Select, MenuItem, 
     Button, TextField, CircularProgress
 } from "@mui/material";
 import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
-import OrderItemStatusChanges from "../../../../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
+import OrderItemStatusChanges from "../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
 import moment from "moment";
 
 const OrderItemForm = (props) => {

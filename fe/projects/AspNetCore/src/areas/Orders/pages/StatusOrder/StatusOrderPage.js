@@ -7,7 +7,7 @@ import Header from "../../../../shared/components/Header/Header";
 import MainNavigation from "../../../../shared/components/MainNavigation/MainNavigation";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 import StatusOrder from "../../components/StatusOrder/StatusOrder";
-import LocaleHelper from "../../../../../../shared/helpers/globals/LocaleHelper";
+import LocaleHelper from "../.../.../../../../shared/helpers/globals/LocaleHelper";
 
 const StatusOrderPage = (props) => {
 

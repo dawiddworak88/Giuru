@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import CountrySalesAnalytics from "../../../../../../../shared/components/AnalyticsDashboard/CountrySalesAnalytics/CountrySalesAnalytics";
-import SalesAnalytics from "../../../../../../../shared/components/AnalyticsDashboard/SalesAnalytics/SalesAnalytics";
-import ProductsSalesAnalytics from "../../../../../../../shared/components/AnalyticsDashboard/ProductsSalesAnalytics/ProductsSalesAnalytics";
-import ClientsSalesAnalytics from "../../../../../../../shared/components/AnalyticsDashboard/ClientSalesAnalytics/ClientsSalesAnalytics";
+import CountrySalesAnalytics from "../../../../shared/components/AnalyticsDashboard/CountrySalesAnalytics/CountrySalesAnalytics";
+import SalesAnalytics from "../../../../shared/components/AnalyticsDashboard/SalesAnalytics/SalesAnalytics";
+import ProductsSalesAnalytics from "../../../../shared/components/AnalyticsDashboard/ProductsSalesAnalytics/ProductsSalesAnalytics";
+import ClientsSalesAnalytics from "../../../../shared/components/AnalyticsDashboard/ClientSalesAnalytics/ClientsSalesAnalytics";
 
 const DashboardDetail = (props) => {
     return (

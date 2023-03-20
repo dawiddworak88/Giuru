@@ -7,10 +7,10 @@ import {
 import {
     PictureAsPdf, Attachment
 } from "@mui/icons-material";
-import MediaCloud from "../../../../../../../shared/components/MediaCloud/MediaCloud";
+import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
 import NavigationHelper from "../../../../../../../shared/helpers/globals/NavigationHelper";
-import useForm from "../../../../../../../shared/helpers/forms/useForm";
-import { Context } from "../../../../../../../shared/stores/Store";
+import useForm from "../../../../shared/helpers/forms/useForm";
+import { Context } from "../../../../shared/stores/Store";
 import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 const MediaItemForm = (props) => {

@@ -5,7 +5,7 @@ import { useDropzone } from "react-dropzone";
 import PropTypes from "prop-types";
 import { DatePicker, LocalizationProvider } from "@mui/lab";
 import Autosuggest from "react-autosuggest";
-import { Context } from "../../../../../../../shared/stores/Store";
+import { Context } from "../../../../shared/stores/Store";
 import { Delete, AddShoppingCartRounded } from "@mui/icons-material"
 import {
     Fab, Table, TableBody, TableCell, TableContainer, Autocomplete, 
@@ -15,7 +15,7 @@ import moment from "moment";
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import QueryStringSerializer from "../../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../../../../../../shared/constants/OrderFormConstants";
-import ConfirmationDialog from "../../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
+import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
 import IconConstants from "../../../../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
 
