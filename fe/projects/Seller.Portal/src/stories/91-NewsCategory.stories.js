@@ -1,7 +1,7 @@
 import React from "react";
-import CategoryPage from "../project/Seller.Portal/areas/News/pages/CategoryPage/CategoryPage";
-import { header, menuTiles, footer } from "./Shared/Props";
-import "../project/Seller.Portal/areas/News/pages/CategoryPage/CategoryPage.scss";
+import CategoryPage from "../areas/News/pages/CategoryPage/CategoryPage";
+import { header, menuTiles, footer } from "./shared/Props";
+import "../areas/News/pages/CategoryPage/CategoryPage.scss";
 
 const formData = {
   title: "Category",
@@ -18,7 +18,7 @@ NewsCategoryPageStory.story = {
 };
 
 const SellerNewsCategoryStories = {
-  title: "SellerPortal.News",
+  title: "NewsItems",
   component: NewsCategoryPageStory,
 };
 

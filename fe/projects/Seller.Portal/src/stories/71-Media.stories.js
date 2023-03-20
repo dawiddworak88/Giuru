@@ -1,7 +1,7 @@
 import React from "react";
-import MediaPage from "../project/Seller.Portal/areas/MediaItems/pages/MediaPage/MediaPage";
-import { header, menuTiles, footer } from "./Shared/Props";
-import "../project/Seller.Portal/areas/MediaItems/pages/MediaPage/MediaPage.scss";
+import MediaPage from "../areas/MediaItems/pages/MediaPage/MediaPage";
+import { header, menuTiles, footer } from "./shared/Props";
+import "../areas/MediaItems/pages/MediaPage/MediaPage.scss";
 
 const formData = {
   title: "Media",
@@ -21,7 +21,7 @@ MediaPageStory.story = {
 };
 
 const SellerMediaStories = {
-  title: "SellerPortal.Media",
+  title: "MediaItems",
   component: MediaPageStory,
 };
 

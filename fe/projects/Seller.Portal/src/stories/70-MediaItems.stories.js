@@ -1,10 +1,10 @@
 import React from "react";
-import InventoriesPage from "../project/Seller.Portal/areas/Inventory/pages/InventoriesPage/InventoriesPage";
-import { header, menuTiles, footer } from "./Shared/Props";
-import "../project/Seller.Portal/areas/Inventory/pages/InventoriesPage/InventoriesPage.scss";
+import MediasPage from "../areas/MediaItems/pages/MediaItemsPage/MediaItemsPage";
+import { header, menuTiles, footer } from "./shared/Props";
+import "../areas/MediaItems/pages/MediaItemsPage/MediaItemsPage.scss";
 
-const formData = {
-  title: "Inventory",
+const catalog = {
+  title: "Media",
   newText: "New inventory item",
   newUrl: "#",
   noLabel: "No",
@@ -77,15 +77,15 @@ const formData = {
   }
 };
 
-export const InventoriesPageStory = () => <InventoriesPage header={header} menuTiles={menuTiles} footer={footer} catalog={formData} />;
+export const MediasPageStory = () => <MediasPage header={header} menuTiles={menuTiles} footer={footer} catalog={catalog} />;
 
-InventoriesPageStory.story = {
-  name: "Inventories Page",
+MediasPageStory.story = {
+  name: "MediaItems Page",
 };
 
-const SellerInventoriesStories = {
-  title: "SellerPortal.Inventory",
-  component: InventoriesPageStory,
+const SellerMediasStories = {
+  title: "MediaItems",
+  component: MediasPageStory,
 };
 
-export default SellerInventoriesStories;
+export default SellerMediasStories;

@@ -1,7 +1,7 @@
 import React from "react";
-import OutletsPage from "../project/Seller.Portal/areas/Inventory/pages/OutletsPage/OutletsPage";
-import { header, menuTiles, footer } from "./Shared/Props";
-import "../project/Seller.Portal/areas/Inventory/pages/OutletsPage/OutletsPage.scss";
+import OutletsPage from "../areas/Inventory/pages/OutletsPage/OutletsPage";
+import { header, menuTiles, footer } from "./shared/Props";
+import "../areas/Inventory/pages/OutletsPage/OutletsPage.scss";
 
 const catalog = {
   title: "Outlet",
@@ -80,11 +80,11 @@ const catalog = {
 export const OutletPageStory = () => <OutletsPage header={header} menuTiles={menuTiles} footer={footer} catalog={catalog} />;
 
 OutletPageStory.story = {
-  name: "Outlet Page",
+  name: "OutletItems Page",
 };
 
 const SellerOutletsStories = {
-  title: "SellerPortal.Outlet",
+  title: "Inventories",
   component: OutletPageStory,
 };
 

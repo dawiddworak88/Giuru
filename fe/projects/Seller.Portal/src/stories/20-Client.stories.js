@@ -1,7 +1,7 @@
 import React from "react";
-import "../project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage.scss";
-import ClientPage from "../project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage";
-import { header, menuTiles, footer } from "./Shared/Props";
+import "../areas/Clients/pages/ClientPage/ClientPage.scss";
+import ClientPage from "../areas/Clients/pages/ClientPage/ClientPage";
+import { header, menuTiles, footer } from "./shared/Props";
 
 var clientForm = {
   accountText: "Create account",
@@ -31,11 +31,11 @@ var clientForm = {
 export const ClientDetailPageStory = () => <ClientPage header={header} menuTiles={menuTiles} clientForm={clientForm} footer={footer} />
 
 ClientDetailPageStory.story = {
-  name: "Client Detail Page",
+  name: "Client Page",
 };
 
 const SellerClientStories = {
-  title: "SellerPortal.Client",
+  title: "Clients",
   component: ClientDetailPageStory,
 };
 

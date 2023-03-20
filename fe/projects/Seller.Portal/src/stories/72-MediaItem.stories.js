@@ -1,7 +1,7 @@
 import React from "react";
-import MediaItemPage from "../project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/MediaItemPage";
-import { header, menuTiles, footer } from "./Shared/Props";
-import "../project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/MediaItemPage.scss";
+import MediaItemPage from "../areas/MediaItems/pages/MediaItemPage/MediaItemPage";
+import { header, menuTiles, footer } from "./shared/Props";
+import "../areas/MediaItems/pages/MediaItemPage/MediaItemPage.scss";
 
 const formData = {
   title: "Media",
@@ -34,11 +34,11 @@ const formData = {
 export const MediaItemPageStory = () => <MediaItemPage header={header} menuTiles={menuTiles} footer={footer} mediaItemForm={formData} />;
 
 MediaItemPageStory.story = {
-  name: "Media item Page",
+  name: "MediaItem Page",
 };
 
 const SellerMediaItemStories = {
-  title: "SellerPortal.Media",
+  title: "MediaItems",
   component: MediaItemPageStory,
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
-import "../project/Seller.Portal/areas/Products/pages/CategoryPage/CategoryPage.scss";
-import CategoryPage from "../project/Seller.Portal/areas/Products/pages/CategoryPage/CategoryPage";
-import { header, menuTiles, footer } from "./Shared/Props";
+import "../areas/Products/pages/CategoryPage/CategoryPage.scss";
+import CategoryPage from "../areas/Products/pages/CategoryPage/CategoryPage";
+import { header, menuTiles, footer } from "./shared/Props";
 
 var categoryForm = {
   title: "Category",
@@ -31,7 +31,7 @@ CategoryPageStory.story = {
 };
 
 const SellerCategoryStories = { 
-  title: "SellerPortal.Category",
+  title: "Products",
   component: CategoryPageStory,
 };
 

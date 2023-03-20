@@ -1,7 +1,7 @@
 import React from "react";
 import "../project/Account/areas/Accounts/pages/SetPassword/SetPasswordPage.scss";
 import SetPasswordPage from "../project/Account/areas/Accounts/pages/SetPassword/SetPasswordPage";
-import { header, footer } from "./Shared/Props";
+import { header, footer } from "./shared/Props";
 
 var setPasswordForm = {
   submitUrl: "#",

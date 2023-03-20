@@ -1,7 +1,7 @@
 import React from "react";
-import "../project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage.scss";
-import ProductPage from "../project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage";
-import { header, menuTiles, footer } from "./Shared/Props";
+import "../areas/Products/pages/ProductPage/ProductPage.scss";
+import ProductPage from "../areas/Products/pages/ProductPage/ProductPage";
+import { header, menuTiles, footer } from "./shared/Props";
 
 var productForm = {
   title: "Product",
@@ -286,7 +286,7 @@ ProductPageStory.story = {
 };
 
 const SellerProductStories = {
-  title: "SellerPortal.Product",
+  title: "Products",
   component: ProductPageStory,
 };
 

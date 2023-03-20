@@ -1,7 +1,7 @@
 import React from "react";
-import NewsItemPage from "../project/Seller.Portal/areas/News/pages/NewsItemPage/NewsItemPage";
-import { header, menuTiles, footer } from "./Shared/Props";
-import "../project/Seller.Portal/areas/News/pages/NewsItemPage/NewsItemPage.scss";
+import NewsItemPage from "../areas/News/pages/NewsItemPage/NewsItemPage";
+import { header, menuTiles, footer } from "./shared/Props";
+import "../areas/News/pages/NewsItemPage/NewsItemPage.scss";
 
 const formData = {
   title: "News item",
@@ -23,11 +23,11 @@ const formData = {
 export const NewsItemPageStory = () => <NewsItemPage header={header} menuTiles={menuTiles} footer={footer} newsItemForm={formData}/>;
 
 NewsItemPageStory.story = {
-  name: "News item page",
+  name: "NewsItem page",
 };
 
 const SellerNewsItemStories = {
-  title: "SellerPortal.News",
+  title: "NewsItems",
   component: NewsItemPageStory,
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import "../project/Account/areas/Accounts/pages/SignIn/SignInPage.scss";
 import SignInPage from "../project/Account/areas/Accounts/pages/SignIn/SignInPage";
-import { header, footer } from "./Shared/Props";
+import { header, footer } from "./shared/Props";
 
 var signInForm = {
   emailRequiredErrorMessage: "Enter e-mail address",

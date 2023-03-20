@@ -1,7 +1,7 @@
 import React from "react";
-import "../project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage.scss";
-import ProductsPage from "../project/Seller.Portal/areas/Products/pages/ProductsPage/ProductsPage";
-import { header, menuTiles, footer } from "./Shared/Props";
+import "../areas/Products/pages/ProductPage/ProductPage.scss";
+import ProductsPage from "../areas/Products/pages/ProductsPage/ProductsPage";
+import { header, menuTiles, footer } from "./shared/Props";
 
 var catalog = {
   title: "Products",
@@ -77,7 +77,7 @@ ProductsPageStory.story = {
 };
 
 const SellerProductStories = {
-  title: "SellerPortal.Products",
+  title: "Products",
   component: ProductsPageStory,
 };
 

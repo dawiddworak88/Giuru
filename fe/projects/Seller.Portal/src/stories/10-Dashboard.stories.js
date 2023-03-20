@@ -1,7 +1,7 @@
 import React from "react";
-import DashboardPage from "../project/Seller.Portal/areas/Dashboard/pages/DashboardPage/DashboardPage";
+import DashboardPage from "../areas/Dashboard/pages/DashboardPage/DashboardPage";
 import { header, menuTiles, footer } from "./shared/Props";
-import "../project/Seller.Portal/areas/Dashboard/pages/DashboardPage/DashboardPage.scss";
+import "../areas/Dashboard/pages/DashboardPage/DashboardPage.scss";
 
 const componentProps = {
     title: "Dashboard",
@@ -107,7 +107,7 @@ DashboardPageStory.story = {
 };
 
 const SellerDashboardStories = {
-  title: "SellerPortal.Dashboard",
+  title: "Dashboard",
   component: DashboardPageStory
 };
 

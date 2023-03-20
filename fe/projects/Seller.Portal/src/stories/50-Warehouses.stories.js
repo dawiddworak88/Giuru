@@ -1,7 +1,7 @@
 import React from "react";
-import WarehousesPage from "../project/Seller.Portal/areas/Inventory/pages/WarehousesPage/WarehousesPage";
-import { header, menuTiles, footer } from "./Shared/Props";
-import "../project/Seller.Portal/areas/Inventory/pages/WarehousesPage/WarehousesPage.scss";
+import WarehousesPage from "../areas/Inventory/pages/WarehousesPage/WarehousesPage";
+import { header, menuTiles, footer } from "./shared/Props";
+import "../areas/Inventory/pages/WarehousesPage/WarehousesPage.scss";
 
 const formData = {
   title: "Warehouses",
@@ -72,11 +72,11 @@ const formData = {
 export const WarehousesPageStory = () => <WarehousesPage header={header} menuTiles={menuTiles} footer={footer} catalog={formData}/>;
 
 WarehousesPageStory.story = {
-  name: "Warehouse Page",
+  name: "Warehouses Page",
 };
 
 const SellerWarehousesStories = {
-  title: "SellerPortal.Warehouses",
+  title: "Warehouses",
   component: WarehousesPageStory,
 };
 

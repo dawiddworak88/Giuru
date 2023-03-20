@@ -1,7 +1,7 @@
 import React from "react";
-import NewsPage from "../project/Seller.Portal/areas/News/pages/NewsPage/NewsPage";
-import { header, menuTiles, footer } from "./Shared/Props";
-import "../project/Seller.Portal/areas/News/pages/NewsPage/NewsPage.scss";
+import NewsPage from "../areas/News/pages/NewsPage/NewsPage";
+import { header, menuTiles, footer } from "./shared/Props";
+import "../areas/News/pages/NewsPage/NewsPage.scss";
 
 const catalogData = {
   title: "News",
@@ -72,11 +72,11 @@ const catalogData = {
 export const NewsPageStory = () => <NewsPage header={header} menuTiles={menuTiles} footer={footer} catalog={catalogData}/>;
 
 NewsPageStory.story = {
-  name: "News Page",
+  name: "NewsItems Page",
 };
 
 const SellerNewsStories = {
-  title: "SellerPortal.News",
+  title: "NewsItems",
   component: NewsPageStory,
 };
 

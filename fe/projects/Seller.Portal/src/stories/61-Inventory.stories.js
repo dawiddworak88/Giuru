@@ -1,7 +1,7 @@
 import React from "react";
-import InventoryPage from "../project/Seller.Portal/areas/Inventory/pages/InventoryPage/InventoryPage";
-import { header, menuTiles, footer } from "./Shared/Props";
-import "../project/Seller.Portal/areas/Inventory/pages/InventoryPage/InventoryPage.scss";
+import InventoryPage from "../areas/Inventory/pages/InventoryPage/InventoryPage";
+import { header, menuTiles, footer } from "./shared/Props";
+import "../areas/Inventory/pages/InventoryPage/InventoryPage.scss";
 
 const formData = {
   title: "Inventory",
@@ -52,11 +52,11 @@ const formData = {
 export const InventoryPageStory = () => <InventoryPage header={header} menuTiles={menuTiles} footer={footer} inventoryForm={formData} />;
 
 InventoryPageStory.story = {
-  name: "Inventory Add Page",
+  name: "Inventory Page",
 };
 
 const SellerInventoryStories = {
-  title: "SellerPortal.Inventory",
+  title: "Inventories",
   component: InventoryPageStory,
 };
 
