@@ -1,6 +1,6 @@
 import React from "react";
-import "../project/Account/areas/Accounts/pages/SignIn/SignInPage.scss";
-import SignInPage from "../project/Account/areas/Accounts/pages/SignIn/SignInPage";
+import "../areas/Accounts/pages/SignIn/SignInPage.scss";
+import SignInPage from "../areas/Accounts/pages/SignIn/SignInPage";
 import { header, footer } from "./shared/Props";
 
 var signInForm = {
@@ -16,11 +16,11 @@ var signInForm = {
 export const SignInPageStory = () => <SignInPage header={header} signInForm={signInForm} footer={footer} />
 
 SignInPageStory.story = {
-  name: "Sign in Page",
+  name: "SignIn Page",
 };
 
 const SignInStories = {
-  title: "Account.Pages",
+  title: "Pages",
   component: SignInPageStory,
 };
 

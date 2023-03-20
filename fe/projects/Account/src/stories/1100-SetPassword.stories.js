@@ -1,6 +1,6 @@
 import React from "react";
-import "../project/Account/areas/Accounts/pages/SetPassword/SetPasswordPage.scss";
-import SetPasswordPage from "../project/Account/areas/Accounts/pages/SetPassword/SetPasswordPage";
+import "../areas/Accounts/pages/SetPassword/SetPasswordPage.scss";
+import SetPasswordPage from "../areas/Accounts/pages/SetPassword/SetPasswordPage";
 import { header, footer } from "./shared/Props";
 
 var setPasswordForm = {
@@ -16,11 +16,11 @@ var setPasswordForm = {
 export const SetPasswordPageStory = () => <SetPasswordPage header={header} setPasswordForm={setPasswordForm} footer={footer} />;
 
 SetPasswordPageStory.story = {
-  name: "Set Password Page",
+  name: "SetPassword Page",
 };
 
 const SetPasswordStories = {
-  title: "Account.Pages",
+  title: "Pages",
   component: SetPasswordPageStory,
 };
 
