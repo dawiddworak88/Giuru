@@ -1,15 +1,15 @@
 import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import { Context } from "../../../../../../shared/stores/Store"
+import { Context } from "../../../../shared/stores/Store"
 import {
     Stepper, Step, StepLabel, StepContent, TextField, Button, FormHelperText,
     FormControl, InputLabel, Select, MenuItem, NoSsr, FormControlLabel, Checkbox
 } from "@mui/material";
-import useForm from "../../../../../../shared/helpers/forms/useForm";
-import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import useForm from "../../../../shared/helpers/forms/useForm";
+import EmailValidator from "../../../../../../../shared/helpers/validators/EmailValidator";
+import NavigationHelper from "../../../../../../../shared/helpers/globals/NavigationHelper";
+import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 const ApplicationForm = (props) => {
     const [state, dispatch] = useContext(Context);

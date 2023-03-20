@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
 import { Carousel } from "react-responsive-carousel";
-import LazyLoadConstants from "../../../../../../shared/constants/LazyLoadConstants";
-import ResponsiveImage from "../../../../../../shared/components/Picture/ResponsiveImage";
+import LazyLoadConstants from "../../../../../../../shared/constants/LazyLoadConstants";
+import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
 
 function HeroSlider(props) {
 

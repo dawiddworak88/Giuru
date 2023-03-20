@@ -6,19 +6,19 @@ import PropTypes from "prop-types";
 import { LocalizationProvider, DatePicker } from "@mui/lab";
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import Autosuggest from "react-autosuggest";
-import { Context } from "../../../../../../shared/stores/Store";
+import { Context } from "../../../../shared/stores/Store";
 import { Delete, AddShoppingCartRounded } from "@mui/icons-material";
 import {
     Fab, Table, TableBody, TableCell, TableContainer, FormControlLabel,
     TableHead, TableRow, Paper, TextField, Button, CircularProgress, Checkbox, NoSsr
 } from "@mui/material";
 import moment from "moment";
-import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
-import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
-import ConfirmationDialog from "../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
-import IconConstants from "../../../../../../shared/constants/IconConstants";
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
+import QueryStringSerializer from "../../../../../../../shared/helpers/serializers/QueryStringSerializer";
+import OrderFormConstants from "../../../../../../../shared/constants/OrderFormConstants";
+import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
+import IconConstants from "../../../../../../../shared/constants/IconConstants";
+import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
+import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);

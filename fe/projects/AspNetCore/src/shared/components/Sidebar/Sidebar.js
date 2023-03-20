@@ -6,8 +6,8 @@ import { Close, AddShoppingCart, ArrowRight } from "@mui/icons-material";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import PropTypes from "prop-types";
-import { Context } from "../../../../../../shared/stores/Store";
-import ResponsiveImage from "../../../../../../shared/components/Picture/ResponsiveImage";
+import { Context } from "../../../shared/stores/Store";
+import ResponsiveImage from "../../../shared/components/Picture/ResponsiveImage";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
 

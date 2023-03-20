@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import Carousel from "react-multi-carousel";
-import ResponsiveImage from "../../../../../../shared/components/Picture/ResponsiveImage";
+import ResponsiveImage from "../../../shared/components/Picture/ResponsiveImage";
 import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../../../shared/constants/LazyLoadConstants";
 import CarouselConstants from "../Carousel/CarouselConstants";

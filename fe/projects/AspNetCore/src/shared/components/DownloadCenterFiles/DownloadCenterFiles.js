@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useContext } from "react";
 import PropTypes from "prop-types";
 import KeyConstants from "../../../../../../shared/constants/KeyConstants";
-import { Context } from "../../../../../../shared/stores/Store";
+import { Context } from "../../../shared/stores/Store";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button, Tooltip,

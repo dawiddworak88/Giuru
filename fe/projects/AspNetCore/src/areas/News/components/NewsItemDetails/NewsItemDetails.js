@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
-import { CalendarToday, PictureAsPdf, Folder, Attachment } from "@mui/icons-material";
-import LazyLoadConstants from "../../../../../../shared/constants/LazyLoadConstants";
-import ResponsiveImage from "../../../../../../shared/components/Picture/ResponsiveImage";
+import { CalendarToday } from "@mui/icons-material";
+import LazyLoadConstants from "../../../../../../../shared/constants/LazyLoadConstants";
+import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
 import { Hash } from "react-feather"
 import {marked} from "marked";
 import moment from "moment";
-import Files from "../../../../../../shared/components/Files/Files";
+import Files from "../../../../shared/components/Files/Files";
 
 const NewsItemDetails = (props) => {
     return (

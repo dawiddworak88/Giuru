@@ -4,11 +4,11 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { Button } from "@mui/material";
 import ImageGallery from "react-image-gallery";
-import Files from "../../../../../../shared/components/Files/Files";
-import { Context } from "../../../../../../shared/stores/Store";
+import Files from "../../../../shared/components/Files/Files";
+import { Context } from "../../../../shared/stores/Store";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
 import Modal from "../../../../shared/components/Modal/Modal";
 import { ExpandMore, ExpandLess } from "@mui/icons-material"
 import { marked } from "marked";

@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useState } from "react";
 import PropTypes from "prop-types";
-import { Context } from "../../../../../../shared/stores/Store";
+import { Context } from "../../../../shared/stores/Store";
 import { toast } from "react-toastify";
 import {
     Table, TableBody, TableCell, TableContainer,
@@ -9,9 +9,9 @@ import {
 } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 import moment from "moment";
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import Files from "../../../../../../shared/components/Files/Files";
-import ConfirmationDialog from "../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
+import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
+import Files from "../../../../shared/components/Files/Files";
+import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
 
 function StatusOrder(props) {
     const [state, dispatch] = useContext(Context);
