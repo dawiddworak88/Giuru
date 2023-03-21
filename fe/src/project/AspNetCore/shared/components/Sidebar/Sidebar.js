@@ -130,12 +130,12 @@ const Sidebar = (props) => {
                                                         }
                                                     </a>
                                                     <div className="stock-details">
-                                                        {carouselItem.availableQuantity && carouselItem.availableQuantity > 0 &&
+                                                        {carouselItem.availableQuantity > 0 && carouselItem.availableQuantity &&
                                                             <div className="stock">
                                                                 {labels.inStockLabel} {carouselItem.availableQuantity}
                                                             </div>
                                                         }
-                                                        {carouselItem.availableOutletQuantity && carouselItem.availableOutletQuantity > 0 &&
+                                                        {carouselItem.availableOutletQuantity > 0 && carouselItem.availableOutletQuantity &&
                                                             <div className="stock">
                                                                 {labels.inOutletLabel} {carouselItem.availableOutletQuantity} {carouselItem.outletTitle && <span>({carouselItem.outletTitle})</span>}
                                                             </div>
