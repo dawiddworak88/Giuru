@@ -88,22 +88,22 @@ services:
     environment: 
       NODE_ENV: development
     volumes:
-      - ../../fe/Projects/Seller.Portal/server:/home/node/seller-web-react-ssr/server
-      - ../../fe/Projects/Seller.Portal/src:/home/node/seller-web-react-ssr/src
+      - ../../fe/projects/Seller.Portal/server:/home/node/seller-web-react-ssr/server
+      - ../../fe/projects/Seller.Portal/src:/home/node/seller-web-react-ssr/src
 
   buyer-web-react-ssr:
     environment: 
       NODE_ENV: development
     volumes:
-      - ../../fe/Projects/AspNetCore/server:/home/node/buyer-web-react-ssr/server
-      - ../../fe/Projects/AspNetCore/src:/home/node/buyer-web-react-ssr/src
+      - ../../fe/projects/AspNetCore/server:/home/node/buyer-web-react-ssr/server
+      - ../../fe/projects/AspNetCore/src:/home/node/buyer-web-react-ssr/src
 
   account-web-react-ssr:
     environment: 
       NODE_ENV: development
     volumes:
-      - ../../fe/Projects/Account/server:/home/node/account-web-react-ssr/server
-      - ../../fe/Projects/Account/src:/home/node/account-web-react-ssr/src
+      - ../../fe/projects/Account/server:/home/node/account-web-react-ssr/server
+      - ../../fe/projects/Account/src:/home/node/account-web-react-ssr/src
 
   sqldata:
     environment:

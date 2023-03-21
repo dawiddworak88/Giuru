@@ -49,21 +49,21 @@ services:
     image: ${REGISTRY:-giuru}/seller-web-react-ssr:${PLATFORM:-linux}-${TAG:-latest}
     build: 
       context: ../../fe
-      dockerfile: Projects/Seller.Portal/Dockerfile-ssr-local
+      dockerfile: projects/Seller.Portal/Dockerfile-ssr-local
     restart: unless-stopped
 
   account-web-react-ssr:
     image: ${REGISTRY:-giuru}/account-web-react-ssr:${PLATFORM:-linux}-${TAG:-latest}
     build: 
       context: ../../fe
-      dockerfile: Projects/Account/Dockerfile-ssr-local
+      dockerfile: projects/Account/Dockerfile-ssr-local
     restart: unless-stopped
 
-  buyer-web--react-ssr:
+  buyer-web-react-ssr:
     image: ${REGISTRY:-giuru}/buyer-web-react-ssr:${PLATFORM:-linux}-${TAG:-latest}
     build: 
       context: ../../fe
-      dockerfile: Projects/AspNetCore/Dockerfile-ssr-local
+      dockerfile: projects/AspNetCore/Dockerfile-ssr-local
     restart: unless-stopped
 
   sqldata:
