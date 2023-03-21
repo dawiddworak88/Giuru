@@ -81,3 +81,28 @@ spec:
             name: b2b-buyer-web-secrets
         ports:
         - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buyer-web-react-ssr-deployment
+  labels:
+    app: buyer-web-react-ssr
+spec:
+  replicas: {{ .Values.buyerWeb.replicas }}
+  selector:
+    matchLabels:
+      app: buyer-web-react-ssr
+  template:
+    metadata:
+      labels:
+        app: buyer-web-react-ssr
+    spec:
+      containers:
+      - name: buyer-web-react-ssr-container
+        image: {{ .Values.image.registry }}/buyer-web-react-ssr:{{ .Values.image.tag }}
+        env:
+        - name: NODE_ENV
+          value: {{ .Values.nodeEnvironment }}
+        ports:
+        - containerPort: 3000

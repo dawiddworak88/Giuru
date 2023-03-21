@@ -77,3 +77,28 @@ spec:
             name: b2b-identity-api-secrets
         ports:
         - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account-web-react-ssr-deployment
+  labels:
+    app: account-web-react-ssr
+spec:
+  replicas: {{ .Values.identityApi.replicas }}
+  selector:
+    matchLabels:
+      app: account-web-react-ssr
+  template:
+    metadata:
+      labels:
+        app: account-web-react-ssr
+    spec:
+      containers:
+      - name: account-web-react-ssr-container
+        image: {{ .Values.image.registry }}/account-web-react-ssr:{{ .Values.image.tag }}
+        env:
+        - name: NODE_ENV
+          value: {{ .Values.nodeEnvironment }}
+        ports:
+        - containerPort: 3000
