@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import IconConstants from "../../../../../../shared/constants/IconConstants";
+import IconConstants from "../../../shared/constants/IconConstants";
 import * as Icon from "react-feather";
 
 function Tile(props) {

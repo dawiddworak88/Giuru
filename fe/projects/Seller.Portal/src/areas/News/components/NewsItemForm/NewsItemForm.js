@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../shared/stores/Store";
 import useForm from "../../../../shared/helpers/forms/useForm";
-import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
+import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
 import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';

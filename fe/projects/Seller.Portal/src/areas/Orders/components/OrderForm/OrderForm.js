@@ -13,11 +13,11 @@ import {
 } from "@mui/material";
 import moment from "moment";
 import AdapterMoment from '@mui/lab/AdapterMoment';
-import QueryStringSerializer from "../../../../../../../shared/helpers/serializers/QueryStringSerializer";
-import OrderFormConstants from "../../../../../../../shared/constants/OrderFormConstants";
+import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
+import OrderFormConstants from "../../../../shared/constants/OrderFormConstants";
 import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
-import IconConstants from "../../../../../../../shared/constants/IconConstants";
-import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
+import IconConstants from "../../../../shared/constants/IconConstants";
+import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 
 function OrderForm(props) {
     const clientsProps = {

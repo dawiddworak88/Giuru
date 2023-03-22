@@ -6,9 +6,9 @@ import { DatePicker, LocalizationProvider } from "@mui/lab";
 import { TextField } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJs, CategoryScale, Tooltip, Legend, BarElement } from "chart.js";
-import ChartsConstants from "../../../../../../../shared/constants/ChartsConstants";
-import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
-import ChartValidator from "../../../../../../../shared/helpers/validators/ChartValidator";
+import ChartsConstants from "../../../../shared/constants/ChartsConstants";
+import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
+import ChartValidator from "../../../../shared/helpers/validators/ChartValidator";
 
 if (typeof window !== "undefined") {
     ChartJs.register(

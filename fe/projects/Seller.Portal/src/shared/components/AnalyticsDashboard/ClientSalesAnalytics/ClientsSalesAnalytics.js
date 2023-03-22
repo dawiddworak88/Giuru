@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import { toast } from "react-toastify";
 import { DatePicker, LocalizationProvider } from "@mui/lab";
-import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
+import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, TextField } from "@mui/material";
-import ChartValidator from "../../../../../../../shared/helpers/validators/ChartValidator";
+import ChartValidator from "../../../../shared/helpers/validators/ChartValidator";
 
 const ClientsSalesAnalytics = (props) => {
     const [clientsAnalytics, setClientsAnalytics] = useState(props.clients ? props.clients : [])

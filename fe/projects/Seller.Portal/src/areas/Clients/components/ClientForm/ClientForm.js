@@ -8,8 +8,8 @@ import {
     Autocomplete
 } from "@mui/material";
 import useForm from "../../../../shared/helpers/forms/useForm";
-import EmailValidator from "../../../../../../../shared/helpers/validators/EmailValidator";
-import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
+import EmailValidator from "../../../../shared/helpers/validators/EmailValidator";
+import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);

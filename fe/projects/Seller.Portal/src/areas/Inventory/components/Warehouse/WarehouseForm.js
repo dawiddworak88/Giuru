@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Context } from "../../../../shared/stores/Store";
 import { TextField, Button, InputLabel } from "@mui/material";
 import useForm from "../../../../shared/helpers/forms/useForm";
-import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
+import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 
 const WarehouseForm = (props) => {
 

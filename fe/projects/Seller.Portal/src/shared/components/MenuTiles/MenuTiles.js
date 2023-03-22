@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Tile from "./Tile";
 import { Splide, SplideSlide } from '@splidejs/react-splide';
-import MenuTilesConstants from "../../../../../../shared/constants/MenuTilesConstants";
+import MenuTilesConstants from "../../../shared/constants/MenuTilesConstants";
 import '@splidejs/react-splide/css';
 
 function MenuTiles(props) {

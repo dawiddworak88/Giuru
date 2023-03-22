@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { QRCodeCanvas } from "qrcode.react";
-import DialogConstants from "../../../../../../shared/constants/DialogConstants";
+import DialogConstants from "../../../shared/constants/DialogConstants";
 import {
     Button, Dialog, DialogActions, 
     DialogContent, DialogTitle

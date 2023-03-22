@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Button, CircularProgress } from "@mui/material";
 import { Context } from "../../../../shared/stores/Store";
-import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
+import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 
 function SettingsForm(props) {
 

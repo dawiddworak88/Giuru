@@ -13,9 +13,9 @@ import {
 } from "@mui/material";
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
 import DynamicForm from "../../../../shared/components/DynamicForm/DynamicForm";
-import QueryStringSerializer from "../../../../../../../shared/helpers/serializers/QueryStringSerializer";
-import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
-import SearchConstants from "../../../../../../../shared/constants/SearchConstants";
+import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
+import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
+import SearchConstants from "../../../../shared/constants/SearchConstants";
 
 function ProductForm(props) {
     const [state, dispatch] = useContext(Context);

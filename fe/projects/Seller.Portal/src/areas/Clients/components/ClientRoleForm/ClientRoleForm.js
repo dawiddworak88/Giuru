@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { Context } from "../../../../shared/stores/Store";
 import { toast } from "react-toastify";
 import useForm from "../../../../shared/helpers/forms/useForm";
-import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
+import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import { 
     TextField, Button, CircularProgress, InputLabel
 } from "@mui/material";

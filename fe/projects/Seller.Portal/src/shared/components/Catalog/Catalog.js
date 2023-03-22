@@ -12,12 +12,12 @@ import {
     TableHead, TableRow, Paper, TablePagination, CircularProgress, Fab,
     Tooltip, NoSsr
 } from "@mui/material";
-import KeyConstants from "../../../../../../shared/constants/KeyConstants";
+import KeyConstants from "../../../shared/constants/KeyConstants";
 import { Context } from "../../stores/Store";
-import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
+import QueryStringSerializer from "../../../shared/helpers/serializers/QueryStringSerializer";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
-import ClipboardHelper from "../../../../../../shared/helpers/globals/ClipboardHelper";
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import ClipboardHelper from "../../../shared/helpers/globals/ClipboardHelper";
+import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import { TextSnippet } from "@mui/icons-material";
 import QRCodeDialog from "../QRCodeDialog/QRCodeDialog";
 
