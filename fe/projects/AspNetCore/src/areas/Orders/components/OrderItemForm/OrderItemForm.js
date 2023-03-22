@@ -6,7 +6,7 @@ import {
     Button, TextField, CircularProgress
 } from "@mui/material";
 import OrderItemStatusChanges from "../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
-import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
+import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
 
 const OrderItemForm = (props) => {

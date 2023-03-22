@@ -5,9 +5,9 @@ import { UploadCloud } from "react-feather";
 import { Button } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import { Context } from "../../../shared/stores/Store";
-import IconConstants from "../../../../../../shared/constants/IconConstants";
+import IconConstants from "../../../shared/constants/IconConstants";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 
 function MediaCloud(props) {
 

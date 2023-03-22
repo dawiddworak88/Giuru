@@ -3,7 +3,7 @@ import { TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } 
 import PropTypes from "prop-types";
 import { LocalizationProvider, DatePicker  } from "@mui/lab";
 import AdapterMoment from '@mui/lab/AdapterMoment';
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
+import NavigationHelper from "../../../shared/helpers/globals/NavigationHelper";
 
 const Modal = (props) => {
     const {isOpen, maxStockValue, maxOutletValue, handleOrder, handleClose, labels, product} = props;

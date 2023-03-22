@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useContext } from "react";
 import PropTypes from "prop-types";
-import KeyConstants from "../../../../../../shared/constants/KeyConstants";
+import KeyConstants from "../../../shared/constants/KeyConstants";
 import { Context } from "../../../shared/stores/Store";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
@@ -10,13 +10,13 @@ import {
 } from "@mui/material";
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
-import ClipboardHelper from "../../../../../../shared/helpers/globals/ClipboardHelper";
+import ClipboardHelper from "../../../shared/helpers/globals/ClipboardHelper";
 import JsZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { toast } from "react-toastify";
-import ResponseStatusConstants from "../../../../../../shared/constants/ResponseStatusConstants";
-import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import ResponseStatusConstants from "../../../shared/constants/ResponseStatusConstants";
+import QueryStringSerializer from "../../../shared/helpers/serializers/QueryStringSerializer";
+import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 
 const DownloadCenterFiles = (props) => {
     const [state, dispatch] = useContext(Context);

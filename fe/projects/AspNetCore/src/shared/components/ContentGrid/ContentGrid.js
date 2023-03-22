@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
 import ResponsiveImage from "../../../shared/components/Picture/ResponsiveImage";
-import LazyLoadConstants from "../../../../../../shared/constants/LazyLoadConstants";
+import LazyLoadConstants from "../../../shared/constants/LazyLoadConstants";
 
 function ContentGrid(props) {
 

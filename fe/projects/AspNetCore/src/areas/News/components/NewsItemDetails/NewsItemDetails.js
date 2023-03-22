@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
 import { CalendarToday } from "@mui/icons-material";
-import LazyLoadConstants from "../../../../../../../shared/constants/LazyLoadConstants";
+import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
 import { Hash } from "react-feather"
 import {marked} from "marked";

@@ -24,7 +24,7 @@ function ResponsiveImage(props) {
 ResponsiveImage.propTypes = {
     sources: PropTypes.array,
     imageSrc: PropTypes.string.isRequired,
-    imageAlt: PropTypes.string.isRequired,
+    imageAlt: PropTypes.string,
     imageTitle: PropTypes.string
 };
 

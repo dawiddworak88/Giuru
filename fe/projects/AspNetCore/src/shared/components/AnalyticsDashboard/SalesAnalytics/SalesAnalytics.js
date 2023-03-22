@@ -4,13 +4,13 @@ import { Line } from "react-chartjs-2";
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import { toast } from "react-toastify";
 import { DatePicker, LocalizationProvider } from "@mui/lab";
-import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
+import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import { TextField } from "@mui/material";
 import { 
     Chart as ChartJs, Tooltip, Legend, CategoryScale, 
     LinearScale, PointElement, LineElement
 } from "chart.js";
-import ChartValidator from "../../../../../../../shared/helpers/validators/ChartValidator";
+import ChartValidator from "../../../../shared/helpers/validators/ChartValidator";
 
 if (typeof window !== "undefined") {
     ChartJs.register(

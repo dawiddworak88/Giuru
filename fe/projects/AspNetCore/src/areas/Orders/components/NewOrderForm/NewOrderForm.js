@@ -13,11 +13,11 @@ import {
     TableHead, TableRow, Paper, TextField, Button, CircularProgress, Checkbox, NoSsr
 } from "@mui/material";
 import moment from "moment";
-import QueryStringSerializer from "../../../../../../../shared/helpers/serializers/QueryStringSerializer";
-import OrderFormConstants from "../../../../../../../shared/constants/OrderFormConstants";
+import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
+import OrderFormConstants from "../../../../shared/constants/OrderFormConstants";
 import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
-import IconConstants from "../../../../../../../shared/constants/IconConstants";
-import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
+import IconConstants from "../../../../shared/constants/IconConstants";
+import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
 
 function NewOrderForm(props) {

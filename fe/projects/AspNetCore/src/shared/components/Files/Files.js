@@ -8,9 +8,9 @@ import {
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
 import { Context } from "../../stores/Store";
-import ClipboardHelper from "../../../../../../shared/helpers/globals/ClipboardHelper";
-import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import ClipboardHelper from "../../../shared/helpers/globals/ClipboardHelper";
+import QueryStringSerializer from "../../../shared/helpers/serializers/QueryStringSerializer";
+import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 
 function Files(props) {
     const [state, dispatch] = useContext(Context);
