@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import { Context } from "../../../../shared/stores/Store";
 import { TextField, Button, CircularProgress } from "@mui/material";
 import useForm from "../../../../shared/helpers/forms/useForm";
-import PasswordValidator from "../../../../../../../shared/helpers/validators/PasswordValidator";
+import PasswordValidator from "../../../../shared/helpers/validators/PasswordValidator";
 import { toast } from "react-toastify";
-import ResponseStatusConstants from "../../../../../../../shared/constants/ResponseStatusConstants";
-import NavigationHelper from "../../../../../../../shared/helpers/globals/NavigationHelper";
+import ResponseStatusConstants from "../../../../shared/constants/ResponseStatusConstants";
+import NavigationHelper from "../../../../shared/helpers/globals/NavigationHelper";
 import ToastHelper from "../../../../shared/helpers/globals/ToastHelper";
 
 function SetPasswordForm(props) {

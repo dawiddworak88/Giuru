@@ -7,9 +7,9 @@ import {
     FormControl, InputLabel, Select, MenuItem, NoSsr, FormControlLabel, Checkbox
 } from "@mui/material";
 import useForm from "../../../../shared/helpers/forms/useForm";
-import EmailValidator from "../../../../../../../shared/helpers/validators/EmailValidator";
-import NavigationHelper from "../../../../../../../shared/helpers/globals/NavigationHelper";
-import AuthenticationHelper from "../../../../../../../shared/helpers/globals/AuthenticationHelper";
+import EmailValidator from "../../../../shared/helpers/validators/EmailValidator";
+import NavigationHelper from "../../../../shared/helpers/globals/NavigationHelper";
+import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 
 const RegisterForm = (props) => {
     const [state, dispatch] = useContext(Context);

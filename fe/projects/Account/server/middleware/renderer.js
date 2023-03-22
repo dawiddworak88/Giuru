@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
-import { resetServerContext } from 'react-beautiful-dnd';
 import { ServerStyleSheets } from "@mui/styles";
 
 import RegisterPage from "../../src/areas/Accounts/pages/Register/RegisterPage";
@@ -32,8 +31,6 @@ const serverRenderer = (req, res, next) => {
 		);
 
 		const css = sheets.toString();
-
-		resetServerContext();
 
 		return res.send(
 			ReactDOMServer.renderToString(

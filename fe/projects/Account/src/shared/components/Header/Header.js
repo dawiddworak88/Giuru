@@ -5,7 +5,7 @@ import { makeStyles } from "@mui/styles";
 import { Drawer, List, Divider, IconButton, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import { Menu } from "@mui/icons-material"
 import LanguageSwitcher from "../../../shared/components/LanguageSwitcher/LanguageSwitcher";
-import ColorConstants from "../../../../../../shared/constants/ColorConstants";
+import ColorConstants from "../../constants/ColorConstants";
 import * as Icon from "react-feather";
 
 const useStyles = makeStyles({
