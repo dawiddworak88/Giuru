@@ -138,7 +138,7 @@ Header.propTypes = {
     drawerMenuCategories: PropTypes.array,
     isLoggedIn: PropTypes.bool,
     signOutLink: PropTypes.object,
-    welcomeText: PropTypes.string.isRequired,
+    welcomeText: PropTypes.string,
     name: PropTypes.string.isRequired
 };
 
