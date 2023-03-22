@@ -1,4 +1,5 @@
 environment: "#{Environment}#"
+nodeEnvironment: "#{NodeEnvironment}#"
 identityUrl: "#{IdentityUrl}#"
 redisUrl: "#{RedisUrl}#"
 mediaUrl: "#{MediaUrl}#"
@@ -39,3 +40,5 @@ identityApi:
     initialDelaySeconds: "15"
     periodSeconds: "30"
     timeoutSeconds: "15"
+accountWebReactSsr:
+  replicas: "1"

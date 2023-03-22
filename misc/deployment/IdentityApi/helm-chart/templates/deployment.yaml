@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: identity-api-container
-        image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        image: {{ .Values.image.registry }}/{{ .Values.image.identityApi.repository }}:{{ .Values.image.tag }}
         readinessProbe:
           httpGet:
             path: /hc
@@ -85,7 +85,7 @@ metadata:
   labels:
     app: account-web-react-ssr
 spec:
-  replicas: {{ .Values.identityApi.replicas }}
+  replicas: {{ .Values.accountWebReactSsr.replicas }}
   selector:
     matchLabels:
       app: account-web-react-ssr
@@ -96,7 +96,7 @@ spec:
     spec:
       containers:
       - name: account-web-react-ssr-container
-        image: {{ .Values.image.registry }}/account-web-react-ssr:{{ .Values.image.tag }}
+        image: {{ .Values.image.registry }}/{{ .Values.image.accountWebReactSsr.repository }}:{{ .Values.image.tag }}
         env:
         - name: NODE_ENV
           value: {{ .Values.nodeEnvironment }}

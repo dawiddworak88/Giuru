@@ -1,4 +1,5 @@
 environment: "#{Environment}#"
+nodeEnvironment: "#{NodeEnvironment}#"
 identityUrl: "#{IdentityUrl}#"
 redisUrl: "#{RedisUrl}#"
 mediaUrl: "#{MediaUrl}#"
@@ -36,3 +37,5 @@ buyerWeb:
     initialDelaySeconds: "15"
     periodSeconds: "30"
     timeoutSeconds: "15"
+buyerWebReactSsr:
+  replicas: "1"

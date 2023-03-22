@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: buyer-web-container
-        image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        image: {{ .Values.image.registry }}/{{ .Values.image.buyerWeb.repository }}:{{ .Values.image.tag }}
         readinessProbe:
           httpGet:
             path: /hc
@@ -100,7 +100,7 @@ spec:
     spec:
       containers:
       - name: buyer-web-react-ssr-container
-        image: {{ .Values.image.registry }}/buyer-web-react-ssr:{{ .Values.image.tag }}
+        image: {{ .Values.image.registry }}/{{ .Values.image.buyerWebReactSsr.repository }}:{{ .Values.image.tag }}
         env:
         - name: NODE_ENV
           value: {{ .Values.nodeEnvironment }}

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: seller-web-container
-        image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        image: {{ .Values.image.registry }}/{{ .Values.image.sellerWeb.repository }}:{{ .Values.image.tag }}
         readinessProbe:
           httpGet:
             path: /hc
@@ -92,7 +92,7 @@ metadata:
   labels:
     app: seller-web-react-ssr
 spec:
-  replicas: {{ .Values.sellerWeb.replicas }}
+  replicas: {{ .Values.sellerWebReactSsr.replicas }}
   selector:
     matchLabels:
       app: seller-web-react-ssr
@@ -103,7 +103,7 @@ spec:
     spec:
       containers:
       - name: seller-web-react-ssr-container
-        image: {{ .Values.image.registry }}/seller-web-react-ssr:{{ .Values.image.tag }}
+        image: {{ .Values.image.registry }}/{{ .Values.image.sellerWebReactSsr.repository }}:{{ .Values.image.tag }}
         env:
         - name: NODE_ENV
           value: {{ .Values.nodeEnvironment }}

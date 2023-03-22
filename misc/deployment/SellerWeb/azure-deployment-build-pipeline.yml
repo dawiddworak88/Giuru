@@ -14,8 +14,12 @@ variables:
 - template: './variables.yml'
 - name: b2bSellerWebDockerfile
   value: 'be/src/Project/Web/Seller/Seller.Web/Dockerfile'
-- name: dockerfileBuildContext
+- name: dockerfileWebsiteBuildContext
   value: 'be/src'
+- name: b2bSellerWebSsrDockerfile
+  value: 'fe/projects/Seller.Portal/Dockerfile-ssr'
+- name: dockerfileSsrBuildContext
+  value: 'fe/projects/Seller.Portal'
 - name: chartPath
   value: 'misc/deployment/SellerWeb/helm-chart'
 
@@ -34,21 +38,35 @@ steps:
     includeRootFolder: false
     archiveFile: '$(Build.ArtifactStagingDirectory)/helm-chart.zip'
 - task: Npm@1
+  displayName: Install Website Dependencies
+  inputs:
+    command: custom
+    verbose: false
+    customCommand: 'install --legacy-peer-deps'
+- task: Npm@1
   displayName: Build Website
   inputs:
     command: custom
     verbose: false
     customCommand: 'run build-fe'
 - task: Docker@2
-  displayName: Build and Push Docker Image
+  displayName: Build and Push Docker Image for Website
   inputs:
     command: buildAndPush
     repository: $(b2bSellerWebImageRepository)
     dockerfile: $(b2bSellerWebDockerfile)
-    buildContext: $(dockerfileBuildContext)
+    buildContext: $(dockerfileWebsiteBuildContext)
     containerRegistry: $(acrServiceConnection)
     tags: |
       $(Build.BuildId)
+- task: Docker@2
+  displayName: Build and Push Docker Image for SSR
+  inputs:
+    command: buildAndPush
+    repository: $(b2bSellerWebReactSsrImageRepository)
+    dockerfile: $(b2bSellerWebSsrDockerfile)
+    buildContext: $(dockerfileSsrBuildContext)
+    containerRegistry: $(acrServiceConnection)
 - task: PublishBuildArtifacts@1
   displayName: Publish artifacts to staging directory
   inputs:

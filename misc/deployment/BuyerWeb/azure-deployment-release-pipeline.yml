@@ -54,9 +54,11 @@ stages:
           - script: |
               helm upgrade --install --wait \
               --set image.registry='$(acrLoginServer)' \
-              --set image.repository='$(b2bBuyerWebImageRepository)' \
+              --set image.buyerWeb.repository='$(b2bBuyerWebImageRepository)' \
+              --set image.buyerWebReactSsr.repository='$(b2bBuyerWebReactSsrImageRepository)' \
               --set image.tag='$(Resources.Pipeline.BuyerWebBuild.RunID)' \
               --set environment='$(environment)' \
+              --set nodeEnvironment='$(nodeEnvironment)' \
               --set serverSideRenderingEndpoint='$(serverSideRenderingEndpoint)' \
               --set organisationId='$(organisationId)' \
               --set catalogUrl='$(catalogUrl)' \
