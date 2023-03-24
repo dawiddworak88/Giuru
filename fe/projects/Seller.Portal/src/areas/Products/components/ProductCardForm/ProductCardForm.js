@@ -281,43 +281,45 @@ const ProductCardForm = (props) => {
             });
     }
 
-    const addCard = (schema) => {
+    const handleSaveCard = (schema) => {
         const newElements = generateElementsFromSchema(schema);
 
         if (productAttribute != null) {
 
-            const sameAttributes = newElements.filter((element) => element.name === productAttribute.name);
+            let newElement = {
+                name: productAttribute.name,
+                required: false,
+                dataOptions: {
+                    title: productAttribute.title,
+                    type: productAttribute.type,
+                    default: ""
+                }
+            }
 
-            if (sameAttributes.length > 0) {
-                toast.error(props.productAttributeExistsMessage);
+            if (productAttribute.definitionId !== undefined) {
+                newElement = {
+                    ...newElement,
+                    definitionId: productAttribute.definitionId
+                }
+
+                handleDefinitionSchema(productAttribute.definitionId);
+            }
+
+            const existingProductAttribute = newElements.find((element) => element.name === productAttribute.name);
+
+            if (existingProductAttribute != null) {
+                const existingProductAttributeIndex = newElements.findIndex((element) => element.name === existingProductAttribute.name);
+
+                newElements[existingProductAttributeIndex] = newElement;
             }
             else {
-                let newElement = {
-                    name: productAttribute.name,
-                    required: false,
-                    dataOptions: {
-                        title: productAttribute.title,
-                        type: productAttribute.type,
-                        default: ""
-                    }
-                }
-    
-                if (productAttribute.definitionId !== undefined) {
-                    newElement = {
-                        ...newElement,
-                        definitionId: productAttribute.definitionId
-                    }
-    
-                    handleDefinitionSchema(productAttribute.definitionId);
-                }
-    
                 newElements.splice(0, 0, newElement)
-    
-                updateSchema(newElements, schema)
-    
-                setIsModalOpen(false);
-                setProductAttribute(null);
             }
+
+            updateSchema(newElements, schema)
+    
+            setIsModalOpen(false);
+            setProductAttribute(null);
         } 
     }
 
@@ -422,7 +424,7 @@ const ProductCardForm = (props) => {
                 attribute={productAttribute}
                 setAttribute={setProductAttribute}
                 handleClose={handleCloseModal}
-                handleSave={() => addCard(schema)}
+                handleSave={() => handleSaveCard(schema)}
                 labels={props.productCardModal}
             />
             {state.isLoading && <CircularProgress className="progressBar" />}
