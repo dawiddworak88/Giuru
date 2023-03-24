@@ -1,16 +1,16 @@
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import { Context } from "../../../../../../shared/stores/Store";
+import { Context } from "../../../../shared/stores/Store";
 import { Button, CircularProgress } from "@mui/material";
 import { Edit, Delete, DragIndicator } from "@mui/icons-material"
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import useForm from "../../../../../../shared/helpers/forms/useForm";
-import ProductCardModal from "../ProductCardModal/ProductCardModal";
-import ConfirmationDialog from "../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
-import ProductCardConstants from "../../../../../../shared/constants/ProductCardConstants";
-import CamelcaseHelper from "../../../../../../shared/helpers/globals/CamelCaseHelper";
+import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
+import useForm from "../../../../shared/helpers/forms/useForm";
+import ProductCardModal from "../../components/ProductCardModal/ProductCardModal";
+import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
+import ProductCardConstants from "../../../../shared/constants/ProductCardConstants";
+import CamelcaseHelper from "../../../../shared/helpers/globals/CamelCaseHelper";
 
 const ProductCardForm = (props) => {
     const [state, dispatch] = useContext(Context);

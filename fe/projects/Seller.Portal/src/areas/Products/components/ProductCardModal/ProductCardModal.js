@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
-import CamelCaseHelper from "../../../../../../shared/helpers/globals/CamelCaseHelper";
+import NavigationHelper from "../../../../shared/helpers/globals/NavigationHelper";
+import CamelCaseHelper from "../../../../shared/helpers/globals/CamelCaseHelper";
 import PropTypes from "prop-types";
 import { 
     TextField, Button, Dialog, DialogTitle, 
     DialogContent, DialogActions, FormControl,
     InputLabel, MenuItem, Select
 } from "@mui/material";
-import ProductCardConstants from "../../../../../../shared/constants/ProductCardConstants";
+import ProductCardConstants from "../../../../shared/constants/ProductCardConstants";
 
 const ProductCardModal = (props) => {
     const [productAttribute, setProductAttribute] = useState(props.attribute);

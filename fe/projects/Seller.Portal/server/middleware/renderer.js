@@ -3,6 +3,8 @@ import ReactDOMServer from "react-dom/server";
 import { resetServerContext } from 'react-beautiful-dnd';
 import { ServerStyleSheets } from "@mui/styles";
 
+import ProductCardPage from "../../src/areas/Products/pages/ProductCardPage/ProductCardPage";
+import ProductCardsPage from "../../src/areas/Products/pages/ProductCardsPage/ProductCardsPage";
 import DashboardPage from "../../src/areas/Dashboard/pages/DashboardPage/DashboardPage";
 import CountryPage from "../../src/areas/Global/pages/CountryPage/CountryPage";
 import CountriesPage from "../../src/areas/Global/pages/CountriesPage/CountriesPage";
@@ -49,6 +51,8 @@ import SellerCategoryPage from "../../src/areas/Products/pages/CategoryPage/Cate
 import SettingsPage from "../../src/areas/Settings/pages/SettingsPage/SettingsPage";
 
 const Components = {
+	ProductCardPage,
+	ProductCardsPage,
 	DashboardPage,
 	CountriesPage,
 	CountryPage,
