@@ -84,12 +84,26 @@ services:
       - 9200:9200
       - 9300:9300
 
-  react-ssr:
+  seller-web-react-ssr:
     environment: 
       NODE_ENV: development
     volumes:
-      - ../../fe/server:/home/node/aspnetcore-react-ssr/server
-      - ../../fe/src:/home/node/aspnetcore-react-ssr/src
+      - ../../fe/projects/Seller.Portal/server:/home/node/seller-web-react-ssr/server
+      - ../../fe/projects/Seller.Portal/src:/home/node/seller-web-react-ssr/src
+
+  buyer-web-react-ssr:
+    environment: 
+      NODE_ENV: development
+    volumes:
+      - ../../fe/projects/AspNetCore/server:/home/node/buyer-web-react-ssr/server
+      - ../../fe/projects/AspNetCore/src:/home/node/buyer-web-react-ssr/src
+
+  account-web-react-ssr:
+    environment: 
+      NODE_ENV: development
+    volumes:
+      - ../../fe/projects/Account/server:/home/node/account-web-react-ssr/server
+      - ../../fe/projects/Account/src:/home/node/account-web-react-ssr/src
 
   sqldata:
     environment:
@@ -234,7 +248,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - RedisUrl=redis
-      - ServerSideRenderingEndpoint=http://react-ssr:3000
+      - ServerSideRenderingEndpoint=http://account-web-react-ssr:3000
       - CatalogUrl=http://catalog-api
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -388,7 +402,7 @@ services:
   seller-web:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ServerSideRenderingEndpoint=http://react-ssr:3000
+      - ServerSideRenderingEndpoint=http://seller-web-react-ssr:3000
       - ClientId=663bba90-0036-4a58-8516-39faa8baba87
       - ClientSecret=c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9
       - RedisUrl=redis
@@ -419,7 +433,7 @@ services:
   buyer-web:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ServerSideRenderingEndpoint=http://react-ssr:3000
+      - ServerSideRenderingEndpoint=http://buyer-web-react-ssr:3000
       - ClientId=d9316849-7e98-4c5b-853b-5a322aecdc75
       - ClientSecret=693667b0-545e-48b6-9ef8-02ada81be946
       - RedisUrl=redis

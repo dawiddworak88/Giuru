@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buyer-web-deployment
+  labels:
+    app: buyer-web
+spec:
+  replicas: {{ .Values.buyerWeb.replicas }}
+  selector:
+    matchLabels:
+      app: buyer-web
+  template:
+    metadata:
+      labels:
+        app: buyer-web
+    spec:
+      containers:
+      - name: buyer-web-container
+        image: {{ .Values.image.registry }}/{{ .Values.image.buyerWeb.repository }}:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: {{ .Values.buyerWeb.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.buyerWeb.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.buyerWeb.readinessProbe.timeoutSeconds }}
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: {{ .Values.buyerWeb.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.buyerWeb.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.buyerWeb.livenessProbe.timeoutSeconds }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: OrganisationId
+          value: {{ .Values.organisationId }}
+        - name: ServerSideRenderingEndpoint
+          value: {{ .Values.serverSideRenderingEndpoint }}
+        - name: AnalyticsUrl
+          value: {{ .Values.analyticsUrl }}
+        - name: CatalogUrl
+          value: {{ .Values.catalogUrl }}
+        - name: MediaUrl
+          value: {{ .Values.mediaUrl }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: InventoryUrl
+          value: {{ .Values.inventoryUrl }}
+        - name: ClientUrl
+          value: {{ .Values.clientUrl }}
+        - name: BasketUrl
+          value: {{ .Values.basketUrl }}
+        - name: OrderUrl
+          value: {{ .Values.orderUrl }}
+        - name: NewsUrl
+          value: {{ .Values.newsUrl }}
+        - name: DownloadCenterUrl
+          value: {{ .Values.downloadCenterUrl }}
+        - name: MakeComplaintUrl
+          value: {{ .Values.makeComplaintUrl }}
+        - name: CdnUrl
+          value: {{ .Values.cdnUrl }}
+        - name: ContentGraphQlUrl
+          value: {{ .Values.contentGraphQlUrl }}
+        - name: ProductAttributes
+          value: {{ .Values.buyerWeb.productAttributes }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        envFrom:
+        - secretRef:
+            name: b2b-buyer-web-secrets
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buyer-web-react-ssr-deployment
+  labels:
+    app: buyer-web-react-ssr
+spec:
+  replicas: {{ .Values.buyerWeb.replicas }}
+  selector:
+    matchLabels:
+      app: buyer-web-react-ssr
+  template:
+    metadata:
+      labels:
+        app: buyer-web-react-ssr
+    spec:
+      containers:
+      - name: buyer-web-react-ssr-container
+        image: {{ .Values.image.registry }}/{{ .Values.image.buyerWebReactSsr.repository }}:{{ .Values.image.tag }}
+        env:
+        - name: NODE_ENV
+          value: {{ .Values.nodeEnvironment }}
+        ports:
+        - containerPort: 3000

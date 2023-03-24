@@ -1,0 +1,5 @@
+variables:
+- name: b2bSellerWebImageRepository
+  value: 'b2b-seller-web'
+- name: b2bSellerWebReactSsrImageRepository
+  value: 'seller-web-react-ssr'

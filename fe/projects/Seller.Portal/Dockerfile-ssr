@@ -1,0 +1,23 @@
+FROM node:18.1-alpine
+
+RUN apk update && apk add python3 make g++
+
+RUN mkdir -p /home/node/seller-web-react-ssr/node_modules && chown -R node:node /home/node/seller-web-react-ssr
+
+WORKDIR /home/node/seller-web-react-ssr
+
+COPY package*.json ./
+
+USER root
+
+RUN npm ci --only=production --legacy-peer-deps
+
+USER node
+
+COPY --chown=node:node . .
+
+ENV NODE_ENV=production
+
+EXPOSE 3000
+
+CMD ["node", "server/bootstrap.js" ]
