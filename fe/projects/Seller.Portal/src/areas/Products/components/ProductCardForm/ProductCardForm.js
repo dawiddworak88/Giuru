@@ -305,11 +305,9 @@ const ProductCardForm = (props) => {
                 handleDefinitionSchema(productAttribute.definitionId);
             }
 
-            const existingProductAttribute = newElements.find((element) => element.name === productAttribute.name);
+            const existingProductAttributeIndex = newElements.findIndex((element) => element.name === productAttribute.name);
 
-            if (existingProductAttribute != null) {
-                const existingProductAttributeIndex = newElements.findIndex((element) => element.name === existingProductAttribute.name);
-
+            if (existingProductAttributeIndex != -1) {
                 newElements[existingProductAttributeIndex] = newElement;
             }
             else {
