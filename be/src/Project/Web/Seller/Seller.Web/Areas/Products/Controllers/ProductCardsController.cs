@@ -7,7 +7,6 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Seller.Web.Areas.Products.ViewModels;
-using System;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -18,27 +17,27 @@ namespace Seller.Web.Areas.Products.Controllers
     [Area("Products")]
     public class ProductCardsController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductCardsPageViewModel> productCardsPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductCardsPageViewModel> _productCardsPageModelBuilder;
 
         public ProductCardsController(IAsyncComponentModelBuilder<ComponentModelBase, ProductCardsPageViewModel> productCardsPageModelBuilder)
         {
-            this.productCardsPageModelBuilder = productCardsPageModelBuilder;
+            _productCardsPageModelBuilder = productCardsPageModelBuilder;
         }
 
         public async Task<IActionResult> Index()
         {
             var componentModel = new ComponentModelBase
             {
-                IsAuthenticated = this.User.Identity.IsAuthenticated,
-                Name = this.User.Identity.Name,
+                IsAuthenticated = User.Identity.IsAuthenticated,
+                Name = User.Identity.Name,
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
+                SellerId = GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
             };
 
-            var viewModel = await this.productCardsPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _productCardsPageModelBuilder.BuildModelAsync(componentModel);
 
-            return this.View(viewModel);
+            return View(viewModel);
         }
     }
 }

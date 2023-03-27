@@ -12,10 +12,10 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 {
     public class ProductCardsPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductCardsPageViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder;
-        private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductCardCategory>> categoryCatalogModelBuilder;
-        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> _headerModelBuilder;
+        private readonly IModelBuilder<MenuTilesViewModel> _menuTilesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductCardCategory>> _categoryCatalogModelBuilder;
+        private readonly IModelBuilder<FooterViewModel> _footerModelBuilder;
 
         public ProductCardsPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
@@ -23,10 +23,10 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductCardCategory>> categoryCatalogModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
-            this.headerModelBuilder = headerModelBuilder;
-            this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.categoryCatalogModelBuilder = categoryCatalogModelBuilder;
-            this.footerModelBuilder = footerModelBuilder;
+            _headerModelBuilder = headerModelBuilder;
+            _menuTilesModelBuilder = menuTilesModelBuilder;
+            _categoryCatalogModelBuilder = categoryCatalogModelBuilder;
+            _footerModelBuilder = footerModelBuilder;
         }
 
         public async Task<ProductCardsPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -34,10 +34,10 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             var viewModel = new ProductCardsPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
-                MenuTiles = menuTilesModelBuilder.BuildModel(),
-                Catalog = await this.categoryCatalogModelBuilder.BuildModelAsync(componentModel),
-                Footer = footerModelBuilder.BuildModel()
+                Header = await _headerModelBuilder.BuildModelAsync(componentModel),
+                MenuTiles = _menuTilesModelBuilder.BuildModel(),
+                Catalog = await _categoryCatalogModelBuilder.BuildModelAsync(componentModel),
+                Footer = _footerModelBuilder.BuildModel()
             };
 
             return viewModel;

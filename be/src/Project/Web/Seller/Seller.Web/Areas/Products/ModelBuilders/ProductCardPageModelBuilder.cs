@@ -10,10 +10,10 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 {
     public class ProductCardPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductCardPageViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder;
-        private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductCardFormViewModel> productCardFormModelBuilder;
-        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> _headerModelBuilder;
+        private readonly IModelBuilder<MenuTilesViewModel> _menuTilesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductCardFormViewModel> _productCardFormModelBuilder;
+        private readonly IModelBuilder<FooterViewModel> _footerModelBuilder;
 
         public ProductCardPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
@@ -21,20 +21,20 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             IAsyncComponentModelBuilder<ComponentModelBase, ProductCardFormViewModel> productCardFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
-            this.headerModelBuilder = headerModelBuilder;
-            this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.productCardFormModelBuilder = productCardFormModelBuilder;
-            this.footerModelBuilder = footerModelBuilder;
+            _headerModelBuilder = headerModelBuilder;
+            _menuTilesModelBuilder = menuTilesModelBuilder;
+            _productCardFormModelBuilder = productCardFormModelBuilder;
+            _footerModelBuilder = footerModelBuilder;
         }
 
         public async Task<ProductCardPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new ProductCardPageViewModel
             {
-                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
-                MenuTiles = this.menuTilesModelBuilder.BuildModel(),
-                ProductCardForm = await this.productCardFormModelBuilder.BuildModelAsync(componentModel),
-                Footer = this.footerModelBuilder.BuildModel()
+                Header = await _headerModelBuilder.BuildModelAsync(componentModel),
+                MenuTiles = _menuTilesModelBuilder.BuildModel(),
+                ProductCardForm = await _productCardFormModelBuilder.BuildModelAsync(componentModel),
+                Footer = _footerModelBuilder.BuildModel()
             };
 
             return viewModel;

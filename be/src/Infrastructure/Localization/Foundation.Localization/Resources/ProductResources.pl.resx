@@ -229,7 +229,7 @@
     <value>Atrybut produktu został pomyślnie zapisany.</value>
   </data>
   <data name="ProductCardDefaultInputName" xml:space="preserve">
-    <value>NowyElement</value>
+    <value>Nowy Element</value>
   </data>
   <data name="ProductCardNameErrorMessage" xml:space="preserve">
     <value>Nazwa atrybutu nie powinna zawierać liczb i znaków specjalnych.</value>

@@ -229,7 +229,7 @@
     <value>Das Produktattribut wurde erfolgreich gespeichert.</value>
   </data>
   <data name="ProductCardDefaultInputName" xml:space="preserve">
-    <value>NeuerGegenstand</value>
+    <value>Neuer Gegenstand</value>
   </data>
   <data name="ProductCardNameErrorMessage" xml:space="preserve">
     <value>Der Attributname sollte keine Zahlen und Sonderzeichen enthalten.</value>

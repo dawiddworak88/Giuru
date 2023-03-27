@@ -18,12 +18,12 @@ namespace Seller.Web.Areas.Products.Controllers
     [Area("Products")]
     public class ProductCardController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductCardPageViewModel> productCardPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductCardPageViewModel> _productCardPageModelBuilder;
 
         public ProductCardController(
             IAsyncComponentModelBuilder<ComponentModelBase, ProductCardPageViewModel> productCardPageModelBuilder)
         {
-            this.productCardPageModelBuilder = productCardPageModelBuilder;
+            _productCardPageModelBuilder = productCardPageModelBuilder;
         }
 
         public async Task<IActionResult> Edit(Guid? id)
@@ -31,14 +31,14 @@ namespace Seller.Web.Areas.Products.Controllers
             var componentModel = new ComponentModelBase
             {
                 Id = id,
-                IsAuthenticated = this.User.Identity.IsAuthenticated,
-                Name = this.User.Identity.Name,
+                IsAuthenticated = User.Identity.IsAuthenticated,
+                Name = User.Identity.Name,
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
+                SellerId = GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
             };
 
-            var viewModel = await this.productCardPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _productCardPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
         }

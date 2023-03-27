@@ -187,7 +187,7 @@
     <value>New product attribute item</value>
   </data>
   <data name="NewProductCard" xml:space="preserve">
-    <value>Add new product card</value>
+    <value>Add a new product card</value>
   </data>
   <data name="NewProductCardAttribute" xml:space="preserve">
     <value>Add a new attribute</value>
@@ -229,7 +229,7 @@
     <value>Product attribute has been saved successfully.</value>
   </data>
   <data name="ProductCardDefaultInputName" xml:space="preserve">
-    <value>NewElement</value>
+    <value>New Element</value>
   </data>
   <data name="ProductCardNameErrorMessage" xml:space="preserve">
     <value>The attribute name shouldn't contain numbers and special characters.</value>
