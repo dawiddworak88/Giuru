@@ -342,9 +342,7 @@ const ProductCardForm = (props) => {
             const definitionItems = newElements.filter((item) => item.definitionId === element.definitionId);
 
             if (!(definitionItems.length > 1)) {
-                const newDefinitions = definitions;
-
-                delete newDefinitions[element.definitionId];
+                const { [`${element.definitionId}`]: deletedDefinition, ...newDefinitions } = definitions;
 
                 setDefinitions(newDefinitions);
             }

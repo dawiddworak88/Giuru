@@ -8,6 +8,7 @@ import {
     InputLabel, MenuItem, Select
 } from "@mui/material";
 import ProductCardConstants from "../../../../shared/constants/ProductCardConstants";
+import RegexConstants from "../../../../shared/constants/RegexConstants";
 
 const ProductCardModal = (props) => {
     const [productAttribute, setProductAttribute] = useState(props.attribute);
@@ -29,7 +30,7 @@ const ProductCardModal = (props) => {
             const currentDefinition = props.labels.definitionsOptions.find((definition) => definition.id === productAttribute.definitionId);
 
             if (currentDefinition != null) {
-                NavigationHelper.redirect(currentDefinition.url, "_blank");
+                NavigationHelper.openInNewTab(currentDefinition.url, "_blank");
             }
         }
     }
@@ -37,7 +38,7 @@ const ProductCardModal = (props) => {
     const handleDisplayName = (e) => {
         updateAttribute(e);
         
-        const format = new RegExp(/(.|\s)*\S(.|\s)*/)
+        const format = new RegExp(RegexConstants.nonBlankAndNonEmptyString())
 
         if (format.test(String(e.target.value))) {
             setDisabledButton(false);
@@ -49,7 +50,7 @@ const ProductCardModal = (props) => {
                 ...attribute, ["name"]: newAttributeName
             }))
 
-            const nameFormat = new RegExp(/^[A-Za-z]+$/);
+            const nameFormat = new RegExp(RegexConstants.onlyLetters());
 
             if (!nameFormat.test(String(newAttributeName))) { 
                 setDisabledButton(true);
@@ -65,7 +66,7 @@ const ProductCardModal = (props) => {
     const handleName = (e) => {
         updateAttribute(e);
 
-        const format = new RegExp(/^[A-Za-z]+$/);
+        const format = new RegExp(RegexConstants.onlyLetters());
 
         if (format.test(String(e.target.value))) { 
             setDisabledButton(false);

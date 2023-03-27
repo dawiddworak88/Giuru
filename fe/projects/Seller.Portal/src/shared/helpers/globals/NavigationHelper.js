@@ -1,14 +1,17 @@
 export default class NavigationHelper {
 
-    static redirect(url, target = null) {
+    static redirect(url) {
 
         if (typeof window !== "undefined") {
         
-            if (target != null) {
-                return window.open(url, target);
-            }
+            window.location.href = url;
+        }
+    }
 
-            return window.location.href = url;
+    static openInNewTab(url) {
+
+        if (typeof window !== "undefined") {
+            window.open(url, "_blank");
         }
     }
 }
