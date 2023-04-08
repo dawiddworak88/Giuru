@@ -17,6 +17,7 @@ spec:
       containers:
       - name: content-api-container
         image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: IfNotPresent
         env:
         - name: DATABASE_CLIENT
           value: {{ .Values.contentApi.databaseClient }}
