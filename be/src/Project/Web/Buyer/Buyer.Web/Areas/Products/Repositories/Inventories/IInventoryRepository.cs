@@ -9,8 +9,8 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
     {
         Task<PagedResults<IEnumerable<InventorySum>>> GetAvailbleProductsInventory(
             string language,
-            int pageIndex,
-            int itemsPerPage,
+            int? pageIndex,
+            int? itemsPerPage,
             string token);
     }
 }

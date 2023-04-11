@@ -106,11 +106,11 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             if (product?.ProductVariants is not null)
             {
                 var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+
                 var productVariants = await this.productsRepository.GetProductsAsync(
                     product.ProductVariants, null, null, language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, $"{nameof(Product.Name)} ASC");
 
-                var availableProducts = await this.inventoryRepository.GetAvailbleProductsInventory(
-                    language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, null);
+                var availableProducts = await this.inventoryRepository.GetAvailbleProductsInventory(language, null, null, null);
 
                 var availableOutletProducts = await this.outletRepository.GetOutletProductsAsync(language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, token);
 

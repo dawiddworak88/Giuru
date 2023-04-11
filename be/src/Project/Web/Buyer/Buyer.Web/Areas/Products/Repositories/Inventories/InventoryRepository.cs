@@ -5,6 +5,7 @@ using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
@@ -26,10 +27,21 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
 
         public async Task<PagedResults<IEnumerable<InventorySum>>> GetAvailbleProductsInventory(
             string language,
-            int pageIndex, 
-            int itemsPerPage,
+            int? pageIndex, 
+            int? itemsPerPage,
             string token)
         {
+            if (pageIndex.HasValue is false || itemsPerPage.HasValue is false)
+            {
+                pageIndex = Constants.DefaultPageIndex;
+                itemsPerPage = Constants.MaxItemsPerPageLimit;
+            }
+            else
+            {
+                pageIndex = Constants.DefaultPageIndex;
+                itemsPerPage = Constants.DefaultItemsPerPage;
+            }
+
             var requestModel = new PagedRequestModelBase
             {
                 ItemsPerPage = itemsPerPage,
