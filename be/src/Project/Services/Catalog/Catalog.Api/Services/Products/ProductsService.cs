@@ -264,11 +264,11 @@ namespace Catalog.Api.Services.Products
                 await _context.ProductFiles.AddAsync(productFile.FillCommonProperties());
             }
 
-            var clientGroups = this.catalogContext.ProductsGroups.Where(x => x.ProductId == model.Id && x.IsActive);
+            var clientGroups = _context.ProductsGroups.Where(x => x.ProductId == model.Id && x.IsActive);
 
             foreach (var clientGroup in clientGroups.OrEmptyIfNull())
             {
-                this.catalogContext.ProductsGroups.Remove(clientGroup);
+                _context.ProductsGroups.Remove(clientGroup);
             }
 
             foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
@@ -279,7 +279,7 @@ namespace Catalog.Api.Services.Products
                     GroupId = clientGroupId
                 };
 
-                await this.catalogContext.ProductsGroups.AddAsync(group.FillCommonProperties());
+                await _context.ProductsGroups.AddAsync(group.FillCommonProperties());
             }
 
             var message = new UpdatedProductIntegrationEvent

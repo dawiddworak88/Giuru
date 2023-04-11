@@ -226,7 +226,7 @@ namespace Media.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.mediaService.SaveMediaItemGroupsAsync(serviceModel);
+                await _mediaService.SaveMediaItemGroupsAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }

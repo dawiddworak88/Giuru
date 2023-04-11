@@ -38,6 +38,7 @@ namespace Catalog.Api.Services.Categories
                 .Include(x => x.Translations)
                 .Include(x => x.ParentCategory)
                 .Include(x => x.ParentCategory.Translations)
+                .Include(x => x.ClientsGroups)
                 .AsSingleQuery();
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
@@ -83,7 +84,7 @@ namespace Catalog.Api.Services.Categories
                     CreatedDate = x.CreatedDate,
                     Name =  x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? x.Translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
                     ParentCategoryName = x.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == x.Parentid && t.Language == model.Language)?.Name ?? x.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == x.Parentid)?.Name,
-                    ClientGroupIds = clientGroups.Select(x => x.Id),
+                    ClientGroupIds = x.ClientsGroups.Select(x => x.GroupId),
                     ThumbnailMediaId = x.Images.FirstOrDefault(y => y.CategoryId == x.Id)?.MediaId
                 })
             };
@@ -91,57 +92,9 @@ namespace Catalog.Api.Services.Categories
 
         public CategoryServiceModel Get(GetCategoryServiceModel model)
         {
-            ##var categoryItem = _context.Categories.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+            var categoryItem = _context.Categories.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
 
-            if (categoryItem is null)
-            {
-                var category = new CategoryServiceModel
-                {
-                    Id = categoryItem.Id,
-                    Order = categoryItem.Order,
-                    Level = categoryItem.Level,
-                    IsLeaf = categoryItem.IsLeaf,
-                    ParentId = categoryItem.Parentid,
-                    LastModifiedDate = categoryItem.LastModifiedDate,
-                    CreatedDate = categoryItem.CreatedDate
-                };
-
-                var clientGroups = _context.CategoriesGroups.Where(x => x.CategoryId == categoryItem.Id && x.IsActive).Select(x => x.GroupId);
-
-                if (clientGroups is not null)
-                {
-                    category.ClientGroupIds = clientGroups;
-                }
-
-                var thumbnailMedia = _context.CategoryImages.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive);
-
-                if (thumbnailMedia is not null)
-                {
-                    category.ThumbnailMediaId = thumbnailMedia.MediaId;
-                }
-
-                var categoryItemTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == categoryItem.Id && x.IsActive);
-
-                if (categoryItemTranslations is null)
-                {
-                    categoryItemTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive);
-                }
-
-                category.Name = categoryItemTranslations?.Name;
-
-                if (categoryItem.Parentid.HasValue)
-                {
-                    var parentCategoryTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == categoryItem.Parentid && x.IsActive);
-
-                    if (parentCategoryTranslations is null)
-                    {
-                        parentCategoryTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == categoryItem.Parentid && x.IsActive);
-                    }
-
-                    category.ParentCategoryName = parentCategoryTranslations?.Name;
-                }
-
-                return category;
+            if (categoryItem is null) { 
                 throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
@@ -162,7 +115,55 @@ namespace Catalog.Api.Services.Categories
             };
         }
 
-        public async Task DeleteAsync(DeleteCategoryServiceModel model)
+    /*  var category = new CategoryServiceModel
+      {
+          Id = categoryItem.Id,
+          Order = categoryItem.Order,
+          Level = categoryItem.Level,
+          IsLeaf = categoryItem.IsLeaf,
+          ParentId = categoryItem.Parentid,
+          LastModifiedDate = categoryItem.LastModifiedDate,
+          CreatedDate = categoryItem.CreatedDate
+      };
+
+      var clientGroups = _context.CategoriesGroups.Where(x => x.CategoryId == categoryItem.Id && x.IsActive).Select(x => x.GroupId);
+
+      if (clientGroups is not null)
+      {
+          category.ClientGroupIds = clientGroups;
+      }
+
+      var thumbnailMedia = _context.CategoryImages.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive);
+
+      if (thumbnailMedia is not null)
+      {
+          category.ThumbnailMediaId = thumbnailMedia.MediaId;
+      }
+
+      var categoryItemTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == categoryItem.Id && x.IsActive);
+
+      if (categoryItemTranslations is null)
+      {
+          categoryItemTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive);
+      }
+
+      category.Name = categoryItemTranslations?.Name;
+
+      if (categoryItem.Parentid.HasValue)
+      {
+          var parentCategoryTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == categoryItem.Parentid && x.IsActive);
+
+          if (parentCategoryTranslations is null)
+          {
+              parentCategoryTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == categoryItem.Parentid && x.IsActive);
+          }
+
+          category.ParentCategoryName = parentCategoryTranslations?.Name;
+      }
+
+      return category;*/
+
+    public async Task DeleteAsync(DeleteCategoryServiceModel model)
         {
             var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 

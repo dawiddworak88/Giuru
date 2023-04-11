@@ -185,7 +185,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                         .HasForeignKey("ParentCategoryId");
 
                     b.Navigation("ParentCategory");
-                });
+                }));
 
             modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterCategoryFile", b =>
                 {

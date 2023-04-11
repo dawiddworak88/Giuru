@@ -109,6 +109,7 @@ namespace News.Api.Services.News
                     .Include(x => x.Category)
                     .Include(x => x.Category.Translations)
                     .Include(x => x.Translations)
+                    .Include(x => x.ClientGroups)
                     .AsSingleQuery();
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
@@ -146,7 +147,7 @@ namespace News.Api.Services.News
                     PreviewImageId = x.PreviewImageId,
                     ThumbnailImageId = x.ThumbnailImageId,
                     IsPublished = x.IsPublished,
-                    ClientGroupIds = clientGroups.Select(x => x.Id),
+                    ClientGroupIds = x.ClientGroups.Select(x => x.GroupId),
                     Files = x.Files.Select(x => x.Id),
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
@@ -160,6 +161,7 @@ namespace News.Api.Services.News
                     .Include(x => x.Category)
                     .Include(x => x.Category.Translations)
                     .Include(x => x.Translations)
+                    .Include(x => x.ClientGroups)
                     .AsSingleQuery()
                     .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
@@ -179,7 +181,7 @@ namespace News.Api.Services.News
                 PreviewImageId = newsItem.PreviewImageId,
                 ThumbnailImageId = newsItem.ThumbnailImageId,
                 IsPublished = newsItem.IsPublished,
-                ClientGroupIds = newsItem.ClientGroups
+                ClientGroupIds = newsItem.ClientGroups.Select(x => x.GroupId),
                 Files = newsItem.Files.Where(f => f.NewsItemId == newsItem.Id && f.IsActive).OrEmptyIfNull().Select(f => f.MediaId),
                 LastModifiedDate = newsItem.LastModifiedDate,
                 CreatedDate = newsItem.CreatedDate

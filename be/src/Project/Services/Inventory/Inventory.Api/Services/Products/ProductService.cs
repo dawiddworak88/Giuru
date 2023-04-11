@@ -33,7 +33,9 @@ namespace Inventory.Api.Services.Products
 
         public async Task UpdateProductAsync(Guid? productId, string productName, string productSku, string productEan, IEnumerable<Guid> clientGroupIds)
         {
-            var #product = await _context.Products.FirstOrDefaultAsync(x => x.Id == productId.Value && x.IsActive);
+            var product = await _context.Products
+                    .Include(x => x.Groups)
+                    .FirstOrDefaultAsync(x => x.Id == productId.Value && x.IsActive);
 
             if (product is not null)
             {
@@ -44,7 +46,7 @@ namespace Inventory.Api.Services.Products
 
                 var clientGroups = _context.ProductsGroups.Where(x => x.ProductId == productId && x.IsActive);
 
-                foreach (var clientGroup in clientGroups.OrEmptyIfNull())
+                foreach (var clientGroup in product.Groups.OrEmptyIfNull())
                 {
                     _context.ProductsGroups.Remove(clientGroup);
                 }

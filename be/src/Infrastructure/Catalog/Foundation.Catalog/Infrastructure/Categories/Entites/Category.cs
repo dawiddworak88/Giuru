@@ -28,5 +28,7 @@ namespace Foundation.Catalog.Infrastructure.Categories.Entities
         public virtual IEnumerable<CategoryTranslation> Translations { get; set; }
 
         public virtual IEnumerable<CategorySchema> Schemas { get; set; }
+        
+        public virtual IEnumerable<CategoriesGroup> ClientsGroups { get; set; }
     }
 }
