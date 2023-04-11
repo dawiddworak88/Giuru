@@ -20,19 +20,18 @@ using Catalog.Api.IntegrationEvents;
 using Newtonsoft.Json.Linq;
 using Foundation.Catalog.Repositories.ProductSearchRepositories;
 using System.Diagnostics;
-using Elastic.CommonSchema;
 using Foundation.GenericRepository.Definitions;
 
 namespace Catalog.Api.Services.Products
 {
     public class ProductsService : IProductsService
     {
-        private readonly IEventBus eventBus;
-        private readonly CatalogContext catalogContext;
-        private readonly IProductSearchRepository productSearchRepository;
-        private readonly IProductIndexingRepository productIndexingRepository;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
+        private readonly IEventBus _eventBus;
+        private readonly CatalogContext _context;
+        private readonly IProductSearchRepository _productSearchRepository;
+        private readonly IProductIndexingRepository _productIndexingRepository;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<ProductResources> _productLocalizer;
 
         public ProductsService(
             IEventBus eventBus,
@@ -42,28 +41,28 @@ namespace Catalog.Api.Services.Products
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer)
         {
-            this.eventBus = eventBus;
-            this.catalogContext = catalogContext;
-            this.productSearchRepository = productSearchRepository;
-            this.productIndexingRepository = productIndexingRepository;
-            this.globalLocalizer = globalLocalizer;
-            this.productLocalizer = productLocalizer;
+            _eventBus = eventBus;
+            _context = catalogContext;
+            _productSearchRepository = productSearchRepository;
+            _productIndexingRepository = productIndexingRepository;
+            _globalLocalizer = globalLocalizer;
+            _productLocalizer = productLocalizer;
         }
 
         public async Task<Guid?> CreateAsync(CreateUpdateProductModel model)
         {
-            var brand = catalogContext.Brands.FirstOrDefault(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
+            var brand = _context.Brands.FirstOrDefault(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
 
-            if (brand == null)
+            if (brand is null)
             {
-                throw new CustomException(this.productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            var category = catalogContext.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
+            var category = _context.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
 
-            if (category == null)
+            if (category is null)
             {
-                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var product = new Product
@@ -78,7 +77,7 @@ namespace Catalog.Api.Services.Products
                 PrimaryProductId = model.PrimaryProductId
             };
 
-            await this.catalogContext.Products.AddAsync(product.FillCommonProperties());
+            await _context.Products.AddAsync(product.FillCommonProperties());
 
             var productTranslation = new ProductTranslation
             {
@@ -89,7 +88,7 @@ namespace Catalog.Api.Services.Products
                 ProductId = product.Id
             };
 
-            await this.catalogContext.ProductTranslations.AddAsync(productTranslation.FillCommonProperties());
+            await _context.ProductTranslations.AddAsync(productTranslation.FillCommonProperties());
 
             foreach (var imageId in model.Images.OrEmptyIfNull())
             {
@@ -99,7 +98,7 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                await this.catalogContext.ProductImages.AddAsync(productImage.FillCommonProperties());
+                await _context.ProductImages.AddAsync(productImage.FillCommonProperties());
             }
 
             foreach (var videoId in model.Videos.OrEmptyIfNull())
@@ -110,7 +109,7 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                await this.catalogContext.ProductVideos.AddAsync(productVideo.FillCommonProperties());
+                await _context.ProductVideos.AddAsync(productVideo.FillCommonProperties());
             }
 
             foreach (var fileId in model.Files.OrEmptyIfNull())
@@ -121,7 +120,7 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                await this.catalogContext.ProductFiles.AddAsync(productFile.FillCommonProperties());
+                await _context.ProductFiles.AddAsync(productFile.FillCommonProperties());
             }
 
             foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
@@ -132,19 +131,19 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                await this.catalogContext.ProductsGroups.AddAsync(productGroup.FillCommonProperties());
+                await _context.ProductsGroups.AddAsync(productGroup.FillCommonProperties());
             }
 
-            await this.catalogContext.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            await this.productIndexingRepository.IndexAsync(product.Id);
+            await _productIndexingRepository.IndexAsync(product.Id);
 
             return product.Id;
         }
 
         public async Task<bool> IsEmptyAsync()
         {
-            var count = await this.productSearchRepository.CountAllAsync();
+            var count = await _productSearchRepository.CountAllAsync();
 
             if (count.HasValue && count.Value == 0)
             {
@@ -158,25 +157,25 @@ namespace Catalog.Api.Services.Products
         {
             using var source = new ActivitySource(this.GetType().Name);
 
-            var brand = catalogContext.Brands.FirstOrDefault(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
+            var brand = _context.Brands.FirstOrDefault(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
 
-            if (brand == null)
+            if (brand is null)
             {
-                throw new CustomException(this.productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            var category = catalogContext.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
+            var category = _context.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
 
-            if (category == null)
+            if (category is null)
             {
-                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            var product = await this.catalogContext.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
 
-            if (product == null)
+            if (product is null)
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NoContent);
             }
             
             product.IsNew = model.IsNew;
@@ -189,9 +188,9 @@ namespace Catalog.Api.Services.Products
             product.PrimaryProductId = model.PrimaryProductId;
             product.LastModifiedDate = DateTime.UtcNow;
 
-            var productTranslation = await this.catalogContext.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == product.Id && x.Language == model.Language && x.IsActive);
+            var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == product.Id && x.Language == model.Language && x.IsActive);
 
-            if (productTranslation != null)
+            if (productTranslation is not null)
             {
                 productTranslation.Name = model.Name;
                 productTranslation.Description = model.Description;
@@ -208,14 +207,14 @@ namespace Catalog.Api.Services.Products
                     FormData = model.FormData
                 };
 
-                this.catalogContext.ProductTranslations.Add(newProductTranslation.FillCommonProperties());
+                _context.ProductTranslations.Add(newProductTranslation.FillCommonProperties());
             }
 
-            var productImages = this.catalogContext.ProductImages.Where(x => x.ProductId == model.Id && x.IsActive);
+            var productImages = _context.ProductImages.Where(x => x.ProductId == model.Id && x.IsActive);
 
             foreach (var productImage in productImages.OrEmptyIfNull())
             {
-                this.catalogContext.ProductImages.Remove(productImage);
+                _context.ProductImages.Remove(productImage);
             }
 
             foreach (var imageId in model.Images.OrEmptyIfNull())
@@ -226,14 +225,14 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                await this.catalogContext.ProductImages.AddAsync(productImage.FillCommonProperties());
+                await _context.ProductImages.AddAsync(productImage.FillCommonProperties());
             }
 
-            var productVideos = this.catalogContext.ProductVideos.Where(x => x.ProductId == model.Id && x.IsActive);
+            var productVideos = _context.ProductVideos.Where(x => x.ProductId == model.Id && x.IsActive);
 
             foreach (var productVideo in productVideos.OrEmptyIfNull())
             {
-                this.catalogContext.ProductVideos.Remove(productVideo);
+                _context.ProductVideos.Remove(productVideo);
             }
 
             foreach (var videoId in model.Videos.OrEmptyIfNull())
@@ -244,14 +243,14 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                await this.catalogContext.ProductVideos.AddAsync(productVideo.FillCommonProperties());
+                await _context.ProductVideos.AddAsync(productVideo.FillCommonProperties());
             }
 
-            var productFiles = this.catalogContext.ProductFiles.Where(x => x.ProductId == model.Id && x.IsActive);
+            var productFiles = _context.ProductFiles.Where(x => x.ProductId == model.Id && x.IsActive);
 
             foreach (var productFile in productFiles.OrEmptyIfNull())
             {
-                this.catalogContext.ProductFiles.Remove(productFile);
+                _context.ProductFiles.Remove(productFile);
             }
 
             foreach (var fileId in model.Files.OrEmptyIfNull())
@@ -262,7 +261,7 @@ namespace Catalog.Api.Services.Products
                     ProductId = product.Id
                 };
 
-                await this.catalogContext.ProductFiles.AddAsync(productFile.FillCommonProperties());
+                await _context.ProductFiles.AddAsync(productFile.FillCommonProperties());
             }
 
             var clientGroups = this.catalogContext.ProductsGroups.Where(x => x.ProductId == model.Id && x.IsActive);
@@ -296,11 +295,12 @@ namespace Catalog.Api.Services.Products
             };
 
             using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
-            this.eventBus.Publish(message);
+            
+            _eventBus.Publish(message);
 
-            await this.catalogContext.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            await this.productIndexingRepository.IndexAsync(product.Id);
+            await _productIndexingRepository.IndexAsync(product.Id);
             
             return product.Id;
         }
@@ -309,21 +309,21 @@ namespace Catalog.Api.Services.Products
         {
             using var source = new ActivitySource(this.GetType().Name);
 
-            var product = await this.catalogContext.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
 
-            if (product == null)
+            if (product is null)
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            if (await this.catalogContext.Products.AnyAsync(x => x.PrimaryProductId == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive))
+            if (await _context.Products.AnyAsync(x => x.PrimaryProductId == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive))
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductVariantsDeleteProductConflict"), (int)HttpStatusCode.Conflict);
+                throw new CustomException(_productLocalizer.GetString("ProductVariantsDeleteProductConflict"), (int)HttpStatusCode.Conflict);
             }
 
             product.IsActive = false;
 
-            await this.catalogContext.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             var message = new DeletedProductIntegrationEvent
             {
@@ -334,14 +334,15 @@ namespace Catalog.Api.Services.Products
             };
 
             using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
-            this.eventBus.Publish(message);
+            
+            _eventBus.Publish(message);
 
-            await this.productIndexingRepository.IndexAsync(product.Id);
+            await _productIndexingRepository.IndexAsync(product.Id);
         }
 
         public async Task<PagedResults<IEnumerable<ProductServiceModel>>> GetAsync(GetProductsServiceModel model)
         {
-            var searchResults = await this.productSearchRepository.GetAsync(
+            var searchResults = await _productSearchRepository.GetAsync(
                 model.Language, 
                 model.CategoryId, 
                 model.OrganisationId, 
@@ -357,21 +358,22 @@ namespace Catalog.Api.Services.Products
 
         public async Task<PagedResults<IEnumerable<ProductServiceModel>>> GetByIdsAsync(GetProductsByIdsServiceModel model)
         {
-            var searchResults = await this.productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Ids, model.OrderBy);
+            var searchResults = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Ids, model.OrderBy);
+            
             return await this.MapToPageResultsAsync(searchResults, model.Language, model.OrganisationId);
         }
 
         public async Task<ProductServiceModel> GetByIdAsync(GetProductByIdServiceModel model)
         {
-            var searchResultItem = await this.productSearchRepository.GetByIdAsync(model.Id.Value, model.Language, model.OrganisationId);
+            var searchResultItem = await _productSearchRepository.GetByIdAsync(model.Id.Value, model.Language, model.OrganisationId);
 
-            if (searchResultItem != null)
+            if (searchResultItem is not null)
             {
                 var productSearchModel = this.MapProductSearchModelToProductResult(searchResultItem);
 
                 if (!searchResultItem.PrimaryProductIdHasValue)
                 {
-                    var productVariants = await this.productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, model.Language, model.OrganisationId);
+                    var productVariants = await _productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, model.Language, model.OrganisationId);
                     productSearchModel.ProductVariants = productVariants?.Data?.Select(x => x.ProductId);
                 }
 
@@ -383,15 +385,15 @@ namespace Catalog.Api.Services.Products
 
         public async Task<ProductServiceModel> GetBySkuAsync(GetProductBySkuServiceModel model)
         {
-            var searchResultItem = await this.productSearchRepository.GetBySkuAsync(model.Sku, model.Language, model.OrganisationId);
+            var searchResultItem = await _productSearchRepository.GetBySkuAsync(model.Sku, model.Language, model.OrganisationId);
 
-            if (searchResultItem != null)
+            if (searchResultItem is not null)
             {
                 var productSearchModel = this.MapProductSearchModelToProductResult(searchResultItem);
 
                 if (!searchResultItem.PrimaryProductIdHasValue)
                 {
-                    var productVariants = await this.productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, model.Language, model.OrganisationId);
+                    var productVariants = await _productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, model.Language, model.OrganisationId);
                     productSearchModel.ProductVariants = productVariants?.Data?.Select(x => x.ProductId);
                 }
 
@@ -403,19 +405,19 @@ namespace Catalog.Api.Services.Products
 
         public IEnumerable<string> GetProductSuggestions(GetProductSuggestionsServiceModel model)
         {
-            return this.productSearchRepository.GetProductSuggestions(model.SearchTerm, model.Size, model.Language, model.OrganisationId);
+            return _productSearchRepository.GetProductSuggestions(model.SearchTerm, model.Size, model.Language, model.OrganisationId);
         }
 
         public async Task<PagedResults<IEnumerable<ProductServiceModel>>> GetBySkusAsync(GetProductsBySkusServiceModel model)
         {
-            var products = await this.productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Skus, model.OrderBy);
+            var products = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Skus, model.OrderBy);
 
             return await this.MapToPageResultsAsync(products, model.Language, model.OrganisationId);
         }
 
         private async Task<PagedResults<IEnumerable<ProductServiceModel>>> MapToPageResultsAsync(PagedResults<IEnumerable<ProductSearchModel>> searchResults, string language, Guid? organisationId)
         {
-            if (searchResults?.Data != null && searchResults.Data.Any())
+            if (searchResults?.Data is not null && searchResults.Data.Any())
             {
                 var products = new List<ProductServiceModel>();
 
@@ -425,7 +427,8 @@ namespace Catalog.Api.Services.Products
 
                     if (!searchResultItem.PrimaryProductIdHasValue)
                     {
-                        var productVariants = await this.productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, language, organisationId);
+                        var productVariants = await _productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, language, organisationId);
+                        
                         productSearchModel.ProductVariants = productVariants?.Data?.Select(x => x.ProductId);
                     }
 
@@ -452,7 +455,7 @@ namespace Catalog.Api.Services.Products
             {
                 var productAttributeObject = JObject.FromObject(productAttributeSearchModel.Value);
 
-                if (productAttributeObject != null)
+                if (productAttributeObject is not null)
                 {
                     var productAttribute = new ProductAttributeServiceModel
                     { 
@@ -464,7 +467,7 @@ namespace Catalog.Api.Services.Products
                     {
                         var valuesArray = (JArray)productAttributeObject["value"];
 
-                        if (valuesArray != null)
+                        if (valuesArray is not null)
                         {
                             productAttribute.Values = valuesArray.Children().Select(x => ((JObject)x)["name"].Value<string>());
                         }
@@ -473,7 +476,7 @@ namespace Catalog.Api.Services.Products
                     {
                         var valueObject = (JObject)productAttributeObject["value"];
 
-                        if (valueObject != null)
+                        if (valueObject is not null)
                         {
                             productAttribute.Values = new string[] { valueObject["name"].Value<string>() };
                         }
@@ -482,11 +485,11 @@ namespace Catalog.Api.Services.Products
                     {
                         if (productAttributeObject["value"].Value<bool>())
                         {
-                            productAttribute.Values = new string[] { this.globalLocalizer.GetString("Yes") };
+                            productAttribute.Values = new string[] { _globalLocalizer.GetString("Yes") };
                         }
                         else
                         {
-                            productAttribute.Values = new string[] { this.globalLocalizer.GetString("No") };
+                            productAttribute.Values = new string[] { _globalLocalizer.GetString("No") };
                         }
                     }
                     else
@@ -536,12 +539,13 @@ namespace Catalog.Api.Services.Products
             };
 
             using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
-            this.eventBus.Publish(message);
+            
+            _eventBus.Publish(message);
         }
 
         public async Task<PagedResults<IEnumerable<ProductFileServiceModel>>> GetProductFiles(GetProductFilesServiceModel model)
         {
-            var productFiles = from f in this.catalogContext.ProductFiles
+            var productFiles = from f in _context.ProductFiles
                                               where f.ProductId == model.Id && f.IsActive
                                               select new ProductFileServiceModel
                                               {

@@ -1,0 +1,36 @@
+.catalog {
+
+    @media only screen and (max-width: $tablet) {
+        margin-top: 1.5rem;
+    }
+
+    &__search {
+        margin: 3rem 0 3rem 0;
+
+        button {
+            margin-left: 1.5rem;
+        }
+    }
+
+    &__table {
+        th {
+            font-weight: bold;
+        }
+
+        button {
+            margin: 0.3rem;
+        }
+
+        .property-image {
+            max-width: 200px;
+        }
+    }
+
+    &__search-field {
+        width: 40%;
+    }
+
+    &__pagination {
+        margin: 1rem 0 3rem 0;
+    }
+}

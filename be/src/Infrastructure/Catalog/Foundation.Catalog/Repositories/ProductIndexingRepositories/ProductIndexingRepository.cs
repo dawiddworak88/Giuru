@@ -256,6 +256,8 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
                     }
                 }
 
+                await this.elasticClient.DeleteByQueryAsync<ProductSearchModel>(q => q.Query(z => z.Term(p => p.ProductId, productId)));
+
                 var response = await this.elasticClient.BulkAsync(descriptor);
 
                 if (response.IsValid is false)

@@ -20,7 +20,6 @@ using Foundation.GenericRepository.Paginations;
 using Catalog.Api.v1.Categories.ResultModels;
 using Foundation.Extensions.ExtensionMethods;
 using Catalog.Api.v1.Categories.ResponseModels;
-using System.Diagnostics;
 
 namespace Catalog.Api.v1.Categories.Controllers
 {
@@ -104,7 +103,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(Guid? id)
+        public IActionResult Get(Guid? id)
         {
             var serviceModel = new GetCategoryServiceModel
             {
@@ -114,11 +113,11 @@ namespace Catalog.Api.v1.Categories.Controllers
 
             var validator = new GetCategoryModelValidator();
 
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var validationResult = validator.Validate(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var category = await _categoryService.GetAsync(serviceModel);
+                var category = _categoryService.Get(serviceModel);
 
                 if (category is not null)
                 {

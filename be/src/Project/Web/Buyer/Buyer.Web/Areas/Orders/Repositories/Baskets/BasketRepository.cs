@@ -125,7 +125,10 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Basket>(apiRequest);
-            if (response.IsSuccessStatusCode && response.Data != null)
+
+
+
+            if (response.IsSuccessStatusCode && response.Data is not null)
             {
                 return response.Data;
             }

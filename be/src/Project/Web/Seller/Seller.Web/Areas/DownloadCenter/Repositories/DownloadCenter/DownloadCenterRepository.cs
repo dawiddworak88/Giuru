@@ -17,6 +17,7 @@ using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.Definitions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
@@ -106,9 +107,11 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<DownloadCenterItemApiResponseModel>>>(apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            if (response.IsSuccessStatusCode && response.Data?.Data is not null)
             {
                 var downloadCenterFiles = new List<DownloadCenterItem>();
+
+                var mediaItems = await this.mediaItemsRepository.GetMediaItemsAsync(response.Data.Data.Select(x => x.Id), language, pageIndex, itemsPerPage, token);
 
                 foreach(var downloadCenterFile in response.Data.Data.OrEmptyIfNull())
                 {
@@ -122,7 +125,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
                         CreatedDate = downloadCenterFile.CreatedDate
                     };
 
-                    var file = await this.mediaItemsRepository.GetMediaItemAsync(token, language, downloadCenterFile.Id);
+                    var file = mediaItems.Data.FirstOrDefault(x => x.Id == downloadCenterFile.Id);
 
                     if (file is not null)
                     {

@@ -11,29 +11,29 @@ namespace Inventory.Api.Services.Products
 {
     public class ProductService : IProductService
     {
-        private readonly InventoryContext context;
+        private readonly InventoryContext _context;
 
         public ProductService(InventoryContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
         public async Task DeleteProductAsync(Guid? productId)
         {
-            var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == productId.Value && x.IsActive);
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == productId.Value && x.IsActive);
 
             if (product is not null)
             {
                 product.IsActive = false;
                 product.LastModifiedDate = DateTime.UtcNow;
 
-                await this.context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
         }
 
         public async Task UpdateProductAsync(Guid? productId, string productName, string productSku, string productEan, IEnumerable<Guid> clientGroupIds)
         {
-            var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == productId.Value && x.IsActive);
+            var #product = await _context.Products.FirstOrDefaultAsync(x => x.Id == productId.Value && x.IsActive);
 
             if (product is not null)
             {
@@ -42,11 +42,11 @@ namespace Inventory.Api.Services.Products
                 product.Ean = productEan;
                 product.LastModifiedDate = DateTime.UtcNow;
 
-                var clientGroups = this.context.ProductsGroups.Where(x => x.ProductId == productId && x.IsActive);
+                var clientGroups = _context.ProductsGroups.Where(x => x.ProductId == productId && x.IsActive);
 
                 foreach (var clientGroup in clientGroups.OrEmptyIfNull())
                 {
-                    this.context.ProductsGroups.Remove(clientGroup);
+                    _context.ProductsGroups.Remove(clientGroup);
                 }
 
                 foreach (var clientGroupId in clientGroupIds.OrEmptyIfNull())
@@ -57,10 +57,10 @@ namespace Inventory.Api.Services.Products
                         GroupId = clientGroupId
                     };
 
-                    await this.context.ProductsGroups.AddAsync(group);
+                    await _context.ProductsGroups.AddAsync(group);
                 }
 
-                await this.context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
         }
     }

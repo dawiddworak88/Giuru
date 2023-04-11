@@ -20,22 +20,22 @@ namespace Global.Api.Services.Countries
 {
     public class CountriesService : ICountriesService
     {
-        private readonly GlobalContext context;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly GlobalContext _context;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
 
         public CountriesService(
             GlobalContext context,
             IStringLocalizer<GlobalResources> globalLocalizer)
         {
-            this.context = context;
-            this.globalLocalizer = globalLocalizer;
+            _context = context;
+            _globalLocalizer = globalLocalizer;
         }
 
         public async Task CreateAsync(CreateCountryServiceModel model)
         {
             var country = new Country();
 
-            await this.context.Countries.AddAsync(country.FillCommonProperties());
+            await _context.Countries.AddAsync(country.FillCommonProperties());
 
             var countryTranslation = new CountryTranslation
             {
@@ -44,36 +44,45 @@ namespace Global.Api.Services.Countries
                 Language = model.Language
             };
 
-            await this.context.CountryTranslations.AddAsync(countryTranslation.FillCommonProperties());
-            await this.context.SaveChangesAsync();
+            await _context.CountryTranslations.AddAsync(countryTranslation.FillCommonProperties());
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(DeleteCountryServiceModel model)
         {
-            var country = await this.context.Countries.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var country = await _context.Countries.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (country is null)
             {
-                throw new CustomException(this.globalLocalizer.GetString("CountryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_globalLocalizer.GetString("CountryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             country.IsActive = false;
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<PagedResults<IEnumerable<CountryServiceModel>>> GetAsync(GetCountriesServiceModel model)
+        public PagedResults<IEnumerable<CountryServiceModel>> Get(GetCountriesServiceModel model)
         {
-            var countries = this.context.Countries.Where(x => x.IsActive);
+            var countries = _context.Countries.Where(x => x.IsActive)
+                    .Include(x => x.Translations)
+                    .AsSingleQuery()
+                    .Select(x => new CountryServiceModel
+                    {
+                        Id = x.Id,
+                        Name = x.Translations.FirstOrDefault(t => t.CountryId == x.Id && t.Language == model.Language) != null ? x.Translations.FirstOrDefault(t => t.CountryId == x.Id && t.Language == model.Language).Name : x.Translations.FirstOrDefault(t => t.CountryId == x.Id).Name,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    });
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                countries = countries.Where(x => x.Translations.Any(x => x.Name.StartsWith(model.SearchTerm)));
+                countries = countries.Where(x => x.Name.StartsWith(model.SearchTerm));
             }
 
             countries = countries.ApplySort(model.OrderBy);
 
-            PagedResults<IEnumerable<Country>> pagedResults;
+            PagedResults<IEnumerable<CountryServiceModel>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
@@ -86,74 +95,39 @@ namespace Global.Api.Services.Countries
                 pagedResults = countries.PagedIndex(new Pagination(countries.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            var pagedCountriesServiceModel = new PagedResults<IEnumerable<CountryServiceModel>>(pagedResults.Total, pagedResults.PageSize);
-
-            var countriesItems = new List<CountryServiceModel>();
-
-            foreach (var countryItem in pagedResults.Data.OrEmptyIfNull().ToList())
-            {
-                var country = new CountryServiceModel
-                {
-                    Id = countryItem.Id,
-                    LastModifiedDate = countryItem.LastModifiedDate,
-                    CreatedDate = countryItem.CreatedDate
-                };
-
-                var countryTranslations = this.context.CountryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CountryId == country.Id && x.IsActive);
-
-                if (countryTranslations is null)
-                {
-                    countryTranslations = this.context.CountryTranslations.FirstOrDefault(x => x.IsActive);
-                }
-
-                country.Name = countryTranslations?.Name;
-
-                countriesItems.Add(country);
-            };
-
-            pagedCountriesServiceModel.Data = countriesItems;
-
-            return pagedCountriesServiceModel;
+            return pagedResults;
         }
 
         public async Task<CountryServiceModel> GetAsync(GetCountryServiceModel model)
         {
-            var existingCountry = await this.context.Countries.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var country = await _context.Countries
+                    .Include(x => x.Translations)
+                    .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
-            if (existingCountry is null)
+            if (country is null)
             {
-                throw new CustomException(this.globalLocalizer.GetString("CountryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_globalLocalizer.GetString("CountryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            var country = new CountryServiceModel
+            return new CountryServiceModel
             {
-                Id = existingCountry.Id,
-                LastModifiedDate = existingCountry.LastModifiedDate,
-                CreatedDate = existingCountry.CreatedDate
+                Id = country.Id,
+                Name = country.Translations.FirstOrDefault(t => t.CountryId == country.Id && t.Language == model.Language && t.IsActive)?.Name ?? country.Translations.FirstOrDefault(t => t.CountryId == country.Id && t.IsActive)?.Name,
+                LastModifiedDate = country.LastModifiedDate,
+                CreatedDate = country.CreatedDate
             };
-
-            var countryTranslation = await this.context.CountryTranslations.FirstOrDefaultAsync(x => x.CountryId == existingCountry.Id && x.Language == model.Language && x.IsActive);
-
-            if (countryTranslation is null)
-            {
-                countryTranslation = await this.context.CountryTranslations.FirstOrDefaultAsync(x => x.CountryId == existingCountry.Id && x.IsActive);
-            }
-
-            country.Name = countryTranslation?.Name;
-
-            return country;
         }
 
         public async Task UpdateAsync(UpdateCountryServiceModel model)
         {
-            var country = await this.context.Countries.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var country = await _context.Countries.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (country is null)
             {
-                throw new CustomException(this.globalLocalizer.GetString("CountryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_globalLocalizer.GetString("CountryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            var countryTranslation = await this.context.CountryTranslations.FirstOrDefaultAsync(x => x.CountryId == model.Id && x.Language == model.Language && x.IsActive);
+            var countryTranslation = await _context.CountryTranslations.FirstOrDefaultAsync(x => x.CountryId == model.Id && x.Language == model.Language && x.IsActive);
 
             if (countryTranslation is not null)
             {
@@ -169,12 +143,12 @@ namespace Global.Api.Services.Countries
                     Language = model.Language
                 };
 
-                await this.context.CountryTranslations.AddAsync(newCountryTranslation.FillCommonProperties());
+                await _context.CountryTranslations.AddAsync(newCountryTranslation.FillCommonProperties());
             }
 
             country.LastModifiedDate = DateTime.UtcNow;
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
     }
 }

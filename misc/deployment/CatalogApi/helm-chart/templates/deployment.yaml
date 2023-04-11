@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-api-deployment
+  labels:
+    app: catalog-api
+spec:
+  replicas: {{ .Values.catalogApi.replicas }}
+  selector:
+    matchLabels:
+      app: catalog-api
+  template:
+    metadata:
+      labels:
+        app: catalog-api
+    spec:
+      containers:
+      - name: catalog-api-container
+        image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: {{ .Values.catalogApi.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.catalogApi.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.catalogApi.readinessProbe.timeoutSeconds }}
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: {{ .Values.catalogApi.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.catalogApi.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.catalogApi.livenessProbe.timeoutSeconds }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
+        - name: MediaUrl
+          value: {{ .Values.mediaUrl }}
+        - name: ElasticsearchIndex
+          value: {{ .Values.catalogApi.elasticsearchIndex }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
+        envFrom:
+        - secretRef:
+            name: b2b-catalog-api-secrets
+        ports:
+        - containerPort: 80

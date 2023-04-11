@@ -14,28 +14,27 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 {
     public class HomePageNewsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, HomePageNewsCarouselGridViewModel>
     {
-        private readonly INewsRepository newsRepository;
-        private readonly IStringLocalizer<NewsResources> newsLocalizer;
+        private readonly INewsRepository _newsRepository;
+        private readonly IStringLocalizer<NewsResources> _newsLocalizer;
 
         public HomePageNewsModelBuilder(
             INewsRepository newsRepository,
             IStringLocalizer<NewsResources> newsLocalizer)
         {
-            this.newsRepository = newsRepository;
-            this.newsLocalizer = newsLocalizer;
+            _newsRepository = newsRepository;
+            _newsLocalizer = newsLocalizer;
         }
 
         public async Task<HomePageNewsCarouselGridViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new HomePageNewsCarouselGridViewModel
             {
-                Title = newsLocalizer.GetString("News")
+                Title = _newsLocalizer.GetString("News")
             };
 
             var items = new List<CarouselGridItemViewModel>();
 
-            var news = await newsRepository.GetNewsItemsAsync(
-                componentModel.Token, componentModel.Language, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, null, $"{nameof(NewsItem.CreatedDate)} desc");
+            var news = await _newsRepository.GetNewsItemsAsync(componentModel.Token, componentModel.Language, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, null, $"{nameof(NewsItem.CreatedDate)} desc");
 
             if (news is not null && news.Total > 0)
             {
@@ -58,7 +57,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                     contentGridCarouselItems.Add(carouselItem);
                 }
 
-                items.Add(new CarouselGridItemViewModel { Id = HomeConstants.News.NewsId, Title = newsLocalizer.GetString("News"), CarouselItems = contentGridCarouselItems });
+                items.Add(new CarouselGridItemViewModel { Id = HomeConstants.News.NewsId, Title = _newsLocalizer.GetString("News"), CarouselItems = contentGridCarouselItems });
 
                 viewModel.Items = items;
             }

@@ -18,6 +18,7 @@ using Ordering.Api.Definitions;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.Infrastructure.Orders.Entities;
 using Ordering.Api.IntegrationEvents;
+using Ordering.Api.IntegrationEventsModels;
 using Ordering.Api.ServicesModels;
 using System;
 using System.Collections.Generic;
@@ -178,7 +179,16 @@ namespace Ordering.Api.Services
 
             var message = new OrderStartedIntegrationEvent
             { 
-                BasketId =  serviceModel.BasketId
+                BasketId = serviceModel.BasketId,
+                ClientId = serviceModel.ClientId,
+                OrderItems = serviceModel.Items.OrEmptyIfNull().Select(x => new OrderItemStartedEventModel
+                {
+                    Id = x.ProductId,
+                    Quantity = x.Quantity,
+                    StockQuantity = x.StockQuantity,
+                    OutletQuantity = x.OutletQuantity
+                }),
+                CreatedDate = order.CreatedDate
             };
 
             using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
@@ -233,10 +243,18 @@ namespace Ordering.Api.Services
                 throw new CustomException(_orderLocalizer.GetString("OrderNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            var order = new OrderServiceModel
+            var orderStatusTranslations = _context.OrderStatusTranslations.Where(x => x.IsActive).ToList();
+
+            var orderItems = _context.OrderItems.Where(x => x.OrderId == existingOrder.Id && x.IsActive).ToList();
+
+            var lastOrderItemStatusChanges = _context.OrderItemStatusChanges.Where(x => orderItems.Select(x => x.Id).Contains(x.OrderItemId) && x.IsActive).ToList();
+
+            var orderItemStatusChangesCommentTranslations = _context.OrderItemStatusChangesCommentTranslations.Where(x => lastOrderItemStatusChanges.Select(x => x.Id).Contains(x.OrderItemStatusChangeId) && x.IsActive).ToList();
+
+            return new OrderServiceModel
             {
                 Id = existingOrder.Id,
-                SellerId = existingOrder.Id,
+                SellerId = existingOrder.SellerId,
                 ClientId = existingOrder.ClientId.Value,
                 ClientName = existingOrder.ClientName,
                 BillingAddressId = existingOrder.BillingAddressId,
@@ -261,83 +279,39 @@ namespace Ordering.Api.Services
                 ShippingPostCode = existingOrder.ShippingPostCode,
                 ShippingRegion = existingOrder.ShippingRegion,
                 ShippingStreet = existingOrder.ShippingStreet,
-                ExternalReference = existingOrder.ExternalReference,
                 ExpectedDeliveryDate = existingOrder.ExpectedDeliveryDate,
+                ExternalReference = existingOrder.ExternalReference,
                 MoreInfo = existingOrder.MoreInfo,
                 Reason = existingOrder.Reason,
                 OrderStateId = existingOrder.OrderStateId,
                 OrderStatusId = existingOrder.OrderStatusId,
+                OrderStatusName = orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == existingOrder.OrderStatusId && y.Language == model.Language)?.Name ?? orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == existingOrder.OrderStatusId)?.Name,
+                OrderItems = orderItems.Where(y => y.OrderId == existingOrder.Id && y.IsActive).Select(y => new OrderItemServiceModel
+                {
+                    Id = y.Id,
+                    OrderId = y.OrderId,
+                    ProductId = y.ProductId,
+                    ProductSku = y.ProductSku,
+                    ProductName = y.ProductName,
+                    PictureUrl = y.PictureUrl,
+                    Quantity = y.Quantity,
+                    StockQuantity = y.StockQuantity,
+                    OutletQuantity = y.OutletQuantity,
+                    ExternalReference = y.ExternalReference,
+                    ExpectedDeliveryFrom = y.ExpectedDeliveryFrom,
+                    ExpectedDeliveryTo = y.ExpectedDeliveryTo,
+                    MoreInfo = y.MoreInfo,
+                    LastOrderItemStatusChangeId = y.LastOrderItemStatusChangeId,
+                    OrderItemStatusId = lastOrderItemStatusChanges.FirstOrDefault(z => z.OrderItemId == y.Id)?.OrderItemStatusId ?? OrderStatusesConstants.NewId,
+                    OrderItemStatusChangeComment = orderItemStatusChangesCommentTranslations.FirstOrDefault(z => z.OrderItemStatusChangeId == y.LastOrderItemStatusChangeId && z.Language == model.Language)?.OrderItemStatusChangeComment ?? orderItemStatusChangesCommentTranslations.FirstOrDefault(z => z.OrderItemStatusChangeId == y.LastOrderItemStatusChangeId)?.OrderItemStatusChangeComment,
+                    OrderItemStatusName = orderStatusTranslations.FirstOrDefault(z => z.OrderStatusId == (lastOrderItemStatusChanges.FirstOrDefault(z => z.OrderItemId == y.Id)?.OrderItemStatusId ?? OrderStatusesConstants.NewId) && z.Language == model.Language)?.Name,
+                    OrderItemStateId = lastOrderItemStatusChanges.FirstOrDefault(z => z.OrderItemId == y.Id)?.OrderItemStateId ?? OrderStatesConstants.NewId,
+                    LastModifiedDate = y.LastModifiedDate,
+                    CreatedDate = y.CreatedDate
+                }),
                 LastModifiedDate = existingOrder.LastModifiedDate,
                 CreatedDate = existingOrder.CreatedDate
             };
-
-            var orderStatusTranslation = _context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == existingOrder.OrderStatusId && x.IsActive && x.Language == model.Language);
-
-            if (orderStatusTranslation is null)
-            {
-                orderStatusTranslation = _context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == existingOrder.OrderStatusId && x.IsActive);
-            }
-
-            order.OrderStatusName = orderStatusTranslation?.Name;
-
-            var orderedItems = _context.OrderItems.Where(x => x.OrderId == existingOrder.Id && x.IsActive);
-
-            var orderItems = new List<OrderItemServiceModel>();
-
-            foreach (var orderedItem in orderedItems.OrEmptyIfNull().ToList())
-            {
-                var orderItem = new OrderItemServiceModel
-                {
-                    Id = orderedItem.Id,
-                    OrderId = orderedItem.OrderId,
-                    ProductId = orderedItem.ProductId,
-                    ProductSku = orderedItem.ProductSku,
-                    ProductName = orderedItem.ProductName,
-                    PictureUrl = orderedItem.PictureUrl,
-                    Quantity = orderedItem.Quantity,
-                    StockQuantity = orderedItem.StockQuantity,
-                    OutletQuantity = orderedItem.OutletQuantity,
-                    ExternalReference = orderedItem.ExternalReference,
-                    ExpectedDeliveryFrom = orderedItem.ExpectedDeliveryFrom,
-                    ExpectedDeliveryTo = orderedItem.ExpectedDeliveryTo,
-                    MoreInfo = orderedItem.MoreInfo,
-                    LastModifiedDate = orderedItem.LastModifiedDate,
-                    CreatedDate = orderedItem.CreatedDate
-                };
-
-                var lastOrderStatusChange = _context.OrderItemStatusChanges.FirstOrDefault(x => x.Id == orderedItem.LastOrderItemStatusChangeId && x.IsActive);
-
-                if (lastOrderStatusChange is not null)
-                {
-                    orderItem.OrderItemStateId = lastOrderStatusChange.OrderItemStateId;
-                    orderItem.OrderItemStatusId = lastOrderStatusChange.OrderItemStatusId;
-                    orderItem.LastOrderItemStatusChangeId = lastOrderStatusChange.Id;
-
-                    var orderItemStatusTranslation = _context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == lastOrderStatusChange.OrderItemStatusId && x.IsActive && x.Language == model.Language);
-
-                    if (orderItemStatusTranslation is null)
-                    {
-                        orderItemStatusTranslation = _context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == lastOrderStatusChange.OrderItemStatusId && x.IsActive);
-                    }
-
-                    orderItem.OrderItemStatusName = orderItemStatusTranslation?.Name;
-
-                    var orderItemStatusCommentTranslation = _context.OrderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == lastOrderStatusChange.Id && x.Language == model.Language && x.IsActive);
-
-                    if (orderItemStatusCommentTranslation is null)
-                    {
-                        orderItemStatusCommentTranslation = _context.OrderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == lastOrderStatusChange.Id && x.IsActive);
-                    }
-
-                    orderItem.OrderItemStatusChangeComment = orderItemStatusCommentTranslation?.OrderItemStatusChangeComment;
-                }
-
-                orderItems.Add(orderItem);
-            }
-
-            order.OrderItems = orderItems;
-
-            return order;
         }
 
         public async Task<OrderItemServiceModel> GetAsync(GetOrderItemServiceModel model)

@@ -17,7 +17,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.11")
+                .HasAnnotation("ProductVersion", "6.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -55,6 +55,8 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentCategoryId");
 
                     b.ToTable("DownloadCenterCategories");
                 });
@@ -94,6 +96,8 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("DownloadCenterCategoryFiles");
                 });
 
@@ -108,9 +112,6 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DownloadCenterCategoryId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -133,7 +134,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DownloadCenterCategoryId");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("DownloadCenterCategoryTranslations");
                 });
@@ -177,7 +178,37 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterCategory", b =>
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterCategory", b =>
                 {
+                    b.HasOne("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterCategory", "ParentCategory")
+                        .WithMany()
+                        .HasForeignKey("ParentCategoryId");
+
+                    b.Navigation("ParentCategory");
+                });
+
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterCategoryFile", b =>
+                {
+                    b.HasOne("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterCategory", null)
+                        .WithMany("Files")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterCategoryTranslation", b =>
+                {
+                    b.HasOne("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterCategory", null)
+                        .WithMany("Translations")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterCategory", b =>
+                {
+                    b.Navigation("Files");
+
                     b.Navigation("Translations");
                 });
 #pragma warning restore 612, 618

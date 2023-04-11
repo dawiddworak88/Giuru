@@ -29,11 +29,11 @@ namespace Media.Api.v1.Controllers
     [ApiController]
     public class MediaItemsController : BaseApiController
     {
-        private readonly IMediaService mediaService;
+        private readonly IMediaService _mediaService;
 
         public MediaItemsController(IMediaService mediaService)
         {
-            this.mediaService = mediaService;
+            _mediaService = mediaService;
         }
 
         /// <summary>
@@ -50,9 +50,9 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<MediaItemResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy )
+        public IActionResult Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy )
         {
-            var sellerClaims = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaims = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var mediaItemsIds = ids.ToEnumerableGuidIds();
 
             if (mediaItemsIds is not null)
@@ -63,16 +63,16 @@ namespace Media.Api.v1.Controllers
                     Ids = mediaItemsIds,
                     PageIndex = pageIndex,
                     ItemsPerPage = itemsPerPage,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaims?.Value)
                 };
 
                 var validator = new GetMediaItemsByIdsModelValidator();
-                var validationResult = await validator.ValidateAsync(serviceModel);
+                var validationResult = validator.Validate(serviceModel);
 
                 if (validationResult.IsValid)
                 {
-                    var mediaItems = this.mediaService.GetMediaItemsByIds(serviceModel);
+                    var mediaItems = _mediaService.GetMediaItemsByIds(serviceModel);
 
                     if (mediaItems is not null)
                     {
@@ -103,7 +103,7 @@ namespace Media.Api.v1.Controllers
             {
                 var serviceModel = new GetMediaItemsServiceModel
                 {
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaims?.Value),
                     Language = CultureInfo.CurrentCulture.Name,
                     SearchTerm = searchTerm,
@@ -112,13 +112,13 @@ namespace Media.Api.v1.Controllers
                     OrderBy = orderBy
                 };
 
-                var mediaItems = this.mediaService.GetAsync(serviceModel);
+                var mediaItems = _mediaService.Get(serviceModel);
 
                 if (mediaItems is not null)
                 {
-                    var response = new PagedResults<IEnumerable<MediaItemResponseModel>>(mediaItems.Result.Total, mediaItems.Result.PageSize)
+                    var response = new PagedResults<IEnumerable<MediaItemResponseModel>>(mediaItems.Total, mediaItems.PageSize)
                     {
-                        Data = mediaItems.Result.Data.OrEmptyIfNull().Select(x => new MediaItemResponseModel
+                        Data = mediaItems.Data.OrEmptyIfNull().Select(x => new MediaItemResponseModel
                         {
                             Id = x.Id,
                             MediaItemVersionId = x.MediaItemVersionId,
@@ -151,24 +151,24 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(MediaItemResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Get(Guid? id)
+        public IActionResult Get(Guid? id)
         {
-            var sellerClaims = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaims = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetMediaItemsByIdServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaims?.Value)
             };
 
             var validator = new GetMediaItemsByIdModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var validationResult = validator.Validate(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var mediaItem = this.mediaService.GetMediaItemById(serviceModel);
+                var mediaItem = _mediaService.GetMediaItemById(serviceModel);
 
                 if (mediaItem is not null)
                 {
@@ -247,7 +247,7 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> UpdateVersion(UpdateMediaItemVersionRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new UpdateMediaItemVersionServiceModel
             {
                 Id = request.Id,
@@ -256,7 +256,7 @@ namespace Media.Api.v1.Controllers
                 Language = CultureInfo.CurrentCulture.Name,
                 MetaData = request.MetaData,
                 ClientGroupIds = request.ClientGroupIds,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -265,7 +265,7 @@ namespace Media.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.mediaService.UpdateMediaItemVersionAsync(serviceModel);
+                await _mediaService.UpdateMediaItemVersionAsync(serviceModel);
                 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
@@ -284,23 +284,23 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(MediaItemVersionsResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetVersions(Guid? id)
+        public IActionResult GetVersions(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetMediaItemsByIdServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new GetMediaItemsByIdModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var validationResult = validator.Validate(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var mediaItemVersions = await this.mediaService.GetMediaItemVerionsByIdAsync(serviceModel);
+                var mediaItemVersions = _mediaService.GetMediaItemVerionsById(serviceModel);
 
                 if (mediaItemVersions is not null)
                 {

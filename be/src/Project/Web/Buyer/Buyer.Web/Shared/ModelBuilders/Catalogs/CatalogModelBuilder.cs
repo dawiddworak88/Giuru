@@ -56,7 +56,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 ExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ExpectedDeliveryLabel")
             };
 
-            if (componentModel.IsAuthenticated)
+            if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
             {
                 var basketItems = this.basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language).Result;
 
