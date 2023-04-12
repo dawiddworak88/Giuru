@@ -112,7 +112,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                 var availableProducts = await _inventoryRepository.GetAvailbleProductsInventoryByIds(token, language, productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
 
-                var availableOutletProducts = await _outletRepository.GetOutletProductsAsync(language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, token);
+                var availableOutletProducts = await _outletRepository.GetOutletProductsByIdsAsync(token, language, productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
 
                 var carouselItems = new List<CarouselGridCarouselItemViewModel>();
 
@@ -168,7 +168,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         carouselItem.ExpectedDelivery = availableProduct.ExpectedDelivery;
                     }
 
-                    var availableOutletProduct = availableOutletProducts.Data.FirstOrDefault(x => x.ProductSku == productVariant.Sku);
+                    var availableOutletProduct = availableOutletProducts.FirstOrDefault(x => x.ProductSku == productVariant.Sku);
 
                     if (availableOutletProduct is not null)
                     {
