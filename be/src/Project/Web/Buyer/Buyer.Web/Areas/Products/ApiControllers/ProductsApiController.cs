@@ -110,11 +110,12 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 var productVariants = await this.productsRepository.GetProductsAsync(
                     product.ProductVariants, null, null, language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, $"{nameof(Product.Name)} ASC");
 
-                var availableProducts = await this.inventoryRepository.GetAvailbleProductsInventory(language, null, null, null);
+                var availableProducts = await this.inventoryRepository.GetAvailbleProductsInventoryByIds(token, language, productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
 
                 var availableOutletProducts = await this.outletRepository.GetOutletProductsAsync(language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, token);
 
                 var carouselItems = new List<CarouselGridCarouselItemViewModel>();
+
                 foreach (var productVariant in productVariants.Data.OrEmptyIfNull())
                 {
                     var carouselItem = new CarouselGridCarouselItemViewModel
@@ -131,6 +132,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     if (productVariant.Images != null && productVariant.Images.Any())
                     {
                         var variantImage = productVariant.Images.FirstOrDefault();
+
                         carouselItem.Sources = new List<SourceViewModel>
                         {
                             new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 1024) },
@@ -145,6 +147,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         };
 
                         var variantImages = new List<ImageVariantViewModel>();
+
                         foreach (var image in productVariant.Images)
                         {
                             var imageVariantViewModel = new ImageVariantViewModel
@@ -157,7 +160,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         carouselItem.ImageUrl = this.mediaService.GetMediaUrl(variantImage, CarouselGridConstants.CarouselItemImageMaxWidth);
                     }
 
-                    var availableProduct = availableProducts.Data.FirstOrDefault(x => x.ProductSku == productVariant.Sku);
+                    var availableProduct = availableProducts.FirstOrDefault(x => x.ProductSku == productVariant.Sku);
+
                     if (availableProduct is not null)
                     {
                         carouselItem.AvailableQuantity = availableProduct.AvailableQuantity;
@@ -165,6 +169,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     }
 
                     var availableOutletProduct = availableOutletProducts.Data.FirstOrDefault(x => x.ProductSku == productVariant.Sku);
+
                     if (availableOutletProduct is not null)
                     {
                         carouselItem.AvailableOutletQuantity = availableOutletProduct.AvailableQuantity;
