@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Products.Definitions;
-using Buyer.Web.Areas.Products.DomainModels;
+﻿using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
