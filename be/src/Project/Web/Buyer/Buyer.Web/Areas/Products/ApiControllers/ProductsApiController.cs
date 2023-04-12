@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Products.Definitions;
-using Buyer.Web.Areas.Products.DomainModels;
+﻿using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
@@ -33,14 +32,14 @@ namespace Buyer.Web.Areas.Products.ApiControllers
     [Area("Products")]
     public class ProductsApiController : BaseApiController
     {
-        private readonly IProductsService productsService;
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
-        private readonly IProductsRepository productsRepository;
-        private readonly IInventoryRepository inventoryRepository;
-        private readonly IOutletRepository outletRepository;
-        private readonly IMediaItemsRepository mediaRepository;
-        private readonly IMediaService mediaService;
-        private readonly LinkGenerator linkGenerator;
+        private readonly IProductsService _productsService;
+        private readonly IStringLocalizer<ProductResources> _productLocalizer;
+        private readonly IProductsRepository _productsRepository;
+        private readonly IInventoryRepository _inventoryRepository;
+        private readonly IOutletRepository _outletRepository;
+        private readonly IMediaItemsRepository _mediaRepository;
+        private readonly IMediaService _mediaService;
+        private readonly LinkGenerator _linkGenerator;
 
         public ProductsApiController(
             IProductsService productsService,
@@ -52,21 +51,21 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IOutletRepository outletRepository,
             LinkGenerator linkGenerator)
         {
-            this.productsService = productsService;
-            this.productsRepository = productsRepository;
-            this.linkGenerator = linkGenerator;
-            this.productLocalizer = productLocalizer;
-            this.mediaService = mediaService;
-            this.productLocalizer = productLocalizer;
-            this.inventoryRepository = inventoryRepository;
-            this.outletRepository = outletRepository;
-            this.mediaRepository = mediaRepository;
+            _productsService = productsService;
+            _productsRepository = productsRepository;
+            _linkGenerator = linkGenerator;
+            _productLocalizer = productLocalizer;
+            _mediaService = mediaService;
+            _productLocalizer = productLocalizer;
+            _inventoryRepository = inventoryRepository;
+            _outletRepository = outletRepository;
+            _mediaRepository = mediaRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var products = await this.productsService.GetProductsAsync(
+            var products = await _productsService.GetProductsAsync(
                 null,
                 categoryId,
                 brandId,
@@ -76,7 +75,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 itemsPerPage,
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName));
 
-            return this.StatusCode((int)HttpStatusCode.OK, products);
+            return StatusCode((int)HttpStatusCode.OK, products);
         }
 
         [HttpGet]
@@ -84,7 +83,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         {
             var language = CultureInfo.CurrentUICulture.Name;
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
-            var products = await this.productsRepository.GetProductsAsync(
+            var products = await _productsRepository.GetProductsAsync(
                 token,
                 language,
                 searchTerm,
@@ -94,27 +93,28 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 itemsPerPage,
                 orderBy);
 
-            return this.StatusCode((int)HttpStatusCode.OK, products);
+            return StatusCode((int)HttpStatusCode.OK, products);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetProductVariants(Guid? id)
         {
             var language = CultureInfo.CurrentUICulture.Name;
-            var product = await this.productsRepository.GetProductAsync(id, language, null);
+            var product = await _productsRepository.GetProductAsync(id, language, null);
 
             if (product?.ProductVariants is not null)
             {
                 var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
-                var productVariants = await this.productsRepository.GetProductsAsync(
+
+                var productVariants = await _productsRepository.GetProductsAsync(
                     product.ProductVariants, null, null, language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, $"{nameof(Product.Name)} ASC");
 
-                var availableProducts = await this.inventoryRepository.GetAvailbleProductsInventory(
-                    language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, null);
+                var availableProducts = await _inventoryRepository.GetAvailbleProductsInventoryByIds(token, language, productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
 
-                var availableOutletProducts = await this.outletRepository.GetOutletProductsAsync(language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, token);
+                var availableOutletProducts = await _outletRepository.GetOutletProductsByIdsAsync(token, language, productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
 
                 var carouselItems = new List<CarouselGridCarouselItemViewModel>();
+
                 foreach (var productVariant in productVariants.Data.OrEmptyIfNull())
                 {
                     var carouselItem = new CarouselGridCarouselItemViewModel
@@ -124,27 +124,29 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         Subtitle = productVariant.Sku,
                         Ean = productVariant.Ean,
                         ImageAlt = productVariant.Name,
-                        Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id }),
-                        ProductAttributes = await this.productsService.GetProductAttributesAsync(productVariant.ProductAttributes)
+                        Url = _linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id }),
+                        ProductAttributes = await _productsService.GetProductAttributesAsync(productVariant.ProductAttributes)
                     };
 
                     if (productVariant.Images != null && productVariant.Images.Any())
                     {
                         var variantImage = productVariant.Images.FirstOrDefault();
+
                         carouselItem.Sources = new List<SourceViewModel>
                         {
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 1024) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 352) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 608) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 768) },
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(variantImage, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(variantImage, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(variantImage, 608) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(variantImage, 768) },
 
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 1024) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 352) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 608) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 768) }
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(variantImage, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(variantImage, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(variantImage, 608) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(variantImage, 768) }
                         };
 
                         var variantImages = new List<ImageVariantViewModel>();
+
                         foreach (var image in productVariant.Images)
                         {
                             var imageVariantViewModel = new ImageVariantViewModel
@@ -154,17 +156,19 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             variantImages.Add(imageVariantViewModel);
                         }
                         carouselItem.Images = variantImages;
-                        carouselItem.ImageUrl = this.mediaService.GetMediaUrl(variantImage, CarouselGridConstants.CarouselItemImageMaxWidth);
+                        carouselItem.ImageUrl = _mediaService.GetMediaUrl(variantImage, CarouselGridConstants.CarouselItemImageMaxWidth);
                     }
 
-                    var availableProduct = availableProducts.Data.FirstOrDefault(x => x.ProductSku == productVariant.Sku);
+                    var availableProduct = availableProducts.FirstOrDefault(x => x.ProductSku == productVariant.Sku);
+
                     if (availableProduct is not null)
                     {
                         carouselItem.AvailableQuantity = availableProduct.AvailableQuantity;
                         carouselItem.ExpectedDelivery = availableProduct.ExpectedDelivery;
                     }
 
-                    var availableOutletProduct = availableOutletProducts.Data.FirstOrDefault(x => x.ProductSku == productVariant.Sku);
+                    var availableOutletProduct = availableOutletProducts.FirstOrDefault(x => x.ProductSku == productVariant.Sku);
+
                     if (availableOutletProduct is not null)
                     {
                         carouselItem.AvailableOutletQuantity = availableOutletProduct.AvailableQuantity;
@@ -179,15 +183,15 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     new CarouselGridItemViewModel
                     {
                         Id = product.Id,
-                        Title = this.productLocalizer.GetString("ProductVariants"),
+                        Title = _productLocalizer.GetString("ProductVariants"),
                         CarouselItems = carouselItems
                     }
                 };
 
-                return this.StatusCode((int)HttpStatusCode.OK, response);
+                return StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            return this.StatusCode((int)HttpStatusCode.OK);
+            return StatusCode((int)HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -196,14 +200,14 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var productFiles = await this.productsRepository.GetProductFilesAsync(token, language, id, pageIndex, itemsPerPage, searchTerm, $"{nameof(ProductFile.CreatedDate)} desc");
+            var productFiles = await _productsRepository.GetProductFilesAsync(token, language, id, pageIndex, itemsPerPage, searchTerm, $"{nameof(ProductFile.CreatedDate)} desc");
 
             var filesModel = new List<FileItem>();
             var filesIds = productFiles.Data.Select(x => x.Id);
 
             if (productFiles is not null && filesIds.Any())
             {
-                var files = await this.mediaRepository.GetMediaItemsAsync(token, language, filesIds, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize);
+                var files = await _mediaRepository.GetMediaItemsAsync(token, language, filesIds, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize);
 
                 foreach (var file in files.OrEmptyIfNull())
                 {
@@ -212,10 +216,10 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         Id = file.Id,
                         Name = file.Name,
                         Filename = file.Filename,
-                        Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
+                        Url = _mediaService.GetNonCdnMediaUrl(file.Id),
                         Description = file.Description ?? "-",
                         IsProtected = file.IsProtected,
-                        Size = this.mediaService.ConvertToMB(file.Size),
+                        Size = _mediaService.ConvertToMB(file.Size),
                         LastModifiedDate = file.LastModifiedDate,
                         CreatedDate = file.CreatedDate
                     };
@@ -229,7 +233,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 Data = filesModel
             };
 
-            return this.StatusCode((int)HttpStatusCode.OK, pagedFiles);
+            return StatusCode((int)HttpStatusCode.OK, pagedFiles);
         }
     } 
 }
