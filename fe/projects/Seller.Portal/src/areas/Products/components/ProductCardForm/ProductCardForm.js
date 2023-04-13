@@ -21,8 +21,8 @@ const ProductCardForm = (props) => {
     const [entityToDelete, setEntityToDelete] = useState(null);
     const stateSchema = {
         id: { value: props.id ? props.id : null },
-        schema: { value: props.schema ? JSON.parse(props.schema) : null },
-        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : null }
+        schema: { value: props.schema ? JSON.parse(props.schema) : {} },
+        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : {} }
     }
     
     const stateValidatorSchema = {
