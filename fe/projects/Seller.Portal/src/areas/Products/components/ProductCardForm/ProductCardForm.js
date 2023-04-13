@@ -22,7 +22,7 @@ const ProductCardForm = (props) => {
     const stateSchema = {
         id: { value: props.id ? props.id : null },
         schema: { value: props.schema ? JSON.parse(props.schema) : {} },
-        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : {} }
+        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : null }
     }
     
     const stateValidatorSchema = {
