@@ -25,7 +25,7 @@ namespace Foundation.Extensions.Formatters
 
         public override Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
         {
-            StringBuilder csv = new StringBuilder();
+            var csv = new StringBuilder();
 
             var type = context.Object.GetType();
 
@@ -35,9 +35,7 @@ namespace Foundation.Extensions.Formatters
 
                 var dataObjectsList = (IEnumerable<object>)dataObjects;
 
-                csv.AppendLine(
-                        string.Join(",", dataObjectsList.FirstOrDefault().GetType().GetProperties().Select(x => x.Name))
-                    );
+                csv.AppendLine(string.Join(",", dataObjectsList.FirstOrDefault().GetType().GetProperties().Select(x => x.Name)));
 
                 foreach (var obj in (IEnumerable<object>)dataObjects)
                 {
@@ -83,19 +81,17 @@ namespace Foundation.Extensions.Formatters
             }
             else
             {
-                csv.AppendLine(
-                        string.Join(",", type.GetProperties().Select(x => x.Name))
-                    );
+                csv.AppendLine(string.Join(",", type.GetProperties().Select(x => x.Name)));
 
                 foreach (var obj in (IEnumerable<object>)context.Object)
                 {
                     var properties = obj.GetType().GetProperties().Select(
-                                pi => new
-                                {
-                                    Name = pi.Name,
-                                    Value = pi.GetValue(obj, null)
-                                }
-                            );
+                        pi => new
+                        {
+                            Name = pi.Name,
+                            Value = pi.GetValue(obj, null)
+                        }
+                    );
 
                     var values = new List<string>();
 
@@ -135,12 +131,7 @@ namespace Foundation.Extensions.Formatters
 
         protected override bool CanWriteType(Type type)
         {
-            if (type.IsGenericType)
-            {
-                return true;
-            }
-
-            return false;
+            return type.IsGenericType;
         }
     }
 }
