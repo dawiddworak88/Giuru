@@ -1,0 +1,22 @@
+﻿<div id="root" asp-prerender-module="ProductCardPage" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    <title>@MetaTagsService.GenerateTitle(this.GlobalLocalizer.GetString("ProductCard"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.GlobalLocalizer.GetString("ProductCard")))
+    {
+        <meta name="description" content="@this.GlobalLocalizer.GetString("ProductCard")" />
+    }
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/productcardpage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/productcardpage.js" asp-append-version="true"></script>
+}

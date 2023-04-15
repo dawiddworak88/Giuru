@@ -7,4 +7,11 @@ export default class NavigationHelper {
             window.location.href = url;
         }
     }
+
+    static openInNewTab(url) {
+
+        if (typeof window !== "undefined") {
+            window.open(url, "_blank");
+        }
+    }
 }
