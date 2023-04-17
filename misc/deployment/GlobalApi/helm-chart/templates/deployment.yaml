@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: global-api-deployment
+  labels:
+    app: global-api
+spec:
+  replicas: {{ .Values.globalApi.replicas }}
+  selector:
+    matchLabels:
+      app: global-api
+  template:
+    metadata:
+      labels:
+        app: global-api
+    spec:
+      containers:
+      - name: global-api-container
+        image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: {{ .Values.globalApi.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.globalApi.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.globalApi.readinessProbe.timeoutSeconds }}
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: {{ .Values.globalApi.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.globalApi.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.globalApi.livenessProbe.timeoutSeconds }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        envFrom:
+        - secretRef:
+            name: b2b-global-api-secrets
+        ports:
+        - containerPort: 80

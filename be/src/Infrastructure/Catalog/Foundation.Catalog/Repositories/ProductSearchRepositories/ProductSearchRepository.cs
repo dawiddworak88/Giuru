@@ -74,7 +74,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 itemsPerPage = Constants.MaxItemsPerPageLimit;
             }
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.TrackTotalHits().From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
 
             if (response.IsValid)
             {
@@ -114,7 +114,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
         public async Task<ProductSearchModel> GetBySkuAsync(string sku, string language, Guid? organisationId)
         {
-            var query = Query<ProductSearchModel>.Term(t => t.Field(x => x.Sku.Suffix("keyword")).Value(sku.ToLowerInvariant()))
+            var query = Query<ProductSearchModel>.Term(t => t.Field(x => x.Sku.Suffix("keyword")).Value(sku))
                 && Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
@@ -260,29 +260,6 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
         public IEnumerable<string> GetProductSuggestions(string searchTerm, int size, string language, Guid? organisationId)
         {
-            var suggestions = new List<string>();
-
-            var categoryResponse = this.elasticClient.Search<ProductSearchModel>(s => s
-                .Suggest(su => su
-                    .Completion("categoryName", cs => cs
-                        .Contexts(ctx => ctx
-                            .Context("isActive", x => x.Context(true.ToString())))
-                        .Contexts(ctx => ctx
-                            .Context("language", x => x.Context(language)))
-                        .Field(f => f.CategoryNameSuggest)
-                        .Prefix(searchTerm)
-                        .Fuzzy(f => f
-                            .Fuzziness(Fuzziness.Auto)
-                        )
-                    )
-                )
-            );
-
-            var categorySuggestions =
-                from suggest in categoryResponse.Suggest["categoryName"]
-                from option in suggest.Options
-                select option.Text;
-
             var nameResponse = this.elasticClient.Search<ProductSearchModel>(s => s
                 .Suggest(su => su
                     .Completion("name", cs => cs
@@ -304,32 +281,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 from option in suggest.Options
                 select option.Text;
 
-            var brandResponse = this.elasticClient.Search<ProductSearchModel>(s => s
-                .Suggest(su => su
-                    .Completion("brandName", cs => cs
-                        .Contexts(ctx => ctx
-                            .Context("isActive", x => x.Context(true.ToString())))
-                        .Contexts(ctx => ctx
-                            .Context("primaryProductIdHasValue", x => x.Context(false.ToString())))
-                        .Field(f => f.BrandNameSuggest)
-                        .Prefix(searchTerm)
-                        .Fuzzy(f => f
-                            .Fuzziness(Fuzziness.Auto)
-                        )
-                    )
-                )
-            );
-
-            var brandSuggestions =
-                from suggest in brandResponse.Suggest["brandName"]
-                from option in suggest.Options
-                select option.Text;
-
-            suggestions.AddRange(categorySuggestions.Distinct());
-            suggestions.AddRange(nameSuggestions.Distinct());
-            suggestions.AddRange(brandSuggestions.Distinct());
-
-            return suggestions.Take(size);
+            return nameSuggestions.Distinct().Take(size);
         }
     }
 }

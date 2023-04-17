@@ -56,12 +56,7 @@ namespace Analytics.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid?>("SalesFactId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("SalesFactId");
 
                     b.ToTable("ClientDimensions");
                 });
@@ -89,12 +84,7 @@ namespace Analytics.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid?>("SalesFactId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("SalesFactId");
 
                     b.ToTable("LocationDimensions");
                 });
@@ -160,16 +150,11 @@ namespace Analytics.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid?>("SalesFactId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Sku")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SalesFactId");
 
                     b.ToTable("ProductDimensions");
                 });
@@ -295,9 +280,6 @@ namespace Analytics.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid?>("SalesFactId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Second")
                         .HasColumnType("int");
 
@@ -306,30 +288,7 @@ namespace Analytics.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SalesFactId");
-
                     b.ToTable("TimeDimensions");
-                });
-
-            modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.ClientDimension", b =>
-                {
-                    b.HasOne("Analytics.Api.Infrastructure.Entities.SalesAnalytics.SalesFact", null)
-                        .WithMany("ClientDimensions")
-                        .HasForeignKey("SalesFactId");
-                });
-
-            modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.LocationDimension", b =>
-                {
-                    b.HasOne("Analytics.Api.Infrastructure.Entities.SalesAnalytics.SalesFact", null)
-                        .WithMany("LocationDimensions")
-                        .HasForeignKey("SalesFactId");
-                });
-
-            modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.ProductDimension", b =>
-                {
-                    b.HasOne("Analytics.Api.Infrastructure.Entities.SalesAnalytics.SalesFact", null)
-                        .WithMany("ProductDimensions")
-                        .HasForeignKey("SalesFactId");
                 });
 
             modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.ProductTranslationDimension", b =>
@@ -341,27 +300,9 @@ namespace Analytics.Api.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.TimeDimension", b =>
-                {
-                    b.HasOne("Analytics.Api.Infrastructure.Entities.SalesAnalytics.SalesFact", null)
-                        .WithMany("TimeDimensions")
-                        .HasForeignKey("SalesFactId");
-                });
-
             modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.ProductDimension", b =>
                 {
                     b.Navigation("Translations");
-                });
-
-            modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.SalesFact", b =>
-                {
-                    b.Navigation("ClientDimensions");
-
-                    b.Navigation("LocationDimensions");
-
-                    b.Navigation("ProductDimensions");
-
-                    b.Navigation("TimeDimensions");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,6 +7,7 @@ using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,48 +26,23 @@ namespace Buyer.Web.Areas.Dashboard.Repositories
             _settings = settings;
         }
 
-        public async Task<IEnumerable<AnnualSalesItem>> GetAnnualSales(string token, string language)
+        public async Task<IEnumerable<AnnualSalesItem>> GetAnnualSales(string token, string language, DateTime fromDate, DateTime toDate)
         {
-            var apiRequest = new ApiRequest<RequestModelBase>
+            var requestModel = new SalesAnalyticsRequestModel
             {
-                Language = language,
-                Data = new RequestModelBase(),
-                AccessToken = token,
-                EndpointAddress = $"{_settings.Value.AnalyticsUrl}{ApiConstants.Analytics.SalesAnalyticsApiEndpoint}"
+                FromDate = fromDate,
+                ToDate = toDate,
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<AnnualSalesItem>>(apiRequest);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            if (response.IsSuccessStatusCode && response.Data != null)
-            {
-                return response.Data;
-            }
-
-            return default;
-        }
-
-        public async Task<IEnumerable<Product>> GetProductsSales(string token, string language, int? size, string orderBy)
-        {
-            var requestModel = new SalesAnalyticsProductsRequestModel
-            {
-                Size = size,
-                OrderBy = orderBy
-            };
-
-            var apiRequest = new ApiRequest<SalesAnalyticsProductsRequestModel>
+            var apiRequest = new ApiRequest<SalesAnalyticsRequestModel>
             {
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.AnalyticsUrl}{ApiConstants.Analytics.ProductsSalesAnalyticsApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.AnalyticsUrl}{ApiConstants.Analytics.SalesAnalyticsApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<SalesAnalyticsProductsRequestModel>, SalesAnalyticsProductsRequestModel, IEnumerable<Product>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<SalesAnalyticsRequestModel>, SalesAnalyticsRequestModel, IEnumerable<AnnualSalesItem>>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {

@@ -58,8 +58,8 @@ spec:
           value: {{ .Values.eventBusRetryCount }}
         - name: EventBusRequestedHeartbeat
           value: {{ .Values.eventBusRequestedHeartbeat }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -96,9 +96,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -124,12 +121,14 @@ spec:
           value: {{ .Values.senderEmail }}
         - name: SendGridApiKey
           value: {{ .Values.sendGridApiKey }}
+        - name: ApplyRecipientEmail
+          value: {{ .Values.identityApi.applyRecipientEmail }}
         - name: ActionSendGridClientApplyConfirmationTemplateId
           value: {{ .Values.clientApi.actionSendGridClientApplyConfirmationTemplateId }}
         - name: ActionSendGridClientApplyTemplateId
           value: {{ .Values.clientApi.actionSendGridClientApplyTemplateId }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -166,9 +165,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "500Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -202,8 +198,8 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -240,9 +236,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -272,10 +265,59 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
         - containerPort: 80
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: content-api-deployment
+#   labels:
+#     app: content-api
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: content-api
+#   template:
+#     metadata:
+#       labels:
+#         app: content-api
+#     spec:
+#       containers:
+#       - name: content-api-container
+#         image: {{ .Values.image.registry }}/content-api:{{ .Values.image.tag }}
+#         env:
+#         - name: DATABASE_CLIENT
+#           value: {{ .Values.contentApi.databaseClient }}
+#         - name: DATABASE_NAME
+#           value: {{ .Values.contentApi.databaseName }}
+#         - name: DATABASE_HOST
+#           value: {{ .Values.contentApi.databaseHost }}
+#         - name: DATABASE_PORT
+#           value: {{ .Values.contentApi.databasePort }}
+#         - name: DATABASE_USERNAME
+#           value: {{ .Values.contentApi.databaseUsername }}
+#         - name: DATABASE_PASSWORD
+#           value: {{ .Values.contentApi.databasePassword }}
+#         - name: DATABASE_SSL
+#           value: {{ .Values.contentApi.databaseSsl }}
+#         - name: GIURU_API_SECRET
+#           value: {{ .Values.giuruApiSecret }}
+#         - name: GIURU_API_EMAIL
+#           value: {{ .Values.giuruApiEmail }}
+#         - name: GIURU_API_ORGANISATION_ID
+#           value: {{ .Values.organisationId }}
+#         - name: GIURU_MEDIA_API_URL
+#           value: {{ .Values.mediaUrl }}
+#         - name: GIURU_CONTENT_API_URL
+#           value: {{ .Values.contentUrl }}
+#         - name: GIURU_IDENTITY_API_URL
+#           value: {{ .Values.identityUrl }}
+#         ports:
+#         - containerPort: 1337
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -310,9 +352,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -334,8 +373,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -376,9 +415,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -410,8 +446,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -477,9 +513,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -539,8 +572,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -581,9 +614,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -605,8 +635,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -647,9 +677,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -667,8 +694,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -709,9 +736,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -739,8 +763,8 @@ spec:
           value: {{ .Values.eventBusRetryCount }}
         - name: EventBusRequestedHeartbeat
           value: {{ .Values.eventBusRequestedHeartbeat }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
         - containerPort: 80
 ---
@@ -777,9 +801,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -799,62 +820,10 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
         - containerPort: 80
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: content-api-deployment
-  labels:
-    app: content-api
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: content-api
-  template:
-    metadata:
-      labels:
-        app: content-api
-    spec:
-      containers:
-      - name: content-api-container
-        image: {{ .Values.image.registry }}/content-api:{{ .Values.image.tag }}
-        resources:
-          limits:
-            memory: "250Mi"
-        env:
-        - name: DATABASE_CLIENT
-          value: {{ .Values.contentApi.databaseClient }}
-        - name: DATABASE_NAME
-          value: {{ .Values.contentApi.databaseName }}
-        - name: DATABASE_HOST
-          value: {{ .Values.contentApi.databaseHost }}
-        - name: DATABASE_PORT
-          value: {{ .Values.contentApi.databasePort }}
-        - name: DATABASE_USERNAME
-          value: {{ .Values.contentApi.databaseUsername }}
-        - name: DATABASE_PASSWORD
-          value: {{ .Values.contentApi.databasePassword }}
-        - name: DATABASE_SSL
-          value: {{ .Values.contentApi.databaseSsl }}
-        - name: GIURU_API_SECRET
-          value: {{ .Values.giuruApiSecret }}
-        - name: GIURU_API_EMAIL
-          value: {{ .Values.giuruApiEmail }}
-        - name: GIURU_API_ORGANISATION_ID
-          value: {{ .Values.organisationId }}
-        - name: GIURU_MEDIA_API_URL
-          value: {{ .Values.mediaUrl }}
-        - name: GIURU_CONTENT_API_URL
-          value: {{ .Values.contentUrl }}
-        - name: GIURU_IDENTITY_API_URL
-          value: {{ .Values.identityTokenUrl }}
-        ports:
-        - containerPort: 1337
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -889,9 +858,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -911,8 +877,28 @@ spec:
           value: {{ .Values.supportedCultures }}
         - name: RedisUrl
           value: {{ .Values.redisUrl }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
+        - name: GiuruApiAppSecret
+          value: {{ .Values.giuruApiSecret }}
+        - name: GiuruApiEmail
+          value: {{ .Values.giuruApiEmail }}
+        - name: GiuruApiOrganisationId
+          value: {{ .Values.organisationId }}
+        - name: GiuruTokenUrl
+          value: {{ .Values.identityTokenUrl }}
+        - name: EventBusConnection
+          value: {{ .Values.eventBusConnection }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
+        - name: ClientUrl
+          value: {{ .Values.clientUrl }}
+        - name: CatalogUrl
+          value: {{ .Values.catalogUrl }}
+        - name: GlobalUrl
+          value: {{ .Values.globalUrl }}
         ports:
         - containerPort: 80
 ---
@@ -949,9 +935,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -1003,8 +986,8 @@ spec:
           value: {{ .Values.logzIoDataCenterSubDomain }}
         - name: GoogleTagManagerIdentifier
           value: {{ .Values.googleTagManagerIdentifier }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -1045,9 +1028,6 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
-        resources:
-          limits:
-            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -1067,6 +1047,8 @@ spec:
           value: {{ .Values.basketUrl }}
         - name: ClientUrl
           value: {{ .Values.clientUrl }}
+        - name: AnalyticsUrl
+          value: {{ .Values.analyticsUrl }}
         - name: InventoryUrl
           value: {{ .Values.inventoryUrl }}
         - name: NewsUrl
@@ -1087,8 +1069,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
-        - name: OpenTelemetryCollectorUrl
-          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: OpenTelemetryTracingCollectorUrl
+          value: {{ .Values.openTelemetryTracingCollectorUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures

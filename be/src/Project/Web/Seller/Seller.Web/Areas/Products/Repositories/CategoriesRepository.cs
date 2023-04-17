@@ -230,5 +230,30 @@ namespace Seller.Web.Areas.Categories.Repositories
 
             return default;
         }
+
+        public async Task SaveAsync(string token, string language, Guid? id, string schema, string uiSchema)
+        {
+            var requestModel = new ProductCardApiRequestModel
+            {
+                CategoryId = id,
+                Schema = schema,
+                UiSchema = uiSchema
+            };
+
+            var apiRequest = new ApiRequest<ProductCardApiRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemasApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.PostAsync<ApiRequest<ProductCardApiRequestModel>, ProductCardApiRequestModel, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+        }
     }
 }

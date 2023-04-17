@@ -16,6 +16,6 @@ namespace DownloadCenter.Api.Services.DownloadCenter
         Task<Guid> CreateAsync(CreateDownloadCenterItemServiceModel model);
         Task<Guid> UpdateAsync(UpdateDownloadCenterItemServiceModel model);
         Task UpdateFileNameAsync(Guid? id, string name);
-        Task<PagedResults<IEnumerable<DownloadCenterCategoryFileServiceModel>>> GetDownloadCenterCategoryFilesAsync(GetDownloadCenterCategoryFilesServiceModel model);
+        PagedResults<IEnumerable<DownloadCenterCategoryFileServiceModel>> GetDownloadCenterCategoryFiles(GetDownloadCenterCategoryFilesServiceModel model);
     }
 }

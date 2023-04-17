@@ -49,6 +49,7 @@ namespace Catalog.BackgroundTasks.DependencyInjection
         {
             services.AddScoped<IIntegrationEventHandler<RebuildCatalogSearchIndexIntegrationEvent>, RebuildCatalogSearchIndexIntegrationEventHandler>();
             services.AddScoped<IIntegrationEventHandler<RebuildCategorySchemasIntegrationEvent>, RebuildCategorySchemasIntegrationEventHandler>();
+            services.AddScoped<IIntegrationEventHandler<RebuildCategoryProductsIntegrationEvent>, RebuildCategoryProductsIntegrationEventHandler>();
 
             services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
             {

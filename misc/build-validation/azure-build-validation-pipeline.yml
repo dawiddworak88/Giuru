@@ -1,0 +1,18 @@
+trigger: none
+
+variables:
+  solution: 'be/src/AspNetCore.sln'
+
+stages:
+- stage: Build_and_Unit_Test
+  jobs:
+  - job: BuildUnitTestJob
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - script: |
+        dotnet build -c 'Release' $(solution)
+      displayName: Build solution
+    - script: |
+        dotnet test $(solution)
+      displayName: Run unit tests

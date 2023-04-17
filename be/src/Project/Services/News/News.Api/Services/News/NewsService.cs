@@ -80,6 +80,7 @@ namespace News.Api.Services.News
         public async Task DeleteAsync(DeleteNewsItemServiceModel model)
         {
             var newsItem = _context.NewsItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+
             if (newsItem is null)
             {
                 throw new CustomException(_newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NoContent);
@@ -93,11 +94,11 @@ namespace News.Api.Services.News
         public PagedResults<IEnumerable<NewsItemServiceModel>> Get(GetNewsItemsServiceModel model)
         {
             var news = _context.NewsItems.Where(x => x.IsActive)
-                .Include(x => x.Translations)
-                .Include(x => x.Category)
-                .Include(x => x.Category.Translations)
-                .Include(x => x.Files)
-                .AsSingleQuery(); ;
+                    .Include(x => x.Files)
+                    .Include(x => x.Category)
+                    .Include(x => x.Category.Translations)
+                    .Include(x => x.Translations)
+                    .AsSingleQuery();
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -143,48 +144,33 @@ namespace News.Api.Services.News
 
         public async Task<NewsItemServiceModel> GetAsync(GetNewsItemServiceModel model)
         {
-            var newsItem = _context.NewsItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
-            if (newsItem is not null)
+            var newsItem = await _context.NewsItems
+                    .Include(x => x.Category)
+                    .Include(x => x.Category.Translations)
+                    .Include(x => x.Translations)
+                    .AsSingleQuery()
+                    .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+
+            if (newsItem is null)
             {
-                var item = new NewsItemServiceModel
-                {
-                    Id = newsItem.Id,
-                    ThumbnailImageId = newsItem.ThumbnailImageId,
-                    PreviewImageId = newsItem.PreviewImageId,
-                    CategoryId = newsItem.CategoryId,
-                    IsPublished = newsItem.IsPublished,
-                    LastModifiedDate = newsItem.LastModifiedDate,
-                    CreatedDate = newsItem.CreatedDate
-                };
-
-                var newsItemTranslations = _context.NewsItemTranslations.FirstOrDefault(x => x.Language == model.Language && x.NewsItemId == newsItem.Id && x.IsActive);
-                if (newsItemTranslations is null)
-                {
-                    newsItemTranslations = _context.NewsItemTranslations.FirstOrDefault(x => x.NewsItemId == newsItem.Id && x.IsActive);
-                }
-
-                item.Title = newsItemTranslations?.Title;
-                item.Description = newsItemTranslations?.Description;
-                item.Content = newsItemTranslations?.Content;
-
-                var newsCategoryTranslation = _context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == newsItem.CategoryId && x.IsActive);
-                if (newsCategoryTranslation is null)
-                {
-                    newsCategoryTranslation = _context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == newsItem.CategoryId && x.IsActive);
-                }
-                
-                item.CategoryName = newsCategoryTranslation?.Name;
-
-                var files = _context.NewsItemFiles.Where(x => x.NewsItemId == newsItem.Id && x.IsActive);
-                if (files.Any())
-                {
-                    item.Files = files.Select(x => x.MediaId);
-                }
-
-                return item;
+                throw new CustomException(_newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            return default;
+            return new NewsItemServiceModel
+            {
+                Id = newsItem.Id,
+                CategoryId = newsItem.CategoryId,
+                CategoryName = newsItem.Category?.Translations?.FirstOrDefault(t => t.CategoryId == newsItem.CategoryId && t.Language == model.Language && t.IsActive)?.Name ?? newsItem.Category?.Translations?.FirstOrDefault(t => t.CategoryId == newsItem.CategoryId && t.IsActive)?.Name,
+                Title = newsItem.Translations.FirstOrDefault(t => t.NewsItemId == newsItem.Id && t.IsActive && t.Language == model.Language)?.Title ?? newsItem.Translations.FirstOrDefault(t => t.NewsItemId == newsItem.Id && t.IsActive)?.Title,
+                Description = newsItem.Translations.FirstOrDefault(t => t.NewsItemId == newsItem.Id && t.IsActive && t.Language == model.Language)?.Description ?? newsItem.Translations.FirstOrDefault(t => t.NewsItemId == newsItem.Id && t.IsActive)?.Description,
+                Content = newsItem.Translations.FirstOrDefault(t => t.NewsItemId == newsItem.Id && t.IsActive && t.Language == model.Language)?.Content ?? newsItem.Translations.FirstOrDefault(t => t.NewsItemId == newsItem.Id && t.IsActive)?.Content,
+                PreviewImageId = newsItem.PreviewImageId,
+                ThumbnailImageId = newsItem.ThumbnailImageId,
+                IsPublished = newsItem.IsPublished,
+                Files = newsItem.Files.Where(f => f.NewsItemId == newsItem.Id && f.IsActive).OrEmptyIfNull().Select(f => f.MediaId),
+                LastModifiedDate = newsItem.LastModifiedDate,
+                CreatedDate = newsItem.CreatedDate
+            };
         }
 
         public async Task<PagedResults<IEnumerable<NewsItemFileServiceModel>>> GetFilesAsync(GetNewsItemFilesServiceModel model)

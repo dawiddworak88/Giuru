@@ -678,4 +678,40 @@
   <data name="Content" xml:space="preserve">
     <value>CMS</value>
   </data>
+  <data name="ProductCard" xml:space="preserve">
+    <value>Karta produktu</value>
+  </data>
+  <data name="ProductCards" xml:space="preserve">
+    <value>Karty produktów</value>
+  </data>
+  <data name="Definition" xml:space="preserve">
+    <value>Definicja</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>Wyświetlana nazwa</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="Array" xml:space="preserve">
+    <value>Lista</value>
+  </data>
+  <data name="Boolean" xml:space="preserve">
+    <value>Przełącznik</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Liczba</value>
+  </data>
+  <data name="Reference" xml:space="preserve">
+    <value>Odwołanie do definicji</value>
+  </data>
+  <data name="String" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Ilość</value>
+  </data>
+  <data name="Sku" xml:space="preserve">
+    <value>Sku</value>
+  </data>
 </root>

@@ -1,8 +1,8 @@
-﻿using Foundation.Extensions.Definitions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,75 +11,111 @@ namespace Foundation.Telemetry.DependencyInjection
 {
     public static class CompositionRoot
     {
-        public static void RegisterOpenTelemetry(
+        public static void AddOpenTelemetryTracing(
             this IServiceCollection services,
-            IConfiguration configuration,
+            string endpoint,
             string name,
             bool enableRedisInstrumentation,
             bool enableSqlClientInstrumentation,
             bool enableEntityFrameworkInstrumentation,
             bool enableHttpClientInstrumentation,
             bool enableAspNetCoreInstrumentation,
-            IEnumerable<string> pathsToIgnore,
-            string environmentName)
+            IEnumerable<string> pathsToIgnore)
         {
-            services.AddOpenTelemetryTracing(tracerProviderBuilder =>
+            if (string.IsNullOrWhiteSpace(endpoint) is false)
             {
-                tracerProviderBuilder
-                    .AddSource(name)
-                    .SetResourceBuilder(
-                        ResourceBuilder.CreateDefault()
-                            .AddService(name));
-
-                if (enableSqlClientInstrumentation)
+                services.AddOpenTelemetryTracing(tracerProviderBuilder =>
                 {
-                    tracerProviderBuilder.AddSqlClientInstrumentation();
-                }
+                    tracerProviderBuilder
+                        .AddSource(name)
+                        .SetResourceBuilder(
+                            ResourceBuilder.CreateDefault()
+                                .AddService(name));
 
-                if (enableEntityFrameworkInstrumentation)
-                {
-                    tracerProviderBuilder.AddEntityFrameworkCoreInstrumentation();
-                }
-
-                if (enableRedisInstrumentation)
-                {
-                    tracerProviderBuilder.AddRedisInstrumentation();
-                }
-
-                if (enableHttpClientInstrumentation)
-                {
-                    tracerProviderBuilder.AddHttpClientInstrumentation();
-                }
-
-                if (enableAspNetCoreInstrumentation)
-                {
-                    tracerProviderBuilder.AddAspNetCoreInstrumentation(o =>
+                    if (enableSqlClientInstrumentation)
                     {
-                        if (pathsToIgnore is not null && pathsToIgnore.Any())
+                        tracerProviderBuilder.AddSqlClientInstrumentation();
+                    }
+
+                    if (enableEntityFrameworkInstrumentation)
+                    {
+                        tracerProviderBuilder.AddEntityFrameworkCoreInstrumentation();
+                    }
+
+                    if (enableRedisInstrumentation)
+                    {
+                        tracerProviderBuilder.AddRedisInstrumentation();
+                    }
+
+                    if (enableHttpClientInstrumentation)
+                    {
+                        tracerProviderBuilder.AddHttpClientInstrumentation();
+                    }
+
+                    if (enableAspNetCoreInstrumentation)
+                    {
+                        tracerProviderBuilder.AddAspNetCoreInstrumentation(o =>
                         {
-                            var pathsToIgnoreList = pathsToIgnore.ToList();
-
-                            o.Filter = context =>
+                            if (pathsToIgnore is not null && pathsToIgnore.Any())
                             {
-                                return !pathsToIgnoreList.Contains(context.Request.Path);
-                            };
-                        }
-                    });
-                }
+                                var pathsToIgnoreList = pathsToIgnore.ToList();
 
-                if (environmentName == EnvironmentConstants.DevelopmentEnvironmentName
-                    || string.IsNullOrWhiteSpace(configuration["OpenTelemetryCollectorUrl"]))
-                {
-                    tracerProviderBuilder.AddConsoleExporter();
-                }
-                else
-                {
+                                o.Filter = context =>
+                                {
+                                    return !pathsToIgnoreList.Contains(context.Request.Path);
+                                };
+                            }
+                        });
+                    }
+
                     tracerProviderBuilder.AddOtlpExporter(o =>
                     {
-                        o.Endpoint = new Uri(configuration["OpenTelemetryCollectorUrl"]);
+                        o.Endpoint = new Uri(endpoint);
                     });
-                }
-            });
+                });
+            }
+        }
+
+        public static void AddOpenTelemetryMetrics(
+            this IServiceCollection services,
+            string endpoint,
+            string name,
+            bool enableHttpClientInstrumentation,
+            bool enableAspNetCoreInstrumentation)
+        {
+            if (string.IsNullOrWhiteSpace(endpoint) is false)
+            {
+                services.AddOpenTelemetryMetrics(meterProviderBuilder =>
+                {
+                    meterProviderBuilder
+                        .SetResourceBuilder(
+                            ResourceBuilder.CreateDefault()
+                                .AddService(name));
+
+                    if (enableHttpClientInstrumentation)
+                    {
+                        meterProviderBuilder.AddHttpClientInstrumentation();
+                    }
+
+                    if (enableAspNetCoreInstrumentation)
+                    {
+                        meterProviderBuilder.AddAspNetCoreInstrumentation();
+                    }
+
+                    meterProviderBuilder.AddOtlpExporter(o =>
+                    {
+                        o.Endpoint = new Uri(endpoint);
+                    });
+                });
+            }
+        }
+
+        public static void AddOpenTelemetrySerilogLogs(this LoggerConfiguration loggerConfiguration, string endpoint)
+        {
+            if (string.IsNullOrWhiteSpace(endpoint) is false)
+            {
+                loggerConfiguration.WriteTo.OpenTelemetry(endpoint);
+            }
         }
     }
 }

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: news-api-deployment
+  labels:
+    app: news-api
+spec:
+  replicas: {{ .Values.newsApi.replicas }}
+  selector:
+    matchLabels:
+      app: news-api
+  template:
+    metadata:
+      labels:
+        app: news-api
+    spec:
+      containers:
+      - name: news-api-container
+        image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: {{ .Values.newsApi.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.newsApi.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.newsApi.readinessProbe.timeoutSeconds }}
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: {{ .Values.newsApi.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.newsApi.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.newsApi.livenessProbe.timeoutSeconds }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: OpenTelemetryCollectorUrl
+          value: {{ .Values.openTelemetryCollectorUrl }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        envFrom:
+        - secretRef:
+            name: b2b-news-api-secrets
+        ports:
+        - containerPort: 80
