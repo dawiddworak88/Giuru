@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
+using Foundation.Media.Services.FileTypeServices;
 using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
@@ -11,6 +12,7 @@ using Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenterCategories;
 using Seller.Web.Areas.DownloadCenter.ViewModel;
 using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Definitions;
+using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
 using System.Globalization;
@@ -28,6 +30,8 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
         private readonly IDownloadCenterRepository downloadCenterRepository;
         private readonly IMediaItemsRepository mediaItemsRepository;
         private readonly IMediaService mediaService;
+        private readonly IClientGroupsRepository clientGroupsRepository;
+        private readonly IFileTypeService fileTypeService;
 
         public DownloadCenterItemFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -35,7 +39,9 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             IDownloadCenterRepository downloadCenterRepository,
             IDownloadCenterCategoriesRepository downloadCenterCategoriesRepository,
             IMediaItemsRepository mediaItemsRepository,
+            IClientGroupsRepository clientGroupsRepository,
             IMediaService mediaService,
+            IFileTypeService fileTypeService,
             LinkGenerator linkGenerator)
         {
             this.linkGenerator = linkGenerator;
@@ -45,6 +51,8 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             this.downloadCenterRepository = downloadCenterRepository;
             this.mediaService = mediaService;
             this.mediaItemsRepository = mediaItemsRepository;
+            this.clientGroupsRepository = clientGroupsRepository;
+            this.fileTypeService = fileTypeService;
         }
 
         public async Task<DownloadCenterItemFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -70,7 +78,9 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 ChunkSize = MediaConstants.DefaultChunkSize,
                 DeleteLabel = this.globalLocalizer.GetString("Delete"),
                 DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
-                DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile")
+                DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
+                NoGroupsText = this.globalLocalizer.GetString("NoGroupsText"),
+                GroupsLabel = this.globalLocalizer.GetString("Groups")
             };
 
             var categories = await this.downloadCenterCategoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language);
@@ -78,6 +88,13 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             if (categories is not null)
             {
                 viewModel.Categories = categories.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
+            }
+
+            var groups = await this.clientGroupsRepository.GetAsync(componentModel.Token, componentModel.Language);
+
+            if (groups is not null)
+            {
+                viewModel.Groups = groups.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
             if (componentModel.Id.HasValue)
@@ -88,6 +105,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 {
                     viewModel.Id = downloadCenterItem.Id;
                     viewModel.CategoriesIds = downloadCenterItem.CategoriesIds;
+                    viewModel.ClientGroupIds = downloadCenterItem.ClientGroupIds;
 
                     var file = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, downloadCenterItem.Id);
 
@@ -98,7 +116,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                            new FileViewModel
                            {
                                Id = file.Id,
-                               Url = file.MimeType.StartsWith("image") ? this.mediaService.GetMediaUrl(file.Id, Constants.PreviewMaxWidth) : this.mediaService.GetNonCdnMediaUrl(file.Id),
+                               Url = this.fileTypeService.IsImage(file.MimeType) ? this.mediaService.GetMediaUrl(file.Id, Constants.PreviewMaxWidth) : this.mediaService.GetNonCdnMediaUrl(file.Id),
                                Name = file.Name,
                                MimeType = file.MimeType,
                                Filename = file.Filename,

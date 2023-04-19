@@ -48,7 +48,7 @@ namespace Seller.Web.Areas.DownloadCenter.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await this.downloadCenterRepository.SaveAsync(token, language, model.Id, model.CategoriesIds, model.Files);
+            await this.downloadCenterRepository.SaveAsync(token, language, model.Id, model.CategoriesIds, model.ClientGroupIds, model.Files);
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.downloadCenterLocalizer.GetString("DownloadCenterItemSavedSuccessfully").Value });
         }

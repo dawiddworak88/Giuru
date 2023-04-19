@@ -8,6 +8,7 @@ namespace Seller.Web.Areas.DownloadCenter.ApiRequestModels
     public class DownloadCenterItemRequestModel : RequestModelBase
     {
         public IEnumerable<Guid> CategoriesIds { get; set; }
+        public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<DownloadCenterApiFile> Files { get; set; }
     }
 }

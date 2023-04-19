@@ -10,6 +10,7 @@ namespace Seller.Web.Areas.Products.ApiRequestModels
         public string Schema { get; set; }
         public string UiSchema { get; set; }
         public Guid? ParentCategoryId { get; set; }
+        public IEnumerable<Guid> GroupIds { get; set; }
         public IEnumerable<FileRequestModel> Files { get; set; }
     }
 }

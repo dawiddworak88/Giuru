@@ -9,5 +9,6 @@ namespace Media.Api.Infrastructure.Media.Entities
         public Guid? OrganisationId { get; set; }
         public bool IsProtected { get; set; }
         public virtual IEnumerable<MediaItemVersion> Versions { get; set; }
+        public virtual IEnumerable<MediaItemsGroup> Groups { get; set; }
     }
 }

@@ -7,5 +7,6 @@ namespace Seller.Web.Areas.DownloadCenter.DomainModels
     {
         public Guid Id { get; set; }
         public IEnumerable<Guid> CategoriesIds { get; set; }
+        public IEnumerable<Guid> ClientGroupIds { get; set; }
     }
 }

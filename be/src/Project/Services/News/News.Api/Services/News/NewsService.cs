@@ -72,6 +72,17 @@ namespace News.Api.Services.News
                 await _context.NewsItemFiles.AddAsync(file.FillCommonProperties());
             }
 
+            foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
+            {
+                var group = new NewsItemsGroup
+                {
+                    NewsItemId = newsItem.Id,
+                    GroupId = clientGroupId
+                };
+
+                await _context.NewsItemsGroups.AddAsync(group.FillCommonProperties());
+            }
+
             await _context.SaveChangesAsync();
 
             return newsItem.Id;
@@ -80,7 +91,7 @@ namespace News.Api.Services.News
         public async Task DeleteAsync(DeleteNewsItemServiceModel model)
         {
             var newsItem = _context.NewsItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
-
+            
             if (newsItem is null)
             {
                 throw new CustomException(_newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NoContent);
@@ -98,6 +109,7 @@ namespace News.Api.Services.News
                     .Include(x => x.Category)
                     .Include(x => x.Category.Translations)
                     .Include(x => x.Translations)
+                    .Include(x => x.ClientGroups)
                     .AsSingleQuery();
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
@@ -135,6 +147,7 @@ namespace News.Api.Services.News
                     PreviewImageId = x.PreviewImageId,
                     ThumbnailImageId = x.ThumbnailImageId,
                     IsPublished = x.IsPublished,
+                    ClientGroupIds = x.ClientGroups.Select(x => x.GroupId),
                     Files = x.Files.Select(x => x.Id),
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
@@ -148,6 +161,7 @@ namespace News.Api.Services.News
                     .Include(x => x.Category)
                     .Include(x => x.Category.Translations)
                     .Include(x => x.Translations)
+                    .Include(x => x.ClientGroups)
                     .AsSingleQuery()
                     .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
@@ -167,6 +181,7 @@ namespace News.Api.Services.News
                 PreviewImageId = newsItem.PreviewImageId,
                 ThumbnailImageId = newsItem.ThumbnailImageId,
                 IsPublished = newsItem.IsPublished,
+                ClientGroupIds = newsItem.ClientGroups.Select(x => x.GroupId),
                 Files = newsItem.Files.Where(f => f.NewsItemId == newsItem.Id && f.IsActive).OrEmptyIfNull().Select(f => f.MediaId),
                 LastModifiedDate = newsItem.LastModifiedDate,
                 CreatedDate = newsItem.CreatedDate
@@ -211,6 +226,7 @@ namespace News.Api.Services.News
             }
 
             var news = _context.NewsItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+            
             if (news is null)
             {
                 throw new CustomException(_newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NoContent);
@@ -223,6 +239,7 @@ namespace News.Api.Services.News
             news.LastModifiedDate = DateTime.UtcNow;
 
             var newsTranslation = _context.NewsItemTranslations.FirstOrDefault(x => x.NewsItemId == model.Id && x.Language == model.Language && x.IsActive);
+            
             if (newsTranslation is not null)
             {
                 newsTranslation.Title = model.Title;
@@ -259,7 +276,25 @@ namespace News.Api.Services.News
                     NewsItemId = news.Id
                 };
 
-                await _context.NewsItemFiles.AddAsync(file.FillCommonProperties());
+                _context.NewsItemFiles.AddAsync(file.FillCommonProperties());
+            }
+
+            var clientGroups = _context.NewsItemsGroups.Where(x => x.NewsItemId == news.Id);
+
+            foreach (var clientGroup in clientGroups.OrEmptyIfNull())
+            {
+                _context.NewsItemsGroups.Remove(clientGroup);
+            }
+
+            foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
+            {
+                var group = new NewsItemsGroup
+                {
+                    NewsItemId = news.Id,
+                    GroupId = clientGroupId
+                };
+
+                _context.NewsItemsGroups.AddAsync(group.FillCommonProperties());
             }
 
             await _context.SaveChangesAsync();

@@ -30,7 +30,7 @@ namespace Inventory.Api.IntegrationEventsHandlers
 
             if (@event.OrganisationId.HasValue)
             {
-                await this.productService.UpdateProductAsync(@event.ProductId, @event.ProductName, @event.ProductSku, @event.ProductEan);
+                await this.productService.UpdateProductAsync(@event.ProductId, @event.ProductName, @event.ProductSku, @event.ProductEan, @event.ClientGroupIds);
             }
         }
     }

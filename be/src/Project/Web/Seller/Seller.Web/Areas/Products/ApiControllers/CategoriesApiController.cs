@@ -50,7 +50,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             var categoryId = await this.categoriesRepository.SaveAsync(
-                token, language, model.Id, model.ParentCategoryId, model.Name, model.Files.Select(x => x.Id.Value), model.Schema, model.UiSchema);
+                token, language, model.Id, model.ParentCategoryId, model.Name, model.Files.Select(x => x.Id.Value), model.GroupIds, model.Schema, model.UiSchema);
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Id = categoryId, Message = this.productLocalizer.GetString("CategorySavedSuccessfully").Value });
         }

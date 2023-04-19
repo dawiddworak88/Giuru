@@ -123,6 +123,17 @@ namespace Catalog.Api.Services.Products
                 await _context.ProductFiles.AddAsync(productFile.FillCommonProperties());
             }
 
+            foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
+            {
+                var productGroup = new ProductsGroup
+                {
+                    GroupId = clientGroupId,
+                    ProductId = product.Id
+                };
+
+                await _context.ProductsGroups.AddAsync(productGroup.FillCommonProperties());
+            }
+
             await _context.SaveChangesAsync();
 
             await _productIndexingRepository.IndexAsync(product.Id);
@@ -253,6 +264,24 @@ namespace Catalog.Api.Services.Products
                 await _context.ProductFiles.AddAsync(productFile.FillCommonProperties());
             }
 
+            var clientGroups = _context.ProductsGroups.Where(x => x.ProductId == model.Id && x.IsActive);
+
+            foreach (var clientGroup in clientGroups.OrEmptyIfNull())
+            {
+                _context.ProductsGroups.Remove(clientGroup);
+            }
+
+            foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
+            {
+                var group = new ProductsGroup
+                {
+                    ProductId = product.Id,
+                    GroupId = clientGroupId
+                };
+
+                await _context.ProductsGroups.AddAsync(group.FillCommonProperties());
+            }
+
             var message = new UpdatedProductIntegrationEvent
             {
                 OrganisationId = model.OrganisationId,
@@ -261,7 +290,8 @@ namespace Catalog.Api.Services.Products
                 ProductId = model.Id,
                 ProductName = model.Name,
                 ProductSku = model.Sku,
-                ProductEan = model.Ean
+                ProductEan = model.Ean,
+                ClientGroupIds = model.ClientGroupIds
             };
 
             using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
@@ -478,6 +508,7 @@ namespace Catalog.Api.Services.Products
                 Images = searchResultItem.Images,
                 Files = searchResultItem.Files,
                 Videos = searchResultItem.Videos,
+                ClientGroupIds = searchResultItem.ClientGroupIds,
                 SellerId = searchResultItem.SellerId,
                 BrandName = searchResultItem.BrandName,
                 CategoryId = searchResultItem.CategoryId,

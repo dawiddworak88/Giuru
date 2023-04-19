@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace Media.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(MediaContext))]
@@ -15,9 +17,10 @@ namespace Media.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.10")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Media.Api.Infrastructure.Media.Entities.MediaItem", b =>
                 {
@@ -48,6 +51,37 @@ namespace Media.Api.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MediaItems");
+                });
+
+            modelBuilder.Entity("Media.Api.Infrastructure.Media.Entities.MediaItemsGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("MediaItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MediaItemsGroups");
                 });
 
             modelBuilder.Entity("Media.Api.Infrastructure.Media.Entities.MediaItemTranslation", b =>
@@ -162,6 +196,16 @@ namespace Media.Api.Infrastructure.Migrations
                         .HasForeignKey("MediaItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Media.Api.Infrastructure.Media.Entities.MediaItem", b =>
+                {
+                    b.Navigation("Versions");
+                });
+
+            modelBuilder.Entity("Media.Api.Infrastructure.Media.Entities.MediaItemVersion", b =>
+                {
+                    b.Navigation("Translations");
                 });
 #pragma warning restore 612, 618
         }

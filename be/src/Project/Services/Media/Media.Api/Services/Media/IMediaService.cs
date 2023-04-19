@@ -22,5 +22,6 @@ namespace Media.Api.Services.Media
         Task CreateFileChunkAsync(CreateFileChunkServiceModel model);
         Task<Guid> CreateFileFromChunksAsync(CreateMediaItemFromChunksServiceModel model);
         Task<Guid> UpdateFileFromChunksAsync(UpdateMediaItemFromChunksServiceModel model);
+        Task SaveMediaItemGroupsAsync(MediaItemGroupsServiceModel model);
     }
 }

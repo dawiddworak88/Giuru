@@ -8,7 +8,6 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.Groups;
-using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Identity;
 using Seller.Web.Shared.Repositories.Organisations;
 using System;
@@ -23,14 +22,14 @@ namespace Seller.Web.Areas.Clients.ApiControllers
     public class ClientsApiController : BaseApiController
     {
         private readonly IOrganisationsRepository organisationsRepository;
-        private readonly IClientsRepository clientsRepository;
+        private readonly Web.Shared.Repositories.Clients.IClientsRepository clientsRepository;
         private readonly IIdentityRepository identityRepository;
         private readonly IStringLocalizer clientLocalizer;
         private readonly IClientGroupsRepository clientGroupsRepository;
 
         public ClientsApiController(
             IOrganisationsRepository organisationsRepository,
-            IClientsRepository clientsRepository,
+            Web.Shared.Repositories.Clients.IClientsRepository clientsRepository,
             IStringLocalizer<ClientResources> clientLocalizer,
             IIdentityRepository identityRepository,
             IClientGroupsRepository clientGroupsRepository)

@@ -18,6 +18,7 @@ namespace News.Api.Infrastructure
         public DbSet<Category> Categories { get; set; }
         public DbSet<CategoryTranslation> CategoryTranslations { get; set; }
         public DbSet<NewsItem> NewsItems { get; set; }
+        public DbSet<NewsItemsGroup> NewsItemsGroups { get; set; }
         public DbSet<NewsItemTranslation> NewsItemTranslations { get; set; }
         public DbSet<NewsItemFile> NewsItemFiles { get; set; }
     }

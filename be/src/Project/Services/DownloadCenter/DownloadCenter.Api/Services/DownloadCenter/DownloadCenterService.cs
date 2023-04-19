@@ -7,7 +7,6 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
@@ -34,9 +33,9 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
         public async Task<Guid> CreateAsync(CreateDownloadCenterItemServiceModel model)
         {
-            foreach(var categoryId in model.CategoriesIds.OrEmptyIfNull())
+            foreach (var file in model.Files.OrEmptyIfNull())
             {
-                foreach(var file in model.Files.OrEmptyIfNull())
+                foreach (var categoryId in model.CategoriesIds.OrEmptyIfNull())
                 {
                     var categoryFile = new DownloadCenterCategoryFile
                     {
@@ -46,6 +45,17 @@ namespace DownloadCenter.Api.Services.DownloadCenter
                     };
 
                     await _context.DownloadCenterCategoryFiles.AddAsync(categoryFile.FillCommonProperties());
+                }
+
+                foreach (var clientGroup in model.ClientGroupIds.OrEmptyIfNull()) //2
+                {
+                    var group = new DownloadCenterFilesGroup
+                    {
+                        GroupId = clientGroup,
+                        MediaItemId = file.Id
+                    };
+
+                    await _context.DownloadCenterFilesGroups.AddAsync(group.FillCommonProperties());
                 }
             }
 
@@ -101,8 +111,8 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             return new PagedResults<IEnumerable<DownloadCenterItemServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
-                Data = pagedResults?.Data?.Select(x => new DownloadCenterItemServiceModel
-                { 
+                Data = pagedResults.Data.Select(x => new DownloadCenterItemServiceModel
+                {
                     Id = x.MediaId,
                     Filename = x.Filename,
                     Categories = new[] { x.Category.Translations.FirstOrDefault(x => x.Language == model.Language && x.IsActive)?.Name ?? x.Category.Translations.FirstOrDefault(x => x.IsActive)?.Name },
@@ -114,28 +124,25 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
         public async Task<DownloadCenterItemFileServiceModel> GetAsync(GetDownloadCenterFileServiceModel model)
         {
-            var downloadCenterFile = await _context.DownloadCenterCategoryFiles.FirstOrDefaultAsync(x => x.MediaId == model.Id && x.IsActive);
+            var downloadCenterFiles = _context.DownloadCenterCategoryFiles.Where(x => x.MediaId == model.Id && x.IsActive);
 
-            if (downloadCenterFile is null)
+            if (downloadCenterFiles is null)
             {
                 throw new CustomException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            var downloadCenterFileItem = new DownloadCenterItemFileServiceModel
+            var downloadCenterFile = downloadCenterFiles.FirstOrDefault();
+
+            var clientGroups = _context.DownloadCenterFilesGroups.Where(x => x.MediaItemId == downloadCenterFile.MediaId && x.IsActive).OrEmptyIfNull().Select(x => x.GroupId);
+
+            return new DownloadCenterItemFileServiceModel
             {
                 Id = downloadCenterFile.MediaId,
+                ClientGroupIds = clientGroups,
+                CategoriesIds = downloadCenterFiles.Select(x => x.Id),
                 LastModifiedDate = downloadCenterFile.LastModifiedDate,
                 CreatedDate = downloadCenterFile.CreatedDate
             };
-
-            var downloadCenterFileCategories = _context.DownloadCenterCategoryFiles.Where(x => x.MediaId == model.Id && x.IsActive);
-
-            if (downloadCenterFileCategories is not null)
-            {
-                downloadCenterFileItem.CategoriesIds = downloadCenterFileCategories.Select(x => x.CategoryId);
-            }
-
-            return downloadCenterFileItem;
         }
 
         public PagedResults<IEnumerable<DownloadCenterCategoryItemServiceModel>> Get(GetDownloadCenterItemsServiceModel model)
@@ -256,9 +263,27 @@ namespace DownloadCenter.Api.Services.DownloadCenter
                 _context.DownloadCenterCategoryFiles.Remove(downloadCenterCategoryFile);
             }
 
-            foreach (var categoryId in model.CategoriesIds.OrEmptyIfNull())
+            foreach (var downloadCenterCategoryFile in model.Files.OrEmptyIfNull())
             {
-                foreach(var downloadCenterCategoryFile in model.Files.OrEmptyIfNull())
+                var clientGroups = _context.DownloadCenterFilesGroups.Where(x => x.MediaItemId == downloadCenterCategoryFile.Id && x.IsActive);
+
+                foreach (var clientGroup in clientGroups.OrEmptyIfNull())
+                {
+                    _context.DownloadCenterFilesGroups.Remove(clientGroup);
+                }
+
+                foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
+                {
+                    var group = new DownloadCenterFilesGroup
+                    {
+                        MediaItemId = downloadCenterCategoryFile.Id,
+                        GroupId = clientGroupId
+                    };
+
+                    await _context.DownloadCenterFilesGroups.AddAsync(group.FillCommonProperties());
+                }
+
+                foreach (var categoryId in model.CategoriesIds.OrEmptyIfNull())
                 {
                     var file = new DownloadCenterCategoryFile
                     {

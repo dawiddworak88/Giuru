@@ -6,6 +6,7 @@ namespace DownloadCenter.Api.ServicesModels.DownloadCenter
 {
     public class CreateDownloadCenterItemServiceModel : BaseServiceModel
     {
+        public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> CategoriesIds { get; set; }
         public IEnumerable<DownloadCenterFileServiceModel> Files { get; set; }
     }

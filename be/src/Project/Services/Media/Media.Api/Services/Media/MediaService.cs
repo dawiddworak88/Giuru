@@ -23,6 +23,7 @@ using Microsoft.EntityFrameworkCore;
 using Media.Api.IntegrationEvents;
 using Foundation.EventBus.Abstractions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using Foundation.GenericRepository.Definitions;
 
@@ -123,7 +124,7 @@ namespace Media.Api.Services.Media
                 
                 var translations = _context.MediaItemTranslations.Where(x => x.MediaItemVersionId == existingMediaItemVersion.LastOrDefault().Id);
 
-                foreach(var translation in translations)
+                foreach(var translation in translations.OrEmptyIfNull())
                 {
                     translation.MediaItemVersionId = mediaItemVersion.Id;
                     translation.LastModifiedDate = DateTime.UtcNow;
@@ -235,7 +236,9 @@ namespace Media.Api.Services.Media
 
         public MediaItemServiceModel GetMediaItemById(GetMediaItemsByIdServiceModel model)
         {
-            var mediaItem = _context.MediaItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+            var mediaItem = _context.MediaItems
+                    .Include(x => x.Groups)
+                    .FirstOrDefault(x => x.Id == model.Id && x.IsActive);
 
             if (mediaItem is null)
             {
@@ -260,6 +263,7 @@ namespace Media.Api.Services.Media
                 Name = translations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersion.Id && t.IsActive && t.Language == model.Language)?.Name ?? translations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersion.Id && t.IsActive)?.Name,
                 Description = translations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersion.Id && t.IsActive && t.Language == model.Language)?.Description ?? translations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersion.Id && t.IsActive)?.Description,
                 MetaData = translations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersion.Id && t.IsActive && t.Language == model.Language)?.Metadata ?? translations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersion.Id && t.IsActive)?.Metadata,
+                ClientGroupIds = mediaItem.Groups?.Select(g => g.GroupId),
                 LastModifiedDate = mediaItem.LastModifiedDate,
                 CreatedDate = mediaItem.CreatedDate
             };
@@ -267,7 +271,9 @@ namespace Media.Api.Services.Media
 
         public PagedResults<IEnumerable<MediaItemServiceModel>> Get(GetMediaItemsServiceModel serviceModel)
         {
-            var mediaItems = _context.MediaItems.Where(x => x.IsActive && x.OrganisationId == serviceModel.OrganisationId.Value);
+            var mediaItems = _context.MediaItems
+                .Include(x => x.Groups)
+                .Where(x => x.IsActive && x.OrganisationId == serviceModel.OrganisationId.Value);
 
             if (string.IsNullOrWhiteSpace(serviceModel.SearchTerm) is false)
             {
@@ -307,6 +313,7 @@ namespace Media.Api.Services.Media
                     Name = translations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Id && t.IsActive && t.Language == serviceModel.Language)?.Name ?? translations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Id && t.IsActive)?.Name,
                     Description = translations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Id && t.IsActive && t.Language == serviceModel.Language)?.Description ?? translations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Id && t.IsActive)?.Description,
                     MetaData = translations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Id && t.IsActive && t.Language == serviceModel.Language)?.Metadata ?? translations.FirstOrDefault(t => t.MediaItemVersionId == mediaItemVersions.FirstOrDefault(v => v.MediaItemId == x.Id).Id && t.IsActive)?.Metadata,
+                    ClientGroupIds = x.Groups?.Select(x => x.GroupId),
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
                 })
@@ -331,6 +338,7 @@ namespace Media.Api.Services.Media
         public MediaItemVerionsByIdServiceModel GetMediaItemVerionsById(GetMediaItemsByIdServiceModel model)
         {
             var mediaItemVersions = _context.MediaItemVersions
+                .Include(x => x.Translations)
                 .Where(x => x.MediaItemId == model.Id && x.IsActive)
                 .Select(x => new MediaItemServiceModel
                 {
@@ -357,6 +365,13 @@ namespace Media.Api.Services.Media
                     MetaData = mediaItemVersions.FirstOrDefault().MetaData,
                     Versions = mediaItemVersions
                 };
+
+                var clientGroups = _context.MediaItemsGroups.Where(x => x.MediaItemId == model.Id && x.IsActive).Select(x => x.GroupId);
+
+                if (clientGroups is not null)
+                {
+                    mediaItems.ClientGroupIds = clientGroups;
+                }
                 
                 return mediaItems;
             }
@@ -369,9 +384,29 @@ namespace Media.Api.Services.Media
             using var source = new ActivitySource(this.GetType().Name);
 
             var mediaVersion = _context.MediaItemVersions.OrderBy(o => o.Version).LastOrDefault(x => x.MediaItemId == model.Id.Value && x.IsActive);
+            
             if (mediaVersion is not null)
             {
+                var clientGroups = _context.MediaItemsGroups.Where(x => x.MediaItemId == model.Id && x.IsActive);
+
+                foreach (var clientGroup in clientGroups.OrEmptyIfNull())
+                {
+                    _context.MediaItemsGroups.Remove(clientGroup);
+                }
+
+                foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
+                {
+                    var group = new MediaItemsGroup
+                    {
+                        GroupId = clientGroupId,
+                        MediaItemId = model.Id.Value
+                    };
+
+                    await _context.MediaItemsGroups.AddAsync(group.FillCommonProperties());
+                }
+
                 var mediaVersionTranslation = _context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaVersion.Id && x.Language == model.Language);
+                
                 if (mediaVersionTranslation is not null)
                 {
                     mediaVersionTranslation.Name = model.Name;
@@ -379,7 +414,8 @@ namespace Media.Api.Services.Media
                     mediaVersionTranslation.Metadata = model.MetaData;
                     mediaVersionTranslation.LastModifiedDate = DateTime.UtcNow;
                     mediaVersion.LastModifiedDate = DateTime.UtcNow;
-                } else
+                } 
+                else
                 {
                     var mediaItemTranslation = new MediaItemTranslation
                     {
@@ -540,6 +576,36 @@ namespace Media.Api.Services.Media
 
                 File.Delete(chunk2);
             }
+        }
+
+        public async Task SaveMediaItemGroupsAsync(MediaItemGroupsServiceModel model)
+        {
+            var mediaItem = await _context.MediaItems.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+
+            if (mediaItem is null)
+            {
+                throw new CustomException(_mediaResources.GetString("MediaNotFound"), (int)HttpStatusCode.NoContent);
+            }
+
+            var clientGroups = _context.MediaItemsGroups.Where(x => x.MediaItemId == model.Id && x.IsActive);
+
+            foreach (var clientGroup in clientGroups.OrEmptyIfNull())
+            {
+                _context.MediaItemsGroups.Remove(clientGroup);
+            }
+
+            foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
+            {
+                var group = new MediaItemsGroup
+                {
+                    MediaItemId = mediaItem.Id,
+                    GroupId = clientGroupId
+                };
+
+                await _context.MediaItemsGroups.AddAsync(group.FillCommonProperties());
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

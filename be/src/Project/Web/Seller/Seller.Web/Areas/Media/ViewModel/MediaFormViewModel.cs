@@ -1,4 +1,7 @@
-﻿namespace Seller.Web.Areas.Media.ViewModel
+﻿using Foundation.PageContent.Components.ListItems.ViewModels;
+using System.Collections.Generic;
+
+namespace Seller.Web.Areas.Media.ViewModel
 {
     public class MediaFormViewModel
     {
@@ -15,5 +18,10 @@
         public string SaveMediaChunkCompleteUrl { get; set; }
         public bool IsUploadInChunksEnabled { get; set; }
         public int? ChunkSize { get; set; }
+        public string NoGroupsText { get; set; }
+        public string GroupsLabel { get; set; }
+        public string SaveText { get; set; }
+        public string SaveUrl { get; set; }
+        public IEnumerable<ListItemViewModel> Groups { get; set; }
     }
 }

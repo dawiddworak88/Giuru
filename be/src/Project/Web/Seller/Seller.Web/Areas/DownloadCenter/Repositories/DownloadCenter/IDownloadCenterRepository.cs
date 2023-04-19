@@ -10,7 +10,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
     {
         Task<PagedResults<IEnumerable<DownloadCenterItem>>> GetDownloadCenterItemsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
         Task<DownloadCenterCategoryFile> GetAsync(string token, string language, Guid? id);
-        Task<Guid> SaveAsync(string token, string language, Guid? id, IEnumerable<Guid> categoriesIds, IEnumerable<DownloadCenterApiFile> files);
+        Task<Guid> SaveAsync(string token, string language, Guid? id, IEnumerable<Guid> categoriesIds, IEnumerable<Guid> clientGroupIds, IEnumerable<DownloadCenterApiFile> files);
         Task DeleteAsync(string token, string language, Guid? id);
     }
 }

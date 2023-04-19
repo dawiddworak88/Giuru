@@ -131,6 +131,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                         ParentCategoryName = category.ParentCategoryName,
                         ParentId = category.ParentId,
                         ThumbnailMediaId = category.ThumbnailMediaId,
+                        ClientGroupIds = category.ClientGroupIds,
                         LastModifiedDate = category.LastModifiedDate,
                         CreatedDate = category.CreatedDate
                     };
@@ -170,6 +171,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                     Schema = request.Schema,
                     UiSchema = request.UiSchema,
                     ParentId = request.ParentCategoryId,
+                    ClientGroupIds = request.ClientGroupIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -183,7 +185,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 {
                     var category = await _categoryService.UpdateAsync(serviceModel);
 
-                    if (category != null)
+                    if (category is not null)
                     {
                         var response = new CategoryResponseModel
                         {
@@ -195,6 +197,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                             ParentCategoryName = category.ParentCategoryName,
                             ParentId = category.ParentId,
                             ThumbnailMediaId = category.ThumbnailMediaId,
+                            ClientGroupIds = category.ClientGroupIds,
                             LastModifiedDate = category.LastModifiedDate,
                             CreatedDate = category.CreatedDate
                         };
@@ -227,7 +230,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 {
                     var category = await _categoryService.CreateAsync(serviceModel);
 
-                    if (category != null)
+                    if (category is not null)
                     {
                         var response = new CategoryResponseModel
                         {
@@ -239,6 +242,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                             ParentCategoryName = category.ParentCategoryName,
                             ParentId = category.ParentId,
                             ThumbnailMediaId = category.ThumbnailMediaId,
+                            ClientGroupIds = category.ClientGroupIds,
                             LastModifiedDate = category.LastModifiedDate,
                             CreatedDate = category.CreatedDate
                         };
@@ -320,7 +324,7 @@ namespace Catalog.Api.v1.Categories.Controllers
             {
                 var categorySchema = await _categoryService.UpdateCategorySchemaAsync(serviceModel);
 
-                if (categorySchema != null)
+                if (categorySchema is not null)
                 {
                     var response = new CategorySchemaResponseModel
                     {
@@ -366,7 +370,7 @@ namespace Catalog.Api.v1.Categories.Controllers
             {
                 var categorySchema = await _categoryService.GetCategorySchemaAsync(serviceModel);
 
-                if (categorySchema != null)
+                if (categorySchema is not null)
                 {
                     var response = new CategorySchemaResponseModel
                     {

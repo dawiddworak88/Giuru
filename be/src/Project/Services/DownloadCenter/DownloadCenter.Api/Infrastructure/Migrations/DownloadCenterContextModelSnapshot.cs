@@ -139,6 +139,45 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                     b.ToTable("DownloadCenterCategoryTranslations");
                 });
 
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterFilesGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("MediaItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DownloadCenterFilesGroups");
+                });
+
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterCategoryTranslation", b =>
+                {
+                    b.HasOne("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterCategory", null)
+                        .WithMany("Translations")
+                        .HasForeignKey("DownloadCenterCategoryId");
+                });
+
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterCategory", b =>
             modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterCategory", b =>
                 {
                     b.HasOne("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterCategory", "ParentCategory")
@@ -146,7 +185,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                         .HasForeignKey("ParentCategoryId");
 
                     b.Navigation("ParentCategory");
-                });
+                }));
 
             modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories.DownloadCenterCategoryFile", b =>
                 {

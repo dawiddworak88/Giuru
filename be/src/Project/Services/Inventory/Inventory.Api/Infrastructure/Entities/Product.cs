@@ -1,4 +1,5 @@
 ﻿using Foundation.GenericRepository.Entities;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Inventory.Api.Infrastructure.Entities
@@ -12,5 +13,6 @@ namespace Inventory.Api.Infrastructure.Entities
         public string Sku { get; set; }
 
         public string Ean { get; set; }
+        public virtual IEnumerable<ProductsGroup> Groups { get; set; }
     }
 }

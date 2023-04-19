@@ -28,5 +28,7 @@ namespace News.Api.Infrastructure.Entities.News
         public virtual IEnumerable<NewsItemFile> Files { get; set; }
 
         public virtual IEnumerable<NewsItemTranslation> Translations { get; set; }
+
+        public virtual IEnumerable<NewsItemsGroup> ClientGroups { get; set; }
     }
 }

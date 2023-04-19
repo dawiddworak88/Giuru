@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using News.Api.Services.News;
 using News.Api.ServicesModels.News;
-using News.Api.v1.Categories.RequestModels;
+using News.Api.v1.News.RequestModels;
 using News.Api.v1.News.ResponseModels;
 using News.Api.Validators.News;
 using System;
@@ -117,6 +117,7 @@ namespace News.Api.v1.News.Controllers
                     PreviewImageId = request.PreviewImageId,
                     ThumbnailImageId = request.ThumbnailImageId,
                     Files = request.Files,
+                    ClientGroupIds = request.ClientGroupIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -146,6 +147,7 @@ namespace News.Api.v1.News.Controllers
                     ThumbnailImageId = request.ThumbnailImageId,
                     PreviewImageId = request.PreviewImageId,
                     Files = request.Files,
+                    ClientGroupIds = request.ClientGroupIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -266,6 +268,7 @@ namespace News.Api.v1.News.Controllers
                         Content = newsItem.Content,
                         IsPublished = newsItem.IsPublished,
                         Files = newsItem.Files,
+                        ClientGroupIds = newsItem.ClientGroupIds,
                         LastModifiedDate = newsItem.LastModifiedDate,
                         CreatedDate = newsItem.CreatedDate
                     };

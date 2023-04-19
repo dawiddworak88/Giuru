@@ -319,6 +319,7 @@ namespace DownloadCenter.Api.v1.Controllers
                     {
                         Id = downloadCenterFile.Id,
                         CategoriesIds = downloadCenterFile.CategoriesIds,
+                        ClientGroupIds = downloadCenterFile.ClientGroupIds,
                         LastModifiedDate = downloadCenterFile.LastModifiedDate,
                         CreatedDate = downloadCenterFile.CreatedDate
                     };
@@ -349,6 +350,7 @@ namespace DownloadCenter.Api.v1.Controllers
                 {
                     Id = request.Id,
                     CategoriesIds = request.CategoriesIds,
+                    ClientGroupIds = request.ClientGroupIds,
                     Files = request.Files.Select(x => new DownloadCenterFileServiceModel
                     {
                         Id = x.Id,
@@ -376,6 +378,7 @@ namespace DownloadCenter.Api.v1.Controllers
                 var serviceModel = new CreateDownloadCenterItemServiceModel
                 {
                     CategoriesIds = request.CategoriesIds,
+                    ClientGroupIds = request.ClientGroupIds,
                     Files = request.Files.Select(x => new DownloadCenterFileServiceModel
                     {
                         Id = x.Id,

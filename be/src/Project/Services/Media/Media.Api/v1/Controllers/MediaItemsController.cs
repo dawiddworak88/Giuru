@@ -46,6 +46,7 @@ namespace Media.Api.v1.Controllers
         /// <param name="orderBy">The optional order by.</param>
         /// <returns>Media items.</returns>
         [HttpGet, MapToApiVersion("1.0")]
+        [Authorize]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<MediaItemResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [AllowAnonymous]
@@ -86,6 +87,7 @@ namespace Media.Api.v1.Controllers
                                 Filename = x.Filename,
                                 MimeType = x.MimeType,
                                 Size = x.Size,
+                                ClientGroupIds = x.ClientGroupIds,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -107,7 +109,7 @@ namespace Media.Api.v1.Controllers
                     SearchTerm = searchTerm,
                     PageIndex = pageIndex,
                     ItemsPerPage = itemsPerPage,
-                    OrderBy = orderBy,
+                    OrderBy = orderBy
                 };
 
                 var mediaItems = _mediaService.Get(serviceModel);
@@ -182,6 +184,7 @@ namespace Media.Api.v1.Controllers
                         Name = mediaItem.Name,
                         MetaData = mediaItem.MetaData,
                         Size = mediaItem.Size,
+                        ClientGroupIds = mediaItem.ClientGroupIds,
                         LastModifiedDate = mediaItem.LastModifiedDate,
                         CreatedDate = mediaItem.CreatedDate
                     };
@@ -201,9 +204,44 @@ namespace Media.Api.v1.Controllers
         /// Updates media item version data
         /// </summary>
         /// <param name="request">The model.</param>
+        /// <returns>OK.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [Route("groups")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Guid))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Groups(MediaItemGroupsRequestModel request)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var serviceModel = new MediaItemGroupsServiceModel
+            {
+                Id = request.Id,
+                ClientGroupIds = request.GroupIds,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new MediaItemGroupsModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                await _mediaService.SaveMediaItemGroupsAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Updates media item version data
+        /// </summary>
+        /// <param name="request">The model.</param>
         /// <returns>Created if the file has been uploaded successfully.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [Route("versions")]
+        [Authorize]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Guid))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
@@ -217,6 +255,7 @@ namespace Media.Api.v1.Controllers
                 Description = request.Description,
                 Language = CultureInfo.CurrentCulture.Name,
                 MetaData = request.MetaData,
+                ClientGroupIds = request.ClientGroupIds,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
@@ -271,6 +310,7 @@ namespace Media.Api.v1.Controllers
                         Name = mediaItemVersions.Name,
                         Description = mediaItemVersions.Description,
                         MetaData = mediaItemVersions.MetaData,
+                        ClientGroupIds = mediaItemVersions.ClientGroupIds,
                         Versions = mediaItemVersions.Versions.Select(x => new MediaItemServiceModel
                         {
                             Id = x.MediaItemId.Value,

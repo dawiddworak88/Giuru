@@ -16,6 +16,7 @@ namespace Media.Api.Infrastructure
         }
 
         public DbSet<MediaItem> MediaItems { get; set; }
+        public DbSet<MediaItemsGroup> MediaItemsGroups { get; set; }
         public DbSet<MediaItemTranslation> MediaItemTranslations { get; set; }
         public DbSet<MediaItemVersion> MediaItemVersions { get; set; }
     }

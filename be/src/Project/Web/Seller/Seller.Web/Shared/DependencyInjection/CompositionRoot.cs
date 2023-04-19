@@ -29,6 +29,7 @@ namespace Seller.Web.Shared.DependencyInjection
     {
         public static void RegisterDependencies(this IServiceCollection services)
         {
+            services.AddScoped<IClientGroupsRepository, ClientGroupsRepository>();
             services.AddScoped<IMediaItemsRepository, MediaItemsRepository>();
             services.AddScoped<IOrganisationsRepository, OrganisationsRepository>();
             services.AddScoped<IClientsRepository, ClientsRepository>();

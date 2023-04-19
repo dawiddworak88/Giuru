@@ -246,9 +246,6 @@
   <data name="NoClients" xml:space="preserve">
     <value>Brak dostępnych klientów</value>
   </data>
-  <data name="NoGroupsText" xml:space="preserve">
-    <value>Brak dostępnych grup</value>
-  </data>
   <data name="NoManagers" xml:space="preserve">
     <value>Brak dostępnych account menedzerów</value>
   </data>

@@ -663,6 +663,12 @@
   <data name="TrySignIn" xml:space="preserve">
     <value>Bitte versuchen Sie sich anzumelden</value>
   </data>
+  <data name="NoGroupsText" xml:space="preserve">
+    <value>Keine Gruppen verfügbar</value>
+  </data>
+  <data name="IsraelCountry" xml:space="preserve">
+    <value>Israel</value>
+  </data>
   <data name="CountryNotFound" xml:space="preserve">
     <value>Land nicht gefunden.</value>
   </data>

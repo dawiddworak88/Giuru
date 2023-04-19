@@ -16,8 +16,9 @@ function CategoryForm(props) {
         name: { value: props.name ? props.name : "", error: "" },
         parentCategoryId: { value: props.parentCategoryId ? props.parentCategoryId : "" },
         files: { value: props.files ? props.files : [] },
+        clientGroupIds: { value: props.clientGroupIds ? props.clientGroupIds : []},
         schema: { value: props.schema ? JSON.parse(props.schema) : null },
-        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : null },
+        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : null }
     };
 
     const stateValidatorSchema = {
@@ -37,6 +38,7 @@ function CategoryForm(props) {
             name,
             parentCategoryId,
             files,
+            clientGroupIds,
             schema: schema ? JSON.stringify(schema) : null,
             uiSchema: uiSchema ? JSON.stringify(uiSchema) : null
         }
@@ -74,7 +76,7 @@ function CategoryForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !categoryBase.id);
 
-    const { id, name, parentCategoryId, files, schema, uiSchema } = values;
+    const { id, name, parentCategoryId, files, schema, uiSchema, clientGroupIds } = values;
 
     return (
         <section className="section section-small-padding category">
@@ -103,6 +105,28 @@ function CategoryForm(props) {
                                     <MenuItem value="">&nbsp;</MenuItem>
                                     {categoryBase.parentCategories && categoryBase.parentCategories.map(category =>
                                         <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <div className="field">
+                            <FormControl fullWidth={true} variant="standard">
+                                <InputLabel id="clientGroups-label">{categoryBase.groupsLabel}</InputLabel>
+                                <Select
+                                    labelId="clientGroups-label"
+                                    id="clientGroupIds"
+                                    name="clientGroupIds"
+                                    value={clientGroupIds}
+                                    multiple={true}
+                                    onChange={handleOnChange}>
+                                    {categoryBase.groups && categoryBase.groups.length > 0 ? (
+                                        categoryBase.groups.map((group, index) => {
+                                            return (
+                                                <MenuItem key={index} value={group.id}>{group.name}</MenuItem>
+                                            );
+                                        })
+                                    ) : (
+                                        <MenuItem disabled>{categoryBase.noGroupsText}</MenuItem>
                                     )}
                                 </Select>
                             </FormControl>

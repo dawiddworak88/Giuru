@@ -31,7 +31,8 @@ namespace Seller.Web.Areas.Categories.Repositories
             this.settings = settings;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? parentCategoryId, string name, IEnumerable<Guid> files, string schema, string uiSchema)
+        public async Task<Guid> SaveAsync(
+            string token, string language, Guid? id, Guid? parentCategoryId, string name, IEnumerable<Guid> files, IEnumerable<Guid> groupIds, string schema, string uiSchema)
         {
             var requestModel = new SaveCategoryApiRequestModel
             {
@@ -40,7 +41,8 @@ namespace Seller.Web.Areas.Categories.Repositories
                 Name = name,
                 Files = files,
                 Schema = schema,
-                UiSchema = uiSchema
+                UiSchema = uiSchema,
+                GroupIds = groupIds
             };
 
             var apiRequest = new ApiRequest<SaveCategoryApiRequestModel>

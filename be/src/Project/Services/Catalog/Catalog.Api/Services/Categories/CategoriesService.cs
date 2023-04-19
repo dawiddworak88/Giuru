@@ -44,6 +44,7 @@ namespace Catalog.Api.Services.Categories
                 .Include(x => x.Translations)
                 .Include(x => x.ParentCategory)
                 .Include(x => x.ParentCategory.Translations)
+                .Include(x => x.ClientsGroups)
                 .AsSingleQuery();
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
@@ -89,6 +90,7 @@ namespace Catalog.Api.Services.Categories
                     CreatedDate = x.CreatedDate,
                     Name =  x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? x.Translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
                     ParentCategoryName = x.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == x.Parentid && t.Language == model.Language)?.Name ?? x.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == x.Parentid)?.Name,
+                    ClientGroupIds = x.ClientsGroups.Select(x => x.GroupId),
                     ThumbnailMediaId = x.Images.FirstOrDefault(y => y.CategoryId == x.Id)?.MediaId
                 })
             };
@@ -98,8 +100,7 @@ namespace Catalog.Api.Services.Categories
         {
             var categoryItem = _context.Categories.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
 
-            if (categoryItem is null)
-            {
+            if (categoryItem is null) { 
                 throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
@@ -120,7 +121,55 @@ namespace Catalog.Api.Services.Categories
             };
         }
 
-        public async Task DeleteAsync(DeleteCategoryServiceModel model)
+    /*  var category = new CategoryServiceModel
+      {
+          Id = categoryItem.Id,
+          Order = categoryItem.Order,
+          Level = categoryItem.Level,
+          IsLeaf = categoryItem.IsLeaf,
+          ParentId = categoryItem.Parentid,
+          LastModifiedDate = categoryItem.LastModifiedDate,
+          CreatedDate = categoryItem.CreatedDate
+      };
+
+      var clientGroups = _context.CategoriesGroups.Where(x => x.CategoryId == categoryItem.Id && x.IsActive).Select(x => x.GroupId);
+
+      if (clientGroups is not null)
+      {
+          category.ClientGroupIds = clientGroups;
+      }
+
+      var thumbnailMedia = _context.CategoryImages.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive);
+
+      if (thumbnailMedia is not null)
+      {
+          category.ThumbnailMediaId = thumbnailMedia.MediaId;
+      }
+
+      var categoryItemTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == categoryItem.Id && x.IsActive);
+
+      if (categoryItemTranslations is null)
+      {
+          categoryItemTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive);
+      }
+
+      category.Name = categoryItemTranslations?.Name;
+
+      if (categoryItem.Parentid.HasValue)
+      {
+          var parentCategoryTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == categoryItem.Parentid && x.IsActive);
+
+          if (parentCategoryTranslations is null)
+          {
+              parentCategoryTranslations = _context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == categoryItem.Parentid && x.IsActive);
+          }
+
+          category.ParentCategoryName = parentCategoryTranslations?.Name;
+      }
+
+      return category;*/
+
+    public async Task DeleteAsync(DeleteCategoryServiceModel model)
         {
             var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
@@ -206,6 +255,24 @@ namespace Catalog.Api.Services.Categories
             
             await _context.CategoryImages.AddRangeAsync(images);
 
+            var clientGroups = _context.CategoriesGroups.Where(x => x.CategoryId == model.Id && x.IsActive);
+
+            foreach (var clientGroup in clientGroups.OrEmptyIfNull())
+            {
+                _context.CategoriesGroups.Remove(clientGroup);
+            }
+
+            foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
+            {
+                var group = new CategoriesGroup
+                {
+                    GroupId = clientGroupId,
+                    CategoryId = category.Id
+                };
+
+                _context.CategoriesGroups.Add(group.FillCommonProperties());
+            }
+
             await _context.SaveChangesAsync();
 
             return Get(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
@@ -248,6 +315,17 @@ namespace Catalog.Api.Services.Categories
             }
 
             await _context.CategoryImages.AddRangeAsync(images);
+
+            foreach (var clientGroupId in model.ClientGroupIds.OrEmptyIfNull())
+            {
+                var group = new CategoriesGroup
+                {
+                    CategoryId = category.Id,
+                    GroupId = clientGroupId
+                };
+
+                _context.CategoriesGroups.Add(group.FillCommonProperties());
+            }
 
             if (model.Schema is not null)
             {
