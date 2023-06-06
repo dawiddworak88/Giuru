@@ -4,7 +4,8 @@
   "info": {
     "singularName": "fabrics-catalog-home-page",
     "pluralName": "fabrics-catalog-home-pages",
-    "displayName": "Fabrics Catalog - Home Page"
+    "displayName": "Fabrics Catalog - Home Page",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -24,6 +25,17 @@
         }
       },
       "component": "shared.seo"
+    },
+    "banner": {
+      "displayName": "Fabrics Banner",
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "blocks.fabrics-banner"
     }
   }
 }

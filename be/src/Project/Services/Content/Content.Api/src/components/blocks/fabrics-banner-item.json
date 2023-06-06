@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_blocks_fabrics_banner_items",
+  "info": {
+    "displayName": "Fabrics Banner Item"
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

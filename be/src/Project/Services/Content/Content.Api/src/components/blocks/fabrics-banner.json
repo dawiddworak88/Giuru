@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_blocks_fabrics_banners",
+  "info": {
+    "displayName": "Fabrics Banner"
+  },
+  "options": {},
+  "attributes": {
+    "bannerItems": {
+      "displayName": "Fabrics Banner Item",
+      "type": "component",
+      "repeatable": true,
+      "component": "blocks.fabrics-banner-item"
+    }
+  }
+}
