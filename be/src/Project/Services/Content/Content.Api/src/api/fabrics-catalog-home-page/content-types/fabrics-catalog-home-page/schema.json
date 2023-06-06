@@ -26,8 +26,7 @@
       },
       "component": "shared.seo"
     },
-    "banner": {
-      "displayName": "Fabrics Banner",
+    "heroSlider": {
       "type": "component",
       "repeatable": false,
       "pluginOptions": {
@@ -35,7 +34,7 @@
           "localized": true
         }
       },
-      "component": "blocks.fabrics-banner"
+      "component": "blocks.hero-slider"
     }
   }
 }
