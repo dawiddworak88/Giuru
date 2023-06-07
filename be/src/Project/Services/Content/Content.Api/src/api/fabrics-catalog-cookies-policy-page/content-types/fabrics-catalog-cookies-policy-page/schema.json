@@ -1,0 +1,40 @@
+{
+  "kind": "singleType",
+  "collectionName": "fabrics_catalog_cookies_policy_pages",
+  "info": {
+    "singularName": "fabrics-catalog-cookies-policy-page",
+    "pluralName": "fabrics-catalog-cookies-policy-pages",
+    "displayName": "Fabrics Catalog - Cookies Policy Page",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo"
+    },
+    "policy": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "blocks.policy"
+    }
+  }
+}
