@@ -144,6 +144,9 @@
   <data name="EditProductAttributeItem" xml:space="preserve">
     <value>Edit attribute item</value>
   </data>
+  <data name="EditProductCard" xml:space="preserve">
+    <value>Edit product card</value>
+  </data>
   <data name="EnterCategoryName" xml:space="preserve">
     <value>Enter category name</value>
   </data>
@@ -168,6 +171,9 @@
   <data name="NavigateToCategoriesLabel" xml:space="preserve">
     <value>Back to categories</value>
   </data>
+  <data name="NavigateToProductCards" xml:space="preserve">
+    <value>Back to product cards</value>
+  </data>
   <data name="NavigateToProductsLabel" xml:space="preserve">
     <value>Back to products</value>
   </data>
@@ -179,6 +185,12 @@
   </data>
   <data name="NewProductAttributeItem" xml:space="preserve">
     <value>New product attribute item</value>
+  </data>
+  <data name="NewProductCard" xml:space="preserve">
+    <value>Add a new product card</value>
+  </data>
+  <data name="NewProductCardAttribute" xml:space="preserve">
+    <value>Add a new attribute</value>
   </data>
   <data name="ParentCategory" xml:space="preserve">
     <value>Parent category</value>
@@ -194,6 +206,9 @@
   </data>
   <data name="ProductAttributeDeletedSuccessfully" xml:space="preserve">
     <value>Product attribute has been deleted successfully.</value>
+  </data>
+  <data name="ProductAttributeExists" xml:space="preserve">
+    <value>Attribute with that name already exists.</value>
   </data>
   <data name="ProductAttributeItemDeletedSuccessfully" xml:space="preserve">
     <value>Product attribute item has been deleted successfully.</value>
@@ -212,6 +227,12 @@
   </data>
   <data name="ProductAttributeSavedSuccessfully" xml:space="preserve">
     <value>Product attribute has been saved successfully.</value>
+  </data>
+  <data name="ProductCardDefaultInputName" xml:space="preserve">
+    <value>New Element</value>
+  </data>
+  <data name="ProductCardNameErrorMessage" xml:space="preserve">
+    <value>The attribute name shouldn't contain numbers and special characters.</value>
   </data>
   <data name="ProductDeletedSuccessfully" xml:space="preserve">
     <value>Product has been deleted successfully</value>
@@ -260,5 +281,11 @@
   </data>
   <data name="SubcategoriesDeleteCategoryConflict" xml:space="preserve">
     <value>Delete subcategories of this category first.</value>
+  </data>
+  <data name="SuccessfullySavedProductCard" xml:space="preserve">
+    <value>Successfully saved product card.</value>
+  </data>
+  <data name="ToDefinition" xml:space="preserve">
+    <value>Go to definition</value>
   </data>
 </root>

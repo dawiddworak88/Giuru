@@ -1,0 +1,95 @@
+trigger: none
+
+pr: none
+
+resources:
+  pipelines:
+  - pipeline: IdentityApiBuild
+    source: '[Identity Api] Build'
+    trigger: 
+      branches:
+        include: 
+        - main
+
+variables:
+- group: global
+- template: './variables.yml'
+- name: k8sReleaseName
+  value: 'b2b-identity-api'
+- name: helmVersionToInstall
+  value: '3.3.4'
+- name: helmChartPath
+  value: '$(Pipeline.Workspace)/helm-chart'
+
+stages:
+- stage: Production
+  variables:
+  - group: production
+  - group: b2b-identity-api-production
+  jobs:
+  - deployment:
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment: Production
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: ExtractFiles@1
+            displayName: Extract Helm Chart
+            inputs:
+              archiveFilePatterns: '$(Pipeline.Workspace)/IdentityApiBuild/drop/helm-chart.zip'
+              destinationFolder: $(helmChartPath)
+          - task: HelmInstaller@1
+            displayName: Install Helm
+            inputs:
+              helmVersionToInstall: $(helmVersionToInstall)
+          - task: HelmDeploy@0
+            displayName: Login to Kubernetes
+            inputs:
+              command: login
+              azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+              azureResourceGroup: $(azureResourceGroup)
+              kubernetesCluster: $(kubernetesCluster)
+          - script: |
+              stringConnectionString="$(connectionString)"
+              escapedConnectionString=${stringConnectionString//,/\\,}
+
+              helm upgrade --install --wait \
+              --set image.registry='$(acrLoginServer)' \
+              --set image.identityApi.repository='$(b2bIdentityApiImageRepository)' \
+              --set image.accountWebReactSsr.repository='$(b2bAccountWebReactSsrImageRepository)' \
+              --set image.tag='$(Resources.Pipeline.IdentityApiBuild.RunID)' \
+              --set environment='$(environment)' \
+              --set nodeEnvironment='$(nodeEnvironment)' \
+              --set serverSideRenderingEndpoint='$(serverSideRenderingEndpoint)' \
+              --set catalogUrl='$(catalogUrl)' \
+              --set mediaUrl='$(mediaUrl)' \
+              --set identityUrl='$(identityUrl)' \
+              --set redisUrl='$(redisUrl)' \
+              --set buyerUrl='$(buyerUrl)' \
+              --set sendGridApiKey='$(sendGridApiKey)' \
+              --set logzIoToken='$(logzIoToken)' \
+              --set logzIoType='$(logzIoType)' \
+              --set eventBusConnection='$(eventBusConnection)' \
+              --set eventBusRetryCount=`$(eventBusRetryCount)` \
+              --set eventBusRequestedHeartbeat=`$(eventBusRequestedHeartbeat)` \
+              --set logzIoDataCenterSubDomain='$(logzIoDataCenterSubDomain)' \
+              --set openTelemetryCollectorUrl='$(openTelemetryCollectorUrl)' \
+              --set identityApi.connectionString='$escapedConnectionString' \
+              --set identityApi.developersEmail='$(developersEmail)' \
+              --set identityApi.regulations='$(regulations)' \
+              --set identityApi.privacyPolicy='$(privacyPolicy)' \
+              --set identityApi.organisations='$(organisations)' \
+              --set identityApi.accounts='$(accounts)' \
+              --set identityApi.clients='$(clients)' \
+              --set identityApi.sellerClientId='$(sellerClientId)' \
+              --set identityApi.actionSendGridTeamMemberInvitationTemplateId='$(actionSendGridTeamMemberInvitationTemplateId)' \
+              --set identityApi.actionSendGridResetTemplateId='$(actionSendGridResetTemplateId)' \
+              --set identityApi.actionSendGridCreateTemplateId='$(actionSendGridCreateTemplateId)' \
+              --set identityApi.azureKeyVaultClientSecret='$(azureKeyVaultClientSecret)' \
+              --set identityApi.azureKeyVaultClientId='$(azureKeyVaultClientId)' \
+              --set identityApi.azureKeyVaultGiuruIdentityServer4Certificate='$(azureKeyVaultGiuruIdentityServer4Certificate)' \
+              --set ingress.identityapidomain='$(identityApiDomain)' \
+              $(k8sReleaseName) $(helmChartPath)
+            displayName: Deploy to Kubernetes

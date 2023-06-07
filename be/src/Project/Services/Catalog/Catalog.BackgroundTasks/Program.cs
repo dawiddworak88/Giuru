@@ -112,6 +112,7 @@ var eventBus = app.Services.GetService<IEventBus>();
 
 eventBus.Subscribe<RebuildCatalogSearchIndexIntegrationEvent, IIntegrationEventHandler<RebuildCatalogSearchIndexIntegrationEvent>>();
 eventBus.Subscribe<RebuildCategorySchemasIntegrationEvent, IIntegrationEventHandler<RebuildCategorySchemasIntegrationEvent>>();
+eventBus.Subscribe<RebuildCategoryProductsIntegrationEvent, IIntegrationEventHandler<RebuildCategoryProductsIntegrationEvent>>();
 
 app.UseEndpoints(endpoints =>
 {

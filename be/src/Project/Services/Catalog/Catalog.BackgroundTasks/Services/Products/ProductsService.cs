@@ -9,33 +9,51 @@ namespace Catalog.BackgroundTasks.Services.Products
 {
     public class ProductsService : IProductsService
     {
-        private readonly CatalogContext catalogContext;
-        private readonly IProductIndexingRepository productIndexingRepository;
-        private readonly ILogger logger;
+        private readonly CatalogContext _context;
+        private readonly IProductIndexingRepository _productIndexingRepository;
+        private readonly ILogger<ProductsService> _logger;
 
         public ProductsService(
-            CatalogContext catalogContext,
+            CatalogContext context,
             IProductIndexingRepository productIndexingRepository,
             ILogger<ProductsService> logger)
         {
-            this.catalogContext = catalogContext;
-            this.productIndexingRepository = productIndexingRepository;
-            this.logger = logger;
+            _context = context;
+            _productIndexingRepository = productIndexingRepository;
+            _logger = logger;
         }
 
         public async Task IndexAllAsync(Guid? sellerId)
         {
             if (sellerId.HasValue)
             {
-                foreach (var productId in this.catalogContext.Products.Where(x => x.Brand.SellerId == sellerId).Select(x => x.Id).ToList())
+                foreach (var productId in _context.Products.Where(x => x.Brand.SellerId == sellerId).Select(x => x.Id).ToList())
                 {
                     try
                     {
-                        await this.productIndexingRepository.IndexAsync(productId);
+                        await _productIndexingRepository.IndexAsync(productId);
                     }
                     catch (Exception exception)
                     {
-                        this.logger.LogError(exception, $"Couldn't index product: {productId}");
+                        _logger.LogError(exception, $"Couldn't index product: {productId}");
+                    }
+                }
+            }
+        }
+
+        public async Task IndexCategoryProducts(Guid? categoryId, Guid? sellerId)
+        {
+            if (sellerId.HasValue)
+            {
+                foreach (var productId in _context.Products.Where(x => x.Brand.SellerId == sellerId && x.Category.Id == categoryId).Select(x => x.Id).ToList())
+                {
+                    try
+                    {
+                        await _productIndexingRepository.IndexAsync(productId);
+                    }
+                    catch (Exception exception)
+                    {
+                        _logger.LogError(exception, $"Couldn't index product: {productId}");
                     }
                 }
             }

@@ -45,10 +45,24 @@ services:
   redis:
     image: redis:alpine
 
-  react-ssr:
-    image: ${REGISTRY:-giuru}/react-ssr:${PLATFORM:-linux}-${TAG:-latest}
+  seller-web-react-ssr:
+    image: ${REGISTRY:-giuru}/seller-web-react-ssr:${PLATFORM:-linux}-${TAG:-latest}
     build: 
-      context: ../../fe
+      context: ../../fe/projects/Seller.Portal
+      dockerfile: Dockerfile-ssr-local
+    restart: unless-stopped
+
+  account-web-react-ssr:
+    image: ${REGISTRY:-giuru}/account-web-react-ssr:${PLATFORM:-linux}-${TAG:-latest}
+    build: 
+      context: ../../fe/projects/Account
+      dockerfile: Dockerfile-ssr-local
+    restart: unless-stopped
+
+  buyer-web-react-ssr:
+    image: ${REGISTRY:-giuru}/buyer-web-react-ssr:${PLATFORM:-linux}-${TAG:-latest}
+    build: 
+      context: ../../fe/projects/AspNetCore
       dockerfile: Dockerfile-ssr-local
     restart: unless-stopped
 
@@ -142,7 +156,7 @@ services:
     depends_on: 
       - sqldata
       - redis
-      - react-ssr
+      - account-web-react-ssr
       - otel-collector
 
   basket-api:
@@ -213,7 +227,7 @@ services:
       dockerfile: Project/Web/Seller/Seller.Web/Dockerfile
     restart: unless-stopped
     depends_on: 
-      - react-ssr
+      - seller-web-react-ssr
       - analytics-api
       - media-api
       - client-api
@@ -237,7 +251,7 @@ services:
       dockerfile: Project/Web/Buyer/Buyer.Web/Dockerfile
     restart: unless-stopped
     depends_on: 
-      - react-ssr
+      - buyer-web-react-ssr
       - analytics-api
       - media-api
       - client-api

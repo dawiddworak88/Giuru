@@ -12,5 +12,6 @@ namespace Seller.Web.Areas.Products.Repositories
         Task DeleteAsync(string token, string language, Guid? id);
         Task<ProductAttributeItem> GetByIdAsync(string token, string language, Guid? id);
         Task<PagedResults<IEnumerable<ProductAttributeItem>>> GetAsync(string token, string language, Guid? productAttributeId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
+        Task<IEnumerable<ProductAttributeItem>> GetAsync(string token, string language, Guid? productAttributeId);
     }
 }

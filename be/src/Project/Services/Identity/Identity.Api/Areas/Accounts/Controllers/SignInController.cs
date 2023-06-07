@@ -69,7 +69,7 @@ namespace Identity.Api.Areas.Accounts.Controllers
             {
                 var context = await interactionService.GetAuthorizationContextAsync(model.ReturnUrl);
 
-                if (context != null)
+                if (context is not null)
                 {
                     if (await this.userService.SignInAsync(model.Email, model.Password, model.ReturnUrl, context.Client.ClientId))
                     {
@@ -78,6 +78,8 @@ namespace Identity.Api.Areas.Accounts.Controllers
                     else
                     {
                         this.logger.LogError("Unsuccessful login for {0} user", model.Email);
+
+                        return this.Redirect(model.ReturnUrl);
                     }
                 }                
             }

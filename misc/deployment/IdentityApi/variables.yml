@@ -1,0 +1,5 @@
+variables:
+- name: b2bIdentityApiImageRepository
+  value: 'b2b-identity-api'
+- name: b2bAccountWebReactSsrImageRepository
+  value: 'account-web-react-ssr'

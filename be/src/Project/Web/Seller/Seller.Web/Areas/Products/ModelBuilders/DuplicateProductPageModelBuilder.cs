@@ -1,5 +1,4 @@
 ﻿using Foundation.PageContent.Components.Footers.ViewModels;
-using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using System.Threading.Tasks;

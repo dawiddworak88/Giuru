@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using DownloadCenter.Api.DependencyInjection;
 using Foundation.EventBus.Abstractions;
 using DownloadCenter.Api.IntegrationEvents;
+using Foundation.Extensions.Formatters;
 using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
@@ -66,7 +67,7 @@ builder.Services.AddControllers(options =>
 {
     options.RespectBrowserAcceptHeader = true;
     options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
+}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters().AddCsvSerializerFormatters();
 
 builder.Services.AddLocalization();
 
