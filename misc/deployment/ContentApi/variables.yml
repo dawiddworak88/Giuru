@@ -1,3 +1,0 @@
-variables:
-- name: b2bContentApiImageRepository
-  value: 'b2b-content-api'
