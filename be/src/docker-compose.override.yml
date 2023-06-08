@@ -114,20 +114,6 @@ services:
     volumes:
       - mssqldata:/var/opt/mssql
 
-  postgres:
-    environment:
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=postgres
-    logging:
-        options:
-          max-size: 10m
-          max-file: "3"
-    ports:
-        - '5438:5432'
-    volumes: 
-        - postgresdata:/var/lib/postgresql/data
-        - ./Project/Services/Content/Content.Api/scripts/docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
-
   media-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -323,26 +309,6 @@ services:
     ports:
       - "5102:80"
 
-  content-api:
-    environment:
-      - DATABASE_CLIENT=postgres
-      - DATABASE_NAME=postgres
-      - DATABASE_HOST=host.docker.internal
-      - DATABASE_PORT=5438
-      - DATABASE_USERNAME=postgres
-      - DATABASE_PASSWORD=postgres
-      - DATABASE_SSL=false
-      - GIURU_API_SECRET=98daf0da-89ac-48db-8b9f-edc6383153ed
-      - GIURU_API_EMAIL=seller@user.com
-      - GIURU_API_ORGANISATION_ID=09affcc9-1665-45d6-919f-3d2026106ba1
-      - GIURU_MEDIA_API_URL=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
-      - GIURU_CONTENT_API_URL=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5111
-      - GIURU_IDENTITY_API_URL=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105/api/v1/token
-    volumes:
-      - ./Project/Services/Content/Content.Api/src:/content/src
-    ports:
-      - "5111:1337"
-
   downloadcenter-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -464,8 +430,6 @@ services:
 
 volumes:
   mssqldata:
-    external: false
-  postgresdata:
     external: false
   redis:
     external: false

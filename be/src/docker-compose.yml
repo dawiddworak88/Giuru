@@ -70,10 +70,6 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
     restart: unless-stopped
 
-  postgres:
-    image: postgres:10.5
-    restart: unless-stopped
-
   media-api:
     image: ${REGISTRY:-giuru}/media-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
@@ -181,15 +177,6 @@ services:
       - rabbitmq
       - otel-collector
 
-  content-api:
-    image: ${REGISTRY:-giuru}/content-api:${PLATFORM:-linux}-${TAG:-latest}
-    build:
-      context: Project/Services/Content/Content.Api
-      dockerfile: Dockerfile-dev-local
-    depends_on:
-      - postgres
-      - otel-collector
-
   downloadcenter-api:
     image: ${REGISTRY:-giuru}/download-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
@@ -236,7 +223,6 @@ services:
       - downloadcenter-api
       - ordering-api
       - basket-api
-      - content-api
       - catalog-api
       - catalog-backgroundtasks
       - news-api
@@ -260,7 +246,6 @@ services:
       - downloadcenter-api
       - ordering-api
       - basket-api
-      - content-api
       - catalog-api
       - catalog-backgroundtasks
       - news-api
