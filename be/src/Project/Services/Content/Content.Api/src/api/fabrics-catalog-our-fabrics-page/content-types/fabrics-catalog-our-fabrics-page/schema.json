@@ -1,0 +1,40 @@
+{
+  "kind": "singleType",
+  "collectionName": "fabrics_catalog_our_fabrics_pages",
+  "info": {
+    "singularName": "fabrics-catalog-our-fabrics-page",
+    "pluralName": "fabrics-catalog-our-fabrics-pages",
+    "displayName": "Fabrics Catalog - Our Fabrics Page",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo"
+    },
+    "banner": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "blocks.hero-slider-item"
+    }
+  }
+}
