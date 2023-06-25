@@ -12,7 +12,7 @@ const Footer = (props) => {
                         <ul className="footer_navigation_list">
                             {props.links.map((navigationItem, index) => (
                                 <li className="footer_navigation_item" key={index}>
-                                    <a href={navigationItem.link} className="footer_navigation_link">
+                                    <a href={navigationItem.url} className="footer_navigation_link">
                                         {navigationItem.text}
                                     </a>
                                 </li>
