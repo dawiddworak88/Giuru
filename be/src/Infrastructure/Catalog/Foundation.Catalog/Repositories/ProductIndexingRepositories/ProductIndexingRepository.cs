@@ -170,17 +170,20 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
                                                 {
                                                     JValue title = (JValue)categorySchemaObject.SelectToken($"$.definitions...anyOf[?(@.enum[0] == '{id}')].title");
 
-                                                    var value = new
+                                                    if (title is not null)
                                                     {
-                                                        Name = propertyObject["title"].Value<string>(),
-                                                        Value = new
+                                                        var value = new
                                                         {
-                                                            Id = id,
-                                                            Name = title.Value<string>()
-                                                        }
-                                                    };
+                                                            Name = propertyObject["title"].Value<string>(),
+                                                            Value = new
+                                                            {
+                                                                Id = id,
+                                                                Name = title.Value<string>()
+                                                            }
+                                                        };
 
-                                                    productAttributes.Add(key, value);
+                                                        productAttributes.Add(key, value);
+                                                    }
                                                 }
                                                 else
                                                 {
