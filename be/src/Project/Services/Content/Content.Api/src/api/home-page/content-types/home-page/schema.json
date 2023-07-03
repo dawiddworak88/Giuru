@@ -4,7 +4,8 @@
   "info": {
     "singularName": "home-page",
     "pluralName": "home-pages",
-    "displayName": "Home Page"
+    "displayName": "Home Page",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -34,6 +35,16 @@
         }
       },
       "component": "blocks.hero-slider"
+    },
+    "footer": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.footer"
     }
   }
 }
