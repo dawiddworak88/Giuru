@@ -15,14 +15,14 @@ namespace Buyer.Web.Areas.News.ModelBuilders
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, NewsItemBreadcrumbsViewModel> breadcrumbsModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, NewsItemDetailsViewModel> newsDetailsModelBuilder;
-        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder;
 
         public NewsItemPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, NewsItemDetailsViewModel> newsDetailsModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, NewsItemBreadcrumbsViewModel> breadcrumbsModelBuilder,
-            IModelBuilder<FooterViewModel> footerModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.mainNavigationModelBuilder = mainNavigationModelBuilder;
@@ -40,7 +40,7 @@ namespace Buyer.Web.Areas.News.ModelBuilders
                 Breadcrumbs = await this.breadcrumbsModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 NewsItemDetails = await this.newsDetailsModelBuilder.BuildModelAsync(componentModel),
-                Footer = footerModelBuilder.BuildModel()
+                Footer = await footerModelBuilder.BuildModelAsync(componentModel)
             };
 
             return viewModel;
