@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Buyer.Web.Shared.GraphQlResponseModels
 {
     public record FooterGraphQlResponseModel(
-        [property: JsonProperty("homePage")] FooterComponent Page
+        [property: JsonProperty("page")] FooterComponent Page
     );
 
     public record FooterComponent(
