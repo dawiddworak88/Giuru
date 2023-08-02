@@ -68,6 +68,10 @@ var productDetail = {
       sidebarTitle: "Add the selected product variant to the cart",
 
     },
+    modal: {
+      title: "Anton",
+      skuLabel: "Sku:"
+    },
     productVariants: [
       {
         id: "5dddbdfb-2a79-412b-7d5f-08d907687b6a",
