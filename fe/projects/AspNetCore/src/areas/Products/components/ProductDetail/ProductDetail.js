@@ -14,6 +14,9 @@ import { ExpandMore, ExpandLess } from "@mui/icons-material"
 import { marked } from "marked";
 
 import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
+import {Swiper, SwiperSlide} from 'swiper/react';
+import { Scrollbar, Navigation } from 'swiper';
+
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
@@ -25,7 +28,8 @@ function ProductDetail(props) {
     const [canActiveModal, setCanActiveModal] = useState(true);
     const [showMore, setShowMore] = useState(false);
 
-    console.log(props)
+    const [fabricsSliderOnStart, setFabricsSliderOnStart] = useState(true);
+    const [fabricsSliderOnEnd, setFabricsSliderOnEnd] = useState(false);
 
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -123,25 +127,57 @@ function ProductDetail(props) {
         if (!canActiveModal && !isModalOpen){
             setIsSidebarOpen(true)
         }
-    }, [canActiveModal, isModalOpen, isSidebarOpen]);
-    
-    console.log(props);
+    }, [canActiveModal, isModalOpen, isSidebarOpen]);    
 
     return (
         <section className="product-detail section">
-            <div className="product-detail__head columns is-tablet">
-                <div className="column is-8">
-                    <div className="is-flex is-flex-wrap product-detail__product-gallery">
-                        {props.images.map((image, index) => {
-                            return (
-                                <div className="product-detail__product-image">
-                                    <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt}/>
-                                </div>
-                            )
-                        })}    
+            <div className="product-detail__head columns is-desktop">
+                <div className="product-detail__gallery-column">
+                    <div className="desktop-product-gallery">
+                        <div className="is-flex is-flex-wrap product-detail__product-gallery">
+                            {props.images.map((image, index) => {
+                                return (
+                                    <div className="product-detail__product-image">
+                                        <ResponsiveImage sources={image.sources} imageSrc={image.Src} imageAlt={image.Alt}/>
+                                    </div>
+                                )
+                            })}    
+                        </div>                                                
                     </div>                    
+                    <div className="mobile-product-gallery">
+                            <Swiper
+                                modules={[Scrollbar]}
+                                slidesPerView={1}
+                                spaceBetween={16}
+                                scrollbar
+                                navigation={{
+                                    prevEl: '.${product-details__fabrics_slider_prev}',
+                                    nextEl: '.${product-details__fabrics_slider_next}'
+                                }}
+                                onActiveIndexChange={(e) => {
+                                    if (e.activeIndex === 0) {
+                                        setFabricsSliderOnStart(true)
+                                    } else {
+                                        setFabricsSliderOnStart(false)
+                                        setFabricsSliderOnEnd(false)
+                                    }
+
+                                    if (e.isEnd) {
+                                        setFabricsSliderOnEnd(true)
+                                    }
+                                }}
+                            >
+                                {props.images.map((image, index) => {
+                                    return (
+                                        <SwiperSlide key={index}>
+                                            <ResponsiveImage sources={image.sources} imageSrc={image.Src} imageAlt={image.Alt}/>
+                                        </SwiperSlide>
+                                    )                                    
+                                })}
+                            </Swiper>
+                        </div>
                 </div>
-                <div className="column is-4 test__desc">
+                <div className="product-detail__description-column">
                     <p className="product-detail__sku">{props.skuLabel}{props.sku}</p>                       
                     {props.ean &&
                         <p className="product-detail__ean">{props.eanLabel} {props.ean}</p>
@@ -157,6 +193,23 @@ function ProductDetail(props) {
                              {props.expectedDelivery && 
                                <div className="product-detail__expected-delivery">{props.expectedDeliveryLabel} {moment.utc(props.expectedDelivery).local().format("L")}</div>
                             }
+                        </div>
+                    }
+                    {props.isAuthenticated && 
+                        <div className="product-detail__add-to-cart-button">
+                            {props.isProductVariant ? (
+                                <div className="row">
+                                    <Button type="text" variant="contained" color="primary" onClick={() => setIsModalOpen(true)}>
+                                        {props.basketLabel}
+                                    </Button>
+                                </div>
+                            ) : (
+                                <div className="product-detail__add-to-cart-button">
+                                    <Button type="text" variant="contained" color="primary" onClick={() => setIsSidebarOpen(true)}>
+                                        {props.basketLabel}
+                                    </Button>
+                                </div>
+                            )}
                         </div>
                     }
                     {props.description &&
@@ -275,7 +328,7 @@ function ProductDetail(props) {
         //         product={productVariant ? productVariant : props}
         //         labels={props.modal}
         //     />
-        // </section>
+        // </section>        
     );
 }
 

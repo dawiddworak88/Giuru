@@ -2,18 +2,19 @@
 @import "../../../../shared/components/Sidebar/Sidebar.scss";
 @import "../../../../shared/components/Modal/Modal.scss";
 @import "../../../../shared/components/Files/Files.scss";
-
-.test {
-    &__photo {
-        background-color: #666;
-    }
-
-    &__column {
-        background-color: black;
-    }
-}
+@import "~swiper/swiper.css"; 
+@import "~swiper/css/scrollbar";
+@import "~swiper/css/navigation";
 
 .product-detail {
+
+    &__gallery-column {
+        flex-basis: 60%;
+    }
+
+    &__description-column {
+        flex-basis: 38%;
+    }
 
     &__feature-title {
         font-size: 1.1rem;
@@ -39,6 +40,24 @@
             border-radius: 0.5rem;
         }
     }
+
+    &__fabrics_slider_prev,
+    &__fabrics_slider_next {
+    position: absolute;
+    background: var(--white);
+    width: 2.5rem;
+    height: 2.5rem;
+    top: 50%;
+    z-index: 100;
+    transform: translateY(-100%);
+    box-shadow: var(--primary-shadow);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    filter: drop-shadow(0px 16px 32px rgba(159, 165, 181, 0.16));
+    cursor: pointer;
+}
 
     // &__image-gallery {
     //     position: sticky;
@@ -74,6 +93,8 @@
 
     &__head {
         min-height: 630px;
+        flex-direction: row;
+        justify-content: space-between;
     }
 
     &__price {
@@ -144,7 +165,11 @@
             border-bottom: 1px solid $swamp;
             padding: 1rem;
             width: 50%;
-        }
+        }        
+    }
+
+    .desktop-product-gallery {
+        display: none;
     }
 }
 
@@ -154,4 +179,16 @@
     @media only screen and (max-width: $tablet) {
         min-height: 300px;
     }
+}
+
+@media only screen and (min-width: $desktop) {
+    .product-detail {
+        .desktop-product-gallery {
+            display: block;
+        }
+
+        .mobile-product-gallery {
+            display: none;            
+        }
+    }    
 }
