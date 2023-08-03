@@ -13,6 +13,8 @@ import Modal from "../../../../shared/components/Modal/Modal";
 import { ExpandMore, ExpandLess } from "@mui/icons-material"
 import { marked } from "marked";
 
+import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
+
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
     const [orderItems, setOrderItems] = useState(props.orderItems ? props.orderItems : []);
@@ -22,6 +24,8 @@ function ProductDetail(props) {
     const [productVariant, setProductVariant] = useState(null);
     const [canActiveModal, setCanActiveModal] = useState(true);
     const [showMore, setShowMore] = useState(false);
+
+    console.log(props)
 
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -121,115 +125,157 @@ function ProductDetail(props) {
         }
     }, [canActiveModal, isModalOpen, isSidebarOpen]);
     
+    console.log(props);
+
     return (
         <section className="product-detail section">
             <div className="product-detail__head columns is-tablet">
-                <div className="column is-6">
-                    {props.images && props.images.length &&
-                        <div className="product-detail__image-gallery">
-                            <ImageGallery items={props.images} />
-                        </div>
-                    }
+                <div className="column is-8">
+                    <div className="is-flex is-flex-wrap product-detail__product-gallery">
+                        {props.images.map((image, index) => {
+                            return (
+                                <div className="product-detail__product-image">
+                                    <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt}/>
+                                </div>
+                            )
+                        })}    
+                    </div>                    
                 </div>
-                <div className="column is-4">
-                    <p className="product-detail__sku">{props.skuLabel} {props.sku}</p>
+                <div className="column is-4 test__desc">
+                    <p className="product-detail__sku">{props.skuLabel}{props.sku}</p>                       
                     {props.ean &&
                         <p className="product-detail__ean">{props.eanLabel} {props.ean}</p>
                     }
-                    <h1 className="title is-4 mt-1">{props.title}</h1>
-                    <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
+                    <h1 className="title is-4">{props.title}</h1>  
+                    <h2 className="subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
                     {props.outletTitle &&
                         <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>     
                     }
                     {props.inStock && props.availableQuantity && props.availableQuantity > 0 &&
                         <div className="product-detail__in-stock">
                             {props.inStockLabel} {props.availableQuantity}
-                            {props.expectedDelivery && 
-                                <div className="product-detail__expected-delivery">{props.expectedDeliveryLabel} {moment.utc(props.expectedDelivery).local().format("L")}</div>
+                             {props.expectedDelivery && 
+                               <div className="product-detail__expected-delivery">{props.expectedDeliveryLabel} {moment.utc(props.expectedDelivery).local().format("L")}</div>
                             }
                         </div>
                     }
-                    {props.inOutlet && props.availableOutletQuantity && props.availableOutletQuantity > 0 &&
-                        <div className="product-detail__in-stock">
-                            {props.inOutletLabel} {props.availableOutletQuantity}
-                        </div>
-                    }
-                    {props.isAuthenticated && 
-                        <div className="product-detail__add-to-cart-button">
-                            {props.isProductVariant ? (
-                                <div className="row">
-                                    <Button type="text" variant="contained" color="primary" onClick={() => setIsModalOpen(true)}>
-                                        {props.basketLabel}
-                                    </Button>
-                                </div>
-                            ) : (
-                                <div className="product-detail__add-to-cart-button">
-                                    <Button type="text" variant="contained" color="primary" onClick={() => setIsSidebarOpen(true)}>
-                                        {props.basketLabel}
-                                    </Button>
-                                </div>
-                            )}
-                        </div>
-                    }
                     {props.description &&
-                        <div className="product-detail__product-description">
-                            <h3 className="product-detail__feature-title">{props.descriptionLabel}</h3>
-                            <div dangerouslySetInnerHTML={{__html: marked.parse(props.description)}}></div>
-                        </div>
-                    }
-                    {props.features && props.features.length > 0 &&
-                        <div className="mt-2">
-                            {showMore ? (
-                                <Fragment>
-                                    <div className="is-flex is-justify-content-center">
-                                        <span className="is-flex is-align-content-center is-text button" onClick={() => setShowMore(false)}>{props.readLessText} <ExpandLess/></span>
-                                    </div>
-                                    <div className="product-detail__product-information">
-                                        <h3 className="product-detail__feature-title">{props.productInformationLabel}</h3>
-                                        <div className="product-detail__product-information-list">
-                                            <dl>
-                                                {props.features.map((item, index) =>
-                                                    <Fragment key={item.key}>
-                                                        <dt>{item.key}</dt>
-                                                        <dd>{item.value}</dd>
-                                                    </Fragment>
-                                                )}
-                                            </dl>
-                                        </div>
-                                    </div>
-                                </Fragment>
-                            ) : (
-                                <div className="is-flex is-justify-content-center">
-                                    <span className="button is-flex is-align-content-center is-text" onClick={() => setShowMore(true)}>{props.readMoreText} <ExpandMore/></span>
-                                </div>
-                            )}
-                        </div>
-                    }
+                         <div className="product-detail__product-description">
+                             <h3 className="product-detail__feature-title">{props.descriptionLabel}</h3>
+                             <div dangerouslySetInnerHTML={{__html: marked.parse(props.description)}}></div>
+                         </div>
+                     }
                 </div>
-                <Sidebar 
-                    productId={props.productId}
-                    isOpen={isSidebarOpen}
-                    manyUses={false}
-                    setIsOpen={setIsSidebarOpen}
-                    handleOrder={handleModal}
-                    labels={props.sidebar}
-                />
             </div>
-            <CarouselGrid items={props.productVariants} className="pt-6"/>
-            {props.files &&
-                <Files {...props.files} />
-            }
-            <Modal
-                isOpen={isModalOpen}
-                setIsOpen={setIsModalOpen}
-                handleClose={handleCloseModal}
-                maxOutletValue={productVariant ? productVariant.availableOutletQuantity : props.availableOutletQuantity}
-                maxStockValue={productVariant ? productVariant.availableQuantity : props.availableQuantity}
-                handleOrder={handleAddOrderItemClick}
-                product={productVariant ? productVariant : props}
-                labels={props.modal}
-            />
         </section>
+        // <section className="product-detail section">
+        //     <div className="product-detail__head columns is-tablet">
+        //         <div className="column is-6"> // Kolumna galeria
+        //             {props.images && props.images.length &&
+        //                 <div className="product-detail__image-gallery">
+        //                     <ImageGallery items={props.images} />
+        //                 </div>
+        //             }
+        //         </div>
+        //         <div className="column is-4"> // kolumna opis
+        //             <p className="product-detail__sku">{props.skuLabel} {props.sku}</p>
+        //             {props.ean &&
+        //                 <p className="product-detail__ean">{props.eanLabel} {props.ean}</p>
+        //             }
+        //             <h1 className="title is-4 mt-1">{props.title}</h1>
+        //             <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
+        //             {props.outletTitle &&
+        //                 <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>     
+        //             }
+        //             {props.inStock && props.availableQuantity && props.availableQuantity > 0 &&
+        //                 <div className="product-detail__in-stock">
+        //                     {props.inStockLabel} {props.availableQuantity}
+        //                     {props.expectedDelivery && 
+        //                         <div className="product-detail__expected-delivery">{props.expectedDeliveryLabel} {moment.utc(props.expectedDelivery).local().format("L")}</div>
+        //                     }
+        //                 </div>
+        //             }
+        //             {props.inOutlet && props.availableOutletQuantity && props.availableOutletQuantity > 0 &&
+        //                 <div className="product-detail__in-stock">
+        //                     {props.inOutletLabel} {props.availableOutletQuantity}
+        //                 </div>
+        //             }
+        //             {props.isAuthenticated && 
+        //                 <div className="product-detail__add-to-cart-button">
+        //                     {props.isProductVariant ? (
+        //                         <div className="row">
+        //                             <Button type="text" variant="contained" color="primary" onClick={() => setIsModalOpen(true)}>
+        //                                 {props.basketLabel}
+        //                             </Button>
+        //                         </div>
+        //                     ) : (
+        //                         <div className="product-detail__add-to-cart-button">
+        //                             <Button type="text" variant="contained" color="primary" onClick={() => setIsSidebarOpen(true)}>
+        //                                 {props.basketLabel}
+        //                             </Button>
+        //                         </div>
+        //                     )}
+        //                 </div>
+        //             }
+        //             {props.description &&
+        //                 <div className="product-detail__product-description">
+        //                     <h3 className="product-detail__feature-title">{props.descriptionLabel}</h3>
+        //                     <div dangerouslySetInnerHTML={{__html: marked.parse(props.description)}}></div>
+        //                 </div>
+        //             }
+        //             {props.features && props.features.length > 0 &&
+        //                 <div className="mt-2">
+        //                     {showMore ? (
+        //                         <Fragment>
+        //                             <div className="is-flex is-justify-content-center">
+        //                                 <span className="is-flex is-align-content-center is-text button" onClick={() => setShowMore(false)}>{props.readLessText} <ExpandLess/></span>
+        //                             </div>
+        //                             <div className="product-detail__product-information">
+        //                                 <h3 className="product-detail__feature-title">{props.productInformationLabel}</h3>
+        //                                 <div className="product-detail__product-information-list">
+        //                                     <dl>
+        //                                         {props.features.map((item, index) =>
+        //                                             <Fragment key={item.key}>
+        //                                                 <dt>{item.key}</dt>
+        //                                                 <dd>{item.value}</dd>
+        //                                             </Fragment>
+        //                                         )}
+        //                                     </dl>
+        //                                 </div>
+        //                             </div>
+        //                         </Fragment>
+        //                     ) : (
+        //                         <div className="is-flex is-justify-content-center">
+        //                             <span className="button is-flex is-align-content-center is-text" onClick={() => setShowMore(true)}>{props.readMoreText} <ExpandMore/></span>
+        //                         </div>
+        //                     )}
+        //                 </div>
+        //             }
+        //         </div>
+        //         <Sidebar 
+        //             productId={props.productId}
+        //             isOpen={isSidebarOpen}
+        //             manyUses={false}
+        //             setIsOpen={setIsSidebarOpen}
+        //             handleOrder={handleModal}
+        //             labels={props.sidebar}
+        //         />
+        //     </div>
+        //     <CarouselGrid items={props.productVariants} className="pt-6"/>
+        //     {props.files &&
+        //         <Files {...props.files} />
+        //     }
+        //     <Modal
+        //         isOpen={isModalOpen}
+        //         setIsOpen={setIsModalOpen}
+        //         handleClose={handleCloseModal}
+        //         maxOutletValue={productVariant ? productVariant.availableOutletQuantity : props.availableOutletQuantity}
+        //         maxStockValue={productVariant ? productVariant.availableQuantity : props.availableQuantity}
+        //         handleOrder={handleAddOrderItemClick}
+        //         product={productVariant ? productVariant : props}
+        //         labels={props.modal}
+        //     />
+        // </section>
     );
 }
 
