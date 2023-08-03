@@ -5,20 +5,20 @@ import { header, breadcrumbs, mainNavigation, files, footer } from "./shared/Pro
 
 const images = [
   {
-    imageSrc: "https://eltap.pl/upload/gallery/172/eridano-104080rgbjpg7311.jpg",
-    imageAlt: "Sectional"
+    Src: "https://eltap.pl/upload/gallery/172/eridano-104080rgbjpg7311.jpg",
+    Alt: "Sectional"
   },
   {
-    imageSrc: "https://eltap.pl/upload/gallery/65/zamowienie4berlin01soft11200000jpg3793.jpg",
-    imageAlt: "Sectional"
+    Src: "https://eltap.pl/upload/gallery/65/zamowienie4berlin01soft11200000jpg3793.jpg",
+    Alt: "Sectional"
   },
   {
-    imageSrc: "https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg",  
-    imageAlt: "Sectional"
+    Src: "https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg",  
+    Alt: "Sectional"
   },
   {
-    imageSrc: "https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg",  
-    imageAlt: "Sectional"
+    Src: "https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg",  
+    Alt: "Sectional"
   }
 ];
 
