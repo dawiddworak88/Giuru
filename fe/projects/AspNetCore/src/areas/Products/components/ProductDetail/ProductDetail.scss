@@ -15,6 +15,30 @@
 
     &__gallery-column {
         flex-basis: 60%;
+
+        &__desktop-product-image {   
+            flex-basis: 47%;
+            height: inherit;                               
+            
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 0.5rem;
+            }
+        }
+
+        &__mobile-product-image {
+            flex-basis: 100%;
+            height: inherit;
+            
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 0.5rem;
+            }
+        }
     }
 
     &__description-column {
@@ -30,21 +54,7 @@
 
     &__product-gallery {
         gap: 1.5rem;
-    }
-
-    &__product-image {   
-        flex-basis: 47%;
-        height: inherit;       
-        border-radius: 0.5rem;
-        background-color: #666;  
-        
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 0.5rem;
-        }
-    }
+    }    
 
     &__fabrics_slider_prev,
     &__fabrics_slider_next {

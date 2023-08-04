@@ -137,7 +137,7 @@ function ProductDetail(props) {
                         <div className="is-flex is-flex-wrap product-detail__product-gallery">
                             {props.images.map((image, index) => {
                                 return (
-                                    <div className="product-detail__product-image" key={index}>
+                                    <div className="product-detail__gallery-column__desktop-product-image" key={index}>
                                         <ResponsiveImage sources={image.sources} imageSrc={image.Src} imageAlt={image.Alt}/>
                                     </div>
                                 )
@@ -170,7 +170,9 @@ function ProductDetail(props) {
                                 {props.images.map((image, index) => {
                                     return (
                                         <SwiperSlide key={index}>
-                                            <ResponsiveImage sources={image.sources} imageSrc={image.Src} imageAlt={image.Alt}/>
+                                            <div className="product-detail__gallery-column__mobile-product-image">
+                                                <ResponsiveImage sources={image.sources} imageSrc={image.Src} imageAlt={image.Alt}/>
+                                            </div>
                                         </SwiperSlide>
                                     )                                    
                                 })}
