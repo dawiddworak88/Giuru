@@ -6,6 +6,11 @@
 @import "~swiper/css/scrollbar";
 @import "~swiper/css/navigation";
 
+.swiper {
+    padding-bottom: 20px;
+    margin-bottom: 10px;
+}
+
 .product-detail {
 
     &__gallery-column {
@@ -28,7 +33,7 @@
     }
 
     &__product-image {   
-        flex-basis: 48%;
+        flex-basis: 47%;
         height: inherit;       
         border-radius: 0.5rem;
         background-color: #666;  
@@ -44,7 +49,7 @@
     &__fabrics_slider_prev,
     &__fabrics_slider_next {
     position: absolute;
-    background: var(--white);
+    background: #fff;
     width: 2.5rem;
     height: 2.5rem;
     top: 50%;
@@ -173,13 +178,13 @@
     }
 }
 
-.image-gallery-image {
-    min-height: 446px;
+// .image-gallery-image {
+//     min-height: 446px;
 
-    @media only screen and (max-width: $tablet) {
-        min-height: 300px;
-    }
-}
+//     @media only screen and (max-width: $tablet) {
+//         min-height: 300px;
+//     }
+// }
 
 @media only screen and (min-width: $desktop) {
     .product-detail {
