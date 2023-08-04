@@ -146,14 +146,12 @@ function ProductDetail(props) {
                     </div>                    
                     <div className="mobile-product-gallery">
                             <Swiper
-                                modules={[Scrollbar]}
+                                modules={[Scrollbar, Navigation]}
                                 slidesPerView={1}
                                 spaceBetween={16}
+                                loop
                                 scrollbar
-                                navigation={{
-                                    prevEl: '.${product-details__fabrics_slider_prev}',
-                                    nextEl: '.${product-details__fabrics_slider_next}'
-                                }}
+                                navigation
                                 onActiveIndexChange={(e) => {
                                     if (e.activeIndex === 0) {
                                         setFabricsSliderOnStart(true)
@@ -220,7 +218,7 @@ function ProductDetail(props) {
                              <div dangerouslySetInnerHTML={{__html: marked.parse(props.description)}}></div>
                          </div>
                      }
-                </div>
+                </div>                
             </div>
         </section>
         // <section className="product-detail section">
