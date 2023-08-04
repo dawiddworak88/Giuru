@@ -152,18 +152,6 @@ function ProductDetail(props) {
                                 loop
                                 scrollbar
                                 navigation
-                                onActiveIndexChange={(e) => {
-                                    if (e.activeIndex === 0) {
-                                        setFabricsSliderOnStart(true)
-                                    } else {
-                                        setFabricsSliderOnStart(false)
-                                        setFabricsSliderOnEnd(false)
-                                    }
-
-                                    if (e.isEnd) {
-                                        setFabricsSliderOnEnd(true)
-                                    }
-                                }}
                             >
                                 {props.images.map((image, index) => {
                                     return (

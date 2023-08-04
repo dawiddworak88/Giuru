@@ -6,24 +6,6 @@
 @import "~swiper/css/scrollbar";
 @import "~swiper/css/navigation";
 
-.swiper {
-    padding-bottom: 20px;
-    margin-bottom: 10px;
-}
-
-.swiper-button-next, .swiper-button-prev {
-    color: #000;    
-    background-color: #fff;
-    border-radius: 50%;
-    width: 2rem;
-    height: 2rem;
-}
-
-.swiper-button-next::after, .swiper-button-prev::after {
-    font-size: 0.5rem;
-    font-weight: bold;
-}
-
 .product-detail {
 
     &__gallery-column {
@@ -68,15 +50,6 @@
     &__product-gallery {
         gap: 1.5rem;
     }    
-
-    // &__image-gallery {
-    //     position: sticky;
-    //     top: 8px;
-
-    //     div.fullscreen {
-    //         z-index: 10000;
-    //     }
-    // }
 
     &__discount {
         margin-top: 1rem;
@@ -183,13 +156,23 @@
     }
 }
 
-// .image-gallery-image {
-//     min-height: 446px;
+.swiper {
+    padding-bottom: 20px;
+    margin-bottom: 10px;
+}
 
-//     @media only screen and (max-width: $tablet) {
-//         min-height: 300px;
-//     }
-// }
+.swiper-button-next, .swiper-button-prev {
+    color: #000;    
+    background-color: #fff;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+}
+
+.swiper-button-next::after, .swiper-button-prev::after {
+    font-size: 0.5rem;
+    font-weight: bold;
+}
 
 @media only screen and (min-width: $desktop) {
     .product-detail {
@@ -213,3 +196,11 @@
         font-size: 1rem;
     }
 }
+
+// .image-gallery-image {
+//     min-height: 446px;
+
+//     @media only screen and (max-width: $tablet) {
+//         min-height: 300px;
+//     }
+// }
