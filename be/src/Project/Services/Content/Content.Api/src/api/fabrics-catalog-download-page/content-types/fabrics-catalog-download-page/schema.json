@@ -1,0 +1,40 @@
+{
+  "kind": "singleType",
+  "collectionName": "fabrics_catalog_download_pages",
+  "info": {
+    "singularName": "fabrics-catalog-download-page",
+    "pluralName": "fabrics-catalog-download-pages",
+    "displayName": "Fabrics Catalog - Download Page",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo"
+    },
+    "banner": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "blocks.hero-slider-item"
+    }
+  }
+}
