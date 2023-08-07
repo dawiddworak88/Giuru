@@ -2,11 +2,12 @@
 @import "../../../../shared/components/Sidebar/Sidebar.scss";
 @import "../../../../shared/components/Modal/Modal.scss";
 @import "../../../../shared/components/Files/Files.scss";
+@import "@splidejs/react-splide/css";
 
 .product-detail {
 
     &__gallery-column {
-        flex-basis: 60%;
+        flex-basis: 60%;        
 
         &__desktop-product-image {   
             flex-basis: 47%;
@@ -34,7 +35,7 @@
     }
 
     &__description-column {
-        flex-basis: 38%;
+        flex-basis: 38%;        
     }
 
     &__feature-title {
@@ -153,6 +154,15 @@
     }
 }
 
+.splide {
+    padding-bottom: 1.5rem;    
+
+    &__arrow {
+        background-color: $white;
+        opacity: 1;
+    }
+}
+
 @media only screen and (min-width: $desktop) {
     .product-detail {
         .desktop-product-gallery {
@@ -165,10 +175,11 @@
     }    
 }
 
-// .image-gallery-image {
-//     min-height: 446px;
-
-//     @media only screen and (max-width: $tablet) {
-//         min-height: 300px;
-//     }
-// }
+@media only screen and (min-width: $tablet) {
+    .splide {
+        &__arrow {
+            width: 2.5em;
+            height: 2.5em;
+        }
+    }
+}

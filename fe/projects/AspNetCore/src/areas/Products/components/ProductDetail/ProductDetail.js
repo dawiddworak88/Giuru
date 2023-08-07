@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { Button } from "@mui/material";
-import ImageGallery from "react-image-gallery";
 import Files from "../../../../shared/components/Files/Files";
 import { Context } from "../../../../shared/stores/Store";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
@@ -13,6 +12,7 @@ import Modal from "../../../../shared/components/Modal/Modal";
 import { ExpandMore, ExpandLess } from "@mui/icons-material"
 import { marked } from "marked";
 import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
+import { Splide, SplideSlide } from "@splidejs/react-splide";
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
@@ -122,129 +122,146 @@ function ProductDetail(props) {
         }
     }, [canActiveModal, isModalOpen, isSidebarOpen]);
 
-    console.log(props);
-
     return (
         <section className="product-detail section">
-            <div className="product-detail__head columns is-desktop">
-                <div className="product-detail__gallery-column">
-                    <div className="desktop-product-gallery">
-                        <div className="is-flex is-flex-wrap product-detail__product-gallery">
-                            {props.images && props.images.length > 0 && props.images.map((image, index) => {
-                                return (
-                                    <div className="product-detail__gallery-column__desktop-product-image" key={index}>
-                                        <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
-                                    </div>
-                                )
-                            })}
+            <div className="container">
+                <div className="product-detail__head columns is-desktop">
+                    <div className="product-detail__gallery-column">
+                        <div className="column desktop-product-gallery">
+                            <div className="is-flex is-flex-wrap product-detail__product-gallery">
+                                {props.images && props.images.length > 0 && props.images.map((image, index) => {
+                                    return (
+                                        <div className="product-detail__gallery-column__desktop-product-image" key={index}>
+                                            <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                        <div className="column mobile-product-gallery">
+                            {props.images && props.images.length > 0 &&
+                                <div className="is-flex is-flex-wrap product-detail__product-detail">
+                                    <Splide
+                                        options={{
+                                            type: "loop",                                                                         
+                                        }}
+                                    >                                    
+                                        {props.images.map((image, index) => {
+                                            return (
+                                                <SplideSlide key={index}>
+                                                    <div className="product-detail__gallery-column__desktop-product-image">
+                                                        <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
+                                                    </div>
+                                                </SplideSlide>
+                                                )
+                                            })
+                                        }                                    
+                                    </Splide>
+                                </div>
+                            }
                         </div>
                     </div>
-                    {props.images && props.images.length > 0 &&
-                        <div className="mobile-product-gallery">
-
-                        </div>
-                    }
-                </div>
-            </div>
-            <div className="product-detail__description-column">
-                <p className="product-detail__sku">{props.skuLabel} {props.sku}</p>
-                {props.ean &&
-                    <p className="product-detail__ean">{props.eanLabel} {props.ean}</p>
-                }
-                <h1 className="title is-4 mt-1">{props.title}</h1>
-                <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
-                {props.outletTitle &&
-                    <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>
-                }
-                {props.inStock && props.availableQuantity && props.availableQuantity > 0 &&
-                    <div className="product-detail__in-stock">
-                        {props.inStockLabel} {props.availableQuantity}
-                        {props.expectedDelivery &&
-                            <div className="product-detail__expected-delivery">{props.expectedDeliveryLabel} {moment.utc(props.expectedDelivery).local().format("L")}</div>
+                    <div className="product-detail__description-column">
+                        <p className="product-detail__sku">{props.skuLabel} {props.sku}</p>
+                        {props.ean &&
+                            <p className="product-detail__ean">{props.eanLabel} {props.ean}</p>
                         }
-                    </div>
-                }
-                {props.inOutlet && props.availableOutletQuantity && props.availableOutletQuantity > 0 &&
-                    <div className="product-detail__in-stock">
-                        {props.inOutletLabel} {props.availableOutletQuantity}
-                    </div>
-                }
-                {props.isAuthenticated &&
-                    <div className="product-detail__add-to-cart-button">
-                        {props.isProductVariant ? (
-                            <div className="row">
-                                <Button type="text" variant="contained" color="primary" onClick={() => setIsModalOpen(true)}>
-                                    {props.basketLabel}
-                                </Button>
+                        <h1 className="title is-4 mt-1">{props.title}</h1>
+                        <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
+                        {props.outletTitle &&
+                            <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>
+                        }
+                        {props.inStock && props.availableQuantity && props.availableQuantity > 0 &&
+                            <div className="product-detail__in-stock">
+                                {props.inStockLabel} {props.availableQuantity}
+                                {props.expectedDelivery &&
+                                    <div className="product-detail__expected-delivery">{props.expectedDeliveryLabel} {moment.utc(props.expectedDelivery).local().format("L")}</div>
+                                }
                             </div>
-                        ) : (
+                        }
+                        {props.inOutlet && props.availableOutletQuantity && props.availableOutletQuantity > 0 &&
+                            <div className="product-detail__in-stock">
+                                {props.inOutletLabel} {props.availableOutletQuantity}
+                            </div>
+                        }
+                        {props.isAuthenticated &&
                             <div className="product-detail__add-to-cart-button">
-                                <Button type="text" variant="contained" color="primary" onClick={() => setIsSidebarOpen(true)}>
-                                    {props.basketLabel}
-                                </Button>
-                            </div>
-                        )}
-                    </div>
-                }
-                {props.description &&
-                    <div className="product-detail__product-description">
-                        <h3 className="product-detail__feature-title">{props.descriptionLabel}</h3>
-                        <div dangerouslySetInnerHTML={{ __html: marked.parse(props.description) }}></div>
-                    </div>
-                }
-                {props.features && props.features.length > 0 &&
-                    <div className="mt-2">
-                        {showMore ? (
-                            <Fragment>
-                                <div className="is-flex is-justify-content-center">
-                                    <span className="is-flex is-align-content-center is-text button" onClick={() => setShowMore(false)}>{props.readLessText} <ExpandLess /></span>
-                                </div>
-                                <div className="product-detail__product-information">
-                                    <h3 className="product-detail__feature-title">{props.productInformationLabel}</h3>
-                                    <div className="product-detail__product-information-list">
-                                        <dl>
-                                            {props.features.map((item, index) =>
-                                                <Fragment key={item.key}>
-                                                    <dt>{item.key}</dt>
-                                                    <dd>{item.value}</dd>
-                                                </Fragment>
-                                            )}
-                                        </dl>
+                                {props.isProductVariant ? (
+                                    <div className="row">
+                                        <Button type="text" variant="contained" color="primary" onClick={() => setIsModalOpen(true)}>
+                                            {props.basketLabel}
+                                        </Button>
                                     </div>
-                                </div>
-                            </Fragment>
-                        ) : (
-                            <div className="is-flex is-justify-content-center">
-                                <span className="button is-flex is-align-content-center is-text" onClick={() => setShowMore(true)}>{props.readMoreText} <ExpandMore /></span>
+                                ) : (
+                                    <div className="product-detail__add-to-cart-button">
+                                        <Button type="text" variant="contained" color="primary" onClick={() => setIsSidebarOpen(true)}>
+                                            {props.basketLabel}
+                                        </Button>
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
+                        }
+                        {props.description &&
+                            <div className="product-detail__product-description">
+                                <h3 className="product-detail__feature-title">{props.descriptionLabel}</h3>
+                                <div dangerouslySetInnerHTML={{ __html: marked.parse(props.description) }}></div>
+                            </div>
+                        }
+                        {props.features && props.features.length > 0 &&
+                            <div className="mt-2">
+                                {showMore ? (
+                                    <Fragment>
+                                        <div className="is-flex is-justify-content-center">
+                                            <span className="is-flex is-align-content-center is-text button" onClick={() => setShowMore(false)}>{props.readLessText} <ExpandLess /></span>
+                                        </div>
+                                        <div className="product-detail__product-information">
+                                            <h3 className="product-detail__feature-title">{props.productInformationLabel}</h3>
+                                            <div className="product-detail__product-information-list">
+                                                <dl>
+                                                    {props.features.map((item, index) =>
+                                                        <Fragment key={item.key}>
+                                                            <dt>{item.key}</dt>
+                                                            <dd>{item.value}</dd>
+                                                        </Fragment>
+                                                    )}
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </Fragment>
+                                ) : (
+                                    <div className="is-flex is-justify-content-center">
+                                        <span className="button is-flex is-align-content-center is-text" onClick={() => setShowMore(true)}>{props.readMoreText} <ExpandMore /></span>
+                                    </div>
+                                )}
+                            </div>
+                        }
+                    </div>                
+                </div>
+                <div className="product-detail__head columns is-tablet">
+                    <Sidebar
+                        productId={props.productId}
+                        isOpen={isSidebarOpen}
+                        manyUses={false}
+                        setIsOpen={setIsSidebarOpen}
+                        handleOrder={handleModal}
+                        labels={props.sidebar}
+                    />
+                </div>   
+                <CarouselGrid items={props.productVariants} className="pt-6" />             
+                {props.files &&
+                    <Files {...props.files} />
                 }
-            </div>
-            <div className="product-detail__head columns is-tablet">
-                <Sidebar
-                    productId={props.productId}
-                    isOpen={isSidebarOpen}
-                    manyUses={false}
-                    setIsOpen={setIsSidebarOpen}
-                    handleOrder={handleModal}
-                    labels={props.sidebar}
+                <Modal
+                    isOpen={isModalOpen}
+                    setIsOpen={setIsModalOpen}
+                    handleClose={handleCloseModal}
+                    maxOutletValue={productVariant ? productVariant.availableOutletQuantity : props.availableOutletQuantity}
+                    maxStockValue={productVariant ? productVariant.availableQuantity : props.availableQuantity}
+                    handleOrder={handleAddOrderItemClick}
+                    product={productVariant ? productVariant : props}
+                    labels={props.modal}
                 />
-            </div>
-            <CarouselGrid items={props.productVariants} className="pt-6" />
-            {props.files &&
-                <Files {...props.files} />
-            }
-            <Modal
-                isOpen={isModalOpen}
-                setIsOpen={setIsModalOpen}
-                handleClose={handleCloseModal}
-                maxOutletValue={productVariant ? productVariant.availableOutletQuantity : props.availableOutletQuantity}
-                maxStockValue={productVariant ? productVariant.availableQuantity : props.availableQuantity}
-                handleOrder={handleAddOrderItemClick}
-                product={productVariant ? productVariant : props}
-                labels={props.modal}
-            />
+            </div>            
         </section>
     );
 }
