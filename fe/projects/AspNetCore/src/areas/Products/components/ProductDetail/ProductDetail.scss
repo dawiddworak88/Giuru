@@ -2,9 +2,6 @@
 @import "../../../../shared/components/Sidebar/Sidebar.scss";
 @import "../../../../shared/components/Modal/Modal.scss";
 @import "../../../../shared/components/Files/Files.scss";
-@import "~swiper/swiper.css"; 
-@import "~swiper/css/scrollbar";
-@import "~swiper/css/navigation";
 
 .product-detail {
 
@@ -156,24 +153,6 @@
     }
 }
 
-.swiper {
-    padding-bottom: 20px;
-    margin-bottom: 10px;
-}
-
-.swiper-button-next, .swiper-button-prev {
-    color: #000;    
-    background-color: #fff;
-    border-radius: 50%;
-    width: 2rem;
-    height: 2rem;
-}
-
-.swiper-button-next::after, .swiper-button-prev::after {
-    font-size: 0.5rem;
-    font-weight: bold;
-}
-
 @media only screen and (min-width: $desktop) {
     .product-detail {
         .desktop-product-gallery {
@@ -184,17 +163,6 @@
             display: none;            
         }
     }    
-}
-
-@media only screen and (min-width: $tablet) {
-    .swiper-button-next, .swiper-button-prev {
-        width: 2.5rem;
-        height: 2.5rem;
-    }
-
-    .swiper-button-next::after, .swiper-button-prev::after {
-        font-size: 1rem;
-    }
 }
 
 // .image-gallery-image {
