@@ -32,6 +32,28 @@
                 border-radius: 0.5rem;
             }
         }
+
+        &__desktop-more-product-images {
+            display: block;                      
+            width: 100%;
+            margin-top: 1.5rem;           
+
+            &__button-more-less {
+                background-color: $white;
+                font-weight: 700;
+                font-size: 15px;
+                padding: 1.2rem 1.5rem;
+                border-radius: 0.5rem;
+                border: 1px solid;
+                transition: 0.5s;
+            }
+
+            &__button-more-less:hover {
+                cursor: pointer;
+                border:1px solid $swamp;
+                color: $swamp;            
+            }
+        }
     }
 
     &__description-column {

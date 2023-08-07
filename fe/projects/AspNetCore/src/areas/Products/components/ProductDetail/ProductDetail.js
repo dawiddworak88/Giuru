@@ -23,6 +23,8 @@ function ProductDetail(props) {
     const [productVariant, setProductVariant] = useState(null);
     const [canActiveModal, setCanActiveModal] = useState(true);
     const [showMore, setShowMore] = useState(false);
+    const [showMoreImg, setShowMoreImg] = useState(false);
+    const [images, setImages] = useState(props.images ? props.images.slice(0, 6) : []);
 
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -122,6 +124,19 @@ function ProductDetail(props) {
         }
     }, [canActiveModal, isModalOpen, isSidebarOpen]);
 
+    const handleShowMoreImg = () => {
+        if(showMoreImg)
+        {            
+            setImages(props.images.slice(0, 6));
+        }
+        else
+        {
+            setImages(props.images);   
+        }
+
+        setShowMoreImg(!showMoreImg);
+    }
+
     return (
         <section className="product-detail section">
             <div className="container">
@@ -129,13 +144,26 @@ function ProductDetail(props) {
                     <div className="product-detail__gallery-column">
                         <div className="column desktop-product-gallery">
                             <div className="is-flex is-flex-wrap product-detail__product-gallery">
-                                {props.images && props.images.length > 0 && props.images.map((image, index) => {
+                                {props.images && props.images.length > 0 && images.map((image, index) => {
                                     return (
                                         <div className="product-detail__gallery-column__desktop-product-image" key={index}>
                                             <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
                                         </div>
                                     )
                                 })}
+                                {props.images.length > 6 &&
+                                    <div className="product-detail__gallery-column__desktop-more-product-images">
+                                        {showMoreImg ? (
+                                            <div className="is-flex is-justify-content-center">                                                                                                
+                                                <button variant="outlined" className="product-detail__gallery-column__desktop-more-product-images__button-more-less" onClick={handleShowMoreImg}>Zobacz mniej</button>
+                                            </div>
+                                        ) : (
+                                            <div className="is-flex is-justify-content-center">
+                                                <button variant="outlined" className="product-detail__gallery-column__desktop-more-product-images__button-more-less" onClick={handleShowMoreImg}>Zobacz więcej</button>                                                
+                                            </div>
+                                        )}
+                                    </div>
+                                }
                             </div>
                         </div>
                         <div className="column mobile-product-gallery">
@@ -143,9 +171,9 @@ function ProductDetail(props) {
                                 <div className="is-flex is-flex-wrap product-detail__product-detail">
                                     <Splide
                                         options={{
-                                            type: "loop",                                                                         
+                                            type: "loop",
                                         }}
-                                    >                                    
+                                    >
                                         {props.images.map((image, index) => {
                                             return (
                                                 <SplideSlide key={index}>
@@ -153,9 +181,9 @@ function ProductDetail(props) {
                                                         <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
                                                     </div>
                                                 </SplideSlide>
-                                                )
-                                            })
-                                        }                                    
+                                            )
+                                        })
+                                        }
                                     </Splide>
                                 </div>
                             }
@@ -235,7 +263,7 @@ function ProductDetail(props) {
                                 )}
                             </div>
                         }
-                    </div>                
+                    </div>
                 </div>
                 <div className="product-detail__head columns is-tablet">
                     <Sidebar
@@ -246,8 +274,8 @@ function ProductDetail(props) {
                         handleOrder={handleModal}
                         labels={props.sidebar}
                     />
-                </div>   
-                <CarouselGrid items={props.productVariants} className="pt-6" />             
+                </div>
+                <CarouselGrid items={props.productVariants} className="pt-6" />
                 {props.files &&
                     <Files {...props.files} />
                 }
@@ -261,7 +289,7 @@ function ProductDetail(props) {
                     product={productVariant ? productVariant : props}
                     labels={props.modal}
                 />
-            </div>            
+            </div>
         </section>
     );
 }
