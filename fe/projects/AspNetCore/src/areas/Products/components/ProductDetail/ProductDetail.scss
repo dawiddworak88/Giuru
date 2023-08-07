@@ -7,11 +7,11 @@
 .product-detail {
 
     &__gallery-column {
-        flex-basis: 60%;        
+        flex-basis: 62%;           
 
         &__desktop-product-image {   
-            flex-basis: 47%;
-            height: inherit;                               
+            flex-basis: 48%;
+            height: inherit;
             
             img {
                 width: 100%;
@@ -35,7 +35,8 @@
     }
 
     &__description-column {
-        flex-basis: 38%;        
+        flex-basis: 38%; 
+        padding: 0px;       
     }
 
     &__feature-title {
@@ -46,7 +47,7 @@
     }
 
     &__product-gallery {
-        gap: 1.5rem;
+        gap: 1rem;
     }    
 
     &__discount {
@@ -151,6 +152,7 @@
 
     .desktop-product-gallery {
         display: none;
+        padding: 0px;
     }
 }
 
