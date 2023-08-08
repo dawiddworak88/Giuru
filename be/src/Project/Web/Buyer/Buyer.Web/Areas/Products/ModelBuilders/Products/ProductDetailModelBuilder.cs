@@ -114,12 +114,22 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 foreach (var image in product.Images.OrEmptyIfNull())
                 {
-                    var imageViewModel = new ImageViewModel
+
+                    var imageViewModel = new ImageViewModel()
                     {
-                        Id = image,
-                        Original = _mediaService.GetMediaUrl(image, ProductConstants.OriginalMaxWidth),
-                        Thumbnail = _mediaService.GetMediaUrl(image, ProductConstants.ThumbnailMaxWidth)
+
                     };
+
+
+
+                    //var imageViewModel = new ImageViewModel
+                    //{
+                    //    Id = image,
+                    //    Original = _mediaService.GetMediaUrl(image, ProductConstants.OriginalMaxWidth),
+                    //    Thumbnail = _mediaService.GetMediaUrl(image, ProductConstants.ThumbnailMaxWidth)
+                    //};
+
+                    
 
                     images.Add(imageViewModel);
                 }

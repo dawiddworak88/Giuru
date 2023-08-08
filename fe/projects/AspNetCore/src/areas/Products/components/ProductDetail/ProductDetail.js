@@ -25,7 +25,7 @@ function ProductDetail(props) {
     const [productVariant, setProductVariant] = useState(null);
     const [canActiveModal, setCanActiveModal] = useState(true);
     const [showMore, setShowMore] = useState(false);
-    const [showMoreImg, setShowMoreImg] = useState(false);
+    const [showMoreImages, setShowMoreImages] = useState(false);
     const [images, setImages] = useState(props.images ? props.images.slice(0, 6) : []);
 
     const handleAddOrderItemClick = (item) => {
@@ -126,15 +126,15 @@ function ProductDetail(props) {
         }
     }, [canActiveModal, isModalOpen, isSidebarOpen]);
 
-    const handleShowMoreImg = () => {
-        if(showMoreImg) {            
+    const handleShowMoreImages = () => {
+        if (showMoreImages) {
             setImages(props.images.slice(0, 6));
         }
         else {
-            setImages(props.images);   
+            setImages(props.images);
         }
 
-        setShowMoreImg(!showMoreImg);
+        setShowMoreImages(!showMoreImages);
     }
 
     return (
@@ -142,55 +142,59 @@ function ProductDetail(props) {
             <div className="product-detail__container">
                 <div className="product-detail__head columns is-desktop">
                     <div className="product-detail__gallery-column">
-                        <div className="column desktop-product-gallery">
+                        <div className="column product-detail__desktop-gallery">
                             <div className="is-flex is-flex-wrap product-detail__product-gallery">
                                 {props.images && props.images.length > 0 && images.map((image, index) => {
                                     return (
-                                        <div className="product-detail__gallery-column__desktop-product-image" key={index}>
+                                        <div className="product-detail__desktop-gallery__desktop-product-image" key={index}>
                                             <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
                                                 <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
                                             </LazyLoad>
                                         </div>
                                     )
                                 })}
-                                {props.images.length > 6 &&
-                                    <div className="product-detail__gallery-column__desktop-more-product-images">
-                                        {showMoreImg ? (
-                                            <div className="is-flex is-justify-content-center">                                                                                                
-                                                <button variant="outlined" className="product-detail__gallery-column__desktop-more-product-images__button-more-less" onClick={handleShowMoreImg}>Zobacz mniej</button>
-                                            </div>
-                                        ) : (
-                                            <div className="is-flex is-justify-content-center">
-                                                <button variant="outlined" className="product-detail__gallery-column__desktop-more-product-images__button-more-less" onClick={handleShowMoreImg}>Zobacz więcej</button>                                                
-                                            </div>
-                                        )}
-                                    </div>
-                                }
                             </div>
-                        </div>
-                        <div className="column mobile-product-gallery">
-                            {props.images && props.images.length > 0 &&
-                                <div className="is-flex is-flex-wrap product-detail__product-detail">
-                                    <Splide
-                                        options={{                                            
-                                            type: "slide"                                                                                
-                                        }}
-                                    >
-                                        {props.images.map((image, index) => {
-                                                return (
-                                                    <SplideSlide key={index}>
-                                                        <div className="product-detail__gallery-column__mobile-product-image">
-                                                            <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
-                                                                <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
-                                                            </LazyLoad>                                                        
-                                                        </div>
-                                                    </SplideSlide>
-                                                )
-                                            })
-                                        }
-                                    </Splide>
+                            {props.images && props.images.length > 6 &&
+                                <div className="product-detail__more-product-images">
+                                    {showMoreImages ? (
+                                        <div className="is-flex is-justify-content-center">
+                                            <button variant="outlined"
+                                                className="product-detail__more-product-images__button-more-less"
+                                                onClick={handleShowMoreImages}>
+                                                {props.readLessText}Mniej
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="is-flex is-justify-content-center">
+                                            <button variant="outlined"
+                                                className="product-detail__more-product-images__button-more-less"
+                                                onClick={handleShowMoreImages}>
+                                                {props.readMoreText}Więcej
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             }
+                        </div>
+                        <div className="column product-detail__mobile-gallery">                            
+                            {props.images && props.images.length > 0 &&
+                                <Splide
+                                    options={{
+                                        type: "slide"
+                                    }}
+                                >
+                                    {props.images.map((image, index) => {
+                                        return (
+                                            <SplideSlide key={index}>
+                                                <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="product-detail__mobile-gallery__mobile-product-image">
+                                                    <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
+                                                </LazyLoad>
+                                            </SplideSlide>
+                                        )
+                                    })
+                                    }
+                                </Splide>
+                            }                                                    
                         </div>
                     </div>
                     <div className="product-detail__description-column">
@@ -269,16 +273,14 @@ function ProductDetail(props) {
                         }
                     </div>
                 </div>
-                <div className="product-detail__head columns is-tablet">
-                    <Sidebar
-                        productId={props.productId}
-                        isOpen={isSidebarOpen}
-                        manyUses={false}
-                        setIsOpen={setIsSidebarOpen}
-                        handleOrder={handleModal}
-                        labels={props.sidebar}
-                    />
-                </div>
+                <Sidebar
+                    productId={props.productId}
+                    isOpen={isSidebarOpen}
+                    manyUses={false}
+                    setIsOpen={setIsSidebarOpen}
+                    handleOrder={handleModal}
+                    labels={props.sidebar}
+                />
                 <CarouselGrid items={props.productVariants} className="pt-6" />
                 {props.files &&
                     <Files {...props.files} />
