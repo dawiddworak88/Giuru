@@ -13,6 +13,8 @@ import { ExpandMore, ExpandLess } from "@mui/icons-material"
 import { marked } from "marked";
 import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
+import LazyLoad from "react-lazyload";
+import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
@@ -145,7 +147,9 @@ function ProductDetail(props) {
                                 {props.images && props.images.length > 0 && images.map((image, index) => {
                                     return (
                                         <div className="product-detail__gallery-column__desktop-product-image" key={index}>
-                                            <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
+                                            <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
+                                                <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
+                                            </LazyLoad>                                            
                                         </div>
                                     )
                                 })}
@@ -176,7 +180,9 @@ function ProductDetail(props) {
                                             return (
                                                 <SplideSlide key={index}>
                                                     <div className="product-detail__gallery-column__desktop-product-image">
-                                                        <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
+                                                        <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
+                                                            <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
+                                                        </LazyLoad>                                                        
                                                     </div>
                                                 </SplideSlide>
                                             )
