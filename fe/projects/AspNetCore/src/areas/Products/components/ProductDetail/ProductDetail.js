@@ -149,7 +149,7 @@ function ProductDetail(props) {
                                         <div className="product-detail__gallery-column__desktop-product-image" key={index}>
                                             <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
                                                 <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
-                                            </LazyLoad>                                            
+                                            </LazyLoad>
                                         </div>
                                     )
                                 })}
@@ -172,21 +172,21 @@ function ProductDetail(props) {
                             {props.images && props.images.length > 0 &&
                                 <div className="is-flex is-flex-wrap product-detail__product-detail">
                                     <Splide
-                                        options={{
-                                            type: "loop",
+                                        options={{                                            
+                                            type: "slide"                                                                                
                                         }}
                                     >
                                         {props.images.map((image, index) => {
-                                            return (
-                                                <SplideSlide key={index}>
-                                                    <div className="product-detail__gallery-column__desktop-product-image">
-                                                        <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
-                                                            <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
-                                                        </LazyLoad>                                                        
-                                                    </div>
-                                                </SplideSlide>
-                                            )
-                                        })
+                                                return (
+                                                    <SplideSlide key={index}>
+                                                        <div className="product-detail__gallery-column__mobile-product-image">
+                                                            <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
+                                                                <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
+                                                            </LazyLoad>                                                        
+                                                        </div>
+                                                    </SplideSlide>
+                                                )
+                                            })
                                         }
                                     </Splide>
                                 </div>
