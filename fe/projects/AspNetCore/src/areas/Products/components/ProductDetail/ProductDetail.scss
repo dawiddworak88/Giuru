@@ -6,6 +6,10 @@
 
 .product-detail {
 
+    &__container {
+        margin-top: 1rem;
+    }
+
     &__gallery-column {
         flex-basis: 62%;           
 

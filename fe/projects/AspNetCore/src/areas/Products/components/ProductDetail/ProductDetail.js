@@ -125,12 +125,10 @@ function ProductDetail(props) {
     }, [canActiveModal, isModalOpen, isSidebarOpen]);
 
     const handleShowMoreImg = () => {
-        if(showMoreImg)
-        {            
+        if(showMoreImg) {            
             setImages(props.images.slice(0, 6));
         }
-        else
-        {
+        else {
             setImages(props.images);   
         }
 
@@ -139,7 +137,7 @@ function ProductDetail(props) {
 
     return (
         <section className="product-detail section">
-            <div className="container">
+            <div className="product-detail__container">
                 <div className="product-detail__head columns is-desktop">
                     <div className="product-detail__gallery-column">
                         <div className="column desktop-product-gallery">
