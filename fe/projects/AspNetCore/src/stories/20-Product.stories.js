@@ -85,8 +85,8 @@ var productDetail = {
     basketLabel: "Add to cart",
     addedProduct: "Added",
     basketUrl: "#",
-    readMoreText: "Read more",
-    readLessText: "Read less",
+    readMoreText: "See more",
+    readLessText: "See less",
     sidebar: {
       lackInformation: "Lack of information",
       toBasketLabel: "View cart",
