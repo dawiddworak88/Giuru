@@ -112,25 +112,20 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 var images = new List<ImageViewModel>();
 
-                foreach (var image in product.Images.OrEmptyIfNull())
+                foreach (var imageId in product.Images.OrEmptyIfNull())
                 {
-
                     var imageViewModel = new ImageViewModel()
                     {
-
+                        ImageSrc = _mediaService.GetMediaUrl(imageId),
+                        Sources = new List<SourceViewModel>()
+                        {
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 1366) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 470) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 342) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 768) }
+                        }
                     };
-
-
-
-                    //var imageViewModel = new ImageViewModel
-                    //{
-                    //    Id = image,
-                    //    Original = _mediaService.GetMediaUrl(image, ProductConstants.OriginalMaxWidth),
-                    //    Thumbnail = _mediaService.GetMediaUrl(image, ProductConstants.ThumbnailMaxWidth)
-                    //};
-
-                    
-
+                   
                     images.Add(imageViewModel);
                 }
 
