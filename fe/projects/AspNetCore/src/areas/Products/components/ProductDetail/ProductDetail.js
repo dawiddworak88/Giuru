@@ -146,11 +146,9 @@ function ProductDetail(props) {
                             <div className="is-flex is-flex-wrap product-detail__product-gallery">
                                 {props.images && props.images.length > 0 && images.map((image, index) => {
                                     return (
-                                        <div className="product-detail__desktop-gallery__desktop-product-image" key={index}>
-                                            <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
-                                                <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
-                                            </LazyLoad>
-                                        </div>
+                                        <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="product-detail__desktop-gallery__desktop-product-image" key={index}>
+                                            <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
+                                        </LazyLoad>
                                     )
                                 })}
                             </div>
@@ -158,25 +156,25 @@ function ProductDetail(props) {
                                 <div className="product-detail__more-product-images">
                                     {showMoreImages ? (
                                         <div className="is-flex is-justify-content-center">
-                                            <button variant="outlined"
-                                                className="product-detail__more-product-images__button-more-less"
-                                                onClick={handleShowMoreImages}>
-                                                {props.readLessText}Mniej
-                                            </button>
+                                            <Button variant="outlined"
+                                                onClick={handleShowMoreImages}
+                                                color="inherit">
+                                                {props.readLessText}
+                                            </Button>
                                         </div>
                                     ) : (
                                         <div className="is-flex is-justify-content-center">
-                                            <button variant="outlined"
-                                                className="product-detail__more-product-images__button-more-less"
-                                                onClick={handleShowMoreImages}>
-                                                {props.readMoreText}Więcej
-                                            </button>
+                                            <Button variant="outlined"                                                
+                                                onClick={handleShowMoreImages}
+                                                color="inherit">
+                                                {props.readMoreText}
+                                            </Button>
                                         </div>
                                     )}
                                 </div>
                             }
                         </div>
-                        <div className="column product-detail__mobile-gallery">                            
+                        <div className="column product-detail__mobile-gallery">
                             {props.images && props.images.length > 0 &&
                                 <Splide
                                     options={{
@@ -194,7 +192,7 @@ function ProductDetail(props) {
                                     })
                                     }
                                 </Splide>
-                            }                                                    
+                            }
                         </div>
                     </div>
                     <div className="product-detail__description-column">
