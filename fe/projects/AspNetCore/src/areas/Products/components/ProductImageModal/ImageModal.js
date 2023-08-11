@@ -7,7 +7,7 @@ import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
 
 const ImageModal = (props) => {
-    const { isOpen, handleClose, images } = props;
+    const { isOpen, handleClose, images } = props;  
 
     return (
         <Dialog
@@ -15,7 +15,7 @@ const ImageModal = (props) => {
             onClose={handleClose}
             maxWidth='md'
             PaperProps={{
-                className: "image-modal"
+                className: "image-modal"            
             }}
         >
             <div className="is-flex is-justify-content-end">
@@ -27,13 +27,14 @@ const ImageModal = (props) => {
                         className="image-modal__splide"
                         options={{
                             type: "slide",
-                            pagination: false
+                            pagination: false,                              
+                            keyboard: 'global'                                             
                         }}
                     >
                         {images.map((image, index) => {
                             return (
-                                <SplideSlide page={index}>
-                                    <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="image-modal__image">
+                                <SplideSlide>
+                                    <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="image-modal__image" key={index}>
                                         <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
                                     </LazyLoad>
                                 </SplideSlide>
