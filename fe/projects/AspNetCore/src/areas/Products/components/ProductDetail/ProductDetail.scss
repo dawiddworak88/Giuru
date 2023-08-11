@@ -16,11 +16,11 @@
     }
 
     &__desktop-gallery {
-        display: none !important;
+        display: none;
         padding: 0;           
 
         @media only screen and (min-width: $desktop) {
-            display: block !important;                  
+            display: block;                       
         }
 
         &__desktop-product-image {
@@ -33,6 +33,10 @@
                 height: 100%;
                 object-fit: cover;
                 border-radius: 0.25rem;
+            }   
+            
+            &:hover {
+                cursor: pointer;
             }
         }
     }
@@ -40,7 +44,7 @@
     &__mobile-gallery {         
         
         @media only screen and (min-width: $desktop) {                    
-            display: none !important;
+            display: none;            
         } 
         
         &__mobile-product-image {
