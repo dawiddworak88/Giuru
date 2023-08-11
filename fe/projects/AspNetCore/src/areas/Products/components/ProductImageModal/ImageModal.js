@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Button, Dialog, DialogTitle } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
@@ -7,7 +7,15 @@ import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
 
 const ImageModal = (props) => {
-    const { isOpen, handleClose, images } = props;  
+    const { isOpen, handleClose, images, index } = props; 
+    const splideRef = useRef(); 
+    
+    useEffect(() => {
+        if(splideRef.current) {
+            console.log(index)
+            splideRef.current.go(index);
+        }
+    }, [index]) 
 
     return (
         <Dialog
@@ -24,6 +32,7 @@ const ImageModal = (props) => {
             <div className="image-modal__container">
                 {images && images.length > 0 &&
                     <Splide
+                        ref={splideRef}
                         className="image-modal__splide"
                         options={{
                             type: "slide",

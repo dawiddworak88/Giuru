@@ -28,7 +28,8 @@ function ProductDetail(props) {
     const [canActiveModal, setCanActiveModal] = useState(true);
     const [showMore, setShowMore] = useState(false);
     const [showMoreImages, setShowMoreImages] = useState(false);
-    const [images, setImages] = useState(props.images ? props.images.slice(0, 6) : []);
+    const [images, setImages] = useState(props.images ? props.images.slice(0, 6) : []);    
+    const [activeImageIndex, setActiveImageIndex] = useState();
 
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -108,8 +109,13 @@ function ProductDetail(props) {
             });
     };
 
-    const handleCloseImageModal = () => {
-        setIsImageModalOpen(false);
+    const handleCloseImageModal = (index) => {
+        setIsImageModalOpen(false);        
+    }
+
+    const handleImageModal = (index) => {
+        setActiveImageIndex(index);
+        setIsImageModalOpen(true);    
     }
 
     const handleCloseModal = () => {
@@ -134,7 +140,7 @@ function ProductDetail(props) {
 
     const handleShowMoreImages = () => {
         if (showMoreImages) {
-            setImages(props.images.slice(0, 6));
+            setImages(props.images.slice(0, 6));            
         }
         else {
             setImages(props.images);
@@ -148,11 +154,11 @@ function ProductDetail(props) {
             <div className="product-detail__container">
                 <div className="product-detail__head columns is-desktop">
                     <div className="product-detail__gallery-column">
-                        <div className="column product-detail__desktop-gallery">
+                        <div className="product-detail__desktop-gallery">
                             <div className="is-flex is-flex-wrap product-detail__product-gallery">
                                 {props.images && props.images.length > 0 && images.map((image, index) => {
                                     return (
-                                        <div className="product-detail__desktop-gallery__desktop-product-image" onClick={() => setIsImageModalOpen(true)}>
+                                        <div className="product-detail__desktop-gallery__desktop-product-image" onClick={() => handleImageModal(index)}>
                                             <LazyLoad 
                                                 offset={LazyLoadConstants.defaultOffset()}  key={index}>
                                                 <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt}/>
@@ -185,16 +191,16 @@ function ProductDetail(props) {
                                 </div>
                             }
                         </div>
-                        <div className="column product-detail__mobile-gallery">
+                        <div className="product-detail__mobile-gallery">
                             {props.images && props.images.length > 0 &&
                                 <Splide
                                     className="splide-mobile"
                                     options={{
                                         type: "slide",
-                                        pagination: false
+                                        pagination: false                                        
                                     }}
                                 >
-                                    {props.images.map((image, index) => {
+                                    {props.images.map((image, index) => {                                        
                                             return (
                                                 <SplideSlide key={index}>
                                                     <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="product-detail__mobile-gallery__mobile-product-image">
@@ -208,7 +214,7 @@ function ProductDetail(props) {
                             }
                         </div>
                     </div>                    
-                    <div className="product-detail__description-column"> 
+                    <div className="product-detail__description-column">                           
                         <p className="product-detail__sku">{props.skuLabel} {props.sku}</p>
                         {props.ean &&
                             <p className="product-detail__ean">{props.eanLabel} {props.ean}</p>
@@ -309,7 +315,8 @@ function ProductDetail(props) {
                 <ImageModal
                     isOpen={isImageModalOpen}
                     handleClose={handleCloseImageModal}
-                    images={props.images}                    
+                    images={props.images}     
+                    index={activeImageIndex}           
                 />            
             </div>
         </section>
