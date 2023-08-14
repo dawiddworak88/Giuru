@@ -29,7 +29,7 @@ function ProductDetail(props) {
     const [showMore, setShowMore] = useState(false);
     const [showMoreImages, setShowMoreImages] = useState(false);
     const [images, setImages] = useState(props.images ? props.images.slice(0, 6) : []);    
-    const [activeImageIndex, setActiveImageIndex] = useState();
+    const [activeImageIndex, setActiveImageIndex] = useState(0);
 
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -161,7 +161,7 @@ function ProductDetail(props) {
                                         <div className="product-detail__desktop-gallery__desktop-product-image" onClick={() => handleImageModal(index)}>
                                             <LazyLoad 
                                                 offset={LazyLoadConstants.defaultOffset()}  key={index}>
-                                                <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt}/>
+                                                <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt}/>
                                             </LazyLoad>
                                         </div>
                                     )
@@ -204,7 +204,7 @@ function ProductDetail(props) {
                                             return (
                                                 <SplideSlide key={index}>
                                                     <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="product-detail__mobile-gallery__mobile-product-image">
-                                                        <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
+                                                        <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} />
                                                     </LazyLoad>
                                                 </SplideSlide>
                                             )
