@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { Button, Dialog, DialogTitle } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Button, Dialog } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import LazyLoad from "react-lazyload";
@@ -7,15 +7,14 @@ import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
 
 const ImageModal = (props) => {
-    const { isOpen, handleClose, images, index } = props; 
-    const splideRef = useRef(); 
-    
+    const { isOpen, handleClose, images, index } = props;
+    const [splideContext, setSplideContext] = useState(null);    
+
     useEffect(() => {
-        if(splideRef.current) {
-            console.log(index)
-            splideRef.current.go(index);
+        if(splideContext) {
+            splideContext.go(index)
         }
-    }, [index]) 
+    })
 
     return (
         <Dialog
@@ -32,19 +31,19 @@ const ImageModal = (props) => {
             <div className="image-modal__container">
                 {images && images.length > 0 &&
                     <Splide
-                        ref={splideRef}
+                        onVisible={(context) => setSplideContext(context)}                        
                         className="image-modal__splide"
                         options={{
                             type: "slide",
                             pagination: false,                              
-                            keyboard: 'global'                                             
+                            keyboard: 'global',                                                                                           
                         }}
                     >
                         {images.map((image, index) => {
                             return (
                                 <SplideSlide>
                                     <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="image-modal__image" key={index}>
-                                        <ResponsiveImage sources={image.sources} imageSrc={image.src} imageAlt={image.alt} />
+                                        <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} />
                                     </LazyLoad>
                                 </SplideSlide>
                             )
