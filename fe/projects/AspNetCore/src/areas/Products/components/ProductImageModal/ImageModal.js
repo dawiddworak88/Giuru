@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { Button, Dialog } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
@@ -30,7 +31,7 @@ const ImageModal = (props) => {
             </div>
             <div className="image-modal__container">
                 {images && images.length > 0 &&
-                    <Splide
+                    <Splide                                     
                         onVisible={(context) => setSplideContext(context)}                        
                         options={{
                             type: 'fade',
@@ -41,9 +42,9 @@ const ImageModal = (props) => {
                         {images.map((image, index) => {
                             return (
                                 <SplideSlide>                                    
-                                        <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="image-modal__image" key={index}>
-                                            <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={title}/>
-                                        </LazyLoad>                                                                      
+                                    <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="image-modal__image" key={index}>
+                                        <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={title}/>
+                                    </LazyLoad>                                                                      
                                 </SplideSlide>
                             )
                         })
@@ -53,6 +54,14 @@ const ImageModal = (props) => {
             </div>
         </Dialog>
     )
+}
+
+ImageModal.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    handleClose: PropTypes.func.isRequired,
+    images: PropTypes.array.isRequired,
+    title: PropTypes.string.isRequired,
+    index: PropTypes.number.isRequired
 }
 
 export default ImageModal;
