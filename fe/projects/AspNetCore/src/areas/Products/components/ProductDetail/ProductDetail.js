@@ -193,8 +193,7 @@ function ProductDetail(props) {
                         </div>
                         <div className="product-detail__mobile-gallery">
                             {props.images && props.images.length > 0 &&
-                                <Splide
-                                    className="splide-mobile"
+                                <Splide                                    
                                     options={{
                                         type: "slide",
                                         pagination: false                                        
