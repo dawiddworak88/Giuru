@@ -119,17 +119,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     componentModel.Language,
                     product.Images,
                     PaginationConstants.DefaultPageIndex,
-                    PaginationConstants.DefaultPageSize);                
+                    PaginationConstants.DefaultPageSize);
 
                 var images = new List<ImageViewModel>();
 
                 foreach (var imageId in product.Images.OrEmptyIfNull())
                 {
-                    var imageViewModel = new ImageViewModel()
+                    var imageViewModel = new ImageViewModel
                     {
                         ImageSrc = _mediaService.GetMediaUrl(imageId), 
-                        ImageAlt = imagesMediaItems.FirstOrDefault(mediaItem => mediaItem.Id == imageId).Description,
-                        Sources = new List<SourceViewModel>()
+                        ImageAlt = imagesMediaItems.OrEmptyIfNull().FirstOrDefault(mediaItem => mediaItem.Id == imageId)?.Description,
+                        Sources = new List<SourceViewModel>
                         {
                             new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 1366) },
                             new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 470) },
