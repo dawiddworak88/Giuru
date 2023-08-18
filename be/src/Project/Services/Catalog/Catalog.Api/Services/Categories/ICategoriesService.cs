@@ -14,5 +14,6 @@ namespace Catalog.Api.Services.Categories
         Task<CategoryServiceModel> CreateAsync(CreateCategoryServiceModel model);
         Task<CategorySchemaServiceModel> UpdateCategorySchemaAsync(UpdateCategorySchemaServiceModel model);
         Task<CategorySchemaServiceModel> GetCategorySchemaAsync(GetCategorySchemaServiceModel model);
+        Task<IEnumerable<CategorySchemaServiceModel>> GetCategorySchemasAsync(GetCategorySchemasServiceModel model);
     }
 }
