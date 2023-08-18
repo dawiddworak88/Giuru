@@ -28,7 +28,7 @@ function ProductDetail(props) {
     const [canActiveModal, setCanActiveModal] = useState(true);
     const [showMore, setShowMore] = useState(false);
     const [showMoreImages, setShowMoreImages] = useState(false);
-    const [images, setImages] = useState(props.images ? props.images.slice(0, 6) : []);    
+    const [images, setImages] = useState(props.images ? props.images.slice(0, 6) : []);
     const [activeImageIndex, setActiveImageIndex] = useState(0);
 
     const handleAddOrderItemClick = (item) => {
@@ -110,12 +110,12 @@ function ProductDetail(props) {
     };
 
     const handleCloseImageModal = (index) => {
-        setIsImageModalOpen(false);        
+        setIsImageModalOpen(false);
     }
 
     const handleImageModal = (index) => {
         setActiveImageIndex(index);
-        setIsImageModalOpen(true);    
+        setIsImageModalOpen(true);
     }
 
     const handleCloseModal = () => {
@@ -140,7 +140,7 @@ function ProductDetail(props) {
 
     const handleShowMoreImages = () => {
         if (showMoreImages) {
-            setImages(props.images.slice(0, 6));            
+            setImages(props.images.slice(0, 6));
         }
         else {
             setImages(props.images);
@@ -156,12 +156,20 @@ function ProductDetail(props) {
                     <div className="product-detail__gallery-column">
                         <div className="product-detail__desktop-gallery">
                             <div className="is-flex is-flex-wrap product-detail__product-gallery">
-                                {props.images && props.images.length > 0 && images.map((image, index) => {
+                                {props.images && props.images.length < 2 && images.map((image, index) => {
+                                    return (
+                                        <div className="product-detail__desktop-gallery__desktop-product-image__single" onClick={() => handleImageModal(index)}>
+                                            <LazyLoad offset={LazyLoadConstants.defaultOffset()} key={index}>
+                                                <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={props.title} />
+                                            </LazyLoad>
+                                        </div>
+                                    )
+                                })}
+                                {props.images && props.images.length > 1 && images.map((image, index) => {
                                     return (
                                         <div className="product-detail__desktop-gallery__desktop-product-image" onClick={() => handleImageModal(index)}>
-                                            <LazyLoad 
-                                                offset={LazyLoadConstants.defaultOffset()}  key={index}>
-                                                <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={props.title}/>
+                                            <LazyLoad offset={LazyLoadConstants.defaultOffset()} key={index}>
+                                                <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={props.title} />
                                             </LazyLoad>
                                         </div>
                                     )
@@ -171,7 +179,7 @@ function ProductDetail(props) {
                                 <div className="product-detail__more-product-images">
                                     {showMoreImages ? (
                                         <div className="is-flex is-justify-content-center">
-                                            <Button 
+                                            <Button
                                                 variant="outlined"
                                                 onClick={handleShowMoreImages}
                                                 color="inherit">
@@ -180,8 +188,8 @@ function ProductDetail(props) {
                                         </div>
                                     ) : (
                                         <div className="is-flex is-justify-content-center">
-                                            <Button 
-                                                variant="outlined"                                                
+                                            <Button
+                                                variant="outlined"
                                                 onClick={handleShowMoreImages}
                                                 color="inherit">
                                                 {props.readMoreText}
@@ -193,27 +201,27 @@ function ProductDetail(props) {
                         </div>
                         <div className="product-detail__mobile-gallery">
                             {props.images && props.images.length > 0 &&
-                                <Splide                                    
+                                <Splide
                                     options={{
                                         type: "slide",
-                                        pagination: false                                        
+                                        pagination: false
                                     }}
                                 >
-                                    {props.images.map((image, index) => {                                        
-                                            return (
-                                                <SplideSlide key={index}>
-                                                    <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="product-detail__mobile-gallery__mobile-product-image">
-                                                        <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={props.title} />
-                                                    </LazyLoad>
-                                                </SplideSlide>
-                                            )
-                                        })
+                                    {props.images.map((image, index) => {
+                                        return (
+                                            <SplideSlide key={index}>
+                                                <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="product-detail__mobile-gallery__mobile-product-image">
+                                                    <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={props.title} />
+                                                </LazyLoad>
+                                            </SplideSlide>
+                                        )
+                                    })
                                     }
                                 </Splide>
                             }
                         </div>
-                    </div>                    
-                    <div className="product-detail__description-column">                           
+                    </div>
+                    <div className="product-detail__description-column">
                         <p className="product-detail__sku">{props.skuLabel} {props.sku}</p>
                         {props.ean &&
                             <p className="product-detail__ean">{props.eanLabel} {props.ean}</p>
@@ -314,10 +322,10 @@ function ProductDetail(props) {
                 <ImageModal
                     isOpen={isImageModalOpen}
                     handleClose={handleCloseImageModal}
-                    images={props.images}     
+                    images={props.images}
                     title={props.title}
-                    index={activeImageIndex}           
-                />            
+                    index={activeImageIndex}
+                />
             </div>
         </section>
     );
