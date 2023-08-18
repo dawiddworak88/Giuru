@@ -328,6 +328,25 @@ namespace Catalog.Api.Services.Categories
             return await categorySchemas.FirstOrDefaultAsync();
         }
 
+        public IEnumerable<CategorySchemaServiceModel> GetCategorySchemas(GetCategorySchemasServiceModel model)
+        {
+            var categorySchemas = from c in _context.Categories
+                                  join cs in _context.CategorySchemas on c.Id equals cs.CategoryId into csx
+                                  from x in csx.DefaultIfEmpty()
+                                  where x != null && c.Id == model.CategoryId && c.IsActive
+                                  select new CategorySchemaServiceModel
+                                  {
+                                      Id = x.Id,
+                                      CategoryId = c.Id,
+                                      Schema = x.Schema,
+                                      UiSchema = x.UiSchema,
+                                      LastModifiedDate = x.LastModifiedDate,
+                                      CreatedDate = x.CreatedDate
+                                  };
+
+            return categorySchemas.AsEnumerable();
+        }
+
         private void TriggerCategoryProductsIndexRebuild(RebuildCategoryProductsIndexServiceModel model)
         {
             using var source = new ActivitySource(this.GetType().Name);
