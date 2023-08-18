@@ -231,6 +231,36 @@ namespace Seller.Web.Areas.Categories.Repositories
             return default;
         }
 
+        public async Task<CategorySchemas> GetCategorySchemasAsync(string token, string language, Guid? categoryId)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Catalog.CategorySchemasApiEndpoint}/{categoryId}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, CategorySchemas>(apiRequest);
+
+            if(response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+            
+            if(!response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return new CategorySchemas();
+            }
+
+            if(!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
+        }
+
         public async Task SaveAsync(string token, string language, Guid? id, string schema, string uiSchema)
         {
             var requestModel = new ProductCardApiRequestModel
