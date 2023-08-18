@@ -344,38 +344,83 @@ namespace Catalog.Api.v1.Categories.Controllers
         /// </summary>
         /// <param name="categoryId">The category id.</param>
         /// <returns>The category schema.</returns>
+        //[HttpGet, MapToApiVersion("1.0")]
+        //[Route("CategorySchemas/{categoryId}")]
+        //[AllowAnonymous]
+        //[ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemaResponseModel))]
+        //[ProducesResponseType((int)HttpStatusCode.NotFound)]
+        //[ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        //public async Task<IActionResult> GetCategorySchemaByCategoryId(Guid? categoryId)
+        //{
+        //    var serviceModel = new GetCategorySchemaServiceModel
+        //    {
+        //        CategoryId = categoryId,
+        //        Language = CultureInfo.CurrentCulture.Name
+        //    };
+
+        //    var validator = new GetCategorySchemaModelValidator();
+
+        //    var validationResult = await validator.ValidateAsync(serviceModel);
+
+        //    if (validationResult.IsValid)
+        //    {
+        //        var categorySchema = await _categoryService.GetCategorySchemaAsync(serviceModel);
+
+        //        if (categorySchema != null)
+        //        {
+        //            var response = new CategorySchemaResponseModel
+        //            {
+        //                Id = categorySchema.Id,
+        //                CategoryId = categorySchema.CategoryId,
+        //                Schema = categorySchema.Schema,
+        //                UiSchema = categorySchema.UiSchema,
+        //                LastModifiedDate = categorySchema.LastModifiedDate,
+        //                CreatedDate = categorySchema.CreatedDate
+        //            };
+
+        //            return StatusCode((int)HttpStatusCode.OK, response);
+        //        }
+        //        else
+        //        {
+        //            return StatusCode((int)HttpStatusCode.NotFound);
+        //        }
+        //    }
+
+        //    throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        //}
+
+        /// <summary>
+        /// Gets schemas by category id.
+        /// </summary>
+        /// <param name="categoryId">The category id.</param>
+        /// <returns>The category schema.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("CategorySchemas/{categoryId}")]
         [AllowAnonymous]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemaResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemasResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetCategorySchemaByCategoryId(Guid? categoryId)
+        public IActionResult GetCategorySchemasByCategoryId(Guid? categoryId)
         {
-            var serviceModel = new GetCategorySchemaServiceModel
+            var serviceModel = new GetCategorySchemasServiceModel
             {
                 CategoryId = categoryId,
                 Language = CultureInfo.CurrentCulture.Name
             };
 
-            var validator = new GetCategorySchemaModelValidator();
+            var validator = new GetCategorySchemasModelValidator();
 
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var validationResult = validator.Validate(serviceModel);
 
-            if (validationResult.IsValid)
+            if(validationResult.IsValid)
             {
-                var categorySchema = await _categoryService.GetCategorySchemaAsync(serviceModel);
+                var categorySchemas = _categoryService.GetCategorySchemas(serviceModel);
 
-                if (categorySchema != null)
+                if(categorySchemas != null) 
                 {
-                    var response = new CategorySchemaResponseModel
+                    var response = new CategorySchemasResponseModel
                     {
-                        Id = categorySchema.Id,
-                        CategoryId = categorySchema.CategoryId,
-                        Schema = categorySchema.Schema,
-                        UiSchema = categorySchema.UiSchema,
-                        LastModifiedDate = categorySchema.LastModifiedDate,
-                        CreatedDate = categorySchema.CreatedDate
+                        Schemas = categorySchemas
                     };
 
                     return StatusCode((int)HttpStatusCode.OK, response);
