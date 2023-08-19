@@ -25,6 +25,7 @@ using Foundation.PageContent.Definitions;
 using ImageViewModel = Buyer.Web.Shared.ViewModels.Images.ImageViewModel;
 using Foundation.Media.Services.MediaServices;
 using Buyer.Web.Shared.Definitions.Files;
+using Buyer.Web.Shared.Repositories.Media;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -41,19 +42,21 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IMediaService _mediaService;
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
+        private readonly IMediaItemsRepository _mediaItemsRepository;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
             IProductsRepository productsRepository,
-            IStringLocalizer<GlobalResources> globalLocalizer, 
+            IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             IStringLocalizer<InventoryResources> inventoryResources,
             IStringLocalizer<OrderResources> orderResources,
             IMediaService mediaService,
             IBasketService basketService,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IMediaItemsRepository mediaItemsRepository)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -66,6 +69,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _basketService = basketService;
             _orderResources = orderResources;
             _modalModelBuilder = modalModelBuilder;
+            _mediaItemsRepository = mediaItemsRepository;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -110,19 +114,32 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 viewModel.IsProductVariant = product.PrimaryProductId.HasValue;
                 viewModel.Features = product.ProductAttributes?.Select(x => new ProductFeatureViewModel { Key = x.Name, Value = string.Join(", ", x.Values.OrEmptyIfNull()) });
 
+                var imagesMediaItems = await _mediaItemsRepository.GetMediaItemsAsync(
+                    componentModel.Token,
+                    componentModel.Language,
+                    product.Images,
+                    PaginationConstants.DefaultPageIndex,
+                    PaginationConstants.DefaultPageSize);
+
                 var images = new List<ImageViewModel>();
 
-                foreach (var image in product.Images.OrEmptyIfNull())
+                foreach (var imageId in product.Images.OrEmptyIfNull())
                 {
                     var imageViewModel = new ImageViewModel
                     {
-                        Id = image,
-                        Original = _mediaService.GetMediaUrl(image, ProductConstants.OriginalMaxWidth),
-                        Thumbnail = _mediaService.GetMediaUrl(image, ProductConstants.ThumbnailMaxWidth)
+                        ImageSrc = _mediaService.GetMediaUrl(imageId), 
+                        ImageAlt = imagesMediaItems.OrEmptyIfNull().FirstOrDefault(mediaItem => mediaItem.Id == imageId)?.Description,
+                        Sources = new List<SourceViewModel>
+                        {
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 1366) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 470) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 342) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 768) }
+                        }
                     };
 
                     images.Add(imageViewModel);
-                }
+                }                
 
                 viewModel.Images = images;
 
