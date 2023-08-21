@@ -1,4 +1,6 @@
-﻿namespace Foundation.ApiExtensions.Shared.Definitions
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Foundation.ApiExtensions.Shared.Definitions
 {
     public static class ApiConstants
     {
@@ -19,6 +21,7 @@
         public struct Catalog
         {
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
+            public static readonly string CategorySchemaApiEndpoint = "/api/v1/categories/categoryschema";
             public static readonly string CategorySchemasApiEndpoint = "/api/v1/categories/categoryschemas";
             public static readonly string ProductsApiEndpoint = "/api/v1/products";
             public static readonly string ProductAttributesApiEndpoint = "/api/v1/productattributes";
