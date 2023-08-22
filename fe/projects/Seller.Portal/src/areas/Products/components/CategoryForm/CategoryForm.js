@@ -20,6 +20,8 @@ function CategoryForm(props) {
         uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : null },
     };
 
+    console.log(props);
+
     const stateValidatorSchema = {
         name: {
             required: {

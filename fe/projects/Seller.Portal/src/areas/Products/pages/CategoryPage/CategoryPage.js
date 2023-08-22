@@ -12,7 +12,7 @@ import CategoryForm from "../../components/CategoryForm/CategoryForm";
 function CategoryPage(props) {
 
   LocaleHelper.setMomentLocale(props.locale);
-
+  
   return (
     <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
       <ToastContainer />
