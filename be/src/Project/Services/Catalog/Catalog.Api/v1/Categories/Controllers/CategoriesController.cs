@@ -293,7 +293,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         /// <param name="request">The model.</param>
         /// <returns>The category schema.</returns>
         [HttpPost, MapToApiVersion("1.0")]
-        [Route("CategorySchemas")]
+        [Route("CategorySchema")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemaResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
@@ -344,50 +344,50 @@ namespace Catalog.Api.v1.Categories.Controllers
         /// </summary>
         /// <param name="categoryId">The category id.</param>
         /// <returns>The category schema.</returns>
-        //[HttpGet, MapToApiVersion("1.0")]
-        //[Route("CategorySchemas/{categoryId}")]
-        //[AllowAnonymous]
-        //[ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemaResponseModel))]
-        //[ProducesResponseType((int)HttpStatusCode.NotFound)]
-        //[ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        //public async Task<IActionResult> GetCategorySchemaByCategoryId(Guid? categoryId)
-        //{
-        //    var serviceModel = new GetCategorySchemaServiceModel
-        //    {
-        //        CategoryId = categoryId,
-        //        Language = CultureInfo.CurrentCulture.Name
-        //    };
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("CategorySchema/{categoryId}")]
+        [AllowAnonymous]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemaResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetCategorySchemaByCategoryId(Guid? categoryId)
+        {
+            var serviceModel = new GetCategorySchemaServiceModel
+            {
+                CategoryId = categoryId,
+                Language = CultureInfo.CurrentCulture.Name
+            };
 
-        //    var validator = new GetCategorySchemaModelValidator();
+            var validator = new GetCategorySchemaModelValidator();
 
-        //    var validationResult = await validator.ValidateAsync(serviceModel);
+            var validationResult = await validator.ValidateAsync(serviceModel);
 
-        //    if (validationResult.IsValid)
-        //    {
-        //        var categorySchema = await _categoryService.GetCategorySchemaAsync(serviceModel);
+            if (validationResult.IsValid)
+            {
+                var categorySchema = await _categoryService.GetCategorySchemaAsync(serviceModel);
 
-        //        if (categorySchema != null)
-        //        {
-        //            var response = new CategorySchemaResponseModel
-        //            {
-        //                Id = categorySchema.Id,
-        //                CategoryId = categorySchema.CategoryId,
-        //                Schema = categorySchema.Schema,
-        //                UiSchema = categorySchema.UiSchema,
-        //                LastModifiedDate = categorySchema.LastModifiedDate,
-        //                CreatedDate = categorySchema.CreatedDate
-        //            };
+                if (categorySchema != null)
+                {
+                    var response = new CategorySchemaResponseModel
+                    {
+                        Id = categorySchema.Id,
+                        CategoryId = categorySchema.CategoryId,
+                        Schema = categorySchema.Schema,
+                        UiSchema = categorySchema.UiSchema,
+                        LastModifiedDate = categorySchema.LastModifiedDate,
+                        CreatedDate = categorySchema.CreatedDate
+                    };
 
-        //            return StatusCode((int)HttpStatusCode.OK, response);
-        //        }
-        //        else
-        //        {
-        //            return StatusCode((int)HttpStatusCode.NotFound);
-        //        }
-        //    }
+                    return StatusCode((int)HttpStatusCode.OK, response);
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.NotFound);
+                }
+            }
 
-        //    throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
-        //}
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
 
         /// <summary>
         /// Gets schemas by category id.
@@ -412,11 +412,11 @@ namespace Catalog.Api.v1.Categories.Controllers
 
             var validationResult = validator.Validate(serviceModel);
 
-            if(validationResult.IsValid)
+            if (validationResult.IsValid)
             {
                 var categorySchemas = _categoryService.GetCategorySchemas(serviceModel);
 
-                if(categorySchemas != null) 
+                if (categorySchemas != null)
                 {
                     var response = new CategorySchemasResponseModel
                     {
@@ -427,7 +427,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound);
+                    return StatusCode((int)HttpStatusCode.NotFound);                    
                 }
             }
 
