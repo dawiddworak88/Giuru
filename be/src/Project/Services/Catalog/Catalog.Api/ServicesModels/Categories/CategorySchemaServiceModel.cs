@@ -10,5 +10,6 @@ namespace Catalog.Api.ServicesModels.Categories
         public string UiSchema { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string Language { get; set; }
     }
 }

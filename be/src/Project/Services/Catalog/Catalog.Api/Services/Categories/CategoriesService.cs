@@ -340,6 +340,7 @@ namespace Catalog.Api.Services.Categories
                                       CategoryId = c.Id,
                                       Schema = x.Schema,
                                       UiSchema = x.UiSchema,
+                                      Language = x.Language,
                                       LastModifiedDate = x.LastModifiedDate,
                                       CreatedDate = x.CreatedDate
                                   };

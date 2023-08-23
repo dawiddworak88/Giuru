@@ -9,5 +9,6 @@ namespace Seller.Web.Areas.Products.DomainModels
         public string UiSchema { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string Language { get; set; }
     }
 }
