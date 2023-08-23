@@ -2,6 +2,7 @@
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Products.ApiRequestModels;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Products.ApiControllers
 {
-    [Area("Products")]
+    [Area("Products")]    
     public class CategoriesApiController : BaseApiController
     {
         private readonly ICategoriesRepository categoriesRepository;
@@ -50,7 +51,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             var categoryId = await this.categoriesRepository.SaveAsync(
-                token, language, model.Id, model.ParentCategoryId, model.Name, model.Files.Select(x => x.Id.Value), model.Schema, model.UiSchema);
+                token, language, model.Id, model.ParentCategoryId, model.Name, model.Files.Select(x => x.Id.Value), model.Schemas);
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Id = categoryId, Message = this.productLocalizer.GetString("CategorySavedSuccessfully").Value });
         }
