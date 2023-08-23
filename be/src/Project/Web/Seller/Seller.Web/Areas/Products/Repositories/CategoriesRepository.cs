@@ -231,7 +231,7 @@ namespace Seller.Web.Areas.Categories.Repositories
             return default;
         }
 
-        public async Task<CategorySchemas> GetCategorySchemasAsync(string token, string language, Guid? categoryId)
+        public async Task<IEnumerable<CategorySchema>> GetCategorySchemasAsync(string token, string language, Guid? categoryId)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
@@ -245,12 +245,12 @@ namespace Seller.Web.Areas.Categories.Repositories
 
             if(response.IsSuccessStatusCode && response.Data != null)
             {
-                return response.Data;
+                return response.Data.Schemas;
             }
             
             if(!response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.NotFound)
             {
-                return new CategorySchemas();
+                return Enumerable.Empty<CategorySchema>();
             }
 
             if(!response.IsSuccessStatusCode)
