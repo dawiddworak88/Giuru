@@ -13,7 +13,7 @@ namespace Seller.Web.Areas.Products.ViewModels
         public Guid? ParentCategoryId { get; set; }
         public IEnumerable<FileViewModel> Files { get; set; }
         public IEnumerable<CategorySchema> Schemas { get; set; }
-        public string UiSchema { get; set; }
+        public string Language { get; set; }        
         public CategoryBaseFormViewModel CategoryBase { get; set; }
     }
 }

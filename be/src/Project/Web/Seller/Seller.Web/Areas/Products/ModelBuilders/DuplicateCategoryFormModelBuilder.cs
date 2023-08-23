@@ -40,7 +40,8 @@ namespace Seller.Web.Areas.ModelBuilders.Products
         {
             var viewModel = new CategoryFormViewModel
             {
-                CategoryBase = await this.categoryBaseFormModelBuilder.BuildModelAsync(componentModel)
+                CategoryBase = await this.categoryBaseFormModelBuilder.BuildModelAsync(componentModel),
+                Language = componentModel.Language,
             };
 
             if (componentModel.Id.HasValue)
