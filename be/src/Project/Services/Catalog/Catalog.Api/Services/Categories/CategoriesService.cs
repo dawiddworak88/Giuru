@@ -345,7 +345,7 @@ namespace Catalog.Api.Services.Categories
                                       CreatedDate = x.CreatedDate
                                   };
 
-            return categorySchemas.AsEnumerable();
+            return categorySchemas;
         }
 
         private void TriggerCategoryProductsIndexRebuild(RebuildCategoryProductsIndexServiceModel model)
