@@ -249,17 +249,24 @@ namespace Catalog.Api.Services.Categories
 
             await _context.CategoryImages.AddRangeAsync(images);
 
-            if (model.Schema is not null)
+            if (model.Schemas is not null)
             {
-                var categorySchema = new CategorySchema
-                {
-                    Schema = model.Schema,
-                    UiSchema = model.UiSchema,
-                    CategoryId = category.Id,
-                    Language = model.Language
-                };
+                var schemas = new List<CategorySchema>();
 
-                _context.CategorySchemas.Add(categorySchema.FillCommonProperties());
+                foreach (var schema in model.Schemas) 
+                {
+                    var categorySchema = new CategorySchema
+                    {
+                        Schema = schema.Schema,
+                        UiSchema = schema.UiSchema,
+                        CategoryId = category.Id,
+                        Language = schema.Language
+                    };
+                    
+                    schemas.Add(categorySchema.FillCommonProperties());
+                }
+
+                await _context.CategorySchemas.AddRangeAsync(schemas);
             }
 
             await _context.SaveChangesAsync();
