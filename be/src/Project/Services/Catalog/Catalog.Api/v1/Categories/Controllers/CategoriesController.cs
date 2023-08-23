@@ -167,8 +167,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                     Id = request.Id,
                     Files = request.Files,
                     Name = request.Name,
-                    Schema = request.Schema,
-                    UiSchema = request.UiSchema,
+                    Schemas = request.Schemas,
                     ParentId = request.ParentCategoryId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
@@ -210,8 +209,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 var serviceModel = new CreateCategoryServiceModel
                 {
                     Name = request.Name,
-                    Schema = request.Schema,
-                    UiSchema = request.UiSchema,
+                    Schemas = request.Schemas,
                     ParentId = request.ParentCategoryId,
                     Files = request.Files,
                     Language = CultureInfo.CurrentCulture.Name,

@@ -21,8 +21,6 @@ function CategoryForm(props) {
         uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : null },
     };    
 
-
-
     const stateValidatorSchema = {
         name: {
             required: {
@@ -30,7 +28,7 @@ function CategoryForm(props) {
                 error: categoryBase.nameRequiredErrorMessage
             }
         }
-    };
+    };  
 
     function onSubmitForm(state) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -39,11 +37,10 @@ function CategoryForm(props) {
             id,
             name,
             parentCategoryId,
-            files,
-            schema: schema ? JSON.stringify(schema) : null,
-            uiSchema: uiSchema ? JSON.stringify(uiSchema) : null
-        }
-
+            files,            
+            schemas: props.schemas ? props.schemas : [],            
+        };        
+        
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
@@ -77,7 +74,7 @@ function CategoryForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !categoryBase.id);
 
-    const { id, name, parentCategoryId, files, schema, uiSchema } = values;
+    const { id, name, parentCategoryId, files } = values;
 
     return (
         <section className="section section-small-padding category">

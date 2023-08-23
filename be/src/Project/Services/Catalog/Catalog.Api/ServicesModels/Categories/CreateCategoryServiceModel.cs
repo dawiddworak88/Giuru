@@ -1,4 +1,5 @@
-﻿using Foundation.Extensions.Models;
+﻿using Foundation.Catalog.Infrastructure.Categories.Entites;
+using Foundation.Extensions.Models;
 using System;
 using System.Collections.Generic;
 
@@ -7,8 +8,7 @@ namespace Catalog.Api.ServicesModels.Categories
     public class CreateCategoryServiceModel : BaseServiceModel
     {
         public string Name { get; set; }
-        public string Schema { get; set; }
-        public string UiSchema { get; set; }
+        public IEnumerable<CategorySchema> Schemas { get; set; }
         public Guid? ParentId { get; set; }
         public IEnumerable<Guid> Files { get; set; }
     }
