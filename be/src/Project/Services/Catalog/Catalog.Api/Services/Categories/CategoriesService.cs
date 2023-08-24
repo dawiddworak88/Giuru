@@ -274,7 +274,7 @@ namespace Catalog.Api.Services.Categories
             return Get(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
-        public async Task<CategorySchemaServiceModel> UpdateCategorySchemaAsync(UpdateCategorySchemaServiceModel model)
+        public async Task<CategorySchemasServiceModel> UpdateCategorySchemaAsync(UpdateCategorySchemaServiceModel model)
         {
             var categorySchema = await _context.CategorySchemas.FirstOrDefaultAsync(x => x.CategoryId == model.CategoryId && x.Language == model.Language && x.IsActive);
 
@@ -307,7 +307,7 @@ namespace Catalog.Api.Services.Categories
                 Username = model.Username
             });
 
-            return await GetCategorySchemaAsync(new GetCategorySchemaServiceModel 
+            return GetCategorySchemas(new GetCategorySchemasServiceModel 
             { 
                 CategoryId = model.CategoryId,
                 Language = model.Language,
@@ -316,41 +316,28 @@ namespace Catalog.Api.Services.Categories
             });
         }
 
-        public async Task<CategorySchemaServiceModel> GetCategorySchemaAsync(GetCategorySchemaServiceModel model)
+        public CategorySchemasServiceModel GetCategorySchemas(GetCategorySchemasServiceModel model)
         {
-            var categorySchemas = from c in _context.Categories
-                                  join cs in _context.CategorySchemas on c.Id equals cs.CategoryId into csx
-                                  from x in csx.DefaultIfEmpty()
-                                  where x != null && c.Id == model.CategoryId && (x.Language == model.Language || x.Language == null) && c.IsActive
-                                  select new CategorySchemaServiceModel
-                                  {
-                                      Id = x.Id,
-                                      CategoryId = c.Id,
-                                      Schema = x.Schema,
-                                      UiSchema = x.UiSchema,
-                                      LastModifiedDate = x.LastModifiedDate,
-                                      CreatedDate = x.CreatedDate
-                                  };
+            var categorySchemas = new CategorySchemasServiceModel
+            {
+                CategoryId = model.CategoryId,
+                Schemas = from cs in _context.CategorySchemas 
+                          where cs != null && cs.CategoryId == model.CategoryId
+                          select new SchemaServiceModel
+                          {
+                              Id = cs.Id,
+                              Schema = cs.Schema,
+                              UiSchema = cs.UiSchema,
+                              Language = cs.Language,
+                          }
+            };
 
-            return await categorySchemas.FirstOrDefaultAsync();
-        }
+            var dates = from c in _context.Categories
+                        where c.Id == model.CategoryId
+                        select new { LastModifiedDate = c.LastModifiedDate, CreatedDate = c.CreatedDate };
 
-        public IEnumerable<CategorySchemaServiceModel> GetCategorySchemas(GetCategorySchemasServiceModel model)
-        {
-            var categorySchemas = from c in _context.Categories
-                                  join cs in _context.CategorySchemas on c.Id equals cs.CategoryId into csx
-                                  from x in csx.DefaultIfEmpty()
-                                  where x != null && c.Id == model.CategoryId && c.IsActive
-                                  select new CategorySchemaServiceModel
-                                  {
-                                      Id = x.Id,
-                                      CategoryId = c.Id,
-                                      Schema = x.Schema,
-                                      UiSchema = x.UiSchema,
-                                      Language = x.Language,
-                                      LastModifiedDate = x.LastModifiedDate,
-                                      CreatedDate = x.CreatedDate
-                                  };
+            categorySchemas.LastModifiedDate = dates.Select(x => x.LastModifiedDate).First();
+            categorySchemas.CreatedDate = dates.Select(x => x.CreatedDate).First();
 
             return categorySchemas;
         }
