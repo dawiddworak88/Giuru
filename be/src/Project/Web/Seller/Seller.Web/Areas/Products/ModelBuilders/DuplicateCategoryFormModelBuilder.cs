@@ -78,7 +78,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                     if (categorySchemas is not null)
                     {
-                        viewModel.Schemas = categorySchemas;                        
+                        viewModel.Schemas = categorySchemas.Schemas;                        
                     }
                 }
             }
