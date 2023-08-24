@@ -246,15 +246,10 @@ namespace Seller.Web.Areas.Categories.Repositories
             {
                 return response.Data;
             }
-            
-            if(!response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.NotFound)
+
+            if (!response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.NotFound)
             {
                 return new CategorySchemas();
-            }
-
-            if(!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
             return default;
