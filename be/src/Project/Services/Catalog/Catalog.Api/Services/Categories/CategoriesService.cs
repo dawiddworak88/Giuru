@@ -87,7 +87,7 @@ namespace Catalog.Api.Services.Categories
                     ParentId = x.Parentid,
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate,
-                    Name =  x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? x.Translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
+                    Name = x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? x.Translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
                     ParentCategoryName = x.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == x.Parentid && t.Language == model.Language)?.Name ?? x.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == x.Parentid)?.Name,
                     ThumbnailMediaId = x.Images.FirstOrDefault(y => y.CategoryId == x.Id)?.MediaId
                 })
@@ -196,14 +196,14 @@ namespace Catalog.Api.Services.Categories
             foreach (var file in model.Files.OrEmptyIfNull())
             {
                 var categoryImage = new CategoryImage
-                { 
+                {
                     CategoryId = model.Id.Value,
                     MediaId = file
                 };
 
                 images.Add(categoryImage.FillCommonProperties());
             }
-            
+
             await _context.CategoryImages.AddRangeAsync(images);
 
             await _context.SaveChangesAsync();
@@ -226,7 +226,7 @@ namespace Catalog.Api.Services.Categories
             _context.Categories.Add(category.FillCommonProperties());
 
             var categoryTranslation = new CategoryTranslation
-            { 
+            {
                 CategoryId = category.Id,
                 Name = model.Name,
                 Language = model.Language
@@ -249,25 +249,23 @@ namespace Catalog.Api.Services.Categories
 
             await _context.CategoryImages.AddRangeAsync(images);
 
-            if (model.Schemas is not null)
+            var schemas = new List<CategorySchema>();
+
+            foreach (var schema in model.Schemas.OrEmptyIfNull())
             {
-                var schemas = new List<CategorySchema>();
-
-                foreach (var schema in model.Schemas) 
+                var categorySchema = new CategorySchema
                 {
-                    var categorySchema = new CategorySchema
-                    {
-                        Schema = schema.Schema,
-                        UiSchema = schema.UiSchema,
-                        CategoryId = category.Id,
-                        Language = schema.Language
-                    };
-                    
-                    schemas.Add(categorySchema.FillCommonProperties());
-                }
+                    Schema = schema.Schema,
+                    UiSchema = schema.UiSchema,
+                    CategoryId = category.Id,
+                    Language = schema.Language
+                };
 
-                await _context.CategorySchemas.AddRangeAsync(schemas);
+                schemas.Add(categorySchema.FillCommonProperties());
             }
+
+            await _context.CategorySchemas.AddRangeAsync(schemas);
+
 
             await _context.SaveChangesAsync();
 
@@ -287,7 +285,7 @@ namespace Catalog.Api.Services.Categories
             else
             {
                 var newCategorySchema = new CategorySchema
-                { 
+                {
                     CategoryId = model.CategoryId.Value,
                     Language = model.Language,
                     Schema = model.Schema,
@@ -307,8 +305,8 @@ namespace Catalog.Api.Services.Categories
                 Username = model.Username
             });
 
-            return GetCategorySchemas(new GetCategorySchemasServiceModel 
-            { 
+            return GetCategorySchemas(new GetCategorySchemasServiceModel
+            {
                 CategoryId = model.CategoryId,
                 Language = model.Language,
                 OrganisationId = model.OrganisationId,
@@ -321,7 +319,7 @@ namespace Catalog.Api.Services.Categories
             var categorySchemas = new CategorySchemasServiceModel
             {
                 CategoryId = model.CategoryId,
-                Schemas = from cs in _context.CategorySchemas 
+                Schemas = from cs in _context.CategorySchemas
                           where cs != null && cs.CategoryId == model.CategoryId
                           select new SchemaServiceModel
                           {
