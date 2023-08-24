@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Foundation.ApiExtensions.Shared.Definitions
+﻿namespace Foundation.ApiExtensions.Shared.Definitions
 {
     public static class ApiConstants
     {
@@ -21,8 +19,7 @@ namespace Foundation.ApiExtensions.Shared.Definitions
         public struct Catalog
         {
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
-            public static readonly string CategorySchemaApiEndpoint = "/api/v1/categories/categoryschema";
-            public static readonly string CategorySchemasApiEndpoint = "/api/v1/categories/categoryschemas";
+            public static readonly string CategorySchemaApiEndpoint = "/api/v1/categories/categoryschemas";            
             public static readonly string ProductsApiEndpoint = "/api/v1/products";
             public static readonly string ProductAttributesApiEndpoint = "/api/v1/productattributes";
             public static readonly string ProductAttributeItemsApiEndpoint = "/api/v1/productattributeitems";
