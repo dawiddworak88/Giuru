@@ -6,6 +6,7 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Areas.Products.ViewModels;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
@@ -57,13 +58,13 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 
             if (componentModel.Id.HasValue)
             {
-                var categorySchema = await _categoriesRepository.GetCategorySchemaAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                var categorySchemas = await _categoriesRepository.GetCategorySchemasAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
-                if (categorySchema is not null)
+                if (categorySchemas is not null)
                 {
                     viewModel.Id = componentModel.Id;
-                    viewModel.Schema = categorySchema.Schema;
-                    viewModel.UiSchema = categorySchema.UiSchema;
+                    viewModel.Schema = categorySchemas.Schemas.Where(x => x.Language == componentModel.Language).First().Schema;
+                    viewModel.UiSchema = categorySchemas.Schemas.Where(x => x.Language == componentModel.Language).First().UiSchema;
                 }
             }
 
