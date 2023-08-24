@@ -1,4 +1,5 @@
-﻿using Foundation.Extensions.ModelBuilders;
+﻿using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
@@ -63,8 +64,8 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 if (categorySchemas is not null)
                 {
                     viewModel.Id = componentModel.Id;
-                    viewModel.Schema = categorySchemas.Schemas.Where(x => x.Language == componentModel.Language).First().Schema;
-                    viewModel.UiSchema = categorySchemas.Schemas.Where(x => x.Language == componentModel.Language).First().UiSchema;
+                    viewModel.Schema = categorySchemas.Schemas.Where(x => x.Language == componentModel.Language).OrEmptyIfNull().FirstOrDefault().Schema;
+                    viewModel.UiSchema = categorySchemas.Schemas.Where(x => x.Language == componentModel.Language).OrEmptyIfNull().FirstOrDefault().UiSchema;
                 }
             }
 
