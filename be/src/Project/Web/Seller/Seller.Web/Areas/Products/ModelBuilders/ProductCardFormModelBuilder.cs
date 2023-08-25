@@ -63,9 +63,17 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 
                 if (categorySchemas is not null)
                 {
-                    viewModel.Id = componentModel.Id;
-                    viewModel.Schema = categorySchemas.Schemas.Where(x => x.Language == componentModel.Language).OrEmptyIfNull().FirstOrDefault().Schema;
-                    viewModel.UiSchema = categorySchemas.Schemas.Where(x => x.Language == componentModel.Language).OrEmptyIfNull().FirstOrDefault().UiSchema;
+                    viewModel.Id = categorySchemas.Id;
+
+                    if(categorySchemas.Schemas.FirstOrDefault(x => x.Language == componentModel.Language) is not null) 
+                    {
+                        viewModel.Schema = categorySchemas.Schemas
+                            .OrEmptyIfNull()
+                            .FirstOrDefault(x => x.Language == componentModel.Language).Schema;
+                        viewModel.UiSchema = categorySchemas.Schemas
+                            .OrEmptyIfNull()
+                            .FirstOrDefault(x => x.Language == componentModel.Language).UiSchema;
+                    }                    
                 }
             }
 
