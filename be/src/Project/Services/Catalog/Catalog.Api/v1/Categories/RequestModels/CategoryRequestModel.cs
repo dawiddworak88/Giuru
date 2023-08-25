@@ -9,7 +9,7 @@ namespace Catalog.Api.v1.Categories.RequestModels
     public class CategoryRequestModel : RequestModelBase
     {
         public string Name { get; set; }
-        public IEnumerable<CategorySchemaServiceModel> Schemas { get; set; }
+        public IEnumerable<CategorySchemaRequestModel> Schemas { get; set; }
         public Guid? ParentCategoryId { get; set; }
         public IEnumerable<Guid> Files { get; set; }
     }
