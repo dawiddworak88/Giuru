@@ -48,7 +48,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
             await _categoriesRepository.SaveAsync(token, language, request.Id, new CategorySchema 
             { 
                 Schema = request.Schema,
-                UiSchema = request.UiSchema,
+                UiSchema = request.UiSchema
             });
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Message = _productLocalizer.GetString("SuccessfullySavedProductCard").Value });
