@@ -314,7 +314,7 @@ namespace Catalog.Api.v1.Categories.Controllers
 
             var serviceModel = new UpdateCategorySchemaServiceModel
             {
-                CategoryId = request.CategoryId,
+                Id = request.CategoryId,
                 Schema = request.Schema,
                 UiSchema = request.UiSchema,
                 Language = CultureInfo.CurrentCulture.Name,
@@ -334,7 +334,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 {
                     var response = new CategorySchemasResponseModel
                     {
-                        Id = categorySchemas.CategoryId,
+                        Id = categorySchemas.Id,
                         Schemas = categorySchemas.Schemas.Select(x => new CategorySchemaResponseModel 
                         {
                             Id = x.Id,
@@ -368,7 +368,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         {
             var serviceModel = new GetCategorySchemasServiceModel
             {
-                CategoryId = categoryId,
+                Id = categoryId,
                 Language = CultureInfo.CurrentCulture.Name
             };
 
@@ -378,13 +378,13 @@ namespace Catalog.Api.v1.Categories.Controllers
 
             if (validationResult.IsValid)
             {
-                var categorySchemas = _categoryService.GetCategorySchemas(serviceModel);
+                var categorySchemas = _categoryService.GetCategorySchemas(serviceModel).Result;
 
                 if (categorySchemas != null)
                 {
                     var response = new CategorySchemasResponseModel
                     {
-                        Id = categorySchemas.CategoryId,
+                        Id = categorySchemas.Id,
                         Schemas = categorySchemas.Schemas.Select(x => new CategorySchemaResponseModel
                         {
                             Id = x.Id,
