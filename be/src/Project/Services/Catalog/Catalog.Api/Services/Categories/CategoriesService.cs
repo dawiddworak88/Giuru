@@ -275,7 +275,7 @@ namespace Catalog.Api.Services.Categories
 
         public async Task<CategorySchemasServiceModel> UpdateCategorySchemaAsync(UpdateCategorySchemaServiceModel model)
         {
-            var categorySchema = await _context.CategorySchemas.FirstOrDefaultAsync(x => x.CategoryId == model.CategoryId && x.Language == model.Language && x.IsActive);
+            var categorySchema = await _context.CategorySchemas.FirstOrDefaultAsync(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);
 
             if (categorySchema is not null)
             {
@@ -287,7 +287,7 @@ namespace Catalog.Api.Services.Categories
             {
                 var newCategorySchema = new CategorySchema
                 {
-                    CategoryId = model.CategoryId.Value,
+                    CategoryId = model.Id.Value,
                     Language = model.Language,
                     Schema = model.Schema,
                     UiSchema = model.UiSchema
@@ -300,7 +300,7 @@ namespace Catalog.Api.Services.Categories
 
             this.TriggerCategoryProductsIndexRebuild(new RebuildCategoryProductsIndexServiceModel
             {
-                CategoryId = model.CategoryId,
+                CategoryId = model.Id,
                 Language = model.Language,
                 OrganisationId = model.OrganisationId,
                 Username = model.Username
@@ -308,7 +308,7 @@ namespace Catalog.Api.Services.Categories
 
             return GetCategorySchemas(new GetCategorySchemasServiceModel
             {
-                CategoryId = model.CategoryId,
+                Id = model.Id,
                 Language = model.Language,
                 OrganisationId = model.OrganisationId,
                 Username = model.Username
@@ -319,7 +319,7 @@ namespace Catalog.Api.Services.Categories
         {
             var categorySchema = await _context.Categories
                 .Include(x => x.Schemas)
-                .FirstOrDefaultAsync(x => x.Id == model.CategoryId);
+                .FirstOrDefaultAsync(x => x.Id == model.Id);
 
             if(categorySchema is null)
             {
