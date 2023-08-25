@@ -6,8 +6,8 @@ namespace Catalog.Api.v1.Categories.ResponseModels
 {
     public class CategorySchemasResponseModel
     {
-        public Guid? CategoryId { get; set; }
-        public IEnumerable<CategorySchemaServiceModel> Schemas { get; set; }
+        public Guid? Id { get; set; }
+        public IEnumerable<CategorySchemaResponseModel> Schemas { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

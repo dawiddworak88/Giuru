@@ -5,8 +5,9 @@ namespace Catalog.Api.v1.Categories.RequestModels
 {
     public class CategorySchemaRequestModel : RequestModelBase
     {
+        public Guid? Id { get; set; }
         public string Schema { get; set; }
         public string UiSchema { get; set; }
-        public Guid CategoryId { get; set; }
+        public string Language { get; set; }
     }
 }
