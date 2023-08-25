@@ -207,7 +207,7 @@ namespace Seller.Web.Areas.Categories.Repositories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemaApiEndpoint}/{categoryId}"
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemasApiEndpoint}/{categoryId}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, CategorySchema>(apiRequest);
@@ -237,7 +237,7 @@ namespace Seller.Web.Areas.Categories.Repositories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemaApiEndpoint}/{categoryId}"
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemasApiEndpoint}/{categoryId}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, CategorySchemas>(apiRequest);
@@ -264,7 +264,7 @@ namespace Seller.Web.Areas.Categories.Repositories
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemaApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemasApiEndpoint}"
             };
 
             var response = await this.apiClientService.PostAsync<ApiRequest<ProductCardApiRequestModel>, ProductCardApiRequestModel, BaseResponseModel>(apiRequest);
