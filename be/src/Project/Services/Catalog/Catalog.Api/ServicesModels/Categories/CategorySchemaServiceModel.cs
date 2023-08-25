@@ -2,7 +2,7 @@
 
 namespace Catalog.Api.ServicesModels.Categories
 {
-    public class SchemaServiceModel
+    public class CategorySchemaServiceModel
     {
         public Guid? Id { get; set; }
         public string Schema { get; set; }
