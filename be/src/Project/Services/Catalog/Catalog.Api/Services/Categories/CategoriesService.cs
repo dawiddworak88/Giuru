@@ -18,6 +18,7 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.EventBus.Abstractions;
 using System.Diagnostics;
 using Catalog.Api.IntegrationEvents;
+using System.Threading;
 
 namespace Catalog.Api.Services.Categories
 {
@@ -311,33 +312,33 @@ namespace Catalog.Api.Services.Categories
                 Language = model.Language,
                 OrganisationId = model.OrganisationId,
                 Username = model.Username
-            });
+            }).Result;
         }
 
-        public CategorySchemasServiceModel GetCategorySchemas(GetCategorySchemasServiceModel model)
+        public async Task<CategorySchemasServiceModel> GetCategorySchemas(GetCategorySchemasServiceModel model)
         {
-            var categorySchemas = new CategorySchemasServiceModel
+            var categorySchema = await _context.Categories
+                .Include(x => x.Schemas)
+                .FirstOrDefaultAsync(x => x.Id == model.CategoryId);
+
+            if(categorySchema is null)
             {
-                CategoryId = model.CategoryId,
-                Schemas = from cs in _context.CategorySchemas
-                          where cs != null && cs.CategoryId == model.CategoryId
-                          select new CategorySchemaServiceModel
-                          {
-                              Id = cs.Id,
-                              Schema = cs.Schema,
-                              UiSchema = cs.UiSchema,
-                              Language = cs.Language,
-                          }
+                throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent); 
+            }
+
+            return new CategorySchemasServiceModel
+            {
+                Id = categorySchema.Id,
+                Schemas = categorySchema.Schemas.Select(x => new CategorySchemaServiceModel
+                {
+                    Id = x.Id,
+                    Schema = x.Schema,
+                    UiSchema = x.UiSchema,
+                    Language = x.Language
+                }),
+                LastModifiedDate = categorySchema.LastModifiedDate,
+                CreatedDate = categorySchema.CreatedDate
             };
-
-            var dates = from c in _context.Categories
-                        where c.Id == model.CategoryId
-                        select new { LastModifiedDate = c.LastModifiedDate, CreatedDate = c.CreatedDate };
-
-            categorySchemas.LastModifiedDate = dates.Select(x => x.LastModifiedDate).First();
-            categorySchemas.CreatedDate = dates.Select(x => x.CreatedDate).First();
-
-            return categorySchemas;
         }
 
         private void TriggerCategoryProductsIndexRebuild(RebuildCategoryProductsIndexServiceModel model)
