@@ -321,7 +321,7 @@ namespace Catalog.Api.Services.Categories
                 CategoryId = model.CategoryId,
                 Schemas = from cs in _context.CategorySchemas
                           where cs != null && cs.CategoryId == model.CategoryId
-                          select new SchemaServiceModel
+                          select new CategorySchemaServiceModel
                           {
                               Id = cs.Id,
                               Schema = cs.Schema,
