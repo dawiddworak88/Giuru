@@ -13,6 +13,6 @@ namespace Catalog.Api.Services.Categories
         Task<CategoryServiceModel> UpdateAsync(UpdateCategoryServiceModel model);
         Task<CategoryServiceModel> CreateAsync(CreateCategoryServiceModel model);
         Task<CategorySchemasServiceModel> UpdateCategorySchemaAsync(UpdateCategorySchemaServiceModel model);
-        CategorySchemasServiceModel GetCategorySchemas(GetCategorySchemasServiceModel model);
+        Task<CategorySchemasServiceModel> GetCategorySchemas(GetCategorySchemasServiceModel model);
     }
 }
