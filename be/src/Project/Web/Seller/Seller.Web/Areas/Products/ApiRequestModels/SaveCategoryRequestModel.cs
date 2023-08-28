@@ -1,5 +1,4 @@
 ﻿using Foundation.ApiExtensions.Models.Request;
-using Seller.Web.Areas.Products.DomainModels;
 using System;
 using System.Collections.Generic;
 

@@ -1,5 +1,4 @@
-﻿using Foundation.Catalog.Infrastructure.Categories.Entites;
-using Foundation.Extensions.Models;
+﻿using Foundation.Extensions.Models;
 using System;
 using System.Collections.Generic;
 

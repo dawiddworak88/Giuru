@@ -18,7 +18,6 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.EventBus.Abstractions;
 using System.Diagnostics;
 using Catalog.Api.IntegrationEvents;
-using System.Threading;
 
 namespace Catalog.Api.Services.Categories
 {

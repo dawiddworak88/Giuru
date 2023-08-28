@@ -1,6 +1,4 @@
-﻿using Foundation.PageContent.Components.ListItems.ViewModels;
-using Seller.Web.Areas.Products.DomainModels;
-using Seller.Web.Shared.ViewModels;
+﻿using Seller.Web.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 
