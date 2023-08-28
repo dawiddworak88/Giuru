@@ -188,7 +188,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 {
                     var category = await _categoryService.UpdateAsync(serviceModel);
 
-                    if (category != null)
+                    if (category is not null)
                     {
                         var response = new CategoryResponseModel
                         {
@@ -237,7 +237,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 {
                     var category = await _categoryService.CreateAsync(serviceModel);
 
-                    if (category != null)
+                    if (category is not null)
                     {
                         var response = new CategoryResponseModel
                         {
@@ -380,7 +380,7 @@ namespace Catalog.Api.v1.Categories.Controllers
             {
                 var categorySchemas = _categoryService.GetCategorySchemas(serviceModel).Result;
 
-                if (categorySchemas != null)
+                if (categorySchemas is not null)
                 {
                     var response = new CategorySchemasResponseModel
                     {
