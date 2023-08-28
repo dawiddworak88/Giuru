@@ -44,7 +44,7 @@ namespace Seller.Web.Areas.Categories.Repositories
                     Id = x.Id,
                     Schema = x.Schema,
                     UiSchema = x.UiSchema,
-                    Language = language
+                    Language = x.Language
                 })
             };
 
