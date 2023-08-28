@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Products.ApiControllers
 {
-    [Area("Products")]    
+    [Area("Products")]
     public class CategoriesApiController : BaseApiController
     {
         private readonly ICategoriesRepository categoriesRepository;
