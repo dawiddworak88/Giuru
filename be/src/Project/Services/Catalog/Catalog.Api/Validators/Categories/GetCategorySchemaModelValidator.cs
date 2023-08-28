@@ -8,7 +8,7 @@ namespace Catalog.Api.Validators.Categories
     {
         public GetCategorySchemaModelValidator()
         {
-            this.RuleFor(x => x.Id).NotNull().NotEmpty();
+            RuleFor(x => x.Id).NotNull().NotEmpty();
         }
     }
 }
