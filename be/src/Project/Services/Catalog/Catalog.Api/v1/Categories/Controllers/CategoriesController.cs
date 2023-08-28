@@ -393,14 +393,14 @@ namespace Catalog.Api.v1.Categories.Controllers
                             Language = x.Language
                         }),
                         LastModifiedDate = categorySchemas.LastModifiedDate,
-                        CreatedDate = categorySchemas.CreatedDate,
+                        CreatedDate = categorySchemas.CreatedDate
                     };
 
                     return StatusCode((int)HttpStatusCode.OK, response);
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound);                    
+                    return StatusCode((int)HttpStatusCode.NotFound);
                 }
             }
 
