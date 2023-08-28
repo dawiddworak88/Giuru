@@ -18,7 +18,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
     public class DuplicateCategoryFormModelBuilder : IAsyncComponentModelBuilder<DuplicateCategoryComponentModel, CategoryFormViewModel>
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryBaseFormViewModel> categoryBaseFormModelBuilder;
-        private readonly ICategoriesRepository categoriesRepository;
+        private readonly ICategoriesRepository _categoriesRepository;
         private readonly IMediaItemsRepository mediaItemsRepository;
         private readonly IStringLocalizer globalLocalizer;
         private readonly IMediaService mediaService;
@@ -30,7 +30,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             IStringLocalizer<GlobalResources> globalLocalizer,
             IMediaService mediaService)
         {
-            this.categoriesRepository = categoriesRepository;
+            _categoriesRepository = categoriesRepository;
             this.mediaItemsRepository = mediaItemsRepository;
             this.globalLocalizer = globalLocalizer;
             this.mediaService = mediaService;
@@ -47,7 +47,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
             if (componentModel.Id.HasValue)
             {
-                var category = await this.categoriesRepository.GetCategoryAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                var category = await _categoriesRepository.GetCategoryAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                 if (category is not null)
                 {
@@ -75,7 +75,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                         }
                     }
 
-                    var categorySchemas = await this.categoriesRepository.GetCategorySchemasAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                    var categorySchemas = await _categoriesRepository.GetCategorySchemasAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                     if (categorySchemas is not null)
                     {
