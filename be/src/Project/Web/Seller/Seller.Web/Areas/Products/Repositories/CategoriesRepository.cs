@@ -250,13 +250,13 @@ namespace Seller.Web.Areas.Categories.Repositories
             return default;
         }
 
-        public async Task SaveAsync(string token, string language, Guid? id, CategorySchema model)
+        public async Task SaveAsync(string token, string language, Guid? id, CategorySchema categorySchema)
         {
             var requestModel = new ProductCardApiRequestModel
             {
                 CategoryId = id,
-                Schema = model.Schema,
-                UiSchema = model.UiSchema
+                Schema = categorySchema.Schema,
+                UiSchema = categorySchema.UiSchema
             };
 
             var apiRequest = new ApiRequest<ProductCardApiRequestModel>
