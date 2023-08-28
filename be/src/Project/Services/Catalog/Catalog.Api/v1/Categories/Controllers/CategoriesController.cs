@@ -378,7 +378,7 @@ namespace Catalog.Api.v1.Categories.Controllers
 
             if (validationResult.IsValid)
             {
-                var categorySchemas = _categoryService.GetCategorySchemas(serviceModel).Result;
+                var categorySchemas = _categoryService.GetCategorySchemasAsync(serviceModel).Result;
 
                 if (categorySchemas is not null)
                 {

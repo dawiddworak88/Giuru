@@ -305,7 +305,7 @@ namespace Catalog.Api.Services.Categories
                 Username = model.Username
             });
 
-            return await GetCategorySchemas(new GetCategorySchemasServiceModel
+            return await GetCategorySchemasAsync(new GetCategorySchemasServiceModel
             {
                 Id = model.Id,
                 Language = model.Language,
@@ -314,7 +314,7 @@ namespace Catalog.Api.Services.Categories
             });
         }
 
-        public async Task<CategorySchemasServiceModel> GetCategorySchemas(GetCategorySchemasServiceModel model)
+        public async Task<CategorySchemasServiceModel> GetCategorySchemasAsync(GetCategorySchemasServiceModel model)
         {
             var categorySchema = await _context.Categories
                 .Include(x => x.Schemas)
