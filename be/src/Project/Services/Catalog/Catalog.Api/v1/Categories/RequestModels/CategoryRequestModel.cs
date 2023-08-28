@@ -1,6 +1,4 @@
-﻿using Catalog.Api.ServicesModels.Categories;
-using Foundation.ApiExtensions.Models.Request;
-using Foundation.Catalog.Infrastructure.Categories.Entites;
+﻿using Foundation.ApiExtensions.Models.Request;
 using System;
 using System.Collections.Generic;
 
