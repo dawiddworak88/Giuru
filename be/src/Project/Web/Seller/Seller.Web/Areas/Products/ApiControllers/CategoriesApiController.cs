@@ -52,7 +52,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             var categoryId = await this.categoriesRepository.SaveAsync(
-                token, language, model.Id, model.ParentCategoryId, model.Name, model.Files.Select(x => x.Id.Value), model.Schemas.Select(x => new CategorySchema
+                token, language, model.Id, model.ParentCategoryId, model.Name, model.Files.Select(x => x.Id.Value), model.Schemas.Select(x => new CategorySchemaRequestModel
                 {
                     Id = x.Id,
                     Schema = x.Schema,
