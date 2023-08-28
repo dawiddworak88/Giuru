@@ -3,12 +3,11 @@ using Seller.Web.Areas.Products.DomainModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Seller.Web.Areas.Products.ApiRequestModels;
 namespace Seller.Web.Areas.Products.Repositories
 {
     public interface ICategoriesRepository
     {
-        Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? parentCategoryId, string name, IEnumerable<Guid> files, IEnumerable<CategorySchemaRequestModel> schemas);
+        Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? parentCategoryId, string name, IEnumerable<Guid> files, IEnumerable<CategorySchema> schemas);
         Task<PagedResults<IEnumerable<Category>>> GetCategoriesAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
         Task<IEnumerable<Category>> GetAllCategoriesAsync(string token, string language, bool? leafOnly, string orderBy);
         Task DeleteAsync(string token, string language, Guid? id);
