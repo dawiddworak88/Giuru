@@ -94,7 +94,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                             schemas.Add(categorySchema);
                         }
 
-                        viewModel.Schemas = schemas.AsEnumerable();                        
+                        viewModel.Schemas = schemas;                        
                     }
                 }
             }
