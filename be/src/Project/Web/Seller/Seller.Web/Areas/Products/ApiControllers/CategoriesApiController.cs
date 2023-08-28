@@ -40,7 +40,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
                 itemsPerPage,
                 $"{nameof(Category.CreatedDate)} desc");
 
-            return this.StatusCode((int)HttpStatusCode.OK, categories);
+            return StatusCode((int)HttpStatusCode.OK, categories);
         }
 
         [HttpPost]
@@ -58,7 +58,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
                     Language = x.Language
                 }));
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = categoryId, Message = _productLocalizer.GetString("CategorySavedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Id = categoryId, Message = _productLocalizer.GetString("CategorySavedSuccessfully").Value });
         }
 
         [HttpDelete]
@@ -69,7 +69,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
                 CultureInfo.CurrentUICulture.Name,
                 id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = _productLocalizer.GetString("CategoryDeletedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Message = _productLocalizer.GetString("CategoryDeletedSuccessfully").Value });
         }
     }
 }

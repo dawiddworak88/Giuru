@@ -297,7 +297,7 @@ namespace Catalog.Api.Services.Categories
 
             await _context.SaveChangesAsync();
 
-            this.TriggerCategoryProductsIndexRebuild(new RebuildCategoryProductsIndexServiceModel
+            TriggerCategoryProductsIndexRebuild(new RebuildCategoryProductsIndexServiceModel
             {
                 CategoryId = model.Id,
                 Language = model.Language,
@@ -342,7 +342,7 @@ namespace Catalog.Api.Services.Categories
 
         private void TriggerCategoryProductsIndexRebuild(RebuildCategoryProductsIndexServiceModel model)
         {
-            using var source = new ActivitySource(this.GetType().Name);
+            using var source = new ActivitySource(GetType().Name);
 
             var message = new RebuildCategoryProductsIntegrationEvent
             {
