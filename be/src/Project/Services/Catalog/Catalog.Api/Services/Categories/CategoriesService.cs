@@ -305,13 +305,13 @@ namespace Catalog.Api.Services.Categories
                 Username = model.Username
             });
 
-            return GetCategorySchemas(new GetCategorySchemasServiceModel
+            return await GetCategorySchemas(new GetCategorySchemasServiceModel
             {
                 Id = model.Id,
                 Language = model.Language,
                 OrganisationId = model.OrganisationId,
                 Username = model.Username
-            }).Result;
+            });
         }
 
         public async Task<CategorySchemasServiceModel> GetCategorySchemas(GetCategorySchemasServiceModel model)
