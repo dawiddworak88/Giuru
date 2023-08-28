@@ -19,15 +19,15 @@ namespace Seller.Web.Areas.Products.Controllers
     [Area("Products")]
     public class CategoryController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryPageViewModel> categoryPageModelBuilder;
-        private readonly IAsyncComponentModelBuilder<DuplicateCategoryComponentModel, CategoryPageViewModel> duplicateCategoryPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryPageViewModel> _categoryPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<DuplicateCategoryComponentModel, CategoryPageViewModel> _duplicateCategoryPageModelBuilder;
 
         public CategoryController(
             IAsyncComponentModelBuilder<ComponentModelBase, CategoryPageViewModel> categoryPageModelBuilder,
             IAsyncComponentModelBuilder<DuplicateCategoryComponentModel, CategoryPageViewModel> duplicateCategoryPageModelBuilder)
         {
-            this.categoryPageModelBuilder = categoryPageModelBuilder;
-            this.duplicateCategoryPageModelBuilder = duplicateCategoryPageModelBuilder;
+            _categoryPageModelBuilder = categoryPageModelBuilder;
+            _duplicateCategoryPageModelBuilder = duplicateCategoryPageModelBuilder;
         }
 
         public async Task<IActionResult> Edit(Guid? id)
@@ -41,7 +41,7 @@ namespace Seller.Web.Areas.Products.Controllers
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName)
             };
 
-            var viewModel = await this.categoryPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _categoryPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
         }
@@ -56,7 +56,7 @@ namespace Seller.Web.Areas.Products.Controllers
                 SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
             };
 
-            var viewModel = await this.duplicateCategoryPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _duplicateCategoryPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View("Edit", viewModel);
         }

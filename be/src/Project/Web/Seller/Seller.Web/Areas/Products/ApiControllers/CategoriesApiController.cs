@@ -18,21 +18,21 @@ namespace Seller.Web.Areas.Products.ApiControllers
     [Area("Products")]
     public class CategoriesApiController : BaseApiController
     {
-        private readonly ICategoriesRepository categoriesRepository;
-        private readonly IStringLocalizer productLocalizer;
+        private readonly ICategoriesRepository _categoriesRepository;
+        private readonly IStringLocalizer _productLocalizer;
 
         public CategoriesApiController(
             ICategoriesRepository categoriesRepository,
             IStringLocalizer<ProductResources> productLocalizer)
         {
-            this.categoriesRepository = categoriesRepository;
-            this.productLocalizer = productLocalizer;
+            _categoriesRepository = categoriesRepository;
+            _productLocalizer = productLocalizer;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var categories = await this.categoriesRepository.GetCategoriesAsync(
+            var categories = await _categoriesRepository.GetCategoriesAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 searchTerm,
@@ -49,7 +49,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var categoryId = await this.categoriesRepository.SaveAsync(
+            var categoryId = await _categoriesRepository.SaveAsync(
                 token, language, model.Id, model.ParentCategoryId, model.Name, model.Files.Select(x => x.Id.Value), model.Schemas.Select(x => new CategorySchema
                 {
                     Id = x.Id,
@@ -58,18 +58,18 @@ namespace Seller.Web.Areas.Products.ApiControllers
                     Language = x.Language
                 }));
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = categoryId, Message = this.productLocalizer.GetString("CategorySavedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Id = categoryId, Message = _productLocalizer.GetString("CategorySavedSuccessfully").Value });
         }
 
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            await this.categoriesRepository.DeleteAsync(
+            await _categoriesRepository.DeleteAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.productLocalizer.GetString("CategoryDeletedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = _productLocalizer.GetString("CategoryDeletedSuccessfully").Value });
         }
     }
 }
