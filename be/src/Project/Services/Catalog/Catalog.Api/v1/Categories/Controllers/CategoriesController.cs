@@ -364,7 +364,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemasResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult GetCategorySchemasByCategoryId(Guid? categoryId)
+        public async Task<IActionResult> GetCategorySchemasByCategoryId(Guid? categoryId)
         {
             var serviceModel = new GetCategorySchemasServiceModel
             {
@@ -378,7 +378,7 @@ namespace Catalog.Api.v1.Categories.Controllers
 
             if (validationResult.IsValid)
             {
-                var categorySchemas = _categoryService.GetCategorySchemasAsync(serviceModel).Result;
+                var categorySchemas = await _categoryService.GetCategorySchemasAsync(serviceModel);
 
                 if (categorySchemas is not null)
                 {
