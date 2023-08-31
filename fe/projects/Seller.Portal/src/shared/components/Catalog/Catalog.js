@@ -192,13 +192,27 @@ function Catalog(props) {
         const result = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
         result.splice(endIndex, 0, removed);
+
+        updateOrderProperty(result);
+
         return result;
+    }
+
+    const updateOrderProperty = (list) => {
+        let i = 1;
+
+        const newList = list.forEach(category => {
+            category.order = i;
+            i++;
+        });
+
+        return newList;
     }
 
     const onDragEnd = (result, categories) => {
         handleIsDragableDisable();
 
-        const { destination, source, draggableId } = result;
+        const { destination, source } = result;
 
         if (!destination) {
             return;
@@ -211,7 +225,7 @@ function Catalog(props) {
             return;
         }
 
-        const newCategoryArray = reorder(categories, source.index, destination.index);
+        const newCategoryArray = reorder(categories, source.index, destination.index);        
 
         setItems(newCategoryArray);        
     }
