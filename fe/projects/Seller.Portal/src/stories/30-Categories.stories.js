@@ -63,10 +63,43 @@ var catalog = {
                 name: "Sectionals",
                 parentName: "Living Room",
                 lastModifiedDate: new Date(),
-                createdDate: new Date()
+                createdDate: new Date(),
+                order: "1"
+            },
+            {
+                id: "2",
+                name: "Mirrors",
+                parentName: "Bathroom",
+                lastModifiedDate: new Date(),
+                createdDate: new Date(),
+                order: "2"
+            },
+            {
+                id: "3",
+                name: "Lamp",
+                parentName: "Bedroom",
+                lastModifiedDate: new Date(),
+                createdDate: new Date(),
+                order: "3"
+            },
+            {
+                id: "4",
+                name: "Table",
+                parentName: "Kitchen",
+                lastModifiedDate: new Date(),
+                createdDate: new Date(),
+                order: "4"
+            },
+            {
+                id: "5",
+                name: "Armchair",
+                parentName: "Living Room",
+                lastModifiedDate: new Date(),
+                createdDate: new Date(),
+                order: "5"
             }
         ],
-        total: 1
+        total: 2
     }
 };
 
