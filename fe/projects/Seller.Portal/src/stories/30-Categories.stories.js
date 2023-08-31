@@ -99,7 +99,7 @@ var catalog = {
                 order: "5"
             }
         ],
-        total: 2
+        total: 5
     }
 };
 
