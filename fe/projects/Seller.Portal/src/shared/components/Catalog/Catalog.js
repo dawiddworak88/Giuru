@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { Plus } from "react-feather";
 import {
-    Delete, Edit, FileCopyOutlined, Link, QrCode2
+    Delete, Edit, FileCopyOutlined, Link, QrCode2, DragIndicator
 } from "@mui/icons-material";
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
@@ -32,6 +32,7 @@ function Catalog(props) {
     const [entityToDelete, setEntityToDelete] = React.useState(null);
     const [selectedItem, setSelectedItem] = React.useState(null);
     const [openQRCodeDialog, setOpenQRCodeDialog] = React.useState(false);
+    const [isDragableDisable, setIsDragableDisable] = React.useState(true);
 
     const handleSearchTermKeyPress = (event) => {
 
@@ -194,7 +195,9 @@ function Catalog(props) {
         return result;
     }
 
-    const onDragEnd = (result, categories) => {        
+    const onDragEnd = (result, categories) => {
+        handleIsDragableDisable();
+
         const { destination, source, draggableId } = result;
 
         if (!destination) {
@@ -208,11 +211,22 @@ function Catalog(props) {
             return;
         }
 
-        const newCategoryArray = reorder(categories, source.index, destination.index);        
+        const newCategoryArray = reorder(categories, source.index, destination.index);
 
-        setItems(newCategoryArray);
-    }    
+        setItems(newCategoryArray);        
+    }
     
+    const handleIsDragableDisable = () => {
+        if(isDragableDisable)
+        {
+            setIsDragableDisable(false);
+        }
+        else
+        {
+            setIsDragableDisable(true);
+        }        
+    }    
+
     return (
         <section className="section section-small-padding catalog">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -263,19 +277,25 @@ function Catalog(props) {
                                                         <Draggable
                                                             key={item.id}
                                                             draggableId={item.id}
-                                                            index={index}                                                            
+                                                            index={index}
+                                                            isDragDisabled={isDragableDisable}                                                            
                                                         >
-                                                            {(providedDraggable) => (
-                                                                <TableRow 
-                                                                    
+                                                            {(providedDraggable, snapshot) => (
+                                                                <TableRow                                                                     
                                                                     ref={providedDraggable.innerRef} 
                                                                     {...providedDraggable.draggableProps} 
                                                                     {...providedDraggable.dragHandleProps}
-                                                                    className="catalog__table-row"
-                                                                >
+                                                                    isDragging={snapshot.isDragging}
+                                                                    className="catalog__table__row"
+                                                                >                                                                    
                                                                     {props.table.actions &&
-                                                                        <TableCell width="12%">
-                                                                            {props.table.actions.map((actionItem, index) => {
+                                                                        <TableCell width="12%"> 
+                                                                            <Tooltip title={props.dragLabel} aria-label={props.dragLabel}>
+                                                                                <Fab onClick={() => handleIsDragableDisable()} size="small" color="secondary">
+                                                                                    <DragIndicator />
+                                                                                </Fab>
+                                                                            </Tooltip>                                                                             
+                                                                            {props.table.actions.map((actionItem, index) => {                                                                                
                                                                                 if (actionItem.isEdit) return (
                                                                                     <Tooltip title={props.editLabel} aria-label={props.editLabel} key={index}>
                                                                                         <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary">
