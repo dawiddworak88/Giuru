@@ -20,6 +20,7 @@ import ClipboardHelper from "../../../shared/helpers/globals/ClipboardHelper";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import { TextSnippet } from "@mui/icons-material";
 import QRCodeDialog from "../QRCodeDialog/QRCodeDialog";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -140,7 +141,7 @@ function Catalog(props) {
     const handleDeleteEntity = () => {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
-        
+
         const deleteParameters = {
             id: entityToDelete.id
         };
@@ -185,6 +186,32 @@ function Catalog(props) {
         setSelectedItem(item);
         setOpenQRCodeDialog(true);
     }
+
+    const reorder = (list, startIndex, endIndex) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+        return result;
+    }
+
+    const onDragEnd = (result, categories) => {        
+        const { destination, source, draggableId } = result;
+
+        if (!destination) {
+            return;
+        }
+        
+        if (
+            destination.droppableId === source.droppableId &&
+            destination.index === source.index
+        ) {
+            return;
+        }
+
+        const newCategoryArray = reorder(categories, source.index, destination.index);        
+
+        setItems(newCategoryArray);
+    }    
     
     return (
         <section className="section section-small-padding catalog">
@@ -192,12 +219,12 @@ function Catalog(props) {
             {props.newUrl &&
                 <div>
                     <a href={props.newUrl} className="button is-primary">
-                    <span className="icon">
-                        <Plus />
-                    </span>
-                    <span>
-                        {props.newText}
-                    </span>
+                        <span className="icon">
+                            <Plus />
+                        </span>
+                        <span>
+                            {props.newText}
+                        </span>
                     </a>
                 </div>
             }
@@ -225,76 +252,103 @@ function Catalog(props) {
                                             )}
                                         </TableRow>
                                     </TableHead>
-                                    <TableBody>
-                                        {items.map((item, index) => (
-                                            <TableRow key={index}>
-                                                {props.table.actions &&
-                                                    <TableCell width="12%">
-                                                        {props.table.actions.map((actionItem, index) => {
-                                                            if (actionItem.isEdit) return (
-                                                                <Tooltip title={props.editLabel} aria-label={props.editLabel} key={index}>
-                                                                    <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary">
-                                                                        <Edit />
-                                                                    </Fab>
-                                                                </Tooltip>)
-                                                            else if (actionItem.isDelete) return (
-                                                                <Tooltip title={props.deleteLabel} aria-label={props.deleteLabel} key={index}>
-                                                                    <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary">
-                                                                        <Delete />
-                                                                    </Fab>
-                                                                </Tooltip>)
-                                                            else if (actionItem.isDuplicate) return (
-                                                                <Tooltip title={props.duplicateLabel} aria-label={props.duplicateLabel} key={index}>
-                                                                    <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary">
-                                                                        <FileCopyOutlined />
-                                                                    </Fab>
-                                                                </Tooltip>)
-                                                            else if (actionItem.isPicture) return (
-                                                                <Tooltip title={props.copyLinkLabel} aria-label={props.copyLinkLabel} key={index}>
-                                                                    <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary">
-                                                                        <Link />
-                                                                    </Fab>
-                                                                </Tooltip>)
-                                                            else if (actionItem.qrCode) return (
-                                                                <Tooltip title={props.generateQRCodeLabel} aria-label={props.generateQRCodeLabel} key={index}>
-                                                                    <Fab onClick={() => handleQRCodeDialog(item)} size="small" color="secondary">
-                                                                        <QrCode2 />
-                                                                    </Fab>
-                                                                </Tooltip>)
-                                                            else return (
-                                                                <div></div>)})}
-                                                    </TableCell>
-                                                }
-                                                {props.table.properties && props.table.properties.map((property, index) => {
-                                                    if (property.isPicture){
-                                                        return (
-                                                            <TableCell key={index}>
-                                                                <div className="property-image">
-                                                                    {item[property.title] ? (
-                                                                        <img src={item[property.title]}/>
-                                                                    ) : (
-                                                                        <div className="is-flex is-justify-content-center">
-                                                                            <TextSnippet className="is-size-2" color="primary"/>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            </TableCell>
-                                                        )
-                                                    }
-                                                    else if (property.isDateTime){
-                                                        return (
-                                                            <NoSsr key={index}>
-                                                                <TableCell>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
-                                                            </NoSsr>
-                                                        )
-                                                    }
-                                                    else {
-                                                        return (
-                                                            <TableCell key={index}>{item[property.title] !== null ? item[property.title] : "-"}</TableCell>
-                                                        )}})}
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
+                                    <DragDropContext onDragEnd={(result) => onDragEnd(result, items)}>
+                                        <Droppable droppableId="categories">
+                                            {(providedDroppable) => (
+                                                <TableBody
+                                                    ref={providedDroppable.innerRef}                                                    
+                                                    {...providedDroppable.droppableProps}
+                                                >
+                                                    {items.map((item, index) => (
+                                                        <Draggable
+                                                            key={item.id}
+                                                            draggableId={item.id}
+                                                            index={index}                                                            
+                                                        >
+                                                            {(providedDraggable) => (
+                                                                <TableRow 
+                                                                    
+                                                                    ref={providedDraggable.innerRef} 
+                                                                    {...providedDraggable.draggableProps} 
+                                                                    {...providedDraggable.dragHandleProps}
+                                                                    className="catalog__table-row"
+                                                                >
+                                                                    {props.table.actions &&
+                                                                        <TableCell width="12%">
+                                                                            {props.table.actions.map((actionItem, index) => {
+                                                                                if (actionItem.isEdit) return (
+                                                                                    <Tooltip title={props.editLabel} aria-label={props.editLabel} key={index}>
+                                                                                        <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary">
+                                                                                            <Edit />
+                                                                                        </Fab>
+                                                                                    </Tooltip>)
+                                                                                else if (actionItem.isDelete) return (
+                                                                                    <Tooltip title={props.deleteLabel} aria-label={props.deleteLabel} key={index}>
+                                                                                        <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary">
+                                                                                            <Delete />
+                                                                                        </Fab>
+                                                                                    </Tooltip>)
+                                                                                else if (actionItem.isDuplicate) return (
+                                                                                    <Tooltip title={props.duplicateLabel} aria-label={props.duplicateLabel} key={index}>
+                                                                                        <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary">
+                                                                                            <FileCopyOutlined />
+                                                                                        </Fab>
+                                                                                    </Tooltip>)
+                                                                                else if (actionItem.isPicture) return (
+                                                                                    <Tooltip title={props.copyLinkLabel} aria-label={props.copyLinkLabel} key={index}>
+                                                                                        <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary">
+                                                                                            <Link />
+                                                                                        </Fab>
+                                                                                    </Tooltip>)
+                                                                                else if (actionItem.qrCode) return (
+                                                                                    <Tooltip title={props.generateQRCodeLabel} aria-label={props.generateQRCodeLabel} key={index}>
+                                                                                        <Fab onClick={() => handleQRCodeDialog(item)} size="small" color="secondary">
+                                                                                            <QrCode2 />
+                                                                                        </Fab>
+                                                                                    </Tooltip>)
+                                                                                else return (
+                                                                                    <div></div>)
+                                                                            })}
+                                                                        </TableCell>
+                                                                    }
+                                                                    {props.table.properties && props.table.properties.map((property, index) => {
+                                                                        if (property.isPicture) {
+                                                                            return (
+                                                                                <TableCell key={index}>
+                                                                                    <div className="property-image">
+                                                                                        {item[property.title] ? (
+                                                                                            <img src={item[property.title]} />
+                                                                                        ) : (
+                                                                                            <div className="is-flex is-justify-content-center">
+                                                                                                <TextSnippet className="is-size-2" color="primary" />
+                                                                                            </div>
+                                                                                        )}
+                                                                                    </div>
+                                                                                </TableCell>
+                                                                            )
+                                                                        }
+                                                                        else if (property.isDateTime) {
+                                                                            return (
+                                                                                <NoSsr key={index}>
+                                                                                    <TableCell>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
+                                                                                </NoSsr>
+                                                                            )
+                                                                        }
+                                                                        else {
+                                                                            return (
+                                                                                <TableCell key={index}>{item[property.title] !== null ? item[property.title] : "-"}</TableCell>
+                                                                            )
+                                                                        }
+                                                                    })}
+                                                                </TableRow>
+                                                            )}
+                                                        </Draggable>
+                                                    ))}
+                                                    {providedDroppable.placeholder}
+                                                </TableBody>
+                                            )}
+                                        </Droppable>
+                                    </DragDropContext>
                                 </Table>
                             </TableContainer>
                         </div>
@@ -323,17 +377,17 @@ function Catalog(props) {
                     title={props.deleteConfirmationLabel}
                     textId="alert-dialog-description"
                     text={props.areYouSureLabel + ": " + (
-                        entityToDelete ? props.confirmationDialogDeleteNameProperty && props.confirmationDialogDeleteNameProperty.length > 0 ? 
+                        entityToDelete ? props.confirmationDialogDeleteNameProperty && props.confirmationDialogDeleteNameProperty.length > 0 ?
                             props.confirmationDialogDeleteNameProperty.map((property) => {
                                 return entityToDelete[`${property}`]
                             }
-                        ).join(" ") : entityToDelete["name"] : ""
+                            ).join(" ") : entityToDelete["name"] : ""
                     )}
                     noLabel={props.noLabel}
                     yesLabel={props.yesLabel}
                 />
                 {props.qrCodeDialog &&
-                    <QRCodeDialog 
+                    <QRCodeDialog
                         open={openQRCodeDialog}
                         setOpen={setOpenQRCodeDialog}
                         item={selectedItem}
