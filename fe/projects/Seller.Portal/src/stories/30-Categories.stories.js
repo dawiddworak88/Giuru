@@ -13,7 +13,6 @@ var catalog = {
     areYouSureLabel: "Are you sure you want to delete this item",
     generalErrorMessage: "An Error Occurred",
     searchLabel: "Search",
-    dragLabel: "Drag",
     editLabel: "Edit",
     deleteLabel: "Delete",
     displayedRowsLabel: "of",
