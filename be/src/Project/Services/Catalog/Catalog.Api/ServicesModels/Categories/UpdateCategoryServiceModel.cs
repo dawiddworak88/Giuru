@@ -11,6 +11,7 @@ namespace Catalog.Api.ServicesModels.Categories
         public string Name { get; set; }
         public string Schema { get; set; }
         public string UiSchema { get; set; }
+        public int Order { get; set; }
         public IEnumerable<Guid> Files { get; set; }
     }
 }
