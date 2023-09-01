@@ -109,7 +109,7 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Category.CreatedDate)} desc");
+            viewModel.PagedItems = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Category.Order)} asc");
 
             return viewModel;
         }
