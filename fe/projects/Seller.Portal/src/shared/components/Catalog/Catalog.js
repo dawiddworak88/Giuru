@@ -52,7 +52,6 @@ function Catalog(props) {
         setPage(() => newPage);
 
         const searchParameters = {
-
             searchTerm,
             pageIndex: newPage + 1,
             itemsPerPage: props.defaultItemsPerPage
@@ -179,14 +178,37 @@ function Catalog(props) {
             });
     };
 
+    const handleChangeEntityOrder = (item) => {
+        dispatch({ type: "SET_IS_LOADING", payload: true});
+
+        const updateParameters = {
+            id: item.id,
+            name: item.name,
+            order: item.order
+        };
+
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+            body: JSON.stringify(updateParameters)
+        };
+
+        const url = "/pl/Products/CategoriesApi";
+
+        return fetch(url, requestOptions)
+            .then(function (response) {
+                dispatch({ type: "SET_IS_LOADING", payload: false})
+            })
+    };    
+
     const copyToClipboard = (text) => {
         ClipboardHelper.copyToClipboard(text);
-    }
+    };
 
     const handleQRCodeDialog = (item) => {
         setSelectedItem(item);
         setOpenQRCodeDialog(true);
-    }
+    };
 
     const reorder = (list, startIndex, endIndex) => {
         const result = Array.from(list);
@@ -196,23 +218,23 @@ function Catalog(props) {
         updateOrderProperty(result);
 
         return result;
-    }
+    };
 
     const updateOrderProperty = (list) => {
         let i = 1;
 
-        const newList = list.forEach(category => {
-            category.order = i;
+        const newList = list.forEach(entity => {
+            entity.order = i;
             i++;
         });
 
         return newList;
-    }
+    };
 
-    const onDragEnd = (result, categories) => {
+    const onDragEnd = (result) => {
         handleIsDragableDisable();
 
-        const { destination, source } = result;
+        const { destination, source, draggableId } = result;
 
         if (!destination) {
             return;
@@ -225,10 +247,13 @@ function Catalog(props) {
             return;
         }
 
-        const newCategoryArray = reorder(categories, source.index, destination.index);        
+        const newCategoryArray = reorder(items, source.index, destination.index);        
+
+        handleChangeEntityOrder(newCategoryArray.find((x) => x.id === draggableId));
+        console.log(newCategoryArray);
 
         setItems(newCategoryArray);        
-    }
+    };
     
     const handleIsDragableDisable = () => {
         if(isDragableDisable)
@@ -239,7 +264,7 @@ function Catalog(props) {
         {
             setIsDragableDisable(true);
         }        
-    }    
+    };
 
     return (
         <section className="section section-small-padding catalog">
@@ -280,7 +305,7 @@ function Catalog(props) {
                                             )}
                                         </TableRow>
                                     </TableHead>
-                                    <DragDropContext onDragEnd={(result) => onDragEnd(result, items)}>
+                                    <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
                                         <Droppable droppableId="categories">
                                             {(providedDroppable) => (
                                                 <TableBody
