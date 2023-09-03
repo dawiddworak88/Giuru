@@ -4,10 +4,10 @@ using Foundation.Extensions.Validators;
 
 namespace Catalog.Api.Validators.Categories
 {
-    public class GetCategoryModelValidator : BaseServiceModelValidator<GetCategoryServiceModel>
+    public class GetCategorySchemasModelValidator : BaseServiceModelValidator<GetCategorySchemasServiceModel>
     {
-        public GetCategoryModelValidator()
-        {
+        public GetCategorySchemasModelValidator() 
+        { 
             RuleFor(x => x.Id).NotNull().NotEmpty();
         }
     }

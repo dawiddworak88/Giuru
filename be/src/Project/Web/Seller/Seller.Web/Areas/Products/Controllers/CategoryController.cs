@@ -19,15 +19,15 @@ namespace Seller.Web.Areas.Products.Controllers
     [Area("Products")]
     public class CategoryController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryPageViewModel> categoryPageModelBuilder;
-        private readonly IAsyncComponentModelBuilder<DuplicateCategoryComponentModel, CategoryPageViewModel> duplicateCategoryPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryPageViewModel> _categoryPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<DuplicateCategoryComponentModel, CategoryPageViewModel> _duplicateCategoryPageModelBuilder;
 
         public CategoryController(
             IAsyncComponentModelBuilder<ComponentModelBase, CategoryPageViewModel> categoryPageModelBuilder,
             IAsyncComponentModelBuilder<DuplicateCategoryComponentModel, CategoryPageViewModel> duplicateCategoryPageModelBuilder)
         {
-            this.categoryPageModelBuilder = categoryPageModelBuilder;
-            this.duplicateCategoryPageModelBuilder = duplicateCategoryPageModelBuilder;
+            _categoryPageModelBuilder = categoryPageModelBuilder;
+            _duplicateCategoryPageModelBuilder = duplicateCategoryPageModelBuilder;
         }
 
         public async Task<IActionResult> Edit(Guid? id)
@@ -35,15 +35,15 @@ namespace Seller.Web.Areas.Products.Controllers
             var componentModel = new ComponentModelBase
             {
                 Id = id,
-                IsAuthenticated = this.User.Identity.IsAuthenticated,
-                Name = this.User.Identity.Name,
+                IsAuthenticated = User.Identity.IsAuthenticated,
+                Name = User.Identity.Name,
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName)
             };
 
-            var viewModel = await this.categoryPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _categoryPageModelBuilder.BuildModelAsync(componentModel);
 
-            return this.View(viewModel);
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Duplicate(Guid? id)
@@ -53,12 +53,12 @@ namespace Seller.Web.Areas.Products.Controllers
                 Id = id,
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
+                SellerId = GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
             };
 
-            var viewModel = await this.duplicateCategoryPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _duplicateCategoryPageModelBuilder.BuildModelAsync(componentModel);
 
-            return this.View("Edit", viewModel);
+            return View("Edit", viewModel);
         }
     }
 }

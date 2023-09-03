@@ -163,12 +163,17 @@ namespace Catalog.Api.v1.Categories.Controllers
             if (request.Id.HasValue)
             {
                 var serviceModel = new UpdateCategoryServiceModel
-                { 
+                {
                     Id = request.Id,
                     Files = request.Files,
                     Name = request.Name,
-                    Schema = request.Schema,
-                    UiSchema = request.UiSchema,
+                    Schemas = request.Schemas.Select(x => new CategorySchemaServiceModel
+                    {
+                        Id = x.Id,
+                        Schema = x.Schema,
+                        UiSchema = x.UiSchema,
+                        Language = x.Language
+                    }),
                     ParentId = request.ParentCategoryId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
@@ -183,7 +188,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 {
                     var category = await _categoryService.UpdateAsync(serviceModel);
 
-                    if (category != null)
+                    if (category is not null)
                     {
                         var response = new CategoryResponseModel
                         {
@@ -210,8 +215,13 @@ namespace Catalog.Api.v1.Categories.Controllers
                 var serviceModel = new CreateCategoryServiceModel
                 {
                     Name = request.Name,
-                    Schema = request.Schema,
-                    UiSchema = request.UiSchema,
+                    Schemas = request.Schemas.Select(x => new CategorySchemaServiceModel 
+                    { 
+                        Id = x.Id,
+                        Schema = x.Schema,
+                        UiSchema = x.UiSchema,
+                        Language = x.Language
+                    }),
                     ParentId = request.ParentCategoryId,
                     Files = request.Files,
                     Language = CultureInfo.CurrentCulture.Name,
@@ -227,7 +237,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                 {
                     var category = await _categoryService.CreateAsync(serviceModel);
 
-                    if (category != null)
+                    if (category is not null)
                     {
                         var response = new CategoryResponseModel
                         {
@@ -294,17 +304,17 @@ namespace Catalog.Api.v1.Categories.Controllers
         /// <returns>The category schema.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [Route("CategorySchemas")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemaResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemasResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> SaveCategorySchema(CategorySchemaRequestModel request)
+        public async Task<IActionResult> SaveCategorySchema(SaveCategorySchemaRequestModel request)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new UpdateCategorySchemaServiceModel
             {
-                CategoryId = request.CategoryId,
+                Id = request.CategoryId,
                 Schema = request.Schema,
                 UiSchema = request.UiSchema,
                 Language = CultureInfo.CurrentCulture.Name,
@@ -318,18 +328,22 @@ namespace Catalog.Api.v1.Categories.Controllers
 
             if (validationResult.IsValid)
             {
-                var categorySchema = await _categoryService.UpdateCategorySchemaAsync(serviceModel);
+                var categorySchemas = await _categoryService.UpdateCategorySchemaAsync(serviceModel);
 
-                if (categorySchema != null)
+                if (categorySchemas is not null)
                 {
-                    var response = new CategorySchemaResponseModel
+                    var response = new CategorySchemasResponseModel
                     {
-                        Id = categorySchema.Id,
-                        CategoryId = categorySchema.CategoryId,
-                        Schema = categorySchema.Schema,
-                        UiSchema = categorySchema.UiSchema,
-                        LastModifiedDate = categorySchema.LastModifiedDate,
-                        CreatedDate = categorySchema.CreatedDate
+                        Id = categorySchemas.Id,
+                        Schemas = categorySchemas.Schemas.Select(x => new CategorySchemaResponseModel 
+                        {
+                            Id = x.Id,
+                            Schema = x.Schema,
+                            UiSchema = x.UiSchema,
+                            Language = x.Language
+                        }),
+                        LastModifiedDate = categorySchemas.LastModifiedDate,
+                        CreatedDate = categorySchemas.CreatedDate
                     };
 
                     return StatusCode((int)HttpStatusCode.OK, response);
@@ -340,42 +354,46 @@ namespace Catalog.Api.v1.Categories.Controllers
         }
 
         /// <summary>
-        /// Gets schema by category id.
+        /// Gets schemas by category id.
         /// </summary>
         /// <param name="categoryId">The category id.</param>
         /// <returns>The category schema.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("CategorySchemas/{categoryId}")]
         [AllowAnonymous]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemaResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemasResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetCategorySchemaByCategoryId(Guid? categoryId)
+        public async Task<IActionResult> GetCategorySchemasByCategoryId(Guid? categoryId)
         {
-            var serviceModel = new GetCategorySchemaServiceModel
+            var serviceModel = new GetCategorySchemasServiceModel
             {
-                CategoryId = categoryId,
+                Id = categoryId,
                 Language = CultureInfo.CurrentCulture.Name
             };
 
-            var validator = new GetCategorySchemaModelValidator();
+            var validator = new GetCategorySchemasModelValidator();
 
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var validationResult = validator.Validate(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var categorySchema = await _categoryService.GetCategorySchemaAsync(serviceModel);
+                var categorySchemas = await _categoryService.GetCategorySchemasAsync(serviceModel);
 
-                if (categorySchema != null)
+                if (categorySchemas is not null)
                 {
-                    var response = new CategorySchemaResponseModel
+                    var response = new CategorySchemasResponseModel
                     {
-                        Id = categorySchema.Id,
-                        CategoryId = categorySchema.CategoryId,
-                        Schema = categorySchema.Schema,
-                        UiSchema = categorySchema.UiSchema,
-                        LastModifiedDate = categorySchema.LastModifiedDate,
-                        CreatedDate = categorySchema.CreatedDate
+                        Id = categorySchemas.Id,
+                        Schemas = categorySchemas.Schemas.Select(x => new CategorySchemaResponseModel
+                        {
+                            Id = x.Id,
+                            Schema = x.Schema,
+                            UiSchema = x.UiSchema,
+                            Language = x.Language
+                        }),
+                        LastModifiedDate = categorySchemas.LastModifiedDate,
+                        CreatedDate = categorySchemas.CreatedDate
                     };
 
                     return StatusCode((int)HttpStatusCode.OK, response);
