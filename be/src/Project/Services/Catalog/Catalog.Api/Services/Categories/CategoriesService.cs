@@ -44,6 +44,7 @@ namespace Catalog.Api.Services.Categories
                 .Include(x => x.Translations)
                 .Include(x => x.ParentCategory)
                 .Include(x => x.ParentCategory.Translations)
+                .Include(x => x.Schemas)                
                 .AsSingleQuery();
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
@@ -82,6 +83,8 @@ namespace Catalog.Api.Services.Categories
                 {
                     Id = x.Id,
                     Order = x.Order,
+                    Schema = x.Schemas.FirstOrDefault(s => s.Language == model.Language)?.Schema,
+                    UiSchema = x.Schemas.FirstOrDefault(s => s.Language == model.Language)?.UiSchema,
                     Level = x.Level,
                     IsLeaf = x.IsLeaf,
                     ParentId = x.Parentid,
