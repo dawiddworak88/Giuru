@@ -184,7 +184,11 @@ function Catalog(props) {
         const updateParameters = {
             id: item.id,
             name: item.name,
-            order: item.order
+            schema: item.schema,
+            uiSchema: item.uiSchema,
+            parentCategoryId: item.parentId,
+            order: item.order,
+            files: props.files ? props.files : []
         };
 
         const requestOptions = {
