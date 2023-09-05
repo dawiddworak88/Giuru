@@ -12,6 +12,7 @@ using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Shared.Configurations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.ProductAttributes.Repositories
@@ -136,6 +137,61 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
                 {
                     Data = response.Data.Data
                 };
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
+        }
+
+        public async Task<IEnumerable<ProductAttributeItem>> GetAsync(string token, string language, Guid? productAttributeId)
+        {
+            var requestModel = new PagedProductAttributeItemsRequestModel
+            {
+                ProductAttributeId = productAttributeId,
+                PageIndex = PaginationConstants.DefaultPageIndex,
+                ItemsPerPage = PaginationConstants.DefaultPageSize
+            };
+
+            var apiRequest = new ApiRequest<PagedProductAttributeItemsRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductAttributeItemsApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedProductAttributeItemsRequestModel>, PagedProductAttributeItemsRequestModel, PagedResults<IEnumerable<ProductAttributeItem>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                var productAttributeItems = new List<ProductAttributeItem>();
+
+                productAttributeItems.AddRange(response.Data.Data);
+
+                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
+
+                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
+                {
+                    apiRequest.Data.PageIndex = i;
+
+                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedProductAttributeItemsRequestModel>, PagedProductAttributeItemsRequestModel, PagedResults<IEnumerable<ProductAttributeItem>>>(apiRequest);
+
+                    if (!nextPagesResponse.IsSuccessStatusCode)
+                    {
+                        throw new CustomException(response.Message, (int)response.StatusCode);
+                    }
+
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Any())
+                    {
+                        productAttributeItems.AddRange(nextPagesResponse.Data.Data);
+                    }
+                }
+
+                return productAttributeItems;
             }
 
             if (!response.IsSuccessStatusCode)

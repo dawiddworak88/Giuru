@@ -11,7 +11,6 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Catalog.Api.v1.Products.Controllers
 {
@@ -20,11 +19,11 @@ namespace Catalog.Api.v1.Products.Controllers
     [ApiController]
     public class ProductsSearchIndexController : BaseApiController
     {
-        private readonly IProductsService productsService;
+        private readonly IProductsService _productsService;
 
         public ProductsSearchIndexController(IProductsService productsService)
         {
-            this.productsService = productsService;
+            _productsService = productsService;
         }
 
         /// <summary>
@@ -34,24 +33,24 @@ namespace Catalog.Api.v1.Products.Controllers
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Post()
+        public IActionResult Post()
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new RebuildCatalogIndexServiceModel
             {
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Language = CultureInfo.CurrentCulture.Name
             };
 
             var validator = new RebuildCatalogIndexModelValidator();
 
-            var validationResult = await validator.ValidateAsync(serviceModel);
+            var validationResult = validator.Validate(serviceModel);
 
             if (validationResult.IsValid)
             {
-                await this.productsService.TriggerCatalogIndexRebuildAsync(serviceModel);
+                _productsService.TriggerCatalogIndexRebuild(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.Accepted);
             }

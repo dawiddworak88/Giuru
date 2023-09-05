@@ -1,0 +1,25 @@
+@import "../../../../shared/components/MediaCloud/MediaCloud.scss";
+
+.order {
+    &__items {
+        border: 1px grey solid;
+        border-radius: 4px;
+    }
+
+    &__items-table{
+        width: 100%;
+    }
+
+    &__basket-product-image {
+        height: 100px;
+        max-width: 250px;
+    }
+
+    &__clear-button {
+        margin-left: 0.5rem !important;
+    }
+
+    .react-autosuggest__container {
+        z-index: 10000;
+    }
+}

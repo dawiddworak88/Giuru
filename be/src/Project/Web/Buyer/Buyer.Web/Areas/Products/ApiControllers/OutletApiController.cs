@@ -46,8 +46,15 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 {
                     foreach (var product in products.Data)
                     {
-                        product.InStock = true;
-                        product.AvailableQuantity = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
+                        var availableQuantity = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
+
+                        if (availableQuantity > 0)
+                        {
+                            product.CanOrder = true;
+                            product.AvailableQuantity = availableQuantity;
+                        }
+
+                        product.InOutlet = true;
                         product.ExpectedDelivery = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
                     }
 

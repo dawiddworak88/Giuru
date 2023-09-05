@@ -21,6 +21,7 @@ using Foundation.Extensions.Filters;
 using Foundation.Account.DependencyInjection;
 using Global.Api.DependencyInjection;
 using Foundation.Telemetry.DependencyInjection;
+using Foundation.Extensions.Formatters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,7 +65,7 @@ builder.Services.AddControllers(options =>
 {
     options.RespectBrowserAcceptHeader = true;
     options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
+}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters().AddCsvSerializerFormatters();
 
 builder.Services.AddLocalization();
 

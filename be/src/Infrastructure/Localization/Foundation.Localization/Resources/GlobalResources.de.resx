@@ -672,6 +672,36 @@
   <data name="Content" xml:space="preserve">
     <value>Inhalt</value>
   </data>
+  <data name="ProductCard" xml:space="preserve">
+    <value>Produktkarte</value>
+  </data>
+  <data name="ProductCards" xml:space="preserve">
+    <value>Produktkarten</value>
+  </data>
+  <data name="Definition" xml:space="preserve">
+    <value>Definition</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>Anzeigename</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="Array" xml:space="preserve">
+    <value>Aufführen</value>
+  </data>
+  <data name="Boolean" xml:space="preserve">
+    <value>Umschalter</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Nummer</value>
+  </data>
+  <data name="Reference" xml:space="preserve">
+    <value>Definitionsreferenz</value>
+  </data>
+  <data name="String" xml:space="preserve">
+    <value>Text</value>
+  </data>
   <data name="Quantity" xml:space="preserve">
     <value>Quantität</value>
   </data>

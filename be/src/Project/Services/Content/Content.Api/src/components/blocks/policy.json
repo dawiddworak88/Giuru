@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_blocks_policies",
+  "info": {
+    "displayName": "Policy",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "accordion": {
+      "displayName": "Accordion",
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.accordion"
+    }
+  }
+}

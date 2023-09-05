@@ -283,32 +283,37 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
 
         private static Product MapProductResponseToProduct(ProductResponseModel productResponse)
         { 
-            return new Product
+            if (productResponse is not null)
             {
-                Id = productResponse.Id.Value,
-                PrimaryProductId = productResponse.PrimaryProductId,
-                Sku = productResponse.Sku,
-                Name = productResponse.Name,
-                Description = productResponse.Description,
-                IsNew = productResponse.IsNew,
-                IsProtected = productResponse.IsProtected,
-                FormData = productResponse.FormData,
-                SellerId = productResponse.SellerId,
-                BrandName = productResponse.BrandName,
-                CategoryId = productResponse.CategoryId,
-                CategoryName = productResponse.CategoryName,
-                Ean = productResponse.Ean,
-                ProductVariants = productResponse.ProductVariants,
-                Images = productResponse.Images,
-                Files = productResponse.Files,
-                Videos = productResponse.Videos,
-                ProductAttributes = productResponse.ProductAttributes?.Select(x => new ProductAttribute 
-                { 
-                    Key = x.Key,
-                    Name = x.Name,
-                    Values = x.Values.OrEmptyIfNull().Select(y => y)
-                })
-            };
+                return new Product
+                {
+                    Id = productResponse.Id.Value,
+                    PrimaryProductId = productResponse.PrimaryProductId,
+                    Sku = productResponse.Sku,
+                    Name = productResponse.Name,
+                    Description = productResponse.Description,
+                    IsNew = productResponse.IsNew,
+                    IsProtected = productResponse.IsProtected,
+                    FormData = productResponse.FormData,
+                    SellerId = productResponse.SellerId,
+                    BrandName = productResponse.BrandName,
+                    CategoryId = productResponse.CategoryId,
+                    CategoryName = productResponse.CategoryName,
+                    Ean = productResponse.Ean,
+                    ProductVariants = productResponse.ProductVariants,
+                    Images = productResponse.Images,
+                    Files = productResponse.Files,
+                    Videos = productResponse.Videos,
+                    ProductAttributes = productResponse.ProductAttributes?.Select(x => new ProductAttribute
+                    {
+                        Key = x.Key,
+                        Name = x.Name,
+                        Values = x.Values.OrEmptyIfNull().Select(y => y)
+                    })
+                };
+            }
+
+            return default;
         }
     }
 }

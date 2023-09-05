@@ -1,0 +1,20 @@
+.footer {
+    .content {
+        ul {
+            list-style: none;
+
+            li {
+                display: inline;
+
+                a {
+                    color: $white;
+                    margin-right: 2rem;
+
+                    &:hover {
+                        color: $grey-light;
+                    }
+                }
+            }
+        }
+    }
+}

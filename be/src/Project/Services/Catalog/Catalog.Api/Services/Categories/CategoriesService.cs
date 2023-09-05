@@ -15,20 +15,26 @@ using Foundation.Catalog.Infrastructure;
 using Foundation.Catalog.Infrastructure.Categories.Entites;
 using Foundation.Catalog.Infrastructure.Categories.Entities;
 using Foundation.GenericRepository.Definitions;
+using Foundation.EventBus.Abstractions;
+using System.Diagnostics;
+using Catalog.Api.IntegrationEvents;
 
 namespace Catalog.Api.Services.Categories
 {
     public class CategoriesService : ICategoriesService
     {
+        private readonly IEventBus _eventBus;
         private readonly CatalogContext _context;
         private readonly IStringLocalizer<ProductResources> _productLocalizer;
 
         public CategoriesService(
             CatalogContext context,
+            IEventBus eventBus,
             IStringLocalizer<ProductResources> productLocalizer)
         {
             _context = context;
             _productLocalizer = productLocalizer;
+            _eventBus = eventBus;
         }
 
         public PagedResults<IEnumerable<CategoryServiceModel>> Get(GetCategoriesServiceModel model)
@@ -81,7 +87,7 @@ namespace Catalog.Api.Services.Categories
                     ParentId = x.Parentid,
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate,
-                    Name =  x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? x.Translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
+                    Name = x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? x.Translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
                     ParentCategoryName = x.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == x.Parentid && t.Language == model.Language)?.Name ?? x.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == x.Parentid)?.Name,
                     ThumbnailMediaId = x.Images.FirstOrDefault(y => y.CategoryId == x.Id)?.MediaId
                 })
@@ -190,14 +196,14 @@ namespace Catalog.Api.Services.Categories
             foreach (var file in model.Files.OrEmptyIfNull())
             {
                 var categoryImage = new CategoryImage
-                { 
+                {
                     CategoryId = model.Id.Value,
                     MediaId = file
                 };
 
                 images.Add(categoryImage.FillCommonProperties());
             }
-            
+
             await _context.CategoryImages.AddRangeAsync(images);
 
             await _context.SaveChangesAsync();
@@ -220,7 +226,7 @@ namespace Catalog.Api.Services.Categories
             _context.Categories.Add(category.FillCommonProperties());
 
             var categoryTranslation = new CategoryTranslation
-            { 
+            {
                 CategoryId = category.Id,
                 Name = model.Name,
                 Language = model.Language
@@ -243,27 +249,32 @@ namespace Catalog.Api.Services.Categories
 
             await _context.CategoryImages.AddRangeAsync(images);
 
-            if (model.Schema is not null)
+            var schemas = new List<CategorySchema>();
+
+            foreach (var schema in model.Schemas.OrEmptyIfNull())
             {
                 var categorySchema = new CategorySchema
                 {
-                    Schema = model.Schema,
-                    UiSchema = model.UiSchema,
+                    Schema = schema.Schema,
+                    UiSchema = schema.UiSchema,
                     CategoryId = category.Id,
-                    Language = model.Language
+                    Language = schema.Language
                 };
 
-                _context.CategorySchemas.Add(categorySchema.FillCommonProperties());
+                schemas.Add(categorySchema.FillCommonProperties());
             }
+
+            await _context.CategorySchemas.AddRangeAsync(schemas);
+
 
             await _context.SaveChangesAsync();
 
             return Get(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
-        public async Task<CategorySchemaServiceModel> UpdateCategorySchemaAsync(UpdateCategorySchemaServiceModel model)
+        public async Task<CategorySchemasServiceModel> UpdateCategorySchemaAsync(UpdateCategorySchemaServiceModel model)
         {
-            var categorySchema = await _context.CategorySchemas.FirstOrDefaultAsync(x => x.CategoryId == model.CategoryId && x.Language == model.Language && x.IsActive);
+            var categorySchema = await _context.CategorySchemas.FirstOrDefaultAsync(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);
 
             if (categorySchema is not null)
             {
@@ -274,8 +285,8 @@ namespace Catalog.Api.Services.Categories
             else
             {
                 var newCategorySchema = new CategorySchema
-                { 
-                    CategoryId = model.CategoryId.Value,
+                {
+                    CategoryId = model.Id.Value,
                     Language = model.Language,
                     Schema = model.Schema,
                     UiSchema = model.UiSchema
@@ -286,32 +297,64 @@ namespace Catalog.Api.Services.Categories
 
             await _context.SaveChangesAsync();
 
-            return await GetCategorySchemaAsync(new GetCategorySchemaServiceModel 
-            { 
-                CategoryId = model.CategoryId,
+            TriggerCategoryProductsIndexRebuild(new RebuildCategoryProductsIndexServiceModel
+            {
+                CategoryId = model.Id,
+                Language = model.Language,
+                OrganisationId = model.OrganisationId,
+                Username = model.Username
+            });
+
+            return await GetCategorySchemasAsync(new GetCategorySchemasServiceModel
+            {
+                Id = model.Id,
                 Language = model.Language,
                 OrganisationId = model.OrganisationId,
                 Username = model.Username
             });
         }
 
-        public async Task<CategorySchemaServiceModel> GetCategorySchemaAsync(GetCategorySchemaServiceModel model)
+        public async Task<CategorySchemasServiceModel> GetCategorySchemasAsync(GetCategorySchemasServiceModel model)
         {
-            var categorySchemas = from c in _context.Categories
-                                  join cs in _context.CategorySchemas on c.Id equals cs.CategoryId into csx
-                                  from x in csx.DefaultIfEmpty()
-                                  where x != null && c.Id == model.CategoryId && (x.Language == model.Language || x.Language == null) && c.IsActive
-                                  select new CategorySchemaServiceModel
-                                  {
-                                      Id = x.Id,
-                                      CategoryId = c.Id,
-                                      Schema = x.Schema,
-                                      UiSchema = x.UiSchema,
-                                      LastModifiedDate = x.LastModifiedDate,
-                                      CreatedDate = x.CreatedDate
-                                  };
+            var categorySchema = await _context.Categories
+                .Include(x => x.Schemas)
+                .FirstOrDefaultAsync(x => x.Id == model.Id);
 
-            return await categorySchemas.FirstOrDefaultAsync();
+            if(categorySchema is null)
+            {
+                throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent); 
+            }
+
+            return new CategorySchemasServiceModel
+            {
+                Id = categorySchema.Id,
+                Schemas = categorySchema.Schemas.Select(x => new CategorySchemaServiceModel
+                {
+                    Id = x.Id,
+                    Schema = x.Schema,
+                    UiSchema = x.UiSchema,
+                    Language = x.Language
+                }),
+                LastModifiedDate = categorySchema.LastModifiedDate,
+                CreatedDate = categorySchema.CreatedDate
+            };
+        }
+
+        private void TriggerCategoryProductsIndexRebuild(RebuildCategoryProductsIndexServiceModel model)
+        {
+            using var source = new ActivitySource(GetType().Name);
+
+            var message = new RebuildCategoryProductsIntegrationEvent
+            {
+                OrganisationId = model.OrganisationId,
+                Language = model.Language,
+                Username = model.Username,
+                CategoryId = model.CategoryId
+            };
+
+            using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
+
+            _eventBus.Publish(message);
         }
     }
 }

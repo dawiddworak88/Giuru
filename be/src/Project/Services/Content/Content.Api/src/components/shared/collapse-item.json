@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_shared_collapse_items",
+  "info": {
+    "displayName": "Accordion Item",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "richtext"
+    }
+  }
+}
