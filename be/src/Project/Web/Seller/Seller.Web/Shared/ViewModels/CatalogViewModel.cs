@@ -8,7 +8,8 @@ namespace Seller.Web.Shared.ViewModels
         public string Title { get; set; }
         public string NewText { get; set; }
         public string NewUrl { get; set; }
-        public string SearchApiUrl { get; set; }
+        public string UpdateOrderUrl { get; set; }
+        public string SearchApiUrl { get; set; }      
         public string EditLabel { get; set; }
         public string DeleteLabel { get; set; }
         public string DuplicateLabel { get; set; }

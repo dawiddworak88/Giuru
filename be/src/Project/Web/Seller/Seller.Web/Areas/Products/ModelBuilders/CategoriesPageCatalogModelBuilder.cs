@@ -2,11 +2,13 @@
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
+using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
+using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
@@ -45,6 +47,7 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
             viewModel.NewText = this.productLocalizer.GetString("AddCategory");
+            viewModel.UpdateOrderUrl = this.linkGenerator.GetPathByAction("Index", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             
