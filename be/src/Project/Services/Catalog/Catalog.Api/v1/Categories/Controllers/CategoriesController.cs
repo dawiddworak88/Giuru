@@ -171,6 +171,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                     Name = request.Name,
                     Schema = request.Schema,
                     UiSchema = request.UiSchema,
+                    Order = request.Order,
                     ParentId = request.ParentCategoryId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
