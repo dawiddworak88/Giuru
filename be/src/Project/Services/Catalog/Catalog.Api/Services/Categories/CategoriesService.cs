@@ -18,6 +18,7 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.EventBus.Abstractions;
 using System.Diagnostics;
 using Catalog.Api.IntegrationEvents;
+using System.Linq.Dynamic.Core;
 
 namespace Catalog.Api.Services.Categories
 {
@@ -165,7 +166,7 @@ namespace Catalog.Api.Services.Categories
 
             if (model.Order is not 0)
             {
-                await OrderingCategoriesAsync(model.Id, model.Order);
+                await OrderingCategoriesAsync(category.Order, model.Order);
                 category.Order = model.Order;
             }
 
@@ -220,33 +221,21 @@ namespace Catalog.Api.Services.Categories
             return Get(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
-        private async Task OrderingCategoriesAsync(Guid? id, int destination)
+        private async Task OrderingCategoriesAsync(int source, int destination)
         {
-            var source = _context.Categories.FirstOrDefault(x => x.Id == id).Order;
-            
-            if(destination > source)
-            {
-                var categories = _context.Categories.Where(x => x.Order <= destination && x.Order > source).OrderBy(x => x.Order);
+            var categories = _context.Categories.Where(x => x.IsActive);
 
-                foreach (var category in categories) 
+            foreach(var categoty in categories.OrEmptyIfNull())
+            { 
+                if(categoty.Order >= destination && categoty.Order < source)
                 {
-                    category.Order = source;
-                    source++;
+                    categoty.Order += 1;
                 }
 
-                _context.Categories.UpdateRange(categories);
-            }
-
-            if(destination < source) 
-            {
-                var categories = _context.Categories.Where(x => x.Order >= destination && x.Order < source).OrderBy(x => x.Order);
-
-                foreach (var category in categories)
+                if(categoty.Order <= destination && categoty.Order > source)
                 {
-                    category.Order = ++destination;
+                    categoty.Order -= 1;
                 }
-
-                _context.Categories.UpdateRange(categories);
             }
             
             await _context.SaveChangesAsync();
