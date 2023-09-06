@@ -163,6 +163,12 @@ namespace Catalog.Api.Services.Categories
                 throw new CustomException(_productLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
+            if (model.Order is not 0)
+            {
+                await OrderingCategoriesAsync(model.Id, model.Order);
+                category.Order = model.Order;
+            }
+
             category.Parentid = model.ParentId;
             category.Level = parentCategory.Level + 1;
             category.IsLeaf = !await _context.Categories.AnyAsync(x => x.Parentid == category.Id && x.IsActive);
@@ -212,6 +218,38 @@ namespace Catalog.Api.Services.Categories
             await _context.SaveChangesAsync();
 
             return Get(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
+        }
+
+        private async Task OrderingCategoriesAsync(Guid? id, int destination)
+        {
+            var source = _context.Categories.FirstOrDefault(x => x.Id == id).Order;
+            
+            if(destination > source)
+            {
+                var categories = _context.Categories.Where(x => x.Order <= destination && x.Order > source).OrderBy(x => x.Order);
+
+                foreach (var category in categories) 
+                {
+                    category.Order = source;
+                    source++;
+                }
+
+                _context.Categories.UpdateRange(categories);
+            }
+
+            if(destination < source) 
+            {
+                var categories = _context.Categories.Where(x => x.Order >= destination && x.Order < source).OrderBy(x => x.Order);
+
+                foreach (var category in categories)
+                {
+                    category.Order = ++destination;
+                }
+
+                _context.Categories.UpdateRange(categories);
+            }
+            
+            await _context.SaveChangesAsync();
         }
 
         public async Task<CategoryServiceModel> CreateAsync(CreateCategoryServiceModel model)
