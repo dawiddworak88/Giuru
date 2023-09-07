@@ -19,6 +19,7 @@ using Foundation.EventBus.Abstractions;
 using System.Diagnostics;
 using Catalog.Api.IntegrationEvents;
 using System.Linq.Dynamic.Core;
+using Microsoft.Extensions.Logging;
 
 namespace Catalog.Api.Services.Categories
 {
@@ -227,12 +228,11 @@ namespace Catalog.Api.Services.Categories
 
             foreach(var categoty in categories.OrEmptyIfNull())
             { 
-                if(categoty.Order >= destination && categoty.Order < source)
+                if((categoty.Order >= destination && categoty.Order < source) || source == 0)
                 {
                     categoty.Order += 1;
-                }
-
-                if(categoty.Order <= destination && categoty.Order > source)
+                } 
+                else if(categoty.Order <= destination && categoty.Order > source)
                 {
                     categoty.Order -= 1;
                 }
@@ -261,6 +261,9 @@ namespace Catalog.Api.Services.Categories
                 Name = model.Name,
                 Language = model.Language
             };
+            
+            await OrderingCategoriesAsync(0, 1);
+            category.Order = 1;
 
             _context.CategoryTranslations.Add(categoryTranslation.FillCommonProperties());
 
