@@ -33,6 +33,7 @@ function Catalog(props) {
     const [selectedItem, setSelectedItem] = React.useState(null);
     const [openQRCodeDialog, setOpenQRCodeDialog] = React.useState(false);
     const [isDragableDisable, setIsDragableDisable] = React.useState(true);
+    const [draggingItem, setDraggingItem] = React.useState(null);
 
     const handleSearchTermKeyPress = (event) => {
 
@@ -46,7 +47,6 @@ function Catalog(props) {
     };
 
     const handleChangePage = (event, newPage) => {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         setPage(() => newPage);
@@ -179,16 +179,11 @@ function Catalog(props) {
     };
 
     const handleChangeEntityOrder = (item) => {
-        dispatch({ type: "SET_IS_LOADING", payload: true});
+        dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const updateParameters = {
             id: item.id,
-            name: item.name,
-            schema: item.schema,
-            uiSchema: item.uiSchema,
-            parentCategoryId: item.parentId,
             order: item.order,
-            files: props.files ? props.files : []
         };
 
         const requestOptions = {
@@ -197,13 +192,20 @@ function Catalog(props) {
             body: JSON.stringify(updateParameters)
         };
 
-        const url = "/pl/Products/CategoriesApi";
+        const url = props.updateOrderUrl + "/Order";
 
         return fetch(url, requestOptions)
             .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false})
+                dispatch({ type: "SET_IS_LOADING", payload: false })
+
+                return response.json().then((jsonResponse) => {
+
+                    if (!response.ok) {
+                        toast.error(jsonResponse.message);
+                    }
+                });
             })
-    };    
+    };
 
     const copyToClipboard = (text) => {
         ClipboardHelper.copyToClipboard(text);
@@ -214,61 +216,77 @@ function Catalog(props) {
         setOpenQRCodeDialog(true);
     };
 
-    const reorder = (list, startIndex, endIndex) => {
-        const result = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
+    const onDragStart = (result) => {        
+        setDraggingItem(getItem(result.draggableId));        
+    }
 
-        updateOrderProperty(result);
+    const getItem = (id) => {
+        return items.find((x) => x.id === id);
+    }
+
+    const onDragEnd = (result) => {
+        
+        setIsDragableDisable(true);
+
+        const { destination, source, draggableId } = result;
+
+        if (!destination) {            
+            return;
+        }
+
+        if (
+            destination.droppableId === source.droppableId &&
+            destination.index === source.index
+        ) {            
+            return;
+        }
+
+        const item = getItem(draggableId);
+        const newCategoryArray = reorder(items, item, source.index,destination.index);
+        handleChangeEntityOrder(newCategoryArray.find((x) => x.id === draggableId));
+        setItems(newCategoryArray);
+
+        setDraggingItem(null);
+
+    };
+
+    const reorder = (list, element, source, destination) => {
+        const first = list[0].order;
+
+        const result = Array.from(list);
+        result.splice(source, 1);
+        result.splice(destination, 0, element);
+
+        updateOrderProperty(result, first);
 
         return result;
     };
 
-    const updateOrderProperty = (list) => {
-        let i = 1;
+    const updateOrderProperty = (list, first) => {
+        let i = first;
 
-        const newList = list.forEach(entity => {
+        list.forEach(entity => {
             entity.order = i;
             i++;
         });
-
-        return newList;
     };
 
-    const onDragEnd = (result) => {
-        handleIsDragableDisable();
-
-        const { destination, source, draggableId } = result;
-
-        if (!destination) {
-            return;
-        }
-        
-        if (
-            destination.droppableId === source.droppableId &&
-            destination.index === source.index
-        ) {
-            return;
-        }
-
-        const newCategoryArray = reorder(items, source.index, destination.index);        
-
-        handleChangeEntityOrder(newCategoryArray.find((x) => x.id === draggableId));
-        console.log(newCategoryArray);
-
-        setItems(newCategoryArray);        
-    };
-    
     const handleIsDragableDisable = () => {
-        if(isDragableDisable)
-        {
+        if (isDragableDisable) {
             setIsDragableDisable(false);
         }
-        else
-        {
+        else {
             setIsDragableDisable(true);
-        }        
+        }
     };
+
+    const handleChangedPageWhenDragItem = () => {
+        if (draggingItem) {
+            handleChangePage(null, 1);
+            reorder(items, draggingItem, props.defaultItemsPerPage, props.defaultItemsPerPage + 1);
+            handleChangeEntityOrder({id: draggingItem.id, order: props.defaultItemsPerPage + 1});
+        }
+    }  
 
     return (
         <section className="section section-small-padding catalog">
@@ -309,11 +327,11 @@ function Catalog(props) {
                                             )}
                                         </TableRow>
                                     </TableHead>
-                                    <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
+                                    <DragDropContext onDragEnd={(result) => onDragEnd(result)} onDragStart={(result) => onDragStart(result)}>
                                         <Droppable droppableId="categories">
                                             {(providedDroppable) => (
                                                 <TableBody
-                                                    ref={providedDroppable.innerRef}                                                    
+                                                    ref={providedDroppable.innerRef}
                                                     {...providedDroppable.droppableProps}
                                                 >
                                                     {items.map((item, index) => (
@@ -321,24 +339,24 @@ function Catalog(props) {
                                                             key={item.id}
                                                             draggableId={item.id}
                                                             index={index}
-                                                            isDragDisabled={isDragableDisable}                                                            
+                                                            isDragDisabled={isDragableDisable}
                                                         >
                                                             {(providedDraggable, snapshot) => (
-                                                                <TableRow                                                                     
-                                                                    ref={providedDraggable.innerRef} 
-                                                                    {...providedDraggable.draggableProps} 
+                                                                <TableRow
+                                                                    ref={providedDraggable.innerRef}
+                                                                    {...providedDraggable.draggableProps}
                                                                     {...providedDraggable.dragHandleProps}
                                                                     isDragging={snapshot.isDragging}
                                                                     className="catalog__table__row"
-                                                                >                                                                    
+                                                                >
                                                                     {props.table.actions &&
-                                                                        <TableCell width="12%"> 
+                                                                        <TableCell width="12%">
                                                                             <Tooltip title={props.dragLabel} aria-label={props.dragLabel}>
                                                                                 <Fab onClick={() => handleIsDragableDisable()} size="small" color="secondary">
                                                                                     <DragIndicator />
                                                                                 </Fab>
-                                                                            </Tooltip>                                                                             
-                                                                            {props.table.actions.map((actionItem, index) => {                                                                                
+                                                                            </Tooltip>
+                                                                            {props.table.actions.map((actionItem, index) => {
                                                                                 if (actionItem.isEdit) return (
                                                                                     <Tooltip title={props.editLabel} aria-label={props.editLabel} key={index}>
                                                                                         <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary">
@@ -424,6 +442,7 @@ function Catalog(props) {
                                 count={total}
                                 page={page}
                                 onPageChange={handleChangePage}
+                                onMouseEnter={handleChangedPageWhenDragItem}
                                 rowsPerPage={props.defaultItemsPerPage}
                             />
                         </div>

@@ -4,6 +4,7 @@ import CategoriesPage from "../areas/Products/pages/CategoriesPage/CategoriesPag
 import { header, menuTiles, footer } from "./shared/Props";
 
 var catalog = {
+    defaultItemsPerPage: 25,
     title: "Categories",
     newText: "New category",
     newUrl: "#",
