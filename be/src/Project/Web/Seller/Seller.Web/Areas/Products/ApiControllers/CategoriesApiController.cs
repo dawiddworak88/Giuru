@@ -41,7 +41,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
                 searchTerm,
                 pageIndex,
                 itemsPerPage,
-                $"{nameof(Category.CreatedDate)} desc");
+                $"{nameof(Category.Order)} asc");
 
             return this.StatusCode((int)HttpStatusCode.OK, categories);
         }
