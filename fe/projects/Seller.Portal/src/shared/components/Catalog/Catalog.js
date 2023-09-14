@@ -33,7 +33,7 @@ function Catalog(props) {
     const [selectedItem, setSelectedItem] = React.useState(null);
     const [openQRCodeDialog, setOpenQRCodeDialog] = React.useState(false);
     const [isDragableDisable, setIsDragableDisable] = React.useState(true);
-    const [draggingItem, setDraggingItem] = React.useState(null);
+    const [draggingItem, setDraggingItem] = React.useState({});
 
     const handleSearchTermKeyPress = (event) => {
 
@@ -218,7 +218,7 @@ function Catalog(props) {
 
     const onDragStart = (result) => {        
         const item = items.find((x) => x.id === result.draggableId);
-        item ? setDraggingItem(item) : setDraggingItem(null);
+        item ? setDraggingItem(item) : setDraggingItem({});
     }
 
     const onDragEnd = (result) => {        
@@ -242,7 +242,7 @@ function Catalog(props) {
         handleChangeEntityOrder({id: draggableId, order: (destination.index + 1) + (page * props.defaultItemsPerPage)});
         setItems(newCategoryArray);
 
-        setDraggingItem(null);
+        setDraggingItem({});
     };
 
     const reorder = (list, source, destination) => {        
@@ -266,6 +266,9 @@ function Catalog(props) {
     const disableNextChangePageArea = () => {
         return page == props.pagedItems.pageCount - 1 ? true : false;
     };
+
+    console.log(isDragableDisable);
+    console.log(draggingItem);
 
     return (
         <section className="section section-small-padding catalog">
@@ -486,7 +489,7 @@ function Catalog(props) {
                                                                 </TableRow>
                                                             )}
                                                         </Draggable>
-                                                    ))}                                                    
+                                                    ))}
                                                 </TableBody>
                                             )}
                                         </Droppable>
@@ -494,7 +497,7 @@ function Catalog(props) {
                                 </Table>
                             </TableContainer>
                         </div>
-                        { !isDragableDisable && draggingItem &&
+                        { !isDragableDisable && draggingItem.id &&
                             <div className="is-flex-centered">
                                 <div 
                                     className="catalog__change-page-aera"
