@@ -310,7 +310,7 @@ function Catalog(props) {
                                         <Droppable
                                             droppableId="categories"
                                             mode="virtual"                                            
-                                            renderClone={(provided, snapshot, rubric) => (
+                                            renderClone={(provided) => (
                                                 <TableRow
                                                     className="catalog__table__row"
                                                     {...provided.draggableProps}
@@ -404,7 +404,7 @@ function Catalog(props) {
                                                             index={index}
                                                             isDragDisabled={isDragableDisable}
                                                         >
-                                                            {(providedDraggable, snapshot) => (
+                                                            {(providedDraggable) => (
                                                                 <TableRow
                                                                     ref={providedDraggable.innerRef}
                                                                     {...providedDraggable.draggableProps}
