@@ -8,6 +8,7 @@ var catalog = {
     title: "Categories",
     newText: "New category",
     newUrl: "#",
+    searchApiUrl: "#",
     noLabel: "No",
     yesLabel: "Yes",
     deleteConfirmationLabel: "Delete confirmation",
@@ -65,7 +66,8 @@ var catalog = {
                 parentName: "Living Room",
                 lastModifiedDate: new Date(),
                 createdDate: new Date(),
-                order: "1"
+                order: "1",
+                level: 2
             },
             {
                 id: "2",
@@ -73,7 +75,8 @@ var catalog = {
                 parentName: "Bathroom",
                 lastModifiedDate: new Date(),
                 createdDate: new Date(),
-                order: "2"
+                order: "2",
+                level: 1
             },
             {
                 id: "3",
@@ -81,7 +84,8 @@ var catalog = {
                 parentName: "Bedroom",
                 lastModifiedDate: new Date(),
                 createdDate: new Date(),
-                order: "3"
+                order: "3",
+                level: 2
             },
             {
                 id: "4",
@@ -89,7 +93,8 @@ var catalog = {
                 parentName: "Kitchen",
                 lastModifiedDate: new Date(),
                 createdDate: new Date(),
-                order: "4"
+                order: "4",
+                level: 2
             },
             {
                 id: "5",
@@ -97,7 +102,8 @@ var catalog = {
                 parentName: "Living Room",
                 lastModifiedDate: new Date(),
                 createdDate: new Date(),
-                order: "5"
+                order: "5",
+                level: 1
             }
         ],
         total: 5
