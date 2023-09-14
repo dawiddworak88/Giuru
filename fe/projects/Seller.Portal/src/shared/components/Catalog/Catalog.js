@@ -217,76 +217,55 @@ function Catalog(props) {
     };
 
     const onDragStart = (result) => {        
-        setDraggingItem(getItem(result.draggableId));        
+        const item = items.find((x) => x.id === result.draggableId);
+        item ? setDraggingItem(item) : setDraggingItem(null);
     }
 
-    const getItem = (id) => {
-        return items.find((x) => x.id === id);
-    }
+    const onDragEnd = (result) => {        
 
-    const onDragEnd = (result) => {
-        
         setIsDragableDisable(true);
 
         const { destination, source, draggableId } = result;
 
-        if (!destination) {            
+        if (!destination) {
             return;
         }
 
         if (
             destination.droppableId === source.droppableId &&
             destination.index === source.index
-        ) {            
+        ) {
             return;
         }
-
-        const item = getItem(draggableId);
-        const newCategoryArray = reorder(items, item, source.index,destination.index);
-        handleChangeEntityOrder(newCategoryArray.find((x) => x.id === draggableId));
+        
+        const newCategoryArray = reorder(items, source.index, destination.index);
+        handleChangeEntityOrder({id: draggableId, order: (destination.index + 1) + (page * props.defaultItemsPerPage)});
         setItems(newCategoryArray);
 
         setDraggingItem(null);
-
     };
 
-    const reorder = (list, element, source, destination) => {
-        const first = list[0].order;
-
+    const reorder = (list, source, destination) => {        
         const result = Array.from(list);
         result.splice(source, 1);
-        result.splice(destination, 0, element);
-
-        updateOrderProperty(result, first);
+        result.splice(destination, 0, draggingItem);
 
         return result;
     };
 
-    const updateOrderProperty = (list, first) => {
-        let i = first;
-
-        list.forEach(entity => {
-            entity.order = i;
-            i++;
-        });
-    };
-
-    const handleIsDragableDisable = () => {
-        if (isDragableDisable) {
-            setIsDragableDisable(false);
-        }
-        else {
-            setIsDragableDisable(true);
+    const handleChangedPageWhenDragItem = (toPage) => {        
+        if (draggingItem && !isDragableDisable) {
+            handleChangePage(null, toPage);
         }
     };
 
-    const handleChangedPageWhenDragItem = () => {
-        if (draggingItem) {
-            handleChangePage(null, 1);
-            reorder(items, draggingItem, props.defaultItemsPerPage, props.defaultItemsPerPage + 1);
-            handleChangeEntityOrder({id: draggingItem.id, order: props.defaultItemsPerPage + 1});
-        }
-    }  
+    const disablePrevChangePageArea = () => {
+        return page == 0 ? true : false;
+    };
+
+    const disableNextChangePageArea = () => {
+        return page == props.pagedItems.pageCount - 1 ? true : false;
+    };
 
     return (
         <section className="section section-small-padding catalog">
@@ -328,7 +307,91 @@ function Catalog(props) {
                                         </TableRow>
                                     </TableHead>
                                     <DragDropContext onDragEnd={(result) => onDragEnd(result)} onDragStart={(result) => onDragStart(result)}>
-                                        <Droppable droppableId="categories">
+                                        <Droppable
+                                            droppableId="categories"
+                                            mode="virtual"                                            
+                                            renderClone={(provided, snapshot, rubric) => (
+                                                <TableRow
+                                                    className="catalog__table__row"
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    ref={provided.innerRef}
+                                                >
+                                                    {props.table.actions &&
+                                                        <TableCell width="12%">
+                                                            <Tooltip title={props.dragLabel} aria-label={props.dragLabel}>
+                                                                <Fab onClick={() => setIsDragableDisable(!isDragableDisable)} size="small" color="secondary">
+                                                                    <DragIndicator />
+                                                                </Fab>
+                                                            </Tooltip>
+                                                            {props.table.actions.map((actionItem, index) => {
+                                                                if (actionItem.isEdit) return (
+                                                                    <Tooltip title={props.editLabel} aria-label={props.editLabel} key={index}>
+                                                                        <Fab href={props.editUrl + "/" + draggingItem.id} size="small" color="secondary">
+                                                                            <Edit />
+                                                                        </Fab>
+                                                                    </Tooltip>)
+                                                                else if (actionItem.isDelete) return (
+                                                                    <Tooltip title={props.deleteLabel} aria-label={props.deleteLabel} key={index}>
+                                                                        <Fab onClick={() => handleDeleteClick(draggingItem)} size="small" color="primary">
+                                                                            <Delete />
+                                                                        </Fab>
+                                                                    </Tooltip>)
+                                                                else if (actionItem.isDuplicate) return (
+                                                                    <Tooltip title={props.duplicateLabel} aria-label={props.duplicateLabel} key={index}>
+                                                                        <Fab href={props.duplicateUrl + "/" + draggingItem.id} size="small" color="secondary">
+                                                                            <FileCopyOutlined />
+                                                                        </Fab>
+                                                                    </Tooltip>)
+                                                                else if (actionItem.isPicture) return (
+                                                                    <Tooltip title={props.copyLinkLabel} aria-label={props.copyLinkLabel} key={index}>
+                                                                        <Fab onClick={() => copyToClipboard(draggingItem.url)} size="small" color="secondary">
+                                                                            <Link />
+                                                                        </Fab>
+                                                                    </Tooltip>)
+                                                                else if (actionItem.qrCode) return (
+                                                                    <Tooltip title={props.generateQRCodeLabel} aria-label={props.generateQRCodeLabel} key={index}>
+                                                                        <Fab onClick={() => handleQRCodeDialog(draggingItem)} size="small" color="secondary">
+                                                                            <QrCode2 />
+                                                                        </Fab>
+                                                                    </Tooltip>)
+                                                                else return (
+                                                                    <div></div>)
+                                                            })}
+                                                        </TableCell>
+                                                    }
+                                                    {props.table.properties && props.table.properties.map((property, index) => {
+                                                        if (property.isPicture) {
+                                                            return (
+                                                                <TableCell key={index}>
+                                                                    <div className="property-image">
+                                                                        {draggingItem[property.title] ? (
+                                                                            <img src={draggingItem[property.title]} />
+                                                                        ) : (
+                                                                            <div className="is-flex is-justify-content-center">
+                                                                                <TextSnippet className="is-size-2" color="primary" />
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                </TableCell>
+                                                            )
+                                                        }
+                                                        else if (property.isDateTime) {
+                                                            return (
+                                                                <NoSsr key={index}>
+                                                                    <TableCell>{moment.utc(draggingItem[property.title]).local().format("L LT")}</TableCell>
+                                                                </NoSsr>
+                                                            )
+                                                        }
+                                                        else {
+                                                            return (
+                                                                <TableCell key={index}>{draggingItem[property.title] !== null ? draggingItem[property.title] : "-"}</TableCell>
+                                                            )
+                                                        }
+                                                    })}
+                                                </TableRow>
+                                            )}
+                                        >
                                             {(providedDroppable) => (
                                                 <TableBody
                                                     ref={providedDroppable.innerRef}
@@ -345,14 +408,13 @@ function Catalog(props) {
                                                                 <TableRow
                                                                     ref={providedDraggable.innerRef}
                                                                     {...providedDraggable.draggableProps}
-                                                                    {...providedDraggable.dragHandleProps}
-                                                                    isDragging={snapshot.isDragging}
+                                                                    {...providedDraggable.dragHandleProps}                                                                    
                                                                     className="catalog__table__row"
                                                                 >
                                                                     {props.table.actions &&
                                                                         <TableCell width="12%">
                                                                             <Tooltip title={props.dragLabel} aria-label={props.dragLabel}>
-                                                                                <Fab onClick={() => handleIsDragableDisable()} size="small" color="secondary">
+                                                                                <Fab onClick={() => setIsDragableDisable(!isDragableDisable)} size="small" color="secondary">
                                                                                     <DragIndicator />
                                                                                 </Fab>
                                                                             </Tooltip>
@@ -424,8 +486,7 @@ function Catalog(props) {
                                                                 </TableRow>
                                                             )}
                                                         </Draggable>
-                                                    ))}
-                                                    {providedDroppable.placeholder}
+                                                    ))}                                                    
                                                 </TableBody>
                                             )}
                                         </Droppable>
@@ -433,6 +494,25 @@ function Catalog(props) {
                                 </Table>
                             </TableContainer>
                         </div>
+                        { !isDragableDisable && draggingItem &&
+                            <div className="is-flex-centered">
+                                <div 
+                                    className="catalog__change-page-aera"
+                                    onMouseEnter={() => handleChangedPageWhenDragItem(page - 1)}
+                                    disabled={disablePrevChangePageArea()}
+                                >
+                                    prev
+                                </div>
+                                <div 
+                                    className="catalog__change-page-aera"
+                                    onMouseEnter={() => handleChangedPageWhenDragItem(page + 1)}
+                                    disabled={disableNextChangePageArea()}
+                                >
+                                    next
+                                </div>
+                            </div>
+                        }
+                        
                         <div className="catalog__pagination is-flex-centered">
                             <TablePagination
                                 labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
@@ -442,7 +522,6 @@ function Catalog(props) {
                                 count={total}
                                 page={page}
                                 onPageChange={handleChangePage}
-                                onMouseEnter={handleChangedPageWhenDragItem}
                                 rowsPerPage={props.defaultItemsPerPage}
                             />
                         </div>
