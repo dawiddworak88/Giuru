@@ -458,22 +458,22 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: react-ssr-web-deployment
+  name: account-web-react-ssr-deployment
   labels:
-    app: react-ssr-web
+    app: account-web-react-ssr
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: react-ssr-web
+      app: account-web-react-ssr
   template:
     metadata:
       labels:
-        app: react-ssr-web
+        app: account-web-react-ssr
     spec:
       containers:
-      - name: react-ssr-web-container
-        image: {{ .Values.image.registry }}/react-ssr-web:{{ .Values.image.tag }}
+      - name: account-web-react-ssr-container
+        image: {{ .Values.image.registry }}/account-web-react-ssr:{{ .Values.image.tag }}
         env:
         - name: NODE_ENV
           value: {{ .Values.nodeEnvironment }}
@@ -517,7 +517,7 @@ spec:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
         - name: ServerSideRenderingEndpoint
-          value: {{ .Values.serverSideRenderingEndpoint }}
+          value: {{ .Values.accountWebServerSideRenderingEndpoint }}
         - name: ConnectionString
           value: {{ .Values.identityApi.connectionString }}
         - name: RedisUrl
@@ -905,6 +905,31 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: buyer-web-react-ssr-deployment
+  labels:
+    app: buyer-web-react-ssr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: buyer-web-react-ssr
+  template:
+    metadata:
+      labels:
+        app: buyer-web-react-ssr
+    spec:
+      containers:
+      - name: buyer-web-react-ssr-container
+        image: {{ .Values.image.registry }}/buyer-web-react-ssr:{{ .Values.image.tag }}
+        env:
+        - name: NODE_ENV
+          value: {{ .Values.nodeEnvironment }}
+        ports:
+        - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: buyer-web-deployment
   labels:
     app: buyer-web
@@ -943,7 +968,7 @@ spec:
         - name: OrganisationId
           value: {{ .Values.organisationId }}
         - name: ServerSideRenderingEndpoint
-          value: {{ .Values.serverSideRenderingEndpoint }}
+          value: {{ .Values.buyerWebServerSideRenderingEndpoint }}
         - name: AnalyticsUrl
           value: {{ .Values.analyticsUrl }}
         - name: CatalogUrl
@@ -998,6 +1023,31 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: seller-web-react-ssr-deployment
+  labels:
+    app: seller-web-react-ssr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seller-web-react-ssr
+  template:
+    metadata:
+      labels:
+        app: seller-web-react-ssr
+    spec:
+      containers:
+      - name: seller-web-react-ssr-container
+        image: {{ .Values.image.registry }}/seller-web-react-ssr:{{ .Values.image.tag }}
+        env:
+        - name: NODE_ENV
+          value: {{ .Values.nodeEnvironment }}
+        ports:
+        - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: seller-web-deployment
   labels:
     app: seller-web
@@ -1034,7 +1084,7 @@ spec:
         - name: RedisUrl
           value: {{ .Values.redisUrl }}
         - name: ServerSideRenderingEndpoint
-          value: {{ .Values.serverSideRenderingEndpoint }}
+          value: {{ .Values.sellerWebServerSideRenderingEndpoint }}
         - name: CatalogUrl
           value: {{ .Values.catalogUrl }}
         - name: MediaUrl
