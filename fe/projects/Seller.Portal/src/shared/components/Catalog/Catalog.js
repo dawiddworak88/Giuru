@@ -1,4 +1,3 @@
-
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
@@ -34,6 +33,7 @@ function Catalog(props) {
     const [openQRCodeDialog, setOpenQRCodeDialog] = React.useState(false);
     const [isDragableDisable, setIsDragableDisable] = React.useState(true);
     const [draggingItem, setDraggingItem] = React.useState({});
+    const [placeholderProps, setPlaceholderProps] = React.useState({});
 
     const handleSearchTermKeyPress = (event) => {
 
@@ -216,18 +216,25 @@ function Catalog(props) {
         setOpenQRCodeDialog(true);
     };
 
-    const onDragStart = (result) => {        
+    const onDragStart = (result) => {
         const item = items.find((x) => x.id === result.draggableId);
         item ? setDraggingItem(item) : setDraggingItem({});
-    }
+        
+        const queryAttr = "data-rbd-drag-handle-draggable-id";
+        const domQuery = `[${queryAttr}='${result.draggableId}']`;
+		const draggedDOM = document.querySelector(domQuery);
 
-    const onDragEnd = (result) => {        
+        setPlaceholderProps({position: result.source.index, height: draggedDOM.clientHeight});
+    };
 
+    const onDragEnd = (result) => {
         setIsDragableDisable(true);
+        setPlaceholderProps({});
 
         const { destination, source, draggableId } = result;
 
         if (!destination) {
+            setDraggingItem({});
             return;
         }
 
@@ -235,9 +242,10 @@ function Catalog(props) {
             destination.droppableId === source.droppableId &&
             destination.index === source.index
         ) {
+            setDraggingItem({});
             return;
         }
-        
+                
         const newCategoryArray = reorder(items, source.index, destination.index);
         handleChangeEntityOrder({id: draggableId, order: (destination.index + 1) + (page * props.defaultItemsPerPage)});
         setItems(newCategoryArray);
@@ -266,9 +274,6 @@ function Catalog(props) {
     const disableNextChangePageArea = () => {
         return page == props.pagedItems.pageCount - 1 ? true : false;
     };
-
-    console.log(isDragableDisable);
-    console.log(draggingItem);
 
     return (
         <section className="section section-small-padding catalog">
@@ -309,10 +314,13 @@ function Catalog(props) {
                                             )}
                                         </TableRow>
                                     </TableHead>
-                                    <DragDropContext onDragEnd={(result) => onDragEnd(result)} onDragStart={(result) => onDragStart(result)}>
+                                    <DragDropContext 
+                                        onDragEnd={(result) => onDragEnd(result)}
+                                        onDragStart={(result) => onDragStart(result)}                                        
+                                    >
                                         <Droppable
                                             droppableId="categories"
-                                            mode="virtual"                                            
+                                            mode="virtual"
                                             renderClone={(provided) => (
                                                 <TableRow
                                                     className="catalog__table__row"
@@ -401,6 +409,8 @@ function Catalog(props) {
                                                     {...providedDroppable.droppableProps}
                                                 >
                                                     {items.map((item, index) => (
+                                                        !isDragableDisable && draggingItem.id && placeholderProps.position == index ?
+                                                        <TableRow height={placeholderProps.height}/> :
                                                         <Draggable
                                                             key={item.id}
                                                             draggableId={item.id}
