@@ -2,13 +2,11 @@
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
-using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
-using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
@@ -56,6 +54,11 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
             viewModel.DuplicateUrl = this.linkGenerator.GetPathByAction("Duplicate", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(Category.CreatedDate)} desc";
+            
+            viewModel.IsDragDropEnable = true;
+
+            viewModel.PrevPageAeraText = this.globalLocalizer.GetString("MoveToPreviousPage");
+            viewModel.NextPageAeraText = this.globalLocalizer.GetString("MoveToNextPage");
 
             viewModel.Table = new CatalogTableViewModel
             {
