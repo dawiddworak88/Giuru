@@ -224,7 +224,7 @@ function Catalog(props) {
         const domQuery = `[${queryAttr}='${result.draggableId}']`;
         const draggedDOM = document.querySelector(domQuery);
 
-        setPlaceholderProps({ position: result.source.index, height: draggedDOM.clientHeight });
+        setPlaceholderProps({ position: result.source.index, height: draggedDOM.clientHeight + 5});
     };
 
     const onDragEnd = (result) => {
@@ -285,7 +285,7 @@ function Catalog(props) {
             >
                 {props.table.actions &&
                     <TableCell width="12%" height={placeholderProps.height}>
-                        {props.isDragDropEnable &&
+                        {props.isDragDropEnable && (window != undefined && window.innerWidth > 800) &&
                             <Tooltip title={props.dragLabel} aria-label={props.dragLabel}>
                                 <Fab onClick={() => setIsDragableDisable(!isDragableDisable)} size="small" color="secondary">
                                     <DragIndicator />
