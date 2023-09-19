@@ -25,6 +25,8 @@ var catalog = {
     deleteUrl: "#",
     noResultsLabel: "There are no results",
     isDragDropEnable: true,
+    prevPageAeraText: "Move To Previous Page",
+    nextPageAeraText: "Move To Next Page",
     table: {
         actions: [
             {

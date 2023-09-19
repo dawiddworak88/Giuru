@@ -516,14 +516,14 @@ function Catalog(props) {
                                     onMouseEnter={() => handleChangedPageWhenDragItem(page - 1)}
                                     disabled={disablePrevChangePageArea()}
                                 >
-                                    prev
+                                    {props.prevPageAeraText}
                                 </div>
                                 <div 
                                     className="catalog__change-page-aera"
                                     onMouseEnter={() => handleChangedPageWhenDragItem(page + 1)}
                                     disabled={disableNextChangePageArea()}
                                 >
-                                    next
+                                    {props.nextPageAeraText}
                                 </div>
                             </div>
                         }
