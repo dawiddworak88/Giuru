@@ -17,11 +17,11 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
 {
     public class CategoriesPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Category>>
     {
-        private readonly ICatalogModelBuilder catalogModelBuilder;
-        private readonly ICategoriesRepository categoriesRepository;
-        private readonly IStringLocalizer globalLocalizer;
-        private readonly IStringLocalizer productLocalizer;
-        private readonly LinkGenerator linkGenerator;
+        private readonly ICatalogModelBuilder _catalogModelBuilder;
+        private readonly ICategoriesRepository _categoriesRepository;
+        private readonly IStringLocalizer _globalLocalizer;
+        private readonly IStringLocalizer _productLocalizer;
+        private readonly LinkGenerator _linkGenerator;
 
         public CategoriesPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
@@ -30,45 +30,45 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
             IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator)
         {
-            this.catalogModelBuilder = catalogModelBuilder;
-            this.categoriesRepository = categoriesRepository;
-            this.globalLocalizer = globalLocalizer;
-            this.productLocalizer = productLocalizer;
-            this.linkGenerator = linkGenerator;
+            _catalogModelBuilder = catalogModelBuilder;
+            _categoriesRepository = categoriesRepository;
+            _globalLocalizer = globalLocalizer;
+            _productLocalizer = productLocalizer;
+            _linkGenerator = linkGenerator;
         }
 
         public async Task<CatalogViewModel<Category>> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<Category>, Category>();
+            var viewModel = _catalogModelBuilder.BuildModel<CatalogViewModel<Category>, Category>();
 
-            viewModel.Title = this.globalLocalizer.GetString("Categories");
+            viewModel.Title = _globalLocalizer.GetString("Categories");
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
-            viewModel.NewText = this.productLocalizer.GetString("AddCategory");
-            viewModel.UpdateOrderUrl = this.linkGenerator.GetPathByAction("Index", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewText = _productLocalizer.GetString("AddCategory");
+            viewModel.UpdateOrderUrl = _linkGenerator.GetPathByAction("Index", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             
-            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.DuplicateUrl = this.linkGenerator.GetPathByAction("Duplicate", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DuplicateUrl = _linkGenerator.GetPathByAction("Duplicate", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(Category.CreatedDate)} desc";
             
             viewModel.IsDragDropEnable = true;
 
-            viewModel.PrevPageAeraText = this.globalLocalizer.GetString("MoveToPreviousPage");
-            viewModel.NextPageAeraText = this.globalLocalizer.GetString("MoveToNextPage");
+            viewModel.PrevPageAeraText = _globalLocalizer.GetString("MoveToPreviousPage");
+            viewModel.NextPageAeraText = _globalLocalizer.GetString("MoveToNextPage");
 
             viewModel.Table = new CatalogTableViewModel
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("Name"),
-                    this.globalLocalizer.GetString("ParentCategory"),
-                    this.globalLocalizer.GetString("Level"),
-                    this.globalLocalizer.GetString("LastModifiedDate"),
-                    this.globalLocalizer.GetString("CreatedDate")
+                    _globalLocalizer.GetString("Name"),
+                    _globalLocalizer.GetString("ParentCategory"),
+                    _globalLocalizer.GetString("Level"),
+                    _globalLocalizer.GetString("LastModifiedDate"),
+                    _globalLocalizer.GetString("CreatedDate")
                 },
                 Actions = new List<CatalogActionViewModel>
                 {
@@ -115,7 +115,7 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Category.Order)} asc");
+            viewModel.PagedItems = await _categoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Category.Order)} asc");
 
             return viewModel;
         }

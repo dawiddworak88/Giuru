@@ -20,15 +20,15 @@ namespace Seller.Web.Areas.Categories.Repositories
 {
     public class CategoriesRepository : ICategoriesRepository
     {
-        private readonly IApiClientService apiClientService;
-        private readonly IOptions<AppSettings> settings;
+        private readonly IApiClientService _apiClientService;
+        private readonly IOptions<AppSettings> _settings;
 
         public CategoriesRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> settings)
         {
-            this.apiClientService = apiClientService;
-            this.settings = settings;
+            _apiClientService = apiClientService;
+            _settings = settings;
         }
 
         public async Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? parentCategoryId, string name, IEnumerable<Guid> files, string schema, string uiSchema, int order)
@@ -49,10 +49,10 @@ namespace Seller.Web.Areas.Categories.Repositories
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<SaveCategoryApiRequestModel>, SaveCategoryApiRequestModel, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<SaveCategoryApiRequestModel>, SaveCategoryApiRequestModel, BaseResponseModel>(apiRequest);
             
             if (response.IsSuccessStatusCode && response.Data?.Id != null)
             {
@@ -74,10 +74,10 @@ namespace Seller.Web.Areas.Categories.Repositories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}/{id}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode && response?.Data != null)
             {
@@ -100,10 +100,10 @@ namespace Seller.Web.Areas.Categories.Repositories
                 Language = language,
                 Data = categoriesRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Category>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Category>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
@@ -136,10 +136,10 @@ namespace Seller.Web.Areas.Categories.Repositories
                 Language = language,
                 Data = categoriesRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedCategoriesRequestModel>, PagedCategoriesRequestModel, PagedResults<IEnumerable<Category>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedCategoriesRequestModel>, PagedCategoriesRequestModel, PagedResults<IEnumerable<Category>>>(apiRequest);
             
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
@@ -153,7 +153,7 @@ namespace Seller.Web.Areas.Categories.Repositories
                 {
                     apiRequest.Data.PageIndex = i;
 
-                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedCategoriesRequestModel>, PagedCategoriesRequestModel, PagedResults<IEnumerable<Category>>>(apiRequest);
+                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedCategoriesRequestModel>, PagedCategoriesRequestModel, PagedResults<IEnumerable<Category>>>(apiRequest);
 
                     if (!nextPagesResponse.IsSuccessStatusCode)
                     {
@@ -184,10 +184,10 @@ namespace Seller.Web.Areas.Categories.Repositories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}/{id}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Category>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Category>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
@@ -209,10 +209,10 @@ namespace Seller.Web.Areas.Categories.Repositories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemasApiEndpoint}/{categoryId}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemasApiEndpoint}/{categoryId}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, CategorySchema>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, CategorySchema>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
@@ -246,10 +246,10 @@ namespace Seller.Web.Areas.Categories.Repositories
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemasApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemasApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<ProductCardApiRequestModel>, ProductCardApiRequestModel, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<ProductCardApiRequestModel>, ProductCardApiRequestModel, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
