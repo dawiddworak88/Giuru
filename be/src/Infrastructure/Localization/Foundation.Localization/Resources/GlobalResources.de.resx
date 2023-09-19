@@ -708,4 +708,10 @@
   <data name="Sku" xml:space="preserve">
     <value>Sku</value>
   </data>
+  <data name="MoveToNextPage" xml:space="preserve">
+    <value>Gehen zur nächsten Seite</value>
+  </data>
+  <data name="MoveToPreviousPage" xml:space="preserve">
+    <value>Gehen zur vorherigen Seite</value>
+  </data>
 </root>
