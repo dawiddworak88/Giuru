@@ -31,6 +31,9 @@ namespace Seller.Web.Shared.ViewModels
         public string GenerateQRCodeLabel { get; set; }
         public string CopyLinkLabel { get; set; }
         public int DefaultItemsPerPage { get; set; }
+        public bool IsDragDropEnable {  get; set; }
+        public string PrevPageAeraText { get; set; }
+        public string NextPageAeraText { get; set; }
         public IEnumerable<string> ConfirmationDialogDeleteNameProperty { get; set; }
         public CatalogTableViewModel Table { get; set; }
         public QRCodeDialogViewModel QrCodeDialog { get; set; }
