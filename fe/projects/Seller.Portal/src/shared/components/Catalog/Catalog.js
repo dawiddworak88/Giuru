@@ -424,13 +424,15 @@ function Catalog(props) {
                                                                     {...providedDraggable.dragHandleProps}                                                                    
                                                                     className="catalog__table__row"
                                                                 >
-                                                                    {props.table.actions &&
+                                                                    {props.table.actions &&                                                                        
                                                                         <TableCell width="12%">
-                                                                            <Tooltip title={props.dragLabel} aria-label={props.dragLabel}>
-                                                                                <Fab onClick={() => setIsDragableDisable(!isDragableDisable)} size="small" color="secondary">
-                                                                                    <DragIndicator />
-                                                                                </Fab>
-                                                                            </Tooltip>
+                                                                            {props.isDragDropEnable &&
+                                                                                <Tooltip title={props.dragLabel} aria-label={props.dragLabel}>
+                                                                                    <Fab onClick={() => setIsDragableDisable(!isDragableDisable)} size="small" color="secondary">
+                                                                                        <DragIndicator />
+                                                                                    </Fab>
+                                                                                </Tooltip>
+                                                                            }
                                                                             {props.table.actions.map((actionItem, index) => {
                                                                                 if (actionItem.isEdit) return (
                                                                                     <Tooltip title={props.editLabel} aria-label={props.editLabel} key={index}>

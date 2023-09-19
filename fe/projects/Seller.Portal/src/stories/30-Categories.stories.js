@@ -24,6 +24,7 @@ var catalog = {
     editUrl: "#",
     deleteUrl: "#",
     noResultsLabel: "There are no results",
+    isDragDropEnable: true,
     table: {
         actions: [
             {
