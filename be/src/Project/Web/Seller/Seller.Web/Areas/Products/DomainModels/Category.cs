@@ -17,6 +17,6 @@ namespace Seller.Web.Areas.Products.DomainModels
         public Guid? ThumbnailMediaId { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
-        public IEnumerable<MediaItem> Files { get; set; }
+        public IEnumerable<Guid> Files { get; set; }
     }
 }
