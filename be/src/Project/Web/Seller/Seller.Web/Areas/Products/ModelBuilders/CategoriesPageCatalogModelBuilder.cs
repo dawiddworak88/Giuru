@@ -45,7 +45,7 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
             viewModel.NewText = _productLocalizer.GetString("AddCategory");
-            viewModel.UpdateOrderUrl = _linkGenerator.GetPathByAction("Index", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.UpdateOrderApiUrl = _linkGenerator.GetPathByAction("Index", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }) + "/Order";
             viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             
@@ -54,11 +54,9 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
             viewModel.DuplicateUrl = _linkGenerator.GetPathByAction("Duplicate", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(Category.CreatedDate)} desc";
-            
-            viewModel.IsDragDropEnable = true;
 
-            viewModel.PrevPageAeraText = _globalLocalizer.GetString("MoveToPreviousPage");
-            viewModel.NextPageAeraText = _globalLocalizer.GetString("MoveToNextPage");
+            viewModel.PrevPageAreaText = _globalLocalizer.GetString("MoveToPreviousPage");
+            viewModel.NextPageAreaText = _globalLocalizer.GetString("MoveToNextPage");
 
             viewModel.Table = new CatalogTableViewModel
             {
@@ -72,6 +70,10 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
                 },
                 Actions = new List<CatalogActionViewModel>
                 {
+                    new CatalogActionViewModel
+                    {
+                        IsDragDropOrderEnabled = true
+                    },
                     new CatalogActionViewModel
                     {
                         IsEdit = true
