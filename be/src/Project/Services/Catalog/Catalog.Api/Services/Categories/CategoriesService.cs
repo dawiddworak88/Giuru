@@ -19,7 +19,7 @@ using Foundation.EventBus.Abstractions;
 using System.Diagnostics;
 using Catalog.Api.IntegrationEvents;
 using System.Linq.Dynamic.Core;
-using Microsoft.Extensions.Logging;
+using System.Runtime.Serialization;
 
 namespace Catalog.Api.Services.Categories
 {
@@ -85,8 +85,8 @@ namespace Catalog.Api.Services.Categories
                 {
                     Id = x.Id,
                     Order = x.Order,
-                    Schema = x.Schemas.FirstOrDefault(s => s.Language == model.Language)?.Schema,
-                    UiSchema = x.Schemas.FirstOrDefault(s => s.Language == model.Language)?.UiSchema,
+                    Schema = x.Schemas.FirstOrDefault(s => s.Language == model.Language)?.Schema ?? x.Schemas.FirstOrDefault(s => s.Id == x.Id)?.Schema,
+                    UiSchema = x.Schemas.FirstOrDefault(s => s.Language == model.Language)?.UiSchema ?? x.Schemas.FirstOrDefault(s => s.Id == x.Id)?.UiSchema,
                     Level = x.Level,
                     IsLeaf = x.IsLeaf,
                     ParentId = x.Parentid,
