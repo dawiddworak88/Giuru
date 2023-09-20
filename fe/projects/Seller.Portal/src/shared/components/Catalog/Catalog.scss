@@ -41,6 +41,11 @@
         &:hover {
             background-color: $lightgrey;
         }
+
+        &[disabled] {
+            pointer-events: none;
+            opacity: 0.3;
+        }
     }
 
     &__search-field {
@@ -50,9 +55,4 @@
     &__pagination {
         margin: 1rem 0 3rem 0;
     }
-}
-
-div[disabled] {
-    pointer-events: none;
-    opacity: 0.3;
 }
