@@ -178,12 +178,12 @@ function Catalog(props) {
             });
     };
 
-    const handleChangeEntityOrder = (item) => {
+    const handleChangeEntityOrder = (id, order) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const updateParameters = {
-            id: item.id,
-            order: item.order,
+            id,
+            order
         };
 
         const requestOptions = {
@@ -192,7 +192,7 @@ function Catalog(props) {
             body: JSON.stringify(updateParameters)
         };
 
-        const url = props.updateOrderUrl + "/Order";
+        const url = props.updateOrderUrl;
 
         return fetch(url, requestOptions)
             .then(function (response) {
@@ -247,7 +247,7 @@ function Catalog(props) {
         }
 
         const newCategoryArray = reorder(items, source.index, destination.index);
-        handleChangeEntityOrder({ id: draggableId, order: (destination.index + 1) + (page * props.defaultItemsPerPage) });
+        handleChangeEntityOrder(draggableId, (destination.index + 1) + (page * props.defaultItemsPerPage));
         setItems(newCategoryArray);
 
         setDraggingItem({});
@@ -285,15 +285,15 @@ function Catalog(props) {
             >
                 {props.table.actions &&
                     <TableCell width="12%" height={placeholderProps.height}>
-                        {props.isDragDropEnable && (window != undefined && window.innerWidth > 800) &&
-                            <Tooltip title={props.dragLabel} aria-label={props.dragLabel}>
-                                <Fab onClick={() => setIsDragableDisable(!isDragableDisable)} size="small" color="secondary">
-                                    <DragIndicator />
-                                </Fab>
-                            </Tooltip>
-                        }
                         {props.table.actions.map((actionItem, index) => {
-                            if (actionItem.isEdit) return (
+                            if (actionItem.isDragDropOrderEnabled && (typeof window !== undefined && window.innerWidth >= 800)) return (
+                                <Tooltip title={props.dragLabel} aria-label={props.dragLabel}>
+                                    <Fab onClick={() => setIsDragableDisable(!isDragableDisable)} size="small" color="secondary">
+                                        <DragIndicator />
+                                    </Fab>
+                                </Tooltip>
+                            )
+                            else if (actionItem.isEdit) return (
                                 <Tooltip title={props.editLabel} aria-label={props.editLabel} key={index}>
                                     <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary">
                                         <Edit />
@@ -438,20 +438,20 @@ function Catalog(props) {
                             </TableContainer>
                         </div>
                         {!isDragableDisable && draggingItem.id &&
-                            <div className="is-flex-centered">
+                            <div className="is-flex is-flex-centered">
                                 <div
                                     className="catalog__change-page-aera"
                                     onMouseEnter={() => handleChangedPageWhenDragItem(page - 1)}
                                     disabled={disablePrevChangePageArea()}
                                 >
-                                    {props.prevPageAeraText}
+                                    {props.prevPageAreaText}
                                 </div>
                                 <div
                                     className="catalog__change-page-aera"
                                     onMouseEnter={() => handleChangedPageWhenDragItem(page + 1)}
                                     disabled={disableNextChangePageArea()}
                                 >
-                                    {props.nextPageAeraText}
+                                    {props.nextPageAreaText}
                                 </div>
                             </div>
                         }
