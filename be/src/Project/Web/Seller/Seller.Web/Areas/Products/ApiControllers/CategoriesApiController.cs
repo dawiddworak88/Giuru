@@ -1,16 +1,14 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
 using System;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -66,18 +64,13 @@ namespace Seller.Web.Areas.Products.ApiControllers
 
             var category = await _categoriesRepository.GetCategoryAsync(token, language, model.Id);
 
-            if(category.Files is null)
-            {
-                category.Files = Enumerable.Empty<MediaItem>();
-            }
-
             if(category is not null) 
             {
                 await _categoriesRepository.SaveAsync(
-                    token, language, category.Id, category.ParentId, category.Name, category.Files.Select(x => x.Id), category.Schema, category.UiSchema, model.Order);
+                    token, language, category.Id, category.ParentId, category.Name, category.Files.OrEmptyIfNull(), category.Schema, category.UiSchema, model.Order);
             }
 
-            return StatusCode((int)HttpStatusCode.OK, new { Id = model.Id, Message = _productLocalizer.GetString("CategorySavedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Id = model.Id });
         }
 
         [HttpDelete]
