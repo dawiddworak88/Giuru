@@ -123,15 +123,15 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                     viewModel.CategoryId = product.CategoryId;
                     viewModel.FormData = product.FormData;
 
-                    var categorySchema = await this.categoriesRepository.GetCategorySchemaAsync(
+                    var categorySchema = await this.categoriesRepository.GetCategorySchemasAsync(
                         componentModel.Token,
                         componentModel.Language,
                         product.CategoryId);
 
-                    if (categorySchema != null)
+                    if (categorySchema is not null && categorySchema.Schemas.OrEmptyIfNull().Any())
                     {
-                        viewModel.Schema = categorySchema.Schema;
-                        viewModel.UiSchema = categorySchema.UiSchema;
+                        viewModel.Schema = categorySchema.Schemas.FirstOrDefault(x => x.Language == componentModel.Language)?.Schema ?? categorySchema.Schemas.FirstOrDefault()?.Schema;
+                        viewModel.UiSchema = categorySchema.Schemas.FirstOrDefault(x => x.Language == componentModel.Language)?.UiSchema ?? categorySchema.Schemas.FirstOrDefault()?.UiSchema;
                     }
 
                     if (product.PrimaryProductId.HasValue)
