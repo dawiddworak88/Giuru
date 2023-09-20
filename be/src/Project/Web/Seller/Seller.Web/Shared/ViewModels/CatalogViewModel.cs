@@ -8,7 +8,7 @@ namespace Seller.Web.Shared.ViewModels
         public string Title { get; set; }
         public string NewText { get; set; }
         public string NewUrl { get; set; }
-        public string UpdateOrderUrl { get; set; }
+        public string UpdateOrderApiUrl { get; set; }
         public string SearchApiUrl { get; set; }      
         public string EditLabel { get; set; }
         public string DeleteLabel { get; set; }
@@ -31,9 +31,8 @@ namespace Seller.Web.Shared.ViewModels
         public string GenerateQRCodeLabel { get; set; }
         public string CopyLinkLabel { get; set; }
         public int DefaultItemsPerPage { get; set; }
-        public bool IsDragDropEnable {  get; set; }
-        public string PrevPageAeraText { get; set; }
-        public string NextPageAeraText { get; set; }
+        public string PrevPageAreaText { get; set; }
+        public string NextPageAreaText { get; set; }
         public IEnumerable<string> ConfirmationDialogDeleteNameProperty { get; set; }
         public CatalogTableViewModel Table { get; set; }
         public QRCodeDialogViewModel QrCodeDialog { get; set; }
