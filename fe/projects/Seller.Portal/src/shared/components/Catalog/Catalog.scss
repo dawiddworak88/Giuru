@@ -30,19 +30,20 @@
         }
     }
 
-    &__change-page-aera {
+    &__change-page-area {
         flex-basis: 40%;
         padding: 2rem;        
         margin: 1rem;
         border: 1px dashed $link;
         background-color: $grey;
         text-align: center;
+        pointer-events: none;
         
         &:hover {
             background-color: $lightgrey;
         }
 
-        &[disabled] {
+        &__disabled {
             pointer-events: none;
             opacity: 0.3;
         }
