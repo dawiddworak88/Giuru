@@ -51,7 +51,20 @@ namespace Seller.Web.Areas.Products.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             var categoryId = await _categoriesRepository.SaveAsync(
-                token, language, model.Id, model.ParentCategoryId, model.Name, model.Files.Select(x => x.Id.Value), model.Schema, model.UiSchema, model.Order);
+                token, 
+                language, 
+                model.Id, 
+                model.ParentCategoryId, 
+                model.Name, 
+                model.Files.Select(x => x.Id.Value),
+                model.Schemas.OrEmptyIfNull().Select(x => new CategorySchema
+                {
+                    Id = x.Id,
+                    Schema = x.Schema,
+                    UiSchema = x.UiSchema,
+                    Language = x.Language
+                }), 
+                model.Order);
 
             return StatusCode((int)HttpStatusCode.OK, new { Id = categoryId, Message = _productLocalizer.GetString("CategorySavedSuccessfully").Value });
         }
@@ -66,17 +79,25 @@ namespace Seller.Web.Areas.Products.ApiControllers
 
             if(category is not null) 
             {
-                await _categoriesRepository.SaveAsync(
-                    token, language, model.Id, model.ParentCategoryId, model.Name, model.Files.Select(x => x.Id.Value), model.Schemas.Select(x => new CategorySchema
+                var categorySchemas = await _categoriesRepository.GetCategorySchemasAsync(token, language, model.Id);
+
+                if (categorySchemas is not null && categorySchemas.Schemas.OrEmptyIfNull().Any())
                 {
-                    Id = x.Id,
-                    Schema = x.Schema,
-                    UiSchema = x.UiSchema,
-                    Language = x.Language
-                }));
+                    await _categoriesRepository.SaveAsync(
+                        token, language, model.Id, category.ParentId, category.Name, category.Files, 
+                        categorySchemas.Schemas.Select(x => new CategorySchema
+                        {
+                            Id = x.Id,
+                            Schema = x.Schema,
+                            UiSchema = x.UiSchema,
+                            Language = x.Language
+                        }), category.Order);
+
+                    return StatusCode((int)HttpStatusCode.OK);
+                }
             }
 
-            return StatusCode((int)HttpStatusCode.OK);
+            return StatusCode((int)HttpStatusCode.BadRequest);
         }
 
         [HttpDelete]
