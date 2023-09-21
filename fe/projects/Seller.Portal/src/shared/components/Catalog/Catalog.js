@@ -12,6 +12,7 @@ import {
     Tooltip, NoSsr
 } from "@mui/material";
 import KeyConstants from "../../../shared/constants/KeyConstants";
+import DragDropConstants from "../../constants/DragDropConstants";
 import { Context } from "../../stores/Store";
 import QueryStringSerializer from "../../../shared/helpers/serializers/QueryStringSerializer";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
@@ -220,8 +221,7 @@ function Catalog(props) {
         const item = items.find((x) => x.id === result.draggableId);
         item ? setDraggingItem(item) : setDraggingItem({});
 
-        const queryAttr = "data-rbd-drag-handle-draggable-id";
-        const domQuery = `[${queryAttr}='${result.draggableId}']`;
+        const domQuery = `[data-rbd-drag-handle-draggable-id='${result.draggableId}']`;
         const draggedDOM = document.querySelector(domQuery);
 
         setPlaceholderProps({ position: result.source.index, height: draggedDOM.clientHeight + 5});
@@ -267,14 +267,6 @@ function Catalog(props) {
         }
     };
 
-    const disablePrevChangePageArea = () => {
-        return page == 0 ? true : false;
-    };
-
-    const disableNextChangePageArea = () => {
-        return page == props.pagedItems.pageCount - 1 ? true : false;
-    };
-
     const tableRow = (provided, item) => {
         return (
             <TableRow
@@ -286,7 +278,7 @@ function Catalog(props) {
                 {props.table.actions &&
                     <TableCell width="12%" height={placeholderProps.height}>
                         {props.table.actions.map((actionItem, index) => {
-                            if (actionItem.isDragDropOrderEnabled && (typeof window !== undefined && window.innerWidth >= 800)) return (
+                            if (actionItem.isDragDropOrderEnabled && (typeof window !== undefined && window.innerWidth >= DragDropConstants.windowSizeDisableDragDrop())) return (
                                 <Tooltip title={props.dragLabel} aria-label={props.dragLabel}>
                                     <Fab onClick={() => setIsDragableDisable(!isDragableDisable)} size="small" color="secondary">
                                         <DragIndicator />
@@ -438,18 +430,16 @@ function Catalog(props) {
                             </TableContainer>
                         </div>
                         {!isDragableDisable && draggingItem.id &&
-                            <div className="is-flex is-flex-centered">
+                            <div className="is-flex is-justify-content-center">
                                 <div
-                                    className="catalog__change-page-aera"
+                                    className={`catalog__change-page-area ${page == 0 ? "catalog__change-page-area__disabled" : ""}`}
                                     onMouseEnter={() => handleChangedPageWhenDragItem(page - 1)}
-                                    disabled={disablePrevChangePageArea()}
                                 >
                                     {props.prevPageAreaText}
                                 </div>
                                 <div
-                                    className="catalog__change-page-aera"
+                                    className={`catalog__change-page-area ${page == props.pagedItems.pageCount - 1 ? "catalog__change-page-area__disabled" : ""}`}
                                     onMouseEnter={() => handleChangedPageWhenDragItem(page + 1)}
-                                    disabled={disableNextChangePageArea()}
                                 >
                                     {props.nextPageAreaText}
                                 </div>
