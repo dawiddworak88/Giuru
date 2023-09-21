@@ -70,7 +70,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
                     token, language, category.Id, category.ParentId, category.Name, category.Files.OrEmptyIfNull(), category.Schema, category.UiSchema, model.Order);
             }
 
-            return StatusCode((int)HttpStatusCode.OK, new { Id = model.Id });
+            return StatusCode((int)HttpStatusCode.OK);
         }
 
         [HttpDelete]
