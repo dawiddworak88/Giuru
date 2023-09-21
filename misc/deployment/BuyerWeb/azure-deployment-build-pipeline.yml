@@ -42,13 +42,15 @@ steps:
   inputs:
     command: custom
     verbose: false
+    workingDir: './fe/projects/AspNetCore'
     customCommand: 'install --legacy-peer-deps'
 - task: Npm@1
   displayName: Build Website
   inputs:
     command: custom
     verbose: false
-    customCommand: 'run build-fe'
+    workingDir: './fe/projects/AspNetCore'
+    customCommand: 'run build-fe-deploy'
 - task: Docker@2
   displayName: Build and Push Docker Image for Website
   inputs:

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Catalog.Api.v1.Categories.ResponseModels
+namespace Seller.Web.Areas.Products.ApiRequestModels
 {
-    public class CategorySchemaResponseModel
+    public class CategorySchemaRequestModel
     {
         public Guid? Id { get; set; }
         public string Schema { get; set; }

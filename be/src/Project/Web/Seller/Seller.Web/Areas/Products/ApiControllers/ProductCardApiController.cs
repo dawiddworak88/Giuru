@@ -9,6 +9,7 @@ using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.ApiResponseModels;
 using Seller.Web.Areas.Products.Definitions;
 using Seller.Web.Areas.Products.Repositories;
+using Seller.Web.Areas.Products.DomainModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -44,7 +45,11 @@ namespace Seller.Web.Areas.Products.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await _categoriesRepository.SaveAsync(token, language, request.Id, request.Schema, request.UiSchema);
+            await _categoriesRepository.SaveAsync(token, language, request.Id, new CategorySchema 
+            { 
+                Schema = request.Schema,
+                UiSchema = request.UiSchema
+            });
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Message = _productLocalizer.GetString("SuccessfullySavedProductCard").Value });
         }

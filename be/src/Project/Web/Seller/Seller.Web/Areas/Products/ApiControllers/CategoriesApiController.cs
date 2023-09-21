@@ -67,7 +67,13 @@ namespace Seller.Web.Areas.Products.ApiControllers
             if(category is not null) 
             {
                 await _categoriesRepository.SaveAsync(
-                    token, language, category.Id, category.ParentId, category.Name, category.Files.OrEmptyIfNull(), category.Schema, category.UiSchema, model.Order);
+                    token, language, model.Id, model.ParentCategoryId, model.Name, model.Files.Select(x => x.Id.Value), model.Schemas.Select(x => new CategorySchema
+                {
+                    Id = x.Id,
+                    Schema = x.Schema,
+                    UiSchema = x.UiSchema,
+                    Language = x.Language
+                }));
             }
 
             return StatusCode((int)HttpStatusCode.OK);

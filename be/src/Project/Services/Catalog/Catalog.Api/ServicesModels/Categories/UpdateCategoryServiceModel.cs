@@ -9,9 +9,8 @@ namespace Catalog.Api.ServicesModels.Categories
         public Guid? Id { get; set; }
         public Guid? ParentId { get; set; }
         public string Name { get; set; }
-        public string Schema { get; set; }
-        public string UiSchema { get; set; }
         public int Order { get; set; }
+        public IEnumerable<CategorySchemaServiceModel> Schemas { get; set; }
         public IEnumerable<Guid> Files { get; set; }
     }
 }

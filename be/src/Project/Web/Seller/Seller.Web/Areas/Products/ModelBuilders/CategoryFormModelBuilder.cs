@@ -13,10 +13,10 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 {
     public class CategoryFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoryFormViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryBaseFormViewModel> categoryBaseFormModelBuilder;
-        private readonly ICategoriesRepository categoriesRepository;
-        private readonly IMediaItemsRepository mediaItemsRepository;
-        private readonly IMediaService mediaService;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryBaseFormViewModel> _categoryBaseFormModelBuilder;
+        private readonly ICategoriesRepository _categoriesRepository;
+        private readonly IMediaItemsRepository _mediaItemsRepository;
+        private readonly IMediaService _mediaService;
 
         public CategoryFormModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, CategoryBaseFormViewModel> categoryBaseFormModelBuilder,
@@ -24,22 +24,22 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             IMediaItemsRepository mediaItemsRepository,
             IMediaService mediaService)
         {
-            this.categoriesRepository = categoriesRepository;
-            this.mediaItemsRepository = mediaItemsRepository;
-            this.mediaService = mediaService;
-            this.categoryBaseFormModelBuilder = categoryBaseFormModelBuilder;
+            _categoriesRepository = categoriesRepository;
+            _mediaItemsRepository = mediaItemsRepository;
+            _mediaService = mediaService;
+            _categoryBaseFormModelBuilder = categoryBaseFormModelBuilder;
         }
 
         public async Task<CategoryFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new CategoryFormViewModel
             {
-                CategoryBase = await this.categoryBaseFormModelBuilder.BuildModelAsync(componentModel)
+                CategoryBase = await _categoryBaseFormModelBuilder.BuildModelAsync(componentModel)
             };
 
             if (componentModel.Id.HasValue)
             {
-                var category = await this.categoriesRepository.GetCategoryAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                var category = await _categoriesRepository.GetCategoryAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                 if (category is not null)
                 {
@@ -49,7 +49,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                     if (category.ThumbnailMediaId.HasValue)
                     {
-                        var mediaItem = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, category.ThumbnailMediaId.Value);
+                        var mediaItem = await _mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, category.ThumbnailMediaId.Value);
 
                         if (mediaItem is not null)
                         {
@@ -58,7 +58,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                                 new FileViewModel
                                 {
                                     Id = mediaItem.Id,
-                                    Url = this.mediaService.GetMediaUrl(mediaItem.Id, Constants.PreviewMaxWidth),
+                                    Url = _mediaService.GetMediaUrl(mediaItem.Id, Constants.PreviewMaxWidth),
                                     Name = mediaItem.Name,
                                     MimeType = mediaItem.MimeType,
                                     Filename = mediaItem.Filename,

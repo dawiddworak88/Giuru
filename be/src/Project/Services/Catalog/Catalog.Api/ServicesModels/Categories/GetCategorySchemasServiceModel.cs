@@ -3,8 +3,8 @@ using System;
 
 namespace Catalog.Api.ServicesModels.Categories
 {
-    public class GetCategorySchemaServiceModel : BaseServiceModel
+    public class GetCategorySchemasServiceModel : BaseServiceModel
     {
-        public Guid? Id { get; set; }
+        public Guid? Id { get; set; }        
     }
 }

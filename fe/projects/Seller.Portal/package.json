@@ -61,6 +61,7 @@
     "build-storybook": "SET NODE_ENV=development&&build-storybook -s public",
     "build-fe": "SET NODE_ENV=production&&webpack --mode production",
     "build-fe-dev": "SET NODE_ENV=development&&webpack --mode development",
+    "build-fe-deploy": "export NODE_ENV=production&&webpack --mode production",
     "watch-fe": "SET NODE_ENV=development&&webpack --mode development -w",
     "ssr": "node server/bootstrap.js",
     "watch-ssr": "nodemon server/bootstrap.js --watch \".\" --legacy-watch --polling-interval 4000"

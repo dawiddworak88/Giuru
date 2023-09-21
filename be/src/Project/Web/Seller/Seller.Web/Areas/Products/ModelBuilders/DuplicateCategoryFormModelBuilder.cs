@@ -16,11 +16,11 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 {
     public class DuplicateCategoryFormModelBuilder : IAsyncComponentModelBuilder<DuplicateCategoryComponentModel, CategoryFormViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryBaseFormViewModel> categoryBaseFormModelBuilder;
-        private readonly ICategoriesRepository categoriesRepository;
-        private readonly IMediaItemsRepository mediaItemsRepository;
-        private readonly IStringLocalizer globalLocalizer;
-        private readonly IMediaService mediaService;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryBaseFormViewModel> _categoryBaseFormModelBuilder;
+        private readonly ICategoriesRepository _categoriesRepository;
+        private readonly IMediaItemsRepository _mediaItemsRepository;
+        private readonly IStringLocalizer _globalLocalizer;
+        private readonly IMediaService _mediaService;
 
         public DuplicateCategoryFormModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, CategoryBaseFormViewModel> categoryBaseFormModelBuilder,
@@ -29,32 +29,33 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             IStringLocalizer<GlobalResources> globalLocalizer,
             IMediaService mediaService)
         {
-            this.categoriesRepository = categoriesRepository;
-            this.mediaItemsRepository = mediaItemsRepository;
-            this.globalLocalizer = globalLocalizer;
-            this.mediaService = mediaService;
-            this.categoryBaseFormModelBuilder = categoryBaseFormModelBuilder;
+            _categoriesRepository = categoriesRepository;
+            _mediaItemsRepository = mediaItemsRepository;
+            _globalLocalizer = globalLocalizer;
+            _mediaService = mediaService;
+            _categoryBaseFormModelBuilder = categoryBaseFormModelBuilder;
         }
 
         public async Task<CategoryFormViewModel> BuildModelAsync(DuplicateCategoryComponentModel componentModel)
         {
             var viewModel = new CategoryFormViewModel
             {
-                CategoryBase = await this.categoryBaseFormModelBuilder.BuildModelAsync(componentModel)
+                CategoryBase = await _categoryBaseFormModelBuilder.BuildModelAsync(componentModel),
+                Language = componentModel.Language,
             };
 
             if (componentModel.Id.HasValue)
             {
-                var category = await this.categoriesRepository.GetCategoryAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                var category = await _categoriesRepository.GetCategoryAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                 if (category is not null)
                 {
-                    viewModel.Name = $"{category.Name} {this.globalLocalizer.GetString("Copy")}";
+                    viewModel.Name = $"{category.Name} {_globalLocalizer.GetString("Copy")}";
                     viewModel.ParentCategoryId = category.ParentId;
 
                     if (category.ThumbnailMediaId.HasValue)
                     {
-                        var mediaItem = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token,componentModel.Language,category.ThumbnailMediaId.Value);
+                        var mediaItem = await _mediaItemsRepository.GetMediaItemAsync(componentModel.Token,componentModel.Language,category.ThumbnailMediaId.Value);
 
                         if (mediaItem is not null)
                         {
@@ -63,7 +64,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                                 new FileViewModel
                                 {
                                     Id = mediaItem.Id,
-                                    Url = this.mediaService.GetMediaUrl(mediaItem.Id, Constants.PreviewMaxWidth),
+                                    Url = _mediaService.GetMediaUrl(mediaItem.Id, Constants.PreviewMaxWidth),
                                     Name = mediaItem.Name,
                                     MimeType = mediaItem.MimeType,
                                     Filename = mediaItem.Filename,
@@ -73,12 +74,26 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                         }
                     }
 
-                    var categorySchema = await this.categoriesRepository.GetCategorySchemaAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                    var categorySchemas = await _categoriesRepository.GetCategorySchemasAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
-                    if (categorySchema is not null)
+                    if (categorySchemas is not null)
                     {
-                        viewModel.Schema = categorySchema.Schema;
-                        viewModel.UiSchema = categorySchema.UiSchema;
+                        var schemas = new List<CategorySchemaViewModel>();
+
+                        foreach (var schema in categorySchemas.Schemas)
+                        {
+                            var categorySchema = new CategorySchemaViewModel
+                            {
+                                Id = schema.Id,
+                                Schema = schema.Schema,
+                                UiSchema = schema.UiSchema,
+                                Language = schema.Language
+                            };
+
+                            schemas.Add(categorySchema);
+                        }
+
+                        viewModel.Schemas = schemas;                        
                     }
                 }
             }

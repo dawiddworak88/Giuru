@@ -66,11 +66,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: react-ssr-web-service
+  name: account-web-react-ssr-service
 spec:
   type: ClusterIP
   selector:
-    app: react-ssr-web
+    app: account-web-react-ssr
   ports:
   - protocol: TCP
     port: 3000
@@ -170,6 +170,19 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  name: buyer-web-react-ssr-service
+spec:
+  type: ClusterIP
+  selector:
+    app: buyer-web-react-ssr
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
   name: buyer-web-service
 spec:
   type: ClusterIP
@@ -180,7 +193,19 @@ spec:
     port: 80
     targetPort: 80
 ---
-
+apiVersion: v1
+kind: Service
+metadata:
+  name: seller-web-react-ssr-service
+spec:
+  type: ClusterIP
+  selector:
+    app: seller-web-react-ssr
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+---
 apiVersion: v1
 kind: Service
 metadata:
