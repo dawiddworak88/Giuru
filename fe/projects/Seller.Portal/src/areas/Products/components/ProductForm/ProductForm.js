@@ -102,13 +102,12 @@ function ProductForm(props) {
                         setFieldValue({ name: "schema", value: jsonResponse.schema ? JSON.parse(jsonResponse.schema) : {} });
                         setFieldValue({ name: "uiSchema", value: jsonResponse.uiSchema ? JSON.parse(jsonResponse.uiSchema) : {} });
                     }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
                 });
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
+
+                setFieldValue({ name: "schema", value: {} });
+                setFieldValue({ name: "uiSchema", value: {} });
             });
     };
 
