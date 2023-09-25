@@ -280,7 +280,7 @@ function Catalog(props) {
         if(typeof window !== 'undefined') {
             setWindowWidth(window.innerWidth);
         }
-    }, [])
+    }, []);
 
     const tableRow = (provided, item) => {
         return (
