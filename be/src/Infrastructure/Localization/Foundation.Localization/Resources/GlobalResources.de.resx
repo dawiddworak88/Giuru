@@ -714,4 +714,7 @@
   <data name="MoveToPreviousPage" xml:space="preserve">
     <value>Gehen zur vorherigen Seite</value>
   </data>
+  <data name="Drag" xml:space="preserve">
+    <value>Versetzen</value>
+  </data>
 </root>
