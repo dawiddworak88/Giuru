@@ -37,6 +37,9 @@ var catalog = {
             },
             {
                 isDelete: true
+            },
+            {
+                isDuplicate: true
             }
         ],
         labels: [
