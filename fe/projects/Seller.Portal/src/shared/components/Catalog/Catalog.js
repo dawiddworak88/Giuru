@@ -12,7 +12,7 @@ import {
     Tooltip, NoSsr
 } from "@mui/material";
 import KeyConstants from "../../../shared/constants/KeyConstants";
-import DragDropConstants from "../../constants/CatalogConstants";
+import CatalogConstants from "../../constants/CatalogConstants";
 import { Context } from "../../stores/Store";
 import QueryStringSerializer from "../../../shared/helpers/serializers/QueryStringSerializer";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
