@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import moment from "moment";
@@ -12,7 +12,7 @@ import {
     Tooltip, NoSsr
 } from "@mui/material";
 import KeyConstants from "../../../shared/constants/KeyConstants";
-import DragDropConstants from "../../constants/DragDropConstants";
+import DragDropConstants from "../../constants/CatalogConstants";
 import { Context } from "../../stores/Store";
 import QueryStringSerializer from "../../../shared/helpers/serializers/QueryStringSerializer";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
@@ -35,6 +35,7 @@ function Catalog(props) {
     const [isDragableDisable, setIsDragableDisable] = React.useState(true);
     const [draggingItem, setDraggingItem] = React.useState({});
     const [placeholderProps, setPlaceholderProps] = React.useState({});
+    const [windowWidth, setWindowWidth] = React.useState(undefined);
 
     const handleSearchTermKeyPress = (event) => {
 
@@ -267,6 +268,20 @@ function Catalog(props) {
         }
     };
 
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth)
+        };
+
+        window.addEventListener("resize", handleResize);
+    }, windowWidth);
+
+    useEffect(() => {
+        if(typeof window !== 'undefined') {
+            setWindowWidth(window.innerWidth);
+        }
+    }, [])
+
     const tableRow = (provided, item) => {
         return (
             <TableRow
@@ -278,7 +293,7 @@ function Catalog(props) {
                 {props.table.actions &&
                     <TableCell width="12%" height={placeholderProps.height}>
                         {props.table.actions.map((actionItem, index) => {
-                            if (actionItem.isDragDropOrderEnabled && (typeof window !== undefined && window.innerWidth >= DragDropConstants.windowSizeDisableDragDrop())) return (
+                            if (actionItem.isDragDropOrderEnabled && windowWidth >= CatalogConstants.windowSizeDisableDragDrop()) return (
                                 <Tooltip title={props.dragLabel} aria-label={props.dragLabel}>
                                     <Fab onClick={() => setIsDragableDisable(!isDragableDisable)} size="small" color="secondary">
                                         <DragIndicator />
