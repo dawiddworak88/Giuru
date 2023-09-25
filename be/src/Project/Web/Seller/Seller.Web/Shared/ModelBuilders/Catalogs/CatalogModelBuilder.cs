@@ -7,31 +7,32 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 {
     public class CatalogModelBuilder : ICatalogModelBuilder
     {
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
 
         public CatalogModelBuilder(IStringLocalizer<GlobalResources> globalLocalizer)
         {
-            this.globalLocalizer = globalLocalizer;
+            _globalLocalizer = globalLocalizer;
         }
 
         public T BuildModel<T, W>() where T : CatalogViewModel<W>, new() where W: class
         {
             var viewModel = new T
             {
-                NoLabel = this.globalLocalizer.GetString("No"),
-                YesLabel = this.globalLocalizer.GetString("Yes"),
-                DeleteConfirmationLabel = this.globalLocalizer.GetString("DeleteConfirmationLabel"),
-                AreYouSureLabel = this.globalLocalizer.GetString("AreYouSureLabel"),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                SearchLabel = this.globalLocalizer.GetString("Search"),
-                EditLabel = this.globalLocalizer.GetString("Edit"),
-                DeleteLabel = this.globalLocalizer.GetString("Delete"),
-                DuplicateLabel = this.globalLocalizer.GetString("Duplicate"),
-                DisplayedRowsLabel = this.globalLocalizer.GetString("DisplayedRows"),
-                RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage"),
-                NoResultsLabel = this.globalLocalizer.GetString("NoResultsLabel"),
-                GenerateQRCodeLabel = this.globalLocalizer.GetString("GenerateQRCode"),
-                CopyLinkLabel = this.globalLocalizer.GetString("CopyLink"),
+                NoLabel = _globalLocalizer.GetString("No"),
+                YesLabel = _globalLocalizer.GetString("Yes"),
+                DeleteConfirmationLabel = _globalLocalizer.GetString("DeleteConfirmationLabel"),
+                AreYouSureLabel = _globalLocalizer.GetString("AreYouSureLabel"),
+                GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
+                SearchLabel = _globalLocalizer.GetString("Search"),
+                EditLabel = _globalLocalizer.GetString("Edit"),
+                DeleteLabel = _globalLocalizer.GetString("Delete"),
+                DuplicateLabel = _globalLocalizer.GetString("Duplicate"),
+                DragLabel = _globalLocalizer.GetString("Drag"),
+                DisplayedRowsLabel = _globalLocalizer.GetString("DisplayedRows"),
+                RowsPerPageLabel = _globalLocalizer.GetString("RowsPerPage"),
+                NoResultsLabel = _globalLocalizer.GetString("NoResultsLabel"),
+                GenerateQRCodeLabel = _globalLocalizer.GetString("GenerateQRCode"),
+                CopyLinkLabel = _globalLocalizer.GetString("CopyLink"),
                 SearchTerm = string.Empty
             };
 
