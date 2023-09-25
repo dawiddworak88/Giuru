@@ -194,7 +194,7 @@ function Catalog(props) {
             body: JSON.stringify(updateParameters)
         };
 
-        const url = props.updateOrderUrl;
+        const url = props.updateOrderApiUrl;
 
         return fetch(url, requestOptions)
             .then(function (response) {
@@ -269,18 +269,19 @@ function Catalog(props) {
     };
 
     useEffect(() => {
-        const handleResize = () => {
-            setWindowWidth(window.innerWidth)
-        };
-
-        window.addEventListener("resize", handleResize);
-    }, windowWidth);
-
-    useEffect(() => {
         if(typeof window !== 'undefined') {
             setWindowWidth(window.innerWidth);
         }
-    }, []);
+
+        if(typeof window !== 'undefined') {
+        
+            const handleResize = () => {
+                setWindowWidth(window.innerWidth)
+            };
+    
+            window.addEventListener("resize", handleResize);
+        }
+    }, windowWidth);
 
     const tableRow = (provided, item) => {
         return (
