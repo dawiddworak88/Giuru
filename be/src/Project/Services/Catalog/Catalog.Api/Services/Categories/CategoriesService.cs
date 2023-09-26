@@ -232,7 +232,7 @@ namespace Catalog.Api.Services.Categories
 
             foreach(var categoty in categories.OrEmptyIfNull())
             { 
-                if((categoty.Order >= destination && categoty.Order < source) || source == 0)
+                if ((categoty.Order >= destination && categoty.Order < source) || source == 0)
                 {
                     categoty.Order += 1;
                 } 
