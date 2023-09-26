@@ -8,7 +8,7 @@ import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
 
 const ImageModal = (props) => {
-    const { isOpen, handleClose, images, title, index } = props;
+    const { isOpen, handleClose, images, index } = props;
     const [splideContext, setSplideContext] = useState(null);     
         
     useEffect(() => {
@@ -27,7 +27,13 @@ const ImageModal = (props) => {
             }}
         >
             <div className="is-flex is-justify-content-end p-2">
-                <Button variant="text" color="inherit" onClick={() => handleClose()} className="image-modal__close-button"><Close /></Button>
+                <Button 
+                    variant="text" 
+                    color="inherit" 
+                    onClick={() => handleClose()} 
+                    className="image-modal__close-button">
+                        <Close />
+                </Button>
             </div>
             <div className="image-modal__container">
                 {images && images.length > 0 &&
@@ -43,7 +49,13 @@ const ImageModal = (props) => {
                             return (
                                 <SplideSlide>                                    
                                     <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="image-modal__image" key={index}>
-                                        <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={title}/>
+                                        {image.mimeType.startsWith("image") ? (
+                                            <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={props.title} />
+                                        ) : (
+                                            <video autoPlay loop muted playsInline preload='auto'>
+                                                <source src={image.imageSrc} type="video/mp4" />
+                                            </video>
+                                        )}
                                     </LazyLoad>                                                                      
                                 </SplideSlide>
                             )

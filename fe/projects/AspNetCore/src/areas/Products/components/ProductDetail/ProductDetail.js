@@ -169,7 +169,13 @@ function ProductDetail(props) {
                                     return (
                                         <div className="product-detail__desktop-gallery__desktop-product-image" onClick={() => handleImageModal(index)}>
                                             <LazyLoad offset={LazyLoadConstants.defaultOffset()} key={index}>
-                                                <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={props.title} />
+                                                {image.mimeType.startsWith("image") ? (
+                                                        <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={props.title} />
+                                                    ) : (
+                                                        <video autoPlay loop muted playsInline preload='auto'>
+                                                            <source src={image.imageSrc} type="video/mp4"  />
+                                                        </video>
+                                                    )}
                                             </LazyLoad>
                                         </div>
                                     )
@@ -211,7 +217,13 @@ function ProductDetail(props) {
                                         return (
                                             <SplideSlide key={index}>
                                                 <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="product-detail__mobile-gallery__mobile-product-image">
-                                                    <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={props.title} />
+                                                    {image.mimeType.startsWith("image") ? (
+                                                        <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={props.title} />
+                                                    ) : (
+                                                        <video autoPlay loop muted playsInline preload='auto'>
+                                                            <source src={image.imageSrc} type="video/mp4"  />
+                                                        </video>
+                                                    )}
                                                 </LazyLoad>
                                             </SplideSlide>
                                         )

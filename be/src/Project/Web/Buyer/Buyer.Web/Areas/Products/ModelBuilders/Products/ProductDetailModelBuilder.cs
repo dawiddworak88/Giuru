@@ -125,20 +125,26 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 foreach (var imageId in product.Images.OrEmptyIfNull())
                 {
-                    var imageViewModel = new ImageViewModel
-                    {
-                        ImageSrc = _mediaService.GetMediaUrl(imageId), 
-                        ImageAlt = imagesMediaItems.OrEmptyIfNull().FirstOrDefault(mediaItem => mediaItem.Id == imageId)?.Description,
-                        Sources = new List<SourceViewModel>
-                        {
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 1366) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 470) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 342) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 768) }
-                        }
-                    };
+                    var mediaItem = imagesMediaItems.FirstOrDefault(x =>  x.Id == imageId);
 
-                    images.Add(imageViewModel);
+                    if (mediaItem is not null)
+                    {
+                        var imageViewModel = new ImageViewModel
+                        {
+                            ImageSrc = _mediaService.GetMediaUrl(imageId),
+                            ImageAlt = mediaItem.Description,
+                            MimeType = mediaItem.MimeType,
+                            Sources = new List<SourceViewModel>
+                            {
+                                new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 1366) },
+                                new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 470) },
+                                new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 342) },
+                                new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 768) }
+                            }
+                        };
+
+                        images.Add(imageViewModel);
+                    }
                 }                
 
                 viewModel.Images = images;
