@@ -90,24 +90,22 @@ namespace Catalog.Api.Services.Products
 
             await _context.ProductTranslations.AddAsync(productTranslation.FillCommonProperties());
 
-            foreach (var image in model.Images.OrEmptyIfNull())
+            foreach (var imageId in model.Images.OrEmptyIfNull())
             {
                 var productImage = new ProductImage
                 {
-                    MediaId = image.Id,
-                    Order = image.Order,
+                    MediaId = imageId,
                     ProductId = product.Id
                 };
 
                 await _context.ProductImages.AddAsync(productImage.FillCommonProperties());
             }
 
-            foreach (var video in model.Videos.OrEmptyIfNull())
+            foreach (var videoId in model.Videos.OrEmptyIfNull())
             {
                 var productVideo = new ProductVideo
                 {
-                    MediaId = video.Id, 
-                    Order = video.Order,
+                    MediaId = videoId, 
                     ProductId = product.Id
                 };
 
@@ -208,12 +206,11 @@ namespace Catalog.Api.Services.Products
                 _context.ProductImages.Remove(productImage);
             }
 
-            foreach (var image in model.Images.OrEmptyIfNull())
+            foreach (var imageId in model.Images.OrEmptyIfNull())
             {
                 var productImage = new ProductImage
                 {
-                    MediaId = image.Id,
-                    Order = image.Order,
+                    MediaId = imageId,
                     ProductId = product.Id
                 };
 
@@ -227,12 +224,11 @@ namespace Catalog.Api.Services.Products
                 _context.ProductVideos.Remove(productVideo);
             }
 
-            foreach (var video in model.Videos.OrEmptyIfNull())
+            foreach (var videoId in model.Videos.OrEmptyIfNull())
             {
                 var productVideo = new ProductVideo
                 {
-                    MediaId = video.Id,
-                    Order = video.Order,
+                    MediaId = videoId,
                     ProductId = product.Id
                 };
 

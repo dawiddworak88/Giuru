@@ -25,8 +25,7 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
             bool isPublished,
             Guid? primaryProductId, 
             Guid? categoryId, 
-            IEnumerable<ProductMediaFile> images,
-            IEnumerable<ProductMediaFile> videos,
+            IEnumerable<Guid> images,
             IEnumerable<Guid> files,
             string ean,
             string formData);

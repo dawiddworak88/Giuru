@@ -17,8 +17,8 @@ namespace Catalog.Api.ServicesModels.Products
         public string Sku { get; set; }
         public string FormData { get; set; }
         public string Ean { get; set; }
-        public IEnumerable<CreateProductFileServiceModel> Images { get; set; }
-        public IEnumerable<CreateProductFileServiceModel> Videos { get; set; }
+        public IEnumerable<Guid> Images { get; set; }
+        public IEnumerable<Guid> Videos { get; set; }
         public IEnumerable<Guid> Files { get; set; }
     }
 }

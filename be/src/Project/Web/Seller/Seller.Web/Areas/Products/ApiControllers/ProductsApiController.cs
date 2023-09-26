@@ -14,8 +14,6 @@ using System.Security.Claims;
 using Foundation.Account.Definitions;
 using Foundation.Extensions.Helpers;
 using Seller.Web.Areas.Shared.Repositories.Products;
-using System.Collections.Generic;
-using Seller.Web.Areas.Products.DomainModels;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
@@ -56,32 +54,6 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] SaveProductRequestModel model)
         {
-            var videos = new List<ProductMediaFile>();
-            var images = new List<ProductMediaFile>();
-
-            for (int i = 0; i < model.Images.Count(); i++)
-            {
-                var media = model.Images.ElementAt(i);
-
-                if (media.MimeType.StartsWith("video"))
-                {
-                    videos.Add(new ProductMediaFile
-                    {
-                        Id = media.Id,
-                        Order = i + 1
-                    });
-                }
-
-                if (media.MimeType.StartsWith("image"))
-                {
-                    images.Add(new ProductMediaFile
-                    {
-                        Id = media.Id,
-                        Order = i + 1
-                    });
-                }
-            }
-
             var productId = await _productsRepository.SaveAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
@@ -93,8 +65,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 model.IsPublished,
                 model.PrimaryProductId,
                 model.CategoryId,
-                images,
-                videos,
+                model.Images.Select(x => x.Id),
                 model.Files.Select(x => x.Id),
                 model.Ean,
                 model.FormData);
