@@ -215,12 +215,18 @@ function Catalog(props) {
 
     const onDragStart = (result) => {
         const item = items.find((x) => x.id === result.draggableId);
-        item ? setDraggingItem(item) : setDraggingItem({});
 
-        const domQuery = `[data-rbd-drag-handle-draggable-id='${result.draggableId}']`;
-        const draggedDOM = document.querySelector(domQuery);
+        if (item != null) {
+            setDraggingItem(item);
 
-        setPlaceholderProps({ position: result.source.index, height: draggedDOM.clientHeight + 5});
+            const domQuery = `[data-rbd-drag-handle-draggable-id='${result.draggableId}']`;
+            const draggedDOM = document.querySelector(domQuery);
+
+            setPlaceholderProps({ position: result.source.index, height: draggedDOM.clientHeight + 5});
+        }
+        else {
+            setDraggingItem({})
+        }
     };
 
     const onDragEnd = (result) => {
@@ -246,10 +252,11 @@ function Catalog(props) {
 
         const newDraggableItemOrder = destination.index + 1 + (page * props.defaultItemsPerPage);
 
-        if(newDraggableItemOrder < 0) {
+        if(newDraggableItemOrder > 0) {
             draggingItem.order = newDraggableItemOrder;
 
             const newCategoryArray = reorder(items, source.index, destination.index);
+
             handleChangeEntityOrder(draggableId, newDraggableItemOrder);
             setItems(newCategoryArray);
     
@@ -258,7 +265,8 @@ function Catalog(props) {
     };
 
     const reorder = (list, source, destination) => {
-        const result = Array.from(list);
+        const result = [...list];
+        
         result.splice(source, 1);
         result.splice(destination, 0, draggingItem);
 
