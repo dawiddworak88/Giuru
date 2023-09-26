@@ -157,11 +157,17 @@ namespace Catalog.Api.Services.Categories
                 throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            var parentCategory = await _context.Categories.FirstOrDefaultAsync(x => x.Id == model.ParentId && x.IsActive);
-
-            if (parentCategory is null)
+            if (model.ParentId.HasValue)
             {
-                throw new CustomException(_productLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NoContent);
+                var parentCategory = await _context.Categories.FirstOrDefaultAsync(x => x.Id == model.ParentId && x.IsActive);
+
+                if (parentCategory is null)
+                {
+                    throw new CustomException(_productLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NoContent);
+                }
+
+                category.Parentid = model.ParentId;
+                category.Level = parentCategory.Level + 1;
             }
 
             if (model.Order is not 0)
@@ -171,7 +177,6 @@ namespace Catalog.Api.Services.Categories
             }
 
             category.Parentid = model.ParentId;
-            category.Level = parentCategory.Level + 1;
             category.IsLeaf = !await _context.Categories.AnyAsync(x => x.Parentid == category.Id && x.IsActive);
             category.LastModifiedDate = DateTime.UtcNow;
 

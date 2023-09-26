@@ -194,18 +194,13 @@ function Catalog(props) {
             body: JSON.stringify(updateParameters)
         };
 
-        const url = props.updateOrderApiUrl;
-
-        return fetch(url, requestOptions)
+        return fetch(props.updateOrderApiUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false })
 
-                return response.json().then((jsonResponse) => {
-
-                    if (!response.ok) {
-                        toast.error(jsonResponse.message);
-                    }
-                });
+                if (!response.ok) {
+                    toast.error(props.generalErrorMessage);
+                }
             })
     };
 
@@ -271,9 +266,6 @@ function Catalog(props) {
     useEffect(() => {
         if(typeof window !== 'undefined') {
             setWindowWidth(window.innerWidth);
-        }
-
-        if(typeof window !== 'undefined') {
         
             const handleResize = () => {
                 setWindowWidth(window.innerWidth)

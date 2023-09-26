@@ -81,11 +81,11 @@ namespace Seller.Web.Areas.Products.ApiControllers
             {
                 var categorySchemas = await _categoriesRepository.GetCategorySchemasAsync(token, language, model.Id);
 
-                if (categorySchemas is not null && categorySchemas.Schemas.OrEmptyIfNull().Any())
+                if (categorySchemas is not null)
                 {
                     await _categoriesRepository.SaveAsync(
                         token, language, model.Id, category.ParentId, category.Name, category.Files, 
-                        categorySchemas.Schemas.Select(x => new CategorySchema
+                        categorySchemas.Schemas.OrEmptyIfNull().Select(x => new CategorySchema
                         {
                             Id = x.Id,
                             Schema = x.Schema,
