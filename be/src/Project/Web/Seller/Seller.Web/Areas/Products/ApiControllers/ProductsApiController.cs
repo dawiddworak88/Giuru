@@ -14,6 +14,7 @@ using System.Security.Claims;
 using Foundation.Account.Definitions;
 using Foundation.Extensions.Helpers;
 using Seller.Web.Areas.Shared.Repositories.Products;
+using System.Collections.Generic;
 using Seller.Web.Areas.Products.DomainModels;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
@@ -21,15 +22,15 @@ namespace Seller.Web.Areas.Clients.ApiControllers
     [Area("Products")]
     public class ProductsApiController : BaseApiController
     {
-        private readonly IProductsRepository productsRepository;
-        private readonly IStringLocalizer productLocalizer;
+        private readonly IProductsRepository _productsRepository;
+        private readonly IStringLocalizer _productLocalizer;
 
         public ProductsApiController(
             IProductsRepository productsRepository,
             IStringLocalizer<ProductResources> productLocalizer)
         {
-            this.productsRepository = productsRepository;
-            this.productLocalizer = productLocalizer;
+            _productsRepository = productsRepository;
+            _productLocalizer = productLocalizer;
         }
 
         [HttpGet]
@@ -39,7 +40,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             int pageIndex,
             int itemsPerPage)
         {
-            var products = await this.productsRepository.GetProductsAsync(
+            var products = await _productsRepository.GetProductsAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 searchTerm,
@@ -55,7 +56,33 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] SaveProductRequestModel model)
         {
-            var productId = await this.productsRepository.SaveAsync(
+            var videos = new List<ProductMediaFile>();
+            var images = new List<ProductMediaFile>();
+
+            for (int i = 0; i < model.Images.Count(); i++)
+            {
+                var media = model.Images.ElementAt(i);
+
+                if (media.MimeType.StartsWith("video"))
+                {
+                    videos.Add(new ProductMediaFile
+                    {
+                        Id = media.Id,
+                        Order = i + 1
+                    });
+                }
+
+                if (media.MimeType.StartsWith("image"))
+                {
+                    images.Add(new ProductMediaFile
+                    {
+                        Id = media.Id,
+                        Order = i + 1
+                    });
+                }
+            }
+
+            var productId = await _productsRepository.SaveAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 model.Id,
@@ -66,23 +93,24 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 model.IsPublished,
                 model.PrimaryProductId,
                 model.CategoryId,
-                model.Images?.Select(x => x.Id),
-                model.Files?.Select(x => x.Id),
+                images,
+                videos,
+                model.Files.Select(x => x.Id),
                 model.Ean,
                 model.FormData);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = productId, Message = this.productLocalizer.GetString("ProductSavedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Id = productId, Message = _productLocalizer.GetString("ProductSavedSuccessfully").Value });
         }
 
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            await this.productsRepository.DeleteAsync(
+            await _productsRepository.DeleteAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.productLocalizer.GetString("ProductDeletedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Message = _productLocalizer.GetString("ProductDeletedSuccessfully").Value });
         }
     }
 }

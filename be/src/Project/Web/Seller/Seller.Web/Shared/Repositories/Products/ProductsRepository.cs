@@ -241,7 +241,8 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
             bool isPublished,
             Guid? primaryProductId, 
             Guid? categoryId,
-            IEnumerable<Guid> images, 
+            IEnumerable<ProductMediaFile> images,
+            IEnumerable<ProductMediaFile> videos,
             IEnumerable<Guid> files,
             string ean,
             string formData)
@@ -257,6 +258,7 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
                 PrimaryProductId = primaryProductId,
                 CategoryId = categoryId,
                 Images = images,
+                Videos = videos,
                 Files = files,
                 Ean = ean,
                 FormData = formData

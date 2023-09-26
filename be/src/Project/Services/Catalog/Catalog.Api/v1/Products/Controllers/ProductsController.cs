@@ -259,9 +259,17 @@ namespace Catalog.Api.v1.Products.Controllers
                 IsPublished = request.IsPublished,
                 CategoryId = request.CategoryId,
                 IsProtected = request.IsProtected,
-                Videos = request.Videos,
+                Videos = request.Videos.Select(x => new CreateProductFileServiceModel
+                {
+                    Id = x.Id,
+                    Order = x.Order
+                }),
                 Files = request.Files,
-                Images = request.Images,
+                Images = request.Images.Select(x => new CreateProductFileServiceModel
+                {
+                    Id = x.Id,
+                    Order = x.Order
+                }),
                 Sku = request.Sku,
                 Name = request.Name,
                 Description = request.Description,
