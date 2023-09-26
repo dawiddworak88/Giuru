@@ -1,13 +1,12 @@
 ﻿using Foundation.PageContent.Components.Images;
-using System;
 using System.Collections.Generic;
 
-namespace Buyer.Web.Shared.ViewModels.Images
+namespace Buyer.Web.Areas.Products.ViewModels.Products
 {
-    public class ImageViewModel
+    public class ProductMediaItemViewModel
     {
-        public string ImageSrc { get; set; }
-        public string ImageAlt { get; set; }
+        public string MediaSrc { get; set; }
+        public string MediaAlt { get; set; }
         public string MimeType { get; set; }
         public IEnumerable<SourceViewModel> Sources { get; set; }
     }
