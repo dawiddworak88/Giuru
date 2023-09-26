@@ -91,7 +91,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
                             Schema = x.Schema,
                             UiSchema = x.UiSchema,
                             Language = x.Language
-                        }), category.Order);
+                        }), model.Order);
 
                     return StatusCode((int)HttpStatusCode.OK);
                 }
