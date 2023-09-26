@@ -230,15 +230,15 @@ namespace Catalog.Api.Services.Categories
         {
             var categories = _context.Categories.Where(x => x.IsActive);
 
-            foreach(var categoty in categories.OrEmptyIfNull())
+            foreach(var category in categories.OrEmptyIfNull())
             { 
-                if ((categoty.Order >= destination && categoty.Order < source) || source == 0)
+                if ((category.Order >= destination && category.Order < source) || source == 0)
                 {
-                    categoty.Order += 1;
+                    category.Order += 1;
                 } 
-                else if(categoty.Order <= destination && categoty.Order > source)
+                else if(category.Order <= destination && category.Order > source)
                 {
-                    categoty.Order -= 1;
+                    category.Order -= 1;
                 }
             }
             

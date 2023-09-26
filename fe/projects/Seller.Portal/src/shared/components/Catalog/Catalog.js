@@ -287,7 +287,7 @@ function Catalog(props) {
                     <TableCell width="12%" height={placeholderProps.height}>
                         {props.table.actions.map((actionItem, index) => {
                             if (actionItem.isDragDropOrderEnabled && windowWidth >= CatalogConstants.windowSizeDisableDragDrop()) return (
-                                <Tooltip title={props.dragLabel} aria-label={props.dragLabel}>
+                                <Tooltip title={props.dragLabel} aria-label={props.dragLabel} key={index}>
                                     <Fab onClick={() => setIsDragableDisable(!isDragableDisable)} size="small" color="secondary">
                                         <DragIndicator />
                                     </Fab>
@@ -446,7 +446,7 @@ function Catalog(props) {
                                     {props.prevPageAreaText}
                                 </div>
                                 <div
-                                    className={`catalog__change-page-area ${page == props.pagedItems.pageCount - 1 ? "catalog__change-page-area__disabled" : ""}`}
+                                    className={`catalog__change-page-area ${page == (props.pagedItems.pageCount - 1) ? "catalog__change-page-area__disabled" : ""}`}
                                     onMouseEnter={() => handleChangedPageWhenDragItem(page + 1)}
                                 >
                                     {props.nextPageAreaText}
