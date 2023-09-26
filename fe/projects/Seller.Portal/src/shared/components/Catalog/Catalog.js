@@ -234,19 +234,27 @@ function Catalog(props) {
             return;
         }
 
+        const currentDraggableItemOrder = draggingItem.order - 1 - (page * props.defaultItemsPerPage);
+
         if (
-            destination.droppableId === source.droppableId &&
-            destination.index === source.index
+            destination.droppableId === source.droppableId && 
+            destination.index === currentDraggableItemOrder
         ) {
             setDraggingItem({});
             return;
         }
 
-        const newCategoryArray = reorder(items, source.index, destination.index);
-        handleChangeEntityOrder(draggableId, (destination.index + 1) + (page * props.defaultItemsPerPage));
-        setItems(newCategoryArray);
+        const newDraggableItemOrder = destination.index + 1 + (page * props.defaultItemsPerPage);
 
-        setDraggingItem({});
+        if(newDraggableItemOrder < 0) {
+            draggingItem.order = newDraggableItemOrder;
+
+            const newCategoryArray = reorder(items, source.index, destination.index);
+            handleChangeEntityOrder(draggableId, newDraggableItemOrder);
+            setItems(newCategoryArray);
+    
+            setDraggingItem({});
+        }
     };
 
     const reorder = (list, source, destination) => {
