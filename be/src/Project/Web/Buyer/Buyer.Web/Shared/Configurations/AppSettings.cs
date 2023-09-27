@@ -21,5 +21,6 @@ namespace Buyer.Web.Shared.Configurations
         public string GoogleTagManagerIdentifier { get; set; }
         public string MakeComplaintUrl { get; set; }
         public string DefaultCulture { get; set; }
+        public string FabricsWebUrl { get; set; }
     }
 }
