@@ -457,6 +457,7 @@ services:
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
+      - FabricsWebUrl=https://fabrics.eltap.com
     volumes:
       - ./Project/Web/Seller/Seller.Web/wwwroot/dist:/src/wwwroot/dist
     ports:
