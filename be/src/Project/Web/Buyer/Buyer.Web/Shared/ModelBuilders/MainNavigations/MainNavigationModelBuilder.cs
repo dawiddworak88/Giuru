@@ -15,10 +15,10 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
 {
     public class MainNavigationModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>
     {
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<OrderResources> orderLocalizer;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IOptionsMonitor<AppSettings> settings;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IOptionsMonitor<AppSettings> _settings;
 
         public MainNavigationModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -26,10 +26,10 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
             LinkGenerator linkGenerator,
             IOptionsMonitor<AppSettings> settings)
         {
-            this.globalLocalizer = globalLocalizer;
-            this.orderLocalizer = orderLocalizer;
-            this.linkGenerator = linkGenerator;
-            this.settings = settings;
+            _globalLocalizer = globalLocalizer;
+            _orderLocalizer = orderLocalizer;
+            _linkGenerator = linkGenerator;
+            _settings = settings;
         }
 
         public async Task<MainNavigationViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -38,47 +38,51 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
             { 
                 new LinkViewModel
                 {
-                    Text = this.orderLocalizer.GetString("MyOrders").Value,
-                    Url = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                    Text = _orderLocalizer.GetString("MyOrders").Value,
+                    Url = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
                 },
                 new LinkViewModel
                 {
-                    Text = this.orderLocalizer.GetString("PlaceOrder").Value,
-                    Url = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                    Text = _orderLocalizer.GetString("PlaceOrder").Value,
+                    Url = _linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
                 },
                 new LinkViewModel
                 {
-                    Text = this.globalLocalizer.GetString("AvailableProducts"),
-                    Url = this.linkGenerator.GetPathByAction("Index", "AvailableProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                    Text = _globalLocalizer.GetString("AvailableProducts"),
+                    Url = _linkGenerator.GetPathByAction("Index", "AvailableProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
                 },
                 new LinkViewModel
                 {
-                    Text = this.globalLocalizer.GetString("Outlet").Value,
-                    Url = this.linkGenerator.GetPathByAction("Index", "Outlet", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                    Text = _globalLocalizer.GetString("Outlet").Value,
+                    Url = _linkGenerator.GetPathByAction("Index", "Outlet", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
                 },
                 new LinkViewModel
                 {
-                    Text = this.globalLocalizer.GetString("EltapFabrics"),
+                    Text = _globalLocalizer.GetString("News"),
+                    Url = _linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new LinkViewModel
+                {
+                    Text = _globalLocalizer.GetString("DownloadCenter"),
+                    Url = _linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new LinkViewModel
+                {
+                    Text = _globalLocalizer.GetString("MakeComplaint"),
                     Target = "_blank",
-                    Url = this.settings.CurrentValue.FabricsWebUrl
-                },
-                new LinkViewModel
-                {
-                    Text = this.globalLocalizer.GetString("News"),
-                    Url = this.linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
-                },
-                new LinkViewModel
-                {
-                    Text = this.globalLocalizer.GetString("DownloadCenter"),
-                    Url = this.linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
-                },
-                new LinkViewModel
-                {
-                    Text = this.globalLocalizer.GetString("MakeComplaint"),
-                    Target = "_blank",
-                    Url = this.settings.CurrentValue.MakeComplaintUrl
+                    Url = _settings.CurrentValue.MakeComplaintUrl
                 }
             };
+
+            if(_settings.CurrentValue.FabricsWebUrl is not null)
+            {
+                links.Insert(4, new LinkViewModel
+                {
+                    Text = _globalLocalizer.GetString("EltapFabrics"),
+                    Target = "_blank",
+                    Url = _settings.CurrentValue.FabricsWebUrl
+                });
+            }
 
             return new MainNavigationViewModel
             {
