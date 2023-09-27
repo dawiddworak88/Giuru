@@ -36,55 +36,49 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
         {
             var links = new List<LinkViewModel>
             { 
-                new LinkViewModel 
+                new LinkViewModel
                 {
-                    Text = this.globalLocalizer.GetString("Home"),
-                    Url = this.linkGenerator.GetPathByAction("Index", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name })
+                    Text = this.orderLocalizer.GetString("MyOrders").Value,
+                    Url = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new LinkViewModel
+                {
+                    Text = this.orderLocalizer.GetString("PlaceOrder").Value,
+                    Url = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new LinkViewModel
+                {
+                    Text = this.globalLocalizer.GetString("AvailableProducts"),
+                    Url = this.linkGenerator.GetPathByAction("Index", "AvailableProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new LinkViewModel
+                {
+                    Text = this.globalLocalizer.GetString("Outlet").Value,
+                    Url = this.linkGenerator.GetPathByAction("Index", "Outlet", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new LinkViewModel
+                {
+                    Text = this.globalLocalizer.GetString("EltapFabrics"),
+                    Target = "_blank",
+                    Url = this.settings.CurrentValue.FabricsWebUrl
+                },
+                new LinkViewModel
+                {
+                    Text = this.globalLocalizer.GetString("News"),
+                    Url = this.linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new LinkViewModel
+                {
+                    Text = this.globalLocalizer.GetString("DownloadCenter"),
+                    Url = this.linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new LinkViewModel
+                {
+                    Text = this.globalLocalizer.GetString("MakeComplaint"),
+                    Target = "_blank",
+                    Url = this.settings.CurrentValue.MakeComplaintUrl
                 }
             };
-
-            links.Add(new LinkViewModel
-            {
-                Text = this.orderLocalizer.GetString("MyOrders").Value,
-                Url = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
-            });
-
-            links.Add(new LinkViewModel
-            {
-                Text = this.orderLocalizer.GetString("PlaceOrder").Value,
-                Url = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
-            });
-
-            links.Add(new LinkViewModel
-            {
-                Text = this.globalLocalizer.GetString("AvailableProducts"),
-                Url = this.linkGenerator.GetPathByAction("Index", "AvailableProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
-            });
-
-            links.Add(new LinkViewModel
-            {
-                Text = this.globalLocalizer.GetString("Outlet").Value,
-                Url = this.linkGenerator.GetPathByAction("Index", "Outlet", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
-            });
-
-            links.Add(new LinkViewModel
-            {
-                Text = this.globalLocalizer.GetString("News"),
-                Url = this.linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
-            });
-
-            links.Add(new LinkViewModel
-            {
-                Text = this.globalLocalizer.GetString("DownloadCenter"),
-                Url = this.linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
-            });
-
-            links.Add(new LinkViewModel
-            {
-                Text = this.globalLocalizer.GetString("MakeComplaint"),
-                Target = "_blank",
-                Url = this.settings.CurrentValue.MakeComplaintUrl
-            });
 
             return new MainNavigationViewModel
             {

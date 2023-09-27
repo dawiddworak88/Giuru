@@ -29,6 +29,12 @@ namespace Buyer.Web.Shared.ModelBuilders.Footers
         {
             var links = new List<LinkViewModel>
             {
+                new LinkViewModel
+                {
+                    Text = this.globalLocalizer["EltapFabrics"],
+                    Target = "_blank",
+                    Url = this.options.Value.FabricsWebUrl
+                },
                 new LinkViewModel 
                 { 
                     Text = this.globalLocalizer["TermsConditions"], 
