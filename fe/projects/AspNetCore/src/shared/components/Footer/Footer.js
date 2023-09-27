@@ -2,8 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 function Footer(props) {
-
-    const links = props.links.map((link, index) => <li key={index}><a href={link.url}>{link.text}</a></li>);
+    const links = props.links.map((link, index) => <li key={index}><a href={link.url} target={link.target}>{link.text}</a></li>);
 
     return (
         <footer className="footer">
