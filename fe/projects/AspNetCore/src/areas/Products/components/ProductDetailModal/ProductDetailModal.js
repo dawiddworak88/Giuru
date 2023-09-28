@@ -53,7 +53,7 @@ const ProductDetailModal = (props) => {
                                             <ResponsiveImage sources={mediaItem.sources} mediaItemsrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
                                         ) : (
                                             <video autoPlay loop muted playsInline preload='auto'>
-                                                <source src={mediaItem.mediaSrc} type="video/mp4" />
+                                                <source src={mediaItem.mediaSrc} type={mediaItem.mimeType} />
                                             </video>
                                         )}
                                     </LazyLoad>                                                                      

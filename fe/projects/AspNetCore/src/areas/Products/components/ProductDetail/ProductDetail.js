@@ -164,7 +164,7 @@ function ProductDetail(props) {
                                                         <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
                                                     ) : (
                                                         <video autoPlay loop muted playsInline preload='auto'>
-                                                            <source src={mediaItem.mediaSrc} type="video/mp4"  />
+                                                            <source src={mediaItem.mediaSrc} type={mediaItem.mimeType}  />
                                                         </video>
                                                     )}
                                             </LazyLoad>
@@ -178,7 +178,7 @@ function ProductDetail(props) {
                                                     <ResponsiveImage sources={props.mediaItems[0].sources} imageSrc={props.mediaItems[0].mediaSrc} imageAlt={props.mediaItems[0].mediaAlt} imageTitle={props.title} />
                                                 ) : (
                                                     <video autoPlay loop muted playsInline preload='auto'>
-                                                        <source src={props.mediaItems[0].mediaSrc} type="video/mp4"  />
+                                                        <source src={props.mediaItems[0].mediaSrc} type={props.mediaItems[0].mimeType}  />
                                                     </video>
                                                 )}
                                             </LazyLoad>
@@ -227,7 +227,7 @@ function ProductDetail(props) {
                                                         <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
                                                     ) : (
                                                         <video autoPlay loop muted playsInline preload='auto'>
-                                                            <source src={mediaItem.mediaSrc} type="video/mp4"  />
+                                                            <source src={mediaItem.mediaSrc} type={mediaItem.mimeType}  />
                                                         </video>
                                                     )}
                                                 </LazyLoad>
