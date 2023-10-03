@@ -34,6 +34,9 @@ function StringField(props) {
   if (format && hasWidget(schema, format, widgets)) {
     defaultWidget = format;
   }
+  if(schema.type === "number") {
+    defaultWidget = "updown";
+  }
   const { widget = defaultWidget, placeholder = "", ...options } = getUiOptions(
     uiSchema
   );
