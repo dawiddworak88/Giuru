@@ -135,7 +135,12 @@ function useForm(
       setIsDirty(true);
 
       if (event.isFormData) {
-        setFieldValue({ name: "formData", value: { ...event.formData, [event.name]: event.target.value } });
+        if(event.target.type === "number") {
+          setFieldValue({ name: "formData", value: { ...event.formData, [event.name]: parseFloat(event.target.value) } });
+        } 
+        else {
+          setFieldValue({ name: "formData", value: { ...event.formData, [event.name]: event.target.value } });
+        }
       }
       else {
         const name = event.target.name;
