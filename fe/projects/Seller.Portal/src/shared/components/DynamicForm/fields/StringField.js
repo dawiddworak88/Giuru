@@ -31,13 +31,9 @@ function StringField(props) {
   let value = formData;
 
   if(typeof value === "string") {
-    let re = new RegExp("[!@#$%^&*(){},<>/?|'\"+=`~\[|\]|]");
-    if(re.test(formData)) {
-      value = formData.replace(re, "");
-    }
-    
-    re = new RegExp("[\\\\]")
-    if(re.test(formData)) {
+    let re = /[!@#$%^&*(){},<>/?|'\"+=`~\[|\]|\\\\]/g;
+
+    if(formData.match(re)) {
       value = formData.replace(re, "");
     }
   }
