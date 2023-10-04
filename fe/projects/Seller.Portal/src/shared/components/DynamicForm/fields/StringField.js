@@ -27,6 +27,21 @@ function StringField(props) {
     registry = getDefaultRegistry(),
     rawErrors,
   } = props;
+
+  let value = formData;
+
+  if(typeof value === "string") {
+    let re = new RegExp("[!@#$%^&*(){},<>/?|'\"+=`~\[|\]|]");
+    if(re.test(formData)) {
+      value = formData.replace(re, "");
+    }
+    
+    re = new RegExp("[\\\\]")
+    if(re.test(formData)) {
+      value = formData.replace(re, "");
+    }
+  }
+
   const { title, format } = schema;
   const { widgets, formContext } = registry;
   const enumOptions = isSelect(schema) && optionsList(schema);
@@ -47,7 +62,7 @@ function StringField(props) {
       schema={schema}
       id={idSchema && idSchema.$id}
       label={title === undefined ? name : title}
-      value={formData}
+      value={value}
       onChange={onChange}
       onBlur={onBlur}
       onFocus={onFocus}
