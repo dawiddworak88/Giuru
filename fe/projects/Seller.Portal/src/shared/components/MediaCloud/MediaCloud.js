@@ -32,8 +32,17 @@ function MediaCloud(props) {
     }
 
     const onDrop = useCallback(acceptedFiles => {
-        
         dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        if (props.videoSizeLimit) {
+            const oversizedVideoFile = acceptedFiles.find(file => file.size > props.videoSizeLimit && file.type.startsWith("video"));
+
+            if (oversizedVideoFile){
+                toast.error(props.videoSizeLimitErrorMessage);
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                return;
+            }
+        }
 
         if (props.multiple) {
             if (props.isUploadInChunksEnabled) {
@@ -345,7 +354,9 @@ MediaCloud.propTypes = {
     setFieldValue: PropTypes.func.isRequired,
     isUploadInChunksEnabled: PropTypes.bool,
     chunkSize: PropTypes.number,
-    files: PropTypes.array
+    files: PropTypes.array,
+    videoSizeLimit: PropTypes.number,
+    videoSizeLimitErrorMessage: PropTypes.string
 };
 
 export default MediaCloud;
