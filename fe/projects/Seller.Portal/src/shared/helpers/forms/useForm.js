@@ -77,7 +77,6 @@ function useForm(
         const required = field["required"];
 
         if (required["isRequired"] && !value) {
-
           error = required["error"];
         }
       }
