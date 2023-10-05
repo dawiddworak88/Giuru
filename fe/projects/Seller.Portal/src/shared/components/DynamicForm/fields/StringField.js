@@ -42,15 +42,18 @@ function StringField(props) {
   const { widgets, formContext } = registry;
   const enumOptions = isSelect(schema) && optionsList(schema);
   let defaultWidget = enumOptions ? "select" : "text";
+
   if (format && hasWidget(schema, format, widgets)) {
     defaultWidget = format;
-  } else if (schema.type === "number") {
+  } 
+  else if (schema.type === "number") {
     defaultWidget = "updown";
   }
-  const { widget = defaultWidget, placeholder = "", ...options } = getUiOptions(
-    uiSchema
-  );
+
+  const { widget = defaultWidget, placeholder = "", ...options } = getUiOptions(uiSchema);
+
   const Widget = getWidget(schema, widget, widgets);
+  
   return (
     <Widget
       options={{ ...options, enumOptions }}
