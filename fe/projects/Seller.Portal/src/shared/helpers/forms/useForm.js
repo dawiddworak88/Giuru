@@ -78,7 +78,7 @@ function useForm(
 
         if (required["isRequired"] && !value) {
 
-            error = required["error"];
+          error = required["error"];
         }
       }
 
@@ -134,13 +134,15 @@ function useForm(
 
       setIsDirty(true);
 
+      let value = event.target.value;
+      const fieldType = event.target.type;
+
+      if (parseFloat(value) && fieldType == "number") {
+        value = parseFloat(value);
+      }
+
       if (event.isFormData) {
-        if(event.target.type === "number") {
-          setFieldValue({ name: "formData", value: { ...event.formData, [event.name]: parseFloat(event.target.value) } });
-        } 
-        else {
-          setFieldValue({ name: "formData", value: { ...event.formData, [event.name]: event.target.value } });
-        }
+        setFieldValue({ name: "formData", value: { ...event.formData, [event.name]: value } });
       }
       else {
         const name = event.target.name;
