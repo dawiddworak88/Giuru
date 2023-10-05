@@ -30,11 +30,11 @@ function StringField(props) {
 
   let value = formData;
 
-  if(typeof value === "string") {
-    let re = /[!@#$%^&*(){},<>/?|'\"+=`~\[|\]|\\\\]/g;
+  if (typeof value === "string") {
+    let regex = /[!@#$%^&*(){},<>/?|'\"+=`~\[|\]|\\\\]/g;
 
-    if(formData.match(re)) {
-      value = formData.replace(re, "");
+    if (formData.match(regex)) {
+      value = formData.replace(regex, "");
     }
   }
 
@@ -44,8 +44,7 @@ function StringField(props) {
   let defaultWidget = enumOptions ? "select" : "text";
   if (format && hasWidget(schema, format, widgets)) {
     defaultWidget = format;
-  }
-  if(schema.type === "number") {
+  } else if (schema.type === "number") {
     defaultWidget = "updown";
   }
   const { widget = defaultWidget, placeholder = "", ...options } = getUiOptions(
