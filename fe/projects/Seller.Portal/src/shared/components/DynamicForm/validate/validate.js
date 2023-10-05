@@ -12,8 +12,7 @@ function createAjvInstance() {
     $data: true,
     allErrors: true,
     multipleOfPrecision: 8,
-    schemaId: "auto",
-    strict: false
+    schemaId: "auto"
   });
 
   // add custom formats
