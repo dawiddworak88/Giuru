@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Routing;
 using System.Globalization;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Repositories.MainNavigationLinks;
 
 namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
 {
@@ -19,21 +20,26 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
         private readonly LinkGenerator _linkGenerator;
         private readonly IOptionsMonitor<AppSettings> _settings;
+        private readonly IMainNavigationLinkRepository _mainNavigationLinkRepository;
 
         public MainNavigationModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             LinkGenerator linkGenerator,
-            IOptionsMonitor<AppSettings> settings)
+            IOptionsMonitor<AppSettings> settings,
+            IMainNavigationLinkRepository mainNavigationLinkRepository)
         {
             _globalLocalizer = globalLocalizer;
             _orderLocalizer = orderLocalizer;
             _linkGenerator = linkGenerator;
             _settings = settings;
+            _mainNavigationLinkRepository = mainNavigationLinkRepository;
         }
 
         public async Task<MainNavigationViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
+            var result = await _mainNavigationLinkRepository.GetMainNavigationLinksAsync(componentModel.ContentPageKey, componentModel.Language);
+
             var links = new List<LinkViewModel>
             { 
                 new LinkViewModel

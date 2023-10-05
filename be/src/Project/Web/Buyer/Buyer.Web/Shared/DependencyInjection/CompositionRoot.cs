@@ -39,6 +39,7 @@ using GraphQL.Client.Http;
 using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
 using Buyer.Web.Shared.ModelBuilders.OrderItemStatusChanges;
 using Buyer.Web.Shared.Repositories.Metadatas;
+using Buyer.Web.Shared.Repositories.MainNavigationLinks;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -68,6 +69,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IMetadataRepository, MetadataRepository>();
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<ICatalogProductsRepository, CatalogProductsRepository>();
+            services.AddScoped<IMainNavigationLinkRepository, MainNavigationLinkRepository>();
 
             // Services
             services.AddScoped<ICatalogService, CatalogService>();
