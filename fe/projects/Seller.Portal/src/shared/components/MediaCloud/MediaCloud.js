@@ -38,7 +38,7 @@ function MediaCloud(props) {
             const oversizedVideoFile = acceptedFiles.find(file => file.size > props.videoSizeLimit && file.type.startsWith("video"));
 
             if (oversizedVideoFile){
-                toast.error(props.videoSizeLimitErrorMessage);
+                toast.error(props.fileSizeLimitErrorMessage);
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 return;
             }
@@ -356,7 +356,7 @@ MediaCloud.propTypes = {
     chunkSize: PropTypes.number,
     files: PropTypes.array,
     videoSizeLimit: PropTypes.number,
-    videoSizeLimitErrorMessage: PropTypes.string
+    fileSizeLimitErrorMessage: PropTypes.string
 };
 
 export default MediaCloud;

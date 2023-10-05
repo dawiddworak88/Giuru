@@ -19,6 +19,7 @@ using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Definitions;
 using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.Definitions;
+using Seller.Web.Areas.Products.Definitions;
 
 namespace Seller.Web.Areas.ModelBuilders.Products
 {
@@ -72,6 +73,8 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 SaveMediaChunkCompleteUrl = this.linkGenerator.GetPathByAction("PostChunksComplete", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 IsUploadInChunksEnabled = true,
                 ChunkSize = MediaConstants.DefaultChunkSize,
+                VideoFileSizeLimit = ProductsConstants.Limits.VideoFileSizeLimit,
+                FileSizeLimitErrorMessage = this.globalLocalizer.GetString("FileSizeLimit"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 ProductPicturesLabel = this.productLocalizer.GetString("ProductPicturesLabel"),

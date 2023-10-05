@@ -323,6 +323,8 @@ function ProductForm(props) {
                                 name="images"
                                 label={props.productPicturesLabel}
                                 multiple={true}
+                                videoSizeLimit={props.videoFileSizeLimit}
+                                fileSizeLimitErrorMessage={props.fileSizeLimitErrorMessage}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
                                 dropFilesLabel={props.dropFilesLabel}
@@ -333,7 +335,7 @@ function ProductForm(props) {
                                 isUploadInChunksEnabled={true}
                                 chunkSize={props.chunkSize}
                                 saveMediaChunkUrl={props.saveMediaChunkUrl}
-                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} 
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl}
                                 accept={{
                                     'image/*': [".png", ".jpg", ".webp"],
                                     "video/*": [".mp4"]
@@ -454,7 +456,9 @@ ProductForm.propTypes = {
     chunkSize: PropTypes.number,
     saveMediaChunkUrl: PropTypes.string,
     saveMediaChunkCompleteUrl: PropTypes.string,
-    productsSuggestionUrl: PropTypes.string.isRequired
+    productsSuggestionUrl: PropTypes.string.isRequired,
+    fileSizeLimitErrorMessage: PropTypes.string,
+    videoFileSizeLimit: PropTypes.number
 };
 
 export default ProductForm;
