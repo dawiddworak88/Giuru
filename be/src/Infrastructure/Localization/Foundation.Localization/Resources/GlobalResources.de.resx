@@ -708,4 +708,7 @@
   <data name="Sku" xml:space="preserve">
     <value>Sku</value>
   </data>
+  <data name="FileSizeLimit" xml:space="preserve">
+    <value>Die hochgeladene Datei überschreitet die maximale Größe</value>
+  </data>
 </root>

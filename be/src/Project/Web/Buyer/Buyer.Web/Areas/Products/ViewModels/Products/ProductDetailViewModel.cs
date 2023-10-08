@@ -1,6 +1,5 @@
 ﻿using Buyer.Web.Shared.DomainModels.Baskets;
 using Buyer.Web.Shared.ViewModels.Files;
-using Buyer.Web.Shared.ViewModels.Images;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Foundation.PageContent.Components.CarouselGrids.ViewModels;
@@ -53,7 +52,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public ModalViewModel Modal { get; set; }
         public FilesViewModel Files { get; set; }
         public IEnumerable<BasketItem> OrderItems { get; set; }
-        public IEnumerable<ImageViewModel> Images { get; set; }
+        public IEnumerable<ProductMediaItemViewModel> MediaItems { get; set; }
         public IEnumerable<ProductFeatureViewModel> Features { get; set; }
         public IEnumerable<CarouselGridItemViewModel> ProductVariants { get; set; }
     }

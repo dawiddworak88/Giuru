@@ -714,4 +714,7 @@
   <data name="Sku" xml:space="preserve">
     <value>Sku</value>
   </data>
+  <data name="FileSizeLimit" xml:space="preserve">
+    <value>Przesłany plik przekracza maksymalny rozmiar</value>
+  </data>
 </root>
