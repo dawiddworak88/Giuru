@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,13 +27,40 @@ namespace Buyer.Web.Shared.Repositories.MainNavigationLinks
             _logger = logger;
         }
 
-        public async Task<ICollection<MainNavigationLink>> GetMainNavigationLinksAsync(string contentPageKey, string language)
+        public async Task<IEnumerable<MainNavigationLink>> GetMainNavigationLinksAsync(string contentPageKey, string language)
         {
-            try 
-            {
-                var query = new GraphQLRequest
+            try
+            { 
+                var response = await _graphQlClient.SendQueryAsync<JObject>(GetMainNavigationLinksQuery(contentPageKey, language));
+
+                if (response.Errors.OrEmptyIfNull().Any() is false && response?.Data != null)
                 {
-                    Query = $@"
+                    var replacedContentPageKey = response.Data.ToString().Replace(contentPageKey, "mainNavigation");
+
+                    var links = JsonConvert.DeserializeObject<MainNavigationLinksGraphQlResponseModel>(replacedContentPageKey);
+
+                    return links?.MainNavigation?.Data?.Attributes?.MainNavigationLinks?.Links?.Select(x => new MainNavigationLink
+                    {
+                        Href = x.Href,
+                        Label = x.Label,
+                        Taget = x.Target,
+                        IsExternal = x.IsExternal
+                    });
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Couldn't get link to MainNavigation");
+            }
+
+            return default;
+        }
+
+        private GraphQLRequest GetMainNavigationLinksQuery(string contentPageKey, string language)
+        {
+            return new GraphQLRequest
+            {
+                Query = $@"
                      query GetMainNavigationLinks {{
                       {contentPageKey}(locale: ""{language}"") {{
                         data {{
@@ -51,25 +79,7 @@ namespace Buyer.Web.Shared.Repositories.MainNavigationLinks
                       }}
                     }}
                     "
-                };
-
-                var response = await _graphQlClient.SendQueryAsync<JObject>(query);
-
-                if( response.Errors.OrEmptyIfNull().Any() is false && response?.Data != null)
-                {
-                    var replacedContentPageKey = response.Data.ToString().Replace(contentPageKey, "page");
-
-                    var metaData = JsonConvert.DeserializeObject<ICollection<MainNavigationLink>>(replacedContentPageKey);
-
-                    return metaData;
-                }
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception, $"Couldn't get link to MainNavigation");
-            }
-
-            return default;
+            };
         }
     }
 }
