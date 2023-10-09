@@ -136,7 +136,7 @@ function useForm(
       let value = event.target.value;
       const fieldType = event.target.type;
 
-      if (parseFloat(value) && fieldType == "number") {
+      if (!isNaN(value) && fieldType == "number") {
         value = parseFloat(value);
       }
 
