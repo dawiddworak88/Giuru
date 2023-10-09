@@ -4,7 +4,8 @@
   "info": {
     "singularName": "basket-page",
     "pluralName": "basket-pages",
-    "displayName": "Basket Page"
+    "displayName": "Basket Page",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -24,6 +25,16 @@
         }
       },
       "component": "shared.seo"
+    },
+    "mainNavigationLinks": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "blocks.main-navigation"
     }
   }
 }
