@@ -72,7 +72,6 @@ stages:
               --set orderUrl='$(orderUrl)' \
               --set newsUrl='$(newsUrl)' \
               --set downloadCenterUrl='$(downloadCenterUrl)' \
-              --set fabricsWebUrl='$(fabricsWebUrl)' \
               --set makeComplaintUrl='$(makeComplaintUrl)' \
               --set cdnUrl='$(cdnUrl)' \
               --set contentGraphQlUrl='$(contentGraphQlUrl)' \

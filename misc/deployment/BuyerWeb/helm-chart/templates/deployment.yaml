@@ -60,8 +60,6 @@ spec:
           value: {{ .Values.downloadCenterUrl }}
         - name: MakeComplaintUrl
           value: {{ .Values.makeComplaintUrl }}
-        - name: FabricsWebUrl
-          value: {{ .Values.fabricsWebUrl }}
         - name: CdnUrl
           value: {{ .Values.cdnUrl }}
         - name: ContentGraphQlUrl
