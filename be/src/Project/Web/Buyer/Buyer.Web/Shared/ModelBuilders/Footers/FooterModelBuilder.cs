@@ -14,15 +14,15 @@ namespace Buyer.Web.Shared.ModelBuilders.Footers
 {
     public class FooterModelBuilder : IModelBuilder<FooterViewModel>
     {
-        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
-        private readonly IOptions<AppSettings> _options;
+        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IOptions<AppSettings> options;
 
         public FooterModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IOptions<AppSettings> options)
         {
-            _globalLocalizer = globalLocalizer;
-            _options = options;
+            this.globalLocalizer = globalLocalizer;
+            this.options = options;
         }
 
         public FooterViewModel BuildModel()
@@ -31,29 +31,19 @@ namespace Buyer.Web.Shared.ModelBuilders.Footers
             {
                 new LinkViewModel 
                 { 
-                    Text = _globalLocalizer["TermsConditions"],
-                    Url = $"{_options.Value.IdentityUrl}{SecurityConstants.RegulationsEndpoint}"
+                    Text = this.globalLocalizer["TermsConditions"], 
+                    Url = $"{this.options.Value.IdentityUrl}{SecurityConstants.RegulationsEndpoint}"
                 },
                 new LinkViewModel 
                 { 
-                    Text = _globalLocalizer["PrivacyPolicy"],
-                    Url = $"{_options.Value.IdentityUrl}{SecurityConstants.PrivacyPolicyEndpoint}"
+                    Text = this.globalLocalizer["PrivacyPolicy"], 
+                    Url = $"{this.options.Value.IdentityUrl}{SecurityConstants.PrivacyPolicyEndpoint}"
                 }
             };
 
-            if (_options.Value.FabricsWebUrl is not null)
-            {
-                links.Insert(0, new LinkViewModel
-                {
-                    Text = _globalLocalizer.GetString("EltapFabrics"),
-                    Target = "_blank",
-                    Url = _options.Value.FabricsWebUrl
-                });
-            }
-
             var viewModel = new FooterViewModel 
             {
-                Copyright = _globalLocalizer["Copyright"]?.Value.Replace(LocalizationConstants.YearToken, DateTime.Now.Year.ToString()),
+                Copyright = this.globalLocalizer["Copyright"]?.Value.Replace(LocalizationConstants.YearToken, DateTime.Now.Year.ToString()),
                 Links = links
             };
 
