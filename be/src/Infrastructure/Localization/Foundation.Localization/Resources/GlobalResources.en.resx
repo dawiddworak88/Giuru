@@ -708,7 +708,4 @@
   <data name="Sku" xml:space="preserve">
     <value>Sku</value>
   </data>
-  <data name="EltapFabrics" xml:space="preserve">
-    <value>ELTAP Fabrics</value>
-  </data>
 </root>

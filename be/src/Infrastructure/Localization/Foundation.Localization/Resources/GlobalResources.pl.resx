@@ -714,7 +714,4 @@
   <data name="Sku" xml:space="preserve">
     <value>Sku</value>
   </data>
-  <data name="EltapFabrics" xml:space="preserve">
-    <value>Tkaniny ELTAP</value>
-  </data>
 </root>
