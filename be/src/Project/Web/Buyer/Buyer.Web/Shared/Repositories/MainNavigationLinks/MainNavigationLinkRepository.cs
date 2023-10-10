@@ -27,7 +27,7 @@ namespace Buyer.Web.Shared.Repositories.MainNavigationLinks
             _logger = logger;
         }
 
-        public async Task<IEnumerable<MainNavigationLink>> GetMainNavigationLinksAsync(string contentPageKey, string language)
+        public async Task<IEnumerable<MainNavigationLink>> GetMainNavigationLinksAsync(string contentPageKey, string language, string fallbackLanguage)
         {
             try
             { 
@@ -35,11 +35,16 @@ namespace Buyer.Web.Shared.Repositories.MainNavigationLinks
 
                 if (response.Errors.OrEmptyIfNull().Any() is false && response?.Data != null)
                 {
+                    if(response.Data is null && string.IsNullOrWhiteSpace(fallbackLanguage))
+                    {
+                        response = await _graphQlClient.SendQueryAsync<JObject>(GetMainNavigationLinksQuery(contentPageKey, fallbackLanguage));
+                    }
+
                     var replacedContentPageKey = response.Data.ToString().Replace(contentPageKey, "page");
 
                     var links = JsonConvert.DeserializeObject<MainNavigationLinksGraphQlResponseModel>(replacedContentPageKey);
 
-                    return links?.Page?.Data?.Attributes?.MainNavigationLinks?.Links?.Select(x => new MainNavigationLink
+                    return links?.Page?.Data?.Attributes.MainNavigationLinks?.Links?.Select(x => new MainNavigationLink
                     {
                         Href = x.Href,
                         Label = x.Label,

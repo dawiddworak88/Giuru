@@ -6,6 +6,6 @@ namespace Buyer.Web.Shared.Repositories.MainNavigationLinks
 {
     public interface IMainNavigationLinkRepository
     {
-        Task<IEnumerable<MainNavigationLink>> GetMainNavigationLinksAsync(string contentPageKey, string language);
+        Task<IEnumerable<MainNavigationLink>> GetMainNavigationLinksAsync(string contentPageKey, string language, string fallbackLanguage);
     }
 }

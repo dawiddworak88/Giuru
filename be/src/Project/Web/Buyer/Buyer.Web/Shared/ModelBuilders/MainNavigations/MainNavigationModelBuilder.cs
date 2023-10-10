@@ -40,7 +40,7 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
 
         public async Task<MainNavigationViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var result = await _mainNavigationLinkRepository.GetMainNavigationLinksAsync(componentModel.ContentPageKey, componentModel.Language);
+            var result = await _mainNavigationLinkRepository.GetMainNavigationLinksAsync(componentModel.ContentPageKey, componentModel.Language, this._settings.CurrentValue.DefaultCulture);
 
             var links = new List<LinkViewModel>();
 
