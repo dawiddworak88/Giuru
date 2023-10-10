@@ -18,29 +18,20 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
 {
     public class MainNavigationModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>
     {
-        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
-        private readonly IStringLocalizer<OrderResources> _orderLocalizer;
-        private readonly LinkGenerator _linkGenerator;
         private readonly IOptionsMonitor<AppSettings> _settings;
         private readonly IMainNavigationLinkRepository _mainNavigationLinkRepository;
 
         public MainNavigationModelBuilder(
-            IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<OrderResources> orderLocalizer,
-            LinkGenerator linkGenerator,
             IOptionsMonitor<AppSettings> settings,
             IMainNavigationLinkRepository mainNavigationLinkRepository)
         {
-            _globalLocalizer = globalLocalizer;
-            _orderLocalizer = orderLocalizer;
-            _linkGenerator = linkGenerator;
             _settings = settings;
             _mainNavigationLinkRepository = mainNavigationLinkRepository;
         }
 
         public async Task<MainNavigationViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var result = await _mainNavigationLinkRepository.GetMainNavigationLinksAsync(componentModel.ContentPageKey, componentModel.Language, this._settings.CurrentValue.DefaultCulture);
+            var result = await _mainNavigationLinkRepository.GetMainNavigationLinksAsync(componentModel.ContentPageKey, componentModel.Language, _settings.CurrentValue.DefaultCulture);
 
             var links = new List<LinkViewModel>();
 
