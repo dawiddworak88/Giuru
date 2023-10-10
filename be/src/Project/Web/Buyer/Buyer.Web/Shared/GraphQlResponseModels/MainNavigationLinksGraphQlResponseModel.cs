@@ -6,8 +6,8 @@ namespace Buyer.Web.Shared.GraphQlResponseModels
 {
     public class MainNavigationLinksGraphQlResponseModel
     {
-        [JsonProperty("mainNavigation")]
-        public MainNavigation MainNavigation { get; set; }
+        [JsonProperty("page")]
+        public MainNavigation Page { get; set; }
     }
 
     public class MainNavigation

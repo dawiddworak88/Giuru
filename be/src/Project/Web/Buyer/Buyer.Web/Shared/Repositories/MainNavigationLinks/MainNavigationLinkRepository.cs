@@ -35,11 +35,11 @@ namespace Buyer.Web.Shared.Repositories.MainNavigationLinks
 
                 if (response.Errors.OrEmptyIfNull().Any() is false && response?.Data != null)
                 {
-                    var replacedContentPageKey = response.Data.ToString().Replace(contentPageKey, "mainNavigation");
+                    var replacedContentPageKey = response.Data.ToString().Replace(contentPageKey, "page");
 
                     var links = JsonConvert.DeserializeObject<MainNavigationLinksGraphQlResponseModel>(replacedContentPageKey);
 
-                    return links?.MainNavigation?.Data?.Attributes?.MainNavigationLinks?.Links?.Select(x => new MainNavigationLink
+                    return links?.Page?.Data?.Attributes?.MainNavigationLinks?.Links?.Select(x => new MainNavigationLink
                     {
                         Href = x.Href,
                         Label = x.Label,
