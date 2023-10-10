@@ -32,7 +32,8 @@ namespace Buyer.Web.Areas.Products.Controllers
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName])
+                BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName]),
+                ContentPageKey = "categoryPage"
             };
 
             var viewModel = await this.categoryPageModelBuilder.BuildModelAsync(componentModel);
