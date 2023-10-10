@@ -44,68 +44,15 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
 
             var links = new List<LinkViewModel>();
 
-            if (result is not null)
+            foreach (var link in result)
             {
-                foreach (var link in result)
+                links.Add(new LinkViewModel
                 {
-                    links.Add(new LinkViewModel
-                    {
-                        Url = link.Href,
-                        Text = link.Label,
-                        Target = link.Taget
-                    });
-                }
+                    Url = link.Href,
+                    Text = link.Label,
+                    Target = link.Taget
+                });
             }
-
-            //var links = new List<LinkViewModel>
-            //{
-            //    new LinkViewModel
-            //    {
-            //        Text = _orderLocalizer.GetString("MyOrders").Value,
-            //        Url = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
-            //    },
-            //    new LinkViewModel
-            //    {
-            //        Text = _orderLocalizer.GetString("PlaceOrder").Value,
-            //        Url = _linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
-            //    },
-            //    new LinkViewModel
-            //    {
-            //        Text = _globalLocalizer.GetString("AvailableProducts"),
-            //        Url = _linkGenerator.GetPathByAction("Index", "AvailableProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
-            //    },
-            //    new LinkViewModel
-            //    {
-            //        Text = _globalLocalizer.GetString("Outlet").Value,
-            //        Url = _linkGenerator.GetPathByAction("Index", "Outlet", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
-            //    },
-            //    new LinkViewModel
-            //    {
-            //        Text = _globalLocalizer.GetString("News"),
-            //        Url = _linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
-            //    },
-            //    new LinkViewModel
-            //    {
-            //        Text = _globalLocalizer.GetString("DownloadCenter"),
-            //        Url = _linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
-            //    },
-            //    new LinkViewModel
-            //    {
-            //        Text = _globalLocalizer.GetString("MakeComplaint"),
-            //        Target = "_blank",
-            //        Url = _settings.CurrentValue.MakeComplaintUrl
-            //    }
-            //};
-
-            //if (_settings.CurrentValue.FabricsWebUrl is not null)
-            //{
-            //    links.Insert(4, new LinkViewModel
-            //    {
-            //        Text = _globalLocalizer.GetString("EltapFabrics"),
-            //        Target = "_blank",
-            //        Url = _settings.CurrentValue.FabricsWebUrl
-            //    });
-            //}
 
             return new MainNavigationViewModel
             {
