@@ -35,7 +35,7 @@ namespace Buyer.Web.Shared.Repositories.MainNavigationLinks
 
                 if (response.Errors.OrEmptyIfNull().Any() is false && response?.Data != null)
                 {
-                    if(response.Data is null && string.IsNullOrWhiteSpace(fallbackLanguage))
+                    if(response.Data is null && string.IsNullOrWhiteSpace(fallbackLanguage) is false)
                     {
                         response = await _graphQlClient.SendQueryAsync<JObject>(GetMainNavigationLinksQuery(contentPageKey, fallbackLanguage));
                     }
