@@ -15,14 +15,14 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, OutletPageCatalogViewModel> outletCatalogModelBuilder;
-        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder;
 
         public OutletPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, OutletPageCatalogViewModel> outletCatalogModelBuilder,
-            IModelBuilder<FooterViewModel> footerModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder)
         {
             this.seoModelBuilder = seoModelBuilder;
             this.headerModelBuilder = headerModelBuilder;
@@ -39,7 +39,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                 Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 Catalog = await this.outletCatalogModelBuilder.BuildModelAsync(componentModel),
-                Footer = footerModelBuilder.BuildModel()
+                Footer = await footerModelBuilder.BuildModelAsync(componentModel)
             };
 
             return viewModel;

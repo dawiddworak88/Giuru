@@ -39,6 +39,7 @@ using GraphQL.Client.Http;
 using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
 using Buyer.Web.Shared.ModelBuilders.OrderItemStatusChanges;
 using Buyer.Web.Shared.Repositories.Metadatas;
+using Buyer.Web.Shared.Repositories.GraphQl;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -60,7 +61,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>, MainNavigationModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel>, MetadataModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel>, OrderItemStatusChangesModelBuilder>();
-            services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
 
@@ -68,6 +69,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IMetadataRepository, MetadataRepository>();
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<ICatalogProductsRepository, CatalogProductsRepository>();
+            services.AddScoped<IGraphQlRepository, GraphQlRepository>();
 
             // Services
             services.AddScoped<ICatalogService, CatalogService>();

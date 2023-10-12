@@ -1,51 +1,45 @@
 ﻿using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Links.ViewModels;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.Localization;
-using Foundation.Localization.Definitions;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
-using Foundation.Security.Definitions;
-using System;
-using System.Collections.Generic;
+using Buyer.Web.Shared.Repositories.GraphQl;
+using Foundation.PageContent.ComponentModels;
+using System.Threading.Tasks;
+using System.Linq;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Buyer.Web.Shared.ModelBuilders.Footers
 {
-    public class FooterModelBuilder : IModelBuilder<FooterViewModel>
+    public class FooterModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel>
     {
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IOptions<AppSettings> options;
+        private readonly IGraphQlRepository _graphQlRepository;
+        private readonly IOptions<AppSettings> _options;
 
         public FooterModelBuilder(
-            IStringLocalizer<GlobalResources> globalLocalizer,
+            IGraphQlRepository graphQlRepository,
             IOptions<AppSettings> options)
         {
-            this.globalLocalizer = globalLocalizer;
-            this.options = options;
+            _graphQlRepository = graphQlRepository;
+            _options = options;
         }
 
-        public FooterViewModel BuildModel()
+        public async Task<FooterViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var links = new List<LinkViewModel>
-            {
-                new LinkViewModel 
-                { 
-                    Text = this.globalLocalizer["TermsConditions"], 
-                    Url = $"{this.options.Value.IdentityUrl}{SecurityConstants.RegulationsEndpoint}"
-                },
-                new LinkViewModel 
-                { 
-                    Text = this.globalLocalizer["PrivacyPolicy"], 
-                    Url = $"{this.options.Value.IdentityUrl}{SecurityConstants.PrivacyPolicyEndpoint}"
-                }
-            };
+            var viewModel = new FooterViewModel();
 
-            var viewModel = new FooterViewModel 
+            var footerContent = await _graphQlRepository.GetFooterAsync(componentModel.ContentPageKey, componentModel.Language, _options.Value.DefaultCulture);
+
+            if (footerContent is not null)
             {
-                Copyright = this.globalLocalizer["Copyright"]?.Value.Replace(LocalizationConstants.YearToken, DateTime.Now.Year.ToString()),
-                Links = links
-            };
+                viewModel.Copyright = footerContent.Copyright;
+                viewModel.Links = footerContent.Links.OrEmptyIfNull().Select(x => new LinkViewModel
+                {
+                    Url = x.Href,
+                    Target = x.Target,
+                    Text = x.Label
+                });
+            }
 
             return viewModel;
         }

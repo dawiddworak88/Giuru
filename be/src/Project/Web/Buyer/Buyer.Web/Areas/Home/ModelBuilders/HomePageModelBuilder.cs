@@ -22,7 +22,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, HomePageContentGridViewModel> _contentGridModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, HomePageNewsCarouselGridViewModel> _newsModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrdersAnalyticsDetailViewModel> _ordersAnalyticsModelBuilder;
-        private readonly IModelBuilder<FooterViewModel> _footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> _footerModelBuilder;
 
         public HomePageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder,
@@ -33,7 +33,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             IAsyncComponentModelBuilder<ComponentModelBase, HomePageContentGridViewModel> contentGridModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, HomePageNewsCarouselGridViewModel> newsModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, OrdersAnalyticsDetailViewModel> ordersAnalyticsModelBuilder,
-            IModelBuilder<FooterViewModel> footerModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder)
         {
             _seoModelBuilder = seoModelBuilder;
             _headerModelBuilder = headerModelBuilder;
@@ -60,7 +60,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                 CarouselGrid = await _carouselGridModelBuilder.BuildModelAsync(componentModel),
                 ContentGrid = await _contentGridModelBuilder.BuildModelAsync(componentModel),
                 NewsCarouselGrid = await _newsModelBuilder.BuildModelAsync(componentModel),
-                Footer = _footerModelBuilder.BuildModel()
+                Footer = await _footerModelBuilder.BuildModelAsync(componentModel)
             };
 
             return viewModel;
