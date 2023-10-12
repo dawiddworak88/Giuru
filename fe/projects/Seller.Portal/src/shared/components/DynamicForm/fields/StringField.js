@@ -27,24 +27,40 @@ function StringField(props) {
     registry = getDefaultRegistry(),
     rawErrors,
   } = props;
+
+  let value = formData;
+
+  if (typeof value === "string") {
+    let regex = /[!@#$%^&*(){},<>/?|'\"+=`~\[|\]|\\\\]/g;
+
+    if (formData.match(regex)) {
+      value = formData.replace(regex, "");
+    }
+  }
+
   const { title, format } = schema;
   const { widgets, formContext } = registry;
   const enumOptions = isSelect(schema) && optionsList(schema);
   let defaultWidget = enumOptions ? "select" : "text";
+
   if (format && hasWidget(schema, format, widgets)) {
     defaultWidget = format;
+  } 
+  else if (schema.type === "number") {
+    defaultWidget = "updown";
   }
-  const { widget = defaultWidget, placeholder = "", ...options } = getUiOptions(
-    uiSchema
-  );
+
+  const { widget = defaultWidget, placeholder = "", ...options } = getUiOptions(uiSchema);
+
   const Widget = getWidget(schema, widget, widgets);
+  
   return (
     <Widget
       options={{ ...options, enumOptions }}
       schema={schema}
       id={idSchema && idSchema.$id}
       label={title === undefined ? name : title}
-      value={formData}
+      value={value}
       onChange={onChange}
       onBlur={onBlur}
       onFocus={onFocus}

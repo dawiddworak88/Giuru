@@ -2,6 +2,8 @@ FROM node:18-alpine
 
 RUN apk update && apk add  build-base gcc autoconf automake zlib-dev libpng-dev nasm bash vips-dev
 
+RUN npm install -g node-gyp
+
 WORKDIR /content
 
 COPY . .
