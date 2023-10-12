@@ -1,5 +1,5 @@
 ﻿using Buyer.Web.Shared.DomainModels.MainNavigationLinks;
-using Buyer.Web.Shared.GraphQlResponseModels;
+using Buyer.Web.Shared.GraphQlResponseModels.MainNavigationLinks;
 using Foundation.Extensions.ExtensionMethods;
 using GraphQL;
 using GraphQL.Client.Abstractions;

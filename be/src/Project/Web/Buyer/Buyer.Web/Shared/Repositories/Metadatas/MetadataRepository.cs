@@ -1,5 +1,5 @@
 ﻿using Buyer.Web.Shared.DomainModels.Metadata;
-using Buyer.Web.Shared.GraphQlResponseModels;
+using Buyer.Web.Shared.GraphQlResponseModels.Seo;
 using Foundation.Extensions.ExtensionMethods;
 using GraphQL;
 using GraphQL.Client.Abstractions;
