@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Routing;
 using System.Globalization;
 using Foundation.Localization;
 using Microsoft.Extensions.Localization;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
 {
@@ -74,7 +75,7 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
                 }
             };
 
-            foreach (var link in mainNavigationLinks)
+            foreach (var link in mainNavigationLinks.OrEmptyIfNull())
             {
                 links.Add(new LinkViewModel
                 {
