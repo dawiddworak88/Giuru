@@ -228,15 +228,20 @@ namespace Catalog.Api.Services.Categories
 
         private async Task OrderingCategoriesAsync(int source, int destination)
         {
-            var categories = _context.Categories.Where(x => x.IsActive);
+            if(source > destination)
+            {
+                var categories = _context.Categories.Where(x => x.IsActive && x.Order >= destination && x.Order < source);
 
-            foreach(var category in categories.OrEmptyIfNull())
-            { 
-                if ((category.Order >= destination && category.Order < source) || source == 0)
-                {
+                foreach (var category in categories.OrEmptyIfNull()) 
+                { 
                     category.Order += 1;
-                } 
-                else if(category.Order <= destination && category.Order > source)
+                }
+            }
+            else
+            {
+                var categories = _context.Categories.Where(x => x.IsActive && x.Order <= destination && x.Order > source);
+
+                foreach (var category in categories.OrEmptyIfNull())
                 {
                     category.Order -= 1;
                 }
