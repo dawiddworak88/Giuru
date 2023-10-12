@@ -7,14 +7,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Repositories.MainNavigationLinks;
-using Foundation.Extensions.ExtensionMethods;
-using System.Linq;
-using Elastic.CommonSchema;
 using Microsoft.AspNetCore.Routing;
 using System.Globalization;
 using Foundation.Localization;
 using Microsoft.Extensions.Localization;
-using System.Diagnostics;
 
 namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
 {
