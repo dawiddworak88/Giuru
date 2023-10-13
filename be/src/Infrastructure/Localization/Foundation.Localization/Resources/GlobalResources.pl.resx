@@ -714,6 +714,15 @@
   <data name="Sku" xml:space="preserve">
     <value>Sku</value>
   </data>
+  <data name="MoveToNextPage" xml:space="preserve">
+    <value>Przenieś na następną stronę</value>
+  </data>
+  <data name="MoveToPreviousPage" xml:space="preserve">
+    <value>Przenieś na poprzednią stronę</value>
+  </data>
+  <data name="Drag" xml:space="preserve">
+    <value>Przenieś</value>
+  </data>
   <data name="FileSizeLimit" xml:space="preserve">
     <value>Przesłany plik przekracza maksymalny rozmiar</value>
   </data>
