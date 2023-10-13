@@ -708,6 +708,15 @@
   <data name="Sku" xml:space="preserve">
     <value>Sku</value>
   </data>
+  <data name="MoveToNextPage" xml:space="preserve">
+    <value>zur nächsten Seite</value>
+  </data>
+  <data name="MoveToPreviousPage" xml:space="preserve">
+    <value>zur vorherigen Seite</value>
+  </data>
+  <data name="Drag" xml:space="preserve">
+    <value>Versetzen</value>
+  </data>
   <data name="FileSizeLimit" xml:space="preserve">
     <value>Die hochgeladene Datei überschreitet die maximale Größe</value>
   </data>

@@ -7,5 +7,6 @@
         public bool IsDuplicate { get; set; }
         public bool isPicture { get; set; }
         public bool QrCode { get; set; }
+        public bool IsDragDropOrderEnabled { get; set; }
     }
 }

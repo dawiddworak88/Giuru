@@ -31,13 +31,14 @@ namespace Seller.Web.Areas.Categories.Repositories
             _settings = settings;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? parentCategoryId, string name, IEnumerable<Guid> files, IEnumerable<CategorySchema> schemas)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? parentCategoryId, string name, IEnumerable<Guid> files, IEnumerable<CategorySchema> schemas, int order)
         {
             var requestModel = new SaveCategoryApiRequestModel
             {
                 Id = id,
                 ParentCategoryId = parentCategoryId,
                 Name = name,
+                Order = order,
                 Files = files,
                 Schemas = schemas.Select(x => new CategorySchemaRequestModel 
                 { 

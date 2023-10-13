@@ -18,6 +18,7 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.EventBus.Abstractions;
 using System.Diagnostics;
 using Catalog.Api.IntegrationEvents;
+using System.Linq.Dynamic.Core;
 
 namespace Catalog.Api.Services.Categories
 {
@@ -44,6 +45,7 @@ namespace Catalog.Api.Services.Categories
                 .Include(x => x.Translations)
                 .Include(x => x.ParentCategory)
                 .Include(x => x.ParentCategory.Translations)
+                .Include(x => x.Schemas)                
                 .AsSingleQuery();
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
@@ -82,6 +84,8 @@ namespace Catalog.Api.Services.Categories
                 {
                     Id = x.Id,
                     Order = x.Order,
+                    Schema = x.Schemas.FirstOrDefault(s => s.Language == model.Language)?.Schema ?? x.Schemas.FirstOrDefault(s => s.CategoryId == x.Id)?.Schema,
+                    UiSchema = x.Schemas.FirstOrDefault(s => s.Language == model.Language)?.UiSchema ?? x.Schemas.FirstOrDefault(s => s.CategoryId == x.Id)?.UiSchema,
                     Level = x.Level,
                     IsLeaf = x.IsLeaf,
                     ParentId = x.Parentid,
@@ -153,15 +157,26 @@ namespace Catalog.Api.Services.Categories
                 throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            var parentCategory = await _context.Categories.FirstOrDefaultAsync(x => x.Id == model.ParentId && x.IsActive);
-
-            if (parentCategory is null)
+            if (model.ParentId.HasValue)
             {
-                throw new CustomException(_productLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NoContent);
+                var parentCategory = await _context.Categories.FirstOrDefaultAsync(x => x.Id == model.ParentId && x.IsActive);
+
+                if (parentCategory is null)
+                {
+                    throw new CustomException(_productLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NoContent);
+                }
+
+                category.Parentid = model.ParentId;
+                category.Level = parentCategory.Level + 1;
+            }
+
+            if (model.Order != 0)
+            {
+                await OrderingCategoriesAsync(category.Order, model.Order);
+                category.Order = model.Order;
             }
 
             category.Parentid = model.ParentId;
-            category.Level = parentCategory.Level + 1;
             category.IsLeaf = !await _context.Categories.AnyAsync(x => x.Parentid == category.Id && x.IsActive);
             category.LastModifiedDate = DateTime.UtcNow;
 
@@ -211,6 +226,30 @@ namespace Catalog.Api.Services.Categories
             return Get(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
+        private async Task OrderingCategoriesAsync(int source, int destination)
+        {
+            if(source > destination)
+            {
+                var categories = _context.Categories.Where(x => x.IsActive && x.Order >= destination && x.Order < source);
+
+                foreach (var category in categories.OrEmptyIfNull()) 
+                { 
+                    category.Order += 1;
+                }
+            }
+            else
+            {
+                var categories = _context.Categories.Where(x => x.IsActive && x.Order <= destination && x.Order > source);
+
+                foreach (var category in categories.OrEmptyIfNull())
+                {
+                    category.Order -= 1;
+                }
+            }
+            
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<CategoryServiceModel> CreateAsync(CreateCategoryServiceModel model)
         {
             var category = new Category
@@ -231,6 +270,9 @@ namespace Catalog.Api.Services.Categories
                 Name = model.Name,
                 Language = model.Language
             };
+            
+            await OrderingCategoriesAsync(0, 1);
+            category.Order = 1;
 
             _context.CategoryTranslations.Add(categoryTranslation.FillCommonProperties());
 

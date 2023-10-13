@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Products.DomainModels
 {
@@ -6,6 +7,8 @@ namespace Seller.Web.Areas.Products.DomainModels
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string Schema { get; set; }
+        public string UiSchema { get; set; }
         public int Level { get; set; }
         public int Order { get; set; }
         public Guid? ParentId { get; set; }
@@ -14,5 +17,6 @@ namespace Seller.Web.Areas.Products.DomainModels
         public Guid? ThumbnailMediaId { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public IEnumerable<Guid> Files { get; set; }
     }
 }

@@ -28,6 +28,7 @@ namespace Identity.Api.Areas.Home.Controllers
         {
             var componentModel = new ComponentModelBase
             {
+                ContentPageKey = "privacyPolicyPage",
                 Language = CultureInfo.CurrentUICulture.Name
             };
 
@@ -40,6 +41,7 @@ namespace Identity.Api.Areas.Home.Controllers
         {
             var componentModel = new ComponentModelBase
             {
+                ContentPageKey = "regulationsPage",
                 Language = CultureInfo.CurrentUICulture.Name
             };
 

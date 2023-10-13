@@ -15,7 +15,6 @@ using Buyer.Web.Shared.ViewModels.Catalogs;
 using System.Collections.Generic;
 using Buyer.Web.Areas.Products.Definitions;
 using Buyer.Web.Shared.ViewModels.Modals;
-using Buyer.Web.Areas.Products.Repositories;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {

@@ -5,7 +5,7 @@
 -- Dumped from database version 10.5 (Debian 10.5-2.pgdg90+1)
 -- Dumped by pg_dump version 15.0
 
--- Started on 2022-12-14 13:30:09
+-- Started on 2023-01-02 08:06:02
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -59,7 +59,7 @@ CREATE SEQUENCE public.admin_permissions_id_seq
 ALTER TABLE public.admin_permissions_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3960 (class 0 OID 0)
+-- TOC entry 3972 (class 0 OID 0)
 -- Dependencies: 197
 -- Name: admin_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -99,7 +99,7 @@ CREATE SEQUENCE public.admin_permissions_role_links_id_seq
 ALTER TABLE public.admin_permissions_role_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3961 (class 0 OID 0)
+-- TOC entry 3973 (class 0 OID 0)
 -- Dependencies: 199
 -- Name: admin_permissions_role_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -143,7 +143,7 @@ CREATE SEQUENCE public.admin_roles_id_seq
 ALTER TABLE public.admin_roles_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3962 (class 0 OID 0)
+-- TOC entry 3974 (class 0 OID 0)
 -- Dependencies: 201
 -- Name: admin_roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -194,7 +194,7 @@ CREATE SEQUENCE public.admin_users_id_seq
 ALTER TABLE public.admin_users_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3963 (class 0 OID 0)
+-- TOC entry 3975 (class 0 OID 0)
 -- Dependencies: 203
 -- Name: admin_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -235,7 +235,7 @@ CREATE SEQUENCE public.admin_users_roles_links_id_seq
 ALTER TABLE public.admin_users_roles_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3964 (class 0 OID 0)
+-- TOC entry 3976 (class 0 OID 0)
 -- Dependencies: 205
 -- Name: admin_users_roles_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -295,7 +295,7 @@ CREATE SEQUENCE public.available_products_pages_components_id_seq
 ALTER TABLE public.available_products_pages_components_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3965 (class 0 OID 0)
+-- TOC entry 3977 (class 0 OID 0)
 -- Dependencies: 298
 -- Name: available_products_pages_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -320,7 +320,7 @@ CREATE SEQUENCE public.available_products_pages_id_seq
 ALTER TABLE public.available_products_pages_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3966 (class 0 OID 0)
+-- TOC entry 3978 (class 0 OID 0)
 -- Dependencies: 296
 -- Name: available_products_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -360,7 +360,7 @@ CREATE SEQUENCE public.available_products_pages_localizations_links_id_seq
 ALTER TABLE public.available_products_pages_localizations_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3967 (class 0 OID 0)
+-- TOC entry 3979 (class 0 OID 0)
 -- Dependencies: 300
 -- Name: available_products_pages_localizations_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -420,7 +420,7 @@ CREATE SEQUENCE public.basket_pages_components_id_seq
 ALTER TABLE public.basket_pages_components_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3968 (class 0 OID 0)
+-- TOC entry 3980 (class 0 OID 0)
 -- Dependencies: 316
 -- Name: basket_pages_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -445,7 +445,7 @@ CREATE SEQUENCE public.basket_pages_id_seq
 ALTER TABLE public.basket_pages_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3969 (class 0 OID 0)
+-- TOC entry 3981 (class 0 OID 0)
 -- Dependencies: 314
 -- Name: basket_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -485,12 +485,51 @@ CREATE SEQUENCE public.basket_pages_localizations_links_id_seq
 ALTER TABLE public.basket_pages_localizations_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3970 (class 0 OID 0)
+-- TOC entry 3982 (class 0 OID 0)
 -- Dependencies: 318
 -- Name: basket_pages_localizations_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.basket_pages_localizations_links_id_seq OWNED BY public.basket_pages_localizations_links.id;
+
+
+--
+-- TOC entry 333 (class 1259 OID 336530)
+-- Name: components_blocks_contents; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.components_blocks_contents (
+    id integer NOT NULL,
+    title character varying(255),
+    text text
+);
+
+
+ALTER TABLE public.components_blocks_contents OWNER TO postgres;
+
+--
+-- TOC entry 332 (class 1259 OID 336528)
+-- Name: components_blocks_contents_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.components_blocks_contents_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.components_blocks_contents_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3983 (class 0 OID 0)
+-- Dependencies: 332
+-- Name: components_blocks_contents_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.components_blocks_contents_id_seq OWNED BY public.components_blocks_contents.id;
 
 
 --
@@ -541,7 +580,7 @@ CREATE SEQUENCE public.components_blocks_hero_slider_items_components_id_seq
 ALTER TABLE public.components_blocks_hero_slider_items_components_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3971 (class 0 OID 0)
+-- TOC entry 3984 (class 0 OID 0)
 -- Dependencies: 208
 -- Name: components_blocks_hero_slider_items_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -566,7 +605,7 @@ CREATE SEQUENCE public.components_blocks_hero_slider_items_id_seq
 ALTER TABLE public.components_blocks_hero_slider_items_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3972 (class 0 OID 0)
+-- TOC entry 3985 (class 0 OID 0)
 -- Dependencies: 209
 -- Name: components_blocks_hero_slider_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -620,7 +659,7 @@ CREATE SEQUENCE public.components_blocks_hero_sliders_components_id_seq
 ALTER TABLE public.components_blocks_hero_sliders_components_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3973 (class 0 OID 0)
+-- TOC entry 3986 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: components_blocks_hero_sliders_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -645,7 +684,7 @@ CREATE SEQUENCE public.components_blocks_hero_sliders_id_seq
 ALTER TABLE public.components_blocks_hero_sliders_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3974 (class 0 OID 0)
+-- TOC entry 3987 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: components_blocks_hero_sliders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -686,7 +725,7 @@ CREATE SEQUENCE public.components_shared_links_id_seq
 ALTER TABLE public.components_shared_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3975 (class 0 OID 0)
+-- TOC entry 3988 (class 0 OID 0)
 -- Dependencies: 215
 -- Name: components_shared_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -725,7 +764,7 @@ CREATE SEQUENCE public.components_shared_seos_id_seq
 ALTER TABLE public.components_shared_seos_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3976 (class 0 OID 0)
+-- TOC entry 3989 (class 0 OID 0)
 -- Dependencies: 217
 -- Name: components_shared_seos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -785,7 +824,7 @@ CREATE SEQUENCE public.dashboard_pages_components_id_seq
 ALTER TABLE public.dashboard_pages_components_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3977 (class 0 OID 0)
+-- TOC entry 3990 (class 0 OID 0)
 -- Dependencies: 272
 -- Name: dashboard_pages_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -810,7 +849,7 @@ CREATE SEQUENCE public.dashboard_pages_id_seq
 ALTER TABLE public.dashboard_pages_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3978 (class 0 OID 0)
+-- TOC entry 3991 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: dashboard_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -850,7 +889,7 @@ CREATE SEQUENCE public.dashboard_pages_localizations_links_id_seq
 ALTER TABLE public.dashboard_pages_localizations_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3979 (class 0 OID 0)
+-- TOC entry 3992 (class 0 OID 0)
 -- Dependencies: 274
 -- Name: dashboard_pages_localizations_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -910,7 +949,7 @@ CREATE SEQUENCE public.download_center_pages_components_id_seq
 ALTER TABLE public.download_center_pages_components_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3980 (class 0 OID 0)
+-- TOC entry 3993 (class 0 OID 0)
 -- Dependencies: 276
 -- Name: download_center_pages_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -935,7 +974,7 @@ CREATE SEQUENCE public.download_center_pages_id_seq
 ALTER TABLE public.download_center_pages_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3981 (class 0 OID 0)
+-- TOC entry 3994 (class 0 OID 0)
 -- Dependencies: 262
 -- Name: download_center_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -975,7 +1014,7 @@ CREATE SEQUENCE public.download_center_pages_localizations_links_id_seq
 ALTER TABLE public.download_center_pages_localizations_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3982 (class 0 OID 0)
+-- TOC entry 3995 (class 0 OID 0)
 -- Dependencies: 278
 -- Name: download_center_pages_localizations_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1046,7 +1085,7 @@ CREATE SEQUENCE public.files_folder_links_id_seq
 ALTER TABLE public.files_folder_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3983 (class 0 OID 0)
+-- TOC entry 3996 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: files_folder_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1071,7 +1110,7 @@ CREATE SEQUENCE public.files_id_seq
 ALTER TABLE public.files_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3984 (class 0 OID 0)
+-- TOC entry 3997 (class 0 OID 0)
 -- Dependencies: 221
 -- Name: files_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1113,7 +1152,7 @@ CREATE SEQUENCE public.files_related_morphs_id_seq
 ALTER TABLE public.files_related_morphs_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3985 (class 0 OID 0)
+-- TOC entry 3998 (class 0 OID 0)
 -- Dependencies: 223
 -- Name: files_related_morphs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1173,7 +1212,7 @@ CREATE SEQUENCE public.home_pages_components_id_seq
 ALTER TABLE public.home_pages_components_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3986 (class 0 OID 0)
+-- TOC entry 3999 (class 0 OID 0)
 -- Dependencies: 226
 -- Name: home_pages_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1198,7 +1237,7 @@ CREATE SEQUENCE public.home_pages_id_seq
 ALTER TABLE public.home_pages_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3987 (class 0 OID 0)
+-- TOC entry 4000 (class 0 OID 0)
 -- Dependencies: 227
 -- Name: home_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1238,7 +1277,7 @@ CREATE SEQUENCE public.home_pages_localizations_links_id_seq
 ALTER TABLE public.home_pages_localizations_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3988 (class 0 OID 0)
+-- TOC entry 4001 (class 0 OID 0)
 -- Dependencies: 229
 -- Name: home_pages_localizations_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1281,7 +1320,7 @@ CREATE SEQUENCE public.i18n_locale_id_seq
 ALTER TABLE public.i18n_locale_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3989 (class 0 OID 0)
+-- TOC entry 4002 (class 0 OID 0)
 -- Dependencies: 231
 -- Name: i18n_locale_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1341,7 +1380,7 @@ CREATE SEQUENCE public.news_pages_components_id_seq
 ALTER TABLE public.news_pages_components_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3990 (class 0 OID 0)
+-- TOC entry 4003 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: news_pages_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1366,7 +1405,7 @@ CREATE SEQUENCE public.news_pages_id_seq
 ALTER TABLE public.news_pages_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3991 (class 0 OID 0)
+-- TOC entry 4004 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: news_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1406,7 +1445,7 @@ CREATE SEQUENCE public.news_pages_localizations_links_id_seq
 ALTER TABLE public.news_pages_localizations_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3992 (class 0 OID 0)
+-- TOC entry 4005 (class 0 OID 0)
 -- Dependencies: 282
 -- Name: news_pages_localizations_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1466,7 +1505,7 @@ CREATE SEQUENCE public.order_item_pages_components_id_seq
 ALTER TABLE public.order_item_pages_components_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3993 (class 0 OID 0)
+-- TOC entry 4006 (class 0 OID 0)
 -- Dependencies: 322
 -- Name: order_item_pages_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1491,7 +1530,7 @@ CREATE SEQUENCE public.order_item_pages_id_seq
 ALTER TABLE public.order_item_pages_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3994 (class 0 OID 0)
+-- TOC entry 4007 (class 0 OID 0)
 -- Dependencies: 320
 -- Name: order_item_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1531,7 +1570,7 @@ CREATE SEQUENCE public.order_item_pages_localizations_links_id_seq
 ALTER TABLE public.order_item_pages_localizations_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3995 (class 0 OID 0)
+-- TOC entry 4008 (class 0 OID 0)
 -- Dependencies: 324
 -- Name: order_item_pages_localizations_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1591,7 +1630,7 @@ CREATE SEQUENCE public.order_pages_components_id_seq
 ALTER TABLE public.order_pages_components_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3996 (class 0 OID 0)
+-- TOC entry 4009 (class 0 OID 0)
 -- Dependencies: 284
 -- Name: order_pages_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1616,7 +1655,7 @@ CREATE SEQUENCE public.order_pages_id_seq
 ALTER TABLE public.order_pages_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3997 (class 0 OID 0)
+-- TOC entry 4010 (class 0 OID 0)
 -- Dependencies: 266
 -- Name: order_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1656,7 +1695,7 @@ CREATE SEQUENCE public.order_pages_localizations_links_id_seq
 ALTER TABLE public.order_pages_localizations_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3998 (class 0 OID 0)
+-- TOC entry 4011 (class 0 OID 0)
 -- Dependencies: 286
 -- Name: order_pages_localizations_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1716,7 +1755,7 @@ CREATE SEQUENCE public.orders_pages_components_id_seq
 ALTER TABLE public.orders_pages_components_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3999 (class 0 OID 0)
+-- TOC entry 4012 (class 0 OID 0)
 -- Dependencies: 288
 -- Name: orders_pages_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1741,7 +1780,7 @@ CREATE SEQUENCE public.orders_pages_id_seq
 ALTER TABLE public.orders_pages_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4000 (class 0 OID 0)
+-- TOC entry 4013 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: orders_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1781,7 +1820,7 @@ CREATE SEQUENCE public.orders_pages_localizations_links_id_seq
 ALTER TABLE public.orders_pages_localizations_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4001 (class 0 OID 0)
+-- TOC entry 4014 (class 0 OID 0)
 -- Dependencies: 290
 -- Name: orders_pages_localizations_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1841,7 +1880,7 @@ CREATE SEQUENCE public.outlet_pages_components_id_seq
 ALTER TABLE public.outlet_pages_components_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4002 (class 0 OID 0)
+-- TOC entry 4015 (class 0 OID 0)
 -- Dependencies: 292
 -- Name: outlet_pages_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1866,7 +1905,7 @@ CREATE SEQUENCE public.outlet_pages_id_seq
 ALTER TABLE public.outlet_pages_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4003 (class 0 OID 0)
+-- TOC entry 4016 (class 0 OID 0)
 -- Dependencies: 270
 -- Name: outlet_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1906,7 +1945,7 @@ CREATE SEQUENCE public.outlet_pages_localizations_links_id_seq
 ALTER TABLE public.outlet_pages_localizations_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4004 (class 0 OID 0)
+-- TOC entry 4017 (class 0 OID 0)
 -- Dependencies: 294
 -- Name: outlet_pages_localizations_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1926,8 +1965,7 @@ CREATE TABLE public.privacy_policy_pages (
     published_at timestamp(6) without time zone,
     created_by_id integer,
     updated_by_id integer,
-    locale character varying(255),
-    text text
+    locale character varying(255)
 );
 
 
@@ -1967,7 +2005,7 @@ CREATE SEQUENCE public.privacy_policy_pages_components_id_seq
 ALTER TABLE public.privacy_policy_pages_components_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4005 (class 0 OID 0)
+-- TOC entry 4018 (class 0 OID 0)
 -- Dependencies: 310
 -- Name: privacy_policy_pages_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1992,7 +2030,7 @@ CREATE SEQUENCE public.privacy_policy_pages_id_seq
 ALTER TABLE public.privacy_policy_pages_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4006 (class 0 OID 0)
+-- TOC entry 4019 (class 0 OID 0)
 -- Dependencies: 308
 -- Name: privacy_policy_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2032,7 +2070,7 @@ CREATE SEQUENCE public.privacy_policy_pages_localizations_links_id_seq
 ALTER TABLE public.privacy_policy_pages_localizations_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4007 (class 0 OID 0)
+-- TOC entry 4020 (class 0 OID 0)
 -- Dependencies: 312
 -- Name: privacy_policy_pages_localizations_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2052,8 +2090,7 @@ CREATE TABLE public.regulations_pages (
     published_at timestamp(6) without time zone,
     created_by_id integer,
     updated_by_id integer,
-    locale character varying(255),
-    text text
+    locale character varying(255)
 );
 
 
@@ -2093,7 +2130,7 @@ CREATE SEQUENCE public.regulations_pages_components_id_seq
 ALTER TABLE public.regulations_pages_components_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4008 (class 0 OID 0)
+-- TOC entry 4021 (class 0 OID 0)
 -- Dependencies: 304
 -- Name: regulations_pages_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2118,7 +2155,7 @@ CREATE SEQUENCE public.regulations_pages_id_seq
 ALTER TABLE public.regulations_pages_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4009 (class 0 OID 0)
+-- TOC entry 4022 (class 0 OID 0)
 -- Dependencies: 302
 -- Name: regulations_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2158,7 +2195,7 @@ CREATE SEQUENCE public.regulations_pages_localizations_links_id_seq
 ALTER TABLE public.regulations_pages_localizations_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4010 (class 0 OID 0)
+-- TOC entry 4023 (class 0 OID 0)
 -- Dependencies: 306
 -- Name: regulations_pages_localizations_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2218,7 +2255,7 @@ CREATE SEQUENCE public.search_products_pages_components_id_seq
 ALTER TABLE public.search_products_pages_components_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4011 (class 0 OID 0)
+-- TOC entry 4024 (class 0 OID 0)
 -- Dependencies: 328
 -- Name: search_products_pages_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2243,7 +2280,7 @@ CREATE SEQUENCE public.search_products_pages_id_seq
 ALTER TABLE public.search_products_pages_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4012 (class 0 OID 0)
+-- TOC entry 4025 (class 0 OID 0)
 -- Dependencies: 326
 -- Name: search_products_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2283,7 +2320,7 @@ CREATE SEQUENCE public.search_products_pages_localizations_links_id_seq
 ALTER TABLE public.search_products_pages_localizations_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4013 (class 0 OID 0)
+-- TOC entry 4026 (class 0 OID 0)
 -- Dependencies: 330
 -- Name: search_products_pages_localizations_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2325,7 +2362,7 @@ CREATE SEQUENCE public.strapi_api_token_permissions_id_seq
 ALTER TABLE public.strapi_api_token_permissions_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4014 (class 0 OID 0)
+-- TOC entry 4027 (class 0 OID 0)
 -- Dependencies: 233
 -- Name: strapi_api_token_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2365,7 +2402,7 @@ CREATE SEQUENCE public.strapi_api_token_permissions_token_links_id_seq
 ALTER TABLE public.strapi_api_token_permissions_token_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4015 (class 0 OID 0)
+-- TOC entry 4028 (class 0 OID 0)
 -- Dependencies: 235
 -- Name: strapi_api_token_permissions_token_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2413,7 +2450,7 @@ CREATE SEQUENCE public.strapi_api_tokens_id_seq
 ALTER TABLE public.strapi_api_tokens_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4016 (class 0 OID 0)
+-- TOC entry 4029 (class 0 OID 0)
 -- Dependencies: 237
 -- Name: strapi_api_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2455,7 +2492,7 @@ CREATE SEQUENCE public.strapi_core_store_settings_id_seq
 ALTER TABLE public.strapi_core_store_settings_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4017 (class 0 OID 0)
+-- TOC entry 4030 (class 0 OID 0)
 -- Dependencies: 239
 -- Name: strapi_core_store_settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2495,7 +2532,7 @@ CREATE SEQUENCE public.strapi_database_schema_id_seq
 ALTER TABLE public.strapi_database_schema_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4018 (class 0 OID 0)
+-- TOC entry 4031 (class 0 OID 0)
 -- Dependencies: 241
 -- Name: strapi_database_schema_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2534,7 +2571,7 @@ CREATE SEQUENCE public.strapi_migrations_id_seq
 ALTER TABLE public.strapi_migrations_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4019 (class 0 OID 0)
+-- TOC entry 4032 (class 0 OID 0)
 -- Dependencies: 243
 -- Name: strapi_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2576,7 +2613,7 @@ CREATE SEQUENCE public.strapi_webhooks_id_seq
 ALTER TABLE public.strapi_webhooks_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4020 (class 0 OID 0)
+-- TOC entry 4033 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: strapi_webhooks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2618,7 +2655,7 @@ CREATE SEQUENCE public.up_permissions_id_seq
 ALTER TABLE public.up_permissions_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4021 (class 0 OID 0)
+-- TOC entry 4034 (class 0 OID 0)
 -- Dependencies: 247
 -- Name: up_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2658,7 +2695,7 @@ CREATE SEQUENCE public.up_permissions_role_links_id_seq
 ALTER TABLE public.up_permissions_role_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4022 (class 0 OID 0)
+-- TOC entry 4035 (class 0 OID 0)
 -- Dependencies: 249
 -- Name: up_permissions_role_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2702,7 +2739,7 @@ CREATE SEQUENCE public.up_roles_id_seq
 ALTER TABLE public.up_roles_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4023 (class 0 OID 0)
+-- TOC entry 4036 (class 0 OID 0)
 -- Dependencies: 251
 -- Name: up_roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2751,7 +2788,7 @@ CREATE SEQUENCE public.up_users_id_seq
 ALTER TABLE public.up_users_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4024 (class 0 OID 0)
+-- TOC entry 4037 (class 0 OID 0)
 -- Dependencies: 253
 -- Name: up_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2791,7 +2828,7 @@ CREATE SEQUENCE public.up_users_role_links_id_seq
 ALTER TABLE public.up_users_role_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4025 (class 0 OID 0)
+-- TOC entry 4038 (class 0 OID 0)
 -- Dependencies: 255
 -- Name: up_users_role_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2835,7 +2872,7 @@ CREATE SEQUENCE public.upload_folders_id_seq
 ALTER TABLE public.upload_folders_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4026 (class 0 OID 0)
+-- TOC entry 4039 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: upload_folders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2875,7 +2912,7 @@ CREATE SEQUENCE public.upload_folders_parent_links_id_seq
 ALTER TABLE public.upload_folders_parent_links_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4027 (class 0 OID 0)
+-- TOC entry 4040 (class 0 OID 0)
 -- Dependencies: 259
 -- Name: upload_folders_parent_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -2884,7 +2921,7 @@ ALTER SEQUENCE public.upload_folders_parent_links_id_seq OWNED BY public.upload_
 
 
 --
--- TOC entry 3160 (class 2604 OID 16602)
+-- TOC entry 3167 (class 2604 OID 16602)
 -- Name: admin_permissions id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -2892,7 +2929,7 @@ ALTER TABLE ONLY public.admin_permissions ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
--- TOC entry 3161 (class 2604 OID 16603)
+-- TOC entry 3168 (class 2604 OID 16603)
 -- Name: admin_permissions_role_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -2900,7 +2937,7 @@ ALTER TABLE ONLY public.admin_permissions_role_links ALTER COLUMN id SET DEFAULT
 
 
 --
--- TOC entry 3162 (class 2604 OID 16604)
+-- TOC entry 3169 (class 2604 OID 16604)
 -- Name: admin_roles id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -2908,7 +2945,7 @@ ALTER TABLE ONLY public.admin_roles ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 3163 (class 2604 OID 16605)
+-- TOC entry 3170 (class 2604 OID 16605)
 -- Name: admin_users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -2916,7 +2953,7 @@ ALTER TABLE ONLY public.admin_users ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 3164 (class 2604 OID 16606)
+-- TOC entry 3171 (class 2604 OID 16606)
 -- Name: admin_users_roles_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -2924,7 +2961,7 @@ ALTER TABLE ONLY public.admin_users_roles_links ALTER COLUMN id SET DEFAULT next
 
 
 --
--- TOC entry 3210 (class 2604 OID 214098)
+-- TOC entry 3217 (class 2604 OID 214098)
 -- Name: available_products_pages id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -2932,7 +2969,7 @@ ALTER TABLE ONLY public.available_products_pages ALTER COLUMN id SET DEFAULT nex
 
 
 --
--- TOC entry 3211 (class 2604 OID 214108)
+-- TOC entry 3218 (class 2604 OID 214108)
 -- Name: available_products_pages_components id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -2940,7 +2977,7 @@ ALTER TABLE ONLY public.available_products_pages_components ALTER COLUMN id SET 
 
 
 --
--- TOC entry 3212 (class 2604 OID 214124)
+-- TOC entry 3219 (class 2604 OID 214124)
 -- Name: available_products_pages_localizations_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -2948,7 +2985,7 @@ ALTER TABLE ONLY public.available_products_pages_localizations_links ALTER COLUM
 
 
 --
--- TOC entry 3219 (class 2604 OID 214417)
+-- TOC entry 3226 (class 2604 OID 214417)
 -- Name: basket_pages id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -2956,7 +2993,7 @@ ALTER TABLE ONLY public.basket_pages ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
--- TOC entry 3220 (class 2604 OID 214427)
+-- TOC entry 3227 (class 2604 OID 214427)
 -- Name: basket_pages_components id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -2964,7 +3001,7 @@ ALTER TABLE ONLY public.basket_pages_components ALTER COLUMN id SET DEFAULT next
 
 
 --
--- TOC entry 3221 (class 2604 OID 214443)
+-- TOC entry 3228 (class 2604 OID 214443)
 -- Name: basket_pages_localizations_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -2972,7 +3009,15 @@ ALTER TABLE ONLY public.basket_pages_localizations_links ALTER COLUMN id SET DEF
 
 
 --
--- TOC entry 3165 (class 2604 OID 16607)
+-- TOC entry 3235 (class 2604 OID 336533)
+-- Name: components_blocks_contents id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.components_blocks_contents ALTER COLUMN id SET DEFAULT nextval('public.components_blocks_contents_id_seq'::regclass);
+
+
+--
+-- TOC entry 3172 (class 2604 OID 16607)
 -- Name: components_blocks_hero_slider_items id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -2980,7 +3025,7 @@ ALTER TABLE ONLY public.components_blocks_hero_slider_items ALTER COLUMN id SET 
 
 
 --
--- TOC entry 3166 (class 2604 OID 16608)
+-- TOC entry 3173 (class 2604 OID 16608)
 -- Name: components_blocks_hero_slider_items_components id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -2988,7 +3033,7 @@ ALTER TABLE ONLY public.components_blocks_hero_slider_items_components ALTER COL
 
 
 --
--- TOC entry 3167 (class 2604 OID 16609)
+-- TOC entry 3174 (class 2604 OID 16609)
 -- Name: components_blocks_hero_sliders id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -2996,7 +3041,7 @@ ALTER TABLE ONLY public.components_blocks_hero_sliders ALTER COLUMN id SET DEFAU
 
 
 --
--- TOC entry 3168 (class 2604 OID 16610)
+-- TOC entry 3175 (class 2604 OID 16610)
 -- Name: components_blocks_hero_sliders_components id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3004,7 +3049,7 @@ ALTER TABLE ONLY public.components_blocks_hero_sliders_components ALTER COLUMN i
 
 
 --
--- TOC entry 3169 (class 2604 OID 16611)
+-- TOC entry 3176 (class 2604 OID 16611)
 -- Name: components_shared_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3012,7 +3057,7 @@ ALTER TABLE ONLY public.components_shared_links ALTER COLUMN id SET DEFAULT next
 
 
 --
--- TOC entry 3170 (class 2604 OID 16612)
+-- TOC entry 3177 (class 2604 OID 16612)
 -- Name: components_shared_seos id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3020,7 +3065,7 @@ ALTER TABLE ONLY public.components_shared_seos ALTER COLUMN id SET DEFAULT nextv
 
 
 --
--- TOC entry 3192 (class 2604 OID 213621)
+-- TOC entry 3199 (class 2604 OID 213621)
 -- Name: dashboard_pages id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3028,7 +3073,7 @@ ALTER TABLE ONLY public.dashboard_pages ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 3198 (class 2604 OID 213691)
+-- TOC entry 3205 (class 2604 OID 213691)
 -- Name: dashboard_pages_components id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3036,7 +3081,7 @@ ALTER TABLE ONLY public.dashboard_pages_components ALTER COLUMN id SET DEFAULT n
 
 
 --
--- TOC entry 3199 (class 2604 OID 213707)
+-- TOC entry 3206 (class 2604 OID 213707)
 -- Name: dashboard_pages_localizations_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3044,7 +3089,7 @@ ALTER TABLE ONLY public.dashboard_pages_localizations_links ALTER COLUMN id SET 
 
 
 --
--- TOC entry 3193 (class 2604 OID 213631)
+-- TOC entry 3200 (class 2604 OID 213631)
 -- Name: download_center_pages id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3052,7 +3097,7 @@ ALTER TABLE ONLY public.download_center_pages ALTER COLUMN id SET DEFAULT nextva
 
 
 --
--- TOC entry 3200 (class 2604 OID 213720)
+-- TOC entry 3207 (class 2604 OID 213720)
 -- Name: download_center_pages_components id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3060,7 +3105,7 @@ ALTER TABLE ONLY public.download_center_pages_components ALTER COLUMN id SET DEF
 
 
 --
--- TOC entry 3201 (class 2604 OID 213736)
+-- TOC entry 3208 (class 2604 OID 213736)
 -- Name: download_center_pages_localizations_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3068,7 +3113,7 @@ ALTER TABLE ONLY public.download_center_pages_localizations_links ALTER COLUMN i
 
 
 --
--- TOC entry 3171 (class 2604 OID 16613)
+-- TOC entry 3178 (class 2604 OID 16613)
 -- Name: files id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3076,7 +3121,7 @@ ALTER TABLE ONLY public.files ALTER COLUMN id SET DEFAULT nextval('public.files_
 
 
 --
--- TOC entry 3172 (class 2604 OID 16614)
+-- TOC entry 3179 (class 2604 OID 16614)
 -- Name: files_folder_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3084,7 +3129,7 @@ ALTER TABLE ONLY public.files_folder_links ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
--- TOC entry 3173 (class 2604 OID 16615)
+-- TOC entry 3180 (class 2604 OID 16615)
 -- Name: files_related_morphs id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3092,7 +3137,7 @@ ALTER TABLE ONLY public.files_related_morphs ALTER COLUMN id SET DEFAULT nextval
 
 
 --
--- TOC entry 3174 (class 2604 OID 16616)
+-- TOC entry 3181 (class 2604 OID 16616)
 -- Name: home_pages id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3100,7 +3145,7 @@ ALTER TABLE ONLY public.home_pages ALTER COLUMN id SET DEFAULT nextval('public.h
 
 
 --
--- TOC entry 3175 (class 2604 OID 16617)
+-- TOC entry 3182 (class 2604 OID 16617)
 -- Name: home_pages_components id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3108,7 +3153,7 @@ ALTER TABLE ONLY public.home_pages_components ALTER COLUMN id SET DEFAULT nextva
 
 
 --
--- TOC entry 3176 (class 2604 OID 16618)
+-- TOC entry 3183 (class 2604 OID 16618)
 -- Name: home_pages_localizations_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3116,7 +3161,7 @@ ALTER TABLE ONLY public.home_pages_localizations_links ALTER COLUMN id SET DEFAU
 
 
 --
--- TOC entry 3177 (class 2604 OID 16619)
+-- TOC entry 3184 (class 2604 OID 16619)
 -- Name: i18n_locale id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3124,7 +3169,7 @@ ALTER TABLE ONLY public.i18n_locale ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 3194 (class 2604 OID 213651)
+-- TOC entry 3201 (class 2604 OID 213651)
 -- Name: news_pages id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3132,7 +3177,7 @@ ALTER TABLE ONLY public.news_pages ALTER COLUMN id SET DEFAULT nextval('public.n
 
 
 --
--- TOC entry 3202 (class 2604 OID 213778)
+-- TOC entry 3209 (class 2604 OID 213778)
 -- Name: news_pages_components id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3140,7 +3185,7 @@ ALTER TABLE ONLY public.news_pages_components ALTER COLUMN id SET DEFAULT nextva
 
 
 --
--- TOC entry 3203 (class 2604 OID 213794)
+-- TOC entry 3210 (class 2604 OID 213794)
 -- Name: news_pages_localizations_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3148,7 +3193,7 @@ ALTER TABLE ONLY public.news_pages_localizations_links ALTER COLUMN id SET DEFAU
 
 
 --
--- TOC entry 3222 (class 2604 OID 214508)
+-- TOC entry 3229 (class 2604 OID 214508)
 -- Name: order_item_pages id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3156,7 +3201,7 @@ ALTER TABLE ONLY public.order_item_pages ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
--- TOC entry 3223 (class 2604 OID 214518)
+-- TOC entry 3230 (class 2604 OID 214518)
 -- Name: order_item_pages_components id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3164,7 +3209,7 @@ ALTER TABLE ONLY public.order_item_pages_components ALTER COLUMN id SET DEFAULT 
 
 
 --
--- TOC entry 3224 (class 2604 OID 214534)
+-- TOC entry 3231 (class 2604 OID 214534)
 -- Name: order_item_pages_localizations_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3172,7 +3217,7 @@ ALTER TABLE ONLY public.order_item_pages_localizations_links ALTER COLUMN id SET
 
 
 --
--- TOC entry 3195 (class 2604 OID 213661)
+-- TOC entry 3202 (class 2604 OID 213661)
 -- Name: order_pages id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3180,7 +3225,7 @@ ALTER TABLE ONLY public.order_pages ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 3204 (class 2604 OID 213807)
+-- TOC entry 3211 (class 2604 OID 213807)
 -- Name: order_pages_components id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3188,7 +3233,7 @@ ALTER TABLE ONLY public.order_pages_components ALTER COLUMN id SET DEFAULT nextv
 
 
 --
--- TOC entry 3205 (class 2604 OID 213823)
+-- TOC entry 3212 (class 2604 OID 213823)
 -- Name: order_pages_localizations_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3196,7 +3241,7 @@ ALTER TABLE ONLY public.order_pages_localizations_links ALTER COLUMN id SET DEFA
 
 
 --
--- TOC entry 3196 (class 2604 OID 213671)
+-- TOC entry 3203 (class 2604 OID 213671)
 -- Name: orders_pages id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3204,7 +3249,7 @@ ALTER TABLE ONLY public.orders_pages ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
--- TOC entry 3206 (class 2604 OID 213836)
+-- TOC entry 3213 (class 2604 OID 213836)
 -- Name: orders_pages_components id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3212,7 +3257,7 @@ ALTER TABLE ONLY public.orders_pages_components ALTER COLUMN id SET DEFAULT next
 
 
 --
--- TOC entry 3207 (class 2604 OID 213852)
+-- TOC entry 3214 (class 2604 OID 213852)
 -- Name: orders_pages_localizations_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3220,7 +3265,7 @@ ALTER TABLE ONLY public.orders_pages_localizations_links ALTER COLUMN id SET DEF
 
 
 --
--- TOC entry 3197 (class 2604 OID 213681)
+-- TOC entry 3204 (class 2604 OID 213681)
 -- Name: outlet_pages id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3228,7 +3273,7 @@ ALTER TABLE ONLY public.outlet_pages ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
--- TOC entry 3208 (class 2604 OID 213865)
+-- TOC entry 3215 (class 2604 OID 213865)
 -- Name: outlet_pages_components id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3236,7 +3281,7 @@ ALTER TABLE ONLY public.outlet_pages_components ALTER COLUMN id SET DEFAULT next
 
 
 --
--- TOC entry 3209 (class 2604 OID 213881)
+-- TOC entry 3216 (class 2604 OID 213881)
 -- Name: outlet_pages_localizations_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3244,7 +3289,7 @@ ALTER TABLE ONLY public.outlet_pages_localizations_links ALTER COLUMN id SET DEF
 
 
 --
--- TOC entry 3216 (class 2604 OID 214274)
+-- TOC entry 3223 (class 2604 OID 214274)
 -- Name: privacy_policy_pages id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3252,7 +3297,7 @@ ALTER TABLE ONLY public.privacy_policy_pages ALTER COLUMN id SET DEFAULT nextval
 
 
 --
--- TOC entry 3217 (class 2604 OID 214287)
+-- TOC entry 3224 (class 2604 OID 214287)
 -- Name: privacy_policy_pages_components id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3260,7 +3305,7 @@ ALTER TABLE ONLY public.privacy_policy_pages_components ALTER COLUMN id SET DEFA
 
 
 --
--- TOC entry 3218 (class 2604 OID 214303)
+-- TOC entry 3225 (class 2604 OID 214303)
 -- Name: privacy_policy_pages_localizations_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3268,7 +3313,7 @@ ALTER TABLE ONLY public.privacy_policy_pages_localizations_links ALTER COLUMN id
 
 
 --
--- TOC entry 3213 (class 2604 OID 214184)
+-- TOC entry 3220 (class 2604 OID 214184)
 -- Name: regulations_pages id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3276,7 +3321,7 @@ ALTER TABLE ONLY public.regulations_pages ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
--- TOC entry 3214 (class 2604 OID 214197)
+-- TOC entry 3221 (class 2604 OID 214197)
 -- Name: regulations_pages_components id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3284,7 +3329,7 @@ ALTER TABLE ONLY public.regulations_pages_components ALTER COLUMN id SET DEFAULT
 
 
 --
--- TOC entry 3215 (class 2604 OID 214213)
+-- TOC entry 3222 (class 2604 OID 214213)
 -- Name: regulations_pages_localizations_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3292,7 +3337,7 @@ ALTER TABLE ONLY public.regulations_pages_localizations_links ALTER COLUMN id SE
 
 
 --
--- TOC entry 3225 (class 2604 OID 214600)
+-- TOC entry 3232 (class 2604 OID 214600)
 -- Name: search_products_pages id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3300,7 +3345,7 @@ ALTER TABLE ONLY public.search_products_pages ALTER COLUMN id SET DEFAULT nextva
 
 
 --
--- TOC entry 3226 (class 2604 OID 214610)
+-- TOC entry 3233 (class 2604 OID 214610)
 -- Name: search_products_pages_components id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3308,7 +3353,7 @@ ALTER TABLE ONLY public.search_products_pages_components ALTER COLUMN id SET DEF
 
 
 --
--- TOC entry 3227 (class 2604 OID 214626)
+-- TOC entry 3234 (class 2604 OID 214626)
 -- Name: search_products_pages_localizations_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3316,7 +3361,7 @@ ALTER TABLE ONLY public.search_products_pages_localizations_links ALTER COLUMN i
 
 
 --
--- TOC entry 3178 (class 2604 OID 16620)
+-- TOC entry 3185 (class 2604 OID 16620)
 -- Name: strapi_api_token_permissions id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3324,7 +3369,7 @@ ALTER TABLE ONLY public.strapi_api_token_permissions ALTER COLUMN id SET DEFAULT
 
 
 --
--- TOC entry 3179 (class 2604 OID 16621)
+-- TOC entry 3186 (class 2604 OID 16621)
 -- Name: strapi_api_token_permissions_token_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3332,7 +3377,7 @@ ALTER TABLE ONLY public.strapi_api_token_permissions_token_links ALTER COLUMN id
 
 
 --
--- TOC entry 3180 (class 2604 OID 16622)
+-- TOC entry 3187 (class 2604 OID 16622)
 -- Name: strapi_api_tokens id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3340,7 +3385,7 @@ ALTER TABLE ONLY public.strapi_api_tokens ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
--- TOC entry 3181 (class 2604 OID 16623)
+-- TOC entry 3188 (class 2604 OID 16623)
 -- Name: strapi_core_store_settings id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3348,7 +3393,7 @@ ALTER TABLE ONLY public.strapi_core_store_settings ALTER COLUMN id SET DEFAULT n
 
 
 --
--- TOC entry 3182 (class 2604 OID 16624)
+-- TOC entry 3189 (class 2604 OID 16624)
 -- Name: strapi_database_schema id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3356,7 +3401,7 @@ ALTER TABLE ONLY public.strapi_database_schema ALTER COLUMN id SET DEFAULT nextv
 
 
 --
--- TOC entry 3183 (class 2604 OID 16625)
+-- TOC entry 3190 (class 2604 OID 16625)
 -- Name: strapi_migrations id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3364,7 +3409,7 @@ ALTER TABLE ONLY public.strapi_migrations ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
--- TOC entry 3184 (class 2604 OID 16626)
+-- TOC entry 3191 (class 2604 OID 16626)
 -- Name: strapi_webhooks id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3372,7 +3417,7 @@ ALTER TABLE ONLY public.strapi_webhooks ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 3185 (class 2604 OID 16627)
+-- TOC entry 3192 (class 2604 OID 16627)
 -- Name: up_permissions id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3380,7 +3425,7 @@ ALTER TABLE ONLY public.up_permissions ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
--- TOC entry 3186 (class 2604 OID 16628)
+-- TOC entry 3193 (class 2604 OID 16628)
 -- Name: up_permissions_role_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3388,7 +3433,7 @@ ALTER TABLE ONLY public.up_permissions_role_links ALTER COLUMN id SET DEFAULT ne
 
 
 --
--- TOC entry 3187 (class 2604 OID 16629)
+-- TOC entry 3194 (class 2604 OID 16629)
 -- Name: up_roles id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3396,7 +3441,7 @@ ALTER TABLE ONLY public.up_roles ALTER COLUMN id SET DEFAULT nextval('public.up_
 
 
 --
--- TOC entry 3188 (class 2604 OID 16630)
+-- TOC entry 3195 (class 2604 OID 16630)
 -- Name: up_users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3404,7 +3449,7 @@ ALTER TABLE ONLY public.up_users ALTER COLUMN id SET DEFAULT nextval('public.up_
 
 
 --
--- TOC entry 3189 (class 2604 OID 16631)
+-- TOC entry 3196 (class 2604 OID 16631)
 -- Name: up_users_role_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3412,7 +3457,7 @@ ALTER TABLE ONLY public.up_users_role_links ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
--- TOC entry 3190 (class 2604 OID 16632)
+-- TOC entry 3197 (class 2604 OID 16632)
 -- Name: upload_folders id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3420,7 +3465,7 @@ ALTER TABLE ONLY public.upload_folders ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
--- TOC entry 3191 (class 2604 OID 16633)
+-- TOC entry 3198 (class 2604 OID 16633)
 -- Name: upload_folders_parent_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3428,7 +3473,7 @@ ALTER TABLE ONLY public.upload_folders_parent_links ALTER COLUMN id SET DEFAULT 
 
 
 --
--- TOC entry 3819 (class 0 OID 16384)
+-- TOC entry 3829 (class 0 OID 16384)
 -- Dependencies: 196
 -- Data for Name: admin_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3515,15 +3560,16 @@ INSERT INTO public.admin_permissions (id, action, subject, properties, condition
 INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (269, 'plugin::content-manager.explorer.update', 'api::search-products-page.search-products-page', '{"fields": ["seo.metaTitle", "seo.metaDescription"], "locales": ["en", "pl", "de"]}', '[]', '2022-12-14 12:08:57.519', '2022-12-14 12:08:57.519', NULL, NULL);
 INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (270, 'plugin::content-manager.explorer.delete', 'api::search-products-page.search-products-page', '{"locales": ["en", "pl", "de"]}', '[]', '2022-12-14 12:08:57.544', '2022-12-14 12:08:57.544', NULL, NULL);
 INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (271, 'plugin::content-manager.explorer.publish', 'api::search-products-page.search-products-page', '{"locales": ["en", "pl", "de"]}', '[]', '2022-12-14 12:08:57.56', '2022-12-14 12:08:57.56', NULL, NULL);
+INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (296, 'plugin::content-manager.explorer.create', 'api::privacy-policy-page.privacy-policy-page', '{"fields": ["seo.metaTitle", "seo.metaDescription", "content.title", "content.text"], "locales": ["en", "pl", "de"]}', '[]', '2023-01-02 06:51:35.269', '2023-01-02 06:51:35.269', NULL, NULL);
+INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (297, 'plugin::content-manager.explorer.create', 'api::regulations-page.regulations-page', '{"fields": ["seo.metaTitle", "seo.metaDescription", "content.title", "content.text"], "locales": ["en", "pl", "de"]}', '[]', '2023-01-02 06:51:35.296', '2023-01-02 06:51:35.296', NULL, NULL);
+INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (298, 'plugin::content-manager.explorer.read', 'api::privacy-policy-page.privacy-policy-page', '{"fields": ["seo.metaTitle", "seo.metaDescription", "content.title", "content.text"], "locales": ["en", "pl", "de"]}', '[]', '2023-01-02 06:51:35.323', '2023-01-02 06:51:35.323', NULL, NULL);
+INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (299, 'plugin::content-manager.explorer.read', 'api::regulations-page.regulations-page', '{"fields": ["seo.metaTitle", "seo.metaDescription", "content.title", "content.text"], "locales": ["en", "pl", "de"]}', '[]', '2023-01-02 06:51:35.345', '2023-01-02 06:51:35.345', NULL, NULL);
+INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (300, 'plugin::content-manager.explorer.update', 'api::privacy-policy-page.privacy-policy-page', '{"fields": ["seo.metaTitle", "seo.metaDescription", "content.title", "content.text"], "locales": ["en", "pl", "de"]}', '[]', '2023-01-02 06:51:35.367', '2023-01-02 06:51:35.367', NULL, NULL);
+INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (301, 'plugin::content-manager.explorer.update', 'api::regulations-page.regulations-page', '{"fields": ["seo.metaTitle", "seo.metaDescription", "content.title", "content.text"], "locales": ["en", "pl", "de"]}', '[]', '2023-01-02 06:51:35.386', '2023-01-02 06:51:35.386', NULL, NULL);
 INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (244, 'plugin::content-manager.explorer.delete', 'api::regulations-page.regulations-page', '{"locales": ["en", "pl", "de"]}', '[]', '2022-12-14 11:54:44.861', '2022-12-14 11:54:44.861', NULL, NULL);
 INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (245, 'plugin::content-manager.explorer.publish', 'api::regulations-page.regulations-page', '{"locales": ["en", "pl", "de"]}', '[]', '2022-12-14 11:54:44.883', '2022-12-14 11:54:44.883', NULL, NULL);
 INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (249, 'plugin::content-manager.explorer.delete', 'api::privacy-policy-page.privacy-policy-page', '{"locales": ["en", "pl", "de"]}', '[]', '2022-12-14 11:57:51.87', '2022-12-14 11:57:51.87', NULL, NULL);
 INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (250, 'plugin::content-manager.explorer.publish', 'api::privacy-policy-page.privacy-policy-page', '{"locales": ["en", "pl", "de"]}', '[]', '2022-12-14 11:57:51.905', '2022-12-14 11:57:51.905', NULL, NULL);
-INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (252, 'plugin::content-manager.explorer.read', 'api::regulations-page.regulations-page', '{"fields": ["seo.metaTitle", "seo.metaDescription", "Text"], "locales": ["en", "pl", "de"]}', '[]', '2022-12-14 11:59:30.953', '2022-12-14 11:59:30.953', NULL, NULL);
-INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (253, 'plugin::content-manager.explorer.update', 'api::regulations-page.regulations-page', '{"fields": ["seo.metaTitle", "seo.metaDescription", "Text"], "locales": ["en", "pl", "de"]}', '[]', '2022-12-14 11:59:30.972', '2022-12-14 11:59:30.972', NULL, NULL);
-INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (254, 'plugin::content-manager.explorer.create', 'api::privacy-policy-page.privacy-policy-page', '{"fields": ["seo.metaTitle", "seo.metaDescription", "Text"], "locales": ["en", "pl", "de"]}', '[]', '2022-12-14 11:59:48.594', '2022-12-14 11:59:48.594', NULL, NULL);
-INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (255, 'plugin::content-manager.explorer.read', 'api::privacy-policy-page.privacy-policy-page', '{"fields": ["seo.metaTitle", "seo.metaDescription", "Text"], "locales": ["en", "pl", "de"]}', '[]', '2022-12-14 11:59:48.611', '2022-12-14 11:59:48.611', NULL, NULL);
-INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (256, 'plugin::content-manager.explorer.update', 'api::privacy-policy-page.privacy-policy-page', '{"fields": ["seo.metaTitle", "seo.metaDescription", "Text"], "locales": ["en", "pl", "de"]}', '[]', '2022-12-14 11:59:48.633', '2022-12-14 11:59:48.633', NULL, NULL);
 INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (201, 'plugin::content-manager.explorer.create', 'api::dashboard-page.dashboard-page', '{"fields": ["seo.metaTitle", "seo.metaDescription"], "locales": ["en", "pl", "de"]}', '[]', '2022-12-14 09:19:13.071', '2022-12-14 09:19:13.071', NULL, NULL);
 INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (202, 'plugin::content-manager.explorer.create', 'api::download-center-page.download-center-page', '{"fields": ["seo.metaTitle", "seo.metaDescription"], "locales": ["en", "pl", "de"]}', '[]', '2022-12-14 09:19:13.097', '2022-12-14 09:19:13.097', NULL, NULL);
 INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (204, 'plugin::content-manager.explorer.create', 'api::news-page.news-page', '{"fields": ["seo.metaTitle", "seo.metaDescription"], "locales": ["en", "pl", "de"]}', '[]', '2022-12-14 09:19:13.127', '2022-12-14 09:19:13.127', NULL, NULL);
@@ -3559,11 +3605,10 @@ INSERT INTO public.admin_permissions (id, action, subject, properties, condition
 INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (238, 'plugin::content-manager.explorer.update', 'api::available-products-page.available-products-page', '{"fields": ["seo.metaTitle", "seo.metaDescription"], "locales": ["en", "pl", "de"]}', '[]', '2022-12-14 10:11:40.813', '2022-12-14 10:11:40.813', NULL, NULL);
 INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (239, 'plugin::content-manager.explorer.delete', 'api::available-products-page.available-products-page', '{"locales": ["en", "pl", "de"]}', '[]', '2022-12-14 10:11:40.826', '2022-12-14 10:11:40.826', NULL, NULL);
 INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (240, 'plugin::content-manager.explorer.publish', 'api::available-products-page.available-products-page', '{"locales": ["en", "pl", "de"]}', '[]', '2022-12-14 10:11:40.846', '2022-12-14 10:11:40.846', NULL, NULL);
-INSERT INTO public.admin_permissions (id, action, subject, properties, conditions, created_at, updated_at, created_by_id, updated_by_id) VALUES (251, 'plugin::content-manager.explorer.create', 'api::regulations-page.regulations-page', '{"fields": ["seo.metaTitle", "seo.metaDescription", "Text"], "locales": ["en", "pl", "de"]}', '[]', '2022-12-14 11:59:30.936', '2022-12-14 11:59:30.936', NULL, NULL);
 
 
 --
--- TOC entry 3821 (class 0 OID 16392)
+-- TOC entry 3831 (class 0 OID 16392)
 -- Dependencies: 198
 -- Data for Name: admin_permissions_role_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3650,6 +3695,12 @@ INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, per
 INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (279, 269, 1, 126);
 INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (280, 270, 1, 127);
 INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (281, 271, 1, 128);
+INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (306, 296, 1, 129);
+INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (307, 297, 1, 130);
+INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (308, 298, 1, 131);
+INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (309, 299, 1, 132);
+INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (310, 300, 1, 133);
+INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (311, 301, 1, 134);
 INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (211, 201, 1, 58);
 INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (212, 202, 1, 59);
 INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (214, 204, 1, 61);
@@ -3689,16 +3740,10 @@ INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, per
 INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (255, 245, 1, 102);
 INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (259, 249, 1, 106);
 INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (260, 250, 1, 107);
-INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (261, 251, 1, 108);
-INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (262, 252, 1, 109);
-INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (263, 253, 1, 110);
-INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (264, 254, 1, 111);
-INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (265, 255, 1, 112);
-INSERT INTO public.admin_permissions_role_links (id, permission_id, role_id, permission_order) VALUES (266, 256, 1, 113);
 
 
 --
--- TOC entry 3823 (class 0 OID 16397)
+-- TOC entry 3833 (class 0 OID 16397)
 -- Dependencies: 200
 -- Data for Name: admin_roles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3709,7 +3754,7 @@ INSERT INTO public.admin_roles (id, name, code, description, created_at, updated
 
 
 --
--- TOC entry 3825 (class 0 OID 16405)
+-- TOC entry 3835 (class 0 OID 16405)
 -- Dependencies: 202
 -- Data for Name: admin_users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3718,7 +3763,7 @@ INSERT INTO public.admin_users (id, firstname, lastname, username, email, passwo
 
 
 --
--- TOC entry 3827 (class 0 OID 16413)
+-- TOC entry 3837 (class 0 OID 16413)
 -- Dependencies: 204
 -- Data for Name: admin_users_roles_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3727,7 +3772,7 @@ INSERT INTO public.admin_users_roles_links (id, user_id, role_id, role_order, us
 
 
 --
--- TOC entry 3920 (class 0 OID 214095)
+-- TOC entry 3930 (class 0 OID 214095)
 -- Dependencies: 297
 -- Data for Name: available_products_pages; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3738,7 +3783,7 @@ INSERT INTO public.available_products_pages (id, created_at, updated_at, publish
 
 
 --
--- TOC entry 3922 (class 0 OID 214105)
+-- TOC entry 3932 (class 0 OID 214105)
 -- Dependencies: 299
 -- Data for Name: available_products_pages_components; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3749,7 +3794,7 @@ INSERT INTO public.available_products_pages_components (id, entity_id, component
 
 
 --
--- TOC entry 3924 (class 0 OID 214121)
+-- TOC entry 3934 (class 0 OID 214121)
 -- Dependencies: 301
 -- Data for Name: available_products_pages_localizations_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3763,7 +3808,7 @@ INSERT INTO public.available_products_pages_localizations_links (id, available_p
 
 
 --
--- TOC entry 3938 (class 0 OID 214414)
+-- TOC entry 3948 (class 0 OID 214414)
 -- Dependencies: 315
 -- Data for Name: basket_pages; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3774,7 +3819,7 @@ INSERT INTO public.basket_pages (id, created_at, updated_at, published_at, creat
 
 
 --
--- TOC entry 3940 (class 0 OID 214424)
+-- TOC entry 3950 (class 0 OID 214424)
 -- Dependencies: 317
 -- Data for Name: basket_pages_components; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3785,7 +3830,7 @@ INSERT INTO public.basket_pages_components (id, entity_id, component_id, compone
 
 
 --
--- TOC entry 3942 (class 0 OID 214440)
+-- TOC entry 3952 (class 0 OID 214440)
 -- Dependencies: 319
 -- Data for Name: basket_pages_localizations_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3799,7 +3844,15 @@ INSERT INTO public.basket_pages_localizations_links (id, basket_page_id, inv_bas
 
 
 --
--- TOC entry 3829 (class 0 OID 16418)
+-- TOC entry 3966 (class 0 OID 336530)
+-- Dependencies: 333
+-- Data for Name: components_blocks_contents; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3839 (class 0 OID 16418)
 -- Dependencies: 206
 -- Data for Name: components_blocks_hero_slider_items; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3819,7 +3872,7 @@ INSERT INTO public.components_blocks_hero_slider_items (id, title, text) VALUES 
 
 
 --
--- TOC entry 3830 (class 0 OID 16424)
+-- TOC entry 3840 (class 0 OID 16424)
 -- Dependencies: 207
 -- Data for Name: components_blocks_hero_slider_items_components; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3839,7 +3892,7 @@ INSERT INTO public.components_blocks_hero_slider_items_components (id, entity_id
 
 
 --
--- TOC entry 3833 (class 0 OID 16434)
+-- TOC entry 3843 (class 0 OID 16434)
 -- Dependencies: 210
 -- Data for Name: components_blocks_hero_sliders; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3850,7 +3903,7 @@ INSERT INTO public.components_blocks_hero_sliders (id) VALUES (3);
 
 
 --
--- TOC entry 3834 (class 0 OID 16437)
+-- TOC entry 3844 (class 0 OID 16437)
 -- Dependencies: 211
 -- Data for Name: components_blocks_hero_sliders_components; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3870,7 +3923,7 @@ INSERT INTO public.components_blocks_hero_sliders_components (id, entity_id, com
 
 
 --
--- TOC entry 3837 (class 0 OID 16447)
+-- TOC entry 3847 (class 0 OID 16447)
 -- Dependencies: 214
 -- Data for Name: components_shared_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3890,7 +3943,7 @@ INSERT INTO public.components_shared_links (id, href, label, target, is_external
 
 
 --
--- TOC entry 3839 (class 0 OID 16455)
+-- TOC entry 3849 (class 0 OID 16455)
 -- Dependencies: 216
 -- Data for Name: components_shared_seos; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3924,7 +3977,6 @@ INSERT INTO public.components_shared_seos (id, meta_title, meta_description) VAL
 INSERT INTO public.components_shared_seos (id, meta_title, meta_description) VALUES (29, 'Outlet', NULL);
 INSERT INTO public.components_shared_seos (id, meta_title, meta_description) VALUES (30, 'Wyprzedaż', NULL);
 INSERT INTO public.components_shared_seos (id, meta_title, meta_description) VALUES (11, 'Zamówienia', NULL);
-INSERT INTO public.components_shared_seos (id, meta_title, meta_description) VALUES (31, 'Regulations', NULL);
 INSERT INTO public.components_shared_seos (id, meta_title, meta_description) VALUES (32, 'Regulamin', NULL);
 INSERT INTO public.components_shared_seos (id, meta_title, meta_description) VALUES (33, 'Geschäftsbedingungen', NULL);
 INSERT INTO public.components_shared_seos (id, meta_title, meta_description) VALUES (34, 'Privacy Policy', NULL);
@@ -3939,10 +3991,11 @@ INSERT INTO public.components_shared_seos (id, meta_title, meta_description) VAL
 INSERT INTO public.components_shared_seos (id, meta_title, meta_description) VALUES (44, 'Zamówienie', NULL);
 INSERT INTO public.components_shared_seos (id, meta_title, meta_description) VALUES (43, 'Order', NULL);
 INSERT INTO public.components_shared_seos (id, meta_title, meta_description) VALUES (45, 'Bestellung', NULL);
+INSERT INTO public.components_shared_seos (id, meta_title, meta_description) VALUES (31, 'Regulations', NULL);
 
 
 --
--- TOC entry 3884 (class 0 OID 213618)
+-- TOC entry 3894 (class 0 OID 213618)
 -- Dependencies: 261
 -- Data for Name: dashboard_pages; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3953,7 +4006,7 @@ INSERT INTO public.dashboard_pages (id, created_at, updated_at, published_at, cr
 
 
 --
--- TOC entry 3896 (class 0 OID 213688)
+-- TOC entry 3906 (class 0 OID 213688)
 -- Dependencies: 273
 -- Data for Name: dashboard_pages_components; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3964,7 +4017,7 @@ INSERT INTO public.dashboard_pages_components (id, entity_id, component_id, comp
 
 
 --
--- TOC entry 3898 (class 0 OID 213704)
+-- TOC entry 3908 (class 0 OID 213704)
 -- Dependencies: 275
 -- Data for Name: dashboard_pages_localizations_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3978,7 +4031,7 @@ INSERT INTO public.dashboard_pages_localizations_links (id, dashboard_page_id, i
 
 
 --
--- TOC entry 3886 (class 0 OID 213628)
+-- TOC entry 3896 (class 0 OID 213628)
 -- Dependencies: 263
 -- Data for Name: download_center_pages; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3989,7 +4042,7 @@ INSERT INTO public.download_center_pages (id, created_at, updated_at, published_
 
 
 --
--- TOC entry 3900 (class 0 OID 213717)
+-- TOC entry 3910 (class 0 OID 213717)
 -- Dependencies: 277
 -- Data for Name: download_center_pages_components; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4000,7 +4053,7 @@ INSERT INTO public.download_center_pages_components (id, entity_id, component_id
 
 
 --
--- TOC entry 3902 (class 0 OID 213733)
+-- TOC entry 3912 (class 0 OID 213733)
 -- Dependencies: 279
 -- Data for Name: download_center_pages_localizations_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4014,7 +4067,7 @@ INSERT INTO public.download_center_pages_localizations_links (id, download_cente
 
 
 --
--- TOC entry 3841 (class 0 OID 16463)
+-- TOC entry 3851 (class 0 OID 16463)
 -- Dependencies: 218
 -- Data for Name: files; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4026,7 +4079,7 @@ INSERT INTO public.files (id, name, alternative_text, caption, width, height, fo
 
 
 --
--- TOC entry 3842 (class 0 OID 16469)
+-- TOC entry 3852 (class 0 OID 16469)
 -- Dependencies: 219
 -- Data for Name: files_folder_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4034,7 +4087,7 @@ INSERT INTO public.files (id, name, alternative_text, caption, width, height, fo
 
 
 --
--- TOC entry 3845 (class 0 OID 16476)
+-- TOC entry 3855 (class 0 OID 16476)
 -- Dependencies: 222
 -- Data for Name: files_related_morphs; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4054,7 +4107,7 @@ INSERT INTO public.files_related_morphs (id, file_id, related_id, related_type, 
 
 
 --
--- TOC entry 3847 (class 0 OID 16484)
+-- TOC entry 3857 (class 0 OID 16484)
 -- Dependencies: 224
 -- Data for Name: home_pages; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4065,7 +4118,7 @@ INSERT INTO public.home_pages (id, created_at, updated_at, published_at, created
 
 
 --
--- TOC entry 3848 (class 0 OID 16487)
+-- TOC entry 3858 (class 0 OID 16487)
 -- Dependencies: 225
 -- Data for Name: home_pages_components; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4079,7 +4132,7 @@ INSERT INTO public.home_pages_components (id, entity_id, component_id, component
 
 
 --
--- TOC entry 3851 (class 0 OID 16497)
+-- TOC entry 3861 (class 0 OID 16497)
 -- Dependencies: 228
 -- Data for Name: home_pages_localizations_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4093,7 +4146,7 @@ INSERT INTO public.home_pages_localizations_links (id, home_page_id, inv_home_pa
 
 
 --
--- TOC entry 3853 (class 0 OID 16502)
+-- TOC entry 3863 (class 0 OID 16502)
 -- Dependencies: 230
 -- Data for Name: i18n_locale; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4104,7 +4157,7 @@ INSERT INTO public.i18n_locale (id, name, code, created_at, updated_at, created_
 
 
 --
--- TOC entry 3888 (class 0 OID 213648)
+-- TOC entry 3898 (class 0 OID 213648)
 -- Dependencies: 265
 -- Data for Name: news_pages; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4115,7 +4168,7 @@ INSERT INTO public.news_pages (id, created_at, updated_at, published_at, created
 
 
 --
--- TOC entry 3904 (class 0 OID 213775)
+-- TOC entry 3914 (class 0 OID 213775)
 -- Dependencies: 281
 -- Data for Name: news_pages_components; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4126,7 +4179,7 @@ INSERT INTO public.news_pages_components (id, entity_id, component_id, component
 
 
 --
--- TOC entry 3906 (class 0 OID 213791)
+-- TOC entry 3916 (class 0 OID 213791)
 -- Dependencies: 283
 -- Data for Name: news_pages_localizations_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4140,7 +4193,7 @@ INSERT INTO public.news_pages_localizations_links (id, news_page_id, inv_news_pa
 
 
 --
--- TOC entry 3944 (class 0 OID 214505)
+-- TOC entry 3954 (class 0 OID 214505)
 -- Dependencies: 321
 -- Data for Name: order_item_pages; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4151,7 +4204,7 @@ INSERT INTO public.order_item_pages (id, created_at, updated_at, published_at, c
 
 
 --
--- TOC entry 3946 (class 0 OID 214515)
+-- TOC entry 3956 (class 0 OID 214515)
 -- Dependencies: 323
 -- Data for Name: order_item_pages_components; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4162,7 +4215,7 @@ INSERT INTO public.order_item_pages_components (id, entity_id, component_id, com
 
 
 --
--- TOC entry 3948 (class 0 OID 214531)
+-- TOC entry 3958 (class 0 OID 214531)
 -- Dependencies: 325
 -- Data for Name: order_item_pages_localizations_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4176,7 +4229,7 @@ INSERT INTO public.order_item_pages_localizations_links (id, order_item_page_id,
 
 
 --
--- TOC entry 3890 (class 0 OID 213658)
+-- TOC entry 3900 (class 0 OID 213658)
 -- Dependencies: 267
 -- Data for Name: order_pages; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4187,7 +4240,7 @@ INSERT INTO public.order_pages (id, created_at, updated_at, published_at, create
 
 
 --
--- TOC entry 3908 (class 0 OID 213804)
+-- TOC entry 3918 (class 0 OID 213804)
 -- Dependencies: 285
 -- Data for Name: order_pages_components; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4198,7 +4251,7 @@ INSERT INTO public.order_pages_components (id, entity_id, component_id, componen
 
 
 --
--- TOC entry 3910 (class 0 OID 213820)
+-- TOC entry 3920 (class 0 OID 213820)
 -- Dependencies: 287
 -- Data for Name: order_pages_localizations_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4212,7 +4265,7 @@ INSERT INTO public.order_pages_localizations_links (id, order_page_id, inv_order
 
 
 --
--- TOC entry 3892 (class 0 OID 213668)
+-- TOC entry 3902 (class 0 OID 213668)
 -- Dependencies: 269
 -- Data for Name: orders_pages; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4223,7 +4276,7 @@ INSERT INTO public.orders_pages (id, created_at, updated_at, published_at, creat
 
 
 --
--- TOC entry 3912 (class 0 OID 213833)
+-- TOC entry 3922 (class 0 OID 213833)
 -- Dependencies: 289
 -- Data for Name: orders_pages_components; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4234,7 +4287,7 @@ INSERT INTO public.orders_pages_components (id, entity_id, component_id, compone
 
 
 --
--- TOC entry 3914 (class 0 OID 213849)
+-- TOC entry 3924 (class 0 OID 213849)
 -- Dependencies: 291
 -- Data for Name: orders_pages_localizations_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4248,7 +4301,7 @@ INSERT INTO public.orders_pages_localizations_links (id, orders_page_id, inv_ord
 
 
 --
--- TOC entry 3894 (class 0 OID 213678)
+-- TOC entry 3904 (class 0 OID 213678)
 -- Dependencies: 271
 -- Data for Name: outlet_pages; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4259,7 +4312,7 @@ INSERT INTO public.outlet_pages (id, created_at, updated_at, published_at, creat
 
 
 --
--- TOC entry 3916 (class 0 OID 213862)
+-- TOC entry 3926 (class 0 OID 213862)
 -- Dependencies: 293
 -- Data for Name: outlet_pages_components; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4270,7 +4323,7 @@ INSERT INTO public.outlet_pages_components (id, entity_id, component_id, compone
 
 
 --
--- TOC entry 3918 (class 0 OID 213878)
+-- TOC entry 3928 (class 0 OID 213878)
 -- Dependencies: 295
 -- Data for Name: outlet_pages_localizations_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4284,18 +4337,18 @@ INSERT INTO public.outlet_pages_localizations_links (id, outlet_page_id, inv_out
 
 
 --
--- TOC entry 3932 (class 0 OID 214271)
+-- TOC entry 3942 (class 0 OID 214271)
 -- Dependencies: 309
 -- Data for Name: privacy_policy_pages; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.privacy_policy_pages (id, created_at, updated_at, published_at, created_by_id, updated_by_id, locale, text) VALUES (1, '2022-12-14 12:07:36.519', '2022-12-14 12:08:10.328', '2022-12-14 12:07:38.401', 1, 1, 'en', '# Privacy Policy');
-INSERT INTO public.privacy_policy_pages (id, created_at, updated_at, published_at, created_by_id, updated_by_id, locale, text) VALUES (2, '2022-12-14 12:07:56.861', '2022-12-14 12:08:10.329', '2022-12-14 12:07:58.503', 1, 1, 'pl', '# Polityka Prywatności');
-INSERT INTO public.privacy_policy_pages (id, created_at, updated_at, published_at, created_by_id, updated_by_id, locale, text) VALUES (3, '2022-12-14 12:08:10.3', '2022-12-14 12:08:12.032', '2022-12-14 12:08:12.022', 1, 1, 'de', '# Datenschutz-Bestimmungen');
+INSERT INTO public.privacy_policy_pages (id, created_at, updated_at, published_at, created_by_id, updated_by_id, locale) VALUES (1, '2022-12-14 12:07:36.519', '2022-12-14 12:08:10.328', '2022-12-14 12:07:38.401', 1, 1, 'en');
+INSERT INTO public.privacy_policy_pages (id, created_at, updated_at, published_at, created_by_id, updated_by_id, locale) VALUES (2, '2022-12-14 12:07:56.861', '2022-12-14 12:08:10.329', '2022-12-14 12:07:58.503', 1, 1, 'pl');
+INSERT INTO public.privacy_policy_pages (id, created_at, updated_at, published_at, created_by_id, updated_by_id, locale) VALUES (3, '2022-12-14 12:08:10.3', '2022-12-14 12:08:12.032', '2022-12-14 12:08:12.022', 1, 1, 'de');
 
 
 --
--- TOC entry 3934 (class 0 OID 214284)
+-- TOC entry 3944 (class 0 OID 214284)
 -- Dependencies: 311
 -- Data for Name: privacy_policy_pages_components; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4306,7 +4359,7 @@ INSERT INTO public.privacy_policy_pages_components (id, entity_id, component_id,
 
 
 --
--- TOC entry 3936 (class 0 OID 214300)
+-- TOC entry 3946 (class 0 OID 214300)
 -- Dependencies: 313
 -- Data for Name: privacy_policy_pages_localizations_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4320,18 +4373,18 @@ INSERT INTO public.privacy_policy_pages_localizations_links (id, privacy_policy_
 
 
 --
--- TOC entry 3926 (class 0 OID 214181)
+-- TOC entry 3936 (class 0 OID 214181)
 -- Dependencies: 303
 -- Data for Name: regulations_pages; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.regulations_pages (id, created_at, updated_at, published_at, created_by_id, updated_by_id, locale, text) VALUES (1, '2022-12-14 12:04:18.001', '2022-12-14 12:06:21.736', '2022-12-14 12:04:21.537', 1, 1, 'en', '# Regulations');
-INSERT INTO public.regulations_pages (id, created_at, updated_at, published_at, created_by_id, updated_by_id, locale, text) VALUES (3, '2022-12-14 12:06:21.708', '2022-12-14 12:06:23.186', '2022-12-14 12:06:23.173', 1, 1, 'de', '# Geschäftsbedingungen');
-INSERT INTO public.regulations_pages (id, created_at, updated_at, published_at, created_by_id, updated_by_id, locale, text) VALUES (2, '2022-12-14 12:05:36.903', '2022-12-14 12:06:27.544', '2022-12-14 12:06:27.531', 1, 1, 'pl', '# Regulamin');
+INSERT INTO public.regulations_pages (id, created_at, updated_at, published_at, created_by_id, updated_by_id, locale) VALUES (3, '2022-12-14 12:06:21.708', '2022-12-14 12:06:23.186', '2022-12-14 12:06:23.173', 1, 1, 'de');
+INSERT INTO public.regulations_pages (id, created_at, updated_at, published_at, created_by_id, updated_by_id, locale) VALUES (2, '2022-12-14 12:05:36.903', '2022-12-14 12:06:27.544', '2022-12-14 12:06:27.531', 1, 1, 'pl');
+INSERT INTO public.regulations_pages (id, created_at, updated_at, published_at, created_by_id, updated_by_id, locale) VALUES (1, '2022-12-14 12:04:18.001', '2022-12-30 14:13:56.768', '2022-12-14 12:04:21.537', 1, 1, 'en');
 
 
 --
--- TOC entry 3928 (class 0 OID 214194)
+-- TOC entry 3938 (class 0 OID 214194)
 -- Dependencies: 305
 -- Data for Name: regulations_pages_components; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4342,7 +4395,7 @@ INSERT INTO public.regulations_pages_components (id, entity_id, component_id, co
 
 
 --
--- TOC entry 3930 (class 0 OID 214210)
+-- TOC entry 3940 (class 0 OID 214210)
 -- Dependencies: 307
 -- Data for Name: regulations_pages_localizations_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4356,7 +4409,7 @@ INSERT INTO public.regulations_pages_localizations_links (id, regulations_page_i
 
 
 --
--- TOC entry 3950 (class 0 OID 214597)
+-- TOC entry 3960 (class 0 OID 214597)
 -- Dependencies: 327
 -- Data for Name: search_products_pages; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4367,7 +4420,7 @@ INSERT INTO public.search_products_pages (id, created_at, updated_at, published_
 
 
 --
--- TOC entry 3952 (class 0 OID 214607)
+-- TOC entry 3962 (class 0 OID 214607)
 -- Dependencies: 329
 -- Data for Name: search_products_pages_components; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4378,7 +4431,7 @@ INSERT INTO public.search_products_pages_components (id, entity_id, component_id
 
 
 --
--- TOC entry 3954 (class 0 OID 214623)
+-- TOC entry 3964 (class 0 OID 214623)
 -- Dependencies: 331
 -- Data for Name: search_products_pages_localizations_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4392,7 +4445,7 @@ INSERT INTO public.search_products_pages_localizations_links (id, search_product
 
 
 --
--- TOC entry 3855 (class 0 OID 16510)
+-- TOC entry 3865 (class 0 OID 16510)
 -- Dependencies: 232
 -- Data for Name: strapi_api_token_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4400,7 +4453,7 @@ INSERT INTO public.search_products_pages_localizations_links (id, search_product
 
 
 --
--- TOC entry 3857 (class 0 OID 16515)
+-- TOC entry 3867 (class 0 OID 16515)
 -- Dependencies: 234
 -- Data for Name: strapi_api_token_permissions_token_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4408,16 +4461,16 @@ INSERT INTO public.search_products_pages_localizations_links (id, search_product
 
 
 --
--- TOC entry 3859 (class 0 OID 16520)
+-- TOC entry 3869 (class 0 OID 16520)
 -- Dependencies: 236
 -- Data for Name: strapi_api_tokens; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.strapi_api_tokens (id, name, description, type, access_key, last_used_at, expires_at, lifespan, created_at, updated_at, created_by_id, updated_by_id) VALUES (1, 'GraphQL', '', 'full-access', '5ba877d48f81f3a68d0acd169cde9c3b37c2e63de80789ddbdf217e3732453253c8c0a37c3bd6a089b1ce114143012e399c3656f64792502676ca4c44ba77e83', '2022-12-14 12:27:51.885', NULL, NULL, '2022-12-04 11:02:42.763', '2022-12-14 12:27:51.885', NULL, NULL);
+INSERT INTO public.strapi_api_tokens (id, name, description, type, access_key, last_used_at, expires_at, lifespan, created_at, updated_at, created_by_id, updated_by_id) VALUES (1, 'GraphQL', '', 'full-access', '5ba877d48f81f3a68d0acd169cde9c3b37c2e63de80789ddbdf217e3732453253c8c0a37c3bd6a089b1ce114143012e399c3656f64792502676ca4c44ba77e83', '2022-12-30 14:12:32.422', NULL, NULL, '2022-12-04 11:02:42.763', '2022-12-30 14:12:32.422', NULL, NULL);
 
 
 --
--- TOC entry 3861 (class 0 OID 16528)
+-- TOC entry 3871 (class 0 OID 16528)
 -- Dependencies: 238
 -- Data for Name: strapi_core_store_settings; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4430,7 +4483,7 @@ INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (7, 'plugin_content_manager_configuration_content_types::plugin::i18n.locale', '{"uid":"plugin::i18n.locale","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"name","defaultSortBy":"name","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"name":{"edit":{"label":"name","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"name","searchable":true,"sortable":true}},"code":{"edit":{"label":"code","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"code","searchable":true,"sortable":true}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","name","code","createdAt"],"edit":[[{"name":"name","size":6},{"name":"code","size":6}]]}}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (18, 'plugin_i18n_default_locale', '"en"', 'string', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (19, 'core_admin_auth', '{"providers":{"autoRegister":false,"defaultRole":null}}', 'object', NULL, NULL);
-INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (1, 'strapi_content_types_schema', '{"admin::permission":{"collectionName":"admin_permissions","info":{"name":"Permission","description":"","singularName":"permission","pluralName":"permissions","displayName":"Permission"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"action":{"type":"string","minLength":1,"configurable":false,"required":true},"subject":{"type":"string","minLength":1,"configurable":false,"required":false},"properties":{"type":"json","configurable":false,"required":false,"default":{}},"conditions":{"type":"json","configurable":false,"required":false,"default":[]},"role":{"configurable":false,"type":"relation","relation":"manyToOne","inversedBy":"permissions","target":"admin::role"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"collectionName":"admin_permissions","info":{"name":"Permission","description":"","singularName":"permission","pluralName":"permissions","displayName":"Permission"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"action":{"type":"string","minLength":1,"configurable":false,"required":true},"subject":{"type":"string","minLength":1,"configurable":false,"required":false},"properties":{"type":"json","configurable":false,"required":false,"default":{}},"conditions":{"type":"json","configurable":false,"required":false,"default":[]},"role":{"configurable":false,"type":"relation","relation":"manyToOne","inversedBy":"permissions","target":"admin::role"}},"kind":"collectionType"},"modelType":"contentType","modelName":"permission","connection":"default","uid":"admin::permission","plugin":"admin","globalId":"AdminPermission"},"admin::user":{"collectionName":"admin_users","info":{"name":"User","description":"","singularName":"user","pluralName":"users","displayName":"User"},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"firstname":{"type":"string","unique":false,"minLength":1,"configurable":false,"required":false},"lastname":{"type":"string","unique":false,"minLength":1,"configurable":false,"required":false},"username":{"type":"string","unique":false,"configurable":false,"required":false},"email":{"type":"email","minLength":6,"configurable":false,"required":true,"unique":true,"private":true},"password":{"type":"password","minLength":6,"configurable":false,"required":false,"private":true},"resetPasswordToken":{"type":"string","configurable":false,"private":true},"registrationToken":{"type":"string","configurable":false,"private":true},"isActive":{"type":"boolean","default":false,"configurable":false,"private":true},"roles":{"configurable":false,"private":true,"type":"relation","relation":"manyToMany","inversedBy":"users","target":"admin::role","collectionName":"strapi_users_roles"},"blocked":{"type":"boolean","default":false,"configurable":false,"private":true},"preferedLanguage":{"type":"string","configurable":false,"required":false},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"collectionName":"admin_users","info":{"name":"User","description":"","singularName":"user","pluralName":"users","displayName":"User"},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"firstname":{"type":"string","unique":false,"minLength":1,"configurable":false,"required":false},"lastname":{"type":"string","unique":false,"minLength":1,"configurable":false,"required":false},"username":{"type":"string","unique":false,"configurable":false,"required":false},"email":{"type":"email","minLength":6,"configurable":false,"required":true,"unique":true,"private":true},"password":{"type":"password","minLength":6,"configurable":false,"required":false,"private":true},"resetPasswordToken":{"type":"string","configurable":false,"private":true},"registrationToken":{"type":"string","configurable":false,"private":true},"isActive":{"type":"boolean","default":false,"configurable":false,"private":true},"roles":{"configurable":false,"private":true,"type":"relation","relation":"manyToMany","inversedBy":"users","target":"admin::role","collectionName":"strapi_users_roles"},"blocked":{"type":"boolean","default":false,"configurable":false,"private":true},"preferedLanguage":{"type":"string","configurable":false,"required":false}},"kind":"collectionType"},"modelType":"contentType","modelName":"user","connection":"default","uid":"admin::user","plugin":"admin","globalId":"AdminUser"},"admin::role":{"collectionName":"admin_roles","info":{"name":"Role","description":"","singularName":"role","pluralName":"roles","displayName":"Role"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","minLength":1,"unique":true,"configurable":false,"required":true},"code":{"type":"string","minLength":1,"unique":true,"configurable":false,"required":true},"description":{"type":"string","configurable":false},"users":{"configurable":false,"type":"relation","relation":"manyToMany","mappedBy":"roles","target":"admin::user"},"permissions":{"configurable":false,"type":"relation","relation":"oneToMany","mappedBy":"role","target":"admin::permission"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"collectionName":"admin_roles","info":{"name":"Role","description":"","singularName":"role","pluralName":"roles","displayName":"Role"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","minLength":1,"unique":true,"configurable":false,"required":true},"code":{"type":"string","minLength":1,"unique":true,"configurable":false,"required":true},"description":{"type":"string","configurable":false},"users":{"configurable":false,"type":"relation","relation":"manyToMany","mappedBy":"roles","target":"admin::user"},"permissions":{"configurable":false,"type":"relation","relation":"oneToMany","mappedBy":"role","target":"admin::permission"}},"kind":"collectionType"},"modelType":"contentType","modelName":"role","connection":"default","uid":"admin::role","plugin":"admin","globalId":"AdminRole"},"admin::api-token":{"collectionName":"strapi_api_tokens","info":{"name":"Api Token","singularName":"api-token","pluralName":"api-tokens","displayName":"Api Token","description":""},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","minLength":1,"configurable":false,"required":true,"unique":true},"description":{"type":"string","minLength":1,"configurable":false,"required":false,"default":""},"type":{"type":"enumeration","enum":["read-only","full-access","custom"],"configurable":false,"required":true,"default":"read-only"},"accessKey":{"type":"string","minLength":1,"configurable":false,"required":true},"lastUsedAt":{"type":"datetime","configurable":false,"required":false},"permissions":{"type":"relation","target":"admin::api-token-permission","relation":"oneToMany","mappedBy":"token","configurable":false,"required":false},"expiresAt":{"type":"datetime","configurable":false,"required":false},"lifespan":{"type":"biginteger","configurable":false,"required":false},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"collectionName":"strapi_api_tokens","info":{"name":"Api Token","singularName":"api-token","pluralName":"api-tokens","displayName":"Api Token","description":""},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","minLength":1,"configurable":false,"required":true,"unique":true},"description":{"type":"string","minLength":1,"configurable":false,"required":false,"default":""},"type":{"type":"enumeration","enum":["read-only","full-access","custom"],"configurable":false,"required":true,"default":"read-only"},"accessKey":{"type":"string","minLength":1,"configurable":false,"required":true},"lastUsedAt":{"type":"datetime","configurable":false,"required":false},"permissions":{"type":"relation","target":"admin::api-token-permission","relation":"oneToMany","mappedBy":"token","configurable":false,"required":false},"expiresAt":{"type":"datetime","configurable":false,"required":false},"lifespan":{"type":"biginteger","configurable":false,"required":false}},"kind":"collectionType"},"modelType":"contentType","modelName":"api-token","connection":"default","uid":"admin::api-token","plugin":"admin","globalId":"AdminApiToken"},"admin::api-token-permission":{"collectionName":"strapi_api_token_permissions","info":{"name":"API Token Permission","description":"","singularName":"api-token-permission","pluralName":"api-token-permissions","displayName":"API Token Permission"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"action":{"type":"string","minLength":1,"configurable":false,"required":true},"token":{"configurable":false,"type":"relation","relation":"manyToOne","inversedBy":"permissions","target":"admin::api-token"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"collectionName":"strapi_api_token_permissions","info":{"name":"API Token Permission","description":"","singularName":"api-token-permission","pluralName":"api-token-permissions","displayName":"API Token Permission"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"action":{"type":"string","minLength":1,"configurable":false,"required":true},"token":{"configurable":false,"type":"relation","relation":"manyToOne","inversedBy":"permissions","target":"admin::api-token"}},"kind":"collectionType"},"modelType":"contentType","modelName":"api-token-permission","connection":"default","uid":"admin::api-token-permission","plugin":"admin","globalId":"AdminApiTokenPermission"},"plugin::upload.file":{"collectionName":"files","info":{"singularName":"file","pluralName":"files","displayName":"File","description":""},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","configurable":false,"required":true},"alternativeText":{"type":"string","configurable":false},"caption":{"type":"string","configurable":false},"width":{"type":"integer","configurable":false},"height":{"type":"integer","configurable":false},"formats":{"type":"json","configurable":false},"hash":{"type":"string","configurable":false,"required":true},"ext":{"type":"string","configurable":false},"mime":{"type":"string","configurable":false,"required":true},"size":{"type":"decimal","configurable":false,"required":true},"url":{"type":"string","configurable":false,"required":true},"previewUrl":{"type":"string","configurable":false},"provider":{"type":"string","configurable":false,"required":true},"provider_metadata":{"type":"json","configurable":false},"related":{"type":"relation","relation":"morphToMany","configurable":false},"folder":{"type":"relation","relation":"manyToOne","target":"plugin::upload.folder","inversedBy":"files","private":true},"folderPath":{"type":"string","min":1,"required":true,"private":true},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"indexes":[{"name":"upload_files_folder_path_index","columns":["folder_path"],"type":null}],"kind":"collectionType","__schema__":{"collectionName":"files","info":{"singularName":"file","pluralName":"files","displayName":"File","description":""},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","configurable":false,"required":true},"alternativeText":{"type":"string","configurable":false},"caption":{"type":"string","configurable":false},"width":{"type":"integer","configurable":false},"height":{"type":"integer","configurable":false},"formats":{"type":"json","configurable":false},"hash":{"type":"string","configurable":false,"required":true},"ext":{"type":"string","configurable":false},"mime":{"type":"string","configurable":false,"required":true},"size":{"type":"decimal","configurable":false,"required":true},"url":{"type":"string","configurable":false,"required":true},"previewUrl":{"type":"string","configurable":false},"provider":{"type":"string","configurable":false,"required":true},"provider_metadata":{"type":"json","configurable":false},"related":{"type":"relation","relation":"morphToMany","configurable":false},"folder":{"type":"relation","relation":"manyToOne","target":"plugin::upload.folder","inversedBy":"files","private":true},"folderPath":{"type":"string","min":1,"required":true,"private":true}},"kind":"collectionType"},"modelType":"contentType","modelName":"file","connection":"default","uid":"plugin::upload.file","plugin":"upload","globalId":"UploadFile"},"plugin::upload.folder":{"collectionName":"upload_folders","info":{"singularName":"folder","pluralName":"folders","displayName":"Folder"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","min":1,"required":true},"pathId":{"type":"integer","unique":true,"required":true},"parent":{"type":"relation","relation":"manyToOne","target":"plugin::upload.folder","inversedBy":"children"},"children":{"type":"relation","relation":"oneToMany","target":"plugin::upload.folder","mappedBy":"parent"},"files":{"type":"relation","relation":"oneToMany","target":"plugin::upload.file","mappedBy":"folder"},"path":{"type":"string","min":1,"required":true},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"indexes":[{"name":"upload_folders_path_id_index","columns":["path_id"],"type":"unique"},{"name":"upload_folders_path_index","columns":["path"],"type":"unique"}],"kind":"collectionType","__schema__":{"collectionName":"upload_folders","info":{"singularName":"folder","pluralName":"folders","displayName":"Folder"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","min":1,"required":true},"pathId":{"type":"integer","unique":true,"required":true},"parent":{"type":"relation","relation":"manyToOne","target":"plugin::upload.folder","inversedBy":"children"},"children":{"type":"relation","relation":"oneToMany","target":"plugin::upload.folder","mappedBy":"parent"},"files":{"type":"relation","relation":"oneToMany","target":"plugin::upload.file","mappedBy":"folder"},"path":{"type":"string","min":1,"required":true}},"kind":"collectionType"},"modelType":"contentType","modelName":"folder","connection":"default","uid":"plugin::upload.folder","plugin":"upload","globalId":"UploadFolder"},"plugin::i18n.locale":{"info":{"singularName":"locale","pluralName":"locales","collectionName":"locales","displayName":"Locale","description":""},"options":{"draftAndPublish":false},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","min":1,"max":50,"configurable":false},"code":{"type":"string","unique":true,"configurable":false},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"info":{"singularName":"locale","pluralName":"locales","collectionName":"locales","displayName":"Locale","description":""},"options":{"draftAndPublish":false},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","min":1,"max":50,"configurable":false},"code":{"type":"string","unique":true,"configurable":false}},"kind":"collectionType"},"modelType":"contentType","modelName":"locale","connection":"default","uid":"plugin::i18n.locale","plugin":"i18n","collectionName":"i18n_locale","globalId":"I18NLocale"},"plugin::users-permissions.permission":{"collectionName":"up_permissions","info":{"name":"permission","description":"","singularName":"permission","pluralName":"permissions","displayName":"Permission"},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"action":{"type":"string","required":true,"configurable":false},"role":{"type":"relation","relation":"manyToOne","target":"plugin::users-permissions.role","inversedBy":"permissions","configurable":false},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"collectionName":"up_permissions","info":{"name":"permission","description":"","singularName":"permission","pluralName":"permissions","displayName":"Permission"},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"action":{"type":"string","required":true,"configurable":false},"role":{"type":"relation","relation":"manyToOne","target":"plugin::users-permissions.role","inversedBy":"permissions","configurable":false}},"kind":"collectionType"},"modelType":"contentType","modelName":"permission","connection":"default","uid":"plugin::users-permissions.permission","plugin":"users-permissions","globalId":"UsersPermissionsPermission"},"plugin::users-permissions.role":{"collectionName":"up_roles","info":{"name":"role","description":"","singularName":"role","pluralName":"roles","displayName":"Role"},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","minLength":3,"required":true,"configurable":false},"description":{"type":"string","configurable":false},"type":{"type":"string","unique":true,"configurable":false},"permissions":{"type":"relation","relation":"oneToMany","target":"plugin::users-permissions.permission","mappedBy":"role","configurable":false},"users":{"type":"relation","relation":"oneToMany","target":"plugin::users-permissions.user","mappedBy":"role","configurable":false},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"collectionName":"up_roles","info":{"name":"role","description":"","singularName":"role","pluralName":"roles","displayName":"Role"},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","minLength":3,"required":true,"configurable":false},"description":{"type":"string","configurable":false},"type":{"type":"string","unique":true,"configurable":false},"permissions":{"type":"relation","relation":"oneToMany","target":"plugin::users-permissions.permission","mappedBy":"role","configurable":false},"users":{"type":"relation","relation":"oneToMany","target":"plugin::users-permissions.user","mappedBy":"role","configurable":false}},"kind":"collectionType"},"modelType":"contentType","modelName":"role","connection":"default","uid":"plugin::users-permissions.role","plugin":"users-permissions","globalId":"UsersPermissionsRole"},"plugin::users-permissions.user":{"collectionName":"up_users","info":{"name":"user","description":"","singularName":"user","pluralName":"users","displayName":"User"},"options":{"draftAndPublish":false,"timestamps":true},"attributes":{"username":{"type":"string","minLength":3,"unique":true,"configurable":false,"required":true},"email":{"type":"email","minLength":6,"configurable":false,"required":true},"provider":{"type":"string","configurable":false},"password":{"type":"password","minLength":6,"configurable":false,"private":true},"resetPasswordToken":{"type":"string","configurable":false,"private":true},"confirmationToken":{"type":"string","configurable":false,"private":true},"confirmed":{"type":"boolean","default":false,"configurable":false},"blocked":{"type":"boolean","default":false,"configurable":false},"role":{"type":"relation","relation":"manyToOne","target":"plugin::users-permissions.role","inversedBy":"users","configurable":false},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"config":{"attributes":{"resetPasswordToken":{"hidden":true},"confirmationToken":{"hidden":true},"provider":{"hidden":true}}},"kind":"collectionType","__schema__":{"collectionName":"up_users","info":{"name":"user","description":"","singularName":"user","pluralName":"users","displayName":"User"},"options":{"draftAndPublish":false,"timestamps":true},"attributes":{"username":{"type":"string","minLength":3,"unique":true,"configurable":false,"required":true},"email":{"type":"email","minLength":6,"configurable":false,"required":true},"provider":{"type":"string","configurable":false},"password":{"type":"password","minLength":6,"configurable":false,"private":true},"resetPasswordToken":{"type":"string","configurable":false,"private":true},"confirmationToken":{"type":"string","configurable":false,"private":true},"confirmed":{"type":"boolean","default":false,"configurable":false},"blocked":{"type":"boolean","default":false,"configurable":false},"role":{"type":"relation","relation":"manyToOne","target":"plugin::users-permissions.role","inversedBy":"users","configurable":false}},"kind":"collectionType"},"modelType":"contentType","modelName":"user","connection":"default","uid":"plugin::users-permissions.user","plugin":"users-permissions","globalId":"UsersPermissionsUser"},"api::available-products-page.available-products-page":{"kind":"singleType","collectionName":"available_products_pages","info":{"singularName":"available-products-page","pluralName":"available-products-pages","displayName":"Available Products Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::available-products-page.available-products-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"available_products_pages","info":{"singularName":"available-products-page","pluralName":"available-products-pages","displayName":"Available Products Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"}},"kind":"singleType"},"modelType":"contentType","modelName":"available-products-page","connection":"default","uid":"api::available-products-page.available-products-page","apiName":"available-products-page","globalId":"AvailableProductsPage","actions":{},"lifecycles":{}},"api::basket-page.basket-page":{"kind":"singleType","collectionName":"basket_pages","info":{"singularName":"basket-page","pluralName":"basket-pages","displayName":"Basket Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::basket-page.basket-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"basket_pages","info":{"singularName":"basket-page","pluralName":"basket-pages","displayName":"Basket Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"}},"kind":"singleType"},"modelType":"contentType","modelName":"basket-page","connection":"default","uid":"api::basket-page.basket-page","apiName":"basket-page","globalId":"BasketPage","actions":{},"lifecycles":{}},"api::dashboard-page.dashboard-page":{"kind":"singleType","collectionName":"dashboard_pages","info":{"singularName":"dashboard-page","pluralName":"dashboard-pages","displayName":"Dashboard Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::dashboard-page.dashboard-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"dashboard_pages","info":{"singularName":"dashboard-page","pluralName":"dashboard-pages","displayName":"Dashboard Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"}},"kind":"singleType"},"modelType":"contentType","modelName":"dashboard-page","connection":"default","uid":"api::dashboard-page.dashboard-page","apiName":"dashboard-page","globalId":"DashboardPage","actions":{},"lifecycles":{}},"api::download-center-page.download-center-page":{"kind":"singleType","collectionName":"download_center_pages","info":{"singularName":"download-center-page","pluralName":"download-center-pages","displayName":"Download Center Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::download-center-page.download-center-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"download_center_pages","info":{"singularName":"download-center-page","pluralName":"download-center-pages","displayName":"Download Center Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}}},"kind":"singleType"},"modelType":"contentType","modelName":"download-center-page","connection":"default","uid":"api::download-center-page.download-center-page","apiName":"download-center-page","globalId":"DownloadCenterPage","actions":{},"lifecycles":{}},"api::home-page.home-page":{"kind":"singleType","collectionName":"home_pages","info":{"singularName":"home-page","pluralName":"home-pages","displayName":"Home Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"heroSlider":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"blocks.hero-slider"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::home-page.home-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"home_pages","info":{"singularName":"home-page","pluralName":"home-pages","displayName":"Home Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"heroSlider":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"blocks.hero-slider"}},"kind":"singleType"},"modelType":"contentType","modelName":"home-page","connection":"default","uid":"api::home-page.home-page","apiName":"home-page","globalId":"HomePage","actions":{},"lifecycles":{}},"api::news-page.news-page":{"kind":"singleType","collectionName":"news_pages","info":{"singularName":"news-page","pluralName":"news-pages","displayName":"News Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::news-page.news-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"news_pages","info":{"singularName":"news-page","pluralName":"news-pages","displayName":"News Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}}},"kind":"singleType"},"modelType":"contentType","modelName":"news-page","connection":"default","uid":"api::news-page.news-page","apiName":"news-page","globalId":"NewsPage","actions":{},"lifecycles":{}},"api::order-item-page.order-item-page":{"kind":"singleType","collectionName":"order_item_pages","info":{"singularName":"order-item-page","pluralName":"order-item-pages","displayName":"Order Item Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::order-item-page.order-item-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"order_item_pages","info":{"singularName":"order-item-page","pluralName":"order-item-pages","displayName":"Order Item Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"}},"kind":"singleType"},"modelType":"contentType","modelName":"order-item-page","connection":"default","uid":"api::order-item-page.order-item-page","apiName":"order-item-page","globalId":"OrderItemPage","actions":{},"lifecycles":{}},"api::order-page.order-page":{"kind":"singleType","collectionName":"order_pages","info":{"singularName":"order-page","pluralName":"order-pages","displayName":"Order Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::order-page.order-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"order_pages","info":{"singularName":"order-page","pluralName":"order-pages","displayName":"Order Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"}},"kind":"singleType"},"modelType":"contentType","modelName":"order-page","connection":"default","uid":"api::order-page.order-page","apiName":"order-page","globalId":"OrderPage","actions":{},"lifecycles":{}},"api::orders-page.orders-page":{"kind":"singleType","collectionName":"orders_pages","info":{"singularName":"orders-page","pluralName":"orders-pages","displayName":"Orders Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::orders-page.orders-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"orders_pages","info":{"singularName":"orders-page","pluralName":"orders-pages","displayName":"Orders Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}}},"kind":"singleType"},"modelType":"contentType","modelName":"orders-page","connection":"default","uid":"api::orders-page.orders-page","apiName":"orders-page","globalId":"OrdersPage","actions":{},"lifecycles":{}},"api::outlet-page.outlet-page":{"kind":"singleType","collectionName":"outlet_pages","info":{"singularName":"outlet-page","pluralName":"outlet-pages","displayName":"Outlet Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::outlet-page.outlet-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"outlet_pages","info":{"singularName":"outlet-page","pluralName":"outlet-pages","displayName":"Outlet Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}}},"kind":"singleType"},"modelType":"contentType","modelName":"outlet-page","connection":"default","uid":"api::outlet-page.outlet-page","apiName":"outlet-page","globalId":"OutletPage","actions":{},"lifecycles":{}},"api::privacy-policy-page.privacy-policy-page":{"kind":"singleType","collectionName":"privacy_policy_pages","info":{"singularName":"privacy-policy-page","pluralName":"privacy-policy-pages","displayName":"Privacy Policy Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"Text":{"pluginOptions":{"i18n":{"localized":true}},"type":"richtext"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::privacy-policy-page.privacy-policy-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"privacy_policy_pages","info":{"singularName":"privacy-policy-page","pluralName":"privacy-policy-pages","displayName":"Privacy Policy Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"Text":{"pluginOptions":{"i18n":{"localized":true}},"type":"richtext"}},"kind":"singleType"},"modelType":"contentType","modelName":"privacy-policy-page","connection":"default","uid":"api::privacy-policy-page.privacy-policy-page","apiName":"privacy-policy-page","globalId":"PrivacyPolicyPage","actions":{},"lifecycles":{}},"api::regulations-page.regulations-page":{"kind":"singleType","collectionName":"regulations_pages","info":{"singularName":"regulations-page","pluralName":"regulations-pages","displayName":"Regulations Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"Text":{"pluginOptions":{"i18n":{"localized":true}},"type":"richtext"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::regulations-page.regulations-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"regulations_pages","info":{"singularName":"regulations-page","pluralName":"regulations-pages","displayName":"Regulations Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"Text":{"pluginOptions":{"i18n":{"localized":true}},"type":"richtext"}},"kind":"singleType"},"modelType":"contentType","modelName":"regulations-page","connection":"default","uid":"api::regulations-page.regulations-page","apiName":"regulations-page","globalId":"RegulationsPage","actions":{},"lifecycles":{}},"api::search-products-page.search-products-page":{"kind":"singleType","collectionName":"search_products_pages","info":{"singularName":"search-products-page","pluralName":"search-products-pages","displayName":"Search Products Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::search-products-page.search-products-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"search_products_pages","info":{"singularName":"search-products-page","pluralName":"search-products-pages","displayName":"Search Products Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"}},"kind":"singleType"},"modelType":"contentType","modelName":"search-products-page","connection":"default","uid":"api::search-products-page.search-products-page","apiName":"search-products-page","globalId":"SearchProductsPage","actions":{},"lifecycles":{}}}', 'object', NULL, NULL);
+INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (1, 'strapi_content_types_schema', '{"admin::permission":{"collectionName":"admin_permissions","info":{"name":"Permission","description":"","singularName":"permission","pluralName":"permissions","displayName":"Permission"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"action":{"type":"string","minLength":1,"configurable":false,"required":true},"subject":{"type":"string","minLength":1,"configurable":false,"required":false},"properties":{"type":"json","configurable":false,"required":false,"default":{}},"conditions":{"type":"json","configurable":false,"required":false,"default":[]},"role":{"configurable":false,"type":"relation","relation":"manyToOne","inversedBy":"permissions","target":"admin::role"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"collectionName":"admin_permissions","info":{"name":"Permission","description":"","singularName":"permission","pluralName":"permissions","displayName":"Permission"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"action":{"type":"string","minLength":1,"configurable":false,"required":true},"subject":{"type":"string","minLength":1,"configurable":false,"required":false},"properties":{"type":"json","configurable":false,"required":false,"default":{}},"conditions":{"type":"json","configurable":false,"required":false,"default":[]},"role":{"configurable":false,"type":"relation","relation":"manyToOne","inversedBy":"permissions","target":"admin::role"}},"kind":"collectionType"},"modelType":"contentType","modelName":"permission","connection":"default","uid":"admin::permission","plugin":"admin","globalId":"AdminPermission"},"admin::user":{"collectionName":"admin_users","info":{"name":"User","description":"","singularName":"user","pluralName":"users","displayName":"User"},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"firstname":{"type":"string","unique":false,"minLength":1,"configurable":false,"required":false},"lastname":{"type":"string","unique":false,"minLength":1,"configurable":false,"required":false},"username":{"type":"string","unique":false,"configurable":false,"required":false},"email":{"type":"email","minLength":6,"configurable":false,"required":true,"unique":true,"private":true},"password":{"type":"password","minLength":6,"configurable":false,"required":false,"private":true},"resetPasswordToken":{"type":"string","configurable":false,"private":true},"registrationToken":{"type":"string","configurable":false,"private":true},"isActive":{"type":"boolean","default":false,"configurable":false,"private":true},"roles":{"configurable":false,"private":true,"type":"relation","relation":"manyToMany","inversedBy":"users","target":"admin::role","collectionName":"strapi_users_roles"},"blocked":{"type":"boolean","default":false,"configurable":false,"private":true},"preferedLanguage":{"type":"string","configurable":false,"required":false},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"collectionName":"admin_users","info":{"name":"User","description":"","singularName":"user","pluralName":"users","displayName":"User"},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"firstname":{"type":"string","unique":false,"minLength":1,"configurable":false,"required":false},"lastname":{"type":"string","unique":false,"minLength":1,"configurable":false,"required":false},"username":{"type":"string","unique":false,"configurable":false,"required":false},"email":{"type":"email","minLength":6,"configurable":false,"required":true,"unique":true,"private":true},"password":{"type":"password","minLength":6,"configurable":false,"required":false,"private":true},"resetPasswordToken":{"type":"string","configurable":false,"private":true},"registrationToken":{"type":"string","configurable":false,"private":true},"isActive":{"type":"boolean","default":false,"configurable":false,"private":true},"roles":{"configurable":false,"private":true,"type":"relation","relation":"manyToMany","inversedBy":"users","target":"admin::role","collectionName":"strapi_users_roles"},"blocked":{"type":"boolean","default":false,"configurable":false,"private":true},"preferedLanguage":{"type":"string","configurable":false,"required":false}},"kind":"collectionType"},"modelType":"contentType","modelName":"user","connection":"default","uid":"admin::user","plugin":"admin","globalId":"AdminUser"},"admin::role":{"collectionName":"admin_roles","info":{"name":"Role","description":"","singularName":"role","pluralName":"roles","displayName":"Role"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","minLength":1,"unique":true,"configurable":false,"required":true},"code":{"type":"string","minLength":1,"unique":true,"configurable":false,"required":true},"description":{"type":"string","configurable":false},"users":{"configurable":false,"type":"relation","relation":"manyToMany","mappedBy":"roles","target":"admin::user"},"permissions":{"configurable":false,"type":"relation","relation":"oneToMany","mappedBy":"role","target":"admin::permission"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"collectionName":"admin_roles","info":{"name":"Role","description":"","singularName":"role","pluralName":"roles","displayName":"Role"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","minLength":1,"unique":true,"configurable":false,"required":true},"code":{"type":"string","minLength":1,"unique":true,"configurable":false,"required":true},"description":{"type":"string","configurable":false},"users":{"configurable":false,"type":"relation","relation":"manyToMany","mappedBy":"roles","target":"admin::user"},"permissions":{"configurable":false,"type":"relation","relation":"oneToMany","mappedBy":"role","target":"admin::permission"}},"kind":"collectionType"},"modelType":"contentType","modelName":"role","connection":"default","uid":"admin::role","plugin":"admin","globalId":"AdminRole"},"admin::api-token":{"collectionName":"strapi_api_tokens","info":{"name":"Api Token","singularName":"api-token","pluralName":"api-tokens","displayName":"Api Token","description":""},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","minLength":1,"configurable":false,"required":true,"unique":true},"description":{"type":"string","minLength":1,"configurable":false,"required":false,"default":""},"type":{"type":"enumeration","enum":["read-only","full-access","custom"],"configurable":false,"required":true,"default":"read-only"},"accessKey":{"type":"string","minLength":1,"configurable":false,"required":true},"lastUsedAt":{"type":"datetime","configurable":false,"required":false},"permissions":{"type":"relation","target":"admin::api-token-permission","relation":"oneToMany","mappedBy":"token","configurable":false,"required":false},"expiresAt":{"type":"datetime","configurable":false,"required":false},"lifespan":{"type":"biginteger","configurable":false,"required":false},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"collectionName":"strapi_api_tokens","info":{"name":"Api Token","singularName":"api-token","pluralName":"api-tokens","displayName":"Api Token","description":""},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","minLength":1,"configurable":false,"required":true,"unique":true},"description":{"type":"string","minLength":1,"configurable":false,"required":false,"default":""},"type":{"type":"enumeration","enum":["read-only","full-access","custom"],"configurable":false,"required":true,"default":"read-only"},"accessKey":{"type":"string","minLength":1,"configurable":false,"required":true},"lastUsedAt":{"type":"datetime","configurable":false,"required":false},"permissions":{"type":"relation","target":"admin::api-token-permission","relation":"oneToMany","mappedBy":"token","configurable":false,"required":false},"expiresAt":{"type":"datetime","configurable":false,"required":false},"lifespan":{"type":"biginteger","configurable":false,"required":false}},"kind":"collectionType"},"modelType":"contentType","modelName":"api-token","connection":"default","uid":"admin::api-token","plugin":"admin","globalId":"AdminApiToken"},"admin::api-token-permission":{"collectionName":"strapi_api_token_permissions","info":{"name":"API Token Permission","description":"","singularName":"api-token-permission","pluralName":"api-token-permissions","displayName":"API Token Permission"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"action":{"type":"string","minLength":1,"configurable":false,"required":true},"token":{"configurable":false,"type":"relation","relation":"manyToOne","inversedBy":"permissions","target":"admin::api-token"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"collectionName":"strapi_api_token_permissions","info":{"name":"API Token Permission","description":"","singularName":"api-token-permission","pluralName":"api-token-permissions","displayName":"API Token Permission"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"action":{"type":"string","minLength":1,"configurable":false,"required":true},"token":{"configurable":false,"type":"relation","relation":"manyToOne","inversedBy":"permissions","target":"admin::api-token"}},"kind":"collectionType"},"modelType":"contentType","modelName":"api-token-permission","connection":"default","uid":"admin::api-token-permission","plugin":"admin","globalId":"AdminApiTokenPermission"},"plugin::upload.file":{"collectionName":"files","info":{"singularName":"file","pluralName":"files","displayName":"File","description":""},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","configurable":false,"required":true},"alternativeText":{"type":"string","configurable":false},"caption":{"type":"string","configurable":false},"width":{"type":"integer","configurable":false},"height":{"type":"integer","configurable":false},"formats":{"type":"json","configurable":false},"hash":{"type":"string","configurable":false,"required":true},"ext":{"type":"string","configurable":false},"mime":{"type":"string","configurable":false,"required":true},"size":{"type":"decimal","configurable":false,"required":true},"url":{"type":"string","configurable":false,"required":true},"previewUrl":{"type":"string","configurable":false},"provider":{"type":"string","configurable":false,"required":true},"provider_metadata":{"type":"json","configurable":false},"related":{"type":"relation","relation":"morphToMany","configurable":false},"folder":{"type":"relation","relation":"manyToOne","target":"plugin::upload.folder","inversedBy":"files","private":true},"folderPath":{"type":"string","min":1,"required":true,"private":true},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"indexes":[{"name":"upload_files_folder_path_index","columns":["folder_path"],"type":null}],"kind":"collectionType","__schema__":{"collectionName":"files","info":{"singularName":"file","pluralName":"files","displayName":"File","description":""},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","configurable":false,"required":true},"alternativeText":{"type":"string","configurable":false},"caption":{"type":"string","configurable":false},"width":{"type":"integer","configurable":false},"height":{"type":"integer","configurable":false},"formats":{"type":"json","configurable":false},"hash":{"type":"string","configurable":false,"required":true},"ext":{"type":"string","configurable":false},"mime":{"type":"string","configurable":false,"required":true},"size":{"type":"decimal","configurable":false,"required":true},"url":{"type":"string","configurable":false,"required":true},"previewUrl":{"type":"string","configurable":false},"provider":{"type":"string","configurable":false,"required":true},"provider_metadata":{"type":"json","configurable":false},"related":{"type":"relation","relation":"morphToMany","configurable":false},"folder":{"type":"relation","relation":"manyToOne","target":"plugin::upload.folder","inversedBy":"files","private":true},"folderPath":{"type":"string","min":1,"required":true,"private":true}},"kind":"collectionType"},"modelType":"contentType","modelName":"file","connection":"default","uid":"plugin::upload.file","plugin":"upload","globalId":"UploadFile"},"plugin::upload.folder":{"collectionName":"upload_folders","info":{"singularName":"folder","pluralName":"folders","displayName":"Folder"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","min":1,"required":true},"pathId":{"type":"integer","unique":true,"required":true},"parent":{"type":"relation","relation":"manyToOne","target":"plugin::upload.folder","inversedBy":"children"},"children":{"type":"relation","relation":"oneToMany","target":"plugin::upload.folder","mappedBy":"parent"},"files":{"type":"relation","relation":"oneToMany","target":"plugin::upload.file","mappedBy":"folder"},"path":{"type":"string","min":1,"required":true},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"indexes":[{"name":"upload_folders_path_id_index","columns":["path_id"],"type":"unique"},{"name":"upload_folders_path_index","columns":["path"],"type":"unique"}],"kind":"collectionType","__schema__":{"collectionName":"upload_folders","info":{"singularName":"folder","pluralName":"folders","displayName":"Folder"},"options":{},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","min":1,"required":true},"pathId":{"type":"integer","unique":true,"required":true},"parent":{"type":"relation","relation":"manyToOne","target":"plugin::upload.folder","inversedBy":"children"},"children":{"type":"relation","relation":"oneToMany","target":"plugin::upload.folder","mappedBy":"parent"},"files":{"type":"relation","relation":"oneToMany","target":"plugin::upload.file","mappedBy":"folder"},"path":{"type":"string","min":1,"required":true}},"kind":"collectionType"},"modelType":"contentType","modelName":"folder","connection":"default","uid":"plugin::upload.folder","plugin":"upload","globalId":"UploadFolder"},"plugin::i18n.locale":{"info":{"singularName":"locale","pluralName":"locales","collectionName":"locales","displayName":"Locale","description":""},"options":{"draftAndPublish":false},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","min":1,"max":50,"configurable":false},"code":{"type":"string","unique":true,"configurable":false},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"info":{"singularName":"locale","pluralName":"locales","collectionName":"locales","displayName":"Locale","description":""},"options":{"draftAndPublish":false},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","min":1,"max":50,"configurable":false},"code":{"type":"string","unique":true,"configurable":false}},"kind":"collectionType"},"modelType":"contentType","modelName":"locale","connection":"default","uid":"plugin::i18n.locale","plugin":"i18n","collectionName":"i18n_locale","globalId":"I18NLocale"},"plugin::users-permissions.permission":{"collectionName":"up_permissions","info":{"name":"permission","description":"","singularName":"permission","pluralName":"permissions","displayName":"Permission"},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"action":{"type":"string","required":true,"configurable":false},"role":{"type":"relation","relation":"manyToOne","target":"plugin::users-permissions.role","inversedBy":"permissions","configurable":false},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"collectionName":"up_permissions","info":{"name":"permission","description":"","singularName":"permission","pluralName":"permissions","displayName":"Permission"},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"action":{"type":"string","required":true,"configurable":false},"role":{"type":"relation","relation":"manyToOne","target":"plugin::users-permissions.role","inversedBy":"permissions","configurable":false}},"kind":"collectionType"},"modelType":"contentType","modelName":"permission","connection":"default","uid":"plugin::users-permissions.permission","plugin":"users-permissions","globalId":"UsersPermissionsPermission"},"plugin::users-permissions.role":{"collectionName":"up_roles","info":{"name":"role","description":"","singularName":"role","pluralName":"roles","displayName":"Role"},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","minLength":3,"required":true,"configurable":false},"description":{"type":"string","configurable":false},"type":{"type":"string","unique":true,"configurable":false},"permissions":{"type":"relation","relation":"oneToMany","target":"plugin::users-permissions.permission","mappedBy":"role","configurable":false},"users":{"type":"relation","relation":"oneToMany","target":"plugin::users-permissions.user","mappedBy":"role","configurable":false},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"kind":"collectionType","__schema__":{"collectionName":"up_roles","info":{"name":"role","description":"","singularName":"role","pluralName":"roles","displayName":"Role"},"pluginOptions":{"content-manager":{"visible":false},"content-type-builder":{"visible":false}},"attributes":{"name":{"type":"string","minLength":3,"required":true,"configurable":false},"description":{"type":"string","configurable":false},"type":{"type":"string","unique":true,"configurable":false},"permissions":{"type":"relation","relation":"oneToMany","target":"plugin::users-permissions.permission","mappedBy":"role","configurable":false},"users":{"type":"relation","relation":"oneToMany","target":"plugin::users-permissions.user","mappedBy":"role","configurable":false}},"kind":"collectionType"},"modelType":"contentType","modelName":"role","connection":"default","uid":"plugin::users-permissions.role","plugin":"users-permissions","globalId":"UsersPermissionsRole"},"plugin::users-permissions.user":{"collectionName":"up_users","info":{"name":"user","description":"","singularName":"user","pluralName":"users","displayName":"User"},"options":{"draftAndPublish":false,"timestamps":true},"attributes":{"username":{"type":"string","minLength":3,"unique":true,"configurable":false,"required":true},"email":{"type":"email","minLength":6,"configurable":false,"required":true},"provider":{"type":"string","configurable":false},"password":{"type":"password","minLength":6,"configurable":false,"private":true},"resetPasswordToken":{"type":"string","configurable":false,"private":true},"confirmationToken":{"type":"string","configurable":false,"private":true},"confirmed":{"type":"boolean","default":false,"configurable":false},"blocked":{"type":"boolean","default":false,"configurable":false},"role":{"type":"relation","relation":"manyToOne","target":"plugin::users-permissions.role","inversedBy":"users","configurable":false},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true}},"config":{"attributes":{"resetPasswordToken":{"hidden":true},"confirmationToken":{"hidden":true},"provider":{"hidden":true}}},"kind":"collectionType","__schema__":{"collectionName":"up_users","info":{"name":"user","description":"","singularName":"user","pluralName":"users","displayName":"User"},"options":{"draftAndPublish":false,"timestamps":true},"attributes":{"username":{"type":"string","minLength":3,"unique":true,"configurable":false,"required":true},"email":{"type":"email","minLength":6,"configurable":false,"required":true},"provider":{"type":"string","configurable":false},"password":{"type":"password","minLength":6,"configurable":false,"private":true},"resetPasswordToken":{"type":"string","configurable":false,"private":true},"confirmationToken":{"type":"string","configurable":false,"private":true},"confirmed":{"type":"boolean","default":false,"configurable":false},"blocked":{"type":"boolean","default":false,"configurable":false},"role":{"type":"relation","relation":"manyToOne","target":"plugin::users-permissions.role","inversedBy":"users","configurable":false}},"kind":"collectionType"},"modelType":"contentType","modelName":"user","connection":"default","uid":"plugin::users-permissions.user","plugin":"users-permissions","globalId":"UsersPermissionsUser"},"api::available-products-page.available-products-page":{"kind":"singleType","collectionName":"available_products_pages","info":{"singularName":"available-products-page","pluralName":"available-products-pages","displayName":"Available Products Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::available-products-page.available-products-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"available_products_pages","info":{"singularName":"available-products-page","pluralName":"available-products-pages","displayName":"Available Products Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"}},"kind":"singleType"},"modelType":"contentType","modelName":"available-products-page","connection":"default","uid":"api::available-products-page.available-products-page","apiName":"available-products-page","globalId":"AvailableProductsPage","actions":{},"lifecycles":{}},"api::basket-page.basket-page":{"kind":"singleType","collectionName":"basket_pages","info":{"singularName":"basket-page","pluralName":"basket-pages","displayName":"Basket Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::basket-page.basket-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"basket_pages","info":{"singularName":"basket-page","pluralName":"basket-pages","displayName":"Basket Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"}},"kind":"singleType"},"modelType":"contentType","modelName":"basket-page","connection":"default","uid":"api::basket-page.basket-page","apiName":"basket-page","globalId":"BasketPage","actions":{},"lifecycles":{}},"api::dashboard-page.dashboard-page":{"kind":"singleType","collectionName":"dashboard_pages","info":{"singularName":"dashboard-page","pluralName":"dashboard-pages","displayName":"Dashboard Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::dashboard-page.dashboard-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"dashboard_pages","info":{"singularName":"dashboard-page","pluralName":"dashboard-pages","displayName":"Dashboard Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"}},"kind":"singleType"},"modelType":"contentType","modelName":"dashboard-page","connection":"default","uid":"api::dashboard-page.dashboard-page","apiName":"dashboard-page","globalId":"DashboardPage","actions":{},"lifecycles":{}},"api::download-center-page.download-center-page":{"kind":"singleType","collectionName":"download_center_pages","info":{"singularName":"download-center-page","pluralName":"download-center-pages","displayName":"Download Center Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::download-center-page.download-center-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"download_center_pages","info":{"singularName":"download-center-page","pluralName":"download-center-pages","displayName":"Download Center Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}}},"kind":"singleType"},"modelType":"contentType","modelName":"download-center-page","connection":"default","uid":"api::download-center-page.download-center-page","apiName":"download-center-page","globalId":"DownloadCenterPage","actions":{},"lifecycles":{}},"api::home-page.home-page":{"kind":"singleType","collectionName":"home_pages","info":{"singularName":"home-page","pluralName":"home-pages","displayName":"Home Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"heroSlider":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"blocks.hero-slider"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::home-page.home-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"home_pages","info":{"singularName":"home-page","pluralName":"home-pages","displayName":"Home Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"heroSlider":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"blocks.hero-slider"}},"kind":"singleType"},"modelType":"contentType","modelName":"home-page","connection":"default","uid":"api::home-page.home-page","apiName":"home-page","globalId":"HomePage","actions":{},"lifecycles":{}},"api::news-page.news-page":{"kind":"singleType","collectionName":"news_pages","info":{"singularName":"news-page","pluralName":"news-pages","displayName":"News Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::news-page.news-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"news_pages","info":{"singularName":"news-page","pluralName":"news-pages","displayName":"News Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}}},"kind":"singleType"},"modelType":"contentType","modelName":"news-page","connection":"default","uid":"api::news-page.news-page","apiName":"news-page","globalId":"NewsPage","actions":{},"lifecycles":{}},"api::order-item-page.order-item-page":{"kind":"singleType","collectionName":"order_item_pages","info":{"singularName":"order-item-page","pluralName":"order-item-pages","displayName":"Order Item Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::order-item-page.order-item-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"order_item_pages","info":{"singularName":"order-item-page","pluralName":"order-item-pages","displayName":"Order Item Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"}},"kind":"singleType"},"modelType":"contentType","modelName":"order-item-page","connection":"default","uid":"api::order-item-page.order-item-page","apiName":"order-item-page","globalId":"OrderItemPage","actions":{},"lifecycles":{}},"api::order-page.order-page":{"kind":"singleType","collectionName":"order_pages","info":{"singularName":"order-page","pluralName":"order-pages","displayName":"Order Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::order-page.order-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"order_pages","info":{"singularName":"order-page","pluralName":"order-pages","displayName":"Order Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"}},"kind":"singleType"},"modelType":"contentType","modelName":"order-page","connection":"default","uid":"api::order-page.order-page","apiName":"order-page","globalId":"OrderPage","actions":{},"lifecycles":{}},"api::orders-page.orders-page":{"kind":"singleType","collectionName":"orders_pages","info":{"singularName":"orders-page","pluralName":"orders-pages","displayName":"Orders Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::orders-page.orders-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"orders_pages","info":{"singularName":"orders-page","pluralName":"orders-pages","displayName":"Orders Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}}},"kind":"singleType"},"modelType":"contentType","modelName":"orders-page","connection":"default","uid":"api::orders-page.orders-page","apiName":"orders-page","globalId":"OrdersPage","actions":{},"lifecycles":{}},"api::outlet-page.outlet-page":{"kind":"singleType","collectionName":"outlet_pages","info":{"singularName":"outlet-page","pluralName":"outlet-pages","displayName":"Outlet Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::outlet-page.outlet-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"outlet_pages","info":{"singularName":"outlet-page","pluralName":"outlet-pages","displayName":"Outlet Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"component":"shared.seo","pluginOptions":{"i18n":{"localized":true}}}},"kind":"singleType"},"modelType":"contentType","modelName":"outlet-page","connection":"default","uid":"api::outlet-page.outlet-page","apiName":"outlet-page","globalId":"OutletPage","actions":{},"lifecycles":{}},"api::privacy-policy-page.privacy-policy-page":{"kind":"singleType","collectionName":"privacy_policy_pages","info":{"singularName":"privacy-policy-page","pluralName":"privacy-policy-pages","displayName":"Privacy Policy Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"content":{"displayName":"Content","type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"blocks.content"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::privacy-policy-page.privacy-policy-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"privacy_policy_pages","info":{"singularName":"privacy-policy-page","pluralName":"privacy-policy-pages","displayName":"Privacy Policy Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"content":{"displayName":"Content","type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"blocks.content"}},"kind":"singleType"},"modelType":"contentType","modelName":"privacy-policy-page","connection":"default","uid":"api::privacy-policy-page.privacy-policy-page","apiName":"privacy-policy-page","globalId":"PrivacyPolicyPage","actions":{},"lifecycles":{}},"api::regulations-page.regulations-page":{"kind":"singleType","collectionName":"regulations_pages","info":{"singularName":"regulations-page","pluralName":"regulations-pages","displayName":"Regulations Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"content":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"blocks.content"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::regulations-page.regulations-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"regulations_pages","info":{"singularName":"regulations-page","pluralName":"regulations-pages","displayName":"Regulations Page","description":""},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"content":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"blocks.content"}},"kind":"singleType"},"modelType":"contentType","modelName":"regulations-page","connection":"default","uid":"api::regulations-page.regulations-page","apiName":"regulations-page","globalId":"RegulationsPage","actions":{},"lifecycles":{}},"api::search-products-page.search-products-page":{"kind":"singleType","collectionName":"search_products_pages","info":{"singularName":"search-products-page","pluralName":"search-products-pages","displayName":"Search Products Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"},"createdAt":{"type":"datetime"},"updatedAt":{"type":"datetime"},"publishedAt":{"type":"datetime","configurable":false,"writable":true,"visible":false},"createdBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"updatedBy":{"type":"relation","relation":"oneToOne","target":"admin::user","configurable":false,"writable":false,"visible":false,"useJoinTable":false,"private":true},"localizations":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"relation","relation":"oneToMany","target":"api::search-products-page.search-products-page"},"locale":{"writable":true,"private":false,"configurable":false,"visible":false,"type":"string"}},"__schema__":{"collectionName":"search_products_pages","info":{"singularName":"search-products-page","pluralName":"search-products-pages","displayName":"Search Products Page"},"options":{"draftAndPublish":true},"pluginOptions":{"i18n":{"localized":true}},"attributes":{"seo":{"type":"component","repeatable":false,"pluginOptions":{"i18n":{"localized":true}},"component":"shared.seo"}},"kind":"singleType"},"modelType":"contentType","modelName":"search-products-page","connection":"default","uid":"api::search-products-page.search-products-page","apiName":"search-products-page","globalId":"SearchProductsPage","actions":{},"lifecycles":{}}}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (8, 'plugin_content_manager_configuration_content_types::plugin::upload.folder', '{"uid":"plugin::upload.folder","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"name","defaultSortBy":"name","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"name":{"edit":{"label":"name","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"name","searchable":true,"sortable":true}},"pathId":{"edit":{"label":"pathId","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"pathId","searchable":true,"sortable":true}},"parent":{"edit":{"label":"parent","description":"","placeholder":"","visible":true,"editable":true,"mainField":"name"},"list":{"label":"parent","searchable":true,"sortable":true}},"children":{"edit":{"label":"children","description":"","placeholder":"","visible":true,"editable":true,"mainField":"name"},"list":{"label":"children","searchable":false,"sortable":false}},"files":{"edit":{"label":"files","description":"","placeholder":"","visible":true,"editable":true,"mainField":"name"},"list":{"label":"files","searchable":false,"sortable":false}},"path":{"edit":{"label":"path","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"path","searchable":true,"sortable":true}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","name","pathId","parent"],"edit":[[{"name":"name","size":6},{"name":"pathId","size":4}],[{"name":"parent","size":6},{"name":"children","size":6}],[{"name":"files","size":6},{"name":"path","size":6}]]}}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (10, 'plugin_content_manager_configuration_content_types::admin::api-token-permission', '{"uid":"admin::api-token-permission","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"action","defaultSortBy":"action","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"action":{"edit":{"label":"action","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"action","searchable":true,"sortable":true}},"token":{"edit":{"label":"token","description":"","placeholder":"","visible":true,"editable":true,"mainField":"name"},"list":{"label":"token","searchable":true,"sortable":true}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","action","token","createdAt"],"edit":[[{"name":"action","size":6},{"name":"token","size":6}]]}}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (9, 'plugin_content_manager_configuration_content_types::plugin::upload.file', '{"uid":"plugin::upload.file","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"name","defaultSortBy":"name","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"name":{"edit":{"label":"name","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"name","searchable":true,"sortable":true}},"alternativeText":{"edit":{"label":"alternativeText","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"alternativeText","searchable":true,"sortable":true}},"caption":{"edit":{"label":"caption","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"caption","searchable":true,"sortable":true}},"width":{"edit":{"label":"width","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"width","searchable":true,"sortable":true}},"height":{"edit":{"label":"height","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"height","searchable":true,"sortable":true}},"formats":{"edit":{"label":"formats","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"formats","searchable":false,"sortable":false}},"hash":{"edit":{"label":"hash","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"hash","searchable":true,"sortable":true}},"ext":{"edit":{"label":"ext","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"ext","searchable":true,"sortable":true}},"mime":{"edit":{"label":"mime","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"mime","searchable":true,"sortable":true}},"size":{"edit":{"label":"size","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"size","searchable":true,"sortable":true}},"url":{"edit":{"label":"url","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"url","searchable":true,"sortable":true}},"previewUrl":{"edit":{"label":"previewUrl","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"previewUrl","searchable":true,"sortable":true}},"provider":{"edit":{"label":"provider","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"provider","searchable":true,"sortable":true}},"provider_metadata":{"edit":{"label":"provider_metadata","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"provider_metadata","searchable":false,"sortable":false}},"folder":{"edit":{"label":"folder","description":"","placeholder":"","visible":true,"editable":true,"mainField":"name"},"list":{"label":"folder","searchable":true,"sortable":true}},"folderPath":{"edit":{"label":"folderPath","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"folderPath","searchable":true,"sortable":true}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","name","alternativeText","caption"],"edit":[[{"name":"name","size":6},{"name":"alternativeText","size":6}],[{"name":"caption","size":6},{"name":"width","size":4}],[{"name":"height","size":4}],[{"name":"formats","size":12}],[{"name":"hash","size":6},{"name":"ext","size":6}],[{"name":"mime","size":6},{"name":"size","size":4}],[{"name":"url","size":6},{"name":"previewUrl","size":6}],[{"name":"provider","size":6}],[{"name":"provider_metadata","size":12}],[{"name":"folder","size":6},{"name":"folderPath","size":6}]]}}', 'object', NULL, NULL);
@@ -4438,7 +4491,7 @@ INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (16, 'plugin_users-permissions_email', '{"reset_password":{"display":"Email.template.reset_password","icon":"sync","options":{"from":{"name":"Administration Panel","email":"no-reply@strapi.io"},"response_email":"","object":"Reset password","message":"<p>We heard that you lost your password. Sorry about that!</p>\n\n<p>But don’t worry! You can use the following link to reset your password:</p>\n<p><%= URL %>?code=<%= TOKEN %></p>\n\n<p>Thanks.</p>"}},"email_confirmation":{"display":"Email.template.email_confirmation","icon":"check-square","options":{"from":{"name":"Administration Panel","email":"no-reply@strapi.io"},"response_email":"","object":"Account confirmation","message":"<p>Thank you for registering!</p>\n\n<p>You have to confirm your email address. Please click on the link below.</p>\n\n<p><%= URL %>?confirmation=<%= CODE %></p>\n\n<p>Thanks.</p>"}}}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (17, 'plugin_users-permissions_advanced', '{"unique_email":true,"allow_register":true,"email_confirmation":false,"email_reset_password":null,"email_confirmation_redirection":null,"default_role":"authenticated"}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (13, 'plugin_upload_settings', '{"sizeOptimization":false,"responsiveDimensions":false,"autoOrientation":false}', 'object', NULL, NULL);
-INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (14, 'plugin_upload_metrics', '{"weeklySchedule":"5 38 6 * * 1","lastWeeklyUpdate":1670827085034}', 'object', NULL, NULL);
+INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (14, 'plugin_upload_metrics', '{"weeklySchedule":"14 43 8 * * 2","lastWeeklyUpdate":1672130594038}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (11, 'plugin_content_manager_configuration_content_types::plugin::users-permissions.user', '{"uid":"plugin::users-permissions.user","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"username","defaultSortBy":"username","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"username":{"edit":{"label":"username","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"username","searchable":true,"sortable":true}},"email":{"edit":{"label":"email","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"email","searchable":true,"sortable":true}},"provider":{"edit":{"label":"provider","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"provider","searchable":true,"sortable":true}},"password":{"edit":{"label":"password","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"password","searchable":true,"sortable":true}},"resetPasswordToken":{"edit":{"label":"resetPasswordToken","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"resetPasswordToken","searchable":true,"sortable":true}},"confirmationToken":{"edit":{"label":"confirmationToken","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"confirmationToken","searchable":true,"sortable":true}},"confirmed":{"edit":{"label":"confirmed","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"confirmed","searchable":true,"sortable":true}},"blocked":{"edit":{"label":"blocked","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"blocked","searchable":true,"sortable":true}},"role":{"edit":{"label":"role","description":"","placeholder":"","visible":true,"editable":true,"mainField":"name"},"list":{"label":"role","searchable":true,"sortable":true}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","username","email","confirmed"],"edit":[[{"name":"username","size":6},{"name":"email","size":6}],[{"name":"password","size":6},{"name":"confirmed","size":4}],[{"name":"blocked","size":4},{"name":"role","size":6}]]}}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (12, 'plugin_content_manager_configuration_content_types::plugin::users-permissions.role', '{"uid":"plugin::users-permissions.role","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"name","defaultSortBy":"name","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"name":{"edit":{"label":"name","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"name","searchable":true,"sortable":true}},"description":{"edit":{"label":"description","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"description","searchable":true,"sortable":true}},"type":{"edit":{"label":"type","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"type","searchable":true,"sortable":true}},"permissions":{"edit":{"label":"permissions","description":"","placeholder":"","visible":true,"editable":true,"mainField":"action"},"list":{"label":"permissions","searchable":false,"sortable":false}},"users":{"edit":{"label":"users","description":"","placeholder":"","visible":true,"editable":true,"mainField":"username"},"list":{"label":"users","searchable":false,"sortable":false}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","name","description","type"],"edit":[[{"name":"name","size":6},{"name":"description","size":6}],[{"name":"type","size":6},{"name":"permissions","size":6}],[{"name":"users","size":6}]]}}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (20, 'plugin_content_manager_configuration_components::shared.link', '{"uid":"shared.link","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"href","defaultSortBy":"href","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":false,"sortable":false}},"href":{"edit":{"label":"href","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"href","searchable":true,"sortable":true}},"label":{"edit":{"label":"label","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"label","searchable":true,"sortable":true}},"target":{"edit":{"label":"target","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"target","searchable":true,"sortable":true}},"isExternal":{"edit":{"label":"isExternal","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"isExternal","searchable":true,"sortable":true}}},"layouts":{"list":["id","href","label","target"],"edit":[[{"name":"href","size":6},{"name":"label","size":6}],[{"name":"target","size":6},{"name":"isExternal","size":4}]]},"isComponent":true}', 'object', NULL, NULL);
@@ -4453,24 +4506,25 @@ INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (78, 'plugin_content_manager_configuration_content_types::api::outlet-page.outlet-page', '{"uid":"api::outlet-page.outlet-page","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"id","defaultSortBy":"id","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"seo":{"edit":{"label":"seo","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"seo","searchable":false,"sortable":false}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","seo","createdAt","updatedAt"],"edit":[[{"name":"seo","size":12}]]}}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (79, 'plugin_content_manager_configuration_content_types::api::news-page.news-page', '{"uid":"api::news-page.news-page","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"id","defaultSortBy":"id","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"seo":{"edit":{"label":"seo","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"seo","searchable":false,"sortable":false}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","seo","createdAt","updatedAt"],"edit":[[{"name":"seo","size":12}]]}}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (80, 'plugin_content_manager_configuration_content_types::api::available-products-page.available-products-page', '{"uid":"api::available-products-page.available-products-page","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"id","defaultSortBy":"id","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"seo":{"edit":{"label":"seo","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"seo","searchable":false,"sortable":false}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","seo","createdAt","updatedAt"],"edit":[[{"name":"seo","size":12}]]}}', 'object', NULL, NULL);
-INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (81, 'plugin_content_manager_configuration_content_types::api::regulations-page.regulations-page', '{"uid":"api::regulations-page.regulations-page","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"id","defaultSortBy":"id","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"seo":{"edit":{"label":"seo","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"seo","searchable":false,"sortable":false}},"Text":{"edit":{"label":"Text","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"Text","searchable":false,"sortable":false}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","seo","createdAt","updatedAt"],"edit":[[{"name":"seo","size":12}],[{"name":"Text","size":12}]]}}', 'object', NULL, NULL);
-INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (82, 'plugin_content_manager_configuration_content_types::api::privacy-policy-page.privacy-policy-page', '{"uid":"api::privacy-policy-page.privacy-policy-page","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"id","defaultSortBy":"id","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"seo":{"edit":{"label":"seo","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"seo","searchable":false,"sortable":false}},"Text":{"edit":{"label":"Text","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"Text","searchable":false,"sortable":false}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","seo","createdAt","updatedAt"],"edit":[[{"name":"seo","size":12}],[{"name":"Text","size":12}]]}}', 'object', NULL, NULL);
+INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (81, 'plugin_content_manager_configuration_content_types::api::regulations-page.regulations-page', '{"uid":"api::regulations-page.regulations-page","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"id","defaultSortBy":"id","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"seo":{"edit":{"label":"seo","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"seo","searchable":false,"sortable":false}},"content":{"edit":{"label":"content","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"content","searchable":false,"sortable":false}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","seo","createdAt","updatedAt"],"edit":[[{"name":"seo","size":12}],[{"name":"content","size":12}]]}}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (83, 'plugin_content_manager_configuration_content_types::api::basket-page.basket-page', '{"uid":"api::basket-page.basket-page","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"id","defaultSortBy":"id","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"seo":{"edit":{"label":"seo","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"seo","searchable":false,"sortable":false}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","seo","createdAt","updatedAt"],"edit":[[{"name":"seo","size":12}]]}}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (84, 'plugin_content_manager_configuration_content_types::api::order-item-page.order-item-page', '{"uid":"api::order-item-page.order-item-page","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"id","defaultSortBy":"id","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"seo":{"edit":{"label":"seo","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"seo","searchable":false,"sortable":false}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","seo","createdAt","updatedAt"],"edit":[[{"name":"seo","size":12}]]}}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (85, 'plugin_content_manager_configuration_content_types::api::search-products-page.search-products-page', '{"uid":"api::search-products-page.search-products-page","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"id","defaultSortBy":"id","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"seo":{"edit":{"label":"seo","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"seo","searchable":false,"sortable":false}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","seo","createdAt","updatedAt"],"edit":[[{"name":"seo","size":12}]]}}', 'object', NULL, NULL);
+INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (87, 'plugin_content_manager_configuration_components::blocks.content', '{"uid":"blocks.content","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"title","defaultSortBy":"title","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"title":{"edit":{"label":"title","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"title","searchable":true,"sortable":true}},"text":{"edit":{"label":"text","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"text","searchable":false,"sortable":false}}},"layouts":{"list":["id","title"],"edit":[[{"name":"title","size":6}],[{"name":"text","size":12}]]},"isComponent":true}', 'object', NULL, NULL);
+INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (82, 'plugin_content_manager_configuration_content_types::api::privacy-policy-page.privacy-policy-page', '{"uid":"api::privacy-policy-page.privacy-policy-page","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"id","defaultSortBy":"id","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"seo":{"edit":{"label":"seo","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"seo","searchable":false,"sortable":false}},"content":{"edit":{"label":"content","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"content","searchable":false,"sortable":false}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","seo","createdAt","updatedAt"],"edit":[[{"name":"seo","size":12}],[{"name":"content","size":12}]]}}', 'object', NULL, NULL);
 
 
 --
--- TOC entry 3863 (class 0 OID 16536)
+-- TOC entry 3873 (class 0 OID 16536)
 -- Dependencies: 240
 -- Data for Name: strapi_database_schema; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.strapi_database_schema (id, schema, "time", hash) VALUES (98, '{"tables":[{"name":"strapi_core_store_settings","indexes":[],"foreignKeys":[],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"key","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"value","type":"text","args":["longtext"],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"environment","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"tag","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"strapi_webhooks","indexes":[],"foreignKeys":[],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"name","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"url","type":"text","args":["longtext"],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"headers","type":"jsonb","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"events","type":"jsonb","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"enabled","type":"boolean","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"admin_permissions","indexes":[{"name":"admin_permissions_created_by_id_fk","columns":["created_by_id"]},{"name":"admin_permissions_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"admin_permissions_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"admin_permissions_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"action","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"subject","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"properties","type":"jsonb","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"conditions","type":"jsonb","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"admin_users","indexes":[{"name":"admin_users_created_by_id_fk","columns":["created_by_id"]},{"name":"admin_users_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"admin_users_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"admin_users_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"firstname","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"lastname","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"username","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"email","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"password","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"reset_password_token","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"registration_token","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"is_active","type":"boolean","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"blocked","type":"boolean","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"prefered_language","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"admin_roles","indexes":[{"name":"admin_roles_created_by_id_fk","columns":["created_by_id"]},{"name":"admin_roles_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"admin_roles_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"admin_roles_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"name","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"code","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"description","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"strapi_api_tokens","indexes":[{"name":"strapi_api_tokens_created_by_id_fk","columns":["created_by_id"]},{"name":"strapi_api_tokens_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"strapi_api_tokens_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"strapi_api_tokens_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"name","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"description","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"access_key","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"last_used_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"expires_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"lifespan","type":"bigInteger","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"strapi_api_token_permissions","indexes":[{"name":"strapi_api_token_permissions_created_by_id_fk","columns":["created_by_id"]},{"name":"strapi_api_token_permissions_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"strapi_api_token_permissions_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"strapi_api_token_permissions_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"action","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"files","indexes":[{"name":"upload_files_folder_path_index","columns":["folder_path"],"type":null},{"name":"files_created_by_id_fk","columns":["created_by_id"]},{"name":"files_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"files_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"files_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"name","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"alternative_text","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"caption","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"width","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"height","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"formats","type":"jsonb","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"hash","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"ext","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"mime","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"size","type":"decimal","args":[10,2],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"url","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"preview_url","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"provider","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"provider_metadata","type":"jsonb","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"folder_path","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"upload_folders","indexes":[{"name":"upload_folders_path_id_index","columns":["path_id"],"type":"unique"},{"name":"upload_folders_path_index","columns":["path"],"type":"unique"},{"name":"upload_folders_created_by_id_fk","columns":["created_by_id"]},{"name":"upload_folders_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"upload_folders_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"upload_folders_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"name","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"path_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"path","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"i18n_locale","indexes":[{"name":"i18n_locale_created_by_id_fk","columns":["created_by_id"]},{"name":"i18n_locale_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"i18n_locale_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"i18n_locale_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"name","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"code","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"up_permissions","indexes":[{"name":"up_permissions_created_by_id_fk","columns":["created_by_id"]},{"name":"up_permissions_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"up_permissions_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"up_permissions_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"action","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"up_roles","indexes":[{"name":"up_roles_created_by_id_fk","columns":["created_by_id"]},{"name":"up_roles_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"up_roles_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"up_roles_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"name","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"description","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"up_users","indexes":[{"name":"up_users_created_by_id_fk","columns":["created_by_id"]},{"name":"up_users_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"up_users_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"up_users_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"username","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"email","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"provider","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"password","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"reset_password_token","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"confirmation_token","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"confirmed","type":"boolean","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"blocked","type":"boolean","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"available_products_pages","indexes":[{"name":"available_products_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"available_products_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"available_products_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"available_products_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"basket_pages","indexes":[{"name":"basket_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"basket_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"basket_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"basket_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"dashboard_pages","indexes":[{"name":"dashboard_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"dashboard_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"dashboard_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"dashboard_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"download_center_pages","indexes":[{"name":"download_center_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"download_center_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"download_center_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"download_center_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"home_pages","indexes":[{"name":"home_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"home_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"home_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"home_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"news_pages","indexes":[{"name":"news_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"news_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"news_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"news_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"order_item_pages","indexes":[{"name":"order_item_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"order_item_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"order_item_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"order_item_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"order_pages","indexes":[{"name":"order_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"order_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"order_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"order_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"orders_pages","indexes":[{"name":"orders_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"orders_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"orders_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"orders_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"outlet_pages","indexes":[{"name":"outlet_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"outlet_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"outlet_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"outlet_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"privacy_policy_pages","indexes":[{"name":"privacy_policy_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"privacy_policy_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"privacy_policy_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"privacy_policy_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"text","type":"text","args":["longtext"],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"regulations_pages","indexes":[{"name":"regulations_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"regulations_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"regulations_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"regulations_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"text","type":"text","args":["longtext"],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"search_products_pages","indexes":[{"name":"search_products_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"search_products_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"search_products_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"search_products_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"components_blocks_hero_slider_items","indexes":[],"foreignKeys":[],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"title","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"text","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"components_blocks_hero_sliders","indexes":[],"foreignKeys":[],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false}]},{"name":"components_shared_links","indexes":[],"foreignKeys":[],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"href","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"label","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"target","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"is_external","type":"boolean","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"components_shared_seos","indexes":[],"foreignKeys":[],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"meta_title","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"meta_description","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"admin_permissions_role_links","indexes":[{"name":"admin_permissions_role_links_fk","columns":["permission_id"]},{"name":"admin_permissions_role_links_inv_fk","columns":["role_id"]},{"name":"admin_permissions_role_links_unique","columns":["permission_id","role_id"],"type":"unique"},{"name":"admin_permissions_role_links_order_inv_fk","columns":["permission_order"]}],"foreignKeys":[{"name":"admin_permissions_role_links_fk","columns":["permission_id"],"referencedColumns":["id"],"referencedTable":"admin_permissions","onDelete":"CASCADE"},{"name":"admin_permissions_role_links_inv_fk","columns":["role_id"],"referencedColumns":["id"],"referencedTable":"admin_roles","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"permission_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"role_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"permission_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"admin_users_roles_links","indexes":[{"name":"admin_users_roles_links_fk","columns":["user_id"]},{"name":"admin_users_roles_links_inv_fk","columns":["role_id"]},{"name":"admin_users_roles_links_unique","columns":["user_id","role_id"],"type":"unique"},{"name":"admin_users_roles_links_order_fk","columns":["role_order"]},{"name":"admin_users_roles_links_order_inv_fk","columns":["user_order"]}],"foreignKeys":[{"name":"admin_users_roles_links_fk","columns":["user_id"],"referencedColumns":["id"],"referencedTable":"admin_users","onDelete":"CASCADE"},{"name":"admin_users_roles_links_inv_fk","columns":["role_id"],"referencedColumns":["id"],"referencedTable":"admin_roles","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"user_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"role_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"role_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"user_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"strapi_api_token_permissions_token_links","indexes":[{"name":"strapi_api_token_permissions_token_links_fk","columns":["api_token_permission_id"]},{"name":"strapi_api_token_permissions_token_links_inv_fk","columns":["api_token_id"]},{"name":"strapi_api_token_permissions_token_links_unique","columns":["api_token_permission_id","api_token_id"],"type":"unique"},{"name":"strapi_api_token_permissions_token_links_order_inv_fk","columns":["api_token_permission_order"]}],"foreignKeys":[{"name":"strapi_api_token_permissions_token_links_fk","columns":["api_token_permission_id"],"referencedColumns":["id"],"referencedTable":"strapi_api_token_permissions","onDelete":"CASCADE"},{"name":"strapi_api_token_permissions_token_links_inv_fk","columns":["api_token_id"],"referencedColumns":["id"],"referencedTable":"strapi_api_tokens","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"api_token_permission_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"api_token_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"api_token_permission_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"files_related_morphs","indexes":[{"name":"files_related_morphs_fk","columns":["file_id"]}],"foreignKeys":[{"name":"files_related_morphs_fk","columns":["file_id"],"referencedColumns":["id"],"referencedTable":"files","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"file_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"related_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"related_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"files_folder_links","indexes":[{"name":"files_folder_links_fk","columns":["file_id"]},{"name":"files_folder_links_inv_fk","columns":["folder_id"]},{"name":"files_folder_links_unique","columns":["file_id","folder_id"],"type":"unique"},{"name":"files_folder_links_order_inv_fk","columns":["file_order"]}],"foreignKeys":[{"name":"files_folder_links_fk","columns":["file_id"],"referencedColumns":["id"],"referencedTable":"files","onDelete":"CASCADE"},{"name":"files_folder_links_inv_fk","columns":["folder_id"],"referencedColumns":["id"],"referencedTable":"upload_folders","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"file_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"folder_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"file_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"upload_folders_parent_links","indexes":[{"name":"upload_folders_parent_links_fk","columns":["folder_id"]},{"name":"upload_folders_parent_links_inv_fk","columns":["inv_folder_id"]},{"name":"upload_folders_parent_links_unique","columns":["folder_id","inv_folder_id"],"type":"unique"},{"name":"upload_folders_parent_links_order_inv_fk","columns":["folder_order"]}],"foreignKeys":[{"name":"upload_folders_parent_links_fk","columns":["folder_id"],"referencedColumns":["id"],"referencedTable":"upload_folders","onDelete":"CASCADE"},{"name":"upload_folders_parent_links_inv_fk","columns":["inv_folder_id"],"referencedColumns":["id"],"referencedTable":"upload_folders","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"folder_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_folder_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"folder_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"up_permissions_role_links","indexes":[{"name":"up_permissions_role_links_fk","columns":["permission_id"]},{"name":"up_permissions_role_links_inv_fk","columns":["role_id"]},{"name":"up_permissions_role_links_unique","columns":["permission_id","role_id"],"type":"unique"},{"name":"up_permissions_role_links_order_inv_fk","columns":["permission_order"]}],"foreignKeys":[{"name":"up_permissions_role_links_fk","columns":["permission_id"],"referencedColumns":["id"],"referencedTable":"up_permissions","onDelete":"CASCADE"},{"name":"up_permissions_role_links_inv_fk","columns":["role_id"],"referencedColumns":["id"],"referencedTable":"up_roles","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"permission_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"role_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"permission_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"up_users_role_links","indexes":[{"name":"up_users_role_links_fk","columns":["user_id"]},{"name":"up_users_role_links_inv_fk","columns":["role_id"]},{"name":"up_users_role_links_unique","columns":["user_id","role_id"],"type":"unique"},{"name":"up_users_role_links_order_inv_fk","columns":["user_order"]}],"foreignKeys":[{"name":"up_users_role_links_fk","columns":["user_id"],"referencedColumns":["id"],"referencedTable":"up_users","onDelete":"CASCADE"},{"name":"up_users_role_links_inv_fk","columns":["role_id"],"referencedColumns":["id"],"referencedTable":"up_roles","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"user_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"role_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"user_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"available_products_pages_components","indexes":[{"name":"available_products_pages_field_index","columns":["field"],"type":null},{"name":"available_products_pages_component_type_index","columns":["component_type"],"type":null},{"name":"available_products_pages_entity_fk","columns":["entity_id"]},{"name":"available_products_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"available_products_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"available_products_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"available_products_pages_localizations_links","indexes":[{"name":"available_products_pages_localizations_links_fk","columns":["available_products_page_id"]},{"name":"available_products_pages_localizations_links_inv_fk","columns":["inv_available_products_page_id"]},{"name":"available_products_pages_localizations_links_unique","columns":["available_products_page_id","inv_available_products_page_id"],"type":"unique"},{"name":"available_products_pages_localizations_links_order_fk","columns":["available_products_page_order"]}],"foreignKeys":[{"name":"available_products_pages_localizations_links_fk","columns":["available_products_page_id"],"referencedColumns":["id"],"referencedTable":"available_products_pages","onDelete":"CASCADE"},{"name":"available_products_pages_localizations_links_inv_fk","columns":["inv_available_products_page_id"],"referencedColumns":["id"],"referencedTable":"available_products_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"available_products_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_available_products_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"available_products_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"basket_pages_components","indexes":[{"name":"basket_pages_field_index","columns":["field"],"type":null},{"name":"basket_pages_component_type_index","columns":["component_type"],"type":null},{"name":"basket_pages_entity_fk","columns":["entity_id"]},{"name":"basket_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"basket_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"basket_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"basket_pages_localizations_links","indexes":[{"name":"basket_pages_localizations_links_fk","columns":["basket_page_id"]},{"name":"basket_pages_localizations_links_inv_fk","columns":["inv_basket_page_id"]},{"name":"basket_pages_localizations_links_unique","columns":["basket_page_id","inv_basket_page_id"],"type":"unique"},{"name":"basket_pages_localizations_links_order_fk","columns":["basket_page_order"]}],"foreignKeys":[{"name":"basket_pages_localizations_links_fk","columns":["basket_page_id"],"referencedColumns":["id"],"referencedTable":"basket_pages","onDelete":"CASCADE"},{"name":"basket_pages_localizations_links_inv_fk","columns":["inv_basket_page_id"],"referencedColumns":["id"],"referencedTable":"basket_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"basket_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_basket_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"basket_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"dashboard_pages_components","indexes":[{"name":"dashboard_pages_field_index","columns":["field"],"type":null},{"name":"dashboard_pages_component_type_index","columns":["component_type"],"type":null},{"name":"dashboard_pages_entity_fk","columns":["entity_id"]},{"name":"dashboard_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"dashboard_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"dashboard_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"dashboard_pages_localizations_links","indexes":[{"name":"dashboard_pages_localizations_links_fk","columns":["dashboard_page_id"]},{"name":"dashboard_pages_localizations_links_inv_fk","columns":["inv_dashboard_page_id"]},{"name":"dashboard_pages_localizations_links_unique","columns":["dashboard_page_id","inv_dashboard_page_id"],"type":"unique"},{"name":"dashboard_pages_localizations_links_order_fk","columns":["dashboard_page_order"]}],"foreignKeys":[{"name":"dashboard_pages_localizations_links_fk","columns":["dashboard_page_id"],"referencedColumns":["id"],"referencedTable":"dashboard_pages","onDelete":"CASCADE"},{"name":"dashboard_pages_localizations_links_inv_fk","columns":["inv_dashboard_page_id"],"referencedColumns":["id"],"referencedTable":"dashboard_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"dashboard_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_dashboard_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"dashboard_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"download_center_pages_components","indexes":[{"name":"download_center_pages_field_index","columns":["field"],"type":null},{"name":"download_center_pages_component_type_index","columns":["component_type"],"type":null},{"name":"download_center_pages_entity_fk","columns":["entity_id"]},{"name":"download_center_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"download_center_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"download_center_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"download_center_pages_localizations_links","indexes":[{"name":"download_center_pages_localizations_links_fk","columns":["download_center_page_id"]},{"name":"download_center_pages_localizations_links_inv_fk","columns":["inv_download_center_page_id"]},{"name":"download_center_pages_localizations_links_unique","columns":["download_center_page_id","inv_download_center_page_id"],"type":"unique"},{"name":"download_center_pages_localizations_links_order_fk","columns":["download_center_page_order"]}],"foreignKeys":[{"name":"download_center_pages_localizations_links_fk","columns":["download_center_page_id"],"referencedColumns":["id"],"referencedTable":"download_center_pages","onDelete":"CASCADE"},{"name":"download_center_pages_localizations_links_inv_fk","columns":["inv_download_center_page_id"],"referencedColumns":["id"],"referencedTable":"download_center_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"download_center_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_download_center_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"download_center_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"home_pages_components","indexes":[{"name":"home_pages_field_index","columns":["field"],"type":null},{"name":"home_pages_component_type_index","columns":["component_type"],"type":null},{"name":"home_pages_entity_fk","columns":["entity_id"]},{"name":"home_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"home_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"home_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"home_pages_localizations_links","indexes":[{"name":"home_pages_localizations_links_fk","columns":["home_page_id"]},{"name":"home_pages_localizations_links_inv_fk","columns":["inv_home_page_id"]},{"name":"home_pages_localizations_links_unique","columns":["home_page_id","inv_home_page_id"],"type":"unique"},{"name":"home_pages_localizations_links_order_fk","columns":["home_page_order"]}],"foreignKeys":[{"name":"home_pages_localizations_links_fk","columns":["home_page_id"],"referencedColumns":["id"],"referencedTable":"home_pages","onDelete":"CASCADE"},{"name":"home_pages_localizations_links_inv_fk","columns":["inv_home_page_id"],"referencedColumns":["id"],"referencedTable":"home_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"home_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_home_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"home_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"news_pages_components","indexes":[{"name":"news_pages_field_index","columns":["field"],"type":null},{"name":"news_pages_component_type_index","columns":["component_type"],"type":null},{"name":"news_pages_entity_fk","columns":["entity_id"]},{"name":"news_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"news_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"news_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"news_pages_localizations_links","indexes":[{"name":"news_pages_localizations_links_fk","columns":["news_page_id"]},{"name":"news_pages_localizations_links_inv_fk","columns":["inv_news_page_id"]},{"name":"news_pages_localizations_links_unique","columns":["news_page_id","inv_news_page_id"],"type":"unique"},{"name":"news_pages_localizations_links_order_fk","columns":["news_page_order"]}],"foreignKeys":[{"name":"news_pages_localizations_links_fk","columns":["news_page_id"],"referencedColumns":["id"],"referencedTable":"news_pages","onDelete":"CASCADE"},{"name":"news_pages_localizations_links_inv_fk","columns":["inv_news_page_id"],"referencedColumns":["id"],"referencedTable":"news_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"news_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_news_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"news_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"order_item_pages_components","indexes":[{"name":"order_item_pages_field_index","columns":["field"],"type":null},{"name":"order_item_pages_component_type_index","columns":["component_type"],"type":null},{"name":"order_item_pages_entity_fk","columns":["entity_id"]},{"name":"order_item_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"order_item_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"order_item_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"order_item_pages_localizations_links","indexes":[{"name":"order_item_pages_localizations_links_fk","columns":["order_item_page_id"]},{"name":"order_item_pages_localizations_links_inv_fk","columns":["inv_order_item_page_id"]},{"name":"order_item_pages_localizations_links_unique","columns":["order_item_page_id","inv_order_item_page_id"],"type":"unique"},{"name":"order_item_pages_localizations_links_order_fk","columns":["order_item_page_order"]}],"foreignKeys":[{"name":"order_item_pages_localizations_links_fk","columns":["order_item_page_id"],"referencedColumns":["id"],"referencedTable":"order_item_pages","onDelete":"CASCADE"},{"name":"order_item_pages_localizations_links_inv_fk","columns":["inv_order_item_page_id"],"referencedColumns":["id"],"referencedTable":"order_item_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"order_item_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_order_item_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"order_item_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"order_pages_components","indexes":[{"name":"order_pages_field_index","columns":["field"],"type":null},{"name":"order_pages_component_type_index","columns":["component_type"],"type":null},{"name":"order_pages_entity_fk","columns":["entity_id"]},{"name":"order_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"order_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"order_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"order_pages_localizations_links","indexes":[{"name":"order_pages_localizations_links_fk","columns":["order_page_id"]},{"name":"order_pages_localizations_links_inv_fk","columns":["inv_order_page_id"]},{"name":"order_pages_localizations_links_unique","columns":["order_page_id","inv_order_page_id"],"type":"unique"},{"name":"order_pages_localizations_links_order_fk","columns":["order_page_order"]}],"foreignKeys":[{"name":"order_pages_localizations_links_fk","columns":["order_page_id"],"referencedColumns":["id"],"referencedTable":"order_pages","onDelete":"CASCADE"},{"name":"order_pages_localizations_links_inv_fk","columns":["inv_order_page_id"],"referencedColumns":["id"],"referencedTable":"order_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"order_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_order_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"order_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"orders_pages_components","indexes":[{"name":"orders_pages_field_index","columns":["field"],"type":null},{"name":"orders_pages_component_type_index","columns":["component_type"],"type":null},{"name":"orders_pages_entity_fk","columns":["entity_id"]},{"name":"orders_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"orders_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"orders_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"orders_pages_localizations_links","indexes":[{"name":"orders_pages_localizations_links_fk","columns":["orders_page_id"]},{"name":"orders_pages_localizations_links_inv_fk","columns":["inv_orders_page_id"]},{"name":"orders_pages_localizations_links_unique","columns":["orders_page_id","inv_orders_page_id"],"type":"unique"},{"name":"orders_pages_localizations_links_order_fk","columns":["orders_page_order"]}],"foreignKeys":[{"name":"orders_pages_localizations_links_fk","columns":["orders_page_id"],"referencedColumns":["id"],"referencedTable":"orders_pages","onDelete":"CASCADE"},{"name":"orders_pages_localizations_links_inv_fk","columns":["inv_orders_page_id"],"referencedColumns":["id"],"referencedTable":"orders_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"orders_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_orders_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"orders_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"outlet_pages_components","indexes":[{"name":"outlet_pages_field_index","columns":["field"],"type":null},{"name":"outlet_pages_component_type_index","columns":["component_type"],"type":null},{"name":"outlet_pages_entity_fk","columns":["entity_id"]},{"name":"outlet_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"outlet_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"outlet_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"outlet_pages_localizations_links","indexes":[{"name":"outlet_pages_localizations_links_fk","columns":["outlet_page_id"]},{"name":"outlet_pages_localizations_links_inv_fk","columns":["inv_outlet_page_id"]},{"name":"outlet_pages_localizations_links_unique","columns":["outlet_page_id","inv_outlet_page_id"],"type":"unique"},{"name":"outlet_pages_localizations_links_order_fk","columns":["outlet_page_order"]}],"foreignKeys":[{"name":"outlet_pages_localizations_links_fk","columns":["outlet_page_id"],"referencedColumns":["id"],"referencedTable":"outlet_pages","onDelete":"CASCADE"},{"name":"outlet_pages_localizations_links_inv_fk","columns":["inv_outlet_page_id"],"referencedColumns":["id"],"referencedTable":"outlet_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"outlet_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_outlet_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"outlet_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"privacy_policy_pages_components","indexes":[{"name":"privacy_policy_pages_field_index","columns":["field"],"type":null},{"name":"privacy_policy_pages_component_type_index","columns":["component_type"],"type":null},{"name":"privacy_policy_pages_entity_fk","columns":["entity_id"]},{"name":"privacy_policy_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"privacy_policy_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"privacy_policy_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"privacy_policy_pages_localizations_links","indexes":[{"name":"privacy_policy_pages_localizations_links_fk","columns":["privacy_policy_page_id"]},{"name":"privacy_policy_pages_localizations_links_inv_fk","columns":["inv_privacy_policy_page_id"]},{"name":"privacy_policy_pages_localizations_links_unique","columns":["privacy_policy_page_id","inv_privacy_policy_page_id"],"type":"unique"},{"name":"privacy_policy_pages_localizations_links_order_fk","columns":["privacy_policy_page_order"]}],"foreignKeys":[{"name":"privacy_policy_pages_localizations_links_fk","columns":["privacy_policy_page_id"],"referencedColumns":["id"],"referencedTable":"privacy_policy_pages","onDelete":"CASCADE"},{"name":"privacy_policy_pages_localizations_links_inv_fk","columns":["inv_privacy_policy_page_id"],"referencedColumns":["id"],"referencedTable":"privacy_policy_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"privacy_policy_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_privacy_policy_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"privacy_policy_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"regulations_pages_components","indexes":[{"name":"regulations_pages_field_index","columns":["field"],"type":null},{"name":"regulations_pages_component_type_index","columns":["component_type"],"type":null},{"name":"regulations_pages_entity_fk","columns":["entity_id"]},{"name":"regulations_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"regulations_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"regulations_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"regulations_pages_localizations_links","indexes":[{"name":"regulations_pages_localizations_links_fk","columns":["regulations_page_id"]},{"name":"regulations_pages_localizations_links_inv_fk","columns":["inv_regulations_page_id"]},{"name":"regulations_pages_localizations_links_unique","columns":["regulations_page_id","inv_regulations_page_id"],"type":"unique"},{"name":"regulations_pages_localizations_links_order_fk","columns":["regulations_page_order"]}],"foreignKeys":[{"name":"regulations_pages_localizations_links_fk","columns":["regulations_page_id"],"referencedColumns":["id"],"referencedTable":"regulations_pages","onDelete":"CASCADE"},{"name":"regulations_pages_localizations_links_inv_fk","columns":["inv_regulations_page_id"],"referencedColumns":["id"],"referencedTable":"regulations_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"regulations_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_regulations_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"regulations_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"search_products_pages_components","indexes":[{"name":"search_products_pages_field_index","columns":["field"],"type":null},{"name":"search_products_pages_component_type_index","columns":["component_type"],"type":null},{"name":"search_products_pages_entity_fk","columns":["entity_id"]},{"name":"search_products_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"search_products_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"search_products_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"search_products_pages_localizations_links","indexes":[{"name":"search_products_pages_localizations_links_fk","columns":["search_products_page_id"]},{"name":"search_products_pages_localizations_links_inv_fk","columns":["inv_search_products_page_id"]},{"name":"search_products_pages_localizations_links_unique","columns":["search_products_page_id","inv_search_products_page_id"],"type":"unique"},{"name":"search_products_pages_localizations_links_order_fk","columns":["search_products_page_order"]}],"foreignKeys":[{"name":"search_products_pages_localizations_links_fk","columns":["search_products_page_id"],"referencedColumns":["id"],"referencedTable":"search_products_pages","onDelete":"CASCADE"},{"name":"search_products_pages_localizations_links_inv_fk","columns":["inv_search_products_page_id"],"referencedColumns":["id"],"referencedTable":"search_products_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"search_products_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_search_products_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"search_products_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"components_blocks_hero_slider_items_components","indexes":[{"name":"components_blocks_hero_slider_items_field_index","columns":["field"],"type":null},{"name":"components_blocks_hero_slider_items_component_type_index","columns":["component_type"],"type":null},{"name":"components_blocks_hero_slider_items_entity_fk","columns":["entity_id"]},{"name":"components_blocks_hero_slider_items_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"components_blocks_hero_slider_items_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"components_blocks_hero_slider_items","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"components_blocks_hero_sliders_components","indexes":[{"name":"components_blocks_hero_sliders_field_index","columns":["field"],"type":null},{"name":"components_blocks_hero_sliders_component_type_index","columns":["component_type"],"type":null},{"name":"components_blocks_hero_sliders_entity_fk","columns":["entity_id"]},{"name":"components_blocks_hero_sliders_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"components_blocks_hero_sliders_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"components_blocks_hero_sliders","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]}]}', '2022-12-14 12:08:56.152', 'f07c4e57c3e126c52ad01b6225c16d26');
+INSERT INTO public.strapi_database_schema (id, schema, "time", hash) VALUES (102, '{"tables":[{"name":"strapi_core_store_settings","indexes":[],"foreignKeys":[],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"key","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"value","type":"text","args":["longtext"],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"environment","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"tag","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"strapi_webhooks","indexes":[],"foreignKeys":[],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"name","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"url","type":"text","args":["longtext"],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"headers","type":"jsonb","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"events","type":"jsonb","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"enabled","type":"boolean","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"admin_permissions","indexes":[{"name":"admin_permissions_created_by_id_fk","columns":["created_by_id"]},{"name":"admin_permissions_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"admin_permissions_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"admin_permissions_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"action","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"subject","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"properties","type":"jsonb","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"conditions","type":"jsonb","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"admin_users","indexes":[{"name":"admin_users_created_by_id_fk","columns":["created_by_id"]},{"name":"admin_users_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"admin_users_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"admin_users_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"firstname","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"lastname","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"username","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"email","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"password","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"reset_password_token","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"registration_token","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"is_active","type":"boolean","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"blocked","type":"boolean","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"prefered_language","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"admin_roles","indexes":[{"name":"admin_roles_created_by_id_fk","columns":["created_by_id"]},{"name":"admin_roles_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"admin_roles_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"admin_roles_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"name","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"code","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"description","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"strapi_api_tokens","indexes":[{"name":"strapi_api_tokens_created_by_id_fk","columns":["created_by_id"]},{"name":"strapi_api_tokens_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"strapi_api_tokens_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"strapi_api_tokens_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"name","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"description","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"access_key","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"last_used_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"expires_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"lifespan","type":"bigInteger","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"strapi_api_token_permissions","indexes":[{"name":"strapi_api_token_permissions_created_by_id_fk","columns":["created_by_id"]},{"name":"strapi_api_token_permissions_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"strapi_api_token_permissions_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"strapi_api_token_permissions_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"action","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"files","indexes":[{"name":"upload_files_folder_path_index","columns":["folder_path"],"type":null},{"name":"files_created_by_id_fk","columns":["created_by_id"]},{"name":"files_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"files_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"files_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"name","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"alternative_text","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"caption","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"width","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"height","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"formats","type":"jsonb","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"hash","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"ext","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"mime","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"size","type":"decimal","args":[10,2],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"url","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"preview_url","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"provider","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"provider_metadata","type":"jsonb","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"folder_path","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"upload_folders","indexes":[{"name":"upload_folders_path_id_index","columns":["path_id"],"type":"unique"},{"name":"upload_folders_path_index","columns":["path"],"type":"unique"},{"name":"upload_folders_created_by_id_fk","columns":["created_by_id"]},{"name":"upload_folders_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"upload_folders_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"upload_folders_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"name","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"path_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"path","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"i18n_locale","indexes":[{"name":"i18n_locale_created_by_id_fk","columns":["created_by_id"]},{"name":"i18n_locale_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"i18n_locale_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"i18n_locale_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"name","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"code","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"up_permissions","indexes":[{"name":"up_permissions_created_by_id_fk","columns":["created_by_id"]},{"name":"up_permissions_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"up_permissions_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"up_permissions_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"action","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"up_roles","indexes":[{"name":"up_roles_created_by_id_fk","columns":["created_by_id"]},{"name":"up_roles_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"up_roles_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"up_roles_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"name","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"description","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"up_users","indexes":[{"name":"up_users_created_by_id_fk","columns":["created_by_id"]},{"name":"up_users_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"up_users_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"up_users_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"username","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"email","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"provider","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"password","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"reset_password_token","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"confirmation_token","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"confirmed","type":"boolean","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"blocked","type":"boolean","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"available_products_pages","indexes":[{"name":"available_products_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"available_products_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"available_products_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"available_products_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"basket_pages","indexes":[{"name":"basket_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"basket_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"basket_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"basket_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"dashboard_pages","indexes":[{"name":"dashboard_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"dashboard_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"dashboard_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"dashboard_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"download_center_pages","indexes":[{"name":"download_center_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"download_center_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"download_center_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"download_center_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"home_pages","indexes":[{"name":"home_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"home_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"home_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"home_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"news_pages","indexes":[{"name":"news_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"news_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"news_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"news_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"order_item_pages","indexes":[{"name":"order_item_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"order_item_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"order_item_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"order_item_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"order_pages","indexes":[{"name":"order_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"order_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"order_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"order_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"orders_pages","indexes":[{"name":"orders_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"orders_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"orders_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"orders_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"outlet_pages","indexes":[{"name":"outlet_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"outlet_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"outlet_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"outlet_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"privacy_policy_pages","indexes":[{"name":"privacy_policy_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"privacy_policy_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"privacy_policy_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"privacy_policy_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"regulations_pages","indexes":[{"name":"regulations_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"regulations_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"regulations_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"regulations_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"search_products_pages","indexes":[{"name":"search_products_pages_created_by_id_fk","columns":["created_by_id"]},{"name":"search_products_pages_updated_by_id_fk","columns":["updated_by_id"]}],"foreignKeys":[{"name":"search_products_pages_created_by_id_fk","columns":["created_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"},{"name":"search_products_pages_updated_by_id_fk","columns":["updated_by_id"],"referencedTable":"admin_users","referencedColumns":["id"],"onDelete":"SET NULL"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"created_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"updated_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"published_at","type":"datetime","args":[{"useTz":false,"precision":6}],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"created_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"updated_by_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"locale","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"components_blocks_contents","indexes":[],"foreignKeys":[],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"title","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"text","type":"text","args":["longtext"],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"components_blocks_hero_slider_items","indexes":[],"foreignKeys":[],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"title","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"text","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"components_blocks_hero_sliders","indexes":[],"foreignKeys":[],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false}]},{"name":"components_shared_links","indexes":[],"foreignKeys":[],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"href","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"label","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"target","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"is_external","type":"boolean","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"components_shared_seos","indexes":[],"foreignKeys":[],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"meta_title","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"meta_description","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false}]},{"name":"admin_permissions_role_links","indexes":[{"name":"admin_permissions_role_links_fk","columns":["permission_id"]},{"name":"admin_permissions_role_links_inv_fk","columns":["role_id"]},{"name":"admin_permissions_role_links_unique","columns":["permission_id","role_id"],"type":"unique"},{"name":"admin_permissions_role_links_order_inv_fk","columns":["permission_order"]}],"foreignKeys":[{"name":"admin_permissions_role_links_fk","columns":["permission_id"],"referencedColumns":["id"],"referencedTable":"admin_permissions","onDelete":"CASCADE"},{"name":"admin_permissions_role_links_inv_fk","columns":["role_id"],"referencedColumns":["id"],"referencedTable":"admin_roles","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"permission_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"role_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"permission_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"admin_users_roles_links","indexes":[{"name":"admin_users_roles_links_fk","columns":["user_id"]},{"name":"admin_users_roles_links_inv_fk","columns":["role_id"]},{"name":"admin_users_roles_links_unique","columns":["user_id","role_id"],"type":"unique"},{"name":"admin_users_roles_links_order_fk","columns":["role_order"]},{"name":"admin_users_roles_links_order_inv_fk","columns":["user_order"]}],"foreignKeys":[{"name":"admin_users_roles_links_fk","columns":["user_id"],"referencedColumns":["id"],"referencedTable":"admin_users","onDelete":"CASCADE"},{"name":"admin_users_roles_links_inv_fk","columns":["role_id"],"referencedColumns":["id"],"referencedTable":"admin_roles","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"user_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"role_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"role_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"user_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"strapi_api_token_permissions_token_links","indexes":[{"name":"strapi_api_token_permissions_token_links_fk","columns":["api_token_permission_id"]},{"name":"strapi_api_token_permissions_token_links_inv_fk","columns":["api_token_id"]},{"name":"strapi_api_token_permissions_token_links_unique","columns":["api_token_permission_id","api_token_id"],"type":"unique"},{"name":"strapi_api_token_permissions_token_links_order_inv_fk","columns":["api_token_permission_order"]}],"foreignKeys":[{"name":"strapi_api_token_permissions_token_links_fk","columns":["api_token_permission_id"],"referencedColumns":["id"],"referencedTable":"strapi_api_token_permissions","onDelete":"CASCADE"},{"name":"strapi_api_token_permissions_token_links_inv_fk","columns":["api_token_id"],"referencedColumns":["id"],"referencedTable":"strapi_api_tokens","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"api_token_permission_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"api_token_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"api_token_permission_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"files_related_morphs","indexes":[{"name":"files_related_morphs_fk","columns":["file_id"]}],"foreignKeys":[{"name":"files_related_morphs_fk","columns":["file_id"],"referencedColumns":["id"],"referencedTable":"files","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"file_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"related_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"related_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"files_folder_links","indexes":[{"name":"files_folder_links_fk","columns":["file_id"]},{"name":"files_folder_links_inv_fk","columns":["folder_id"]},{"name":"files_folder_links_unique","columns":["file_id","folder_id"],"type":"unique"},{"name":"files_folder_links_order_inv_fk","columns":["file_order"]}],"foreignKeys":[{"name":"files_folder_links_fk","columns":["file_id"],"referencedColumns":["id"],"referencedTable":"files","onDelete":"CASCADE"},{"name":"files_folder_links_inv_fk","columns":["folder_id"],"referencedColumns":["id"],"referencedTable":"upload_folders","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"file_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"folder_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"file_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"upload_folders_parent_links","indexes":[{"name":"upload_folders_parent_links_fk","columns":["folder_id"]},{"name":"upload_folders_parent_links_inv_fk","columns":["inv_folder_id"]},{"name":"upload_folders_parent_links_unique","columns":["folder_id","inv_folder_id"],"type":"unique"},{"name":"upload_folders_parent_links_order_inv_fk","columns":["folder_order"]}],"foreignKeys":[{"name":"upload_folders_parent_links_fk","columns":["folder_id"],"referencedColumns":["id"],"referencedTable":"upload_folders","onDelete":"CASCADE"},{"name":"upload_folders_parent_links_inv_fk","columns":["inv_folder_id"],"referencedColumns":["id"],"referencedTable":"upload_folders","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"folder_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_folder_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"folder_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"up_permissions_role_links","indexes":[{"name":"up_permissions_role_links_fk","columns":["permission_id"]},{"name":"up_permissions_role_links_inv_fk","columns":["role_id"]},{"name":"up_permissions_role_links_unique","columns":["permission_id","role_id"],"type":"unique"},{"name":"up_permissions_role_links_order_inv_fk","columns":["permission_order"]}],"foreignKeys":[{"name":"up_permissions_role_links_fk","columns":["permission_id"],"referencedColumns":["id"],"referencedTable":"up_permissions","onDelete":"CASCADE"},{"name":"up_permissions_role_links_inv_fk","columns":["role_id"],"referencedColumns":["id"],"referencedTable":"up_roles","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"permission_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"role_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"permission_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"up_users_role_links","indexes":[{"name":"up_users_role_links_fk","columns":["user_id"]},{"name":"up_users_role_links_inv_fk","columns":["role_id"]},{"name":"up_users_role_links_unique","columns":["user_id","role_id"],"type":"unique"},{"name":"up_users_role_links_order_inv_fk","columns":["user_order"]}],"foreignKeys":[{"name":"up_users_role_links_fk","columns":["user_id"],"referencedColumns":["id"],"referencedTable":"up_users","onDelete":"CASCADE"},{"name":"up_users_role_links_inv_fk","columns":["role_id"],"referencedColumns":["id"],"referencedTable":"up_roles","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"user_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"role_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"user_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"available_products_pages_components","indexes":[{"name":"available_products_pages_field_index","columns":["field"],"type":null},{"name":"available_products_pages_component_type_index","columns":["component_type"],"type":null},{"name":"available_products_pages_entity_fk","columns":["entity_id"]},{"name":"available_products_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"available_products_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"available_products_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"available_products_pages_localizations_links","indexes":[{"name":"available_products_pages_localizations_links_fk","columns":["available_products_page_id"]},{"name":"available_products_pages_localizations_links_inv_fk","columns":["inv_available_products_page_id"]},{"name":"available_products_pages_localizations_links_unique","columns":["available_products_page_id","inv_available_products_page_id"],"type":"unique"},{"name":"available_products_pages_localizations_links_order_fk","columns":["available_products_page_order"]}],"foreignKeys":[{"name":"available_products_pages_localizations_links_fk","columns":["available_products_page_id"],"referencedColumns":["id"],"referencedTable":"available_products_pages","onDelete":"CASCADE"},{"name":"available_products_pages_localizations_links_inv_fk","columns":["inv_available_products_page_id"],"referencedColumns":["id"],"referencedTable":"available_products_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"available_products_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_available_products_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"available_products_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"basket_pages_components","indexes":[{"name":"basket_pages_field_index","columns":["field"],"type":null},{"name":"basket_pages_component_type_index","columns":["component_type"],"type":null},{"name":"basket_pages_entity_fk","columns":["entity_id"]},{"name":"basket_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"basket_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"basket_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"basket_pages_localizations_links","indexes":[{"name":"basket_pages_localizations_links_fk","columns":["basket_page_id"]},{"name":"basket_pages_localizations_links_inv_fk","columns":["inv_basket_page_id"]},{"name":"basket_pages_localizations_links_unique","columns":["basket_page_id","inv_basket_page_id"],"type":"unique"},{"name":"basket_pages_localizations_links_order_fk","columns":["basket_page_order"]}],"foreignKeys":[{"name":"basket_pages_localizations_links_fk","columns":["basket_page_id"],"referencedColumns":["id"],"referencedTable":"basket_pages","onDelete":"CASCADE"},{"name":"basket_pages_localizations_links_inv_fk","columns":["inv_basket_page_id"],"referencedColumns":["id"],"referencedTable":"basket_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"basket_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_basket_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"basket_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"dashboard_pages_components","indexes":[{"name":"dashboard_pages_field_index","columns":["field"],"type":null},{"name":"dashboard_pages_component_type_index","columns":["component_type"],"type":null},{"name":"dashboard_pages_entity_fk","columns":["entity_id"]},{"name":"dashboard_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"dashboard_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"dashboard_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"dashboard_pages_localizations_links","indexes":[{"name":"dashboard_pages_localizations_links_fk","columns":["dashboard_page_id"]},{"name":"dashboard_pages_localizations_links_inv_fk","columns":["inv_dashboard_page_id"]},{"name":"dashboard_pages_localizations_links_unique","columns":["dashboard_page_id","inv_dashboard_page_id"],"type":"unique"},{"name":"dashboard_pages_localizations_links_order_fk","columns":["dashboard_page_order"]}],"foreignKeys":[{"name":"dashboard_pages_localizations_links_fk","columns":["dashboard_page_id"],"referencedColumns":["id"],"referencedTable":"dashboard_pages","onDelete":"CASCADE"},{"name":"dashboard_pages_localizations_links_inv_fk","columns":["inv_dashboard_page_id"],"referencedColumns":["id"],"referencedTable":"dashboard_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"dashboard_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_dashboard_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"dashboard_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"download_center_pages_components","indexes":[{"name":"download_center_pages_field_index","columns":["field"],"type":null},{"name":"download_center_pages_component_type_index","columns":["component_type"],"type":null},{"name":"download_center_pages_entity_fk","columns":["entity_id"]},{"name":"download_center_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"download_center_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"download_center_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"download_center_pages_localizations_links","indexes":[{"name":"download_center_pages_localizations_links_fk","columns":["download_center_page_id"]},{"name":"download_center_pages_localizations_links_inv_fk","columns":["inv_download_center_page_id"]},{"name":"download_center_pages_localizations_links_unique","columns":["download_center_page_id","inv_download_center_page_id"],"type":"unique"},{"name":"download_center_pages_localizations_links_order_fk","columns":["download_center_page_order"]}],"foreignKeys":[{"name":"download_center_pages_localizations_links_fk","columns":["download_center_page_id"],"referencedColumns":["id"],"referencedTable":"download_center_pages","onDelete":"CASCADE"},{"name":"download_center_pages_localizations_links_inv_fk","columns":["inv_download_center_page_id"],"referencedColumns":["id"],"referencedTable":"download_center_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"download_center_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_download_center_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"download_center_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"home_pages_components","indexes":[{"name":"home_pages_field_index","columns":["field"],"type":null},{"name":"home_pages_component_type_index","columns":["component_type"],"type":null},{"name":"home_pages_entity_fk","columns":["entity_id"]},{"name":"home_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"home_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"home_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"home_pages_localizations_links","indexes":[{"name":"home_pages_localizations_links_fk","columns":["home_page_id"]},{"name":"home_pages_localizations_links_inv_fk","columns":["inv_home_page_id"]},{"name":"home_pages_localizations_links_unique","columns":["home_page_id","inv_home_page_id"],"type":"unique"},{"name":"home_pages_localizations_links_order_fk","columns":["home_page_order"]}],"foreignKeys":[{"name":"home_pages_localizations_links_fk","columns":["home_page_id"],"referencedColumns":["id"],"referencedTable":"home_pages","onDelete":"CASCADE"},{"name":"home_pages_localizations_links_inv_fk","columns":["inv_home_page_id"],"referencedColumns":["id"],"referencedTable":"home_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"home_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_home_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"home_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"news_pages_components","indexes":[{"name":"news_pages_field_index","columns":["field"],"type":null},{"name":"news_pages_component_type_index","columns":["component_type"],"type":null},{"name":"news_pages_entity_fk","columns":["entity_id"]},{"name":"news_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"news_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"news_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"news_pages_localizations_links","indexes":[{"name":"news_pages_localizations_links_fk","columns":["news_page_id"]},{"name":"news_pages_localizations_links_inv_fk","columns":["inv_news_page_id"]},{"name":"news_pages_localizations_links_unique","columns":["news_page_id","inv_news_page_id"],"type":"unique"},{"name":"news_pages_localizations_links_order_fk","columns":["news_page_order"]}],"foreignKeys":[{"name":"news_pages_localizations_links_fk","columns":["news_page_id"],"referencedColumns":["id"],"referencedTable":"news_pages","onDelete":"CASCADE"},{"name":"news_pages_localizations_links_inv_fk","columns":["inv_news_page_id"],"referencedColumns":["id"],"referencedTable":"news_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"news_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_news_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"news_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"order_item_pages_components","indexes":[{"name":"order_item_pages_field_index","columns":["field"],"type":null},{"name":"order_item_pages_component_type_index","columns":["component_type"],"type":null},{"name":"order_item_pages_entity_fk","columns":["entity_id"]},{"name":"order_item_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"order_item_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"order_item_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"order_item_pages_localizations_links","indexes":[{"name":"order_item_pages_localizations_links_fk","columns":["order_item_page_id"]},{"name":"order_item_pages_localizations_links_inv_fk","columns":["inv_order_item_page_id"]},{"name":"order_item_pages_localizations_links_unique","columns":["order_item_page_id","inv_order_item_page_id"],"type":"unique"},{"name":"order_item_pages_localizations_links_order_fk","columns":["order_item_page_order"]}],"foreignKeys":[{"name":"order_item_pages_localizations_links_fk","columns":["order_item_page_id"],"referencedColumns":["id"],"referencedTable":"order_item_pages","onDelete":"CASCADE"},{"name":"order_item_pages_localizations_links_inv_fk","columns":["inv_order_item_page_id"],"referencedColumns":["id"],"referencedTable":"order_item_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"order_item_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_order_item_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"order_item_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"order_pages_components","indexes":[{"name":"order_pages_field_index","columns":["field"],"type":null},{"name":"order_pages_component_type_index","columns":["component_type"],"type":null},{"name":"order_pages_entity_fk","columns":["entity_id"]},{"name":"order_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"order_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"order_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"order_pages_localizations_links","indexes":[{"name":"order_pages_localizations_links_fk","columns":["order_page_id"]},{"name":"order_pages_localizations_links_inv_fk","columns":["inv_order_page_id"]},{"name":"order_pages_localizations_links_unique","columns":["order_page_id","inv_order_page_id"],"type":"unique"},{"name":"order_pages_localizations_links_order_fk","columns":["order_page_order"]}],"foreignKeys":[{"name":"order_pages_localizations_links_fk","columns":["order_page_id"],"referencedColumns":["id"],"referencedTable":"order_pages","onDelete":"CASCADE"},{"name":"order_pages_localizations_links_inv_fk","columns":["inv_order_page_id"],"referencedColumns":["id"],"referencedTable":"order_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"order_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_order_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"order_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"orders_pages_components","indexes":[{"name":"orders_pages_field_index","columns":["field"],"type":null},{"name":"orders_pages_component_type_index","columns":["component_type"],"type":null},{"name":"orders_pages_entity_fk","columns":["entity_id"]},{"name":"orders_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"orders_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"orders_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"orders_pages_localizations_links","indexes":[{"name":"orders_pages_localizations_links_fk","columns":["orders_page_id"]},{"name":"orders_pages_localizations_links_inv_fk","columns":["inv_orders_page_id"]},{"name":"orders_pages_localizations_links_unique","columns":["orders_page_id","inv_orders_page_id"],"type":"unique"},{"name":"orders_pages_localizations_links_order_fk","columns":["orders_page_order"]}],"foreignKeys":[{"name":"orders_pages_localizations_links_fk","columns":["orders_page_id"],"referencedColumns":["id"],"referencedTable":"orders_pages","onDelete":"CASCADE"},{"name":"orders_pages_localizations_links_inv_fk","columns":["inv_orders_page_id"],"referencedColumns":["id"],"referencedTable":"orders_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"orders_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_orders_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"orders_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"outlet_pages_components","indexes":[{"name":"outlet_pages_field_index","columns":["field"],"type":null},{"name":"outlet_pages_component_type_index","columns":["component_type"],"type":null},{"name":"outlet_pages_entity_fk","columns":["entity_id"]},{"name":"outlet_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"outlet_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"outlet_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"outlet_pages_localizations_links","indexes":[{"name":"outlet_pages_localizations_links_fk","columns":["outlet_page_id"]},{"name":"outlet_pages_localizations_links_inv_fk","columns":["inv_outlet_page_id"]},{"name":"outlet_pages_localizations_links_unique","columns":["outlet_page_id","inv_outlet_page_id"],"type":"unique"},{"name":"outlet_pages_localizations_links_order_fk","columns":["outlet_page_order"]}],"foreignKeys":[{"name":"outlet_pages_localizations_links_fk","columns":["outlet_page_id"],"referencedColumns":["id"],"referencedTable":"outlet_pages","onDelete":"CASCADE"},{"name":"outlet_pages_localizations_links_inv_fk","columns":["inv_outlet_page_id"],"referencedColumns":["id"],"referencedTable":"outlet_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"outlet_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_outlet_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"outlet_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"privacy_policy_pages_components","indexes":[{"name":"privacy_policy_pages_field_index","columns":["field"],"type":null},{"name":"privacy_policy_pages_component_type_index","columns":["component_type"],"type":null},{"name":"privacy_policy_pages_entity_fk","columns":["entity_id"]},{"name":"privacy_policy_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"privacy_policy_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"privacy_policy_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"privacy_policy_pages_localizations_links","indexes":[{"name":"privacy_policy_pages_localizations_links_fk","columns":["privacy_policy_page_id"]},{"name":"privacy_policy_pages_localizations_links_inv_fk","columns":["inv_privacy_policy_page_id"]},{"name":"privacy_policy_pages_localizations_links_unique","columns":["privacy_policy_page_id","inv_privacy_policy_page_id"],"type":"unique"},{"name":"privacy_policy_pages_localizations_links_order_fk","columns":["privacy_policy_page_order"]}],"foreignKeys":[{"name":"privacy_policy_pages_localizations_links_fk","columns":["privacy_policy_page_id"],"referencedColumns":["id"],"referencedTable":"privacy_policy_pages","onDelete":"CASCADE"},{"name":"privacy_policy_pages_localizations_links_inv_fk","columns":["inv_privacy_policy_page_id"],"referencedColumns":["id"],"referencedTable":"privacy_policy_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"privacy_policy_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_privacy_policy_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"privacy_policy_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"regulations_pages_components","indexes":[{"name":"regulations_pages_field_index","columns":["field"],"type":null},{"name":"regulations_pages_component_type_index","columns":["component_type"],"type":null},{"name":"regulations_pages_entity_fk","columns":["entity_id"]},{"name":"regulations_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"regulations_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"regulations_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"regulations_pages_localizations_links","indexes":[{"name":"regulations_pages_localizations_links_fk","columns":["regulations_page_id"]},{"name":"regulations_pages_localizations_links_inv_fk","columns":["inv_regulations_page_id"]},{"name":"regulations_pages_localizations_links_unique","columns":["regulations_page_id","inv_regulations_page_id"],"type":"unique"},{"name":"regulations_pages_localizations_links_order_fk","columns":["regulations_page_order"]}],"foreignKeys":[{"name":"regulations_pages_localizations_links_fk","columns":["regulations_page_id"],"referencedColumns":["id"],"referencedTable":"regulations_pages","onDelete":"CASCADE"},{"name":"regulations_pages_localizations_links_inv_fk","columns":["inv_regulations_page_id"],"referencedColumns":["id"],"referencedTable":"regulations_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"regulations_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_regulations_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"regulations_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"search_products_pages_components","indexes":[{"name":"search_products_pages_field_index","columns":["field"],"type":null},{"name":"search_products_pages_component_type_index","columns":["component_type"],"type":null},{"name":"search_products_pages_entity_fk","columns":["entity_id"]},{"name":"search_products_pages_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"search_products_pages_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"search_products_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"search_products_pages_localizations_links","indexes":[{"name":"search_products_pages_localizations_links_fk","columns":["search_products_page_id"]},{"name":"search_products_pages_localizations_links_inv_fk","columns":["inv_search_products_page_id"]},{"name":"search_products_pages_localizations_links_unique","columns":["search_products_page_id","inv_search_products_page_id"],"type":"unique"},{"name":"search_products_pages_localizations_links_order_fk","columns":["search_products_page_order"]}],"foreignKeys":[{"name":"search_products_pages_localizations_links_fk","columns":["search_products_page_id"],"referencedColumns":["id"],"referencedTable":"search_products_pages","onDelete":"CASCADE"},{"name":"search_products_pages_localizations_links_inv_fk","columns":["inv_search_products_page_id"],"referencedColumns":["id"],"referencedTable":"search_products_pages","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"search_products_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"inv_search_products_page_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"search_products_page_order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"components_blocks_hero_slider_items_components","indexes":[{"name":"components_blocks_hero_slider_items_field_index","columns":["field"],"type":null},{"name":"components_blocks_hero_slider_items_component_type_index","columns":["component_type"],"type":null},{"name":"components_blocks_hero_slider_items_entity_fk","columns":["entity_id"]},{"name":"components_blocks_hero_slider_items_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"components_blocks_hero_slider_items_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"components_blocks_hero_slider_items","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]},{"name":"components_blocks_hero_sliders_components","indexes":[{"name":"components_blocks_hero_sliders_field_index","columns":["field"],"type":null},{"name":"components_blocks_hero_sliders_component_type_index","columns":["component_type"],"type":null},{"name":"components_blocks_hero_sliders_entity_fk","columns":["entity_id"]},{"name":"components_blocks_hero_sliders_unique","columns":["entity_id","component_id","field","component_type"],"type":"unique"}],"foreignKeys":[{"name":"components_blocks_hero_sliders_entity_fk","columns":["entity_id"],"referencedColumns":["id"],"referencedTable":"components_blocks_hero_sliders","onDelete":"CASCADE"}],"columns":[{"name":"id","type":"increments","args":[{"primary":true,"primaryKey":true}],"defaultTo":null,"notNullable":true,"unsigned":false},{"name":"entity_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_id","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true},{"name":"component_type","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"field","type":"string","args":[],"defaultTo":null,"notNullable":false,"unsigned":false},{"name":"order","type":"integer","args":[],"defaultTo":null,"notNullable":false,"unsigned":true}]}]}', '2023-01-02 06:51:33.616', 'a63ff8502d020ac325741962c27aa06d');
 
 
 --
--- TOC entry 3865 (class 0 OID 16544)
+-- TOC entry 3875 (class 0 OID 16544)
 -- Dependencies: 242
 -- Data for Name: strapi_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4478,7 +4532,7 @@ INSERT INTO public.strapi_database_schema (id, schema, "time", hash) VALUES (98,
 
 
 --
--- TOC entry 3867 (class 0 OID 16549)
+-- TOC entry 3877 (class 0 OID 16549)
 -- Dependencies: 244
 -- Data for Name: strapi_webhooks; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4486,7 +4540,7 @@ INSERT INTO public.strapi_database_schema (id, schema, "time", hash) VALUES (98,
 
 
 --
--- TOC entry 3869 (class 0 OID 16557)
+-- TOC entry 3879 (class 0 OID 16557)
 -- Dependencies: 246
 -- Data for Name: up_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4503,7 +4557,7 @@ INSERT INTO public.up_permissions (id, action, created_at, updated_at, created_b
 
 
 --
--- TOC entry 3871 (class 0 OID 16562)
+-- TOC entry 3881 (class 0 OID 16562)
 -- Dependencies: 248
 -- Data for Name: up_permissions_role_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4520,7 +4574,7 @@ INSERT INTO public.up_permissions_role_links (id, permission_id, role_id, permis
 
 
 --
--- TOC entry 3873 (class 0 OID 16567)
+-- TOC entry 3883 (class 0 OID 16567)
 -- Dependencies: 250
 -- Data for Name: up_roles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4530,7 +4584,7 @@ INSERT INTO public.up_roles (id, name, description, type, created_at, updated_at
 
 
 --
--- TOC entry 3875 (class 0 OID 16575)
+-- TOC entry 3885 (class 0 OID 16575)
 -- Dependencies: 252
 -- Data for Name: up_users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4538,7 +4592,7 @@ INSERT INTO public.up_roles (id, name, description, type, created_at, updated_at
 
 
 --
--- TOC entry 3877 (class 0 OID 16583)
+-- TOC entry 3887 (class 0 OID 16583)
 -- Dependencies: 254
 -- Data for Name: up_users_role_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4546,7 +4600,7 @@ INSERT INTO public.up_roles (id, name, description, type, created_at, updated_at
 
 
 --
--- TOC entry 3879 (class 0 OID 16589)
+-- TOC entry 3889 (class 0 OID 16589)
 -- Dependencies: 256
 -- Data for Name: upload_folders; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4554,7 +4608,7 @@ INSERT INTO public.up_roles (id, name, description, type, created_at, updated_at
 
 
 --
--- TOC entry 3881 (class 0 OID 16597)
+-- TOC entry 3891 (class 0 OID 16597)
 -- Dependencies: 258
 -- Data for Name: upload_folders_parent_links; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -4562,25 +4616,25 @@ INSERT INTO public.up_roles (id, name, description, type, created_at, updated_at
 
 
 --
--- TOC entry 4028 (class 0 OID 0)
+-- TOC entry 4041 (class 0 OID 0)
 -- Dependencies: 197
 -- Name: admin_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.admin_permissions_id_seq', 271, true);
+SELECT pg_catalog.setval('public.admin_permissions_id_seq', 301, true);
 
 
 --
--- TOC entry 4029 (class 0 OID 0)
+-- TOC entry 4042 (class 0 OID 0)
 -- Dependencies: 199
 -- Name: admin_permissions_role_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.admin_permissions_role_links_id_seq', 281, true);
+SELECT pg_catalog.setval('public.admin_permissions_role_links_id_seq', 311, true);
 
 
 --
--- TOC entry 4030 (class 0 OID 0)
+-- TOC entry 4043 (class 0 OID 0)
 -- Dependencies: 201
 -- Name: admin_roles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4589,7 +4643,7 @@ SELECT pg_catalog.setval('public.admin_roles_id_seq', 3, true);
 
 
 --
--- TOC entry 4031 (class 0 OID 0)
+-- TOC entry 4044 (class 0 OID 0)
 -- Dependencies: 203
 -- Name: admin_users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4598,7 +4652,7 @@ SELECT pg_catalog.setval('public.admin_users_id_seq', 1, true);
 
 
 --
--- TOC entry 4032 (class 0 OID 0)
+-- TOC entry 4045 (class 0 OID 0)
 -- Dependencies: 205
 -- Name: admin_users_roles_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4607,7 +4661,7 @@ SELECT pg_catalog.setval('public.admin_users_roles_links_id_seq', 1, true);
 
 
 --
--- TOC entry 4033 (class 0 OID 0)
+-- TOC entry 4046 (class 0 OID 0)
 -- Dependencies: 298
 -- Name: available_products_pages_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4616,7 +4670,7 @@ SELECT pg_catalog.setval('public.available_products_pages_components_id_seq', 5,
 
 
 --
--- TOC entry 4034 (class 0 OID 0)
+-- TOC entry 4047 (class 0 OID 0)
 -- Dependencies: 296
 -- Name: available_products_pages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4625,7 +4679,7 @@ SELECT pg_catalog.setval('public.available_products_pages_id_seq', 3, true);
 
 
 --
--- TOC entry 4035 (class 0 OID 0)
+-- TOC entry 4048 (class 0 OID 0)
 -- Dependencies: 300
 -- Name: available_products_pages_localizations_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4634,7 +4688,7 @@ SELECT pg_catalog.setval('public.available_products_pages_localizations_links_id
 
 
 --
--- TOC entry 4036 (class 0 OID 0)
+-- TOC entry 4049 (class 0 OID 0)
 -- Dependencies: 316
 -- Name: basket_pages_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4643,7 +4697,7 @@ SELECT pg_catalog.setval('public.basket_pages_components_id_seq', 7, true);
 
 
 --
--- TOC entry 4037 (class 0 OID 0)
+-- TOC entry 4050 (class 0 OID 0)
 -- Dependencies: 314
 -- Name: basket_pages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4652,7 +4706,7 @@ SELECT pg_catalog.setval('public.basket_pages_id_seq', 3, true);
 
 
 --
--- TOC entry 4038 (class 0 OID 0)
+-- TOC entry 4051 (class 0 OID 0)
 -- Dependencies: 318
 -- Name: basket_pages_localizations_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4661,7 +4715,16 @@ SELECT pg_catalog.setval('public.basket_pages_localizations_links_id_seq', 8, tr
 
 
 --
--- TOC entry 4039 (class 0 OID 0)
+-- TOC entry 4052 (class 0 OID 0)
+-- Dependencies: 332
+-- Name: components_blocks_contents_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.components_blocks_contents_id_seq', 1, false);
+
+
+--
+-- TOC entry 4053 (class 0 OID 0)
 -- Dependencies: 208
 -- Name: components_blocks_hero_slider_items_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4670,7 +4733,7 @@ SELECT pg_catalog.setval('public.components_blocks_hero_slider_items_components_
 
 
 --
--- TOC entry 4040 (class 0 OID 0)
+-- TOC entry 4054 (class 0 OID 0)
 -- Dependencies: 209
 -- Name: components_blocks_hero_slider_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4679,7 +4742,7 @@ SELECT pg_catalog.setval('public.components_blocks_hero_slider_items_id_seq', 45
 
 
 --
--- TOC entry 4041 (class 0 OID 0)
+-- TOC entry 4055 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: components_blocks_hero_sliders_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4688,7 +4751,7 @@ SELECT pg_catalog.setval('public.components_blocks_hero_sliders_components_id_se
 
 
 --
--- TOC entry 4042 (class 0 OID 0)
+-- TOC entry 4056 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: components_blocks_hero_sliders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4697,7 +4760,7 @@ SELECT pg_catalog.setval('public.components_blocks_hero_sliders_id_seq', 3, true
 
 
 --
--- TOC entry 4043 (class 0 OID 0)
+-- TOC entry 4057 (class 0 OID 0)
 -- Dependencies: 215
 -- Name: components_shared_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4706,7 +4769,7 @@ SELECT pg_catalog.setval('public.components_shared_links_id_seq', 44, true);
 
 
 --
--- TOC entry 4044 (class 0 OID 0)
+-- TOC entry 4058 (class 0 OID 0)
 -- Dependencies: 217
 -- Name: components_shared_seos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4715,7 +4778,7 @@ SELECT pg_catalog.setval('public.components_shared_seos_id_seq', 45, true);
 
 
 --
--- TOC entry 4045 (class 0 OID 0)
+-- TOC entry 4059 (class 0 OID 0)
 -- Dependencies: 272
 -- Name: dashboard_pages_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4724,7 +4787,7 @@ SELECT pg_catalog.setval('public.dashboard_pages_components_id_seq', 3, true);
 
 
 --
--- TOC entry 4046 (class 0 OID 0)
+-- TOC entry 4060 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: dashboard_pages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4733,7 +4796,7 @@ SELECT pg_catalog.setval('public.dashboard_pages_id_seq', 3, true);
 
 
 --
--- TOC entry 4047 (class 0 OID 0)
+-- TOC entry 4061 (class 0 OID 0)
 -- Dependencies: 274
 -- Name: dashboard_pages_localizations_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4742,7 +4805,7 @@ SELECT pg_catalog.setval('public.dashboard_pages_localizations_links_id_seq', 8,
 
 
 --
--- TOC entry 4048 (class 0 OID 0)
+-- TOC entry 4062 (class 0 OID 0)
 -- Dependencies: 276
 -- Name: download_center_pages_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4751,7 +4814,7 @@ SELECT pg_catalog.setval('public.download_center_pages_components_id_seq', 3, tr
 
 
 --
--- TOC entry 4049 (class 0 OID 0)
+-- TOC entry 4063 (class 0 OID 0)
 -- Dependencies: 262
 -- Name: download_center_pages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4760,7 +4823,7 @@ SELECT pg_catalog.setval('public.download_center_pages_id_seq', 3, true);
 
 
 --
--- TOC entry 4050 (class 0 OID 0)
+-- TOC entry 4064 (class 0 OID 0)
 -- Dependencies: 278
 -- Name: download_center_pages_localizations_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4769,7 +4832,7 @@ SELECT pg_catalog.setval('public.download_center_pages_localizations_links_id_se
 
 
 --
--- TOC entry 4051 (class 0 OID 0)
+-- TOC entry 4065 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: files_folder_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4778,7 +4841,7 @@ SELECT pg_catalog.setval('public.files_folder_links_id_seq', 1, false);
 
 
 --
--- TOC entry 4052 (class 0 OID 0)
+-- TOC entry 4066 (class 0 OID 0)
 -- Dependencies: 221
 -- Name: files_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4787,7 +4850,7 @@ SELECT pg_catalog.setval('public.files_id_seq', 37, true);
 
 
 --
--- TOC entry 4053 (class 0 OID 0)
+-- TOC entry 4067 (class 0 OID 0)
 -- Dependencies: 223
 -- Name: files_related_morphs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4796,7 +4859,7 @@ SELECT pg_catalog.setval('public.files_related_morphs_id_seq', 70, true);
 
 
 --
--- TOC entry 4054 (class 0 OID 0)
+-- TOC entry 4068 (class 0 OID 0)
 -- Dependencies: 226
 -- Name: home_pages_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4805,7 +4868,7 @@ SELECT pg_catalog.setval('public.home_pages_components_id_seq', 50, true);
 
 
 --
--- TOC entry 4055 (class 0 OID 0)
+-- TOC entry 4069 (class 0 OID 0)
 -- Dependencies: 227
 -- Name: home_pages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4814,7 +4877,7 @@ SELECT pg_catalog.setval('public.home_pages_id_seq', 3, true);
 
 
 --
--- TOC entry 4056 (class 0 OID 0)
+-- TOC entry 4070 (class 0 OID 0)
 -- Dependencies: 229
 -- Name: home_pages_localizations_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4823,7 +4886,7 @@ SELECT pg_catalog.setval('public.home_pages_localizations_links_id_seq', 8, true
 
 
 --
--- TOC entry 4057 (class 0 OID 0)
+-- TOC entry 4071 (class 0 OID 0)
 -- Dependencies: 231
 -- Name: i18n_locale_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4832,7 +4895,7 @@ SELECT pg_catalog.setval('public.i18n_locale_id_seq', 3, true);
 
 
 --
--- TOC entry 4058 (class 0 OID 0)
+-- TOC entry 4072 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: news_pages_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4841,7 +4904,7 @@ SELECT pg_catalog.setval('public.news_pages_components_id_seq', 3, true);
 
 
 --
--- TOC entry 4059 (class 0 OID 0)
+-- TOC entry 4073 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: news_pages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4850,7 +4913,7 @@ SELECT pg_catalog.setval('public.news_pages_id_seq', 3, true);
 
 
 --
--- TOC entry 4060 (class 0 OID 0)
+-- TOC entry 4074 (class 0 OID 0)
 -- Dependencies: 282
 -- Name: news_pages_localizations_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4859,7 +4922,7 @@ SELECT pg_catalog.setval('public.news_pages_localizations_links_id_seq', 8, true
 
 
 --
--- TOC entry 4061 (class 0 OID 0)
+-- TOC entry 4075 (class 0 OID 0)
 -- Dependencies: 322
 -- Name: order_item_pages_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4868,7 +4931,7 @@ SELECT pg_catalog.setval('public.order_item_pages_components_id_seq', 3, true);
 
 
 --
--- TOC entry 4062 (class 0 OID 0)
+-- TOC entry 4076 (class 0 OID 0)
 -- Dependencies: 320
 -- Name: order_item_pages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4877,7 +4940,7 @@ SELECT pg_catalog.setval('public.order_item_pages_id_seq', 3, true);
 
 
 --
--- TOC entry 4063 (class 0 OID 0)
+-- TOC entry 4077 (class 0 OID 0)
 -- Dependencies: 324
 -- Name: order_item_pages_localizations_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4886,7 +4949,7 @@ SELECT pg_catalog.setval('public.order_item_pages_localizations_links_id_seq', 8
 
 
 --
--- TOC entry 4064 (class 0 OID 0)
+-- TOC entry 4078 (class 0 OID 0)
 -- Dependencies: 284
 -- Name: order_pages_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4895,7 +4958,7 @@ SELECT pg_catalog.setval('public.order_pages_components_id_seq', 3, true);
 
 
 --
--- TOC entry 4065 (class 0 OID 0)
+-- TOC entry 4079 (class 0 OID 0)
 -- Dependencies: 266
 -- Name: order_pages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4904,7 +4967,7 @@ SELECT pg_catalog.setval('public.order_pages_id_seq', 3, true);
 
 
 --
--- TOC entry 4066 (class 0 OID 0)
+-- TOC entry 4080 (class 0 OID 0)
 -- Dependencies: 286
 -- Name: order_pages_localizations_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4913,7 +4976,7 @@ SELECT pg_catalog.setval('public.order_pages_localizations_links_id_seq', 8, tru
 
 
 --
--- TOC entry 4067 (class 0 OID 0)
+-- TOC entry 4081 (class 0 OID 0)
 -- Dependencies: 288
 -- Name: orders_pages_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4922,7 +4985,7 @@ SELECT pg_catalog.setval('public.orders_pages_components_id_seq', 5, true);
 
 
 --
--- TOC entry 4068 (class 0 OID 0)
+-- TOC entry 4082 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: orders_pages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4931,7 +4994,7 @@ SELECT pg_catalog.setval('public.orders_pages_id_seq', 3, true);
 
 
 --
--- TOC entry 4069 (class 0 OID 0)
+-- TOC entry 4083 (class 0 OID 0)
 -- Dependencies: 290
 -- Name: orders_pages_localizations_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4940,7 +5003,7 @@ SELECT pg_catalog.setval('public.orders_pages_localizations_links_id_seq', 8, tr
 
 
 --
--- TOC entry 4070 (class 0 OID 0)
+-- TOC entry 4084 (class 0 OID 0)
 -- Dependencies: 292
 -- Name: outlet_pages_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4949,7 +5012,7 @@ SELECT pg_catalog.setval('public.outlet_pages_components_id_seq', 3, true);
 
 
 --
--- TOC entry 4071 (class 0 OID 0)
+-- TOC entry 4085 (class 0 OID 0)
 -- Dependencies: 270
 -- Name: outlet_pages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4958,7 +5021,7 @@ SELECT pg_catalog.setval('public.outlet_pages_id_seq', 3, true);
 
 
 --
--- TOC entry 4072 (class 0 OID 0)
+-- TOC entry 4086 (class 0 OID 0)
 -- Dependencies: 294
 -- Name: outlet_pages_localizations_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4967,7 +5030,7 @@ SELECT pg_catalog.setval('public.outlet_pages_localizations_links_id_seq', 8, tr
 
 
 --
--- TOC entry 4073 (class 0 OID 0)
+-- TOC entry 4087 (class 0 OID 0)
 -- Dependencies: 310
 -- Name: privacy_policy_pages_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4976,7 +5039,7 @@ SELECT pg_catalog.setval('public.privacy_policy_pages_components_id_seq', 3, tru
 
 
 --
--- TOC entry 4074 (class 0 OID 0)
+-- TOC entry 4088 (class 0 OID 0)
 -- Dependencies: 308
 -- Name: privacy_policy_pages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4985,7 +5048,7 @@ SELECT pg_catalog.setval('public.privacy_policy_pages_id_seq', 3, true);
 
 
 --
--- TOC entry 4075 (class 0 OID 0)
+-- TOC entry 4089 (class 0 OID 0)
 -- Dependencies: 312
 -- Name: privacy_policy_pages_localizations_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -4994,16 +5057,16 @@ SELECT pg_catalog.setval('public.privacy_policy_pages_localizations_links_id_seq
 
 
 --
--- TOC entry 4076 (class 0 OID 0)
+-- TOC entry 4090 (class 0 OID 0)
 -- Dependencies: 304
 -- Name: regulations_pages_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.regulations_pages_components_id_seq', 4, true);
+SELECT pg_catalog.setval('public.regulations_pages_components_id_seq', 45, true);
 
 
 --
--- TOC entry 4077 (class 0 OID 0)
+-- TOC entry 4091 (class 0 OID 0)
 -- Dependencies: 302
 -- Name: regulations_pages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5012,7 +5075,7 @@ SELECT pg_catalog.setval('public.regulations_pages_id_seq', 3, true);
 
 
 --
--- TOC entry 4078 (class 0 OID 0)
+-- TOC entry 4092 (class 0 OID 0)
 -- Dependencies: 306
 -- Name: regulations_pages_localizations_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5021,7 +5084,7 @@ SELECT pg_catalog.setval('public.regulations_pages_localizations_links_id_seq', 
 
 
 --
--- TOC entry 4079 (class 0 OID 0)
+-- TOC entry 4093 (class 0 OID 0)
 -- Dependencies: 328
 -- Name: search_products_pages_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5030,7 +5093,7 @@ SELECT pg_catalog.setval('public.search_products_pages_components_id_seq', 3, tr
 
 
 --
--- TOC entry 4080 (class 0 OID 0)
+-- TOC entry 4094 (class 0 OID 0)
 -- Dependencies: 326
 -- Name: search_products_pages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5039,7 +5102,7 @@ SELECT pg_catalog.setval('public.search_products_pages_id_seq', 3, true);
 
 
 --
--- TOC entry 4081 (class 0 OID 0)
+-- TOC entry 4095 (class 0 OID 0)
 -- Dependencies: 330
 -- Name: search_products_pages_localizations_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5048,7 +5111,7 @@ SELECT pg_catalog.setval('public.search_products_pages_localizations_links_id_se
 
 
 --
--- TOC entry 4082 (class 0 OID 0)
+-- TOC entry 4096 (class 0 OID 0)
 -- Dependencies: 233
 -- Name: strapi_api_token_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5057,7 +5120,7 @@ SELECT pg_catalog.setval('public.strapi_api_token_permissions_id_seq', 1, false)
 
 
 --
--- TOC entry 4083 (class 0 OID 0)
+-- TOC entry 4097 (class 0 OID 0)
 -- Dependencies: 235
 -- Name: strapi_api_token_permissions_token_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5066,7 +5129,7 @@ SELECT pg_catalog.setval('public.strapi_api_token_permissions_token_links_id_seq
 
 
 --
--- TOC entry 4084 (class 0 OID 0)
+-- TOC entry 4098 (class 0 OID 0)
 -- Dependencies: 237
 -- Name: strapi_api_tokens_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5075,25 +5138,25 @@ SELECT pg_catalog.setval('public.strapi_api_tokens_id_seq', 1, true);
 
 
 --
--- TOC entry 4085 (class 0 OID 0)
+-- TOC entry 4099 (class 0 OID 0)
 -- Dependencies: 239
 -- Name: strapi_core_store_settings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.strapi_core_store_settings_id_seq', 85, true);
+SELECT pg_catalog.setval('public.strapi_core_store_settings_id_seq', 87, true);
 
 
 --
--- TOC entry 4086 (class 0 OID 0)
+-- TOC entry 4100 (class 0 OID 0)
 -- Dependencies: 241
 -- Name: strapi_database_schema_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.strapi_database_schema_id_seq', 98, true);
+SELECT pg_catalog.setval('public.strapi_database_schema_id_seq', 102, true);
 
 
 --
--- TOC entry 4087 (class 0 OID 0)
+-- TOC entry 4101 (class 0 OID 0)
 -- Dependencies: 243
 -- Name: strapi_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5102,7 +5165,7 @@ SELECT pg_catalog.setval('public.strapi_migrations_id_seq', 1, false);
 
 
 --
--- TOC entry 4088 (class 0 OID 0)
+-- TOC entry 4102 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: strapi_webhooks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5111,7 +5174,7 @@ SELECT pg_catalog.setval('public.strapi_webhooks_id_seq', 1, false);
 
 
 --
--- TOC entry 4089 (class 0 OID 0)
+-- TOC entry 4103 (class 0 OID 0)
 -- Dependencies: 247
 -- Name: up_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5120,7 +5183,7 @@ SELECT pg_catalog.setval('public.up_permissions_id_seq', 9, true);
 
 
 --
--- TOC entry 4090 (class 0 OID 0)
+-- TOC entry 4104 (class 0 OID 0)
 -- Dependencies: 249
 -- Name: up_permissions_role_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5129,7 +5192,7 @@ SELECT pg_catalog.setval('public.up_permissions_role_links_id_seq', 9, true);
 
 
 --
--- TOC entry 4091 (class 0 OID 0)
+-- TOC entry 4105 (class 0 OID 0)
 -- Dependencies: 251
 -- Name: up_roles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5138,7 +5201,7 @@ SELECT pg_catalog.setval('public.up_roles_id_seq', 2, true);
 
 
 --
--- TOC entry 4092 (class 0 OID 0)
+-- TOC entry 4106 (class 0 OID 0)
 -- Dependencies: 253
 -- Name: up_users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5147,7 +5210,7 @@ SELECT pg_catalog.setval('public.up_users_id_seq', 1, false);
 
 
 --
--- TOC entry 4093 (class 0 OID 0)
+-- TOC entry 4107 (class 0 OID 0)
 -- Dependencies: 255
 -- Name: up_users_role_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5156,7 +5219,7 @@ SELECT pg_catalog.setval('public.up_users_role_links_id_seq', 1, false);
 
 
 --
--- TOC entry 4094 (class 0 OID 0)
+-- TOC entry 4108 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: upload_folders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5165,7 +5228,7 @@ SELECT pg_catalog.setval('public.upload_folders_id_seq', 1, false);
 
 
 --
--- TOC entry 4095 (class 0 OID 0)
+-- TOC entry 4109 (class 0 OID 0)
 -- Dependencies: 259
 -- Name: upload_folders_parent_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -5174,7 +5237,7 @@ SELECT pg_catalog.setval('public.upload_folders_parent_links_id_seq', 1, false);
 
 
 --
--- TOC entry 3230 (class 2606 OID 16637)
+-- TOC entry 3238 (class 2606 OID 16637)
 -- Name: admin_permissions admin_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5183,7 +5246,7 @@ ALTER TABLE ONLY public.admin_permissions
 
 
 --
--- TOC entry 3236 (class 2606 OID 16639)
+-- TOC entry 3244 (class 2606 OID 16639)
 -- Name: admin_permissions_role_links admin_permissions_role_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5192,7 +5255,7 @@ ALTER TABLE ONLY public.admin_permissions_role_links
 
 
 --
--- TOC entry 3238 (class 2606 OID 16641)
+-- TOC entry 3246 (class 2606 OID 16641)
 -- Name: admin_permissions_role_links admin_permissions_role_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5201,7 +5264,7 @@ ALTER TABLE ONLY public.admin_permissions_role_links
 
 
 --
--- TOC entry 3241 (class 2606 OID 16643)
+-- TOC entry 3249 (class 2606 OID 16643)
 -- Name: admin_roles admin_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5210,7 +5273,7 @@ ALTER TABLE ONLY public.admin_roles
 
 
 --
--- TOC entry 3245 (class 2606 OID 16645)
+-- TOC entry 3253 (class 2606 OID 16645)
 -- Name: admin_users admin_users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5219,7 +5282,7 @@ ALTER TABLE ONLY public.admin_users
 
 
 --
--- TOC entry 3252 (class 2606 OID 16647)
+-- TOC entry 3260 (class 2606 OID 16647)
 -- Name: admin_users_roles_links admin_users_roles_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5228,7 +5291,7 @@ ALTER TABLE ONLY public.admin_users_roles_links
 
 
 --
--- TOC entry 3254 (class 2606 OID 16649)
+-- TOC entry 3262 (class 2606 OID 16649)
 -- Name: admin_users_roles_links admin_users_roles_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5237,7 +5300,7 @@ ALTER TABLE ONLY public.admin_users_roles_links
 
 
 --
--- TOC entry 3492 (class 2606 OID 214113)
+-- TOC entry 3500 (class 2606 OID 214113)
 -- Name: available_products_pages_components available_products_pages_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5246,7 +5309,7 @@ ALTER TABLE ONLY public.available_products_pages_components
 
 
 --
--- TOC entry 3501 (class 2606 OID 214126)
+-- TOC entry 3509 (class 2606 OID 214126)
 -- Name: available_products_pages_localizations_links available_products_pages_localizations_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5255,7 +5318,7 @@ ALTER TABLE ONLY public.available_products_pages_localizations_links
 
 
 --
--- TOC entry 3503 (class 2606 OID 214130)
+-- TOC entry 3511 (class 2606 OID 214130)
 -- Name: available_products_pages_localizations_links available_products_pages_localizations_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5264,7 +5327,7 @@ ALTER TABLE ONLY public.available_products_pages_localizations_links
 
 
 --
--- TOC entry 3488 (class 2606 OID 214100)
+-- TOC entry 3496 (class 2606 OID 214100)
 -- Name: available_products_pages available_products_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5273,7 +5336,7 @@ ALTER TABLE ONLY public.available_products_pages
 
 
 --
--- TOC entry 3496 (class 2606 OID 214660)
+-- TOC entry 3504 (class 2606 OID 336540)
 -- Name: available_products_pages_components available_products_pages_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5282,7 +5345,7 @@ ALTER TABLE ONLY public.available_products_pages_components
 
 
 --
--- TOC entry 3546 (class 2606 OID 214432)
+-- TOC entry 3554 (class 2606 OID 214432)
 -- Name: basket_pages_components basket_pages_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5291,7 +5354,7 @@ ALTER TABLE ONLY public.basket_pages_components
 
 
 --
--- TOC entry 3555 (class 2606 OID 214445)
+-- TOC entry 3563 (class 2606 OID 214445)
 -- Name: basket_pages_localizations_links basket_pages_localizations_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5300,7 +5363,7 @@ ALTER TABLE ONLY public.basket_pages_localizations_links
 
 
 --
--- TOC entry 3557 (class 2606 OID 214449)
+-- TOC entry 3565 (class 2606 OID 214449)
 -- Name: basket_pages_localizations_links basket_pages_localizations_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5309,7 +5372,7 @@ ALTER TABLE ONLY public.basket_pages_localizations_links
 
 
 --
--- TOC entry 3542 (class 2606 OID 214419)
+-- TOC entry 3550 (class 2606 OID 214419)
 -- Name: basket_pages basket_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5318,7 +5381,7 @@ ALTER TABLE ONLY public.basket_pages
 
 
 --
--- TOC entry 3550 (class 2606 OID 214662)
+-- TOC entry 3558 (class 2606 OID 336542)
 -- Name: basket_pages_components basket_pages_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5327,7 +5390,16 @@ ALTER TABLE ONLY public.basket_pages_components
 
 
 --
--- TOC entry 3259 (class 2606 OID 16651)
+-- TOC entry 3603 (class 2606 OID 336538)
+-- Name: components_blocks_contents components_blocks_contents_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.components_blocks_contents
+    ADD CONSTRAINT components_blocks_contents_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3267 (class 2606 OID 16651)
 -- Name: components_blocks_hero_slider_items_components components_blocks_hero_slider_items_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5336,7 +5408,7 @@ ALTER TABLE ONLY public.components_blocks_hero_slider_items_components
 
 
 --
--- TOC entry 3256 (class 2606 OID 16653)
+-- TOC entry 3264 (class 2606 OID 16653)
 -- Name: components_blocks_hero_slider_items components_blocks_hero_slider_items_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5345,7 +5417,7 @@ ALTER TABLE ONLY public.components_blocks_hero_slider_items
 
 
 --
--- TOC entry 3263 (class 2606 OID 214684)
+-- TOC entry 3271 (class 2606 OID 336566)
 -- Name: components_blocks_hero_slider_items_components components_blocks_hero_slider_items_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5354,7 +5426,7 @@ ALTER TABLE ONLY public.components_blocks_hero_slider_items_components
 
 
 --
--- TOC entry 3268 (class 2606 OID 16657)
+-- TOC entry 3276 (class 2606 OID 16657)
 -- Name: components_blocks_hero_sliders_components components_blocks_hero_sliders_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5363,7 +5435,7 @@ ALTER TABLE ONLY public.components_blocks_hero_sliders_components
 
 
 --
--- TOC entry 3265 (class 2606 OID 16659)
+-- TOC entry 3273 (class 2606 OID 16659)
 -- Name: components_blocks_hero_sliders components_blocks_hero_sliders_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5372,7 +5444,7 @@ ALTER TABLE ONLY public.components_blocks_hero_sliders
 
 
 --
--- TOC entry 3272 (class 2606 OID 214686)
+-- TOC entry 3280 (class 2606 OID 336568)
 -- Name: components_blocks_hero_sliders_components components_blocks_hero_sliders_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5381,7 +5453,7 @@ ALTER TABLE ONLY public.components_blocks_hero_sliders_components
 
 
 --
--- TOC entry 3274 (class 2606 OID 16663)
+-- TOC entry 3282 (class 2606 OID 16663)
 -- Name: components_shared_links components_shared_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5390,7 +5462,7 @@ ALTER TABLE ONLY public.components_shared_links
 
 
 --
--- TOC entry 3276 (class 2606 OID 16665)
+-- TOC entry 3284 (class 2606 OID 16665)
 -- Name: components_shared_seos components_shared_seos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5399,7 +5471,7 @@ ALTER TABLE ONLY public.components_shared_seos
 
 
 --
--- TOC entry 3404 (class 2606 OID 213696)
+-- TOC entry 3412 (class 2606 OID 213696)
 -- Name: dashboard_pages_components dashboard_pages_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5408,7 +5480,7 @@ ALTER TABLE ONLY public.dashboard_pages_components
 
 
 --
--- TOC entry 3413 (class 2606 OID 213709)
+-- TOC entry 3421 (class 2606 OID 213709)
 -- Name: dashboard_pages_localizations_links dashboard_pages_localizations_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5417,7 +5489,7 @@ ALTER TABLE ONLY public.dashboard_pages_localizations_links
 
 
 --
--- TOC entry 3415 (class 2606 OID 213713)
+-- TOC entry 3423 (class 2606 OID 213713)
 -- Name: dashboard_pages_localizations_links dashboard_pages_localizations_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5426,7 +5498,7 @@ ALTER TABLE ONLY public.dashboard_pages_localizations_links
 
 
 --
--- TOC entry 3380 (class 2606 OID 213623)
+-- TOC entry 3388 (class 2606 OID 213623)
 -- Name: dashboard_pages dashboard_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5435,7 +5507,7 @@ ALTER TABLE ONLY public.dashboard_pages
 
 
 --
--- TOC entry 3408 (class 2606 OID 214664)
+-- TOC entry 3416 (class 2606 OID 336544)
 -- Name: dashboard_pages_components dashboard_pages_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5444,7 +5516,7 @@ ALTER TABLE ONLY public.dashboard_pages_components
 
 
 --
--- TOC entry 3418 (class 2606 OID 213725)
+-- TOC entry 3426 (class 2606 OID 213725)
 -- Name: download_center_pages_components download_center_pages_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5453,7 +5525,7 @@ ALTER TABLE ONLY public.download_center_pages_components
 
 
 --
--- TOC entry 3427 (class 2606 OID 213738)
+-- TOC entry 3435 (class 2606 OID 213738)
 -- Name: download_center_pages_localizations_links download_center_pages_localizations_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5462,7 +5534,7 @@ ALTER TABLE ONLY public.download_center_pages_localizations_links
 
 
 --
--- TOC entry 3429 (class 2606 OID 213742)
+-- TOC entry 3437 (class 2606 OID 213742)
 -- Name: download_center_pages_localizations_links download_center_pages_localizations_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5471,7 +5543,7 @@ ALTER TABLE ONLY public.download_center_pages_localizations_links
 
 
 --
--- TOC entry 3384 (class 2606 OID 213633)
+-- TOC entry 3392 (class 2606 OID 213633)
 -- Name: download_center_pages download_center_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5480,7 +5552,7 @@ ALTER TABLE ONLY public.download_center_pages
 
 
 --
--- TOC entry 3422 (class 2606 OID 214666)
+-- TOC entry 3430 (class 2606 OID 336546)
 -- Name: download_center_pages_components download_center_pages_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5489,7 +5561,7 @@ ALTER TABLE ONLY public.download_center_pages_components
 
 
 --
--- TOC entry 3286 (class 2606 OID 16667)
+-- TOC entry 3294 (class 2606 OID 16667)
 -- Name: files_folder_links files_folder_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5498,7 +5570,7 @@ ALTER TABLE ONLY public.files_folder_links
 
 
 --
--- TOC entry 3288 (class 2606 OID 16669)
+-- TOC entry 3296 (class 2606 OID 16669)
 -- Name: files_folder_links files_folder_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5507,7 +5579,7 @@ ALTER TABLE ONLY public.files_folder_links
 
 
 --
--- TOC entry 3279 (class 2606 OID 16671)
+-- TOC entry 3287 (class 2606 OID 16671)
 -- Name: files files_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5516,7 +5588,7 @@ ALTER TABLE ONLY public.files
 
 
 --
--- TOC entry 3291 (class 2606 OID 16673)
+-- TOC entry 3299 (class 2606 OID 16673)
 -- Name: files_related_morphs files_related_morphs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5525,7 +5597,7 @@ ALTER TABLE ONLY public.files_related_morphs
 
 
 --
--- TOC entry 3298 (class 2606 OID 16675)
+-- TOC entry 3306 (class 2606 OID 16675)
 -- Name: home_pages_components home_pages_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5534,7 +5606,7 @@ ALTER TABLE ONLY public.home_pages_components
 
 
 --
--- TOC entry 3307 (class 2606 OID 16677)
+-- TOC entry 3315 (class 2606 OID 16677)
 -- Name: home_pages_localizations_links home_pages_localizations_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5543,7 +5615,7 @@ ALTER TABLE ONLY public.home_pages_localizations_links
 
 
 --
--- TOC entry 3309 (class 2606 OID 16679)
+-- TOC entry 3317 (class 2606 OID 16679)
 -- Name: home_pages_localizations_links home_pages_localizations_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5552,7 +5624,7 @@ ALTER TABLE ONLY public.home_pages_localizations_links
 
 
 --
--- TOC entry 3294 (class 2606 OID 16681)
+-- TOC entry 3302 (class 2606 OID 16681)
 -- Name: home_pages home_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5561,7 +5633,7 @@ ALTER TABLE ONLY public.home_pages
 
 
 --
--- TOC entry 3302 (class 2606 OID 214668)
+-- TOC entry 3310 (class 2606 OID 336548)
 -- Name: home_pages_components home_pages_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5570,7 +5642,7 @@ ALTER TABLE ONLY public.home_pages_components
 
 
 --
--- TOC entry 3312 (class 2606 OID 16685)
+-- TOC entry 3320 (class 2606 OID 16685)
 -- Name: i18n_locale i18n_locale_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5579,7 +5651,7 @@ ALTER TABLE ONLY public.i18n_locale
 
 
 --
--- TOC entry 3432 (class 2606 OID 213783)
+-- TOC entry 3440 (class 2606 OID 213783)
 -- Name: news_pages_components news_pages_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5588,7 +5660,7 @@ ALTER TABLE ONLY public.news_pages_components
 
 
 --
--- TOC entry 3441 (class 2606 OID 213796)
+-- TOC entry 3449 (class 2606 OID 213796)
 -- Name: news_pages_localizations_links news_pages_localizations_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5597,7 +5669,7 @@ ALTER TABLE ONLY public.news_pages_localizations_links
 
 
 --
--- TOC entry 3443 (class 2606 OID 213800)
+-- TOC entry 3451 (class 2606 OID 213800)
 -- Name: news_pages_localizations_links news_pages_localizations_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5606,7 +5678,7 @@ ALTER TABLE ONLY public.news_pages_localizations_links
 
 
 --
--- TOC entry 3388 (class 2606 OID 213653)
+-- TOC entry 3396 (class 2606 OID 213653)
 -- Name: news_pages news_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5615,7 +5687,7 @@ ALTER TABLE ONLY public.news_pages
 
 
 --
--- TOC entry 3436 (class 2606 OID 214670)
+-- TOC entry 3444 (class 2606 OID 336550)
 -- Name: news_pages_components news_pages_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5624,7 +5696,7 @@ ALTER TABLE ONLY public.news_pages_components
 
 
 --
--- TOC entry 3564 (class 2606 OID 214523)
+-- TOC entry 3572 (class 2606 OID 214523)
 -- Name: order_item_pages_components order_item_pages_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5633,7 +5705,7 @@ ALTER TABLE ONLY public.order_item_pages_components
 
 
 --
--- TOC entry 3573 (class 2606 OID 214536)
+-- TOC entry 3581 (class 2606 OID 214536)
 -- Name: order_item_pages_localizations_links order_item_pages_localizations_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5642,7 +5714,7 @@ ALTER TABLE ONLY public.order_item_pages_localizations_links
 
 
 --
--- TOC entry 3575 (class 2606 OID 214540)
+-- TOC entry 3583 (class 2606 OID 214540)
 -- Name: order_item_pages_localizations_links order_item_pages_localizations_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5651,7 +5723,7 @@ ALTER TABLE ONLY public.order_item_pages_localizations_links
 
 
 --
--- TOC entry 3560 (class 2606 OID 214510)
+-- TOC entry 3568 (class 2606 OID 214510)
 -- Name: order_item_pages order_item_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5660,7 +5732,7 @@ ALTER TABLE ONLY public.order_item_pages
 
 
 --
--- TOC entry 3568 (class 2606 OID 214672)
+-- TOC entry 3576 (class 2606 OID 336552)
 -- Name: order_item_pages_components order_item_pages_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5669,7 +5741,7 @@ ALTER TABLE ONLY public.order_item_pages_components
 
 
 --
--- TOC entry 3446 (class 2606 OID 213812)
+-- TOC entry 3454 (class 2606 OID 213812)
 -- Name: order_pages_components order_pages_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5678,7 +5750,7 @@ ALTER TABLE ONLY public.order_pages_components
 
 
 --
--- TOC entry 3455 (class 2606 OID 213825)
+-- TOC entry 3463 (class 2606 OID 213825)
 -- Name: order_pages_localizations_links order_pages_localizations_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5687,7 +5759,7 @@ ALTER TABLE ONLY public.order_pages_localizations_links
 
 
 --
--- TOC entry 3457 (class 2606 OID 213829)
+-- TOC entry 3465 (class 2606 OID 213829)
 -- Name: order_pages_localizations_links order_pages_localizations_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5696,7 +5768,7 @@ ALTER TABLE ONLY public.order_pages_localizations_links
 
 
 --
--- TOC entry 3392 (class 2606 OID 213663)
+-- TOC entry 3400 (class 2606 OID 213663)
 -- Name: order_pages order_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5705,7 +5777,7 @@ ALTER TABLE ONLY public.order_pages
 
 
 --
--- TOC entry 3450 (class 2606 OID 214674)
+-- TOC entry 3458 (class 2606 OID 336554)
 -- Name: order_pages_components order_pages_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5714,7 +5786,7 @@ ALTER TABLE ONLY public.order_pages_components
 
 
 --
--- TOC entry 3460 (class 2606 OID 213841)
+-- TOC entry 3468 (class 2606 OID 213841)
 -- Name: orders_pages_components orders_pages_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5723,7 +5795,7 @@ ALTER TABLE ONLY public.orders_pages_components
 
 
 --
--- TOC entry 3469 (class 2606 OID 213854)
+-- TOC entry 3477 (class 2606 OID 213854)
 -- Name: orders_pages_localizations_links orders_pages_localizations_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5732,7 +5804,7 @@ ALTER TABLE ONLY public.orders_pages_localizations_links
 
 
 --
--- TOC entry 3471 (class 2606 OID 213858)
+-- TOC entry 3479 (class 2606 OID 213858)
 -- Name: orders_pages_localizations_links orders_pages_localizations_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5741,7 +5813,7 @@ ALTER TABLE ONLY public.orders_pages_localizations_links
 
 
 --
--- TOC entry 3396 (class 2606 OID 213673)
+-- TOC entry 3404 (class 2606 OID 213673)
 -- Name: orders_pages orders_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5750,7 +5822,7 @@ ALTER TABLE ONLY public.orders_pages
 
 
 --
--- TOC entry 3464 (class 2606 OID 214676)
+-- TOC entry 3472 (class 2606 OID 336556)
 -- Name: orders_pages_components orders_pages_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5759,7 +5831,7 @@ ALTER TABLE ONLY public.orders_pages_components
 
 
 --
--- TOC entry 3474 (class 2606 OID 213870)
+-- TOC entry 3482 (class 2606 OID 213870)
 -- Name: outlet_pages_components outlet_pages_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5768,7 +5840,7 @@ ALTER TABLE ONLY public.outlet_pages_components
 
 
 --
--- TOC entry 3483 (class 2606 OID 213883)
+-- TOC entry 3491 (class 2606 OID 213883)
 -- Name: outlet_pages_localizations_links outlet_pages_localizations_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5777,7 +5849,7 @@ ALTER TABLE ONLY public.outlet_pages_localizations_links
 
 
 --
--- TOC entry 3485 (class 2606 OID 213887)
+-- TOC entry 3493 (class 2606 OID 213887)
 -- Name: outlet_pages_localizations_links outlet_pages_localizations_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5786,7 +5858,7 @@ ALTER TABLE ONLY public.outlet_pages_localizations_links
 
 
 --
--- TOC entry 3400 (class 2606 OID 213683)
+-- TOC entry 3408 (class 2606 OID 213683)
 -- Name: outlet_pages outlet_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5795,7 +5867,7 @@ ALTER TABLE ONLY public.outlet_pages
 
 
 --
--- TOC entry 3478 (class 2606 OID 214678)
+-- TOC entry 3486 (class 2606 OID 336558)
 -- Name: outlet_pages_components outlet_pages_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5804,7 +5876,7 @@ ALTER TABLE ONLY public.outlet_pages_components
 
 
 --
--- TOC entry 3528 (class 2606 OID 214292)
+-- TOC entry 3536 (class 2606 OID 214292)
 -- Name: privacy_policy_pages_components privacy_policy_pages_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5813,7 +5885,7 @@ ALTER TABLE ONLY public.privacy_policy_pages_components
 
 
 --
--- TOC entry 3537 (class 2606 OID 214305)
+-- TOC entry 3545 (class 2606 OID 214305)
 -- Name: privacy_policy_pages_localizations_links privacy_policy_pages_localizations_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5822,7 +5894,7 @@ ALTER TABLE ONLY public.privacy_policy_pages_localizations_links
 
 
 --
--- TOC entry 3539 (class 2606 OID 214309)
+-- TOC entry 3547 (class 2606 OID 214309)
 -- Name: privacy_policy_pages_localizations_links privacy_policy_pages_localizations_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5831,7 +5903,7 @@ ALTER TABLE ONLY public.privacy_policy_pages_localizations_links
 
 
 --
--- TOC entry 3524 (class 2606 OID 214279)
+-- TOC entry 3532 (class 2606 OID 214279)
 -- Name: privacy_policy_pages privacy_policy_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5840,7 +5912,7 @@ ALTER TABLE ONLY public.privacy_policy_pages
 
 
 --
--- TOC entry 3532 (class 2606 OID 214680)
+-- TOC entry 3540 (class 2606 OID 336560)
 -- Name: privacy_policy_pages_components privacy_policy_pages_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5849,7 +5921,7 @@ ALTER TABLE ONLY public.privacy_policy_pages_components
 
 
 --
--- TOC entry 3510 (class 2606 OID 214202)
+-- TOC entry 3518 (class 2606 OID 214202)
 -- Name: regulations_pages_components regulations_pages_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5858,7 +5930,7 @@ ALTER TABLE ONLY public.regulations_pages_components
 
 
 --
--- TOC entry 3519 (class 2606 OID 214215)
+-- TOC entry 3527 (class 2606 OID 214215)
 -- Name: regulations_pages_localizations_links regulations_pages_localizations_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5867,7 +5939,7 @@ ALTER TABLE ONLY public.regulations_pages_localizations_links
 
 
 --
--- TOC entry 3521 (class 2606 OID 214219)
+-- TOC entry 3529 (class 2606 OID 214219)
 -- Name: regulations_pages_localizations_links regulations_pages_localizations_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5876,7 +5948,7 @@ ALTER TABLE ONLY public.regulations_pages_localizations_links
 
 
 --
--- TOC entry 3506 (class 2606 OID 214189)
+-- TOC entry 3514 (class 2606 OID 214189)
 -- Name: regulations_pages regulations_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5885,7 +5957,7 @@ ALTER TABLE ONLY public.regulations_pages
 
 
 --
--- TOC entry 3514 (class 2606 OID 214682)
+-- TOC entry 3522 (class 2606 OID 336562)
 -- Name: regulations_pages_components regulations_pages_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5894,7 +5966,7 @@ ALTER TABLE ONLY public.regulations_pages_components
 
 
 --
--- TOC entry 3582 (class 2606 OID 214615)
+-- TOC entry 3590 (class 2606 OID 214615)
 -- Name: search_products_pages_components search_products_pages_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5903,7 +5975,7 @@ ALTER TABLE ONLY public.search_products_pages_components
 
 
 --
--- TOC entry 3591 (class 2606 OID 214628)
+-- TOC entry 3599 (class 2606 OID 214628)
 -- Name: search_products_pages_localizations_links search_products_pages_localizations_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5912,7 +5984,7 @@ ALTER TABLE ONLY public.search_products_pages_localizations_links
 
 
 --
--- TOC entry 3593 (class 2606 OID 214632)
+-- TOC entry 3601 (class 2606 OID 214632)
 -- Name: search_products_pages_localizations_links search_products_pages_localizations_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5921,7 +5993,7 @@ ALTER TABLE ONLY public.search_products_pages_localizations_links
 
 
 --
--- TOC entry 3578 (class 2606 OID 214602)
+-- TOC entry 3586 (class 2606 OID 214602)
 -- Name: search_products_pages search_products_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5930,7 +6002,7 @@ ALTER TABLE ONLY public.search_products_pages
 
 
 --
--- TOC entry 3586 (class 2606 OID 214620)
+-- TOC entry 3594 (class 2606 OID 336564)
 -- Name: search_products_pages_components search_products_pages_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5939,7 +6011,7 @@ ALTER TABLE ONLY public.search_products_pages_components
 
 
 --
--- TOC entry 3316 (class 2606 OID 16687)
+-- TOC entry 3324 (class 2606 OID 16687)
 -- Name: strapi_api_token_permissions strapi_api_token_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5948,7 +6020,7 @@ ALTER TABLE ONLY public.strapi_api_token_permissions
 
 
 --
--- TOC entry 3322 (class 2606 OID 16689)
+-- TOC entry 3330 (class 2606 OID 16689)
 -- Name: strapi_api_token_permissions_token_links strapi_api_token_permissions_token_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5957,7 +6029,7 @@ ALTER TABLE ONLY public.strapi_api_token_permissions_token_links
 
 
 --
--- TOC entry 3324 (class 2606 OID 16691)
+-- TOC entry 3332 (class 2606 OID 16691)
 -- Name: strapi_api_token_permissions_token_links strapi_api_token_permissions_token_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5966,7 +6038,7 @@ ALTER TABLE ONLY public.strapi_api_token_permissions_token_links
 
 
 --
--- TOC entry 3327 (class 2606 OID 16693)
+-- TOC entry 3335 (class 2606 OID 16693)
 -- Name: strapi_api_tokens strapi_api_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5975,7 +6047,7 @@ ALTER TABLE ONLY public.strapi_api_tokens
 
 
 --
--- TOC entry 3330 (class 2606 OID 16695)
+-- TOC entry 3338 (class 2606 OID 16695)
 -- Name: strapi_core_store_settings strapi_core_store_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5984,7 +6056,7 @@ ALTER TABLE ONLY public.strapi_core_store_settings
 
 
 --
--- TOC entry 3332 (class 2606 OID 16697)
+-- TOC entry 3340 (class 2606 OID 16697)
 -- Name: strapi_database_schema strapi_database_schema_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5993,7 +6065,7 @@ ALTER TABLE ONLY public.strapi_database_schema
 
 
 --
--- TOC entry 3334 (class 2606 OID 16699)
+-- TOC entry 3342 (class 2606 OID 16699)
 -- Name: strapi_migrations strapi_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -6002,7 +6074,7 @@ ALTER TABLE ONLY public.strapi_migrations
 
 
 --
--- TOC entry 3336 (class 2606 OID 16701)
+-- TOC entry 3344 (class 2606 OID 16701)
 -- Name: strapi_webhooks strapi_webhooks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -6011,7 +6083,7 @@ ALTER TABLE ONLY public.strapi_webhooks
 
 
 --
--- TOC entry 3339 (class 2606 OID 16703)
+-- TOC entry 3347 (class 2606 OID 16703)
 -- Name: up_permissions up_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -6020,7 +6092,7 @@ ALTER TABLE ONLY public.up_permissions
 
 
 --
--- TOC entry 3345 (class 2606 OID 16705)
+-- TOC entry 3353 (class 2606 OID 16705)
 -- Name: up_permissions_role_links up_permissions_role_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -6029,7 +6101,7 @@ ALTER TABLE ONLY public.up_permissions_role_links
 
 
 --
--- TOC entry 3347 (class 2606 OID 16707)
+-- TOC entry 3355 (class 2606 OID 16707)
 -- Name: up_permissions_role_links up_permissions_role_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -6038,7 +6110,7 @@ ALTER TABLE ONLY public.up_permissions_role_links
 
 
 --
--- TOC entry 3350 (class 2606 OID 16709)
+-- TOC entry 3358 (class 2606 OID 16709)
 -- Name: up_roles up_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -6047,7 +6119,7 @@ ALTER TABLE ONLY public.up_roles
 
 
 --
--- TOC entry 3354 (class 2606 OID 16711)
+-- TOC entry 3362 (class 2606 OID 16711)
 -- Name: up_users up_users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -6056,7 +6128,7 @@ ALTER TABLE ONLY public.up_users
 
 
 --
--- TOC entry 3360 (class 2606 OID 16713)
+-- TOC entry 3368 (class 2606 OID 16713)
 -- Name: up_users_role_links up_users_role_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -6065,7 +6137,7 @@ ALTER TABLE ONLY public.up_users_role_links
 
 
 --
--- TOC entry 3362 (class 2606 OID 16715)
+-- TOC entry 3370 (class 2606 OID 16715)
 -- Name: up_users_role_links up_users_role_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -6074,7 +6146,7 @@ ALTER TABLE ONLY public.up_users_role_links
 
 
 --
--- TOC entry 3375 (class 2606 OID 16717)
+-- TOC entry 3383 (class 2606 OID 16717)
 -- Name: upload_folders_parent_links upload_folders_parent_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -6083,7 +6155,7 @@ ALTER TABLE ONLY public.upload_folders_parent_links
 
 
 --
--- TOC entry 3377 (class 2606 OID 16719)
+-- TOC entry 3385 (class 2606 OID 16719)
 -- Name: upload_folders_parent_links upload_folders_parent_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -6092,7 +6164,7 @@ ALTER TABLE ONLY public.upload_folders_parent_links
 
 
 --
--- TOC entry 3365 (class 2606 OID 16721)
+-- TOC entry 3373 (class 2606 OID 16721)
 -- Name: upload_folders upload_folders_path_id_index; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -6101,7 +6173,7 @@ ALTER TABLE ONLY public.upload_folders
 
 
 --
--- TOC entry 3367 (class 2606 OID 16723)
+-- TOC entry 3375 (class 2606 OID 16723)
 -- Name: upload_folders upload_folders_path_index; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -6110,7 +6182,7 @@ ALTER TABLE ONLY public.upload_folders
 
 
 --
--- TOC entry 3369 (class 2606 OID 16725)
+-- TOC entry 3377 (class 2606 OID 16725)
 -- Name: upload_folders upload_folders_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -6119,7 +6191,7 @@ ALTER TABLE ONLY public.upload_folders
 
 
 --
--- TOC entry 3228 (class 1259 OID 16726)
+-- TOC entry 3236 (class 1259 OID 16726)
 -- Name: admin_permissions_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6127,7 +6199,7 @@ CREATE INDEX admin_permissions_created_by_id_fk ON public.admin_permissions USIN
 
 
 --
--- TOC entry 3232 (class 1259 OID 16727)
+-- TOC entry 3240 (class 1259 OID 16727)
 -- Name: admin_permissions_role_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6135,7 +6207,7 @@ CREATE INDEX admin_permissions_role_links_fk ON public.admin_permissions_role_li
 
 
 --
--- TOC entry 3233 (class 1259 OID 16728)
+-- TOC entry 3241 (class 1259 OID 16728)
 -- Name: admin_permissions_role_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6143,7 +6215,7 @@ CREATE INDEX admin_permissions_role_links_inv_fk ON public.admin_permissions_rol
 
 
 --
--- TOC entry 3234 (class 1259 OID 16729)
+-- TOC entry 3242 (class 1259 OID 16729)
 -- Name: admin_permissions_role_links_order_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6151,7 +6223,7 @@ CREATE INDEX admin_permissions_role_links_order_inv_fk ON public.admin_permissio
 
 
 --
--- TOC entry 3231 (class 1259 OID 16730)
+-- TOC entry 3239 (class 1259 OID 16730)
 -- Name: admin_permissions_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6159,7 +6231,7 @@ CREATE INDEX admin_permissions_updated_by_id_fk ON public.admin_permissions USIN
 
 
 --
--- TOC entry 3239 (class 1259 OID 16731)
+-- TOC entry 3247 (class 1259 OID 16731)
 -- Name: admin_roles_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6167,7 +6239,7 @@ CREATE INDEX admin_roles_created_by_id_fk ON public.admin_roles USING btree (cre
 
 
 --
--- TOC entry 3242 (class 1259 OID 16732)
+-- TOC entry 3250 (class 1259 OID 16732)
 -- Name: admin_roles_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6175,7 +6247,7 @@ CREATE INDEX admin_roles_updated_by_id_fk ON public.admin_roles USING btree (upd
 
 
 --
--- TOC entry 3243 (class 1259 OID 16733)
+-- TOC entry 3251 (class 1259 OID 16733)
 -- Name: admin_users_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6183,7 +6255,7 @@ CREATE INDEX admin_users_created_by_id_fk ON public.admin_users USING btree (cre
 
 
 --
--- TOC entry 3247 (class 1259 OID 16734)
+-- TOC entry 3255 (class 1259 OID 16734)
 -- Name: admin_users_roles_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6191,7 +6263,7 @@ CREATE INDEX admin_users_roles_links_fk ON public.admin_users_roles_links USING 
 
 
 --
--- TOC entry 3248 (class 1259 OID 16735)
+-- TOC entry 3256 (class 1259 OID 16735)
 -- Name: admin_users_roles_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6199,7 +6271,7 @@ CREATE INDEX admin_users_roles_links_inv_fk ON public.admin_users_roles_links US
 
 
 --
--- TOC entry 3249 (class 1259 OID 16736)
+-- TOC entry 3257 (class 1259 OID 16736)
 -- Name: admin_users_roles_links_order_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6207,7 +6279,7 @@ CREATE INDEX admin_users_roles_links_order_fk ON public.admin_users_roles_links 
 
 
 --
--- TOC entry 3250 (class 1259 OID 16737)
+-- TOC entry 3258 (class 1259 OID 16737)
 -- Name: admin_users_roles_links_order_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6215,7 +6287,7 @@ CREATE INDEX admin_users_roles_links_order_inv_fk ON public.admin_users_roles_li
 
 
 --
--- TOC entry 3246 (class 1259 OID 16738)
+-- TOC entry 3254 (class 1259 OID 16738)
 -- Name: admin_users_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6223,7 +6295,7 @@ CREATE INDEX admin_users_updated_by_id_fk ON public.admin_users USING btree (upd
 
 
 --
--- TOC entry 3490 (class 1259 OID 214115)
+-- TOC entry 3498 (class 1259 OID 214115)
 -- Name: available_products_pages_component_type_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6231,7 +6303,7 @@ CREATE INDEX available_products_pages_component_type_index ON public.available_p
 
 
 --
--- TOC entry 3486 (class 1259 OID 214101)
+-- TOC entry 3494 (class 1259 OID 214101)
 -- Name: available_products_pages_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6239,7 +6311,7 @@ CREATE INDEX available_products_pages_created_by_id_fk ON public.available_produ
 
 
 --
--- TOC entry 3493 (class 1259 OID 214116)
+-- TOC entry 3501 (class 1259 OID 214116)
 -- Name: available_products_pages_entity_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6247,7 +6319,7 @@ CREATE INDEX available_products_pages_entity_fk ON public.available_products_pag
 
 
 --
--- TOC entry 3494 (class 1259 OID 214114)
+-- TOC entry 3502 (class 1259 OID 214114)
 -- Name: available_products_pages_field_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6255,7 +6327,7 @@ CREATE INDEX available_products_pages_field_index ON public.available_products_p
 
 
 --
--- TOC entry 3497 (class 1259 OID 214127)
+-- TOC entry 3505 (class 1259 OID 214127)
 -- Name: available_products_pages_localizations_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6263,7 +6335,7 @@ CREATE INDEX available_products_pages_localizations_links_fk ON public.available
 
 
 --
--- TOC entry 3498 (class 1259 OID 214128)
+-- TOC entry 3506 (class 1259 OID 214128)
 -- Name: available_products_pages_localizations_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6271,7 +6343,7 @@ CREATE INDEX available_products_pages_localizations_links_inv_fk ON public.avail
 
 
 --
--- TOC entry 3499 (class 1259 OID 214131)
+-- TOC entry 3507 (class 1259 OID 214131)
 -- Name: available_products_pages_localizations_links_order_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6279,7 +6351,7 @@ CREATE INDEX available_products_pages_localizations_links_order_fk ON public.ava
 
 
 --
--- TOC entry 3489 (class 1259 OID 214102)
+-- TOC entry 3497 (class 1259 OID 214102)
 -- Name: available_products_pages_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6287,7 +6359,7 @@ CREATE INDEX available_products_pages_updated_by_id_fk ON public.available_produ
 
 
 --
--- TOC entry 3544 (class 1259 OID 214434)
+-- TOC entry 3552 (class 1259 OID 214434)
 -- Name: basket_pages_component_type_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6295,7 +6367,7 @@ CREATE INDEX basket_pages_component_type_index ON public.basket_pages_components
 
 
 --
--- TOC entry 3540 (class 1259 OID 214420)
+-- TOC entry 3548 (class 1259 OID 214420)
 -- Name: basket_pages_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6303,7 +6375,7 @@ CREATE INDEX basket_pages_created_by_id_fk ON public.basket_pages USING btree (c
 
 
 --
--- TOC entry 3547 (class 1259 OID 214435)
+-- TOC entry 3555 (class 1259 OID 214435)
 -- Name: basket_pages_entity_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6311,7 +6383,7 @@ CREATE INDEX basket_pages_entity_fk ON public.basket_pages_components USING btre
 
 
 --
--- TOC entry 3548 (class 1259 OID 214433)
+-- TOC entry 3556 (class 1259 OID 214433)
 -- Name: basket_pages_field_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6319,7 +6391,7 @@ CREATE INDEX basket_pages_field_index ON public.basket_pages_components USING bt
 
 
 --
--- TOC entry 3551 (class 1259 OID 214446)
+-- TOC entry 3559 (class 1259 OID 214446)
 -- Name: basket_pages_localizations_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6327,7 +6399,7 @@ CREATE INDEX basket_pages_localizations_links_fk ON public.basket_pages_localiza
 
 
 --
--- TOC entry 3552 (class 1259 OID 214447)
+-- TOC entry 3560 (class 1259 OID 214447)
 -- Name: basket_pages_localizations_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6335,7 +6407,7 @@ CREATE INDEX basket_pages_localizations_links_inv_fk ON public.basket_pages_loca
 
 
 --
--- TOC entry 3553 (class 1259 OID 214450)
+-- TOC entry 3561 (class 1259 OID 214450)
 -- Name: basket_pages_localizations_links_order_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6343,7 +6415,7 @@ CREATE INDEX basket_pages_localizations_links_order_fk ON public.basket_pages_lo
 
 
 --
--- TOC entry 3543 (class 1259 OID 214421)
+-- TOC entry 3551 (class 1259 OID 214421)
 -- Name: basket_pages_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6351,7 +6423,7 @@ CREATE INDEX basket_pages_updated_by_id_fk ON public.basket_pages USING btree (u
 
 
 --
--- TOC entry 3257 (class 1259 OID 16739)
+-- TOC entry 3265 (class 1259 OID 16739)
 -- Name: components_blocks_hero_slider_items_component_type_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6359,7 +6431,7 @@ CREATE INDEX components_blocks_hero_slider_items_component_type_index ON public.
 
 
 --
--- TOC entry 3260 (class 1259 OID 16740)
+-- TOC entry 3268 (class 1259 OID 16740)
 -- Name: components_blocks_hero_slider_items_entity_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6367,7 +6439,7 @@ CREATE INDEX components_blocks_hero_slider_items_entity_fk ON public.components_
 
 
 --
--- TOC entry 3261 (class 1259 OID 16741)
+-- TOC entry 3269 (class 1259 OID 16741)
 -- Name: components_blocks_hero_slider_items_field_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6375,7 +6447,7 @@ CREATE INDEX components_blocks_hero_slider_items_field_index ON public.component
 
 
 --
--- TOC entry 3266 (class 1259 OID 16742)
+-- TOC entry 3274 (class 1259 OID 16742)
 -- Name: components_blocks_hero_sliders_component_type_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6383,7 +6455,7 @@ CREATE INDEX components_blocks_hero_sliders_component_type_index ON public.compo
 
 
 --
--- TOC entry 3269 (class 1259 OID 16743)
+-- TOC entry 3277 (class 1259 OID 16743)
 -- Name: components_blocks_hero_sliders_entity_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6391,7 +6463,7 @@ CREATE INDEX components_blocks_hero_sliders_entity_fk ON public.components_block
 
 
 --
--- TOC entry 3270 (class 1259 OID 16744)
+-- TOC entry 3278 (class 1259 OID 16744)
 -- Name: components_blocks_hero_sliders_field_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6399,7 +6471,7 @@ CREATE INDEX components_blocks_hero_sliders_field_index ON public.components_blo
 
 
 --
--- TOC entry 3402 (class 1259 OID 213698)
+-- TOC entry 3410 (class 1259 OID 213698)
 -- Name: dashboard_pages_component_type_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6407,7 +6479,7 @@ CREATE INDEX dashboard_pages_component_type_index ON public.dashboard_pages_comp
 
 
 --
--- TOC entry 3378 (class 1259 OID 213624)
+-- TOC entry 3386 (class 1259 OID 213624)
 -- Name: dashboard_pages_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6415,7 +6487,7 @@ CREATE INDEX dashboard_pages_created_by_id_fk ON public.dashboard_pages USING bt
 
 
 --
--- TOC entry 3405 (class 1259 OID 213699)
+-- TOC entry 3413 (class 1259 OID 213699)
 -- Name: dashboard_pages_entity_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6423,7 +6495,7 @@ CREATE INDEX dashboard_pages_entity_fk ON public.dashboard_pages_components USIN
 
 
 --
--- TOC entry 3406 (class 1259 OID 213697)
+-- TOC entry 3414 (class 1259 OID 213697)
 -- Name: dashboard_pages_field_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6431,7 +6503,7 @@ CREATE INDEX dashboard_pages_field_index ON public.dashboard_pages_components US
 
 
 --
--- TOC entry 3409 (class 1259 OID 213710)
+-- TOC entry 3417 (class 1259 OID 213710)
 -- Name: dashboard_pages_localizations_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6439,7 +6511,7 @@ CREATE INDEX dashboard_pages_localizations_links_fk ON public.dashboard_pages_lo
 
 
 --
--- TOC entry 3410 (class 1259 OID 213711)
+-- TOC entry 3418 (class 1259 OID 213711)
 -- Name: dashboard_pages_localizations_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6447,7 +6519,7 @@ CREATE INDEX dashboard_pages_localizations_links_inv_fk ON public.dashboard_page
 
 
 --
--- TOC entry 3411 (class 1259 OID 213714)
+-- TOC entry 3419 (class 1259 OID 213714)
 -- Name: dashboard_pages_localizations_links_order_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6455,7 +6527,7 @@ CREATE INDEX dashboard_pages_localizations_links_order_fk ON public.dashboard_pa
 
 
 --
--- TOC entry 3381 (class 1259 OID 213625)
+-- TOC entry 3389 (class 1259 OID 213625)
 -- Name: dashboard_pages_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6463,7 +6535,7 @@ CREATE INDEX dashboard_pages_updated_by_id_fk ON public.dashboard_pages USING bt
 
 
 --
--- TOC entry 3416 (class 1259 OID 213727)
+-- TOC entry 3424 (class 1259 OID 213727)
 -- Name: download_center_pages_component_type_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6471,7 +6543,7 @@ CREATE INDEX download_center_pages_component_type_index ON public.download_cente
 
 
 --
--- TOC entry 3382 (class 1259 OID 213634)
+-- TOC entry 3390 (class 1259 OID 213634)
 -- Name: download_center_pages_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6479,7 +6551,7 @@ CREATE INDEX download_center_pages_created_by_id_fk ON public.download_center_pa
 
 
 --
--- TOC entry 3419 (class 1259 OID 213728)
+-- TOC entry 3427 (class 1259 OID 213728)
 -- Name: download_center_pages_entity_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6487,7 +6559,7 @@ CREATE INDEX download_center_pages_entity_fk ON public.download_center_pages_com
 
 
 --
--- TOC entry 3420 (class 1259 OID 213726)
+-- TOC entry 3428 (class 1259 OID 213726)
 -- Name: download_center_pages_field_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6495,7 +6567,7 @@ CREATE INDEX download_center_pages_field_index ON public.download_center_pages_c
 
 
 --
--- TOC entry 3423 (class 1259 OID 213739)
+-- TOC entry 3431 (class 1259 OID 213739)
 -- Name: download_center_pages_localizations_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6503,7 +6575,7 @@ CREATE INDEX download_center_pages_localizations_links_fk ON public.download_cen
 
 
 --
--- TOC entry 3424 (class 1259 OID 213740)
+-- TOC entry 3432 (class 1259 OID 213740)
 -- Name: download_center_pages_localizations_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6511,7 +6583,7 @@ CREATE INDEX download_center_pages_localizations_links_inv_fk ON public.download
 
 
 --
--- TOC entry 3425 (class 1259 OID 213743)
+-- TOC entry 3433 (class 1259 OID 213743)
 -- Name: download_center_pages_localizations_links_order_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6519,7 +6591,7 @@ CREATE INDEX download_center_pages_localizations_links_order_fk ON public.downlo
 
 
 --
--- TOC entry 3385 (class 1259 OID 213635)
+-- TOC entry 3393 (class 1259 OID 213635)
 -- Name: download_center_pages_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6527,7 +6599,7 @@ CREATE INDEX download_center_pages_updated_by_id_fk ON public.download_center_pa
 
 
 --
--- TOC entry 3277 (class 1259 OID 16745)
+-- TOC entry 3285 (class 1259 OID 16745)
 -- Name: files_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6535,7 +6607,7 @@ CREATE INDEX files_created_by_id_fk ON public.files USING btree (created_by_id);
 
 
 --
--- TOC entry 3282 (class 1259 OID 16746)
+-- TOC entry 3290 (class 1259 OID 16746)
 -- Name: files_folder_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6543,7 +6615,7 @@ CREATE INDEX files_folder_links_fk ON public.files_folder_links USING btree (fil
 
 
 --
--- TOC entry 3283 (class 1259 OID 16747)
+-- TOC entry 3291 (class 1259 OID 16747)
 -- Name: files_folder_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6551,7 +6623,7 @@ CREATE INDEX files_folder_links_inv_fk ON public.files_folder_links USING btree 
 
 
 --
--- TOC entry 3284 (class 1259 OID 16748)
+-- TOC entry 3292 (class 1259 OID 16748)
 -- Name: files_folder_links_order_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6559,7 +6631,7 @@ CREATE INDEX files_folder_links_order_inv_fk ON public.files_folder_links USING 
 
 
 --
--- TOC entry 3289 (class 1259 OID 16749)
+-- TOC entry 3297 (class 1259 OID 16749)
 -- Name: files_related_morphs_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6567,7 +6639,7 @@ CREATE INDEX files_related_morphs_fk ON public.files_related_morphs USING btree 
 
 
 --
--- TOC entry 3280 (class 1259 OID 16750)
+-- TOC entry 3288 (class 1259 OID 16750)
 -- Name: files_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6575,7 +6647,7 @@ CREATE INDEX files_updated_by_id_fk ON public.files USING btree (updated_by_id);
 
 
 --
--- TOC entry 3296 (class 1259 OID 16751)
+-- TOC entry 3304 (class 1259 OID 16751)
 -- Name: home_pages_component_type_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6583,7 +6655,7 @@ CREATE INDEX home_pages_component_type_index ON public.home_pages_components USI
 
 
 --
--- TOC entry 3292 (class 1259 OID 16752)
+-- TOC entry 3300 (class 1259 OID 16752)
 -- Name: home_pages_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6591,7 +6663,7 @@ CREATE INDEX home_pages_created_by_id_fk ON public.home_pages USING btree (creat
 
 
 --
--- TOC entry 3299 (class 1259 OID 16753)
+-- TOC entry 3307 (class 1259 OID 16753)
 -- Name: home_pages_entity_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6599,7 +6671,7 @@ CREATE INDEX home_pages_entity_fk ON public.home_pages_components USING btree (e
 
 
 --
--- TOC entry 3300 (class 1259 OID 16754)
+-- TOC entry 3308 (class 1259 OID 16754)
 -- Name: home_pages_field_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6607,7 +6679,7 @@ CREATE INDEX home_pages_field_index ON public.home_pages_components USING btree 
 
 
 --
--- TOC entry 3303 (class 1259 OID 16755)
+-- TOC entry 3311 (class 1259 OID 16755)
 -- Name: home_pages_localizations_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6615,7 +6687,7 @@ CREATE INDEX home_pages_localizations_links_fk ON public.home_pages_localization
 
 
 --
--- TOC entry 3304 (class 1259 OID 16756)
+-- TOC entry 3312 (class 1259 OID 16756)
 -- Name: home_pages_localizations_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6623,7 +6695,7 @@ CREATE INDEX home_pages_localizations_links_inv_fk ON public.home_pages_localiza
 
 
 --
--- TOC entry 3305 (class 1259 OID 16757)
+-- TOC entry 3313 (class 1259 OID 16757)
 -- Name: home_pages_localizations_links_order_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6631,7 +6703,7 @@ CREATE INDEX home_pages_localizations_links_order_fk ON public.home_pages_locali
 
 
 --
--- TOC entry 3295 (class 1259 OID 16758)
+-- TOC entry 3303 (class 1259 OID 16758)
 -- Name: home_pages_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6639,7 +6711,7 @@ CREATE INDEX home_pages_updated_by_id_fk ON public.home_pages USING btree (updat
 
 
 --
--- TOC entry 3310 (class 1259 OID 16759)
+-- TOC entry 3318 (class 1259 OID 16759)
 -- Name: i18n_locale_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6647,7 +6719,7 @@ CREATE INDEX i18n_locale_created_by_id_fk ON public.i18n_locale USING btree (cre
 
 
 --
--- TOC entry 3313 (class 1259 OID 16760)
+-- TOC entry 3321 (class 1259 OID 16760)
 -- Name: i18n_locale_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6655,7 +6727,7 @@ CREATE INDEX i18n_locale_updated_by_id_fk ON public.i18n_locale USING btree (upd
 
 
 --
--- TOC entry 3430 (class 1259 OID 213785)
+-- TOC entry 3438 (class 1259 OID 213785)
 -- Name: news_pages_component_type_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6663,7 +6735,7 @@ CREATE INDEX news_pages_component_type_index ON public.news_pages_components USI
 
 
 --
--- TOC entry 3386 (class 1259 OID 213654)
+-- TOC entry 3394 (class 1259 OID 213654)
 -- Name: news_pages_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6671,7 +6743,7 @@ CREATE INDEX news_pages_created_by_id_fk ON public.news_pages USING btree (creat
 
 
 --
--- TOC entry 3433 (class 1259 OID 213786)
+-- TOC entry 3441 (class 1259 OID 213786)
 -- Name: news_pages_entity_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6679,7 +6751,7 @@ CREATE INDEX news_pages_entity_fk ON public.news_pages_components USING btree (e
 
 
 --
--- TOC entry 3434 (class 1259 OID 213784)
+-- TOC entry 3442 (class 1259 OID 213784)
 -- Name: news_pages_field_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6687,7 +6759,7 @@ CREATE INDEX news_pages_field_index ON public.news_pages_components USING btree 
 
 
 --
--- TOC entry 3437 (class 1259 OID 213797)
+-- TOC entry 3445 (class 1259 OID 213797)
 -- Name: news_pages_localizations_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6695,7 +6767,7 @@ CREATE INDEX news_pages_localizations_links_fk ON public.news_pages_localization
 
 
 --
--- TOC entry 3438 (class 1259 OID 213798)
+-- TOC entry 3446 (class 1259 OID 213798)
 -- Name: news_pages_localizations_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6703,7 +6775,7 @@ CREATE INDEX news_pages_localizations_links_inv_fk ON public.news_pages_localiza
 
 
 --
--- TOC entry 3439 (class 1259 OID 213801)
+-- TOC entry 3447 (class 1259 OID 213801)
 -- Name: news_pages_localizations_links_order_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6711,7 +6783,7 @@ CREATE INDEX news_pages_localizations_links_order_fk ON public.news_pages_locali
 
 
 --
--- TOC entry 3389 (class 1259 OID 213655)
+-- TOC entry 3397 (class 1259 OID 213655)
 -- Name: news_pages_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6719,7 +6791,7 @@ CREATE INDEX news_pages_updated_by_id_fk ON public.news_pages USING btree (updat
 
 
 --
--- TOC entry 3562 (class 1259 OID 214525)
+-- TOC entry 3570 (class 1259 OID 214525)
 -- Name: order_item_pages_component_type_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6727,7 +6799,7 @@ CREATE INDEX order_item_pages_component_type_index ON public.order_item_pages_co
 
 
 --
--- TOC entry 3558 (class 1259 OID 214511)
+-- TOC entry 3566 (class 1259 OID 214511)
 -- Name: order_item_pages_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6735,7 +6807,7 @@ CREATE INDEX order_item_pages_created_by_id_fk ON public.order_item_pages USING 
 
 
 --
--- TOC entry 3565 (class 1259 OID 214526)
+-- TOC entry 3573 (class 1259 OID 214526)
 -- Name: order_item_pages_entity_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6743,7 +6815,7 @@ CREATE INDEX order_item_pages_entity_fk ON public.order_item_pages_components US
 
 
 --
--- TOC entry 3566 (class 1259 OID 214524)
+-- TOC entry 3574 (class 1259 OID 214524)
 -- Name: order_item_pages_field_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6751,7 +6823,7 @@ CREATE INDEX order_item_pages_field_index ON public.order_item_pages_components 
 
 
 --
--- TOC entry 3569 (class 1259 OID 214537)
+-- TOC entry 3577 (class 1259 OID 214537)
 -- Name: order_item_pages_localizations_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6759,7 +6831,7 @@ CREATE INDEX order_item_pages_localizations_links_fk ON public.order_item_pages_
 
 
 --
--- TOC entry 3570 (class 1259 OID 214538)
+-- TOC entry 3578 (class 1259 OID 214538)
 -- Name: order_item_pages_localizations_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6767,7 +6839,7 @@ CREATE INDEX order_item_pages_localizations_links_inv_fk ON public.order_item_pa
 
 
 --
--- TOC entry 3571 (class 1259 OID 214541)
+-- TOC entry 3579 (class 1259 OID 214541)
 -- Name: order_item_pages_localizations_links_order_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6775,7 +6847,7 @@ CREATE INDEX order_item_pages_localizations_links_order_fk ON public.order_item_
 
 
 --
--- TOC entry 3561 (class 1259 OID 214512)
+-- TOC entry 3569 (class 1259 OID 214512)
 -- Name: order_item_pages_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6783,7 +6855,7 @@ CREATE INDEX order_item_pages_updated_by_id_fk ON public.order_item_pages USING 
 
 
 --
--- TOC entry 3444 (class 1259 OID 213814)
+-- TOC entry 3452 (class 1259 OID 213814)
 -- Name: order_pages_component_type_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6791,7 +6863,7 @@ CREATE INDEX order_pages_component_type_index ON public.order_pages_components U
 
 
 --
--- TOC entry 3390 (class 1259 OID 213664)
+-- TOC entry 3398 (class 1259 OID 213664)
 -- Name: order_pages_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6799,7 +6871,7 @@ CREATE INDEX order_pages_created_by_id_fk ON public.order_pages USING btree (cre
 
 
 --
--- TOC entry 3447 (class 1259 OID 213815)
+-- TOC entry 3455 (class 1259 OID 213815)
 -- Name: order_pages_entity_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6807,7 +6879,7 @@ CREATE INDEX order_pages_entity_fk ON public.order_pages_components USING btree 
 
 
 --
--- TOC entry 3448 (class 1259 OID 213813)
+-- TOC entry 3456 (class 1259 OID 213813)
 -- Name: order_pages_field_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6815,7 +6887,7 @@ CREATE INDEX order_pages_field_index ON public.order_pages_components USING btre
 
 
 --
--- TOC entry 3451 (class 1259 OID 213826)
+-- TOC entry 3459 (class 1259 OID 213826)
 -- Name: order_pages_localizations_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6823,7 +6895,7 @@ CREATE INDEX order_pages_localizations_links_fk ON public.order_pages_localizati
 
 
 --
--- TOC entry 3452 (class 1259 OID 213827)
+-- TOC entry 3460 (class 1259 OID 213827)
 -- Name: order_pages_localizations_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6831,7 +6903,7 @@ CREATE INDEX order_pages_localizations_links_inv_fk ON public.order_pages_locali
 
 
 --
--- TOC entry 3453 (class 1259 OID 213830)
+-- TOC entry 3461 (class 1259 OID 213830)
 -- Name: order_pages_localizations_links_order_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6839,7 +6911,7 @@ CREATE INDEX order_pages_localizations_links_order_fk ON public.order_pages_loca
 
 
 --
--- TOC entry 3393 (class 1259 OID 213665)
+-- TOC entry 3401 (class 1259 OID 213665)
 -- Name: order_pages_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6847,7 +6919,7 @@ CREATE INDEX order_pages_updated_by_id_fk ON public.order_pages USING btree (upd
 
 
 --
--- TOC entry 3458 (class 1259 OID 213843)
+-- TOC entry 3466 (class 1259 OID 213843)
 -- Name: orders_pages_component_type_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6855,7 +6927,7 @@ CREATE INDEX orders_pages_component_type_index ON public.orders_pages_components
 
 
 --
--- TOC entry 3394 (class 1259 OID 213674)
+-- TOC entry 3402 (class 1259 OID 213674)
 -- Name: orders_pages_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6863,7 +6935,7 @@ CREATE INDEX orders_pages_created_by_id_fk ON public.orders_pages USING btree (c
 
 
 --
--- TOC entry 3461 (class 1259 OID 213844)
+-- TOC entry 3469 (class 1259 OID 213844)
 -- Name: orders_pages_entity_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6871,7 +6943,7 @@ CREATE INDEX orders_pages_entity_fk ON public.orders_pages_components USING btre
 
 
 --
--- TOC entry 3462 (class 1259 OID 213842)
+-- TOC entry 3470 (class 1259 OID 213842)
 -- Name: orders_pages_field_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6879,7 +6951,7 @@ CREATE INDEX orders_pages_field_index ON public.orders_pages_components USING bt
 
 
 --
--- TOC entry 3465 (class 1259 OID 213855)
+-- TOC entry 3473 (class 1259 OID 213855)
 -- Name: orders_pages_localizations_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6887,7 +6959,7 @@ CREATE INDEX orders_pages_localizations_links_fk ON public.orders_pages_localiza
 
 
 --
--- TOC entry 3466 (class 1259 OID 213856)
+-- TOC entry 3474 (class 1259 OID 213856)
 -- Name: orders_pages_localizations_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6895,7 +6967,7 @@ CREATE INDEX orders_pages_localizations_links_inv_fk ON public.orders_pages_loca
 
 
 --
--- TOC entry 3467 (class 1259 OID 213859)
+-- TOC entry 3475 (class 1259 OID 213859)
 -- Name: orders_pages_localizations_links_order_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6903,7 +6975,7 @@ CREATE INDEX orders_pages_localizations_links_order_fk ON public.orders_pages_lo
 
 
 --
--- TOC entry 3397 (class 1259 OID 213675)
+-- TOC entry 3405 (class 1259 OID 213675)
 -- Name: orders_pages_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6911,7 +6983,7 @@ CREATE INDEX orders_pages_updated_by_id_fk ON public.orders_pages USING btree (u
 
 
 --
--- TOC entry 3472 (class 1259 OID 213872)
+-- TOC entry 3480 (class 1259 OID 213872)
 -- Name: outlet_pages_component_type_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6919,7 +6991,7 @@ CREATE INDEX outlet_pages_component_type_index ON public.outlet_pages_components
 
 
 --
--- TOC entry 3398 (class 1259 OID 213684)
+-- TOC entry 3406 (class 1259 OID 213684)
 -- Name: outlet_pages_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6927,7 +6999,7 @@ CREATE INDEX outlet_pages_created_by_id_fk ON public.outlet_pages USING btree (c
 
 
 --
--- TOC entry 3475 (class 1259 OID 213873)
+-- TOC entry 3483 (class 1259 OID 213873)
 -- Name: outlet_pages_entity_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6935,7 +7007,7 @@ CREATE INDEX outlet_pages_entity_fk ON public.outlet_pages_components USING btre
 
 
 --
--- TOC entry 3476 (class 1259 OID 213871)
+-- TOC entry 3484 (class 1259 OID 213871)
 -- Name: outlet_pages_field_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6943,7 +7015,7 @@ CREATE INDEX outlet_pages_field_index ON public.outlet_pages_components USING bt
 
 
 --
--- TOC entry 3479 (class 1259 OID 213884)
+-- TOC entry 3487 (class 1259 OID 213884)
 -- Name: outlet_pages_localizations_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6951,7 +7023,7 @@ CREATE INDEX outlet_pages_localizations_links_fk ON public.outlet_pages_localiza
 
 
 --
--- TOC entry 3480 (class 1259 OID 213885)
+-- TOC entry 3488 (class 1259 OID 213885)
 -- Name: outlet_pages_localizations_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6959,7 +7031,7 @@ CREATE INDEX outlet_pages_localizations_links_inv_fk ON public.outlet_pages_loca
 
 
 --
--- TOC entry 3481 (class 1259 OID 213888)
+-- TOC entry 3489 (class 1259 OID 213888)
 -- Name: outlet_pages_localizations_links_order_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6967,7 +7039,7 @@ CREATE INDEX outlet_pages_localizations_links_order_fk ON public.outlet_pages_lo
 
 
 --
--- TOC entry 3401 (class 1259 OID 213685)
+-- TOC entry 3409 (class 1259 OID 213685)
 -- Name: outlet_pages_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6975,7 +7047,7 @@ CREATE INDEX outlet_pages_updated_by_id_fk ON public.outlet_pages USING btree (u
 
 
 --
--- TOC entry 3526 (class 1259 OID 214294)
+-- TOC entry 3534 (class 1259 OID 214294)
 -- Name: privacy_policy_pages_component_type_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6983,7 +7055,7 @@ CREATE INDEX privacy_policy_pages_component_type_index ON public.privacy_policy_
 
 
 --
--- TOC entry 3522 (class 1259 OID 214280)
+-- TOC entry 3530 (class 1259 OID 214280)
 -- Name: privacy_policy_pages_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6991,7 +7063,7 @@ CREATE INDEX privacy_policy_pages_created_by_id_fk ON public.privacy_policy_page
 
 
 --
--- TOC entry 3529 (class 1259 OID 214295)
+-- TOC entry 3537 (class 1259 OID 214295)
 -- Name: privacy_policy_pages_entity_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -6999,7 +7071,7 @@ CREATE INDEX privacy_policy_pages_entity_fk ON public.privacy_policy_pages_compo
 
 
 --
--- TOC entry 3530 (class 1259 OID 214293)
+-- TOC entry 3538 (class 1259 OID 214293)
 -- Name: privacy_policy_pages_field_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7007,7 +7079,7 @@ CREATE INDEX privacy_policy_pages_field_index ON public.privacy_policy_pages_com
 
 
 --
--- TOC entry 3533 (class 1259 OID 214306)
+-- TOC entry 3541 (class 1259 OID 214306)
 -- Name: privacy_policy_pages_localizations_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7015,7 +7087,7 @@ CREATE INDEX privacy_policy_pages_localizations_links_fk ON public.privacy_polic
 
 
 --
--- TOC entry 3534 (class 1259 OID 214307)
+-- TOC entry 3542 (class 1259 OID 214307)
 -- Name: privacy_policy_pages_localizations_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7023,7 +7095,7 @@ CREATE INDEX privacy_policy_pages_localizations_links_inv_fk ON public.privacy_p
 
 
 --
--- TOC entry 3535 (class 1259 OID 214310)
+-- TOC entry 3543 (class 1259 OID 214310)
 -- Name: privacy_policy_pages_localizations_links_order_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7031,7 +7103,7 @@ CREATE INDEX privacy_policy_pages_localizations_links_order_fk ON public.privacy
 
 
 --
--- TOC entry 3525 (class 1259 OID 214281)
+-- TOC entry 3533 (class 1259 OID 214281)
 -- Name: privacy_policy_pages_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7039,7 +7111,7 @@ CREATE INDEX privacy_policy_pages_updated_by_id_fk ON public.privacy_policy_page
 
 
 --
--- TOC entry 3508 (class 1259 OID 214204)
+-- TOC entry 3516 (class 1259 OID 214204)
 -- Name: regulations_pages_component_type_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7047,7 +7119,7 @@ CREATE INDEX regulations_pages_component_type_index ON public.regulations_pages_
 
 
 --
--- TOC entry 3504 (class 1259 OID 214190)
+-- TOC entry 3512 (class 1259 OID 214190)
 -- Name: regulations_pages_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7055,7 +7127,7 @@ CREATE INDEX regulations_pages_created_by_id_fk ON public.regulations_pages USIN
 
 
 --
--- TOC entry 3511 (class 1259 OID 214205)
+-- TOC entry 3519 (class 1259 OID 214205)
 -- Name: regulations_pages_entity_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7063,7 +7135,7 @@ CREATE INDEX regulations_pages_entity_fk ON public.regulations_pages_components 
 
 
 --
--- TOC entry 3512 (class 1259 OID 214203)
+-- TOC entry 3520 (class 1259 OID 214203)
 -- Name: regulations_pages_field_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7071,7 +7143,7 @@ CREATE INDEX regulations_pages_field_index ON public.regulations_pages_component
 
 
 --
--- TOC entry 3515 (class 1259 OID 214216)
+-- TOC entry 3523 (class 1259 OID 214216)
 -- Name: regulations_pages_localizations_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7079,7 +7151,7 @@ CREATE INDEX regulations_pages_localizations_links_fk ON public.regulations_page
 
 
 --
--- TOC entry 3516 (class 1259 OID 214217)
+-- TOC entry 3524 (class 1259 OID 214217)
 -- Name: regulations_pages_localizations_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7087,7 +7159,7 @@ CREATE INDEX regulations_pages_localizations_links_inv_fk ON public.regulations_
 
 
 --
--- TOC entry 3517 (class 1259 OID 214220)
+-- TOC entry 3525 (class 1259 OID 214220)
 -- Name: regulations_pages_localizations_links_order_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7095,7 +7167,7 @@ CREATE INDEX regulations_pages_localizations_links_order_fk ON public.regulation
 
 
 --
--- TOC entry 3507 (class 1259 OID 214191)
+-- TOC entry 3515 (class 1259 OID 214191)
 -- Name: regulations_pages_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7103,7 +7175,7 @@ CREATE INDEX regulations_pages_updated_by_id_fk ON public.regulations_pages USIN
 
 
 --
--- TOC entry 3580 (class 1259 OID 214617)
+-- TOC entry 3588 (class 1259 OID 214617)
 -- Name: search_products_pages_component_type_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7111,7 +7183,7 @@ CREATE INDEX search_products_pages_component_type_index ON public.search_product
 
 
 --
--- TOC entry 3576 (class 1259 OID 214603)
+-- TOC entry 3584 (class 1259 OID 214603)
 -- Name: search_products_pages_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7119,7 +7191,7 @@ CREATE INDEX search_products_pages_created_by_id_fk ON public.search_products_pa
 
 
 --
--- TOC entry 3583 (class 1259 OID 214618)
+-- TOC entry 3591 (class 1259 OID 214618)
 -- Name: search_products_pages_entity_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7127,7 +7199,7 @@ CREATE INDEX search_products_pages_entity_fk ON public.search_products_pages_com
 
 
 --
--- TOC entry 3584 (class 1259 OID 214616)
+-- TOC entry 3592 (class 1259 OID 214616)
 -- Name: search_products_pages_field_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7135,7 +7207,7 @@ CREATE INDEX search_products_pages_field_index ON public.search_products_pages_c
 
 
 --
--- TOC entry 3587 (class 1259 OID 214629)
+-- TOC entry 3595 (class 1259 OID 214629)
 -- Name: search_products_pages_localizations_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7143,7 +7215,7 @@ CREATE INDEX search_products_pages_localizations_links_fk ON public.search_produ
 
 
 --
--- TOC entry 3588 (class 1259 OID 214630)
+-- TOC entry 3596 (class 1259 OID 214630)
 -- Name: search_products_pages_localizations_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7151,7 +7223,7 @@ CREATE INDEX search_products_pages_localizations_links_inv_fk ON public.search_p
 
 
 --
--- TOC entry 3589 (class 1259 OID 214633)
+-- TOC entry 3597 (class 1259 OID 214633)
 -- Name: search_products_pages_localizations_links_order_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7159,7 +7231,7 @@ CREATE INDEX search_products_pages_localizations_links_order_fk ON public.search
 
 
 --
--- TOC entry 3579 (class 1259 OID 214604)
+-- TOC entry 3587 (class 1259 OID 214604)
 -- Name: search_products_pages_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7167,7 +7239,7 @@ CREATE INDEX search_products_pages_updated_by_id_fk ON public.search_products_pa
 
 
 --
--- TOC entry 3314 (class 1259 OID 16761)
+-- TOC entry 3322 (class 1259 OID 16761)
 -- Name: strapi_api_token_permissions_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7175,7 +7247,7 @@ CREATE INDEX strapi_api_token_permissions_created_by_id_fk ON public.strapi_api_
 
 
 --
--- TOC entry 3318 (class 1259 OID 16762)
+-- TOC entry 3326 (class 1259 OID 16762)
 -- Name: strapi_api_token_permissions_token_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7183,7 +7255,7 @@ CREATE INDEX strapi_api_token_permissions_token_links_fk ON public.strapi_api_to
 
 
 --
--- TOC entry 3319 (class 1259 OID 16763)
+-- TOC entry 3327 (class 1259 OID 16763)
 -- Name: strapi_api_token_permissions_token_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7191,7 +7263,7 @@ CREATE INDEX strapi_api_token_permissions_token_links_inv_fk ON public.strapi_ap
 
 
 --
--- TOC entry 3320 (class 1259 OID 16764)
+-- TOC entry 3328 (class 1259 OID 16764)
 -- Name: strapi_api_token_permissions_token_links_order_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7199,7 +7271,7 @@ CREATE INDEX strapi_api_token_permissions_token_links_order_inv_fk ON public.str
 
 
 --
--- TOC entry 3317 (class 1259 OID 16765)
+-- TOC entry 3325 (class 1259 OID 16765)
 -- Name: strapi_api_token_permissions_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7207,7 +7279,7 @@ CREATE INDEX strapi_api_token_permissions_updated_by_id_fk ON public.strapi_api_
 
 
 --
--- TOC entry 3325 (class 1259 OID 16766)
+-- TOC entry 3333 (class 1259 OID 16766)
 -- Name: strapi_api_tokens_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7215,7 +7287,7 @@ CREATE INDEX strapi_api_tokens_created_by_id_fk ON public.strapi_api_tokens USIN
 
 
 --
--- TOC entry 3328 (class 1259 OID 16767)
+-- TOC entry 3336 (class 1259 OID 16767)
 -- Name: strapi_api_tokens_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7223,7 +7295,7 @@ CREATE INDEX strapi_api_tokens_updated_by_id_fk ON public.strapi_api_tokens USIN
 
 
 --
--- TOC entry 3337 (class 1259 OID 16768)
+-- TOC entry 3345 (class 1259 OID 16768)
 -- Name: up_permissions_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7231,7 +7303,7 @@ CREATE INDEX up_permissions_created_by_id_fk ON public.up_permissions USING btre
 
 
 --
--- TOC entry 3341 (class 1259 OID 16769)
+-- TOC entry 3349 (class 1259 OID 16769)
 -- Name: up_permissions_role_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7239,7 +7311,7 @@ CREATE INDEX up_permissions_role_links_fk ON public.up_permissions_role_links US
 
 
 --
--- TOC entry 3342 (class 1259 OID 16770)
+-- TOC entry 3350 (class 1259 OID 16770)
 -- Name: up_permissions_role_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7247,7 +7319,7 @@ CREATE INDEX up_permissions_role_links_inv_fk ON public.up_permissions_role_link
 
 
 --
--- TOC entry 3343 (class 1259 OID 16771)
+-- TOC entry 3351 (class 1259 OID 16771)
 -- Name: up_permissions_role_links_order_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7255,7 +7327,7 @@ CREATE INDEX up_permissions_role_links_order_inv_fk ON public.up_permissions_rol
 
 
 --
--- TOC entry 3340 (class 1259 OID 16772)
+-- TOC entry 3348 (class 1259 OID 16772)
 -- Name: up_permissions_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7263,7 +7335,7 @@ CREATE INDEX up_permissions_updated_by_id_fk ON public.up_permissions USING btre
 
 
 --
--- TOC entry 3348 (class 1259 OID 16773)
+-- TOC entry 3356 (class 1259 OID 16773)
 -- Name: up_roles_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7271,7 +7343,7 @@ CREATE INDEX up_roles_created_by_id_fk ON public.up_roles USING btree (created_b
 
 
 --
--- TOC entry 3351 (class 1259 OID 16774)
+-- TOC entry 3359 (class 1259 OID 16774)
 -- Name: up_roles_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7279,7 +7351,7 @@ CREATE INDEX up_roles_updated_by_id_fk ON public.up_roles USING btree (updated_b
 
 
 --
--- TOC entry 3352 (class 1259 OID 16775)
+-- TOC entry 3360 (class 1259 OID 16775)
 -- Name: up_users_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7287,7 +7359,7 @@ CREATE INDEX up_users_created_by_id_fk ON public.up_users USING btree (created_b
 
 
 --
--- TOC entry 3356 (class 1259 OID 16776)
+-- TOC entry 3364 (class 1259 OID 16776)
 -- Name: up_users_role_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7295,7 +7367,7 @@ CREATE INDEX up_users_role_links_fk ON public.up_users_role_links USING btree (u
 
 
 --
--- TOC entry 3357 (class 1259 OID 16777)
+-- TOC entry 3365 (class 1259 OID 16777)
 -- Name: up_users_role_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7303,7 +7375,7 @@ CREATE INDEX up_users_role_links_inv_fk ON public.up_users_role_links USING btre
 
 
 --
--- TOC entry 3358 (class 1259 OID 16778)
+-- TOC entry 3366 (class 1259 OID 16778)
 -- Name: up_users_role_links_order_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7311,7 +7383,7 @@ CREATE INDEX up_users_role_links_order_inv_fk ON public.up_users_role_links USIN
 
 
 --
--- TOC entry 3355 (class 1259 OID 16779)
+-- TOC entry 3363 (class 1259 OID 16779)
 -- Name: up_users_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7319,7 +7391,7 @@ CREATE INDEX up_users_updated_by_id_fk ON public.up_users USING btree (updated_b
 
 
 --
--- TOC entry 3281 (class 1259 OID 16780)
+-- TOC entry 3289 (class 1259 OID 16780)
 -- Name: upload_files_folder_path_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7327,7 +7399,7 @@ CREATE INDEX upload_files_folder_path_index ON public.files USING btree (folder_
 
 
 --
--- TOC entry 3363 (class 1259 OID 16781)
+-- TOC entry 3371 (class 1259 OID 16781)
 -- Name: upload_folders_created_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7335,7 +7407,7 @@ CREATE INDEX upload_folders_created_by_id_fk ON public.upload_folders USING btre
 
 
 --
--- TOC entry 3371 (class 1259 OID 16782)
+-- TOC entry 3379 (class 1259 OID 16782)
 -- Name: upload_folders_parent_links_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7343,7 +7415,7 @@ CREATE INDEX upload_folders_parent_links_fk ON public.upload_folders_parent_link
 
 
 --
--- TOC entry 3372 (class 1259 OID 16783)
+-- TOC entry 3380 (class 1259 OID 16783)
 -- Name: upload_folders_parent_links_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7351,7 +7423,7 @@ CREATE INDEX upload_folders_parent_links_inv_fk ON public.upload_folders_parent_
 
 
 --
--- TOC entry 3373 (class 1259 OID 16784)
+-- TOC entry 3381 (class 1259 OID 16784)
 -- Name: upload_folders_parent_links_order_inv_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7359,7 +7431,7 @@ CREATE INDEX upload_folders_parent_links_order_inv_fk ON public.upload_folders_p
 
 
 --
--- TOC entry 3370 (class 1259 OID 16785)
+-- TOC entry 3378 (class 1259 OID 16785)
 -- Name: upload_folders_updated_by_id_fk; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -7367,7 +7439,7 @@ CREATE INDEX upload_folders_updated_by_id_fk ON public.upload_folders USING btre
 
 
 --
--- TOC entry 3594 (class 2606 OID 16786)
+-- TOC entry 3604 (class 2606 OID 16786)
 -- Name: admin_permissions admin_permissions_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7376,7 +7448,7 @@ ALTER TABLE ONLY public.admin_permissions
 
 
 --
--- TOC entry 3596 (class 2606 OID 16791)
+-- TOC entry 3606 (class 2606 OID 16791)
 -- Name: admin_permissions_role_links admin_permissions_role_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7385,7 +7457,7 @@ ALTER TABLE ONLY public.admin_permissions_role_links
 
 
 --
--- TOC entry 3597 (class 2606 OID 16796)
+-- TOC entry 3607 (class 2606 OID 16796)
 -- Name: admin_permissions_role_links admin_permissions_role_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7394,7 +7466,7 @@ ALTER TABLE ONLY public.admin_permissions_role_links
 
 
 --
--- TOC entry 3595 (class 2606 OID 16801)
+-- TOC entry 3605 (class 2606 OID 16801)
 -- Name: admin_permissions admin_permissions_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7403,7 +7475,7 @@ ALTER TABLE ONLY public.admin_permissions
 
 
 --
--- TOC entry 3598 (class 2606 OID 16806)
+-- TOC entry 3608 (class 2606 OID 16806)
 -- Name: admin_roles admin_roles_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7412,7 +7484,7 @@ ALTER TABLE ONLY public.admin_roles
 
 
 --
--- TOC entry 3599 (class 2606 OID 16811)
+-- TOC entry 3609 (class 2606 OID 16811)
 -- Name: admin_roles admin_roles_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7421,7 +7493,7 @@ ALTER TABLE ONLY public.admin_roles
 
 
 --
--- TOC entry 3600 (class 2606 OID 16816)
+-- TOC entry 3610 (class 2606 OID 16816)
 -- Name: admin_users admin_users_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7430,7 +7502,7 @@ ALTER TABLE ONLY public.admin_users
 
 
 --
--- TOC entry 3602 (class 2606 OID 16821)
+-- TOC entry 3612 (class 2606 OID 16821)
 -- Name: admin_users_roles_links admin_users_roles_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7439,7 +7511,7 @@ ALTER TABLE ONLY public.admin_users_roles_links
 
 
 --
--- TOC entry 3603 (class 2606 OID 16826)
+-- TOC entry 3613 (class 2606 OID 16826)
 -- Name: admin_users_roles_links admin_users_roles_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7448,7 +7520,7 @@ ALTER TABLE ONLY public.admin_users_roles_links
 
 
 --
--- TOC entry 3601 (class 2606 OID 16831)
+-- TOC entry 3611 (class 2606 OID 16831)
 -- Name: admin_users admin_users_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7457,7 +7529,7 @@ ALTER TABLE ONLY public.admin_users
 
 
 --
--- TOC entry 3668 (class 2606 OID 214132)
+-- TOC entry 3678 (class 2606 OID 214132)
 -- Name: available_products_pages available_products_pages_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7466,7 +7538,7 @@ ALTER TABLE ONLY public.available_products_pages
 
 
 --
--- TOC entry 3670 (class 2606 OID 214142)
+-- TOC entry 3680 (class 2606 OID 214142)
 -- Name: available_products_pages_components available_products_pages_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7475,7 +7547,7 @@ ALTER TABLE ONLY public.available_products_pages_components
 
 
 --
--- TOC entry 3671 (class 2606 OID 214147)
+-- TOC entry 3681 (class 2606 OID 214147)
 -- Name: available_products_pages_localizations_links available_products_pages_localizations_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7484,7 +7556,7 @@ ALTER TABLE ONLY public.available_products_pages_localizations_links
 
 
 --
--- TOC entry 3672 (class 2606 OID 214152)
+-- TOC entry 3682 (class 2606 OID 214152)
 -- Name: available_products_pages_localizations_links available_products_pages_localizations_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7493,7 +7565,7 @@ ALTER TABLE ONLY public.available_products_pages_localizations_links
 
 
 --
--- TOC entry 3669 (class 2606 OID 214137)
+-- TOC entry 3679 (class 2606 OID 214137)
 -- Name: available_products_pages available_products_pages_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7502,7 +7574,7 @@ ALTER TABLE ONLY public.available_products_pages
 
 
 --
--- TOC entry 3683 (class 2606 OID 214451)
+-- TOC entry 3693 (class 2606 OID 214451)
 -- Name: basket_pages basket_pages_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7511,7 +7583,7 @@ ALTER TABLE ONLY public.basket_pages
 
 
 --
--- TOC entry 3685 (class 2606 OID 214461)
+-- TOC entry 3695 (class 2606 OID 214461)
 -- Name: basket_pages_components basket_pages_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7520,7 +7592,7 @@ ALTER TABLE ONLY public.basket_pages_components
 
 
 --
--- TOC entry 3686 (class 2606 OID 214466)
+-- TOC entry 3696 (class 2606 OID 214466)
 -- Name: basket_pages_localizations_links basket_pages_localizations_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7529,7 +7601,7 @@ ALTER TABLE ONLY public.basket_pages_localizations_links
 
 
 --
--- TOC entry 3687 (class 2606 OID 214471)
+-- TOC entry 3697 (class 2606 OID 214471)
 -- Name: basket_pages_localizations_links basket_pages_localizations_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7538,7 +7610,7 @@ ALTER TABLE ONLY public.basket_pages_localizations_links
 
 
 --
--- TOC entry 3684 (class 2606 OID 214456)
+-- TOC entry 3694 (class 2606 OID 214456)
 -- Name: basket_pages basket_pages_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7547,7 +7619,7 @@ ALTER TABLE ONLY public.basket_pages
 
 
 --
--- TOC entry 3604 (class 2606 OID 16836)
+-- TOC entry 3614 (class 2606 OID 16836)
 -- Name: components_blocks_hero_slider_items_components components_blocks_hero_slider_items_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7556,7 +7628,7 @@ ALTER TABLE ONLY public.components_blocks_hero_slider_items_components
 
 
 --
--- TOC entry 3605 (class 2606 OID 16841)
+-- TOC entry 3615 (class 2606 OID 16841)
 -- Name: components_blocks_hero_sliders_components components_blocks_hero_sliders_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7565,7 +7637,7 @@ ALTER TABLE ONLY public.components_blocks_hero_sliders_components
 
 
 --
--- TOC entry 3638 (class 2606 OID 213889)
+-- TOC entry 3648 (class 2606 OID 213889)
 -- Name: dashboard_pages dashboard_pages_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7574,7 +7646,7 @@ ALTER TABLE ONLY public.dashboard_pages
 
 
 --
--- TOC entry 3650 (class 2606 OID 213959)
+-- TOC entry 3660 (class 2606 OID 213959)
 -- Name: dashboard_pages_components dashboard_pages_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7583,7 +7655,7 @@ ALTER TABLE ONLY public.dashboard_pages_components
 
 
 --
--- TOC entry 3651 (class 2606 OID 213964)
+-- TOC entry 3661 (class 2606 OID 213964)
 -- Name: dashboard_pages_localizations_links dashboard_pages_localizations_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7592,7 +7664,7 @@ ALTER TABLE ONLY public.dashboard_pages_localizations_links
 
 
 --
--- TOC entry 3652 (class 2606 OID 213969)
+-- TOC entry 3662 (class 2606 OID 213969)
 -- Name: dashboard_pages_localizations_links dashboard_pages_localizations_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7601,7 +7673,7 @@ ALTER TABLE ONLY public.dashboard_pages_localizations_links
 
 
 --
--- TOC entry 3639 (class 2606 OID 213894)
+-- TOC entry 3649 (class 2606 OID 213894)
 -- Name: dashboard_pages dashboard_pages_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7610,7 +7682,7 @@ ALTER TABLE ONLY public.dashboard_pages
 
 
 --
--- TOC entry 3640 (class 2606 OID 213899)
+-- TOC entry 3650 (class 2606 OID 213899)
 -- Name: download_center_pages download_center_pages_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7619,7 +7691,7 @@ ALTER TABLE ONLY public.download_center_pages
 
 
 --
--- TOC entry 3653 (class 2606 OID 213974)
+-- TOC entry 3663 (class 2606 OID 213974)
 -- Name: download_center_pages_components download_center_pages_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7628,7 +7700,7 @@ ALTER TABLE ONLY public.download_center_pages_components
 
 
 --
--- TOC entry 3654 (class 2606 OID 213979)
+-- TOC entry 3664 (class 2606 OID 213979)
 -- Name: download_center_pages_localizations_links download_center_pages_localizations_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7637,7 +7709,7 @@ ALTER TABLE ONLY public.download_center_pages_localizations_links
 
 
 --
--- TOC entry 3655 (class 2606 OID 213984)
+-- TOC entry 3665 (class 2606 OID 213984)
 -- Name: download_center_pages_localizations_links download_center_pages_localizations_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7646,7 +7718,7 @@ ALTER TABLE ONLY public.download_center_pages_localizations_links
 
 
 --
--- TOC entry 3641 (class 2606 OID 213904)
+-- TOC entry 3651 (class 2606 OID 213904)
 -- Name: download_center_pages download_center_pages_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7655,7 +7727,7 @@ ALTER TABLE ONLY public.download_center_pages
 
 
 --
--- TOC entry 3606 (class 2606 OID 16846)
+-- TOC entry 3616 (class 2606 OID 16846)
 -- Name: files files_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7664,7 +7736,7 @@ ALTER TABLE ONLY public.files
 
 
 --
--- TOC entry 3608 (class 2606 OID 16851)
+-- TOC entry 3618 (class 2606 OID 16851)
 -- Name: files_folder_links files_folder_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7673,7 +7745,7 @@ ALTER TABLE ONLY public.files_folder_links
 
 
 --
--- TOC entry 3609 (class 2606 OID 16856)
+-- TOC entry 3619 (class 2606 OID 16856)
 -- Name: files_folder_links files_folder_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7682,7 +7754,7 @@ ALTER TABLE ONLY public.files_folder_links
 
 
 --
--- TOC entry 3610 (class 2606 OID 16861)
+-- TOC entry 3620 (class 2606 OID 16861)
 -- Name: files_related_morphs files_related_morphs_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7691,7 +7763,7 @@ ALTER TABLE ONLY public.files_related_morphs
 
 
 --
--- TOC entry 3607 (class 2606 OID 16866)
+-- TOC entry 3617 (class 2606 OID 16866)
 -- Name: files files_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7700,7 +7772,7 @@ ALTER TABLE ONLY public.files
 
 
 --
--- TOC entry 3611 (class 2606 OID 16871)
+-- TOC entry 3621 (class 2606 OID 16871)
 -- Name: home_pages home_pages_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7709,7 +7781,7 @@ ALTER TABLE ONLY public.home_pages
 
 
 --
--- TOC entry 3613 (class 2606 OID 16876)
+-- TOC entry 3623 (class 2606 OID 16876)
 -- Name: home_pages_components home_pages_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7718,7 +7790,7 @@ ALTER TABLE ONLY public.home_pages_components
 
 
 --
--- TOC entry 3614 (class 2606 OID 16881)
+-- TOC entry 3624 (class 2606 OID 16881)
 -- Name: home_pages_localizations_links home_pages_localizations_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7727,7 +7799,7 @@ ALTER TABLE ONLY public.home_pages_localizations_links
 
 
 --
--- TOC entry 3615 (class 2606 OID 16886)
+-- TOC entry 3625 (class 2606 OID 16886)
 -- Name: home_pages_localizations_links home_pages_localizations_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7736,7 +7808,7 @@ ALTER TABLE ONLY public.home_pages_localizations_links
 
 
 --
--- TOC entry 3612 (class 2606 OID 16891)
+-- TOC entry 3622 (class 2606 OID 16891)
 -- Name: home_pages home_pages_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7745,7 +7817,7 @@ ALTER TABLE ONLY public.home_pages
 
 
 --
--- TOC entry 3616 (class 2606 OID 16896)
+-- TOC entry 3626 (class 2606 OID 16896)
 -- Name: i18n_locale i18n_locale_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7754,7 +7826,7 @@ ALTER TABLE ONLY public.i18n_locale
 
 
 --
--- TOC entry 3617 (class 2606 OID 16901)
+-- TOC entry 3627 (class 2606 OID 16901)
 -- Name: i18n_locale i18n_locale_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7763,7 +7835,7 @@ ALTER TABLE ONLY public.i18n_locale
 
 
 --
--- TOC entry 3642 (class 2606 OID 213919)
+-- TOC entry 3652 (class 2606 OID 213919)
 -- Name: news_pages news_pages_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7772,7 +7844,7 @@ ALTER TABLE ONLY public.news_pages
 
 
 --
--- TOC entry 3656 (class 2606 OID 214004)
+-- TOC entry 3666 (class 2606 OID 214004)
 -- Name: news_pages_components news_pages_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7781,7 +7853,7 @@ ALTER TABLE ONLY public.news_pages_components
 
 
 --
--- TOC entry 3657 (class 2606 OID 214009)
+-- TOC entry 3667 (class 2606 OID 214009)
 -- Name: news_pages_localizations_links news_pages_localizations_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7790,7 +7862,7 @@ ALTER TABLE ONLY public.news_pages_localizations_links
 
 
 --
--- TOC entry 3658 (class 2606 OID 214014)
+-- TOC entry 3668 (class 2606 OID 214014)
 -- Name: news_pages_localizations_links news_pages_localizations_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7799,7 +7871,7 @@ ALTER TABLE ONLY public.news_pages_localizations_links
 
 
 --
--- TOC entry 3643 (class 2606 OID 213924)
+-- TOC entry 3653 (class 2606 OID 213924)
 -- Name: news_pages news_pages_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7808,7 +7880,7 @@ ALTER TABLE ONLY public.news_pages
 
 
 --
--- TOC entry 3688 (class 2606 OID 214542)
+-- TOC entry 3698 (class 2606 OID 214542)
 -- Name: order_item_pages order_item_pages_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7817,7 +7889,7 @@ ALTER TABLE ONLY public.order_item_pages
 
 
 --
--- TOC entry 3690 (class 2606 OID 214552)
+-- TOC entry 3700 (class 2606 OID 214552)
 -- Name: order_item_pages_components order_item_pages_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7826,7 +7898,7 @@ ALTER TABLE ONLY public.order_item_pages_components
 
 
 --
--- TOC entry 3691 (class 2606 OID 214557)
+-- TOC entry 3701 (class 2606 OID 214557)
 -- Name: order_item_pages_localizations_links order_item_pages_localizations_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7835,7 +7907,7 @@ ALTER TABLE ONLY public.order_item_pages_localizations_links
 
 
 --
--- TOC entry 3692 (class 2606 OID 214562)
+-- TOC entry 3702 (class 2606 OID 214562)
 -- Name: order_item_pages_localizations_links order_item_pages_localizations_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7844,7 +7916,7 @@ ALTER TABLE ONLY public.order_item_pages_localizations_links
 
 
 --
--- TOC entry 3689 (class 2606 OID 214547)
+-- TOC entry 3699 (class 2606 OID 214547)
 -- Name: order_item_pages order_item_pages_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7853,7 +7925,7 @@ ALTER TABLE ONLY public.order_item_pages
 
 
 --
--- TOC entry 3644 (class 2606 OID 213929)
+-- TOC entry 3654 (class 2606 OID 213929)
 -- Name: order_pages order_pages_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7862,7 +7934,7 @@ ALTER TABLE ONLY public.order_pages
 
 
 --
--- TOC entry 3659 (class 2606 OID 214019)
+-- TOC entry 3669 (class 2606 OID 214019)
 -- Name: order_pages_components order_pages_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7871,7 +7943,7 @@ ALTER TABLE ONLY public.order_pages_components
 
 
 --
--- TOC entry 3660 (class 2606 OID 214024)
+-- TOC entry 3670 (class 2606 OID 214024)
 -- Name: order_pages_localizations_links order_pages_localizations_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7880,7 +7952,7 @@ ALTER TABLE ONLY public.order_pages_localizations_links
 
 
 --
--- TOC entry 3661 (class 2606 OID 214029)
+-- TOC entry 3671 (class 2606 OID 214029)
 -- Name: order_pages_localizations_links order_pages_localizations_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7889,7 +7961,7 @@ ALTER TABLE ONLY public.order_pages_localizations_links
 
 
 --
--- TOC entry 3645 (class 2606 OID 213934)
+-- TOC entry 3655 (class 2606 OID 213934)
 -- Name: order_pages order_pages_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7898,7 +7970,7 @@ ALTER TABLE ONLY public.order_pages
 
 
 --
--- TOC entry 3646 (class 2606 OID 213939)
+-- TOC entry 3656 (class 2606 OID 213939)
 -- Name: orders_pages orders_pages_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7907,7 +7979,7 @@ ALTER TABLE ONLY public.orders_pages
 
 
 --
--- TOC entry 3662 (class 2606 OID 214034)
+-- TOC entry 3672 (class 2606 OID 214034)
 -- Name: orders_pages_components orders_pages_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7916,7 +7988,7 @@ ALTER TABLE ONLY public.orders_pages_components
 
 
 --
--- TOC entry 3663 (class 2606 OID 214039)
+-- TOC entry 3673 (class 2606 OID 214039)
 -- Name: orders_pages_localizations_links orders_pages_localizations_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7925,7 +7997,7 @@ ALTER TABLE ONLY public.orders_pages_localizations_links
 
 
 --
--- TOC entry 3664 (class 2606 OID 214044)
+-- TOC entry 3674 (class 2606 OID 214044)
 -- Name: orders_pages_localizations_links orders_pages_localizations_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7934,7 +8006,7 @@ ALTER TABLE ONLY public.orders_pages_localizations_links
 
 
 --
--- TOC entry 3647 (class 2606 OID 213944)
+-- TOC entry 3657 (class 2606 OID 213944)
 -- Name: orders_pages orders_pages_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7943,7 +8015,7 @@ ALTER TABLE ONLY public.orders_pages
 
 
 --
--- TOC entry 3648 (class 2606 OID 213949)
+-- TOC entry 3658 (class 2606 OID 213949)
 -- Name: outlet_pages outlet_pages_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7952,7 +8024,7 @@ ALTER TABLE ONLY public.outlet_pages
 
 
 --
--- TOC entry 3665 (class 2606 OID 214049)
+-- TOC entry 3675 (class 2606 OID 214049)
 -- Name: outlet_pages_components outlet_pages_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7961,7 +8033,7 @@ ALTER TABLE ONLY public.outlet_pages_components
 
 
 --
--- TOC entry 3666 (class 2606 OID 214054)
+-- TOC entry 3676 (class 2606 OID 214054)
 -- Name: outlet_pages_localizations_links outlet_pages_localizations_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7970,7 +8042,7 @@ ALTER TABLE ONLY public.outlet_pages_localizations_links
 
 
 --
--- TOC entry 3667 (class 2606 OID 214059)
+-- TOC entry 3677 (class 2606 OID 214059)
 -- Name: outlet_pages_localizations_links outlet_pages_localizations_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7979,7 +8051,7 @@ ALTER TABLE ONLY public.outlet_pages_localizations_links
 
 
 --
--- TOC entry 3649 (class 2606 OID 213954)
+-- TOC entry 3659 (class 2606 OID 213954)
 -- Name: outlet_pages outlet_pages_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7988,7 +8060,7 @@ ALTER TABLE ONLY public.outlet_pages
 
 
 --
--- TOC entry 3678 (class 2606 OID 214311)
+-- TOC entry 3688 (class 2606 OID 214311)
 -- Name: privacy_policy_pages privacy_policy_pages_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -7997,7 +8069,7 @@ ALTER TABLE ONLY public.privacy_policy_pages
 
 
 --
--- TOC entry 3680 (class 2606 OID 214321)
+-- TOC entry 3690 (class 2606 OID 214321)
 -- Name: privacy_policy_pages_components privacy_policy_pages_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8006,7 +8078,7 @@ ALTER TABLE ONLY public.privacy_policy_pages_components
 
 
 --
--- TOC entry 3681 (class 2606 OID 214326)
+-- TOC entry 3691 (class 2606 OID 214326)
 -- Name: privacy_policy_pages_localizations_links privacy_policy_pages_localizations_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8015,7 +8087,7 @@ ALTER TABLE ONLY public.privacy_policy_pages_localizations_links
 
 
 --
--- TOC entry 3682 (class 2606 OID 214331)
+-- TOC entry 3692 (class 2606 OID 214331)
 -- Name: privacy_policy_pages_localizations_links privacy_policy_pages_localizations_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8024,7 +8096,7 @@ ALTER TABLE ONLY public.privacy_policy_pages_localizations_links
 
 
 --
--- TOC entry 3679 (class 2606 OID 214316)
+-- TOC entry 3689 (class 2606 OID 214316)
 -- Name: privacy_policy_pages privacy_policy_pages_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8033,7 +8105,7 @@ ALTER TABLE ONLY public.privacy_policy_pages
 
 
 --
--- TOC entry 3673 (class 2606 OID 214221)
+-- TOC entry 3683 (class 2606 OID 214221)
 -- Name: regulations_pages regulations_pages_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8042,7 +8114,7 @@ ALTER TABLE ONLY public.regulations_pages
 
 
 --
--- TOC entry 3675 (class 2606 OID 214231)
+-- TOC entry 3685 (class 2606 OID 214231)
 -- Name: regulations_pages_components regulations_pages_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8051,7 +8123,7 @@ ALTER TABLE ONLY public.regulations_pages_components
 
 
 --
--- TOC entry 3676 (class 2606 OID 214236)
+-- TOC entry 3686 (class 2606 OID 214236)
 -- Name: regulations_pages_localizations_links regulations_pages_localizations_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8060,7 +8132,7 @@ ALTER TABLE ONLY public.regulations_pages_localizations_links
 
 
 --
--- TOC entry 3677 (class 2606 OID 214241)
+-- TOC entry 3687 (class 2606 OID 214241)
 -- Name: regulations_pages_localizations_links regulations_pages_localizations_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8069,7 +8141,7 @@ ALTER TABLE ONLY public.regulations_pages_localizations_links
 
 
 --
--- TOC entry 3674 (class 2606 OID 214226)
+-- TOC entry 3684 (class 2606 OID 214226)
 -- Name: regulations_pages regulations_pages_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8078,7 +8150,7 @@ ALTER TABLE ONLY public.regulations_pages
 
 
 --
--- TOC entry 3693 (class 2606 OID 214634)
+-- TOC entry 3703 (class 2606 OID 214634)
 -- Name: search_products_pages search_products_pages_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8087,7 +8159,7 @@ ALTER TABLE ONLY public.search_products_pages
 
 
 --
--- TOC entry 3695 (class 2606 OID 214644)
+-- TOC entry 3705 (class 2606 OID 214644)
 -- Name: search_products_pages_components search_products_pages_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8096,7 +8168,7 @@ ALTER TABLE ONLY public.search_products_pages_components
 
 
 --
--- TOC entry 3696 (class 2606 OID 214649)
+-- TOC entry 3706 (class 2606 OID 214649)
 -- Name: search_products_pages_localizations_links search_products_pages_localizations_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8105,7 +8177,7 @@ ALTER TABLE ONLY public.search_products_pages_localizations_links
 
 
 --
--- TOC entry 3697 (class 2606 OID 214654)
+-- TOC entry 3707 (class 2606 OID 214654)
 -- Name: search_products_pages_localizations_links search_products_pages_localizations_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8114,7 +8186,7 @@ ALTER TABLE ONLY public.search_products_pages_localizations_links
 
 
 --
--- TOC entry 3694 (class 2606 OID 214639)
+-- TOC entry 3704 (class 2606 OID 214639)
 -- Name: search_products_pages search_products_pages_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8123,7 +8195,7 @@ ALTER TABLE ONLY public.search_products_pages
 
 
 --
--- TOC entry 3618 (class 2606 OID 16906)
+-- TOC entry 3628 (class 2606 OID 16906)
 -- Name: strapi_api_token_permissions strapi_api_token_permissions_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8132,7 +8204,7 @@ ALTER TABLE ONLY public.strapi_api_token_permissions
 
 
 --
--- TOC entry 3620 (class 2606 OID 16911)
+-- TOC entry 3630 (class 2606 OID 16911)
 -- Name: strapi_api_token_permissions_token_links strapi_api_token_permissions_token_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8141,7 +8213,7 @@ ALTER TABLE ONLY public.strapi_api_token_permissions_token_links
 
 
 --
--- TOC entry 3621 (class 2606 OID 16916)
+-- TOC entry 3631 (class 2606 OID 16916)
 -- Name: strapi_api_token_permissions_token_links strapi_api_token_permissions_token_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8150,7 +8222,7 @@ ALTER TABLE ONLY public.strapi_api_token_permissions_token_links
 
 
 --
--- TOC entry 3619 (class 2606 OID 16921)
+-- TOC entry 3629 (class 2606 OID 16921)
 -- Name: strapi_api_token_permissions strapi_api_token_permissions_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8159,7 +8231,7 @@ ALTER TABLE ONLY public.strapi_api_token_permissions
 
 
 --
--- TOC entry 3622 (class 2606 OID 16926)
+-- TOC entry 3632 (class 2606 OID 16926)
 -- Name: strapi_api_tokens strapi_api_tokens_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8168,7 +8240,7 @@ ALTER TABLE ONLY public.strapi_api_tokens
 
 
 --
--- TOC entry 3623 (class 2606 OID 16931)
+-- TOC entry 3633 (class 2606 OID 16931)
 -- Name: strapi_api_tokens strapi_api_tokens_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8177,7 +8249,7 @@ ALTER TABLE ONLY public.strapi_api_tokens
 
 
 --
--- TOC entry 3624 (class 2606 OID 16936)
+-- TOC entry 3634 (class 2606 OID 16936)
 -- Name: up_permissions up_permissions_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8186,7 +8258,7 @@ ALTER TABLE ONLY public.up_permissions
 
 
 --
--- TOC entry 3626 (class 2606 OID 16941)
+-- TOC entry 3636 (class 2606 OID 16941)
 -- Name: up_permissions_role_links up_permissions_role_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8195,7 +8267,7 @@ ALTER TABLE ONLY public.up_permissions_role_links
 
 
 --
--- TOC entry 3627 (class 2606 OID 16946)
+-- TOC entry 3637 (class 2606 OID 16946)
 -- Name: up_permissions_role_links up_permissions_role_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8204,7 +8276,7 @@ ALTER TABLE ONLY public.up_permissions_role_links
 
 
 --
--- TOC entry 3625 (class 2606 OID 16951)
+-- TOC entry 3635 (class 2606 OID 16951)
 -- Name: up_permissions up_permissions_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8213,7 +8285,7 @@ ALTER TABLE ONLY public.up_permissions
 
 
 --
--- TOC entry 3628 (class 2606 OID 16956)
+-- TOC entry 3638 (class 2606 OID 16956)
 -- Name: up_roles up_roles_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8222,7 +8294,7 @@ ALTER TABLE ONLY public.up_roles
 
 
 --
--- TOC entry 3629 (class 2606 OID 16961)
+-- TOC entry 3639 (class 2606 OID 16961)
 -- Name: up_roles up_roles_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8231,7 +8303,7 @@ ALTER TABLE ONLY public.up_roles
 
 
 --
--- TOC entry 3630 (class 2606 OID 16966)
+-- TOC entry 3640 (class 2606 OID 16966)
 -- Name: up_users up_users_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8240,7 +8312,7 @@ ALTER TABLE ONLY public.up_users
 
 
 --
--- TOC entry 3632 (class 2606 OID 16971)
+-- TOC entry 3642 (class 2606 OID 16971)
 -- Name: up_users_role_links up_users_role_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8249,7 +8321,7 @@ ALTER TABLE ONLY public.up_users_role_links
 
 
 --
--- TOC entry 3633 (class 2606 OID 16976)
+-- TOC entry 3643 (class 2606 OID 16976)
 -- Name: up_users_role_links up_users_role_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8258,7 +8330,7 @@ ALTER TABLE ONLY public.up_users_role_links
 
 
 --
--- TOC entry 3631 (class 2606 OID 16981)
+-- TOC entry 3641 (class 2606 OID 16981)
 -- Name: up_users up_users_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8267,7 +8339,7 @@ ALTER TABLE ONLY public.up_users
 
 
 --
--- TOC entry 3634 (class 2606 OID 16986)
+-- TOC entry 3644 (class 2606 OID 16986)
 -- Name: upload_folders upload_folders_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8276,7 +8348,7 @@ ALTER TABLE ONLY public.upload_folders
 
 
 --
--- TOC entry 3636 (class 2606 OID 16991)
+-- TOC entry 3646 (class 2606 OID 16991)
 -- Name: upload_folders_parent_links upload_folders_parent_links_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8285,7 +8357,7 @@ ALTER TABLE ONLY public.upload_folders_parent_links
 
 
 --
--- TOC entry 3637 (class 2606 OID 16996)
+-- TOC entry 3647 (class 2606 OID 16996)
 -- Name: upload_folders_parent_links upload_folders_parent_links_inv_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8294,7 +8366,7 @@ ALTER TABLE ONLY public.upload_folders_parent_links
 
 
 --
--- TOC entry 3635 (class 2606 OID 17001)
+-- TOC entry 3645 (class 2606 OID 17001)
 -- Name: upload_folders upload_folders_updated_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8302,9 +8374,8 @@ ALTER TABLE ONLY public.upload_folders
     ADD CONSTRAINT upload_folders_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES public.admin_users(id) ON DELETE SET NULL;
 
 
--- Completed on 2022-12-14 13:30:09
+-- Completed on 2023-01-02 08:06:02
 
 --
 -- PostgreSQL database dump complete
 --
-

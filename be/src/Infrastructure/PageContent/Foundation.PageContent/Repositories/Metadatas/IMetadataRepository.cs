@@ -1,8 +1,9 @@
-﻿using Buyer.Web.Shared.DomainModels.Metadata;
+﻿using Foundation.PageContent.DomainModels.Metadatas;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Shared.Repositories.Metadatas
-{
+namespace Foundation.PageContent.Repositories.Metadatas 
+{ 
+
     public interface IMetadataRepository
     {
         Task<Metadata> GetMetadataAsync(string contentPageKey, string language);
