@@ -39,8 +39,6 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
 
         public async Task<MainNavigationViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var mainNavigationLinks = await _mainNavigationLinkRepository.GetMainNavigationLinksAsync(componentModel.ContentPageKey, componentModel.Language, _settings.CurrentValue.DefaultCulture);
-
             var links = new List<LinkViewModel>
             {
                 new LinkViewModel
@@ -74,6 +72,8 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
                     Url = _linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
                 }
             };
+
+            var mainNavigationLinks = await _mainNavigationLinkRepository.GetMainNavigationLinksAsync(componentModel.ContentPageKey, componentModel.Language, _settings.CurrentValue.DefaultCulture);
 
             foreach (var link in mainNavigationLinks.OrEmptyIfNull())
             {
