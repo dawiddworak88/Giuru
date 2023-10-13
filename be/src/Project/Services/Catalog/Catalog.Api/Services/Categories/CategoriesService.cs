@@ -170,7 +170,7 @@ namespace Catalog.Api.Services.Categories
                 category.Level = parentCategory.Level + 1;
             }
 
-            if (model.Order is not 0)
+            if (model.Order != 0)
             {
                 await OrderingCategoriesAsync(category.Order, model.Order);
                 category.Order = model.Order;
