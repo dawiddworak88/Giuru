@@ -43,7 +43,7 @@ namespace Buyer.Web.Shared.Repositories.MainNavigationLinks
 
                     var links = JsonConvert.DeserializeObject<MainNavigationLinksGraphQlResponseModel>(replacedContentPageKey);
 
-                    return links?.Page?.Data?.Attributes.MainNavigationLinks?.Links?.Select(x => new MainNavigationLink
+                    return links?.Page?.Data?.Attributes?.MainNavigationLinks?.Links?.Select(x => new MainNavigationLink
                     {
                         Href = x.Href,
                         Label = x.Label,
@@ -54,7 +54,7 @@ namespace Buyer.Web.Shared.Repositories.MainNavigationLinks
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, $"Couldn't get link to MainNavigation");
+                _logger.LogError(exception, $"Couldn't get links to MainNavigation");
             }
 
             return default;
@@ -81,8 +81,7 @@ namespace Buyer.Web.Shared.Repositories.MainNavigationLinks
                           }}
                         }}
                       }}
-                    }}
-                    "
+                    }}"
             };
         }
     }
