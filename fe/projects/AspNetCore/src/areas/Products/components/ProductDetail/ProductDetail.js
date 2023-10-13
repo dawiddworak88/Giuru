@@ -15,7 +15,7 @@ import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveIma
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
-import ImageModal from "../ProductImageModal/ImageModal";
+import ProductDetailModal from "../ProductDetailModal/ProductDetailModal";
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
@@ -28,8 +28,8 @@ function ProductDetail(props) {
     const [canActiveModal, setCanActiveModal] = useState(true);
     const [showMore, setShowMore] = useState(false);
     const [showMoreImages, setShowMoreImages] = useState(false);
-    const [images, setImages] = useState(props.images ? props.images.slice(0, 6) : []);
-    const [activeImageIndex, setActiveImageIndex] = useState(0);
+    const [mediaItems, setMediaItems] = useState(props.mediaItems ? props.mediaItems.slice(0, 6) : []);
+    const [activeMediaItemIndex, setActiveMediaItemIndex] = useState(0);
 
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -109,12 +109,12 @@ function ProductDetail(props) {
             });
     };
 
-    const handleCloseImageModal = (index) => {
+    const handleCloseImageModal = () => {
         setIsImageModalOpen(false);
     }
 
     const handleImageModal = (index) => {
-        setActiveImageIndex(index);
+        setActiveMediaItemIndex(index);
         setIsImageModalOpen(true);
     }
 
@@ -140,10 +140,10 @@ function ProductDetail(props) {
 
     const handleShowMoreImages = () => {
         if (showMoreImages) {
-            setImages(props.images.slice(0, 6));
+            setMediaItems(props.mediaItems.slice(0, 6));
         }
         else {
-            setImages(props.images);
+            setMediaItems(props.mediaItems);
         }
 
         setShowMoreImages(!showMoreImages);
@@ -156,26 +156,38 @@ function ProductDetail(props) {
                     <div className="product-detail__gallery-column">
                         <div className="product-detail__desktop-gallery">
                             <div className="is-flex is-flex-wrap product-detail__product-gallery">
-                                {props.images && props.images.length < 2 && images.map((image, index) => {
-                                    return (
-                                        <div className="product-detail__desktop-gallery__desktop-product-image__single" onClick={() => handleImageModal(index)}>
-                                            <LazyLoad offset={LazyLoadConstants.defaultOffset()} key={index}>
-                                                <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={props.title} />
-                                            </LazyLoad>
-                                        </div>
-                                    )
-                                })}
-                                {props.images && props.images.length > 1 && images.map((image, index) => {
-                                    return (
+                                {props.mediaItems && props.mediaItems.length > 1 ? (
+                                    mediaItems.map((mediaItem, index) => (
                                         <div className="product-detail__desktop-gallery__desktop-product-image" onClick={() => handleImageModal(index)}>
                                             <LazyLoad offset={LazyLoadConstants.defaultOffset()} key={index}>
-                                                <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={props.title} />
+                                                {mediaItem.mimeType.startsWith("image") ? (
+                                                        <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
+                                                    ) : (
+                                                        <video autoPlay loop muted playsInline preload='auto'>
+                                                            <source src={mediaItem.mediaSrc} type={mediaItem.mimeType}  />
+                                                        </video>
+                                                    )}
+                                            </LazyLoad>
+                                        </div>
+                                    ))
+                                ) : (
+                                    props.mediaItems.length == 1 && (
+                                        <div className="product-detail__desktop-gallery__desktop-product-image__single" onClick={() => handleImageModal(index)}>
+                                            <LazyLoad offset={LazyLoadConstants.defaultOffset()} key={index}>
+                                                {props.mediaItems[0].mimeType.startsWith("image") ? (
+                                                    <ResponsiveImage sources={props.mediaItems[0].sources} imageSrc={props.mediaItems[0].mediaSrc} imageAlt={props.mediaItems[0].mediaAlt} imageTitle={props.title} />
+                                                ) : (
+                                                    <video autoPlay loop muted playsInline preload='auto'>
+                                                        <source src={props.mediaItems[0].mediaSrc} type={props.mediaItems[0].mimeType}  />
+                                                    </video>
+                                                )}
                                             </LazyLoad>
                                         </div>
                                     )
-                                })}
+                                )}
+                               
                             </div>
-                            {props.images && props.images.length > 6 &&
+                            {props.mediaItems && props.mediaItems.length > 6 &&
                                 <div className="product-detail__more-product-images">
                                     {showMoreImages ? (
                                         <div className="is-flex is-justify-content-center">
@@ -200,18 +212,24 @@ function ProductDetail(props) {
                             }
                         </div>
                         <div className="product-detail__mobile-gallery">
-                            {props.images && props.images.length > 0 &&
+                            {props.mediaItems && props.mediaItems.length > 0 &&
                                 <Splide
                                     options={{
                                         type: "slide",
                                         pagination: false
                                     }}
                                 >
-                                    {props.images.map((image, index) => {
+                                    {props.mediaItems.map((mediaItem, index) => {
                                         return (
                                             <SplideSlide key={index}>
                                                 <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="product-detail__mobile-gallery__mobile-product-image">
-                                                    <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={props.title} />
+                                                    {mediaItem.mimeType.startsWith("image") ? (
+                                                        <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
+                                                    ) : (
+                                                        <video autoPlay loop muted playsInline preload='auto'>
+                                                            <source src={mediaItem.mediaSrc} type={mediaItem.mimeType}  />
+                                                        </video>
+                                                    )}
                                                 </LazyLoad>
                                             </SplideSlide>
                                         )
@@ -319,12 +337,12 @@ function ProductDetail(props) {
                     product={productVariant ? productVariant : props}
                     labels={props.modal}
                 />
-                <ImageModal
+                <ProductDetailModal
                     isOpen={isImageModalOpen}
                     handleClose={handleCloseImageModal}
-                    images={props.images}
+                    mediaItems={props.mediaItems}
                     title={props.title}
-                    index={activeImageIndex}
+                    index={activeMediaItemIndex}
                 />
             </div>
         </section>

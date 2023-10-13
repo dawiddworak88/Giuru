@@ -78,7 +78,7 @@ export var files = {
 };
 
 export var footer = {
-  copyright: "Copyright © 2021 Giuru",
+  copyright: "© 2023 | Giuru. All rigths reserved.",
   links: [
     { text: "Privacy Policy", url: "#privacy-policy" },
     { text: "Terms & Conditions", url: "#terms-conditions" }

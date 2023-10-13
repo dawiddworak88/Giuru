@@ -222,6 +222,7 @@ namespace DownloadCenter.Api.v1.Controllers
                     {
                         Id = x.Id,
                         Name = x.Name,
+                        IsVisible = x.IsVisible,
                         ParentCategoryId = x.ParentCategoryId,
                         ParentCategoryName = x.ParentCategoryName,
                         LastModifiedDate = x.LastModifiedDate,

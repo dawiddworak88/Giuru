@@ -102,13 +102,12 @@ function ProductForm(props) {
                         setFieldValue({ name: "schema", value: jsonResponse.schema ? JSON.parse(jsonResponse.schema) : {} });
                         setFieldValue({ name: "uiSchema", value: jsonResponse.uiSchema ? JSON.parse(jsonResponse.uiSchema) : {} });
                     }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
                 });
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
+
+                setFieldValue({ name: "schema", value: {} });
+                setFieldValue({ name: "uiSchema", value: {} });
             });
     };
 
@@ -324,6 +323,8 @@ function ProductForm(props) {
                                 name="images"
                                 label={props.productPicturesLabel}
                                 multiple={true}
+                                videoSizeLimit={props.videoFileSizeLimit}
+                                fileSizeLimitErrorMessage={props.fileSizeLimitErrorMessage}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
                                 dropFilesLabel={props.dropFilesLabel}
@@ -334,9 +335,10 @@ function ProductForm(props) {
                                 isUploadInChunksEnabled={true}
                                 chunkSize={props.chunkSize}
                                 saveMediaChunkUrl={props.saveMediaChunkUrl}
-                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} 
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl}
                                 accept={{
                                     'image/*': [".png", ".jpg", ".webp"],
+                                    "video/*": [".mp4"]
                                 }}/>
                         </div>
                         <div className="field">
@@ -454,7 +456,9 @@ ProductForm.propTypes = {
     chunkSize: PropTypes.number,
     saveMediaChunkUrl: PropTypes.string,
     saveMediaChunkCompleteUrl: PropTypes.string,
-    productsSuggestionUrl: PropTypes.string.isRequired
+    productsSuggestionUrl: PropTypes.string.isRequired,
+    fileSizeLimitErrorMessage: PropTypes.string,
+    videoFileSizeLimit: PropTypes.number
 };
 
 export default ProductForm;

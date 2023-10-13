@@ -360,9 +360,10 @@ namespace Catalog.Api.Services.Categories
         {
             var categorySchema = await _context.Categories
                 .Include(x => x.Schemas)
+                .AsSingleQuery()
                 .FirstOrDefaultAsync(x => x.Id == model.Id);
 
-            if(categorySchema is null)
+            if (categorySchema is null)
             {
                 throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent); 
             }

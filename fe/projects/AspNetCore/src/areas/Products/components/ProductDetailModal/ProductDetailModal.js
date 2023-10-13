@@ -7,8 +7,8 @@ import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
 
-const ImageModal = (props) => {
-    const { isOpen, handleClose, images, title, index } = props;
+const ProductDetailModal = (props) => {
+    const { isOpen, handleClose, mediaItems, index } = props;
     const [splideContext, setSplideContext] = useState(null);     
         
     useEffect(() => {
@@ -27,10 +27,16 @@ const ImageModal = (props) => {
             }}
         >
             <div className="is-flex is-justify-content-end p-2">
-                <Button variant="text" color="inherit" onClick={() => handleClose()} className="image-modal__close-button"><Close /></Button>
+                <Button 
+                    variant="text" 
+                    color="inherit" 
+                    onClick={() => handleClose()} 
+                    className="image-modal__close-button">
+                        <Close />
+                </Button>
             </div>
             <div className="image-modal__container">
-                {images && images.length > 0 &&
+                {mediaItems && mediaItems.length > 0 &&
                     <Splide                                     
                         onVisible={(context) => setSplideContext(context)}                        
                         options={{
@@ -39,11 +45,17 @@ const ImageModal = (props) => {
                             keyboard: 'global',                                                                                           
                         }}
                     >
-                        {images.map((image, index) => {
+                        {mediaItems.map((mediaItem, index) => {
                             return (
                                 <SplideSlide>                                    
                                     <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="image-modal__image" key={index}>
-                                        <ResponsiveImage sources={image.sources} imageSrc={image.imageSrc} imageAlt={image.imageAlt} imageTitle={title}/>
+                                        {mediaItem.mimeType.startsWith("image") ? (
+                                            <ResponsiveImage sources={mediaItem.sources} mediaItemsrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
+                                        ) : (
+                                            <video autoPlay loop muted playsInline preload='auto'>
+                                                <source src={mediaItem.mediaSrc} type={mediaItem.mimeType} />
+                                            </video>
+                                        )}
                                     </LazyLoad>                                                                      
                                 </SplideSlide>
                             )
@@ -56,12 +68,12 @@ const ImageModal = (props) => {
     )
 }
 
-ImageModal.propTypes = {
+ProductDetailModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
-    images: PropTypes.array.isRequired,
+    mediaItems: PropTypes.array.isRequired,
     title: PropTypes.string.isRequired,
     index: PropTypes.number.isRequired
 }
 
-export default ImageModal;
+export default ProductDetailModal;

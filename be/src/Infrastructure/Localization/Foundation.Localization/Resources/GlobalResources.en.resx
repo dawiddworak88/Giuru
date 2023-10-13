@@ -169,7 +169,7 @@
     <value>Copy link</value>
   </data>
   <data name="Copyright" xml:space="preserve">
-    <value>Copyright © [year]</value>
+    <value>© [year] | ELTAP Spółka z ograniczoną odpowiedzialnością Sp.k. All rights reserved.</value>
   </data>
   <data name="CreatedDate" xml:space="preserve">
     <value>Created Date</value>
@@ -716,5 +716,8 @@
   </data>
   <data name="Drag" xml:space="preserve">
     <value>Drag</value>
+  </data>
+  <data name="FileSizeLimit" xml:space="preserve">
+    <value>The uploaded file exceeds the maximum size</value>
   </data>
 </root>

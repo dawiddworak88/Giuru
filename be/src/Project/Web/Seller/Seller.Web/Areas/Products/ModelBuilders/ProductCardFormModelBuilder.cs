@@ -59,13 +59,14 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 
             if (componentModel.Id.HasValue)
             {
+                viewModel.Id = componentModel.Id;
+
                 var categorySchemas = await _categoriesRepository.GetCategorySchemasAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
-                if (categorySchemas is not null)
+                if (categorySchemas is not null && categorySchemas.Schemas.OrEmptyIfNull().Any())
                 {
-                    viewModel.Id = componentModel.Id;
-                    viewModel.Schema = categorySchemas.Schemas.OrEmptyIfNull().FirstOrDefault(x => x.Language == componentModel.Language)?.Schema;
-                    viewModel.UiSchema = categorySchemas.Schemas.OrEmptyIfNull().FirstOrDefault(x => x.Language == componentModel.Language)?.UiSchema;
+                    viewModel.Schema = categorySchemas.Schemas.FirstOrDefault(x => x.Language == componentModel.Language)?.Schema ?? categorySchemas.Schemas.FirstOrDefault()?.Schema;
+                    viewModel.UiSchema = categorySchemas.Schemas.FirstOrDefault(x => x.Language == componentModel.Language)?.UiSchema ?? categorySchemas.Schemas.FirstOrDefault()?.UiSchema;
                 }
             }
 

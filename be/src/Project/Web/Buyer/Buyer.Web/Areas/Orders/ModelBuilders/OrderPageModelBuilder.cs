@@ -16,14 +16,14 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderFormViewModel> orderFormModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
-        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder;
 
         public OrderPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, OrderFormViewModel> orderFormModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
-            IModelBuilder<FooterViewModel> footerModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.orderFormModelBuilder = orderFormModelBuilder;
@@ -41,7 +41,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 NewOrderForm = await this.orderFormModelBuilder.BuildModelAsync(componentModel),
-                Footer = footerModelBuilder.BuildModel()
+                Footer = await footerModelBuilder.BuildModelAsync(componentModel)
             };
 
             return viewModel;

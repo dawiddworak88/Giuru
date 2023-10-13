@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import SchemaField from "../DynamicForm/fields/SchemaField";
 import { getDefaultRegistry } from "./utils/utils";
+import validateFormData from "./validate/validate";
 
 function DynamicForm(props) {
 
@@ -18,6 +19,11 @@ function DynamicForm(props) {
             formContext: props.formContext || {},
         };
     }
+
+    const onChangeValidate = (event) => {
+        props.onChange(event);
+        validateFormData(props.formData, props.jsonSchema);
+    };
     
     return (
         <div>
@@ -25,7 +31,7 @@ function DynamicForm(props) {
                 schema={props.jsonSchema}
                 uiSchema={props.uiSchema}
                 formData={props.formData}
-                onChange={props.onChange}
+                onChange={onChangeValidate}
                 registry={getRegistry()} />
         </div>
     );

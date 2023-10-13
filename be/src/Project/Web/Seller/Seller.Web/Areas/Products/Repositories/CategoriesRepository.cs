@@ -207,36 +207,6 @@ namespace Seller.Web.Areas.Categories.Repositories
             return default;
         }
 
-        public async Task<CategorySchema> GetCategorySchemaAsync(string token, string language, Guid? categoryId)
-        {
-            var apiRequest = new ApiRequest<RequestModelBase>
-            {
-                Language = language,
-                Data = new RequestModelBase(),
-                AccessToken = token,
-                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemasApiEndpoint}/{categoryId}"
-            };
-
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, CategorySchema>(apiRequest);
-
-            if (response.IsSuccessStatusCode && response.Data != null)
-            {
-                return response.Data;
-            }
-
-            if (!response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.NotFound)
-            {
-                return new CategorySchema();
-            }
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            return default;
-        }
-
         public async Task<CategorySchemas> GetCategorySchemasAsync(string token, string language, Guid? categoryId)
         {
             var apiRequest = new ApiRequest<RequestModelBase>

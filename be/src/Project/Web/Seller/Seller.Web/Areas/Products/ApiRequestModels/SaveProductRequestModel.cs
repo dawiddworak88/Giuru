@@ -12,8 +12,9 @@ namespace Seller.Web.Areas.Products.ApiRequestModels
         public Guid? CategoryId { get; set; }
         public string Description { get; set; }
         public Guid? PrimaryProductId { get; set; }
-        public IEnumerable<ListItemRequestModel> Images { get; set; }
-        public IEnumerable<ListItemRequestModel> Files { get; set; }
+        public IEnumerable<SaveFileRequestModel> Images { get; set; }
+        public IEnumerable<SaveFileRequestModel> Videos { get; set; }
+        public IEnumerable<SaveFileRequestModel> Files { get; set; }
         public bool IsNew { get; set; }
         public string Ean { get; set; }
         public bool IsPublished { get; set; }

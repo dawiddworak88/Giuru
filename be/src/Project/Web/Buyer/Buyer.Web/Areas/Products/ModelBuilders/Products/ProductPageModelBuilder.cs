@@ -14,14 +14,14 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductBreadcrumbsViewModel> productBreadcrumbsModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel> productDetailModelBuilder;
-        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder;
 
         public ProductPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ProductBreadcrumbsViewModel> productBreadcrumbsModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel> productDetailModelBuilder,
-            IModelBuilder<FooterViewModel> footerModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.mainNavigationModelBuilder = mainNavigationModelBuilder;
@@ -39,7 +39,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 Breadcrumbs = await this.productBreadcrumbsModelBuilder.BuildModelAsync(componentModel),
                 ProductDetail = await this.productDetailModelBuilder.BuildModelAsync(componentModel),
-                Footer = footerModelBuilder.BuildModel()
+                Footer = await footerModelBuilder.BuildModelAsync(componentModel)
             };
 
             return viewModel;
