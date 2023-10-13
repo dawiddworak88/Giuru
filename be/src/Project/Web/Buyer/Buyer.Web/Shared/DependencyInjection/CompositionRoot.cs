@@ -28,16 +28,11 @@ using Buyer.Web.Shared.Services.Baskets;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ModelBuilders.Modal;
 using Buyer.Web.Shared.Repositories.News;
-using Foundation.PageContent.Components.Metadatas.ViewModels;
 using Buyer.Web.Shared.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Files;
-using GraphQL.Client.Abstractions;
 using Foundation.Media.Configurations;
-using GraphQL.Client.Serializer.Newtonsoft;
-using GraphQL.Client.Http;
 using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
 using Buyer.Web.Shared.ModelBuilders.OrderItemStatusChanges;
-using Buyer.Web.Shared.Repositories.Metadatas;
 using Buyer.Web.Shared.Repositories.GraphQl;
 
 namespace Buyer.Web.Shared.DependencyInjection
