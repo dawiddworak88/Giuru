@@ -28,7 +28,7 @@
     },
     "content": {
       "displayName": "Content",
-      "type": "component",
+      "type": "richtext",
       "repeatable": false,
       "pluginOptions": {
         "i18n": {
@@ -36,6 +36,16 @@
         }
       },
       "component": "blocks.content"
+    },
+    "footer": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.footer"
     }
   }
 }

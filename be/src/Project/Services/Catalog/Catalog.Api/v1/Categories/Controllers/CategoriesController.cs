@@ -76,6 +76,8 @@ namespace Catalog.Api.v1.Categories.Controllers
                         IsLeaf = x.IsLeaf,
                         Level = x.Level,
                         Name = x.Name,
+                        Schema = x.Schema,
+                        UiSchema = x.UiSchema,
                         Order = x.Order,
                         ParentId = x.ParentId,
                         ThumbnailMediaId = x.ThumbnailMediaId,
@@ -167,6 +169,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                     Id = request.Id,
                     Files = request.Files,
                     Name = request.Name,
+                    Order = request.Order,
                     Schemas = request.Schemas.Select(x => new CategorySchemaServiceModel
                     {
                         Id = x.Id,

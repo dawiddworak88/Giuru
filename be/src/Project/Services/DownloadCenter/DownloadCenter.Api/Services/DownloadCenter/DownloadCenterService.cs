@@ -205,7 +205,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
                 Subcategories = subcategories.Select(x => new DownloadCenterSubcategoryServiceModel
                 {
                     Id = x.Id,
-                    Name = x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.IsActive)?.Name ?? x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.IsActive)?.Name,
+                    Name = x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language && t.IsActive)?.Name ?? x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.IsActive)?.Name,
                 }),
                 Files = downloadCenterCategory.Files.Select(x => x.MediaId),
                 LastModifiedDate = downloadCenterCategory.LastModifiedDate,

@@ -22,7 +22,6 @@ using Buyer.Web.Shared.Services.Baskets;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
-using ImageViewModel = Buyer.Web.Shared.ViewModels.Images.ImageViewModel;
 using Foundation.Media.Services.MediaServices;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Repositories.Media;
@@ -121,27 +120,33 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     PaginationConstants.DefaultPageIndex,
                     PaginationConstants.DefaultPageSize);
 
-                var images = new List<ImageViewModel>();
+                var mediaItems = new List<ProductMediaItemViewModel>();
 
-                foreach (var imageId in product.Images.OrEmptyIfNull())
+                foreach (var mediaItemId in product.Images.OrEmptyIfNull())
                 {
-                    var imageViewModel = new ImageViewModel
-                    {
-                        ImageSrc = _mediaService.GetMediaUrl(imageId), 
-                        ImageAlt = imagesMediaItems.OrEmptyIfNull().FirstOrDefault(mediaItem => mediaItem.Id == imageId)?.Description,
-                        Sources = new List<SourceViewModel>
-                        {
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 1366) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 470) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 342) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(imageId, 768) }
-                        }
-                    };
+                    var mediaItem = imagesMediaItems.FirstOrDefault(x =>  x.Id == mediaItemId);
 
-                    images.Add(imageViewModel);
+                    if (mediaItem is not null)
+                    {
+                        var mediaItemViewModel = new ProductMediaItemViewModel
+                        {
+                            MediaSrc = _mediaService.GetMediaUrl(mediaItemId),
+                            MediaAlt = mediaItem.Description,
+                            MimeType = mediaItem.MimeType,
+                            Sources = new List<SourceViewModel>
+                            {
+                                new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(mediaItemId, 1366) },
+                                new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(mediaItemId, 470) },
+                                new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(mediaItemId, 342) },
+                                new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(mediaItemId, 768) }
+                            }
+                        };
+
+                        mediaItems.Add(mediaItemViewModel);
+                    }
                 }                
 
-                viewModel.Images = images;
+                viewModel.MediaItems = mediaItems;
 
                 var productFiles = await _productsRepository.GetProductFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(ProductFile.CreatedDate)} desc");
 

@@ -31,13 +31,14 @@ namespace Seller.Web.Areas.Categories.Repositories
             _settings = settings;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? parentCategoryId, string name, IEnumerable<Guid> files, IEnumerable<CategorySchema> schemas)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? parentCategoryId, string name, IEnumerable<Guid> files, IEnumerable<CategorySchema> schemas, int order)
         {
             var requestModel = new SaveCategoryApiRequestModel
             {
                 Id = id,
                 ParentCategoryId = parentCategoryId,
                 Name = name,
+                Order = order,
                 Files = files,
                 Schemas = schemas.Select(x => new CategorySchemaRequestModel 
                 { 
@@ -196,36 +197,6 @@ namespace Seller.Web.Areas.Categories.Repositories
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return response.Data;
-            }
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            return default;
-        }
-
-        public async Task<CategorySchema> GetCategorySchemaAsync(string token, string language, Guid? categoryId)
-        {
-            var apiRequest = new ApiRequest<RequestModelBase>
-            {
-                Language = language,
-                Data = new RequestModelBase(),
-                AccessToken = token,
-                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemasApiEndpoint}/{categoryId}"
-            };
-
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, CategorySchema>(apiRequest);
-
-            if (response.IsSuccessStatusCode && response.Data != null)
-            {
-                return response.Data;
-            }
-
-            if (!response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.NotFound)
-            {
-                return new CategorySchema();
             }
 
             if (!response.IsSuccessStatusCode)

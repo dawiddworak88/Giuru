@@ -1,5 +1,6 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +39,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
                 searchTerm,
                 pageIndex,
                 itemsPerPage,
-                $"{nameof(Category.CreatedDate)} desc");
+                $"{nameof(Category.Order)} asc");
 
             return StatusCode((int)HttpStatusCode.OK, categories);
         }
@@ -50,15 +51,53 @@ namespace Seller.Web.Areas.Products.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             var categoryId = await _categoriesRepository.SaveAsync(
-                token, language, model.Id, model.ParentCategoryId, model.Name, model.Files.Select(x => x.Id.Value), model.Schemas.Select(x => new CategorySchema
+                token, 
+                language, 
+                model.Id, 
+                model.ParentCategoryId, 
+                model.Name, 
+                model.Files.Select(x => x.Id.Value),
+                model.Schemas.OrEmptyIfNull().Select(x => new CategorySchema
                 {
                     Id = x.Id,
                     Schema = x.Schema,
                     UiSchema = x.UiSchema,
                     Language = x.Language
-                }));
+                }), 
+                model.Order);
 
             return StatusCode((int)HttpStatusCode.OK, new { Id = categoryId, Message = _productLocalizer.GetString("CategorySavedSuccessfully").Value });
+        }
+
+        [HttpPost]        
+        public async Task<IActionResult> Order([FromBody] SaveCategoryOrderRequestModel model)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentCulture.Name;
+
+            var category = await _categoriesRepository.GetCategoryAsync(token, language, model.Id);
+
+            if (category is not null) 
+            {
+                var categorySchemas = await _categoriesRepository.GetCategorySchemasAsync(token, language, model.Id);
+
+                if (categorySchemas is not null)
+                {
+                    await _categoriesRepository.SaveAsync(
+                        token, language, model.Id, category.ParentId, category.Name, category.Files, 
+                        categorySchemas.Schemas.OrEmptyIfNull().Select(x => new CategorySchema
+                        {
+                            Id = x.Id,
+                            Schema = x.Schema,
+                            UiSchema = x.UiSchema,
+                            Language = x.Language
+                        }), model.Order);
+
+                    return StatusCode((int)HttpStatusCode.OK);
+                }
+            }
+
+            return StatusCode((int)HttpStatusCode.BadRequest);
         }
 
         [HttpDelete]

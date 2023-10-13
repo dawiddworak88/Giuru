@@ -17,12 +17,38 @@
             font-weight: bold;
         }
 
+        &__row {
+            background-color: $white;
+        }
+
         button {
-            margin: 0.3rem;
+            margin: 0.15rem;
+        }
+
+        a {
+            margin: 0.15rem;
         }
 
         .property-image {
             max-width: 200px;
+        }
+    }
+
+    &__change-page-area {
+        flex-basis: 40%;
+        padding: 2rem;        
+        margin: 1rem;
+        border: 1px dashed $link;
+        background-color: $grey;
+        text-align: center;
+        
+        &:hover {
+            background-color: $lightgrey;
+        }
+
+        &__disabled {
+            pointer-events: none;
+            opacity: 0.3;
         }
     }
 

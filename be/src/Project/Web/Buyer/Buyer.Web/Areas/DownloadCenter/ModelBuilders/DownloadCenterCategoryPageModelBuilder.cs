@@ -17,7 +17,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryDetailsViewModel> categoryDetailsModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryBreadcrumbsViewModel> categoryBreadcrumbsModelBuilder;
-        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder;
 
         public DownloadCenterCategoryPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder,
@@ -25,7 +25,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryDetailsViewModel> categoryDetailsModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryBreadcrumbsViewModel> categoryBreadcrumbsModelBuilder,
-            IModelBuilder<FooterViewModel> footerModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder)
         {
             this.seoModelBuilder = seoModelBuilder;
             this.headerModelBuilder = headerModelBuilder;
@@ -45,7 +45,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 Breadcrumbs = await this.categoryBreadcrumbsModelBuilder.BuildModelAsync(componentModel),
                 CategoryDetails = await this.categoryDetailsModelBuilder.BuildModelAsync(componentModel),
-                Footer = footerModelBuilder.BuildModel()
+                Footer = await footerModelBuilder.BuildModelAsync(componentModel)
             };
 
             return viewModel;

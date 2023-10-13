@@ -1,19 +1,25 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-function Footer(props) {
-
-    const links = props.links.map((link, index) => <li key={index}><a href={link.url}>{link.text}</a></li>);
+const Footer = (props) => {
 
     return (
         <footer className="footer">
-            <div className="content">
-                <ul>
-                    {links}
-                </ul>
-            </div>
-            <div className="content has-text-centered has-text-white">
-                {props.copyright}
+            <div className="footer_wrapper">
+                <div className="footer_copyright">{props.copyright}</div>
+                {props.links && props.links.length > 0 &&
+                    <div className="footer_navigation">
+                        <ul className="footer_navigation_list">
+                            {props.links.map((navigationItem, index) => (
+                                <li className="footer_navigation_item" key={index}>
+                                    <a href={navigationItem.url} className="footer_navigation_link">
+                                        {navigationItem.text}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                }
             </div>
         </footer>
     );
