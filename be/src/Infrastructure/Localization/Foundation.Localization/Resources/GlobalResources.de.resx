@@ -709,10 +709,10 @@
     <value>Sku</value>
   </data>
   <data name="MoveToNextPage" xml:space="preserve">
-    <value>Gehen zur nächsten Seite</value>
+    <value>zur nächsten Seite</value>
   </data>
   <data name="MoveToPreviousPage" xml:space="preserve">
-    <value>Gehen zur vorherigen Seite</value>
+    <value>zur vorherigen Seite</value>
   </data>
   <data name="Drag" xml:space="preserve">
     <value>Versetzen</value>
