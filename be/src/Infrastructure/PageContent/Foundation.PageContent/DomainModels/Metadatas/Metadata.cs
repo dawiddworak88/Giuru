@@ -1,4 +1,4 @@
-﻿namespace Buyer.Web.Shared.DomainModels.Metadata
+﻿namespace Foundation.PageContent.DomainModels.Metadatas
 {
     public class Metadata
     {

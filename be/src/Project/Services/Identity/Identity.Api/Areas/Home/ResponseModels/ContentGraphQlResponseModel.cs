@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace Buyer.Web.Shared.GraphQlResponseModels
+namespace Identity.Api.Areas.Home.ResponseModels
 {
     public record Attributes(
-        [property: JsonProperty("seo")] Seo Seo
+        [property: JsonProperty("content")] Content Content
     );
 
     public record Data(
@@ -15,12 +15,12 @@ namespace Buyer.Web.Shared.GraphQlResponseModels
         [property: JsonProperty("data")] Data Data
     );
 
-    public record SeoGraphQlResponseModel(
+    public record ContentGraphQlResponseModel(
         [property: JsonProperty("page")] Page Page
     );
 
-    public record Seo(
-        [property: JsonProperty("metaTitle")] string MetaTitle,
-        [property: JsonProperty("metaDescription")] string MetaDescription
+    public record Content(
+        [property: JsonProperty("title")] string Title,
+        [property: JsonProperty("text")] string Text
     );
 }
