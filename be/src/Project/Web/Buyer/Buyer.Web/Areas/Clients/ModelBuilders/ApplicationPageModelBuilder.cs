@@ -10,11 +10,11 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
     public class ApplicationPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ApplicationPageViewModel>
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
-        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ApplicationFormViewModel> applicationFormModelBuilder;
 
         public ApplicationPageModelBuilder(
-            IModelBuilder<FooterViewModel> footerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder,
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ApplicationFormViewModel> applicationFormModelBuilder)
         {
@@ -28,7 +28,7 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
             {
                 Header = headerModelBuilder.BuildModel(),
                 ApplicationForm = await applicationFormModelBuilder.BuildModelAsync(componentModel),
-                Footer = footerModelBuilder.BuildModel()
+                Footer = await footerModelBuilder.BuildModelAsync(componentModel)
             };
 
             return viewModel;

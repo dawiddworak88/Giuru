@@ -54,5 +54,7 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string Ean { get; set; }
         public ListItemViewModel PrimaryProduct { get; set; }
         public string ProductsSuggestionUrl { get; set; }
+        public long VideoFileSizeLimit { get; set; }
+        public string FileSizeLimitErrorMessage { get; set; }
     }
 }

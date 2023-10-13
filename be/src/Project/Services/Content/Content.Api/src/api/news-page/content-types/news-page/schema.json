@@ -35,6 +35,16 @@
         }
       },
       "component": "blocks.main-navigation"
+    },
+    "footer": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.footer"
     }
   }
 }

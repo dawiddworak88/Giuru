@@ -105,7 +105,7 @@ namespace Catalog.Api.Services.Products
             {
                 var productVideo = new ProductVideo
                 {
-                    MediaId = videoId,
+                    MediaId = videoId, 
                     ProductId = product.Id
                 };
 

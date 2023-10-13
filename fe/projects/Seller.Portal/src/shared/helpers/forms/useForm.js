@@ -77,8 +77,7 @@ function useForm(
         const required = field["required"];
 
         if (required["isRequired"] && !value) {
-
-            error = required["error"];
+          error = required["error"];
         }
       }
 
@@ -134,8 +133,15 @@ function useForm(
 
       setIsDirty(true);
 
+      let value = event.target.value;
+      const fieldType = event.target.type;
+
+      if (!isNaN(value) && fieldType == "number") {
+        value = parseFloat(value);
+      }
+
       if (event.isFormData) {
-        setFieldValue({ name: "formData", value: { ...event.formData, [event.name]: event.target.value } });
+        setFieldValue({ name: "formData", value: { ...event.formData, [event.name]: value } });
       }
       else {
         const name = event.target.name;

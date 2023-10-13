@@ -37,6 +37,16 @@
       "component": "blocks.hero-slider"
     },
     "mainNavigationLinks": {
+        "type": "component",
+        "repeatable": false,
+        "pluginOptions": {
+          "i18n": {
+            "localized": true
+          }
+        },
+        "component": "blocks.main-navigation"
+    },
+    "footer": {
       "type": "component",
       "repeatable": false,
       "pluginOptions": {
@@ -44,7 +54,7 @@
           "localized": true
         }
       },
-      "component": "blocks.main-navigation"
+      "component": "shared.footer"
     }
   }
 }
