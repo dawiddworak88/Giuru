@@ -77,7 +77,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
 
             var category = await _categoriesRepository.GetCategoryAsync(token, language, model.Id);
 
-            if(category is not null) 
+            if (category is not null) 
             {
                 var categorySchemas = await _categoriesRepository.GetCategorySchemasAsync(token, language, model.Id);
 
