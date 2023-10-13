@@ -27,7 +27,7 @@
       "component": "shared.seo"
     },
     "content": {
-      "type": "richtext",
+      "type": "component",
       "repeatable": false,
       "pluginOptions": {
         "i18n": {
