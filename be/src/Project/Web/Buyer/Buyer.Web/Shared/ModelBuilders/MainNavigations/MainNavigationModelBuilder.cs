@@ -4,87 +4,86 @@ using Foundation.PageContent.Components.MainNavigations.ViewModels;
 using Foundation.PageContent.Components.Links.ViewModels;
 using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Localization;
-using Foundation.Localization;
-using Microsoft.AspNetCore.Routing;
-using System.Globalization;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Repositories.MainNavigationLinks;
+using Microsoft.AspNetCore.Routing;
+using System.Globalization;
+using Foundation.Localization;
+using Microsoft.Extensions.Localization;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
 {
     public class MainNavigationModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>
     {
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<OrderResources> orderLocalizer;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IOptionsMonitor<AppSettings> settings;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IOptionsMonitor<AppSettings> _settings;
+        private readonly IMainNavigationLinkRepository _mainNavigationLinkRepository;
 
         public MainNavigationModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
+            IOptionsMonitor<AppSettings> settings,
             LinkGenerator linkGenerator,
-            IOptionsMonitor<AppSettings> settings)
+            IMainNavigationLinkRepository mainNavigationLinkRepository)
         {
-            this.globalLocalizer = globalLocalizer;
-            this.orderLocalizer = orderLocalizer;
-            this.linkGenerator = linkGenerator;
-            this.settings = settings;
+            _globalLocalizer = globalLocalizer;
+            _orderLocalizer = orderLocalizer;
+            _settings = settings;
+            _linkGenerator = linkGenerator;
+            _mainNavigationLinkRepository = mainNavigationLinkRepository;
         }
 
         public async Task<MainNavigationViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var links = new List<LinkViewModel>
-            { 
-                new LinkViewModel 
+            {
+                new LinkViewModel
                 {
-                    Text = this.globalLocalizer.GetString("Home"),
-                    Url = this.linkGenerator.GetPathByAction("Index", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name })
+                    Text = _orderLocalizer.GetString("MyOrders").Value,
+                    Url = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new LinkViewModel
+                {
+                    Text = _orderLocalizer.GetString("PlaceOrder").Value,
+                    Url = _linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new LinkViewModel
+                {
+                    Text = _globalLocalizer.GetString("AvailableProducts"),
+                    Url = _linkGenerator.GetPathByAction("Index", "AvailableProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new LinkViewModel
+                {
+                    Text = _globalLocalizer.GetString("Outlet").Value,
+                    Url = _linkGenerator.GetPathByAction("Index", "Outlet", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new LinkViewModel
+                {
+                    Text = _globalLocalizer.GetString("News"),
+                    Url = _linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new LinkViewModel
+                {
+                    Text = _globalLocalizer.GetString("DownloadCenter"),
+                    Url = _linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
                 }
             };
 
-            links.Add(new LinkViewModel
-            {
-                Text = this.orderLocalizer.GetString("MyOrders").Value,
-                Url = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
-            });
+            var mainNavigationLinks = await _mainNavigationLinkRepository.GetMainNavigationLinksAsync(componentModel.ContentPageKey, componentModel.Language, _settings.CurrentValue.DefaultCulture);
 
-            links.Add(new LinkViewModel
+            foreach (var link in mainNavigationLinks.OrEmptyIfNull())
             {
-                Text = this.orderLocalizer.GetString("PlaceOrder").Value,
-                Url = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
-            });
-
-            links.Add(new LinkViewModel
-            {
-                Text = this.globalLocalizer.GetString("AvailableProducts"),
-                Url = this.linkGenerator.GetPathByAction("Index", "AvailableProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
-            });
-
-            links.Add(new LinkViewModel
-            {
-                Text = this.globalLocalizer.GetString("Outlet").Value,
-                Url = this.linkGenerator.GetPathByAction("Index", "Outlet", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
-            });
-
-            links.Add(new LinkViewModel
-            {
-                Text = this.globalLocalizer.GetString("News"),
-                Url = this.linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
-            });
-
-            links.Add(new LinkViewModel
-            {
-                Text = this.globalLocalizer.GetString("DownloadCenter"),
-                Url = this.linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
-            });
-
-            links.Add(new LinkViewModel
-            {
-                Text = this.globalLocalizer.GetString("MakeComplaint"),
-                Target = "_blank",
-                Url = this.settings.CurrentValue.MakeComplaintUrl
-            });
+                links.Add(new LinkViewModel
+                {
+                    Url = link.Href,
+                    Text = link.Label,
+                    Target = link.Taget
+                });
+            }
 
             return new MainNavigationViewModel
             {

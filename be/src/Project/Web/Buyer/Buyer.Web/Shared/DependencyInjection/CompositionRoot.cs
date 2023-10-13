@@ -33,6 +33,7 @@ using Buyer.Web.Areas.Products.Repositories.Files;
 using Foundation.Media.Configurations;
 using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
 using Buyer.Web.Shared.ModelBuilders.OrderItemStatusChanges;
+using Buyer.Web.Shared.Repositories.MainNavigationLinks;
 using Buyer.Web.Shared.Repositories.GraphQl;
 
 namespace Buyer.Web.Shared.DependencyInjection
@@ -61,6 +62,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             // Repositories
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<ICatalogProductsRepository, CatalogProductsRepository>();
+            services.AddScoped<IMainNavigationLinkRepository, MainNavigationLinkRepository>();
             services.AddScoped<IGraphQlRepository, GraphQlRepository>();
 
             // Services

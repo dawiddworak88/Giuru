@@ -1,4 +1,4 @@
-﻿using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.PageContent.DomainModels.Metadatas;
 using Foundation.PageContent.ResponseModels.Seo;
 using GraphQL;
