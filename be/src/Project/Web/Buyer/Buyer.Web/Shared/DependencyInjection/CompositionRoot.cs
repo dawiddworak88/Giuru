@@ -33,7 +33,6 @@ using Buyer.Web.Areas.Products.Repositories.Files;
 using Foundation.Media.Configurations;
 using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
 using Buyer.Web.Shared.ModelBuilders.OrderItemStatusChanges;
-using Buyer.Web.Shared.Repositories.Metadatas;
 using Buyer.Web.Shared.Repositories.MainNavigationLinks;
 using Buyer.Web.Shared.Repositories.GraphQl;
 

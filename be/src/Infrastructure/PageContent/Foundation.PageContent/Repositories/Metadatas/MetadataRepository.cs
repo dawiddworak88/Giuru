@@ -1,6 +1,3 @@
-using Buyer.Web.Shared.DomainModels.Metadata;
-using Buyer.Web.Shared.GraphQlResponseModels.Seo;
-using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.PageContent.DomainModels.Metadatas;
 using Foundation.PageContent.ResponseModels.Seo;
