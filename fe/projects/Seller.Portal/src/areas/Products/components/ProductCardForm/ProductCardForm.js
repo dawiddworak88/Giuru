@@ -217,11 +217,16 @@ const ProductCardForm = (props) => {
 
         const newElements = generateElementsFromSchema(schema);
 
-        const tmpBlock = newElements[src];
-        newElements[src] = newElements[dest];
-        newElements[dest] = tmpBlock;
+        reorder(newElements, src, dest);
 
         updateSchema(newElements, schema)
+    }
+
+    const reorder = (list, source, destination) => {
+        const result = list;
+
+        const [item] = result.splice(source, 1);
+        result.splice(destination, 0, item);
     }
 
     const handleProductAttribute = (attribute) => {
