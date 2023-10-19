@@ -138,12 +138,18 @@ namespace Client.Api.Services.Clients
         {
             var client = await this.context.Clients.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
 
-            if (client == null)
+            if (client is null)
             {
                 throw new CustomException(this.clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
             }
 
+            if (await this.context.Addresses.AnyAsync(x => x.ClientId == model.Id && x.IsActive))
+            {
+                throw new CustomException("", (int)HttpStatusCode.Conflict);
+            }
+
             client.IsActive = false;
+            client.LastModifiedDate = DateTime.UtcNow;
 
             await this.context.SaveChangesAsync();
         }

@@ -24,5 +24,7 @@ namespace Client.Api.Infrastructure.Clients.Entities
 
         [Required]
         public Guid ClientId { get; set; }
+
+        public virtual Client Client { get; set; }
     }
 }
