@@ -52,14 +52,14 @@ namespace Client.Api.Services.Addresses
 
         public async Task<PagedResults<IEnumerable<ClientAddressServiceModel>>> GetAsync(GetClientAddressesServiceModel model)
         {
-            var clientAddresses = _context.Addresses
+            var clientsAddresses = _context.Addresses
                     .Where(x => x.IsActive)
                     .Include(x => x.Client)
                     .AsSingleQuery();
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                clientAddresses = clientAddresses.Where(x => 
+                clientsAddresses = clientsAddresses.Where(x => 
                     x.Street.StartsWith(model.SearchTerm) || 
                     x.City.StartsWith(model.SearchTerm) || 
                     x.Region.StartsWith(model.SearchTerm) ||
@@ -67,17 +67,19 @@ namespace Client.Api.Services.Addresses
                     x.PhoneNumber.StartsWith(model.SearchTerm));
             }
 
+            clientsAddresses = clientsAddresses.ApplySort(model.OrderBy);
+
             PagedResults<IEnumerable<Address>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
-                clientAddresses = clientAddresses.Take(Constants.MaxItemsPerPageLimit);
+                clientsAddresses = clientsAddresses.Take(Constants.MaxItemsPerPageLimit);
 
-                pagedResults = clientAddresses.PagedIndex(new Pagination(clientAddresses.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+                pagedResults = clientsAddresses.PagedIndex(new Pagination(clientsAddresses.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
             }
             else
             {
-                pagedResults = clientAddresses.PagedIndex(new Pagination(clientAddresses.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+                pagedResults = clientsAddresses.PagedIndex(new Pagination(clientsAddresses.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
             return new PagedResults<IEnumerable<ClientAddressServiceModel>>(pagedResults.Total, pagedResults.PageSize)
