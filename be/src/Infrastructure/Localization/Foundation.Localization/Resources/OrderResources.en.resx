@@ -246,8 +246,8 @@
   <data name="OrderStatus" xml:space="preserve">
     <value>Order status:</value>
   </data>
-  <data name="OrderStatusComment" xml:space="preserve">
-    <value>Additional order status info:</value>
+  <data name="ExpectedDateOfProductOnStock" xml:space="preserve">
+    <value>Expected date of product on stock:</value>
   </data>
   <data name="OrderStatusNotFound" xml:space="preserve">
     <value>Order status has not been found</value>

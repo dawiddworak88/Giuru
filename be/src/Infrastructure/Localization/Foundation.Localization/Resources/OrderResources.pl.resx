@@ -246,8 +246,8 @@
   <data name="OrderStatus" xml:space="preserve">
     <value>Status zamówienia:</value>
   </data>
-  <data name="OrderStatusComment" xml:space="preserve">
-    <value>Dodatkowe informacje o statusie zamówienia:</value>
+  <data name="ExpectedDateOfProductOnStock" xml:space="preserve">
+    <value>Przewidywana data towaru na magazynie:</value>
   </data>
   <data name="OrderStatusNotFound" xml:space="preserve">
     <value>Status zamówienia nie został znaleziony.</value>
