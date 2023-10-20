@@ -48,7 +48,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 NameLabel = this.globalLocalizer.GetString("Name"),
                 OrderStatusLabel = this.globalLocalizer.GetString("OrderStatus"),
                 NavigateToOrderLabel = this.orderLocalizer.GetString("NavigateToOrder"),
-                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
+                ExpectedDateOfProductOnStockLabel = this.orderLocalizer.GetString("ExpectedDateOfProductOnStock"),
                 QuantityLabel = this.orderLocalizer.GetString("QuantityLabel"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
@@ -77,8 +77,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.ImageUrl = orderItem.PictureUrl;
                     viewModel.ImageAlt = orderItem.ProductName;
                     viewModel.OrderUrl = this.linkGenerator.GetPathByAction("Status", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, id = orderItem.OrderId });
-                    viewModel.DeliveryFrom = orderItem.ExpectedDeliveryFrom;
-                    viewModel.DeliveryTo = orderItem.ExpectedDeliveryTo;
                     viewModel.ExternalReference = orderItem.ExternalReference;
                     viewModel.MoreInfo = orderItem.MoreInfo;
                     viewModel.CanCancelOrderItem = false;

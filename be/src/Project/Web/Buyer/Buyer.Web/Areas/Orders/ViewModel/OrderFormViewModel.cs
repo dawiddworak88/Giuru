@@ -19,8 +19,6 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string StockQuantityLabel { get; set; }
         public string OutletQuantityLabel { get; set; }
         public string ExternalReferenceLabel { get; set; }
-        public string DeliveryFromLabel { get; set; }
-        public string DeliveryToLabel { get; set; }
         public string MoreInfoLabel { get; set; }
         public string GetSuggestionsUrl { get; set; }
         public string OrderItemsLabel { get; set; }

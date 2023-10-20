@@ -16,11 +16,9 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public double OutletQuantity { get; set; }
         public string ExternalReference { get; set; }
         public string OrderItemStatusName { get; set; }
-        public string OrderItemStatusChangeComment { get; set; }
+        public string ExpectedDateOfProductOnStock { get; set; }
         public string MoreInfo { get; set; }
         public string ProductAttributes { get; set; }
         public Guid? OrderItemStatusId { get; set; }
-        public DateTime? DeliveryFrom { get; set; }
-        public DateTime? DeliveryTo { get; set; }
     }
 }

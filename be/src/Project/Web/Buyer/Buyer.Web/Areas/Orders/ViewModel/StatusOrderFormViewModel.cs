@@ -16,8 +16,6 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string StockQuantityLabel { get; set; }
         public string OutletQuantityLabel { get; set; }
         public string ExternalReferenceLabel { get; set; }
-        public string DeliveryFromLabel { get; set; }
-        public string DeliveryToLabel { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
         public string FabricsLabel { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
@@ -28,7 +26,7 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string CancelOrderLabel { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string UpdateOrderStatusUrl { get; set; }
-        public string OrderStatusCommentLabel { get; set; }
+        public string ExpectedDateOfProductOnStockLabel { get; set; }
         public string CustomOrder { get; set; }
         public string CustomOrderLabel { get; set; }
         public string EditUrl { get; set; }

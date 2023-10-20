@@ -42,8 +42,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 OrLabel = this.globalLocalizer.GetString("Or"),
                 DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
                 DropOrSelectFilesLabel = this.orderLocalizer.GetString("DropOrSelectOrderFile"),
-                DeliveryFromLabel = this.orderLocalizer.GetString("DeliveryFrom"),
-                DeliveryToLabel = this.orderLocalizer.GetString("DeliveryTo"),
                 MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
                 NameLabel = this.orderLocalizer.GetString("NameLabel"),
                 OrderItemsLabel = this.orderLocalizer.GetString("OrderItemsLabel"),
