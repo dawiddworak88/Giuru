@@ -41,8 +41,6 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 SearchPlaceholderLabel = this.orderLocalizer.GetString("EnterSkuOrName"),
                 ChangeDeliveryFromLabel = this.orderLocalizer.GetString("ChangeDeliveryFrom"),
                 ChangeDeliveryToLabel = this.orderLocalizer.GetString("ChangeDeliveryTo"),
-                DeliveryFromLabel = this.orderLocalizer.GetString("DeliveryFrom"),
-                DeliveryToLabel = this.orderLocalizer.GetString("DeliveryTo"),
                 GetSuggestionsUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
                 NameLabel = this.orderLocalizer.GetString("NameLabel"),
