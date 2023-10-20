@@ -209,7 +209,7 @@ namespace Client.Api.Services.Clients
 
             await _context.SaveChangesAsync();
 
-            return await _GetAsync(new GetClientServiceModel { Id = client.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
+            return await GetAsync(new GetClientServiceModel { Id = client.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
         public async Task<ClientServiceModel> CreateAsync(CreateClientServiceModel serviceModel)
@@ -258,7 +258,7 @@ namespace Client.Api.Services.Clients
 
             await _context.SaveChangesAsync();
 
-            return await _GetAsync(new GetClientServiceModel { Id = client.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
+            return await GetAsync(new GetClientServiceModel { Id = client.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
         public async Task<PagedResults<IEnumerable<ClientServiceModel>>> GetByIdsAsync(GetClientsByIdsServiceModel model)
