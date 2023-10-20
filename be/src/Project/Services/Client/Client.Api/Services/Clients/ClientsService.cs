@@ -20,20 +20,20 @@ namespace Client.Api.Services.Clients
 {
     public class ClientsService : IClientsService
     {
-        private readonly ClientContext context;
-        private readonly IStringLocalizer clientLocalizer;
+        private readonly ClientContext _context;
+        private readonly IStringLocalizer _clientLocalizer;
 
         public ClientsService(
             ClientContext context,
             IStringLocalizer<ClientResources> clientLocalizer)
         {
-            this.context = context;
-            this.clientLocalizer = clientLocalizer;
+            _context = context;
+            _clientLocalizer = clientLocalizer;
         }
 
         public async Task<PagedResults<IEnumerable<ClientServiceModel>>> GetAsync(GetClientsServiceModel model)
         {
-            var clients = this.context.Clients.Where(x => x.IsActive);
+            var clients = _context.Clients.Where(x => x.IsActive);
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -73,14 +73,14 @@ namespace Client.Api.Services.Clients
                     CreatedDate = client.CreatedDate
                 };
 
-                var clientGroups = this.context.ClientsGroups.Where(x => x.ClientId == client.Id && x.IsActive).Select(x => x.GroupId);
+                var clientGroups = _context.ClientsGroups.Where(x => x.ClientId == client.Id && x.IsActive).Select(x => x.GroupId);
 
                 if (clientGroups is not null)
                 {
                     item.ClientGroupIds = clientGroups;
                 }
 
-                var clientManagers = this.context.ClientsAccountManagers.Where(x => x.ClientId == client.Id && x.IsActive).Select(x => x.ClientManagerId);
+                var clientManagers = _context.ClientsAccountManagers.Where(x => x.ClientId == client.Id && x.IsActive).Select(x => x.ClientManagerId);
 
                 if (clientManagers is not null)
                 {
@@ -97,11 +97,11 @@ namespace Client.Api.Services.Clients
 
         public async Task<ClientServiceModel> GetAsync(GetClientServiceModel model)
         {
-            var existingClient = await this.context.Clients.FirstOrDefaultAsync(x => x.SellerId == model.OrganisationId.Value && x.Id == model.Id && x.IsActive);
+            var existingClient = await _context.Clients.FirstOrDefaultAsync(x => x.SellerId == model.OrganisationId.Value && x.Id == model.Id && x.IsActive);
             
             if (existingClient is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var client = new ClientServiceModel
@@ -117,14 +117,14 @@ namespace Client.Api.Services.Clients
                 CreatedDate = existingClient.CreatedDate
             };
 
-            var clientGroups = this.context.ClientsGroups.Where(x => x.ClientId == existingClient.Id && x.IsActive).Select(x => x.GroupId);
+            var clientGroups = _context.ClientsGroups.Where(x => x.ClientId == existingClient.Id && x.IsActive).Select(x => x.GroupId);
 
             if (clientGroups is not null)
             {
                 client.ClientGroupIds = clientGroups;
             }
 
-            var clientManagers = this.context.ClientsAccountManagers.Where(x => x.ClientId == existingClient.Id && x.IsActive).Select(x => x.ClientManagerId);
+            var clientManagers = _context.ClientsAccountManagers.Where(x => x.ClientId == existingClient.Id && x.IsActive).Select(x => x.ClientManagerId);
 
             if (clientManagers is not null)
             {
@@ -136,31 +136,31 @@ namespace Client.Api.Services.Clients
 
         public async Task DeleteAsync(DeleteClientServiceModel model)
         {
-            var client = await this.context.Clients.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
+            var client = await _context.Clients.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
 
             if (client is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            if (await this.context.Addresses.AnyAsync(x => x.ClientId == model.Id && x.IsActive))
+            if (await _context.Addresses.AnyAsync(x => x.ClientId == model.Id && x.IsActive))
             {
-                throw new CustomException("", (int)HttpStatusCode.Conflict);
+                throw new CustomException(_clientLocalizer.GetString("ClientDeleteAddressConflict"), (int)HttpStatusCode.Conflict);
             }
 
             client.IsActive = false;
             client.LastModifiedDate = DateTime.UtcNow;
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<ClientServiceModel> UpdateAsync(UpdateClientServiceModel serviceModel)
         {
-            var client = await this.context.Clients.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
+            var client = await _context.Clients.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
 
             if (client == null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             client.Name = serviceModel.Name;
@@ -171,11 +171,11 @@ namespace Client.Api.Services.Clients
             client.OrganisationId = serviceModel.ClientOrganisationId.Value;
             client.LastModifiedDate = DateTime.UtcNow;
 
-            var clientGroups = this.context.ClientsGroups.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
+            var clientGroups = _context.ClientsGroups.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
 
             foreach (var clientGroup in clientGroups.OrEmptyIfNull())
             {
-                this.context.ClientsGroups.Remove(clientGroup);
+                _context.ClientsGroups.Remove(clientGroup);
             }
 
             foreach (var group in serviceModel.ClientGroupIds.OrEmptyIfNull())
@@ -186,14 +186,14 @@ namespace Client.Api.Services.Clients
                     GroupId = group
                 };
 
-                await this.context.ClientsGroups.AddAsync(groupItem.FillCommonProperties());
+                await _context.ClientsGroups.AddAsync(groupItem.FillCommonProperties());
             }
 
-            var clientManagers = this.context.ClientsAccountManagers.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
+            var clientManagers = _context.ClientsAccountManagers.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
 
             foreach (var clientManager in clientManagers.OrEmptyIfNull())
             {
-                this.context.ClientsAccountManagers.Remove(clientManager);
+                _context.ClientsAccountManagers.Remove(clientManager);
             }
 
             foreach (var managerId in serviceModel.ClientManagerIds.OrEmptyIfNull())
@@ -204,21 +204,21 @@ namespace Client.Api.Services.Clients
                     ClientManagerId = managerId
                 };
 
-                await this.context.ClientsAccountManagers.AddAsync(managerItem.FillCommonProperties());
+                await _context.ClientsAccountManagers.AddAsync(managerItem.FillCommonProperties());
             }
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            return await this.GetAsync(new GetClientServiceModel { Id = client.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
+            return await _GetAsync(new GetClientServiceModel { Id = client.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
         public async Task<ClientServiceModel> CreateAsync(CreateClientServiceModel serviceModel)
         {
-            var exsitingClient = this.context.Clients.FirstOrDefault(x => x.Email == serviceModel.Email && x.IsActive);
+            var exsitingClient = _context.Clients.FirstOrDefault(x => x.Email == serviceModel.Email && x.IsActive);
 
             if (exsitingClient is not null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientExists"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientExists"), (int)HttpStatusCode.NoContent);
             }
 
             var client = new Infrastructure.Clients.Entities.Client
@@ -232,7 +232,7 @@ namespace Client.Api.Services.Clients
                 SellerId = serviceModel.OrganisationId.Value
             };
 
-            this.context.Clients.Add(client.FillCommonProperties());
+            _context.Clients.Add(client.FillCommonProperties());
 
             foreach (var group in serviceModel.ClientGroupIds.OrEmptyIfNull())
             {
@@ -242,7 +242,7 @@ namespace Client.Api.Services.Clients
                     GroupId = group
                 };
 
-                await this.context.ClientsGroups.AddAsync(clientGroup.FillCommonProperties());
+                await _context.ClientsGroups.AddAsync(clientGroup.FillCommonProperties());
             }
 
             foreach (var managerId in serviceModel.ClientManagerIds.OrEmptyIfNull())
@@ -253,17 +253,17 @@ namespace Client.Api.Services.Clients
                     ClientManagerId = managerId
                 };
 
-                await this.context.ClientsAccountManagers.AddAsync(clientManager.FillCommonProperties());
+                await _context.ClientsAccountManagers.AddAsync(clientManager.FillCommonProperties());
             }
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            return await this.GetAsync(new GetClientServiceModel { Id = client.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
+            return await _GetAsync(new GetClientServiceModel { Id = client.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
         public async Task<PagedResults<IEnumerable<ClientServiceModel>>> GetByIdsAsync(GetClientsByIdsServiceModel model)
         {
-            var clients = from c in this.context.Clients
+            var clients = from c in _context.Clients
                           where model.Ids.Contains(c.Id) && c.SellerId == model.OrganisationId.Value && c.IsActive
                           select new ClientServiceModel
                           {
@@ -289,7 +289,7 @@ namespace Client.Api.Services.Clients
 
         public async Task<ClientServiceModel> GetByOrganisationAsync(GetClientByOrganisationServiceModel model)
         {
-            var clients = from c in this.context.Clients
+            var clients = from c in _context.Clients
                           where c.OrganisationId == model.Id.Value && c.IsActive
                           select new ClientServiceModel
                           {

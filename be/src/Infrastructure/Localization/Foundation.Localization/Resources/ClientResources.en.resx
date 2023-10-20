@@ -282,4 +282,13 @@
   <data name="NewCountry" xml:space="preserve">
     <value>Add country</value>
   </data>
+  <data name="AddressDeleteDefaultConflict" xml:space="preserve">
+    <value>The selected address is assigned as the default.</value>
+  </data>
+  <data name="ClientAddressNotFound" xml:space="preserve">
+    <value>Client address not found.</value>
+  </data>
+  <data name="ClientDeleteAddressConflict" xml:space="preserve">
+    <value>Delete the addresses assigned to this Client</value>
+  </data>
 </root>

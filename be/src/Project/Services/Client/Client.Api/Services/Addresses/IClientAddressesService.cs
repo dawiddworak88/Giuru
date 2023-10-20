@@ -11,7 +11,7 @@ namespace Client.Api.Services.Addresses
         Task<Guid> CreateAsync(CreateClientAddressServiceModel model);
         Task<Guid> UpdateAsync(UpdateClientAddressServiceModel model);
         Task DeleteAsync(DeleteClientAddressServiceModel model);
-        Task<PagedResults<IEnumerable<ClientAddressServiceModel>>> GetAsync(GetClientAddressesServiceModel model);
+        PagedResults<IEnumerable<ClientAddressServiceModel>> Get(GetClientAddressesServiceModel model);
         Task<ClientAddressServiceModel> GetAsync(GetClientAddressServiceModel model);
     }
 }

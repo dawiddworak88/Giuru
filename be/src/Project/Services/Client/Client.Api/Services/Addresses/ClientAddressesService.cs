@@ -36,12 +36,12 @@ namespace Client.Api.Services.Addresses
 
             if (clientAddress is null)
             {
-                throw new CustomException("", (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             if (await _context.Clients.AnyAsync(x => x.DefaultAddressId == model.Id && x.IsActive))
             {
-                throw new CustomException("", (int)HttpStatusCode.Conflict);
+                throw new CustomException("AddressDeleteDefaultConflict", (int)HttpStatusCode.Conflict);
             }
 
             clientAddress.IsActive = false;
@@ -50,7 +50,7 @@ namespace Client.Api.Services.Addresses
             await _context.SaveChangesAsync();
         }
 
-        public async Task<PagedResults<IEnumerable<ClientAddressServiceModel>>> GetAsync(GetClientAddressesServiceModel model)
+        public PagedResults<IEnumerable<ClientAddressServiceModel>> Get(GetClientAddressesServiceModel model)
         {
             var clientsAddresses = _context.Addresses
                     .Where(x => x.IsActive)
@@ -110,7 +110,7 @@ namespace Client.Api.Services.Addresses
 
             if (clientAddress is null)
             {
-                throw new CustomException("", (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             return new ClientAddressServiceModel
@@ -131,6 +131,13 @@ namespace Client.Api.Services.Addresses
 
         public async Task<Guid> CreateAsync(CreateClientAddressServiceModel model)
         {
+            var client = await _context.Clients.FirstOrDefaultAsync(x => x.Id == model.ClientId && x.IsActive);
+
+            if (client is null)
+            {
+                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
+            }
+
             var clientAddress = new Address
             {
                 Street = model.Street, 
@@ -142,7 +149,12 @@ namespace Client.Api.Services.Addresses
                 Region = model.Region
             };
 
-            await _context.Addresses .AddAsync(clientAddress.FillCommonProperties());
+            await _context.Addresses.AddAsync(clientAddress.FillCommonProperties());
+
+            if (client.DefaultAddressId.HasValue is false)
+            {
+                client.DefaultAddressId = clientAddress.Id;
+            }
 
             await _context.SaveChangesAsync();
 
@@ -155,7 +167,7 @@ namespace Client.Api.Services.Addresses
 
             if (clientAddress is null)
             {
-                throw new CustomException("", (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             clientAddress.ClientId = model.ClientId.Value; 
