@@ -64,7 +64,8 @@ namespace Client.Api.Services.Addresses
                     x.City.StartsWith(model.SearchTerm) || 
                     x.Region.StartsWith(model.SearchTerm) ||
                     x.PostCode.StartsWith(model.SearchTerm) ||
-                    x.PhoneNumber.StartsWith(model.SearchTerm));
+                    x.PhoneNumber.StartsWith(model.SearchTerm) ||
+                    x.Recipient.StartsWith(model.SearchTerm));
             }
 
             clientsAddresses = clientsAddresses.ApplySort(model.OrderBy);
