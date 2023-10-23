@@ -63,8 +63,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 AreYouSureLabel = this.globalLocalizer.GetString("AreYouSureLabel"),
                 NavigateToOrdersListText = this.orderLocalizer.GetString("NavigateToOrdersList"),
                 NoOrderItemsLabel = this.orderLocalizer.GetString("NoOrderItemsLabel"),
-                ChangeDeliveryFromLabel = this.orderLocalizer.GetString("ChangeDeliveryFrom"),
-                ChangeDeliveryToLabel = this.orderLocalizer.GetString("ChangeDeliveryTo"),
                 OrdersUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 UploadOrderFileUrl = this.linkGenerator.GetPathByAction("Index", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),

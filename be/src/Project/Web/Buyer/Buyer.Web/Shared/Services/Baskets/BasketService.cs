@@ -44,8 +44,6 @@ namespace Buyer.Web.Shared.Services.Baskets
                         ExternalReference = x.ExternalReference,
                         ImageSrc = x.PictureUrl,
                         ImageAlt = x.ProductName,
-                        DeliveryFrom = x.DeliveryFrom,
-                        DeliveryTo = x.DeliveryTo,
                         MoreInfo = x.MoreInfo
                     });
 

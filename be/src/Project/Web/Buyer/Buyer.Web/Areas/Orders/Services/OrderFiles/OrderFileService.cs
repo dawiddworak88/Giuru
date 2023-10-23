@@ -27,8 +27,6 @@ namespace Buyer.Web.Areas.Orders.Services.OrderFiles
                     Sku = row.Cell(OrderFileConstants.SkuColumnIndex).GetValue<string>(),
                     Quantity = row.Cell(OrderFileConstants.QuantityColumnIndex).GetValue<double>(),
                     ExternalReference = row.Cell(OrderFileConstants.ExternalReferenceColumnIndex).GetValue<string>(),
-                    DeliveryFrom = row.Cell(OrderFileConstants.ExpectedDeliveryFromColumnIndex).GetValue<DateTime?>(),
-                    DeliveryTo = row.Cell(OrderFileConstants.ExpectedDeliveryToColumnIndex).GetValue<DateTime?>(),
                     MoreInfo = row.Cell(OrderFileConstants.MoreInfoColumnIndex).GetValue<string>()
                 };
 
