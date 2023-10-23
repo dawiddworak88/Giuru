@@ -75,6 +75,7 @@ namespace Client.Api.v1.Controllers
                         CountryId = x.CountryId,
                         ClientId = x.ClientId,
                         ClientName = x.ClientName,
+                        Recipient = x.Recipient,
                         City = x.City,
                         Region = x.Region,
                         Street = x.Street,
@@ -129,6 +130,7 @@ namespace Client.Api.v1.Controllers
                         CountryId = clientAddress.CountryId,
                         ClientId = clientAddress.ClientId,
                         ClientName = clientAddress.ClientName,
+                        Recipient = clientAddress.Recipient,
                         City = clientAddress.City,
                         Region = clientAddress.Region,
                         Street = clientAddress.Street,
@@ -171,6 +173,7 @@ namespace Client.Api.v1.Controllers
                     Id = request.Id,
                     CountryId = request.CountryId,
                     ClientId = request.ClientId,
+                    Recipient = request.Recipient,
                     City = request.City,
                     Region = request.Region,
                     PostCode = request.PostCode,
@@ -198,7 +201,8 @@ namespace Client.Api.v1.Controllers
                 var serviceModel = new CreateClientAddressServiceModel
                 {
                     CountryId = request.CountryId,
-                    ClientId= request.ClientId,
+                    ClientId = request.ClientId,
+                    Recipient = request.Recipient,
                     City = request.City,
                     PostCode = request.PostCode,
                     Street = request.Street,

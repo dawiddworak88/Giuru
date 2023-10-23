@@ -39,7 +39,7 @@ namespace Client.Api.Services.Addresses
                 throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            if (await _context.Clients.AnyAsync(x => x.DefaultAddressId == model.Id && x.IsActive))
+            if (await _context.Clients.AnyAsync(x => x.DefaultDeliveryAddressId == model.Id && x.IsActive))
             {
                 throw new CustomException("AddressDeleteDefaultConflict", (int)HttpStatusCode.Conflict);
             }
@@ -89,6 +89,7 @@ namespace Client.Api.Services.Addresses
                     Id = x.Id,
                     ClientId = x.ClientId,
                     ClientName = x.Client.Name,
+                    Recipient = x.Recipient,
                     CountryId = x.CountryId,
                     Street = x.Street,
                     City = x.City,
@@ -118,6 +119,7 @@ namespace Client.Api.Services.Addresses
                 Id = clientAddress.Id,
                 ClientId = clientAddress.ClientId,
                 ClientName = clientAddress.Client.Name,
+                Recipient = clientAddress.Recipient,
                 CountryId = clientAddress.CountryId,
                 Street = clientAddress.Street,
                 City = clientAddress.City,
@@ -140,6 +142,7 @@ namespace Client.Api.Services.Addresses
 
             var clientAddress = new Address
             {
+                Recipient = model.Recipient,
                 Street = model.Street, 
                 City = model.City, 
                 PhoneNumber = model.PhoneNumber, 
@@ -151,9 +154,9 @@ namespace Client.Api.Services.Addresses
 
             await _context.Addresses.AddAsync(clientAddress.FillCommonProperties());
 
-            if (client.DefaultAddressId.HasValue is false)
+            if (client.DefaultDeliveryAddressId.HasValue is false)
             {
-                client.DefaultAddressId = clientAddress.Id;
+                client.DefaultDeliveryAddressId = clientAddress.Id;
             }
 
             await _context.SaveChangesAsync();
@@ -170,7 +173,8 @@ namespace Client.Api.Services.Addresses
                 throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            clientAddress.ClientId = model.ClientId.Value; 
+            clientAddress.ClientId = model.ClientId.Value;
+            clientAddress.Recipient = model.Recipient;
             clientAddress.Street = model.Street;
             clientAddress.City = model.City;
             clientAddress.PhoneNumber = model.PhoneNumber;

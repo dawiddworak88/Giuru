@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Client.Api.Infrastructure.Migrations
 {
-    public partial class AddedClientAddresses : Migration
+    public partial class AddedClientDeliveryAddresses : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,17 +25,18 @@ namespace Client.Api.Infrastructure.Migrations
                 name: "LastName",
                 table: "Addresses");
 
-            migrationBuilder.DropColumn(
-                name: "Phone",
-                table: "Addresses");
-
             migrationBuilder.RenameColumn(
                 name: "PhonePrefix",
+                table: "Addresses",
+                newName: "Recipient");
+
+            migrationBuilder.RenameColumn(
+                name: "Phone",
                 table: "Addresses",
                 newName: "PhoneNumber");
 
             migrationBuilder.AddColumn<Guid>(
-                name: "DefaultAddressId",
+                name: "DefaultDeliveryAddressId",
                 table: "Clients",
                 type: "uniqueidentifier",
                 nullable: true);
@@ -46,12 +47,33 @@ namespace Client.Api.Infrastructure.Migrations
                 type: "uniqueidentifier",
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Addresses_ClientId",
+                table: "Addresses",
+                column: "ClientId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Addresses_Clients_ClientId",
+                table: "Addresses",
+                column: "ClientId",
+                principalTable: "Clients",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Addresses_Clients_ClientId",
+                table: "Addresses");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Addresses_ClientId",
+                table: "Addresses");
+
             migrationBuilder.DropColumn(
-                name: "DefaultAddressId",
+                name: "DefaultDeliveryAddressId",
                 table: "Clients");
 
             migrationBuilder.DropColumn(
@@ -59,9 +81,14 @@ namespace Client.Api.Infrastructure.Migrations
                 table: "Addresses");
 
             migrationBuilder.RenameColumn(
-                name: "PhoneNumber",
+                name: "Recipient",
                 table: "Addresses",
                 newName: "PhonePrefix");
+
+            migrationBuilder.RenameColumn(
+                name: "PhoneNumber",
+                table: "Addresses",
+                newName: "Phone");
 
             migrationBuilder.AddColumn<string>(
                 name: "Company",
@@ -84,12 +111,6 @@ namespace Client.Api.Infrastructure.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "LastName",
-                table: "Addresses",
-                type: "nvarchar(max)",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "Phone",
                 table: "Addresses",
                 type: "nvarchar(max)",
                 nullable: true);

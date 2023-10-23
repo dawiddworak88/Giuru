@@ -6,6 +6,7 @@ namespace Client.Api.ServicesModels.Addresses
     public class CreateClientAddressServiceModel : BaseServiceModel
     {
         public Guid? ClientId { get; set; }
+        public string Recipient { get; set; }
         public string PostCode { get; set; }
         public string Region { get; set; }
         public string City { get; set; }
