@@ -7,6 +7,7 @@ namespace Client.Api.Infrastructure.Clients.Entities
     public class Address : Entity
     {
         public string Recipient { get; set; }
+
         public string Region { get; set; }
 
         [Required]
