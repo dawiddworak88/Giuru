@@ -17,12 +17,16 @@ var clientForm = {
   clientDetailText: "Client",
   enterNameText: "Enter name",
   enterEmailText: "Enter e-mail",
+  deliveryAddressLabel: "Default delivery address",
   saveUrl: "#",
   languages: [
     { value: "", text: "Select language" },
     { value: "EN", text: "EN" },
     { value: "DE", text: "DE" },
     { value: "PL", text: "PL" }
+  ],
+  deliveryAddresses: [
+    { id: "1", name: "Mroczeń 203, 63-640, Poland" }
   ],
   communicationLanguage: "",
   saveText: "Save"

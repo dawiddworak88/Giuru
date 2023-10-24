@@ -23,7 +23,8 @@ function ClientForm(props) {
         country: { value: props.countryId ? props.countries.find((item) => item.id === props.countryId) : null },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
-        hasAccount: { value: props.hasAccount ? props.hasAccount : false }
+        hasAccount: { value: props.hasAccount ? props.hasAccount : false },
+        deliveryAddress: { value: props.defaultDeliveryAddressId ? props.deliveryAddresses.find((item) => item.id === props.defaultDeliveryAddressId) : null }
     };
 
     const stateValidatorSchema = {
@@ -135,7 +136,8 @@ function ClientForm(props) {
 
     const { 
         id, name, email, country, clientGroupIds, 
-        communicationLanguage, phoneNumber, clientManagerIds 
+        communicationLanguage, phoneNumber, clientManagerIds,
+        deliveryAddress 
     } = values;
 
     return (
@@ -237,6 +239,27 @@ function ClientForm(props) {
                                     )}
                                 </Select>
                             </FormControl>
+                        </div>
+                        <div className="field">
+                            <Autocomplete
+                                id="deliveryAddress"
+                                name="deliveryAddress"
+                                options={props.deliveryAddresses}
+                                getOptionLabel={(option) => option.name}
+                                fullWidth={true}
+                                value={deliveryAddress}
+                                variant="standard"
+                                onChange={(event, newValue) => {
+                                    setFieldValue({name: "deliveryAddress", value: newValue});
+                                }}
+                                autoComplete
+                                renderInput={(params) => (
+                                    <TextField 
+                                        {...params} 
+                                        label={props.deliveryAddressLabel} 
+                                        variant="standard"
+                                        margin="normal"/>
+                                )} />
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} variant="standard">
