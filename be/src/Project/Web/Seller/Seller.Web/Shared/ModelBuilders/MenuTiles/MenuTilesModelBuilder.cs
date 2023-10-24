@@ -116,6 +116,12 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                     },
                     new MenuTileViewModel
                     {
+                        Icon = IconsConstants.Archive,
+                        Title = _globalLocalizer.GetString("ClientDeliveryAddresses"),
+                        Url = _linkGenerator.GetPathByAction("Index", "ClientDeliveryAddresses", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                    },
+                    new MenuTileViewModel
+                    {
                         Icon = IconsConstants.Key,
                         Title = _globalLocalizer.GetString("ClientsRoles"),
                         Url = _linkGenerator.GetPathByAction("Index", "ClientRoles", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
