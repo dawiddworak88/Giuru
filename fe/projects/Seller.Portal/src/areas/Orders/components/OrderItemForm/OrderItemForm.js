@@ -8,12 +8,11 @@ import {
 } from "@mui/material";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import OrderItemStatusChanges from "../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
-import moment from "moment";
 
 const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [orderItemStatusId, setOrderItemStatusId] = useState(props.orderItemStatusId ? props.orderItemStatusId : "");
-    const [orderItemStatusChangeComment, setOrderItemStatusChangeComment] = useState("");
+    const [expectedDateOfProductOnStock, setExpectedDateOfProductOnStock] = useState("");
     const [orderItemStatusChanges, setOrderItemStatusChanges] = useState(props.statusChanges ? props.statusChanges : []);
 
     const handleSubmitForm = (e) => {
@@ -170,32 +169,6 @@ const OrderItemForm = (props) => {
                                 }}
                             />
                         </div>
-                        <div className="field">
-                            <TextField 
-                                id="deliveryFrom" 
-                                name="deliveryFrom" 
-                                label={props.deliveryFromLabel}
-                                value={props.deliveryFrom ? moment(props.deliveryFrom).format("L") : ""}
-                                fullWidth={true}
-                                variant="standard"
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                            />
-                        </div>
-                        <div className="field">
-                            <TextField 
-                                id="deliveryTo" 
-                                name="deliveryTo" 
-                                label={props.deliveryToLabel}
-                                value={props.deliveryTo ? moment(props.deliveryTo).format("L") : ""}
-                                fullWidth={true}
-                                variant="standard"
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                            />
-                        </div>
                         {orderItemStatusId &&
                             <div className="field">
                                 <FormControl variant="standard" fullWidth={true}>
@@ -216,14 +189,14 @@ const OrderItemForm = (props) => {
                         }
                         <div className="field">
                             <TextField
-                                id="orderItemStatusChangeComment"
-                                name="orderItemStatusChangeComment"
-                                label={props.orderStatusCommentLabel}
+                                id="expectedDateOfProductOnStock"
+                                name="expectedDateOfProductOnStock"
+                                label={props.expectedDateOfProductOnStockLabel}
                                 variant="standard"
                                 fullWidth={true}
                                 multiline={true}
-                                value={orderItemStatusChangeComment}
-                                onChange={(e) => setOrderItemStatusChangeComment(e.target.value)}
+                                value={expectedDateOfProductOnStock}
+                                onChange={(e) => setExpectedDateOfProductOnStock(e.target.value)}
                             />
                         </div>
                         <div className="field">
@@ -262,12 +235,10 @@ OrderItemForm.propTypes = {
     outletQuantity: PropTypes.number,
     stockQuantity: PropTypes.number,
     quantity: PropTypes.number,
-    orderStatusCommentLabel: PropTypes.string.isRequired,
+    expectedDateOfProductOnStockLabel: PropTypes.string.isRequired,
     orderUrl: PropTypes.string.isRequired,
     navigateToOrderLabel: PropTypes.string.isRequired,
     orderItemStatusChanges: PropTypes.object,
-    deliveryFromLabel: PropTypes.string.isRequired,
-    deliveryToLabel: PropTypes.string.isRequired,
     externalReferenceLabel: PropTypes.string.isRequired,
     moreInfoLabel: PropTypes.string.isRequired,
     statusChanges: PropTypes.array,
