@@ -52,8 +52,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 QuantityLabel = this.orderLocalizer.GetString("QuantityLabel"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
-                DeliveryFromLabel = this.orderLocalizer.GetString("DeliveryFrom"),
-                DeliveryToLabel = this.orderLocalizer.GetString("DeliveryTo"),
                 ExternalReferenceLabel = this.orderLocalizer.GetString("ExternalReferenceLabel"),
                 MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
                 CancelOrderItemLabel = this.orderLocalizer.GetString("CancelOrderItem"),

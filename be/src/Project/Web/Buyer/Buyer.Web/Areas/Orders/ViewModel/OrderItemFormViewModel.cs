@@ -32,8 +32,6 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string ExternalReference { get; set; }
         public string MoreInfoLabel { get; set; }
         public string MoreInfo { get; set; }
-        public string DeliveryFromLabel { get; set; }
-        public string DeliveryToLabel { get; set; }
         public bool CanCancelOrderItem { get; set; }
         public string CancelOrderItemLabel { get; set; }
         public string CancelOrderItemStatusUrl { get; set; }
