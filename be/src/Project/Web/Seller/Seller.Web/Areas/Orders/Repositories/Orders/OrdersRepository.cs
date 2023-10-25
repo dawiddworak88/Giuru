@@ -231,13 +231,13 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
             return default;
         }
 
-        public async Task UpdateOrderItemStatusAsync(string token, string language, Guid id, Guid orderItemStatusId, string orderItemStatusChangeComment)
+        public async Task UpdateOrderItemStatusAsync(string token, string language, Guid id, Guid orderItemStatusId, string expectedDateOfProductOnStock)
         {
             var requestModel = new UpdateOrderItemStatusRequestModel
             {
                 Id = id,
                 OrderItemStatusId = orderItemStatusId,
-                OrderItemStatusChangeComment = orderItemStatusChangeComment
+                ExpectedDateOfProductOnStock = expectedDateOfProductOnStock
             };
 
             var apiRequest = new ApiRequest<UpdateOrderItemStatusRequestModel>

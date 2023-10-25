@@ -23,6 +23,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string OutletQuantityLabel { get; set; }
         public string OrderStatusLabel { get; set; }
         public string ExpectedDateOfProductOnStockLabel { get; set; }
+        public string ExpectedDateOfProductOnStock {  get; set; }
         public string NavigateToOrderLabel { get; set; }
         public string ImageUrl { get; set; }
         public string ImageAlt { get; set; }

@@ -76,7 +76,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await this.ordersRepository.UpdateOrderItemStatusAsync(token, language, request.Id, request.OrderItemStatusId, request.OrderItemStatusChangeComment);
+            await this.ordersRepository.UpdateOrderItemStatusAsync(token, language, request.Id, request.OrderItemStatusId, request.ExpectedDateOfProductOnStock);
 
             var orderItemStatusChanges = await this.ordersRepository.GetOrderItemStatusesAsync(token, language, request.Id);
 
