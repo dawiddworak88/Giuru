@@ -531,7 +531,7 @@ namespace Ordering.Api.v1.Controllers
             {
                 Id = request.Id,
                 OrderItemStatusId = request.OrderItemStatusId,
-                OrderItemStatusChangeComment = request.OrderItemStatusChangeComment,
+                OrderItemStatusChangeComment = request.ExpectedDateOfProductOnStock,
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
