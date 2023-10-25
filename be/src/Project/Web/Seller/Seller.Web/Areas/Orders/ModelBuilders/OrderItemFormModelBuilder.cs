@@ -85,6 +85,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     viewModel.OrderUrl = this.linkGenerator.GetPathByAction("Edit", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, id = orderItem.OrderId });
                     viewModel.ExternalReference = orderItem.ExternalReference;
                     viewModel.MoreInfo = orderItem.MoreInfo;
+                    viewModel.ExpectedDateOfProductOnStock = orderItem.OrderItemStatusChangeComment;
 
                     if (orderItem.OrderItemStatusId == OrdersConstants.OrderStatuses.NewId || 
                         orderItem.OrderItemStatusId == Guid.Empty)
