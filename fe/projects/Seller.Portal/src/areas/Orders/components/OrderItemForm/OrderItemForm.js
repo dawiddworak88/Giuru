@@ -12,7 +12,7 @@ import OrderItemStatusChanges from "../../../../shared/components/OrderItemStatu
 const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [orderItemStatusId, setOrderItemStatusId] = useState(props.orderItemStatusId ? props.orderItemStatusId : "");
-    const [expectedDateOfProductOnStock, setExpectedDateOfProductOnStock] = useState("");
+    const [expectedDateOfProductOnStock, setExpectedDateOfProductOnStock] = useState(props.expectedDateOfProductOnStock ? props.expectedDateOfProductOnStock : "");
     const [orderItemStatusChanges, setOrderItemStatusChanges] = useState(props.statusChanges ? props.statusChanges : []);
 
     const handleSubmitForm = (e) => {
@@ -23,7 +23,7 @@ const OrderItemForm = (props) => {
         const requestPayload = {
             id: props.id,
             orderItemStatusId,
-            orderItemStatusChangeComment
+            expectedDateOfProductOnStock
         }
 
         const requestOptions = {
