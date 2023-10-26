@@ -65,7 +65,9 @@ namespace Client.Api.Services.Addresses
                     x.Region.StartsWith(model.SearchTerm) ||
                     x.PostCode.StartsWith(model.SearchTerm) ||
                     x.PhoneNumber.StartsWith(model.SearchTerm) ||
-                    x.Recipient.StartsWith(model.SearchTerm));
+                    x.Company.StartsWith(model.SearchTerm) ||
+                    x.FirstName.StartsWith(model.SearchTerm) ||
+                    x.LastName.StartsWith(model.SearchTerm));
             }
 
             clientsAddresses = clientsAddresses.ApplySort(model.OrderBy);
@@ -90,7 +92,9 @@ namespace Client.Api.Services.Addresses
                     Id = x.Id,
                     ClientId = x.ClientId,
                     ClientName = x.Client.Name,
-                    Recipient = x.Recipient,
+                    Company = x.Company,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
                     CountryId = x.CountryId,
                     Street = x.Street,
                     City = x.City,
@@ -120,7 +124,9 @@ namespace Client.Api.Services.Addresses
                 Id = clientAddress.Id,
                 ClientId = clientAddress.ClientId,
                 ClientName = clientAddress.Client.Name,
-                Recipient = clientAddress.Recipient,
+                Company = clientAddress.Company,
+                FirstName = clientAddress.FirstName,
+                LastName = clientAddress.LastName,
                 CountryId = clientAddress.CountryId,
                 Street = clientAddress.Street,
                 City = clientAddress.City,
@@ -143,7 +149,9 @@ namespace Client.Api.Services.Addresses
 
             var clientAddress = new Address
             {
-                Recipient = model.Recipient,
+                Company = model.Company,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
                 Street = model.Street, 
                 City = model.City, 
                 PhoneNumber = model.PhoneNumber, 
@@ -175,7 +183,9 @@ namespace Client.Api.Services.Addresses
             }
 
             clientAddress.ClientId = model.ClientId.Value;
-            clientAddress.Recipient = model.Recipient;
+            clientAddress.Company = model.Company;
+            clientAddress.FirstName = model.FirstName;
+            clientAddress.LastName = model.LastName;
             clientAddress.Street = model.Street;
             clientAddress.City = model.City;
             clientAddress.PhoneNumber = model.PhoneNumber;

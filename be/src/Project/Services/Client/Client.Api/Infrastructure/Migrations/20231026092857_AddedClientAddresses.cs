@@ -5,33 +5,20 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Client.Api.Infrastructure.Migrations
 {
-    public partial class AddedClientDeliveryAddresses : Migration
+    public partial class AddedClientAddresses : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Company",
-                table: "Addresses");
-
             migrationBuilder.DropColumn(
                 name: "CountryCode",
                 table: "Addresses");
 
             migrationBuilder.DropColumn(
-                name: "FirstName",
-                table: "Addresses");
-
-            migrationBuilder.DropColumn(
-                name: "LastName",
+                name: "Phone",
                 table: "Addresses");
 
             migrationBuilder.RenameColumn(
                 name: "PhonePrefix",
-                table: "Addresses",
-                newName: "Recipient");
-
-            migrationBuilder.RenameColumn(
-                name: "Phone",
                 table: "Addresses",
                 newName: "PhoneNumber");
 
@@ -81,20 +68,9 @@ namespace Client.Api.Infrastructure.Migrations
                 table: "Addresses");
 
             migrationBuilder.RenameColumn(
-                name: "Recipient",
-                table: "Addresses",
-                newName: "PhonePrefix");
-
-            migrationBuilder.RenameColumn(
                 name: "PhoneNumber",
                 table: "Addresses",
-                newName: "Phone");
-
-            migrationBuilder.AddColumn<string>(
-                name: "Company",
-                table: "Addresses",
-                type: "nvarchar(max)",
-                nullable: true);
+                newName: "PhonePrefix");
 
             migrationBuilder.AddColumn<string>(
                 name: "CountryCode",
@@ -104,13 +80,7 @@ namespace Client.Api.Infrastructure.Migrations
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
-                name: "FirstName",
-                table: "Addresses",
-                type: "nvarchar(max)",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "LastName",
+                name: "Phone",
                 table: "Addresses",
                 type: "nvarchar(max)",
                 nullable: true);

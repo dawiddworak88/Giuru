@@ -6,7 +6,11 @@ namespace Client.Api.Infrastructure.Clients.Entities
 {
     public class Address : Entity
     {
-        public string Recipient { get; set; }
+        public string Company { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
 
         public string Region { get; set; }
 
