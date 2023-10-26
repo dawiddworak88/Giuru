@@ -37,7 +37,7 @@ namespace Client.Api.Services.Clients
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                clients = clients.Where(x => x.Name.StartsWith(model.SearchTerm));
+                clients = clients.Where(x => x.Name.StartsWith(model.SearchTerm) || x.Email.StartsWith(model.SearchTerm));
             }
 
             clients = clients.ApplySort(model.OrderBy);
