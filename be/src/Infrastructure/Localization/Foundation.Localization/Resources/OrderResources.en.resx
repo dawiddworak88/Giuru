@@ -138,12 +138,6 @@
   <data name="CancelOrder" xml:space="preserve">
     <value>Cancel order</value>
   </data>
-  <data name="ChangeDeliveryFrom" xml:space="preserve">
-    <value>Change delivery from date</value>
-  </data>
-  <data name="ChangeDeliveryTo" xml:space="preserve">
-    <value>Change delivery to date</value>
-  </data>
   <data name="ClearBasketText" xml:space="preserve">
     <value>Clear cart</value>
   </data>
@@ -155,12 +149,6 @@
   </data>
   <data name="CustomOrderSubject" xml:space="preserve">
     <value>Custom order from</value>
-  </data>
-  <data name="DeliveryFrom" xml:space="preserve">
-    <value>Delivery from:</value>
-  </data>
-  <data name="DeliveryTo" xml:space="preserve">
-    <value>Delivery to:</value>
   </data>
   <data name="DropOrSelectOrderFile" xml:space="preserve">
     <value>Drag and drop here, or click to select an order file</value>
