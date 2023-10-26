@@ -119,8 +119,6 @@ namespace Ordering.Api.Services
                     StockQuantity = basketItem.StockQuantity,
                     OutletQuantity = basketItem.OutletQuantity,
                     ExternalReference = basketItem.ExternalReference,
-                    ExpectedDeliveryFrom = basketItem.ExpectedDeliveryFrom,
-                    ExpectedDeliveryTo = basketItem.ExpectedDeliveryTo,
                     MoreInfo = basketItem.MoreInfo
                 };
              
@@ -304,8 +302,6 @@ namespace Ordering.Api.Services
                     StockQuantity = orderItem.StockQuantity,
                     OutletQuantity = orderItem.OutletQuantity,
                     ExternalReference = orderItem.ExternalReference,
-                    ExpectedDeliveryFrom = orderItem.ExpectedDeliveryFrom,
-                    ExpectedDeliveryTo = orderItem.ExpectedDeliveryTo,
                     MoreInfo = orderItem.MoreInfo,
                     LastOrderItemStatusChangeId = orderItem.LastOrderItemStatusChangeId,
                     LastModifiedDate = orderItem.LastModifiedDate,
@@ -367,8 +363,6 @@ namespace Ordering.Api.Services
                 StockQuantity = existingOrderItem.StockQuantity,
                 OutletQuantity = existingOrderItem.OutletQuantity,
                 ExternalReference = existingOrderItem.ExternalReference,
-                ExpectedDeliveryFrom = existingOrderItem.ExpectedDeliveryFrom,
-                ExpectedDeliveryTo = existingOrderItem.ExpectedDeliveryTo,
                 LastOrderItemStatusChangeId = existingOrderItem.LastOrderItemStatusChangeId,
                 MoreInfo = existingOrderItem.MoreInfo,
                 LastModifiedDate = existingOrderItem.LastModifiedDate,
@@ -798,8 +792,6 @@ namespace Ordering.Api.Services
                         StockQuantity = y.StockQuantity,
                         OutletQuantity = y.OutletQuantity,
                         ExternalReference = y.ExternalReference,
-                        ExpectedDeliveryFrom = y.ExpectedDeliveryFrom,
-                        ExpectedDeliveryTo = y.ExpectedDeliveryTo,
                         MoreInfo = y.MoreInfo,
                         LastOrderItemStatusChangeId = y.LastOrderItemStatusChangeId,
                         OrderItemStatusId = lastOrderItemStatusChanges.FirstOrDefault(z => z.OrderItemId == y.Id)?.OrderItemStatusId ?? OrderStatusesConstants.NewId,

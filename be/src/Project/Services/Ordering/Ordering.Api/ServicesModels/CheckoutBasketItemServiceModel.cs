@@ -12,8 +12,6 @@ namespace Ordering.Api.ServicesModels
         public double OutletQuantity { get; set; }
         public double StockQuantity { get; set; }
         public string ExternalReference { get; set; }
-        public DateTime? ExpectedDeliveryFrom { get; set; }
-        public DateTime? ExpectedDeliveryTo { get; set; }
         public string MoreInfo { get; set; }
     }
 }

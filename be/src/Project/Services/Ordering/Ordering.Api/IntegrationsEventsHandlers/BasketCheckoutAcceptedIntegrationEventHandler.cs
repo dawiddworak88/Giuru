@@ -77,8 +77,6 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
-                    ExpectedDeliveryFrom = x.DeliveryFrom,
-                    ExpectedDeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
                 }),
                 Language = @event.Language
