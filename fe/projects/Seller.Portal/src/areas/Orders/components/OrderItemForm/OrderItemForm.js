@@ -195,6 +195,7 @@ const OrderItemForm = (props) => {
                                 variant="standard"
                                 fullWidth={true}
                                 multiline={true}
+                                disabled={props.orderItemStatusId !== '287ee71a-d87f-4563-833a-8e2771d1e5a5'}
                                 value={expectedDateOfProductOnStock}
                                 onChange={(e) => setExpectedDateOfProductOnStock(e.target.value)}
                             />
