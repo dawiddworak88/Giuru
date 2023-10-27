@@ -85,7 +85,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 {
                     viewModel.Id = order.Id;
                     viewModel.OrderStatusId = order.OrderStatusId;
-                    viewModel.ExpectedDelivery = order.ExpectedDeliveryDate;
                     viewModel.CustomOrder = order.MoreInfo;
                     viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
                     viewModel.CanCancelOrder = false;

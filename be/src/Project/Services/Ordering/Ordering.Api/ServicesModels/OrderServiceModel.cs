@@ -37,7 +37,6 @@ namespace Ordering.Api.ServicesModels
         public Guid OrderStateId { get; set; }
         public string Reason { get; set; }
         public string ExternalReference { get; set; }
-        public DateTime? ExpectedDeliveryDate { get; set; }
         public IEnumerable<OrderItemServiceModel> OrderItems { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }

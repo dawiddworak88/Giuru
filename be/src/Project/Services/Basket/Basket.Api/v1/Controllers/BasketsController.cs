@@ -205,7 +205,6 @@ namespace Basket.Api.v1.Controllers
                 ShippingPostCode = request.ShippingPostCode,
                 ShippingRegion = request.ShippingRegion,
                 ShippingStreet = request.ShippingStreet,
-                ExpectedDeliveryDate = request.ExpectedDeliveryDate,
                 MoreInfo = request.MoreInfo,
                 HasCustomOrder = request.HasCustomOrder,
                 Attachments = request.Attachments,

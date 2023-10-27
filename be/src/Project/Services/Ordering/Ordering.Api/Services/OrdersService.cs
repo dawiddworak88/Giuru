@@ -99,7 +99,6 @@ namespace Ordering.Api.Services
                 ShippingRegion = serviceModel.ShippingRegion,
                 ShippingStreet = serviceModel.ShippingStreet,
                 ExternalReference = serviceModel.ExternalReference,
-                ExpectedDeliveryDate = serviceModel.ExpectedDeliveryDate,
                 MoreInfo = serviceModel.MoreInfo,
                 IpAddress = serviceModel.IpAddress
             };
@@ -277,7 +276,6 @@ namespace Ordering.Api.Services
                 ShippingPostCode = existingOrder.ShippingPostCode,
                 ShippingRegion = existingOrder.ShippingRegion,
                 ShippingStreet = existingOrder.ShippingStreet,
-                ExpectedDeliveryDate = existingOrder.ExpectedDeliveryDate,
                 ExternalReference = existingOrder.ExternalReference,
                 MoreInfo = existingOrder.MoreInfo,
                 Reason = existingOrder.Reason,
@@ -773,7 +771,6 @@ namespace Ordering.Api.Services
                     ShippingPostCode = x.ShippingPostCode,
                     ShippingRegion = x.ShippingRegion,
                     ShippingStreet = x.ShippingStreet,
-                    ExpectedDeliveryDate = x.ExpectedDeliveryDate,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo,
                     Reason = x.Reason,
