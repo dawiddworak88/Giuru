@@ -23,14 +23,14 @@ namespace Client.Api.Infrastructure.Clients.Entities
         [Required]
         public string Street { get; set; }
 
-        public string PhonePrefix { get; set; }
-
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Required]
-        public string CountryCode { get; set; }
+        public Guid CountryId { get; set; }
 
         [Required]
         public Guid ClientId { get; set; }
+
+        public virtual Client Client { get; set; }
     }
 }

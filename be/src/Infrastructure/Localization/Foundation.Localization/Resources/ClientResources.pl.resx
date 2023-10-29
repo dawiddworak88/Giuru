@@ -282,4 +282,13 @@
   <data name="NewCountry" xml:space="preserve">
     <value>Dodaj kraj</value>
   </data>
+  <data name="AddressDeleteDefaultConflict" xml:space="preserve">
+    <value>Wybrany adres jest przypisany jako domyslny.</value>
+  </data>
+  <data name="ClientAddressNotFound" xml:space="preserve">
+    <value>Nie znaleziono adresu klienta.</value>
+  </data>
+  <data name="ClientDeleteAddressConflict" xml:space="preserve">
+    <value>Usuń przypisane adresy do tego klienta.</value>
+  </data>
 </root>
