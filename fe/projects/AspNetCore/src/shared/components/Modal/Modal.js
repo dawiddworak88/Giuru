@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import PropTypes from "prop-types";
-import { LocalizationProvider, DatePicker  } from "@mui/lab";
-import AdapterMoment from '@mui/lab/AdapterMoment';
 import NavigationHelper from "../../../shared/helpers/globals/NavigationHelper";
 
 const Modal = (props) => {
@@ -11,8 +9,6 @@ const Modal = (props) => {
     const [stockQuantity, setStockQuantity] = useState(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 1 : maxStockValue && maxStockValue > 0 ? 1 : 0);
     const [outletQuantity, setOutletQuantity] = useState(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 0 : maxOutletValue && maxOutletValue > 0 ? 1 : 0);
     const [externalReference, setExternalReference] = useState("");
-    const [deliveryFrom, setDeliveryFrom] = useState(null);
-    const [deliveryTo, setDeliveryTo] = useState(null);
     const [moreInfo, setMoreInfo] = useState("");
 
     const handleAddItemToBasket = () => {
@@ -21,8 +17,6 @@ const Modal = (props) => {
             stockQuantity,
             outletQuantity,
             externalReference,
-            deliveryFrom,
-            deliveryTo,
             moreInfo
         }
 
@@ -34,8 +28,6 @@ const Modal = (props) => {
         setStockQuantity(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 1 : maxStockValue && maxStockValue > 0 ? 1 : 0);
         setOutletQuantity(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 0 : maxOutletValue && maxOutletValue > 0 ? 1 : 0);
         setExternalReference("");
-        setDeliveryFrom(null);
-        setDeliveryTo(null);
         setMoreInfo("")
     }, [isOpen])
     
@@ -139,36 +131,6 @@ const Modal = (props) => {
                         }} />
                 </div>
                 <div className="field">
-                    <LocalizationProvider dateAdapter={AdapterMoment}>
-                        <DatePicker
-                            id="deliveryFrom"
-                            value={deliveryFrom}
-                            label={labels.deliveryFromLabel}
-                            disablePast={true}
-                            renderInput={(params) => 
-                                <TextField {...params} fullWidth={true} variant="standard" />}
-                            onChange={(date) => {
-                                setDeliveryFrom(date);
-                            }}
-                        />
-                    </LocalizationProvider>
-                </div>
-                <div className="field">
-                    <LocalizationProvider dateAdapter={AdapterMoment}>
-                        <DatePicker
-                            id="deliveryTo"
-                            value={deliveryTo}
-                            label={labels.deliveryToLabel}
-                            disablePast={true}
-                            renderInput={(params) => 
-                                <TextField {...params} fullWidth={true} variant="standard" />}
-                            onChange={(date) => {
-                                setDeliveryTo(date);
-                            }}
-                        />
-                    </LocalizationProvider>
-                </div>
-                <div className="field">
                     <TextField 
                         id="moreInfo" 
                         name="moreInfo" 
@@ -202,8 +164,6 @@ Modal.propTypes = {
     cancelLabel: PropTypes.string,
     moreInfoLabel: PropTypes.string,
     maxOutletValue: PropTypes.number,
-    deliveryToLabel: PropTypes.string,
-    deliveryFromLabel: PropTypes.string,
     externalReferenceLabel: PropTypes.string,
     outletQuantityLabel: PropTypes.string,
     stockQuantityLabel: PropTypes.string,
