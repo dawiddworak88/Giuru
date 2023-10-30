@@ -12,6 +12,7 @@ const ClientDeliveryAddressForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null },
+        client: { value: props.clientId ? props.clients.find((item) => item.id === props.clientId) : null, error: "" },
         recipient: { value: props.recipient ? props.recipient : "" },
         phoneNumber: { value: props.recipient ? props.recipient : "", error: "" },
         street: { value: props.recipient ? props.recipient : "", error: "" },
@@ -22,6 +23,12 @@ const ClientDeliveryAddressForm = (props) => {
     };
 
     const stateValidatorSchema = {
+        client: {
+            required: {
+                isRequired: true,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
         phoneNumber: {
             required: {
                 isRequired: true,
@@ -95,10 +102,10 @@ const ClientDeliveryAddressForm = (props) => {
 
     const {
         values, errors, dirty, disable,
-        handleOnChange, handleOnSubmit
+        handleOnChange, handleOnSubmit, setFieldValue
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, recipient, phoneNumber, street, region, postCode, city, country } = values;
+    const { id, recipient, phoneNumber, street, region, postCode, city, country, client } = values;
 
     return (
         <section className="section section-small-padding product client-form">
@@ -110,7 +117,30 @@ const ClientDeliveryAddressForm = (props) => {
                             <div className="field">
                                 <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
                             </div>
-                        }                      
+                        }
+                        <div className="field">
+                            <Autocomplete
+                                id="client"
+                                name="client"
+                                options={props.clients}
+                                getOptionLabel={(option) => option.name}
+                                fullWidth={true}
+                                value={client}
+                                variant="standard"
+                                onChange={(event, newValue) => {
+                                    setFieldValue({name: "client", value: newValue});
+                                }}
+                                autoComplete
+                                renderInput={(params) => (
+                                    <TextField 
+                                        {...params} 
+                                        label={props.clientLabel} 
+                                        variant="standard"
+                                        margin="normal"
+                                        helperText={dirty.client ? errors.client : ""} 
+                                        error={(errors.client.length > 0) && dirty.client} />
+                                )} />
+                        </div>           
                         <div className="field">
                             <TextField 
                                 id="recipient" 

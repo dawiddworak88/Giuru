@@ -16,11 +16,12 @@ const componentProps = {
   cityLabel: "City",
   countryLabel: "Country",
   saveText: "Save",
+  clientLabel: "Client",
   countries: [
-    {
-      id: "1",
-      name: "Poland"
-    }
+    { id: "1", name: "Poland" }
+  ],
+  clients: [
+    { id: "1", name: "ELTAP"}
   ]
 };
 
