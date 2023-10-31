@@ -16,11 +16,11 @@ const ClientDeliveryAddressForm = (props) => {
         company: { value: props.company ? props.company : "" },
         firstName: { value: props.firstName ? props.firstName : "" },
         lastName: { value: props.lastName ? props.lastName : "" },
-        phoneNumber: { value: props.recipient ? props.recipient : "", error: "" },
-        street: { value: props.recipient ? props.recipient : "", error: "" },
-        region: { value: props.recipient ? props.recipient : "", error: "" },
-        postCode: { value: props.recipient ? props.recipient : "", error: "" },
-        city: { value: props.recipient ? props.recipient : "", error: "" },
+        phoneNumber: { value: props.phoneNumber ? props.phoneNumber : "", error: "" },
+        street: { value: props.street ? props.street : "", error: "" },
+        region: { value: props.region ? props.region : "", error: "" },
+        postCode: { value: props.postCode ? props.postCode : "", error: "" },
+        city: { value: props.city ? props.city : "", error: "" },
         country: { value: props.countryId ? props.countries.find((item) => item.id === props.countryId) : null, error: "" }
     };
 
