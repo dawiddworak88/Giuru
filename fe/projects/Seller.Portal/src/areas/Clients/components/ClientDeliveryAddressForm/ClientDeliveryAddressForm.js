@@ -13,7 +13,9 @@ const ClientDeliveryAddressForm = (props) => {
     const stateSchema = {
         id: { value: props.id ? props.id : null },
         client: { value: props.clientId ? props.clients.find((item) => item.id === props.clientId) : null, error: "" },
-        recipient: { value: props.recipient ? props.recipient : "" },
+        company: { value: props.company ? props.company : "" },
+        firstName: { value: props.firstName ? props.firstName : "" },
+        lastName: { value: props.lastName ? props.lastName : "" },
         phoneNumber: { value: props.recipient ? props.recipient : "", error: "" },
         street: { value: props.recipient ? props.recipient : "", error: "" },
         region: { value: props.recipient ? props.recipient : "", error: "" },
@@ -105,7 +107,7 @@ const ClientDeliveryAddressForm = (props) => {
         handleOnChange, handleOnSubmit, setFieldValue
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, recipient, phoneNumber, street, region, postCode, city, country, client } = values;
+    const { id, company, firstName, lastName, phoneNumber, street, region, postCode, city, country, client } = values;
 
     return (
         <section className="section section-small-padding product client-form">
@@ -140,14 +142,34 @@ const ClientDeliveryAddressForm = (props) => {
                                         helperText={dirty.client ? errors.client : ""} 
                                         error={(errors.client.length > 0) && dirty.client} />
                                 )} />
-                        </div>           
+                        </div>   
                         <div className="field">
                             <TextField 
-                                id="recipient" 
-                                name="recipient" 
-                                label={props.recipientLabel} 
+                                id="company" 
+                                name="company" 
+                                label={props.companyLabel} 
                                 fullWidth={true}
-                                value={recipient} 
+                                value={company} 
+                                variant="standard"
+                                onChange={handleOnChange} />
+                        </div>        
+                        <div className="field">
+                            <TextField 
+                                id="firstName" 
+                                name="firstName" 
+                                label={props.firstNameLabel} 
+                                fullWidth={true}
+                                value={firstName} 
+                                variant="standard"
+                                onChange={handleOnChange} />
+                        </div>
+                        <div className="field">
+                            <TextField 
+                                id="lastName" 
+                                name="lastName" 
+                                label={props.lastNameLabel} 
+                                fullWidth={true}
+                                value={lastName} 
                                 variant="standard"
                                 onChange={handleOnChange} />
                         </div>
