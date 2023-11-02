@@ -333,7 +333,7 @@ function NewOrderForm(props) {
                         <div className="container mt-5 mb-5 has-text-centered">
                             {props.orLabel}
                         </div>
-                        <div className="columns is-tablet">
+                        <div className="columns is-tablet is-justify-content-center">
                             <div className="column is-2 is-flex is-align-items-flex-end">
                                 <Autosuggest
                                     suggestions={suggestions}
