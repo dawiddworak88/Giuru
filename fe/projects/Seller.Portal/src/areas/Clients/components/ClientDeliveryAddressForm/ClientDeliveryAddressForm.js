@@ -144,7 +144,7 @@ const ClientDeliveryAddressForm = (props) => {
                                 value={client}
                                 variant="standard"
                                 onChange={(event, newValue) => {
-                                    setFieldValue({name: "client", value: newValue.id});
+                                    setFieldValue({name: "client", value: newValue});
                                 }}
                                 autoComplete
                                 renderInput={(params) => (
@@ -153,8 +153,9 @@ const ClientDeliveryAddressForm = (props) => {
                                         label={props.clientLabel} 
                                         variant="standard"
                                         margin="normal"
-                                        helperText={dirty.client ? errors.client : ""} 
-                                        error={(errors.client.length > 0) && dirty.client} />
+                                        // helperText={dirty.client ? errors.client : ""} 
+                                        // error={(errors.client.length > 0) && dirty.client} 
+                                        />
                                 )} />
                         </div>   
                         <div className="field">
@@ -266,8 +267,9 @@ const ClientDeliveryAddressForm = (props) => {
                                         label={props.countryLabel} 
                                         variant="standard"
                                         margin="normal"
-                                        helperText={dirty.country ? errors.country : ""} 
-                                        error={(errors.country.length > 0) && dirty.country} />
+                                        // helperText={dirty.country ? errors.country : ""} 
+                                        // error={(errors.country.length > 0) && dirty.country}
+                                         />
                                 )} />
                         </div>
                         <div className="field ">
@@ -296,7 +298,7 @@ ClientDeliveryAddressForm.propTypes = {
     name: PropTypes.string,
     nameLabel: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
-    navigateToCountries: PropTypes.string.isRequired,
+    navigateToClientDeliveryAddresses: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
     fieldRequiredErrorMessage: PropTypes.string.isRequired
 }
