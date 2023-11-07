@@ -25,12 +25,12 @@ const ClientDeliveryAddressForm = (props) => {
     };
 
     const stateValidatorSchema = {
-        client: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
+        // client: {
+        //     required: {
+        //         isRequired: true,
+        //         error: props.fieldRequiredErrorMessage
+        //     }
+        // },
         phoneNumber: {
             required: {
                 isRequired: true,
@@ -61,16 +61,30 @@ const ClientDeliveryAddressForm = (props) => {
                 error: props.fieldRequiredErrorMessage
             }
         },
-        country: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
+        // country: {
+        //     required: {
+        //         isRequired: true,
+        //         error: props.fieldRequiredErrorMessage
+        //     }
+        // },
     };
 
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const requestPayload = {
+            id: state.id,
+            clientId: state.client ? state.client.id : null,
+            company: state.company,
+            firstName: state.firstName,
+            lastName: state.lastName,
+            phoneNumber: state.phoneNumber,
+            street: state.street,
+            region: state.region,
+            city: state.city,
+            postCode: state.postCode,
+            countryId: state.country ? state.country.id : null
+        }
 
         const requestOptions = {
             method: "POST",
@@ -78,7 +92,7 @@ const ClientDeliveryAddressForm = (props) => {
                 "Content-Type": "application/json", 
                 "X-Requested-With": "XMLHttpRequest" 
             },
-            body: JSON.stringify(state)
+            body: JSON.stringify(requestPayload)
         };
 
         fetch(props.saveUrl, requestOptions)
@@ -130,7 +144,7 @@ const ClientDeliveryAddressForm = (props) => {
                                 value={client}
                                 variant="standard"
                                 onChange={(event, newValue) => {
-                                    setFieldValue({name: "client", value: newValue});
+                                    setFieldValue({name: "client", value: newValue.id});
                                 }}
                                 autoComplete
                                 renderInput={(params) => (
@@ -264,7 +278,7 @@ const ClientDeliveryAddressForm = (props) => {
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <a href={props.countriesUrl} className="ml-2 button is-text">{props.navigateToClientDeliveryAddresses}</a>
+                            <a href={props.deliveryAddressesUrl} className="ml-2 button is-text">{props.navigateToClientDeliveryAddresses}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}
