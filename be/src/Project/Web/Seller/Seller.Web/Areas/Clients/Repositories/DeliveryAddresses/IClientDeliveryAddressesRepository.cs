@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
 {
-    public interface IClientDeliveryAddresses
+    public interface IClientDeliveryAddressesRepository
     {
         Task<Guid> SaveAsync(string token, string language, string company, string firstName, string lastName, string phoneNumber, string street, string region, string postCode, Guid? clientId, Guid? countryId);
         Task<ClientDeliveryAddress> GetAsync(string token, string language, Guid? id);

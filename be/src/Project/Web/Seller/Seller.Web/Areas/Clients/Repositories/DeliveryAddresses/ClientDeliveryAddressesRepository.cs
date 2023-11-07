@@ -15,12 +15,12 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
 {
-    public class ClientDeliveryAddresses : IClientDeliveryAddresses
+    public class ClientDeliveryAddressesRepository : IClientDeliveryAddressesRepository
     {
         private readonly IApiClientService _apiClientService;
         private readonly IOptions<AppSettings> _options;
 
-        public ClientDeliveryAddresses(
+        public ClientDeliveryAddressesRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> options)
         {
