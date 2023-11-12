@@ -108,7 +108,7 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
         }
 
 
-        public async Task<Guid> SaveAsync(string token, string language, string company, string firstName, string lastName, string phoneNumber, string street, string region, string postCode, Guid? clientId, Guid? countryId)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string company, string firstName, string lastName, string phoneNumber, string street, string region, string postCode, string city, Guid? clientId, Guid? countryId)
         {
             var requestModel = new DeliveryAddressRequestModel
             {
@@ -120,7 +120,8 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
                 PhoneNumber = phoneNumber,
                 Street = street,
                 Region = region,
-                PostCode = postCode
+                PostCode = postCode,
+                City = city
             };
 
             var apiRequest = new ApiRequest<DeliveryAddressRequestModel>

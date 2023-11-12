@@ -32,9 +32,9 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var deliveryAddressId = await _deliveryAddressesRepository.SaveAsync(token, language, model.Company, model.FirstName, model.LastName, model.PhoneNumber, model.Street, model.Region, model.PostCode, model.ClientId, model.CountryId);
+            var deliveryAddressId = await _deliveryAddressesRepository.SaveAsync(token, language, model.Id, model.Company, model.FirstName, model.LastName, model.PhoneNumber, model.Street, model.Region, model.PostCode, model.City, model.ClientId, model.CountryId);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = deliveryAddressId, Message = _clientLocalizer.GetString("DeliveryAddressSavedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Id = deliveryAddressId, Message = _clientLocalizer.GetString("DeliveryAddressSavedSuccessfully").Value });
         }
     }
 }

@@ -12,6 +12,7 @@ using Foundation.Extensions.Helpers;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -26,11 +27,11 @@ namespace Client.Api.v1.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize]
     [ApiController]
-    public class ClientAddressesController : BaseApiController
+    public class ClientDeliveryAddressesController : BaseApiController
     {
         private readonly IClientAddressesService _clientAddressesService;
 
-        public ClientAddressesController(
+        public ClientDeliveryAddressesController(
             IClientAddressesService clientAddressesService) 
         {
             _clientAddressesService = clientAddressesService;

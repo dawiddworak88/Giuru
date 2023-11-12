@@ -8,7 +8,7 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
 {
     public interface IClientDeliveryAddressesRepository
     {
-        Task<Guid> SaveAsync(string token, string language, string company, string firstName, string lastName, string phoneNumber, string street, string region, string postCode, Guid? clientId, Guid? countryId);
+        Task<Guid> SaveAsync(string token, string language, Guid? id, string company, string firstName, string lastName, string phoneNumber, string street, string region, string postCode, string city, Guid? clientId, Guid? countryId);
         Task<ClientDeliveryAddress> GetAsync(string token, string language, Guid? id);
         Task DeleteAsync(string token, string language, Guid? id);
         Task<PagedResults<IEnumerable<ClientDeliveryAddress>>> GetAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
