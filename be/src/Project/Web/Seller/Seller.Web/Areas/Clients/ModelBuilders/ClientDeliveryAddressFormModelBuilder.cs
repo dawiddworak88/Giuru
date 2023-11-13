@@ -46,7 +46,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         {
             var viewModel = new ClientDeliveryAddressFormViewModel
             {
-                Title = _clientLocalizer.GetString("EditDeliveryAddress"),
+                Title = _globalLocalizer.GetString("EditDeliveryAddress"),
                 FieldRequiredErrorMessage = _globalLocalizer.GetString("FieldRequiredErrorMessage"),
                 SaveText = _globalLocalizer.GetString("SaveText"),
                 SaveUrl = _linkGenerator.GetPathByAction("Index", "ClientDeliveryAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),

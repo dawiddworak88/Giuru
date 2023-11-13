@@ -291,4 +291,7 @@
   <data name="ClientDeleteAddressConflict" xml:space="preserve">
     <value>Delete the addresses assigned to this Client</value>
   </data>
+  <data name="BackToDeliveryAddresses" xml:space="preserve">
+    <value>Back to delivery addresses</value>
+  </data>
 </root>
