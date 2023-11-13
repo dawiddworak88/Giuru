@@ -48,10 +48,17 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "ClientDeliveryAddress", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "ClientDeliveryAddress", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "ClientDeliveryAddressApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ClientDeliveryAddressApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "ClientDeliveryAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ClientDeliveryAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(ClientDeliveryAddress.CreatedDate)} desc";
+
+            viewModel.ConfirmationDialogDeleteNameProperty = new List<string>
+            {
+                nameof(ClientDeliveryAddress.Company).ToCamelCase(),
+                nameof(ClientDeliveryAddress.FirstName).ToCamelCase(),
+                nameof(ClientDeliveryAddress.LastName).ToCamelCase()
+            };
 
             viewModel.Table = new CatalogTableViewModel
             {
