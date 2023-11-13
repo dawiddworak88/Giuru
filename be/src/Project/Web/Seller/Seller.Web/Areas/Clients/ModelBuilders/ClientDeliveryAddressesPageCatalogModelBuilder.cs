@@ -6,6 +6,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.DomainModels;
+using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
@@ -20,17 +21,20 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly LinkGenerator _linkGenerator;
+        private readonly IClientDeliveryAddressesRepository _clientDeliveryAddressesRepository;
 
         public ClientDeliveryAddressesPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<ClientResources> clientLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
+            IClientDeliveryAddressesRepository clientDeliveryAddressesRepository,
             LinkGenerator linkGenerator)
         {
             _catalogModelBuilder = catalogModelBuilder;
             _globalLocalizer = globalLocalizer;
             _clientLocalizer = clientLocalizer;
             _linkGenerator = linkGenerator;
+            _clientDeliveryAddressesRepository = clientDeliveryAddressesRepository;
         }
 
         public async Task<CatalogViewModel<ClientDeliveryAddress>> BuildModelAsync(ComponentModelBase componentModel)
@@ -85,6 +89,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     }
                 }
             };
+
+            viewModel.PagedItems = await _clientDeliveryAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientDeliveryAddress.CreatedDate)} desc");
 
             return viewModel;
         }
