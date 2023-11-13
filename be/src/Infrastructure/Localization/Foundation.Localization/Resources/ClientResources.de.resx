@@ -294,4 +294,7 @@
   <data name="BackToDeliveryAddresses" xml:space="preserve">
     <value>Zurück zu den Lieferadressen</value>
   </data>
+  <data name="NewDeliveryAddress" xml:space="preserve">
+    <value>Neue Lieferadresse hinzufügen</value>
+  </data>
 </root>

@@ -57,7 +57,13 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             {
                 Labels = new string[]
                 {
-                    
+                    _globalLocalizer.GetString("ClientName"),
+                    _globalLocalizer.GetString("CompanyName"),
+                    _globalLocalizer.GetString("FirstName"),
+                    _globalLocalizer.GetString("LastName"),
+                    _globalLocalizer.GetString("City"),
+                    _globalLocalizer.GetString("LastModifiedDate"),
+                    _globalLocalizer.GetString("CreatedDate")
                 },
                 Actions = new List<CatalogActionViewModel>
                 {
@@ -75,6 +81,26 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     new CatalogPropertyViewModel
                     {
                         Title = nameof(ClientDeliveryAddress.ClientName).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(ClientDeliveryAddress.Company).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(ClientDeliveryAddress.FirstName).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(ClientDeliveryAddress.LastName).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(ClientDeliveryAddress.City).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel

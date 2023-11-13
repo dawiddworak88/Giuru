@@ -732,4 +732,10 @@
   <data name="EditDeliveryAddress" xml:space="preserve">
     <value>Edytuj adres dostawy</value>
   </data>
+  <data name="PostCode" xml:space="preserve">
+    <value>Kod pocztowy</value>
+  </data>
+  <data name="Street" xml:space="preserve">
+    <value>Ulica</value>
+  </data>
 </root>
