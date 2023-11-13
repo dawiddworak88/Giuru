@@ -57,6 +57,11 @@ namespace Client.Api.Services.Addresses
                     .Include(x => x.Client)
                     .AsSingleQuery();
 
+            if (model.ClientId.HasValue)
+            {
+                clientsAddresses = clientsAddresses.Where(x => x.ClientId == model.ClientId);
+            }
+
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
                 clientsAddresses = clientsAddresses.Where(x => 
