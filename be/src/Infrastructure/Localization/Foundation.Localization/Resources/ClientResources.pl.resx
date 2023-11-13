@@ -297,4 +297,7 @@
   <data name="NewDeliveryAddress" xml:space="preserve">
     <value>Dodaj nowy adres dostawy</value>
   </data>
+  <data name="DeliveryAddress" xml:space="preserve">
+    <value>Adres dostawy</value>
+  </data>
 </root>

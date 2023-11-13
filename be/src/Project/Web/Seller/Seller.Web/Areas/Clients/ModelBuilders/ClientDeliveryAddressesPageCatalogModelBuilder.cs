@@ -116,7 +116,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await _clientDeliveryAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientDeliveryAddress.CreatedDate)} desc");
+            viewModel.PagedItems = await _clientDeliveryAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, null, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientDeliveryAddress.CreatedDate)} desc");
 
             return viewModel;
         }

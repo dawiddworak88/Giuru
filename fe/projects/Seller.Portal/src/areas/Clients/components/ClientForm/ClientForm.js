@@ -62,7 +62,8 @@ function ClientForm(props) {
 
         const payload = {
             ...state,
-            countryId: country ? country.id : null
+            countryId: country ? country.id : null,
+            defaultDeliveryAddressId: state.deliveryAddress ? state.deliveryAddress.id : null
         }
 
         const requestOptions = {

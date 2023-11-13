@@ -89,6 +89,7 @@ namespace Client.Api.v1.Controllers
                                 PhoneNumber = x.PhoneNumber,
                                 ClientGroupIds = x.ClientGroupIds,
                                 ClientManagerIds = x.ClientManagerIds,
+                                DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -135,6 +136,7 @@ namespace Client.Api.v1.Controllers
                                 PhoneNumber = x.PhoneNumber,
                                 ClientGroupIds = x.ClientGroupIds,
                                 ClientManagerIds = x.ClientManagerIds,
+                                DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -190,6 +192,7 @@ namespace Client.Api.v1.Controllers
                         PhoneNumber = client.PhoneNumber,
                         ClientGroupIds = client.ClientGroupIds,
                         ClientManagerIds = client.ClientManagerIds,
+                        DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };
@@ -241,6 +244,7 @@ namespace Client.Api.v1.Controllers
                         PhoneNumber = client.PhoneNumber,
                         ClientGroupIds = client.ClientGroupIds,
                         ClientManagerIds = client.ClientManagerIds,
+                        DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };
@@ -284,6 +288,7 @@ namespace Client.Api.v1.Controllers
                     ClientOrganisationId = request.OrganisationId,
                     ClientGroupIds = request.ClientGroupIds,
                     ClientManagerIds = request.ClientManagerIds,
+                    DefaultDeliveryAddressId = request.DefaultDeliveryAddressId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -314,6 +319,7 @@ namespace Client.Api.v1.Controllers
                     ClientOrganisationId = request.OrganisationId,
                     ClientGroupIds = request.ClientGroupIds,
                     ClientManagerIds = request.ClientManagerIds,
+                    DefaultDeliveryAddressId = request.DefaultDeliveryAddressId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)

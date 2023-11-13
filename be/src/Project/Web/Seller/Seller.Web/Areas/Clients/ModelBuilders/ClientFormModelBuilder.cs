@@ -18,6 +18,8 @@ using Foundation.PageContent.Components.ListItems.ViewModels;
 using Seller.Web.Areas.Clients.Repositories.Managers;
 using Seller.Web.Areas.Global.Repositories;
 using Seller.Web.Areas.Global.DomainModels;
+using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
+using Foundation.GenericRepository.Definitions;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -32,6 +34,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IClientGroupsRepository clientGroupsRepository;
         private readonly IClientAccountManagersRepository clientManagersRepository;
         private readonly ICountriesRepository countriesRepository;
+        private readonly IClientDeliveryAddressesRepository _clientDeliveryAddressesRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -42,6 +45,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IClientGroupsRepository clientGroupsRepository,
             IClientAccountManagersRepository clientManagersRepository,
             ICountriesRepository countriesRepository,
+            IClientDeliveryAddressesRepository clientDeliveryAddressesRepository,
             LinkGenerator linkGenerator)
         {
             this.clientsRepository = clientsRepository;
@@ -53,6 +57,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             this.clientGroupsRepository = clientGroupsRepository;
             this.clientManagersRepository = clientManagersRepository;
             this.countriesRepository = countriesRepository;
+            _clientDeliveryAddressesRepository = clientDeliveryAddressesRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -96,6 +101,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 NoManagersText = this.clientLocalizer.GetString("NoManagers"),
                 ClientManagerLabel = this.globalLocalizer.GetString("Manager"),
                 CountryLabel = this.globalLocalizer.GetString("Country"),
+                DeliveryAddressLabel = this.clientLocalizer.GetString("DeliveryAddress")
             };
 
             if (componentModel.Id.HasValue)
@@ -112,6 +118,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.ClientGroupsIds = client.ClientGroupIds;
                     viewModel.ClientManagersIds = client.ClientManagerIds;
                     viewModel.CountryId = client.CountryId;
+                    viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
 
                     var user = await this.identityRepository.GetAsync(componentModel.Token, componentModel.Language, client.Email);
 
@@ -150,6 +157,17 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             if (countries is not null)
             {
                 viewModel.Countries = countries.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
+            }
+
+            var deliveryAddresses = await _clientDeliveryAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
+
+            if (deliveryAddresses.Data is not null)
+            {
+                viewModel.DeliveryAddresses = deliveryAddresses.Data.Select(x => new ListItemViewModel
+                {
+                    Id = x.Id,
+                    Name = $"{x.Company}, {x.FirstName} {x.LastName}, {x.PostCode} {x.City}"
+                });
             }
 
             return viewModel;

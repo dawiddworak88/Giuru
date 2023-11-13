@@ -220,7 +220,7 @@ namespace Seller.Web.Shared.Repositories.Clients
 
         public async Task<Guid> SaveAsync(
             string token, string language, Guid? id, string name, string email, string communicationLanguage, Guid? countryId, 
-            string phoneNumber, Guid organisationId, IEnumerable<Guid> clientGroupIds, IEnumerable<Guid> clientManagerIds)
+            string phoneNumber, Guid organisationId, IEnumerable<Guid> clientGroupIds, IEnumerable<Guid> clientManagerIds, Guid? defaultDeliveryAddressId)
         {
             var requestModel = new SaveClientRequestModel
             {
@@ -232,7 +232,8 @@ namespace Seller.Web.Shared.Repositories.Clients
                 PhoneNumber = phoneNumber,
                 OrganisationId = organisationId,
                 ClientGroupIds = clientGroupIds,
-                ClientManagerIds = clientManagerIds
+                ClientManagerIds = clientManagerIds,
+                DefaultDeliveryAddressId = defaultDeliveryAddressId
             };
 
             var apiRequest = new ApiRequest<SaveClientRequestModel>

@@ -41,11 +41,14 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string ClientManagerLabel { get; set; }
         public string CountryLabel { get; set; }
         public Guid? CountryId { get; set; }
+        public string DeliveryAddressLabel { get; set; }
+        public Guid? DefaultDeliveryAddressId { get; set; }
         public IEnumerable<Guid> ClientGroupsIds { get; set; }
         public IEnumerable<Guid> ClientManagersIds { get; set; }
         public IEnumerable<LanguageViewModel> Languages { get; set; }
         public IEnumerable<ListItemViewModel> ClientGroups { get; set; }
         public IEnumerable<ListItemViewModel> Countries { get; set; }
+        public IEnumerable<ListItemViewModel> DeliveryAddresses { get; set; }
         public IEnumerable<ClientAccountManagerViewModel> ClientManagers { get; set; }
     }
 }

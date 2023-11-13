@@ -71,10 +71,11 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<ClientDeliveryAddress>>> GetAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<PagedResults<IEnumerable<ClientDeliveryAddress>>> GetAsync(string token, string language, Guid? clientId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
-            var requestModel = new PagedRequestModelBase
+            var requestModel = new PagedDeliveryAddressesRequestModel
             {
+                ClientId = clientId,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
