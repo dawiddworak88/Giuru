@@ -16,12 +16,14 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
+        private readonly IStringLocalizer<ClientResources> clientLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly IClientsRepository clientsRepository;
 
         public OrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
+            IStringLocalizer<ClientResources> clientLocalizer,
             LinkGenerator linkGenerator,
             IClientsRepository clientsRepository)
         {
@@ -29,6 +31,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
             this.clientsRepository = clientsRepository;
+            this.clientLocalizer = clientLocalizer;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -69,12 +72,14 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 NavigateToOrdersListText = this.orderLocalizer.GetString("NavigateToOrdersList"),
                 DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
                 DropOrSelectFilesLabel = this.orderLocalizer.GetString("DropOrSelectOrderFile"),
-                OrLabel = this.globalLocalizer.GetString("Or")
+                OrLabel = this.globalLocalizer.GetString("Or"),
+                GetDeliveryAddressesUrl = this.linkGenerator.GetPathByAction("Get", "ClientDeliveryAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                DeliveryAddress = this.clientLocalizer.GetString("DeliveryAddress")
             };
 
             var clients = await this.clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);
 
-            if (clients != null)
+            if (clients is not null)
             {
                 viewModel.Clients = clients.Select(x => new ListItemViewModel { Id = x.Id , Name = x.Name });
             }

@@ -15,6 +15,7 @@ import Files from "../../../../shared/components/Files/Files";
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
+    const [deliveryAddressId, setDeliveryAddressId] = useState(props.de)
 
     const handleOrderStatusSubmit = (e) => {
         e.preventDefault();
@@ -77,6 +78,26 @@ function EditOrderForm(props) {
                                                     labelId="order-status-label"
                                                     id="orderStatus"
                                                     name="orderStatus"
+                                                    value={orderStatusId}
+                                                    onChange={(e) => {
+                                                        e.preventDefault();
+                                                        setOrderStatusId(e.target.value);
+                                                    }}>
+                                                    {props.orderStatuses.map((status, index) => {
+                                                        return (
+                                                            <MenuItem key={index} value={status.id}>{status.name}</MenuItem>
+                                                        );
+                                                    })}
+                                                </Select>
+                                            </FormControl>
+                                        </div>
+                                        <div className="field">
+                                            <FormControl fullWidth={true} variant="standard">
+                                                <InputLabel id="order-delivery-address">{props.deliveryAddressLabel}</InputLabel>
+                                                <Select
+                                                    labelId="order-delivery-address"
+                                                    id="deliveryAddress"
+                                                    name="deliveryAddress"
                                                     value={orderStatusId}
                                                     onChange={(e) => {
                                                         e.preventDefault();

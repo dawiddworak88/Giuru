@@ -1,5 +1,6 @@
 ﻿using Foundation.PageContent.Components.ListItems.ViewModels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Orders.ViewModel
@@ -44,5 +45,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string OrLabel { get; set; }
         public string DropOrSelectFilesLabel { get; set; }
         public string DropFilesLabel { get; set; }
+        public string DeliveryAddress { get; set; }
+        public string GetDeliveryAddressesUrl { get; set; }
     }
 }
