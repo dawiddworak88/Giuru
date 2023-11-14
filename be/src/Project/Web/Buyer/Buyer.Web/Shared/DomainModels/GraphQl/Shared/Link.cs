@@ -1,4 +1,4 @@
-﻿namespace Buyer.Web.Shared.DomainModels.GraphQl
+﻿namespace Buyer.Web.Shared.DomainModels.GraphQl.Shared
 {
     public class Link
     {
