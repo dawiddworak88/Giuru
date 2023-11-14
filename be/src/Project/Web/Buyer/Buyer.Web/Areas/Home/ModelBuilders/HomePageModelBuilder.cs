@@ -3,6 +3,7 @@ using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
 using Foundation.PageContent.Components.HeroSliders.ViewModels;
 using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.NotificationBar.ViewModels;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.ViewModels.Headers;
 using System.Globalization;
@@ -23,6 +24,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, HomePageNewsCarouselGridViewModel> _newsModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrdersAnalyticsDetailViewModel> _ordersAnalyticsModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> _footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> _notificationBarModelBuilder;
 
         public HomePageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder,
@@ -33,7 +35,8 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             IAsyncComponentModelBuilder<ComponentModelBase, HomePageContentGridViewModel> contentGridModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, HomePageNewsCarouselGridViewModel> newsModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, OrdersAnalyticsDetailViewModel> ordersAnalyticsModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> notificationBarModelBuilder)
         {
             _seoModelBuilder = seoModelBuilder;
             _headerModelBuilder = headerModelBuilder;
@@ -44,6 +47,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             _footerModelBuilder = footerModelBuilder;
             _newsModelBuilder = newsModelBuilder;
             _ordersAnalyticsModelBuilder = ordersAnalyticsModelBuilder;
+            _notificationBarModelBuilder = notificationBarModelBuilder;
         }
 
         public async Task<HomePageViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -53,6 +57,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
                 Metadata = await _seoModelBuilder.BuildModelAsync(componentModel),
+                NotificationBar = await _notificationBarModelBuilder.BuildModelAsync(componentModel),
                 Header = await _headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await _mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 HeroSlider = await _heroSliderModelBuilder.BuildModelAsync(componentModel),
