@@ -4,6 +4,7 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Clients.ViewModels;
 using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.Repositories.Clients;
 using System.Globalization;
@@ -74,14 +75,14 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 DropOrSelectFilesLabel = this.orderLocalizer.GetString("DropOrSelectOrderFile"),
                 OrLabel = this.globalLocalizer.GetString("Or"),
                 GetDeliveryAddressesUrl = this.linkGenerator.GetPathByAction("Get", "ClientDeliveryAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
-                DeliveryAddress = this.clientLocalizer.GetString("DeliveryAddress")
+                DeliveryAddressLabel = this.clientLocalizer.GetString("DeliveryAddress")
             };
 
             var clients = await this.clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);
 
             if (clients is not null)
             {
-                viewModel.Clients = clients.Select(x => new ListItemViewModel { Id = x.Id , Name = x.Name });
+                viewModel.Clients = clients.Select(x => new ClientListItemViewModel { Id = x.Id , Name = x.Name, DefaultDeliveryAddressId = x.DefaultDeliveryAddressId });
             }
 
             return viewModel;

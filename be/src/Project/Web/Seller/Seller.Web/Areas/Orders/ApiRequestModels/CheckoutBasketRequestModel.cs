@@ -7,6 +7,16 @@ namespace Seller.Web.Areas.Orders.ApiRequestModels
         public Guid? BasketId { get; set; }
         public Guid? ClientId { get; set; }
         public string ClientName { get; set; }
+        public Guid? ShippingAddressId { get; set; }
+        public string ShippingCompany { get; set; }
+        public string ShippingFirstName { get; set; }
+        public string ShippingLastName { get; set; }
+        public string ShippingRegion { get; set; }
+        public string ShippingPostCode { get; set; }
+        public string ShippingCity { get; set; }
+        public string ShippingStreet { get; set; }
+        public string ShippingPhoneNumber { get; set; }
+        public Guid? ShippingCountryId { get; set; }
         public DateTime? ExpectedDeliveryDate { get; set; }
         public string MoreInfo { get; set; }
     }

@@ -35,6 +35,16 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 model.ClientId,
                 model.ClientName,
                 model.BasketId,
+                model.ShippingAddressId,
+                model.ShippingCompany,
+                model.ShippingFirstName,
+                model.ShippingLastName,
+                model.ShippingRegion,
+                model.ShippingPostCode,
+                model.ShippingCity,
+                model.ShippingStreet,
+                model.ShippingPhoneNumber,
+                model.ShippingCountryId,
                 model.ExpectedDeliveryDate,
                 model.MoreInfo);
 

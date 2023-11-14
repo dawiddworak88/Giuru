@@ -91,6 +91,16 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             Guid? clientId, 
             string clientName, 
             Guid? basketId,
+            Guid? shippingAddressId,
+            string shippingCompany,
+            string shippingFirstName,
+            string shippingLastName,
+            string shippingRegion,
+            string shippingPostCode,
+            string shippingCity,
+            string shippingStreet,
+            string shippingPhoneNumber,
+            Guid? shippingCountryId,
             DateTime? expectedDelivery,
             string moreInfo)
         {
@@ -99,6 +109,16 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 ClientId = clientId,
                 ClientName = clientName,
                 BasketId = basketId,
+                ShippingAddressId = shippingAddressId,
+                ShippingCompany = shippingCompany,
+                ShippingFirstName = shippingFirstName,
+                ShippingLastName = shippingLastName,
+                ShippingRegion = shippingRegion,
+                ShippingPostCode = shippingPostCode,
+                ShippingCity = shippingCity,
+                ShippingStreet = shippingStreet,
+                ShippingPhoneNumber = shippingPhoneNumber,
+                ShippingCountryId = shippingCountryId,
                 ExpectedDeliveryDate = expectedDelivery,
                 MoreInfo = moreInfo
             };

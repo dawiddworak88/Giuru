@@ -1,4 +1,5 @@
 ﻿using Foundation.PageContent.Components.ListItems.ViewModels;
+using Seller.Web.Areas.Clients.ViewModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string GeneralErrorMessage { get; set; }
         public string SaveText { get; set; }
         public string SaveUrl { get; set; }
-        public IEnumerable<ListItemViewModel> Clients { get; set; }
+        public IEnumerable<ClientListItemViewModel> Clients { get; set; }
         public string SkuLabel { get; set; }
         public string NameLabel { get; set; }
         public string QuantityLabel { get; set; }
@@ -45,7 +46,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string OrLabel { get; set; }
         public string DropOrSelectFilesLabel { get; set; }
         public string DropFilesLabel { get; set; }
-        public string DeliveryAddress { get; set; }
+        public string DeliveryAddressLabel { get; set; }
         public string GetDeliveryAddressesUrl { get; set; }
     }
 }
