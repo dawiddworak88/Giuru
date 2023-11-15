@@ -21,12 +21,12 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 {
     public class EditOrderFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, EditOrderFormViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<OrderResources> orderLocalizer;
-        private readonly IStringLocalizer<ClientResources> clientLocalizer;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IOrdersRepository ordersRepository;
+        private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> _filesModelBuilder;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IOrdersRepository _ordersRepository;
 
         public EditOrderFormModelBuilder
         (
@@ -37,45 +37,45 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             LinkGenerator linkGenerator,
             IOrdersRepository ordersRepository)
         {
-            this.globalLocalizer = globalLocalizer;
-            this.orderLocalizer = orderLocalizer;
-            this.linkGenerator = linkGenerator;
-            this.ordersRepository = ordersRepository;
-            this.filesModelBuilder = filesModelBuilder;
-            this.clientLocalizer = clientLocalizer;
+            _globalLocalizer = globalLocalizer;
+            _orderLocalizer = orderLocalizer;
+            _linkGenerator = linkGenerator;
+            _ordersRepository = ordersRepository;
+            _filesModelBuilder = filesModelBuilder;
+            _clientLocalizer = clientLocalizer;
         }
 
         public async Task<EditOrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new EditOrderFormViewModel
             {
-                IdLabel = this.globalLocalizer.GetString("Id"),
-                Title = this.orderLocalizer.GetString("EditOrder"),
-                DeliveryFromLabel = this.orderLocalizer.GetString("DeliveryFrom"),
-                DeliveryToLabel = this.orderLocalizer.GetString("DeliveryTo"),
-                MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
-                NameLabel = this.orderLocalizer.GetString("NameLabel"),
-                OrderItemsLabel = this.orderLocalizer.GetString("OrderItemsLabel"),
-                QuantityLabel = this.orderLocalizer.GetString("QuantityLabel"),
-                ExternalReferenceLabel = this.orderLocalizer.GetString("ExternalReferenceLabel"),
-                SkuLabel = this.orderLocalizer.GetString("SkuLabel"),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
-                SaveText = this.orderLocalizer.GetString("UpdateOrderStatus"),
-                ClientLabel = this.globalLocalizer.GetString("Client"),
-                CancelOrderLabel = this.orderLocalizer.GetString("CancelOrder"),
-                CancelOrderStatusUrl = this.linkGenerator.GetPathByAction("Cancel", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
-                StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
-                CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
-                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
-                UpdateOrderItemStatusUrl = this.linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                OrdersUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                NavigateToOrders = this.orderLocalizer.GetString("NavigateToOrdersList"),
-                DeliveryAddressLabel = this.clientLocalizer.GetString("DeliveryAddress")
+                IdLabel = _globalLocalizer.GetString("Id"),
+                Title = _orderLocalizer.GetString("EditOrder"),
+                DeliveryFromLabel = _orderLocalizer.GetString("DeliveryFrom"),
+                DeliveryToLabel = _orderLocalizer.GetString("DeliveryTo"),
+                MoreInfoLabel = _orderLocalizer.GetString("MoreInfoLabel"),
+                NameLabel = _orderLocalizer.GetString("NameLabel"),
+                OrderItemsLabel = _orderLocalizer.GetString("OrderItemsLabel"),
+                QuantityLabel = _orderLocalizer.GetString("QuantityLabel"),
+                ExternalReferenceLabel = _orderLocalizer.GetString("ExternalReferenceLabel"),
+                SkuLabel = _orderLocalizer.GetString("SkuLabel"),
+                GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
+                OrderStatusLabel = _orderLocalizer.GetString("OrderStatus"),
+                SaveText = _orderLocalizer.GetString("UpdateOrderStatus"),
+                ClientLabel = _globalLocalizer.GetString("Client"),
+                CancelOrderLabel = _orderLocalizer.GetString("CancelOrder"),
+                CancelOrderStatusUrl = _linkGenerator.GetPathByAction("Cancel", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                OutletQuantityLabel = _orderLocalizer.GetString("OutletQuantityLabel"),
+                StockQuantityLabel = _orderLocalizer.GetString("StockQuantityLabel"),
+                CustomOrderLabel = _globalLocalizer.GetString("CustomOrderLabel"),
+                OrderStatusCommentLabel = _orderLocalizer.GetString("OrderStatusComment"),
+                UpdateOrderItemStatusUrl = _linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                OrdersUrl = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                NavigateToOrders = _orderLocalizer.GetString("NavigateToOrdersList"),
+                DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress")
             };
 
-            var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
+            var orderStatuses = await _ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
 
             if (orderStatuses is not null)
             {
@@ -84,24 +84,24 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             
             if (componentModel.Id.HasValue)
             {
-                var order = await this.ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                var order = await _ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                 if (order is not null)
                 {
                     viewModel.Id = order.Id;
                     viewModel.OrderStatusId = order.OrderStatusId;
-                    viewModel.ClientUrl = this.linkGenerator.GetPathByAction("Edit", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
+                    viewModel.ClientUrl = _linkGenerator.GetPathByAction("Edit", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
                     viewModel.ClientName = order.ClientName;
                     viewModel.DeliveryAddress = $"{order.ShippingCompany}, {order.ShippingFirstName} {order.ShippingLastName}, {order.ShippingPostCode} {order.ShippingCity}";
-                    viewModel.UpdateOrderStatusUrl = this.linkGenerator.GetPathByAction("Index", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
-                    viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
+                    viewModel.UpdateOrderStatusUrl = _linkGenerator.GetPathByAction("Index", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
+                    viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
                     viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                     {
                         Id = x.Id,
                         ProductId = x.ProductId,
                         Sku = x.ProductSku,
                         Name = x.ProductName,
-                        ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
+                        ProductUrl = _linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
                         Quantity = x.Quantity,
                         StockQuantity = x.StockQuantity,
                         OutletQuantity = x.OutletQuantity,
@@ -136,7 +136,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     viewModel.OrderItemsStatuses = orderItemsStatuses;
                 }
 
-                var orderFiles = await this.ordersRepository.GetOrderFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(OrderFile.CreatedDate)} desc");
+                var orderFiles = await _ordersRepository.GetOrderFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(OrderFile.CreatedDate)} desc");
 
                 if (orderFiles is not null)
                 {
@@ -146,11 +146,11 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                         IsAuthenticated = componentModel.IsAuthenticated,
                         Language = componentModel.Language,
                         Token = componentModel.Token,
-                        SearchApiUrl = this.linkGenerator.GetPathByAction("GetFiles", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                        SearchApiUrl = _linkGenerator.GetPathByAction("GetFiles", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                         Files = orderFiles.Data.OrEmptyIfNull().Select(x => x.Id)
                     };
 
-                    viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(filesComponentModel);
+                    viewModel.Attachments = await _filesModelBuilder.BuildModelAsync(filesComponentModel);
                 }
             }
 
