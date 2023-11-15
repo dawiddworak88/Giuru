@@ -5,6 +5,7 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
 using Foundation.PageContent.Components.Metadatas.ViewModels;
+using Buyer.Web.Shared.ViewModels.NotificationBar;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -12,24 +13,27 @@ namespace Buyer.Web.Areas.News.ModelBuilders
 {
     public class NewsPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, NewsPageViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, NewsCatalogViewModel> newsCatalogModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> _seoModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> _headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> _mainNavigationModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, NewsCatalogViewModel> _newsCatalogModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> _footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> _notificationBarModelBuilder;
 
         public NewsPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, NewsCatalogViewModel> newsCatalogModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> notificationBarModelBuilder)
         {
-            this.headerModelBuilder = headerModelBuilder;
-            this.mainNavigationModelBuilder = mainNavigationModelBuilder;
-            this.newsCatalogModelBuilder = newsCatalogModelBuilder;
-            this.footerModelBuilder = footerModelBuilder;
-            this.seoModelBuilder = seoModelBuilder;
+            _headerModelBuilder = headerModelBuilder;
+            _mainNavigationModelBuilder = mainNavigationModelBuilder;
+            _newsCatalogModelBuilder = newsCatalogModelBuilder;
+            _footerModelBuilder = footerModelBuilder;
+            _seoModelBuilder = seoModelBuilder;
+            _notificationBarModelBuilder = notificationBarModelBuilder;
         }
 
         public async Task<NewsPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -37,11 +41,12 @@ namespace Buyer.Web.Areas.News.ModelBuilders
             var viewModel = new NewsPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Metadata = await this.seoModelBuilder.BuildModelAsync(componentModel),
-                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
-                MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
-                NewsCatalog = await this.newsCatalogModelBuilder.BuildModelAsync(componentModel),
-                Footer = await footerModelBuilder.BuildModelAsync(componentModel)
+                Metadata = await _seoModelBuilder.BuildModelAsync(componentModel),
+                NotificationBar = await _notificationBarModelBuilder.BuildModelAsync(componentModel),
+                Header = await _headerModelBuilder.BuildModelAsync(componentModel),
+                MainNavigation = await _mainNavigationModelBuilder.BuildModelAsync(componentModel),
+                NewsCatalog = await _newsCatalogModelBuilder.BuildModelAsync(componentModel),
+                Footer = await _footerModelBuilder.BuildModelAsync(componentModel)
             };
 
             return viewModel;

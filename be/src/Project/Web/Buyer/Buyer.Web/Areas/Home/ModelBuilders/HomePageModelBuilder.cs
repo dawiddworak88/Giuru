@@ -3,7 +3,7 @@ using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
 using Foundation.PageContent.Components.HeroSliders.ViewModels;
 using Foundation.PageContent.ComponentModels;
-using Foundation.PageContent.Components.NotificationBar.ViewModels;
+using Buyer.Web.Shared.ViewModels.NotificationBar;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.ViewModels.Headers;
 using System.Globalization;
