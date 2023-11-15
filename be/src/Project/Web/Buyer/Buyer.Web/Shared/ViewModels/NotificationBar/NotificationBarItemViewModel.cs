@@ -1,6 +1,6 @@
 ﻿using Foundation.PageContent.Components.Links.ViewModels;
 
-namespace Foundation.PageContent.Components.NotificationBar.ViewModels
+namespace Buyer.Web.Shared.ViewModels.NotificationBar
 {
     public class NotificationBarItemViewModel
     {
