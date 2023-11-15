@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_blocks_notification_bars",
+  "info": {
+    "displayName": "Notification Bar",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "notificationBarItem": {
+      "displayName": "Notification Bar Item",
+      "type": "component",
+      "repeatable": true,
+      "component": "blocks.notification-bar-item"
+    }
+  }
+}
