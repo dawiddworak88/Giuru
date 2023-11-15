@@ -1,7 +1,7 @@
 ﻿using Buyer.Web.Shared.Repositories.GraphQl;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
-using Foundation.PageContent.Components.NotificationBar.ViewModels;
+using Buyer.Web.Shared.ViewModels.NotificationBar;
 using Foundation.PageContent.Components.Links.ViewModels;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;

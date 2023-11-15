@@ -35,7 +35,7 @@ using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
 using Buyer.Web.Shared.ModelBuilders.OrderItemStatusChanges;
 using Buyer.Web.Shared.Repositories.GraphQl;
 using Buyer.Web.Shared.ModelBuilders.NotificationBar;
-using Foundation.PageContent.Components.NotificationBar.ViewModels;
+using Buyer.Web.Shared.ViewModels.NotificationBar;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
