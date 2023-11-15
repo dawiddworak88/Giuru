@@ -300,4 +300,16 @@
   <data name="DeliveryAddress" xml:space="preserve">
     <value>Adres dostawy</value>
   </data>
+  <data name="DeliveryAddressDeleteDefaultConflict" xml:space="preserve">
+    <value>Adres dostawy nie może zostać usunięty, ponieważ jest on przypisany jako domyślny</value>
+  </data>
+  <data name="DeliveryAddressDeletedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie usunięto adres dostawy</value>
+  </data>
+  <data name="DeliveryAddressNotFound" xml:space="preserve">
+    <value>Nie znaleziono adresu dostawy</value>
+  </data>
+  <data name="DeliveryAddressSavedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie zapisano adres dostawy</value>
+  </data>
 </root>

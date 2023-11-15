@@ -300,4 +300,16 @@
   <data name="DeliveryAddress" xml:space="preserve">
     <value>Lieferadresse</value>
   </data>
+  <data name="DeliveryAddressDeleteDefaultConflict" xml:space="preserve">
+    <value>Die Lieferadresse kann nicht gelöscht werden, da sie als Standardadresse zugewiesen ist</value>
+  </data>
+  <data name="DeliveryAddressDeletedSuccessfully" xml:space="preserve">
+    <value>Lieferadresse erfolgreich gelöscht</value>
+  </data>
+  <data name="DeliveryAddressNotFound" xml:space="preserve">
+    <value>Lieferadresse nicht gefunden</value>
+  </data>
+  <data name="DeliveryAddressSavedSuccessfully" xml:space="preserve">
+    <value>Lieferadresse erfolgreich gespeichert</value>
+  </data>
 </root>
