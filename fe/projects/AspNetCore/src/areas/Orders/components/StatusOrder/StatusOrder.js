@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import {
     Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, TextField, Fab, Button,
-    CircularProgress 
+    CircularProgress, InputLabel
 } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 import moment from "moment";
@@ -72,6 +72,11 @@ function StatusOrder(props) {
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column">
+                    {props.deliveryAddress &&
+                        <div className="field">
+                            <InputLabel id="delivery-address-label">{props.deliveryAddressLabel}: {props.deliveryAddress}</InputLabel>
+                        </div>
+                    }
                     {status &&
                         <div className="status-order">
                             <div className="status-ordder__details">{props.orderStatusLabel} {status.name}</div>

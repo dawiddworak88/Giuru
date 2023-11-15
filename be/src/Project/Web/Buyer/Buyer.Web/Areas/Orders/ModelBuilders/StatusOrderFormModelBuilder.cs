@@ -24,6 +24,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
+        private readonly IStringLocalizer<ClientResources> clientLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly IOrdersRepository ordersRepository;
 
@@ -31,6 +32,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
+            IStringLocalizer<ClientResources> clientLocalizer,
             LinkGenerator linkGenerator,
             IOrdersRepository ordersRepository)
         {
@@ -39,6 +41,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             this.linkGenerator = linkGenerator;
             this.ordersRepository = ordersRepository;
             this.filesModelBuilder = filesModelBuilder;
+            this.clientLocalizer = clientLocalizer;
         }
 
         public async Task<StatusOrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -69,7 +72,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 CancelationConfirmationDialogLabel = this.orderLocalizer.GetString("CancelationConfirmationDialog"),
                 AreYouSureToCancelOrderLabel = this.orderLocalizer.GetString("AreYouSureToCancelOrder"),
                 OrdersUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                NavigateToOrders = this.orderLocalizer.GetString("NavigateToOrdersList")
+                NavigateToOrders = this.orderLocalizer.GetString("NavigateToOrdersList"),
+                DeliveryAddressLabel = this.clientLocalizer.GetString("DeliveryAddress")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -90,6 +94,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.ExpectedDelivery = order.ExpectedDeliveryDate;
                     viewModel.CustomOrder = order.MoreInfo;
                     viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
+                    viewModel.DeliveryAddress = $"{order.ShippingCompany}, {order.ShippingFirstName} {order.ShippingLastName}, {order.ShippingPostCode} {order.ShippingCity}";
                     viewModel.CanCancelOrder = false;
                     viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                     {
