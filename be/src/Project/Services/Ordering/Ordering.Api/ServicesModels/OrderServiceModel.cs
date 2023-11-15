@@ -28,9 +28,8 @@ namespace Ordering.Api.ServicesModels
         public string ShippingPostCode { get; set; }
         public string ShippingCity { get; set; }
         public string ShippingStreet { get; set; }
-        public string ShippingPhonePrefix { get; set; }
-        public string ShippingPhone { get; set; }
-        public string ShippingCountryCode { get; set; }
+        public string ShippingPhoneNumber { get; set; }
+        public Guid? ShippingCountryId { get; set; }
         public string MoreInfo { get; set; }
         public Guid OrderStatusId { get; set; }
         public string OrderStatusName { get; set; }
