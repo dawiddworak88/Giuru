@@ -95,6 +95,8 @@ const ClientDeliveryAddressForm = (props) => {
             body: JSON.stringify(requestPayload)
         };
 
+        console.log(props.saveUrl)
+
         fetch(props.saveUrl, requestOptions)
             .then(response => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
@@ -295,8 +297,6 @@ ClientDeliveryAddressForm.propTypes = {
     saveUrl: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     idLabel: PropTypes.string.isRequired,
-    name: PropTypes.string,
-    nameLabel: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     navigateToClientDeliveryAddresses: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,

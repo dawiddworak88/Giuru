@@ -1,12 +1,16 @@
-﻿using Buyer.Web.Areas.Orders.Repositories.Baskets;
-using Buyer.Web.Areas.Orders.ViewModel;
+﻿using Buyer.Web.Areas.Orders.ViewModel;
+using Buyer.Web.Shared.DomainModels.Clients;
+using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Services.Baskets;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Orders.ModelBuilders
@@ -15,12 +19,18 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
+        private readonly IStringLocalizer<ClientResources> clientLocalizer;
+        private readonly IClientsRepository clientsRepository;
+        private readonly IClientDeliveryAddressesRepository clientDeliveryAddressesRepository;
         private readonly LinkGenerator linkGenerator;
         private readonly IBasketService basketService;
 
         public OrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
+            IStringLocalizer<ClientResources> clientLocalizer,
+            IClientsRepository clientsRepository,
+            IClientDeliveryAddressesRepository clientDeliveryAddressesRepository,
             IBasketService basketService,
             LinkGenerator linkGenerator)
         {
@@ -28,6 +38,9 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
             this.basketService = basketService;
+            this.clientLocalizer = clientLocalizer;
+            this.clientsRepository = clientsRepository;
+            this.clientDeliveryAddressesRepository = clientDeliveryAddressesRepository;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -78,14 +91,39 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 DeleteLabel = this.globalLocalizer.GetString("Delete"),
                 DropOrSelectAttachmentsLabel = this.globalLocalizer.GetString("DropOrSelectAttachments"),
                 SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                DeliveryAddressLabel = this.clientLocalizer.GetString("DeliveryAddress")
             };
 
             if (componentModel.BasketId.HasValue)
             {
                 var basketItems = await this.basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
+
                 if (basketItems is not null)
                 {
                     viewModel.BasketItems = basketItems;
+                }
+            }
+
+            if (componentModel.SellerId.HasValue)
+            {
+                var client = await this.clientsRepository.GetClientAsync(componentModel.Token, componentModel.Language);
+
+                if (client is not null)
+                {
+                    viewModel.ClientId = client.Id;
+                    viewModel.ClientName = client.Name;
+                    viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
+
+                    var deliveryAddresses = await this.clientDeliveryAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, client.Id, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
+
+                    if (deliveryAddresses is not null)
+                    {
+                        viewModel.DeliveryAddresses = deliveryAddresses.Data.Select(x => new ListItemViewModel
+                        {
+                            Id = x.Id,
+                            Name = $"{x.Company}, {x.FirstName} {x.LastName}, {x.PostCode} {x.City}"
+                        });
+                    }
                 }
             }
 

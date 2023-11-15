@@ -64,6 +64,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<ICatalogProductsRepository, CatalogProductsRepository>();
             services.AddScoped<IMainNavigationLinkRepository, MainNavigationLinkRepository>();
             services.AddScoped<IGraphQlRepository, GraphQlRepository>();
+            services.AddScoped<IClientDeliveryAddressesRepository, ClientDeliveryAddressesRepository>();
 
             // Services
             services.AddScoped<ICatalogService, CatalogService>();

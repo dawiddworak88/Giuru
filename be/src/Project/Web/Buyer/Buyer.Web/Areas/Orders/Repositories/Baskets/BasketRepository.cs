@@ -86,13 +86,42 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             throw new CustomException(response.Message, (int)response.StatusCode);
         }
 
-        public async Task CheckoutBasketAsync(string token, string language, Guid? clientId, string clientName, Guid? basketId, DateTime? expectedDelivery, string moreInfo, bool hasCustomOrder, IEnumerable<Guid> attachments)
+        public async Task CheckoutBasketAsync(
+            string token, 
+            string language, 
+            Guid? clientId, 
+            string clientName, 
+            Guid? basketId,
+            Guid? shippingAddressId,
+            string shippingCompany,
+            string shippingFirstName,
+            string shippingLastName,
+            string shippingRegion,
+            string shippingPostCode,
+            string shippingCity,
+            string shippingStreet,
+            string shippingPhoneNumber,
+            Guid? shippingCountryId, 
+            DateTime? expectedDelivery, 
+            string moreInfo, 
+            bool hasCustomOrder, 
+            IEnumerable<Guid> attachments)
         {
             var requestModel = new CheckoutBasketApiRequestModel
             {
                 ClientId = clientId,
                 ClientName = clientName,
                 BasketId = basketId,
+                ShippingAddressId = shippingAddressId,
+                ShippingCompany = shippingCompany,
+                ShippingFirstName = shippingFirstName,
+                ShippingLastName = shippingLastName,
+                ShippingRegion = shippingRegion,
+                ShippingPostCode = shippingPostCode,
+                ShippingCity = shippingCity,
+                ShippingStreet = shippingStreet,
+                ShippingPhoneNumber = shippingPhoneNumber,
+                ShippingCountryId = shippingCountryId,
                 ExpectedDeliveryDate = expectedDelivery,
                 MoreInfo = moreInfo,
                 HasCustomOrder = hasCustomOrder,
@@ -108,6 +137,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             };
 
             var response = await this.apiClientService.PostAsync<ApiRequest<CheckoutBasketApiRequestModel>, CheckoutBasketApiRequestModel, BaseResponseModel>(apiRequest);
+
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);

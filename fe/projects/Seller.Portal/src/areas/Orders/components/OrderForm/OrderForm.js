@@ -223,8 +223,24 @@ function OrderForm(props) {
         var order = {
             basketId,
             clientId: client.id,
-            clientName: client.name
+            clientName: client.name,
         };
+
+        if (deliveryAddress) {
+            order = {
+                ...order,
+                shippingAddressId: deliveryAddress.id,
+                shippingCompany: deliveryAddress.company,
+                shippingFirstName: deliveryAddress.firstName,
+                shippingLastName: deliveryAddress.lastName,
+                shippingRegion: deliveryAddress.region,
+                shippingPostCode: deliveryAddress.postCode,
+                shippingCity: deliveryAddress.city,
+                shippingStreet: deliveryAddress.street,
+                shippingPhoneNumber: deliveryAddress.phoneNumber,
+                shippingCountryId: deliveryAddress.countryId
+            }
+        }
 
         const requestOptions = {
             method: "POST",
@@ -282,6 +298,12 @@ function OrderForm(props) {
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         setDeliveryAddresses(jsonResponse.data);
+
+                        if (value.defaultDeliveryAddressId) {
+                            const defaultDeliveryAddress = jsonResponse.data.find(x => x.id == value.defaultDeliveryAddressId);
+
+                            setDeliveryAddress(defaultDeliveryAddress);
+                        }
                     }
                 });
             }).catch(() => {
@@ -360,7 +382,7 @@ function OrderForm(props) {
                                 renderInput={(params) => <TextField {...params} label={props.selectClientLabel} margin="normal" variant="standard" />}
                             />
                         </div>
-                        {deliveryAddress && deliveryAddress.length > 0 &&
+                        {deliveryAddresses && deliveryAddresses.length > 0 &&
                             <div className="field">
                                 <Autocomplete
                                     options={deliveryAddresses}
