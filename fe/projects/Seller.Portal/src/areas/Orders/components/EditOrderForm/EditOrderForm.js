@@ -15,7 +15,6 @@ import Files from "../../../../shared/components/Files/Files";
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
-    const [deliveryAddressId, setDeliveryAddressId] = useState(props.de)
 
     const handleOrderStatusSubmit = (e) => {
         e.preventDefault();
