@@ -223,7 +223,7 @@ function OrderForm(props) {
         var order = {
             basketId,
             clientId: client.id,
-            clientName: client.name,
+            clientName: client.name
         };
 
         if (deliveryAddress) {
@@ -275,8 +275,7 @@ function OrderForm(props) {
         const searchParameters = {
             clientId: value.id,
             pageIndex: 1,
-            itemsPerPage: 25
-            //itemsPerPage: props.defaultItemsPerPage
+            itemsPerPage: props.defaultItemsPerPage
         };
 
         const requestOptions = {

@@ -48,5 +48,6 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string DropFilesLabel { get; set; }
         public string DeliveryAddressLabel { get; set; }
         public string GetDeliveryAddressesUrl { get; set; }
+        public int DefaultItemsPerPage { get; set; }
     }
 }
