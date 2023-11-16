@@ -11,6 +11,7 @@ import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGri
 import ContentGrid from "../../../../shared/components/ContentGrid/ContentGrid";
 import Footer from "../../../../shared/components/Footer/Footer";
 import OrdersAnalyticsDetail from "../../../../shared/components/OrdersAnalytics/OrdersAnalyticsDetail";
+import NotificationBar from "../../../../shared/components/NotificationBar/NotificationBar";
 
 function HomePage(props) {
 
@@ -20,6 +21,9 @@ function HomePage(props) {
     <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
       <ToastContainer />
       <Store>
+        {props.notificationBar.items &&
+          <NotificationBar {...props.notificationBar}></NotificationBar>
+        }
         <Header {...props.header}></Header>
         <MainNavigation {...props.mainNavigation}></MainNavigation>
         <HeroSlider {...props.heroSlider}></HeroSlider>

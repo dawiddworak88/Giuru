@@ -9,6 +9,7 @@ import MainNavigation from "../../../../shared/components/MainNavigation/MainNav
 import ProductDetail from "../../components/ProductDetail/ProductDetail";
 import Footer from "../../../../shared/components/Footer/Footer";
 import Breadcrumbs from "../../../../shared/components/Breadcrumb/Breadcrumbs";
+import NotificationBar from "../../../../shared/components/NotificationBar/NotificationBar";
 
 function ProductPage(props) {
 
@@ -19,6 +20,9 @@ function ProductPage(props) {
       <ToastContainer />
       <Store>
         <div className="category-page">
+          {props.notificationBar.items &&
+            <NotificationBar {...props.notificationBar}></NotificationBar>
+          }
           <Header {...props.header}></Header>
           <MainNavigation {...props.mainNavigation}></MainNavigation>
           <Breadcrumbs {...props.breadcrumbs}></Breadcrumbs>

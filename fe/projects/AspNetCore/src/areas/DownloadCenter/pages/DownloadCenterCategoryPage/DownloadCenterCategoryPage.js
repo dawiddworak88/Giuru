@@ -9,6 +9,7 @@ import MainNavigation from "../../../../shared/components/MainNavigation/MainNav
 import Footer from "../../../../shared/components/Footer/Footer";
 import CategoryDetails from "../../components/CategoryDetails/CategoryDetails";
 import Breadcrumbs from "../../../../shared/components/Breadcrumb/Breadcrumbs";
+import NotificationBar from "../../../../shared/components/NotificationBar/NotificationBar";
 
 const DownloadCenterCategoryPage = (props) => {
     
@@ -18,6 +19,9 @@ const DownloadCenterCategoryPage = (props) => {
         <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
             <ToastContainer />
             <Store>
+                {props.notificationBar.items &&
+                    <NotificationBar {...props.notificationBar}></NotificationBar>
+                }
                 <Header {...props.header}></Header>
                 <MainNavigation {...props.mainNavigation} />
                 <Breadcrumbs {...props.breadcrumbs} />
