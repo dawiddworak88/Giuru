@@ -31,10 +31,6 @@
             align-items: center;
         }
 
-        &_link {
-            padding-bottom: 0.3rem;
-        }
-
         &_mobile {
             display: block;
         }
@@ -45,7 +41,7 @@
     }
 }
 
-@media only screen and (min-width: 1024) {
+@media only screen and (min-width: 1024px) {
     .notification-bar {
         &_mobile {
             display: none;
