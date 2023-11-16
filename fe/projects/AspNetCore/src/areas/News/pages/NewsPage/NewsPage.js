@@ -18,7 +18,7 @@ const NewsPage = (props) => {
         <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
             <ToastContainer />
             <Store>
-                {props.notificationBar.items &&
+                {props.notificationBar && props.notificationBar.items &&
                     <NotificationBar {...props.notificationBar}></NotificationBar>
                 }
                 <Header {...props.header}></Header>

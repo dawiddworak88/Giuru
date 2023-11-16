@@ -19,7 +19,7 @@ const DownloadCenterCategoryPage = (props) => {
         <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
             <ToastContainer />
             <Store>
-                {props.notificationBar.items &&
+                {props.notificationBar && props.notificationBar.items &&
                     <NotificationBar {...props.notificationBar}></NotificationBar>
                 }
                 <Header {...props.header}></Header>

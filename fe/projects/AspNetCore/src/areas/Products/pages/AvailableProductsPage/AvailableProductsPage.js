@@ -19,7 +19,7 @@ function AvailableProductsPage(props) {
       <ToastContainer />
       <Store>
         <div className="search-products-page">
-          {props.notificationBar.items &&
+          {props.notificationBar && props.notificationBar.items &&
             <NotificationBar {...props.notificationBar}></NotificationBar>
           }
           <Header {...props.header}></Header>

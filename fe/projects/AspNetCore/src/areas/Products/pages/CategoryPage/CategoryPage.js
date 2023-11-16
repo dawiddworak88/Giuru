@@ -20,7 +20,7 @@ function CategoryPage(props) {
       <ToastContainer />
       <Store>
         <div className="category-page">
-          {props.notificationBar.items &&
+          {props.notificationBar && props.notificationBar.items &&
             <NotificationBar {...props.notificationBar}></NotificationBar>
           }
           <Header {...props.header}></Header>
