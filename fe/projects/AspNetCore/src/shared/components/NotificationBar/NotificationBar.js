@@ -7,15 +7,14 @@ const NotificationBar = (props) => {
 
     const getIconTag = (iconName) => {
         const IconTag = Icon[iconName];
+        const defaultIconName = "PushPin"; 
 
         if (IconTag === undefined || IconTag === null) {
-            IconTag = Icon["PushPin"];
+            IconTag = Icon[defaultIconName];
         }
 
         return (
-            <span>
-                <IconTag />
-            </span>
+            <IconTag />
         )
     };
 
