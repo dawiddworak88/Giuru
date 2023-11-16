@@ -25,12 +25,6 @@ const ClientDeliveryAddressForm = (props) => {
     };
 
     const stateValidatorSchema = {
-        // client: {
-        //     required: {
-        //         isRequired: true,
-        //         error: props.fieldRequiredErrorMessage
-        //     }
-        // },
         phoneNumber: {
             required: {
                 isRequired: true,
@@ -61,12 +55,6 @@ const ClientDeliveryAddressForm = (props) => {
                 error: props.fieldRequiredErrorMessage
             }
         },
-        // country: {
-        //     required: {
-        //         isRequired: true,
-        //         error: props.fieldRequiredErrorMessage
-        //     }
-        // },
     };
 
     const onSubmitForm = (state) => {
@@ -155,9 +143,7 @@ const ClientDeliveryAddressForm = (props) => {
                                         label={props.clientLabel} 
                                         variant="standard"
                                         margin="normal"
-                                        // helperText={dirty.client ? errors.client : ""} 
-                                        // error={(errors.client.length > 0) && dirty.client} 
-                                        />
+                                    />
                                 )} />
                         </div>   
                         <div className="field">
