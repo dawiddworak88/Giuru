@@ -255,8 +255,6 @@ const ClientDeliveryAddressForm = (props) => {
                                         label={props.countryLabel} 
                                         variant="standard"
                                         margin="normal"
-                                        // helperText={dirty.country ? errors.country : ""} 
-                                        // error={(errors.country.length > 0) && dirty.country}
                                          />
                                 )} />
                         </div>
