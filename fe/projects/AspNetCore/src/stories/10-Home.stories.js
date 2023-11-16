@@ -3,6 +3,33 @@ import "../areas/Home/pages/HomePage/HomePage.scss";
 import HomePage from "../areas/Home/pages/HomePage/HomePage";
 import { header, mainNavigation, footer } from "./shared/Props";
 
+var notificationBar = {
+  items: [
+    {
+      icon: "AccessTime",
+      link: {
+        url: "test",
+        text: "Umów spotkanie z opiekunem Twojej firmy",
+        target: "blank"
+      }
+    },
+    {
+      icon: "LocalShipping",
+      link: {
+        url: "test",
+        text: "Do 30 dni na zwrot",
+      }
+    },
+    {
+      icon: "LocalPostOffice",
+      link: {
+        url: "test",
+        text: "Zapisz się do newslettera i zyskaj 50 zł rabatu",
+      }
+    }
+  ]
+}
+
 var heroSlider = {
   items: [
     { imageSrc: "https://eltap.pl/upload/gallery/55/marinosavana05soft11okajpg6870.jpg", imageAlt: "Best sectionals", imageTitle: "Best sectionals", teaserTitle: "Shop sectionals", teaserText: "Best sectionals in the industry", ctaUrl: "#", ctaText: "Shop now!" },
@@ -291,7 +318,7 @@ var contentGrid = {
   ]
 };
 
-export const HomePageStory = () => <HomePage header={header} mainNavigation={mainNavigation} heroSlider={heroSlider} contentGrid={contentGrid} footer={footer} />
+export const HomePageStory = () => <HomePage notificationBar={notificationBar} header={header} mainNavigation={mainNavigation} heroSlider={heroSlider} contentGrid={contentGrid} footer={footer} />
 
 HomePageStory.story = {
   name: "Home Page",
