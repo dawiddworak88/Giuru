@@ -83,8 +83,6 @@ const ClientDeliveryAddressForm = (props) => {
             body: JSON.stringify(requestPayload)
         };
 
-        console.log(props.saveUrl)
-
         fetch(props.saveUrl, requestOptions)
             .then(response => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
@@ -143,7 +141,8 @@ const ClientDeliveryAddressForm = (props) => {
                                         label={props.clientLabel} 
                                         variant="standard"
                                         margin="normal"
-                                    />
+                                        helperText={dirty.client && !client ? props.fieldRequiredErrorMessage : ""} 
+                                        error={dirty.client && !client}/>
                                 )} />
                         </div>   
                         <div className="field">
@@ -255,7 +254,8 @@ const ClientDeliveryAddressForm = (props) => {
                                         label={props.countryLabel} 
                                         variant="standard"
                                         margin="normal"
-                                         />
+                                        helperText={dirty.country && !country ? props.fieldRequiredErrorMessage : ""} 
+                                        error={dirty.country && !country}/>
                                 )} />
                         </div>
                         <div className="field ">
@@ -263,7 +263,7 @@ const ClientDeliveryAddressForm = (props) => {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable}>
+                                disabled={state.isLoading || !client || !country || disable}>
                                 {props.saveText}
                             </Button>
                             <a href={props.deliveryAddressesUrl} className="ml-2 button is-text">{props.navigateToClientDeliveryAddresses}</a>
