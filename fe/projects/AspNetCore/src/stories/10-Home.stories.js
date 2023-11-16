@@ -6,25 +6,17 @@ import { header, mainNavigation, footer } from "./shared/Props";
 var notificationBar = {
   items: [
     {
-      icon: "AccessTime",
-      link: {
-        url: "test",
-        text: "Umów spotkanie z opiekunem Twojej firmy",
-        target: "blank"
-      }
-    },
-    {
       icon: "LocalShipping",
       link: {
         url: "test",
-        text: "Do 30 dni na zwrot",
+        text: "Up to 30 days to return",
       }
     },
     {
       icon: "LocalPostOffice",
       link: {
         url: "test",
-        text: "Zapisz się do newslettera i zyskaj 50 zł rabatu",
+        text: "Sign up for the newsletter and get a PLN 50 discount",
       }
     }
   ]
