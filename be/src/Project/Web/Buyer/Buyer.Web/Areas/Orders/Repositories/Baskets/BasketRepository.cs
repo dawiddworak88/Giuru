@@ -45,8 +45,6 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
-                    DeliveryFrom = x.DeliveryFrom,
-                    DeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
                 })
             };
@@ -76,8 +74,6 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                         StockQuantity = x.StockQuantity,
                         OutletQuantity = x.OutletQuantity,
                         ExternalReference = x.ExternalReference,
-                        DeliveryFrom = x.DeliveryFrom,
-                        DeliveryTo = x.DeliveryTo,
                         MoreInfo = x.MoreInfo
                     })
                 };
@@ -125,8 +121,6 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Basket>(apiRequest);
-
-
 
             if (response.IsSuccessStatusCode && response.Data is not null)
             {

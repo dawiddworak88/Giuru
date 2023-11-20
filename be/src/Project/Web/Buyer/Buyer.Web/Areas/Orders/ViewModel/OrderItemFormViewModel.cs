@@ -22,7 +22,7 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public double OutletQuantity { get; set; }
         public string OutletQuantityLabel { get; set; }
         public string OrderStatusLabel { get; set; }
-        public string OrderStatusCommentLabel { get; set; }
+        public string ExpectedDateOfProductOnStockLabel { get; set; }
         public string OrderItemStatusName { get; set; }
         public string ImageAlt { get; set; }
         public string ImageUrl { get; set; }
@@ -32,13 +32,9 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string ExternalReference { get; set; }
         public string MoreInfoLabel { get; set; }
         public string MoreInfo { get; set; }
-        public string DeliveryFromLabel { get; set; }
-        public string DeliveryToLabel { get; set; }
         public bool CanCancelOrderItem { get; set; }
         public string CancelOrderItemLabel { get; set; }
         public string CancelOrderItemStatusUrl { get; set; }
-        public DateTime? DeliveryFrom { get; set; }
-        public DateTime? DeliveryTo { get; set; }
         public IEnumerable<OrderItemStatusChangeViewModel> StatusChanges { get; set; }
         public OrderItemStatusChangesViewModel OrderItemStatusChanges { get; set; }
     }

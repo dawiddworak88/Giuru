@@ -61,7 +61,6 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
                 ShippingPostCode = @event.ShippingPostCode,
                 ShippingRegion = @event.ShippingRegion,
                 ShippingStreet = @event.ShippingStreet,
-                ExpectedDeliveryDate = @event.ExpectedDeliveryDate,
                 ExternalReference = @event.ExternalReference,
                 MoreInfo = @event.MoreInfo,
                 IpAddress = @event.IpAddress,
@@ -77,8 +76,6 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
-                    ExpectedDeliveryFrom = x.DeliveryFrom,
-                    ExpectedDeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
                 }),
                 Language = @event.Language

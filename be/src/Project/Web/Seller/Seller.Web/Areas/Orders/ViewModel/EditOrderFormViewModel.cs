@@ -18,8 +18,6 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string StockQuantityLabel { get; set; }
         public string OutletQuantityLabel { get; set; }
         public string ExternalReferenceLabel { get; set; }
-        public string DeliveryFromLabel { get; set; }
-        public string DeliveryToLabel { get; set; }
         public string MoreInfoLabel { get; set; }
         public string OrderItemsLabel { get; set; }
         public string OrderStatusLabel { get; set; }
@@ -35,7 +33,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string CustomOrder { get; set; }
         public string UpdateOrderItemStatusUrl { get; set; }
         public string EditUrl { get; set; }
-        public string OrderStatusCommentLabel { get; set; }
+        public string ExpectedDateOfProductOnStockLabel { get; set; }
         public string OrdersUrl { get; set; }
         public string NavigateToOrders { get; set; }
         public FilesViewModel Attachments { get; set; }

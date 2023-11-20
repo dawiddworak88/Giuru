@@ -6,6 +6,6 @@ namespace Seller.Web.Areas.Orders.ApiRequestModels
     {
         public Guid Id { get; set; }
         public Guid OrderItemStatusId { get; set; }
-        public string OrderItemStatusChangeComment { get; set; }
+        public string ExpectedDateOfProductOnStock { get; set; }
     }
 }

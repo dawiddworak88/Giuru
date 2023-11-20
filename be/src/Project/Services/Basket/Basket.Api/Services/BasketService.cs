@@ -62,7 +62,6 @@ namespace Basket.Api.Services
                 ShippingRegion = checkoutBasketServiceModel.ShippingRegion,
                 ShippingStreet = checkoutBasketServiceModel.ShippingStreet,
                 ExternalReference = checkoutBasketServiceModel.ExternalReference,
-                ExpectedDeliveryDate = checkoutBasketServiceModel.ExpectedDeliveryDate,
                 MoreInfo = checkoutBasketServiceModel.MoreInfo,
                 HasCustomOrder = checkoutBasketServiceModel.HasCustomOrder,
                 Attachments = checkoutBasketServiceModel.Attachments
@@ -171,8 +170,6 @@ namespace Basket.Api.Services
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
-                    DeliveryFrom = x.DeliveryFrom,
-                    DeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
                 })
             };
@@ -195,8 +192,6 @@ namespace Basket.Api.Services
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
-                    DeliveryFrom = x.DeliveryFrom,
-                    DeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
                 })
             };
@@ -216,8 +211,6 @@ namespace Basket.Api.Services
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
-                    DeliveryFrom = x.DeliveryFrom,
-                    DeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
                 })
             };

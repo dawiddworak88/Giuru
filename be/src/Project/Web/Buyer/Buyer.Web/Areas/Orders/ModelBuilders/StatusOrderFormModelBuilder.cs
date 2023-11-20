@@ -46,8 +46,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             var viewModel = new StatusOrderFormViewModel
             {
                 Title = this.orderLocalizer.GetString("Order"),
-                DeliveryFromLabel = this.orderLocalizer.GetString("DeliveryFrom"),
-                DeliveryToLabel = this.orderLocalizer.GetString("DeliveryTo"),
                 MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
                 NameLabel = this.orderLocalizer.GetString("NameLabel"),
                 OrderItemsLabel = this.orderLocalizer.GetString("OrderItemsLabel"),
@@ -63,7 +61,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
-                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
+                ExpectedDateOfProductOnStockLabel = this.orderLocalizer.GetString("ExpectedDateOfProductOnStock"),
                 YesLabel = this.globalLocalizer.GetString("Yes"),
                 NoLabel = this.globalLocalizer.GetString("No"),
                 CancelationConfirmationDialogLabel = this.orderLocalizer.GetString("CancelationConfirmationDialog"),
@@ -87,7 +85,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 {
                     viewModel.Id = order.Id;
                     viewModel.OrderStatusId = order.OrderStatusId;
-                    viewModel.ExpectedDelivery = order.ExpectedDeliveryDate;
                     viewModel.CustomOrder = order.MoreInfo;
                     viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
                     viewModel.CanCancelOrder = false;
@@ -105,10 +102,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         MoreInfo = x.MoreInfo,
                         OrderItemStatusId = x.OrderItemStatusId,
                         OrderItemStatusName = x.OrderItemStatusName,
-                        OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
+                        ExpectedDateOfProductOnStock = x.OrderItemStatusChangeComment,
                         ProductAttributes = x.ProductAttributes,
-                        DeliveryFrom = x.ExpectedDeliveryFrom,
-                        DeliveryTo = x.ExpectedDeliveryTo,
                         ImageAlt = x.ProductName,
                         ImageSrc = x.PictureUrl
                     });

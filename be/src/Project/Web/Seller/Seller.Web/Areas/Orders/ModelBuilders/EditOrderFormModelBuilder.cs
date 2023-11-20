@@ -48,8 +48,6 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             {
                 IdLabel = this.globalLocalizer.GetString("Id"),
                 Title = this.orderLocalizer.GetString("EditOrder"),
-                DeliveryFromLabel = this.orderLocalizer.GetString("DeliveryFrom"),
-                DeliveryToLabel = this.orderLocalizer.GetString("DeliveryTo"),
                 MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
                 NameLabel = this.orderLocalizer.GetString("NameLabel"),
                 OrderItemsLabel = this.orderLocalizer.GetString("OrderItemsLabel"),
@@ -65,7 +63,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
                 CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
-                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
+                ExpectedDateOfProductOnStockLabel = this.orderLocalizer.GetString("ExpectedDateOfProductOnStock"),
                 UpdateOrderItemStatusUrl = this.linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 OrdersUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 NavigateToOrders = this.orderLocalizer.GetString("NavigateToOrdersList")
@@ -104,9 +102,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                         MoreInfo = x.MoreInfo,
                         OrderItemStatusId = x.OrderItemStatusId,
                         OrderItemStatusName = x.OrderItemStatusName,
-                        OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
-                        DeliveryFrom = x.ExpectedDeliveryFrom,
-                        DeliveryTo = x.ExpectedDeliveryTo,
+                        ExpectedDateOfProductOnStock = x.OrderItemStatusChangeComment,
                         ImageAlt = x.ProductName,
                         ImageSrc = x.PictureUrl
                     });

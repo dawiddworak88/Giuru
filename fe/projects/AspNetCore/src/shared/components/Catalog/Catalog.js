@@ -106,8 +106,6 @@ function Catalog(props) {
             stockQuantity: stockQuantity,
             outletQuantity: outletQuantity,
             externalReference: item.externalReference,
-            deliveryFrom: moment(item.deliveryFrom).startOf("day"), 
-            deliveryTo: moment(item.deliveryTo).startOf("day"), 
             moreInfo: item.moreInfo
         };
 
