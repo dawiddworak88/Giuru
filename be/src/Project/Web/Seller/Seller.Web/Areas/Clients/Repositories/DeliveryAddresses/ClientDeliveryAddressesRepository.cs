@@ -113,6 +113,7 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
         {
             var requestModel = new DeliveryAddressRequestModel
             {
+                Id = id,
                 ClientId = clientId,
                 CountryId = countryId,
                 Company = company,
