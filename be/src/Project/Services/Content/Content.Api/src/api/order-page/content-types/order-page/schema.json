@@ -45,6 +45,16 @@
         }
       },
       "component": "shared.footer"
+    },
+    "notificationBar": {
+      "type": "component",
+      "repeatable": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "blocks.notification-bar"
     }
   }
 }
