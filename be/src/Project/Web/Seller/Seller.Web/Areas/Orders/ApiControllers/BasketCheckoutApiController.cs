@@ -15,30 +15,39 @@ namespace Seller.Web.Areas.Orders.ApiControllers
     [Area("Orders")]
     public class BasketCheckoutApiController : BaseApiController
     {
-        private readonly IBasketRepository basketRepository;
-        private readonly IStringLocalizer<OrderResources> orderLocalizer;
+        private readonly IBasketRepository _basketRepository;
+        private readonly IStringLocalizer<OrderResources> _orderLocalizer;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
             IStringLocalizer<OrderResources> orderLocalizer)
         {
-            this.basketRepository = basketRepository;
-            this.orderLocalizer = orderLocalizer;
+            _basketRepository = basketRepository;
+            _orderLocalizer = orderLocalizer;
         }
 
         [HttpPost]
         public async Task<IActionResult> Checkout([FromBody] CheckoutBasketRequestModel model)
         {
-            await this.basketRepository.CheckoutBasketAsync(
+            await _basketRepository.CheckoutBasketAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 model.ClientId,
                 model.ClientName,
                 model.BasketId,
-                model.ExpectedDeliveryDate,
+                model.ShippingAddressId,
+                model.ShippingCompany,
+                model.ShippingFirstName,
+                model.ShippingLastName,
+                model.ShippingRegion,
+                model.ShippingPostCode,
+                model.ShippingCity,
+                model.ShippingStreet,
+                model.ShippingPhoneNumber,
+                model.ShippingCountryId,
                 model.MoreInfo);
 
-            return this.StatusCode((int)HttpStatusCode.Accepted, new { Message = this.orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
         }
     }
 }

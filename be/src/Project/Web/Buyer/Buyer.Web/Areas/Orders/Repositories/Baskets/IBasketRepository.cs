@@ -11,6 +11,22 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
         Task DeleteAsync(string token, string language, Guid? id);
         Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items);
         Task CheckoutBasketAsync(
-            string token, string language, Guid? clientId, string clientName, Guid? basketId, DateTime? expectedDelivery, string moreInfo, bool hasCustomOrder, IEnumerable<Guid> attachments);
+            string token, 
+            string language, 
+            Guid? clientId, 
+            string clientName, 
+            Guid? basketId,
+            Guid? shippingAddressId,
+            string shippingCompany,
+            string shippingFirstName,
+            string shippingLastName,
+            string shippingRegion,
+            string shippingPostCode,
+            string shippingCity,
+            string shippingStreet,
+            string shippingPhoneNumber,
+            Guid? shippingCountryId,
+            string moreInfo, bool hasCustomOrder, 
+            IEnumerable<Guid> attachments);
     }
 }

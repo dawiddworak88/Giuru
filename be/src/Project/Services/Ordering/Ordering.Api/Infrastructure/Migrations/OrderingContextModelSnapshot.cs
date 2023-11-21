@@ -111,8 +111,8 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<string>("ShippingCompany")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ShippingCountryCode")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("ShippingCountryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ShippingFirstName")
                         .HasColumnType("nvarchar(max)");
@@ -120,10 +120,7 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<string>("ShippingLastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ShippingPhone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShippingPhonePrefix")
+                    b.Property<string>("ShippingPhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShippingPostCode")

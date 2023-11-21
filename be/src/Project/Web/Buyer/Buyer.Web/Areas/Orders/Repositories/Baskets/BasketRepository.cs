@@ -19,15 +19,15 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
 {
     public class BasketRepository : IBasketRepository
     {
-        private readonly IApiClientService apiClientService;
-        private readonly IOptions<AppSettings> settings;
+        private readonly IApiClientService _apiClientService;
+        private readonly IOptions<AppSettings> _settings;
 
         public BasketRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> settings)
         {
-            this.apiClientService = apiClientService;
-            this.settings = settings;
+            _apiClientService = apiClientService;
+            _settings = settings;
         }
 
         public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items)
@@ -54,10 +54,11 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<SaveBasketApiRequestModel>, SaveBasketApiRequestModel, BasketApiResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<SaveBasketApiRequestModel>, SaveBasketApiRequestModel, BasketApiResponseModel>(apiRequest);
+            
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return new Basket
@@ -82,14 +83,41 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             throw new CustomException(response.Message, (int)response.StatusCode);
         }
 
-        public async Task CheckoutBasketAsync(string token, string language, Guid? clientId, string clientName, Guid? basketId, DateTime? expectedDelivery, string moreInfo, bool hasCustomOrder, IEnumerable<Guid> attachments)
+        public async Task CheckoutBasketAsync(
+            string token, 
+            string language, 
+            Guid? clientId, 
+            string clientName, 
+            Guid? basketId,
+            Guid? shippingAddressId,
+            string shippingCompany,
+            string shippingFirstName,
+            string shippingLastName,
+            string shippingRegion,
+            string shippingPostCode,
+            string shippingCity,
+            string shippingStreet,
+            string shippingPhoneNumber,
+            Guid? shippingCountryId, 
+            string moreInfo, 
+            bool hasCustomOrder, 
+            IEnumerable<Guid> attachments)
         {
             var requestModel = new CheckoutBasketApiRequestModel
             {
                 ClientId = clientId,
                 ClientName = clientName,
                 BasketId = basketId,
-                ExpectedDeliveryDate = expectedDelivery,
+                ShippingAddressId = shippingAddressId,
+                ShippingCompany = shippingCompany,
+                ShippingFirstName = shippingFirstName,
+                ShippingLastName = shippingLastName,
+                ShippingRegion = shippingRegion,
+                ShippingPostCode = shippingPostCode,
+                ShippingCity = shippingCity,
+                ShippingStreet = shippingStreet,
+                ShippingPhoneNumber = shippingPhoneNumber,
+                ShippingCountryId = shippingCountryId,
                 MoreInfo = moreInfo,
                 HasCustomOrder = hasCustomOrder,
                 Attachments = attachments
@@ -100,10 +128,11 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsCheckoutApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsCheckoutApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<CheckoutBasketApiRequestModel>, CheckoutBasketApiRequestModel, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<CheckoutBasketApiRequestModel>, CheckoutBasketApiRequestModel, BaseResponseModel>(apiRequest);
+
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
@@ -117,10 +146,10 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}/{id}"
+                EndpointAddress = $"{_settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Basket>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Basket>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data is not null)
             {
@@ -137,10 +166,11 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}/{id}"
+                EndpointAddress = $"{_settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+            
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);

@@ -9,6 +9,7 @@ using Seller.Web.Areas.Clients.Repositories.Managers;
 using Seller.Web.Areas.Clients.ViewModels;
 using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Clients.Repositories.Applications;
+using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 
 namespace Seller.Web.Areas.Clients.DependencyInjection
 {
@@ -20,6 +21,7 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IClientRolesRepository, ClientRolesRepository>();
             services.AddScoped<IClientAccountManagersRepository, ClientAccountManagersRepository>();
             services.AddScoped<IClientApplicationsRepository, ClientApplicationsRepository>();
+            services.AddScoped<IClientDeliveryAddressesRepository, ClientDeliveryAddressesRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>>, ClientsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel>, ClientsPageModelBuilder>();
@@ -45,6 +47,11 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientApplicationsPageViewModel>, ClientApplicationsPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientApplicationPageViewModel>, ClientApplicationPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientApplicationFormViewModel>, ClientApplicationFormModelBuilder>();
+
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientDeliveryAddress>>, ClientDeliveryAddressesPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientDeliveryAddressesPageViewModel>, ClientDeliveryAddressesPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientDeliveryAddressPageViewModel>, ClientDeliveryAddressPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientDeliveryAddressFormViewModel>, ClientDeliveryAddressFormModelBuilder>();
         }
     }
 }

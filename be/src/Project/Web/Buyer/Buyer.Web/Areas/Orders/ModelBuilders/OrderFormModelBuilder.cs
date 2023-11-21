@@ -1,33 +1,46 @@
-﻿using Buyer.Web.Areas.Orders.Repositories.Baskets;
-using Buyer.Web.Areas.Orders.ViewModel;
+﻿using Buyer.Web.Areas.Orders.ViewModel;
+using Buyer.Web.Shared.DomainModels.Clients;
+using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Services.Baskets;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Orders.ModelBuilders
 {
     public class OrderFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrderFormViewModel>
     {
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<OrderResources> orderLocalizer;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IBasketService basketService;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
+        private readonly IClientsRepository _clientsRepository;
+        private readonly IClientDeliveryAddressesRepository _clientDeliveryAddressesRepository;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IBasketService _basketService;
 
         public OrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
+            IStringLocalizer<ClientResources> clientLocalizer,
+            IClientsRepository clientsRepository,
+            IClientDeliveryAddressesRepository clientDeliveryAddressesRepository,
             IBasketService basketService,
             LinkGenerator linkGenerator)
         {
-            this.globalLocalizer = globalLocalizer;
-            this.orderLocalizer = orderLocalizer;
-            this.linkGenerator = linkGenerator;
-            this.basketService = basketService;
+            _globalLocalizer = globalLocalizer;
+            _orderLocalizer = orderLocalizer;
+            _linkGenerator = linkGenerator;
+            _basketService = basketService;
+            _clientLocalizer = clientLocalizer;
+            _clientsRepository = clientsRepository;
+            _clientDeliveryAddressesRepository = clientDeliveryAddressesRepository;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -35,53 +48,80 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             var viewModel = new OrderFormViewModel
             {
                 BasketId = componentModel.BasketId,
-                Title = this.orderLocalizer.GetString("Order"),
-                AddText = this.orderLocalizer.GetString("AddOrderItem"),
-                SearchPlaceholderLabel = this.orderLocalizer.GetString("EnterSkuOrName"),
-                GetSuggestionsUrl = this.linkGenerator.GetPathByAction("GetSuggestion", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                OrLabel = this.globalLocalizer.GetString("Or"),
-                DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
-                DropOrSelectFilesLabel = this.orderLocalizer.GetString("DropOrSelectOrderFile"),
-                MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
-                NameLabel = this.orderLocalizer.GetString("NameLabel"),
-                OrderItemsLabel = this.orderLocalizer.GetString("OrderItemsLabel"),
-                QuantityLabel = this.orderLocalizer.GetString("QuantityLabel"),
-                StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
-                OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
-                ExternalReferenceLabel = this.orderLocalizer.GetString("ExternalReferenceLabel"),
-                SkuLabel = this.orderLocalizer.GetString("SkuLabel"),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                SaveText = this.orderLocalizer.GetString("PlaceOrder"),
-                DeleteConfirmationLabel = this.globalLocalizer.GetString("DeleteConfirmationLabel"),
-                YesLabel = this.globalLocalizer.GetString("Yes"),
-                OkLabel = this.globalLocalizer.GetString("Ok"),
-                CancelLabel = this.globalLocalizer.GetString("Cancel"),
-                UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                PlaceOrderUrl = this.linkGenerator.GetPathByAction("Checkout", "BasketCheckoutApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                NoLabel = this.globalLocalizer.GetString("No"),
-                DeleteItemBasketUrl = this.linkGenerator.GetPathByAction("DeleteItem", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                AreYouSureLabel = this.globalLocalizer.GetString("AreYouSureLabel"),
-                NavigateToOrdersListText = this.orderLocalizer.GetString("NavigateToOrdersList"),
-                NoOrderItemsLabel = this.orderLocalizer.GetString("NoOrderItemsLabel"),
-                OrdersUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                UploadOrderFileUrl = this.linkGenerator.GetPathByAction("Index", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                ClearBasketText = this.orderLocalizer.GetString("ClearBasketText"),
-                ClearBasketUrl = this.linkGenerator.GetPathByAction("Delete", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                CustomOrderLabel = this.orderLocalizer.GetString("CustomOrderLabel"),
-                InitCustomOrderLabel = this.orderLocalizer.GetString("InitCustomOrderLabel"),
-                AttachmentsLabel = this.globalLocalizer.GetString("Attachments"),
-                DeleteLabel = this.globalLocalizer.GetString("Delete"),
-                DropOrSelectAttachmentsLabel = this.globalLocalizer.GetString("DropOrSelectAttachments"),
-                SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                Title = _orderLocalizer.GetString("Order"),
+                AddText = _orderLocalizer.GetString("AddOrderItem"),
+                SearchPlaceholderLabel = _orderLocalizer.GetString("EnterSkuOrName"),
+                GetSuggestionsUrl = _linkGenerator.GetPathByAction("GetSuggestion", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                OrLabel = _globalLocalizer.GetString("Or"),
+                DropFilesLabel = _globalLocalizer.GetString("DropFile"),
+                DropOrSelectFilesLabel = _orderLocalizer.GetString("DropOrSelectOrderFile"),
+                MoreInfoLabel = _orderLocalizer.GetString("MoreInfoLabel"),
+                NameLabel = _orderLocalizer.GetString("NameLabel"),
+                OrderItemsLabel = _orderLocalizer.GetString("OrderItemsLabel"),
+                QuantityLabel = _orderLocalizer.GetString("QuantityLabel"),
+                StockQuantityLabel = _orderLocalizer.GetString("StockQuantityLabel"),
+                OutletQuantityLabel = _orderLocalizer.GetString("OutletQuantityLabel"),
+                ExternalReferenceLabel = _orderLocalizer.GetString("ExternalReferenceLabel"),
+                SkuLabel = _orderLocalizer.GetString("SkuLabel"),
+                GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
+                SaveText = _orderLocalizer.GetString("PlaceOrder"),
+                DeleteConfirmationLabel = _globalLocalizer.GetString("DeleteConfirmationLabel"),
+                YesLabel = _globalLocalizer.GetString("Yes"),
+                OkLabel = _globalLocalizer.GetString("Ok"),
+                CancelLabel = _globalLocalizer.GetString("Cancel"),
+                UpdateBasketUrl = _linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                PlaceOrderUrl = _linkGenerator.GetPathByAction("Checkout", "BasketCheckoutApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                NoLabel = _globalLocalizer.GetString("No"),
+                DeleteItemBasketUrl = _linkGenerator.GetPathByAction("DeleteItem", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                AreYouSureLabel = _globalLocalizer.GetString("AreYouSureLabel"),
+                NavigateToOrdersListText = _orderLocalizer.GetString("NavigateToOrdersList"),
+                NoOrderItemsLabel = _orderLocalizer.GetString("NoOrderItemsLabel"),
+                ChangeDeliveryFromLabel = _orderLocalizer.GetString("ChangeDeliveryFrom"),
+                ChangeDeliveryToLabel = _orderLocalizer.GetString("ChangeDeliveryTo"),
+                OrdersUrl = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveUrl = _linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                UploadOrderFileUrl = _linkGenerator.GetPathByAction("Index", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                ClearBasketText = _orderLocalizer.GetString("ClearBasketText"),
+                ClearBasketUrl = _linkGenerator.GetPathByAction("Delete", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                CustomOrderLabel = _orderLocalizer.GetString("CustomOrderLabel"),
+                InitCustomOrderLabel = _orderLocalizer.GetString("InitCustomOrderLabel"),
+                AttachmentsLabel = _globalLocalizer.GetString("Attachments"),
+                DeleteLabel = _globalLocalizer.GetString("Delete"),
+                DropOrSelectAttachmentsLabel = _globalLocalizer.GetString("DropOrSelectAttachments"),
+                SaveMediaUrl = _linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress")
             };
 
             if (componentModel.BasketId.HasValue)
             {
-                var basketItems = await this.basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
+                var basketItems = await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
+
                 if (basketItems is not null)
                 {
                     viewModel.BasketItems = basketItems;
+                }
+            }
+
+            if (componentModel.SellerId.HasValue)
+            {
+                var client = await _clientsRepository.GetClientAsync(componentModel.Token, componentModel.Language);
+
+                if (client is not null)
+                {
+                    viewModel.ClientId = client.Id;
+                    viewModel.ClientName = client.Name;
+                    viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
+
+                    var deliveryAddresses = await _clientDeliveryAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, client.Id, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
+
+                    if (deliveryAddresses is not null)
+                    {
+                        viewModel.DeliveryAddresses = deliveryAddresses.Data.Select(x => new ListItemViewModel
+                        {
+                            Id = x.Id,
+                            Name = $"{x.Company}, {x.FirstName} {x.LastName}, {x.PostCode} {x.City}"
+                        });
+                    }
                 }
             }
 

@@ -7,8 +7,9 @@ import Autosuggest from "react-autosuggest";
 import { Context } from "../../../../shared/stores/Store";
 import { Delete, AddShoppingCartRounded } from "@mui/icons-material";
 import {
-    Fab, Table, TableBody, TableCell, TableContainer, FormControlLabel,
-    TableHead, TableRow, Paper, TextField, Button, CircularProgress, Checkbox, NoSsr
+    Fab, Table, TableBody, TableCell, TableContainer, FormControlLabel, 
+    Select, FormControl, InputLabel, MenuItem, TableHead, TableRow, Paper, 
+    TextField, Button, CircularProgress, Checkbox, NoSsr
 } from "@mui/material";
 import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../../../shared/constants/OrderFormConstants";
@@ -33,6 +34,7 @@ function NewOrderForm(props) {
     const [hasCustomOrder, setHasCustomOrder] = useState(false);
     const [isOrdered, setIsOrdered] = useState(false);
     const [attachments, setAttachments] = useState([]);
+    const [deliveryAddressId, setDeliveryAddressId] = useState(props.defaultDeliveryAddressId ? props.defaultDeliveryAddressId : null);
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -199,6 +201,9 @@ function NewOrderForm(props) {
 
         var order = {
             basketId,
+            clientId: props.clientId,
+            clientName: props.clientName,
+            shippingAddressId: deliveryAddressId,
             moreInfo: customOrder,
             attachments,
             hasCustomOrder
@@ -313,10 +318,30 @@ function NewOrderForm(props) {
             });
     }
 
-    const disabledActionButtons = orderItems.length === 0 ? !customOrder ? true : false : false
+    const disabledActionButtons = orderItems.length === 0 ? !customOrder ? true : false : false;
+    
     return (
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
+            <div className="columns is-desktop">
+                <div className="column is-one-third">
+                    <div className="field">
+                        <FormControl fullWidth={true} variant="standard">
+                            <InputLabel id="deliveryAddressId-label">{props.deliveryAddressLabel}</InputLabel>
+                            <Select
+                                labelId="deliveryAddressId-label"
+                                id="deliveryAddressId"
+                                name="deliveryAddressId"
+                                value={deliveryAddressId}
+                                onChange={(e) => setDeliveryAddressId(e.target.value)}>
+                                {props.deliveryAddresses && props.deliveryAddresses.map((deliveryAddress, index) =>
+                                    <MenuItem key={index} value={deliveryAddress.id}>{deliveryAddress.name}</MenuItem>
+                                )}
+                            </Select>
+                        </FormControl>
+                    </div>
+                </div>
+            </div>
             <div className="is-modern-form">
                 <Fragment>
                     <div className="container">

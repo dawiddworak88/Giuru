@@ -26,11 +26,11 @@ namespace Client.Api.v1.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize]
     [ApiController]
-    public class ClientAddressesController : BaseApiController
+    public class ClientDeliveryAddressesController : BaseApiController
     {
         private readonly IClientAddressesService _clientAddressesService;
 
-        public ClientAddressesController(
+        public ClientDeliveryAddressesController(
             IClientAddressesService clientAddressesService) 
         {
             _clientAddressesService = clientAddressesService;
@@ -39,6 +39,7 @@ namespace Client.Api.v1.Controllers
         /// <summary>
         /// Gets list of clients addresses.
         /// </summary>
+        /// <param name="clientId">The client id.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
@@ -48,12 +49,13 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
+        public IActionResult Get(Guid? clientId, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetClientAddressesServiceModel
             {
+                ClientId = clientId,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,

@@ -35,6 +35,7 @@
             public static readonly string ApplicationsApiEndpoint = "/api/v1/clientsapplications";
             public static readonly string ManagersApiEndpoint = "/api/v1/clientaccountmanagers";
             public static readonly string ClientsApiEndpoint = "/api/v1/clients";
+            public static readonly string DeliveryAddressesApiEndpoint = "/api/v1/clientdeliveryaddresses";
         }
 
         public struct Identity

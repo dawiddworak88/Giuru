@@ -21,56 +21,59 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 {
     public class StatusOrderFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, StatusOrderFormViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<OrderResources> orderLocalizer;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IOrdersRepository ordersRepository;
+        private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> _filesModelBuilder;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IOrdersRepository _ordersRepository;
 
         public StatusOrderFormModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
+            IStringLocalizer<ClientResources> clientLocalizer,
             LinkGenerator linkGenerator,
             IOrdersRepository ordersRepository)
         {
-            this.globalLocalizer = globalLocalizer;
-            this.orderLocalizer = orderLocalizer;
-            this.linkGenerator = linkGenerator;
-            this.ordersRepository = ordersRepository;
-            this.filesModelBuilder = filesModelBuilder;
+            _globalLocalizer = globalLocalizer;
+            _orderLocalizer = orderLocalizer;
+            _linkGenerator = linkGenerator;
+            _ordersRepository = ordersRepository;
+            _filesModelBuilder = filesModelBuilder;
+            _clientLocalizer = clientLocalizer;
         }
 
         public async Task<StatusOrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new StatusOrderFormViewModel
             {
-                Title = this.orderLocalizer.GetString("Order"),
-                MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
-                NameLabel = this.orderLocalizer.GetString("NameLabel"),
-                OrderItemsLabel = this.orderLocalizer.GetString("OrderItemsLabel"),
-                QuantityLabel = this.orderLocalizer.GetString("QuantityLabel"),
-                ExternalReferenceLabel = this.orderLocalizer.GetString("ExternalReferenceLabel"),
-                SkuLabel = this.orderLocalizer.GetString("SkuLabel"),
-                OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
-                ExpectedDeliveryLabel = this.orderLocalizer.GetString("ExpectedDeliveryLabel"),
-                FabricsLabel = this.orderLocalizer.GetString("FabricsLabel"),
-                CancelOrderLabel = this.orderLocalizer.GetString("CancelOrder"),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                UpdateOrderStatusUrl = this.linkGenerator.GetPathByAction("Cancel", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
-                OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
-                StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
-                ExpectedDateOfProductOnStockLabel = this.orderLocalizer.GetString("ExpectedDateOfProductOnStock"),
-                YesLabel = this.globalLocalizer.GetString("Yes"),
-                NoLabel = this.globalLocalizer.GetString("No"),
-                CancelationConfirmationDialogLabel = this.orderLocalizer.GetString("CancelationConfirmationDialog"),
-                AreYouSureToCancelOrderLabel = this.orderLocalizer.GetString("AreYouSureToCancelOrder"),
-                OrdersUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                NavigateToOrders = this.orderLocalizer.GetString("NavigateToOrdersList")
+                Title = _orderLocalizer.GetString("Order"),
+                MoreInfoLabel = _orderLocalizer.GetString("MoreInfoLabel"),
+                NameLabel = _orderLocalizer.GetString("NameLabel"),
+                OrderItemsLabel = _orderLocalizer.GetString("OrderItemsLabel"),
+                QuantityLabel = _orderLocalizer.GetString("QuantityLabel"),
+                ExternalReferenceLabel = _orderLocalizer.GetString("ExternalReferenceLabel"),
+                SkuLabel = _orderLocalizer.GetString("SkuLabel"),
+                OrderStatusLabel = _orderLocalizer.GetString("OrderStatus"),
+                ExpectedDeliveryLabel = _orderLocalizer.GetString("ExpectedDeliveryLabel"),
+                FabricsLabel = _orderLocalizer.GetString("FabricsLabel"),
+                CancelOrderLabel = _orderLocalizer.GetString("CancelOrder"),
+                GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
+                UpdateOrderStatusUrl = _linkGenerator.GetPathByAction("Cancel", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                CustomOrderLabel = _globalLocalizer.GetString("CustomOrderLabel"),
+                OutletQuantityLabel = _orderLocalizer.GetString("OutletQuantityLabel"),
+                StockQuantityLabel = _orderLocalizer.GetString("StockQuantityLabel"),
+                YesLabel = _globalLocalizer.GetString("Yes"),
+                NoLabel = _globalLocalizer.GetString("No"),
+                CancelationConfirmationDialogLabel = _orderLocalizer.GetString("CancelationConfirmationDialog"),
+                AreYouSureToCancelOrderLabel = _orderLocalizer.GetString("AreYouSureToCancelOrder"),
+                OrdersUrl = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                NavigateToOrders = _orderLocalizer.GetString("NavigateToOrdersList"),
+                DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress")
             };
 
-            var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
+            var orderStatuses = await _ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
 
             if (orderStatuses is not null)
             {
@@ -79,14 +82,15 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             
             if (componentModel.Id.HasValue)
             {
-                var order = await this.ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                var order = await _ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                 if (order is not null)
                 {
                     viewModel.Id = order.Id;
                     viewModel.OrderStatusId = order.OrderStatusId;
                     viewModel.CustomOrder = order.MoreInfo;
-                    viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
+                    viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
+                    viewModel.DeliveryAddress = $"{order.ShippingCompany}, {order.ShippingFirstName} {order.ShippingLastName}, {order.ShippingPostCode} {order.ShippingCity}";
                     viewModel.CanCancelOrder = false;
                     viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                     {
@@ -94,7 +98,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         ProductId = x.ProductId,
                         Sku = x.ProductSku,
                         Name = x.ProductName,
-                        ProductUrl = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
+                        ProductUrl = _linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
                         Quantity = x.Quantity,
                         StockQuantity = x.StockQuantity,
                         OutletQuantity = x.OutletQuantity,
@@ -109,7 +113,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     });
                 }
 
-                var orderFiles = await this.ordersRepository.GetOrderFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(OrderFile.CreatedDate)} desc");
+                var orderFiles = await _ordersRepository.GetOrderFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(OrderFile.CreatedDate)} desc");
 
                 if (orderFiles is not null)
                 {
@@ -119,11 +123,11 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         IsAuthenticated = componentModel.IsAuthenticated,
                         Language = componentModel.Language,
                         Token = componentModel.Token,
-                        SearchApiUrl = this.linkGenerator.GetPathByAction("GetFiles", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                        SearchApiUrl = _linkGenerator.GetPathByAction("GetFiles", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                         Files = orderFiles.Data.OrEmptyIfNull().Select(x => x.Id)
                     };
 
-                    viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(filesComponentModel);
+                    viewModel.Attachments = await _filesModelBuilder.BuildModelAsync(filesComponentModel);
                 }
             }
 

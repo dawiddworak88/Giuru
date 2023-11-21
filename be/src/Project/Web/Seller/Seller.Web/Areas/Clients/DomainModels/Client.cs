@@ -13,6 +13,7 @@ namespace Seller.Web.Areas.Clients.DomainModels
         public string PhoneNumber { get; set; }
         public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> ClientManagerIds { get; set; }
+        public Guid? DefaultDeliveryAddressId { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

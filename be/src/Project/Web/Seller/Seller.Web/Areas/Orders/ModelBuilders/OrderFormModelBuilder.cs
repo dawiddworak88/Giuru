@@ -1,9 +1,10 @@
 ﻿using Foundation.Extensions.ModelBuilders;
+using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
-using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Clients.ViewModels;
 using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.Repositories.Clients;
 using System.Globalization;
@@ -14,65 +15,71 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 {
     public class OrderFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrderFormViewModel>
     {
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<OrderResources> orderLocalizer;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IClientsRepository clientsRepository;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IClientsRepository _clientsRepository;
 
         public OrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
+            IStringLocalizer<ClientResources> clientLocalizer,
             LinkGenerator linkGenerator,
             IClientsRepository clientsRepository)
         {
-            this.globalLocalizer = globalLocalizer;
-            this.orderLocalizer = orderLocalizer;
-            this.linkGenerator = linkGenerator;
-            this.clientsRepository = clientsRepository;
+            _globalLocalizer = globalLocalizer;
+            _orderLocalizer = orderLocalizer;
+            _linkGenerator = linkGenerator;
+            _clientsRepository = clientsRepository;
+            _clientLocalizer = clientLocalizer;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new OrderFormViewModel
             {
-                Title = this.orderLocalizer.GetString("EditOrder"),
-                AddText = this.orderLocalizer.GetString("AddOrderItem"),
-                NoOrderItemsLabel = this.orderLocalizer.GetString("NoOrderItemsLabel"),
-                SearchPlaceholderLabel = this.orderLocalizer.GetString("EnterSkuOrName"),
-                GetSuggestionsUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
-                NameLabel = this.orderLocalizer.GetString("NameLabel"),
-                OrderItemsLabel = this.orderLocalizer.GetString("OrderItemsLabel"),
-                QuantityLabel = this.orderLocalizer.GetString("QuantityLabel"),
-                OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
-                ExternalReferenceLabel = this.orderLocalizer.GetString("ExternalReferenceLabel"),
-                SkuLabel = this.orderLocalizer.GetString("SkuLabel"),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                SaveText = this.orderLocalizer.GetString("PlaceOrder"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                SelectClientLabel = this.orderLocalizer.GetString("SelectClientLabel"),
-                ClientRequiredErrorMessage = this.orderLocalizer.GetString("ClientRequiredErrorMessage"),
-                OkLabel = this.globalLocalizer.GetString("Ok"),
-                CancelLabel = this.globalLocalizer.GetString("Cancel"),
-                UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                AreYouSureLabel = this.globalLocalizer.GetString("AreYouSureLabel"),
-                DeleteConfirmationLabel = this.globalLocalizer.GetString("DeleteConfirmationLabel"),
-                YesLabel = this.globalLocalizer.GetString("Yes"),
-                NoLabel = this.globalLocalizer.GetString("No"),
-                PlaceOrderUrl = this.linkGenerator.GetPathByAction("Checkout", "BasketCheckoutApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                UploadOrderFileUrl = this.linkGenerator.GetPathByAction("Index", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                OrdersUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                NavigateToOrdersListText = this.orderLocalizer.GetString("NavigateToOrdersList"),
-                DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
-                DropOrSelectFilesLabel = this.orderLocalizer.GetString("DropOrSelectOrderFile"),
-                OrLabel = this.globalLocalizer.GetString("Or")
+                Title = _orderLocalizer.GetString("EditOrder"),
+                AddText = _orderLocalizer.GetString("AddOrderItem"),
+                NoOrderItemsLabel = _orderLocalizer.GetString("NoOrderItemsLabel"),
+                SearchPlaceholderLabel = _orderLocalizer.GetString("EnterSkuOrName"),
+                GetSuggestionsUrl = _linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                MoreInfoLabel = _orderLocalizer.GetString("MoreInfoLabel"),
+                NameLabel = _orderLocalizer.GetString("NameLabel"),
+                OrderItemsLabel = _orderLocalizer.GetString("OrderItemsLabel"),
+                QuantityLabel = _orderLocalizer.GetString("QuantityLabel"),
+                OutletQuantityLabel = _orderLocalizer.GetString("OutletQuantityLabel"),
+                ExternalReferenceLabel = _orderLocalizer.GetString("ExternalReferenceLabel"),
+                SkuLabel = _orderLocalizer.GetString("SkuLabel"),
+                GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
+                SaveText = _orderLocalizer.GetString("PlaceOrder"),
+                SaveUrl = _linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                SelectClientLabel = _orderLocalizer.GetString("SelectClientLabel"),
+                ClientRequiredErrorMessage = _orderLocalizer.GetString("ClientRequiredErrorMessage"),
+                OkLabel = _globalLocalizer.GetString("Ok"),
+                CancelLabel = _globalLocalizer.GetString("Cancel"),
+                UpdateBasketUrl = _linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                AreYouSureLabel = _globalLocalizer.GetString("AreYouSureLabel"),
+                DeleteConfirmationLabel = _globalLocalizer.GetString("DeleteConfirmationLabel"),
+                YesLabel = _globalLocalizer.GetString("Yes"),
+                NoLabel = _globalLocalizer.GetString("No"),
+                PlaceOrderUrl = _linkGenerator.GetPathByAction("Checkout", "BasketCheckoutApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                UploadOrderFileUrl = _linkGenerator.GetPathByAction("Index", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                OrdersUrl = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                NavigateToOrdersListText = _orderLocalizer.GetString("NavigateToOrdersList"),
+                DropFilesLabel = _globalLocalizer.GetString("DropFile"),
+                DropOrSelectFilesLabel = _orderLocalizer.GetString("DropOrSelectOrderFile"),
+                OrLabel = _globalLocalizer.GetString("Or"),
+                GetDeliveryAddressesUrl = _linkGenerator.GetPathByAction("Get", "ClientDeliveryAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
+                DefaultItemsPerPage = Constants.DefaultItemsPerPage
             };
 
-            var clients = await this.clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);
+            var clients = await _clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);
 
-            if (clients != null)
+            if (clients is not null)
             {
-                viewModel.Clients = clients.Select(x => new ListItemViewModel { Id = x.Id , Name = x.Name });
+                viewModel.Clients = clients.Select(x => new ClientListItemViewModel { Id = x.Id , Name = x.Name, DefaultDeliveryAddressId = x.DefaultDeliveryAddressId });
             }
 
             return viewModel;

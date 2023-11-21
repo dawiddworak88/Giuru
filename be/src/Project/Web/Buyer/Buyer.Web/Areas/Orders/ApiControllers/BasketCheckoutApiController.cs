@@ -21,17 +21,17 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
     public class BasketCheckoutApiController : BaseApiController
     {
         private readonly IBasketRepository _basketRepository;
-        private readonly IClientsRepository _clientsRepository;
+        private readonly IClientDeliveryAddressesRepository _clientDeliveryAddressesRepository;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
-            IClientsRepository clientsRepository,
+            IClientDeliveryAddressesRepository clientDeliveryAddressesRepository,
             IStringLocalizer<OrderResources> orderLocalizer)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
-            _clientsRepository = clientsRepository;
+            _clientDeliveryAddressesRepository = clientDeliveryAddressesRepository;
         }
 
         [HttpPost]
@@ -40,23 +40,48 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var client = await _clientsRepository.GetClientAsync(token, language);
-
             var reqCookie = Request.Cookies[BasketConstants.BasketCookieName];
+
             if (reqCookie is null)
             {
                 reqCookie = Guid.NewGuid().ToString();
+
                 var cookieOptions = new CookieOptions
                 {
                     MaxAge = TimeSpan.FromDays(BasketConstants.BasketCookieMaxAge)
                 };
+
                 Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
             }
 
-            await _basketRepository.CheckoutBasketAsync(
-                token, language, client.Id, client.Name, Guid.Parse(reqCookie), model.ExpectedDeliveryDate, model.MoreInfo, model.HasCustomOrder, model.Attachments?.Select(x => x.Id));
+            var deliveryAddress = await _clientDeliveryAddressesRepository.GetAsync(token, language, model.ShippingAddressId);
 
-            return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
+            if (deliveryAddress is not null)
+            {
+                await _basketRepository.CheckoutBasketAsync(
+                token,
+                language,
+                model.ClientId,
+                model.ClientName,
+                Guid.Parse(reqCookie),
+                model.ShippingAddressId,
+                deliveryAddress.Company,
+                deliveryAddress.FirstName,
+                deliveryAddress.LastName,
+                deliveryAddress.Region,
+                deliveryAddress.PostCode,
+                deliveryAddress.City,
+                deliveryAddress.Street,
+                deliveryAddress.PhoneNumber,
+                deliveryAddress.CountryId,
+                model.MoreInfo,
+                model.HasCustomOrder,
+                model.Attachments?.Select(x => x.Id));
+
+                return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
+            }
+
+            return StatusCode((int)HttpStatusCode.BadRequest);
         }
     }
 }

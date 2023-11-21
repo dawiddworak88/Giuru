@@ -14,7 +14,16 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             Guid? clientId,
             string clientName,
             Guid? basketId,
-            DateTime? expectedDelivery,
+            Guid? shippingAddressId,
+            string shippingCompany,
+            string shippingFirstName,
+            string shippingLastName,
+            string shippingRegion,
+            string shippingPostCode,
+            string shippingCity,
+            string shippingStreet,
+            string shippingPhoneNumber,
+            Guid? shippingCountryId,
             string moreInfo);
     }
 }

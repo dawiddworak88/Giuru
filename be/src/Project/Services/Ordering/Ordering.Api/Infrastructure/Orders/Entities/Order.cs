@@ -51,11 +51,9 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
 
         public string ShippingStreet { get; set; }
 
-        public string ShippingPhonePrefix { get; set; }
+        public string ShippingPhoneNumber { get; set; }
 
-        public string ShippingPhone { get; set; }
-
-        public string ShippingCountryCode { get; set; }
+        public Guid? ShippingCountryId { get; set; }
 
         public string ExternalReference { get; set; }
 

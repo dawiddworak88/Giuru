@@ -35,6 +35,8 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string AreYouSureToCancelOrderLabel { get; set; }
         public string OrdersUrl { get; set; }
         public string NavigateToOrders { get; set; }
+        public string DeliveryAddressLabel { get; set; }
+        public string DeliveryAddress { get; set; }
         public IEnumerable<ListItemViewModel> OrderStatuses { get; set; }
         public IEnumerable<OrderItemViewModel> OrderItems { get; set; }
         public FilesViewModel Attachments { get; set; }

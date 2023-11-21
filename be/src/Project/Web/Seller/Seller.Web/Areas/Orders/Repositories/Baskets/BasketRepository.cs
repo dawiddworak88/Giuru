@@ -18,15 +18,15 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
 {
     public class BasketRepository : IBasketRepository
     {
-        private readonly IApiClientService apiClientService;
-        private readonly IOptions<AppSettings> settings;
+        private readonly IApiClientService _apiClientService;
+        private readonly IOptions<AppSettings> _settings;
 
         public BasketRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> settings)
         {
-            this.apiClientService = apiClientService;
-            this.settings = settings;
+            _apiClientService = apiClientService;
+            _settings = settings;
         }
 
         public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items)
@@ -53,10 +53,10 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<SaveBasketApiRequestModel>, SaveBasketApiRequestModel, BasketApiResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<SaveBasketApiRequestModel>, SaveBasketApiRequestModel, BasketApiResponseModel>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
@@ -87,7 +87,16 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             Guid? clientId, 
             string clientName, 
             Guid? basketId,
-            DateTime? expectedDelivery,
+            Guid? shippingAddressId,
+            string shippingCompany,
+            string shippingFirstName,
+            string shippingLastName,
+            string shippingRegion,
+            string shippingPostCode,
+            string shippingCity,
+            string shippingStreet,
+            string shippingPhoneNumber,
+            Guid? shippingCountryId,
             string moreInfo)
         {
             var requestModel = new CheckoutBasketRequestModel
@@ -95,7 +104,16 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 ClientId = clientId,
                 ClientName = clientName,
                 BasketId = basketId,
-                ExpectedDeliveryDate = expectedDelivery,
+                ShippingAddressId = shippingAddressId,
+                ShippingCompany = shippingCompany,
+                ShippingFirstName = shippingFirstName,
+                ShippingLastName = shippingLastName,
+                ShippingRegion = shippingRegion,
+                ShippingPostCode = shippingPostCode,
+                ShippingCity = shippingCity,
+                ShippingStreet = shippingStreet,
+                ShippingPhoneNumber = shippingPhoneNumber,
+                ShippingCountryId = shippingCountryId,
                 MoreInfo = moreInfo
             };
 
@@ -104,10 +122,10 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsCheckoutApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsCheckoutApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<CheckoutBasketRequestModel>, CheckoutBasketRequestModel, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<CheckoutBasketRequestModel>, CheckoutBasketRequestModel, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {

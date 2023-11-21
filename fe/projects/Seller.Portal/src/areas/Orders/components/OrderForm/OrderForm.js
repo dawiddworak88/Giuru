@@ -18,15 +18,12 @@ import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 
 function OrderForm(props) {
-    const clientsProps = {
-        options: props.clients,
-        getOptionLabel: (option) => option.name
-    };
-
     const [state, dispatch] = useContext(Context);
     const [id, setId] = useState(props.id ? props.id : null);
     const [basketId, setBasketId] = useState(null);
     const [client, setClient] = useState(props.clientId ? props.clients.find((item) => item.id === props.clientId) : null);
+    const [deliveryAddress, setDeliveryAddress] = useState(null);
+    const [deliveryAddresses, setDeliveryAddresses] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
@@ -223,6 +220,22 @@ function OrderForm(props) {
             clientName: client.name
         };
 
+        if (deliveryAddress) {
+            order = {
+                ...order,
+                shippingAddressId: deliveryAddress.id,
+                shippingCompany: deliveryAddress.company,
+                shippingFirstName: deliveryAddress.firstName,
+                shippingLastName: deliveryAddress.lastName,
+                shippingRegion: deliveryAddress.region,
+                shippingPostCode: deliveryAddress.postCode,
+                shippingCity: deliveryAddress.city,
+                shippingStreet: deliveryAddress.street,
+                shippingPhoneNumber: deliveryAddress.phoneNumber,
+                shippingCountryId: deliveryAddress.countryId
+            }
+        }
+
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
@@ -248,6 +261,49 @@ function OrderForm(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
+
+    const handleChangeClient = (value) => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+        setClient(value);
+
+        const searchParameters = {
+            clientId: value.id,
+            pageIndex: 1,
+            itemsPerPage: props.defaultItemsPerPage
+        };
+
+        const requestOptions = {
+            method: "GET",
+            headers: { 
+                "Content-Type": "application/json", 
+                "X-Requested-With": "XMLHttpRequest" 
+            }
+        };
+
+        const url = props.getDeliveryAddressesUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+
+        fetch(url, requestOptions)
+            .then((response) => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setDeliveryAddresses(jsonResponse.data);
+
+                        if (value.defaultDeliveryAddressId) {
+                            const defaultDeliveryAddress = jsonResponse.data.find(x => x.id == value.defaultDeliveryAddressId);
+
+                            setDeliveryAddress(defaultDeliveryAddress);
+                        }
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    }
     
     const onDrop = useCallback(acceptedFiles => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -306,18 +362,36 @@ function OrderForm(props) {
                     <div className="column is-half">
                         <div className="field">
                             <Autocomplete
-                                {...clientsProps}
+                                options={props.clients}
+                                getOptionLabel={(option) => option.name}
                                 id="client"
                                 name="client"
                                 fullWidth={true}
                                 value={client}
                                 onChange={(event, newValue) => {
-                                    setClient(newValue);
+                                    handleChangeClient(newValue);
                                 }}
                                 autoComplete
                                 renderInput={(params) => <TextField {...params} label={props.selectClientLabel} margin="normal" variant="standard" />}
                             />
                         </div>
+                        {deliveryAddresses && deliveryAddresses.length > 0 &&
+                            <div className="field">
+                                <Autocomplete
+                                    options={deliveryAddresses}
+                                    getOptionLabel={(option) => `${option.company}, ${option.firstName} ${option.lastName}, ${option.postCode} ${option.city}`}
+                                    id="deliveryAddress"
+                                    name="deliveryAddress"
+                                    fullWidth={true}
+                                    value={deliveryAddress}
+                                    onChange={(event, newValue) => {
+                                        setDeliveryAddress(newValue);
+                                    }}
+                                    autoComplete
+                                    renderInput={(params) => <TextField {...params} label={props.deliveryAddressLabel} margin="normal" variant="standard" />}
+                                />
+                            </div>
+                        }
                     </div>
                 </div>
                 {client &&

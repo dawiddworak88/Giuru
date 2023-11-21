@@ -90,6 +90,11 @@ function EditOrderForm(props) {
                                                 </Select>
                                             </FormControl>
                                         </div>
+                                        {props.deliveryAddress &&
+                                            <div className="field">
+                                                <InputLabel id="delivery-address-label">{props.deliveryAddressLabel}: {props.deliveryAddress}</InputLabel>
+                                            </div>
+                                        }
                                     </div>
                                     <div className="column is-half">
                                         <div className="column">

@@ -18,20 +18,23 @@ using Foundation.PageContent.Components.ListItems.ViewModels;
 using Seller.Web.Areas.Clients.Repositories.Managers;
 using Seller.Web.Areas.Global.Repositories;
 using Seller.Web.Areas.Global.DomainModels;
+using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
+using Foundation.GenericRepository.Definitions;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
     public class ClientFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientFormViewModel>
     {
-        private readonly IClientsRepository clientsRepository;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<ClientResources> clientLocalizer;
-        private readonly IOptionsMonitor<LocalizationSettings> localizationOptions;
-        private readonly IIdentityRepository identityRepository;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IClientGroupsRepository clientGroupsRepository;
-        private readonly IClientAccountManagersRepository clientManagersRepository;
-        private readonly ICountriesRepository countriesRepository;
+        private readonly IClientsRepository _clientsRepository;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
+        private readonly IOptionsMonitor<LocalizationSettings> _localizationOptions;
+        private readonly IIdentityRepository _identityRepository;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IClientGroupsRepository _clientGroupsRepository;
+        private readonly IClientAccountManagersRepository _clientManagersRepository;
+        private readonly ICountriesRepository _countriesRepository;
+        private readonly IClientDeliveryAddressesRepository _clientDeliveryAddressesRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -42,65 +45,68 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IClientGroupsRepository clientGroupsRepository,
             IClientAccountManagersRepository clientManagersRepository,
             ICountriesRepository countriesRepository,
+            IClientDeliveryAddressesRepository clientDeliveryAddressesRepository,
             LinkGenerator linkGenerator)
         {
-            this.clientsRepository = clientsRepository;
-            this.globalLocalizer = globalLocalizer;
-            this.clientLocalizer = clientLocalizer;
-            this.localizationOptions = localizationOptions;
-            this.linkGenerator = linkGenerator;
-            this.identityRepository = identityRepository;
-            this.clientGroupsRepository = clientGroupsRepository;
-            this.clientManagersRepository = clientManagersRepository;
-            this.countriesRepository = countriesRepository;
+            _clientsRepository = clientsRepository;
+            _globalLocalizer = globalLocalizer;
+            _clientLocalizer = clientLocalizer;
+            _localizationOptions = localizationOptions;
+            _linkGenerator = linkGenerator;
+            _identityRepository = identityRepository;
+            _clientGroupsRepository = clientGroupsRepository;
+            _clientManagersRepository = clientManagersRepository;
+            _countriesRepository = countriesRepository;
+            _clientDeliveryAddressesRepository = clientDeliveryAddressesRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var languages = new List<LanguageViewModel>
             {
-                new LanguageViewModel { Text = this.globalLocalizer.GetString("SelectLanguage") , Value = string.Empty }
+                new LanguageViewModel { Text = _globalLocalizer.GetString("SelectLanguage") , Value = string.Empty }
             };
 
-            foreach (var language in this.localizationOptions.CurrentValue.SupportedCultures.Split(','))
+            foreach (var language in _localizationOptions.CurrentValue.SupportedCultures.Split(','))
             {
                 languages.Add(new LanguageViewModel { Text = language.ToUpperInvariant(), Value = language.ToLowerInvariant() });
             }
 
             var viewModel = new ClientFormViewModel
             {
-                Title = this.clientLocalizer.GetString("EditClient"),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                ClientDetailText = this.clientLocalizer.GetString("Client"),
-                NameLabel = this.globalLocalizer.GetString("NameLabel"),
-                EmailLabel = this.globalLocalizer.GetString("EmailLabel"),
-                LanguageLabel = this.globalLocalizer.GetString("CommunicationLanguageLabel"),
-                NameRequiredErrorMessage = this.globalLocalizer.GetString("NameRequiredErrorMessage"),
-                EmailRequiredErrorMessage = this.globalLocalizer.GetString("EmailRequiredErrorMessage"),
-                EmailFormatErrorMessage = this.globalLocalizer.GetString("EmailFormatErrorMessage"),
-                LanguageRequiredErrorMessage = this.globalLocalizer.GetString("LanguageRequiredErrorMessage"),
-                EnterNameText = this.globalLocalizer.GetString("EnterNameText"),
-                EnterEmailText = this.globalLocalizer.GetString("EnterEmailText"),
-                SaveText = this.globalLocalizer.GetString("SaveText"),
-                AccountText = this.clientLocalizer.GetString("AccountText"),
-                AccountUrl = this.linkGenerator.GetPathByAction("Account", "IdentityApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
-                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ClientsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                Title = _clientLocalizer.GetString("EditClient"),
+                GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
+                ClientDetailText = _clientLocalizer.GetString("Client"),
+                NameLabel = _globalLocalizer.GetString("NameLabel"),
+                EmailLabel = _globalLocalizer.GetString("EmailLabel"),
+                LanguageLabel = _globalLocalizer.GetString("CommunicationLanguageLabel"),
+                NameRequiredErrorMessage = _globalLocalizer.GetString("NameRequiredErrorMessage"),
+                EmailRequiredErrorMessage = _globalLocalizer.GetString("EmailRequiredErrorMessage"),
+                EmailFormatErrorMessage = _globalLocalizer.GetString("EmailFormatErrorMessage"),
+                LanguageRequiredErrorMessage = _globalLocalizer.GetString("LanguageRequiredErrorMessage"),
+                EnterNameText = _globalLocalizer.GetString("EnterNameText"),
+                EnterEmailText = _globalLocalizer.GetString("EnterEmailText"),
+                SaveText = _globalLocalizer.GetString("SaveText"),
+                AccountText = _clientLocalizer.GetString("AccountText"),
+                AccountUrl = _linkGenerator.GetPathByAction("Account", "IdentityApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveUrl = _linkGenerator.GetPathByAction("Index", "ClientsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 Languages = languages,
-                IdLabel = this.globalLocalizer.GetString("Id"),
-                PhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel"),
-                ClientsUrl = this.linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
-                NavigateToClientsLabel = this.clientLocalizer.GetString("NavigateToClientsLabel"),
-                ResetPasswordText = this.clientLocalizer.GetString("ResetPasswordText"),
-                NoGroupsText = this.clientLocalizer.GetString("NoGroupsText"),
-                GroupsLabel = this.globalLocalizer.GetString("Groups"),
-                NoManagersText = this.clientLocalizer.GetString("NoManagers"),
-                ClientManagerLabel = this.globalLocalizer.GetString("Manager"),
-                CountryLabel = this.globalLocalizer.GetString("Country"),
+                IdLabel = _globalLocalizer.GetString("Id"),
+                PhoneNumberLabel = _globalLocalizer.GetString("PhoneNumberLabel"),
+                ClientsUrl = _linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                NavigateToClientsLabel = _clientLocalizer.GetString("NavigateToClientsLabel"),
+                ResetPasswordText = _clientLocalizer.GetString("ResetPasswordText"),
+                NoGroupsText = _clientLocalizer.GetString("NoGroupsText"),
+                GroupsLabel = _globalLocalizer.GetString("Groups"),
+                NoManagersText = _clientLocalizer.GetString("NoManagers"),
+                ClientManagerLabel = _globalLocalizer.GetString("Manager"),
+                CountryLabel = _globalLocalizer.GetString("Country"),
+                DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress")
             };
 
             if (componentModel.Id.HasValue)
             {
-                var client = await this.clientsRepository.GetClientAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                var client = await _clientsRepository.GetClientAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                 if (client is not null)
                 {
@@ -112,8 +118,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.ClientGroupsIds = client.ClientGroupIds;
                     viewModel.ClientManagersIds = client.ClientManagerIds;
                     viewModel.CountryId = client.CountryId;
+                    viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
 
-                    var user = await this.identityRepository.GetAsync(componentModel.Token, componentModel.Language, client.Email);
+                    var user = await _identityRepository.GetAsync(componentModel.Token, componentModel.Language, client.Email);
 
                     if (user is not null)
                     {
@@ -122,7 +129,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 }
             }
 
-            var groups = await this.clientGroupsRepository.GetAsync(componentModel.Token, componentModel.Language);
+            var groups = await _clientGroupsRepository.GetAsync(componentModel.Token, componentModel.Language);
 
             if (groups is not null)
             {
@@ -133,7 +140,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 });
             }
 
-            var managers = await this.clientManagersRepository.GetAsync(componentModel.Token, componentModel.Language);
+            var managers = await _clientManagersRepository.GetAsync(componentModel.Token, componentModel.Language);
 
             if (managers is not null)
             {
@@ -145,11 +152,22 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 });
             }
 
-            var countries = await this.countriesRepository.GetAsync(componentModel.Token, componentModel.Language, $"{nameof(Country.Name)} asc");
+            var countries = await _countriesRepository.GetAsync(componentModel.Token, componentModel.Language, $"{nameof(Country.Name)} asc");
 
             if (countries is not null)
             {
                 viewModel.Countries = countries.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
+            }
+
+            var deliveryAddresses = await _clientDeliveryAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
+
+            if (deliveryAddresses.Data is not null)
+            {
+                viewModel.DeliveryAddresses = deliveryAddresses.Data.Select(x => new ListItemViewModel
+                {
+                    Id = x.Id,
+                    Name = $"{x.Company}, {x.FirstName} {x.LastName}, {x.PostCode} {x.City}"
+                });
             }
 
             return viewModel;

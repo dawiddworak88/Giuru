@@ -291,4 +291,25 @@
   <data name="ClientDeleteAddressConflict" xml:space="preserve">
     <value>Delete the addresses assigned to this Client</value>
   </data>
+  <data name="BackToDeliveryAddresses" xml:space="preserve">
+    <value>Back to delivery addresses</value>
+  </data>
+  <data name="NewDeliveryAddress" xml:space="preserve">
+    <value>Add new delivery address</value>
+  </data>
+  <data name="DeliveryAddress" xml:space="preserve">
+    <value>Delivery address</value>
+  </data>
+  <data name="DeliveryAddressDeleteDefaultConflict" xml:space="preserve">
+    <value>Delivery address cannot be deleted because it is assigned as default</value>
+  </data>
+  <data name="DeliveryAddressDeletedSuccessfully" xml:space="preserve">
+    <value>Delivery address successfully deleted</value>
+  </data>
+  <data name="DeliveryAddressNotFound" xml:space="preserve">
+    <value>Delivery address not found</value>
+  </data>
+  <data name="DeliveryAddressSavedSuccessfully" xml:space="preserve">
+    <value>Delivery address successfully saved</value>
+  </data>
 </root>

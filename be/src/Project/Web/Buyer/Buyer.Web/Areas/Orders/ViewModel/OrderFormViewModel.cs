@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Shared.DomainModels.Baskets;
+using Foundation.PageContent.Components.ListItems.ViewModels;
 using System;
 using System.Collections.Generic;
 
@@ -8,6 +9,8 @@ namespace Buyer.Web.Areas.Orders.ViewModel
     {
         public string Title { get; set; }
         public Guid? BasketId { get; set; }
+        public Guid? ClientId { get; set; }
+        public string ClientName { get; set; }
         public string NoOrderItemsLabel { get; set; }
         public string SearchPlaceholderLabel { get; set; }
         public string GeneralErrorMessage { get; set; }
@@ -49,5 +52,8 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string DropOrSelectAttachmentsLabel { get; set; }
         public string AttachmentsLabel { get; set; }
         public string SaveMediaUrl { get; set; }
+        public string DeliveryAddressLabel { get; set; }
+        public Guid? DefaultDeliveryAddressId { get; set; }
+        public IEnumerable<ListItemViewModel> DeliveryAddresses { get; set; }
     }
 }
