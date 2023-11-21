@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { UploadCloud } from "react-feather";
 import { useDropzone } from "react-dropzone";
 import PropTypes from "prop-types";
-import { DatePicker, LocalizationProvider } from "@mui/lab";
 import Autosuggest from "react-autosuggest";
 import { Context } from "../../../../shared/stores/Store";
 import { Delete, AddShoppingCartRounded } from "@mui/icons-material"
@@ -12,7 +11,6 @@ import {
     TableHead, TableRow, Paper, TextField, Button, CircularProgress
 } from "@mui/material";
 import moment from "moment";
-import AdapterMoment from '@mui/lab/AdapterMoment';
 import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../../../shared/constants/OrderFormConstants";
 import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
@@ -30,8 +28,6 @@ function OrderForm(props) {
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [externalReference, setExternalReference] = useState("");
-    const [deliveryFrom, setDeliveryFrom] = useState(null);
-    const [deliveryTo, setDeliveryTo] = useState(null);
     const [moreInfo, setMoreInfo] = useState("");
     const [orderItems, setOrderItems] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
@@ -98,8 +94,6 @@ function OrderForm(props) {
             imageId: product.images ? product.images[0] : null,
             quantity,
             externalReference,
-            deliveryFrom: moment(deliveryFrom).startOf("day"),
-            deliveryTo: moment(deliveryTo).startOf("day"),
             moreInfo
         };
 
@@ -417,7 +411,7 @@ function OrderForm(props) {
                         <div className="container mt-5 mb-5 has-text-centered">
                             {props.orLabel}
                         </div>
-                        <div className="columns is-tablet">
+                        <div className="columns is-tablet is-justify-content-center">
                             <div className="column is-2 is-flex is-align-items-flex-end">
                                 <Autosuggest
                                     suggestions={suggestions}
@@ -451,34 +445,6 @@ function OrderForm(props) {
                                         e.preventDefault();
                                         setExternalReference(e.target.value);
                                     }} />
-                            </div>
-                            <div className="column is-2 is-flex is-align-items-flex-end">
-                                <LocalizationProvider dateAdapter={AdapterMoment}>
-                                    <DatePicker
-                                        id="deliveryFrom"
-                                        label={props.deliveryFromLabel}
-                                        value={deliveryFrom}
-                                        onChange={(date) => {
-                                            setDeliveryFrom(date);
-                                        }}
-                                        renderInput={(params) => 
-                                            <TextField {...params} variant="standard" />}
-                                        disablePast={true}/>
-                                </LocalizationProvider>
-                            </div>
-                            <div className="column is-2 is-flex is-align-items-flex-end">
-                                <LocalizationProvider dateAdapter={AdapterMoment}>
-                                    <DatePicker
-                                        id="deliveryTo"
-                                        label={props.deliveryToLabel}
-                                        value={deliveryTo}
-                                        onChange={(date) => {
-                                            setDeliveryTo(date);
-                                        }}
-                                        renderInput={(params) => 
-                                            <TextField {...params} variant="standard" />}
-                                       disablePast={true}/>
-                                </LocalizationProvider>
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
                                 <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel} variant="standard"
@@ -579,14 +545,10 @@ OrderForm.propTypes = {
     nameLabel: PropTypes.string.isRequired,
     quantityLabel: PropTypes.string.isRequired,
     externalReferenceLabel: PropTypes.string.isRequired,
-    deliveryFromLabel: PropTypes.string.isRequired,
-    deliveryToLabel: PropTypes.string.isRequired,
     moreInfoLabel: PropTypes.string.isRequired,
     selectClientLabel: PropTypes.string.isRequired,
     getSuggestionsUrl: PropTypes.string.isRequired,
     orderItemsLabel: PropTypes.string.isRequired,
-    changeDeliveryFromLabel: PropTypes.string.isRequired,
-    changeDeliveryToLabel: PropTypes.string.isRequired,
     clientRequiredErrorMessage: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
     addText: PropTypes.string.isRequired,

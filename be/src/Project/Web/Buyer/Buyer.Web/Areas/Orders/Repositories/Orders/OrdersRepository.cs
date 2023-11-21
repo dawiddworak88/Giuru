@@ -154,9 +154,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
                             ExternalReference = item.ExternalReference,
                             OrderItemStatusName = item.OrderItemStatusName,
                             OrderItemStatusChangeComment = item.OrderItemStatusChangeComment,
-                            ExpectedDeliveryFrom = item.ExpectedDeliveryFrom,
                             ProductAttributes = await this.productsService.GetProductAttributesAsync(product.ProductAttributes),
-                            ExpectedDeliveryTo = item.ExpectedDeliveryTo,
                             MoreInfo = item.MoreInfo,
                             LastModifiedDate = item.LastModifiedDate,
                             CreatedDate = item.CreatedDate

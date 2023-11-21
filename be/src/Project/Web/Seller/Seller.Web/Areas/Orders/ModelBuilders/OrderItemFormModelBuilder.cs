@@ -49,13 +49,11 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 NavigateToOrderLabel = this.orderLocalizer.GetString("NavigateToOrder"),
-                OrderStatusCommentLabel = this.orderLocalizer.GetString("OrderStatusComment"),
+                ExpectedDateOfProductOnStockLabel = this.orderLocalizer.GetString("ExpectedDateOfProductOnStock"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 QuantityLabel = this.orderLocalizer.GetString("QuantityLabel"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
-                DeliveryFromLabel = this.orderLocalizer.GetString("DeliveryFrom"),
-                DeliveryToLabel = this.orderLocalizer.GetString("DeliveryTo"),
                 ExternalReferenceLabel = this.orderLocalizer.GetString("ExternalReferenceLabel"),
                 MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
                 CancelOrderItemLabel = this.orderLocalizer.GetString("CancelOrder"),
@@ -85,10 +83,9 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     viewModel.ImageUrl = orderItem.PictureUrl;
                     viewModel.ImageAlt = orderItem.ProductName;
                     viewModel.OrderUrl = this.linkGenerator.GetPathByAction("Edit", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, id = orderItem.OrderId });
-                    viewModel.DeliveryFrom = orderItem.ExpectedDeliveryFrom;
-                    viewModel.DeliveryTo = orderItem.ExpectedDeliveryTo;
                     viewModel.ExternalReference = orderItem.ExternalReference;
                     viewModel.MoreInfo = orderItem.MoreInfo;
+                    viewModel.ExpectedDateOfProductOnStock = orderItem.OrderItemStatusChangeComment;
 
                     if (orderItem.OrderItemStatusId == OrdersConstants.OrderStatuses.NewId || 
                         orderItem.OrderItemStatusId == Guid.Empty)

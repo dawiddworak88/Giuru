@@ -109,9 +109,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                         MoreInfo = x.MoreInfo,
                         OrderItemStatusId = x.OrderItemStatusId,
                         OrderItemStatusName = x.OrderItemStatusName,
-                        OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
-                        DeliveryFrom = x.ExpectedDeliveryFrom,
-                        DeliveryTo = x.ExpectedDeliveryTo,
+                        ExpectedDateOfProductOnStock = x.OrderItemStatusChangeComment,
                         ImageAlt = x.ProductName,
                         ImageSrc = x.PictureUrl
                     });

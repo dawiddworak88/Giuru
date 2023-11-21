@@ -56,8 +56,6 @@ namespace Basket.Api.v1.Controllers
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
-                    DeliveryFrom = x.DeliveryFrom,
-                    DeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
                 }),
                 Language = CultureInfo.CurrentCulture.Name,
@@ -86,8 +84,6 @@ namespace Basket.Api.v1.Controllers
                             StockQuantity = x.StockQuantity,
                             OutletQuantity = x.OutletQuantity,
                             ExternalReference = x.ExternalReference,
-                            DeliveryFrom = x.DeliveryFrom,
-                            DeliveryTo = x.DeliveryTo,
                             MoreInfo = x.MoreInfo
                         })
                     };
@@ -162,8 +158,6 @@ namespace Basket.Api.v1.Controllers
                             StockQuantity = x.StockQuantity,
                             OutletQuantity = x.OutletQuantity,
                             ExternalReference = x.ExternalReference,
-                            DeliveryFrom = x.DeliveryFrom,
-                            DeliveryTo = x.DeliveryTo,
                             MoreInfo = x.MoreInfo
                         })
                     };
@@ -210,7 +204,6 @@ namespace Basket.Api.v1.Controllers
                 ShippingPostCode = request.ShippingPostCode,
                 ShippingRegion = request.ShippingRegion,
                 ShippingStreet = request.ShippingStreet,
-                ExpectedDeliveryDate = request.ExpectedDeliveryDate,
                 MoreInfo = request.MoreInfo,
                 HasCustomOrder = request.HasCustomOrder,
                 Attachments = request.Attachments,

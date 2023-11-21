@@ -7,7 +7,6 @@ import {
 } from "@mui/material";
 import OrderItemStatusChanges from "../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
-import moment from "moment";
 
 const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -155,32 +154,6 @@ const OrderItemForm = (props) => {
                         />
                     </div>
                     <div className="field">
-                        <TextField 
-                            id="deliveryFrom" 
-                            name="deliveryFrom" 
-                            label={props.deliveryFromLabel}
-                            value={props.deliveryFrom ? moment(props.deliveryFrom).format("L") : ""}
-                            fullWidth={true}
-                            variant="standard"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
-                    </div>
-                    <div className="field">
-                        <TextField 
-                            id="deliveryTo" 
-                            name="deliveryTo" 
-                            label={props.deliveryToLabel}
-                            value={props.deliveryTo ? moment(props.deliveryTo).format("L") : ""}
-                            fullWidth={true}
-                            variant="standard"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
-                    </div>
-                    <div className="field">
                         {props.canCancelOrderItem && !canceledOrderItem &&
                             <Button 
                                 className="mr-2"
@@ -219,12 +192,10 @@ OrderItemForm.propTypes = {
     outletQuantity: PropTypes.number,
     stockQuantity: PropTypes.number,
     quantity: PropTypes.number,
-    orderStatusCommentLabel: PropTypes.string.isRequired,
+    expectedDateOfProductOnStockLabel: PropTypes.string.isRequired,
     orderUrl: PropTypes.string.isRequired,
     navigateToOrderLabel: PropTypes.string.isRequired,
     orderItemStatusChanges: PropTypes.object,
-    deliveryFromLabel: PropTypes.string.isRequired,
-    deliveryToLabel: PropTypes.string.isRequired,
     externalReferenceLabel: PropTypes.string.isRequired,
     moreInfoLabel: PropTypes.string.isRequired,
     statusChanges: PropTypes.array,

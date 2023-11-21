@@ -3,8 +3,6 @@ import { toast } from "react-toastify";
 import { UploadCloud } from "react-feather";
 import { useDropzone } from "react-dropzone";
 import PropTypes from "prop-types";
-import { LocalizationProvider, DatePicker } from "@mui/lab";
-import AdapterMoment from '@mui/lab/AdapterMoment';
 import Autosuggest from "react-autosuggest";
 import { Context } from "../../../../shared/stores/Store";
 import { Delete, AddShoppingCartRounded } from "@mui/icons-material";
@@ -13,7 +11,6 @@ import {
     Select, FormControl, InputLabel, MenuItem, TableHead, TableRow, Paper, 
     TextField, Button, CircularProgress, Checkbox, NoSsr
 } from "@mui/material";
-import moment from "moment";
 import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../../../shared/constants/OrderFormConstants";
 import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
@@ -28,9 +25,7 @@ function NewOrderForm(props) {
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [externalReference, setExternalReference] = useState("");
-    const [deliveryFrom, setDeliveryFrom] = useState(null);
-    const [deliveryTo, setDeliveryTo] = useState(null);
-    const [moreInfo, setMoreInfo] = useState(null);
+    const [moreInfo, setMoreInfo] = useState("");
     const [orderItems, setOrderItems] = useState(props.basketItems ? props.basketItems : []);
     const [suggestions, setSuggestions] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -94,8 +89,6 @@ function NewOrderForm(props) {
             imageId: product.images ? product.images[0] : null,
             quantity: quantity,
             externalReference,
-            deliveryFrom: moment(deliveryFrom).startOf("day"),
-            deliveryTo: moment(deliveryTo).startOf("day"),
             moreInfo
         };
 
@@ -365,7 +358,7 @@ function NewOrderForm(props) {
                         <div className="container mt-5 mb-5 has-text-centered">
                             {props.orLabel}
                         </div>
-                        <div className="columns is-tablet">
+                        <div className="columns is-tablet is-justify-content-center">
                             <div className="column is-2 is-flex is-align-items-flex-end">
                                 <Autosuggest
                                     suggestions={suggestions}
@@ -402,34 +395,6 @@ function NewOrderForm(props) {
                                 />
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <LocalizationProvider dateAdapter={AdapterMoment}>
-                                    <DatePicker
-                                        id="deliveryFrom"
-                                        label={props.deliveryFromLabel}
-                                        value={deliveryFrom}
-                                        onChange={(date) => {
-                                            setDeliveryFrom(date);
-                                        }}
-                                        renderInput={(params) => 
-                                            <TextField {...params} variant="standard" />}
-                                        disablePast={true}/>
-                                </LocalizationProvider>
-                            </div>
-                            <div className="column is-2 is-flex is-align-items-flex-end">
-                                <LocalizationProvider dateAdapter={AdapterMoment}>
-                                    <DatePicker
-                                        id="deliveryTo"
-                                        label={props.deliveryToLabel}
-                                        value={deliveryTo}
-                                        onChange={(date) => {
-                                            setDeliveryTo(date);
-                                        }}
-                                        renderInput={(params) => 
-                                            <TextField {...params} variant="standard" />}
-                                        disablePast={true}/>
-                                </LocalizationProvider>
-                            </div>
-                            <div className="column is-2 is-flex is-align-items-flex-end">
                                 <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel} variant="standard"
                                     fullWidth={true} value={moreInfo} onChange={(e) => {
                                         e.preventDefault();
@@ -460,8 +425,6 @@ function NewOrderForm(props) {
                                                         <TableCell>{props.stockQuantityLabel}</TableCell>
                                                         <TableCell>{props.outletQuantityLabel}</TableCell>
                                                         <TableCell>{props.externalReferenceLabel}</TableCell>
-                                                        <TableCell>{props.deliveryFromLabel}</TableCell>
-                                                        <TableCell>{props.deliveryToLabel}</TableCell>
                                                         <TableCell>{props.moreInfoLabel}</TableCell>
                                                     </TableRow>
                                                 </TableHead>
@@ -482,8 +445,6 @@ function NewOrderForm(props) {
                                                             <TableCell>{item.stockQuantity}</TableCell>
                                                             <TableCell>{item.outletQuantity}</TableCell>
                                                             <TableCell>{item.externalReference}</TableCell>
-                                                            <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
-                                                            <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
                                                             <TableCell>{item.moreInfo}</TableCell>
                                                         </TableRow>
                                                     ))}
@@ -605,13 +566,9 @@ NewOrderForm.propTypes = {
     nameLabel: PropTypes.string.isRequired,
     quantityLabel: PropTypes.string.isRequired,
     externalReferenceLabel: PropTypes.string.isRequired,
-    deliveryFromLabel: PropTypes.string.isRequired,
-    deliveryToLabel: PropTypes.string.isRequired,
     moreInfoLabel: PropTypes.string.isRequired,
     getSuggestionsUrl: PropTypes.string.isRequired,
     orderItemsLabel: PropTypes.string.isRequired,
-    changeDeliveryFromLabel: PropTypes.string.isRequired,
-    changeDeliveryToLabel: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
     addText: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ordering.Api.Infrastructure;
 
@@ -11,9 +12,10 @@ using Ordering.Api.Infrastructure;
 namespace Ordering.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(OrderingContext))]
-    partial class OrderingContextModelSnapshot : ModelSnapshot
+    [Migration("20231027091649_RemovedDeliveryDates")]
+    partial class RemovedDeliveryDates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,8 +113,8 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<string>("ShippingCompany")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ShippingCountryId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ShippingCountryCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShippingFirstName")
                         .HasColumnType("nvarchar(max)");
@@ -120,7 +122,10 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<string>("ShippingLastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ShippingPhoneNumber")
+                    b.Property<string>("ShippingPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShippingPhonePrefix")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShippingPostCode")

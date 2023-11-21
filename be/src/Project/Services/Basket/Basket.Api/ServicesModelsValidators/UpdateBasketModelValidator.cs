@@ -37,11 +37,6 @@ namespace Basket.Api.ServicesModelsValidators
                         {
                             context.AddFailure("Total quantity must be greater than 0");
                         }
-
-                        if (item.DeliveryFrom.HasValue && item.DeliveryTo.HasValue && item.DeliveryTo < item.DeliveryFrom)
-                        {
-                            context.AddFailure("Delivery from must be earlier than delivery to date");
-                        }
                     }
                 }
             });

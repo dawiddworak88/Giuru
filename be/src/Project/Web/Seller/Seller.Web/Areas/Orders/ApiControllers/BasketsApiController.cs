@@ -51,8 +51,6 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
-                    DeliveryFrom = x.DeliveryFrom,
-                    DeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
                 }));
 
@@ -77,8 +75,6 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     ExternalReference = x.ExternalReference,
                     ImageSrc = x.PictureUrl,
                     ImageAlt = x.ProductName,
-                    DeliveryFrom = x.DeliveryFrom,
-                    DeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
                 });
             }

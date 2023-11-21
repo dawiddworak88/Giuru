@@ -13,8 +13,6 @@ namespace Seller.Web.Areas.Orders.ApiRequestModels
         public double StockQuantity { get; set; }
         public double OutletQuantity { get; set; }
         public string ExternalReference { get; set; }
-        public DateTime? DeliveryFrom { get; set; }
-        public DateTime? DeliveryTo { get; set; }
         public string MoreInfo { get; set; }
     }
 }

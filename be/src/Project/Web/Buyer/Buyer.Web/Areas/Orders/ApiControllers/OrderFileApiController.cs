@@ -95,8 +95,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                         PictureUrl = product.Images.OrEmptyIfNull().Any() ? this.mediaService.GetMediaUrl(product.Images.First(), OrdersConstants.Basket.BasketProductImageMaxWidth) : null,
                         Quantity = orderLine.Quantity,
                         ExternalReference = orderLine.ExternalReference,
-                        DeliveryFrom = orderLine.DeliveryFrom,
-                        DeliveryTo = orderLine.DeliveryTo,
                         MoreInfo = orderLine.MoreInfo
                     };
 
@@ -138,8 +136,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     ExternalReference = x.ExternalReference,
                     ImageSrc = x.PictureUrl,
                     ImageAlt = x.ProductName,
-                    DeliveryFrom = x.DeliveryFrom,
-                    DeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
                 });
             }

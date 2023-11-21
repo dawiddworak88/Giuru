@@ -69,8 +69,6 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
 
         public string IpAddress { get; set; }
 
-        public DateTime? ExpectedDeliveryDate { get; set; }
-
         public virtual IEnumerable<OrderItem> OrderItems { get; set; }
     }
 }

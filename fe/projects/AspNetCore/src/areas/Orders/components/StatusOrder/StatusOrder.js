@@ -117,10 +117,8 @@ function StatusOrder(props) {
                                             <TableCell>{props.stockQuantityLabel}</TableCell>
                                             <TableCell>{props.outletQuantityLabel}</TableCell>
                                             <TableCell>{props.orderStatusLabel}</TableCell>
-                                            <TableCell>{props.orderStatusCommentLabel}</TableCell>
+                                            <TableCell>{props.expectedDateOfProductOnStockLabel}</TableCell>
                                             <TableCell>{props.externalReferenceLabel}</TableCell>
-                                            <TableCell>{props.deliveryFromLabel}</TableCell>
-                                            <TableCell>{props.deliveryToLabel}</TableCell>
                                             <TableCell>{props.moreInfoLabel}</TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -141,10 +139,8 @@ function StatusOrder(props) {
                                                     <TableCell>{item.stockQuantity}</TableCell>
                                                     <TableCell>{item.outletQuantity}</TableCell>
                                                     <TableCell>{item.orderItemStatusName}</TableCell>
-                                                    <TableCell>{item.orderItemStatusChangeComment}</TableCell>
+                                                    <TableCell>{item.expectedDateOfProductOnStock}</TableCell>
                                                     <TableCell>{item.externalReference}</TableCell>
-                                                    <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
-                                                    <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
                                                     <TableCell>{item.moreInfo}</TableCell>
                                                 </TableRow>
                                             )
@@ -207,8 +203,6 @@ StatusOrder.propTypes = {
     nameLabel: PropTypes.string.isRequired,
     quantityLabel: PropTypes.string.isRequired,
     externalReferenceLabel: PropTypes.string.isRequired,
-    deliveryFromLabel: PropTypes.string.isRequired,
-    deliveryToLabel: PropTypes.string.isRequired,
     moreInfoLabel: PropTypes.string.isRequired,
     orderItemsLabel: PropTypes.string.isRequired,
     orderStatusLabel: PropTypes.string.isRequired,

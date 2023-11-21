@@ -138,12 +138,6 @@
   <data name="CancelOrder" xml:space="preserve">
     <value>Anuluj zamówienie</value>
   </data>
-  <data name="ChangeDeliveryFrom" xml:space="preserve">
-    <value>Zmień początkową datę dostawy</value>
-  </data>
-  <data name="ChangeDeliveryTo" xml:space="preserve">
-    <value>Zmień końcową datę dostawy</value>
-  </data>
   <data name="ClearBasketText" xml:space="preserve">
     <value>Wyczyść koszyk</value>
   </data>
@@ -155,12 +149,6 @@
   </data>
   <data name="CustomOrderSubject" xml:space="preserve">
     <value>Niestandardowe zamówienie od</value>
-  </data>
-  <data name="DeliveryFrom" xml:space="preserve">
-    <value>Początkowa data dostawy:</value>
-  </data>
-  <data name="DeliveryTo" xml:space="preserve">
-    <value>Końcowa data dostawy:</value>
   </data>
   <data name="DropOrSelectOrderFile" xml:space="preserve">
     <value>Przeciągnij i upuść lub kliknij, aby wybrać pliki z zamówieniami</value>
@@ -246,8 +234,8 @@
   <data name="OrderStatus" xml:space="preserve">
     <value>Status zamówienia:</value>
   </data>
-  <data name="OrderStatusComment" xml:space="preserve">
-    <value>Dodatkowe informacje o statusie zamówienia:</value>
+  <data name="ExpectedDateOfProductOnStock" xml:space="preserve">
+    <value>Przewidywana data towaru na magazynie:</value>
   </data>
   <data name="OrderStatusNotFound" xml:space="preserve">
     <value>Status zamówienia nie został znaleziony.</value>

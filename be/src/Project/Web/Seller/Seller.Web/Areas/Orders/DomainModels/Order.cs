@@ -35,7 +35,6 @@ namespace Seller.Web.Areas.Orders.DomainModels
         public string OrderStatusName { get; set; }
         public Guid OrderStateId { get; set; }
         public string Reason { get; set; }
-        public DateTime? ExpectedDeliveryDate { get; set; }
         public IEnumerable<OrderItem> OrderItems { get; set; }
         public IEnumerable<Guid> Attachments { get; set; }
         public DateTime? LastModifiedDate { get; set; }

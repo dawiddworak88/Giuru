@@ -91,7 +91,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 {
                     viewModel.Id = order.Id;
                     viewModel.OrderStatusId = order.OrderStatusId;
-                    viewModel.ExpectedDelivery = order.ExpectedDeliveryDate;
                     viewModel.CustomOrder = order.MoreInfo;
                     viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
                     viewModel.DeliveryAddress = $"{order.ShippingCompany}, {order.ShippingFirstName} {order.ShippingLastName}, {order.ShippingPostCode} {order.ShippingCity}";
@@ -110,10 +109,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         MoreInfo = x.MoreInfo,
                         OrderItemStatusId = x.OrderItemStatusId,
                         OrderItemStatusName = x.OrderItemStatusName,
-                        OrderItemStatusChangeComment = x.OrderItemStatusChangeComment,
+                        ExpectedDateOfProductOnStock = x.OrderItemStatusChangeComment,
                         ProductAttributes = x.ProductAttributes,
-                        DeliveryFrom = x.ExpectedDeliveryFrom,
-                        DeliveryTo = x.ExpectedDeliveryTo,
                         ImageAlt = x.ProductName,
                         ImageSrc = x.PictureUrl
                     });

@@ -75,8 +75,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.ImageUrl = orderItem.PictureUrl;
                     viewModel.ImageAlt = orderItem.ProductName;
                     viewModel.OrderUrl = _linkGenerator.GetPathByAction("Status", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, id = orderItem.OrderId });
-                    viewModel.DeliveryFrom = orderItem.ExpectedDeliveryFrom;
-                    viewModel.DeliveryTo = orderItem.ExpectedDeliveryTo;
                     viewModel.ExternalReference = orderItem.ExternalReference;
                     viewModel.MoreInfo = orderItem.MoreInfo;
                     viewModel.CanCancelOrderItem = false;
