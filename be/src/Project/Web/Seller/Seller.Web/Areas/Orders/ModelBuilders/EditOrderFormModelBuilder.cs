@@ -51,8 +51,6 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             {
                 IdLabel = _globalLocalizer.GetString("Id"),
                 Title = _orderLocalizer.GetString("EditOrder"),
-                DeliveryFromLabel = _orderLocalizer.GetString("DeliveryFrom"),
-                DeliveryToLabel = _orderLocalizer.GetString("DeliveryTo"),
                 MoreInfoLabel = _orderLocalizer.GetString("MoreInfoLabel"),
                 NameLabel = _orderLocalizer.GetString("NameLabel"),
                 OrderItemsLabel = _orderLocalizer.GetString("OrderItemsLabel"),
@@ -68,7 +66,6 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 OutletQuantityLabel = _orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = _orderLocalizer.GetString("StockQuantityLabel"),
                 CustomOrderLabel = _globalLocalizer.GetString("CustomOrderLabel"),
-                OrderStatusCommentLabel = _orderLocalizer.GetString("OrderStatusComment"),
                 UpdateOrderItemStatusUrl = _linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 OrdersUrl = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 NavigateToOrders = _orderLocalizer.GetString("NavigateToOrdersList"),

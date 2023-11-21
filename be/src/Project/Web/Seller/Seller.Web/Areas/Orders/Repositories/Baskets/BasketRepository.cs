@@ -97,7 +97,6 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             string shippingStreet,
             string shippingPhoneNumber,
             Guid? shippingCountryId,
-            DateTime? expectedDelivery,
             string moreInfo)
         {
             var requestModel = new CheckoutBasketRequestModel
@@ -115,7 +114,6 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 ShippingStreet = shippingStreet,
                 ShippingPhoneNumber = shippingPhoneNumber,
                 ShippingCountryId = shippingCountryId,
-                ExpectedDeliveryDate = expectedDelivery,
                 MoreInfo = moreInfo
             };
 

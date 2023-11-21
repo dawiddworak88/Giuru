@@ -49,8 +49,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             var viewModel = new StatusOrderFormViewModel
             {
                 Title = _orderLocalizer.GetString("Order"),
-                DeliveryFromLabel = _orderLocalizer.GetString("DeliveryFrom"),
-                DeliveryToLabel = _orderLocalizer.GetString("DeliveryTo"),
                 MoreInfoLabel = _orderLocalizer.GetString("MoreInfoLabel"),
                 NameLabel = _orderLocalizer.GetString("NameLabel"),
                 OrderItemsLabel = _orderLocalizer.GetString("OrderItemsLabel"),
@@ -66,7 +64,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 CustomOrderLabel = _globalLocalizer.GetString("CustomOrderLabel"),
                 OutletQuantityLabel = _orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = _orderLocalizer.GetString("StockQuantityLabel"),
-                OrderStatusCommentLabel = _orderLocalizer.GetString("OrderStatusComment"),
                 YesLabel = _globalLocalizer.GetString("Yes"),
                 NoLabel = _globalLocalizer.GetString("No"),
                 CancelationConfirmationDialogLabel = _orderLocalizer.GetString("CancelationConfirmationDialog"),

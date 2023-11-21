@@ -18,7 +18,6 @@ namespace Buyer.Web.Areas.Orders.ApiRequestModels
         public string ShippingStreet { get; set; }
         public string ShippingPhoneNumber { get; set; }
         public Guid? ShippingCountryId { get; set; }
-        public DateTime? ExpectedDeliveryDate { get; set; }
         public string MoreInfo { get; set; }
         public bool HasCustomOrder { get; set; }
         public IEnumerable<Guid> Attachments { get; set; }

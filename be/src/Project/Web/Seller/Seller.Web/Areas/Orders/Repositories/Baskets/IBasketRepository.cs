@@ -24,7 +24,6 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             string shippingStreet,
             string shippingPhoneNumber,
             Guid? shippingCountryId,
-            DateTime? expectedDelivery,
             string moreInfo);
     }
 }

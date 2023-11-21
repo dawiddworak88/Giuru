@@ -99,7 +99,6 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             string shippingStreet,
             string shippingPhoneNumber,
             Guid? shippingCountryId, 
-            DateTime? expectedDelivery, 
             string moreInfo, 
             bool hasCustomOrder, 
             IEnumerable<Guid> attachments)
@@ -119,7 +118,6 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 ShippingStreet = shippingStreet,
                 ShippingPhoneNumber = shippingPhoneNumber,
                 ShippingCountryId = shippingCountryId,
-                ExpectedDeliveryDate = expectedDelivery,
                 MoreInfo = moreInfo,
                 HasCustomOrder = hasCustomOrder,
                 Attachments = attachments

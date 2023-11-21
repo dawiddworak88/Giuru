@@ -26,7 +26,6 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             string shippingStreet,
             string shippingPhoneNumber,
             Guid? shippingCountryId,
-            DateTime? expectedDelivery, 
             string moreInfo, bool hasCustomOrder, 
             IEnumerable<Guid> attachments);
     }

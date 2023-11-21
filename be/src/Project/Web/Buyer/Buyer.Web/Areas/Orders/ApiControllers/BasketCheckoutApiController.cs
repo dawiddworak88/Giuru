@@ -74,7 +74,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 deliveryAddress.Street,
                 deliveryAddress.PhoneNumber,
                 deliveryAddress.CountryId,
-                model.ExpectedDeliveryDate,
                 model.MoreInfo,
                 model.HasCustomOrder,
                 model.Attachments?.Select(x => x.Id));

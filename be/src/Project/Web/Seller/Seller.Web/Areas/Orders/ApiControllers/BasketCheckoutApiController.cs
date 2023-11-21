@@ -45,7 +45,6 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 model.ShippingStreet,
                 model.ShippingPhoneNumber,
                 model.ShippingCountryId,
-                model.ExpectedDeliveryDate,
                 model.MoreInfo);
 
             return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
