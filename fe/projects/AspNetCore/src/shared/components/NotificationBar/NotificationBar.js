@@ -7,7 +7,7 @@ const NotificationBar = (props) => {
 
     const getIconTag = (iconName) => {
         let IconTag = Icon[iconName];
-        const defaultIconName = "PushPin"; 
+        const defaultIconName = "PushPin";
 
         if (IconTag === undefined || IconTag === null) {
             IconTag = Icon[defaultIconName];
@@ -22,8 +22,8 @@ const NotificationBar = (props) => {
         <div className="notification-bar">
             <div className="notification-bar_desktop">
                 <div className="notification-bar_list is-flex is-justify-content-center">
-                    {props.items.map((item) => (
-                        <div className="notification-bar_item is-flex">
+                    {props.items.map((item, index) => (
+                        <div className="notification-bar_item is-flex" key={index}>
                             {getIconTag(item.icon)}
                             <a href={item.link.url} target={item.link.target} className="notification-bar_link">
                                 {item.link.text}
@@ -38,14 +38,11 @@ const NotificationBar = (props) => {
                         perPage: 1,
                         autoplay: true,
                         pagination: false,
-                        arrows: false,
-                        type: "loop",
-                        speed: 2000,
-                        interval: 7000
+                        arrows: false
                     }}
                 >
-                    {props.items.map((item) => (
-                        <SplideSlide>
+                    {props.items.map((item, index) => (
+                        <SplideSlide key={index}>
                             <div className="notification-bar_item is-flex is-justify-content-center">
                                 {getIconTag(item.icon)}
                                 <a href={item.link.url} target={item.link.target} className="notification-bar_link">
