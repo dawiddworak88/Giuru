@@ -38,7 +38,8 @@ const NotificationBar = (props) => {
                         perPage: 1,
                         autoplay: true,
                         pagination: false,
-                        arrows: false
+                        arrows: false,
+                        type: "loop"
                     }}
                 >
                     {props.items.map((item, index) => (
