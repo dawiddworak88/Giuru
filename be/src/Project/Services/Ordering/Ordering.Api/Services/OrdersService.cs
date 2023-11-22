@@ -731,7 +731,106 @@ namespace Ordering.Api.Services
 
         private PagedResults<IEnumerable<OrderServiceModel>> GetOrdersDetails(string language, PagedResults<IEnumerable<Order>> pagedResults)
         {
-            var orderStatusTranslations = _context.OrderStatusTranslations.Where(x => x.IsActive).ToList();
+            var orderStatusIds = pagedResults.Data.OrEmptyIfNull().Select(x => x.OrderStatusId).Distinct();
+            var orderStatusTranslations = _context.OrderStatusTranslations
+                                          .Where(x => orderStatusIds.Contains(x.OrderStatusId) && x.IsActive)
+                                          .ToList();
+
+            var orderIdSet = new HashSet<Guid>(pagedResults.Data.OrEmptyIfNull().Select(x => x.Id));
+            var orderItems = _context.OrderItems
+                                     .Where(x => orderIdSet.Contains(x.OrderId) && x.IsActive)
+                                     .ToList();
+
+            var orderItemIdSet = orderItems.Select(x => x.Id).ToHashSet();
+            Console.WriteLine(JsonConvert.SerializeObject(orderItemIdSet));
+
+            var lastOrderItemStatusChanges = _context.OrderItemStatusChanges
+                                                     .Where(x => orderItemIdSet.Contains(x.OrderItemId) && x.IsActive).ToList();
+
+            Console.WriteLine(JsonConvert.SerializeObject(lastOrderItemStatusChanges));
+            /*var lastOrderItemStatusChanges = _context.OrderItemStatusChanges
+                                                     .Where(x => orderItemIdSet.Contains(x.OrderItemId) && x.IsActive)
+                                                     .ToDictionary(x => x.OrderItemId, x => x);*/
+
+            /*var orderItemStatusChangeIds = lastOrderItemStatusChanges.Values.Select(x => x.Id).ToHashSet();
+            var orderItemStatusChangesCommentTranslations = _context.OrderItemStatusChangesCommentTranslations
+                                                                  .Where(x => orderItemStatusChangeIds.Contains(x.OrderItemStatusChangeId) && x.IsActive)
+                                                                  .ToDictionary(x => x.OrderItemStatusChangeId, x => x);*/
+
+            var resultData = pagedResults.Data.OrEmptyIfNull().Select(order =>
+            {
+                var orderItemsModels = orderItems.Where(item => item.OrderId == order.Id && item.IsActive).Select(item =>
+                {
+                   // var statusChange = lastOrderItemStatusChanges.GetValueOrDefault<Guid, OrderItemStatusChange>(item.LastOrderItemStatusChangeId.Value);
+                   // var commentTranslation = orderItemStatusChangesCommentTranslations.GetValueOrDefault<Guid, OrderItemStatusChangeCommentTranslation>(item.LastOrderItemStatusChangeId.Value);
+
+                    return new OrderItemServiceModel
+                    {
+                        Id = item.Id,
+                        OrderId = item.OrderId,
+                        ProductId = item.ProductId,
+                        ProductSku = item.ProductSku,
+                        ProductName = item.ProductName,
+                        PictureUrl = item.PictureUrl,
+                        Quantity = item.Quantity,
+                        StockQuantity = item.StockQuantity,
+                        OutletQuantity = item.OutletQuantity,
+                        ExternalReference = item.ExternalReference,
+                        MoreInfo = item.MoreInfo,
+                        LastOrderItemStatusChangeId = item.LastOrderItemStatusChangeId,
+                      //  OrderItemStateId = statusChange.OrderItemStateId,
+                       // OrderItemStatusId = statusChange.OrderItemStatusId,
+                        //OrderItemStatusChangeComment = commentTranslation.OrderItemStatusChangeComment,
+                       // OrderItemStatusName = orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == statusChange.OrderItemStatusId && y.Language == language)?.Name ?? orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == statusChange.OrderItemStatusId)?.Name,
+                        LastModifiedDate = item.LastModifiedDate,
+                        CreatedDate = item.CreatedDate
+                    };
+                });
+
+                return new OrderServiceModel
+                {
+                    Id = order.Id,
+                    SellerId = order.SellerId,
+                    ClientId = order.ClientId.Value,
+                    ClientName = order.ClientName,
+                    BillingAddressId = order.BillingAddressId,
+                    BillingCity = order.BillingCity,
+                    BillingCompany = order.BillingCompany,
+                    BillingCountryCode = order.BillingCountryCode,
+                    BillingFirstName = order.BillingFirstName,
+                    BillingLastName = order.BillingLastName,
+                    BillingPhone = order.BillingPhone,
+                    BillingPhonePrefix = order.BillingPhonePrefix,
+                    BillingPostCode = order.BillingPostCode,
+                    BillingRegion = order.BillingRegion,
+                    BillingStreet = order.BillingStreet,
+                    ShippingAddressId = order.ShippingAddressId,
+                    ShippingCity = order.ShippingCity,
+                    ShippingCompany = order.ShippingCompany,
+                    ShippingCountryId = order.ShippingCountryId,
+                    ShippingFirstName = order.ShippingFirstName,
+                    ShippingLastName = order.ShippingLastName,
+                    ShippingPhoneNumber = order.ShippingPhoneNumber,
+                    ShippingPostCode = order.ShippingPostCode,
+                    ShippingRegion = order.ShippingRegion,
+                    ShippingStreet = order.ShippingStreet,
+                    ExternalReference = order.ExternalReference,
+                    MoreInfo = order.MoreInfo,
+                    Reason = order.Reason,
+                    OrderStateId = order.OrderStateId,
+                    OrderStatusId = order.OrderStatusId,
+                    OrderStatusName = orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == order.OrderStatusId && y.Language == language)?.Name ?? orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == order.OrderStatusId)?.Name,
+                    OrderItems = orderItemsModels,
+                    LastModifiedDate = order.LastModifiedDate,
+                    CreatedDate = order.CreatedDate
+                };
+            });
+
+            return new PagedResults<IEnumerable<OrderServiceModel>>(pagedResults.Total, pagedResults.PageSize)
+            {
+                Data = resultData
+            };
+            /*var orderStatusTranslations = _context.OrderStatusTranslations.Where(x => x.IsActive).ToList();
 
             var orderItems = _context.OrderItems.Where(x => pagedResults.Data.OrEmptyIfNull().Select(x => x.Id).Contains(x.OrderId) && x.IsActive).ToList();
 
@@ -798,7 +897,7 @@ namespace Ordering.Api.Services
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
                 })
-            };
+            };*/
         }
 
         private async Task MapStatusesToOrderStatusId(Guid? orderId)
