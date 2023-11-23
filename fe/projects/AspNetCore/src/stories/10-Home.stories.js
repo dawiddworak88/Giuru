@@ -8,14 +8,14 @@ var notificationBar = {
     {
       icon: "LocalShipping",
       link: {
-        url: "test",
+        url: "#",
         text: "Up to 30 days to return",
       }
     },
     {
       icon: "LocalPostOffice",
       link: {
-        url: "test",
+        url: "#",
         text: "Sign up for the newsletter and get a PLN 50 discount",
       }
     }
