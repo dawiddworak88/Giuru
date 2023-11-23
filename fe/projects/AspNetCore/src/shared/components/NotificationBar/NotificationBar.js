@@ -6,16 +6,18 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 const NotificationBar = (props) => {
 
     const getIconTag = (iconName) => {
-        let IconTag = Icon[iconName];
-        const defaultIconName = "PushPin";
 
-        if (IconTag === undefined || IconTag === null) {
-            IconTag = Icon[defaultIconName];
+        if (iconName !== "" || iconName != null) {
+            let IconTag = Icon[iconName];
+
+            if (IconTag === undefined || IconTag === null) {
+                return;
+            }
+
+            return (
+                <IconTag />
+            );
         }
-
-        return (
-            <IconTag />
-        )
     };
 
     return (
