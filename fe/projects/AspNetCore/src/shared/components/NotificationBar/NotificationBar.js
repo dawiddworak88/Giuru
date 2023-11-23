@@ -7,17 +7,16 @@ const NotificationBar = (props) => {
 
     const getIconTag = (iconName) => {
 
-        if (iconName !== "" || iconName != null) {
-            let IconTag = Icon[iconName];
+        if (iconName && Icon[iconName]) {
 
-            if (IconTag === undefined || IconTag === null) {
-                return;
+            const IconTag = Icon[iconName];
+
+            if (IconTag) {
+                return <IconTag />;
             }
-
-            return (
-                <IconTag />
-            );
         }
+        
+        return;
     };
 
     return (
