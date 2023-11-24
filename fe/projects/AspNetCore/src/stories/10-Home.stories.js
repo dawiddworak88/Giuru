@@ -5,8 +5,28 @@ import { header, mainNavigation, footer } from "./shared/Props";
 
 var heroSlider = {
   items: [
-    { imageSrc: "https://eltap.pl/upload/gallery/55/marinosavana05soft11okajpg6870.jpg", imageAlt: "Best sectionals", imageTitle: "Best sectionals", teaserTitle: "Shop sectionals", teaserText: "Best sectionals in the industry", ctaUrl: "#", ctaText: "Shop now!" },
-    { imageSrc: "https://eltap.pl/upload/gallery/83/sofa-neva01197rgbjpg8615.jpg", imageAlt: "Best sectionals", imageTitle: "Best sectionals" }
+    {
+      image: {
+        imageSrc: "https://eltap.pl/upload/gallery/55/marinosavana05soft11okajpg6870.jpg",
+        imageAlt: "Best sectionals",
+        imageTitle: "Best sectionals",
+      },
+      teaserTitle: "Shop sectionals",
+      teaserText: "Best sectionals in the industry",
+      ctaUrl: "#",
+      ctaText: "Shop now!" 
+    },
+    {
+      image: {
+        imageSrc: "https://eltap.pl/upload/gallery/55/marinosavana05soft11okajpg6870.jpg",
+        imageAlt: "Best sectionals",
+        imageTitle: "Best sectionals",
+      },
+      teaserTitle: "Shop sectionals",
+      teaserText: "The Arcadova Sofa is the perfect complement to any style, providing an ideal place for relaxation",
+      ctaUrl: "#",
+      ctaText: "See colors!" 
+    }
   ]
 };
 
