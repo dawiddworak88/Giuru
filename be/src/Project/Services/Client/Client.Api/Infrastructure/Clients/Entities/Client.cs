@@ -28,6 +28,8 @@ namespace Client.Api.Infrastructure.Clients.Entities
         [Required]
         public Guid SellerId { get; set; }
 
+        public Guid? DefaultBillingAddressId { get; set; }
+
         public Guid? DefaultDeliveryAddressId { get; set; }
     }
 }
