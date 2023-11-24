@@ -1,8 +1,6 @@
 .hero-slider {
-    background-color: $grey;
+    background-color: $white;
     width: 100%;
-    max-height: 400px;
-    padding-bottom: 3rem;
 
     .carousel .control-dots {
         margin: 30px 0;
@@ -13,21 +11,37 @@
     }
 
     &__item {
-        max-height: 400px;
         position: relative;
+
+        @media only screen and (min-width: $tablet) {
+            max-height: 400px;
+        }
     }
 
     &__teaser {
-        color: white;
-        position: absolute;
-        background-color: rgba(0, 23, 31, 0.7);
-        border-radius: 1rem;
-        padding: 2rem;
-        top: 2rem;
-        left: 2rem;
 
-        @media only screen and (max-width: $tablet) {
-            width: 300px;
+        &__desktop {
+            color: white;
+            position: absolute;
+            background-color: rgba(0, 23, 31, 0.7);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            top: 1.5rem;
+            left: 1.5rem;
+
+            @media only screen and (max-width: $tablet) {
+                display: none;
+            }
+        }
+
+        &__mobile {
+            padding: 1rem;
+            background-color: $white;
+            text-align: center;
+
+            @media only screen and (min-width: $tablet) {
+                display: none;
+            }
         }
     }
 
@@ -35,13 +49,35 @@
         color: white;
         margin: 0.5rem;
         text-align: left;
+
+        @media only screen and (max-width: $tablet) {
+            color: #4a4a4a;
+            text-align: center;
+        }
     }
 
     &__teaser-text {
         margin: 0.5rem;
     }
 
+    &__teaser-button {
+        justify-content: center;
+    }
+
     &__teaser-link {
         margin: 0.5rem;
+    }
+
+    @media only screen and (min-width: $tablet) {
+        max-height: 400px;
+        padding-bottom: 3rem;
+    }
+}
+
+.control-dots {
+    display: block;
+
+    @media only screen and (max-width: $tablet) {
+        display: none;
     }
 }
