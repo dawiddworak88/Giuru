@@ -44,6 +44,11 @@ namespace Client.Api.Services.Addresses
                 throw new CustomException(_clientLocalizer.GetString("DeliveryAddressDeleteDefaultConflict"), (int)HttpStatusCode.Conflict);
             }
 
+            if (await _context.Clients.AnyAsync(x => x.DefaultBillingAddressId == model.Id && x.IsActive))
+            {
+                throw new CustomException(_clientLocalizer.GetString("BillingAddressDeleteDefaultConflict"), (int)HttpStatusCode.Conflict);
+            }
+
             clientAddress.IsActive = false;
             clientAddress.LastModifiedDate = DateTime.UtcNow;
 
@@ -171,6 +176,11 @@ namespace Client.Api.Services.Addresses
             if (client.DefaultDeliveryAddressId.HasValue is false)
             {
                 client.DefaultDeliveryAddressId = clientAddress.Id;
+            }
+
+            if (client.DefaultBillingAddressId.HasValue is false)
+            {
+                client.DefaultBillingAddressId = clientAddress.Id;
             }
 
             await _context.SaveChangesAsync();

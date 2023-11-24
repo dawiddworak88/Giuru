@@ -289,6 +289,7 @@ namespace Client.Api.v1.Controllers
                     ClientGroupIds = request.ClientGroupIds,
                     ClientManagerIds = request.ClientManagerIds,
                     DefaultDeliveryAddressId = request.DefaultDeliveryAddressId,
+                    DefaultBillingAddressId = request.DefaultBillingAddressId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -320,6 +321,7 @@ namespace Client.Api.v1.Controllers
                     ClientGroupIds = request.ClientGroupIds,
                     ClientManagerIds = request.ClientManagerIds,
                     DefaultDeliveryAddressId = request.DefaultDeliveryAddressId,
+                    DefaultBillingAddressId = request.DefaultBillingAddressId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
