@@ -90,6 +90,7 @@ namespace Client.Api.v1.Controllers
                                 ClientGroupIds = x.ClientGroupIds,
                                 ClientManagerIds = x.ClientManagerIds,
                                 DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
+                                DefaultBillingAddressId = x.DefaultBillingAddressId,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -137,6 +138,7 @@ namespace Client.Api.v1.Controllers
                                 ClientGroupIds = x.ClientGroupIds,
                                 ClientManagerIds = x.ClientManagerIds,
                                 DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
+                                DefaultBillingAddressId = x.DefaultBillingAddressId,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -193,6 +195,7 @@ namespace Client.Api.v1.Controllers
                         ClientGroupIds = client.ClientGroupIds,
                         ClientManagerIds = client.ClientManagerIds,
                         DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
+                        DefaultBillingAddressId = client.DefaultBillingAddressId,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };
@@ -245,6 +248,7 @@ namespace Client.Api.v1.Controllers
                         ClientGroupIds = client.ClientGroupIds,
                         ClientManagerIds = client.ClientManagerIds,
                         DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
+                        DefaultBillingAddressId = client.DefaultBillingAddressId,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };

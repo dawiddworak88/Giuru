@@ -42,7 +42,9 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string CountryLabel { get; set; }
         public Guid? CountryId { get; set; }
         public string DeliveryAddressLabel { get; set; }
+        public string BillingAddressLabel { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
+        public Guid? DefaultBillingAddressId { get; set; }
         public IEnumerable<Guid> ClientGroupsIds { get; set; }
         public IEnumerable<Guid> ClientManagersIds { get; set; }
         public IEnumerable<LanguageViewModel> Languages { get; set; }

@@ -72,6 +72,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 OrLabel = _globalLocalizer.GetString("Or"),
                 GetDeliveryAddressesUrl = _linkGenerator.GetPathByAction("Get", "ClientDeliveryAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
+                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
                 DefaultItemsPerPage = Constants.DefaultItemsPerPage
             };
 
@@ -79,7 +80,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 
             if (clients is not null)
             {
-                viewModel.Clients = clients.Select(x => new ClientListItemViewModel { Id = x.Id , Name = x.Name, DefaultDeliveryAddressId = x.DefaultDeliveryAddressId });
+                viewModel.Clients = clients.Select(x => new ClientListItemViewModel { Id = x.Id , Name = x.Name, DefaultDeliveryAddressId = x.DefaultDeliveryAddressId, DefaultBillingAddressId = x.DefaultBillingAddressId });
             }
 
             return viewModel;

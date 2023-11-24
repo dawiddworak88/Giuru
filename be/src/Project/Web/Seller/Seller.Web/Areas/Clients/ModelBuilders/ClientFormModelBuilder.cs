@@ -101,7 +101,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 NoManagersText = _clientLocalizer.GetString("NoManagers"),
                 ClientManagerLabel = _globalLocalizer.GetString("Manager"),
                 CountryLabel = _globalLocalizer.GetString("Country"),
-                DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress")
+                DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
+                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress")
             };
 
             if (componentModel.Id.HasValue)
@@ -119,6 +120,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.ClientManagersIds = client.ClientManagerIds;
                     viewModel.CountryId = client.CountryId;
                     viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
+                    viewModel.DefaultBillingAddressId = client.DefaultBillingAddressId;
 
                     var user = await _identityRepository.GetAsync(componentModel.Token, componentModel.Language, client.Email);
 

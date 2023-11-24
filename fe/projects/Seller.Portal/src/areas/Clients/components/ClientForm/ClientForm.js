@@ -24,7 +24,8 @@ function ClientForm(props) {
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
         hasAccount: { value: props.hasAccount ? props.hasAccount : false },
-        deliveryAddress: { value: props.defaultDeliveryAddressId ? props.deliveryAddresses.find((item) => item.id === props.defaultDeliveryAddressId) : null }
+        deliveryAddress: { value: props.defaultDeliveryAddressId ? props.deliveryAddresses.find((item) => item.id === props.defaultDeliveryAddressId) : null },
+        billingAddress: { value: props.defaultBillingAddressId ? props.deliveryAddresses.find((item) => item.id === props.defaultBillingAddressId) : null }
     };
 
     const stateValidatorSchema = {
@@ -63,7 +64,8 @@ function ClientForm(props) {
         const payload = {
             ...state,
             countryId: country ? country.id : null,
-            defaultDeliveryAddressId: state.deliveryAddress ? state.deliveryAddress.id : null
+            defaultDeliveryAddressId: state.deliveryAddress ? state.deliveryAddress.id : null,
+            defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null
         }
 
         const requestOptions = {
@@ -138,7 +140,7 @@ function ClientForm(props) {
     const { 
         id, name, email, country, clientGroupIds, 
         communicationLanguage, phoneNumber, clientManagerIds,
-        deliveryAddress 
+        deliveryAddress, billingAddress
     } = values;
 
     return (
@@ -258,6 +260,27 @@ function ClientForm(props) {
                                     <TextField 
                                         {...params} 
                                         label={props.deliveryAddressLabel} 
+                                        variant="standard"
+                                        margin="normal"/>
+                                )} />
+                        </div>
+                        <div className="field">
+                            <Autocomplete
+                                id="billingAddress"
+                                name="billingAddress"
+                                options={props.deliveryAddresses}
+                                getOptionLabel={(option) => option.name}
+                                fullWidth={true}
+                                value={billingAddress}
+                                variant="standard"
+                                onChange={(event, newValue) => {
+                                    setFieldValue({name: "billingAddress", value: newValue});
+                                }}
+                                autoComplete
+                                renderInput={(params) => (
+                                    <TextField 
+                                        {...params} 
+                                        label={props.billingAddressLabel} 
                                         variant="standard"
                                         margin="normal"/>
                                 )} />
