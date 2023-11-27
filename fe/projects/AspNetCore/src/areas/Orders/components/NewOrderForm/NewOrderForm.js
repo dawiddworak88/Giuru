@@ -350,7 +350,7 @@ function NewOrderForm(props) {
                                 id="billingAddressId"
                                 name="billingAddressId"
                                 value={billingAddressId}
-                                onChange={(e) => setDeliveryAddressId(e.target.value)}>
+                                onChange={(e) => setBillingAddressId(e.target.value)}>
                                 {props.deliveryAddresses && props.deliveryAddresses.map((billingAddress, index) =>
                                     <MenuItem key={index} value={billingAddress.id}>{billingAddress.name}</MenuItem>
                                 )}

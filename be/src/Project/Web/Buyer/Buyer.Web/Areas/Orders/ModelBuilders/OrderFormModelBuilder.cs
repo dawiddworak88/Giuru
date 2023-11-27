@@ -111,6 +111,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.ClientId = client.Id;
                     viewModel.ClientName = client.Name;
                     viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
+                    viewModel.DefaultBillingAddressId = client.DefaultBillingAddressId;
 
                     var deliveryAddresses = await _clientDeliveryAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, client.Id, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
 
