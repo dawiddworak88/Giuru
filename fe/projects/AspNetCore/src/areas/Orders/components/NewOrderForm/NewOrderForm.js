@@ -35,6 +35,7 @@ function NewOrderForm(props) {
     const [isOrdered, setIsOrdered] = useState(false);
     const [attachments, setAttachments] = useState([]);
     const [deliveryAddressId, setDeliveryAddressId] = useState(props.defaultDeliveryAddressId ? props.defaultDeliveryAddressId : null);
+    const [billingAddressId, setBillingAddressId] = useState(props.defaultBillingAddressId ? props.defaultBillingAddressId : null);
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -204,6 +205,7 @@ function NewOrderForm(props) {
             clientId: props.clientId,
             clientName: props.clientName,
             shippingAddressId: deliveryAddressId,
+            billingAddressId: billingAddressId,
             moreInfo: customOrder,
             attachments,
             hasCustomOrder
@@ -336,6 +338,21 @@ function NewOrderForm(props) {
                                 onChange={(e) => setDeliveryAddressId(e.target.value)}>
                                 {props.deliveryAddresses && props.deliveryAddresses.map((deliveryAddress, index) =>
                                     <MenuItem key={index} value={deliveryAddress.id}>{deliveryAddress.name}</MenuItem>
+                                )}
+                            </Select>
+                        </FormControl>
+                    </div>
+                    <div className="field">
+                        <FormControl fullWidth={true} variant="standard">
+                            <InputLabel id="billingAddressId-label">{props.billingAddressLabel}</InputLabel>
+                            <Select
+                                labelId="billingAddressId-label"
+                                id="billingAddressId"
+                                name="billingAddressId"
+                                value={billingAddressId}
+                                onChange={(e) => setDeliveryAddressId(e.target.value)}>
+                                {props.deliveryAddresses && props.deliveryAddresses.map((billingAddress, index) =>
+                                    <MenuItem key={index} value={billingAddress.id}>{billingAddress.name}</MenuItem>
                                 )}
                             </Select>
                         </FormControl>
