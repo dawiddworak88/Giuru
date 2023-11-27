@@ -10,5 +10,6 @@ namespace Buyer.Web.Shared.Repositories.Clients
     {
         Task<ClientDeliveryAddress> GetAsync(string token, string language, Guid? id);
         Task<PagedResults<IEnumerable<ClientDeliveryAddress>>> GetAsync(string token, string language, Guid? clientId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
+        Task<IEnumerable<ClientDeliveryAddress>> GetAsync(string token, string language, IEnumerable<Guid> clientAddressesIds)
     }
 }

@@ -11,6 +11,8 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Foundation.Extensions.ExtensionMethods;
+using System.Linq;
 
 namespace Buyer.Web.Shared.Repositories.Clients
 {
@@ -79,6 +81,61 @@ namespace Buyer.Web.Shared.Repositories.Clients
                 {
                     Data = response.Data.Data
                 };
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
+        }
+
+        public async Task<IEnumerable<ClientDeliveryAddress>> GetAsync(string token, string language, IEnumerable<Guid> clientAddressesIds)
+        {
+            var productsRequestModel = new PagedDeliveryAddressesByIdsRequestModel
+            {
+                PageIndex = PaginationConstants.DefaultPageIndex,
+                ItemsPerPage = PaginationConstants.DefaultPageSize,
+                Ids = clientAddressesIds.ToEndpointParameterString()
+            };
+
+            var apiRequest = new ApiRequest<PagedDeliveryAddressesByIdsRequestModel>
+            {
+                Language = language,
+                Data = productsRequestModel,
+                AccessToken = token,
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.DeliveryAddressesApiEndpoint}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedDeliveryAddressesByIdsRequestModel>, PagedDeliveryAddressesByIdsRequestModel, PagedResults<IEnumerable<ClientDeliveryAddress>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                var products = new List<ClientDeliveryAddress>();
+
+                products.AddRange(response.Data.Data);
+
+                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
+
+                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
+                {
+                    apiRequest.Data.PageIndex = i;
+
+                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedDeliveryAddressesByIdsRequestModel>, PagedDeliveryAddressesByIdsRequestModel, PagedResults<IEnumerable<ClientDeliveryAddress>>>(apiRequest);
+
+                    if (!nextPagesResponse.IsSuccessStatusCode)
+                    {
+                        throw new CustomException(response.Message, (int)response.StatusCode);
+                    }
+
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Any())
+                    {
+                        products.AddRange(nextPagesResponse.Data.Data);
+                    }
+                }
+
+                return products;
             }
 
             if (!response.IsSuccessStatusCode)
