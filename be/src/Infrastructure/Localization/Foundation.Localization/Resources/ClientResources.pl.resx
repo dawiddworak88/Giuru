@@ -291,8 +291,8 @@
   <data name="ClientDeleteAddressConflict" xml:space="preserve">
     <value>Usuń przypisane adresy do tego klienta.</value>
   </data>
-  <data name="BackToDeliveryAddresses" xml:space="preserve">
-    <value>Powróć do adresów dostaw</value>
+  <data name="BackToAddresses" xml:space="preserve">
+    <value>Powróć do adresów</value>
   </data>
   <data name="NewDeliveryAddress" xml:space="preserve">
     <value>Dodaj nowy adres dostawy</value>
@@ -314,5 +314,8 @@
   </data>
   <data name="BillingAddressDeleteDefaultConflict" xml:space="preserve">
     <value>Adres bilingowy nie może zostać usunięty, ponieważ jest on przypisany jako domyślny</value>
+  </data>
+  <data name="NewClientAddress" xml:space="preserve">
+    <value>Dodaj adres</value>
   </data>
 </root>

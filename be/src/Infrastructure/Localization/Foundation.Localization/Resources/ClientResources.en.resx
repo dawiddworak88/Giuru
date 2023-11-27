@@ -291,8 +291,8 @@
   <data name="ClientDeleteAddressConflict" xml:space="preserve">
     <value>Delete the addresses assigned to this Client</value>
   </data>
-  <data name="BackToDeliveryAddresses" xml:space="preserve">
-    <value>Back to delivery addresses</value>
+  <data name="BackToAddresses" xml:space="preserve">
+    <value>Back to addresses</value>
   </data>
   <data name="NewDeliveryAddress" xml:space="preserve">
     <value>Add new delivery address</value>
@@ -314,5 +314,8 @@
   </data>
   <data name="BillingAddressDeleteDefaultConflict" xml:space="preserve">
     <value>Billing address cannot be deleted because it is assigned as the default address</value>
+  </data>
+  <data name="NewClientAddress" xml:space="preserve">
+    <value>Add address</value>
   </data>
 </root>

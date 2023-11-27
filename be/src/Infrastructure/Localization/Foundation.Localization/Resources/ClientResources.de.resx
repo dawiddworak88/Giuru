@@ -291,8 +291,8 @@
   <data name="ClientDeleteAddressConflict" xml:space="preserve">
     <value>Löschen Sie die diesem Kunden zugewiesenen Adressen.</value>
   </data>
-  <data name="BackToDeliveryAddresses" xml:space="preserve">
-    <value>Zurück zu den Lieferadressen</value>
+  <data name="BackToAddresses" xml:space="preserve">
+    <value>Zurück zu den Adressen</value>
   </data>
   <data name="NewDeliveryAddress" xml:space="preserve">
     <value>Neue Lieferadresse hinzufügen</value>
@@ -314,5 +314,8 @@
   </data>
   <data name="BillingAddressDeleteDefaultConflict" xml:space="preserve">
     <value>Die Rechnungsadresse kann nicht gelöscht werden, da sie als Standardadresse zugewiesen ist</value>
+  </data>
+  <data name="NewClientAddress" xml:space="preserve">
+    <value>Adresse hinzufügen</value>
   </data>
 </root>
