@@ -89,7 +89,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 DeleteLabel = _globalLocalizer.GetString("Delete"),
                 DropOrSelectAttachmentsLabel = _globalLocalizer.GetString("DropOrSelectAttachments"),
                 SaveMediaUrl = _linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
-                DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress")
+                DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
+                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress")
             };
 
             if (componentModel.BasketId.HasValue)

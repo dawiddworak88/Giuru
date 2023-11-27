@@ -95,6 +95,11 @@ function EditOrderForm(props) {
                                                 <InputLabel id="delivery-address-label">{props.deliveryAddressLabel}: {props.deliveryAddress}</InputLabel>
                                             </div>
                                         }
+                                        {props.billingAddress &&
+                                            <div className="field">
+                                                <InputLabel id="billing-address-label">{props.billingAddressLabel}: {props.billingAddress}</InputLabel>
+                                            </div>
+                                        }
                                     </div>
                                     <div className="column is-half">
                                         <div className="column">

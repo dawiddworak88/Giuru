@@ -2,7 +2,6 @@
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Repositories.Clients;
-using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Localization;
@@ -82,25 +81,25 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 model.ClientName,
                 Guid.Parse(reqCookie),
                 model.BillingAddressId,
-                billingAddress.Company,
-                billingAddress.FirstName, 
-                billingAddress.LastName,
-                billingAddress.Region,
-                billingAddress.PostCode,
-                billingAddress.City,
-                billingAddress.Street,
-                billingAddress.PhoneNumber,
-                billingAddress.CountryId,
+                billingAddress?.Company,
+                billingAddress?.FirstName, 
+                billingAddress?.LastName,
+                billingAddress?.Region,
+                billingAddress?.PostCode,
+                billingAddress?.City,
+                billingAddress?.Street,
+                billingAddress?.PhoneNumber,
+                billingAddress?.CountryId,
                 model.ShippingAddressId,
-                deliveryAddress.Company,
-                deliveryAddress.FirstName,
-                deliveryAddress.LastName,
-                deliveryAddress.Region,
-                deliveryAddress.PostCode,
-                deliveryAddress.City,
-                deliveryAddress.Street,
-                deliveryAddress.PhoneNumber,
-                deliveryAddress.CountryId,
+                deliveryAddress?.Company,
+                deliveryAddress?.FirstName,
+                deliveryAddress?.LastName,
+                deliveryAddress?.Region,
+                deliveryAddress?.PostCode,
+                deliveryAddress?.City,
+                deliveryAddress?.Street,
+                deliveryAddress?.PhoneNumber,
+                deliveryAddress?.CountryId,
                 model.MoreInfo,
                 model.HasCustomOrder,
                 model.Attachments?.Select(x => x.Id));
