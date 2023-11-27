@@ -34,9 +34,9 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var deliveryAddressId = await _deliveryAddressesRepository.SaveAsync(token, language, model.Id, model.Company, model.FirstName, model.LastName, model.PhoneNumber, model.Street, model.Region, model.PostCode, model.City, model.ClientId, model.CountryId);
+            var clientAddressId = await _deliveryAddressesRepository.SaveAsync(token, language, model.Id, model.Company, model.FirstName, model.LastName, model.PhoneNumber, model.Street, model.Region, model.PostCode, model.City, model.ClientId, model.CountryId);
 
-            return StatusCode((int)HttpStatusCode.OK, new { Id = deliveryAddressId, Message = _clientLocalizer.GetString("DeliveryAddressSavedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Id = clientAddressId, Message = _clientLocalizer.GetString("ClientAddressSavedSuccessfully").Value });
         }
 
         [HttpGet]
@@ -45,7 +45,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var deliveryAddresses = await _deliveryAddressesRepository.GetAsync(
+            var clientAddresses = await _deliveryAddressesRepository.GetAsync(
                 token,
                 language,
                 null,
@@ -54,7 +54,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 itemsPerPage,
                 $"{nameof(ClientDeliveryAddress.CreatedDate)} desc");
 
-            return this.StatusCode((int)HttpStatusCode.OK, deliveryAddresses);
+            return this.StatusCode((int)HttpStatusCode.OK, clientAddresses);
         }
 
         [HttpDelete]
@@ -65,7 +65,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
             await _deliveryAddressesRepository.DeleteAsync(token, language, id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = _clientLocalizer.GetString("DeliveryAddressDeletedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = _clientLocalizer.GetString("ClientAddressDeletedSuccessfully").Value });
         }
     }
 }

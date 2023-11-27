@@ -303,13 +303,16 @@
   <data name="DeliveryAddressDeleteDefaultConflict" xml:space="preserve">
     <value>Die Lieferadresse kann nicht gelöscht werden, da sie als Standardadresse zugewiesen ist</value>
   </data>
-  <data name="DeliveryAddressDeletedSuccessfully" xml:space="preserve">
-    <value>Lieferadresse erfolgreich gelöscht</value>
+  <data name="ClientAddressDeletedSuccessfully" xml:space="preserve">
+    <value>Kundenadresse erfolgreich gelöscht</value>
   </data>
-  <data name="DeliveryAddressNotFound" xml:space="preserve">
-    <value>Lieferadresse nicht gefunden</value>
+  <data name="ClientAddressSavedSuccessfully" xml:space="preserve">
+    <value>Kundenadresse erfolgreich gespeichert</value>
   </data>
-  <data name="DeliveryAddressSavedSuccessfully" xml:space="preserve">
-    <value>Lieferadresse erfolgreich gespeichert</value>
+  <data name="BillingAddress" xml:space="preserve">
+    <value>Rechnungsadresse</value>
+  </data>
+  <data name="BillingAddressDeleteDefaultConflict" xml:space="preserve">
+    <value>Die Rechnungsadresse kann nicht gelöscht werden, da sie als Standardadresse zugewiesen ist</value>
   </data>
 </root>
