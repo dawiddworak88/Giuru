@@ -26,11 +26,11 @@ namespace Client.Api.v1.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize]
     [ApiController]
-    public class ClientDeliveryAddressesController : BaseApiController
+    public class ClientAddressesController : BaseApiController
     {
         private readonly IClientAddressesService _clientAddressesService;
 
-        public ClientDeliveryAddressesController(
+        public ClientAddressesController(
             IClientAddressesService clientAddressesService) 
         {
             _clientAddressesService = clientAddressesService;

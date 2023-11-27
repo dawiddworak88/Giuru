@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace Buyer.Web.Shared.DomainModels.Clients
+namespace Seller.Web.Areas.Clients.DomainModels
 {
-    public class ClientDeliveryAddress
+    public class ClientAddress
     {
         public Guid Id { get; set; }
         public Guid ClientId { get; set; }
         public string ClientName { get; set; }
-        public string Company { get; set; }
+        public string Company {  get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PostCode { get; set; }

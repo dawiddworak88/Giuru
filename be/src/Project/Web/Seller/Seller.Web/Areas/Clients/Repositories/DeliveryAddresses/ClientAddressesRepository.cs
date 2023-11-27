@@ -15,12 +15,12 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
 {
-    public class ClientDeliveryAddressesRepository : IClientDeliveryAddressesRepository
+    public class ClientAddressesRepository : IClientAddressesRepository
     {
         private readonly IApiClientService _apiClientService;
         private readonly IOptions<AppSettings> _options;
 
-        public ClientDeliveryAddressesRepository(
+        public ClientAddressesRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> options)
         {
@@ -35,7 +35,7 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.DeliveryAddressesApiEndpoint}/{id}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.AddressesApiEndpoint}/{id}"
             };
 
             var response = await _apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
@@ -46,17 +46,17 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
             }
         }
 
-        public async Task<ClientDeliveryAddress> GetAsync(string token, string language, Guid? id)
+        public async Task<ClientAddress> GetAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.DeliveryAddressesApiEndpoint}/{id}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.AddressesApiEndpoint}/{id}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ClientDeliveryAddress>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ClientAddress>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -71,7 +71,7 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<ClientDeliveryAddress>>> GetAsync(string token, string language, Guid? clientId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<PagedResults<IEnumerable<ClientAddress>>> GetAsync(string token, string language, Guid? clientId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var requestModel = new PagedDeliveryAddressesRequestModel
             {
@@ -87,14 +87,14 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.DeliveryAddressesApiEndpoint}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.AddressesApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientDeliveryAddress>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientAddress>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
-                return new PagedResults<IEnumerable<ClientDeliveryAddress>>(response.Data.Total, response.Data.PageSize)
+                return new PagedResults<IEnumerable<ClientAddress>>(response.Data.Total, response.Data.PageSize)
                 {
                     Data = response.Data.Data
                 };
@@ -131,7 +131,7 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.DeliveryAddressesApiEndpoint}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.AddressesApiEndpoint}"
             };
 
             var response = await _apiClientService.PostAsync<ApiRequest<DeliveryAddressRequestModel>, DeliveryAddressRequestModel, BaseResponseModel>(apiRequest);

@@ -17,39 +17,39 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
-    public class ClientDeliveryAddressFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientDeliveryAddressFormViewModel>
+    public class ClientAddressFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientAddressFormViewModel>
     {
         private readonly IClientsRepository _clientsRepository;
         private readonly ICountriesRepository _countriesRepository;
-        private readonly IClientDeliveryAddressesRepository _clientDeliveryAddressesRepository;
+        private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly LinkGenerator _linkGenerator;
 
-        public ClientDeliveryAddressFormModelBuilder(
+        public ClientAddressFormModelBuilder(
             IClientsRepository clientsRepository,
             ICountriesRepository countriesRepository,
-            IClientDeliveryAddressesRepository clientDeliveryAddressesRepository,
+            IClientAddressesRepository clientAddressesRepository,
             IStringLocalizer<ClientResources> clientLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
             LinkGenerator linkGenerator)
         {
             _clientsRepository = clientsRepository;
             _countriesRepository = countriesRepository;
-            _clientDeliveryAddressesRepository = clientDeliveryAddressesRepository;
+            _clientAddressesRepository = clientAddressesRepository;
             _clientLocalizer = clientLocalizer;
             _globalLocalizer = globalLocalizer;
             _linkGenerator = linkGenerator;
         }
 
-        public async Task<ClientDeliveryAddressFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<ClientAddressFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new ClientDeliveryAddressFormViewModel
+            var viewModel = new ClientAddressFormViewModel
             {
-                Title = _globalLocalizer.GetString("EditDeliveryAddress"),
+                Title = _globalLocalizer.GetString("EditClientAddress"),
                 FieldRequiredErrorMessage = _globalLocalizer.GetString("FieldRequiredErrorMessage"),
                 SaveText = _globalLocalizer.GetString("SaveText"),
-                SaveUrl = _linkGenerator.GetPathByAction("Index", "ClientDeliveryAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveUrl = _linkGenerator.GetPathByAction("Index", "ClientAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
                 IdLabel = _globalLocalizer.GetString("Id"),
                 ClientLabel = _globalLocalizer.GetString("Client"),
@@ -62,8 +62,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 CountryLabel = _globalLocalizer.GetString("Country"),
                 PhoneNumberLabel = _globalLocalizer.GetString("PhoneNumberLabel"),
                 StreetLabel = _globalLocalizer.GetString("Street"),
-                DeliveryAddressesUrl = _linkGenerator.GetPathByAction("Index", "ClientDeliveryAddresses", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
-                NavigateToClientDeliveryAddresses = _clientLocalizer.GetString("BackToDeliveryAddresses")
+                ClientAddressesUrl = _linkGenerator.GetPathByAction("Index", "ClientAddresses", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                NavigateToClientAddresses = _clientLocalizer.GetString("BackToAddresses")
             };
 
             var clients = await _clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);
@@ -90,21 +90,21 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             if (componentModel.Id.HasValue)
             {
-                var deliveryAddress = await _clientDeliveryAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                var clientAddress = await _clientAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
             
-                if (deliveryAddress is not null)
+                if (clientAddress is not null)
                 {
                     viewModel.Id = componentModel.Id;
-                    viewModel.Company = deliveryAddress.Company;
-                    viewModel.FirstName = deliveryAddress.FirstName;
-                    viewModel.LastName = deliveryAddress.LastName;
-                    viewModel.PhoneNumber = deliveryAddress.PhoneNumber;
-                    viewModel.ClientId = deliveryAddress.ClientId;
-                    viewModel.Street = deliveryAddress.Street;
-                    viewModel.City = deliveryAddress.City;
-                    viewModel.Region = deliveryAddress.Region;
-                    viewModel.PostCode = deliveryAddress.PostCode;
-                    viewModel.CountryId = deliveryAddress.CountryId;
+                    viewModel.Company = clientAddress.Company;
+                    viewModel.FirstName = clientAddress.FirstName;
+                    viewModel.LastName = clientAddress.LastName;
+                    viewModel.PhoneNumber = clientAddress.PhoneNumber;
+                    viewModel.ClientId = clientAddress.ClientId;
+                    viewModel.Street = clientAddress.Street;
+                    viewModel.City = clientAddress.City;
+                    viewModel.Region = clientAddress.Region;
+                    viewModel.PostCode = clientAddress.PostCode;
+                    viewModel.CountryId = clientAddress.CountryId;
                 }
             }
 

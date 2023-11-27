@@ -50,7 +50,7 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public IEnumerable<LanguageViewModel> Languages { get; set; }
         public IEnumerable<ListItemViewModel> ClientGroups { get; set; }
         public IEnumerable<ListItemViewModel> Countries { get; set; }
-        public IEnumerable<ListItemViewModel> DeliveryAddresses { get; set; }
+        public IEnumerable<ListItemViewModel> ClientAddresses { get; set; }
         public IEnumerable<ClientAccountManagerViewModel> ClientManagers { get; set; }
     }
 }

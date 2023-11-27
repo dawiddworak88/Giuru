@@ -12,14 +12,14 @@ using Seller.Web.Areas.Clients.ViewModels;
 namespace Seller.Web.Areas.Clients.Controllers
 {
     [Area("Clients")]
-    public class ClientDeliveryAddressController : BaseController
+    public class ClientAddressController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientDeliveryAddressPageViewModel> _clientDeliveryAddressPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientAddressPageViewModel> _clientAddressPageModelBuilder;
 
-        public ClientDeliveryAddressController(
-            IAsyncComponentModelBuilder<ComponentModelBase, ClientDeliveryAddressPageViewModel> clientDeliveryAddressPageModelBuilder)
+        public ClientAddressController(
+            IAsyncComponentModelBuilder<ComponentModelBase, ClientAddressPageViewModel> clientAddressPageModelBuilder)
         {
-            _clientDeliveryAddressPageModelBuilder = clientDeliveryAddressPageModelBuilder;
+            _clientAddressPageModelBuilder = clientAddressPageModelBuilder;
         }
 
         public async Task<IActionResult> Edit(Guid? id)
@@ -33,7 +33,7 @@ namespace Seller.Web.Areas.Clients.Controllers
                 IsAuthenticated = User.Identity.IsAuthenticated,
             };
 
-            var viewModel = await _clientDeliveryAddressPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _clientAddressPageModelBuilder.BuildModelAsync(componentModel);
 
             return View(viewModel);
         }

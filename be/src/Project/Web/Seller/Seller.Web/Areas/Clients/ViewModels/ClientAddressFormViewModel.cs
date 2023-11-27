@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Clients.ViewModels
 {
-    public class ClientDeliveryAddressFormViewModel
+    public class ClientAddressFormViewModel
     {
         public Guid? Id { get; set; }
         public Guid? ClientId { get; set; }
@@ -30,9 +30,9 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string CountryLabel { get; set; }
         public string SaveText { get; set; }
         public string SaveUrl { get; set; }
-        public string DeliveryAddressesUrl { get; set; }
+        public string ClientAddressesUrl { get; set; }
         public string ClientLabel { get; set; }
-        public string NavigateToClientDeliveryAddresses { get; set; }
+        public string NavigateToClientAddresses { get; set; }
         public string FieldRequiredErrorMessage { get; set; }
         public string GeneralErrorMessage { get; set; }
         public IEnumerable<ListItemViewModel> Clients { get; set; }

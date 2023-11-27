@@ -8,7 +8,7 @@ import { Context } from "../../../../shared/stores/Store";
 import useForm from "../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 
-const ClientDeliveryAddressForm = (props) => {
+const ClientAddressForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null },
@@ -267,7 +267,7 @@ const ClientDeliveryAddressForm = (props) => {
                                 disabled={state.isLoading || !client || !country || disable}>
                                 {props.saveText}
                             </Button>
-                            <a href={props.deliveryAddressesUrl} className="ml-2 button is-text">{props.navigateToClientDeliveryAddresses}</a>
+                            <a href={props.clientAddressesUrl} className="ml-2 button is-text">{props.navigateToClientAddresses}</a>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}
@@ -277,15 +277,15 @@ const ClientDeliveryAddressForm = (props) => {
     )
 }
 
-ClientDeliveryAddressForm.propTypes = {
+ClientAddressForm.propTypes = {
     id: PropTypes.string,
     saveUrl: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     idLabel: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
-    navigateToClientDeliveryAddresses: PropTypes.string.isRequired,
+    navigateToClientAddresses: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
     fieldRequiredErrorMessage: PropTypes.string.isRequired
 }
 
-export default ClientDeliveryAddressForm;
+export default ClientAddressForm;

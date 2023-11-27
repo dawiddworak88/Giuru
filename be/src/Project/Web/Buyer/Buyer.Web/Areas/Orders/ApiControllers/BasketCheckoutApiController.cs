@@ -22,17 +22,17 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
     public class BasketCheckoutApiController : BaseApiController
     {
         private readonly IBasketRepository _basketRepository;
-        private readonly IClientDeliveryAddressesRepository _clientDeliveryAddressesRepository;
+        private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
-            IClientDeliveryAddressesRepository clientDeliveryAddressesRepository,
+            IClientAddressesRepository clientAddressesRepository,
             IStringLocalizer<OrderResources> orderLocalizer)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
-            _clientDeliveryAddressesRepository = clientDeliveryAddressesRepository;
+            _clientAddressesRepository = clientAddressesRepository;
         }
 
         [HttpPost]
@@ -67,7 +67,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 deliveryAddressesIds.Add(model.BillingAddressId.Value);
             }
 
-            var deliveryAddresses = await _clientDeliveryAddressesRepository.GetAsync(token, language, deliveryAddressesIds);
+            var deliveryAddresses = await _clientAddressesRepository.GetAsync(token, language, deliveryAddressesIds);
 
             if (deliveryAddresses is not null)
             {

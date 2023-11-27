@@ -15,49 +15,49 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
-    public class ClientDeliveryAddressesPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientDeliveryAddress>>
+    public class ClientAddressesPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientAddress>>
     {
         private readonly ICatalogModelBuilder _catalogModelBuilder;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly LinkGenerator _linkGenerator;
-        private readonly IClientDeliveryAddressesRepository _clientDeliveryAddressesRepository;
+        private readonly IClientAddressesRepository _clientAddressesRepository;
 
-        public ClientDeliveryAddressesPageCatalogModelBuilder(
+        public ClientAddressesPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<ClientResources> clientLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IClientDeliveryAddressesRepository clientDeliveryAddressesRepository,
+            IClientAddressesRepository clientAddressesRepository,
             LinkGenerator linkGenerator)
         {
             _catalogModelBuilder = catalogModelBuilder;
             _globalLocalizer = globalLocalizer;
             _clientLocalizer = clientLocalizer;
             _linkGenerator = linkGenerator;
-            _clientDeliveryAddressesRepository = clientDeliveryAddressesRepository;
+            _clientAddressesRepository = clientAddressesRepository;
         }
 
-        public async Task<CatalogViewModel<ClientDeliveryAddress>> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<CatalogViewModel<ClientAddress>> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = _catalogModelBuilder.BuildModel<CatalogViewModel<ClientDeliveryAddress>, ClientDeliveryAddress>();
+            var viewModel = _catalogModelBuilder.BuildModel<CatalogViewModel<ClientAddress>, ClientAddress>();
 
-            viewModel.Title = _globalLocalizer.GetString("ClientDeliveryAddresses");
+            viewModel.Title = _globalLocalizer.GetString("ClientAddresses");
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
-            viewModel.NewText = _clientLocalizer.GetString("NewDeliveryAddress");
-            viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "ClientDeliveryAddress", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "ClientDeliveryAddress", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewText = _clientLocalizer.GetString("NewAddress");
+            viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "ClientAddress", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "ClientAddress", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "ClientDeliveryAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ClientDeliveryAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "ClientAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ClientAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.OrderBy = $"{nameof(ClientDeliveryAddress.CreatedDate)} desc";
+            viewModel.OrderBy = $"{nameof(ClientAddress.CreatedDate)} desc";
 
             viewModel.ConfirmationDialogDeleteNameProperty = new List<string>
             {
-                nameof(ClientDeliveryAddress.Company).ToCamelCase(),
-                nameof(ClientDeliveryAddress.FirstName).ToCamelCase(),
-                nameof(ClientDeliveryAddress.LastName).ToCamelCase()
+                nameof(ClientAddress.Company).ToCamelCase(),
+                nameof(ClientAddress.FirstName).ToCamelCase(),
+                nameof(ClientAddress.LastName).ToCamelCase()
             };
 
             viewModel.Table = new CatalogTableViewModel
@@ -87,43 +87,43 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientDeliveryAddress.ClientName).ToCamelCase(),
+                        Title = nameof(ClientAddress.ClientName).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientDeliveryAddress.Company).ToCamelCase(),
+                        Title = nameof(ClientAddress.Company).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientDeliveryAddress.FirstName).ToCamelCase(),
+                        Title = nameof(ClientAddress.FirstName).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientDeliveryAddress.LastName).ToCamelCase(),
+                        Title = nameof(ClientAddress.LastName).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientDeliveryAddress.City).ToCamelCase(),
+                        Title = nameof(ClientAddress.City).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientDeliveryAddress.LastModifiedDate).ToCamelCase(),
+                        Title = nameof(ClientAddress.LastModifiedDate).ToCamelCase(),
                         IsDateTime = true
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientDeliveryAddress.CreatedDate).ToCamelCase(),
+                        Title = nameof(ClientAddress.CreatedDate).ToCamelCase(),
                         IsDateTime = true
                     }
                 }
             };
 
-            viewModel.PagedItems = await _clientDeliveryAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, null, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientDeliveryAddress.CreatedDate)} desc");
+            viewModel.PagedItems = await _clientAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, null, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientAddress.CreatedDate)} desc");
 
             return viewModel;
         }

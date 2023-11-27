@@ -2,7 +2,6 @@
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
-using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.ViewModels;
 using Seller.Web.Shared.ViewModels;
 using System.Globalization;
@@ -10,33 +9,33 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
-    public class ClientDeliveryAddressesPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientDeliveryAddressesPageViewModel>
+    public class ClientAddressPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientAddressPageViewModel>
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> _headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> _menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientDeliveryAddress>> _clientDeliveryAddressesCatalogModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientAddressFormViewModel> _clientAddressFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> _footerModelBuilder;
 
-        public ClientDeliveryAddressesPageModelBuilder(
+        public ClientAddressPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientDeliveryAddress>> clientDeliveryAddressesCatalogModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, ClientAddressFormViewModel> clientAddressFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             _headerModelBuilder = headerModelBuilder;
             _menuTilesModelBuilder = menuTilesModelBuilder;
-            _clientDeliveryAddressesCatalogModelBuilder = clientDeliveryAddressesCatalogModelBuilder;
+            _clientAddressFormModelBuilder = clientAddressFormModelBuilder;
             _footerModelBuilder = footerModelBuilder;
         }
 
-        public async Task<ClientDeliveryAddressesPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<ClientAddressPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new ClientDeliveryAddressesPageViewModel
+            var viewModel = new ClientAddressPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
                 Header = await _headerModelBuilder.BuildModelAsync(componentModel),
                 MenuTiles = _menuTilesModelBuilder.BuildModel(),
-                Catalog = await _clientDeliveryAddressesCatalogModelBuilder.BuildModelAsync(componentModel),
+                ClientAddressForm = await _clientAddressFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = _footerModelBuilder.BuildModel()
             };
 

@@ -24,8 +24,8 @@ function ClientForm(props) {
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
         hasAccount: { value: props.hasAccount ? props.hasAccount : false },
-        deliveryAddress: { value: props.defaultDeliveryAddressId ? props.deliveryAddresses.find((item) => item.id === props.defaultDeliveryAddressId) : null },
-        billingAddress: { value: props.defaultBillingAddressId ? props.deliveryAddresses.find((item) => item.id === props.defaultBillingAddressId) : null }
+        deliveryAddress: { value: props.defaultDeliveryAddressId ? props.clientAddresses.find((item) => item.id === props.defaultDeliveryAddressId) : null },
+        billingAddress: { value: props.defaultBillingAddressId ? props.clientAddresses.find((item) => item.id === props.defaultBillingAddressId) : null }
     };
 
     const stateValidatorSchema = {
@@ -247,7 +247,7 @@ function ClientForm(props) {
                             <Autocomplete
                                 id="deliveryAddress"
                                 name="deliveryAddress"
-                                options={props.deliveryAddresses}
+                                options={props.clientAddresses}
                                 getOptionLabel={(option) => option.name}
                                 fullWidth={true}
                                 value={deliveryAddress}
@@ -268,7 +268,7 @@ function ClientForm(props) {
                             <Autocomplete
                                 id="billingAddress"
                                 name="billingAddress"
-                                options={props.deliveryAddresses}
+                                options={props.clientAddresses}
                                 getOptionLabel={(option) => option.name}
                                 fullWidth={true}
                                 value={billingAddress}

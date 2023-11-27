@@ -6,8 +6,8 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
     entry: {
-        clientdeliveryaddresspage: ["./src/areas/Clients/pages/ClientDeliveryAddressPage/index.js", "./src/areas/Clients/pages/ClientDeliveryAddressPage/ClientDeliveryAddressPage.scss"],
-        clientdeliveryaddressespage: ["./src/areas/Clients/pages/ClientDeliveryAddressesPage/index.js", "./src/areas/Clients/pages/ClientDeliveryAddressesPage/ClientDeliveryAddressesPage.scss"],
+        clientaddresspage: ["./src/areas/Clients/pages/ClientAddressPage/index.js", "./src/areas/Clients/pages/ClientAddressPage/ClientAddressPage.scss"],
+        clientaddressespage: ["./src/areas/Clients/pages/ClientAddressesPage/index.js", "./src/areas/Clients/pages/ClientAddressesPage/ClientAddressesPage.scss"],
         productcardpage: ["./src/areas/Products/pages/ProductCardPage/index.js", "./src/areas/Products/pages/ProductCardPage/ProductCardPage.scss"],
         productcardspage: ["./src/areas/Products/pages/ProductCardsPage/index.js", "./src/areas/Products/pages/ProductCardsPage/ProductCardsPage.scss"],
         dashboardpage: ["./src/areas/Dashboard/pages/DashboardPage/index.js", "./src/areas/Dashboard/pages/DashboardPage/DashboardPage.scss"],

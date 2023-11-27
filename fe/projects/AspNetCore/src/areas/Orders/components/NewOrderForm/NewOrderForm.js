@@ -325,7 +325,7 @@ function NewOrderForm(props) {
     return (
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
-            {props.deliveryAddresses && props.deliveryAddresses.length > 0 &&
+            {props.clientAddresses && props.clientAddresses.length > 0 &&
                 <div className="columns is-desktop">
                     <div className="column is-one-third">
                         <div className="field">
@@ -337,7 +337,7 @@ function NewOrderForm(props) {
                                     name="deliveryAddressId"
                                     value={deliveryAddressId}
                                     onChange={(e) => setDeliveryAddressId(e.target.value)}>
-                                    {props.deliveryAddresses && props.deliveryAddresses.map((deliveryAddress, index) =>
+                                    {props.clientAddresses && props.clientAddresses.map((deliveryAddress, index) =>
                                         <MenuItem key={index} value={deliveryAddress.id}>{deliveryAddress.name}</MenuItem>
                                     )}
                                 </Select>
@@ -352,7 +352,7 @@ function NewOrderForm(props) {
                                     name="billingAddressId"
                                     value={billingAddressId}
                                     onChange={(e) => setBillingAddressId(e.target.value)}>
-                                    {props.deliveryAddresses && props.deliveryAddresses.map((billingAddress, index) =>
+                                    {props.clientAddresses && props.clientAddresses.map((billingAddress, index) =>
                                         <MenuItem key={index} value={billingAddress.id}>{billingAddress.name}</MenuItem>
                                     )}
                                 </Select>

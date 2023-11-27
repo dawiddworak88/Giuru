@@ -16,12 +16,12 @@ using System.Linq;
 
 namespace Buyer.Web.Shared.Repositories.Clients
 {
-    public class ClientDeliveryAddressesRepository : IClientDeliveryAddressesRepository
+    public class ClientAddressesRepository : IClientAddressesRepository
     {
         private readonly IApiClientService _apiClientService;
         private readonly IOptions<AppSettings> _options;
 
-        public ClientDeliveryAddressesRepository(
+        public ClientAddressesRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> options)
         {
@@ -29,17 +29,17 @@ namespace Buyer.Web.Shared.Repositories.Clients
             _options = options;
         }
 
-        public async Task<ClientDeliveryAddress> GetAsync(string token, string language, Guid? id)
+        public async Task<ClientAddress> GetAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.DeliveryAddressesApiEndpoint}/{id}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.AddressesApiEndpoint}/{id}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ClientDeliveryAddress>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ClientAddress>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -54,7 +54,7 @@ namespace Buyer.Web.Shared.Repositories.Clients
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<ClientDeliveryAddress>>> GetAsync(string token, string language, Guid? clientId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<PagedResults<IEnumerable<ClientAddress>>> GetAsync(string token, string language, Guid? clientId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var requestModel = new PagedDeliveryAddressesRequestModel
             {
@@ -70,14 +70,14 @@ namespace Buyer.Web.Shared.Repositories.Clients
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.DeliveryAddressesApiEndpoint}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.AddressesApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientDeliveryAddress>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientAddress>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
-                return new PagedResults<IEnumerable<ClientDeliveryAddress>>(response.Data.Total, response.Data.PageSize)
+                return new PagedResults<IEnumerable<ClientAddress>>(response.Data.Total, response.Data.PageSize)
                 {
                     Data = response.Data.Data
                 };
@@ -91,7 +91,7 @@ namespace Buyer.Web.Shared.Repositories.Clients
             return default;
         }
 
-        public async Task<IEnumerable<ClientDeliveryAddress>> GetAsync(string token, string language, IEnumerable<Guid> clientAddressesIds)
+        public async Task<IEnumerable<ClientAddress>> GetAsync(string token, string language, IEnumerable<Guid> clientAddressesIds)
         {
             var productsRequestModel = new PagedDeliveryAddressesByIdsRequestModel
             {
@@ -105,14 +105,14 @@ namespace Buyer.Web.Shared.Repositories.Clients
                 Language = language,
                 Data = productsRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.DeliveryAddressesApiEndpoint}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.AddressesApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<PagedDeliveryAddressesByIdsRequestModel>, PagedDeliveryAddressesByIdsRequestModel, PagedResults<IEnumerable<ClientDeliveryAddress>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedDeliveryAddressesByIdsRequestModel>, PagedDeliveryAddressesByIdsRequestModel, PagedResults<IEnumerable<ClientAddress>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
-                var products = new List<ClientDeliveryAddress>();
+                var products = new List<ClientAddress>();
 
                 products.AddRange(response.Data.Data);
 
@@ -122,7 +122,7 @@ namespace Buyer.Web.Shared.Repositories.Clients
                 {
                     apiRequest.Data.PageIndex = i;
 
-                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedDeliveryAddressesByIdsRequestModel>, PagedDeliveryAddressesByIdsRequestModel, PagedResults<IEnumerable<ClientDeliveryAddress>>>(apiRequest);
+                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedDeliveryAddressesByIdsRequestModel>, PagedDeliveryAddressesByIdsRequestModel, PagedResults<IEnumerable<ClientAddress>>>(apiRequest);
 
                     if (!nextPagesResponse.IsSuccessStatusCode)
                     {

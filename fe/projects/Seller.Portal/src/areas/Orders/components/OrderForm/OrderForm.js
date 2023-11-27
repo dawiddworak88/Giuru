@@ -24,7 +24,7 @@ function OrderForm(props) {
     const [client, setClient] = useState(props.clientId ? props.clients.find((item) => item.id === props.clientId) : null);
     const [deliveryAddress, setDeliveryAddress] = useState(null);
     const [billingAddress, setBillingAddress] = useState(null);
-    const [deliveryAddresses, setDeliveryAddresses] = useState([]);
+    const [clientAddresses, setClientAddresses] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
@@ -297,7 +297,7 @@ function OrderForm(props) {
             }
         };
 
-        const url = props.getDeliveryAddressesUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+        const url = props.getClientAddressesUrl + "?" + QueryStringSerializer.serialize(searchParameters);
 
         fetch(url, requestOptions)
             .then((response) => {
@@ -307,7 +307,7 @@ function OrderForm(props) {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        setDeliveryAddresses(jsonResponse.data);
+                        setClientAddresses(jsonResponse.data);
 
                         if (value.defaultDeliveryAddressId) {
                             const defaultDeliveryAddress = jsonResponse.data.find(x => x.id == value.defaultDeliveryAddressId);
@@ -398,11 +398,11 @@ function OrderForm(props) {
                                 renderInput={(params) => <TextField {...params} label={props.selectClientLabel} margin="normal" variant="standard" />}
                             />
                         </div>
-                        {deliveryAddresses && deliveryAddresses.length > 0 &&
+                        {clientAddresses && clientAddresses.length > 0 &&
                             <Fragment>
                                 <div className="field">
                                     <Autocomplete
-                                        options={deliveryAddresses}
+                                        options={clientAddresses}
                                         getOptionLabel={(option) => `${option.company}, ${option.firstName} ${option.lastName}, ${option.postCode} ${option.city}`}
                                         id="deliveryAddress"
                                         name="deliveryAddress"
@@ -417,7 +417,7 @@ function OrderForm(props) {
                                 </div>
                                 <div className="field">
                                     <Autocomplete
-                                        options={deliveryAddresses}
+                                        options={clientAddresses}
                                         getOptionLabel={(option) => `${option.company}, ${option.firstName} ${option.lastName}, ${option.postCode} ${option.city}`}
                                         id="billingAddress"
                                         name="billingAddress"

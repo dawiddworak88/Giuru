@@ -70,7 +70,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 DropFilesLabel = _globalLocalizer.GetString("DropFile"),
                 DropOrSelectFilesLabel = _orderLocalizer.GetString("DropOrSelectOrderFile"),
                 OrLabel = _globalLocalizer.GetString("Or"),
-                GetDeliveryAddressesUrl = _linkGenerator.GetPathByAction("Get", "ClientDeliveryAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                GetClientAddressesUrl = _linkGenerator.GetPathByAction("Get", "ClientAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
                 DefaultItemsPerPage = Constants.DefaultItemsPerPage

@@ -15,14 +15,14 @@ using System.Threading.Tasks;
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
     [Area("Clients")]
-    public class ClientDeliveryAddressesApi : BaseApiController
+    public class ClientAddressesApi : BaseApiController
     {
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
-        private readonly IClientDeliveryAddressesRepository _deliveryAddressesRepository;
+        private readonly IClientAddressesRepository _deliveryAddressesRepository;
 
-        public ClientDeliveryAddressesApi(
+        public ClientAddressesApi(
             IStringLocalizer<ClientResources> clientLocalizer,
-            IClientDeliveryAddressesRepository deliveryAddressesRepository)
+            IClientAddressesRepository deliveryAddressesRepository)
         {
             _clientLocalizer = clientLocalizer;
             _deliveryAddressesRepository = deliveryAddressesRepository;
@@ -52,7 +52,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 searchTerm,
                 pageIndex,
                 itemsPerPage,
-                $"{nameof(ClientDeliveryAddress.CreatedDate)} desc");
+                $"{nameof(ClientAddress.CreatedDate)} desc");
 
             return this.StatusCode((int)HttpStatusCode.OK, clientAddresses);
         }

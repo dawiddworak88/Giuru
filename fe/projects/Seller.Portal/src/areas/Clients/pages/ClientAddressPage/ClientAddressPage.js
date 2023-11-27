@@ -7,9 +7,9 @@ import Store from "../../../../shared/stores/Store";
 import Footer from "../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../shared/components/MenuTiles/MenuTiles";
 import LocaleHelper from "../../../../shared/helpers/globals/LocaleHelper";
-import Catalog from "../../../../shared/components/Catalog/Catalog";
+import ClientAddressForm from "../../components/ClientAddressForm/ClientAddressForm";
 
-const ClientDeliveryAddressesPage = (props) => {
+const ClientAddressPage = (props) => {
 
   LocaleHelper.setMomentLocale(props.locale);
 
@@ -19,11 +19,11 @@ const ClientDeliveryAddressesPage = (props) => {
       <Store>
         <Header {...props.header}></Header>
         <MenuTiles {...props.menuTiles} />
-        <Catalog {...props.catalog}></Catalog>
+        <ClientAddressForm {...props.clientAddressForm} />
         <Footer {...props.footer}></Footer>
       </Store>
     </ThemeProvider>
   );
 }
 
-export default ClientDeliveryAddressesPage;
+export default ClientAddressPage;

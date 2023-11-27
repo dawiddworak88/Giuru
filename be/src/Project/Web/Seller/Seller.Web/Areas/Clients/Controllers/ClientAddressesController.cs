@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 namespace Seller.Web.Areas.Clients.Controllers
 {
     [Area("Clients")]
-    public class ClientDeliveryAddressesController : BaseController
+    public class ClientAddressesController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientDeliveryAddressesPageViewModel> _clientDeliveryAddressesPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientAddressesPageViewModel> _clientAddressesPageModelBuilder;
 
-        public ClientDeliveryAddressesController(
-            IAsyncComponentModelBuilder<ComponentModelBase, ClientDeliveryAddressesPageViewModel> clientDeliveryAddressesPageModelBuilder)
+        public ClientAddressesController(
+            IAsyncComponentModelBuilder<ComponentModelBase, ClientAddressesPageViewModel> clientAddressesPageModelBuilder)
         {
-            _clientDeliveryAddressesPageModelBuilder = clientDeliveryAddressesPageModelBuilder;
+            _clientAddressesPageModelBuilder = clientAddressesPageModelBuilder;
         }
 
         public async Task<IActionResult> Index()
@@ -31,7 +31,7 @@ namespace Seller.Web.Areas.Clients.Controllers
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName)
             };
 
-            var viewModel = await _clientDeliveryAddressesPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _clientAddressesPageModelBuilder.BuildModelAsync(componentModel);
 
             return View(viewModel);
         }
