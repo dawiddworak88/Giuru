@@ -213,5 +213,62 @@ namespace Client.Api.Services.Addresses
 
             return clientAddress.Id;
         }
+
+        public PagedResults<IEnumerable<ClientAddressServiceModel>> GetByIds(GetClientAddressesByIdsServiceModel model)
+        {
+            var clientsAddresses = _context.Addresses
+                    .Where(x => model.Ids.Contains(x.Id) && x.IsActive)
+                    .Include(x => x.Client)
+                    .AsSingleQuery();
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                clientsAddresses = clientsAddresses.Where(x =>
+                    x.Street.StartsWith(model.SearchTerm) ||
+                    x.City.StartsWith(model.SearchTerm) ||
+                    x.Region.StartsWith(model.SearchTerm) ||
+                    x.PostCode.StartsWith(model.SearchTerm) ||
+                    x.PhoneNumber.StartsWith(model.SearchTerm) ||
+                    x.Company.StartsWith(model.SearchTerm) ||
+                    x.FirstName.StartsWith(model.SearchTerm) ||
+                    x.LastName.StartsWith(model.SearchTerm));
+            }
+
+            clientsAddresses = clientsAddresses.ApplySort(model.OrderBy);
+
+            PagedResults<IEnumerable<Address>> pagedResults;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                clientsAddresses = clientsAddresses.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = clientsAddresses.PagedIndex(new Pagination(clientsAddresses.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = clientsAddresses.PagedIndex(new Pagination(clientsAddresses.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
+
+            return new PagedResults<IEnumerable<ClientAddressServiceModel>>(pagedResults.Total, pagedResults.PageSize)
+            {
+                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new ClientAddressServiceModel
+                {
+                    Id = x.Id,
+                    ClientId = x.ClientId,
+                    ClientName = x.Client.Name,
+                    Company = x.Company,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    CountryId = x.CountryId,
+                    Street = x.Street,
+                    City = x.City,
+                    PhoneNumber = x.PhoneNumber,
+                    PostCode = x.PostCode,
+                    Region = x.Region,
+                    LastModifiedDate = x.LastModifiedDate,
+                    CreatedDate = x.CreatedDate
+                })
+            };
+        }
     }
 }

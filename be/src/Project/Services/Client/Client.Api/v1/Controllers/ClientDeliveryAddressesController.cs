@@ -39,6 +39,7 @@ namespace Client.Api.v1.Controllers
         /// <summary>
         /// Gets list of clients addresses.
         /// </summary>
+        /// <param name="ids">The client addresses ids.</param>
         /// <param name="clientId">The client id.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
@@ -49,51 +50,105 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult Get(Guid? clientId, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
+        public IActionResult Get(string ids, Guid? clientId, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var clientAddressesIds = ids.ToEnumerableGuidIds();
 
-            var serviceModel = new GetClientAddressesServiceModel
+            if (clientAddressesIds.OrEmptyIfNull().Any())
             {
-                ClientId = clientId,
-                SearchTerm = searchTerm,
-                PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage,
-                OrderBy = orderBy,
-                Language = CultureInfo.CurrentCulture.Name,
-                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
-            };
-            
-            var clientsAddresses = _clientAddressesService.Get(serviceModel);
-
-            if (clientsAddresses is not null)
-            {
-                var response = new PagedResults<IEnumerable<ClientAddressResponseModel>>(clientsAddresses.Total, clientsAddresses.PageSize)
+                var serviceModel = new GetClientAddressesByIdsServiceModel
                 {
-                    Data = clientsAddresses.Data.OrEmptyIfNull().Select(x => new ClientAddressResponseModel
-                    {
-                        Id = x.Id,
-                        CountryId = x.CountryId,
-                        ClientId = x.ClientId,
-                        ClientName = x.ClientName,
-                        Company = x.Company,
-                        FirstName = x.FirstName,
-                        LastName = x.LastName,
-                        City = x.City,
-                        Region = x.Region,
-                        Street = x.Street,
-                        PostCode = x.PostCode,
-                        PhoneNumber = x.PhoneNumber,
-                        LastModifiedDate = x.LastModifiedDate,
-                        CreatedDate = x.CreatedDate
-                    })
+                    Ids = clientAddressesIds,
+                    SearchTerm = searchTerm,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    OrderBy = orderBy,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
-                return StatusCode((int)HttpStatusCode.OK, response);
-            }
+                var validator = new GetClientAddressesByIdsModelValidator();
+                var validationResult = validator.Validate(serviceModel);
 
-            return StatusCode((int)HttpStatusCode.UnprocessableEntity);
+                if (validationResult.IsValid)
+                {
+                    var clientsAddresses = _clientAddressesService.GetByIds(serviceModel);
+
+                    if (clientsAddresses is not null)
+                    {
+                        var response = new PagedResults<IEnumerable<ClientAddressResponseModel>>(clientsAddresses.Total, clientsAddresses.PageSize)
+                        {
+                            Data = clientsAddresses.Data.OrEmptyIfNull().Select(x => new ClientAddressResponseModel
+                            {
+                                Id = x.Id,
+                                CountryId = x.CountryId,
+                                ClientId = x.ClientId,
+                                ClientName = x.ClientName,
+                                Company = x.Company,
+                                FirstName = x.FirstName,
+                                LastName = x.LastName,
+                                City = x.City,
+                                Region = x.Region,
+                                Street = x.Street,
+                                PostCode = x.PostCode,
+                                PhoneNumber = x.PhoneNumber,
+                                LastModifiedDate = x.LastModifiedDate,
+                                CreatedDate = x.CreatedDate
+                            })
+                        };
+
+                        return StatusCode((int)HttpStatusCode.OK, response);
+                    }
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
+            else
+            {
+                var serviceModel = new GetClientAddressesServiceModel
+                {
+                    ClientId = clientId,
+                    SearchTerm = searchTerm,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    OrderBy = orderBy,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
+
+                var clientsAddresses = _clientAddressesService.Get(serviceModel);
+
+                if (clientsAddresses is not null)
+                {
+                    var response = new PagedResults<IEnumerable<ClientAddressResponseModel>>(clientsAddresses.Total, clientsAddresses.PageSize)
+                    {
+                        Data = clientsAddresses.Data.OrEmptyIfNull().Select(x => new ClientAddressResponseModel
+                        {
+                            Id = x.Id,
+                            CountryId = x.CountryId,
+                            ClientId = x.ClientId,
+                            ClientName = x.ClientName,
+                            Company = x.Company,
+                            FirstName = x.FirstName,
+                            LastName = x.LastName,
+                            City = x.City,
+                            Region = x.Region,
+                            Street = x.Street,
+                            PostCode = x.PostCode,
+                            PhoneNumber = x.PhoneNumber,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
+                    };
+
+                    return StatusCode((int)HttpStatusCode.OK, response);
+                }
+
+                return StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            }
         }
 
         /// <summary>
