@@ -16,9 +16,8 @@ namespace Ordering.Api.v1.ResponseModels
         public string BillingPostCode { get; set; }
         public string BillingCity { get; set; }
         public string BillingStreet { get; set; }
-        public string BillingPhonePrefix { get; set; }
-        public string BillingPhone { get; set; }
-        public string BillingCountryCode { get; set; }
+        public string BillingPhoneNumber { get; set; }
+        public Guid? BillingCountryId { get; set; }
         public Guid? ShippingAddressId { get; set; }
         public string ShippingCompany { get; set; }
         public string ShippingFirstName { get; set; }

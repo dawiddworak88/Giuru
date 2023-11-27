@@ -29,11 +29,9 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
 
         public string BillingStreet { get; set; }
 
-        public string BillingPhonePrefix { get; set; }
+        public string BillingPhoneNumber { get; set; }
 
-        public string BillingPhone { get; set; }
-
-        public string BillingCountryCode { get; set; }
+        public Guid? BillingCountryId { get; set; }
 
         public Guid? ShippingAddressId { get; set; }
 
