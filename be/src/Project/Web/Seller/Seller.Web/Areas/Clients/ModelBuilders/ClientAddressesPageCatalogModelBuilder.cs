@@ -44,7 +44,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             viewModel.Title = _globalLocalizer.GetString("ClientAddresses");
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
-            viewModel.NewText = _clientLocalizer.GetString("NewAddress");
+            viewModel.NewText = _clientLocalizer.GetString("NewClientAddress");
             viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "ClientAddress", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "ClientAddress", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
