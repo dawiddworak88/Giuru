@@ -312,4 +312,10 @@
   <data name="DeliveryAddressSavedSuccessfully" xml:space="preserve">
     <value>Pomyślnie zapisano adres dostawy</value>
   </data>
+  <data name="IsEmailMarketingApproval" xml:space="preserve">
+    <value>Przesyłanie informacji handlowych e-mailem</value>
+  </data>
+  <data name="IsSmsMarketingApproval" xml:space="preserve">
+    <value>Przesyłanie informacji handlowych SMS</value>
+  </data>
 </root>
