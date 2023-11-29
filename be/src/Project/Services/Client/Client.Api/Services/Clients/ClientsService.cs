@@ -173,6 +173,8 @@ namespace Client.Api.Services.Clients
             client.OrganisationId = serviceModel.ClientOrganisationId.Value;
             client.DefaultDeliveryAddressId = serviceModel.DefaultDeliveryAddressId;
             client.LastModifiedDate = DateTime.UtcNow;
+            client.IsEmailMarketingApproval = serviceModel.IsEmailMarketingApproval;
+            client.IsSmsMarketingApproval = serviceModel.IsSmsMarketingApproval;
 
             var clientGroups = _context.ClientsGroups.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
 

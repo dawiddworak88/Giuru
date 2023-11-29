@@ -29,5 +29,9 @@ namespace Client.Api.Infrastructure.Clients.Entities
         public Guid SellerId { get; set; }
 
         public Guid? DefaultDeliveryAddressId { get; set; }
+
+        public bool IsEmailMarketingApproval { get; set; }
+
+        public bool IsSmsMarketingApproval { get; set; }
     }
 }
