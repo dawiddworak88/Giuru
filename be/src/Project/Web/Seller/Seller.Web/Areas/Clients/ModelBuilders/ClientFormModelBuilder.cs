@@ -101,7 +101,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 NoManagersText = _clientLocalizer.GetString("NoManagers"),
                 ClientManagerLabel = _globalLocalizer.GetString("Manager"),
                 CountryLabel = _globalLocalizer.GetString("Country"),
-                DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress")
+                DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
+                IsEmailMarketingApprovalLabel = _clientLocalizer.GetString("IsEmailMarketingApproval"),
+                IsSmsMarketingApprovalLabel = _clientLocalizer.GetString("IsSmsMarketingApproval")
             };
 
             if (componentModel.Id.HasValue)
