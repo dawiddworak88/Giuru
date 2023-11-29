@@ -25,8 +25,8 @@ function ClientForm(props) {
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : [] },
         hasAccount: { value: props.hasAccount ? props.hasAccount : false },
         deliveryAddress: { value: props.defaultDeliveryAddressId ? props.deliveryAddresses.find((item) => item.id === props.defaultDeliveryAddressId) : null },
-        emailMarketingApproval: { value: props.emailMarketingApproval ? props.emailMarketingApprovalLabel : false},
-        smsMarketingApproval: { value: props.smsMarketingApproval ? props.smsMarketingApprovalLabel : false}
+        isEmailMarketingApproval: { value: props.isEmailMarketingApproval ? props.isEmailMarketingApproval : false},
+        isSmsMarketingApproval: { value: props.isSmsMarketingApproval ? props.isSmsMarketingApproval : false}
     };
 
     const stateValidatorSchema = {
@@ -310,7 +310,7 @@ function ClientForm(props) {
                                             name="isEmailMarketingApproval"
                                             color="secondary" />
                                     }
-                                    label={props.emailMarketingApprovalLabel ? props.emailMarketingApprovalLabel : "email"} />
+                                    label={props.isEmailMarketingApprovalLabel ? props.isEmailMarketingApprovalLabel : "email"} />
                             </NoSsr>
                         </div>
                         <div className="field">
@@ -326,7 +326,7 @@ function ClientForm(props) {
                                             name="isSmsMarketingApproval"
                                             color="secondary" />
                                     }
-                                    label={props.smsMarketingApprovalLabel ? props.smsMarketingApprovalLabel : "sms"} />
+                                    label={props.isSmsMarketingApprovalLabel ? props.isSmsMarketingApprovalLabel : "sms"} />
                             </NoSsr>
                         </div>
                         <div className="field client-form__field-row">
