@@ -3,6 +3,11 @@
 
 .catalog {
     .catalog-item {
+        .card-image-scale-down {
+            object-fit: scale-down;
+            padding: 0.75rem;
+        }
+        
         .media-content {
             padding: 1rem;
         }

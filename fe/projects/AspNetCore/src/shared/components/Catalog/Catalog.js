@@ -177,7 +177,7 @@ function Catalog(props) {
                                                     }
                                                     <figure className="image is-4by3">
                                                         <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
-                                                            <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} />
+                                                            <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} imageClassName="card-image-scale-down" />
                                                         </LazyLoad>
                                                     </figure>
                                                 </div>

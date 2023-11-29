@@ -27,6 +27,7 @@
             flex-basis: 48%;
             height: inherit;
             display: flex;
+            align-items: center;
 
             &__single {
                 flex-basis: 100%;
@@ -41,9 +42,9 @@
             img,
             video {
                 width: 100%;
-                height: 100%;
                 object-fit: cover;
                 border-radius: 0.25rem;
+                display: flex;
             }   
             
             &:hover {
