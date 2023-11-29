@@ -21,7 +21,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IClientsRepository _clientsRepository;
-        private readonly IClientDeliveryAddressesRepository _clientDeliveryAddressesRepository;
+        private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
 
@@ -30,7 +30,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             IStringLocalizer<OrderResources> orderLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
             IClientsRepository clientsRepository,
-            IClientDeliveryAddressesRepository clientDeliveryAddressesRepository,
+            IClientAddressesRepository clientAddressesRepository,
             IBasketService basketService,
             LinkGenerator linkGenerator)
         {
@@ -40,7 +40,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             _basketService = basketService;
             _clientLocalizer = clientLocalizer;
             _clientsRepository = clientsRepository;
-            _clientDeliveryAddressesRepository = clientDeliveryAddressesRepository;
+            _clientAddressesRepository = clientAddressesRepository;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -89,7 +89,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 DeleteLabel = _globalLocalizer.GetString("Delete"),
                 DropOrSelectAttachmentsLabel = _globalLocalizer.GetString("DropOrSelectAttachments"),
                 SaveMediaUrl = _linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
-                DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress")
+                DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
+                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress")
             };
 
             if (componentModel.BasketId.HasValue)
@@ -111,8 +112,9 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.ClientId = client.Id;
                     viewModel.ClientName = client.Name;
                     viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
+                    viewModel.DefaultBillingAddressId = client.DefaultBillingAddressId;
 
-                    var deliveryAddresses = await _clientDeliveryAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, client.Id, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
+                    var deliveryAddresses = await _clientAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, client.Id, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
 
                     if (deliveryAddresses is not null)
                     {

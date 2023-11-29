@@ -12,6 +12,7 @@ namespace Client.Api.Services.Addresses
         Task<Guid> UpdateAsync(UpdateClientAddressServiceModel model);
         Task DeleteAsync(DeleteClientAddressServiceModel model);
         PagedResults<IEnumerable<ClientAddressServiceModel>> Get(GetClientAddressesServiceModel model);
+        PagedResults<IEnumerable<ClientAddressServiceModel>> GetByIds(GetClientAddressesByIdsServiceModel model);
         Task<ClientAddressServiceModel> GetAsync(GetClientAddressServiceModel model);
     }
 }

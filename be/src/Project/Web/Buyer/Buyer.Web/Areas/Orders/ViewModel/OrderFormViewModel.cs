@@ -53,7 +53,9 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string AttachmentsLabel { get; set; }
         public string SaveMediaUrl { get; set; }
         public string DeliveryAddressLabel { get; set; }
+        public string BillingAddressLabel { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
+        public Guid? DefaultBillingAddressId { get; set; }
         public IEnumerable<ListItemViewModel> DeliveryAddresses { get; set; }
     }
 }

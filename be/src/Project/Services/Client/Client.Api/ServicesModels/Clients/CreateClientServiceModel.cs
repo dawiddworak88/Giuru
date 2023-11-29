@@ -15,5 +15,6 @@ namespace Client.Api.ServicesModels.Clients
         public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> ClientManagerIds { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
+        public Guid? DefaultBillingAddressId { get; set; }
     }
 }

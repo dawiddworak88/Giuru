@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -21,17 +22,17 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
     public class BasketCheckoutApiController : BaseApiController
     {
         private readonly IBasketRepository _basketRepository;
-        private readonly IClientDeliveryAddressesRepository _clientDeliveryAddressesRepository;
+        private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
-            IClientDeliveryAddressesRepository clientDeliveryAddressesRepository,
+            IClientAddressesRepository clientAddressesRepository,
             IStringLocalizer<OrderResources> orderLocalizer)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
-            _clientDeliveryAddressesRepository = clientDeliveryAddressesRepository;
+            _clientAddressesRepository = clientAddressesRepository;
         }
 
         [HttpPost]
@@ -54,26 +55,51 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
             }
 
-            var deliveryAddress = await _clientDeliveryAddressesRepository.GetAsync(token, language, model.ShippingAddressId);
+            var deliveryAddressesIds = new List<Guid>();
 
-            if (deliveryAddress is not null)
+            if (model.ShippingAddressId.HasValue)
             {
+                deliveryAddressesIds.Add(model.ShippingAddressId.Value);
+            }
+
+            if (model.BillingAddressId.HasValue && model.BillingAddressId != model.ShippingAddressId)
+            {
+                deliveryAddressesIds.Add(model.BillingAddressId.Value);
+            }
+
+            var deliveryAddresses = await _clientAddressesRepository.GetAsync(token, language, deliveryAddressesIds);
+
+            if (deliveryAddresses is not null)
+            {
+                var billingAddress = deliveryAddresses.FirstOrDefault(x => x.Id == model.BillingAddressId);
+                var deliveryAddress = deliveryAddresses.FirstOrDefault(x => x.Id == model.ShippingAddressId);
+
                 await _basketRepository.CheckoutBasketAsync(
                 token,
                 language,
                 model.ClientId,
                 model.ClientName,
                 Guid.Parse(reqCookie),
+                model.BillingAddressId,
+                billingAddress?.Company,
+                billingAddress?.FirstName, 
+                billingAddress?.LastName,
+                billingAddress?.Region,
+                billingAddress?.PostCode,
+                billingAddress?.City,
+                billingAddress?.Street,
+                billingAddress?.PhoneNumber,
+                billingAddress?.CountryId,
                 model.ShippingAddressId,
-                deliveryAddress.Company,
-                deliveryAddress.FirstName,
-                deliveryAddress.LastName,
-                deliveryAddress.Region,
-                deliveryAddress.PostCode,
-                deliveryAddress.City,
-                deliveryAddress.Street,
-                deliveryAddress.PhoneNumber,
-                deliveryAddress.CountryId,
+                deliveryAddress?.Company,
+                deliveryAddress?.FirstName,
+                deliveryAddress?.LastName,
+                deliveryAddress?.Region,
+                deliveryAddress?.PostCode,
+                deliveryAddress?.City,
+                deliveryAddress?.Street,
+                deliveryAddress?.PhoneNumber,
+                deliveryAddress?.CountryId,
                 model.MoreInfo,
                 model.HasCustomOrder,
                 model.Attachments?.Select(x => x.Id));

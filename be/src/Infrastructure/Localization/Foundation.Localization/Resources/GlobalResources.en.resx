@@ -720,11 +720,11 @@
   <data name="FileSizeLimit" xml:space="preserve">
     <value>The uploaded file exceeds the maximum size</value>
   </data>
-  <data name="ClientDeliveryAddresses" xml:space="preserve">
-    <value>Clients delivery addresses</value>
+  <data name="ClientAddresses" xml:space="preserve">
+    <value>Clients addresses</value>
   </data>
-  <data name="EditDeliveryAddress" xml:space="preserve">
-    <value>Edit delivery address</value>
+  <data name="EditClientAddress" xml:space="preserve">
+    <value>Edit address</value>
   </data>
   <data name="PostCode" xml:space="preserve">
     <value>Post Code</value>
