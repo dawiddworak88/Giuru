@@ -1,0 +1,54 @@
+.notification-bar {
+    width: 100%;
+    background-color: $swamp;
+    padding: 0.8rem;
+    color: $white;
+
+    &_list {
+        gap: 1rem;
+    }
+
+    &_item {
+        height: 100%;
+        gap: 0.4rem;
+    }
+
+    &_link {
+        color: $white;
+
+        &:hover {
+            color: $lightgrey;
+        }
+    }
+}
+
+@media only screen and (max-width: 1023px) {
+    .notification-bar {
+        font: $paragraph-2;
+        padding: 0.4rem;
+
+        &_item {
+            align-items: center;
+        }
+
+        &_mobile {
+            display: block;
+        }
+
+        &_desktop {
+            display: none;
+        }
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .notification-bar {
+        &_mobile {
+            display: none;
+        }
+
+        &_desktop {
+            display: block;
+        }
+    }
+}

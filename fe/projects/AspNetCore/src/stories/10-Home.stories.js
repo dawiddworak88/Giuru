@@ -3,6 +3,25 @@ import "../areas/Home/pages/HomePage/HomePage.scss";
 import HomePage from "../areas/Home/pages/HomePage/HomePage";
 import { header, mainNavigation, footer } from "./shared/Props";
 
+var notificationBar = {
+  items: [
+    {
+      icon: "LocalShipping",
+      link: {
+        url: "#",
+        text: "Up to 30 days to return",
+      }
+    },
+    {
+      icon: "LocalPostOffice",
+      link: {
+        url: "#",
+        text: "Sign up for the newsletter and get a PLN 50 discount",
+      }
+    }
+  ]
+}
+
 var heroSlider = {
   items: [
     { imageSrc: "https://eltap.pl/upload/gallery/55/marinosavana05soft11okajpg6870.jpg", imageAlt: "Best sectionals", imageTitle: "Best sectionals", teaserTitle: "Shop sectionals", teaserText: "Best sectionals in the industry", ctaUrl: "#", ctaText: "Shop now!" },
@@ -291,7 +310,7 @@ var contentGrid = {
   ]
 };
 
-export const HomePageStory = () => <HomePage header={header} mainNavigation={mainNavigation} heroSlider={heroSlider} contentGrid={contentGrid} footer={footer} />
+export const HomePageStory = () => <HomePage notificationBar={notificationBar} header={header} mainNavigation={mainNavigation} heroSlider={heroSlider} contentGrid={contentGrid} footer={footer} />
 
 HomePageStory.story = {
   name: "Home Page",
