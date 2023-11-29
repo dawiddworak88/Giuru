@@ -6,5 +6,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
     public class ClientListItemViewModel : ListItemViewModel
     {
         public Guid? DefaultDeliveryAddressId { get; set; }
+        public Guid? DefaultBillingAddressId { get; set; }
     }
 }

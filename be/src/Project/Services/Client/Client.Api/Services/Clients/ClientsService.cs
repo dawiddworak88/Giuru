@@ -70,6 +70,7 @@ namespace Client.Api.Services.Clients
                     CommunicationLanguage = client.Language,
                     PhoneNumber = client.PhoneNumber,
                     DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
+                    DefaultBillingAddressId = client.DefaultBillingAddressId,
                     LastModifiedDate = client.LastModifiedDate,
                     CreatedDate = client.CreatedDate
                 };
@@ -115,6 +116,7 @@ namespace Client.Api.Services.Clients
                 CommunicationLanguage = existingClient.Language,
                 PhoneNumber = existingClient.PhoneNumber,
                 DefaultDeliveryAddressId = existingClient.DefaultDeliveryAddressId,
+                DefaultBillingAddressId = existingClient.DefaultBillingAddressId,
                 LastModifiedDate = existingClient.LastModifiedDate,
                 CreatedDate = existingClient.CreatedDate
             };
@@ -172,6 +174,7 @@ namespace Client.Api.Services.Clients
             client.PhoneNumber = serviceModel.PhoneNumber;
             client.OrganisationId = serviceModel.ClientOrganisationId.Value;
             client.DefaultDeliveryAddressId = serviceModel.DefaultDeliveryAddressId;
+            client.DefaultBillingAddressId = serviceModel.DefaultBillingAddressId;
             client.LastModifiedDate = DateTime.UtcNow;
 
             var clientGroups = _context.ClientsGroups.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
@@ -233,7 +236,8 @@ namespace Client.Api.Services.Clients
                 OrganisationId = serviceModel.ClientOrganisationId.Value,
                 PhoneNumber = serviceModel.PhoneNumber,
                 SellerId = serviceModel.OrganisationId.Value,
-                DefaultDeliveryAddressId = serviceModel.DefaultDeliveryAddressId
+                DefaultDeliveryAddressId = serviceModel.DefaultDeliveryAddressId,
+                DefaultBillingAddressId = serviceModel.DefaultBillingAddressId
             };
 
             _context.Clients.Add(client.FillCommonProperties());
@@ -278,6 +282,7 @@ namespace Client.Api.Services.Clients
                               CommunicationLanguage = c.Language,
                               PhoneNumber = c.PhoneNumber,
                               DefaultDeliveryAddressId = c.DefaultDeliveryAddressId,
+                              DefaultBillingAddressId = c.DefaultBillingAddressId,
                               LastModifiedDate = c.LastModifiedDate,
                               CreatedDate = c.CreatedDate
                           };
@@ -305,6 +310,7 @@ namespace Client.Api.Services.Clients
                               CommunicationLanguage = c.Language,
                               PhoneNumber = c.PhoneNumber,
                               DefaultDeliveryAddressId = c.DefaultDeliveryAddressId,
+                              DefaultBillingAddressId = c.DefaultBillingAddressId,
                               LastModifiedDate = c.LastModifiedDate,
                               CreatedDate = c.CreatedDate
                           };

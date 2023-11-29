@@ -23,7 +23,8 @@ function OrderForm(props) {
     const [basketId, setBasketId] = useState(null);
     const [client, setClient] = useState(props.clientId ? props.clients.find((item) => item.id === props.clientId) : null);
     const [deliveryAddress, setDeliveryAddress] = useState(null);
-    const [deliveryAddresses, setDeliveryAddresses] = useState([]);
+    const [billingAddress, setBillingAddress] = useState(null);
+    const [clientAddresses, setClientAddresses] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
@@ -236,6 +237,22 @@ function OrderForm(props) {
             }
         }
 
+        if (billingAddress) {
+            order = {
+                ...order,
+                billingAddressId: billingAddress.id,
+                billingCompany: billingAddress.company,
+                billingFirstName: billingAddress.firstName,
+                billingLastName: billingAddress.lastName,
+                billingRegion: billingAddress.region,
+                billingPostCode: billingAddress.postCode,
+                billingCity: billingAddress.city,
+                billingStreet: billingAddress.street,
+                billingPhoneNumber: billingAddress.phoneNumber,
+                billingCountryId: billingAddress.countryId
+            }
+        }
+
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
@@ -280,7 +297,7 @@ function OrderForm(props) {
             }
         };
 
-        const url = props.getDeliveryAddressesUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+        const url = props.getClientAddressesUrl + "?" + QueryStringSerializer.serialize(searchParameters);
 
         fetch(url, requestOptions)
             .then((response) => {
@@ -290,12 +307,18 @@ function OrderForm(props) {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        setDeliveryAddresses(jsonResponse.data);
+                        setClientAddresses(jsonResponse.data);
 
                         if (value.defaultDeliveryAddressId) {
                             const defaultDeliveryAddress = jsonResponse.data.find(x => x.id == value.defaultDeliveryAddressId);
 
                             setDeliveryAddress(defaultDeliveryAddress);
+                        }
+
+                        if (value.defaultBillingAddressId) {
+                            const defaultBillingAddress = jsonResponse.data.find(x => x.id == value.defaultBillingAddressId);
+                            
+                            setBillingAddress(defaultBillingAddress);
                         }
                     }
                 });
@@ -375,22 +398,39 @@ function OrderForm(props) {
                                 renderInput={(params) => <TextField {...params} label={props.selectClientLabel} margin="normal" variant="standard" />}
                             />
                         </div>
-                        {deliveryAddresses && deliveryAddresses.length > 0 &&
-                            <div className="field">
-                                <Autocomplete
-                                    options={deliveryAddresses}
-                                    getOptionLabel={(option) => `${option.company}, ${option.firstName} ${option.lastName}, ${option.postCode} ${option.city}`}
-                                    id="deliveryAddress"
-                                    name="deliveryAddress"
-                                    fullWidth={true}
-                                    value={deliveryAddress}
-                                    onChange={(event, newValue) => {
-                                        setDeliveryAddress(newValue);
-                                    }}
-                                    autoComplete
-                                    renderInput={(params) => <TextField {...params} label={props.deliveryAddressLabel} margin="normal" variant="standard" />}
-                                />
-                            </div>
+                        {clientAddresses && clientAddresses.length > 0 &&
+                            <Fragment>
+                                <div className="field">
+                                    <Autocomplete
+                                        options={clientAddresses}
+                                        getOptionLabel={(option) => `${option.company}, ${option.firstName} ${option.lastName}, ${option.postCode} ${option.city}`}
+                                        id="deliveryAddress"
+                                        name="deliveryAddress"
+                                        fullWidth={true}
+                                        value={deliveryAddress}
+                                        onChange={(event, newValue) => {
+                                            setDeliveryAddress(newValue);
+                                        }}
+                                        autoComplete
+                                        renderInput={(params) => <TextField {...params} label={props.deliveryAddressLabel} margin="normal" variant="standard" />}
+                                    />
+                                </div>
+                                <div className="field">
+                                    <Autocomplete
+                                        options={clientAddresses}
+                                        getOptionLabel={(option) => `${option.company}, ${option.firstName} ${option.lastName}, ${option.postCode} ${option.city}`}
+                                        id="billingAddress"
+                                        name="billingAddress"
+                                        fullWidth={true}
+                                        value={billingAddress}
+                                        onChange={(event, newValue) => {
+                                            setBillingAddress(newValue);
+                                        }}
+                                        autoComplete
+                                        renderInput={(params) => <TextField {...params} label={props.billingAddressLabel} margin="normal" variant="standard" />}
+                                    />
+                                </div>
+                            </Fragment>
                         }
                     </div>
                 </div>

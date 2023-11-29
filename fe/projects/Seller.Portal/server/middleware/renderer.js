@@ -49,12 +49,12 @@ import ProductAttributeItemPage from "../../src/areas/Products/pages/ProductAttr
 import CategoriesPage from "../../src/areas/Products/pages/CategoriesPage/CategoriesPage";
 import SellerCategoryPage from "../../src/areas/Products/pages/CategoryPage/CategoryPage";
 import SettingsPage from "../../src/areas/Settings/pages/SettingsPage/SettingsPage";
-import ClientDeliveryAddressPage from "../../src/areas/Clients/pages/ClientDeliveryAddressPage/ClientDeliveryAddressPage";
-import ClientDeliveryAddressesPage from "../../src/areas/Clients/pages/ClientDeliveryAddressesPage/ClientDeliveryAddressesPage";
+import ClientAddressPage from "../../src/areas/Clients/pages/ClientAddressPage/ClientAddressPage";
+import ClientAddressesPage from "../../src/areas/Clients/pages/ClientAddressesPage/ClientAddressesPage";
 
 const Components = {
-	ClientDeliveryAddressPage,
-	ClientDeliveryAddressesPage,
+	ClientAddressPage,
+	ClientAddressesPage,
 	ProductCardPage,
 	ProductCardsPage,
 	DashboardPage,

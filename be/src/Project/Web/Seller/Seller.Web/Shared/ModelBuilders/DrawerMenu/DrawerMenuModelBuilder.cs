@@ -150,8 +150,8 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Archive,
-                            Title = _globalLocalizer.GetString("ClientDeliveryAddresses"),
-                            Url = _linkGenerator.GetPathByAction("Index", "ClientDeliveryAddresses", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                            Title = _globalLocalizer.GetString("ClientAddresses"),
+                            Url = _linkGenerator.GetPathByAction("Index", "ClientAddresses", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                         },
                         new DrawerMenuItemViewModel
                         {
