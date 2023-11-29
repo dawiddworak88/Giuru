@@ -71,7 +71,9 @@ namespace Client.Api.Services.Clients
                     PhoneNumber = client.PhoneNumber,
                     DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
                     LastModifiedDate = client.LastModifiedDate,
-                    CreatedDate = client.CreatedDate
+                    CreatedDate = client.CreatedDate,
+                    IsEmailMarketingApproval = client.IsEmailMarketingApproval,
+                    IsSmsMarketingApproval = client.IsSmsMarketingApproval
                 };
 
                 var clientGroups = _context.ClientsGroups.Where(x => x.ClientId == client.Id && x.IsActive).Select(x => x.GroupId);
@@ -116,7 +118,9 @@ namespace Client.Api.Services.Clients
                 PhoneNumber = existingClient.PhoneNumber,
                 DefaultDeliveryAddressId = existingClient.DefaultDeliveryAddressId,
                 LastModifiedDate = existingClient.LastModifiedDate,
-                CreatedDate = existingClient.CreatedDate
+                CreatedDate = existingClient.CreatedDate,
+                IsEmailMarketingApproval = existingClient.IsEmailMarketingApproval,
+                IsSmsMarketingApproval = existingClient.IsSmsMarketingApproval
             };
 
             var clientGroups = _context.ClientsGroups.Where(x => x.ClientId == existingClient.Id && x.IsActive).Select(x => x.GroupId);
@@ -235,7 +239,9 @@ namespace Client.Api.Services.Clients
                 OrganisationId = serviceModel.ClientOrganisationId.Value,
                 PhoneNumber = serviceModel.PhoneNumber,
                 SellerId = serviceModel.OrganisationId.Value,
-                DefaultDeliveryAddressId = serviceModel.DefaultDeliveryAddressId
+                DefaultDeliveryAddressId = serviceModel.DefaultDeliveryAddressId,
+                IsEmailMarketingApproval = serviceModel.IsEmailMarketingApproval,
+                IsSmsMarketingApproval = serviceModel.IsSmsMarketingApproval
             };
 
             _context.Clients.Add(client.FillCommonProperties());
@@ -281,7 +287,9 @@ namespace Client.Api.Services.Clients
                               PhoneNumber = c.PhoneNumber,
                               DefaultDeliveryAddressId = c.DefaultDeliveryAddressId,
                               LastModifiedDate = c.LastModifiedDate,
-                              CreatedDate = c.CreatedDate
+                              CreatedDate = c.CreatedDate,
+                              IsEmailMarketingApproval = c.IsEmailMarketingApproval,
+                              IsSmsMarketingApproval = c.IsSmsMarketingApproval
                           };
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
@@ -308,7 +316,9 @@ namespace Client.Api.Services.Clients
                               PhoneNumber = c.PhoneNumber,
                               DefaultDeliveryAddressId = c.DefaultDeliveryAddressId,
                               LastModifiedDate = c.LastModifiedDate,
-                              CreatedDate = c.CreatedDate
+                              CreatedDate = c.CreatedDate,
+                              IsEmailMarketingApproval = c.IsEmailMarketingApproval,
+                              IsSmsMarketingApproval = c.IsSmsMarketingApproval
                           };
 
             return await clients.FirstOrDefaultAsync();

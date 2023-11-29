@@ -91,7 +91,9 @@ namespace Client.Api.v1.Controllers
                                 ClientManagerIds = x.ClientManagerIds,
                                 DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
                                 LastModifiedDate = x.LastModifiedDate,
-                                CreatedDate = x.CreatedDate
+                                CreatedDate = x.CreatedDate,
+                                IsEmailMarketingApproval = x.IsEmailMarketingApproval,
+                                IsSmsMarketingApproval = x.IsSmsMarketingApproval
                             })
                         };
 
@@ -138,7 +140,9 @@ namespace Client.Api.v1.Controllers
                                 ClientManagerIds = x.ClientManagerIds,
                                 DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
                                 LastModifiedDate = x.LastModifiedDate,
-                                CreatedDate = x.CreatedDate
+                                CreatedDate = x.CreatedDate,
+                                IsEmailMarketingApproval = x.IsEmailMarketingApproval,
+                                IsSmsMarketingApproval = x.IsSmsMarketingApproval
                             })
                         };
 
@@ -194,7 +198,9 @@ namespace Client.Api.v1.Controllers
                         ClientManagerIds = client.ClientManagerIds,
                         DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
                         LastModifiedDate = client.LastModifiedDate,
-                        CreatedDate = client.CreatedDate
+                        CreatedDate = client.CreatedDate,
+                        IsEmailMarketingApproval = client.IsEmailMarketingApproval,
+                        IsSmsMarketingApproval = client.IsSmsMarketingApproval
                     };
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);
@@ -246,7 +252,9 @@ namespace Client.Api.v1.Controllers
                         ClientManagerIds = client.ClientManagerIds,
                         DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
                         LastModifiedDate = client.LastModifiedDate,
-                        CreatedDate = client.CreatedDate
+                        CreatedDate = client.CreatedDate,
+                        IsEmailMarketingApproval = client.IsEmailMarketingApproval,
+                        IsSmsMarketingApproval = client.IsSmsMarketingApproval
                     };
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);
@@ -324,7 +332,9 @@ namespace Client.Api.v1.Controllers
                     DefaultDeliveryAddressId = request.DefaultDeliveryAddressId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    IsEmailMarketingApproval = request.IsEmailMarketingApproval,
+                    IsSmsMarketingApproval = request.IsSmsMarketingApproval
                 };
 
                 var validator = new CreateClientModelValidator();

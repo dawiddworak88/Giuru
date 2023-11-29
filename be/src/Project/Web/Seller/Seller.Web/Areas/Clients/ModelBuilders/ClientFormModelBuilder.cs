@@ -119,6 +119,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.ClientManagersIds = client.ClientManagerIds;
                     viewModel.CountryId = client.CountryId;
                     viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
+                    viewModel.IsEmailMarketingApproval = client.IsEmailMarketingApproval;
+                    viewModel.IsSmsMarketingApproval = client.IsSmsMarketingApproval;
 
                     var user = await _identityRepository.GetAsync(componentModel.Token, componentModel.Language, client.Email);
 
