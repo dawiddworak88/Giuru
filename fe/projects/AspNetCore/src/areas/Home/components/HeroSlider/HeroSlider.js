@@ -6,8 +6,7 @@ import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
 
 function HeroSlider(props) {
-    console.log(props);
-
+    
     if (props.items) {
 
         return (
