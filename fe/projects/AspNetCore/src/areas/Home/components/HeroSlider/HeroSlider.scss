@@ -14,7 +14,7 @@
         position: relative;
 
         @media only screen and (min-width: $tablet) {
-            max-height: 400px;
+            max-height: 25rem;
         }
     }
 
@@ -51,7 +51,7 @@
         text-align: left;
 
         @media only screen and (max-width: $tablet) {
-            color: #4a4a4a;
+            color: $link;
             text-align: center;
         }
     }
@@ -69,7 +69,7 @@
     }
 
     @media only screen and (min-width: $tablet) {
-        max-height: 400px;
+        max-height: 25rem;
         padding-bottom: 3rem;
     }
 }
