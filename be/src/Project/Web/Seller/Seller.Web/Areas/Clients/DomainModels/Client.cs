@@ -16,7 +16,6 @@ namespace Seller.Web.Areas.Clients.DomainModels
         public Guid? DefaultDeliveryAddressId { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
-        public bool IsEmailMarketingApproval { get; set; }
-        public bool IsSmsMarketingApproval { get; set; }
+        public IEnumerable<ClientMarketingApproval> MarketingApprovals { get; set; }
     }
 }

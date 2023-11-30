@@ -50,9 +50,8 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public IEnumerable<ListItemViewModel> Countries { get; set; }
         public IEnumerable<ListItemViewModel> DeliveryAddresses { get; set; }
         public IEnumerable<ClientAccountManagerViewModel> ClientManagers { get; set; }
-        public bool IsEmailMarketingApproval { get; set; }
         public string IsEmailMarketingApprovalLabel { get; set; }
-        public bool IsSmsMarketingApproval { get; set; }
         public string IsSmsMarketingApprovalLabel { get; set; }
+        public IEnumerable<ClientMarketingApproval> MarketingApprovals { get; set; }
     }
 }
