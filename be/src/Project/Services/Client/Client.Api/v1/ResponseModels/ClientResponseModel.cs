@@ -17,7 +17,6 @@ namespace Client.Api.v1.ResponseModels
         public Guid? DefaultDeliveryAddressId { get; set; }
         public DateTime? LastModifiedDate { get; set; }
         public DateTime? CreatedDate { get; set; }
-        public bool IsEmailMarketingApproval { get; set; }
-        public bool IsSmsMarketingApproval { get; set; }
+        public IEnumerable<ClientMarketingApprovalResponseModel> MarketingApprovals { get; set; }
     }
 }
