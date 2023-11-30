@@ -20,6 +20,7 @@ using Seller.Web.Areas.Global.Repositories;
 using Seller.Web.Areas.Global.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Foundation.GenericRepository.Definitions;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -121,8 +122,15 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.ClientManagersIds = client.ClientManagerIds;
                     viewModel.CountryId = client.CountryId;
                     viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
-                    viewModel.IsEmailMarketingApproval = client.IsEmailMarketingApproval;
-                    viewModel.IsSmsMarketingApproval = client.IsSmsMarketingApproval;
+                    viewModel.MarketingApprovals = client.MarketingApprovals.Select(x => new ClientMarketingApproval
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        IsApproved = x.IsApproved,
+                        ClientId = x.ClientId,
+                        CreatedDate = x.CreatedDate,
+                        LastModifiedDate = x.LastModifiedDate
+                    });
 
                     var user = await _identityRepository.GetAsync(componentModel.Token, componentModel.Language, client.Email);
 
