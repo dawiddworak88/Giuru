@@ -28,11 +28,11 @@ namespace Client.Api.v1.Controllers
     [ApiController]
     public class ClientsController : BaseApiController
     {
-        private readonly IClientsService clientsService;
+        private readonly IClientsService _clientsService;
 
         public ClientsController(IClientsService clientsService)
         {
-            this.clientsService = clientsService;
+            _clientsService = clientsService;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var clientIds = ids.ToEnumerableGuidIds();
 
@@ -63,7 +63,7 @@ namespace Client.Api.v1.Controllers
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -73,7 +73,7 @@ namespace Client.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var clients = await this.clientsService.GetByIdsAsync(serviceModel);
+                    var clients = await _clientsService.GetByIdsAsync(serviceModel);
 
                     if (clients is not null)
                     {
@@ -92,12 +92,18 @@ namespace Client.Api.v1.Controllers
                                 DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate,
-                                IsEmailMarketingApproval = x.IsEmailMarketingApproval,
-                                IsSmsMarketingApproval = x.IsSmsMarketingApproval
+                                MarketingApprovals = x.MarketingApprovals.OrEmptyIfNull().Select(x => new ClientMarketingApprovalResponseModel { 
+                                    Id = x.Id,
+                                    Name = x.Name,
+                                    IsApproved = x.IsApproved,
+                                    ClientId = x.ClientId,
+                                    CreatedDate = x.CreatedDate,
+                                    LastModifiedDate = x.LastModifiedDate
+                                })
                             })
                         };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                        return StatusCode((int)HttpStatusCode.OK, response);
                     }
                 }
 
@@ -112,7 +118,7 @@ namespace Client.Api.v1.Controllers
                     PageIndex = pageIndex,
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -122,7 +128,7 @@ namespace Client.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var clients = await this.clientsService.GetAsync(serviceModel);
+                    var clients = await _clientsService.GetAsync(serviceModel);
 
                     if (clients is not null)
                     {
@@ -141,12 +147,19 @@ namespace Client.Api.v1.Controllers
                                 DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate,
-                                IsEmailMarketingApproval = x.IsEmailMarketingApproval,
-                                IsSmsMarketingApproval = x.IsSmsMarketingApproval
+                                MarketingApprovals = x.MarketingApprovals.OrEmptyIfNull().Select(x => new ClientMarketingApprovalResponseModel
+                                {
+                                    Id = x.Id,
+                                    Name = x.Name,
+                                    IsApproved = x.IsApproved,
+                                    ClientId = x.ClientId,
+                                    CreatedDate = x.CreatedDate,
+                                    LastModifiedDate = x.LastModifiedDate
+                                })
                             })
                         };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                        return StatusCode((int)HttpStatusCode.OK, response);
                     }
                 }
 
@@ -167,7 +180,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetClientServiceModel
             {
@@ -181,7 +194,7 @@ namespace Client.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var client = await this.clientsService.GetAsync(serviceModel);
+                var client = await _clientsService.GetAsync(serviceModel);
 
                 if (client != null)
                 {
@@ -199,15 +212,21 @@ namespace Client.Api.v1.Controllers
                         DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate,
-                        IsEmailMarketingApproval = client.IsEmailMarketingApproval,
-                        IsSmsMarketingApproval = client.IsSmsMarketingApproval
+                        MarketingApprovals = client.MarketingApprovals.OrEmptyIfNull().Select(x => new ClientMarketingApprovalResponseModel { 
+                            Id = x.Id,
+                            Name = x.Name,
+                            IsApproved = x.IsApproved,
+                            ClientId = x.ClientId,
+                            CreatedDate = x.CreatedDate,
+                            LastModifiedDate = x.LastModifiedDate
+                        })
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NoContent);
+                    return StatusCode((int)HttpStatusCode.NoContent);
                 }
                 
             }
@@ -227,7 +246,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetByOrganisation()
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetClientByOrganisationServiceModel
             {
                 Id = GuidHelper.ParseNullable(sellerClaim?.Value),
@@ -237,7 +256,7 @@ namespace Client.Api.v1.Controllers
             var validationResult = await validator.ValidateAsync(serviceModel);
             if (validationResult.IsValid)
             {
-                var client = await this.clientsService.GetByOrganisationAsync(serviceModel);
+                var client = await _clientsService.GetByOrganisationAsync(serviceModel);
                 if (client != null)
                 {
                     var response = new ClientResponseModel
@@ -252,16 +271,14 @@ namespace Client.Api.v1.Controllers
                         ClientManagerIds = client.ClientManagerIds,
                         DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
                         LastModifiedDate = client.LastModifiedDate,
-                        CreatedDate = client.CreatedDate,
-                        IsEmailMarketingApproval = client.IsEmailMarketingApproval,
-                        IsSmsMarketingApproval = client.IsSmsMarketingApproval
+                        CreatedDate = client.CreatedDate
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NoContent);
+                    return StatusCode((int)HttpStatusCode.NoContent);
                 }
 
             }
@@ -281,7 +298,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(ClientRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             if (request.Id.HasValue)
             {
@@ -298,7 +315,7 @@ namespace Client.Api.v1.Controllers
                     ClientManagerIds = request.ClientManagerIds,
                     DefaultDeliveryAddressId = request.DefaultDeliveryAddressId,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     IsEmailMarketingApproval = request.IsEmailMarketingApproval,
                     IsSmsMarketingApproval = request.IsSmsMarketingApproval
@@ -310,9 +327,9 @@ namespace Client.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var client = await this.clientsService.UpdateAsync(serviceModel);
+                    var client = await _clientsService.UpdateAsync(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = client.Id });
+                    return StatusCode((int)HttpStatusCode.OK, new { Id = client.Id });
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -331,7 +348,7 @@ namespace Client.Api.v1.Controllers
                     ClientManagerIds = request.ClientManagerIds,
                     DefaultDeliveryAddressId = request.DefaultDeliveryAddressId,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     IsEmailMarketingApproval = request.IsEmailMarketingApproval,
                     IsSmsMarketingApproval = request.IsSmsMarketingApproval
@@ -343,9 +360,9 @@ namespace Client.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var client = await this.clientsService.CreateAsync(serviceModel);
+                    var client = await _clientsService.CreateAsync(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.Created, new { Id = client.Id });
+                    return StatusCode((int)HttpStatusCode.Created, new { Id = client.Id });
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -365,7 +382,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new DeleteClientServiceModel
             {
@@ -380,9 +397,9 @@ namespace Client.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.clientsService.DeleteAsync(serviceModel);
+                await _clientsService.DeleteAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
