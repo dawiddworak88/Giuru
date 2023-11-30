@@ -72,8 +72,6 @@ namespace Client.Api.Services.Clients
                     DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
                     LastModifiedDate = client.LastModifiedDate,
                     CreatedDate = client.CreatedDate,
-                    IsEmailMarketingApproval = client.IsEmailMarketingApproval,
-                    IsSmsMarketingApproval = client.IsSmsMarketingApproval
                 };
 
                 var clientGroups = _context.ClientsGroups.Where(x => x.ClientId == client.Id && x.IsActive).Select(x => x.GroupId);
@@ -90,6 +88,21 @@ namespace Client.Api.Services.Clients
                     item.ClientManagerIds = clientManagers;
                 }
 
+                var marketingApproval = _context.ClientMarketingApprovals.Where(x => x.IsActive && x.ClientId == client.Id);
+
+                if (marketingApproval is not null)
+                {
+                    item.MarketingApprovals = marketingApproval.Select(x => new ClientMarketingApprovalServiceModel
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        IsApproved = x.IsApproved,
+                        ClientId = x.ClientId,
+                        CreatedDate = x.CreatedDate,
+                        LastModifiedDate = x.LastModifiedDate
+                    });
+                }
+
                 clientsList.Add(item);
             }
 
@@ -100,7 +113,8 @@ namespace Client.Api.Services.Clients
 
         public async Task<ClientServiceModel> GetAsync(GetClientServiceModel model)
         {
-            var existingClient = await _context.Clients.FirstOrDefaultAsync(x => x.SellerId == model.OrganisationId.Value && x.Id == model.Id && x.IsActive);
+            //var existingClient = await _context.Clients.FirstOrDefaultAsync(x => x.SellerId == model.OrganisationId.Value && x.Id == model.Id && x.IsActive);
+            var existingClient = await _context.Clients.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
             
             if (existingClient is null)
             {
@@ -108,7 +122,7 @@ namespace Client.Api.Services.Clients
             }
 
             var client = new ClientServiceModel
-            {
+            {   
                 Id = existingClient.Id,
                 Name = existingClient.Name,
                 Email = existingClient.Email,
@@ -118,9 +132,7 @@ namespace Client.Api.Services.Clients
                 PhoneNumber = existingClient.PhoneNumber,
                 DefaultDeliveryAddressId = existingClient.DefaultDeliveryAddressId,
                 LastModifiedDate = existingClient.LastModifiedDate,
-                CreatedDate = existingClient.CreatedDate,
-                IsEmailMarketingApproval = existingClient.IsEmailMarketingApproval,
-                IsSmsMarketingApproval = existingClient.IsSmsMarketingApproval
+                CreatedDate = existingClient.CreatedDate
             };
 
             var clientGroups = _context.ClientsGroups.Where(x => x.ClientId == existingClient.Id && x.IsActive).Select(x => x.GroupId);
@@ -136,7 +148,22 @@ namespace Client.Api.Services.Clients
             {
                 client.ClientManagerIds = clientManagers;
             }
-            
+
+            var marketingApproval = _context.ClientMarketingApprovals.Where(x => x.IsActive && x.ClientId == existingClient.Id);
+
+            if(marketingApproval is not null) 
+            {
+                client.MarketingApprovals = marketingApproval.Select(x => new ClientMarketingApprovalServiceModel 
+                { 
+                    Id = x.Id,
+                    Name = x.Name,
+                    IsApproved = x.IsApproved,
+                    ClientId = x.ClientId,
+                    CreatedDate = x.CreatedDate,
+                    LastModifiedDate = x.LastModifiedDate
+                });
+            }
+
             return client;
         }
 
@@ -177,8 +204,6 @@ namespace Client.Api.Services.Clients
             client.OrganisationId = serviceModel.ClientOrganisationId.Value;
             client.DefaultDeliveryAddressId = serviceModel.DefaultDeliveryAddressId;
             client.LastModifiedDate = DateTime.UtcNow;
-            client.IsEmailMarketingApproval = serviceModel.IsEmailMarketingApproval;
-            client.IsSmsMarketingApproval = serviceModel.IsSmsMarketingApproval;
 
             var clientGroups = _context.ClientsGroups.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
 
@@ -240,8 +265,6 @@ namespace Client.Api.Services.Clients
                 PhoneNumber = serviceModel.PhoneNumber,
                 SellerId = serviceModel.OrganisationId.Value,
                 DefaultDeliveryAddressId = serviceModel.DefaultDeliveryAddressId,
-                IsEmailMarketingApproval = serviceModel.IsEmailMarketingApproval,
-                IsSmsMarketingApproval = serviceModel.IsSmsMarketingApproval
             };
 
             _context.Clients.Add(client.FillCommonProperties());
@@ -287,9 +310,7 @@ namespace Client.Api.Services.Clients
                               PhoneNumber = c.PhoneNumber,
                               DefaultDeliveryAddressId = c.DefaultDeliveryAddressId,
                               LastModifiedDate = c.LastModifiedDate,
-                              CreatedDate = c.CreatedDate,
-                              IsEmailMarketingApproval = c.IsEmailMarketingApproval,
-                              IsSmsMarketingApproval = c.IsSmsMarketingApproval
+                              CreatedDate = c.CreatedDate
                           };
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
@@ -316,9 +337,7 @@ namespace Client.Api.Services.Clients
                               PhoneNumber = c.PhoneNumber,
                               DefaultDeliveryAddressId = c.DefaultDeliveryAddressId,
                               LastModifiedDate = c.LastModifiedDate,
-                              CreatedDate = c.CreatedDate,
-                              IsEmailMarketingApproval = c.IsEmailMarketingApproval,
-                              IsSmsMarketingApproval = c.IsSmsMarketingApproval
+                              CreatedDate = c.CreatedDate
                           };
 
             return await clients.FirstOrDefaultAsync();
