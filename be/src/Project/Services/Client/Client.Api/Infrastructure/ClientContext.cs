@@ -26,5 +26,6 @@ namespace Client.Api.Infrastructure
         public DbSet<ClientRole> ClientRoles { get; set; }
         public DbSet<ClientAccountManager> ClientAccountManagers { get; set; }
         public DbSet<ClientsAccountManagers> ClientsAccountManagers { get; set; }
+        public DbSet<ClientMarketingApproval> ClientMarketingApprovals { get; set;}
     }
 }
