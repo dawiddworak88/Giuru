@@ -4,7 +4,7 @@ import SalesAnalytics from "../../../shared/components/AnalyticsDashboard/SalesA
 
 const OrdersAnalyticsDetail = (props) => {
     return (
-        <div className="section orders-analytics pt-6">
+        <div className="section orders-analytics">
             <div className="orders-analytics__content">
                 <h1 className="title is-4">{props.title}</h1>
                 <div className="orders-analytics__container mt-4">
