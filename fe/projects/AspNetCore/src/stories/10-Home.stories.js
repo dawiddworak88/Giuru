@@ -18,7 +18,7 @@ var heroSlider = {
     },
     {
       image: {
-        imageSrc: "https://eltap.pl/upload/gallery/55/marinosavana05soft11okajpg6870.jpg",
+        imageSrc: "https://eltap.pl/upload/gallery/83/sofa-neva01197rgbjpg8615.jpg",
         imageAlt: "Best sectionals",
         imageTitle: "Best sectionals",
       },
