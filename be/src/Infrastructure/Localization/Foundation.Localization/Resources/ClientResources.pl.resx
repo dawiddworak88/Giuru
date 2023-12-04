@@ -318,4 +318,7 @@
   <data name="IsSmsMarketingApproval" xml:space="preserve">
     <value>Przesyłanie informacji handlowych SMS</value>
   </data>
+  <data name="ExpressedOnLabel" xml:space="preserve">
+    <value>Wyrażono zgodę</value>
+  </data>
 </root>
