@@ -1,4 +1,5 @@
 ﻿using Client.Api.Infrastructure;
+using Client.Api.Infrastructure.Clients.Entities;
 using Client.Api.Infrastructure.Groups.Entities;
 using Client.Api.Infrastructure.Managers.Entities;
 using Client.Api.ServicesModels.Clients;
@@ -113,8 +114,7 @@ namespace Client.Api.Services.Clients
 
         public async Task<ClientServiceModel> GetAsync(GetClientServiceModel model)
         {
-            //var existingClient = await _context.Clients.FirstOrDefaultAsync(x => x.SellerId == model.OrganisationId.Value && x.Id == model.Id && x.IsActive);
-            var existingClient = await _context.Clients.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var existingClient = await _context.Clients.FirstOrDefaultAsync(x => x.SellerId == model.OrganisationId.Value && x.Id == model.Id && x.IsActive);
             
             if (existingClient is null)
             {
@@ -239,6 +239,26 @@ namespace Client.Api.Services.Clients
                 };
 
                 await _context.ClientsAccountManagers.AddAsync(managerItem.FillCommonProperties());
+            }
+
+            var clientMarketingApproval = _context.ClientMarketingApprovals.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
+
+            foreach (var marketingApproval in clientMarketingApproval.OrEmptyIfNull())
+            {
+                _context.ClientMarketingApprovals.Remove(marketingApproval);
+            }
+
+            foreach (var name in serviceModel.MarketingApprovals.OrEmptyIfNull())
+            {
+                var marketingApproval = new ClientMarketingApproval
+                {
+                    Name = name,
+                    IsApproved = true,
+                    ClientId = serviceModel.Id,
+                    IsActive = true
+                };
+
+                await _context.ClientMarketingApprovals.AddAsync(marketingApproval.FillCommonProperties());
             }
 
             await _context.SaveChangesAsync();
