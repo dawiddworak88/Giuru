@@ -9,6 +9,6 @@ namespace Client.Api.Infrastructure.Clients.Entities
 
         public bool IsApproved { get; set; }
 
-        public Guid ClientId { get; set; }
+        public Guid? ClientId { get; set; }
     }
 }
