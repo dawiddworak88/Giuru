@@ -103,8 +103,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 ClientManagerLabel = _globalLocalizer.GetString("Manager"),
                 CountryLabel = _globalLocalizer.GetString("Country"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
-                IsEmailMarketingApprovalLabel = _clientLocalizer.GetString("IsEmailMarketingApproval"),
-                IsSmsMarketingApprovalLabel = _clientLocalizer.GetString("IsSmsMarketingApproval")
+                EmailMarketingApprovalLabel = _clientLocalizer.GetString("IsEmailMarketingApproval"),
+                SmsMarketingApprovalLabel = _clientLocalizer.GetString("IsSmsMarketingApproval"),
+                ExpressedOnLabel = _clientLocalizer.GetString("ExpressedOnLabel")
             };
 
             if (componentModel.Id.HasValue)
@@ -124,12 +125,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
                     viewModel.MarketingApprovals = client.MarketingApprovals.Select(x => new ClientMarketingApproval
                     {
-                        Id = x.Id,
                         Name = x.Name,
-                        IsApproved = x.IsApproved,
-                        ClientId = x.ClientId,
-                        CreatedDate = x.CreatedDate,
-                        LastModifiedDate = x.LastModifiedDate
+                        CreatedDate = x.CreatedDate
                     });
 
                     var user = await _identityRepository.GetAsync(componentModel.Token, componentModel.Language, client.Email);
