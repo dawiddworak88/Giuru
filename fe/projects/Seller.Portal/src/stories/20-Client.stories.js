@@ -28,10 +28,15 @@ var clientForm = {
   deliveryAddresses: [
     { id: "1", name: "Mroczeń 203, 63-640, Poland" }
   ],
-  isEmailMarketingApprovalLabel: "Send commercial information by e-mail",
-  isEmailMarketingApproval: true,
-  isSmsMarketingApprovalLabel: "Send commercial information by SMS",
-  isSmsMarketingApproval: false,
+  emailMarketingApprovalLabel: "Send commercial information by e-mail",
+  smsMarketingApprovalLabel: "Send commercial information by SMS",
+  marketingApprovals: [
+    {
+      name: "SMS_MARKETING_APPROVAL",
+      createdDate: "2023-12-04T12:47:10.2999075"
+    }
+  ],
+  expressedOnLabel: "Expressed on",
   communicationLanguage: "",
   saveText: "Save"
 };
