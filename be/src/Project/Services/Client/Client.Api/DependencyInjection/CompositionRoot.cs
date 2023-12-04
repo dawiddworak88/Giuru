@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Client.Api.Services.Addresses;
+using Client.Api.Services.Fields;
 
 namespace Client.Api.DependencyInjection
 {
@@ -21,6 +22,7 @@ namespace Client.Api.DependencyInjection
             services.AddScoped<IClientsApplicationsService, ClientsApplicationsService>();
             services.AddScoped<IClientAccountManagersService, ClientAccountManagersService>();
             services.AddScoped<IClientAddressesService, ClientAddressesService>();
+            services.AddScoped<IClientFieldsService,  ClientFieldsService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
