@@ -213,12 +213,8 @@ namespace Client.Api.v1.Controllers
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate,
                         MarketingApprovals = client.MarketingApprovals.OrEmptyIfNull().Select(x => new ClientMarketingApprovalResponseModel { 
-                            Id = x.Id,
                             Name = x.Name,
-                            IsApproved = x.IsApproved,
-                            ClientId = x.ClientId,
                             CreatedDate = x.CreatedDate,
-                            LastModifiedDate = x.LastModifiedDate
                         })
                     };
 
@@ -317,8 +313,7 @@ namespace Client.Api.v1.Controllers
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    IsEmailMarketingApproval = request.IsEmailMarketingApproval,
-                    IsSmsMarketingApproval = request.IsSmsMarketingApproval
+                    MarketingApprovals = request.MarketingApprovals
                 };
 
                 var validator = new UpdateClientModelValidator();
@@ -350,8 +345,7 @@ namespace Client.Api.v1.Controllers
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    IsEmailMarketingApproval = request.IsEmailMarketingApproval,
-                    IsSmsMarketingApproval = request.IsSmsMarketingApproval
+                    MarketingApprovals = request.MarketingApprovals
                 };
 
                 var validator = new CreateClientModelValidator();
