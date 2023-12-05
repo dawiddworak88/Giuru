@@ -3,10 +3,10 @@ using Client.Api.Infrastructure.Fields;
 using Client.Api.ServicesModels.Fields;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
+using Foundation.GenericRepository.Paginations;
 using Microsoft.EntityFrameworkCore;
-using Nest;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -126,6 +126,61 @@ namespace Client.Api.Services.Fields
                 Options = fieldDefinitionOptions.OrEmptyIfNull(),
                 LastModifiedDate = fieldDefinition.LastModifiedDate,
                 CreatedDate = fieldDefinition.CreatedDate
+            };
+        }
+
+        public PagedResults<IEnumerable<ClientFieldServiceModel>> Get(GetClientFieldsServiceModel model)
+        {
+            var fieldDefinitions = _context.FieldDefinitions.Include(fd => fd.FieldDefinitionTranslations).AsSingleQuery().Where(x => x.IsActive);
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                fieldDefinitions = fieldDefinitions.Where(x => x.FieldDefinitionTranslations.Any(y => y.FieldName.StartsWith(model.SearchTerm)));
+            }
+
+            fieldDefinitions = fieldDefinitions.ApplySort(model.OrderBy);
+
+            PagedResults<IEnumerable<Infrastructure.Fields.FieldDefinition>> pagedResults;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                fieldDefinitions = fieldDefinitions.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = fieldDefinitions.PagedIndex(new Pagination(fieldDefinitions.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = fieldDefinitions.PagedIndex(new Pagination(fieldDefinitions.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
+
+            var fieldDefinitionOptions = (from fo in _context.FieldOptions
+                                         join fot in _context.FieldOptionsTranslation on fo.Id equals fot.OptionId
+                                         join fos in _context.FieldOptionSetTranslations on fo.OptionSetId equals fos.OptionSetId
+                                         group new { fo, fot, fos } by fo.OptionSetId into grouped
+                                         where pagedResults.Data.Select(x => x.OptionSetId).Contains(grouped.Key)
+                                         select new 
+                                         {
+                                             Id = grouped.Key,
+                                             Name = grouped.FirstOrDefault(g => g.fos.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fos.Language == model.Language).fos.Name : grouped.FirstOrDefault().fos.Name,
+                                             Value = grouped.FirstOrDefault(g => g.fot.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fot.Language == model.Language).fot.OptionValue : grouped.FirstOrDefault().fot.OptionValue
+                                         }).ToList();
+
+            return new PagedResults<IEnumerable<ClientFieldServiceModel>>(pagedResults.Total, pagedResults.PageSize)
+            {
+                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new ClientFieldServiceModel
+                {
+                    Id = x.Id,
+                    Name = x.FieldDefinitionTranslations?.FirstOrDefault(t => t.FieldDefinitionId == x.Id && t.Language == model.Language)?.FieldName ?? x.FieldDefinitionTranslations?.FirstOrDefault(t => t.FieldDefinitionId == x.Id)?.FieldName,
+                    Type = x.FieldType,
+                    IsRequired = x.IsRequired,
+                    Options = fieldDefinitionOptions.OrEmptyIfNull().Where(y => y.Id == x.OptionSetId).Select(x => new ClientFieldOptionServiceModel
+                    {
+                        Name = x.Name,
+                        Value = x.Value
+                    }),
+                    LastModifiedDate = x.LastModifiedDate,
+                    CreatedDate = x.CreatedDate
+                })
             };
         }
     }

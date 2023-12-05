@@ -9,10 +9,13 @@ using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Helpers;
+using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -33,6 +36,61 @@ namespace Client.Api.v1.Controllers
             IClientFieldsService clientFieldsService)
         {
             _clientFieldsService = clientFieldsService;
+        }
+
+        /// <summary>
+        /// Gets list of fields definitions.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
+        /// <returns>The list of fields definitions.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public IActionResult Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetClientFieldsServiceModel
+            {
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var clientFieldsDefinitions = _clientFieldsService.Get(serviceModel);
+
+            if (clientFieldsDefinitions is not null)
+            {
+                var response = new PagedResults<IEnumerable<ClientFieldResponseModel>>(clientFieldsDefinitions.Total, clientFieldsDefinitions.PageSize)
+                {
+                    Data = clientFieldsDefinitions.Data.OrEmptyIfNull().Select(x => new ClientFieldResponseModel
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Type = x.Type,
+                        IsRequired = x.IsRequired,
+                        Options = x.Options.Select(y => new ClientFieldOptionResponseModel
+                        {
+                            Name = y.Name,
+                            Value = y.Value,
+                        }),
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    })
+                };
+
+                return StatusCode((int)HttpStatusCode.OK, response);
+            }
+
+            return StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
