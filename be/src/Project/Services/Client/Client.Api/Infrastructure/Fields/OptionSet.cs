@@ -5,6 +5,6 @@ namespace Client.Api.Infrastructure.Fields
 {
     public class OptionSet : Entity
     {
-        public virtual IEnumerable<Option> Options { get; set; }
+        public virtual IEnumerable<OptionSetTranslation> OptionSetTranslations { get; set; }
     }
 }

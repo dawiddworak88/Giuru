@@ -1,6 +1,8 @@
 ﻿using Foundation.GenericRepository.Entities;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Client.Api.Infrastructure.Fields
 {
@@ -13,6 +15,6 @@ namespace Client.Api.Infrastructure.Fields
 
         public Guid? OptionSetId { get; set; }
 
-        public virtual FieldDefinitionTranslation FieldDefinitionTranslation { get; set; }
+        public virtual IEnumerable<FieldDefinitionTranslation> FieldDefinitionTranslations { get; set; }
     }
 }

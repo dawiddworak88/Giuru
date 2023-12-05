@@ -5,8 +5,10 @@ using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Nest;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -86,27 +88,42 @@ namespace Client.Api.Services.Fields
 
         public async Task<ClientFieldServiceModel> GetAsync(GetClientFieldDefinitionServiceModel model)
         {
-            var fieldDefinition = await _context.FieldDefinitions.Include(x => x.FieldDefinitionTranslation).AsSingleQuery().FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var fieldDefinition = await _context.FieldDefinitions
+                .Include(fd => fd.FieldDefinitionTranslations)
+                .AsSingleQuery()
+                .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (fieldDefinition is null)
             {
                 throw new CustomException("", (int)HttpStatusCode.NoContent);
             }
 
+            var fieldDefinitionTranslation = fieldDefinition.FieldDefinitionTranslations.FirstOrDefault(x => x.Language == model.Language && x.IsActive);
+
+            if (fieldDefinitionTranslation is null)
+            {
+                fieldDefinitionTranslation = fieldDefinition.FieldDefinitionTranslations.FirstOrDefault(x => x.IsActive);
+            }
+
             var fieldDefinitionOptions = from fo in _context.FieldOptions
                                          join fot in _context.FieldOptionsTranslation on fo.Id equals fot.OptionId
-                                         select new
+                                         join fos in _context.FieldOptionSetTranslations on fo.OptionSetId equals fos.OptionSetId
+                                         group new { fo, fot, fos } by fo.OptionSetId into grouped
+                                         where grouped.Key == fieldDefinition.OptionSetId
+                                         select new ClientFieldOptionServiceModel
                                          {
-                                             Value = fot.OptionValue
+                                             Name = grouped.FirstOrDefault(g => g.fos.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fos.Language == model.Language).fos.Name : grouped.FirstOrDefault().fos.Name,
+                                             Value = grouped.FirstOrDefault(g => g.fot.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fot.Language == model.Language).fot.OptionValue : grouped.FirstOrDefault().fot.OptionValue
                                          };
 
-             Console.WriteLine(JsonConvert.SerializeObject(fieldDefinitionOptions));
 
             return new ClientFieldServiceModel
             {
-                Id = model.Id,
-                Name = fieldDefinition.FieldDefinitionTranslation.FieldName,
+                Id = fieldDefinition.Id,
+                Name = fieldDefinitionTranslation.FieldName,
                 Type = fieldDefinition.FieldType,
+                IsRequired = fieldDefinition.IsRequired,
+                Options = fieldDefinitionOptions.OrEmptyIfNull(),
                 LastModifiedDate = fieldDefinition.LastModifiedDate,
                 CreatedDate = fieldDefinition.CreatedDate
             };
