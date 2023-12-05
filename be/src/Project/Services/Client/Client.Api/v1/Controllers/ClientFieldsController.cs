@@ -2,6 +2,7 @@
 using Client.Api.ServicesModels.Addresses;
 using Client.Api.ServicesModels.Fields;
 using Client.Api.v1.RequestModels;
+using Client.Api.v1.ResponseModels;
 using Client.Api.Validators.Addresses;
 using Client.Api.Validators.Feilds;
 using Foundation.Account.Definitions;
@@ -11,6 +12,7 @@ using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -82,6 +84,64 @@ namespace Client.Api.v1.Controllers
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
+        }
+
+        /// <summary>
+        /// Gets field definition by id.
+        /// </summary>
+        /// <param name="id">The client field definition id.</param>
+        /// <returns>The field definition.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetFieldDefinition(Guid? id)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetClientFieldDefinitionServiceModel
+            {
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
+            };
+
+            var validator = new GetClientFieldDefinitionModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var clientFieldDefinition = await _clientFieldsService.GetAsync(serviceModel);
+
+                if (clientFieldDefinition is not null)
+                {
+                    var response = new ClientFieldResponseModel
+                    {
+                        Id = clientFieldDefinition.Id,
+                        Name = clientFieldDefinition.Name,
+                        Type = clientFieldDefinition.Type,
+                        IsRequired = clientFieldDefinition.IsRequired,
+                        Options = clientFieldDefinition.Options.Select(x => new ClientFieldOptionResponseModel
+                        {
+                            Name = x.Name,
+                            Value = x.Value
+                        }),
+                        LastModifiedDate = clientFieldDefinition.LastModifiedDate,
+                        CreatedDate = clientFieldDefinition.CreatedDate
+                    };
+
+                    return StatusCode((int)HttpStatusCode.OK, response);
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.NoContent);
+                }
+
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }

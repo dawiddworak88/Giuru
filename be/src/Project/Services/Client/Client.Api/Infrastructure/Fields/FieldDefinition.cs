@@ -12,5 +12,7 @@ namespace Client.Api.Infrastructure.Fields
         public bool IsRequired { get; set; }
 
         public Guid? OptionSetId { get; set; }
+
+        public virtual FieldDefinitionTranslation FieldDefinitionTranslation { get; set; }
     }
 }
