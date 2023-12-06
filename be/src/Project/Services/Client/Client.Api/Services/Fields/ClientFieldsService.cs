@@ -153,11 +153,13 @@ namespace Client.Api.Services.Fields
                 pagedResults = fieldDefinitions.PagedIndex(new Pagination(fieldDefinitions.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
+            var optionSetIds = pagedResults.Data.Select(x => x.OptionSetId).ToList();
+
             var fieldDefinitionOptions = (from fo in _context.FieldOptions
                                          join fot in _context.FieldOptionsTranslation on fo.Id equals fot.OptionId
                                          join fos in _context.FieldOptionSetTranslations on fo.OptionSetId equals fos.OptionSetId
+                                         where optionSetIds.Contains(fo.OptionSetId)
                                          group new { fo, fot, fos } by fo.OptionSetId into grouped
-                                         where pagedResults.Data.Select(x => x.OptionSetId).Contains(grouped.Key)
                                          select new 
                                          {
                                              Id = grouped.Key,
@@ -182,6 +184,21 @@ namespace Client.Api.Services.Fields
                     CreatedDate = x.CreatedDate
                 })
             };
+        }
+
+        public async Task DeleteAsync(DeleteClientFieldServiceModel model)
+        {
+            var fieldDefinition = await _context.FieldDefinitions.FirstOrDefaultAsync(x => x.Id == model.Id);
+
+            if (fieldDefinition is null)
+            {
+                throw new CustomException("", (int)HttpStatusCode.NoContent);
+            }
+
+            fieldDefinition.IsActive = false;
+            fieldDefinition.LastModifiedDate = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
         }
     }
 }

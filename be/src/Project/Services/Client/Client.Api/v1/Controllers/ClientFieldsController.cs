@@ -196,7 +196,41 @@ namespace Client.Api.v1.Controllers
                 {
                     return StatusCode((int)HttpStatusCode.NoContent);
                 }
+            }
 
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Delete field definition by id.
+        /// </summary>
+        /// <param name="id">The client field definition id.</param>
+        /// <returns>OK.</returns>
+        [HttpDelete, MapToApiVersion("1.0")]
+        [Route("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> DeleteFieldDefinition(Guid? id)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new DeleteClientFieldServiceModel
+            {
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
+            };
+
+            var validator = new DeleteClientFieldDefinitionModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                await _clientFieldsService.DeleteAsync(serviceModel);
+
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
