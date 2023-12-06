@@ -8,6 +8,5 @@ namespace Client.Api.v1.RequestModels
         public string Name { get; set; }
         public string Type { get; set; }
         public bool IsRequired { get; set; }
-        public IEnumerable<ClientFieldOptionRequestModel> Options { get; set; }
     }
 }

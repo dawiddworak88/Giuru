@@ -1,9 +1,7 @@
 ﻿using Client.Api.Services.Fields;
-using Client.Api.ServicesModels.Addresses;
 using Client.Api.ServicesModels.Fields;
 using Client.Api.v1.RequestModels;
 using Client.Api.v1.ResponseModels;
-using Client.Api.Validators.Addresses;
 using Client.Api.Validators.Feilds;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
@@ -12,7 +10,6 @@ using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Helpers;
 using Foundation.GenericRepository.Paginations;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -109,9 +106,28 @@ namespace Client.Api.v1.Controllers
 
             if (request.Id.HasValue)
             {
-                return default;
+                var serviceModel = new UpdateClientFieldServiceModel
+                {
+                    Id = request.Id,
+                    Name = request.Name,
+                    Type = request.Type,
+                    IsRequired = request.IsRequired,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
 
-                //throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+                var validator = new UpdateClientFieldModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var clientFieldId = await _clientFieldsService.UpdateAsync(serviceModel);
+
+                    return StatusCode((int)HttpStatusCode.OK, new { Id = clientFieldId });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
             else
             {
@@ -120,11 +136,6 @@ namespace Client.Api.v1.Controllers
                     Name = request.Name,
                     Type = request.Type,
                     IsRequired = request.IsRequired,
-                    Options = request.Options.Select(x => new ClientFieldOptionServiceModel
-                    {
-                        Name = x.Name,
-                        Value = x.Value
-                    }),
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)

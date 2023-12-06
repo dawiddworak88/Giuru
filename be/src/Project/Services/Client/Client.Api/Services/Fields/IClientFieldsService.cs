@@ -12,5 +12,6 @@ namespace Client.Api.Services.Fields
         Task<ClientFieldServiceModel> GetAsync(GetClientFieldDefinitionServiceModel model);
         PagedResults<IEnumerable<ClientFieldServiceModel>> Get(GetClientFieldsServiceModel model);
         Task DeleteAsync(DeleteClientFieldServiceModel model);
+        Task<Guid> UpdateAsync(UpdateClientFieldServiceModel model);
     }
 }

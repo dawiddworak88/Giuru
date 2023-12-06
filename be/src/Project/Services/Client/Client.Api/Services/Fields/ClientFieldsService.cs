@@ -33,43 +33,6 @@ namespace Client.Api.Services.Fields
                 IsRequired = model.IsRequired
             };
 
-            if (model.Options.Any())
-            {
-                var fieldOptionSet = new OptionSet();
-
-                await _context.FieldOptionSets.AddAsync(fieldOptionSet.FillCommonProperties());
-
-                fieldDefinition.OptionSetId = fieldOptionSet.Id;
-
-                foreach (var option in model.Options.OrEmptyIfNull())
-                {
-                    var fieldOptionSetTranslation = new OptionSetTranslation
-                    {
-                        OptionSetId = fieldOptionSet.Id,
-                        Name = option.Name,
-                        Language = model.Language
-                    };
-
-                    await _context.FieldOptionSetTranslations.AddAsync(fieldOptionSetTranslation.FillCommonProperties());
-
-                    var fieldOption = new Option
-                    {
-                        OptionSetId = fieldOptionSet.Id
-                    };
-
-                    await _context.FieldOptions.AddAsync(fieldOption.FillCommonProperties());
-
-                    var fieldOptionTranslation = new OptionTranslation
-                    {
-                        OptionId = fieldOption.Id,
-                        OptionValue = option.Value,
-                        Language = model.Language
-                    };
-
-                    await _context.FieldOptionsTranslation.AddAsync(fieldOptionTranslation.FillCommonProperties());
-                }
-            }
-
             await _context.FieldDefinitions.AddAsync(fieldDefinition.FillCommonProperties());
 
             var fieldDefinitionTranslation = new FieldDefinitionTranslation
@@ -199,6 +162,46 @@ namespace Client.Api.Services.Fields
             fieldDefinition.LastModifiedDate = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Guid> UpdateAsync(UpdateClientFieldServiceModel model)
+        {
+            var fieldDefinition = await _context.FieldDefinitions
+                .Include(x => x.FieldDefinitionTranslations)
+                .AsSingleQuery()
+                .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+
+            if (fieldDefinition is null)
+            {
+                throw new CustomException("", (int)HttpStatusCode.NoContent);
+            }
+
+            var fieldDefinitionTranslation = fieldDefinition.FieldDefinitionTranslations.FirstOrDefault(x => x.FieldDefinitionId == fieldDefinition.Id && x.Language == model.Language && x.IsActive);
+
+            if (fieldDefinitionTranslation is not null)
+            {
+                fieldDefinitionTranslation.FieldName = model.Name;
+                fieldDefinitionTranslation.LastModifiedDate = DateTime.UtcNow;
+            }
+            else
+            {
+                var newFieldDefinitionTranslation = new FieldDefinitionTranslation
+                {
+                    FieldDefinitionId = fieldDefinition.Id,
+                    FieldName = model.Name,
+                    Language = model.Language
+                };
+
+                await _context.FieldDefinitionTranslations.AddAsync(newFieldDefinitionTranslation.FillCommonProperties());
+            }
+
+            fieldDefinition.IsRequired = model.IsRequired;
+            fieldDefinition.FieldType = model.Type;
+            fieldDefinition.LastModifiedDate = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            return fieldDefinition.Id;
         }
     }
 }
