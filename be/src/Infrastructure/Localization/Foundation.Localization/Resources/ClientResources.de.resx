@@ -318,4 +318,13 @@
   <data name="NewClientAddress" xml:space="preserve">
     <value>Adresse hinzufügen</value>
   </data>
+  <data name="FieldDefinitionNotFound" xml:space="preserve">
+    <value>Felddefinition nicht gefunden</value>
+  </data>
+  <data name="FieldDefinitionSelectTypeConflict" xml:space="preserve">
+    <value>Die Option kann aufgrund des gewählten Typs nicht der Felddefinition zugeordnet werden</value>
+  </data>
+  <data name="FieldOptionNotFound" xml:space="preserve">
+    <value>Keine Option gefunden</value>
+  </data>
 </root>

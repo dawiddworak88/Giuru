@@ -6,7 +6,9 @@ using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +20,14 @@ namespace Client.Api.Services.Fields
     public class ClientFieldsService : IClientFieldsService
     {
         private readonly ClientContext _context;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
 
         public ClientFieldsService(
+            IStringLocalizer<ClientResources> clientLocalizer,
             ClientContext context) 
         { 
             _context = context;
+            _clientLocalizer = clientLocalizer;
         }
 
         public async Task<Guid> CreateAsync(CreateClientFieldServiceModel model)
@@ -58,7 +63,7 @@ namespace Client.Api.Services.Fields
 
             if (fieldDefinition is null)
             {
-                throw new CustomException("", (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("FieldDefinitionNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var fieldDefinitionTranslation = fieldDefinition.FieldDefinitionTranslations.FirstOrDefault(x => x.Language == model.Language && x.IsActive);
@@ -155,7 +160,7 @@ namespace Client.Api.Services.Fields
 
             if (fieldDefinition is null)
             {
-                throw new CustomException("", (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("FieldDefinitionNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             fieldDefinition.IsActive = false;
@@ -173,7 +178,7 @@ namespace Client.Api.Services.Fields
 
             if (fieldDefinition is null)
             {
-                throw new CustomException("", (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("FieldDefinitionNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var fieldDefinitionTranslation = fieldDefinition.FieldDefinitionTranslations.FirstOrDefault(x => x.FieldDefinitionId == fieldDefinition.Id && x.Language == model.Language && x.IsActive);

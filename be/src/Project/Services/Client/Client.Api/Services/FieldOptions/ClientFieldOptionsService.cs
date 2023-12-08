@@ -1,4 +1,5 @@
-﻿using Client.Api.Infrastructure;
+﻿using Client.Api.Definitions;
+using Client.Api.Infrastructure;
 using Client.Api.Infrastructure.Fields;
 using Client.Api.ServicesModels.FieldOptions;
 using Foundation.Extensions.Exceptions;
@@ -6,7 +7,9 @@ using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +21,14 @@ namespace Client.Api.Services.FieldOptions
     public class ClientFieldOptionsService : IClientFieldOptionsService
     {
         private readonly ClientContext _context;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
 
         public ClientFieldOptionsService(
+            IStringLocalizer<ClientResources> clientLocalizer,
             ClientContext context)
         {
             _context = context;
+            _clientLocalizer = clientLocalizer;
         }
         public async Task<Guid> CreateAsync(CreateFieldOptionServiceModel model)
         {
@@ -30,11 +36,11 @@ namespace Client.Api.Services.FieldOptions
 
             if (fieldDefinition is null)
             {
-                throw new CustomException("", (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("FieldDefinitionNotFound"), (int)HttpStatusCode.NoContent);
             }
-            else if (fieldDefinition.FieldType != "select")
+            else if (fieldDefinition.FieldType != FieldTypesConstants.SelectFieldType)
             {
-                throw new CustomException("Is not select", (int)HttpStatusCode.Conflict);
+                throw new CustomException(_clientLocalizer.GetString("FieldDefinitionSelectTypeConflict"), (int)HttpStatusCode.Conflict);
             }
 
             var fieldOptionSetId = fieldDefinition.OptionSetId;
@@ -85,7 +91,7 @@ namespace Client.Api.Services.FieldOptions
 
             if (fieldOption is null)
             {
-                throw new CustomException("", (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             fieldOption.IsActive = false;
@@ -146,7 +152,7 @@ namespace Client.Api.Services.FieldOptions
 
             if (fieldOption is null)
             {
-                throw new CustomException("", (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             return new FieldOptionServiceModel
@@ -170,7 +176,7 @@ namespace Client.Api.Services.FieldOptions
 
             if (fieldOption is null)
             {
-                throw new CustomException("", (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var fieldOptionSetTranslation = fieldOption.OptionSet.OptionSetTranslations.FirstOrDefault(x => x.Language == model.Language && x.IsActive);
