@@ -3,7 +3,7 @@ using System;
 
 namespace Client.Api.ServicesModels.FieldOptions
 {
-    public class DeleteFieldOptionServiceModel : BaseServiceModel
+    public class DeleteClientFieldOptionServiceModel : BaseServiceModel
     {
         public Guid? Id { get; set; }
     }

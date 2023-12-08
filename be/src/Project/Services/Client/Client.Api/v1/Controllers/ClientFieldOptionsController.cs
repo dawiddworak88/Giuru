@@ -52,7 +52,7 @@ namespace Client.Api.v1.Controllers
 
             if (request.Id.HasValue)
             {
-                var serviceModel = new UpdateFieldOptionServiceModel
+                var serviceModel = new UpdateClientFieldOptionServiceModel
                 {
                     Id = request.Id,
                     Name = request.Name,
@@ -77,7 +77,7 @@ namespace Client.Api.v1.Controllers
             }
             else
             {
-                var serviceModel = new CreateFieldOptionServiceModel
+                var serviceModel = new CreateClientFieldOptionServiceModel
                 {
                     Name = request.Name,
                     Value = request.Value,
@@ -115,7 +115,7 @@ namespace Client.Api.v1.Controllers
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new DeleteFieldOptionServiceModel
+            var serviceModel = new DeleteClientFieldOptionServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
@@ -150,7 +150,7 @@ namespace Client.Api.v1.Controllers
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new GetFieldOptionServiceModel
+            var serviceModel = new GetClientFieldOptionServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
@@ -198,7 +198,7 @@ namespace Client.Api.v1.Controllers
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new GetFieldOptionsServiceModel
+            var serviceModel = new GetClientFieldOptionsServiceModel
             {
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,

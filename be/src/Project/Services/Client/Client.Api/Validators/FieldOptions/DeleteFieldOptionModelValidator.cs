@@ -4,7 +4,7 @@ using Foundation.Extensions.Validators;
 
 namespace Client.Api.Validators.FieldOptions
 {
-    public class DeleteFieldOptionModelValidator : BaseServiceModelValidator<DeleteFieldOptionServiceModel>
+    public class DeleteFieldOptionModelValidator : BaseServiceModelValidator<DeleteClientFieldOptionServiceModel>
     {
         public DeleteFieldOptionModelValidator()
         {

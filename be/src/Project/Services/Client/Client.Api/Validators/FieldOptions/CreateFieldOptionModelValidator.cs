@@ -4,7 +4,7 @@ using Foundation.Extensions.Validators;
 
 namespace Client.Api.Validators.FieldOptions
 {
-    public class CreateFieldOptionModelValidator : BaseServiceModelValidator<CreateFieldOptionServiceModel>
+    public class CreateFieldOptionModelValidator : BaseServiceModelValidator<CreateClientFieldOptionServiceModel>
     {
         public CreateFieldOptionModelValidator()
         {

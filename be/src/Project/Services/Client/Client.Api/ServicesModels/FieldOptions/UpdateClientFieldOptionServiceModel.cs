@@ -3,7 +3,7 @@ using System;
 
 namespace Client.Api.ServicesModels.FieldOptions
 {
-    public class UpdateFieldOptionServiceModel : BaseServiceModel
+    public class UpdateClientFieldOptionServiceModel : BaseServiceModel
     {
         public Guid? Id { get; set; }
         public string Name { get; set; }

@@ -9,10 +9,10 @@ namespace Client.Api.Services.FieldOptions
 {
     public interface IClientFieldOptionsService
     {
-        Task<Guid> CreateAsync(CreateFieldOptionServiceModel model);
-        Task<Guid> UpdateAsync(UpdateFieldOptionServiceModel model);
-        Task DeleteAsync(DeleteFieldOptionServiceModel model);
-        Task<FieldOptionServiceModel> GetAsync(GetFieldOptionServiceModel model);
-        PagedResults<IEnumerable<FieldOptionServiceModel>> Get(GetFieldOptionsServiceModel model);
+        Task<Guid> CreateAsync(CreateClientFieldOptionServiceModel model);
+        Task<Guid> UpdateAsync(UpdateClientFieldOptionServiceModel model);
+        Task DeleteAsync(DeleteClientFieldOptionServiceModel model);
+        Task<FieldOptionServiceModel> GetAsync(GetClientFieldOptionServiceModel model);
+        PagedResults<IEnumerable<FieldOptionServiceModel>> Get(GetClientFieldOptionsServiceModel model);
     }
 }

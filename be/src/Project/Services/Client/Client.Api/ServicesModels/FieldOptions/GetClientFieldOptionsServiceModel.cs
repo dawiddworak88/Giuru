@@ -2,7 +2,7 @@
 
 namespace Client.Api.ServicesModels.FieldOptions
 {
-    public class GetFieldOptionsServiceModel : PagedBaseServiceModel
+    public class GetClientFieldOptionsServiceModel : PagedBaseServiceModel
     {
     }
 }
