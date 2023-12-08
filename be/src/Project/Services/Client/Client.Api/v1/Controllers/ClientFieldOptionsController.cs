@@ -1,6 +1,5 @@
 ﻿using Client.Api.Services.FieldOptions;
 using Client.Api.ServicesModels.FieldOptions;
-using Client.Api.ServicesModels.Fields;
 using Client.Api.v1.RequestModels;
 using Client.Api.v1.ResponseModels;
 using Client.Api.Validators.FieldOptions;
@@ -11,6 +10,7 @@ using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Helpers;
 using Foundation.GenericRepository.Paginations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace Client.Api.v1.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class ClientFieldOptionsController : BaseApiController
     {
