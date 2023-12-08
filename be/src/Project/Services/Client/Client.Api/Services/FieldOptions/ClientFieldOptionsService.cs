@@ -30,7 +30,7 @@ namespace Client.Api.Services.FieldOptions
             _context = context;
             _clientLocalizer = clientLocalizer;
         }
-        public async Task<Guid> CreateAsync(CreateFieldOptionServiceModel model)
+        public async Task<Guid> CreateAsync(CreateClientFieldOptionServiceModel model)
         {
             var fieldDefinition = await _context.FieldDefinitions.FirstOrDefaultAsync(x => x.Id == model.FieldDefinitionId && x.IsActive);
 
@@ -85,7 +85,7 @@ namespace Client.Api.Services.FieldOptions
             return fieldOption.Id;
         }
 
-        public async Task DeleteAsync(DeleteFieldOptionServiceModel model)
+        public async Task DeleteAsync(DeleteClientFieldOptionServiceModel model)
         {
             var fieldOption = await _context.FieldOptions.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
@@ -100,7 +100,7 @@ namespace Client.Api.Services.FieldOptions
             await _context.SaveChangesAsync();
         }
 
-        public PagedResults<IEnumerable<FieldOptionServiceModel>> Get(GetFieldOptionsServiceModel model)
+        public PagedResults<IEnumerable<FieldOptionServiceModel>> Get(GetClientFieldOptionsServiceModel model)
         {
             var fieldOption = _context.FieldOptions
                 .Include(x => x.OptionsTranslations)
@@ -141,7 +141,7 @@ namespace Client.Api.Services.FieldOptions
             };
         }
 
-        public async Task<FieldOptionServiceModel> GetAsync(GetFieldOptionServiceModel model)
+        public async Task<FieldOptionServiceModel> GetAsync(GetClientFieldOptionServiceModel model)
         {
             var fieldOption = await _context.FieldOptions
                 .Include(x => x.OptionsTranslations)
@@ -165,7 +165,7 @@ namespace Client.Api.Services.FieldOptions
             };
         }
 
-        public async Task<Guid> UpdateAsync(UpdateFieldOptionServiceModel model)
+        public async Task<Guid> UpdateAsync(UpdateClientFieldOptionServiceModel model)
         {
             var fieldOption = await _context.FieldOptions
                 .Include(x => x.OptionsTranslations)

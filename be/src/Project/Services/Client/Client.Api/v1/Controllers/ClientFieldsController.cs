@@ -75,7 +75,7 @@ namespace Client.Api.v1.Controllers
                         Name = x.Name,
                         Type = x.Type,
                         IsRequired = x.IsRequired,
-                        Options = x.Options.Select(y => new ClientFieldOptionResponseModel
+                        Options = x.Options.Select(y => new FieldOptionResponseModel
                         {
                             Name = y.Name,
                             Value = y.Value,
@@ -193,7 +193,7 @@ namespace Client.Api.v1.Controllers
                         Name = clientFieldDefinition.Name,
                         Type = clientFieldDefinition.Type,
                         IsRequired = clientFieldDefinition.IsRequired,
-                        Options = clientFieldDefinition.Options.Select(x => new ClientFieldOptionResponseModel
+                        Options = clientFieldDefinition.Options.Select(x => new FieldOptionResponseModel
                         {
                             Name = x.Name,
                             Value = x.Value

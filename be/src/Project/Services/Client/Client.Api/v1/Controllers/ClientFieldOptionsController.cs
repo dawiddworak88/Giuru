@@ -167,7 +167,7 @@ namespace Client.Api.v1.Controllers
 
                 if (fieldOption is not null)
                 {
-                    var response = new FieldOptionResponseModel
+                    var response = new ClientFieldOptionResponseModel
                     {
                         Id = fieldOption.Id,
                         Name = fieldOption.Name,
@@ -213,9 +213,9 @@ namespace Client.Api.v1.Controllers
 
             if (fieldOptions is not null)
             {
-                var response = new PagedResults<IEnumerable<FieldOptionResponseModel>>(fieldOptions.Total, fieldOptions.PageSize)
+                var response = new PagedResults<IEnumerable<ClientFieldOptionResponseModel>>(fieldOptions.Total, fieldOptions.PageSize)
                 {
-                    Data = fieldOptions.Data.OrEmptyIfNull().Select(x => new FieldOptionResponseModel
+                    Data = fieldOptions.Data.OrEmptyIfNull().Select(x => new ClientFieldOptionResponseModel
                     {
                         Id = x.Id,
                         Name = x.Name,

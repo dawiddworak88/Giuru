@@ -1,5 +1,6 @@
 ﻿using Client.Api.Infrastructure;
 using Client.Api.Infrastructure.Fields;
+using Client.Api.ServicesModels.FieldOptions;
 using Client.Api.ServicesModels.Fields;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
@@ -54,7 +55,7 @@ namespace Client.Api.Services.Fields
             return fieldDefinition.Id;
         }
 
-        public async Task<ClientFieldServiceModel> GetAsync(GetClientFieldDefinitionServiceModel model)
+        public async Task<ClientFieldOptionServiceModel> GetAsync(GetClientFieldDefinitionServiceModel model)
         {
             var fieldDefinition = await _context.FieldDefinitions
                 .Include(fd => fd.FieldDefinitionTranslations)
@@ -78,14 +79,14 @@ namespace Client.Api.Services.Fields
                                          join fos in _context.FieldOptionSetTranslations on fo.OptionSetId equals fos.OptionSetId
                                          group new { fo, fot, fos } by fo.OptionSetId into grouped
                                          where grouped.Key == fieldDefinition.OptionSetId
-                                         select new ClientFieldOptionServiceModel
+                                         select new ServicesModels.Fields.FieldOptionServiceModel
                                          {
                                              Name = grouped.FirstOrDefault(g => g.fos.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fos.Language == model.Language).fos.Name : grouped.FirstOrDefault().fos.Name,
                                              Value = grouped.FirstOrDefault(g => g.fot.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fot.Language == model.Language).fot.OptionValue : grouped.FirstOrDefault().fot.OptionValue
                                          };
 
 
-            return new ClientFieldServiceModel
+            return new ClientFieldOptionServiceModel
             {
                 Id = fieldDefinition.Id,
                 Name = fieldDefinitionTranslation.FieldName,
@@ -97,7 +98,7 @@ namespace Client.Api.Services.Fields
             };
         }
 
-        public PagedResults<IEnumerable<ClientFieldServiceModel>> Get(GetClientFieldsServiceModel model)
+        public PagedResults<IEnumerable<ClientFieldOptionServiceModel>> Get(GetClientFieldsServiceModel model)
         {
             var fieldDefinitions = _context.FieldDefinitions.Include(fd => fd.FieldDefinitionTranslations).AsSingleQuery().Where(x => x.IsActive);
 
@@ -135,15 +136,15 @@ namespace Client.Api.Services.Fields
                                              Value = grouped.FirstOrDefault(g => g.fot.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fot.Language == model.Language).fot.OptionValue : grouped.FirstOrDefault().fot.OptionValue
                                          }).ToList();
 
-            return new PagedResults<IEnumerable<ClientFieldServiceModel>>(pagedResults.Total, pagedResults.PageSize)
+            return new PagedResults<IEnumerable<ClientFieldOptionServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
-                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new ClientFieldServiceModel
+                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new ClientFieldOptionServiceModel
                 {
                     Id = x.Id,
                     Name = x.FieldDefinitionTranslations?.FirstOrDefault(t => t.FieldDefinitionId == x.Id && t.Language == model.Language)?.FieldName ?? x.FieldDefinitionTranslations?.FirstOrDefault(t => t.FieldDefinitionId == x.Id)?.FieldName,
                     Type = x.FieldType,
                     IsRequired = x.IsRequired,
-                    Options = fieldDefinitionOptions.OrEmptyIfNull().Where(y => y.Id == x.OptionSetId).Select(x => new ClientFieldOptionServiceModel
+                    Options = fieldDefinitionOptions.OrEmptyIfNull().Where(y => y.Id == x.OptionSetId).Select(x => new ServicesModels.Fields.FieldOptionServiceModel
                     {
                         Name = x.Name,
                         Value = x.Value
