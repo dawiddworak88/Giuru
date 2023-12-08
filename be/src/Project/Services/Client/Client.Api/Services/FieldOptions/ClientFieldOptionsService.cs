@@ -2,9 +2,13 @@
 using Client.Api.Infrastructure.Fields;
 using Client.Api.ServicesModels.FieldOptions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
+using Foundation.GenericRepository.Paginations;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -73,6 +77,86 @@ namespace Client.Api.Services.FieldOptions
             await _context.SaveChangesAsync();
 
             return fieldOption.Id;
+        }
+
+        public async Task DeleteAsync(DeleteFieldOptionServiceModel model)
+        {
+            var fieldOption = await _context.FieldOptions.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+
+            if (fieldOption is null)
+            {
+                throw new CustomException("", (int)HttpStatusCode.NoContent);
+            }
+
+            fieldOption.IsActive = false;
+            fieldOption.LastModifiedDate = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+        }
+
+        public PagedResults<IEnumerable<FieldOptionServiceModel>> Get(GetFieldOptionsServiceModel model)
+        {
+            var fieldOption = _context.FieldOptions
+                .Include(x => x.OptionsTranslations)
+                .Include(x => x.OptionSet)
+                .Include(x => x.OptionSet.OptionSetTranslations)
+                .AsSingleQuery();
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                fieldOption = fieldOption.Where(x => x.OptionsTranslations.Any(y => y.OptionValue.StartsWith(model.SearchTerm)));
+            }
+
+            fieldOption = fieldOption.ApplySort(model.OrderBy);
+
+            PagedResults<IEnumerable<Option>> pagedResults;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                fieldOption = fieldOption.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = fieldOption.PagedIndex(new Pagination(fieldOption.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = fieldOption.PagedIndex(new Pagination(fieldOption.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
+
+            return new PagedResults<IEnumerable<FieldOptionServiceModel>>(pagedResults.Total, pagedResults.PageSize)
+            {
+                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new FieldOptionServiceModel
+                {
+                    Id = x.Id,
+                    Name = x.OptionSet?.OptionSetTranslations?.FirstOrDefault(t => t.Language == model.Language && t.IsActive)?.Name ?? x.OptionSet?.OptionSetTranslations?.FirstOrDefault(t => t.IsActive)?.Name,
+                    Value = x.OptionsTranslations?.FirstOrDefault(t => t.Language == model.Language && t.IsActive)?.OptionValue ?? x.OptionsTranslations?.FirstOrDefault(t => t.IsActive)?.OptionValue,
+                    LastModifiedDate = x.LastModifiedDate,
+                    CreatedDate = x.CreatedDate
+                })
+            };
+        }
+
+        public async Task<FieldOptionServiceModel> GetAsync(GetFieldOptionServiceModel model)
+        {
+            var fieldOption = await _context.FieldOptions
+                .Include(x => x.OptionsTranslations)
+                .Include(x => x.OptionSet)
+                .Include(x => x.OptionSet.OptionSetTranslations)
+                .AsSingleQuery()
+                .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+
+            if (fieldOption is null)
+            {
+                throw new CustomException("", (int)HttpStatusCode.NoContent);
+            }
+
+            return new FieldOptionServiceModel
+            {
+                Id = model.Id,
+                Name = fieldOption.OptionSet?.OptionSetTranslations?.FirstOrDefault(x => x.Language == model.Language && x.IsActive)?.Name ?? fieldOption.OptionSet?.OptionSetTranslations?.FirstOrDefault(x => x.IsActive)?.Name,
+                Value = fieldOption.OptionsTranslations?.FirstOrDefault(x => x.Language == model.Language && x.IsActive)?.OptionValue ?? fieldOption.OptionsTranslations?.FirstOrDefault(x => x.IsActive)?.OptionValue,
+                LastModifiedDate = fieldOption.LastModifiedDate,
+                CreatedDate = fieldOption.CreatedDate
+            };
         }
 
         public async Task<Guid> UpdateAsync(UpdateFieldOptionServiceModel model)

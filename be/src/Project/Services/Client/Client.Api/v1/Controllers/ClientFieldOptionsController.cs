@@ -1,13 +1,19 @@
 ﻿using Client.Api.Services.FieldOptions;
 using Client.Api.ServicesModels.FieldOptions;
+using Client.Api.ServicesModels.Fields;
 using Client.Api.v1.RequestModels;
+using Client.Api.v1.ResponseModels;
 using Client.Api.Validators.FieldOptions;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Helpers;
+using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -93,6 +99,136 @@ namespace Client.Api.v1.Controllers
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
+        }
+
+        /// <summary>
+        /// Delete field option by id.
+        /// </summary>
+        /// <param name="id">The client field option id.</param>
+        /// <returns>OK.</returns>
+        [HttpDelete, MapToApiVersion("1.0")]
+        [Route("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> DeleteFieldOption(Guid? id)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new DeleteFieldOptionServiceModel
+            {
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
+            };
+
+            var validator = new DeleteFieldOptionModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                await _clientFieldOptionsService.DeleteAsync(serviceModel);
+
+                return StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Get field option by id.
+        /// </summary>
+        /// <param name="id">The client field option id.</param>
+        /// <returns>OK.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetFieldOption(Guid? id)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetFieldOptionServiceModel
+            {
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
+            };
+
+            var validator = new GetFieldOptionModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var fieldOption = await _clientFieldOptionsService.GetAsync(serviceModel);
+
+                if (fieldOption is not null)
+                {
+                    var response = new FieldOptionResponseModel
+                    {
+                        Id = fieldOption.Id,
+                        Name = fieldOption.Name,
+                        Value = fieldOption.Value,
+                        LastModifiedDate = fieldOption.LastModifiedDate,
+                        CreatedDate = fieldOption.CreatedDate
+                    };
+
+                    return StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Gets list of field options.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
+        /// <returns>The list of field options.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public IActionResult Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetFieldOptionsServiceModel
+            {
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var fieldOptions = _clientFieldOptionsService.Get(serviceModel);
+
+            if (fieldOptions is not null)
+            {
+                var response = new PagedResults<IEnumerable<FieldOptionResponseModel>>(fieldOptions.Total, fieldOptions.PageSize)
+                {
+                    Data = fieldOptions.Data.OrEmptyIfNull().Select(x => new FieldOptionResponseModel
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Value = x.Value,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    })
+                };
+
+                return StatusCode((int)HttpStatusCode.OK, response);
+            }
+
+            return StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }
