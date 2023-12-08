@@ -46,7 +46,11 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 EmailIsConfirmedText = this.accountLocalizer["EmailIsConfirmedText"],
                 BackToLoginText = this.accountLocalizer["BackToLoginText"],
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                PasswordSetSuccessMessage = this.accountLocalizer.GetString("PasswordUpdated")
+                PasswordSetSuccessMessage = this.accountLocalizer.GetString("PasswordUpdated"),
+                MarketingApprovalHeader = this.accountLocalizer.GetString("MarketingApprovalHeader"),
+                MarketingApprovalText = this.accountLocalizer.GetString("MarketingApprovalText"),
+                EmailMarketingApprovalLabel = this.accountLocalizer.GetString("EmailMarketingApprovalLabel"),
+                SmsMarketingApprovalLabel = this.accountLocalizer.GetString("SmsMarketingApprovalLabel")
             };
 
             if (componentModel.Id.HasValue)

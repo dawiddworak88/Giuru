@@ -144,6 +144,9 @@
   <data name="EmailIsConfirmedText" xml:space="preserve">
     <value>Account Confirmed</value>
   </data>
+  <data name="EmailMarketingApprovalLabel" xml:space="preserve">
+    <value>I consent to receiving information from ELTAP electronically, to an e-mail address that I secure</value>
+  </data>
   <data name="FirstNameRequiredErrorMessage" xml:space="preserve">
     <value>Enter your first name</value>
   </data>
@@ -155,6 +158,12 @@
   </data>
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Enter your last name</value>
+  </data>
+  <data name="MarketingApprovalHeader" xml:space="preserve">
+    <value>Marketing form for people cooperating with ELTAP</value>
+  </data>
+  <data name="MarketingApprovalText" xml:space="preserve">
+    <value>If you would like to receive information from us about the current offer, current campaigns, introduced functionalities or changes, as well as other activities conducted by ELTAP, please complete the marketing consents below. Consents may be withdrawn at any time, and the withdrawal of consent does not affect actions taken before the date of its withdrawal.</value>
   </data>
   <data name="nc_buttonLabel" xml:space="preserve">
     <value>Confirm and set a password</value>
@@ -206,6 +215,9 @@
   </data>
   <data name="SignInText" xml:space="preserve">
     <value>Sign in</value>
+  </data>
+  <data name="SmsMarketingApprovalLabel" xml:space="preserve">
+    <value>I consent to telephone contact from ELTAP for marketing purposes</value>
   </data>
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>The reset password link has been sent if your account exists in our platform. Please check your e-mail box for further instructions.</value>
