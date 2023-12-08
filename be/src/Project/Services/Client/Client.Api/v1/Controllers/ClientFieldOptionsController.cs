@@ -186,6 +186,7 @@ namespace Client.Api.v1.Controllers
         /// <summary>
         /// Gets list of field options.
         /// </summary>
+        /// <param name="fieldDefinitionId">The field definition id.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
@@ -194,12 +195,13 @@ namespace Client.Api.v1.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
+        public IActionResult Get(Guid? fieldDefinitionId, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetClientFieldOptionsServiceModel
             {
+                FieldDefinitionId = fieldDefinitionId,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,

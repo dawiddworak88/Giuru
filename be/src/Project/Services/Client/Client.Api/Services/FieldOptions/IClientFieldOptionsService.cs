@@ -12,7 +12,7 @@ namespace Client.Api.Services.FieldOptions
         Task<Guid> CreateAsync(CreateClientFieldOptionServiceModel model);
         Task<Guid> UpdateAsync(UpdateClientFieldOptionServiceModel model);
         Task DeleteAsync(DeleteClientFieldOptionServiceModel model);
-        Task<FieldOptionServiceModel> GetAsync(GetClientFieldOptionServiceModel model);
-        PagedResults<IEnumerable<FieldOptionServiceModel>> Get(GetClientFieldOptionsServiceModel model);
+        Task<ClientFieldOptionServiceModel> GetAsync(GetClientFieldOptionServiceModel model);
+        PagedResults<IEnumerable<ClientFieldOptionServiceModel>> Get(GetClientFieldOptionsServiceModel model);
     }
 }

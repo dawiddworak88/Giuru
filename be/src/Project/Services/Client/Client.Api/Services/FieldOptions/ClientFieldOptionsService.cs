@@ -100,37 +100,47 @@ namespace Client.Api.Services.FieldOptions
             await _context.SaveChangesAsync();
         }
 
-        public PagedResults<IEnumerable<FieldOptionServiceModel>> Get(GetClientFieldOptionsServiceModel model)
+        public PagedResults<IEnumerable<ClientFieldOptionServiceModel>> Get(GetClientFieldOptionsServiceModel model)
         {
-            var fieldOption = _context.FieldOptions
+            var fieldOptions = _context.FieldOptions
                 .Include(x => x.OptionsTranslations)
                 .Include(x => x.OptionSet)
                 .Include(x => x.OptionSet.OptionSetTranslations)
                 .AsSingleQuery();
 
-            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            if (model.FieldDefinitionId.HasValue)
             {
-                fieldOption = fieldOption.Where(x => x.OptionsTranslations.Any(y => y.OptionValue.StartsWith(model.SearchTerm)));
+                var fieldDefinition = _context.FieldDefinitions.FirstOrDefault(x => x.Id == model.FieldDefinitionId && x.IsActive);
+
+                if (fieldDefinition is not null)
+                {
+                    fieldOptions = fieldOptions.Where(x => x.OptionSetId == fieldDefinition.OptionSetId);
+                }
             }
 
-            fieldOption = fieldOption.ApplySort(model.OrderBy);
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                fieldOptions = fieldOptions.Where(x => x.OptionsTranslations.Any(y => y.OptionValue.StartsWith(model.SearchTerm)));
+            }
+
+            fieldOptions = fieldOptions.ApplySort(model.OrderBy);
 
             PagedResults<IEnumerable<Option>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
-                fieldOption = fieldOption.Take(Constants.MaxItemsPerPageLimit);
+                fieldOptions = fieldOptions.Take(Constants.MaxItemsPerPageLimit);
 
-                pagedResults = fieldOption.PagedIndex(new Pagination(fieldOption.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+                pagedResults = fieldOptions.PagedIndex(new Pagination(fieldOptions.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
             }
             else
             {
-                pagedResults = fieldOption.PagedIndex(new Pagination(fieldOption.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+                pagedResults = fieldOptions.PagedIndex(new Pagination(fieldOptions.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            return new PagedResults<IEnumerable<FieldOptionServiceModel>>(pagedResults.Total, pagedResults.PageSize)
+            return new PagedResults<IEnumerable<ClientFieldOptionServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
-                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new FieldOptionServiceModel
+                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new ClientFieldOptionServiceModel
                 {
                     Id = x.Id,
                     Name = x.OptionSet?.OptionSetTranslations?.FirstOrDefault(t => t.Language == model.Language && t.IsActive)?.Name ?? x.OptionSet?.OptionSetTranslations?.FirstOrDefault(t => t.IsActive)?.Name,
@@ -141,7 +151,7 @@ namespace Client.Api.Services.FieldOptions
             };
         }
 
-        public async Task<FieldOptionServiceModel> GetAsync(GetClientFieldOptionServiceModel model)
+        public async Task<ClientFieldOptionServiceModel> GetAsync(GetClientFieldOptionServiceModel model)
         {
             var fieldOption = await _context.FieldOptions
                 .Include(x => x.OptionsTranslations)
@@ -155,7 +165,7 @@ namespace Client.Api.Services.FieldOptions
                 throw new CustomException(_clientLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            return new FieldOptionServiceModel
+            return new ClientFieldOptionServiceModel
             {
                 Id = model.Id,
                 Name = fieldOption.OptionSet?.OptionSetTranslations?.FirstOrDefault(x => x.Language == model.Language && x.IsActive)?.Name ?? fieldOption.OptionSet?.OptionSetTranslations?.FirstOrDefault(x => x.IsActive)?.Name,

@@ -1,6 +1,5 @@
 ﻿using Client.Api.Infrastructure;
 using Client.Api.Infrastructure.Fields;
-using Client.Api.ServicesModels.FieldOptions;
 using Client.Api.ServicesModels.Fields;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
@@ -55,7 +54,7 @@ namespace Client.Api.Services.Fields
             return fieldDefinition.Id;
         }
 
-        public async Task<ClientFieldOptionServiceModel> GetAsync(GetClientFieldDefinitionServiceModel model)
+        public async Task<ClientFieldServiceModel> GetAsync(GetClientFieldDefinitionServiceModel model)
         {
             var fieldDefinition = await _context.FieldDefinitions
                 .Include(fd => fd.FieldDefinitionTranslations)
@@ -86,7 +85,7 @@ namespace Client.Api.Services.Fields
                                          };
 
 
-            return new ClientFieldOptionServiceModel
+            return new ClientFieldServiceModel
             {
                 Id = fieldDefinition.Id,
                 Name = fieldDefinitionTranslation.FieldName,
@@ -98,7 +97,7 @@ namespace Client.Api.Services.Fields
             };
         }
 
-        public PagedResults<IEnumerable<ClientFieldOptionServiceModel>> Get(GetClientFieldsServiceModel model)
+        public PagedResults<IEnumerable<ClientFieldServiceModel>> Get(GetClientFieldsServiceModel model)
         {
             var fieldDefinitions = _context.FieldDefinitions.Include(fd => fd.FieldDefinitionTranslations).AsSingleQuery().Where(x => x.IsActive);
 
@@ -136,9 +135,9 @@ namespace Client.Api.Services.Fields
                                              Value = grouped.FirstOrDefault(g => g.fot.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fot.Language == model.Language).fot.OptionValue : grouped.FirstOrDefault().fot.OptionValue
                                          }).ToList();
 
-            return new PagedResults<IEnumerable<ClientFieldOptionServiceModel>>(pagedResults.Total, pagedResults.PageSize)
+            return new PagedResults<IEnumerable<ClientFieldServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
-                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new ClientFieldOptionServiceModel
+                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new ClientFieldServiceModel
                 {
                     Id = x.Id,
                     Name = x.FieldDefinitionTranslations?.FirstOrDefault(t => t.FieldDefinitionId == x.Id && t.Language == model.Language)?.FieldName ?? x.FieldDefinitionTranslations?.FirstOrDefault(t => t.FieldDefinitionId == x.Id)?.FieldName,
