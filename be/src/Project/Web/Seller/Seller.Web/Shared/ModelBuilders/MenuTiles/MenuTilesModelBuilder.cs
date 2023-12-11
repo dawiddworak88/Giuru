@@ -15,17 +15,20 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
     {
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<DashboardResources> _dashboardResources;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly LinkGenerator _linkGenerator;
         private readonly IOptionsMonitor<AppSettings> _options;
 
         public MenuTilesModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<DashboardResources> dashboardResources,
+            IStringLocalizer<ClientResources> clientLocalizer,
             IOptionsMonitor<AppSettings> options,
             LinkGenerator linkGenerator)
         {
             _globalLocalizer = globalLocalizer;
             _dashboardResources = dashboardResources;
+            _clientLocalizer = clientLocalizer;
             _linkGenerator = linkGenerator;
             _options = options;
         }
@@ -125,6 +128,12 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                         Icon = IconsConstants.Key,
                         Title = _globalLocalizer.GetString("ClientsRoles"),
                         Url = _linkGenerator.GetPathByAction("Index", "ClientRoles", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                    },
+                    new MenuTileViewModel
+                    {
+                        Icon = IconsConstants.Hexagon,
+                        Title = _globalLocalizer.GetString("ClientFields"),
+                        Url = _linkGenerator.GetPathByAction("Index", "ClientFields", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                     },
                     new MenuTileViewModel
                     {
