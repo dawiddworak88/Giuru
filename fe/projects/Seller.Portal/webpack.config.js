@@ -6,6 +6,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
     entry: {
+        clientfieldspage: ["./src/areas/Clients/pages/ClientFieldsPage/index.js", "./src/areas/Clients/pages/ClientFieldsPage/ClientFieldsPage.scss"],
         clientaddresspage: ["./src/areas/Clients/pages/ClientAddressPage/index.js", "./src/areas/Clients/pages/ClientAddressPage/ClientAddressPage.scss"],
         clientaddressespage: ["./src/areas/Clients/pages/ClientAddressesPage/index.js", "./src/areas/Clients/pages/ClientAddressesPage/ClientAddressesPage.scss"],
         productcardpage: ["./src/areas/Products/pages/ProductCardPage/index.js", "./src/areas/Products/pages/ProductCardPage/ProductCardPage.scss"],
@@ -27,7 +28,7 @@ module.exports = {
         mediaitempage: ["./src/areas/MediaItems/pages/MediaItemPage/index.js", "./src/areas/MediaItems/pages/MediaItemPage/MediaItemPage.scss"],
         clientaccountmanagerpage: ["./src/areas/Clients/pages/ClientAccountManagerPage/index.js", "./src/areas/Clients/pages/ClientAccountManagerPage/ClientAccountManagerPage.scss"],
         clientaccountmanagerspage: ["./src/areas/Clients/pages/ClientAccountManagersPage/index.js", "./src/areas/Clients/pages/ClientAccountManagersPage/ClientAccountManagersPage.scss"],
-        mediaitemspage: ["./src/areas/MediaItems/pages/MediaItemsPage/index.js", "./src/areas/MediaItems/pages/MediaItemsPage/MediaItemsPage.scss"],
+        mediaitemspage: ["./src/areas/MediaItems/pages/MediaItemsPag    e/index.js", "./src/areas/MediaItems/pages/MediaItemsPage/MediaItemsPage.scss"],
         outletpage: ["./src/areas/Inventory/pages/OutletPage/index.js", "./src/areas/Inventory/pages/OutletPage/OutletPage.scss"],
         outletspage: ["./src/areas/Inventory/pages/OutletsPage/index.js", "./src/areas/Inventory/pages/OutletsPage/OutletsPage.scss"],
         clientgrouppage: ["./src/areas/Clients/pages/ClientGroupPage/index.js", "./src/areas/Clients/pages/ClientGroupPage/ClientGroupPage.scss"],
