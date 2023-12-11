@@ -24,12 +24,11 @@ namespace Identity.Api.Areas.Accounts.Repositories
             _settings = settings;
         }
 
-        public async Task<Guid> AddMarketingApprovals(string token, string language, Guid? id, Guid? organisationId, IEnumerable<string> marketingApprovals)
+        public async Task<Guid> AddMarketingApprovals(string token, string language, Guid? id, IEnumerable<string> marketingApprovals)
         {
             var requestModel = new SaveClientRequestModel
             {
                 Id = id,
-                OrganisationId = organisationId,
                 MarketingApprovals = marketingApprovals
             };
 
