@@ -1,21 +1,38 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { Context } from "../../../../shared/stores/Store";
-import { TextField, Button, CircularProgress } from "@mui/material";
+import { TextField, Button, CircularProgress, NoSsr, FormControlLabel, Checkbox } from "@mui/material";
 import useForm from "../../../../shared/helpers/forms/useForm";
 import PasswordValidator from "../../../../shared/helpers/validators/PasswordValidator";
 import { toast } from "react-toastify";
 import ResponseStatusConstants from "../../../../shared/constants/ResponseStatusConstants";
 import NavigationHelper from "../../../../shared/helpers/globals/NavigationHelper";
 import ToastHelper from "../../../../shared/helpers/globals/ToastHelper";
+import SetPasswordConstants from "../../../../shared/constants/SetPasswordConstants";
 
 function SetPasswordForm(props) {
+    const [ emailMarketingAporval, setEmailMarketingApproval ] = useState(false);
+    const [ smsMarketingAporval, setSmsMarketingApproval ] = useState(false);
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         password: { value: null, error: "" },
         returnUrl: { value: props.returnUrl ? props.returnUrl : null }
     };
+
+    const addNamesToMarketingApporvals = () => {
+        let result = [];
+
+        if (emailMarketingAporval) {
+            result.push(SetPasswordConstants.emailMarketingApprovalName());
+        }
+
+        if (smsMarketingAporval) {
+            result.push(SetPasswordConstants.smsMarketingApprovalName());
+        }
+
+        return result;
+    }
 
     const stateValidatorSchema = {
         password: {
@@ -33,10 +50,15 @@ function SetPasswordForm(props) {
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        const payload = {
+            ...state,
+            marketingApprovals: addNamesToMarketingApporvals()
+        }
+
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(state)
+            body: JSON.stringify(payload)
         };
 
         fetch(props.submitUrl, requestOptions)
@@ -63,6 +85,7 @@ function SetPasswordForm(props) {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
     const { id, password } = values;
+
     return (
         <section className="section is-flex-centered set-password">
             <div className="account-card">
@@ -93,6 +116,44 @@ function SetPasswordForm(props) {
                             fullWidth={true}>
                             {props.setPasswordText}
                         </Button>
+                    </div>
+                    <div className="field">
+                        <p className="has-text-weight-semibold">{props.marketingApprovalHeader}</p>
+                        <p>{props.marketingApprovalText}</p>
+                    </div>
+                    <div className="field">
+                        <NoSsr>
+                            <FormControlLabel 
+                                control={
+                                    <Checkbox
+                                        onChange={e =>{
+                                            setEmailMarketingApproval(e.target.checked);
+                                        }}
+                                        checked={emailMarketingAporval}
+                                        id="emailMarketingApproval"
+                                        name="emailMarketingApproval"
+                                        color="secondary" />
+                                    }
+                                label={props.emailMarketingApprovalLabel}
+                            />
+                        </NoSsr>
+                    </div>
+                    <div className="field">
+                        <NoSsr>
+                            <FormControlLabel 
+                                control={
+                                    <Checkbox
+                                        onChange={e =>{
+                                            setSmsMarketingApproval(e.target.checked);
+                                        }}
+                                        checked={smsMarketingAporval}
+                                        id="smsMarketingApproval"
+                                        name="smsMarketingApproval"
+                                        color="secondary" />
+                                    }
+                                label={props.smsMarketingApprovalLabel}
+                            />
+                        </NoSsr>
                     </div>
                 </form>
             </div>
