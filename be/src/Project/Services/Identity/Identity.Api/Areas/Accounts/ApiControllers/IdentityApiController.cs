@@ -1,20 +1,24 @@
 ﻿using Feature.Account;
 using Foundation.ApiExtensions.Controllers;
-using Foundation.Extensions.Exceptions;
+using Foundation.ApiExtensions.Definitions;
 using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
+using Identity.Api.Areas.Accounts.Repositories;
 using Identity.Api.Areas.Accounts.Services.UserServices;
 using Identity.Api.Areas.Accounts.Validators;
 using Identity.Api.Configurations;
 using Identity.Api.Services.Users;
 using Identity.Api.ServicesModels.Users;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Identity.Api.Areas.Accounts.ApiControllers
@@ -28,6 +32,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         private readonly IStringLocalizer<AccountResources> accountLocalizer;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly LinkGenerator linkGenerator;
+        private readonly IClientRepository _clientRepository;
 
         public IdentityApiController(
             IUserService userService,
@@ -35,7 +40,8 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             IStringLocalizer<AccountResources> accountLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
             LinkGenerator linkGenerator,
-            IUsersService usersService)
+            IUsersService usersService,
+            IClientRepository clientRepository)
         {
             this.userService = userService;
             this.usersService = usersService;
@@ -43,6 +49,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             this.accountLocalizer = accountLocalizer;
             this.globalLocalizer = globalLocalizer;
             this.linkGenerator = linkGenerator;
+            _clientRepository = clientRepository;
         }
 
         [HttpGet]
@@ -90,6 +97,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             if (result.IsValid)
             {
                 var language = CultureInfo.CurrentUICulture.Name;
+
                 var serviceModel = new SetUserPasswordServiceModel
                 {
                     ExpirationId = model.Id.Value,
@@ -103,6 +111,18 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                 {
                     if (await this.userService.SignInAsync(user.Email, model.Password, null, null))
                     {
+                        var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+
+                        if (model.MarketingApprovals.Any())
+                        {
+                            var clientId = await _clientRepository.GetClientByOrganistationId(language, token, user.OrganisationId);
+
+                            if(clientId is not null)
+                            {
+                               await _clientRepository.AddMarketingApprovals(language, token, clientId, model.MarketingApprovals);
+                            }
+                        }
+
                         return this.StatusCode((int)HttpStatusCode.Redirect, new { Url = model.ReturnUrl });
                     }
                 }
