@@ -13,14 +13,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
+namespace Seller.Web.Areas.Clients.Repositories.Fields
 {
-    public class ClientAddressesRepository : IClientAddressesRepository
+    public class ClientFieldsRepository : IClientFieldsRepository
     {
         private readonly IApiClientService _apiClientService;
         private readonly IOptions<AppSettings> _options;
 
-        public ClientAddressesRepository(
+        public ClientFieldsRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> options)
         {
@@ -35,7 +35,7 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.AddressesApiEndpoint}/{id}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.FieldsApiEndpoint}/{id}"
             };
 
             var response = await _apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
@@ -46,17 +46,53 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
             }
         }
 
-        public async Task<ClientAddress> GetAsync(string token, string language, Guid? id)
+        public async Task<PagedResults<IEnumerable<ClientField>>> GetAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        {
+            var requestModel = new PagedRequestModelBase
+            {
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
+            };
+
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.FieldsApiEndpoint}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientField>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                return new PagedResults<IEnumerable<ClientField>>(response.Data.Total, response.Data.PageSize)
+                {
+                    Data = response.Data.Data
+                };
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
+        }
+
+        public async Task<ClientField> GetAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.AddressesApiEndpoint}/{id}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.FieldsApiEndpoint}/{id}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ClientAddress>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ClientField>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -71,70 +107,24 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<ClientAddress>>> GetAsync(string token, string language, Guid? clientId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string type)
         {
-            var requestModel = new PagedDeliveryAddressesRequestModel
-            {
-                ClientId = clientId,
-                SearchTerm = searchTerm,
-                PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage,
-                OrderBy = orderBy
-            };
-
-            var apiRequest = new ApiRequest<PagedRequestModelBase>
-            {
-                Language = language,
-                Data = requestModel,
-                AccessToken = token,
-                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.AddressesApiEndpoint}"
-            };
-
-            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientAddress>>>(apiRequest);
-
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
-            {
-                return new PagedResults<IEnumerable<ClientAddress>>(response.Data.Total, response.Data.PageSize)
-                {
-                    Data = response.Data.Data
-                };
-            }
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            return default;
-        }
-
-
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string company, string firstName, string lastName, string phoneNumber, string street, string region, string postCode, string city, Guid? clientId, Guid? countryId)
-        {
-            var requestModel = new DeliveryAddressRequestModel
+            var requestModel = new ClientFieldRequestModel
             {
                 Id = id,
-                ClientId = clientId,
-                CountryId = countryId,
-                Company = company,
-                FirstName = firstName,
-                LastName = lastName,
-                PhoneNumber = phoneNumber,
-                Street = street,
-                Region = region,
-                PostCode = postCode,
-                City = city
+                Name = name,
+                Type = type
             };
 
-            var apiRequest = new ApiRequest<DeliveryAddressRequestModel>
+            var apiRequest = new ApiRequest<ClientFieldRequestModel>
             {
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.AddressesApiEndpoint}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.FieldsApiEndpoint}"
             };
 
-            var response = await _apiClientService.PostAsync<ApiRequest<DeliveryAddressRequestModel>, DeliveryAddressRequestModel, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<ClientFieldRequestModel>, ClientFieldRequestModel, BaseResponseModel>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Id != null)
             {
