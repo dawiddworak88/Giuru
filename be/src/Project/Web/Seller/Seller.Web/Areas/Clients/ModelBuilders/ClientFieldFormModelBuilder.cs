@@ -3,6 +3,7 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Clients.Repositories.Fields;
 using Seller.Web.Areas.Clients.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -13,16 +14,19 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
     {
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
+        private readonly IClientFieldsRepository _clientFieldsRepository;
         private readonly LinkGenerator _linkGenerator;
 
         public ClientFieldFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
+            IClientFieldsRepository clientFieldsRepository,
             LinkGenerator linkGenerator)
         {
             _globalLocalizer = globalLocalizer;
             _clientLocalizer = clientLocalizer;
             _linkGenerator = linkGenerator;
+            _clientFieldsRepository = clientFieldsRepository;
         }
 
         public async Task<ClientFieldFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -50,6 +54,14 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             if (componentModel.Id.HasValue)
             {
                 viewModel.Id = componentModel.Id;
+
+                var clientField = await _clientFieldsRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+
+                if (clientField is not null)
+                {
+                    viewModel.Name = clientField.Name;
+                    viewModel.Type = clientField.Type;
+                }
             }
 
             return viewModel;
