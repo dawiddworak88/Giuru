@@ -14,10 +14,10 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
 {
     public class SetPasswordFormModelBuilder : IAsyncComponentModelBuilder<SetPasswordFormComponentModel, SetPasswordFormViewModel>
     {
-        private readonly IUsersService usersService;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<AccountResources> accountLocalizer;
-        private readonly LinkGenerator linkGenerator;
+        private readonly IUsersService _usersService;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<AccountResources> _accountLocalizer;
+        private readonly LinkGenerator _linkGenerator;
 
         public SetPasswordFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer, 
@@ -25,10 +25,10 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             LinkGenerator linkGenerator,
             IUsersService usersService)
         {
-            this.globalLocalizer = globalLocalizer;
-            this.accountLocalizer = accountLocalizer;
-            this.linkGenerator = linkGenerator;
-            this.usersService = usersService;
+            _globalLocalizer = globalLocalizer;
+            _accountLocalizer = accountLocalizer;
+            _linkGenerator = linkGenerator;
+            _usersService = usersService;
         }
 
         public async Task<SetPasswordFormViewModel> BuildModelAsync(SetPasswordFormComponentModel componentModel)
@@ -37,20 +37,20 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             {
                 Id = componentModel.Id.Value,
                 ReturnUrl = componentModel.ReturnUrl,
-                PasswordFormatErrorMessage = this.globalLocalizer["PasswordFormatErrorMessage"],
-                PasswordRequiredErrorMessage = this.globalLocalizer["PasswordRequiredErrorMessage"],
-                PasswordLabel = this.globalLocalizer["EnterPasswordText"],
-                ConfirmPasswordLabel = this.globalLocalizer["EnterConfirmPasswordText"],
-                SetPasswordText = this.accountLocalizer["SetPassword"],
-                SubmitUrl = this.linkGenerator.GetPathByAction("Index", "IdentityApi", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
-                EmailIsConfirmedText = this.accountLocalizer["EmailIsConfirmedText"],
-                BackToLoginText = this.accountLocalizer["BackToLoginText"],
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                PasswordSetSuccessMessage = this.accountLocalizer.GetString("PasswordUpdated"),
-                MarketingApprovalHeader = this.accountLocalizer.GetString("MarketingApprovalHeader"),
-                MarketingApprovalText = this.accountLocalizer.GetString("MarketingApprovalText"),
-                EmailMarketingApprovalLabel = this.accountLocalizer.GetString("EmailMarketingApprovalLabel"),
-                SmsMarketingApprovalLabel = this.accountLocalizer.GetString("SmsMarketingApprovalLabel")
+                PasswordFormatErrorMessage = _globalLocalizer["PasswordFormatErrorMessage"],
+                PasswordRequiredErrorMessage = _globalLocalizer["PasswordRequiredErrorMessage"],
+                PasswordLabel = _globalLocalizer["EnterPasswordText"],
+                ConfirmPasswordLabel = _globalLocalizer["EnterConfirmPasswordText"],
+                SetPasswordText = _accountLocalizer["SetPassword"],
+                SubmitUrl = _linkGenerator.GetPathByAction("Index", "IdentityApi", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
+                EmailIsConfirmedText = _accountLocalizer["EmailIsConfirmedText"],
+                BackToLoginText = _accountLocalizer["BackToLoginText"],
+                GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
+                PasswordSetSuccessMessage = _accountLocalizer.GetString("PasswordUpdated"),
+                MarketingApprovalHeader = _accountLocalizer.GetString("MarketingApprovalHeader"),
+                MarketingApprovalText = _accountLocalizer.GetString("MarketingApprovalText"),
+                EmailMarketingApprovalLabel = _accountLocalizer.GetString("EmailMarketingApprovalLabel"),
+                SmsMarketingApprovalLabel = _accountLocalizer.GetString("SmsMarketingApprovalLabel")
             };
 
             if (componentModel.Id.HasValue)
@@ -61,7 +61,7 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                     Language = componentModel.Language
                 };
 
-                var user = await this.usersService.GetByExpirationId(serviceModel);
+                var user = await _usersService.GetByExpirationId(serviceModel);
 
                 if (user is not null)
                 {

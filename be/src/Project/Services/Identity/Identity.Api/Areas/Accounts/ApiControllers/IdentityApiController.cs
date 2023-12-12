@@ -1,12 +1,12 @@
 ﻿using Feature.Account;
 using Foundation.ApiExtensions.Controllers;
-using Foundation.ApiExtensions.Definitions;
 using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
 using Identity.Api.Areas.Accounts.Repositories;
 using Identity.Api.Areas.Accounts.Services.UserServices;
 using Identity.Api.Areas.Accounts.Validators;
 using Identity.Api.Configurations;
+using Identity.Api.Services.Tokens;
 using Identity.Api.Services.Users;
 using Identity.Api.ServicesModels.Users;
 using Microsoft.AspNetCore.Authentication;
@@ -26,13 +26,14 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
     [Area("Accounts")]
     public class IdentityApiController : BaseApiController
     {
-        private readonly IUserService userService;
-        private readonly IUsersService usersService;
-        private readonly IOptions<AppSettings> options;
-        private readonly IStringLocalizer<AccountResources> accountLocalizer;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly LinkGenerator linkGenerator;
+        private readonly IUserService _userService;
+        private readonly IUsersService _usersService;
+        private readonly IOptions<AppSettings> _options;
+        private readonly IStringLocalizer<AccountResources> _accountLocalizer;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly LinkGenerator _linkGenerator;
         private readonly IClientRepository _clientRepository;
+        private readonly ITokenService _tokenService;
 
         public IdentityApiController(
             IUserService userService,
@@ -41,15 +42,17 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             IStringLocalizer<GlobalResources> globalLocalizer,
             LinkGenerator linkGenerator,
             IUsersService usersService,
-            IClientRepository clientRepository)
+            IClientRepository clientRepository,
+            ITokenService tokenService)
         {
-            this.userService = userService;
-            this.usersService = usersService;
-            this.options = options;
-            this.accountLocalizer = accountLocalizer;
-            this.globalLocalizer = globalLocalizer;
-            this.linkGenerator = linkGenerator;
+            _userService = userService;
+            _usersService = usersService;
+            _options = options;
+            _accountLocalizer = accountLocalizer;
+            _globalLocalizer = globalLocalizer;
+            _linkGenerator = linkGenerator;
             _clientRepository = clientRepository;
+            _tokenService = tokenService;
         }
 
         [HttpGet]
@@ -57,13 +60,13 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         {
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var user = await this.usersService.GetById(new GetUserServiceModel
+            var user = await _usersService.GetById(new GetUserServiceModel
             { 
                 Language = language,
                 Id = id
             });
 
-            return this.StatusCode((int)HttpStatusCode.OK, user);
+            return StatusCode((int)HttpStatusCode.OK, user);
         }
 
         [HttpPost]
@@ -75,17 +78,17 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             {
                 var serviceModel = new ResetUserPasswordServiceModel {
                     Email = model.Email,
-                    ReturnUrl = this.options.Value.BuyerUrl,
-                    Scheme = this.HttpContext.Request.Scheme,
-                    Host = this.HttpContext.Request.Host
+                    ReturnUrl = _options.Value.BuyerUrl,
+                    Scheme = HttpContext.Request.Scheme,
+                    Host = HttpContext.Request.Host
                 };
 
-                await this.usersService.ResetPasswordAsync(serviceModel);
+                await _usersService.ResetPasswordAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.accountLocalizer.GetString("SuccessfullyResetPassword").Value });
+                return StatusCode((int)HttpStatusCode.OK, new { Message = _accountLocalizer.GetString("SuccessfullyResetPassword").Value });
             }
 
-            return this.StatusCode((int)HttpStatusCode.BadRequest);
+            return StatusCode((int)HttpStatusCode.BadRequest);
         }
 
         [HttpPost]
@@ -105,34 +108,38 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                     Language = language
                 };
 
-                var user = await this.usersService.SetPasswordAsync(serviceModel);
+                var user = await _usersService.SetPasswordAsync(serviceModel);
 
                 if (user is not null)
                 {
-                    if (await this.userService.SignInAsync(user.Email, model.Password, null, null))
+                    if (await _userService.SignInAsync(user.Email, model.Password, null, null))
                     {
-                        var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
-
                         if (model.MarketingApprovals.Any())
                         {
-                            var clientId = await _clientRepository.GetClientByOrganistationId(language, token, user.OrganisationId);
+                            var token = await _tokenService.GetTokenAsync("seller@user.com", Guid.Parse("09affcc9-1665-45d6-919f-3d2026106ba1"), "98daf0da-89ac-48db-8b9f-edc6383153ed");
 
-                            if(clientId is not null)
+                            var client = await _clientRepository.GetClientByOrganistationId(language, token, user.OrganisationId);
+
+                            if (client is not null)
                             {
-                               await _clientRepository.AddMarketingApprovals(language, token, clientId, model.MarketingApprovals);
+                                client.MarketingApprovals = model.MarketingApprovals;
+
+                                await _clientRepository.SaveMarketingApprovals(language, token, client);
                             }
                         }
 
-                        return this.StatusCode((int)HttpStatusCode.Redirect, new { Url = model.ReturnUrl });
+                        Console.WriteLine("ReturnUrl " + JsonSerializer.Serialize(model.ReturnUrl));
+
+                        return StatusCode((int)HttpStatusCode.Redirect, new { Url = model.ReturnUrl });
                     }
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.BadRequest, new { EmailIsConfirmedLabel = this.accountLocalizer.GetString("EmailIsConfirmed").Value, SignInLabel = this.globalLocalizer.GetString("TrySignIn").Value, SignInUrl = this.linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })});
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { EmailIsConfirmedLabel = _accountLocalizer.GetString("EmailIsConfirmed").Value, SignInLabel = _globalLocalizer.GetString("TrySignIn").Value, SignInUrl = _linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })});
                 }
             }   
 
-            return this.StatusCode((int)HttpStatusCode.BadRequest);
+            return StatusCode((int)HttpStatusCode.BadRequest);
         }
     }
 }
