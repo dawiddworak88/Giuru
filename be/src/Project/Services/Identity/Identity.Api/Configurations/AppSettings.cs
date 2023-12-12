@@ -13,5 +13,8 @@ namespace Identity.Api.Configurations
         public string ActionSendGridCreateTemplateId { get; set; }
         public string ActionSendGridResetTemplateId { get; set; }
         public string ActionSendGridTeamMemberInvitationTemplateId { get; set; }
+        public string Email { get; set; }
+        public Guid OrganisationId { get; set; }
+        public string AppSecret { get; set; }
     }
 }

@@ -277,6 +277,9 @@ services:
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
+      - OrganisationId=09affcc9-1665-45d6-919f-3d2026106ba1
+      - Email=szymon.dworak@eltap.com
+      - AppSecret=98daf0da-89ac-48db-8b9f-edc6383153ed
     ports:
       - "5105:80"
 
