@@ -72,7 +72,7 @@ namespace Client.Api.Services.Clients
                     PhoneNumber = client.PhoneNumber,
                     DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
                     LastModifiedDate = client.LastModifiedDate,
-                    CreatedDate = client.CreatedDate,
+                    CreatedDate = client.CreatedDate
                 };
 
                 var clientGroups = _context.ClientsGroups.Where(x => x.ClientId == client.Id && x.IsActive).Select(x => x.GroupId);
@@ -122,7 +122,7 @@ namespace Client.Api.Services.Clients
             }
 
             var client = new ClientServiceModel
-            {   
+            {
                 Id = existingClient.Id,
                 Name = existingClient.Name,
                 Email = existingClient.Email,
@@ -284,7 +284,7 @@ namespace Client.Api.Services.Clients
                 OrganisationId = serviceModel.ClientOrganisationId.Value,
                 PhoneNumber = serviceModel.PhoneNumber,
                 SellerId = serviceModel.OrganisationId.Value,
-                DefaultDeliveryAddressId = serviceModel.DefaultDeliveryAddressId,
+                DefaultDeliveryAddressId = serviceModel.DefaultDeliveryAddressId
             };
 
             _context.Clients.Add(client.FillCommonProperties());
