@@ -18,7 +18,6 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Identity.Api.Areas.Accounts.ApiControllers
@@ -116,7 +115,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                     {
                         if (model.MarketingApprovals.Any())
                         {
-                            var token = await _tokenService.GetTokenAsync("seller@user.com", Guid.Parse("09affcc9-1665-45d6-919f-3d2026106ba1"), "98daf0da-89ac-48db-8b9f-edc6383153ed");
+                            var token = await _tokenService.GetTokenAsync(_options.Value.Email, _options.Value.OrganisationId, _options.Value.AppSecret);
 
                             var client = await _clientRepository.GetClientByOrganistationId(language, token, user.OrganisationId);
 
@@ -127,8 +126,6 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                                 await _clientRepository.SaveMarketingApprovals(language, token, client);
                             }
                         }
-
-                        Console.WriteLine("ReturnUrl " + JsonSerializer.Serialize(model.ReturnUrl));
 
                         return StatusCode((int)HttpStatusCode.Redirect, new { Url = model.ReturnUrl });
                     }
