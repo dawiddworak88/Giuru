@@ -6,6 +6,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
     entry: {
+        clientfieldpage: ["./src/areas/Clients/pages/ClientFieldPage/index.js", "./src/areas/Clients/pages/ClientFieldPage/ClientFieldPage.scss"],
         clientfieldspage: ["./src/areas/Clients/pages/ClientFieldsPage/index.js", "./src/areas/Clients/pages/ClientFieldsPage/ClientFieldsPage.scss"],
         clientaddresspage: ["./src/areas/Clients/pages/ClientAddressPage/index.js", "./src/areas/Clients/pages/ClientAddressPage/ClientAddressPage.scss"],
         clientaddressespage: ["./src/areas/Clients/pages/ClientAddressesPage/index.js", "./src/areas/Clients/pages/ClientAddressesPage/ClientAddressesPage.scss"],

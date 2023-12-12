@@ -55,6 +55,8 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientField>>, ClientFieldsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientFieldsPageViewModel>, ClientFieldsPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientFieldPageViewModel>, ClientFieldPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientFieldFormViewModel>, ClientFieldFormModelBuilder>();
         }
     }
 }
