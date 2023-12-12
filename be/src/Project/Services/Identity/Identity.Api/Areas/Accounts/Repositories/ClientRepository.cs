@@ -83,7 +83,7 @@ namespace Identity.Api.Areas.Accounts.Repositories
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
-            if(response.IsSuccessStatusCode && response.Data != null) 
+            if (response.IsSuccessStatusCode && response.Data != null) 
             {
                 return response.Data;
             }
