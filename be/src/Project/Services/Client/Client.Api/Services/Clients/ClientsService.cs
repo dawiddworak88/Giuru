@@ -353,6 +353,7 @@ namespace Client.Api.Services.Clients
                               Name = c.Name,
                               Email = c.Email,
                               CountryId = c.CountryId,
+                              OrganisationId = c.OrganisationId,
                               CommunicationLanguage = c.Language,
                               PhoneNumber = c.PhoneNumber,
                               DefaultDeliveryAddressId = c.DefaultDeliveryAddressId,

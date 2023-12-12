@@ -212,9 +212,13 @@ namespace Client.Api.v1.Controllers
                         DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate,
-                        MarketingApprovals = client.MarketingApprovals.OrEmptyIfNull().Select(x => new ClientMarketingApprovalResponseModel { 
+                        MarketingApprovals = client.MarketingApprovals.OrEmptyIfNull().Select(x => new ClientMarketingApprovalResponseModel {
+                            Id = x.Id,
                             Name = x.Name,
-                            CreatedDate = x.CreatedDate,
+                            IsApproved = x.IsApproved,
+                            ClientId = x.ClientId,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
                         })
                     };
 
@@ -270,6 +274,7 @@ namespace Client.Api.v1.Controllers
                         CommunicationLanguage = client.CommunicationLanguage,
                         CountryId = client.CountryId,
                         PhoneNumber = client.PhoneNumber,
+                        OrganisationId = client.OrganisationId,
                         ClientGroupIds = client.ClientGroupIds,
                         ClientManagerIds = client.ClientManagerIds,
                         DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
