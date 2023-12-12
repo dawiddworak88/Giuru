@@ -2,14 +2,14 @@
 using Foundation.ApiExtensions.Shared.Definitions;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Foundation.ApiExtensions.Services.ApiClientServices;
-using Foundation.ApiExtensions.Models.Response;
 using Foundation.Extensions.Exceptions;
 using Microsoft.Extensions.Options;
 using Identity.Api.Configurations;
 using Foundation.ApiExtensions.Models.Request;
+using Identity.Api.Areas.Accounts.Models;
+using Foundation.ApiExtensions.Models.Response;
 
 namespace Identity.Api.Areas.Accounts.Repositories
 {
@@ -24,12 +24,23 @@ namespace Identity.Api.Areas.Accounts.Repositories
             _settings = settings;
         }
 
-        public async Task<Guid> AddMarketingApprovals(string token, string language, Guid? id, IEnumerable<string> marketingApprovals)
+        public async Task<Guid?> SaveMarketingApprovals(string language, string token, Client client)
         {
             var requestModel = new SaveClientRequestModel
             {
-                Id = id,
-                MarketingApprovals = marketingApprovals
+                Id = client.Id,
+                Name = client.Name,
+                Email = client.Email,
+                CommunicationLanguage = client.CommunicationLanguage,
+                PhoneNumber = client.PhoneNumber,
+                CountryId = client.CountryId,
+                OrganisationId = client.OrganisationId,
+                ClientGroupIds = client.ClientGroupIds,
+                ClientManagerIds = client.ClientManagerIds,
+                DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
+                LastModifiedDate = client.LastModifiedDate,
+                CreatedDate = client.CreatedDate,
+                MarketingApprovals = client.MarketingApprovals
             };
 
             var apiRequest = new ApiRequest<SaveClientRequestModel>
@@ -44,7 +55,7 @@ namespace Identity.Api.Areas.Accounts.Repositories
 
             if (response.IsSuccessStatusCode && response.Data?.Id != null)
             {
-                return response.Data.Id.Value;
+                return response.Data.Id;
             }
 
             if (!response.IsSuccessStatusCode)
@@ -55,7 +66,7 @@ namespace Identity.Api.Areas.Accounts.Repositories
             return default;
         }
 
-        public async Task<Guid?> GetClientByOrganistationId(string language, string token, Guid? id)
+        public async Task<Client> GetClientByOrganistationId(string language, string token, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
@@ -65,7 +76,7 @@ namespace Identity.Api.Areas.Accounts.Repositories
                 EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Identity.ClientByOrganisationApiEndpoint}/{id}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, RequestModelBase>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Client>(apiRequest);
             
             if (!response.IsSuccessStatusCode)
             {
@@ -74,7 +85,7 @@ namespace Identity.Api.Areas.Accounts.Repositories
 
             if(response.IsSuccessStatusCode && response.Data != null) 
             {
-                return response.Data.Id;
+                return response.Data;
             }
 
             return default;
