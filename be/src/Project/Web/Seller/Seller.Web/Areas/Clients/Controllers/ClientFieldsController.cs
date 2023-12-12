@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Seller.Web.Areas.Clients.ModelBuilders;
+using Seller.Web.Areas.Clients.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -14,10 +15,10 @@ namespace Seller.Web.Areas.Clients.Controllers
     [Area("Clients")]
     public class ClientFieldsController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientFieldsPageModelBuilder> _clientFieldsPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientFieldsPageViewModel> _clientFieldsPageModelBuilder;
 
         public ClientFieldsController(
-            IAsyncComponentModelBuilder<ComponentModelBase, ClientFieldsPageModelBuilder> clientFieldsPageModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, ClientFieldsPageViewModel> clientFieldsPageModelBuilder)
         {
             _clientFieldsPageModelBuilder = clientFieldsPageModelBuilder;
         }
