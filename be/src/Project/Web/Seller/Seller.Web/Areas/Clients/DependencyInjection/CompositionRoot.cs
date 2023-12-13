@@ -11,6 +11,7 @@ using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Clients.Repositories.Applications;
 using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Seller.Web.Areas.Clients.Repositories.Fields;
+using Seller.Web.Areas.Clients.Repositories.FieldOptions;
 
 namespace Seller.Web.Areas.Clients.DependencyInjection
 {
@@ -24,6 +25,7 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IClientApplicationsRepository, ClientApplicationsRepository>();
             services.AddScoped<IClientAddressesRepository, ClientAddressesRepository>();
             services.AddScoped<IClientFieldsRepository, ClientFieldsRepository>();
+            services.AddScoped<IClientFieldOptionsRepository, ClientFieldOptionsRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>>, ClientsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel>, ClientsPageModelBuilder>();
