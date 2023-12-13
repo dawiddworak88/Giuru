@@ -14,6 +14,7 @@ const ClientFieldOptionForm = (props) => {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : null, error: "" },
         value: { value: props.value ? props.value : null, error: "" },
+        fieldDefinitionId: { value: props.fieldDefinitionId ? props.fieldDefinitionId : null }
     };
 
     const stateValidatorSchema = {
@@ -129,7 +130,7 @@ ClientFieldOptionForm.propTypes = {
     nameLabel: PropTypes.string.isRequired,
     valueLabel: PropTypes.string.isRequired, 
     clientFieldUrl: PropTypes.string.isRequired,
-    navigateToFieldsText: PropTypes.string.isRequired,
+    navigateToFieldText: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     saveUrl: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,

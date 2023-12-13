@@ -138,6 +138,9 @@ namespace Client.Api.Services.FieldOptions
                 pagedResults = fieldOptions.PagedIndex(new Pagination(fieldOptions.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
+            var optionSetIds = pagedResults.Data.Select(y => y.OptionSet.Id).Distinct().ToList();
+            var fieldDefinitions = _context.FieldDefinitions.Where(x => optionSetIds.Contains(x.OptionSetId.Value)).ToList();
+
             return new PagedResults<IEnumerable<ClientFieldOptionServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
                 Data = pagedResults.Data.OrEmptyIfNull().Select(x => new ClientFieldOptionServiceModel
@@ -145,6 +148,7 @@ namespace Client.Api.Services.FieldOptions
                     Id = x.Id,
                     Name = x.OptionSet?.OptionSetTranslations?.FirstOrDefault(t => t.Language == model.Language && t.IsActive)?.Name ?? x.OptionSet?.OptionSetTranslations?.FirstOrDefault(t => t.IsActive)?.Name,
                     Value = x.OptionsTranslations?.FirstOrDefault(t => t.Language == model.Language && t.IsActive)?.OptionValue ?? x.OptionsTranslations?.FirstOrDefault(t => t.IsActive)?.OptionValue,
+                    FieldDefinitionId = fieldDefinitions.FirstOrDefault(fd => fd.OptionSetId == x.OptionSetId).Id,
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
                 })
@@ -165,11 +169,14 @@ namespace Client.Api.Services.FieldOptions
                 throw new CustomException(_clientLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NoContent);
             }
 
+            var fieldDefinition = await _context.FieldDefinitions.FirstOrDefaultAsync(x => x.OptionSetId == fieldOption.OptionSetId);
+
             return new ClientFieldOptionServiceModel
             {
                 Id = model.Id,
                 Name = fieldOption.OptionSet?.OptionSetTranslations?.FirstOrDefault(x => x.Language == model.Language && x.IsActive)?.Name ?? fieldOption.OptionSet?.OptionSetTranslations?.FirstOrDefault(x => x.IsActive)?.Name,
                 Value = fieldOption.OptionsTranslations?.FirstOrDefault(x => x.Language == model.Language && x.IsActive)?.OptionValue ?? fieldOption.OptionsTranslations?.FirstOrDefault(x => x.IsActive)?.OptionValue,
+                FieldDefinitionId = fieldDefinition?.Id,
                 LastModifiedDate = fieldOption.LastModifiedDate,
                 CreatedDate = fieldOption.CreatedDate
             };

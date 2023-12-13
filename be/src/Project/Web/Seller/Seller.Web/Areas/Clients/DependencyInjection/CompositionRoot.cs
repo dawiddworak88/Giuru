@@ -12,6 +12,7 @@ using Seller.Web.Areas.Clients.Repositories.Applications;
 using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Seller.Web.Areas.Clients.Repositories.Fields;
 using Seller.Web.Areas.Clients.Repositories.FieldOptions;
+using Seller.Web.Areas.Clients.ComponentModels;
 
 namespace Seller.Web.Areas.Clients.DependencyInjection
 {
@@ -62,6 +63,8 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientFieldPageViewModel>, ClientFieldPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientFieldFormViewModel>, ClientFieldFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientFieldOption>>, ClientFieldPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ClientFieldOptionComponentModel, ClientFieldOptionPageViewModel>, ClientFieldOptionPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ClientFieldOptionComponentModel, ClientFieldOptionFormViewModel>, ClientFieldOptionFormModelBuilder>();
         }
     }
 }

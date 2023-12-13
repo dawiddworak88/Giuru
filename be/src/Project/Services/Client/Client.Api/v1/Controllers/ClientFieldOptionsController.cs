@@ -172,6 +172,7 @@ namespace Client.Api.v1.Controllers
                         Id = fieldOption.Id,
                         Name = fieldOption.Name,
                         Value = fieldOption.Value,
+                        FieldDefinitionId = fieldOption.FieldDefinitionId,
                         LastModifiedDate = fieldOption.LastModifiedDate,
                         CreatedDate = fieldOption.CreatedDate
                     };
@@ -222,6 +223,7 @@ namespace Client.Api.v1.Controllers
                         Id = x.Id,
                         Name = x.Name,
                         Value = x.Value,
+                        FieldDefinitionId = x.FieldDefinitionId,
                         LastModifiedDate = x.LastModifiedDate,
                         CreatedDate = x.CreatedDate
                     })
