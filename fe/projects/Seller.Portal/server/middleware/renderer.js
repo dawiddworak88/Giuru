@@ -53,8 +53,10 @@ import ClientAddressPage from "../../src/areas/Clients/pages/ClientAddressPage/C
 import ClientAddressesPage from "../../src/areas/Clients/pages/ClientAddressesPage/ClientAddressesPage";
 import ClientFieldsPage from "../../src/areas/Clients/pages/ClientFieldsPage/ClientFieldsPage";
 import ClientFieldPage from "../../src/areas/Clients/pages/ClientFieldPage/ClientFieldPage";
+import ClientFieldOptionPage from "../../src/areas/Clients/pages/ClientFieldOptionPage/ClientFieldOptionPage";
 
 const Components = {
+	ClientFieldOptionPage,
 	ClientFieldPage,
 	ClientFieldsPage,
 	ClientAddressPage,

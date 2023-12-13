@@ -7,10 +7,9 @@ import Store from "../../../../shared/stores/Store";
 import Footer from "../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../shared/components/MenuTiles/MenuTiles";
 import LocaleHelper from "../../../../shared/helpers/globals/LocaleHelper";
-import ClientFieldForm from "../../components/ClientFieldForm/ClientFieldForm";
-import Catalog from "../../../../shared/components/Catalog/Catalog";
+import ClientFieldOptionForm from "../../components/ClientFieldOptionForm/ClientFieldOptionForm";
 
-const ClientFieldPage = (props) => {
+const ClientFieldOptionPage = (props) => {
 
   LocaleHelper.setMomentLocale(props.locale);
 
@@ -20,17 +19,11 @@ const ClientFieldPage = (props) => {
       <Store>
         <Header {...props.header}></Header>
         <MenuTiles {...props.menuTiles} />
-        <ClientFieldForm {...props.clientFieldForm} />
-        {props.id && props.fieldType == "select" &&
-          <Fragment>
-            <hr />
-            <Catalog {...props.catalog}></Catalog>
-          </Fragment>
-        }
+        <ClientFieldOptionForm {...props.clientFieldOptionForm} />
         <Footer {...props.footer}></Footer>
       </Store>
     </ThemeProvider>
   );
 }
 
-export default ClientFieldPage;
+export default ClientFieldOptionPage;
