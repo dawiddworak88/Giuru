@@ -43,6 +43,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
                 ClientFieldsUrl = _linkGenerator.GetPathByAction("Index", "ClientFields", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveUrl = _linkGenerator.GetPathByAction("Index", "ClientFieldsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                EditUrl = _linkGenerator.GetPathByAction("Edit", "ClientField", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 Types = new string[]
                 {
                     "text",

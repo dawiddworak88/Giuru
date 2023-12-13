@@ -8,6 +8,7 @@ import AuthenticationHelper from "../../../../shared/helpers/globals/Authenticat
 import { Context } from "../../../../shared/stores/Store";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
+import NavigationHelper from "../../../../shared/helpers/globals/NavigationHelper";
 
 const ClientFieldForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -54,6 +55,8 @@ const ClientFieldForm = (props) => {
                     if (response.ok) {
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
+
+                        NavigationHelper.redirect(props.editUrl + "/" + jsonResponse.id);
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -142,6 +145,7 @@ ClientFieldForm.propTypes = {
     navigateToFieldsText: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     saveUrl: PropTypes.string.isRequired,
+    editUrl: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
     fieldRequiredErrorMessage: PropTypes.string.isRequired
 }

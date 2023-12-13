@@ -15,6 +15,7 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string FieldRequiredErrorMessage { get; set; }
         public string SaveText { get; set; }
         public string SaveUrl { get; set; }
+        public string EditUrl { get; set; }
         public string ClientFieldsUrl { get; set; }
         public string NavigateToFieldsText { get; set; }
         public string[] Types { get; set; }
