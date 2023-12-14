@@ -41,12 +41,12 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         {
             var viewModel = _catalogModelBuilder.BuildModel<CatalogViewModel<ClientFieldOption>, ClientFieldOption>();
 
-            viewModel.NewText = _clientLocalizer.GetString("NewClientField");
+            viewModel.NewText = _clientLocalizer.GetString("NewClientFieldOption");
             viewModel.NewUrl = _linkGenerator.GetPathByAction("New", "ClientFieldOption", new { Id = componentModel.Id, Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "ClientFieldOption", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "ClientFieldOptionsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ClientFieldOptionsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ClientFieldOptionsApi", new { FieldDefinitionId = componentModel.Id, Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(ClientFieldOption.CreatedDate)} desc";
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
@@ -80,22 +80,22 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientField.Name).ToCamelCase(),
+                        Title = nameof(ClientFieldOption.Name).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientField.Type).ToCamelCase(),
+                        Title = nameof(ClientFieldOption.Value).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientField.LastModifiedDate).ToCamelCase(),
+                        Title = nameof(ClientFieldOption.LastModifiedDate).ToCamelCase(),
                         IsDateTime = true
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientField.CreatedDate).ToCamelCase(),
+                        Title = nameof(ClientFieldOption.CreatedDate).ToCamelCase(),
                         IsDateTime = true
                     }
                 }

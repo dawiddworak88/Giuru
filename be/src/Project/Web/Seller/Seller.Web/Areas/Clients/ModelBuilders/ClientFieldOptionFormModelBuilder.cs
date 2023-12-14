@@ -34,7 +34,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             var viewModel = new ClientFieldOptionFormViewModel
             {
                 IdLabel = _globalLocalizer.GetString("Id"),
-                Title = _clientLocalizer.GetString("EditClientField"),
+                Title = _clientLocalizer.GetString("EditClientFieldOption"),
                 SaveText = _globalLocalizer.GetString("SaveText"),
                 NameLabel = _globalLocalizer.GetString("Name"),
                 ValueLabel = _globalLocalizer.GetString("Value"),

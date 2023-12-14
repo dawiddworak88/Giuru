@@ -327,6 +327,9 @@
   <data name="FieldOptionNotFound" xml:space="preserve">
     <value>Keine Option gefunden</value>
   </data>
+  <data name="BackToField" xml:space="preserve">
+    <value>Zurück zum Feld</value>
+  </data>
   <data name="BackToFields" xml:space="preserve">
     <value>Zurück zu den Kundenfeldern</value>
   </data>
@@ -336,7 +339,25 @@
   <data name="EditClientField" xml:space="preserve">
     <value>Kundenfeld bearbeiten</value>
   </data>
+  <data name="EditClientFieldOption" xml:space="preserve">
+    <value>Feldoptionen bearbeiten</value>
+  </data>
   <data name="NewClientField" xml:space="preserve">
     <value>Neues Kundenfeld</value>
+  </data>
+  <data name="NewClientFieldOption" xml:space="preserve">
+    <value>Feldoption hinzufügen</value>
+  </data>
+  <data name="FieldDeletedSuccessfully" xml:space="preserve">
+    <value>Feld erfolgreich gelöscht.</value>
+  </data>
+  <data name="FieldOptionDeletedSuccessfully" xml:space="preserve">
+    <value>Feldoption erfolgreich gelöscht.</value>
+  </data>
+  <data name="FieldOptionSavedSuccessfully" xml:space="preserve">
+    <value>Feldoption erfolgreich gespeichert.</value>
+  </data>
+  <data name="FieldSavedSuccessfully" xml:space="preserve">
+    <value>Feld erfolgreich gespeichert.</value>
   </data>
 </root>
