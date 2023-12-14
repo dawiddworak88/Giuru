@@ -10,6 +10,7 @@ import {
 import useForm from "../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
+import ClientDynamicForm from "../ClientDynamicForm/ClientDynamicForm";
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -317,6 +318,11 @@ function ClientForm(props) {
                                 variant="standard"
                                 onChange={handleOnChange} />
                         </div>
+                        {props.clientFields && props.clientFields.length > 0 && 
+                            <ClientDynamicForm 
+                                dynamicFields={props.clientFields}
+                            />
+                        }
                         <div className="field client-form__field-row">
                             <Button 
                                 type="submit" 
