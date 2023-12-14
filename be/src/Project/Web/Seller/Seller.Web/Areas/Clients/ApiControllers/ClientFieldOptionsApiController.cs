@@ -51,6 +51,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         }
 
         [HttpGet]
+        [Route("[area]/[controller]/{fieldDefinitionId}")]
         public async Task<IActionResult> Get(Guid? fieldDefinitionId, string searchTerm, int pageIndex, int itemsPerPage)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
