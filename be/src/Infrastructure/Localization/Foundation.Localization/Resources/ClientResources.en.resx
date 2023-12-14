@@ -327,4 +327,16 @@
   <data name="FieldOptionNotFound" xml:space="preserve">
     <value>Field option not found</value>
   </data>
+  <data name="BackToFields" xml:space="preserve">
+    <value>Back to client fields</value>
+  </data>
+  <data name="ClientFields" xml:space="preserve">
+    <value>Client fields</value>
+  </data>
+  <data name="EditClientField" xml:space="preserve">
+    <value>Edit client field</value>
+  </data>
+  <data name="NewClientField" xml:space="preserve">
+    <value>New client field</value>
+  </data>
 </root>
