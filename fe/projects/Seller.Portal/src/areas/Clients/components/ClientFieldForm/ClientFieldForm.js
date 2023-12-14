@@ -15,7 +15,7 @@ const ClientFieldForm = (props) => {
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : null, error: "" },
-        type: { value: props.types ? props.types.find(type => type == props.type) : "", error: ""}
+        type: { value: props.types ? props.types.find(type => type.value == props.type) : null, error: ""}
     };
 
     const stateValidatorSchema = {
@@ -35,6 +35,12 @@ const ClientFieldForm = (props) => {
 
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const requestPayload = {
+            id: state.id,
+            name: state.name,
+            type: state.type ? state.type.value : null
+        }
         
         const requestOptions = {
             method: "POST",
@@ -42,7 +48,7 @@ const ClientFieldForm = (props) => {
                 "Content-Type": "application/json",
                 "X-Requested-With": "XMLHttpRequest"
             },
-            body: JSON.stringify(state)
+            body: JSON.stringify(requestPayload)
         };
 
         fetch(props.saveUrl, requestOptions)
@@ -109,7 +115,7 @@ const ClientFieldForm = (props) => {
                                     onChange={handleOnChange}>
                                     {props.types && props.types.map((type, index) => {
                                         return (
-                                            <MenuItem key={index} value={type}>{type}</MenuItem>
+                                            <MenuItem key={index} value={type}>{type.text}</MenuItem>
                                         )
                                     })}
                                 </Select>

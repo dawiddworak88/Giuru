@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Office2010.ExcelAc;
+using System;
+using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Clients.ViewModels
 {
@@ -18,6 +20,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string EditUrl { get; set; }
         public string ClientFieldsUrl { get; set; }
         public string NavigateToFieldsText { get; set; }
-        public string[] Types { get; set; }
+        public IEnumerable<ClientFieldTypeViewModel> Types { get; set; }
     }
 }

@@ -9,6 +9,7 @@ import MenuTiles from "../../../../shared/components/MenuTiles/MenuTiles";
 import LocaleHelper from "../../../../shared/helpers/globals/LocaleHelper";
 import ClientFieldForm from "../../components/ClientFieldForm/ClientFieldForm";
 import Catalog from "../../../../shared/components/Catalog/Catalog";
+import FieldTypeConstants from "../../../../shared/constants/FieldTypeConstants";
 
 const ClientFieldPage = (props) => {
 
@@ -21,7 +22,7 @@ const ClientFieldPage = (props) => {
         <Header {...props.header}></Header>
         <MenuTiles {...props.menuTiles} />
         <ClientFieldForm {...props.clientFieldForm} />
-        {props.id && props.fieldType == "select" &&
+        {props.id && props.fieldType == FieldTypeConstants.SelectFieldType() &&
           <Fragment>
             <hr />
             <Catalog {...props.catalog}></Catalog>

@@ -1,10 +1,12 @@
-﻿using Foundation.Extensions.ModelBuilders;
+﻿using DocumentFormat.OpenXml.Office2010.ExcelAc;
+using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.Repositories.Fields;
 using Seller.Web.Areas.Clients.ViewModels;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -44,11 +46,12 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 ClientFieldsUrl = _linkGenerator.GetPathByAction("Index", "ClientFields", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveUrl = _linkGenerator.GetPathByAction("Index", "ClientFieldsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 EditUrl = _linkGenerator.GetPathByAction("Edit", "ClientField", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
-                Types = new string[]
+                Types = new List<ClientFieldTypeViewModel>()
                 {
-                    "text",
-                    "number",
-                    "select"
+                    new() { Value = "text", Text = _globalLocalizer.GetString("String") },
+                    new() { Value = "select", Text = _globalLocalizer.GetString("Array") },
+                    new() { Value = "number", Text = _globalLocalizer.GetString("Number") },
+                    new() { Value = "boolean", Text = _globalLocalizer.GetString("Boolean") }
                 }
             };
 

@@ -106,7 +106,8 @@ namespace Client.Api.Services.FieldOptions
                 .Include(x => x.OptionsTranslations)
                 .Include(x => x.OptionSet)
                 .Include(x => x.OptionSet.OptionSetTranslations)
-                .AsSingleQuery();
+                .AsSingleQuery()
+                .Where(x => x.IsActive);
 
             if (model.FieldDefinitionId.HasValue)
             {

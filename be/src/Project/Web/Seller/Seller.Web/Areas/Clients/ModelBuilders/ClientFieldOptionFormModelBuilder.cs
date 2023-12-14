@@ -41,7 +41,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 NavigateToFieldText = _clientLocalizer.GetString("BackToField"),
                 FieldRequiredErrorMessage = _globalLocalizer.GetString("FieldRequiredErrorMessage"),
                 GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
-                SaveUrl = _linkGenerator.GetPathByAction("Index", "ClientFieldsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                SaveUrl = _linkGenerator.GetPathByAction("Index", "ClientFieldOptionsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var fieldDefinitionId = componentModel.ClientFieldOptionId;

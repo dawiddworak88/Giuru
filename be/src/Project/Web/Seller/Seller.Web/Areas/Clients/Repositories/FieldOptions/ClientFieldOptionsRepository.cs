@@ -75,6 +75,7 @@ namespace Seller.Web.Areas.Clients.Repositories.FieldOptions
         {
             var requestModel = new PagedClientFieldOptionsRequestModel
             {
+                FieldDefinitionId = fieldDefinitionId,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
