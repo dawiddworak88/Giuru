@@ -118,7 +118,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 
                     if (deliveryAddresses is not null)
                     {
-                        viewModel.DeliveryAddresses = deliveryAddresses.Data.Select(x => new ListItemViewModel
+                        viewModel.ClientAddresses = deliveryAddresses.Data.Select(x => new ListItemViewModel
                         {
                             Id = x.Id,
                             Name = $"{x.Company}, {x.FirstName} {x.LastName}, {x.PostCode} {x.City}"
