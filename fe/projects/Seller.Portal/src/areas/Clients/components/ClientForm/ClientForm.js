@@ -15,6 +15,7 @@ import ClientDynamicForm from "../ClientDynamicForm/ClientDynamicForm";
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
     const [canCreateAccount, setCanCreateAccount] = useState(props.hasAccount ? props.hasAccount : false);
+    const [formData, setFormData] = useState(props.formData ? props.formData : null);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
@@ -66,7 +67,8 @@ function ClientForm(props) {
             ...state,
             countryId: country ? country.id : null,
             defaultDeliveryAddressId: state.deliveryAddress ? state.deliveryAddress.id : null,
-            defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null
+            defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null,
+            formData
         }
 
         const requestOptions = {
@@ -321,6 +323,8 @@ function ClientForm(props) {
                         {props.clientFields && props.clientFields.length > 0 && 
                             <ClientDynamicForm 
                                 dynamicFields={props.clientFields}
+                                setFormData={setFormData}
+                                formData={formData}
                             />
                         }
                         <div className="field client-form__field-row">

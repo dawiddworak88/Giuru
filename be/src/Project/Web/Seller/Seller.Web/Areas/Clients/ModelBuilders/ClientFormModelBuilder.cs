@@ -20,6 +20,8 @@ using Seller.Web.Areas.Global.Repositories;
 using Seller.Web.Areas.Global.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Foundation.GenericRepository.Definitions;
+using Seller.Web.Areas.Clients.Repositories.Fields;
+using Seller.Web.Areas.Clients.DomainModels;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -35,6 +37,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IClientAccountManagersRepository _clientManagersRepository;
         private readonly ICountriesRepository _countriesRepository;
         private readonly IClientAddressesRepository _clientAddressesRepository;
+        private readonly IClientFieldsRepository _clientFieldsRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -46,6 +49,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IClientAccountManagersRepository clientManagersRepository,
             ICountriesRepository countriesRepository,
             IClientAddressesRepository clientAddressesRepository,
+            IClientFieldsRepository clientFieldsRepository,
             LinkGenerator linkGenerator)
         {
             _clientsRepository = clientsRepository;
@@ -58,6 +62,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _clientManagersRepository = clientManagersRepository;
             _countriesRepository = countriesRepository;
             _clientAddressesRepository = clientAddressesRepository;
+            _clientFieldsRepository = clientFieldsRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -169,6 +174,24 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     Id = x.Id,
                     Name = $"{x.Company}, {x.FirstName} {x.LastName}, {x.PostCode} {x.City}"
+                });
+            }
+
+            var clientFields = await _clientFieldsRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientField.CreatedDate)} desc");
+
+            if (clientFields.Data is not null)
+            {
+                viewModel.ClientFields = clientFields.Data.Select(x => new ClientFieldViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Type = x.Type,
+                    IsRequired = x.IsRequired,
+                    Options = x.Options.Select(y => new ClientFieldOptionViewModel
+                    {
+                        Name = y.Name,
+                        Value = y.Value
+                    })
                 });
             }
 
