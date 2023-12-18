@@ -23,7 +23,7 @@ namespace Global.Api.v1.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class CurrenciesController : ControllerBase
     {
@@ -31,7 +31,7 @@ namespace Global.Api.v1.Controllers
 
         public CurrenciesController(
             ICurrenciesService currenciesService) 
-        { 
+        {
             _currenciesService = currenciesService;
         }
 
