@@ -42,8 +42,6 @@ namespace Seller.Web.Areas.Global.ModelBuilders
                 Footer = _footerModelBuilder.BuildModel()
             };
 
-            Console.WriteLine("viewModel " + JsonSerializer.Serialize(viewModel.Catalog));
-
             return viewModel;
         }
     }
