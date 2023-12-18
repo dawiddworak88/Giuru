@@ -741,4 +741,28 @@
   <data name="CurrencyNotFound" xml:space="preserve">
     <value>Nie znaleziono waluty</value>
   </data>
+  <data name="Currencies" xml:space="preserve">
+    <value>Waluty</value>
+  </data>
+  <data name="NewCurrency" xml:space="preserve">
+    <value>Dodaj walutę</value>
+  </data>
+  <data name="EditCurrency" xml:space="preserve">
+    <value>Edytuj walutę</value>
+  </data>
+  <data name="NavigateToCurrenciesText" xml:space="preserve">
+    <value>Powróc do walut</value>
+  </data>
+  <data name="CurrencyCodeLabel" xml:space="preserve">
+    <value>Kod waluty</value>
+  </data>
+  <data name="SymbolLabel" xml:space="preserve">
+    <value>Symbol</value>
+  </data>
+  <data name="CurrencyDeletedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie usunięto walutę</value>
+  </data>
+  <data name="CurrencySavedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie zapisano walutę</value>
+  </data>
 </root>

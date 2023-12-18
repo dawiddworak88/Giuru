@@ -735,4 +735,28 @@
   <data name="CurrencyNotFound" xml:space="preserve">
     <value>Währung nicht gefunden</value>
   </data>
+  <data name="Currencies" xml:space="preserve">
+    <value>Währungen</value>
+  </data>
+  <data name="NewCurrency" xml:space="preserve">
+    <value>Währung hinzufügen</value>
+  </data>
+  <data name="EditCurrency" xml:space="preserve">
+    <value>Währung bearbeiten</value>
+  </data>
+  <data name="NavigateToCurrenciesText" xml:space="preserve">
+    <value>Zurück zu den Währungen</value>
+  </data>
+  <data name="CurrencyCodeLabel" xml:space="preserve">
+    <value>Währungscode</value>
+  </data>
+  <data name="SymbolLabel" xml:space="preserve">
+    <value>Symbol</value>
+  </data>
+  <data name="CurrencyDeletedSuccessfully" xml:space="preserve">
+    <value>Währung erfolgreich gelöscht.</value>
+  </data>
+  <data name="CurrencySavedSuccessfully" xml:space="preserve">
+    <value>Währung erfolgreich gespeichert.</value>
+  </data>
 </root>
