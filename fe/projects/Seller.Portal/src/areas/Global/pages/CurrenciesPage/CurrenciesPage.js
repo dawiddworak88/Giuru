@@ -6,9 +6,12 @@ import Header from "../../../../shared/components/Header/Header";
 import Store from "../../../../shared/stores/Store";
 import Footer from "../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../shared/components/MenuTiles/MenuTiles";
+import LocaleHelper from "../../../../shared/helpers/globals/LocaleHelper";
 import Catalog from "../../../../shared/components/Catalog/Catalog";
 
 const CurrenciesPage = (props) => {
+
+  LocaleHelper.setMomentLocale(props.locale);
 
   return (
     <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
