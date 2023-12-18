@@ -14,6 +14,7 @@
         public struct Global
         {
             public static readonly string CountriesApiEndpoint = "/api/v1/countries";
+            public static readonly string CurrenciesApiEndpoint = "/api/v1/currencies";
         }
 
         public struct Catalog
