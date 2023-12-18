@@ -1,6 +1,5 @@
 ﻿using Client.Api.Infrastructure;
 using Client.Api.Infrastructure.Fields;
-using Client.Api.ServicesModels.Fields;
 using Client.Api.ServicesModels.FieldValues;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
@@ -64,7 +63,7 @@ namespace Client.Api.Services.FieldValues
                     var newFieldValueTranslation = new ClientFieldValueTranslation
                     {
                         ClientFieldValueId = newFieldValue.Id,
-                        FieldValue = fieldValue.Value,
+                        FieldValue = fieldValue.FieldValue,
                         Language = model.Language
                     };
 
@@ -79,7 +78,7 @@ namespace Client.Api.Services.FieldValues
                         var newFieldValueTranslation = new ClientFieldValueTranslation
                         {
                             ClientFieldValueId = existingFieldValue.Id,
-                            FieldValue = fieldValue.Value,
+                            FieldValue = fieldValue.FieldValue,
                             Language = model.Language
                         };
 
@@ -87,7 +86,7 @@ namespace Client.Api.Services.FieldValues
                     }
                     else
                     {
-                        existingTranslation.FieldValue = fieldValue.Value;
+                        existingTranslation.FieldValue = fieldValue.FieldValue;
                         existingTranslation.LastModifiedDate = DateTime.UtcNow;
                     }
                 }
@@ -96,7 +95,7 @@ namespace Client.Api.Services.FieldValues
             await _context.SaveChangesAsync();
         }
 
-        public PagedResults<IEnumerable<ClientFieldValueServiceModel>> GetAsync(GetClientFieldsServiceModel model)
+        public PagedResults<IEnumerable<ClientFieldValueServiceModel>> Get(GetClientFieldValuesServiceModel model)
         {
             var fieldValues = _context.ClientFieldValues.Include(x => x.Translation).AsSingleQuery().Where(x => x.IsActive);
 

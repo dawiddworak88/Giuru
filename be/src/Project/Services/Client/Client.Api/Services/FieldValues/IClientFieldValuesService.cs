@@ -9,6 +9,6 @@ namespace Client.Api.Services.FieldValues
     public interface IClientFieldValuesService
     {
         Task CreateAsync(CreateClientFieldValuesServiceModel model);
-        PagedResults<IEnumerable<ClientFieldValueServiceModel>> GetAsync(GetClientFieldsServiceModel model);
+        PagedResults<IEnumerable<ClientFieldValueServiceModel>> Get(GetClientFieldValuesServiceModel model);
     }
 }

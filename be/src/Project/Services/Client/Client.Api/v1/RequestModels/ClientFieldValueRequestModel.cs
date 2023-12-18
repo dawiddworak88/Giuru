@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Client.Api.ServicesModels.FieldValues
+namespace Client.Api.v1.RequestModels
 {
-    public class CreateClientFieldValueServiceModel
+    public class ClientFieldValueRequestModel
     {
         public Guid? FieldDefinitionId { get; set; }
         public string FieldValue { get; set; }
