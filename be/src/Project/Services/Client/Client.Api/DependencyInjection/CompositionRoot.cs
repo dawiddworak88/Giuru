@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Client.Api.Services.Addresses;
 using Client.Api.Services.Fields;
 using Client.Api.Services.FieldOptions;
+using Client.Api.Services.FieldValues;
 
 namespace Client.Api.DependencyInjection
 {
@@ -25,6 +26,7 @@ namespace Client.Api.DependencyInjection
             services.AddScoped<IClientAddressesService, ClientAddressesService>();
             services.AddScoped<IClientFieldsService,  ClientFieldsService>();
             services.AddScoped<IClientFieldOptionsService, ClientFieldOptionsService>();
+            services.AddScoped<IClientFieldValuesService, ClientFieldValuesService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)

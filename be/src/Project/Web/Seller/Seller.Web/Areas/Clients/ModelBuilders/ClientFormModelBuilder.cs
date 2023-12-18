@@ -22,6 +22,7 @@ using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Foundation.GenericRepository.Definitions;
 using Seller.Web.Areas.Clients.Repositories.Fields;
 using Seller.Web.Areas.Clients.DomainModels;
+using Seller.Web.Areas.Clients.Repositories.FieldValues;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -38,6 +39,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly ICountriesRepository _countriesRepository;
         private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly IClientFieldsRepository _clientFieldsRepository;
+        private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -50,6 +52,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             ICountriesRepository countriesRepository,
             IClientAddressesRepository clientAddressesRepository,
             IClientFieldsRepository clientFieldsRepository,
+            IClientFieldValuesRepository clientFieldValuesRepository,
             LinkGenerator linkGenerator)
         {
             _clientsRepository = clientsRepository;
@@ -63,6 +66,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _countriesRepository = countriesRepository;
             _clientAddressesRepository = clientAddressesRepository;
             _clientFieldsRepository = clientFieldsRepository;
+            _clientFieldValuesRepository = clientFieldValuesRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -177,21 +181,29 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 });
             }
 
-            var clientFields = await _clientFieldsRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientField.CreatedDate)} desc");
+            var clientFields = await _clientFieldsRepository.GetAsync(componentModel.Token, componentModel.Language);
 
-            if (clientFields.Data is not null)
+            if (clientFields is not null)
             {
-                viewModel.ClientFields = clientFields.Data.Select(x => new ClientFieldViewModel
+                var clientFieldsValues = await _clientFieldValuesRepository.GetAsync(componentModel.Token, componentModel.Language);
+
+                viewModel.ClientFields = clientFields.Select(x =>
                 {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Type = x.Type,
-                    IsRequired = x.IsRequired,
-                    Options = x.Options.Select(y => new ClientFieldOptionViewModel
+                    var fieldValue = clientFieldsValues.FirstOrDefault(y => y.FieldDefinitionId == x.Id)?.FieldValue;
+
+                    return new ClientFieldViewModel
                     {
-                        Name = y.Name,
-                        Value = y.Value
-                    })
+                        Id = x.Id,
+                        Name = x.Name,
+                        Value = fieldValue,
+                        Type = x.Type,
+                        IsRequired = x.IsRequired,
+                        Options = x.Options.Select(y => new ClientFieldOptionViewModel
+                        {
+                            Name = y.Name,
+                            Value = y.Value
+                        })
+                    };
                 });
             }
 

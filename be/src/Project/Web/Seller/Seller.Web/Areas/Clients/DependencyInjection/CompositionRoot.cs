@@ -13,6 +13,7 @@ using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Seller.Web.Areas.Clients.Repositories.Fields;
 using Seller.Web.Areas.Clients.Repositories.FieldOptions;
 using Seller.Web.Areas.Clients.ComponentModels;
+using Seller.Web.Areas.Clients.Repositories.FieldValues;
 
 namespace Seller.Web.Areas.Clients.DependencyInjection
 {
@@ -27,6 +28,7 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IClientAddressesRepository, ClientAddressesRepository>();
             services.AddScoped<IClientFieldsRepository, ClientFieldsRepository>();
             services.AddScoped<IClientFieldOptionsRepository, ClientFieldOptionsRepository>();
+            services.AddScoped<IClientFieldValuesRepository, ClientFieldValuesRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>>, ClientsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel>, ClientsPageModelBuilder>();

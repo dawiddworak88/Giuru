@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
+using Seller.Web.Areas.Clients.Repositories.FieldValues;
 using Seller.Web.Areas.Clients.Repositories.Groups;
 using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Identity;
@@ -22,11 +23,12 @@ namespace Seller.Web.Areas.Clients.ApiControllers
     [Area("Clients")]
     public class ClientsApiController : BaseApiController
     {
-        private readonly IOrganisationsRepository organisationsRepository;
-        private readonly IClientsRepository clientsRepository;
-        private readonly IIdentityRepository identityRepository;
-        private readonly IStringLocalizer clientLocalizer;
-        private readonly IClientGroupsRepository clientGroupsRepository;
+        private readonly IOrganisationsRepository _organisationsRepository;
+        private readonly IClientsRepository _clientsRepository;
+        private readonly IIdentityRepository _identityRepository;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
+        private readonly IClientGroupsRepository _clientGroupsRepository;
+        private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
 
         public ClientsApiController(
             IOrganisationsRepository organisationsRepository,
@@ -35,17 +37,17 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             IIdentityRepository identityRepository,
             IClientGroupsRepository clientGroupsRepository)
         {
-            this.organisationsRepository = organisationsRepository;
-            this.clientsRepository = clientsRepository;
-            this.clientLocalizer = clientLocalizer;
-            this.identityRepository = identityRepository;
-            this.clientGroupsRepository = clientGroupsRepository;
+            _organisationsRepository = organisationsRepository;
+            _clientsRepository = clientsRepository;
+            _clientLocalizer = clientLocalizer;
+            _identityRepository = identityRepository;
+            _clientGroupsRepository = clientGroupsRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var clients = await this.clientsRepository.GetClientsAsync(
+            var clients = await _clientsRepository.GetClientsAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 searchTerm,
@@ -53,7 +55,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 itemsPerPage,
                 $"{nameof(Client.CreatedDate)} desc");
 
-            return this.StatusCode((int)HttpStatusCode.OK, clients);
+            return StatusCode((int)HttpStatusCode.OK, clients);
         }
 
         [HttpPost]
@@ -64,7 +66,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
             Guid? organisationId;
 
-            var organisation = await this.organisationsRepository.GetAsync(token, language, model.Email);
+            var organisation = await _organisationsRepository.GetAsync(token, language, model.Email);
 
             if (organisation is not null)
             {
@@ -72,27 +74,34 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             }
             else
             {
-                organisationId = await this.organisationsRepository.SaveAsync(token, language, model.Name, model.Email, model.CommunicationLanguage);
+                organisationId = await _organisationsRepository.SaveAsync(token, language, model.Name, model.Email, model.CommunicationLanguage);
             }
 
-            var clientId = await this.clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PhoneNumber, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId);
+            var clientId = await _clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PhoneNumber, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId);
+
+            await _clientFieldValuesRepository.SaveAsync(token, language, clientId,
+                    model.FieldsValues.Select(x => new ApiClientFieldValue
+                    {
+                        FieldDefinitionId = x.FieldDefinitionId,
+                        FieldValue = x.FieldValue
+                    }));
 
             if (model.HasAccount)
             {
-                await this.identityRepository.UpdateAsync(token, language, clientId, model.Email, model.Name, model.CommunicationLanguage);
+                await _identityRepository.UpdateAsync(token, language, clientId, model.Email, model.Name, model.CommunicationLanguage);
 
                 if (model.ClientGroupIds.OrEmptyIfNull().Any())
                 {
-                    var clientGroups = await this.clientGroupsRepository.GetClientGroupsAsync(token, language, model.ClientGroupIds);
+                    var clientGroups = await _clientGroupsRepository.GetClientGroupsAsync(token, language, model.ClientGroupIds);
 
                     if (clientGroups is not null)
                     {
-                        await this.identityRepository.AssignRolesAsync(token, language, model.Email, clientGroups.Select(x => x.Name));
+                        await _identityRepository.AssignRolesAsync(token, language, model.Email, clientGroups.Select(x => x.Name));
                     }
                 }
             }
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = clientId, Message = this.clientLocalizer.GetString("ClientSavedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Id = clientId, Message = _clientLocalizer.GetString("ClientSavedSuccessfully").Value });
         }
 
         [HttpDelete]
@@ -101,9 +110,9 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await this.clientsRepository.DeleteAsync(token, language, id);
+            await _clientsRepository.DeleteAsync(token, language, id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.clientLocalizer.GetString("ClientDeletedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Message = _clientLocalizer.GetString("ClientDeletedSuccessfully").Value });
         }
     }
 }

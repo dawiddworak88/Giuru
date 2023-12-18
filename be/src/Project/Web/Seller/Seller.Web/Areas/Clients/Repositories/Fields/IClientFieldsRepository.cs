@@ -11,6 +11,7 @@ namespace Seller.Web.Areas.Clients.Repositories.Fields
         Task<PagedResults<IEnumerable<ClientField>>> GetAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
         Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string type);
         Task<ClientField> GetAsync(string token, string language, Guid? id);
+        Task<IEnumerable<ClientField>> GetAsync(string token, string language);
         Task DeleteAsync(string token, string language, Guid? id);
     }
 }
