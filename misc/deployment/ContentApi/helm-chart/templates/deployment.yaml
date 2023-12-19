@@ -18,6 +18,18 @@ spec:
       - name: content-api-container
         image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
         env:
+        - name: DATABASE_CLIENT
+          value: {{ .Values.contentApi.databaseClient }}
+        - name: DATABASE_NAME
+          value: {{ .Values.contentApi.databaseName }}
+        - name: DATABASE_HOST
+          value: {{ .Values.contentApi.databaseHost }}
+        - name: DATABASE_PORT
+          value: {{ .Values.contentApi.databasePort }}
+        - name: DATABASE_USERNAME
+          value: {{ .Values.contentApi.databaseUsername }}
+        - name: DATABASE_SSL
+          value: {{ .Values.contentApi.databaseSsl }}
         - name: GIURU_MEDIA_API_URL
           value: {{ .Values.mediaUrl }}
         - name: GIURU_CONTENT_API_URL
