@@ -37,8 +37,6 @@ function Catalog(props) {
     const [placeholderProps, setPlaceholderProps] = React.useState({});
     const [windowWidth, setWindowWidth] = React.useState(undefined);
 
-    console.log("props", props);
-
     const handleSearchTermKeyPress = (event) => {
 
         if (event.key === KeyConstants.enter()) {
