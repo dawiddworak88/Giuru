@@ -1,15 +1,18 @@
 import { InputLabel, TextField, Button, CircularProgress } from "@mui/material";
+import PropTypes from "prop-types";
 import React, { useContext } from "react";
 import useForm from "../../../../shared/helpers/forms/useForm";
 import { Context } from "../../../../shared/stores/Store";
+import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
+import { toast } from "react-toastify";
 
 const CurrencyForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null },
-        currencyCode: { value: props.currencyCode ? props.currencyCode : "" },
-        symbol: { value: props.symbol ? props.symbol : "" },
-        name: { value: props.name ? props.name : "" }
+        currencyCode: { value: props.currencyCode ? props.currencyCode : "", error: "" },
+        symbol: { value: props.symbol ? props.symbol : "", error: "" },
+        name: { value: props.name ? props.name : "", error: "" }
     };
 
     const stateValidatorSchema = {
@@ -33,11 +36,34 @@ const CurrencyForm = (props) => {
         }
     };
 
-    const onSubmitForm = () => {
+    const onSubmitForm = (state) => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+            body: JSON.stringify(state)
+        };
+
+        fetch(props.saveUrl, requestOptions)
+            .then(response => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        toast.success(jsonResponse.message);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
     }
-
-    console.log("props", props);
 
     const {
         values, errors, dirty, disable,
@@ -58,20 +84,19 @@ const CurrencyForm = (props) => {
                             </div>
                         }
                         <div className="field">
-                            <TextField 
+                            <TextField
                                 id="currencyCode"
                                 name="currencyCode"
-                                label={props.currencyCode}
+                                label={props.currencyCodeLabel}
                                 fullWidth={true}
                                 value={currencyCode}
                                 variant="standard"
                                 onChange={handleOnChange}
-                                //helperText={dirty.currencyCode ? errors.currencyCode : ""}
-                                //error={(errors.currencyCode.length > 0) && dirty.name} 
-                                />
+                                helperText={dirty.currencyCode ? errors.currencyCode : ""}
+                                error={(errors.currencyCode.length > 0) && dirty.currencyCode} />
                         </div>
                         <div className="field">
-                            <TextField 
+                            <TextField
                                 id="symbol"
                                 name="symbol"
                                 label={props.symbolLabel}
@@ -79,12 +104,11 @@ const CurrencyForm = (props) => {
                                 value={symbol}
                                 variant="standard"
                                 onChange={handleOnChange}
-                                //helperText={dirty.symbol ? errors.symbol : ""}
-                                //error={(errors.symbol.length > 0) && dirty.name} 
-                                />
+                                helperText={dirty.symbol ? errors.symbol : ""}
+                                error={(errors.symbol.length > 0) && dirty.symbol} />
                         </div>
                         <div className="field">
-                            <TextField 
+                            <TextField
                                 id="name"
                                 name="name"
                                 label={props.nameLabel}
@@ -92,15 +116,14 @@ const CurrencyForm = (props) => {
                                 value={name}
                                 variant="standard"
                                 onChange={handleOnChange}
-                                //helperText={dirty.name ? errors.name : ""}
-                                //error={(errors.name.length > 0) && dirty.name} 
-                                />
+                                helperText={dirty.name ? errors.name : ""} 
+                                error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field ">
-                            <Button 
-                                type="submit" 
-                                variant="contained" 
-                                color="primary" 
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
@@ -112,6 +135,23 @@ const CurrencyForm = (props) => {
             </div>
         </section>
     )
+}
+
+CurrencyForm.propTypes = {
+    id: PropTypes.string,
+    saveUrl: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    idLabel: PropTypes.string.isRequired,
+    currencyCode: PropTypes.string,
+    currencyCodeLabel: PropTypes.string.isRequired,
+    symbol: PropTypes.string,
+    symbolLabel: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    nameLabel: PropTypes.string.isRequired,
+    saveText: PropTypes.string.isRequired,
+    navigateToCurrencies: PropTypes.string.isRequired,
+    generalErrorMessage: PropTypes.string.isRequired,
+    fieldRequiredErrorMessage: PropTypes.string.isRequired
 }
 
 export default CurrencyForm;
