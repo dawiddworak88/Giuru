@@ -6,11 +6,12 @@ using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Seller.Web.Areas.Global.ModelBuilders;
+using Seller.Web.Areas.Global.ViewModels;
 using System;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Global.Controllers
@@ -18,9 +19,9 @@ namespace Seller.Web.Areas.Global.Controllers
     [Area("Global")]
     public class CurrencyController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CurrencyPageModelBuilder> _currencyPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CurrencyPageViewModel> _currencyPageModelBuilder;
 
-        public CurrencyController(IAsyncComponentModelBuilder<ComponentModelBase, CurrencyPageModelBuilder> currencyPageModelBuilder)
+        public CurrencyController(IAsyncComponentModelBuilder<ComponentModelBase, CurrencyPageViewModel> currencyPageModelBuilder)
         {
             _currencyPageModelBuilder = currencyPageModelBuilder;
         }
@@ -38,6 +39,8 @@ namespace Seller.Web.Areas.Global.Controllers
             };
 
             var viewModel = await _currencyPageModelBuilder.BuildModelAsync(componentModel);
+
+            Console.WriteLine(JsonSerializer.Serialize(viewModel));
 
             return View(viewModel);
         }

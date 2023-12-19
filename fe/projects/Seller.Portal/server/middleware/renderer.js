@@ -52,6 +52,7 @@ import SettingsPage from "../../src/areas/Settings/pages/SettingsPage/SettingsPa
 import ClientAddressPage from "../../src/areas/Clients/pages/ClientAddressPage/ClientAddressPage";
 import ClientAddressesPage from "../../src/areas/Clients/pages/ClientAddressesPage/ClientAddressesPage";
 import CurrenciesPage from "../../src/areas/Global/pages/CurrenciesPage/CurrenciesPage";
+import CurrencyPage from "../../src/areas/Global/pages/CurrencyPage/CurrencyPage";
 
 const Components = {
 	ClientAddressPage,
@@ -102,7 +103,8 @@ const Components = {
 	CategoriesPage,
 	SellerCategoryPage,
 	SettingsPage,
-	CurrenciesPage
+	CurrenciesPage,
+	CurrencyPage
 };
 
 const serverRenderer = (req, res, next) => {
