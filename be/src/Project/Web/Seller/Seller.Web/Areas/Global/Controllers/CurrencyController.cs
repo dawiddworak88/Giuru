@@ -40,8 +40,6 @@ namespace Seller.Web.Areas.Global.Controllers
 
             var viewModel = await _currencyPageModelBuilder.BuildModelAsync(componentModel);
 
-            Console.WriteLine(JsonSerializer.Serialize(viewModel));
-
             return View(viewModel);
         }
     }
