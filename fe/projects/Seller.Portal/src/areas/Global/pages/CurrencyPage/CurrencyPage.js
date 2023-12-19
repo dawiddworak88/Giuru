@@ -15,7 +15,7 @@ const CurrencyPage = (props) => {
             <Store>
                 <Header {...props.header}></Header>
                 <MenuTiles {...props.menuTiles} />
-                <CurrencyForm {...props.countryForm} />
+                <CurrencyForm {...props.currencyForm} />
                 <Footer {...props.footer}></Footer>
             </Store>
         </ThemeProvider>
