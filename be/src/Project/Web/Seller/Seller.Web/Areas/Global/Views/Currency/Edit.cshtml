@@ -1,0 +1,22 @@
+﻿<div id="root" asp-prerender-module="CurrencyPage" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    <title>@MetaTagsService.GenerateTitle(_globalLocalizer.GetString("EditCurrency"))</title>
+    @if (!string.IsNullOrWhiteSpace(_globalLocalizer.GetString("EditCurrency")))
+     {
+        <meta name="description" content="@_globalLocalizer.GetString("EditCurrency")" />
+    }
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/currencypage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/currencypage.js" asp-append-version="true"></script>
+}
