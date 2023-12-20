@@ -157,6 +157,8 @@ namespace Global.Api.Services.Currencies
             }
 
             currency.LastModifiedDate = DateTime.UtcNow;
+            currency.CurrencyCode = model.CurrencyCode;
+            currency.Symbol = model.Symbol;
 
             await _context.SaveChangesAsync();
         }
