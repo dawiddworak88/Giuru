@@ -19,6 +19,8 @@ namespace Client.Api.Infrastructure.Clients.Entities
 
         public Guid? CountryId { get; set; }
 
+        public Guid? CurrencyId { get; set; }
+
         [Required]
         public Guid OrganisationId { get; set; }
 
