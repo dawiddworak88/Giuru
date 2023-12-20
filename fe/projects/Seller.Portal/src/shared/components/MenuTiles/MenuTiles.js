@@ -6,7 +6,6 @@ import MenuTilesConstants from "../../../shared/constants/MenuTilesConstants";
 import '@splidejs/react-splide/css';
 
 function MenuTiles(props) {
-    
     return (
         <nav className="section menu-tiles is-hidden-touch">
             <Splide
