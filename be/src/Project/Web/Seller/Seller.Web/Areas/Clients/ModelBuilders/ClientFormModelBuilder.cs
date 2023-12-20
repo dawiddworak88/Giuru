@@ -35,6 +35,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IClientAccountManagersRepository _clientManagersRepository;
         private readonly ICountriesRepository _countriesRepository;
         private readonly IClientAddressesRepository _clientAddressesRepository;
+        private readonly ICurrenciesRepository _currenciesRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -46,7 +47,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IClientAccountManagersRepository clientManagersRepository,
             ICountriesRepository countriesRepository,
             IClientAddressesRepository clientAddressesRepository,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            ICurrenciesRepository currenciesRepository)
         {
             _clientsRepository = clientsRepository;
             _globalLocalizer = globalLocalizer;
@@ -58,6 +60,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _clientManagersRepository = clientManagersRepository;
             _countriesRepository = countriesRepository;
             _clientAddressesRepository = clientAddressesRepository;
+            _currenciesRepository = currenciesRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -101,6 +104,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 NoManagersText = _clientLocalizer.GetString("NoManagers"),
                 ClientManagerLabel = _globalLocalizer.GetString("Manager"),
                 CountryLabel = _globalLocalizer.GetString("Country"),
+                CurrencyLabel = _globalLocalizer.GetString("Currency"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress")
             };
@@ -119,6 +123,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.ClientGroupsIds = client.ClientGroupIds;
                     viewModel.ClientManagersIds = client.ClientManagerIds;
                     viewModel.CountryId = client.CountryId;
+                    viewModel.CurrencyId = client.CurrencyId;
                     viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
                     viewModel.DefaultBillingAddressId = client.DefaultBillingAddressId;
 
@@ -159,6 +164,13 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             if (countries is not null)
             {
                 viewModel.Countries = countries.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
+            }
+
+            var currencies = await _currenciesRepository.GetAsync(componentModel.Token, componentModel.Language, $"{nameof(Country.Name)} asc");
+
+            if (currencies is not null)
+            {
+                viewModel.Currencies = currencies.Select(x => new ListItemViewModel { Id = x.Id, Name = x.CurrencyCode });
             }
 
             var clientAddresses = await _clientAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
