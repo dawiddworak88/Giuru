@@ -219,7 +219,7 @@ namespace Seller.Web.Shared.Repositories.Clients
         }
 
         public async Task<Guid> SaveAsync(
-            string token, string language, Guid? id, string name, string email, string communicationLanguage, Guid? countryId, 
+            string token, string language, Guid? id, string name, string email, string communicationLanguage, Guid? countryId, Guid? currencyId, 
             string phoneNumber, Guid organisationId, IEnumerable<Guid> clientGroupIds, IEnumerable<Guid> clientManagerIds, Guid? defaultDeliveryAddressId, Guid? defaultBillingAddressId)
         {
             var requestModel = new SaveClientRequestModel
@@ -229,6 +229,7 @@ namespace Seller.Web.Shared.Repositories.Clients
                 Email = email,
                 CommunicationLanguage = communicationLanguage,
                 CountryId = countryId,
+                CurrencyId = currencyId,
                 PhoneNumber = phoneNumber,
                 OrganisationId = organisationId,
                 ClientGroupIds = clientGroupIds,

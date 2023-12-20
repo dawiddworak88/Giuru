@@ -11,6 +11,7 @@ namespace Client.Api.v1.ResponseModels
         public string CommunicationLanguage { get; set; }
         public string PhoneNumber { get; set; }
         public Guid? CountryId { get; set; }
+        public Guid? CurrencyId { get; set; }
         public Guid? OrganisationId { get; set; }
         public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> ClientManagerIds { get; set; }
