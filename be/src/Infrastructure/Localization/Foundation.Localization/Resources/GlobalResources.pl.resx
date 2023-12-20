@@ -765,4 +765,7 @@
   <data name="CurrencySavedSuccessfully" xml:space="preserve">
     <value>Pomyślnie zapisano walutę</value>
   </data>
+  <data name="Currency" xml:space="preserve">
+    <value>Waluta</value>
+  </data>
 </root>

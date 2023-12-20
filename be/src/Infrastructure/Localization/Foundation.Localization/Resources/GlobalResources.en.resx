@@ -759,4 +759,7 @@
   <data name="CurrencySavedSuccessfully" xml:space="preserve">
     <value>Currency saved successfully.</value>
   </data>
+  <data name="Currency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
 </root>
