@@ -21,7 +21,7 @@ function ClientForm(props) {
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : null, error: "" },
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
         country: { value: props.countryId ? props.countries.find((item) => item.id === props.countryId) : null },
-        currency: { value: props.currencyId ? props.currencies.find((item) => item.id === props.currencyId) : null },
+        preferedCurrency: { value: props.preferedCurrencyId ? props.currencies.find((item) => item.id === props.preferedCurrencyId) : null },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
         hasAccount: { value: props.hasAccount ? props.hasAccount : false },
@@ -70,7 +70,7 @@ function ClientForm(props) {
         const payload = {
             ...state,
             countryId: country ? country.id : null, 
-            currencyId: currency ? currency.id : null,
+            preferedCurrencyId: preferedCurrency ? preferedCurrency.id : null,
             defaultDeliveryAddressId: state.deliveryAddress ? state.deliveryAddress.id : null,
             defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null
         }
@@ -145,7 +145,7 @@ function ClientForm(props) {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { 
-        id, name, email, country, currency, clientGroupIds, 
+        id, name, email, country, preferedCurrency, clientGroupIds, 
         communicationLanguage, phoneNumber, clientManagerIds,
         deliveryAddress, billingAddress
     } = values;
@@ -211,19 +211,19 @@ function ClientForm(props) {
                         <div className="field">
                             <Autocomplete
                                 {...currenciesPorps}
-                                id="currency"
-                                name="currency"
+                                id="preferedCurrency"
+                                name="preferedCurrency"
                                 fullWidth={true}
-                                value={currency}
+                                value={preferedCurrency}
                                 variant="standard"
                                 onChange={(event, newValue) => {
-                                    setFieldValue({name: "currency", value: newValue});
+                                    setFieldValue({name: "preferedCurrency", value: newValue});
                                 }}
                                 autoComplete
                                 renderInput={(params) => (
                                     <TextField 
                                         {...params} 
-                                        label={props.currencyLabel} 
+                                        label={props.preferedCurrencyLabel} 
                                         variant="standard"
                                         margin="normal"/>
                                 )} />
