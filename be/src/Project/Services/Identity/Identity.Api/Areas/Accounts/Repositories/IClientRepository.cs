@@ -6,7 +6,7 @@ namespace Identity.Api.Areas.Accounts.Repositories
 {
     public interface IClientRepository
     {
-        public Task<Guid?> SaveMarketingApprovals(string token, string language, Client client);
-        public Task<Client> GetClientByOrganistationId(string language, string token, Guid? id);
+        public Task<Guid?> SaveAsync(string token, string language, Client client);
+        public Task<Client> GetByOrganisationAsync(string language, string token, Guid? id);
     }
 }

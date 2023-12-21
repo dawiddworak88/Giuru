@@ -24,7 +24,7 @@ namespace Identity.Api.Areas.Accounts.Repositories
             _settings = settings;
         }
 
-        public async Task<Guid?> SaveMarketingApprovals(string language, string token, Client client)
+        public async Task<Guid?> SaveAsync(string language, string token, Client client)
         {
             var requestModel = new SaveClientRequestModel
             {
@@ -66,7 +66,7 @@ namespace Identity.Api.Areas.Accounts.Repositories
             return default;
         }
 
-        public async Task<Client> GetClientByOrganistationId(string language, string token, Guid? id)
+        public async Task<Client> GetByOrganisationAsync(string language, string token, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {

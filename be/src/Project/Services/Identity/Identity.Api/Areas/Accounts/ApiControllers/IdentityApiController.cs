@@ -18,6 +18,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Identity.Api.Areas.Accounts.ApiControllers
@@ -115,15 +116,15 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                     {
                         if (model.MarketingApprovals.Any())
                         {
-                            var token = await _tokenService.GetTokenAsync(_options.Value.Email, _options.Value.OrganisationId, _options.Value.AppSecret);
+                            var token = await _tokenService.GetTokenAsync(_options.Value.ApiEmail, _options.Value.ApiOrganisationId, _options.Value.ApiAppSecret);
 
-                            var client = await _clientRepository.GetClientByOrganistationId(language, token, user.OrganisationId);
+                            var client = await _clientRepository.GetByOrganisationAsync(language, token, user.OrganisationId);
 
                             if (client is not null)
                             {
                                 client.MarketingApprovals = model.MarketingApprovals;
 
-                                await _clientRepository.SaveMarketingApprovals(language, token, client);
+                                await _clientRepository.SaveAsync(language, token, client);
                             }
                         }
 
