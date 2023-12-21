@@ -11,23 +11,23 @@ import ToastHelper from "../../../../shared/helpers/globals/ToastHelper";
 import SetPasswordConstants from "../../../../shared/constants/SetPasswordConstants";
 
 function SetPasswordForm(props) {
-    const [ emailMarketingAporval, setEmailMarketingApproval ] = useState(false);
-    const [ smsMarketingAporval, setSmsMarketingApproval ] = useState(false);
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         password: { value: null, error: "" },
+        isEmailMarketingAporval: { value: false },
+        isSmsMarketingAporval: { value: false },
         returnUrl: { value: props.returnUrl ? props.returnUrl : null }
     };
 
-    const addNamesToMarketingApporvals = () => {
+    const addNamesToMarketingApporvals = (state) => {
         let result = [];
 
-        if (emailMarketingAporval) {
+        if (state.isEmailMarketingAporval) {
             result.push(SetPasswordConstants.emailMarketingApprovalName());
         }
 
-        if (smsMarketingAporval) {
+        if (state.isSmsMarketingAporval) {
             result.push(SetPasswordConstants.smsMarketingApprovalName());
         }
 
@@ -50,10 +50,14 @@ function SetPasswordForm(props) {
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        console.log("state", state);
+
         const payload = {
             ...state,
-            marketingApprovals: addNamesToMarketingApporvals()
+            marketingApprovals: addNamesToMarketingApporvals(state)
         }
+
+        console.log(payload);
 
         const requestOptions = {
             method: "POST",
@@ -81,10 +85,10 @@ function SetPasswordForm(props) {
     };
 
     const {
-        disable, values, errors, dirty, handleOnChange, handleOnSubmit
+        disable, values, errors, dirty, setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
-    const { id, password } = values;
+    const { id, password, isEmailMarketingAporval, isSmsMarketingAporval } = values;
 
     return (
         <section className="section is-flex-centered set-password">
@@ -126,10 +130,10 @@ function SetPasswordForm(props) {
                             <FormControlLabel 
                                 control={
                                     <Checkbox
-                                        onChange={e =>{
-                                            setEmailMarketingApproval(e.target.checked);
+                                        onChange={e => {
+                                            setFieldValue({ name: "isEmailMarketingAporval", value: e.target.checked });
                                         }}
-                                        checked={emailMarketingAporval}
+                                        checked={isEmailMarketingAporval}
                                         id="emailMarketingApproval"
                                         name="emailMarketingApproval"
                                         color="secondary" />
@@ -143,10 +147,10 @@ function SetPasswordForm(props) {
                             <FormControlLabel 
                                 control={
                                     <Checkbox
-                                        onChange={e =>{
-                                            setSmsMarketingApproval(e.target.checked);
+                                        onChange={e => {
+                                            setFieldValue({ name: "isSmsMarketingAporval", value: e.target.checked });
                                         }}
-                                        checked={smsMarketingAporval}
+                                        checked={isSmsMarketingAporval}
                                         id="smsMarketingApproval"
                                         name="smsMarketingApproval"
                                         color="secondary" />
