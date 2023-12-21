@@ -104,7 +104,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 NoManagersText = _clientLocalizer.GetString("NoManagers"),
                 ClientManagerLabel = _globalLocalizer.GetString("Manager"),
                 CountryLabel = _globalLocalizer.GetString("Country"),
-                CurrencyLabel = _globalLocalizer.GetString("Currency"),
+                PreferedCurrencyLabel = _clientLocalizer.GetString("PreferedCurrencyLabel"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress")
             };
@@ -123,7 +123,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.ClientGroupsIds = client.ClientGroupIds;
                     viewModel.ClientManagersIds = client.ClientManagerIds;
                     viewModel.CountryId = client.CountryId;
-                    viewModel.CurrencyId = client.CurrencyId;
+                    viewModel.PreferedCurrencyId = client.PreferedCurrencyId;
                     viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
                     viewModel.DefaultBillingAddressId = client.DefaultBillingAddressId;
 

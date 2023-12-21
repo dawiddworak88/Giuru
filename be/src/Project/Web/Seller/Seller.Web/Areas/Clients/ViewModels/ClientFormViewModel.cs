@@ -41,8 +41,8 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string ClientManagerLabel { get; set; }
         public string CountryLabel { get; set; }
         public Guid? CountryId { get; set; }
-        public string CurrencyLabel { get; set; }
-        public Guid? CurrencyId { get; set; }
+        public string PreferedCurrencyLabel { get; set; }
+        public Guid? PreferedCurrencyId { get; set; }
         public string DeliveryAddressLabel { get; set; }
         public string BillingAddressLabel { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
