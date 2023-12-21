@@ -85,7 +85,7 @@ namespace Global.Api.Services.Currencies
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                currencies = currencies.Where(x => x.Name.StartsWith(model.SearchTerm));
+                currencies = currencies.Where(x => x.Name.StartsWith(model.SearchTerm) || x.CurrencyCode.StartsWith(model.SearchTerm));
             }
 
             currencies = currencies.ApplySort(model.OrderBy);
