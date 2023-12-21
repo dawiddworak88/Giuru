@@ -68,7 +68,10 @@ function ClientForm(props) {
             countryId: country ? country.id : null,
             defaultDeliveryAddressId: state.deliveryAddress ? state.deliveryAddress.id : null,
             defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null,
-            formData
+            fieldsValues: Object.entries(formData).map((entry) => ({ 
+                fieldDefinitionId: entry[0],
+                fieldValue: entry[1]
+            }))
         }
 
         const requestOptions = {

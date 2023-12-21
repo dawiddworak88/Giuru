@@ -5,6 +5,7 @@ using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Newtonsoft.Json;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
@@ -35,13 +36,15 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             IClientsRepository clientsRepository,
             IStringLocalizer<ClientResources> clientLocalizer,
             IIdentityRepository identityRepository,
-            IClientGroupsRepository clientGroupsRepository)
+            IClientGroupsRepository clientGroupsRepository,
+            IClientFieldValuesRepository clientFieldValuesRepository)
         {
             _organisationsRepository = organisationsRepository;
             _clientsRepository = clientsRepository;
             _clientLocalizer = clientLocalizer;
             _identityRepository = identityRepository;
             _clientGroupsRepository = clientGroupsRepository;
+            _clientFieldValuesRepository = clientFieldValuesRepository;
         }
 
         [HttpGet]
@@ -79,12 +82,15 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
             var clientId = await _clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PhoneNumber, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId);
 
-            await _clientFieldValuesRepository.SaveAsync(token, language, clientId,
-                    model.FieldsValues.Select(x => new ApiClientFieldValue
-                    {
-                        FieldDefinitionId = x.FieldDefinitionId,
-                        FieldValue = x.FieldValue
-                    }));
+            if (model.FieldsValues.Any())
+            {
+                await _clientFieldValuesRepository.SaveAsync(token, language, clientId,
+                  model.FieldsValues.Select(x => new ApiClientFieldValue
+                  {
+                      FieldDefinitionId = x.FieldDefinitionId,
+                      FieldValue = x.FieldValue
+                  }));
+            }
 
             if (model.HasAccount)
             {

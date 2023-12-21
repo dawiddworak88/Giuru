@@ -21,7 +21,6 @@ using Seller.Web.Areas.Global.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Foundation.GenericRepository.Definitions;
 using Seller.Web.Areas.Clients.Repositories.Fields;
-using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
@@ -204,7 +203,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                             Value = y.Value
                         })
                     };
-                });
+                }); 
             }
 
             return viewModel;
