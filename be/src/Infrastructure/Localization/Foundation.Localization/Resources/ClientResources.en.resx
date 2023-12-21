@@ -318,4 +318,7 @@
   <data name="NewClientAddress" xml:space="preserve">
     <value>Add address</value>
   </data>
+  <data name="PreferedCurrencyLabel" xml:space="preserve">
+    <value>Prefered currency</value>
+  </data>
 </root>
