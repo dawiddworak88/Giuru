@@ -3,14 +3,12 @@ import PropTypes from "prop-types";
 
 function Footer(props) {
 
-    const links = props.links.map((link, index) => <li key={index}><a href={link.url}>{link.text}</a></li>);
+    const links = props.links.map((link, index) => <div className="navbar-item" key={index}><a href={link.url}>{link.text}</a></div>);
 
     return (
         <footer className="footer">
-            <div className="content">
-                <ul>
-                    {links}
-                </ul>
+            <div className="navbar">
+                {links}
             </div>
             <div className="content has-text-centered has-text-white">
                 {props.copyright}
