@@ -255,7 +255,6 @@ namespace Client.Api.Services.Clients
                     Name = name,
                     IsApproved = true,
                     ClientId = serviceModel.Id,
-                    IsActive = true
                 };
 
                 await _context.ClientMarketingApprovals.AddAsync(marketingApproval.FillCommonProperties());
