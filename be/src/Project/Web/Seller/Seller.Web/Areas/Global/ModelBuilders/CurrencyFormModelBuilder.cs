@@ -41,8 +41,7 @@ namespace Seller.Web.Areas.Global.ModelBuilders
                 SaveUrl = _linkGenerator.GetPathByAction("Index", "CurrenciesApi", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name }),
                 CurrenciesUrl = _linkGenerator.GetPathByAction("Index", "Currencies", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name }),
                 CurrencyCodeLabel = _globalLocalizer.GetString("CurrencyCodeLabel"),
-                SymbolLabel = _globalLocalizer.GetString("SymbolLabel"),
-
+                SymbolLabel = _globalLocalizer.GetString("SymbolLabel")
             };
 
             if (componentModel.Id.HasValue)
