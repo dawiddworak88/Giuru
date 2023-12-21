@@ -44,8 +44,8 @@ namespace Seller.Web.Areas.Global.ModelBuilders
             viewModel.NewText = _globalLocalizer.GetString("NewCurrency");
             viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "Currency", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name});
             viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "Currency", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name});
-            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "CurrenciesApi", new { Areas = "Global", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "CurrenciesApi", new { Areas = "Global", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "CurrenciesApi", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "CurrenciesApi", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(Currency.CreatedDate)} desc";
 
@@ -54,6 +54,8 @@ namespace Seller.Web.Areas.Global.ModelBuilders
                 Labels = new string[]
                 {
                     _globalLocalizer.GetString("Name"),
+                    _globalLocalizer.GetString("CurrencyCodeLabel"),
+                    _globalLocalizer.GetString("SymbolLabel"),
                     _globalLocalizer.GetString("LastModifiedDate"),
                     _globalLocalizer.GetString("CreatedDate")
                 },
@@ -74,6 +76,16 @@ namespace Seller.Web.Areas.Global.ModelBuilders
                     {
                         Title = nameof(Currency.Name).ToCamelCase(),
                         IsDateTime = false,
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(Currency.CurrencyCode).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(Currency.Symbol).ToCamelCase(),
+                        IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
