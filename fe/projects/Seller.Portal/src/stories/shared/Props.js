@@ -1,6 +1,8 @@
 export var footer = {
     copyright: "Copyright © 2021 Giuru",
     links: [
+      { url: "#", text: "Terms & Conditions", target: null},
+      { url: "#", text: "Privacy Policy", target: null},
     ]
   };
 
