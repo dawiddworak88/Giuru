@@ -13,7 +13,6 @@ using Seller.Web.Shared.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Categories.Repositories
