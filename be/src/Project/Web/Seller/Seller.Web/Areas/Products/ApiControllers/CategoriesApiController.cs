@@ -8,7 +8,9 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
+using Seller.Web.Areas.Shared.Repositories.Media;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -21,13 +23,16 @@ namespace Seller.Web.Areas.Products.ApiControllers
     {
         private readonly ICategoriesRepository _categoriesRepository;
         private readonly IStringLocalizer _productLocalizer;
+        private readonly IMediaItemsRepository _mediaItemsRepository;
 
         public CategoriesApiController(
             ICategoriesRepository categoriesRepository,
-            IStringLocalizer<ProductResources> productLocalizer)
+            IStringLocalizer<ProductResources> productLocalizer,
+            IMediaItemsRepository mediaItemsRepository)
         {
             _categoriesRepository = categoriesRepository;
             _productLocalizer = productLocalizer;
+            _mediaItemsRepository = mediaItemsRepository;
         }
 
         [HttpGet]
@@ -76,6 +81,18 @@ namespace Seller.Web.Areas.Products.ApiControllers
             var language = CultureInfo.CurrentCulture.Name;
 
             var category = await _categoriesRepository.GetCategoryAsync(token, language, model.Id);
+
+            var mediaItem = await _mediaItemsRepository.GetMediaItemAsync(token, language, category.ThumbnailMediaId.Value);
+
+            if (mediaItem is not null)
+            {
+                var files = new List<Guid>
+                {
+                    mediaItem.Id
+                };
+
+                category.Files = files;
+            }
 
             if (category is not null) 
             {
