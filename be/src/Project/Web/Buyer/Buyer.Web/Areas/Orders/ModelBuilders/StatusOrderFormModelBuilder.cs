@@ -71,7 +71,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 OrdersUrl = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 NavigateToOrders = _orderLocalizer.GetString("NavigateToOrdersList"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
-                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress")
+                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
+                ExpectedDateOfProductOnStockLabel = _orderLocalizer.GetString("ExpectedDateOfProductOnStock")
             };
 
             var orderStatuses = await _ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
