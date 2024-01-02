@@ -1,5 +1,4 @@
 ﻿using Buyer.Web.Areas.Orders.ViewModel;
-using Buyer.Web.Shared.DomainModels.Clients;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Services.Baskets;
 using Foundation.Extensions.ModelBuilders;
