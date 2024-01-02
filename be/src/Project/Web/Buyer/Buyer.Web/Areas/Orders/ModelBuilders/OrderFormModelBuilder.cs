@@ -1,5 +1,4 @@
 ﻿using Buyer.Web.Areas.Orders.ViewModel;
-using Buyer.Web.Shared.DomainModels.Clients;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Services.Baskets;
 using Foundation.Extensions.ModelBuilders;
@@ -104,7 +103,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 
             if (componentModel.SellerId.HasValue)
             {
-                var client = await _clientsRepository.GetClientAsync(componentModel.Token, componentModel.Language);
+                var client = await _clientsRepository.GetClientAsync(componentModel.Token, componentModel.Language, componentModel.SellerId);
 
                 if (client is not null)
                 {
