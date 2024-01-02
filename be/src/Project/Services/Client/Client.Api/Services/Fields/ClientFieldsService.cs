@@ -74,7 +74,7 @@ namespace Client.Api.Services.Fields
                 fieldDefinitionTranslation = fieldDefinition.FieldDefinitionTranslations.FirstOrDefault(x => x.IsActive);
             }
 
-            var fieldDefinitionOptions = from fo in _context.FieldOptions
+            var fieldDefinitionOptions = (from fo in _context.FieldOptions
                                          join fot in _context.FieldOptionsTranslation on fo.Id equals fot.OptionId
                                          join fos in _context.FieldOptionSetTranslations on fo.OptionSetId equals fos.OptionSetId
                                          group new { fo, fot, fos } by fo.OptionSetId into grouped
@@ -83,21 +83,7 @@ namespace Client.Api.Services.Fields
                                          {
                                              Name = grouped.FirstOrDefault(g => g.fos.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fos.Language == model.Language).fos.Name : grouped.FirstOrDefault().fos.Name,
                                              Value = grouped.FirstOrDefault(g => g.fot.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fot.Language == model.Language).fot.OptionValue : grouped.FirstOrDefault().fot.OptionValue
-                                         };
-
-            var fieldOptions = (from fo in _context.FieldOptions
-                                join fot in _context.FieldOptionsTranslation on fo.Id equals fot.OptionId
-                                join fos in _context.FieldOptionSetTranslations on fo.OptionSetId equals fos.OptionSetId
-                                where fo.OptionSetId == fieldDefinition.OptionSetId
-                                select new
-                                {
-                                    fo.OptionSetId,
-                                    fos.Name,
-                                    fot.OptionValue
-                                });
-
-            //Console.WriteLine(JsonConvert.SerializeObject(fieldOptions);
-
+                                         }).ToList();
 
             return new ClientFieldServiceModel
             {
@@ -148,19 +134,6 @@ namespace Client.Api.Services.Fields
                                              Name = grouped.FirstOrDefault(g => g.fos.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fos.Language == model.Language).fos.Name : grouped.FirstOrDefault().fos.Name,
                                              Value = grouped.FirstOrDefault(g => g.fot.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fot.Language == model.Language).fot.OptionValue : grouped.FirstOrDefault().fot.OptionValue
                                          }).ToList();
-
-            var fieldOptions = (from fo in _context.FieldOptions
-                                join fot in _context.FieldOptionsTranslation on fo.Id equals fot.OptionId
-                                join fos in _context.FieldOptionSetTranslations on fo.OptionSetId equals fos.OptionSetId
-                                where fo.IsActive
-                                select new
-                                {
-                                    fo.OptionSetId,
-                                    fos.Name,
-                                    fot.OptionValue
-                                }).ToList();
-
-            Console.WriteLine(JsonConvert.SerializeObject(fieldOptions));
 
             return new PagedResults<IEnumerable<ClientFieldServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
