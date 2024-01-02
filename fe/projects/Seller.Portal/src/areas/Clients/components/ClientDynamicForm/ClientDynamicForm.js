@@ -1,48 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
     TextField, Select, MenuItem, 
     FormControl, InputLabel 
 } from '@mui/material';
 
-const ClientDynamicForm = (props) => {
-    const [formData, setFormData] = useState(props.formData ? props.formData : {});
+const ClientDynamicForm = ({ 
+    dynamicFields = [], 
+    formData: initialFormData = {}, 
+    setFormData
+}) => {
+    const [formData, setLocalFormData] = useState(initialFormData || {});
 
     useEffect(() => {
-        const initialFormData = {};
-        
-        props.dynamicFields.forEach(field => {
-            initialFormData[field.id] = field.value ? field.value : field.type === 'select' ? '' : null;
-        });
-
-        setFormData(initialFormData);
-    }, [props.dynamicFields]);
+        setFormData(formData);
+    }, [formData, setFormData]);
 
     const handleChange = (name, value) => {
-        setFormData(prev => ({ ...prev, [name]: value }));
-        // props.onChange({name: "test", value: "abcd"})
-        // props.onChange(prev => ({ ...prev, [name]: value }))
-        props.setFormData(prev => ({ ...prev, [name]: value }))
+        const updatedFormData = { ...formData, [name]: value };
+        setLocalFormData(updatedFormData);
     };
 
+    const initialData = useMemo(() => {
+        const initialFormData = {};
+
+        dynamicFields.forEach(field => {
+            initialFormData[field.id] = field.value ?? (field.type === 'select' ? '' : null);
+        });
+
+        return initialFormData;
+    }, [dynamicFields]);
+
+    useEffect(() => {
+        setLocalFormData(initialData || {});
+    }, [initialData]);
+
     return (
-        props.dynamicFields.map(field => (
+        dynamicFields.map(field => (
             <div key={field.id} className='field'>
-                {field.type === 'text' && (
+                {(field.type === 'text' || field.type === 'number') && (
                     <TextField
                         id={field.id}
                         label={field.name}
                         fullWidth
-                        variant="standard"
-                        value={formData[field.id] || ''}
-                        onChange={(e) => handleChange(field.id, e.target.value)}
-                    />
-                )}
-                {field.type === 'number' && (
-                    <TextField
-                        id={field.id}
-                        label={field.name}
-                        fullWidth
-                        type="number"
+                        type={field.type === 'number' ? 'number' : 'text'}
                         variant="standard"
                         value={formData[field.id] || ''}
                         onChange={(e) => handleChange(field.id, e.target.value)}
