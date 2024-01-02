@@ -63,15 +63,22 @@ function ClientForm(props) {
     function onSubmitForm(state) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        const payload = {
+        let payload = {
             ...state,
             countryId: country ? country.id : null,
             defaultDeliveryAddressId: state.deliveryAddress ? state.deliveryAddress.id : null,
             defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null,
-            fieldsValues: Object.entries(formData).map((entry) => ({ 
-                fieldDefinitionId: entry[0],
-                fieldValue: entry[1]
-            }))
+            
+        }
+
+        if (formData != null) {
+            payload = {
+                ...payload,
+                fieldsValues: Object.entries(formData).map((fieldEntry) => ({ 
+                    fieldDefinitionId: fieldEntry[0],
+                    fieldValue: fieldEntry[1]
+                }))
+            }
         }
 
         const requestOptions = {

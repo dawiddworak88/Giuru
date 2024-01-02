@@ -62,7 +62,9 @@ const ClientFieldForm = (props) => {
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
 
-                        NavigationHelper.redirect(props.editUrl + "/" + jsonResponse.id);
+                        if (type.value == "select" || props.type == "select") {
+                            NavigationHelper.redirect(props.editUrl + "/" + jsonResponse.id);
+                        }
                     }
                     else {
                         toast.error(props.generalErrorMessage);
