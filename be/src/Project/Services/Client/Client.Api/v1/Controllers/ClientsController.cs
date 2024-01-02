@@ -239,24 +239,19 @@ namespace Client.Api.v1.Controllers
         /// </summary>
         /// <returns>The client.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [Route("organisation/{id?}")]
+        [Route("organisation/{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetByOrganisation(Guid? id)
         {
-            var serviceModel = new GetClientByOrganisationServiceModel();
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            if (id is not null)
+            var serviceModel = new GetClientByOrganisationServiceModel
             {
-                serviceModel.Id = id;
-            }
-            else
-            {
-                var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-                serviceModel.Id = GuidHelper.ParseNullable(sellerClaim?.Value);
-            }
+                Id = id
+            };
 
             var validator = new GetClientByOrganisationModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
