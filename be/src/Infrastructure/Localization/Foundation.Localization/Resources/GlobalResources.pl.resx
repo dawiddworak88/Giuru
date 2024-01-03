@@ -727,7 +727,7 @@
     <value>Przesłany plik przekracza maksymalny rozmiar</value>
   </data>
   <data name="ClientAddresses" xml:space="preserve">
-    <value>Adresy klientów</value>
+    <value>Adresy</value>
   </data>
   <data name="EditClientAddress" xml:space="preserve">
     <value>Edytuj adres</value>
