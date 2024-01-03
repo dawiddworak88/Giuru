@@ -48,4 +48,9 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
+
+    .card-image-scale-down {
+        object-fit: scale-down;
+        padding: 0.75rem;
+    }
 }
