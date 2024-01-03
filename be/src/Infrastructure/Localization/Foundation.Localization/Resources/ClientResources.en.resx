@@ -294,9 +294,6 @@
   <data name="BackToAddresses" xml:space="preserve">
     <value>Back to addresses</value>
   </data>
-  <data name="NewDeliveryAddress" xml:space="preserve">
-    <value>Add new delivery address</value>
-  </data>
   <data name="DeliveryAddress" xml:space="preserve">
     <value>Delivery address</value>
   </data>
