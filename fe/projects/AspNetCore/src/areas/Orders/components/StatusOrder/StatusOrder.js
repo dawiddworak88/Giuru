@@ -77,6 +77,11 @@ function StatusOrder(props) {
                             <InputLabel id="delivery-address-label">{props.deliveryAddressLabel}: {props.deliveryAddress}</InputLabel>
                         </div>
                     }
+                    {props.billingAddress &&
+                        <div className="field">
+                            <InputLabel id="delivery-address-label">{props.billingAddressLabel}: {props.billingAddress}</InputLabel>
+                        </div>
+                    }
                     {status &&
                         <div className="status-order">
                             <div className="status-ordder__details">{props.orderStatusLabel} {status.name}</div>

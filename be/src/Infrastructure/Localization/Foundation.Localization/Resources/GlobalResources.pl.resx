@@ -726,11 +726,11 @@
   <data name="FileSizeLimit" xml:space="preserve">
     <value>Przesłany plik przekracza maksymalny rozmiar</value>
   </data>
-  <data name="ClientDeliveryAddresses" xml:space="preserve">
-    <value>Adresy dostaw klientów</value>
+  <data name="ClientAddresses" xml:space="preserve">
+    <value>Adresy klientów</value>
   </data>
-  <data name="EditDeliveryAddress" xml:space="preserve">
-    <value>Edytuj adres dostawy</value>
+  <data name="EditClientAddress" xml:space="preserve">
+    <value>Edytuj adres</value>
   </data>
   <data name="PostCode" xml:space="preserve">
     <value>Kod pocztowy</value>

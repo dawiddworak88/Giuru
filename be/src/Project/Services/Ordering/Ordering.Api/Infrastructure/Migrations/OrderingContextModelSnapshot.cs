@@ -37,8 +37,8 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<string>("BillingCompany")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BillingCountryCode")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("BillingCountryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BillingFirstName")
                         .HasColumnType("nvarchar(max)");
@@ -46,10 +46,7 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<string>("BillingLastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BillingPhone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BillingPhonePrefix")
+                    b.Property<string>("BillingPhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BillingPostCode")

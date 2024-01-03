@@ -94,6 +94,9 @@ namespace Client.Api.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("DefaultBillingAddressId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("DefaultDeliveryAddressId")
                         .HasColumnType("uniqueidentifier");
 

@@ -69,7 +69,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 UpdateOrderItemStatusUrl = _linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 OrdersUrl = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 NavigateToOrders = _orderLocalizer.GetString("NavigateToOrdersList"),
-                DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress")
+                DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
+                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress")
             };
 
             var orderStatuses = await _ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -89,7 +90,6 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     viewModel.OrderStatusId = order.OrderStatusId;
                     viewModel.ClientUrl = _linkGenerator.GetPathByAction("Edit", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
                     viewModel.ClientName = order.ClientName;
-                    viewModel.DeliveryAddress = $"{order.ShippingCompany}, {order.ShippingFirstName} {order.ShippingLastName}, {order.ShippingPostCode} {order.ShippingCity}";
                     viewModel.UpdateOrderStatusUrl = _linkGenerator.GetPathByAction("Index", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
                     viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
                     viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
@@ -111,6 +111,16 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                         ImageSrc = x.PictureUrl
                     });
                     viewModel.CustomOrder = order.MoreInfo;
+
+                    if (order.ShippingAddressId is not null)
+                    {
+                        viewModel.DeliveryAddress = $"{order.ShippingCompany}, {order.ShippingFirstName} {order.ShippingLastName}, {order.ShippingPostCode} {order.ShippingCity}";
+                    }
+
+                    if (order.BillingAddressId is not null)
+                    {
+                        viewModel.BillingAddress = $"{order.BillingCompany}, {order.BillingFirstName} {order.BillingLastName}, {order.BillingPostCode} {order.BillingCity}";
+                    }
 
                     if (order.OrderStatusId == OrdersConstants.OrderStatuses.NewId)
                     {

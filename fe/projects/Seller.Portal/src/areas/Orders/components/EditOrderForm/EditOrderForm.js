@@ -8,7 +8,6 @@ import {
     TableHead, TableRow, Paper, CircularProgress, Fab
 } from "@mui/material";
 import { Edit } from "@mui/icons-material";
-import moment from "moment";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import Files from "../../../../shared/components/Files/Files";
 
@@ -90,11 +89,6 @@ function EditOrderForm(props) {
                                                 </Select>
                                             </FormControl>
                                         </div>
-                                        {props.deliveryAddress &&
-                                            <div className="field">
-                                                <InputLabel id="delivery-address-label">{props.deliveryAddressLabel}: {props.deliveryAddress}</InputLabel>
-                                            </div>
-                                        }
                                     </div>
                                     <div className="column is-half">
                                         <div className="column">
@@ -105,6 +99,18 @@ function EditOrderForm(props) {
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div className="column">
+                                    {props.deliveryAddress &&
+                                        <div className="field">
+                                            <InputLabel id="delivery-address-label">{props.deliveryAddressLabel}: {props.deliveryAddress}</InputLabel>
+                                        </div>
+                                    }
+                                    {props.billingAddress &&
+                                        <div className="field">
+                                            <InputLabel id="billing-address-label">{props.billingAddressLabel}: {props.billingAddress}</InputLabel>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -148,7 +154,7 @@ function EditOrderForm(props) {
                                                             <Edit />
                                                         </Fab>
                                                     </TableCell>
-                                                    <TableCell><a href={item.productUrl} target="_blank"><img className="edit-order__item-product-image" src={item.imageSrc} alt={item.imageAlt}/></a></TableCell>
+                                                    <TableCell><a href={item.productUrl} target="_blank"><img className="edit-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
                                                     <TableCell>{item.sku}</TableCell>
                                                     <TableCell>{item.name}</TableCell>
                                                     <TableCell>{item.quantity}</TableCell>
@@ -173,7 +179,7 @@ function EditOrderForm(props) {
                     <div className="mt-5">
                         <h2 className="subtitle is-5 mb-2">{props.customOrderLabel}</h2>
                         <div className="edit-order__custom-order">
-                            <TextField 
+                            <TextField
                                 id="customOrder"
                                 name="customOrder"
                                 variant="standard"
@@ -181,7 +187,7 @@ function EditOrderForm(props) {
                                 fullWidth={true}
                                 multiline={true}
                                 disabled={true}
-                                InputProps={{ 
+                                InputProps={{
                                     disableUnderline: true,
                                     className: "p-2"
                                 }}

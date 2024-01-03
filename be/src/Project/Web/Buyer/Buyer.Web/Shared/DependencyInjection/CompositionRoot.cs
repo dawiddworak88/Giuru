@@ -33,8 +33,9 @@ using Buyer.Web.Areas.Products.Repositories.Files;
 using Foundation.Media.Configurations;
 using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
 using Buyer.Web.Shared.ModelBuilders.OrderItemStatusChanges;
-using Buyer.Web.Shared.Repositories.MainNavigationLinks;
 using Buyer.Web.Shared.Repositories.GraphQl;
+using Buyer.Web.Shared.ModelBuilders.NotificationBar;
+using Buyer.Web.Shared.ViewModels.NotificationBar;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -56,15 +57,15 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>, MainNavigationModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel>, OrderItemStatusChangesModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel>, FooterModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel>, NotificationBarModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
 
             // Repositories
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<ICatalogProductsRepository, CatalogProductsRepository>();
-            services.AddScoped<IMainNavigationLinkRepository, MainNavigationLinkRepository>();
             services.AddScoped<IGraphQlRepository, GraphQlRepository>();
-            services.AddScoped<IClientDeliveryAddressesRepository, ClientDeliveryAddressesRepository>();
+            services.AddScoped<IClientAddressesRepository, ClientAddressesRepository>();
 
             // Services
             services.AddScoped<ICatalogService, CatalogService>();

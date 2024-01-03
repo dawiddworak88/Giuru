@@ -1,16 +1,10 @@
-﻿using Buyer.Web.Shared.ViewModels.Headers;
-using Foundation.PageContent.Components.Footers.ViewModels;
-using Foundation.PageContent.Components.MainNavigations.ViewModels;
+﻿using Buyer.Web.Shared.ViewModels.Base;
 
 namespace Buyer.Web.Areas.News.ViewModel
 {
-    public class NewsItemPageViewModel
+    public class NewsItemPageViewModel : BasePageViewModel
     {
-        public string Locale { get; set; }
-        public BuyerHeaderViewModel Header { get; set; }
-        public MainNavigationViewModel MainNavigation { get; set; }
         public NewsItemBreadcrumbsViewModel Breadcrumbs { get; set; }
         public NewsItemDetailsViewModel NewsItemDetails { get; set; }
-        public FooterViewModel Footer { get; set; }
     }
 }

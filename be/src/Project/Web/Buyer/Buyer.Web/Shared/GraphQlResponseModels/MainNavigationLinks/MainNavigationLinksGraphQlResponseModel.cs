@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using Buyer.Web.Shared.GraphQlResponseModels.Shared;
 
 namespace Buyer.Web.Shared.GraphQlResponseModels.MainNavigationLinks
 {
@@ -31,20 +32,5 @@ namespace Buyer.Web.Shared.GraphQlResponseModels.MainNavigationLinks
     {
         [JsonProperty("links")]
         public List<Link> Links { get; set; }
-    }
-
-    public class Link
-    {
-        [JsonProperty("href")]
-        public string Href { get; set; }
-
-        [JsonProperty("label")]
-        public string Label { get; set; }
-
-        [JsonProperty("target")]
-        public string Target { get; set; }
-
-        [JsonProperty("isExternal")]
-        public bool IsExternal { get; set; }
     }
 }

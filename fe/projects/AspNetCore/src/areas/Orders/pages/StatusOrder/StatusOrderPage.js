@@ -8,6 +8,7 @@ import MainNavigation from "../../../../shared/components/MainNavigation/MainNav
 import Footer from "../../../../shared/components/Footer/Footer";
 import StatusOrder from "../../components/StatusOrder/StatusOrder";
 import LocaleHelper from "../../../../shared/helpers/globals/LocaleHelper";
+import NotificationBar from "../../../../shared/components/NotificationBar/NotificationBar";
 
 const StatusOrderPage = (props) => {
 
@@ -17,6 +18,9 @@ const StatusOrderPage = (props) => {
         <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
             <ToastContainer />
             <Store>
+                {props.notificationBar && props.notificationBar.items &&
+                    <NotificationBar {...props.notificationBar}></NotificationBar>
+                }
                 <Header {...props.header}></Header>
                 <MainNavigation {...props.mainNavigation}></MainNavigation>
                 <StatusOrder {...props.statusOrder} />

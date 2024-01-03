@@ -35,7 +35,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IClientGroupsRepository _clientGroupsRepository;
         private readonly IClientAccountManagersRepository _clientManagersRepository;
         private readonly ICountriesRepository _countriesRepository;
-        private readonly IClientDeliveryAddressesRepository _clientDeliveryAddressesRepository;
+        private readonly IClientAddressesRepository _clientAddressesRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -46,7 +46,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IClientGroupsRepository clientGroupsRepository,
             IClientAccountManagersRepository clientManagersRepository,
             ICountriesRepository countriesRepository,
-            IClientDeliveryAddressesRepository clientDeliveryAddressesRepository,
+            IClientAddressesRepository clientAddressesRepository,
             LinkGenerator linkGenerator)
         {
             _clientsRepository = clientsRepository;
@@ -58,7 +58,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _clientGroupsRepository = clientGroupsRepository;
             _clientManagersRepository = clientManagersRepository;
             _countriesRepository = countriesRepository;
-            _clientDeliveryAddressesRepository = clientDeliveryAddressesRepository;
+            _clientAddressesRepository = clientAddressesRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -103,6 +103,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 ClientManagerLabel = _globalLocalizer.GetString("Manager"),
                 CountryLabel = _globalLocalizer.GetString("Country"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
+                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
                 EmailMarketingApprovalLabel = _clientLocalizer.GetString("IsEmailMarketingApproval"),
                 SmsMarketingApprovalLabel = _clientLocalizer.GetString("IsSmsMarketingApproval"),
                 ExpressedOnLabel = _clientLocalizer.GetString("ExpressedOnLabel")
@@ -123,6 +124,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.ClientManagersIds = client.ClientManagerIds;
                     viewModel.CountryId = client.CountryId;
                     viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
+                    viewModel.DefaultBillingAddressId = client.DefaultBillingAddressId;
                     viewModel.MarketingApprovals = client.MarketingApprovals.Select(x => new ClientMarketingApproval
                     {
                         Name = x.Name,
@@ -168,11 +170,11 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 viewModel.Countries = countries.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
-            var deliveryAddresses = await _clientDeliveryAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
+            var clientAddresses = await _clientAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
 
-            if (deliveryAddresses.Data is not null)
+            if (clientAddresses.Data is not null)
             {
-                viewModel.DeliveryAddresses = deliveryAddresses.Data.Select(x => new ListItemViewModel
+                viewModel.ClientAddresses = clientAddresses.Data.Select(x => new ListItemViewModel
                 {
                     Id = x.Id,
                     Name = $"{x.Company}, {x.FirstName} {x.LastName}, {x.PostCode} {x.City}"

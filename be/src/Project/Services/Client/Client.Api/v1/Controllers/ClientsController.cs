@@ -90,6 +90,7 @@ namespace Client.Api.v1.Controllers
                                 ClientGroupIds = x.ClientGroupIds,
                                 ClientManagerIds = x.ClientManagerIds,
                                 DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
+                                DefaultBillingAddressId = x.DefaultBillingAddressId,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate,
                                 MarketingApprovals = x.MarketingApprovals.OrEmptyIfNull().Select(x => new ClientMarketingApprovalResponseModel { 
@@ -145,6 +146,7 @@ namespace Client.Api.v1.Controllers
                                 ClientGroupIds = x.ClientGroupIds,
                                 ClientManagerIds = x.ClientManagerIds,
                                 DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
+                                DefaultBillingAddressId = x.DefaultBillingAddressId,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate,
                                 MarketingApprovals = x.MarketingApprovals.OrEmptyIfNull().Select(x => new ClientMarketingApprovalResponseModel
@@ -210,6 +212,7 @@ namespace Client.Api.v1.Controllers
                         ClientGroupIds = client.ClientGroupIds,
                         ClientManagerIds = client.ClientManagerIds,
                         DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
+                        DefaultBillingAddressId = client.DefaultBillingAddressId,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate,
                         MarketingApprovals = client.MarketingApprovals.OrEmptyIfNull().Select(x => new ClientMarketingApprovalResponseModel {
@@ -273,6 +276,7 @@ namespace Client.Api.v1.Controllers
                         ClientGroupIds = client.ClientGroupIds,
                         ClientManagerIds = client.ClientManagerIds,
                         DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
+                        DefaultBillingAddressId = client.DefaultBillingAddressId,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };
@@ -317,6 +321,7 @@ namespace Client.Api.v1.Controllers
                     ClientGroupIds = request.ClientGroupIds,
                     ClientManagerIds = request.ClientManagerIds,
                     DefaultDeliveryAddressId = request.DefaultDeliveryAddressId,
+                    DefaultBillingAddressId = request.DefaultBillingAddressId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
@@ -349,6 +354,7 @@ namespace Client.Api.v1.Controllers
                     ClientGroupIds = request.ClientGroupIds,
                     ClientManagerIds = request.ClientManagerIds,
                     DefaultDeliveryAddressId = request.DefaultDeliveryAddressId,
+                    DefaultBillingAddressId = request.DefaultBillingAddressId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),

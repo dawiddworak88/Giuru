@@ -15,6 +15,7 @@ namespace Client.Api.v1.ResponseModels
         public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> ClientManagerIds { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
+        public Guid? DefaultBillingAddressId { get; set; }
         public DateTime? LastModifiedDate { get; set; }
         public DateTime? CreatedDate { get; set; }
         public IEnumerable<ClientMarketingApprovalResponseModel> MarketingApprovals { get; set; }

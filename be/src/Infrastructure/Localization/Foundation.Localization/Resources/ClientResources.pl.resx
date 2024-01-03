@@ -291,8 +291,8 @@
   <data name="ClientDeleteAddressConflict" xml:space="preserve">
     <value>Usuń przypisane adresy do tego klienta.</value>
   </data>
-  <data name="BackToDeliveryAddresses" xml:space="preserve">
-    <value>Powróć do adresów dostaw</value>
+  <data name="BackToAddresses" xml:space="preserve">
+    <value>Powróć do adresów</value>
   </data>
   <data name="NewDeliveryAddress" xml:space="preserve">
     <value>Dodaj nowy adres dostawy</value>
@@ -303,14 +303,20 @@
   <data name="DeliveryAddressDeleteDefaultConflict" xml:space="preserve">
     <value>Adres dostawy nie może zostać usunięty, ponieważ jest on przypisany jako domyślny</value>
   </data>
-  <data name="DeliveryAddressDeletedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie usunięto adres dostawy</value>
+  <data name="ClientAddressDeletedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie usunięto adres klienta</value>
   </data>
-  <data name="DeliveryAddressNotFound" xml:space="preserve">
-    <value>Nie znaleziono adresu dostawy</value>
+  <data name="ClientAddressSavedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie zapisano adres klienta</value>
   </data>
-  <data name="DeliveryAddressSavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie zapisano adres dostawy</value>
+  <data name="BillingAddress" xml:space="preserve">
+    <value>Adres bilingowy</value>
+  </data>
+  <data name="BillingAddressDeleteDefaultConflict" xml:space="preserve">
+    <value>Adres bilingowy nie może zostać usunięty, ponieważ jest on przypisany jako domyślny</value>
+  </data>
+  <data name="NewClientAddress" xml:space="preserve">
+    <value>Dodaj adres</value>
   </data>
   <data name="IsEmailMarketingApproval" xml:space="preserve">
     <value>Przesyłanie informacji handlowych e-mailem</value>
