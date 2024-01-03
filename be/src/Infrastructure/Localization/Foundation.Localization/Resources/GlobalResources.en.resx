@@ -721,7 +721,7 @@
     <value>The uploaded file exceeds the maximum size</value>
   </data>
   <data name="ClientAddresses" xml:space="preserve">
-    <value>Clients addresses</value>
+    <value>Addresses</value>
   </data>
   <data name="EditClientAddress" xml:space="preserve">
     <value>Edit address</value>
