@@ -44,6 +44,10 @@ spec:
           value: {{ .Values.identityUrl }}
         - name: BuyerUrl
           value: {{ .Values.buyerUrl }}
+        - name: ContentGraphQlUrl
+          value: {{ .Values.contentGraphQlUrl }}
+        - name: ContentGraphQlAuthorizationKey
+          value: {{ .Values.contentGraphQlAuthorizationKey }}
         - name: PrivacyPolicy
           value: {{ .Values.identityApi.privacyPolicy }}
         - name: Regulations

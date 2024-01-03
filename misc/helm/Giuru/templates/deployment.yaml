@@ -538,6 +538,10 @@ spec:
           value: {{ .Values.identityApi.accounts }}
         - name: Organisations
           value: {{ .Values.identityApi.organisations }}
+        - name: ContentGraphQlUrl
+          value: {{ .Values.contentGraphQlUrl }}
+        - name: ContentGraphQlAuthorizationKey
+          value: {{ .Values.contentGraphQlAuthorizationKey }}
         - name: PrivacyPolicy
           value: {{ .Values.identityApi.privacyPolicy }}
         - name: Regulations
