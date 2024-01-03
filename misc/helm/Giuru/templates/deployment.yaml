@@ -578,6 +578,12 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: ApiOrganisationId
+          value: {{ .Values.identityApi.apiOrganisationId }}
+        - name: ApiEmail
+          value:  {{ .Values.identityApi.apiEmail }}
+        - name: ApiAppSecret
+          value: {{ .Values.identityApi.apiAppSecret }}
         ports:
         - containerPort: 80
 ---

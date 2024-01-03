@@ -72,6 +72,12 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: ApiOrganisationId
+          value: {{ .Values.apiOrganisationId }}
+        - name: ApiEmail
+          value:  {{ .Values.apiEmail }}
+        - name: ApiAppSecret
+          value: {{ .Values.apiAppSecret }}
         envFrom:
         - secretRef:
             name: b2b-identity-api-secrets
