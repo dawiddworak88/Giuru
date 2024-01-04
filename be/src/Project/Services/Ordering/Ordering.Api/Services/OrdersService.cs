@@ -752,8 +752,6 @@ namespace Ordering.Api.Services
             {
                 var orderItemsModels = orderItems.Where(item => item.OrderId == order.Id && item.IsActive).Select(item =>
                 {
-                    var statusChange = lastOrderItemStatusChanges.GetValueOrDefault<Guid, OrderItemStatusChange>(item.Id);
-
                     var orderItemModel = new OrderItemServiceModel
                     {
                         Id = item.Id,
@@ -768,18 +766,27 @@ namespace Ordering.Api.Services
                         ExternalReference = item.ExternalReference,
                         MoreInfo = item.MoreInfo,
                         LastOrderItemStatusChangeId = item.LastOrderItemStatusChangeId,
-                        OrderItemStateId = statusChange.OrderItemStateId,
-                        OrderItemStatusId = statusChange.OrderItemStatusId,
-                        OrderItemStatusName = orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == statusChange.OrderItemStatusId && y.Language == language)?.Name ?? orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == statusChange.OrderItemStatusId)?.Name,
                         LastModifiedDate = item.LastModifiedDate,
                         CreatedDate = item.CreatedDate
                     };
 
-                    var commentTranslation = orderItemStatusChangesCommentTranslations.GetValueOrDefault<Guid, OrderItemStatusChangeCommentTranslation>(item.LastOrderItemStatusChangeId.Value);
+                    var statusChange = lastOrderItemStatusChanges.GetValueOrDefault<Guid, OrderItemStatusChange>(item.Id);
 
-                    if (commentTranslation is not null)
+                    if (statusChange is not null)
                     {
-                        orderItemModel.OrderItemStatusChangeComment = commentTranslation.OrderItemStatusChangeComment;
+                        orderItemModel.OrderItemStateId = statusChange.OrderItemStateId;
+                        orderItemModel.OrderItemStatusId = statusChange.OrderItemStatusId;
+                        orderItemModel.OrderItemStatusName = orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == statusChange.OrderItemStatusId && y.Language == language)?.Name ?? orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == statusChange.OrderItemStatusId)?.Name;
+                    }
+
+                    if (item.LastOrderItemStatusChangeId.HasValue)
+                    {
+                        var commentTranslation = orderItemStatusChangesCommentTranslations.GetValueOrDefault<Guid, OrderItemStatusChangeCommentTranslation>(item.LastOrderItemStatusChangeId.Value);
+
+                        if (commentTranslation is not null)
+                        {
+                            orderItemModel.OrderItemStatusChangeComment = commentTranslation.OrderItemStatusChangeComment;
+                        }
                     }
 
                     return orderItemModel;
