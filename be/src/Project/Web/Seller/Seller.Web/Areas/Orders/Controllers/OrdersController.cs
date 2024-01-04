@@ -11,33 +11,36 @@ using System.Security.Claims;
 using Foundation.Extensions.Helpers;
 using System.Linq;
 using Foundation.Account.Definitions;
+using Seller.Web.Areas.Orders.ComponetModels;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace Seller.Web.Areas.Orders.Controllers
 {
     [Area("Orders")]
     public class OrdersController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrdersPageViewModel> ordersPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<OrdersPageComponentModel, OrdersPageViewModel> _ordersPageModelBuilder;
 
-        public OrdersController(IAsyncComponentModelBuilder<ComponentModelBase, OrdersPageViewModel> ordersPageModelBuilder)
+        public OrdersController(IAsyncComponentModelBuilder<OrdersPageComponentModel, OrdersPageViewModel> ordersPageModelBuilder)
         {
-            this.ordersPageModelBuilder = ordersPageModelBuilder;
+            _ordersPageModelBuilder = ordersPageModelBuilder;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchTerm)
         {
-            var componentModel = new ComponentModelBase
+            var componentModel = new OrdersPageComponentModel
             {
-                IsAuthenticated = this.User.Identity.IsAuthenticated,
-                Name = this.User.Identity.Name,
+                IsAuthenticated = User.Identity.IsAuthenticated,
+                Name = User.Identity.Name,
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
+                SellerId = GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
+                SearchTerm = searchTerm
             };
 
-            var viewModel = await this.ordersPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _ordersPageModelBuilder.BuildModelAsync(componentModel);
 
-            return this.View(viewModel);
+            return View(viewModel);
         }
     }
 }
