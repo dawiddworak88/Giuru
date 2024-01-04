@@ -13,7 +13,6 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Seller.Web.Areas.Orders.ComponetModels;
 
 namespace Seller.Web.Areas.Orders.Controllers
 {

@@ -2,7 +2,6 @@
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Mvc;
-using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
 using System.Globalization;
 using Foundation.ApiExtensions.Definitions;
@@ -12,7 +11,6 @@ using Foundation.Extensions.Helpers;
 using System.Linq;
 using Foundation.Account.Definitions;
 using Seller.Web.Areas.Orders.ComponetModels;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace Seller.Web.Areas.Orders.Controllers
 {

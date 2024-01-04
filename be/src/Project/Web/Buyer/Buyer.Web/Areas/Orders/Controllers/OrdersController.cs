@@ -1,7 +1,6 @@
 ﻿using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Mvc;
-using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
 using System.Globalization;
 using Foundation.ApiExtensions.Definitions;

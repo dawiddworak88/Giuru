@@ -1,7 +1,6 @@
 ﻿using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
-using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
@@ -13,7 +12,6 @@ using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.ComponentModels.Files;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;

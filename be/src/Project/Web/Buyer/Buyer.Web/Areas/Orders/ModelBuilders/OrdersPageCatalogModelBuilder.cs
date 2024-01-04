@@ -7,7 +7,6 @@ using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
-using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
