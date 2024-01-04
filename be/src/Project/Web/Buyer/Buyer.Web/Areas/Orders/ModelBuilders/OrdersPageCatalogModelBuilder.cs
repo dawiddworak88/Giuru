@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Orders.DomainModels;
+﻿using Buyer.Web.Areas.Orders.ComponentModels;
+using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
 using Buyer.Web.Shared.ViewModels.Catalogs;
@@ -15,13 +16,13 @@ using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Orders.ModelBuilders
 {
-    public class OrdersPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogOrderViewModel<Order>>
+    public class OrdersPageCatalogModelBuilder : IAsyncComponentModelBuilder<OrdersPageComponentModel, CatalogOrderViewModel<Order>>
     {
-        private readonly ICatalogOrderModelBuilder catalogModelBuilder;
-        private readonly IOrdersRepository ordersRepository;
-        private readonly IStringLocalizer globalLocalizer;
-        private readonly IStringLocalizer orderLocalizer;
-        private readonly LinkGenerator linkGenerator;
+        private readonly ICatalogOrderModelBuilder _catalogModelBuilder;
+        private readonly IOrdersRepository _ordersRepository;
+        private readonly IStringLocalizer _globalLocalizer;
+        private readonly IStringLocalizer _orderLocalizer;
+        private readonly LinkGenerator _linkGenerator;
 
         public OrdersPageCatalogModelBuilder(
             ICatalogOrderModelBuilder catalogModelBuilder,
@@ -30,34 +31,35 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             IStringLocalizer<OrderResources> orderLocalizer,
             LinkGenerator linkGenerator)
         {
-            this.catalogModelBuilder = catalogModelBuilder;
-            this.ordersRepository = ordersRepository;
-            this.globalLocalizer = globalLocalizer;
-            this.orderLocalizer = orderLocalizer;
-            this.linkGenerator = linkGenerator;
+            _catalogModelBuilder = catalogModelBuilder;
+            _ordersRepository = ordersRepository;
+            _globalLocalizer = globalLocalizer;
+            _orderLocalizer = orderLocalizer;
+            _linkGenerator = linkGenerator;
         }
 
-        public async Task<CatalogOrderViewModel<Order>> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<CatalogOrderViewModel<Order>> BuildModelAsync(OrdersPageComponentModel componentModel)
         {
-            var viewModel = this.catalogModelBuilder.BuildModel<CatalogOrderViewModel<Order>, Order>();
+            var viewModel = _catalogModelBuilder.BuildModel<CatalogOrderViewModel<Order>, Order>();
 
-            viewModel.Title = this.orderLocalizer.GetString("Orders");
+            viewModel.Title = _orderLocalizer.GetString("Orders");
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
+            viewModel.SearchTerm = componentModel.SearchTerm;
 
-            viewModel.NewText = this.orderLocalizer.GetString("NewOrder");
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Status", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "OrdersApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewText = _orderLocalizer.GetString("NewOrder");
+            viewModel.NewUrl = _linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = _linkGenerator.GetPathByAction("Status", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "OrdersApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.OrderBy = $"{nameof(Order.CreatedDate)} desc";
 
             viewModel.Table = new CatalogTableViewModel
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("ClientName"),
-                    this.globalLocalizer.GetString("OrderStatus"),
-                    this.globalLocalizer.GetString("LastModifiedDate"),
-                    this.globalLocalizer.GetString("CreatedDate")
+                    _globalLocalizer.GetString("ClientName"),
+                    _globalLocalizer.GetString("OrderStatus"),
+                    _globalLocalizer.GetString("LastModifiedDate"),
+                    _globalLocalizer.GetString("CreatedDate")
                 },
                 Actions = new List<CatalogActionViewModel>
                 {
@@ -91,7 +93,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.ordersRepository.GetOrdersAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Order.CreatedDate)} desc");
+            viewModel.PagedItems = await _ordersRepository.GetOrdersAsync(componentModel.Token, componentModel.Language, componentModel.SearchTerm, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Order.CreatedDate)} desc");
 
             return viewModel;
         }
