@@ -5,6 +5,7 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Orders.ComponetModels;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Orders;
@@ -12,6 +13,7 @@ using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.ComponentModels.Files;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -19,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Orders.ModelBuilders
 {
-    public class EditOrderFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, EditOrderFormViewModel>
+    public class EditOrderFormModelBuilder : IAsyncComponentModelBuilder<OrdersPageComponentModel, EditOrderFormViewModel>
     {
         private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> _filesModelBuilder;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
@@ -45,7 +47,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             _clientLocalizer = clientLocalizer;
         }
 
-        public async Task<EditOrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<EditOrderFormViewModel> BuildModelAsync(OrdersPageComponentModel componentModel)
         {
             var viewModel = new EditOrderFormViewModel
             {
@@ -67,10 +69,11 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 StockQuantityLabel = _orderLocalizer.GetString("StockQuantityLabel"),
                 CustomOrderLabel = _globalLocalizer.GetString("CustomOrderLabel"),
                 UpdateOrderItemStatusUrl = _linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                OrdersUrl = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                OrdersUrl = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, searchTerm = componentModel.SearchTerm }),
                 NavigateToOrders = _orderLocalizer.GetString("NavigateToOrdersList"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
-                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress")
+                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
+                SearchTerm = componentModel.SearchTerm
             };
 
             var orderStatuses = await _ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
