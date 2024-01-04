@@ -8,37 +8,38 @@ using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Orders.DomainModels;
 using System.Threading.Tasks;
 using System.Globalization;
+using Seller.Web.Areas.Orders.ComponetModels;
 
 namespace Seller.Web.Areas.Orders.ModelBuilders
 {
-    public class OrdersPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrdersPageViewModel>
+    public class OrdersPageModelBuilder : IAsyncComponentModelBuilder<OrdersPageComponentModel, OrdersPageViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder;
-        private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Order>> ordersCatalogModelBuilder;
-        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> _headerModelBuilder;
+        private readonly IModelBuilder<MenuTilesViewModel> _menuTilesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<OrdersPageComponentModel, CatalogViewModel<Order>> _ordersCatalogModelBuilder;
+        private readonly IModelBuilder<FooterViewModel> _footerModelBuilder;
 
         public OrdersPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Order>> ordersCatalogModelBuilder,
+            IAsyncComponentModelBuilder<OrdersPageComponentModel, CatalogViewModel<Order>> ordersCatalogModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
-            this.headerModelBuilder = headerModelBuilder;
-            this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.ordersCatalogModelBuilder = ordersCatalogModelBuilder;
-            this.footerModelBuilder = footerModelBuilder;
+            _headerModelBuilder = headerModelBuilder;
+            _menuTilesModelBuilder = menuTilesModelBuilder;
+            _ordersCatalogModelBuilder = ordersCatalogModelBuilder;
+            _footerModelBuilder = footerModelBuilder;
         }
 
-        public async Task<OrdersPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<OrdersPageViewModel> BuildModelAsync(OrdersPageComponentModel componentModel)
         {
             var viewModel = new OrdersPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
-                MenuTiles = this.menuTilesModelBuilder.BuildModel(),
-                Catalog = await this.ordersCatalogModelBuilder.BuildModelAsync(componentModel),
-                Footer = footerModelBuilder.BuildModel()
+                Header = await _headerModelBuilder.BuildModelAsync(componentModel),
+                MenuTiles = _menuTilesModelBuilder.BuildModel(),
+                Catalog = await _ordersCatalogModelBuilder.BuildModelAsync(componentModel),
+                Footer = _footerModelBuilder.BuildModel()
             };
 
             return viewModel;

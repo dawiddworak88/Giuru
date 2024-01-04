@@ -7,37 +7,38 @@ using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
 using System.Globalization;
 using Seller.Web.Shared.ViewModels;
+using Seller.Web.Areas.Orders.ComponetModels;
 
 namespace Seller.Web.Areas.Orders.ModelBuilders
 {
-    public class EditOrderPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, EditOrderPageViewModel>
+    public class EditOrderPageModelBuilder : IAsyncComponentModelBuilder<OrdersPageComponentModel, EditOrderPageViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder;
-        private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, EditOrderFormViewModel> editOrderFormModelBuilder;
-        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> _headerModelBuilder;
+        private readonly IModelBuilder<MenuTilesViewModel> _menuTilesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<OrdersPageComponentModel, EditOrderFormViewModel> _editOrderFormModelBuilder;
+        private readonly IModelBuilder<FooterViewModel> _footerModelBuilder;
 
         public EditOrderPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, EditOrderFormViewModel> editOrderFormModelBuilder,
+            IAsyncComponentModelBuilder<OrdersPageComponentModel, EditOrderFormViewModel> editOrderFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
-            this.headerModelBuilder = headerModelBuilder;
-            this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.editOrderFormModelBuilder = editOrderFormModelBuilder;
-            this.footerModelBuilder = footerModelBuilder;
+            _headerModelBuilder = headerModelBuilder;
+            _menuTilesModelBuilder = menuTilesModelBuilder;
+            _editOrderFormModelBuilder = editOrderFormModelBuilder;
+            _footerModelBuilder = footerModelBuilder;
         }
 
-        public async Task<EditOrderPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<EditOrderPageViewModel> BuildModelAsync(OrdersPageComponentModel componentModel)
         {
             var viewModel = new EditOrderPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
-                MenuTiles = this.menuTilesModelBuilder.BuildModel(),
-                EditOrderForm = await this.editOrderFormModelBuilder.BuildModelAsync(componentModel),
-                Footer = this.footerModelBuilder.BuildModel()
+                Header = await _headerModelBuilder.BuildModelAsync(componentModel),
+                MenuTiles = _menuTilesModelBuilder.BuildModel(),
+                EditOrderForm = await _editOrderFormModelBuilder.BuildModelAsync(componentModel),
+                Footer = _footerModelBuilder.BuildModel()
             };
 
             return viewModel;
