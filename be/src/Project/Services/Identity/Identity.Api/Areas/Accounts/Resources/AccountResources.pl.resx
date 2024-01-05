@@ -145,7 +145,7 @@
     <value>Konto Potwierdzone</value>
   </data>
   <data name="EmailMarketingApprovalLabel" xml:space="preserve">
-    <value>Wyrażam zgodę na otrzymywanie informacji handlowych od ELTAP drogą elektroniczną, na wskazany przeze mnie adres e-mail</value>
+    <value>Wyrażam zgodę na otrzymywanie informacji handlowych drogą elektroniczną, na wskazany przeze mnie adres e-mail</value>
   </data>
   <data name="FirstNameRequiredErrorMessage" xml:space="preserve">
     <value>Wprowadź swoje imię</value>
@@ -160,7 +160,7 @@
     <value>Wprowadź swoje nazwisko</value>
   </data>
   <data name="MarketingApprovalHeader" xml:space="preserve">
-    <value>Formularz marketingowy dla przedsiębiorców współpracujących z ELTAP</value>
+    <value>Formularz marketingowy</value>
   </data>
   <data name="MarketingApprovalText" xml:space="preserve">
     <value>W przypadku chęci otrzymywania od nas informacji o aktualnej ofercie, obowiązujących kampaniach, wprowadzonych funkcjonalnościach czy zmianach, a także innych działaniach prowadzonych przez ELTAP, prosimy o wypełnienie poniższych zgód marketingowych. Udzielone zgody można wycofać w każdym czasie, przy czym cofnięcie zgody nie wpływa na działania, które zostały podjęte przed dniem jej cofnięcia.</value>
@@ -217,7 +217,7 @@
     <value>Zaloguj się</value>
   </data>
   <data name="SmsMarketingApprovalLabel" xml:space="preserve">
-    <value>Wyrażam zgodę na kontakt telefoniczny ze strony ELTAP w celach marketingowych</value>
+    <value>Wyrażam zgodę na kontakt telefoniczny w celach marketingowych</value>
   </data>
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>Link do resetowania hasła został wysłany, jeśli Twoje konto istnieje na naszej platformie. Proszę sprawdź swoją skrzynkę e-mail w celu uzyskania dalszych instrukcji.</value>

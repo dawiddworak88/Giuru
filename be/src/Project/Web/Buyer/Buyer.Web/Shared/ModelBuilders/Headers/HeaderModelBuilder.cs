@@ -44,6 +44,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers
                 DrawerBackIcon = IconsConstants.ArrowLeft,
                 Logo = this.logoModelBuilder.BuildModel(),
                 LanguageSwitcher = this.languageSwitcherViewModel.BuildModel(),
+                SearchLabel = this.globalLocalizer.GetString("Search"),
                 Links = new List<LinkViewModel>()
                 {
                     new LinkViewModel
