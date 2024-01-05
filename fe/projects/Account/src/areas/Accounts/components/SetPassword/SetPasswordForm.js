@@ -50,14 +50,10 @@ function SetPasswordForm(props) {
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        console.log("state", state);
-
         const payload = {
             ...state,
             marketingApprovals: addNamesToMarketingApporvals(state)
         }
-
-        console.log(payload);
 
         const requestOptions = {
             method: "POST",
@@ -92,72 +88,78 @@ function SetPasswordForm(props) {
 
     return (
         <section className="section is-flex-centered set-password">
-            <div className="account-card">
+            <div>
                 <form className="is-modern-form has-text-centered" onSubmit={handleOnSubmit} method="post">
-                    <input type="hidden" name="id" value={id} />
-                    <div>
-                        <h1 className="subtitle is-4">{props.setPasswordText}</h1>
-                    </div>
-                    <div className="field">
-                        <TextField 
-                            id="password" 
-                            name="password" 
-                            type="password"
-                            variant="standard"
-                            label={props.passwordLabel} 
-                            fullWidth={true} 
-                            value={password} 
-                            onChange={handleOnChange} 
-                            helperText={dirty.password ? errors.password : ""} 
-                            error={(errors.password.length > 0) && dirty.password} />
-                    </div>
-                    <div className="field">
-                        <Button 
-                            type="submit" 
-                            variant="contained" 
-                            color="primary" 
-                            disabled={state.isLoading || disable} 
-                            fullWidth={true}>
-                            {props.setPasswordText}
-                        </Button>
-                    </div>
-                    <div className="field">
-                        <p className="has-text-weight-semibold">{props.marketingApprovalHeader}</p>
-                        <p>{props.marketingApprovalText}</p>
-                    </div>
-                    <div className="field">
-                        <NoSsr>
-                            <FormControlLabel 
-                                control={
-                                    <Checkbox
-                                        onChange={e => {
-                                            setFieldValue({ name: "isEmailMarketingAporval", value: e.target.checked });
-                                        }}
-                                        checked={isEmailMarketingAporval}
-                                        id="emailMarketingApproval"
-                                        name="emailMarketingApproval"
-                                        color="secondary" />
-                                    }
-                                label={props.emailMarketingApprovalLabel}
-                            />
-                        </NoSsr>
-                    </div>
-                    <div className="field">
-                        <NoSsr>
-                            <FormControlLabel 
-                                control={
-                                    <Checkbox
-                                        onChange={e => {
-                                            setFieldValue({ name: "isSmsMarketingAporval", value: e.target.checked });
-                                        }}
-                                        checked={isSmsMarketingAporval}
-                                        id="smsMarketingApproval"
-                                        name="smsMarketingApproval"
-                                        color="secondary" />
-                                    }
-                                label={props.smsMarketingApprovalLabel}
-                            />
-                        </NoSsr>
+                    <div className="columns is-align-items-center ">
+                        <div className="column is-7">
+                            <div className="field">
+                                <h1 className="title">{props.marketingApprovalHeader}</h1>
+                                <p className="subtitle mb-2 mt-1">{props.marketingApprovalText}</p>
+                            </div>
+                            <div className="field">
+                                <NoSsr>
+                                    <FormControlLabel 
+                                        control={
+                                            <Checkbox
+                                                onChange={e => {
+                                                    setFieldValue({ name: "isEmailMarketingAporval", value: e.target.checked });
+                                                }}
+                                                checked={isEmailMarketingAporval}
+                                                id="emailMarketingApproval"
+                                                name="emailMarketingApproval"
+                                                color="secondary" />
+                                            }
+                                        label={props.emailMarketingApprovalLabel}
+                                    />
+                                </NoSsr>
+                            </div>
+                            <div className="field">
+                                <NoSsr>
+                                    <FormControlLabel 
+                                        control={
+                                            <Checkbox
+                                                onChange={e => {
+                                                    setFieldValue({ name: "isSmsMarketingAporval", value: e.target.checked });
+                                                }}
+                                                checked={isSmsMarketingAporval}
+                                                id="smsMarketingApproval"
+                                                name="smsMarketingApproval"
+                                                color="secondary" />
+                                            }
+                                        label={props.smsMarketingApprovalLabel}
+                                    />
+                                </NoSsr>
+                            </div>
+                        </div>
+                        <div className="column is-4">
+                            <input type="hidden" name="id" value={id} />
+                            <div>
+                                <h1 className="subtitle is-4">{props.setPasswordText}</h1>
+                            </div>
+                            <div className="field">
+                                <TextField 
+                                    id="password" 
+                                    name="password" 
+                                    type="password"
+                                    variant="standard"
+                                    label={props.passwordLabel} 
+                                    fullWidth={true} 
+                                    value={password} 
+                                    onChange={handleOnChange} 
+                                    helperText={dirty.password ? errors.password : ""} 
+                                    error={(errors.password.length > 0) && dirty.password} />
+                            </div>
+                            <div className="field">
+                                <Button 
+                                    type="submit" 
+                                    variant="contained" 
+                                    color="primary" 
+                                    disabled={state.isLoading || disable} 
+                                    fullWidth={true}>
+                                    {props.setPasswordText}
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
