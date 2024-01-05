@@ -311,7 +311,7 @@ function Catalog(props) {
                             )
                             else if (actionItem.isEdit) return (
                                 <Tooltip title={props.editLabel} aria-label={props.editLabel} key={index}>
-                                    <Fab href={props.editUrl + "/" + item.id + "?" + QueryStringSerializer.serialize({ searchTerm: searchTerm })} size="small" color="secondary">
+                                    <Fab href={props.editUrl + "/" + item.id + (searchTerm ? `/?searchTerm=${searchTerm}` : "")} size="small" color="secondary">
                                         <Edit />
                                     </Fab>
                                 </Tooltip>)
