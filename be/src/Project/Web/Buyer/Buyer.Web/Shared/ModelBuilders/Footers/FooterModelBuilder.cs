@@ -28,7 +28,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Footers
         {
             var viewModel = new FooterViewModel();
 
-            var footerContent = await _graphQlRepository.GetFooterAsync(componentModel.ContentPageKey, componentModel.Language, _options.Value.DefaultCulture);
+            var footerContent = await _graphQlRepository.GetFooterAsync(componentModel.Language, _options.Value.DefaultCulture);
 
             if (footerContent is not null)
             {

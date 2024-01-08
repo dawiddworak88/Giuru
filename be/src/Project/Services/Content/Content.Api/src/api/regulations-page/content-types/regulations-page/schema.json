@@ -35,16 +35,6 @@
         }
       },
       "component": "blocks.content"
-    },
-    "footer": {
-      "type": "component",
-      "repeatable": false,
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "component": "shared.footer"
     }
   }
 }
