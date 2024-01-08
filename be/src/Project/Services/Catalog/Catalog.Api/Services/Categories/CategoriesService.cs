@@ -19,6 +19,7 @@ using Foundation.EventBus.Abstractions;
 using System.Diagnostics;
 using Catalog.Api.IntegrationEvents;
 using System.Linq.Dynamic.Core;
+using Newtonsoft.Json;
 
 namespace Catalog.Api.Services.Categories
 {
@@ -50,7 +51,7 @@ namespace Catalog.Api.Services.Categories
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
-                categories = categories.Where(x => x.Translations.Any(x => x.Language == model.Language && x.Name.StartsWith(model.SearchTerm) && x.IsActive));
+                categories = categories.Where(x => x.Translations.Any(t => t.Name.StartsWith(model.SearchTerm) && t.IsActive));
             }
 
             if (model.Level.HasValue)
@@ -78,23 +79,25 @@ namespace Catalog.Api.Services.Categories
                 pagedResults = categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
+            var resultsData = pagedResults.Data.OrEmptyIfNull().Select(x => new CategoryServiceModel
+            {
+                Id = x.Id,
+                Order = x.Order,
+                Schema = x.Schemas.FirstOrDefault(s => s.Language == model.Language)?.Schema ?? x.Schemas.FirstOrDefault(s => s.CategoryId == x.Id)?.Schema,
+                UiSchema = x.Schemas.FirstOrDefault(s => s.Language == model.Language)?.UiSchema ?? x.Schemas.FirstOrDefault(s => s.CategoryId == x.Id)?.UiSchema,
+                Level = x.Level,
+                IsLeaf = x.IsLeaf,
+                ParentId = x.Parentid,
+                LastModifiedDate = x.LastModifiedDate,
+                CreatedDate = x.CreatedDate,
+                Name = x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? x.Translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
+                ParentCategoryName = x.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == x.Parentid && t.Language == model.Language)?.Name ?? x.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == x.Parentid)?.Name,
+                ThumbnailMediaId = x.Images.FirstOrDefault(y => y.CategoryId == x.Id)?.MediaId
+            }).ToList();
+
             return new PagedResults<IEnumerable<CategoryServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
-                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new CategoryServiceModel
-                {
-                    Id = x.Id,
-                    Order = x.Order,
-                    Schema = x.Schemas.FirstOrDefault(s => s.Language == model.Language)?.Schema ?? x.Schemas.FirstOrDefault(s => s.CategoryId == x.Id)?.Schema,
-                    UiSchema = x.Schemas.FirstOrDefault(s => s.Language == model.Language)?.UiSchema ?? x.Schemas.FirstOrDefault(s => s.CategoryId == x.Id)?.UiSchema,
-                    Level = x.Level,
-                    IsLeaf = x.IsLeaf,
-                    ParentId = x.Parentid,
-                    LastModifiedDate = x.LastModifiedDate,
-                    CreatedDate = x.CreatedDate,
-                    Name = x.Translations.FirstOrDefault(t => t.CategoryId == x.Id && t.Language == model.Language)?.Name ?? x.Translations.FirstOrDefault(t => t.CategoryId == x.Id)?.Name,
-                    ParentCategoryName = x.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == x.Parentid && t.Language == model.Language)?.Name ?? x.ParentCategory?.Translations?.FirstOrDefault(t => t.CategoryId == x.Parentid)?.Name,
-                    ThumbnailMediaId = x.Images.FirstOrDefault(y => y.CategoryId == x.Id)?.MediaId
-                })
+                Data = resultsData
             };
         }
 
