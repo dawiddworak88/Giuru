@@ -44,8 +44,7 @@ namespace Catalog.Api.Services.Categories
                 .Include(x => x.Images)
                 .Include(x => x.Translations)
                 .Include(x => x.ParentCategory)
-                .Include(x => x.ParentCategory.Translations)
-                .Include(x => x.Schemas)                
+                .Include(x => x.ParentCategory.Translations)          
                 .AsSingleQuery();
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
@@ -84,8 +83,6 @@ namespace Catalog.Api.Services.Categories
                 {
                     Id = x.Id,
                     Order = x.Order,
-                    Schema = x.Schemas.FirstOrDefault(s => s.Language == model.Language)?.Schema ?? x.Schemas.FirstOrDefault(s => s.CategoryId == x.Id)?.Schema,
-                    UiSchema = x.Schemas.FirstOrDefault(s => s.Language == model.Language)?.UiSchema ?? x.Schemas.FirstOrDefault(s => s.CategoryId == x.Id)?.UiSchema,
                     Level = x.Level,
                     IsLeaf = x.IsLeaf,
                     ParentId = x.Parentid,
@@ -290,24 +287,6 @@ namespace Catalog.Api.Services.Categories
             }
 
             await _context.CategoryImages.AddRangeAsync(images);
-
-            var schemas = new List<CategorySchema>();
-
-            foreach (var schema in model.Schemas.OrEmptyIfNull())
-            {
-                var categorySchema = new CategorySchema
-                {
-                    Schema = schema.Schema,
-                    UiSchema = schema.UiSchema,
-                    CategoryId = category.Id,
-                    Language = schema.Language
-                };
-
-                schemas.Add(categorySchema.FillCommonProperties());
-            }
-
-            await _context.CategorySchemas.AddRangeAsync(schemas);
-
 
             await _context.SaveChangesAsync();
 

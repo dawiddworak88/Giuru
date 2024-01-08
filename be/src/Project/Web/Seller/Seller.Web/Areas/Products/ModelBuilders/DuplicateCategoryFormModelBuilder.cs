@@ -73,28 +73,6 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                             };
                         }
                     }
-
-                    var categorySchemas = await _categoriesRepository.GetCategorySchemasAsync(componentModel.Token, componentModel.Language, componentModel.Id);
-
-                    if (categorySchemas is not null)
-                    {
-                        var schemas = new List<CategorySchemaViewModel>();
-
-                        foreach (var schema in categorySchemas.Schemas)
-                        {
-                            var categorySchema = new CategorySchemaViewModel
-                            {
-                                Id = schema.Id,
-                                Schema = schema.Schema,
-                                UiSchema = schema.UiSchema,
-                                Language = schema.Language
-                            };
-
-                            schemas.Add(categorySchema);
-                        }
-
-                        viewModel.Schemas = schemas;                        
-                    }
                 }
             }
 
