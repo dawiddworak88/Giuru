@@ -278,7 +278,7 @@ services:
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
       - ApiOrganisationId=09affcc9-1665-45d6-919f-3d2026106ba1
-      - ApiEmail=seller&user.com
+      - ApiEmail=seller@user.com
       - ApiAppSecret=98daf0da-89ac-48db-8b9f-edc6383153ed
     ports:
       - "5105:80"
