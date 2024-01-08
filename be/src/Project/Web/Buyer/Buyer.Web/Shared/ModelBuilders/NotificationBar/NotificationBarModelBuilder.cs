@@ -23,7 +23,7 @@ namespace Buyer.Web.Shared.ModelBuilders.NotificationBar
 
         public async Task<NotificationBarViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var notificationBarItems = await _graphQlRepository.GetNotificationBar(componentModel.ContentPageKey, componentModel.Language, _settings.CurrentValue.DefaultCulture);
+            var notificationBarItems = await _graphQlRepository.GetNotificationBar(componentModel.Language, _settings.CurrentValue.DefaultCulture);
 
             if(notificationBarItems is not null)
             {
