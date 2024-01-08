@@ -2919,6 +2919,74 @@ ALTER TABLE public.upload_folders_parent_links_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.upload_folders_parent_links_id_seq OWNED BY public.upload_folders_parent_links.id;
 
+--
+-- Name: components_blocks_main_navigations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.components_blocks_main_navigations (
+    id integer NOT NULL
+);
+
+
+ALTER TABLE public.components_blocks_main_navigations OWNER TO postgres;
+
+--
+-- Name: components_blocks_main_navigations_components; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.components_blocks_main_navigations_components (
+    id integer NOT NULL,
+    entity_id integer,
+    component_id integer,
+    component_type character varying(255),
+    field character varying(255),
+    "order" integer
+);
+
+
+ALTER TABLE public.components_blocks_main_navigations_components OWNER TO postgres;
+
+--
+-- Name: components_blocks_main_navigations_components_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.components_blocks_main_navigations_components_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.components_blocks_main_navigations_components_id_seq OWNER TO postgres;
+
+--
+-- Name: components_blocks_main_navigations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.components_blocks_main_navigations_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.components_blocks_main_navigations_id_seq OWNER TO postgres;
+
+--
+-- Name: components_blocks_main_navigations_components_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.components_blocks_main_navigations_components_id_seq OWNED BY public.components_blocks_main_navigations_components.id;
+
+--
+-- Name: components_blocks_main_navigations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.components_blocks_main_navigations_id_seq OWNED BY public.components_blocks_main_navigations.id;
 
 --
 -- TOC entry 3167 (class 2604 OID 16602)
@@ -2926,7 +2994,6 @@ ALTER SEQUENCE public.upload_folders_parent_links_id_seq OWNED BY public.upload_
 --
 
 ALTER TABLE ONLY public.admin_permissions ALTER COLUMN id SET DEFAULT nextval('public.admin_permissions_id_seq'::regclass);
-
 
 --
 -- TOC entry 3168 (class 2604 OID 16603)
@@ -3471,6 +3538,17 @@ ALTER TABLE ONLY public.upload_folders ALTER COLUMN id SET DEFAULT nextval('publ
 
 ALTER TABLE ONLY public.upload_folders_parent_links ALTER COLUMN id SET DEFAULT nextval('public.upload_folders_parent_links_id_seq'::regclass);
 
+--
+-- Name: components_blocks_main_navigations id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.components_blocks_main_navigations ALTER COLUMN id SET DEFAULT nextval('public.components_blocks_main_navigations_id_seq'::regclass);
+
+--
+-- Name: components_blocks_main_navigations_components id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.components_blocks_main_navigations_components ALTER COLUMN id SET DEFAULT nextval('public.components_blocks_main_navigations_components_id_seq'::regclass);
 
 --
 -- TOC entry 3829 (class 0 OID 16384)
@@ -3791,6 +3869,9 @@ INSERT INTO public.available_products_pages (id, created_at, updated_at, publish
 INSERT INTO public.available_products_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (1, 1, 25, 'shared.seo', 'seo', NULL);
 INSERT INTO public.available_products_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (2, 2, 26, 'shared.seo', 'seo', NULL);
 INSERT INTO public.available_products_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (5, 3, 27, 'shared.seo', 'seo', NULL);
+INSERT INTO public.available_products_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (7, 2, 11, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.available_products_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (9, 3, 12, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.available_products_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (11, 1, 13, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
 
 
 --
@@ -3827,7 +3908,9 @@ INSERT INTO public.basket_pages (id, created_at, updated_at, published_at, creat
 INSERT INTO public.basket_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (1, 1, 43, 'shared.seo', 'seo', NULL);
 INSERT INTO public.basket_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (2, 2, 44, 'shared.seo', 'seo', NULL);
 INSERT INTO public.basket_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (3, 3, 45, 'shared.seo', 'seo', NULL);
-
+INSERT INTO public.basket_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (9, 1, 26, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.basket_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (11, 2, 27, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.basket_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (13, 3, 28, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
 
 --
 -- TOC entry 3952 (class 0 OID 214440)
@@ -4050,7 +4133,9 @@ INSERT INTO public.download_center_pages (id, created_at, updated_at, published_
 INSERT INTO public.download_center_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (1, 1, 22, 'shared.seo', 'seo', NULL);
 INSERT INTO public.download_center_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (2, 2, 23, 'shared.seo', 'seo', NULL);
 INSERT INTO public.download_center_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (3, 3, 24, 'shared.seo', 'seo', NULL);
-
+INSERT INTO public.download_center_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (5, 1, 20, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.download_center_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (7, 3, 21, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.download_center_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (9, 2, 22, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
 
 --
 -- TOC entry 3912 (class 0 OID 213733)
@@ -4129,6 +4214,10 @@ INSERT INTO public.home_pages_components (id, entity_id, component_id, component
 INSERT INTO public.home_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (40, 2, 2, 'blocks.hero-slider', 'heroSlider', NULL);
 INSERT INTO public.home_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (41, 3, 3, 'shared.seo', 'seo', NULL);
 INSERT INTO public.home_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (42, 3, 3, 'blocks.hero-slider', 'heroSlider', NULL);
+INSERT INTO public.home_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (53, 1, 1, 'blocks.main-navigation', 'MainNavigationLinks', NULL);
+INSERT INTO public.home_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (59, 1, 2, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.home_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (80, 3, 3, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.home_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (92, 2, 4, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
 
 
 --
@@ -4176,7 +4265,9 @@ INSERT INTO public.news_pages (id, created_at, updated_at, published_at, created
 INSERT INTO public.news_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (1, 1, 16, 'shared.seo', 'seo', NULL);
 INSERT INTO public.news_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (2, 2, 17, 'shared.seo', 'seo', NULL);
 INSERT INTO public.news_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (3, 3, 28, 'shared.seo', 'seo', NULL);
-
+INSERT INTO public.news_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (5, 3, 17, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.news_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (7, 1, 18, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.news_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (9, 2, 19, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
 
 --
 -- TOC entry 3916 (class 0 OID 213791)
@@ -4212,6 +4303,9 @@ INSERT INTO public.order_item_pages (id, created_at, updated_at, published_at, c
 INSERT INTO public.order_item_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (1, 1, 40, 'shared.seo', 'seo', NULL);
 INSERT INTO public.order_item_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (2, 2, 41, 'shared.seo', 'seo', NULL);
 INSERT INTO public.order_item_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (3, 3, 42, 'shared.seo', 'seo', NULL);
+INSERT INTO public.order_item_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (5, 2, 23, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.order_item_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (7, 3, 24, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.order_item_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (9, 1, 25, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
 
 
 --
@@ -4248,7 +4342,9 @@ INSERT INTO public.order_pages (id, created_at, updated_at, published_at, create
 INSERT INTO public.order_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (1, 1, 13, 'shared.seo', 'seo', NULL);
 INSERT INTO public.order_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (2, 2, 14, 'shared.seo', 'seo', NULL);
 INSERT INTO public.order_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (3, 3, 15, 'shared.seo', 'seo', NULL);
-
+INSERT INTO public.order_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (5, 2, 8, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.order_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (7, 3, 9, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.order_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (9, 1, 10, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
 
 --
 -- TOC entry 3920 (class 0 OID 213820)
@@ -4284,7 +4380,9 @@ INSERT INTO public.orders_pages (id, created_at, updated_at, published_at, creat
 INSERT INTO public.orders_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (1, 1, 10, 'shared.seo', 'seo', NULL);
 INSERT INTO public.orders_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (2, 2, 11, 'shared.seo', 'seo', NULL);
 INSERT INTO public.orders_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (3, 3, 12, 'shared.seo', 'seo', NULL);
-
+INSERT INTO public.orders_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (7, 1, 5, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.orders_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (9, 2, 6, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.orders_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (11, 3, 7, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
 
 --
 -- TOC entry 3924 (class 0 OID 213849)
@@ -4320,7 +4418,9 @@ INSERT INTO public.outlet_pages (id, created_at, updated_at, published_at, creat
 INSERT INTO public.outlet_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (1, 1, 18, 'shared.seo', 'seo', NULL);
 INSERT INTO public.outlet_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (2, 2, 29, 'shared.seo', 'seo', NULL);
 INSERT INTO public.outlet_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (3, 3, 30, 'shared.seo', 'seo', NULL);
-
+INSERT INTO public.outlet_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (5, 2, 14, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.outlet_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (7, 3, 15, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.outlet_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (9, 1, 16, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
 
 --
 -- TOC entry 3928 (class 0 OID 213878)
@@ -4428,7 +4528,9 @@ INSERT INTO public.search_products_pages (id, created_at, updated_at, published_
 INSERT INTO public.search_products_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (1, 1, 37, 'shared.seo', 'seo', NULL);
 INSERT INTO public.search_products_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (2, 2, 38, 'shared.seo', 'seo', NULL);
 INSERT INTO public.search_products_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (3, 3, 39, 'shared.seo', 'seo', NULL);
-
+INSERT INTO public.search_products_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (5, 1, 29, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.search_products_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (7, 2, 30, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
+INSERT INTO public.search_products_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (9, 3, 31, 'blocks.main-navigation', 'mainNavigationLinks', NULL);
 
 --
 -- TOC entry 3964 (class 0 OID 214623)
@@ -4442,7 +4544,6 @@ INSERT INTO public.search_products_pages_localizations_links (id, search_product
 INSERT INTO public.search_products_pages_localizations_links (id, search_products_page_id, inv_search_products_page_id, search_products_page_order) VALUES (1, 2, 1, 2);
 INSERT INTO public.search_products_pages_localizations_links (id, search_products_page_id, inv_search_products_page_id, search_products_page_order) VALUES (7, 1, 3, 1);
 INSERT INTO public.search_products_pages_localizations_links (id, search_products_page_id, inv_search_products_page_id, search_products_page_order) VALUES (2, 1, 2, 2);
-
 
 --
 -- TOC entry 3865 (class 0 OID 16510)
@@ -5234,6 +5335,18 @@ SELECT pg_catalog.setval('public.upload_folders_id_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.upload_folders_parent_links_id_seq', 1, false);
+
+--
+-- Name: components_blocks_main_navigations_components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.components_blocks_main_navigations_components_id_seq', 28, true);
+
+--
+-- Name: components_blocks_main_navigations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.components_blocks_main_navigations_id_seq', 6, true);
 
 
 --
@@ -6189,6 +6302,28 @@ ALTER TABLE ONLY public.upload_folders
 ALTER TABLE ONLY public.upload_folders
     ADD CONSTRAINT upload_folders_pkey PRIMARY KEY (id);
 
+--
+-- Name: components_blocks_main_navigations_components components_blocks_main_navigations_components_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.components_blocks_main_navigations_components
+    ADD CONSTRAINT components_blocks_main_navigations_components_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: components_blocks_main_navigations components_blocks_main_navigations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.components_blocks_main_navigations
+    ADD CONSTRAINT components_blocks_main_navigations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: components_blocks_main_navigations_components components_blocks_main_navigations_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.components_blocks_main_navigations_components
+    ADD CONSTRAINT components_blocks_main_navigations_unique UNIQUE (entity_id, component_id, field, component_type);
 
 --
 -- TOC entry 3236 (class 1259 OID 16726)
@@ -7437,6 +7572,26 @@ CREATE INDEX upload_folders_parent_links_order_inv_fk ON public.upload_folders_p
 
 CREATE INDEX upload_folders_updated_by_id_fk ON public.upload_folders USING btree (updated_by_id);
 
+--
+-- Name: components_blocks_main_navigations_component_type_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX components_blocks_main_navigations_component_type_index ON public.components_blocks_main_navigations_components USING btree (component_type);
+
+
+--
+-- Name: components_blocks_main_navigations_entity_fk; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX components_blocks_main_navigations_entity_fk ON public.components_blocks_main_navigations_components USING btree (entity_id);
+
+
+--
+-- Name: components_blocks_main_navigations_field_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX components_blocks_main_navigations_field_index ON public.components_blocks_main_navigations_components USING btree (field);
+
 
 --
 -- TOC entry 3604 (class 2606 OID 16786)
@@ -8373,6 +8528,12 @@ ALTER TABLE ONLY public.upload_folders_parent_links
 ALTER TABLE ONLY public.upload_folders
     ADD CONSTRAINT upload_folders_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES public.admin_users(id) ON DELETE SET NULL;
 
+--
+-- Name: components_blocks_main_navigations_components components_blocks_main_navigations_entity_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.components_blocks_main_navigations_components
+    ADD CONSTRAINT components_blocks_main_navigations_entity_fk FOREIGN KEY (entity_id) REFERENCES public.components_blocks_main_navigations(id) ON DELETE CASCADE;
 
 -- Completed on 2023-01-02 08:06:02
 
