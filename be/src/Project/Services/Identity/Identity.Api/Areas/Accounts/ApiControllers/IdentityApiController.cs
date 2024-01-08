@@ -18,7 +18,6 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Identity.Api.Areas.Accounts.ApiControllers
