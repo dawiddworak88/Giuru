@@ -288,6 +288,23 @@ namespace Catalog.Api.Services.Categories
 
             await _context.CategoryImages.AddRangeAsync(images);
 
+            var schemas = new List<CategorySchema>();
+
+            foreach (var schema in model.Schemas.OrEmptyIfNull())
+            {
+                var categorySchema = new CategorySchema
+                {
+                    Schema = schema.Schema,
+                    UiSchema = schema.UiSchema,
+                    CategoryId = category.Id,
+                    Language = schema.Language
+                };
+
+                schemas.Add(categorySchema.FillCommonProperties());
+            }
+
+            await _context.CategorySchemas.AddRangeAsync(schemas);
+
             await _context.SaveChangesAsync();
 
             return Get(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
