@@ -163,7 +163,7 @@
     <value>Marketingformular</value>
   </data>
   <data name="MarketingApprovalText" xml:space="preserve">
-    <value>Für den Fall, dass Sie Informationen über unser aktuelles Angebot, laufende Kampagnen, implementierte Funktionen, Änderungen sowie andere von ELTAP durchgeführte Maßnahmen erhalten möchten, bitten wir um das Ausfüllen der folgenden Marketing-Einwilligungen. Die erteilten Einwilligungen können jederzeit widerrufen werden. Der Widerruf hat jedoch keine Auswirkungen auf bereits vor dem Widerrufsdatum getroffene Maßnahmen.</value>
+    <value>Für den Fall, dass Sie Informationen über unser aktuelles Angebot, laufende Kampagnen, implementierte Funktionen, Änderungen sowie andere durchgeführte Maßnahmen erhalten möchten, bitten wir um das Ausfüllen der folgenden Marketing-Einwilligungen. Die erteilten Einwilligungen können jederzeit widerrufen werden. Der Widerruf hat jedoch keine Auswirkungen auf bereits vor dem Widerrufsdatum getroffene Maßnahmen.</value>
   </data>
   <data name="nc_buttonLabel" xml:space="preserve">
     <value>Bestätigen und ein Passwort festlegen</value>

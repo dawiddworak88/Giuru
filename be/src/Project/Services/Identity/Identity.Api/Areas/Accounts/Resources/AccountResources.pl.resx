@@ -163,7 +163,7 @@
     <value>Formularz marketingowy</value>
   </data>
   <data name="MarketingApprovalText" xml:space="preserve">
-    <value>W przypadku chęci otrzymywania od nas informacji o aktualnej ofercie, obowiązujących kampaniach, wprowadzonych funkcjonalnościach czy zmianach, a także innych działaniach prowadzonych przez ELTAP, prosimy o wypełnienie poniższych zgód marketingowych. Udzielone zgody można wycofać w każdym czasie, przy czym cofnięcie zgody nie wpływa na działania, które zostały podjęte przed dniem jej cofnięcia.</value>
+    <value>W przypadku chęci otrzymywania od nas informacji o aktualnej ofercie, obowiązujących kampaniach, wprowadzonych funkcjonalnościach czy zmianach, a także innych działania, prosimy o wypełnienie poniższych zgód marketingowych. Udzielone zgody można wycofać w każdym czasie, przy czym cofnięcie zgody nie wpływa na działania, które zostały podjęte przed dniem jej cofnięcia.</value>
   </data>
   <data name="nc_buttonLabel" xml:space="preserve">
     <value>Potwierdź i ustaw hasło</value>
