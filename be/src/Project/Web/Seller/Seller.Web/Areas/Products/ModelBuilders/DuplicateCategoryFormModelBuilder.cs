@@ -1,4 +1,5 @@
-﻿using Foundation.Extensions.ModelBuilders;
+﻿using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
@@ -10,6 +11,7 @@ using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.ModelBuilders.Products
@@ -72,6 +74,19 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                                 }
                             };
                         }
+                    }
+
+                    var categorySchemas = await _categoriesRepository.GetCategorySchemasAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+
+                    if (categorySchemas is not null)
+                    {
+                        viewModel.Schemas = categorySchemas.Schemas.OrEmptyIfNull().Select(x => new CategorySchemaViewModel
+                        {
+                            Id = x.Id,
+                            Schema = x.Schema,
+                            UiSchema = x.UiSchema,
+                            Language = x.Language
+                        });
                     }
                 }
             }
