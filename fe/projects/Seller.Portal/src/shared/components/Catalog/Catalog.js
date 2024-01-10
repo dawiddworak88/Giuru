@@ -499,7 +499,7 @@ function Catalog(props) {
                             props.confirmationDialogDeleteNameProperty.map((property) => {
                                 return entityToDelete[`${property}`]
                             }
-                            ).join(" ") : entityToDelete["name"] : ""
+                            ).join(" ") : ( entityToDelete["name"] ? entityToDelete["name"] : entityToDelete["companyName"] ? entityToDelete["companyName"] : "" ): ""
                     )}
                     noLabel={props.noLabel}
                     yesLabel={props.yesLabel}
