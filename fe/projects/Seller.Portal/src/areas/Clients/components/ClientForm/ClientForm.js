@@ -361,7 +361,7 @@ function ClientForm(props) {
                         </div>
                         {emailMarketingApproval && emailMarketingApproval.createdDate &&
                             <div className="field">
-                                <p>{props.expressedOnLabel}: {moment.utc(emailMarketingApproval.createdDate).local().format("L")}</p>
+                                <p>{props.expressedOnLabel}: {moment.utc(emailMarketingApproval.createdDate).local().format("L LT")}</p>
                             </div>
                         }
                         <div className="field">
@@ -387,7 +387,7 @@ function ClientForm(props) {
                         </div>
                         {smsMarketingApproval && smsMarketingApproval.createdDate &&
                             <div className="field">
-                                <p>{props.expressedOnLabel}: {moment.utc(smsMarketingApproval.createdDate).local().format("L")}</p>
+                                <p>{props.expressedOnLabel}: {moment.utc(smsMarketingApproval.createdDate).local().format("L LT")}</p>
                             </div>
                         }
                         <div className="field client-form__field-row">
