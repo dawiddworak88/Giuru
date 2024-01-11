@@ -19,6 +19,7 @@ const ProductCardForm = (props) => {
     const [definitions, setDefinitions] = useState({});
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
+    const [entityToEdit, setEntityToEdit] = useState(null);
     const stateSchema = {
         id: { value: props.id ? props.id : null },
         schema: { value: props.schema ? JSON.parse(props.schema) : {} },
@@ -230,6 +231,7 @@ const ProductCardForm = (props) => {
     }
 
     const handleProductAttribute = (attribute) => {
+        setEntityToEdit(attribute);
         setProductAttribute(attribute);
         setIsModalOpen(true);
     }
@@ -310,7 +312,7 @@ const ProductCardForm = (props) => {
                 handleDefinitionSchema(productAttribute.definitionId);
             }
 
-            const existingProductAttributeIndex = newElements.findIndex((element) => element.name === productAttribute.name);
+            const existingProductAttributeIndex = newElements.findIndex((element) => element.name === entityToEdit.name);
 
             if (existingProductAttributeIndex != -1) {
                 newElements[existingProductAttributeIndex] = newElement;
@@ -320,7 +322,7 @@ const ProductCardForm = (props) => {
             }
 
             updateSchema(newElements, schema)
-    
+
             setIsModalOpen(false);
             setProductAttribute(null);
         } 
