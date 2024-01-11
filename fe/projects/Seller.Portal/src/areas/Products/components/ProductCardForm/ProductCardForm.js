@@ -312,7 +312,7 @@ const ProductCardForm = (props) => {
                 handleDefinitionSchema(productAttribute.definitionId);
             }
 
-            const existingProductAttributeIndex = newElements.findIndex((element) => element.name === entityToEdit.name);
+            const existingProductAttributeIndex = newElements.findIndex((element) => element.name === (entityToEdit ? entityToEdit.name : productAttribute.name));
 
             if (existingProductAttributeIndex != -1) {
                 newElements[existingProductAttributeIndex] = newElement;
@@ -325,6 +325,7 @@ const ProductCardForm = (props) => {
 
             setIsModalOpen(false);
             setProductAttribute(null);
+            setEntityToEdit(null);
         } 
     }
 
