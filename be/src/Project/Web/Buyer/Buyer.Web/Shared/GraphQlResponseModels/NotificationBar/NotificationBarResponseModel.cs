@@ -6,26 +6,26 @@ namespace Buyer.Web.Shared.GraphQlResponseModels.NotificationBar
 {
     public class NotificationBarResponseModel
     {
-        [JsonProperty("page")]
-        public Page Page { get; set; } 
+        [JsonProperty("globalConfiguration")]
+        public NotificationBarComponent Component { get; set; } 
     }
 
-    public class Page
+    public class NotificationBarComponent
     {
         [JsonProperty("data")]
-        public Data Data { get; set; }
+        public NotificationBarData Data { get; set; }
     }
 
-    public class Data
+    public class NotificationBarData
     {
         [JsonProperty("id")]
         public string Id { get; set; }
 
         [JsonProperty("attributes")]
-        public Attributes Attributes { get; set; }
+        public NotificationBarAttributes Attributes { get; set; }
     }
 
-    public class Attributes
+    public class NotificationBarAttributes
     {
         [JsonProperty("notificationBar")]
         public NotificationBar NotificationBar { get; set; }

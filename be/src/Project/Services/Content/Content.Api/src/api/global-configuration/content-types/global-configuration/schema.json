@@ -1,0 +1,50 @@
+{
+  "kind": "singleType",
+  "collectionName": "global_configurations",
+  "info": {
+    "singularName": "global-configuration",
+    "pluralName": "global-configurations",
+    "displayName": "Global Configuration",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "footer": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.footer"
+    },
+    "notificationBar": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "blocks.notification-bar"
+    },
+    "mainNavigationLinks": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "blocks.main-navigation"
+    }
+  }
+}

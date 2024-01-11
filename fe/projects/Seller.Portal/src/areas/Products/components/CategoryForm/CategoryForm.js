@@ -17,7 +17,7 @@ function CategoryForm(props) {
         parentCategoryId: { value: props.parentCategoryId ? props.parentCategoryId : "" },
         files: { value: props.files ? props.files : [] },
         schemas: { value: props.schemas ? props.schemas : null},         
-        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : null },
+        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : null }
     };    
 
     const stateValidatorSchema = {
@@ -36,8 +36,8 @@ function CategoryForm(props) {
             id,
             name,
             parentCategoryId,
-            files,            
-            schemas: props.schemas ? props.schemas : [],            
+            files,
+            schemas: state.schemas
         };        
         
         const requestOptions = {
@@ -146,8 +146,6 @@ CategoryForm.propTypes = {
     name: PropTypes.string,
     parentCategoryId: PropTypes.string,
     files: PropTypes.array,
-    uiSchema: PropTypes.object,
-    schema: PropTypes.object,
     categoryBase: PropTypes.object
 };
 

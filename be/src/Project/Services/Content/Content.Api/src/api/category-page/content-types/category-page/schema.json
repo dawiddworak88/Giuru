@@ -16,17 +16,7 @@
     }
   },
   "attributes": {
-    "mainNavigationLinks": {
-      "type": "component",
-      "repeatable": false,
-      "component": "blocks.main-navigation",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "notificationBar": {
+    "seo": {
       "type": "component",
       "repeatable": false,
       "pluginOptions": {
@@ -34,7 +24,7 @@
           "localized": true
         }
       },
-      "component": "blocks.notification-bar"
+      "component": "shared.seo"
     }
   }
 }
