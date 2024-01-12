@@ -5007,15 +5007,6 @@ INSERT INTO public.components_blocks_notification_bars_components (id, entity_id
 INSERT INTO public.components_blocks_notification_bars_components (id, entity_id, component_id, component_type, field, "order") VALUES (7, 1, 4, 'blocks.notification-bar-item', 'notificationBarItem', 4);
 
 --
--- Data for Name: components_blocks_notification_bar_items_components; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-INSERT INTO public.components_blocks_notification_bar_items_components (id, entity_id, component_id, component_type, field, "order") VALUES (1, 1, 114, 'shared.link', 'link', NULL);
-INSERT INTO public.components_blocks_notification_bar_items_components (id, entity_id, component_id, component_type, field, "order") VALUES (2, 2, 116, 'shared.link', 'link', NULL);
-INSERT INTO public.components_blocks_notification_bar_items_components (id, entity_id, component_id, component_type, field, "order") VALUES (3, 3, 115, 'shared.link', 'link', NULL);
-INSERT INTO public.components_blocks_notification_bar_items_components (id, entity_id, component_id, component_type, field, "order") VALUES (4, 4, 117, 'shared.link', 'link', NULL);
-
---
 -- TOC entry 3867 (class 0 OID 16515)
 -- Dependencies: 234
 -- Data for Name: strapi_api_token_permissions_token_links; Type: TABLE DATA; Schema: public; Owner: postgres
