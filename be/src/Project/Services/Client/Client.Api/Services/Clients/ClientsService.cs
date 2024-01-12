@@ -67,6 +67,7 @@ namespace Client.Api.Services.Clients
                     Name = client.Name,
                     Email = client.Email,
                     CountryId = client.CountryId,
+                    PreferedCurrencyId = client.CurrencyId,
                     CommunicationLanguage = client.Language,
                     PhoneNumber = client.PhoneNumber,
                     DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
@@ -112,6 +113,7 @@ namespace Client.Api.Services.Clients
                 Name = existingClient.Name,
                 Email = existingClient.Email,
                 CountryId = existingClient.CountryId,
+                PreferedCurrencyId = existingClient.CurrencyId,
                 OrganisationId = existingClient.OrganisationId,
                 CommunicationLanguage = existingClient.Language,
                 PhoneNumber = existingClient.PhoneNumber,
@@ -170,6 +172,7 @@ namespace Client.Api.Services.Clients
             client.Name = serviceModel.Name;
             client.Email = serviceModel.Email;
             client.CountryId = serviceModel.CountryId;
+            client.CurrencyId = serviceModel.PreferedCurrencyId;
             client.Language = serviceModel.CommunicationLanguage;
             client.PhoneNumber = serviceModel.PhoneNumber;
             client.OrganisationId = serviceModel.ClientOrganisationId.Value;
@@ -232,6 +235,7 @@ namespace Client.Api.Services.Clients
                 Name = serviceModel.Name,
                 Email = serviceModel.Email,
                 CountryId = serviceModel.CountryId,
+                CurrencyId = serviceModel.PreferedCurrencyId,
                 Language = serviceModel.CommunicationLanguage,
                 OrganisationId = serviceModel.ClientOrganisationId.Value,
                 PhoneNumber = serviceModel.PhoneNumber,
@@ -279,6 +283,7 @@ namespace Client.Api.Services.Clients
                               Name = c.Name,
                               Email = c.Email,
                               CountryId = c.CountryId,
+                              PreferedCurrencyId = c.CurrencyId,
                               CommunicationLanguage = c.Language,
                               PhoneNumber = c.PhoneNumber,
                               DefaultDeliveryAddressId = c.DefaultDeliveryAddressId,
@@ -307,6 +312,7 @@ namespace Client.Api.Services.Clients
                               Name = c.Name,
                               Email = c.Email,
                               CountryId = c.CountryId,
+                              PreferedCurrencyId = c.CurrencyId,
                               CommunicationLanguage = c.Language,
                               PhoneNumber = c.PhoneNumber,
                               DefaultDeliveryAddressId = c.DefaultDeliveryAddressId,

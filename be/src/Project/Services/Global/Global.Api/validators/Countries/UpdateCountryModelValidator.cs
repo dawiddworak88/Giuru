@@ -8,8 +8,8 @@ namespace Global.Api.validators.Countries
     {
         public UpdateCountryModelValidator()
         {
-            this.RuleFor(x => x.Id).NotEmpty().NotNull();
-            this.RuleFor(x => x.Name).NotEmpty().NotNull();
+            RuleFor(x => x.Id).NotEmpty().NotNull();
+            RuleFor(x => x.Name).NotEmpty().NotNull();
         }
     }
 }

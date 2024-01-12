@@ -53,7 +53,9 @@ module.exports = {
         productattributeitempage: ["./src/areas/Products/pages/ProductAttributeItemPage/index.js", "./src/areas/Products/pages/ProductAttributeItemPage/ProductAttributeItemPage.scss"],
         categoriespage: ["./src/areas/Products/pages/CategoriesPage/index.js", "./src/areas/Products/pages/CategoriesPage/CategoriesPage.scss"],
         categorypage: ["./src/areas/Products/pages/CategoryPage/index.js", "./src/areas/Products/pages/CategoryPage/CategoryPage.scss"],
-        settingspage: ["./src/areas/Settings/pages/SettingsPage/index.js", "./src/areas/Settings/pages/SettingsPage/SettingsPage.scss"]
+        settingspage: ["./src/areas/Settings/pages/SettingsPage/index.js", "./src/areas/Settings/pages/SettingsPage/SettingsPage.scss"],
+        currenciespage: ["./src/areas/Global/pages/CurrenciesPage/index.js", "./src/areas/Global/pages/CurrenciesPage/CurrenciesPage.scss"],
+        currencypage: ["./src/areas/Global/pages/CurrencyPage/index.js", "./src/areas/Global/pages/CurrencyPage/CurrencyPage.scss"]
     },
     output: {
         publicPath: path.resolve(__dirname, "../../../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),

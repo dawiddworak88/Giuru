@@ -17,7 +17,7 @@ namespace Global.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.11")
+                .HasAnnotation("ProductVersion", "6.0.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -79,7 +79,102 @@ namespace Global.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CountryId");
+
                     b.ToTable("CountryTranslations");
+                });
+
+            modelBuilder.Entity("Global.Api.Infrastructure.Entities.Currencies.Currency", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CurrencyCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<string>("Symbol")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Currencies");
+                });
+
+            modelBuilder.Entity("Global.Api.Infrastructure.Entities.Currencies.CurrencyTranslation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CurrencyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Language")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.ToTable("CurrenciesTranslations");
+                });
+
+            modelBuilder.Entity("Global.Api.Infrastructure.Entities.Countries.CountryTranslation", b =>
+                {
+                    b.HasOne("Global.Api.Infrastructure.Entities.Countries.Country", null)
+                        .WithMany("Translations")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Global.Api.Infrastructure.Entities.Currencies.CurrencyTranslation", b =>
+                {
+                    b.HasOne("Global.Api.Infrastructure.Entities.Currencies.Currency", null)
+                        .WithMany("Translations")
+                        .HasForeignKey("CurrencyId");
+                });
+
+            modelBuilder.Entity("Global.Api.Infrastructure.Entities.Countries.Country", b =>
+                {
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("Global.Api.Infrastructure.Entities.Currencies.Currency", b =>
+                {
+                    b.Navigation("Translations");
                 });
 #pragma warning restore 612, 618
         }

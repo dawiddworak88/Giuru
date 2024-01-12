@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Extensions.Options;
 using Seller.Web.Shared.Configurations;
+using System;
 
 namespace Seller.Web.Shared.ModelBuilders.MenuTiles
 {
@@ -131,6 +132,12 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                         Icon = IconsConstants.MapPin,
                         Title = _globalLocalizer.GetString("Countries"),
                         Url = _linkGenerator.GetPathByAction("Index", "Countries", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name })
+                    },
+                    new MenuTileViewModel
+                    {
+                        Icon = IconsConstants.DollarSign,
+                        Title = _globalLocalizer.GetString("Currencies"),
+                        Url = _linkGenerator.GetPathByAction("Index", "Currencies", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name })
                     },
                     new MenuTileViewModel
                     {

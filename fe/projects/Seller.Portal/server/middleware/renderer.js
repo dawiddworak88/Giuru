@@ -51,6 +51,8 @@ import SellerCategoryPage from "../../src/areas/Products/pages/CategoryPage/Cate
 import SettingsPage from "../../src/areas/Settings/pages/SettingsPage/SettingsPage";
 import ClientAddressPage from "../../src/areas/Clients/pages/ClientAddressPage/ClientAddressPage";
 import ClientAddressesPage from "../../src/areas/Clients/pages/ClientAddressesPage/ClientAddressesPage";
+import CurrenciesPage from "../../src/areas/Global/pages/CurrenciesPage/CurrenciesPage";
+import CurrencyPage from "../../src/areas/Global/pages/CurrencyPage/CurrencyPage";
 
 const Components = {
 	ClientAddressPage,
@@ -100,7 +102,9 @@ const Components = {
 	ProductAttributeItemPage,
 	CategoriesPage,
 	SellerCategoryPage,
-	SettingsPage
+	SettingsPage,
+	CurrenciesPage,
+	CurrencyPage
 };
 
 const serverRenderer = (req, res, next) => {
