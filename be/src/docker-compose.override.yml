@@ -146,7 +146,7 @@ services:
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
     ports:
-      - "5131:80"
+      - "5131:8080"
 
   client-api:
     environment:
@@ -167,7 +167,7 @@ services:
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
     ports:
-      - "5133:80"
+      - "5133:8080"
 
   inventory-api:
     environment:
@@ -185,7 +185,7 @@ services:
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
     ports:
-      - "5134:80"
+      - "5134:8080"
 
   news-api:
     environment:
@@ -199,7 +199,7 @@ services:
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:
-      - "5135:80"
+      - "5135:8080"
 
   catalog-api:
     environment:
@@ -221,7 +221,7 @@ services:
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:
-      - "5101:80"
+      - "5101:8080"
 
   catalog-backgroundtasks:
     environment:
@@ -242,7 +242,7 @@ services:
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:
-      - "5132:80"
+      - "5132:8080"
 
   identity-api:
     environment:
@@ -277,7 +277,7 @@ services:
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
     ports:
-      - "5105:80"
+      - "5105:8080"
 
   redis:
     ports:
@@ -300,7 +300,7 @@ services:
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:
-      - "5103:80"
+      - "5103:8080"
 
   ordering-api:
     environment:
@@ -323,7 +323,7 @@ services:
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
     ports:
-      - "5102:80"
+      - "5102:8080"
 
   content-api:
     environment:
@@ -361,7 +361,7 @@ services:
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
     ports:
-      - "5136:80"
+      - "5136:8080"
 
   analytics-api:
     environment:
@@ -385,7 +385,7 @@ services:
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
     ports:
-      - "5137:80"
+      - "5137:8080"
 
   global-api:
     environment:
@@ -399,7 +399,7 @@ services:
       - DefaultCulture=${DEFAULT_CULTURE}
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
     ports:
-      - "5138:80"
+      - "5138:8080"
 
   seller-web:
     environment:
@@ -430,7 +430,7 @@ services:
     volumes:
       - ./Project/Web/Buyer/Buyer.Web/wwwroot/dist:/src/wwwroot/dist
     ports:
-      - "5104:80"
+      - "5104:8080"
 
   buyer-web:
     environment:
@@ -462,7 +462,7 @@ services:
     volumes:
       - ./Project/Web/Seller/Seller.Web/wwwroot/dist:/src/wwwroot/dist
     ports:
-      - "5107:80"
+      - "5107:8080"
 
 volumes:
   mssqldata:
