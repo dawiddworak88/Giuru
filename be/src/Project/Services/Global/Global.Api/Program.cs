@@ -47,7 +47,10 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
             hostingContext.Configuration["LogzIoType"],
             new LogzioOptions
             {
-                DataCenterSubDomain = hostingContext.Configuration["LogzIoDataCenterSubDomain"]
+                DataCenter = new LogzioDataCenter
+                {
+                    SubDomain = hostingContext.Configuration["LogzIoDataCenterSubDomain"]
+                }
             });
     }
 
