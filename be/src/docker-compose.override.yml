@@ -131,7 +131,7 @@ services:
   media-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=MediaDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=MediaDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - StorageConnectionString=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -151,7 +151,7 @@ services:
   client-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=ClientDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=ClientDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
@@ -172,7 +172,7 @@ services:
   inventory-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=InventoryDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=InventoryDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
@@ -190,7 +190,7 @@ services:
   news-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=NewsDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=NewsDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
@@ -204,7 +204,7 @@ services:
   catalog-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -226,7 +226,7 @@ services:
   catalog-backgroundtasks:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -253,7 +253,7 @@ services:
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
-      - ConnectionString=Server=sqldata;Database=IdentityDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=IdentityDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - Clients=663bba90-0036-4a58-8516-39faa8baba87&c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9&${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5104;d9316849-7e98-4c5b-853b-5a322aecdc75&693667b0-545e-48b6-9ef8-02ada81be946&${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - SellerClientId=663bba90-0036-4a58-8516-39faa8baba87
       - Accounts=seller@user.com&Greg&Salesman&Gre@tPassw0rd&09affcc9-1665-45d6-919f-3d2026106ba1
@@ -305,7 +305,7 @@ services:
   ordering-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventBusConnection=amqp://rabbitmq
@@ -348,7 +348,7 @@ services:
   downloadcenter-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=DownloadCenterDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=DownloadCenterDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
@@ -366,7 +366,7 @@ services:
   analytics-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=AnalyticsDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=AnalyticsDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
@@ -390,7 +390,7 @@ services:
   global-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=GlobalDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=GlobalDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - SupportedCultures=${SUPPORTED_CULTURES}
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
