@@ -24,7 +24,7 @@ namespace Foundation.Telemetry.DependencyInjection
         {
             if (string.IsNullOrWhiteSpace(endpoint) is false)
             {
-                services.AddOpenTelemetryTracing(endpoint, name, enableRedisInstrumentation, enableHttpClientInstrumentation, enableSqlClientInstrumentation, enableEntityFrameworkInstrumentation, enableAspNetCoreInstrumentation, pathsToIgnore);
+                //services.AddOpenTelemetryTracing(endpoint, name, enableRedisInstrumentation, enableHttpClientInstrumentation, enableSqlClientInstrumentation, enableEntityFrameworkInstrumentation, enableAspNetCoreInstrumentation, pathsToIgnore);
 
                 services.AddOpenTelemetry().WithTracing(meterProviderBuilder =>
                 {
@@ -39,14 +39,14 @@ namespace Foundation.Telemetry.DependencyInjection
 
         public static void AddOpenTelemetryMetrics(
             this IServiceCollection services,
-            string endpoint,
+            string endpoint, 
             string name,
             bool enableHttpClientInstrumentation,
             bool enableAspNetCoreInstrumentation)
         {
             if (string.IsNullOrWhiteSpace(endpoint) is false)
             {
-                services.AddOpenTelemetryMetrics(endpoint, name, enableHttpClientInstrumentation, enableAspNetCoreInstrumentation);
+                //services.AddOpenTelemetryMetrics(endpoint, name, enableHttpClientInstrumentation, enableAspNetCoreInstrumentation);
 
                 services.AddOpenTelemetry().WithMetrics(meterProviderBuilder =>
                 {
