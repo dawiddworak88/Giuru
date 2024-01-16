@@ -24,12 +24,51 @@ namespace Foundation.Telemetry.DependencyInjection
         {
             if (string.IsNullOrWhiteSpace(endpoint) is false)
             {
-                //services.AddOpenTelemetryTracing(endpoint, name, enableRedisInstrumentation, enableHttpClientInstrumentation, enableSqlClientInstrumentation, enableEntityFrameworkInstrumentation, enableAspNetCoreInstrumentation, pathsToIgnore);
-
-                services.AddOpenTelemetry().WithTracing(meterProviderBuilder =>
+                services.AddOpenTelemetry().WithTracing(tracerProviderBuilder =>
                 {
-                    meterProviderBuilder.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(name));
-                    meterProviderBuilder.AddOtlpExporter(o =>
+                    tracerProviderBuilder
+                        .AddSource(name)
+                        .SetResourceBuilder(
+                            ResourceBuilder.CreateDefault()
+                                .AddService(name));
+
+                    if (enableSqlClientInstrumentation)
+                    {
+                        tracerProviderBuilder.AddSqlClientInstrumentation();
+                    }
+
+                    if (enableEntityFrameworkInstrumentation)
+                    {
+                        tracerProviderBuilder.AddEntityFrameworkCoreInstrumentation();
+                    }
+
+                    if (enableRedisInstrumentation)
+                    {
+                        tracerProviderBuilder.AddRedisInstrumentation();
+                    }
+
+                    if (enableHttpClientInstrumentation)
+                    {
+                        tracerProviderBuilder.AddHttpClientInstrumentation();
+                    }
+
+                    if (enableAspNetCoreInstrumentation)
+                    {
+                        tracerProviderBuilder.AddAspNetCoreInstrumentation(o =>
+                        {
+                            if (pathsToIgnore is not null && pathsToIgnore.Any())
+                            {
+                                var pathsToIgnoreList = pathsToIgnore.ToList();
+
+                                o.Filter = context =>
+                                {
+                                    return !pathsToIgnoreList.Contains(context.Request.Path);
+                                };
+                            }
+                        });
+                    }
+
+                    tracerProviderBuilder.AddOtlpExporter(o =>
                     {
                         o.Endpoint = new Uri(endpoint);
                     });
@@ -46,11 +85,23 @@ namespace Foundation.Telemetry.DependencyInjection
         {
             if (string.IsNullOrWhiteSpace(endpoint) is false)
             {
-                //services.AddOpenTelemetryMetrics(endpoint, name, enableHttpClientInstrumentation, enableAspNetCoreInstrumentation);
-
                 services.AddOpenTelemetry().WithMetrics(meterProviderBuilder =>
                 {
-                    meterProviderBuilder.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(name));
+                    meterProviderBuilder
+                        .SetResourceBuilder(
+                            ResourceBuilder.CreateDefault()
+                                .AddService(name));
+
+                    if (enableHttpClientInstrumentation)
+                    {
+                        meterProviderBuilder.AddHttpClientInstrumentation();
+                    }
+
+                    if (enableAspNetCoreInstrumentation)
+                    {
+                        meterProviderBuilder.AddAspNetCoreInstrumentation();
+                    }
+
                     meterProviderBuilder.AddOtlpExporter(o =>
                     {
                         o.Endpoint = new Uri(endpoint);
