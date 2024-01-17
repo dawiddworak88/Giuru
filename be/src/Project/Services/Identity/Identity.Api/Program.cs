@@ -35,10 +35,7 @@ using Foundation.Telemetry.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.ConfigureAppConfiguration((_, config) =>
-{
-    config.AddEnvironmentVariables();
-});
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 {
@@ -158,7 +155,7 @@ if (app.Environment.EnvironmentName == EnvironmentConstants.DevelopmentEnvironme
 {
     app.UseCookiePolicy(new CookiePolicyOptions
     {
-        MinimumSameSitePolicy = SameSiteMode.Lax
+        MinimumSameSitePolicy = SameSiteMode.None
     });
 }
 else
@@ -190,30 +187,27 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty;
 });
 
-app.UseEndpoints(endpoints =>
+app.MapControllerRoute(
+    name: "localizedAreaRoute",
+    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Accounts}/{controller=SignIn}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{area:exists=Accounts}/{controller=SignIn}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "error",
+    pattern: "{controller=Content}/{action=Error}/{errorId?}");
+
+app.MapHealthChecks("/hc", new HealthCheckOptions 
+{ 
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.MapHealthChecks("/liveness", new HealthCheckOptions
 {
-    endpoints.MapControllerRoute(
-                name: "localizedAreaRoute",
-                pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Accounts}/{controller=SignIn}/{action=Index}/{id?}");
-
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{area:exists=Accounts}/{controller=SignIn}/{action=Index}/{id?}");
-
-    endpoints.MapControllerRoute(
-        name: "error",
-        pattern: "{controller=Content}/{action=Error}/{errorId?}");
-
-    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-    {
-        Predicate = _ => true,
-        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-    });
-
-    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
-    {
-        Predicate = r => r.Name.Contains("self")
-    });
+    Predicate = r => r.Name.Contains("self")
 });
 
 app.Run();

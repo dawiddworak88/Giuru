@@ -41,10 +41,7 @@ using Seller.Web.Areas.Dashboard.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.ConfigureAppConfiguration((_, config) =>
-{
-    config.AddEnvironmentVariables();
-});
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 {
@@ -167,7 +164,7 @@ if (app.Environment.EnvironmentName == EnvironmentConstants.DevelopmentEnvironme
 {
     app.UseCookiePolicy(new CookiePolicyOptions
     {
-        MinimumSameSitePolicy = SameSiteMode.Lax
+        MinimumSameSitePolicy = SameSiteMode.Lax,
     });
 }
 else
@@ -191,26 +188,23 @@ app.UseCustomRouteRequestLocalizationProvider(app.Services.GetService<IOptionsMo
 
 app.UseSecurityHeaders(builder.Configuration);
 
-app.UseEndpoints(endpoints =>
+app.MapControllerRoute(
+    name: "localizedAreaRoute",
+    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization("SellerOnly");
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization("SellerOnly");
+
+app.MapHealthChecks("/hc", new HealthCheckOptions
 {
-    endpoints.MapControllerRoute(
-                name: "localizedAreaRoute",
-                pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization("SellerOnly");
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization("SellerOnly");
-
-    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-    {
-        Predicate = _ => true,
-        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-    });
-
-    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
-    {
-        Predicate = r => r.Name.Contains("self")
-    });
+app.MapHealthChecks("/liveness", new HealthCheckOptions
+{
+    Predicate = r => r.Name.Contains("self")
 });
 
 app.Run();

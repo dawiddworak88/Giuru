@@ -34,10 +34,7 @@ using Buyer.Web.Areas.Dashboard.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.ConfigureAppConfiguration((_, config) =>
-{
-    config.AddEnvironmentVariables();
-});
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 {
@@ -176,26 +173,23 @@ app.UseCustomRouteRequestLocalizationProvider(app.Services.GetService<IOptionsMo
 
 app.UseSecurityHeaders(builder.Configuration);
 
-app.UseEndpoints(endpoints =>
+app.MapControllerRoute(
+    name: "localizedAreaRoute",
+    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
+
+app.MapControllerRoute(
+    name: "defautl",
+    pattern: "{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
+
+app.MapHealthChecks("/hc", new HealthCheckOptions
 {
-    endpoints.MapControllerRoute(
-                name: "localizedAreaRoute",
-                pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
-
-    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-    {
-        Predicate = _ => true,
-        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-    });
-
-    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
-    {
-        Predicate = r => r.Name.Contains("self")
-    });
+app.MapHealthChecks("/liveness", new HealthCheckOptions
+{
+    Predicate = r => r.Name.Contains("self")
 });
 
 app.Run();

@@ -27,10 +27,7 @@ using Foundation.Telemetry.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.ConfigureAppConfiguration((_, config) =>
-{
-    config.AddEnvironmentVariables();
-});
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 {
@@ -142,19 +139,17 @@ eventBus.Subscribe<BasketCheckoutStockProductsIntegrationEvent, IIntegrationEven
 eventBus.Subscribe<BasketCheckoutOutletProductsIntegrationEvent, IIntegrationEventHandler<BasketCheckoutOutletProductsIntegrationEvent>>();
 eventBus.Subscribe<DeletedProductIntegrationEvent, IIntegrationEventHandler<DeletedProductIntegrationEvent>>();
 
-app.UseEndpoints(endpoints =>
+app.MapControllers();
+
+app.MapHealthChecks("/hc", new HealthCheckOptions
 {
-    endpoints.MapControllers();
-
-    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-    {
-        Predicate = _ => true,
-        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-    });
-
-    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
-    {
-        Predicate = r => r.Name.Contains("self")
-    });
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
+
+app.MapHealthChecks("/liveness", new HealthCheckOptions
+{
+    Predicate = r => r.Name.Contains("self")
+});
+
 app.Run();
