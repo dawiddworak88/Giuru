@@ -164,7 +164,7 @@ if (app.Environment.EnvironmentName == EnvironmentConstants.DevelopmentEnvironme
 {
     app.UseCookiePolicy(new CookiePolicyOptions
     {
-        MinimumSameSitePolicy = SameSiteMode.Lax,
+        MinimumSameSitePolicy = SameSiteMode.Lax
     });
 }
 else
