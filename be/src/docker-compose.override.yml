@@ -378,9 +378,9 @@ services:
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - EventBusRequestedHeartbeat=60
-      - ClientUrl=http://client-api
-      - CatalogUrl=http://catalog-api
-      - GlobalUrl=http://global-api
+      - ClientUrl=http://client-api:8080
+      - CatalogUrl=http://catalog-api:8080
+      - GlobalUrl=http://global-api:8080
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
