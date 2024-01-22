@@ -40,6 +40,12 @@ namespace Identity.Api.Areas.Accounts.Services.UserServices
 
             if (user is not null && user.EmailConfirmed)
             {
+                if (user.IsActive is false)
+                {
+                    //not active account
+                    return false;
+                }
+
                 if (clientId == this.options.Value.SellerClientId.ToString() && !await this.organisationService.IsSellerAsync(user.OrganisationId))
                 {
                     return false;
