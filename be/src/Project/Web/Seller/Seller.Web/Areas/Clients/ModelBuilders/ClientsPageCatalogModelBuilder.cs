@@ -60,7 +60,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     _globalLocalizer.GetString("Name"),
                     _globalLocalizer.GetString("Email"),
                     _globalLocalizer.GetString("CommunicationLanguage"),
-                    "Status",
+                    _globalLocalizer.GetString("Status"),
                     _globalLocalizer.GetString("LastModifiedDate"),
                     _globalLocalizer.GetString("CreatedDate")
                 },
