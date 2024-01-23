@@ -5,7 +5,7 @@ import { Context } from "../../../../shared/stores/Store";
 import { 
     TextField, Button, FormControl, InputLabel, 
     Select, MenuItem, FormHelperText, CircularProgress, 
-    Autocomplete
+    Autocomplete, NoSsr, FormControlLabel, Switch
 } from "@mui/material";
 import useForm from "../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../shared/helpers/validators/EmailValidator";
@@ -25,6 +25,7 @@ function ClientForm(props) {
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
         hasAccount: { value: props.hasAccount ? props.hasAccount : false },
+        isActive: { value: props.isActive ? props.isActive : false },
         deliveryAddress: { value: props.defaultDeliveryAddressId ? props.clientAddresses.find((item) => item.id === props.defaultDeliveryAddressId) : null },
         billingAddress: { value: props.defaultBillingAddressId ? props.clientAddresses.find((item) => item.id === props.defaultBillingAddressId) : null }
     };
@@ -147,7 +148,7 @@ function ClientForm(props) {
     const { 
         id, name, email, country, preferedCurrency, clientGroupIds, 
         communicationLanguage, phoneNumber, clientManagerIds,
-        deliveryAddress, billingAddress
+        deliveryAddress, billingAddress, isActive
     } = values;
 
     return (
@@ -343,6 +344,23 @@ function ClientForm(props) {
                                 value={phoneNumber} 
                                 variant="standard"
                                 onChange={handleOnChange} />
+                        </div>
+                        <div className="field">
+                            <NoSsr>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            onChange={e => {
+                                                setFieldValue({ name: "isActive", value: e.target.checked });
+                                            }}
+                                            checked={isActive}
+                                            id="isActive"
+                                            name="isActive"
+                                            color="secondary" 
+                                        />
+                                    }
+                                    label={isActive ? "Aktywny" : "Nieaktywny"} />
+                            </NoSsr>
                         </div>
                         <div className="field client-form__field-row">
                             <Button 
