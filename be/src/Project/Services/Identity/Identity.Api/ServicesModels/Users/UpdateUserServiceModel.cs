@@ -14,6 +14,7 @@ namespace Identity.Api.ServicesModels.Users
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool TwoFactorEnabled { get; set; }
+        public bool IsActive { get; set; }
         public DateTimeOffset? LockoutEnd { get; set; }
         public int? AccessFailedCount { get; set; }
     }

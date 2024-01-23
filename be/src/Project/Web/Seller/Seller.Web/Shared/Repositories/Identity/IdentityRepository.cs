@@ -103,14 +103,15 @@ namespace Seller.Web.Shared.Repositories.Identity
             return default;
         }
 
-        public async Task<Guid> UpdateAsync(string token, string language, Guid? id, string email, string name, string communicationLanguage)
+        public async Task<Guid> UpdateAsync(string token, string language, Guid? id, string email, string name, string communicationLanguage, bool isActive)
         {
             var requestModel = new UpdateClientRequestModel
             {
                 Id = id,
                 Email = email,
                 Name = name,
-                CommunicationLanguage = communicationLanguage
+                CommunicationLanguage = communicationLanguage,
+                IsActive = isActive
             };
 
             var apiRequest = new ApiRequest<UpdateClientRequestModel>
@@ -122,6 +123,7 @@ namespace Seller.Web.Shared.Repositories.Identity
             };
 
             var response = await this.apiClientService.PostAsync<ApiRequest<UpdateClientRequestModel>, UpdateClientRequestModel, BaseResponseModel>(apiRequest);
+
             if (response.IsSuccessStatusCode)
             {
                 return response.Data.Id.Value;

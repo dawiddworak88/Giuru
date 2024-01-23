@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Localization;
 using Feature.Account;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Identity.Api.Areas.Accounts.Controllers
 {
@@ -21,27 +22,27 @@ namespace Identity.Api.Areas.Accounts.Controllers
     [AllowAnonymous]
     public class SignInController : BaseController
     {
-        private readonly IOptions<AppSettings> settings;
-        private readonly IStringLocalizer<AccountResources> accountLocalizer;
-        private readonly IIdentityServerInteractionService interactionService;
-        private readonly IUserService userService;
-        private readonly IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder;
-        private readonly ILogger<SignInController> logger;
+        private readonly IOptions<AppSettings> _options;
+        private readonly IStringLocalizer<AccountResources> _accountLocalizer;
+        private readonly IIdentityServerInteractionService _interactionService;
+        private readonly IUserService _userService;
+        private readonly IComponentModelBuilder<SignInComponentModel, SignInViewModel> _signInModelBuilder;
+        private readonly ILogger<SignInController> _logger;
 
         public SignInController(
-            IOptions<AppSettings> settings,
+            IOptions<AppSettings> options,
             IStringLocalizer<AccountResources> accountLocalizer,
             IIdentityServerInteractionService interactionService,
             IUserService userService,
             IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder,
             ILogger<SignInController> logger)
         {
-            this.interactionService = interactionService;
-            this.userService = userService;
-            this.signInModelBuilder = signInModelBuilder;
-            this.settings = settings;
-            this.accountLocalizer = accountLocalizer;
-            this.logger = logger;
+            _interactionService = interactionService;
+            _userService = userService;
+            _signInModelBuilder = signInModelBuilder;
+            _options = options;
+            _accountLocalizer = accountLocalizer;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -50,43 +51,46 @@ namespace Identity.Api.Areas.Accounts.Controllers
             var signInComponentModel = new SignInComponentModel
             {
                 ReturnUrl = returnUrl,
-                DevelopersEmail = this.settings.Value.DevelopersEmail
+                DevelopersEmail = _options.Value.DevelopersEmail
             };
 
-            var viewModel = this.signInModelBuilder.BuildModel(signInComponentModel);
+            var viewModel = _signInModelBuilder.BuildModel(signInComponentModel);
 
-            return this.View(viewModel);
+            return View(viewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Index(SignInModel model)
         {
             var validator = new SignInModelValidator();
+            var validationResult = await validator.ValidateAsync(model);
 
-            var result = await validator.ValidateAsync(model);
-
-            if (result.IsValid)
+            if (validationResult.IsValid)
             {
-                var context = await interactionService.GetAuthorizationContextAsync(model.ReturnUrl);
-
-                if (context is not null)
+                try
                 {
-                    if (await this.userService.SignInAsync(model.Email, model.Password, model.ReturnUrl, context.Client.ClientId))
-                    {
-                        return this.Redirect(model.ReturnUrl);
-                    } 
-                    else
-                    {
-                        this.logger.LogError("Unsuccessful login for {0} user", model.Email);
+                    var context = await _interactionService.GetAuthorizationContextAsync(model.ReturnUrl);
 
-                        return this.Redirect(model.ReturnUrl);
+                    if (context is not null)
+                    {
+                        await _userService.SignInAsync(model.Email, model.Password, model.ReturnUrl, context.Client.ClientId);
+
+                        return Redirect(model.ReturnUrl);
                     }
-                }                
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Unsuccessful login for {0} user. Error message: {1}", model.Email, ex.Message);
+
+                    var errorViewModel = _signInModelBuilder.BuildModel(new SignInComponentModel { ErrorMessage = ex.Message, ReturnUrl = model.ReturnUrl, DevelopersEmail = _options.Value.DevelopersEmail });
+
+                    return View(errorViewModel);
+                }
             }
 
-            var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { ErrorMessage = this.accountLocalizer.GetString("IncorrectEmailOrPassword").Value, ReturnUrl = model.ReturnUrl, DevelopersEmail = this.settings.Value.DevelopersEmail });
+            var viewModel = _signInModelBuilder.BuildModel(new SignInComponentModel { ReturnUrl = model.ReturnUrl, DevelopersEmail = _options.Value.DevelopersEmail });
 
-            return this.View(viewModel);
+            return View(viewModel);
         }
     }
 }

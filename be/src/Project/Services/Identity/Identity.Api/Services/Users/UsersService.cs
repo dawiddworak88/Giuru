@@ -113,6 +113,7 @@ namespace Identity.Api.Services.Users
                 PhoneNumberConfirmed = false,
                 TwoFactorEnabled = false,
                 LockoutEnabled = false,
+                IsActive = true
             };
 
             this.identityContext.Accounts.Add(userAccount);
@@ -193,25 +194,28 @@ namespace Identity.Api.Services.Users
                 throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            if (existingUser.EmailConfirmed is false)
+            if (existingUser.EmailConfirmed)
             {
-                if (existingUser.VerifyExpirationDate >= DateTime.UtcNow)
-                {
-                    existingUser.EmailConfirmed = true;
-                    existingUser.PasswordHash = this.userService.GeneratePasswordHash(existingUser, serviceModel.Password);
-
-                    await this.identityContext.SaveChangesAsync();
-
-                    return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
-                }
+                throw new CustomException("Konto jest potwierdzone", (int)HttpStatusCode.NoContent);
             }
 
-            return default;
+            if ((existingUser.VerifyExpirationDate >= DateTime.UtcNow) is false)
+            {
+                throw new CustomException("Link wygasł. Zresetuj ponownie", (int)HttpStatusCode.BadRequest);
+            }
+
+            existingUser.EmailConfirmed = true;
+            existingUser.PasswordHash = this.userService.GeneratePasswordHash(existingUser, serviceModel.Password);
+
+            await this.identityContext.SaveChangesAsync();
+
+            return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
         }
 
         public async Task<UserServiceModel> UpdateAsync(UpdateUserServiceModel serviceModel)
         {
             var existingUser = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
+
             if (existingUser is null)
             {
                 throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NoContent);
@@ -222,8 +226,10 @@ namespace Identity.Api.Services.Users
             existingUser.TwoFactorEnabled = serviceModel.TwoFactorEnabled;
             existingUser.PhoneNumber = serviceModel.PhoneNumber;
             existingUser.LockoutEnd = serviceModel.LockoutEnd;
+            existingUser.IsActive = serviceModel.IsActive;
 
             var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == existingUser.OrganisationId && x.IsActive);
+
             if (organisation is null)
             {
                 throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NoContent);

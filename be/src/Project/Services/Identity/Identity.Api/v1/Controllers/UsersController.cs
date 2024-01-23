@@ -8,6 +8,7 @@ using Identity.Api.v1.ResponseModels;
 using Identity.Api.Validators.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -89,7 +90,7 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(UserRequestModel request)
         {
-            if (request.Id == null)
+            if (request.Id.HasValue is false)
             {
                 var serviceModel = new CreateUserServiceModel
                 {
@@ -124,11 +125,13 @@ namespace Identity.Api.v1.Controllers
                     LastName = request.LastName,
                     TwoFactorEnabled = request.TwoFactorEnabled,
                     AccessFailedCount = request.AccessFailedCount,
-                    LockoutEnd = request.LockoutEnd
+                    LockoutEnd = request.LockoutEnd,
+                    IsActive = request.IsActive
                 };
 
                 var validator = new UpdateUserModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
+
                 if (validationResult != null)
                 {
                     var response = await this.userService.UpdateAsync(serviceModel);

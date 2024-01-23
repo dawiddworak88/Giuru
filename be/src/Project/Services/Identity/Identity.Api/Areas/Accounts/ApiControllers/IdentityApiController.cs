@@ -84,31 +84,32 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] SetUserPasswordRequestModel model)
         {
-            var validator = new SetPasswordModelValidator();
-            var result = await validator.ValidateAsync(model);
-
-            if (result.IsValid)
+            var serviceModel = new SetUserPasswordServiceModel
             {
-                var language = CultureInfo.CurrentUICulture.Name;
-                var serviceModel = new SetUserPasswordServiceModel
-                {
-                    ExpirationId = model.Id.Value,
-                    Password = model.Password,
-                    Language = language
-                };
+                ExpirationId = model.Id.Value,
+                Password = model.Password,
+                Language = CultureInfo.CurrentUICulture.Name
+            };
 
-                var user = await this.usersService.SetPasswordAsync(serviceModel);
+            var validator = new SetPasswordModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
 
-                if (user is not null)
+            if (validationResult.IsValid)
+            {
+                try
                 {
-                    if (await this.userService.SignInAsync(user.Email, model.Password, null, null))
+                    var user = await this.usersService.SetPasswordAsync(serviceModel);
+
+                    if (user is not null)
                     {
-                        return this.StatusCode((int)HttpStatusCode.Redirect, new { Url = model.ReturnUrl });
+                        await this.userService.SignInAsync(user.Email, model.Password, model.ReturnUrl, null);
+
+                        return this.StatusCode((int)HttpStatusCode.Redirect, new { Url = this.options.Value.BuyerUrl });
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return this.StatusCode((int)HttpStatusCode.BadRequest, new { EmailIsConfirmedLabel = this.accountLocalizer.GetString("EmailIsConfirmed").Value, SignInLabel = this.globalLocalizer.GetString("TrySignIn").Value, SignInUrl = this.linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })});
+                    return this.StatusCode((int)HttpStatusCode.BadRequest, new { Message = ex.Message, UrlLabel = this.globalLocalizer.GetString("TrySignIn").Value, Url = this.options.Value.BuyerUrl });
                 }
             }   
 
