@@ -106,9 +106,10 @@ namespace Identity.Api.v1.Controllers
                     var response = new TeamMemberResponseModel
                     {
                         Id = teamMember.Id,
-                       FirstName = teamMember.FirstName,
-                       LastName = teamMember.LastName,
-                       Email = teamMember.Email
+                        FirstName = teamMember.FirstName,
+                        LastName = teamMember.LastName,
+                        Email = teamMember.Email,
+                        IsActive = teamMember.IsActive
                     };
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);
@@ -155,7 +156,8 @@ namespace Identity.Api.v1.Controllers
                         Id = x.Id,
                         FirstName = x.FirstName,
                         LastName = x.LastName,
-                        Email = x.Email
+                        Email = x.Email,
+                        IsActive = x.IsActive
                     })
                 };
 

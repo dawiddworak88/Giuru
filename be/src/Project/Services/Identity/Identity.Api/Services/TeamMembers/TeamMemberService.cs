@@ -90,6 +90,7 @@ namespace Identity.Api.Services.TeamMembers
                 PhoneNumberConfirmed = false,
                 TwoFactorEnabled = false,
                 LockoutEnabled = false,
+                IsActive = true
             };
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo(organisation.Language);
@@ -140,7 +141,8 @@ namespace Identity.Api.Services.TeamMembers
                                   Id = Guid.Parse(u.Id),
                                   FirstName = u.FirstName,
                                   LastName = u.LastName,
-                                  Email = u.Email
+                                  Email = u.Email,
+                                  IsActive = u.IsActive
                               };
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
@@ -174,7 +176,8 @@ namespace Identity.Api.Services.TeamMembers
                 Id = model.Id,
                 FirstName = existingTeamMember.FirstName,
                 LastName = existingTeamMember.LastName,
-                Email = existingTeamMember.Email
+                Email = existingTeamMember.Email,
+                IsActive = existingTeamMember.IsActive,
             };
 
             return teamMember;
@@ -189,8 +192,13 @@ namespace Identity.Api.Services.TeamMembers
                 throw new CustomException(this.teamMembersLocalizer.GetString("TeamMemberNotFound"), (int)HttpStatusCode.NoContent);
             }
 
+            var t = await this.context.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
+
+            t.IsActive = model.IsActive;
+
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
+            user.IsActive = model.IsActive;
 
             await this.context.SaveChangesAsync();
 

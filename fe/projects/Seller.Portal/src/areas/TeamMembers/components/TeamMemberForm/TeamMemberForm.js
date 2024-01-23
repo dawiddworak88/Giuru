@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../shared/stores/Store";
@@ -6,7 +6,8 @@ import useForm from "../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import EmailValidator from "../../../../shared/helpers/validators/EmailValidator";
 import { 
-    TextField, InputLabel, Button, CircularProgress
+    TextField, InputLabel, Button, CircularProgress,
+    NoSsr, FormControlLabel, Switch
 } from "@mui/material";
 
 const TeamMemberForm = (props) => {
@@ -16,7 +17,8 @@ const TeamMemberForm = (props) => {
         id: { value: props.id ? props.id : null },
         email: { value: props.email ? props.email : "", error: "" },
         firstName: { value: props.firstName ? props.firstName : "", error: "" },
-        lastName: { value: props.lastName ? props.lastName : "", error: "" }
+        lastName: { value: props.lastName ? props.lastName : "", error: "" },
+        isActive: { value: props.isActive ? props.isActive : false }
     }
 
     const stateValidatorSchema = {
@@ -76,7 +78,7 @@ const TeamMemberForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
     
-    const { id, email, firstName, lastName } = values;
+    const { id, email, firstName, lastName, isActive } = values;
     
     return (
         <section className="section section-small-padding">
@@ -130,6 +132,23 @@ const TeamMemberForm = (props) => {
                                 helperText={dirty.email ? errors.email : ""} 
                                 error={(errors.email.length > 0) && dirty.email} 
                             />
+                        </div>
+                        <div className="field">
+                            <NoSsr>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            onChange={e => {
+                                                setFieldValue({ name: "isActive", value: e.target.checked });
+                                            }}
+                                            checked={isActive}
+                                            id="isActive"
+                                            name="isActive"
+                                            color="secondary" 
+                                        />
+                                    }
+                                    label={isActive ? "Aktywny" : "Nieaktywny"} />
+                            </NoSsr>
                         </div>
                         <div className="field">
                             <Button 

@@ -66,16 +66,13 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
                     this.globalLocalizer.GetString("FirstName"),
                     this.globalLocalizer.GetString("LastName"),
                     this.globalLocalizer.GetString("Email"),
+                    "Status"
                 },
                 Actions = new List<CatalogActionViewModel>
                 {
                     new CatalogActionViewModel
                     {
                         IsEdit = true
-                    },
-                    new CatalogActionViewModel
-                    {
-                        IsDelete = true
                     }
                 },
                 Properties = new List<CatalogPropertyViewModel>
@@ -94,6 +91,11 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
                     {
                         Title = nameof(TeamMember.Email).ToCamelCase(),
                         IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(TeamMember.IsActive).ToCamelCase(),
+                        IsActivityTag = true
                     }
                 }
             };

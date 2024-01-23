@@ -89,7 +89,7 @@ namespace Seller.Web.Areas.TeamMembers.Repositories
             return default;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string firstName, string lastName, string email, string returnUrl)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string firstName, string lastName, string email, bool isActive, string returnUrl)
         {
             var requestModel = new TeamMemberApiRequestModel
             {
@@ -97,6 +97,7 @@ namespace Seller.Web.Areas.TeamMembers.Repositories
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email,
+                IsActive = isActive,
                 ReturnUrl = returnUrl
             };
 
