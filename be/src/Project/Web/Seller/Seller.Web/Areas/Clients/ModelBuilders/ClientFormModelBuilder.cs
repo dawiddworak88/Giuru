@@ -123,6 +123,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.ClientGroupsIds = client.ClientGroupIds;
                     viewModel.ClientManagersIds = client.ClientManagerIds;
                     viewModel.CountryId = client.CountryId;
+                    viewModel.IsActive = client.IsActive;
                     viewModel.PreferedCurrencyId = client.PreferedCurrencyId;
                     viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
                     viewModel.DefaultBillingAddressId = client.DefaultBillingAddressId;
@@ -168,7 +169,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             var currencies = await _currenciesRepository.GetAsync(componentModel.Token, componentModel.Language, $"{nameof(Country.Name)} asc");
 
-            if (currencies is not null)
+            if (currencies is not null) 
             {
                 viewModel.Currencies = currencies.Select(x => new ListItemViewModel { Id = x.Id, Name = x.CurrencyCode });
             }

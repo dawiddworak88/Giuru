@@ -75,11 +75,11 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 organisationId = await this.organisationsRepository.SaveAsync(token, language, model.Name, model.Email, model.CommunicationLanguage);
             }
 
-            var clientId = await this.clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PreferedCurrencyId, model.PhoneNumber, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId);
+            var clientId = await this.clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PreferedCurrencyId, model.PhoneNumber, model.IsActive, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId);
 
             if (model.HasAccount)
             {
-                await this.identityRepository.UpdateAsync(token, language, clientId, model.Email, model.Name, model.CommunicationLanguage);
+                await this.identityRepository.UpdateAsync(token, language, clientId, model.Email, model.Name, model.CommunicationLanguage, model.IsActive);
 
                 if (model.ClientGroupIds.OrEmptyIfNull().Any())
                 {

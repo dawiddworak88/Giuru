@@ -17,11 +17,11 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 {
     public class ClientsPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>>
     {
-        private readonly ICatalogModelBuilder catalogModelBuilder;
-        private readonly IClientsRepository clientsRepository;
-        private readonly IStringLocalizer globalLocalizer;
-        private readonly IStringLocalizer clientLocalizer;
-        private readonly LinkGenerator linkGenerator;
+        private readonly ICatalogModelBuilder _catalogModelBuilder;
+        private readonly IClientsRepository _clientsRepository;
+        private readonly IStringLocalizer _globalLocalizer;
+        private readonly IStringLocalizer _clientLocalizer;
+        private readonly LinkGenerator _linkGenerator;
 
         public ClientsPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
@@ -30,26 +30,26 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IStringLocalizer<ClientResources> clientLocalizer,
             LinkGenerator linkGenerator)
         {
-            this.catalogModelBuilder = catalogModelBuilder;
-            this.clientsRepository = clientsRepository;
-            this.globalLocalizer = globalLocalizer;
-            this.clientLocalizer = clientLocalizer;
-            this.linkGenerator = linkGenerator;
+            _catalogModelBuilder = catalogModelBuilder;
+            _clientsRepository = clientsRepository;
+            _globalLocalizer = globalLocalizer;
+            _clientLocalizer = clientLocalizer;
+            _linkGenerator = linkGenerator;
         }
 
         public async Task<CatalogViewModel<Client>> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<Client>, Client>();
+            var viewModel = _catalogModelBuilder.BuildModel<CatalogViewModel<Client>, Client>();
 
-            viewModel.Title = this.globalLocalizer.GetString("Clients");
+            viewModel.Title = _globalLocalizer.GetString("Clients");
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
-            viewModel.NewText = this.clientLocalizer.GetString("NewClient");
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewText = _clientLocalizer.GetString("NewClient");
+            viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ClientsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ClientsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "ClientsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ClientsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(Client.CreatedDate)} desc";
 
@@ -57,21 +57,18 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("Name"),
-                    this.globalLocalizer.GetString("Email"),
-                    this.globalLocalizer.GetString("CommunicationLanguage"),
-                    this.globalLocalizer.GetString("LastModifiedDate"),
-                    this.globalLocalizer.GetString("CreatedDate")
+                    _globalLocalizer.GetString("Name"),
+                    _globalLocalizer.GetString("Email"),
+                    _globalLocalizer.GetString("CommunicationLanguage"),
+                    "Status",
+                    _globalLocalizer.GetString("LastModifiedDate"),
+                    _globalLocalizer.GetString("CreatedDate")
                 },
                 Actions = new List<CatalogActionViewModel>
                 {
                     new CatalogActionViewModel
                     {
                         IsEdit = true
-                    },
-                    new CatalogActionViewModel
-                    {
-                        IsDelete = true
                     }
                 },
                 Properties = new List<CatalogPropertyViewModel>
@@ -93,6 +90,11 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     },
                     new CatalogPropertyViewModel
                     {
+                        Title = nameof(Client.IsActive).ToCamelCase(),
+                        IsActivityTag = true
+                    },
+                    new CatalogPropertyViewModel
+                    {
                         Title = nameof(Client.LastModifiedDate).ToCamelCase(),
                         IsDateTime = true
                     },
@@ -104,7 +106,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.clientsRepository.GetClientsAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Client.CreatedDate)} desc");
+            viewModel.PagedItems = await _clientsRepository.GetClientsAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Client.CreatedDate)} desc");
 
             return viewModel;
         }

@@ -12,6 +12,7 @@ namespace Seller.Web.Areas.Clients.DomainModels
         public Guid? CountryId { get; set; }
         public Guid? PreferedCurrencyId { get; set; }
         public string PhoneNumber { get; set; }
+        public bool IsActive { get; set; }
         public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> ClientManagerIds { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
