@@ -147,7 +147,7 @@ const TeamMemberForm = (props) => {
                                             color="secondary" 
                                         />
                                     }
-                                    label={isActive ? "Aktywny" : "Nieaktywny"} />
+                                    label={isActive ? props.activeLabel : props.inActiveLabel} />
                             </NoSsr>
                         </div>
                         <div className="field">

@@ -33,6 +33,8 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 NoResultsLabel = _globalLocalizer.GetString("NoResultsLabel"),
                 GenerateQRCodeLabel = _globalLocalizer.GetString("GenerateQRCode"),
                 CopyLinkLabel = _globalLocalizer.GetString("CopyLink"),
+                InActiveLabel = _globalLocalizer.GetString("InActive"),
+                ActiveLabel = _globalLocalizer.GetString("Active"),
                 SearchTerm = string.Empty
             };
 

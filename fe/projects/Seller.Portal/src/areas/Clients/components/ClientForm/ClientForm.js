@@ -359,7 +359,7 @@ function ClientForm(props) {
                                             color="secondary" 
                                         />
                                     }
-                                    label={isActive ? "Aktywny" : "Nieaktywny"} />
+                                    label={isActive ? props.activeLabel : props.inActiveLabel} />
                             </NoSsr>
                         </div>
                         <div className="field client-form__field-row">

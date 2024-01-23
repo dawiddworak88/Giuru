@@ -768,4 +768,10 @@
   <data name="Currency" xml:space="preserve">
     <value>Waluta</value>
   </data>
+  <data name="Active" xml:space="preserve">
+    <value>Aktywny</value>
+  </data>
+  <data name="InActive" xml:space="preserve">
+    <value>Nieaktywny</value>
+  </data>
 </root>

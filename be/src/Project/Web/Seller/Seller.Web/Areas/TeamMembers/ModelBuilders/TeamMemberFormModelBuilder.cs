@@ -44,7 +44,9 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
                 SaveText = _globalLocalizer.GetString("SaveText"),
                 NavigateToTeamMembersListText = _teamMembersLocalizer.GetString("NavigateToTeamMembers"),
                 IdLabel = _globalLocalizer.GetString("Id"),
-                TeamMembersUrl = _linkGenerator.GetPathByAction("Index", "TeamMembers", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name })
+                TeamMembersUrl = _linkGenerator.GetPathByAction("Index", "TeamMembers", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name }),
+                ActiveLabel = _globalLocalizer.GetString("Active"),
+                InActiveLabel = _globalLocalizer.GetString("InActive")
             };
 
             if (componentModel.Id.HasValue)

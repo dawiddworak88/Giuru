@@ -368,7 +368,7 @@ function Catalog(props) {
                         const isActive = item[property.title] === true ? true : false;
 
                         return (
-                            <TableCell><Chip label={isActive ? "Aktywny" : "Nieaktywny"} color={isActive ? "success" : "default"}/></TableCell>
+                            <TableCell><Chip label={isActive ? props.activeLabel : props.inActiveLabel} color={isActive ? "success" : "default"}/></TableCell>
                         )
                     }
                     else {

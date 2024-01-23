@@ -106,7 +106,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 CountryLabel = _globalLocalizer.GetString("Country"),
                 PreferedCurrencyLabel = _clientLocalizer.GetString("PreferedCurrencyLabel"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
-                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress")
+                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
+                ActiveLabel = _globalLocalizer.GetString("Active"),
+                InActiveLabel = _globalLocalizer.GetString("InActive")
             };
 
             if (componentModel.Id.HasValue)

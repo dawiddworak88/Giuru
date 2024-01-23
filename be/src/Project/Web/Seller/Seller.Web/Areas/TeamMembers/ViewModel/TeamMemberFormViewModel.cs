@@ -18,6 +18,8 @@ namespace Seller.Web.Areas.TeamMembers.ViewModel
         public string EmailLabel { get; set; }
         public string IdLabel { get; set; }
         public bool IsActive { get; set; }
+        public string ActiveLabel { get; set; }
+        public string InActiveLabel { get; set; }
         public string NavigateToTeamMembersListText { get; set; }
         public string TeamMembersUrl { get; set; }
         public string SaveUrl { get; set; }
