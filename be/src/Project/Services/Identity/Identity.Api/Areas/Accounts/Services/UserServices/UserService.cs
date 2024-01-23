@@ -1,10 +1,12 @@
-﻿using Foundation.Account.Definitions;
+﻿using Feature.Account;
+using Foundation.Account.Definitions;
 using Foundation.Extensions.Exceptions;
 using Identity.Api.Configurations;
 using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.Services.Organisations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
 using System.Net;
@@ -14,52 +16,54 @@ namespace Identity.Api.Areas.Accounts.Services.UserServices
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly SignInManager<ApplicationUser> signInManager;
-        private readonly IOrganisationService organisationService;
-        private readonly IOptions<AppSettings> options;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IOrganisationService _organisationService;
+        private readonly IOptions<AppSettings> _options;
+        private readonly IStringLocalizer<AccountResources> _accountLocalizer;
 
         public UserService(
             UserManager<ApplicationUser> userManager, 
             SignInManager<ApplicationUser> signInManager,
             IOrganisationService organisationService,
+            IStringLocalizer<AccountResources> accountLocalizer,
             IOptions<AppSettings> options)
         {
-            this.userManager = userManager;
-            this.signInManager = signInManager;
-            this.organisationService = organisationService;
-            this.options = options;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _organisationService = organisationService;
+            _options = options;
         }
 
         public string GeneratePasswordHash(ApplicationUser user, string password)
         {
-            return this.userManager.PasswordHasher.HashPassword(user, password);
+            return _userManager.PasswordHasher.HashPassword(user, password);
         }
 
         public async Task SignInAsync(string email, string password, string redirectUrl, string clientId)
         {
-            var user = await this.userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email);
 
             if (user is not null)
             {
                 if (user.EmailConfirmed is false)
                 {
-                    throw new CustomException("Potwierdz adres email", (int)HttpStatusCode.BadRequest);
+                    throw new CustomException(_accountLocalizer.GetString("ConfirmEmail"), (int)HttpStatusCode.BadRequest);
                 }
 
                 if (user.IsActive is false)
                 {
-                    throw new CustomException("Konto zostało dezaktywowane. Jeśli chcesz je ponownie aktywować, to skontaktuj się ze swoim opiekunem", (int)HttpStatusCode.BadRequest);
+                    throw new CustomException(_accountLocalizer.GetString("AccountIsInactive"), (int)HttpStatusCode.BadRequest);
                 }
 
-                if (clientId == this.options.Value.SellerClientId.ToString() && !await this.organisationService.IsSellerAsync(user.OrganisationId))
+                if (clientId == _options.Value.SellerClientId.ToString() && !await _organisationService.IsSellerAsync(user.OrganisationId))
                 {
-                    throw new CustomException("Brak dostępu", (int)HttpStatusCode.OK);
+                    throw new CustomException(_accountLocalizer.GetString("AccessDenied"), (int)HttpStatusCode.Unauthorized);
                 }
 
-                if (await this.userManager.CheckPasswordAsync(user, password) is false)
+                if (await _userManager.CheckPasswordAsync(user, password) is false)
                 {
-                    throw new CustomException("IncorrectEmailOrPassword", (int)(HttpStatusCode.OK));
+                    throw new CustomException(_accountLocalizer.GetString("IncorrectEmailOrPassword"), (int)(HttpStatusCode.OK));
                 }
 
                 var properties = new AuthenticationProperties
@@ -71,13 +75,13 @@ namespace Identity.Api.Areas.Accounts.Services.UserServices
                     IssuedUtc = DateTime.UtcNow
                 };
 
-                await this.signInManager.SignInAsync(user, properties);
+                await _signInManager.SignInAsync(user, properties);
             }
         }
 
         public async Task SignOutAsync()
         {
-            await this.signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
         }
     }
 }

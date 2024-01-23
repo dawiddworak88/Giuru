@@ -26,13 +26,13 @@ namespace Identity.Api.Services.Users
 {
     public class UsersService : IUsersService
     {
-        private readonly IdentityContext identityContext;
-        private readonly IOptionsMonitor<MailingConfiguration> mailingOptions;
-        private readonly IOptionsMonitor<AppSettings> identityOptions;
-        private readonly IMailingService mailingService;
-        private readonly IStringLocalizer<AccountResources> accountLocalizer;
-        private readonly IUserService userService;
-        private readonly LinkGenerator linkGenerator;
+        private readonly IdentityContext _identityContext;
+        private readonly IOptionsMonitor<MailingConfiguration> _mailingOptions;
+        private readonly IOptionsMonitor<AppSettings> _identityOptions;
+        private readonly IMailingService _mailingService;
+        private readonly IStringLocalizer<AccountResources> _accountLocalizer;
+        private readonly IUserService _userService;
+        private readonly LinkGenerator _linkGenerator;
 
         public UsersService(
             IdentityContext identityContext,
@@ -43,30 +43,30 @@ namespace Identity.Api.Services.Users
             IUserService userService,
             LinkGenerator linkGenerator)
         {
-            this.identityContext = identityContext;
-            this.mailingOptions = mailingOptions;
-            this.identityOptions = identityOptions;
-            this.mailingService = mailingService;
-            this.accountLocalizer = accountLocalizer;
-            this.userService = userService;
-            this.linkGenerator = linkGenerator;
+            _identityContext = identityContext;
+            _mailingOptions = mailingOptions;
+            _identityOptions = identityOptions;
+            _mailingService = mailingService;
+            _accountLocalizer = accountLocalizer;
+            _userService = userService;
+            _linkGenerator = linkGenerator;
         }
 
         public async Task<UserServiceModel> CreateAsync(CreateUserServiceModel serviceModel)
         {
             var timeExpiration = DateTime.UtcNow.AddHours(IdentityConstants.VerifyTimeExpiration);
 
-            var existingOrganisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.ContactEmail == serviceModel.Email && x.IsActive);
+            var existingOrganisation = await _identityContext.Organisations.FirstOrDefaultAsync(x => x.ContactEmail == serviceModel.Email && x.IsActive);
             
             if (existingOrganisation == null)
             {
-                throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo(existingOrganisation.Language);
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 
-            var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
+            var user = await _identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
 
             if (user is not null)
             {
@@ -74,28 +74,28 @@ namespace Identity.Api.Services.Users
                 user.VerifyExpirationDate = timeExpiration;
                 user.ExpirationId = Guid.NewGuid();
 
-                await this.identityContext.SaveChangesAsync();
-                await this.mailingService.SendTemplateAsync(new TemplateEmail
+                await _identityContext.SaveChangesAsync();
+                await _mailingService.SendTemplateAsync(new TemplateEmail
                 {
                     RecipientEmailAddress = user.Email,
                     RecipientName = user.UserName,
-                    SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
-                    SenderName = this.mailingOptions.CurrentValue.SenderName,
-                    TemplateId = this.identityOptions.CurrentValue.ActionSendGridResetTemplateId,
+                    SenderEmailAddress = _mailingOptions.CurrentValue.SenderEmail,
+                    SenderName = _mailingOptions.CurrentValue.SenderName,
+                    TemplateId = _identityOptions.CurrentValue.ActionSendGridResetTemplateId,
                     DynamicTemplateData = new
                     {
                         lang = existingOrganisation.Language,
-                        ap_subject = this.accountLocalizer.GetString("ap_subject").Value,
-                        ap_preHeader = this.accountLocalizer.GetString("ap_preHeader").Value,
-                        ap_buttonLabel = this.accountLocalizer.GetString("ap_buttonLabel").Value,
-                        ap_headOne = this.accountLocalizer.GetString("ap_headOne").Value,
-                        ap_headTwo = this.accountLocalizer.GetString("ap_headTwo").Value,
-                        ap_lineOne = this.accountLocalizer.GetString("ap_lineOne").Value,
-                        resetAccountLink = this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = user.ExpirationId, ReturnUrl = string.IsNullOrWhiteSpace(serviceModel.ReturnUrl) ? null : HttpUtility.UrlEncode(serviceModel.ReturnUrl) }, serviceModel.Scheme, serviceModel.Host)
+                        ap_subject = _accountLocalizer.GetString("ap_subject").Value,
+                        ap_preHeader = _accountLocalizer.GetString("ap_preHeader").Value,
+                        ap_buttonLabel = _accountLocalizer.GetString("ap_buttonLabel").Value,
+                        ap_headOne = _accountLocalizer.GetString("ap_headOne").Value,
+                        ap_headTwo = _accountLocalizer.GetString("ap_headTwo").Value,
+                        ap_lineOne = _accountLocalizer.GetString("ap_lineOne").Value,
+                        resetAccountLink = _linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = user.ExpirationId, ReturnUrl = string.IsNullOrWhiteSpace(serviceModel.ReturnUrl) ? null : HttpUtility.UrlEncode(serviceModel.ReturnUrl) }, serviceModel.Scheme, serviceModel.Host)
                     }
                 });
 
-                return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(user.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
+                return await GetById(new GetUserServiceModel { Id = Guid.Parse(user.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
             }
 
             var userAccount = new ApplicationUser
@@ -116,35 +116,35 @@ namespace Identity.Api.Services.Users
                 IsActive = true
             };
 
-            this.identityContext.Accounts.Add(userAccount);
-            await this.identityContext.SaveChangesAsync();
-            await this.mailingService.SendTemplateAsync(new TemplateEmail
+            _identityContext.Accounts.Add(userAccount);
+            await _identityContext.SaveChangesAsync();
+            await _mailingService.SendTemplateAsync(new TemplateEmail
             {
                 RecipientEmailAddress = userAccount.Email,
                 RecipientName = userAccount.UserName,
-                SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
-                SenderName = this.mailingOptions.CurrentValue.SenderName,
-                TemplateId = this.identityOptions.CurrentValue.ActionSendGridCreateTemplateId,
+                SenderEmailAddress = _mailingOptions.CurrentValue.SenderEmail,
+                SenderName = _mailingOptions.CurrentValue.SenderName,
+                TemplateId = _identityOptions.CurrentValue.ActionSendGridCreateTemplateId,
                 DynamicTemplateData = new
                 {
                     lang = existingOrganisation.Language,
-                    nc_subject = this.accountLocalizer.GetString("nc_subject").Value,
-                    nc_preHeader = this.accountLocalizer.GetString("nc_preHeader").Value,
-                    nc_buttonLabel = this.accountLocalizer.GetString("nc_buttonLabel").Value,
-                    nc_headOne = this.accountLocalizer.GetString("nc_headOne").Value,
-                    nc_headTwo = this.accountLocalizer.GetString("nc_headTwo").Value,
-                    nc_lineOne = this.accountLocalizer.GetString("nc_lineOne").Value,
-                    nc_lineTwo = this.accountLocalizer.GetString("nc_lineTwo").Value,
-                    signAccountLink = this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = userAccount.ExpirationId, ReturnUrl = string.IsNullOrWhiteSpace(serviceModel.ReturnUrl) ? null : HttpUtility.UrlEncode(serviceModel.ReturnUrl) }, serviceModel.Scheme, serviceModel.Host)
+                    nc_subject = _accountLocalizer.GetString("nc_subject").Value,
+                    nc_preHeader = _accountLocalizer.GetString("nc_preHeader").Value,
+                    nc_buttonLabel = _accountLocalizer.GetString("nc_buttonLabel").Value,
+                    nc_headOne = _accountLocalizer.GetString("nc_headOne").Value,
+                    nc_headTwo = _accountLocalizer.GetString("nc_headTwo").Value,
+                    nc_lineOne = _accountLocalizer.GetString("nc_lineOne").Value,
+                    nc_lineTwo = _accountLocalizer.GetString("nc_lineTwo").Value,
+                    signAccountLink = _linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = userAccount.ExpirationId, ReturnUrl = string.IsNullOrWhiteSpace(serviceModel.ReturnUrl) ? null : HttpUtility.UrlEncode(serviceModel.ReturnUrl) }, serviceModel.Scheme, serviceModel.Host)
                 }
             });
 
-            return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(userAccount.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
+            return await GetById(new GetUserServiceModel { Id = Guid.Parse(userAccount.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
         }
 
         public async Task<UserServiceModel> GetById(GetUserServiceModel serviceModel)
         {
-            var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Id == serviceModel.Id.ToString());
+            var user = await _identityContext.Accounts.FirstOrDefaultAsync(x => x.Id == serviceModel.Id.ToString());
 
             return new UserServiceModel
             {
@@ -163,7 +163,7 @@ namespace Identity.Api.Services.Users
 
         public async Task<UserServiceModel> GetByExpirationId(GetUserServiceModel serviceModel)
         {
-            var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.ExpirationId == serviceModel.Id);
+            var user = await _identityContext.Accounts.FirstOrDefaultAsync(x => x.ExpirationId == serviceModel.Id);
 
             if (user is not null)
             {
@@ -187,38 +187,38 @@ namespace Identity.Api.Services.Users
 
         public async Task<UserServiceModel> SetPasswordAsync(SetUserPasswordServiceModel serviceModel)
         { 
-            var existingUser = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.ExpirationId == serviceModel.ExpirationId.Value);
+            var existingUser = await _identityContext.Accounts.FirstOrDefaultAsync(x => x.ExpirationId == serviceModel.ExpirationId.Value);
 
             if (existingUser is null)
             {
-                throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             if (existingUser.EmailConfirmed)
             {
-                throw new CustomException("Konto jest potwierdzone", (int)HttpStatusCode.NoContent);
+                throw new CustomException(_accountLocalizer.GetString("EmailIsConfirmedText"), (int)HttpStatusCode.NoContent);
             }
 
             if ((existingUser.VerifyExpirationDate >= DateTime.UtcNow) is false)
             {
-                throw new CustomException("Link wygasł. Zresetuj ponownie", (int)HttpStatusCode.BadRequest);
+                throw new CustomException(_accountLocalizer.GetString("VerifyDateExpired"), (int)HttpStatusCode.BadRequest);
             }
 
             existingUser.EmailConfirmed = true;
-            existingUser.PasswordHash = this.userService.GeneratePasswordHash(existingUser, serviceModel.Password);
+            existingUser.PasswordHash = _userService.GeneratePasswordHash(existingUser, serviceModel.Password);
 
-            await this.identityContext.SaveChangesAsync();
+            await _identityContext.SaveChangesAsync();
 
-            return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
+            return await GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
         }
 
         public async Task<UserServiceModel> UpdateAsync(UpdateUserServiceModel serviceModel)
         {
-            var existingUser = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
+            var existingUser = await _identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
 
             if (existingUser is null)
             {
-                throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             existingUser.FirstName = serviceModel.FirstName;
@@ -228,24 +228,24 @@ namespace Identity.Api.Services.Users
             existingUser.LockoutEnd = serviceModel.LockoutEnd;
             existingUser.IsActive = serviceModel.IsActive;
 
-            var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == existingUser.OrganisationId && x.IsActive);
+            var organisation = await _identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == existingUser.OrganisationId && x.IsActive);
 
             if (organisation is null)
             {
-                throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             organisation.Name = serviceModel.Name;
             organisation.Language = serviceModel.CommunicationLanguage;
 
-            await this.identityContext.SaveChangesAsync();
+            await _identityContext.SaveChangesAsync();
 
-            return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
+            return await GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
         }
 
         public async Task ResetPasswordAsync(ResetUserPasswordServiceModel serviceModel)
         {
-            var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
+            var user = await _identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
 
             if (user is not null)
             {
@@ -255,34 +255,34 @@ namespace Identity.Api.Services.Users
                 user.VerifyExpirationDate = timeExpiration;
                 user.ExpirationId = Guid.NewGuid();
 
-                var userOrganisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == user.OrganisationId && x.IsActive);
+                var userOrganisation = await _identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == user.OrganisationId && x.IsActive);
 
                 if (userOrganisation is null)
                 {
-                    throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NoContent);
+                    throw new CustomException(_accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NoContent);
                 }
 
                 Thread.CurrentThread.CurrentCulture = new CultureInfo(userOrganisation.Language);
                 Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 
-                await this.identityContext.SaveChangesAsync();
-                await this.mailingService.SendTemplateAsync(new TemplateEmail
+                await _identityContext.SaveChangesAsync();
+                await _mailingService.SendTemplateAsync(new TemplateEmail
                 {
                     RecipientEmailAddress = user.Email,
                     RecipientName = user.UserName,
-                    SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
-                    SenderName = this.mailingOptions.CurrentValue.SenderName,
-                    TemplateId = this.identityOptions.CurrentValue.ActionSendGridResetTemplateId,
+                    SenderEmailAddress = _mailingOptions.CurrentValue.SenderEmail,
+                    SenderName = _mailingOptions.CurrentValue.SenderName,
+                    TemplateId = _identityOptions.CurrentValue.ActionSendGridResetTemplateId,
                     DynamicTemplateData = new
                     {
                         lang = userOrganisation.Language,
-                        ap_subject = this.accountLocalizer.GetString("ap_subject").Value,
-                        ap_preHeader = this.accountLocalizer.GetString("ap_preHeader").Value,
-                        ap_buttonLabel = this.accountLocalizer.GetString("ap_buttonLabel").Value,
-                        ap_headOne = this.accountLocalizer.GetString("ap_headOne").Value,
-                        ap_headTwo = this.accountLocalizer.GetString("ap_headTwo").Value,
-                        ap_lineOne = this.accountLocalizer.GetString("ap_lineOne").Value,
-                        resetAccountLink = this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = userOrganisation.Language, Id = user.ExpirationId, ReturnUrl = string.IsNullOrWhiteSpace(serviceModel.ReturnUrl) ? null : HttpUtility.UrlEncode(serviceModel.ReturnUrl) }, serviceModel.Scheme, serviceModel.Host)
+                        ap_subject = _accountLocalizer.GetString("ap_subject").Value,
+                        ap_preHeader = _accountLocalizer.GetString("ap_preHeader").Value,
+                        ap_buttonLabel = _accountLocalizer.GetString("ap_buttonLabel").Value,
+                        ap_headOne = _accountLocalizer.GetString("ap_headOne").Value,
+                        ap_headTwo = _accountLocalizer.GetString("ap_headTwo").Value,
+                        ap_lineOne = _accountLocalizer.GetString("ap_lineOne").Value,
+                        resetAccountLink = _linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = userOrganisation.Language, Id = user.ExpirationId, ReturnUrl = string.IsNullOrWhiteSpace(serviceModel.ReturnUrl) ? null : HttpUtility.UrlEncode(serviceModel.ReturnUrl) }, serviceModel.Scheme, serviceModel.Host)
                     }
                 });
             }
@@ -290,7 +290,7 @@ namespace Identity.Api.Services.Users
 
         public async Task<UserServiceModel> GetByEmail(GetUserByEmailServiceModel serviceModel)
         {
-            var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
+            var user = await _identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
 
             if (user is not null)
             {

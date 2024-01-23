@@ -23,7 +23,6 @@ namespace Identity.Api.Areas.Accounts.Controllers
     public class SignInController : BaseController
     {
         private readonly IOptions<AppSettings> _options;
-        private readonly IStringLocalizer<AccountResources> _accountLocalizer;
         private readonly IIdentityServerInteractionService _interactionService;
         private readonly IUserService _userService;
         private readonly IComponentModelBuilder<SignInComponentModel, SignInViewModel> _signInModelBuilder;
@@ -31,7 +30,6 @@ namespace Identity.Api.Areas.Accounts.Controllers
 
         public SignInController(
             IOptions<AppSettings> options,
-            IStringLocalizer<AccountResources> accountLocalizer,
             IIdentityServerInteractionService interactionService,
             IUserService userService,
             IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder,
@@ -41,7 +39,6 @@ namespace Identity.Api.Areas.Accounts.Controllers
             _userService = userService;
             _signInModelBuilder = signInModelBuilder;
             _options = options;
-            _accountLocalizer = accountLocalizer;
             _logger = logger;
         }
 

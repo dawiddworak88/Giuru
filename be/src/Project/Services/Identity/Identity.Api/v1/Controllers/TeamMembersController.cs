@@ -29,12 +29,12 @@ namespace Identity.Api.v1.Controllers
     [ApiController]
     public class TeamMembersController : BaseApiController
     {
-        private readonly ITeamMemberService teamMemberService;
+        private readonly ITeamMemberService _teamMemberService;
 
         public TeamMembersController(
             ITeamMemberService teamMemberService)
         {
-            this.teamMemberService = teamMemberService;
+            _teamMemberService = teamMemberService;
         }
 
         /// <summary>
@@ -49,13 +49,13 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new DeleteTeamMemberServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -64,9 +64,9 @@ namespace Identity.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.teamMemberService.DeleteAsync(serviceModel);
+                await _teamMemberService.DeleteAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -84,13 +84,13 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetTeamMemberServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -99,7 +99,7 @@ namespace Identity.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var teamMember = await this.teamMemberService.GetAsync(serviceModel);
+                var teamMember = await _teamMemberService.GetAsync(serviceModel);
 
                 if (teamMember is not null)
                 {
@@ -112,7 +112,7 @@ namespace Identity.Api.v1.Controllers
                         IsActive = teamMember.IsActive
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
             }
 
@@ -132,7 +132,7 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetTeamMembersServiceModel
             {
@@ -141,11 +141,11 @@ namespace Identity.Api.v1.Controllers
                 ItemsPerPage = itemsPerPage,
                 OrderBy = orderBy,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var teamMembers = await this.teamMemberService.GetAsync(serviceModel);
+            var teamMembers = await _teamMemberService.GetAsync(serviceModel);
 
             if (teamMembers is not null)
             {
@@ -161,10 +161,10 @@ namespace Identity.Api.v1.Controllers
                     })
                 };
 
-                return this.StatusCode((int)HttpStatusCode.OK, response);
+                return StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            return StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save([FromBody] TeamMemberRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             if (request.Id.HasValue)
             {
@@ -188,7 +188,7 @@ namespace Identity.Api.v1.Controllers
                     LastName = request.LastName,
                     Email = request.Email,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -197,9 +197,9 @@ namespace Identity.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var teamMemberId = await this.teamMemberService.UpdateAsync(serviceModel);
+                    var teamMemberId = await _teamMemberService.UpdateAsync(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = teamMemberId });
+                    return StatusCode((int)HttpStatusCode.OK, new { Id = teamMemberId });
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -211,11 +211,11 @@ namespace Identity.Api.v1.Controllers
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     Email = request.Email,
-                    Host = this.Request.Host,
-                    Scheme = this.Request.Scheme,
+                    Host = Request.Host,
+                    Scheme = Request.Scheme,
                     ReturnUrl = request.ReturnUrl,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -224,9 +224,9 @@ namespace Identity.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var teamMemberId = await this.teamMemberService.CreateAsync(serviceModel);
+                    var teamMemberId = await _teamMemberService.CreateAsync(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = teamMemberId });
+                    return StatusCode((int)HttpStatusCode.OK, new { Id = teamMemberId });
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);

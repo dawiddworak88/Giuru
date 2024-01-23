@@ -28,12 +28,12 @@ namespace Identity.Api.Services.TeamMembers
 {
     public class TeamMemberService : ITeamMemberService
     {
-        private readonly IdentityContext context;
-        private readonly IMailingService mailingService;
-        private readonly IOptionsMonitor<MailingConfiguration> mailingOptions;
-        private readonly IOptionsMonitor<AppSettings> options;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IStringLocalizer<TeamMembersResources> teamMembersLocalizer;
+        private readonly IdentityContext _context;
+        private readonly IMailingService _mailingService;
+        private readonly IOptionsMonitor<MailingConfiguration> _mailingOptions;
+        private readonly IOptionsMonitor<AppSettings> _options;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IStringLocalizer<TeamMembersResources> _teamMembersLocalizer;
 
         public TeamMemberService(
             IdentityContext context,
@@ -43,30 +43,30 @@ namespace Identity.Api.Services.TeamMembers
             IStringLocalizer<TeamMembersResources> teamMembersLocalizer,
             LinkGenerator linkGenerator)
         {
-            this.context = context;
-            this.mailingService = mailingService;
-            this.mailingOptions = mailingOptions;
-            this.options = options;
-            this.linkGenerator = linkGenerator;
-            this.teamMembersLocalizer = teamMembersLocalizer;
+            _context = context;
+            _mailingService = mailingService;
+            _mailingOptions = mailingOptions;
+            _options = options;
+            _linkGenerator = linkGenerator;
+            _teamMembersLocalizer = teamMembersLocalizer;
         }
 
         public async Task<Guid> CreateAsync(CreateTeamMemberServiceModel model)
         {
-            var organisation = await this.context.Organisations.FirstOrDefaultAsync(x => x.Id == model.OrganisationId && x.IsActive);
+            var organisation = await _context.Organisations.FirstOrDefaultAsync(x => x.Id == model.OrganisationId && x.IsActive);
 
             if (organisation is null)
             {
-                throw new CustomException(this.teamMembersLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_teamMembersLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            var user = await this.context.Accounts.FirstOrDefaultAsync(x => x.Email == model.Email);
+            var user = await _context.Accounts.FirstOrDefaultAsync(x => x.Email == model.Email);
 
             if (user is not null)
             {
                 user.OrganisationId = organisation.Id;
 
-                await this.context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
                 return Guid.Parse(user.Id);
             }
@@ -96,22 +96,22 @@ namespace Identity.Api.Services.TeamMembers
             Thread.CurrentThread.CurrentCulture = new CultureInfo(organisation.Language);
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 
-            await this.context.Accounts.AddAsync(userAccount);
-            await this.context.SaveChangesAsync();
-            await this.mailingService.SendTemplateAsync(new TemplateEmail
+            await _context.Accounts.AddAsync(userAccount);
+            await _context.SaveChangesAsync();
+            await _mailingService.SendTemplateAsync(new TemplateEmail
             {
                 RecipientEmailAddress = model.Email,
                 RecipientName = model.FirstName + " " + model.LastName,
-                SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
-                SenderName = this.mailingOptions.CurrentValue.SenderName,
-                TemplateId = this.options.CurrentValue.ActionSendGridTeamMemberInvitationTemplateId,
+                SenderEmailAddress = _mailingOptions.CurrentValue.SenderEmail,
+                SenderName = _mailingOptions.CurrentValue.SenderName,
+                TemplateId = _options.CurrentValue.ActionSendGridTeamMemberInvitationTemplateId,
                 DynamicTemplateData = new
                 {
                     lang = organisation.Language,
-                    subject = this.teamMembersLocalizer.GetString("tm_subject").Value,
-                    lineOne = this.teamMembersLocalizer.GetString("tm_lineOne").Value,
-                    buttonLabel = this.teamMembersLocalizer.GetString("tm_buttonLabel").Value,
-                    signAccountLink = this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = organisation.Language, Id = userAccount.ExpirationId, ReturnUrl = string.IsNullOrWhiteSpace(model.ReturnUrl) ? null : HttpUtility.UrlEncode(model.ReturnUrl) }, model.Scheme, model.Host)
+                    subject = _teamMembersLocalizer.GetString("tm_subject").Value,
+                    lineOne = _teamMembersLocalizer.GetString("tm_lineOne").Value,
+                    buttonLabel = _teamMembersLocalizer.GetString("tm_buttonLabel").Value,
+                    signAccountLink = _linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = organisation.Language, Id = userAccount.ExpirationId, ReturnUrl = string.IsNullOrWhiteSpace(model.ReturnUrl) ? null : HttpUtility.UrlEncode(model.ReturnUrl) }, model.Scheme, model.Host)
                 }
             });
 
@@ -120,21 +120,21 @@ namespace Identity.Api.Services.TeamMembers
 
         public async Task DeleteAsync(DeleteTeamMemberServiceModel model)
         {
-            var user = await this.context.Accounts.FirstOrDefaultAsync(x => x.Id == model.Id.ToString() && x.OrganisationId == model.OrganisationId);
+            var user = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == model.Id.ToString() && x.OrganisationId == model.OrganisationId);
 
             if (user is null)
             {
-                throw new CustomException(this.teamMembersLocalizer.GetString("TeamMemberNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_teamMembersLocalizer.GetString("TeamMemberNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            this.context.Accounts.Remove(user);
+            _context.Accounts.Remove(user);
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<PagedResults<IEnumerable<TeamMemberServiceModel>>> GetAsync(GetTeamMembersServiceModel model)
         {
-            var teamMembers = from u in this.context.Accounts
+            var teamMembers = from u in _context.Accounts
                               where u.OrganisationId == model.OrganisationId
                               select new TeamMemberServiceModel
                               {
@@ -164,11 +164,11 @@ namespace Identity.Api.Services.TeamMembers
 
         public async Task<TeamMemberServiceModel> GetAsync(GetTeamMemberServiceModel model)
         {
-            var existingTeamMember = await this.context.Accounts.FirstOrDefaultAsync(x => x.Id == model.Id.ToString() && x.OrganisationId == model.OrganisationId);
+            var existingTeamMember = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == model.Id.ToString() && x.OrganisationId == model.OrganisationId);
 
             if (existingTeamMember is null)
             {
-                throw new CustomException(this.teamMembersLocalizer.GetString("TeamMemberNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_teamMembersLocalizer.GetString("TeamMemberNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var teamMember = new TeamMemberServiceModel
@@ -185,22 +185,25 @@ namespace Identity.Api.Services.TeamMembers
 
         public async Task<Guid> UpdateAsync(UpdateTeamMemberServiceModel model)
         {
-            var user = await this.context.Accounts.FirstOrDefaultAsync(x => x.Id == model.Id.ToString());
+            var user = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == model.Id.ToString());
 
             if (user is null)
             {
-                throw new CustomException(this.teamMembersLocalizer.GetString("TeamMemberNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_teamMembersLocalizer.GetString("TeamMemberNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            var t = await this.context.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
+            var existingUserWithEmail = await _context.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
 
-            t.IsActive = model.IsActive;
+            if (existingUserWithEmail is not null)
+            {
+                existingUserWithEmail.IsActive = model.IsActive;
+            }
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
             user.IsActive = model.IsActive;
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return Guid.Parse(user.Id);
         }
