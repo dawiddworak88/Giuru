@@ -297,6 +297,7 @@ namespace Client.Api.v1.Controllers
                     PreferedCurrencyId = request.PreferedCurrencyId,
                     CommunicationLanguage = request.CommunicationLanguage,
                     PhoneNumber = request.PhoneNumber,
+                    IsActive = request.IsActive,
                     ClientOrganisationId = request.OrganisationId,
                     ClientGroupIds = request.ClientGroupIds,
                     ClientManagerIds = request.ClientManagerIds,

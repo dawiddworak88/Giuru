@@ -181,6 +181,7 @@ namespace Client.Api.Services.Clients
             client.DefaultDeliveryAddressId = serviceModel.DefaultDeliveryAddressId;
             client.DefaultBillingAddressId = serviceModel.DefaultBillingAddressId;
             client.LastModifiedDate = DateTime.UtcNow;
+            client.IsActive = serviceModel.IsActive;
 
             var clientGroups = _context.ClientsGroups.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
 
@@ -241,6 +242,7 @@ namespace Client.Api.Services.Clients
                 Language = serviceModel.CommunicationLanguage,
                 OrganisationId = serviceModel.ClientOrganisationId.Value,
                 PhoneNumber = serviceModel.PhoneNumber,
+                IsActive = true,
                 SellerId = serviceModel.OrganisationId.Value,
                 DefaultDeliveryAddressId = serviceModel.DefaultDeliveryAddressId,
                 DefaultBillingAddressId = serviceModel.DefaultBillingAddressId
