@@ -9,7 +9,7 @@ import {
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, TablePagination, CircularProgress, Fab,
-    Tooltip, NoSsr
+    Tooltip, NoSsr, Chip
 } from "@mui/material";
 import KeyConstants from "../../../shared/constants/KeyConstants";
 import CatalogConstants from "../../constants/CatalogConstants";
@@ -141,7 +141,6 @@ function Catalog(props) {
     };
 
     const handleDeleteEntity = () => {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const deleteParameters = {
@@ -162,9 +161,7 @@ function Catalog(props) {
                 AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
-
                     if (response.ok) {
-
                         toast.success(jsonResponse.message);
                         setItems(() => items.filter(item => item.id !== entityToDelete.id));
                         setTotal(() => total - 1);
@@ -365,6 +362,13 @@ function Catalog(props) {
                             <NoSsr key={index}>
                                 <TableCell>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
                             </NoSsr>
+                        )
+                    }
+                    else if (property.isActivityTag) {
+                        const isActive = item[property.title] === true ? true : false;
+
+                        return (
+                            <TableCell><Chip label={isActive ? "Aktywny" : "Nieaktywny"} color={isActive ? "success" : "default"}/></TableCell>
                         )
                     }
                     else {
