@@ -32,7 +32,7 @@
     "whatwg-fetch": "3.6.20"
   },
   "scripts": {
-    "storybook": "SET NODE_ENV=development&&start-storybook -p 9009 -s public",
+    "storybook": "storybook dev -p 9009 -s public",
     "build-storybook": "SET NODE_ENV=development&&build-storybook -s public",
     "build-fe": "SET NODE_ENV=production&&webpack --mode production",
     "build-fe-dev": "SET NODE_ENV=development&&webpack --mode development",
@@ -57,13 +57,16 @@
     ]
   },
   "devDependencies": {
-    "@storybook/addon-actions": "7.6.10",
+    "@storybook/addon-essentials": "7.6.10",
+    "@storybook/addon-interactions": "7.6.10",
     "@storybook/addon-links": "7.6.10",
-    "@storybook/addons": "7.6.10",
-    "@storybook/builder-webpack5": "7.6.10",
-    "@storybook/manager-webpack5": "6.5.16",
+    "@storybook/addon-onboarding": "1.0.11",
+    "@storybook/blocks": "7.6.10",
     "@storybook/preset-create-react-app": "7.6.10",
     "@storybook/react": "7.6.10",
+    "@storybook/react-webpack5": "7.6.10",
+    "@storybook/test": "7.6.10",
+    "storybook": "7.6.10",
     "autoprefixer": "10.4.17",
     "babel-preset-react-app": "10.0.1",
     "clean-webpack-plugin": "4.0.0",
