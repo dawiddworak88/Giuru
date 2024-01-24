@@ -1,11 +1,19 @@
+/** @type { import('@storybook/react-webpack5').StorybookConfig } */
 module.exports = {
   stories: ["../src/**/*.stories.js"],
   addons: [
-    "@storybook/preset-create-react-app",
-    "@storybook/addon-actions",
     "@storybook/addon-links",
+    "@storybook/addon-essentials",
+    "@storybook/preset-create-react-app",
+    "@storybook/addon-onboarding",
+    "@storybook/addon-interactions",
   ],
-  core: {
-    builder: "webpack5",
+  framework: {
+    name: "@storybook/react-webpack5",
+    options: {
+      builder: {
+        useSWC: true,
+      },
+    },
   }
 };
