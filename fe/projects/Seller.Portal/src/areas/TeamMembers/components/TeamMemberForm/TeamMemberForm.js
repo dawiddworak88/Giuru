@@ -139,9 +139,9 @@ const TeamMemberForm = (props) => {
                                     control={
                                         <Switch
                                             onChange={e => {
-                                                setFieldValue({ name: "isDisabled", value: e.target.checked });
+                                                setFieldValue({ name: "isDisabled", value: !isDisabled });
                                             }}
-                                            checked={isDisabled}
+                                            checked={isDisabled ? false : true}
                                             id="isDisabled"
                                             name="isDisabled"
                                             color="secondary" 
