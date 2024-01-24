@@ -25,7 +25,7 @@ function ClientForm(props) {
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
         hasAccount: { value: props.hasAccount ? props.hasAccount : false },
-        isActive: { value: props.isActive ? props.isActive : false },
+        isDisabled: { value: props.isDisabled ? props.isDisabled : false },
         deliveryAddress: { value: props.defaultDeliveryAddressId ? props.clientAddresses.find((item) => item.id === props.defaultDeliveryAddressId) : null },
         billingAddress: { value: props.defaultBillingAddressId ? props.clientAddresses.find((item) => item.id === props.defaultBillingAddressId) : null }
     };
@@ -148,7 +148,7 @@ function ClientForm(props) {
     const { 
         id, name, email, country, preferedCurrency, clientGroupIds, 
         communicationLanguage, phoneNumber, clientManagerIds,
-        deliveryAddress, billingAddress, isActive
+        deliveryAddress, billingAddress, isDisabled
     } = values;
 
     return (
@@ -351,15 +351,15 @@ function ClientForm(props) {
                                     control={
                                         <Switch
                                             onChange={e => {
-                                                setFieldValue({ name: "isActive", value: e.target.checked });
+                                                setFieldValue({ name: "isDisabled", value: e.target.checked });
                                             }}
-                                            checked={isActive}
-                                            id="isActive"
-                                            name="isActive"
+                                            checked={isDisabled}
+                                            id="isDisabled"
+                                            name="isDisabled"
                                             color="secondary" 
                                         />
                                     }
-                                    label={isActive ? props.activeLabel : props.inActiveLabel} />
+                                    label={isDisabled ? props.inActiveLabel : props.activeLabel} />
                             </NoSsr>
                         </div>
                         <div className="field client-form__field-row">

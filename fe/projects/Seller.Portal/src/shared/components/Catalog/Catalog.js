@@ -365,10 +365,10 @@ function Catalog(props) {
                         )
                     }
                     else if (property.isActivityTag) {
-                        const isActive = item[property.title] === true ? true : false;
+                        const isDisabled = item[property.title] === true ? true : false;
 
                         return (
-                            <TableCell><Chip label={isActive ? props.activeLabel : props.inActiveLabel} color={isActive ? "success" : "default"}/></TableCell>
+                            <TableCell><Chip label={isDisabled ? props.inActiveLabel : props.activeLabel} color={isDisabled ? "default" : "success"}/></TableCell>
                         )
                     }
                     else {

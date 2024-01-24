@@ -18,7 +18,7 @@ const TeamMemberForm = (props) => {
         email: { value: props.email ? props.email : "", error: "" },
         firstName: { value: props.firstName ? props.firstName : "", error: "" },
         lastName: { value: props.lastName ? props.lastName : "", error: "" },
-        isActive: { value: props.isActive ? props.isActive : false }
+        isDisabled: { value: props.isDisabled ? props.isDisabled : false }
     }
 
     const stateValidatorSchema = {
@@ -78,7 +78,7 @@ const TeamMemberForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
     
-    const { id, email, firstName, lastName, isActive } = values;
+    const { id, email, firstName, lastName, isDisabled } = values;
     
     return (
         <section className="section section-small-padding">
@@ -139,15 +139,15 @@ const TeamMemberForm = (props) => {
                                     control={
                                         <Switch
                                             onChange={e => {
-                                                setFieldValue({ name: "isActive", value: e.target.checked });
+                                                setFieldValue({ name: "isDisabled", value: e.target.checked });
                                             }}
-                                            checked={isActive}
-                                            id="isActive"
-                                            name="isActive"
+                                            checked={isDisabled}
+                                            id="isDisabled"
+                                            name="isDisabled"
                                             color="secondary" 
                                         />
                                     }
-                                    label={isActive ? props.activeLabel : props.inActiveLabel} />
+                                    label={isDisabled ? props.inActiveLabel : props.activeLabel} />
                             </NoSsr>
                         </div>
                         <div className="field">
