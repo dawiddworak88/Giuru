@@ -198,7 +198,7 @@ namespace Client.Api.v1.Controllers
             {
                 var client = await _clientsService.GetAsync(serviceModel);
 
-                if (client != null)
+                if (client is not null)
                 {
                     var response = new ClientResponseModel
                     {
