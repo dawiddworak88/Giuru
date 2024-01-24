@@ -3,6 +3,7 @@ using Client.Api.Infrastructure.Clients.Entities;
 using Client.Api.Infrastructure.Groups.Entities;
 using Client.Api.Infrastructure.Roles.Entities;
 using Microsoft.EntityFrameworkCore;
+using Client.Api.Infrastructure.Notifications.Entities;
 
 namespace Client.Api.Infrastructure
 {
@@ -26,6 +27,10 @@ namespace Client.Api.Infrastructure
         public DbSet<ClientRole> ClientRoles { get; set; }
         public DbSet<ClientAccountManager> ClientAccountManagers { get; set; }
         public DbSet<ClientsAccountManagers> ClientsAccountManagers { get; set; }
-        public DbSet<ClientMarketingApproval> ClientMarketingApprovals { get; set;}
+        public DbSet<ClientNotificationType> ClientNotificationTypes { get; set; }
+        public DbSet<ClientNotificationTypeTranslations> ClientNotificationTypeTranslations { get; set; }
+        public DbSet<ClientNotificationTypeApproval> ClientNotificationTypeApprovals { get; set; }
+        public DbSet<ClientNotification> ClientNotifications { get; set; }
+        public DbSet<ClientNotificationTranslation> ClientNotificationsTranslations { get; set; }
     }
 }
