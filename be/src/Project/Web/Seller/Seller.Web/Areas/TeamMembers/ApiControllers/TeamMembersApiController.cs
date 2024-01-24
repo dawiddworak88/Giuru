@@ -51,7 +51,7 @@ namespace Seller.Web.Areas.TeamMembers.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var teamMemberId = await _teamMembersRepository.SaveAsync(token, language, model.Id, model.FirstName, model.LastName, model.Email, model.IsActive, _options.Value.SellerUrl);
+            var teamMemberId = await _teamMembersRepository.SaveAsync(token, language, model.Id, model.FirstName, model.LastName, model.Email, model.IsDisabled, _options.Value.SellerUrl);
 
             return StatusCode((int)HttpStatusCode.OK, new { Id = teamMemberId, Message = _teamMembersLocalizer.GetString("SuccessfullySavedTeamMember").Value });
 

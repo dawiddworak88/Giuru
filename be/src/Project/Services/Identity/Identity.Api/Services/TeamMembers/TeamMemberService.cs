@@ -90,7 +90,7 @@ namespace Identity.Api.Services.TeamMembers
                 PhoneNumberConfirmed = false,
                 TwoFactorEnabled = false,
                 LockoutEnabled = false,
-                IsActive = true
+                IsDisabled = false
             };
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo(organisation.Language);
@@ -142,7 +142,7 @@ namespace Identity.Api.Services.TeamMembers
                                   FirstName = u.FirstName,
                                   LastName = u.LastName,
                                   Email = u.Email,
-                                  IsActive = u.IsActive
+                                  IsDisabled = u.IsDisabled
                               };
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
@@ -177,7 +177,7 @@ namespace Identity.Api.Services.TeamMembers
                 FirstName = existingTeamMember.FirstName,
                 LastName = existingTeamMember.LastName,
                 Email = existingTeamMember.Email,
-                IsActive = existingTeamMember.IsActive,
+                IsDisabled = existingTeamMember.IsDisabled,
             };
 
             return teamMember;
@@ -196,12 +196,12 @@ namespace Identity.Api.Services.TeamMembers
 
             if (existingUserWithEmail is not null)
             {
-                existingUserWithEmail.IsActive = model.IsActive;
+                existingUserWithEmail.IsDisabled = model.IsDisabled;
             }
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
-            user.IsActive = model.IsActive;
+            user.IsDisabled = model.IsDisabled;
 
             await _context.SaveChangesAsync();
 

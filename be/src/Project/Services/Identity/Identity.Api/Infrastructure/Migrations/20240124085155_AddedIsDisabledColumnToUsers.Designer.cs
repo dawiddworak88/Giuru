@@ -13,8 +13,8 @@ using NetTopologySuite.Geometries;
 namespace Identity.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20240122103636_AddedIsActiveColumnToUsers")]
-    partial class AddedIsActiveColumnToUsers
+    [Migration("20240124085155_AddedIsDisabledColumnToUsers")]
+    partial class AddedIsDisabledColumnToUsers
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,7 +50,7 @@ namespace Identity.Api.Infrastructure.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("IsDisabled")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")

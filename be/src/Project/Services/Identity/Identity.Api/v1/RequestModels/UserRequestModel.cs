@@ -11,7 +11,7 @@ namespace Identity.Api.v1.RequestModels
         public string? LastName { get; set; }
         public string? CommunicationLanguage { get; set; }
         public bool TwoFactorEnabled { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsDisabled { get; set; }
         public bool? PhoneNumberConfirmed { get; set; }
         public bool? EmailConfirmed { get; set; }
         public bool? LockoutEnabled { get; set; }

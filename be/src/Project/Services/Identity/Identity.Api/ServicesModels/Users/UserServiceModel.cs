@@ -15,5 +15,6 @@ namespace Identity.Api.ServicesModels.Users
         public bool EmailConfirmed { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
         public int AccessFailedCount { get; set; }
+        public bool IsDisabled { get; set; }
     }
 }

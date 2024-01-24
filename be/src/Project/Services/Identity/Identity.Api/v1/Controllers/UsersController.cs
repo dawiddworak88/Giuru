@@ -126,7 +126,7 @@ namespace Identity.Api.v1.Controllers
                     TwoFactorEnabled = request.TwoFactorEnabled,
                     AccessFailedCount = request.AccessFailedCount,
                     LockoutEnd = request.LockoutEnd,
-                    IsActive = request.IsActive
+                    IsDisabled = request.IsDisabled
                 };
 
                 var validator = new UpdateUserModelValidator();

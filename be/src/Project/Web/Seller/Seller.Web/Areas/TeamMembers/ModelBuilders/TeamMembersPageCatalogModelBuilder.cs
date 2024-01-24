@@ -94,7 +94,7 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(TeamMember.IsActive).ToCamelCase(),
+                        Title = nameof(TeamMember.IsDisabled).ToCamelCase(),
                         IsActivityTag = true
                     }
                 }

@@ -51,7 +51,7 @@ namespace Identity.Api.Areas.Accounts.Services.UserServices
                     throw new CustomException(_accountLocalizer.GetString("ConfirmEmail"), (int)HttpStatusCode.BadRequest);
                 }
 
-                if (user.IsActive is false)
+                if (user.IsDisabled is true)
                 {
                     throw new CustomException(_accountLocalizer.GetString("AccountIsInactive"), (int)HttpStatusCode.BadRequest);
                 }

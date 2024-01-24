@@ -113,7 +113,7 @@ namespace Identity.Api.Services.Users
                 PhoneNumberConfirmed = false,
                 TwoFactorEnabled = false,
                 LockoutEnabled = false,
-                IsActive = true
+                IsDisabled = false
             };
 
             _identityContext.Accounts.Add(userAccount);
@@ -226,7 +226,7 @@ namespace Identity.Api.Services.Users
             existingUser.TwoFactorEnabled = serviceModel.TwoFactorEnabled;
             existingUser.PhoneNumber = serviceModel.PhoneNumber;
             existingUser.LockoutEnd = serviceModel.LockoutEnd;
-            existingUser.IsActive = serviceModel.IsActive;
+            existingUser.IsDisabled = serviceModel.IsDisabled;
 
             var organisation = await _identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == existingUser.OrganisationId && x.IsActive);
 
@@ -305,7 +305,8 @@ namespace Identity.Api.Services.Users
                     TwoFactorEnabled = user.TwoFactorEnabled,
                     EmailConfirmed = user.EmailConfirmed,
                     PhoneNumberConfirmed = user.PhoneNumberConfirmed,
-                    PhoneNumber = user.PhoneNumber
+                    PhoneNumber = user.PhoneNumber,
+                    IsDisabled = user.IsDisabled
                 };
             }
 

@@ -103,7 +103,7 @@ namespace Seller.Web.Shared.Repositories.Identity
             return default;
         }
 
-        public async Task<Guid> UpdateAsync(string token, string language, Guid? id, string email, string name, string communicationLanguage, bool isActive)
+        public async Task<Guid> UpdateAsync(string token, string language, Guid? id, string email, string name, string communicationLanguage, bool isDisabled)
         {
             var requestModel = new UpdateClientRequestModel
             {
@@ -111,7 +111,7 @@ namespace Seller.Web.Shared.Repositories.Identity
                 Email = email,
                 Name = name,
                 CommunicationLanguage = communicationLanguage,
-                IsActive = isActive
+                IsDisabled = isDisabled
             };
 
             var apiRequest = new ApiRequest<UpdateClientRequestModel>

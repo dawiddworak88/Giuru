@@ -59,7 +59,7 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
                     viewModel.FirstName = teamMember.FirstName;
                     viewModel.LastName = teamMember.LastName;
                     viewModel.Email = teamMember.Email;
-                    viewModel.IsActive = teamMember.IsActive;
+                    viewModel.IsDisabled = teamMember.IsDisabled;
                 }
             }
 

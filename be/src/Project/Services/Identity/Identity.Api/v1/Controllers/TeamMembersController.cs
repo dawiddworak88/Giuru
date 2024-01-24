@@ -109,7 +109,7 @@ namespace Identity.Api.v1.Controllers
                         FirstName = teamMember.FirstName,
                         LastName = teamMember.LastName,
                         Email = teamMember.Email,
-                        IsActive = teamMember.IsActive
+                        IsActive = teamMember.IsDisabled
                     };
 
                     return StatusCode((int)HttpStatusCode.OK, response);
@@ -157,7 +157,7 @@ namespace Identity.Api.v1.Controllers
                         FirstName = x.FirstName,
                         LastName = x.LastName,
                         Email = x.Email,
-                        IsActive = x.IsActive
+                        IsActive = x.IsDisabled
                     })
                 };
 

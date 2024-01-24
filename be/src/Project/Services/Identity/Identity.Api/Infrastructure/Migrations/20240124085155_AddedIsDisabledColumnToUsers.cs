@@ -4,12 +4,12 @@
 
 namespace Identity.Api.Infrastructure.Migrations
 {
-    public partial class AddedIsActiveColumnToUsers : Migration
+    public partial class AddedIsDisabledColumnToUsers : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
-                name: "IsActive",
+                name: "IsDisabled",
                 table: "AspNetUsers",
                 type: "bit",
                 nullable: false,
@@ -19,7 +19,7 @@ namespace Identity.Api.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "IsActive",
+                name: "IsDisabled",
                 table: "AspNetUsers");
         }
     }
