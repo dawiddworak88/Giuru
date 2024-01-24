@@ -33,6 +33,7 @@ namespace Identity.Api.Areas.Accounts.Services.UserServices
             _signInManager = signInManager;
             _organisationService = organisationService;
             _options = options;
+            _accountLocalizer = accountLocalizer;
         }
 
         public string GeneratePasswordHash(ApplicationUser user, string password)
