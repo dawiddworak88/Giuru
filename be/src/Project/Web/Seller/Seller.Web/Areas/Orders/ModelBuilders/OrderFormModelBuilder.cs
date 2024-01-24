@@ -80,7 +80,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 
             if (clients is not null)
             {
-                viewModel.Clients = clients.Where(x => x.IsActive).Select(x => new ClientListItemViewModel { Id = x.Id , Name = x.Name, DefaultDeliveryAddressId = x.DefaultDeliveryAddressId, DefaultBillingAddressId = x.DefaultBillingAddressId });
+                viewModel.Clients = clients.Where(x => !x.IsDisabled).Select(x => new ClientListItemViewModel { Id = x.Id , Name = x.Name, DefaultDeliveryAddressId = x.DefaultDeliveryAddressId, DefaultBillingAddressId = x.DefaultBillingAddressId });
             }
 
             return viewModel;

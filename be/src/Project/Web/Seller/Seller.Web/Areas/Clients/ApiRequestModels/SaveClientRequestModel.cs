@@ -14,7 +14,7 @@ namespace Seller.Web.Areas.Clients.ApiRequestModels
         public string PhoneNumber { get; set; }
         public Guid OrganisationId { get; set; }
         public bool HasAccount { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsDisabled { get; set; }
         public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> ClientManagerIds { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }

@@ -70,7 +70,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             if (clients is not null)
             {
-                viewModel.Clients = clients.Where(x => x.IsActive).Select(x => new ListItemViewModel
+                viewModel.Clients = clients.Where(x => !x.IsDisabled).Select(x => new ListItemViewModel
                 {
                     Id = x.Id,
                     Name = x.Name,

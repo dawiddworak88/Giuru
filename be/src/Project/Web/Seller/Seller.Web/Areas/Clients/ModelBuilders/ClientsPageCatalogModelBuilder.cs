@@ -90,7 +90,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(Client.IsActive).ToCamelCase(),
+                        Title = nameof(Client.IsDisabled).ToCamelCase(),
                         IsActivityTag = true
                     },
                     new CatalogPropertyViewModel

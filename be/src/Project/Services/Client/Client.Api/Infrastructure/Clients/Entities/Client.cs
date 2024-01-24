@@ -27,6 +27,8 @@ namespace Client.Api.Infrastructure.Clients.Entities
         [Required]
         public bool IsOrganisationInformationOutdated { get; set; }
 
+        public bool IsDisabled { get; set; }
+
         [Required]
         public Guid SellerId { get; set; }
 

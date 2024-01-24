@@ -10,7 +10,7 @@ namespace Seller.Web.Shared.Repositories.Clients
     {
         Task<Client> GetClientAsync(string token, string language, Guid? id);
         Task DeleteAsync(string token, string language, Guid? id);
-        Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string email, string communicationLanguage, Guid? countryId, Guid? preferedCurrencyId, string phoneNumber, bool isActive, Guid organisationId, IEnumerable<Guid> clientGroupIds, IEnumerable<Guid> clientManagerIds, Guid? defaultDeliveryAddressId, Guid? defaultBillingAddressId);
+        Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string email, string communicationLanguage, Guid? countryId, Guid? preferedCurrencyId, string phoneNumber, bool isDisabled, Guid organisationId, IEnumerable<Guid> clientGroupIds, IEnumerable<Guid> clientManagerIds, Guid? defaultDeliveryAddressId, Guid? defaultBillingAddressId);
         Task<PagedResults<IEnumerable<Client>>> GetClientsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
         Task<IEnumerable<Client>> GetAllClientsAsync(string token, string language);
         Task<IEnumerable<Client>> GetClientsAsync(string token, string language, IEnumerable<Guid> clientIds);

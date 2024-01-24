@@ -125,7 +125,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.ClientGroupsIds = client.ClientGroupIds;
                     viewModel.ClientManagersIds = client.ClientManagerIds;
                     viewModel.CountryId = client.CountryId;
-                    viewModel.IsActive = client.IsActive;
+                    viewModel.IsDisabled = client.IsDisabled;
                     viewModel.PreferedCurrencyId = client.PreferedCurrencyId;
                     viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
                     viewModel.DefaultBillingAddressId = client.DefaultBillingAddressId;
