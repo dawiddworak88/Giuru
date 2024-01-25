@@ -327,4 +327,19 @@
   <data name="ExpressedOnLabel" xml:space="preserve">
     <value>Consent has been given</value>
   </data>
+  <data name="NavigateToNotificationTypeText" xml:space="preserve">
+    <value>Back to clients approvals</value>
+  </data>
+  <data name="NewNotificationType" xml:space="preserve">
+    <value>Add approval</value>
+  </data>
+  <data name="NoNotificationTypes" xml:space="preserve">
+    <value>No clients approvals</value>
+  </data>
+  <data name="NotificationTypeNotFound" xml:space="preserve">
+    <value>Approval has not been found</value>
+  </data>
+  <data name="NotificationTypes" xml:space="preserve">
+    <value>Clients approvals</value>
+  </data>
 </root>
