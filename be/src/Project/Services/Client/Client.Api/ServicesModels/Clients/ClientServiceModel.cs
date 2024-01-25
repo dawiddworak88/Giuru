@@ -18,6 +18,5 @@ namespace Client.Api.ServicesModels.Clients
         public Guid? DefaultBillingAddressId { get; set; }
         public DateTime? LastModifiedDate { get; set; }
         public DateTime? CreatedDate { get; set; }
-        public IEnumerable<ClientMarketingApprovalServiceModel> MarketingApprovals { get; set; }
     }
 }
