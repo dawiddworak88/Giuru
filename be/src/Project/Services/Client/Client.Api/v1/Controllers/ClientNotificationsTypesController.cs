@@ -58,7 +58,7 @@ namespace Client.Api.v1.Controllers
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
             };
 
-            var clientNotificationTypes = await _clientNotificationTypesService.GetAsync(serviceModel);
+            var clientNotificationTypes = _clientNotificationTypesService.Get(serviceModel);
 
             if (clientNotificationTypes is not null)
             {
@@ -87,6 +87,7 @@ namespace Client.Api.v1.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
@@ -111,6 +112,8 @@ namespace Client.Api.v1.Controllers
                         CreatedDate = clientNotificationType.CreatedDate,
                         LasModifiedDate= clientNotificationType.LastModifiedDate
                     };
+
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
             }
 
@@ -125,7 +128,6 @@ namespace Client.Api.v1.Controllers
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(ClientNotificationTypeRequestModel request)
         {
@@ -155,11 +157,18 @@ namespace Client.Api.v1.Controllers
             {
                 var serviceModel = new CreateClientNotificationTypeServiceModel
                 {
-
+                    Name = request.Name
                 };
 
                 var validator = new CreateClientNotificationTypeModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var clientNotificationType = await _clientNotificationTypesService.CreateAsync(serviceModel);
+
+                    return StatusCode((int)HttpStatusCode.OK, new { Id = clientNotificationType.Id });
+                }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
@@ -174,11 +183,27 @@ namespace Client.Api.v1.Controllers
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult Delete(Guid? id)
+        public async  Task<IActionResult> Delete(Guid? id)
         {
-            return Ok();
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new DeleteClientNotificationTypeServiceModel
+            {
+                Id = id
+            };
+
+            var validator = new DeleteClientNotaficationTypeModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                await _clientNotificationTypesService.DeleteAsync(serviceModel);
+
+                return StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }
