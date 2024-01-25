@@ -92,15 +92,7 @@ namespace Client.Api.v1.Controllers
                                 DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
                                 DefaultBillingAddressId = x.DefaultBillingAddressId,
                                 LastModifiedDate = x.LastModifiedDate,
-                                CreatedDate = x.CreatedDate,
-                                MarketingApprovals = x.MarketingApprovals.OrEmptyIfNull().Select(x => new ClientMarketingApprovalResponseModel { 
-                                    Id = x.Id,
-                                    Name = x.Name,
-                                    IsApproved = x.IsApproved,
-                                    ClientId = x.ClientId,
-                                    CreatedDate = x.CreatedDate,
-                                    LastModifiedDate = x.LastModifiedDate
-                                })
+                                CreatedDate = x.CreatedDate
                             })
                         };
 
@@ -148,16 +140,7 @@ namespace Client.Api.v1.Controllers
                                 DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
                                 DefaultBillingAddressId = x.DefaultBillingAddressId,
                                 LastModifiedDate = x.LastModifiedDate,
-                                CreatedDate = x.CreatedDate,
-                                MarketingApprovals = x.MarketingApprovals.OrEmptyIfNull().Select(x => new ClientMarketingApprovalResponseModel
-                                {
-                                    Id = x.Id,
-                                    Name = x.Name,
-                                    IsApproved = x.IsApproved,
-                                    ClientId = x.ClientId,
-                                    CreatedDate = x.CreatedDate,
-                                    LastModifiedDate = x.LastModifiedDate
-                                })
+                                CreatedDate = x.CreatedDate
                             })
                         };
 
@@ -214,15 +197,7 @@ namespace Client.Api.v1.Controllers
                         DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
                         DefaultBillingAddressId = client.DefaultBillingAddressId,
                         LastModifiedDate = client.LastModifiedDate,
-                        CreatedDate = client.CreatedDate,
-                        MarketingApprovals = client.MarketingApprovals.OrEmptyIfNull().Select(x => new ClientMarketingApprovalResponseModel {
-                            Id = x.Id,
-                            Name = x.Name,
-                            IsApproved = x.IsApproved,
-                            ClientId = x.ClientId,
-                            LastModifiedDate = x.LastModifiedDate,
-                            CreatedDate = x.CreatedDate
-                        })
+                        CreatedDate = client.CreatedDate
                     };
 
                     return StatusCode((int)HttpStatusCode.OK, response);
@@ -324,8 +299,7 @@ namespace Client.Api.v1.Controllers
                     DefaultBillingAddressId = request.DefaultBillingAddressId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    MarketingApprovals = request.MarketingApprovals
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
                 var validator = new UpdateClientModelValidator();
@@ -357,8 +331,7 @@ namespace Client.Api.v1.Controllers
                     DefaultBillingAddressId = request.DefaultBillingAddressId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    MarketingApprovals = request.MarketingApprovals
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
                 var validator = new CreateClientModelValidator();
