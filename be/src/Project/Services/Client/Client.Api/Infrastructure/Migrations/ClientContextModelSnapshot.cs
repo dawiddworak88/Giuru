@@ -110,6 +110,9 @@ namespace Client.Api.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsDisabled")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsOrganisationInformationOutdated")
                         .HasColumnType("bit");
 

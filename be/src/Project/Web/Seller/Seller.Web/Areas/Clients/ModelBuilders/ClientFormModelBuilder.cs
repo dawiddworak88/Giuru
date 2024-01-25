@@ -106,7 +106,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 CountryLabel = _globalLocalizer.GetString("Country"),
                 PreferedCurrencyLabel = _clientLocalizer.GetString("PreferedCurrencyLabel"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
-                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress")
+                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
+                ActiveLabel = _globalLocalizer.GetString("Active"),
+                InActiveLabel = _globalLocalizer.GetString("InActive")
             };
 
             if (componentModel.Id.HasValue)
@@ -123,6 +125,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.ClientGroupsIds = client.ClientGroupIds;
                     viewModel.ClientManagersIds = client.ClientManagerIds;
                     viewModel.CountryId = client.CountryId;
+                    viewModel.IsDisabled = client.IsDisabled;
                     viewModel.PreferedCurrencyId = client.PreferedCurrencyId;
                     viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
                     viewModel.DefaultBillingAddressId = client.DefaultBillingAddressId;
@@ -168,7 +171,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             var currencies = await _currenciesRepository.GetAsync(componentModel.Token, componentModel.Language, $"{nameof(Country.Name)} asc");
 
-            if (currencies is not null)
+            if (currencies is not null) 
             {
                 viewModel.Currencies = currencies.Select(x => new ListItemViewModel { Id = x.Id, Name = x.CurrencyCode });
             }

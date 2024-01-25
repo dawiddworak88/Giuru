@@ -22,27 +22,24 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
     [Area("Accounts")]
     public class IdentityApiController : BaseApiController
     {
-        private readonly IUserService userService;
-        private readonly IUsersService usersService;
-        private readonly IOptions<AppSettings> options;
-        private readonly IStringLocalizer<AccountResources> accountLocalizer;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly LinkGenerator linkGenerator;
+        private readonly IUserService _userService;
+        private readonly IUsersService _usersService;
+        private readonly IOptions<AppSettings> _options;
+        private readonly IStringLocalizer<AccountResources> _accountLocalizer;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
 
         public IdentityApiController(
             IUserService userService,
             IOptions<AppSettings> options,
             IStringLocalizer<AccountResources> accountLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
-            LinkGenerator linkGenerator,
             IUsersService usersService)
         {
-            this.userService = userService;
-            this.usersService = usersService;
-            this.options = options;
-            this.accountLocalizer = accountLocalizer;
-            this.globalLocalizer = globalLocalizer;
-            this.linkGenerator = linkGenerator;
+            _userService = userService;
+            _usersService = usersService;
+            _options = options;
+            _accountLocalizer = accountLocalizer;
+            _globalLocalizer = globalLocalizer;
         }
 
         [HttpGet]
@@ -50,13 +47,13 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         {
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var user = await this.usersService.GetById(new GetUserServiceModel
+            var user = await _usersService.GetById(new GetUserServiceModel
             { 
                 Language = language,
                 Id = id
             });
 
-            return this.StatusCode((int)HttpStatusCode.OK, user);
+            return StatusCode((int)HttpStatusCode.OK, user);
         }
 
         [HttpPost]
@@ -68,51 +65,52 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             {
                 var serviceModel = new ResetUserPasswordServiceModel {
                     Email = model.Email,
-                    ReturnUrl = this.options.Value.BuyerUrl,
-                    Scheme = this.HttpContext.Request.Scheme,
-                    Host = this.HttpContext.Request.Host
+                    ReturnUrl = _options.Value.BuyerUrl,
+                    Scheme = HttpContext.Request.Scheme,
+                    Host = HttpContext.Request.Host
                 };
 
-                await this.usersService.ResetPasswordAsync(serviceModel);
+                await _usersService.ResetPasswordAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.accountLocalizer.GetString("SuccessfullyResetPassword").Value });
+                return StatusCode((int)HttpStatusCode.OK, new { Message = _accountLocalizer.GetString("SuccessfullyResetPassword").Value });
             }
 
-            return this.StatusCode((int)HttpStatusCode.BadRequest);
+            return StatusCode((int)HttpStatusCode.BadRequest);
         }
 
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] SetUserPasswordRequestModel model)
         {
-            var validator = new SetPasswordModelValidator();
-            var result = await validator.ValidateAsync(model);
-
-            if (result.IsValid)
+            var serviceModel = new SetUserPasswordServiceModel
             {
-                var language = CultureInfo.CurrentUICulture.Name;
-                var serviceModel = new SetUserPasswordServiceModel
-                {
-                    ExpirationId = model.Id.Value,
-                    Password = model.Password,
-                    Language = language
-                };
+                ExpirationId = model.Id.Value,
+                Password = model.Password,
+                Language = CultureInfo.CurrentUICulture.Name
+            };
 
-                var user = await this.usersService.SetPasswordAsync(serviceModel);
+            var validator = new SetPasswordModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
 
-                if (user is not null)
+            if (validationResult.IsValid)
+            {
+                try
                 {
-                    if (await this.userService.SignInAsync(user.Email, model.Password, null, null))
+                    var user = await _usersService.SetPasswordAsync(serviceModel);
+
+                    if (user is not null)
                     {
-                        return this.StatusCode((int)HttpStatusCode.Redirect, new { Url = model.ReturnUrl });
+                        await _userService.SignInAsync(user.Email, model.Password, model.ReturnUrl, null);
+
+                        return StatusCode((int)HttpStatusCode.Redirect, new { Url = _options.Value.BuyerUrl });
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return this.StatusCode((int)HttpStatusCode.BadRequest, new { EmailIsConfirmedLabel = this.accountLocalizer.GetString("EmailIsConfirmed").Value, SignInLabel = this.globalLocalizer.GetString("TrySignIn").Value, SignInUrl = this.linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })});
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { Message = ex.Message, UrlLabel = _globalLocalizer.GetString("TrySignIn").Value, Url = _options.Value.BuyerUrl });
                 }
             }   
 
-            return this.StatusCode((int)HttpStatusCode.BadRequest);
+            return StatusCode((int)HttpStatusCode.BadRequest);
         }
     }
 }

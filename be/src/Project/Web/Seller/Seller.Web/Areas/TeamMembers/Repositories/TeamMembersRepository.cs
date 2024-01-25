@@ -17,15 +17,15 @@ namespace Seller.Web.Areas.TeamMembers.Repositories
 {
     public class TeamMembersRepository : ITeamMembersRepository
     {
-        private readonly IApiClientService apiClientService;
-        private readonly IOptions<AppSettings> settings;
+        private readonly IApiClientService _apiClientService;
+        private readonly IOptions<AppSettings> _options;
 
         public TeamMembersRepository(
             IApiClientService apiClientService,
-            IOptions<AppSettings> settings)
+            IOptions<AppSettings> options)
         {
-            this.apiClientService = apiClientService;
-            this.settings = settings;
+            _apiClientService = apiClientService;
+            _options = options;
         }
 
         public async Task<PagedResults<IEnumerable<TeamMember>>> GetAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
@@ -43,10 +43,10 @@ namespace Seller.Web.Areas.TeamMembers.Repositories
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.TeamMembersEndpoint}"
+                EndpointAddress = $"{_options.Value.IdentityUrl}{ApiConstants.Identity.TeamMembersEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<TeamMember>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<TeamMember>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
@@ -71,10 +71,10 @@ namespace Seller.Web.Areas.TeamMembers.Repositories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.TeamMembersEndpoint}/{id}"
+                EndpointAddress = $"{_options.Value.IdentityUrl}{ApiConstants.Identity.TeamMembersEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, TeamMember>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, TeamMember>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -89,7 +89,7 @@ namespace Seller.Web.Areas.TeamMembers.Repositories
             return default;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string firstName, string lastName, string email, string returnUrl)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string firstName, string lastName, string email, bool isDisabled, string returnUrl)
         {
             var requestModel = new TeamMemberApiRequestModel
             {
@@ -97,6 +97,7 @@ namespace Seller.Web.Areas.TeamMembers.Repositories
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email,
+                IsDisabled= isDisabled,
                 ReturnUrl = returnUrl
             };
 
@@ -105,10 +106,10 @@ namespace Seller.Web.Areas.TeamMembers.Repositories
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.TeamMembersEndpoint}"
+                EndpointAddress = $"{_options.Value.IdentityUrl}{ApiConstants.Identity.TeamMembersEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<TeamMemberApiRequestModel>, TeamMemberApiRequestModel, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<TeamMemberApiRequestModel>, TeamMemberApiRequestModel, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -130,10 +131,10 @@ namespace Seller.Web.Areas.TeamMembers.Repositories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.TeamMembersEndpoint}/{id}"
+                EndpointAddress = $"{_options.Value.IdentityUrl}{ApiConstants.Identity.TeamMembersEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode && response?.Data != null)
             {

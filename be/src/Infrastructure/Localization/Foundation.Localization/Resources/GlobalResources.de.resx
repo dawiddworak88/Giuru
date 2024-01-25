@@ -762,4 +762,10 @@
   <data name="Currency" xml:space="preserve">
     <value>Währung</value>
   </data>
+  <data name="Active" xml:space="preserve">
+    <value>Aktiv</value>
+  </data>
+  <data name="InActive" xml:space="preserve">
+    <value>Inaktiv</value>
+  </data>
 </root>

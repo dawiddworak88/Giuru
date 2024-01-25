@@ -31,7 +31,7 @@ namespace Client.Api.Services.Clients
             _clientLocalizer = clientLocalizer;
         }
 
-        public async Task<PagedResults<IEnumerable<ClientServiceModel>>> GetAsync(GetClientsServiceModel model)
+        public PagedResults<IEnumerable<ClientServiceModel>> Get(GetClientsServiceModel model)
         {
             var clients = _context.Clients.Where(x => x.IsActive);
 
@@ -70,6 +70,7 @@ namespace Client.Api.Services.Clients
                     PreferedCurrencyId = client.CurrencyId,
                     CommunicationLanguage = client.Language,
                     PhoneNumber = client.PhoneNumber,
+                    IsDisabled = client.IsDisabled,
                     DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
                     DefaultBillingAddressId = client.DefaultBillingAddressId,
                     LastModifiedDate = client.LastModifiedDate,
@@ -117,6 +118,7 @@ namespace Client.Api.Services.Clients
                 OrganisationId = existingClient.OrganisationId,
                 CommunicationLanguage = existingClient.Language,
                 PhoneNumber = existingClient.PhoneNumber,
+                IsDisabled = existingClient.IsDisabled,
                 DefaultDeliveryAddressId = existingClient.DefaultDeliveryAddressId,
                 DefaultBillingAddressId = existingClient.DefaultBillingAddressId,
                 LastModifiedDate = existingClient.LastModifiedDate,
@@ -155,6 +157,7 @@ namespace Client.Api.Services.Clients
             }
 
             client.IsActive = false;
+            client.IsDisabled = true;
             client.LastModifiedDate = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
@@ -164,7 +167,7 @@ namespace Client.Api.Services.Clients
         {
             var client = await _context.Clients.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
 
-            if (client == null)
+            if (client is null)
             {
                 throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
             }
@@ -179,6 +182,7 @@ namespace Client.Api.Services.Clients
             client.DefaultDeliveryAddressId = serviceModel.DefaultDeliveryAddressId;
             client.DefaultBillingAddressId = serviceModel.DefaultBillingAddressId;
             client.LastModifiedDate = DateTime.UtcNow;
+            client.IsDisabled = serviceModel.IsDisabled;
 
             var clientGroups = _context.ClientsGroups.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
 
@@ -239,6 +243,7 @@ namespace Client.Api.Services.Clients
                 Language = serviceModel.CommunicationLanguage,
                 OrganisationId = serviceModel.ClientOrganisationId.Value,
                 PhoneNumber = serviceModel.PhoneNumber,
+                IsDisabled = false,
                 SellerId = serviceModel.OrganisationId.Value,
                 DefaultDeliveryAddressId = serviceModel.DefaultDeliveryAddressId,
                 DefaultBillingAddressId = serviceModel.DefaultBillingAddressId
@@ -273,7 +278,7 @@ namespace Client.Api.Services.Clients
             return await GetAsync(new GetClientServiceModel { Id = client.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
-        public async Task<PagedResults<IEnumerable<ClientServiceModel>>> GetByIdsAsync(GetClientsByIdsServiceModel model)
+        public PagedResults<IEnumerable<ClientServiceModel>> GetByIds(GetClientsByIdsServiceModel model)
         {
             var clients = from c in _context.Clients
                           where model.Ids.Contains(c.Id) && c.SellerId == model.OrganisationId.Value && c.IsActive
@@ -286,6 +291,7 @@ namespace Client.Api.Services.Clients
                               PreferedCurrencyId = c.CurrencyId,
                               CommunicationLanguage = c.Language,
                               PhoneNumber = c.PhoneNumber,
+                              IsDisabled = c.IsDisabled,
                               DefaultDeliveryAddressId = c.DefaultDeliveryAddressId,
                               DefaultBillingAddressId = c.DefaultBillingAddressId,
                               LastModifiedDate = c.LastModifiedDate,
@@ -315,6 +321,7 @@ namespace Client.Api.Services.Clients
                               PreferedCurrencyId = c.CurrencyId,
                               CommunicationLanguage = c.Language,
                               PhoneNumber = c.PhoneNumber,
+                              IsDisabled = c.IsDisabled,
                               DefaultDeliveryAddressId = c.DefaultDeliveryAddressId,
                               DefaultBillingAddressId = c.DefaultBillingAddressId,
                               LastModifiedDate = c.LastModifiedDate,

@@ -35,6 +35,7 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string PhoneNumberLabel { get; set; }
         public string ResetPasswordText { get; set; }
         public bool HasAccount { get; set; }
+        public bool IsDisabled { get; set; }
         public string NoGroupsText { get; set; }
         public string GroupsLabel { get; set; }
         public string NoManagersText { get; set; }
@@ -43,6 +44,8 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public Guid? CountryId { get; set; }
         public string PreferedCurrencyLabel { get; set; }
         public Guid? PreferedCurrencyId { get; set; }
+        public string ActiveLabel { get; set; }
+        public string InActiveLabel { get; set; }
         public string DeliveryAddressLabel { get; set; }
         public string BillingAddressLabel { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
