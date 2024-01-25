@@ -90,21 +90,6 @@ namespace Client.Api.Services.Clients
                     item.ClientManagerIds = clientManagers;
                 }
 
-                var marketingApproval = _context.ClientMarketingApprovals.Where(x => x.IsActive && x.ClientId == client.Id);
-
-                if (marketingApproval is not null)
-                {
-                    item.MarketingApprovals = marketingApproval.Select(x => new ClientMarketingApprovalServiceModel
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        IsApproved = x.IsApproved,
-                        ClientId = x.ClientId,
-                        CreatedDate = x.CreatedDate,
-                        LastModifiedDate = x.LastModifiedDate
-                    });
-                }
-
                 clientsList.Add(item);
             }
 
@@ -149,21 +134,6 @@ namespace Client.Api.Services.Clients
             if (clientManagers is not null)
             {
                 client.ClientManagerIds = clientManagers;
-            }
-
-            var marketingApproval = _context.ClientMarketingApprovals.Where(x => x.IsActive && x.ClientId == existingClient.Id);
-
-            if(marketingApproval is not null) 
-            {
-                client.MarketingApprovals = marketingApproval.Select(x => new ClientMarketingApprovalServiceModel 
-                { 
-                    Id = x.Id,
-                    Name = x.Name,
-                    IsApproved = x.IsApproved,
-                    ClientId = x.ClientId,
-                    CreatedDate = x.CreatedDate,
-                    LastModifiedDate = x.LastModifiedDate
-                });
             }
 
             return client;
@@ -242,25 +212,6 @@ namespace Client.Api.Services.Clients
                 };
 
                 await _context.ClientsAccountManagers.AddAsync(managerItem.FillCommonProperties());
-            }
-
-            var clientMarketingApproval = _context.ClientMarketingApprovals.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
-
-            foreach (var marketingApproval in clientMarketingApproval.OrEmptyIfNull())
-            {
-                _context.ClientMarketingApprovals.Remove(marketingApproval);
-            }
-
-            foreach (var name in serviceModel.MarketingApprovals.OrEmptyIfNull())
-            {
-                var marketingApproval = new ClientMarketingApproval
-                {
-                    Name = name,
-                    IsApproved = true,
-                    ClientId = serviceModel.Id,
-                };
-
-                await _context.ClientMarketingApprovals.AddAsync(marketingApproval.FillCommonProperties());
             }
 
             await _context.SaveChangesAsync();
