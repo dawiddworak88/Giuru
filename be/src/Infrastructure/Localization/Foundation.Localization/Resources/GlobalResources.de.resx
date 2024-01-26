@@ -732,4 +732,7 @@
   <data name="Street" xml:space="preserve">
     <value>Straße</value>
   </data>
+  <data name="NotificationTypes" xml:space="preserve">
+    <value>Kunden-Einwilligungen</value>
+  </data>
 </root>
