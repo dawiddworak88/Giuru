@@ -139,6 +139,9 @@ namespace Client.Api.v1.Controllers
                 {
                     Id = request.Id,
                     Name = request.Name,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = request.Id,
                 };
 
                 var validator = new UpdateClientNotificationTypeModelValidator();
@@ -157,7 +160,10 @@ namespace Client.Api.v1.Controllers
             {
                 var serviceModel = new CreateClientNotificationTypeServiceModel
                 {
-                    Name = request.Name
+                    Name = request.Name,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = request.Id,
                 };
 
                 var validator = new CreateClientNotificationTypeModelValidator();
