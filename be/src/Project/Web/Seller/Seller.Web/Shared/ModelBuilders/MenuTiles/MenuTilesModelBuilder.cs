@@ -128,6 +128,12 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                     },
                     new MenuTileViewModel
                     {
+                        Icon = IconsConstants.Check,
+                        Title = _globalLocalizer.GetString("NotificationTypes"),
+                        Url = _linkGenerator.GetPathByAction("Index", "ClientNotificationTypes", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                    },
+                    new MenuTileViewModel
+                    {
                         Icon = IconsConstants.MapPin,
                         Title = _globalLocalizer.GetString("Countries"),
                         Url = _linkGenerator.GetPathByAction("Index", "Countries", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name })
