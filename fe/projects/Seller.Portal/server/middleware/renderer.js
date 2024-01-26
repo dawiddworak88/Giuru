@@ -51,6 +51,7 @@ import SellerCategoryPage from "../../src/areas/Products/pages/CategoryPage/Cate
 import SettingsPage from "../../src/areas/Settings/pages/SettingsPage/SettingsPage";
 import ClientAddressPage from "../../src/areas/Clients/pages/ClientAddressPage/ClientAddressPage";
 import ClientAddressesPage from "../../src/areas/Clients/pages/ClientAddressesPage/ClientAddressesPage";
+import ClientNotificationTypsPage from "../../src/areas/Clients/pages/ClientNotificationTypesPage/ClientNotificationTypesPage";
 
 const Components = {
 	ClientAddressPage,
@@ -100,7 +101,8 @@ const Components = {
 	ProductAttributeItemPage,
 	CategoriesPage,
 	SellerCategoryPage,
-	SettingsPage
+	SettingsPage,
+	ClientNotificationTypsPage
 };
 
 const serverRenderer = (req, res, next) => {
