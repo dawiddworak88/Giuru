@@ -62,7 +62,7 @@ namespace Client.Api.Services.Notifications
                 Data = notificationTypes.OrEmptyIfNull().Select(x => new ClientNotificationTypeServiceModel
                 {
                     Id = x.Id,
-                    Name = x.Translations.FirstOrDefault(t => t.ClientNotoficationTypeId == x.Id && t.Language == model.Language && t.IsActive)?.Name ?? x.Translations.FirstOrDefault(t => t.ClientNotoficationTypeId == x.Id && t.IsActive)?.Name,
+                    Name = x.Translations.FirstOrDefault(t => t.ClientNotificationTypeId == x.Id && t.Language == model.Language && t.IsActive)?.Name ?? x.Translations.FirstOrDefault(t => t.ClientNotificationTypeId == x.Id && t.IsActive)?.Name,
                     CreatedDate = x.CreatedDate,
                     LastModifiedDate = x.LastModifiedDate
                 })
@@ -84,7 +84,7 @@ namespace Client.Api.Services.Notifications
             return new ClientNotificationTypeServiceModel
             {
                 Id = notificationType.Id,
-                Name = notificationType.Translations.FirstOrDefault(t => t.ClientNotoficationTypeId == notificationType.Id && t.Language == model.Language && t.IsActive)?.Name ?? notificationType.Translations.FirstOrDefault(t => t.ClientNotoficationTypeId == notificationType.Id && t.IsActive)?.Name,
+                Name = notificationType.Translations.FirstOrDefault(t => t.ClientNotificationTypeId == notificationType.Id && t.Language == model.Language && t.IsActive)?.Name ?? notificationType.Translations.FirstOrDefault(t => t.ClientNotificationTypeId == notificationType.Id && t.IsActive)?.Name,
                 CreatedDate = notificationType.CreatedDate,
                 LastModifiedDate = notificationType.LastModifiedDate
             };
@@ -100,7 +100,7 @@ namespace Client.Api.Services.Notifications
             {
                 Name = model.Name,
                 Language = model.Language,
-                ClientNotoficationTypeId = notificationType.Id
+                ClientNotificationTypeId = notificationType.Id
             };
 
             _context.ClientNotificationTypeTranslations.Add(notificationTypeTranslation.FillCommonProperties());
@@ -133,7 +133,7 @@ namespace Client.Api.Services.Notifications
                 throw new CustomException(_clientLocalizer.GetString("NotificationTypeNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            var notificationTypeTranslation = _context.ClientNotificationTypeTranslations.FirstOrDefault(x => x.ClientNotoficationTypeId == model.Id && x.Language == model.Language && x.IsActive);
+            var notificationTypeTranslation = _context.ClientNotificationTypeTranslations.FirstOrDefault(x => x.ClientNotificationTypeId == model.Id && x.Language == model.Language && x.IsActive);
 
             if (notificationTypeTranslation is not null)
             {

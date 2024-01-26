@@ -7,6 +7,6 @@ namespace Client.Api.Infrastructure.Notifications.Entities
     {
         public string Name { get; set; }
         public string Language { get; set; }
-        public Guid? ClientNotoficationTypeId { get; set; }
+        public Guid? ClientNotificationTypeId { get; set; }
     }
 }
