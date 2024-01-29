@@ -52,13 +52,6 @@ services:
       dockerfile: Dockerfile-ssr-local
     restart: unless-stopped
 
-  account-web-react-ssr:
-    image: ${REGISTRY:-giuru}/account-web-react-ssr:${PLATFORM:-linux}-${TAG:-latest}
-    build: 
-      context: ../../fe/projects/Account
-      dockerfile: Dockerfile-ssr-local
-    restart: unless-stopped
-
   buyer-web-react-ssr:
     image: ${REGISTRY:-giuru}/buyer-web-react-ssr:${PLATFORM:-linux}-${TAG:-latest}
     build: 
@@ -145,18 +138,6 @@ services:
       - sqldata
       - redis
       - rabbitmq
-      - otel-collector
-
-  identity-api:
-    image: ${REGISTRY:-giuru}/identity-api:${PLATFORM:-linux}-${TAG:-latest}
-    build:
-      context: .
-      dockerfile: Project/Services/Identity/Identity.Api/Dockerfile
-    restart: unless-stopped
-    depends_on: 
-      - sqldata
-      - redis
-      - account-web-react-ssr
       - otel-collector
 
   basket-api:
