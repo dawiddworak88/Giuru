@@ -147,7 +147,6 @@ services:
       dockerfile: Project/Services/Basket/Basket.Api/Dockerfile
     depends_on:
       - redis
-      - identity-api
       - rabbitmq
       - otel-collector
 
@@ -222,7 +221,6 @@ services:
       - catalog-backgroundtasks
       - news-api
       - redis
-      - identity-api
       - otel-collector
 
   buyer-web:
@@ -246,5 +244,4 @@ services:
       - catalog-backgroundtasks
       - news-api
       - redis
-      - identity-api
       - otel-collector
