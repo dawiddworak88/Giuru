@@ -342,4 +342,16 @@
   <data name="NotificationTypes" xml:space="preserve">
     <value>Zgody klientów</value>
   </data>
+  <data name="EditClientNotificationType" xml:space="preserve">
+    <value>Edytuj typ zgody</value>
+  </data>
+  <data name="BackToNotificationType" xml:space="preserve">
+    <value>Powrót do zgód klienta</value>
+  </data>
+  <data name="NotificationTypeDeletedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie usunięto zgodę klientów</value>
+  </data>
+  <data name="NotificationTypeSavedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie zapisano zgodę</value>
+  </data>
 </root>

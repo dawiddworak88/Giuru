@@ -342,4 +342,16 @@
   <data name="NotificationTypes" xml:space="preserve">
     <value>Kunden-Einwilligungen</value>
   </data>
+  <data name="EditClientNotificationType" xml:space="preserve">
+    <value>Einwilligungsart bearbeiten</value>
+  </data>
+  <data name="BackToNotificationType" xml:space="preserve">
+    <value>Zurück zu den Kunden-Einwilligungen</value>
+  </data>
+  <data name="NotificationTypeDeletedSuccessfully" xml:space="preserve">
+    <value>Kunden-Einwilligung erfolgreich gelöscht</value>
+  </data>
+  <data name="NotificationTypeSavedSuccessfully" xml:space="preserve">
+    <value>Einwilligung erfolgreich gespeichert</value>
+  </data>
 </root>

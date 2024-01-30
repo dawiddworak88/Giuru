@@ -342,4 +342,16 @@
   <data name="NotificationTypes" xml:space="preserve">
     <value>Clients approvals</value>
   </data>
+  <data name="EditClientNotificationType" xml:space="preserve">
+    <value>Edit approval type</value>
+  </data>
+  <data name="BackToNotificationType" xml:space="preserve">
+    <value>Return to customer approvals</value>
+  </data>
+  <data name="NotificationTypeDeletedSuccessfully" xml:space="preserve">
+    <value>Successfully deleted customer approval</value>
+  </data>
+  <data name="NotificationTypeSavedSuccessfully" xml:space="preserve">
+    <value>Approval successfully saved</value>
+  </data>
 </root>
