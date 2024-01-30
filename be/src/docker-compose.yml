@@ -67,6 +67,19 @@ services:
     image: postgres:10.5
     restart: unless-stopped
 
+  account-web-react-ssr:
+    image: dawiddworak88/giuru-identity:frontend
+    restart: unless-stopped
+
+  identity-api:
+    image: dawiddworak88/giuru-identity:backend
+    restart: unless-stopped
+    depends_on: 
+      - sqldata
+      - redis
+      - account-web-react-ssr
+      - otel-collector
+
   media-api:
     image: ${REGISTRY:-giuru}/media-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
