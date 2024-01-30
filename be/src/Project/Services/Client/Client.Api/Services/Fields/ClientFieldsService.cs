@@ -9,7 +9,6 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,6 +73,10 @@ namespace Client.Api.Services.Fields
                 fieldDefinitionTranslation = fieldDefinition.FieldDefinitionTranslations.FirstOrDefault(x => x.IsActive);
             }
 
+            var fieldOptions = _context.FieldOptions.Where(x => x.OptionSetId == fieldDefinition.OptionSetId).ToList();
+            var fieldOptionsTranslations = _context.FieldOptionsTranslation.ToList();
+            var fieldOptionSetTranslations = _context.FieldOptionSetTranslations.ToList();
+
             var fieldDefinitionOptions = (from fo in _context.FieldOptions
                                          join fot in _context.FieldOptionsTranslation on fo.Id equals fot.OptionId
                                          join fos in _context.FieldOptionSetTranslations on fo.OptionSetId equals fos.OptionSetId
@@ -123,17 +126,22 @@ namespace Client.Api.Services.Fields
 
             var optionSetIds = pagedResults.Data.Select(x => x.OptionSetId).ToList();
 
-            var fieldDefinitionOptions = (from fo in _context.FieldOptions
-                                         join fot in _context.FieldOptionsTranslation on fo.Id equals fot.OptionId
-                                         join fos in _context.FieldOptionSetTranslations on fo.OptionSetId equals fos.OptionSetId
-                                         where optionSetIds.Contains(fo.OptionSetId)
-                                         group new { fo, fot, fos } by fo.OptionSetId into grouped
-                                         select new 
-                                         {
-                                             Id = grouped.Key,
-                                             Name = grouped.FirstOrDefault(g => g.fos.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fos.Language == model.Language).fos.Name : grouped.FirstOrDefault().fos.Name,
-                                             Value = grouped.FirstOrDefault(g => g.fot.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fot.Language == model.Language).fot.OptionValue : grouped.FirstOrDefault().fot.OptionValue
-                                         }).ToList();
+            var fieldOptions = _context.FieldOptions.Where(x => optionSetIds.Contains(x.OptionSetId)).ToList();
+            var fieldOptionsTranslations = _context.FieldOptionsTranslation.Where(x => fieldOptions.Select(y => y.Id).Contains(x.OptionId)).ToList();
+
+            var fieldDefinitionOptions = new List<FieldOptionServiceModel>();
+
+            foreach (var fieldOption in fieldOptions.OrEmptyIfNull())
+            {
+                var newFieldOption = new FieldOptionServiceModel
+                {
+                    FieldOptionSetId = fieldOption.OptionSetId,
+                    Name = fieldOptionsTranslations.FirstOrDefault(x => x.OptionId == fieldOption.Id && x.Language == model.Language).OptionValue ?? fieldOptionsTranslations.FirstOrDefault(x => x.OptionId == fieldOption.Id).OptionValue,
+                    Value = fieldOption.Id
+                };
+
+                fieldDefinitionOptions.Add(newFieldOption);
+            }
 
             return new PagedResults<IEnumerable<ClientFieldServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
@@ -143,10 +151,10 @@ namespace Client.Api.Services.Fields
                     Name = x.FieldDefinitionTranslations?.FirstOrDefault(t => t.FieldDefinitionId == x.Id && t.Language == model.Language)?.FieldName ?? x.FieldDefinitionTranslations?.FirstOrDefault(t => t.FieldDefinitionId == x.Id)?.FieldName,
                     Type = x.FieldType,
                     IsRequired = x.IsRequired,
-                    Options = fieldDefinitionOptions.OrEmptyIfNull().Where(y => y.Id == x.OptionSetId).Select(x => new ServicesModels.Fields.FieldOptionServiceModel
+                    Options = fieldDefinitionOptions.Where(y => y.FieldOptionSetId == x.OptionSetId).Select(y => new FieldOptionServiceModel
                     {
-                        Name = x.Name,
-                        Value = x.Value
+                        Name = y.Name,
+                        Value = y.Value
                     }),
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate

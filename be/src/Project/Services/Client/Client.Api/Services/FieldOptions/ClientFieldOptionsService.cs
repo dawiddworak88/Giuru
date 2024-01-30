@@ -140,16 +140,21 @@ namespace Client.Api.Services.FieldOptions
             }
 
             var optionSetIds = pagedResults.Data.Select(y => y.OptionSet.Id).Distinct().ToList();
-            var fieldDefinitions = _context.FieldDefinitions.Where(x => optionSetIds.Contains(x.OptionSetId.Value)).ToList();
+            //var fieldDefinitions = _context.FieldDefinitions.Where(x => optionSetIds.Contains(x.OptionSetId.Value)).ToList();
+
+            var optSet = _context.FieldOptionSetTranslations.ToList();
+            var opt = _context.FieldOptionsTranslation.ToList();
 
             return new PagedResults<IEnumerable<ClientFieldOptionServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
                 Data = pagedResults.Data.OrEmptyIfNull().Select(x => new ClientFieldOptionServiceModel
                 {
                     Id = x.Id,
-                    Name = x.OptionSet?.OptionSetTranslations?.FirstOrDefault(t => t.Language == model.Language && t.IsActive)?.Name ?? x.OptionSet?.OptionSetTranslations?.FirstOrDefault(t => t.IsActive)?.Name,
-                    Value = x.OptionsTranslations?.FirstOrDefault(t => t.Language == model.Language && t.IsActive)?.OptionValue ?? x.OptionsTranslations?.FirstOrDefault(t => t.IsActive)?.OptionValue,
-                    FieldDefinitionId = fieldDefinitions.FirstOrDefault(fd => fd.OptionSetId == x.OptionSetId).Id,
+                    Name = optSet.FirstOrDefault(t => t.Language == model.Language && t.OptionSetId == x.OptionSetId).Name,
+                    //Value = opt.FirstOrDefault(t => t.Language == model.Language && t.OptionId == x.OptionSet)
+                    //Name = x.OptionSet?.OptionSetTranslations?.FirstOrDefault(t => t.Language == model.Language && t.OptionSetId == x.OptionSetId && t.IsActive)?.Name ?? x.OptionSet?.OptionSetTranslations?.FirstOrDefault(t => t.IsActive)?.Name,
+                    //Value = x.OptionsTranslations?.FirstOrDefault(t => t.Language == model.Language && t.IsActive)?.OptionValue ?? x.OptionsTranslations?.FirstOrDefault(t => t.IsActive)?.OptionValue,
+                    //FieldDefinitionId = fieldDefinitions.FirstOrDefault(fd => fd.OptionSetId == x.OptionSetId).Id,
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
                 })
