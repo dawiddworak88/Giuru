@@ -54,7 +54,8 @@ module.exports = {
         categoriespage: ["./src/areas/Products/pages/CategoriesPage/index.js", "./src/areas/Products/pages/CategoriesPage/CategoriesPage.scss"],
         categorypage: ["./src/areas/Products/pages/CategoryPage/index.js", "./src/areas/Products/pages/CategoryPage/CategoryPage.scss"],
         settingspage: ["./src/areas/Settings/pages/SettingsPage/index.js", "./src/areas/Settings/pages/SettingsPage/SettingsPage.scss"],
-        clientnotificationtypespage: ["./src/areas/Clients/pages/ClientNotificationTypesPage/index.js", "./src/areas/Clients/pages/ClientNotificationTypesPage/ClientNotificationTypesPage.scss"]
+        clientnotificationtypespage: ["./src/areas/Clients/pages/ClientNotificationTypesPage/index.js", "./src/areas/Clients/pages/ClientNotificationTypesPage/ClientNotificationTypesPage.scss"],
+        clientnotificationtypepage: ["./src/areas/Clients/pages/ClientNotificationTypePage/index.js", "./src/areas/Clients/pages/ClientNotificationTypePage/ClientNotificationTypePage.scss"]
     },
     output: {
         publicPath: path.resolve(__dirname, "../../../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),
