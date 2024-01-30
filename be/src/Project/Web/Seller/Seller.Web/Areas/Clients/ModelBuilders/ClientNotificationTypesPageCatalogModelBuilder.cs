@@ -48,8 +48,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "ClientNotificationType", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "ClientNotificationType", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "ClientNotificationTypesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ClientNotificationTypesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "ClientNotificationTypeApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ClientNotificationTypeApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(ClientNotificationType.CreatedDate)} desc";
 
@@ -81,23 +81,23 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientAccountManager.FirstName).ToCamelCase(),
+                        Title = nameof(ClientNotificationType.Name).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientAccountManager.LastModifiedDate).ToCamelCase(),
+                        Title = nameof(ClientNotificationType.LastModifiedDate).ToCamelCase(),
                         IsDateTime = true
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientAccountManager.CreatedDate).ToCamelCase(),
+                        Title = nameof(ClientNotificationType.CreatedDate).ToCamelCase(),
                         IsDateTime = true
                     }
                 }
             };
 
-            viewModel.PagedItems = await _clientNotificationTypesRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientAccountManager.CreatedDate)} desc");
+            viewModel.PagedItems = await _clientNotificationTypesRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientNotificationType.CreatedDate)} desc");
 
             return viewModel;
         }
