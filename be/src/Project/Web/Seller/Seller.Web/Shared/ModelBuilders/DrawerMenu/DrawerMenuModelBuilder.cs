@@ -176,6 +176,12 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                             Icon = IconsConstants.Users,
                             Title = _globalLocalizer.GetString("ClientsGroups"),
                             Url = _linkGenerator.GetPathByAction("Index", "ClientGroups", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                        },
+                        new DrawerMenuItemViewModel
+                        {
+                            Icon = IconsConstants.Check,
+                            Title = _globalLocalizer.GetString("NotificationTypes"),
+                            Url = _linkGenerator.GetPathByAction("Index", "ClientNotificationTypes", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                         }
                     }
                 },
