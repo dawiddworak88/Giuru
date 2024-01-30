@@ -61,7 +61,6 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 Labels = new string[]
                 {
                     _globalLocalizer.GetString("Name"),
-                    _globalLocalizer.GetString("Value"),
                     _globalLocalizer.GetString("LastModifiedDate"),
                     _globalLocalizer.GetString("CreatedDate")
                 },
@@ -81,11 +80,6 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     new CatalogPropertyViewModel
                     {
                         Title = nameof(ClientFieldOption.Name).ToCamelCase(),
-                        IsDateTime = false
-                    },
-                    new CatalogPropertyViewModel
-                    {
-                        Title = nameof(ClientFieldOption.Value).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
