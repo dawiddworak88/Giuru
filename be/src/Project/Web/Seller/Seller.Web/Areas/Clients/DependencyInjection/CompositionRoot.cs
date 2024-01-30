@@ -57,6 +57,8 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientNotificationType>>, ClientNotificationTypesPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientNotificationTypesPageViewModel>, ClientNotificationTypesPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientNotificationTypeFormViewModel>, ClientNotificationTypeFormModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientNotificationTypePageViewModel>, ClientNotificationTypePageModelBuilder>();
         }
     }
 }
