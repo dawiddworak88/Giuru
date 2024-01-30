@@ -37,7 +37,6 @@ namespace Client.Api.v1.Controllers
         /// <summary>
         /// Gets list of notifications types.
         /// </summary>
-        /// <param name="ids">The notifications ids.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
@@ -69,7 +68,7 @@ namespace Client.Api.v1.Controllers
                         Id = x.Id,
                         Name = x.Name,
                         CreatedDate = x.CreatedDate,
-                        LasModifiedDate = x.LastModifiedDate
+                        LastModifiedDate = x.LastModifiedDate
                     })
                 };
 
@@ -110,7 +109,7 @@ namespace Client.Api.v1.Controllers
                         Id = clientNotificationType.Id,
                         Name = clientNotificationType.Name,
                         CreatedDate = clientNotificationType.CreatedDate,
-                        LasModifiedDate= clientNotificationType.LastModifiedDate
+                        LastModifiedDate= clientNotificationType.LastModifiedDate
                     };
 
                     return StatusCode((int)HttpStatusCode.OK, response);
@@ -190,7 +189,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async  Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
