@@ -9,22 +9,21 @@ import MenuTiles from "../../../../shared/components/MenuTiles/MenuTiles";
 import Catalog from "../../../../shared/components/Catalog/Catalog";
 import Footer from "../../../../shared/components/Footer/Footer";
 
-const ClientNotificationTypsPage = (props) =>
+const ClientNotificationTypesPage = (props) =>
 {
     LocaleHelper.setMomentLocale(props.locale)
 
     return (
         <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
-            <ToastContainer>
-                <Store>
-                    <Header {...props.header}></Header>
-                    <MenuTiles {...props.menuTiles} />
-                    <Catalog {...props.catalog} ></Catalog>
-                    <Footer {...props.footer} ></Footer>
-                </Store>
-            </ToastContainer>
+            <ToastContainer />
+            <Store>
+                <Header {...props.header}></Header>
+                <MenuTiles {...props.menuTiles} />
+                <Catalog {...props.catalog} ></Catalog>
+                <Footer {...props.footer} ></Footer>
+            </Store>
         </ThemeProvider>
     );
 }
 
-export default ClientNotificationTypsPage;
+export default ClientNotificationTypesPage;
