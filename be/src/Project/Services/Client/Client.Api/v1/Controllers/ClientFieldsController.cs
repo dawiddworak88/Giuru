@@ -2,7 +2,7 @@
 using Client.Api.ServicesModels.Fields;
 using Client.Api.v1.RequestModels;
 using Client.Api.v1.ResponseModels;
-using Client.Api.Validators.Feilds;
+using Client.Api.Validators.Fields;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;

@@ -55,9 +55,7 @@ const ClientDynamicForm = ({
                         <FormControlLabel
                             control={
                                 <Switch
-                                    onChange={e => {
-                                        setFieldValue({ name: "isPublished", value: e.target.checked });
-                                    }}
+                                    onChange={e => handleChange(field.id, e.target.value)}
                                     checked={formData[field.id]}
                                     id="isPublished"
                                     name="isPublished"
