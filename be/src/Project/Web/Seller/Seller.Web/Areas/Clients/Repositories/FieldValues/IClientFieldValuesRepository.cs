@@ -7,7 +7,7 @@ namespace Seller.Web.Areas.Clients.Repositories.FieldValues
 {
     public interface IClientFieldValuesRepository
     {
-        Task<IEnumerable<ClientFieldValue>> GetAsync(string token, string language);
+        Task<IEnumerable<ClientFieldValue>> GetAsync(string token, string language, Guid? clientId);
         Task SaveAsync(string token, string language, Guid? clientId, IEnumerable<ApiClientFieldValue> fieldsValues);
     }
 }

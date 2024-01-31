@@ -15,8 +15,8 @@ const ClientDynamicForm = ({
         setFormData(formData);
     }, [formData, setFormData]);
 
-    const handleChange = (name, value) => {
-        const updatedFormData = { ...formData, [name]: value };
+    const handleChange = (id, value) => {
+        const updatedFormData = { ...formData, [id]: value };
         setLocalFormData(updatedFormData);
     };
 
@@ -34,8 +34,6 @@ const ClientDynamicForm = ({
         setLocalFormData(initialData || {});
     }, [initialData]);
 
-    console.log(dynamicFields)
-
     return (
         dynamicFields.map(field => (
             <div key={field.id} className='field'>
@@ -50,20 +48,20 @@ const ClientDynamicForm = ({
                         onChange={(e) => handleChange(field.id, e.target.value)}
                     />
                 )}
-                {/* {field.type === "boolean" && (
+                {field.type === "boolean" && (
                     <NoSsr>
                         <FormControlLabel
                             control={
                                 <Switch
-                                    onChange={e => handleChange(field.id, e.target.value)}
+                                    onChange={e => handleChange(field.id, e.target.checked)}
                                     checked={formData[field.id]}
-                                    id="isPublished"
-                                    name="isPublished"
+                                    id={field.id}
+                                    name={field.name}
                                     color="secondary" />
                                 }
-                            label={props.isPublishedLabel} />
+                            label={field.name} />
                     </NoSsr>
-                )} */}
+                )}
                 {field.type === 'select' && (
                     <FormControl fullWidth variant="standard">
                         <InputLabel>{field.name}</InputLabel>

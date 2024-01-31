@@ -29,10 +29,11 @@ namespace Seller.Web.Areas.Clients.Repositories.FieldValues
             _options = options;
         }
 
-        public async Task<IEnumerable<ClientFieldValue>> GetAsync(string token, string language)
+        public async Task<IEnumerable<ClientFieldValue>> GetAsync(string token, string language, Guid? clientId)
         {
-            var requestModel = new PagedRequestModelBase
+            var requestModel = new PagedClientFieldValuesRequestModel
             {
+                ClientId = clientId,
                 PageIndex = PaginationConstants.DefaultPageIndex,
                 ItemsPerPage = PaginationConstants.DefaultPageSize
             };

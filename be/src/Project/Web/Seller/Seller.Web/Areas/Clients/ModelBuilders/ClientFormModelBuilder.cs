@@ -184,7 +184,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             if (clientFields is not null)
             {
-                var clientFieldsValues = await _clientFieldValuesRepository.GetAsync(componentModel.Token, componentModel.Language);
+                var clientFieldsValues = await _clientFieldValuesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                 viewModel.ClientFields = clientFields.Select(x =>
                 {
