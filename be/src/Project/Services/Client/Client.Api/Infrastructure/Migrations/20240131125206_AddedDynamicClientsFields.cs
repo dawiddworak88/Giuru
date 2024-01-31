@@ -45,24 +45,6 @@ namespace Client.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FieldDefinitionTranslations",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FieldDefinitionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FieldName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Language = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FieldDefinitionTranslations", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "FieldOptionSets",
                 columns: table => new
                 {
@@ -75,42 +57,6 @@ namespace Client.Api.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FieldOptionSets", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FieldOptionSetTranslations",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OptionSetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Language = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FieldOptionSetTranslations", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FieldOptionsTranslation",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OptionValue = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Language = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FieldOptionsTranslation", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -138,6 +84,30 @@ namespace Client.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FieldDefinitionTranslations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FieldDefinitionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FieldName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Language = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FieldDefinitionTranslations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FieldDefinitionTranslations_FieldDefinitions_FieldDefinitionId",
+                        column: x => x.FieldDefinitionId,
+                        principalTable: "FieldDefinitions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FieldOptions",
                 columns: table => new
                 {
@@ -159,15 +129,49 @@ namespace Client.Api.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "FieldOptionsTranslation",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Language = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FieldOptionsTranslation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FieldOptionsTranslation_FieldOptions_OptionId",
+                        column: x => x.OptionId,
+                        principalTable: "FieldOptions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ClientFieldValuesTranslation_ClientFieldValueId",
                 table: "ClientFieldValuesTranslation",
                 column: "ClientFieldValueId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FieldDefinitionTranslations_FieldDefinitionId",
+                table: "FieldDefinitionTranslations",
+                column: "FieldDefinitionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FieldOptions_OptionSetId",
                 table: "FieldOptions",
                 column: "OptionSetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FieldOptionsTranslation_OptionId",
+                table: "FieldOptionsTranslation",
+                column: "OptionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -176,22 +180,19 @@ namespace Client.Api.Infrastructure.Migrations
                 name: "ClientFieldValuesTranslation");
 
             migrationBuilder.DropTable(
-                name: "FieldDefinitions");
-
-            migrationBuilder.DropTable(
                 name: "FieldDefinitionTranslations");
-
-            migrationBuilder.DropTable(
-                name: "FieldOptions");
-
-            migrationBuilder.DropTable(
-                name: "FieldOptionSetTranslations");
 
             migrationBuilder.DropTable(
                 name: "FieldOptionsTranslation");
 
             migrationBuilder.DropTable(
                 name: "ClientFieldValues");
+
+            migrationBuilder.DropTable(
+                name: "FieldDefinitions");
+
+            migrationBuilder.DropTable(
+                name: "FieldOptions");
 
             migrationBuilder.DropTable(
                 name: "FieldOptionSets");

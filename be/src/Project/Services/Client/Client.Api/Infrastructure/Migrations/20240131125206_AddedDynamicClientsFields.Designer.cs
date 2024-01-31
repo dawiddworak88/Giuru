@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Client.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(ClientContext))]
-    [Migration("20231204233541_AddedDynamicClientsFields")]
+    [Migration("20240131125206_AddedDynamicClientsFields")]
     partial class AddedDynamicClientsFields
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -346,6 +346,8 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FieldDefinitionId");
+
                     b.ToTable("FieldDefinitionTranslations");
                 });
 
@@ -404,7 +406,7 @@ namespace Client.Api.Infrastructure.Migrations
                     b.ToTable("FieldOptionSets");
                 });
 
-            modelBuilder.Entity("Client.Api.Infrastructure.Fields.OptionSetTranslation", b =>
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.OptionTranslation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -426,50 +428,17 @@ namespace Client.Api.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("OptionSetId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FieldOptionSetTranslations");
-                });
-
-            modelBuilder.Entity("Client.Api.Infrastructure.Fields.OptionTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Language")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("OptionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("OptionValue")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OptionId");
 
                     b.ToTable("FieldOptionsTranslation");
                 });
@@ -688,15 +657,33 @@ namespace Client.Api.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.FieldDefinitionTranslation", b =>
+                {
+                    b.HasOne("Client.Api.Infrastructure.Fields.FieldDefinition", null)
+                        .WithMany("FieldDefinitionTranslations")
+                        .HasForeignKey("FieldDefinitionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.Option", b =>
                 {
                     b.HasOne("Client.Api.Infrastructure.Fields.OptionSet", "OptionSet")
-                        .WithMany("Options")
+                        .WithMany()
                         .HasForeignKey("OptionSetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("OptionSet");
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.OptionTranslation", b =>
+                {
+                    b.HasOne("Client.Api.Infrastructure.Fields.Option", null)
+                        .WithMany("OptionsTranslations")
+                        .HasForeignKey("OptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroupTranslation", b =>
@@ -713,9 +700,14 @@ namespace Client.Api.Infrastructure.Migrations
                     b.Navigation("Translation");
                 });
 
-            modelBuilder.Entity("Client.Api.Infrastructure.Fields.OptionSet", b =>
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.FieldDefinition", b =>
                 {
-                    b.Navigation("Options");
+                    b.Navigation("FieldDefinitionTranslations");
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.Option", b =>
+                {
+                    b.Navigation("OptionsTranslations");
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroup", b =>
