@@ -108,13 +108,12 @@ namespace Seller.Web.Areas.Clients.Repositories.FieldOptions
             return default;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string value, Guid? fieldDefinitionId)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, Guid? fieldDefinitionId)
         {
             var requestModel = new ClientFieldOptionRequestModel
             {
                 Id = id,
                 Name = name,
-                Value = value,
                 FieldDefinitionId = fieldDefinitionId
             };
 

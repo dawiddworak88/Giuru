@@ -56,7 +56,6 @@ namespace Client.Api.v1.Controllers
                 {
                     Id = request.Id,
                     Name = request.Name,
-                    Value = request.Value,
                     FieldDefinitionId = request.FieldDefinitionId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
@@ -80,7 +79,6 @@ namespace Client.Api.v1.Controllers
                 var serviceModel = new CreateClientFieldOptionServiceModel
                 {
                     Name = request.Name,
-                    Value = request.Value,
                     FieldDefinitionId = request.FieldDefinitionId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,

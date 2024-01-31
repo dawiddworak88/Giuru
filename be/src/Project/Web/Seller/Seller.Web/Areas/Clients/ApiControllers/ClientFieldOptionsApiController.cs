@@ -34,7 +34,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var fieldOptionId = await _clientFieldOptionsRepository.SaveAsync(token, language, model.Id, model.Name, model.Value, model.FieldDefinitionId);
+            var fieldOptionId = await _clientFieldOptionsRepository.SaveAsync(token, language, model.Id, model.Name, model.FieldDefinitionId);
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Id = fieldOptionId, Message = _clientLocalizer.GetString("FieldOptionSavedSuccessfully").Value });
         }
