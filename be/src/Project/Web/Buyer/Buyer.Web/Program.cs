@@ -90,7 +90,7 @@ builder.Services.AddControllersWithViews(options =>
 
 builder.Services.RegisterFoundationMediaDependencies();
 
-builder.Services.RegisterClientAccountDependencies(builder.Configuration);
+builder.Services.RegisterClientAccountDependencies(builder.Configuration, builder.Environment);
 
 builder.Services.RegisterLocalizationDependencies();
 

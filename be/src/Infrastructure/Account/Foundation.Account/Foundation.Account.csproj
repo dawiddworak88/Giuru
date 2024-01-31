@@ -16,6 +16,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\ApiExtensions\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
+		<ProjectReference Include="..\..\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
 	</ItemGroup>
 
 </Project>
