@@ -10,7 +10,6 @@ namespace Client.Api.Validators.FieldOptions
         {
             RuleFor(x => x.Id).NotNull().NotEmpty();
             RuleFor(x => x.Name).NotNull().NotEmpty();
-            RuleFor(x => x.Value).NotNull().NotEmpty();
             RuleFor(x => x.FieldDefinitionId).NotNull().NotEmpty();
         }
     }

@@ -2,7 +2,7 @@
 using FluentValidation;
 using Foundation.Extensions.Validators;
 
-namespace Client.Api.Validators.Feilds
+namespace Client.Api.Validators.Fields
 {
     public class UpdateClientFieldModelValidator : BaseServiceModelValidator<UpdateClientFieldServiceModel>
     {

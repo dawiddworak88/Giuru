@@ -9,7 +9,6 @@ namespace Client.Api.Validators.FieldOptions
         public CreateFieldOptionModelValidator()
         {
             RuleFor(x => x.Name).NotNull().NotEmpty();
-            RuleFor(x => x.Value).NotNull().NotEmpty();
             RuleFor(x => x.FieldDefinitionId).NotNull().NotEmpty();
         }
     }
