@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
-    TextField, Select, MenuItem, 
-    FormControl, InputLabel 
+    TextField, Select, MenuItem, NoSsr, Switch,
+    FormControl, InputLabel, FormControlLabel
 } from '@mui/material';
 
 const ClientDynamicForm = ({ 
@@ -34,6 +34,8 @@ const ClientDynamicForm = ({
         setLocalFormData(initialData || {});
     }, [initialData]);
 
+    console.log(dynamicFields)
+
     return (
         dynamicFields.map(field => (
             <div key={field.id} className='field'>
@@ -48,6 +50,22 @@ const ClientDynamicForm = ({
                         onChange={(e) => handleChange(field.id, e.target.value)}
                     />
                 )}
+                {/* {field.type === "boolean" && (
+                    <NoSsr>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    onChange={e => {
+                                        setFieldValue({ name: "isPublished", value: e.target.checked });
+                                    }}
+                                    checked={formData[field.id]}
+                                    id="isPublished"
+                                    name="isPublished"
+                                    color="secondary" />
+                                }
+                            label={props.isPublishedLabel} />
+                    </NoSsr>
+                )} */}
                 {field.type === 'select' && (
                     <FormControl fullWidth variant="standard">
                         <InputLabel>{field.name}</InputLabel>

@@ -34,6 +34,5 @@ namespace Client.Api.Infrastructure
         public DbSet<Option> FieldOptions { get; set; }
         public DbSet<OptionTranslation> FieldOptionsTranslation { get; set; }
         public DbSet<OptionSet> FieldOptionSets { get; set; }
-        public DbSet<OptionSetTranslation> FieldOptionSetTranslations { get; set;}
     }
 }
