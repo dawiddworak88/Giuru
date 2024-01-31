@@ -13,18 +13,11 @@ const ClientFieldOptionForm = (props) => {
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : null, error: "" },
-        value: { value: props.value ? props.value : null, error: "" },
         fieldDefinitionId: { value: props.fieldDefinitionId ? props.fieldDefinitionId : null }
     };
 
     const stateValidatorSchema = {
         name: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        value: {
             required: {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
@@ -70,7 +63,7 @@ const ClientFieldOptionForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, value } = values;
+    const { id, name } = values;
 
     return (
         <section className="section section-small-padding">
@@ -94,18 +87,6 @@ const ClientFieldOptionForm = (props) => {
                                 variant="standard"
                                 helperText={dirty.name ? errors.name : ""} 
                                 error={(errors.name.length > 0) && dirty.name} />
-                        </div>
-                        <div className="field">
-                            <TextField 
-                                id="value" 
-                                name="value" 
-                                label={props.valueLabel} 
-                                fullWidth={true}
-                                value={value} 
-                                onChange={handleOnChange} 
-                                variant="standard"
-                                helperText={dirty.value ? errors.value : ""} 
-                                error={(errors.value.length > 0) && dirty.value} />
                         </div>
                         <div className="field">
                             <Button 
