@@ -55,15 +55,6 @@ namespace Client.Api.Services.FieldOptions
                 fieldDefinition.OptionSetId = fieldOptionSetId.Value;
             }
 
-            var fieldOptionSetTranslation = new OptionSetTranslation
-            {
-                OptionSetId = fieldOptionSetId.Value,
-                Name = model.Name,
-                Language = model.Language
-            };
-            
-            await _context.FieldOptionSetTranslations.AddAsync(fieldOptionSetTranslation.FillCommonProperties());
-           
             var fieldOption = new Option
             {
                 OptionSetId = fieldOptionSetId.Value
@@ -74,7 +65,7 @@ namespace Client.Api.Services.FieldOptions
             var fieldOptionTranslation = new OptionTranslation
             {
                 OptionId = fieldOption.Id,
-                OptionValue = model.Value,
+                Name = model.Name,
                 Language = model.Language
             };
 
@@ -104,8 +95,6 @@ namespace Client.Api.Services.FieldOptions
         {
             var fieldOptions = _context.FieldOptions
                 .Include(x => x.OptionsTranslations)
-                .Include(x => x.OptionSet)
-                .Include(x => x.OptionSet.OptionSetTranslations)
                 .AsSingleQuery()
                 .Where(x => x.IsActive);
 
@@ -121,7 +110,7 @@ namespace Client.Api.Services.FieldOptions
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                fieldOptions = fieldOptions.Where(x => x.OptionsTranslations.Any(y => y.OptionValue.StartsWith(model.SearchTerm)));
+                fieldOptions = fieldOptions.Where(x => x.OptionsTranslations.Any(y => y.Name.StartsWith(model.SearchTerm)));
             }
 
             fieldOptions = fieldOptions.ApplySort(model.OrderBy);
@@ -139,22 +128,15 @@ namespace Client.Api.Services.FieldOptions
                 pagedResults = fieldOptions.PagedIndex(new Pagination(fieldOptions.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            var optionSetIds = pagedResults.Data.Select(y => y.OptionSet.Id).Distinct().ToList();
-            //var fieldDefinitions = _context.FieldDefinitions.Where(x => optionSetIds.Contains(x.OptionSetId.Value)).ToList();
-
-            var optSet = _context.FieldOptionSetTranslations.ToList();
-            var opt = _context.FieldOptionsTranslation.ToList();
+            var optionsTranslations = _context.FieldOptionsTranslation.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.OptionId)).ToList();
 
             return new PagedResults<IEnumerable<ClientFieldOptionServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
                 Data = pagedResults.Data.OrEmptyIfNull().Select(x => new ClientFieldOptionServiceModel
                 {
                     Id = x.Id,
-                    Name = optSet.FirstOrDefault(t => t.Language == model.Language && t.OptionSetId == x.OptionSetId).Name,
-                    //Value = opt.FirstOrDefault(t => t.Language == model.Language && t.OptionId == x.OptionSet)
-                    //Name = x.OptionSet?.OptionSetTranslations?.FirstOrDefault(t => t.Language == model.Language && t.OptionSetId == x.OptionSetId && t.IsActive)?.Name ?? x.OptionSet?.OptionSetTranslations?.FirstOrDefault(t => t.IsActive)?.Name,
-                    //Value = x.OptionsTranslations?.FirstOrDefault(t => t.Language == model.Language && t.IsActive)?.OptionValue ?? x.OptionsTranslations?.FirstOrDefault(t => t.IsActive)?.OptionValue,
-                    //FieldDefinitionId = fieldDefinitions.FirstOrDefault(fd => fd.OptionSetId == x.OptionSetId).Id,
+                    Name = optionsTranslations?.FirstOrDefault(t => t.Language == model.Language && t.OptionId == x.Id)?.Name ?? optionsTranslations?.FirstOrDefault(t => t.OptionId == x.Id)?.Name,
+                    Value = x.Id,
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
                 })
@@ -165,8 +147,6 @@ namespace Client.Api.Services.FieldOptions
         {
             var fieldOption = await _context.FieldOptions
                 .Include(x => x.OptionsTranslations)
-                .Include(x => x.OptionSet)
-                .Include(x => x.OptionSet.OptionSetTranslations)
                 .AsSingleQuery()
                 .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
@@ -180,8 +160,8 @@ namespace Client.Api.Services.FieldOptions
             return new ClientFieldOptionServiceModel
             {
                 Id = model.Id,
-                Name = fieldOption.OptionSet?.OptionSetTranslations?.FirstOrDefault(x => x.Language == model.Language && x.IsActive)?.Name ?? fieldOption.OptionSet?.OptionSetTranslations?.FirstOrDefault(x => x.IsActive)?.Name,
-                Value = fieldOption.OptionsTranslations?.FirstOrDefault(x => x.Language == model.Language && x.IsActive)?.OptionValue ?? fieldOption.OptionsTranslations?.FirstOrDefault(x => x.IsActive)?.OptionValue,
+                Name = fieldOption.OptionsTranslations?.FirstOrDefault(x => x.Language == model.Language && x.IsActive)?.Name ?? fieldOption.OptionsTranslations?.FirstOrDefault(x => x.IsActive)?.Name,
+                Value = fieldOption?.Id,
                 FieldDefinitionId = fieldDefinition?.Id,
                 LastModifiedDate = fieldOption.LastModifiedDate,
                 CreatedDate = fieldOption.CreatedDate
@@ -192,8 +172,6 @@ namespace Client.Api.Services.FieldOptions
         {
             var fieldOption = await _context.FieldOptions
                 .Include(x => x.OptionsTranslations)
-                .Include(x => x.OptionSet)
-                .Include(x => x.OptionSet.OptionSetTranslations)
                 .AsSingleQuery()
                 .FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
@@ -202,36 +180,18 @@ namespace Client.Api.Services.FieldOptions
                 throw new CustomException(_clientLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            var fieldOptionSetTranslation = fieldOption.OptionSet.OptionSetTranslations.FirstOrDefault(x => x.Language == model.Language && x.IsActive);
-
-            if (fieldOptionSetTranslation is not null)
-            {
-                fieldOptionSetTranslation.Name = model.Name;
-            }
-            else
-            {
-                var newFieldOptionSetTranslation = new OptionSetTranslation
-                {
-                    OptionSetId = fieldOption.OptionSetId,
-                    Name = model.Name,
-                    Language = model.Language
-                };
-
-                await _context.FieldOptionSetTranslations.AddAsync(newFieldOptionSetTranslation.FillCommonProperties());
-            }
-
             var fieldOptionTranslation = fieldOption.OptionsTranslations.FirstOrDefault(x => x.Language == model.Language && x.IsActive);
 
             if (fieldOptionTranslation is not null)
             {
-                fieldOptionTranslation.OptionValue = model.Value;                
+                fieldOptionTranslation.Name = model.Name;                
             }
             else
             {
                 var newFieldOptionTranslation = new OptionTranslation
                 {
                     OptionId = fieldOption.Id,
-                    OptionValue = model.Value,
+                    Name = model.Name,
                     Language = model.Language
                 };
 

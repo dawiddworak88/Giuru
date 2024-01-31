@@ -74,19 +74,21 @@ namespace Client.Api.Services.Fields
             }
 
             var fieldOptions = _context.FieldOptions.Where(x => x.OptionSetId == fieldDefinition.OptionSetId).ToList();
-            var fieldOptionsTranslations = _context.FieldOptionsTranslation.ToList();
-            var fieldOptionSetTranslations = _context.FieldOptionSetTranslations.ToList();
+            var fieldOptionsTranslations = _context.FieldOptionsTranslation.Where(x => fieldOptions.Select(y => y.Id).Contains(x.OptionId)).ToList();
 
-            var fieldDefinitionOptions = (from fo in _context.FieldOptions
-                                         join fot in _context.FieldOptionsTranslation on fo.Id equals fot.OptionId
-                                         join fos in _context.FieldOptionSetTranslations on fo.OptionSetId equals fos.OptionSetId
-                                         group new { fo, fot, fos } by fo.OptionSetId into grouped
-                                         where grouped.Key == fieldDefinition.OptionSetId
-                                         select new FieldOptionServiceModel
-                                         {
-                                             Name = grouped.FirstOrDefault(g => g.fos.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fos.Language == model.Language).fos.Name : grouped.FirstOrDefault().fos.Name,
-                                             Value = grouped.FirstOrDefault(g => g.fot.Language == model.Language) != null ? grouped.FirstOrDefault(g => g.fot.Language == model.Language).fot.OptionValue : grouped.FirstOrDefault().fot.OptionValue
-                                         }).ToList();
+            var fieldDefinitionOptions = new List<FieldOptionServiceModel>();
+
+            foreach (var fieldOption in fieldOptions.OrEmptyIfNull()) 
+            {
+                var newFieldOption = new FieldOptionServiceModel
+                {
+                    FieldOptionSetId = fieldOption.OptionSetId,
+                    Name = fieldOptionsTranslations?.FirstOrDefault(x => x.Language == model.Language && x.OptionId == fieldOption.Id)?.Name ?? fieldOptionsTranslations?.FirstOrDefault(x => x.OptionId == fieldOption.Id)?.Name,
+                    Value = fieldOption.Id
+                };
+
+                fieldDefinitionOptions.Add(newFieldOption);
+            }
 
             return new ClientFieldServiceModel
             {
@@ -94,7 +96,7 @@ namespace Client.Api.Services.Fields
                 Name = fieldDefinitionTranslation.FieldName,
                 Type = fieldDefinition.FieldType,
                 IsRequired = fieldDefinition.IsRequired,
-                Options = fieldDefinitionOptions.OrEmptyIfNull(),
+                Options = fieldDefinitionOptions,
                 LastModifiedDate = fieldDefinition.LastModifiedDate,
                 CreatedDate = fieldDefinition.CreatedDate
             };
@@ -136,7 +138,7 @@ namespace Client.Api.Services.Fields
                 var newFieldOption = new FieldOptionServiceModel
                 {
                     FieldOptionSetId = fieldOption.OptionSetId,
-                    Name = fieldOptionsTranslations.FirstOrDefault(x => x.OptionId == fieldOption.Id && x.Language == model.Language).OptionValue ?? fieldOptionsTranslations.FirstOrDefault(x => x.OptionId == fieldOption.Id).OptionValue,
+                    Name = fieldOptionsTranslations?.FirstOrDefault(x => x.OptionId == fieldOption.Id && x.Language == model.Language)?.Name ?? fieldOptionsTranslations?.FirstOrDefault(x => x.OptionId == fieldOption.Id)?.Name,
                     Value = fieldOption.Id
                 };
 
