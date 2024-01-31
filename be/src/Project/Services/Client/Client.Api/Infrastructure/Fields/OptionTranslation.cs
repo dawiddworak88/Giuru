@@ -10,6 +10,6 @@ namespace Client.Api.Infrastructure.Fields
         public Guid OptionId { get; set; }
 
         [Required]
-        public string OptionValue { get; set; }
+        public string Name { get; set; }
     }
 }
