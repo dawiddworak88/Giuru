@@ -4,7 +4,10 @@ using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Localization;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
@@ -20,13 +23,16 @@ namespace Seller.Web.Areas.Clients.Repositories.Fields
     {
         private readonly IApiClientService _apiClientService;
         private readonly IOptions<AppSettings> _options;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
 
         public ClientFieldsRepository(
             IApiClientService apiClientService,
+            IStringLocalizer<GlobalResources> globalLocalizer,
             IOptions<AppSettings> options)
         {
             _apiClientService = apiClientService;
             _options = options;
+            _globalLocalizer = globalLocalizer;
         }
 
         public async Task DeleteAsync(string token, string language, Guid? id)
@@ -69,6 +75,11 @@ namespace Seller.Web.Areas.Clients.Repositories.Fields
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
+                foreach (var responseItem in response.Data.Data.OrEmptyIfNull())
+                {
+                    responseItem.Type = MapFieldTypeToText(responseItem.Type);
+                }
+
                 return new PagedResults<IEnumerable<ClientField>>(response.Data.Total, response.Data.PageSize)
                 {
                     Data = response.Data.Data
@@ -187,6 +198,24 @@ namespace Seller.Web.Areas.Clients.Repositories.Fields
             }
 
             return default;
+        }
+
+        private string MapFieldTypeToText(string type)
+        {
+            var typeMappings = new Dictionary<string, string>
+            {
+                { "boolean", _globalLocalizer.GetString("Boolean") },
+                { "text", _globalLocalizer.GetString("String") },
+                { "select", _globalLocalizer.GetString("Array") },
+                { "number", _globalLocalizer.GetString("Number") }
+            };
+
+            if (typeMappings.TryGetValue(type, out string mapping))
+            {
+                return mapping;
+            }
+
+            return string.Empty;
         }
     }
 }
