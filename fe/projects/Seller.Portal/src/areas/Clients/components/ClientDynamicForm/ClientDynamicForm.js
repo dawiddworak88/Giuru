@@ -24,6 +24,11 @@ const ClientDynamicForm = ({
         const initialFormData = {};
 
         dynamicFields.forEach(field => {
+            if (field.type === "boolean") {
+                const stringValueToBoolean = field.value === "true"
+
+                field.value = stringValueToBoolean;
+            }
             initialFormData[field.id] = field.value ?? (field.type === 'select' ? '' : null);
         });
 
