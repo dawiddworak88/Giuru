@@ -1,8 +1,8 @@
-﻿using Client.Api.Services.Notifications;
+﻿using Client.Api.Services.NotificationsType;
 using Client.Api.ServicesModels.Notification;
 using Client.Api.v1.RequestModels;
 using Client.Api.v1.ResponseModels;
-using Client.Api.Validators.Notifications;
+using Client.Api.Validators.NotificationsType;
 using Foundation.Account.Definitions;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
@@ -24,14 +24,18 @@ namespace Client.Api.v1.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{veriosn:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ClientNotificationsTypesController : ControllerBase
     {
         private readonly IClientNotificationTypesService _clientNotificationTypesService;
+        private readonly IClientNotificationTypeApprovalService _clientNotificationTypeApprovalService;
 
-        public ClientNotificationsTypesController(IClientNotificationTypesService clientNotificationTypesService)
+        public ClientNotificationsTypesController(
+            IClientNotificationTypesService clientNotificationTypesService,
+            IClientNotificationTypeApprovalService clientNotificationTypeApprovalService)
         {
             _clientNotificationTypesService = clientNotificationTypesService;
+            _clientNotificationTypeApprovalService = clientNotificationTypeApprovalService;
         }
 
         /// <summary>
@@ -45,7 +49,7 @@ namespace Client.Api.v1.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy) 
+        public IActionResult Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy) 
         {
             var serviceModel = new GetClientNotificationTypesServiceModel
             {
@@ -75,7 +79,7 @@ namespace Client.Api.v1.Controllers
                 return StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            return StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
@@ -88,7 +92,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(Guid? id)
+        public async Task<IActionResult> GetAsync(Guid? id)
         {
             var serviceModel = new GetClientNotificationTypeServiceModel
             {
@@ -204,6 +208,69 @@ namespace Client.Api.v1.Controllers
             if (validationResult.IsValid)
             {
                 await _clientNotificationTypesService.DeleteAsync(serviceModel);
+
+                return StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("Approvals/{clietnId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Get(Guid? clietnId)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetClientNotificationTypeApprovalsServiceModel
+            {
+                ClientId = clietnId
+            };
+
+            var validator = new GetClientNotificationTypeApprovalsModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            { 
+                var notificationTypeApprovals = _clientNotificationTypeApprovalService.Get(serviceModel);
+
+                if (notificationTypeApprovals is not null)
+                {
+                    return StatusCode((int)HttpStatusCode.OK, notificationTypeApprovals.Select(x => new ClientNotificationTypeApprovalResponseModel
+                    {
+                        Id = x.Id,
+                        ClientId = x.ClientId,
+                        IsApproved = x.IsApproved,
+                        ApprovalDate = x.ApprovalDate,
+                        NotificationTypeId = x.NotificationTypeId
+                    }));
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        [HttpPost, MapToApiVersion("1.0")]
+        [Route("Approvals")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Save([FromBody] ClintNotificationTypeApprovalRequestModel request)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new SaveNotificationTypeApprovalServiceModel
+            {
+                ClientId = request.ClientId,
+                NotificationTypeIds = request.NotificationTypeIds,
+            };
+
+            var validator = new SaveClientNotificationTypeApprovalModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                await _clientNotificationTypeApprovalService.SaveAsync(serviceModel);
 
                 return StatusCode((int)HttpStatusCode.OK);
             }
