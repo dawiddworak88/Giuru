@@ -16,8 +16,6 @@ import moment from "moment";
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
     const [canCreateAccount, setCanCreateAccount] = useState(props.hasAccount ? props.hasAccount : false);
-    const [emailMarketingApproval, setEmailMarketingApproval] = useState(props.marketingApprovals ? props.marketingApprovals.find((item) => item.name === ClientFormConstants.emailMarketingApprovalName()) : null);
-    const [smsMarketingApproval, setSmsMarketingApproval] = useState(props.marketingApprovals ? props.marketingApprovals.find((item) => item.name === ClientFormConstants.smsMarketingApprovalName()) : null);
 
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -28,25 +26,8 @@ function ClientForm(props) {
         country: { value: props.countryId ? props.countries.find((item) => item.id === props.countryId) : null },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : [] },
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : [] },
-        hasAccount: { value: props.hasAccount ? props.hasAccount : false },
-        deliveryAddress: { value: props.defaultDeliveryAddressId ? props.deliveryAddresses.find((item) => item.id === props.defaultDeliveryAddressId) : null },
-        billingAddress: { value: props.defaultBillingAddressId ? props.clientAddresses.find((item) => item.id === props.defaultBillingAddressId) : null },
-        marketingApprovals: { value: [] }
+        hasAccount: { value: props.hasAccount ? props.hasAccount : false }
     };
-
-    const addNamesToMarketingApporvals = () => {
-        let result = [];
-
-        if (emailMarketingApproval) {
-            result.push(emailMarketingApproval.name);
-        }
-
-        if (smsMarketingApproval) {
-            result.push(smsMarketingApproval.name);
-        }
-
-        return result;
-    }
 
     const stateValidatorSchema = {
         name: {
@@ -85,8 +66,7 @@ function ClientForm(props) {
             ...state,
             countryId: country ? country.id : null,
             defaultDeliveryAddressId: state.deliveryAddress ? state.deliveryAddress.id : null,
-            defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null,
-            marketingApprovals: addNamesToMarketingApporvals()
+            defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null
         }
 
         const requestOptions = {
@@ -161,8 +141,10 @@ function ClientForm(props) {
     const {
         id, name, email, country, clientGroupIds,
         communicationLanguage, phoneNumber, clientManagerIds,
-        deliveryAddress, billingAddress, marketingApprovals
+        deliveryAddress, billingAddress
     } = values;
+
+    console.log(props);
 
     return (
         <section className="section section-small-padding product client-form">
@@ -338,57 +320,24 @@ function ClientForm(props) {
                                 variant="standard"
                                 onChange={handleOnChange} />
                         </div>
-                        <div className="field">
-                            <NoSsr>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            onChange={e => {
-                                                if (e.target.checked) {
-                                                    setEmailMarketingApproval({ name: ClientFormConstants.emailMarketingApprovalName() }); 
+                        {props.clientApprovals && props.clientApprovals.length > 0 && 
+                            props.clientApprovals.map((approval, index) => {
+                                return (
+                                    <div key={index} className="field">
+                                        <NoSsr>
+                                            <FormControlLabel
+                                                control={
+                                                    <Switch
+                                                        onChange={e => {e.target.checked}}
+                                                        id={approval.name}
+                                                        name={approval.name}
+                                                        color="secondary" />
                                                 }
-                                                else {
-                                                    setEmailMarketingApproval(null);
-                                                }
-                                            }}
-                                            checked={emailMarketingApproval}
-                                            id="emailMarketingApproval"
-                                            name="emailMarketingApproval"
-                                            color="secondary" />
-                                    }
-                                    label={props.emailMarketingApprovalLabel} />
-                            </NoSsr>
-                        </div>
-                        {emailMarketingApproval && emailMarketingApproval.createdDate &&
-                            <div className="field">
-                                <p>{props.expressedOnLabel}: {moment.utc(emailMarketingApproval.createdDate).local().format("L LT")}</p>
-                            </div>
-                        }
-                        <div className="field">
-                            <NoSsr>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            onChange={e => {
-                                                if (e.target.checked) {
-                                                    setSmsMarketingApproval({ name: ClientFormConstants.smsMarketingApprovalName() }); 
-                                                }
-                                                else {
-                                                    setSmsMarketingApproval(null);
-                                                }
-                                            }}
-                                            checked={smsMarketingApproval}
-                                            id="smsMarketingApproval"
-                                            name="smsMarketingApproval"
-                                            color="secondary" />
-                                    }
-                                    label={props.smsMarketingApprovalLabel} />
-                            </NoSsr>
-                        </div>
-                        {smsMarketingApproval && smsMarketingApproval.createdDate &&
-                            <div className="field">
-                                <p>{props.expressedOnLabel}: {moment.utc(smsMarketingApproval.createdDate).local().format("L LT")}</p>
-                            </div>
+                                                label={approval.name} />
+                                        </NoSsr>
+                                    </div>
+                                );
+                            })
                         }
                         <div className="field client-form__field-row">
                             <Button
