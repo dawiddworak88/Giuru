@@ -17,6 +17,5 @@ namespace Seller.Web.Areas.Clients.ApiRequestModels
         public IEnumerable<Guid> ClientManagerIds { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
         public Guid? DefaultBillingAddressId { get; set; }
-        public IEnumerable<string> MarketingApprovals { get; set; }
     }
 }

@@ -318,12 +318,6 @@
   <data name="NewClientAddress" xml:space="preserve">
     <value>Adresse hinzufügen</value>
   </data>
-  <data name="IsEmailMarketingApproval" xml:space="preserve">
-    <value>Versenden Sie kommerzielle Informationen per E-Mail</value>
-  </data>
-  <data name="IsSmsMarketingApproval" xml:space="preserve">
-    <value>Versenden Sie kommerzielle Informationen per SMS</value>
-  </data>
   <data name="ExpressedOnLabel" xml:space="preserve">
     <value>Die Einwilligung wurde erteilt</value>
   </data>
