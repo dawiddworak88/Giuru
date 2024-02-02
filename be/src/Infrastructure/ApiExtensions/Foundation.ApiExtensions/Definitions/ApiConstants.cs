@@ -37,6 +37,7 @@
             public static readonly string ClientsApiEndpoint = "/api/v1/clients";
             public static readonly string AddressesApiEndpoint = "/api/v1/clientaddresses";
             public static readonly string NotificationTypesApiEndpoint = "/api/v1/clientnotificationstypes";
+            public static readonly string NotificationTypesApiApprovalEndpoint = "/api/v1/clientnotificationstypes/approvals";
         }
 
         public struct Identity
