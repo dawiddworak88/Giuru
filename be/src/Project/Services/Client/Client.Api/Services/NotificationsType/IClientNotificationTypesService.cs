@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Client.Api.Services.Notifications
+namespace Client.Api.Services.NotificationsType
 {
     public interface IClientNotificationTypesService
     {

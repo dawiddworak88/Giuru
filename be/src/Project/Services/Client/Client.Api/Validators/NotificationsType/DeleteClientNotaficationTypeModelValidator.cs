@@ -2,7 +2,7 @@
 using Foundation.Extensions.Validators;
 using Client.Api.ServicesModels.Notification;
 
-namespace Client.Api.Validators.Notifications
+namespace Client.Api.Validators.NotificationsType
 {
     public class DeleteClientNotaficationTypeModelValidator : BaseServiceModelValidator<DeleteClientNotificationTypeServiceModel>
     {

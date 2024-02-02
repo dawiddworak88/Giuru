@@ -16,7 +16,7 @@ using System.Net;
 using Foundation.GenericRepository.Extensions;
 using System;
 
-namespace Client.Api.Services.Notifications
+namespace Client.Api.Services.NotificationsType
 {
     public class ClientNotificationTypesService : IClientNotificationTypesService
     {
@@ -43,7 +43,7 @@ namespace Client.Api.Services.Notifications
             }
 
             notificationTypes = notificationTypes.ApplySort(model.OrderBy);
-
+            
             PagedResults<IEnumerable<ClientNotificationType>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)

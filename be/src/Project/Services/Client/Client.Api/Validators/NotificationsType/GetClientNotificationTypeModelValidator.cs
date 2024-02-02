@@ -2,7 +2,7 @@
 using Client.Api.ServicesModels.Notification;
 using FluentValidation;
 
-namespace Client.Api.Validators.Notifications
+namespace Client.Api.Validators.NotificationsType
 {
     public class GetClientNotificationTypeModelValidator : BaseServiceModelValidator<GetClientNotificationTypeServiceModel>
     {
