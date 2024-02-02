@@ -20,7 +20,9 @@ using Seller.Web.Areas.Global.Repositories;
 using Seller.Web.Areas.Global.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Foundation.GenericRepository.Definitions;
-using Foundation.Extensions.ExtensionMethods;
+using Seller.Web.Areas.Clients.Repositories.NotificationTypes;
+using Seller.Web.Areas.Clients.DomainModels;
+using System;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -36,6 +38,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IClientAccountManagersRepository _clientManagersRepository;
         private readonly ICountriesRepository _countriesRepository;
         private readonly IClientAddressesRepository _clientAddressesRepository;
+        private readonly IClientNotificationTypesRepository _clientNotificationTypesRepository;
+        private readonly IClientNotificationTypeApprovalRepository _clientNotificationTypeApprovalRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -47,7 +51,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IClientAccountManagersRepository clientManagersRepository,
             ICountriesRepository countriesRepository,
             IClientAddressesRepository clientAddressesRepository,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IClientNotificationTypesRepository clientNotificationTypesRepository,
+            IClientNotificationTypeApprovalRepository clientNotificationTypeApprovalRepository)
         {
             _clientsRepository = clientsRepository;
             _globalLocalizer = globalLocalizer;
@@ -59,6 +65,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _clientManagersRepository = clientManagersRepository;
             _countriesRepository = countriesRepository;
             _clientAddressesRepository = clientAddressesRepository;
+            _clientNotificationTypesRepository = clientNotificationTypesRepository;
+            _clientNotificationTypeApprovalRepository = clientNotificationTypeApprovalRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -104,8 +112,6 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 CountryLabel = _globalLocalizer.GetString("Country"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
-                EmailMarketingApprovalLabel = _clientLocalizer.GetString("IsEmailMarketingApproval"),
-                SmsMarketingApprovalLabel = _clientLocalizer.GetString("IsSmsMarketingApproval"),
                 ExpressedOnLabel = _clientLocalizer.GetString("ExpressedOnLabel")
             };
 
@@ -125,11 +131,6 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.CountryId = client.CountryId;
                     viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
                     viewModel.DefaultBillingAddressId = client.DefaultBillingAddressId;
-                    viewModel.MarketingApprovals = client.MarketingApprovals.Select(x => new ClientMarketingApproval
-                    {
-                        Name = x.Name,
-                        CreatedDate = x.CreatedDate
-                    });
 
                     var user = await _identityRepository.GetAsync(componentModel.Token, componentModel.Language, client.Email);
 
@@ -178,6 +179,19 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     Id = x.Id,
                     Name = $"{x.Company}, {x.FirstName} {x.LastName}, {x.PostCode} {x.City}"
+                });
+            }
+
+            var clientTypeApprovals = await _clientNotificationTypesRepository.GetAsync(componentModel.Token, componentModel.Language, $"{nameof(ClientNotificationType.CreatedDate)} asc");
+
+            var clientApprovals = await _clientNotificationTypeApprovalRepository.GetAsync(componentModel.Token, componentModel.Language, viewModel.Id);
+
+            if(clientTypeApprovals is not null)
+            {
+                viewModel.ClientApprovals = clientTypeApprovals.Select(x => new ClientNotificationTypeViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
                 });
             }
 

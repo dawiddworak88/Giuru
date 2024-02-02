@@ -52,9 +52,7 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public IEnumerable<ListItemViewModel> Countries { get; set; }
         public IEnumerable<ListItemViewModel> ClientAddresses { get; set; }
         public IEnumerable<ClientAccountManagerViewModel> ClientManagers { get; set; }
-        public string EmailMarketingApprovalLabel { get; set; }
-        public string SmsMarketingApprovalLabel { get; set; }
-        public IEnumerable<ClientMarketingApproval> MarketingApprovals { get; set; }
+        public IEnumerable<ClientNotificationTypeViewModel> ClientApprovals { get; set; }
         public string ExpressedOnLabel { get; set; }
     }
 }
