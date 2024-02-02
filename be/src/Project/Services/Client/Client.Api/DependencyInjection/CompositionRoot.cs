@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Client.Api.Services.Addresses;
-using Client.Api.Services.Notifications;
+using Client.Api.Services.NotificationsType;
 
 namespace Client.Api.DependencyInjection
 {
@@ -23,6 +23,7 @@ namespace Client.Api.DependencyInjection
             services.AddScoped<IClientAccountManagersService, ClientAccountManagersService>();
             services.AddScoped<IClientAddressesService, ClientAddressesService>();
             services.AddScoped<IClientNotificationTypesService, ClientNotificationTypesService>();
+            services.AddScoped<IClientNotificationTypeApprovalService, ClientNotificationTypeApprovalService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
