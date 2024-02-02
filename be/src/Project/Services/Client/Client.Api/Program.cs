@@ -26,10 +26,7 @@ using Foundation.Telemetry.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.ConfigureAppConfiguration((_, config) =>
-{
-    config.AddEnvironmentVariables();
-});
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 {
@@ -48,7 +45,10 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
             hostingContext.Configuration["LogzIoType"],
             new LogzioOptions
             {
-                DataCenterSubDomain = hostingContext.Configuration["LogzIoDataCenterSubDomain"]
+                DataCenter = new LogzioDataCenter
+                {
+                    SubDomain = hostingContext.Configuration["LogzIoDataCenterSubDomain"]
+                }
             });
     }
 
@@ -131,20 +131,17 @@ app.UseAuthorization();
 
 app.UseCustomHeaderRequestLocalizationProvider(builder.Configuration, app.Services.GetService<IOptionsMonitor<LocalizationSettings>>());
 
-app.UseEndpoints(endpoints =>
+app.MapControllers();
+
+app.MapHealthChecks("/hc", new HealthCheckOptions
 {
-    endpoints.MapControllers();
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
-    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-    {
-        Predicate = _ => true,
-        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-    });
-
-    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
-    {
-        Predicate = r => r.Name.Contains("self")
-    });
+app.MapHealthChecks("/liveness", new HealthCheckOptions
+{
+    Predicate = r => r.Name.Contains("self")
 });
 
 app.Run();
