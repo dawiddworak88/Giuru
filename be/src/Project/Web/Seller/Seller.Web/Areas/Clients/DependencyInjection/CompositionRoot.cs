@@ -24,6 +24,7 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IClientApplicationsRepository, ClientApplicationsRepository>();
             services.AddScoped<IClientAddressesRepository, ClientAddressesRepository>();
             services.AddScoped<IClientNotificationTypesRepository, ClientNotificationTypesRepository>();
+            services.AddScoped<IClientNotificationTypeApprovalRepository, ClientNotificationTypeApprovalRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>>, ClientsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel>, ClientsPageModelBuilder>();
