@@ -11,6 +11,7 @@ namespace Seller.Web.Areas.Clients.Repositories.NotificationTypes
         Task SaveAsync(string token, string language, Guid? id, string name);
         Task<PagedResults<IEnumerable<ClientNotificationType>>> GetAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
         Task<ClientNotificationType> GetAsync(string token, string language, Guid? id);
+        Task<IEnumerable<ClientNotificationType>> GetAsync(string token, string language, string orderBy);
         Task DeleteAsync(string token, string language, Guid? id);
     }
 }
