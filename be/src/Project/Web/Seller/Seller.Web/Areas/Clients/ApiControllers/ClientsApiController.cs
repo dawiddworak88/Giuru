@@ -8,6 +8,7 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.Groups;
+using Seller.Web.Areas.Clients.Repositories.NotificationTypes;
 using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Identity;
 using Seller.Web.Shared.Repositories.Organisations;
@@ -27,19 +28,22 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly IIdentityRepository _identityRepository;
         private readonly IStringLocalizer _clientLocalizer;
         private readonly IClientGroupsRepository _clientGroupsRepository;
+        private readonly IClientNotificationTypeApprovalRepository _clientNotificationTypeApprovalRepository;
 
         public ClientsApiController(
             IOrganisationsRepository organisationsRepository,
             IClientsRepository clientsRepository,
             IStringLocalizer<ClientResources> clientLocalizer,
             IIdentityRepository identityRepository,
-            IClientGroupsRepository clientGroupsRepository)
+            IClientGroupsRepository clientGroupsRepository,
+            IClientNotificationTypeApprovalRepository clientNotificationTypeApprovalRepository)
         {
             _organisationsRepository = organisationsRepository;
             _clientsRepository = clientsRepository;
             _clientLocalizer = clientLocalizer;
             _identityRepository = identityRepository;
             _clientGroupsRepository = clientGroupsRepository;
+            _clientNotificationTypeApprovalRepository = clientNotificationTypeApprovalRepository;
         }
 
         [HttpGet]
@@ -76,6 +80,11 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             }
 
             var clientId = await _clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PhoneNumber, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId);
+
+            if (model.ClientApprovals is not null)
+            {
+                await _clientNotificationTypeApprovalRepository.SaveAsync(token, language, model.Id, model.ClientApprovals);
+            }
 
             if (model.HasAccount)
             {
