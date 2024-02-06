@@ -10,12 +10,12 @@ import {
 import useForm from "../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
-import ClientFormConstants from "../../../../shared/constants/ClientFormConstants";
 import moment from "moment";
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
     const [canCreateAccount, setCanCreateAccount] = useState(props.hasAccount ? props.hasAccount : false);
+    const [notificationTypeIds, setNotificationTypeIds] = useState(props.clientApprovals ? props.clientApprovals.filter(x => x.isApproved).map(x => x.id) : []);
 
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -66,7 +66,8 @@ function ClientForm(props) {
             ...state,
             countryId: country ? country.id : null,
             defaultDeliveryAddressId: state.deliveryAddress ? state.deliveryAddress.id : null,
-            defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null
+            defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null,
+            clientApprovals: notificationTypeIds
         }
 
         const requestOptions = {
@@ -143,8 +144,6 @@ function ClientForm(props) {
         communicationLanguage, phoneNumber, clientManagerIds,
         deliveryAddress, billingAddress
     } = values;
-
-    console.log(props);
 
     return (
         <section className="section section-small-padding product client-form">
@@ -323,18 +322,32 @@ function ClientForm(props) {
                         {props.clientApprovals && props.clientApprovals.length > 0 && 
                             props.clientApprovals.map((approval, index) => {
                                 return (
-                                    <div key={index} className="field">
+                                    <div key={approval.id} className="field">
                                         <NoSsr>
                                             <FormControlLabel
                                                 control={
                                                     <Switch
-                                                        onChange={e => {e.target.checked}}
+                                                        onChange={e => {
+                                                            approval.isApproved = !approval.isApproved;
+                                                            if (e.target.checked) {
+                                                                setNotificationTypeIds(notificationTypeIds.concat(approval.id));
+                                                            }
+                                                            else {
+                                                                setNotificationTypeIds(notificationTypeIds.filter(x => x !== approval.id));
+                                                            }
+                                                        }}
+                                                        checked={approval.isApproved}
                                                         id={approval.name}
                                                         name={approval.name}
                                                         color="secondary" />
                                                 }
                                                 label={approval.name} />
                                         </NoSsr>
+                                        {approval.isApproved && approval.approvalDate &&
+                                            <p>
+                                                {props.expressedOnLabel}: {moment.utc(approval.approvalDate).local().format("L LT")}
+                                            </p>
+                                        }
                                     </div>
                                 );
                             })
