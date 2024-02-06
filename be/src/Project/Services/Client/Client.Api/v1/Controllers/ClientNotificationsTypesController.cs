@@ -24,7 +24,7 @@ namespace Client.Api.v1.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{veriosn:apiVersion}/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class ClientNotificationsTypesController : ControllerBase
     {
         private readonly IClientNotificationTypesService _clientNotificationTypesService;
