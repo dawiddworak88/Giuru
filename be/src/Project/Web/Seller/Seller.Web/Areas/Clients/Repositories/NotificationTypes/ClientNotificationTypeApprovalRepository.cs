@@ -65,7 +65,7 @@ namespace Seller.Web.Areas.Clients.Repositories.NotificationTypes
                 AccessToken = token,
                 Language = language,
                 Data = requestModel,
-                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.NotificationTypesApiApprovalEndpoint}}"
+                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.NotificationTypesApiApprovalEndpoint}"
             };
 
             var response = await _apiClientService.PostAsync<ApiRequest<ClientNotificationTypeApprovalRequestModel>, ClientNotificationTypeApprovalRequestModel, BaseResponseModel>(apiRequest);
