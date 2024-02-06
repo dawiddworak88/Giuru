@@ -3,10 +3,7 @@ using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Seller.Web.Areas.Clients.DomainModels;
-using Seller.Web.Areas.Clients.ModelBuilders;
 using Seller.Web.Areas.Clients.ViewModels;
-using Seller.Web.Shared.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;
 
