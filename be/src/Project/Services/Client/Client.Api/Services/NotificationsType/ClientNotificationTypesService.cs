@@ -146,6 +146,7 @@ namespace Client.Api.Services.NotificationsType
                 {
                     Name = model.Name,
                     Language = model.Language,
+                    ClientNotificationTypeId = model.Id,
                 };
 
                 _context.ClientNotificationTypeTranslations.Add(newNotificationTypeTranslation.FillCommonProperties());
