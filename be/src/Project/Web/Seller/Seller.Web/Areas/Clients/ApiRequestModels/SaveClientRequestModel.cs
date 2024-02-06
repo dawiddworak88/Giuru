@@ -15,6 +15,7 @@ namespace Seller.Web.Areas.Clients.ApiRequestModels
         public bool HasAccount { get; set; }
         public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> ClientManagerIds { get; set; }
+        public IEnumerable<Guid> ClientApprovals { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
         public Guid? DefaultBillingAddressId { get; set; }
     }
