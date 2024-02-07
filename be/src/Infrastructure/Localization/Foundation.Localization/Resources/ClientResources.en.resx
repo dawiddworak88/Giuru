@@ -348,4 +348,7 @@
   <data name="NotificationTypeSavedSuccessfully" xml:space="preserve">
     <value>Approval successfully saved</value>
   </data>
+  <data name="NotificationTypeDeleteTypeApprovalConflict" xml:space="preserve">
+    <value>Delete customer approvals assigned to this type of approval</value>
+  </data>
 </root>

@@ -348,4 +348,7 @@
   <data name="NotificationTypeSavedSuccessfully" xml:space="preserve">
     <value>Einwilligung erfolgreich gespeichert</value>
   </data>
+  <data name="NotificationTypeDeleteTypeApprovalConflict" xml:space="preserve">
+    <value>Löschen Sie Kunden-Einwilligungen, die diesem Einwilligungstyp zugeordnet sind</value>
+  </data>
 </root>

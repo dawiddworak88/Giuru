@@ -13,5 +13,6 @@ namespace Client.Api.Services.NotificationsType
         Task DeleteAsync(DeleteClientNotificationTypeServiceModel model);
         Task<ClientNotificationTypeServiceModel> UpdateAsync(UpdateClientNotificationTypeServiceModel model);
         Task<ClientNotificationTypeServiceModel> CreateAsync(CreateClientNotificationTypeServiceModel model);
+        PagedResults<IEnumerable<ClientNotificationTypeServiceModel>> GetByIds(GetClientNotificationTypeByIdsServiceModel model);
     }
 }

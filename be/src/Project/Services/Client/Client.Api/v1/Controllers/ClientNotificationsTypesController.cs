@@ -7,15 +7,18 @@ using Foundation.Account.Definitions;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.Helpers;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Nest;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Reflection.Metadata;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -41,6 +44,7 @@ namespace Client.Api.v1.Controllers
         /// <summary>
         /// Gets list of notifications types.
         /// </summary>
+        /// <param name="ids">The notificationType ids.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
@@ -49,37 +53,81 @@ namespace Client.Api.v1.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy) 
+        public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
-            var serviceModel = new GetClientNotificationTypesServiceModel
-            {
-                Language = CultureInfo.CurrentCulture.Name,
-                SearchTerm = searchTerm,
-                PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage,
-                OrderBy = orderBy,
-                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-            };
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var clientNotificationTypes = _clientNotificationTypesService.Get(serviceModel);
+            var notificationTypeIds = ids.ToEnumerableGuidIds();
 
-            if (clientNotificationTypes is not null)
+            if (notificationTypeIds is not null)
             {
-                var response = new PagedResults<IEnumerable<ClientNotificationTypeResponseModel>>(clientNotificationTypes.Total, clientNotificationTypes.PageSize)
+                var serviceModel = new GetClientNotificationTypeByIdsServiceModel
                 {
-                    Data = clientNotificationTypes.Data.OrEmptyIfNull().Select(x => new ClientNotificationTypeResponseModel
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        CreatedDate = x.CreatedDate,
-                        LastModifiedDate = x.LastModifiedDate
-                    })
+                    Ids = notificationTypeIds,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    OrderBy = orderBy,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
-                return StatusCode((int)HttpStatusCode.OK, response);
-            }
+                var modelValidator = new GetClientNotificationTypeByIdsModelValidator();
+                var validationResult = await modelValidator.ValidateAsync(serviceModel);
 
-            return StatusCode((int)HttpStatusCode.UnprocessableEntity);
+                if (validationResult.IsValid)
+                {
+                    var notificationTypes = _clientNotificationTypesService.GetByIds(serviceModel);
+
+                    if (notificationTypes is not null)
+                    {
+                        var response = new PagedResults<IEnumerable<ClientNotificationTypeResponseModel>>(notificationTypes.Total, notificationTypes.PageSize)
+                        {
+                            Data = notificationTypes.Data.OrEmptyIfNull().Select(x => new ClientNotificationTypeResponseModel
+                            {
+                                Id = x.Id,
+                                Name = x.Name
+                            })
+                        };
+
+                        return StatusCode((int)HttpStatusCode.OK, response);
+                    }
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
+            else
+            {
+                var serviceModel = new GetClientNotificationTypesServiceModel
+                {
+                    Language = CultureInfo.CurrentCulture.Name,
+                    SearchTerm = searchTerm,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    OrderBy = orderBy,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                };
+
+                var clientNotificationTypes = _clientNotificationTypesService.Get(serviceModel);
+
+                if (clientNotificationTypes is not null)
+                {
+                    var response = new PagedResults<IEnumerable<ClientNotificationTypeResponseModel>>(clientNotificationTypes.Total, clientNotificationTypes.PageSize)
+                    {
+                        Data = clientNotificationTypes.Data.OrEmptyIfNull().Select(x => new ClientNotificationTypeResponseModel
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            CreatedDate = x.CreatedDate,
+                            LastModifiedDate = x.LastModifiedDate
+                        })
+                    };
+
+                    return StatusCode((int)HttpStatusCode.OK, response);
+                }
+
+                return StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            }
         }
 
         /// <summary>
@@ -113,7 +161,7 @@ namespace Client.Api.v1.Controllers
                         Id = clientNotificationType.Id,
                         Name = clientNotificationType.Name,
                         CreatedDate = clientNotificationType.CreatedDate,
-                        LastModifiedDate= clientNotificationType.LastModifiedDate
+                        LastModifiedDate = clientNotificationType.LastModifiedDate
                     };
 
                     return StatusCode((int)HttpStatusCode.OK, response);
@@ -193,6 +241,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> Delete(Guid? id)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
@@ -232,7 +281,7 @@ namespace Client.Api.v1.Controllers
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
-            { 
+            {
                 var notificationTypeApprovals = _clientNotificationTypeApprovalService.Get(serviceModel);
 
                 if (notificationTypeApprovals is not null)

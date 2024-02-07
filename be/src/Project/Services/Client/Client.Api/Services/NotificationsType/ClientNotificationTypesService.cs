@@ -119,6 +119,11 @@ namespace Client.Api.Services.NotificationsType
                 throw new CustomException(_clientLocalizer.GetString("NotificationTypeNotFound"), (int)HttpStatusCode.NoContent);
             }
 
+            if (await _context.ClientNotificationTypeApprovals.AnyAsync(x => x.ClientNotificationTypeId == notificationType.Id && x.IsActive))
+            {
+                throw new CustomException(_clientLocalizer.GetString("NotificationTypeDeleteTypeApprovalConflict"), (int)HttpStatusCode.Conflict);
+            }
+
             notificationType.IsActive = false;
 
             await _context.SaveChangesAsync();
@@ -157,6 +162,28 @@ namespace Client.Api.Services.NotificationsType
             await _context.SaveChangesAsync();
 
             return await GetAsync(new GetClientNotificationTypeServiceModel { Id = notificationType.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
+        }
+
+        public PagedResults<IEnumerable<ClientNotificationTypeServiceModel>> GetByIds(GetClientNotificationTypeByIdsServiceModel model)
+        {
+            var notificationTypes = from n in _context.ClientNotificationTypes
+                                    where model.Ids.Contains(n.Id) && n.IsActive
+                                    join nt in _context.ClientNotificationTypeTranslations on n.Id equals nt.ClientNotificationTypeId
+                                    where nt.ClientNotificationTypeId == n.Id && nt.IsActive && nt.Language == model.Language
+                                    select new ClientNotificationTypeServiceModel
+                                    {
+                                        Id = n.Id,
+                                        Name = nt.Name
+                                    };
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                notificationTypes = notificationTypes.Take(Constants.MaxItemsPerPageLimit);
+
+                return notificationTypes.PagedIndex(new Pagination(notificationTypes.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+
+            return notificationTypes.PagedIndex(new Pagination(notificationTypes.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
         }
     }
 }
