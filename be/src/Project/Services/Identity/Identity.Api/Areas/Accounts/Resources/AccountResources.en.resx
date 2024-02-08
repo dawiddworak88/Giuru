@@ -144,9 +144,6 @@
   <data name="EmailIsConfirmedText" xml:space="preserve">
     <value>Account Confirmed</value>
   </data>
-  <data name="EmailMarketingApprovalLabel" xml:space="preserve">
-    <value>I consent to receiving information electronically, to an e-mail address that I secure</value>
-  </data>
   <data name="FirstNameRequiredErrorMessage" xml:space="preserve">
     <value>Enter your first name</value>
   </data>
@@ -215,9 +212,6 @@
   </data>
   <data name="SignInText" xml:space="preserve">
     <value>Sign in</value>
-  </data>
-  <data name="SmsMarketingApprovalLabel" xml:space="preserve">
-    <value>I consent to telephone contact for marketing purposes</value>
   </data>
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>The reset password link has been sent if your account exists in our platform. Please check your e-mail box for further instructions.</value>
