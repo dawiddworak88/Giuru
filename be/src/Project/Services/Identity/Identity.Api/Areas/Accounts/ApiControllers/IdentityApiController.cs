@@ -2,6 +2,7 @@
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
+using Identity.Api.Areas.Accounts.Models;
 using Identity.Api.Areas.Accounts.Repositories;
 using Identity.Api.Areas.Accounts.Services.UserServices;
 using Identity.Api.Areas.Accounts.Validators;
@@ -33,6 +34,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         private readonly LinkGenerator _linkGenerator;
         private readonly IClientRepository _clientRepository;
         private readonly ITokenService _tokenService;
+        private readonly IClientNotificationTypeRepository _clientNotificationTypeRepository;
 
         public IdentityApiController(
             IUserService userService,
@@ -42,7 +44,8 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             LinkGenerator linkGenerator,
             IUsersService usersService,
             IClientRepository clientRepository,
-            ITokenService tokenService)
+            ITokenService tokenService,
+            IClientNotificationTypeRepository clientNotificationTypeRepository)
         {
             _userService = userService;
             _usersService = usersService;
@@ -52,6 +55,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             _linkGenerator = linkGenerator;
             _clientRepository = clientRepository;
             _tokenService = tokenService;
+            _clientNotificationTypeRepository = clientNotificationTypeRepository;
         }
 
         [HttpGet]
@@ -113,17 +117,21 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                 {
                     if (await _userService.SignInAsync(user.Email, model.Password, null, null))
                     {
-                        if (model.MarketingApprovals.Any())
+                        if (model.ClientApprovals.Any())
                         {
                             var token = await _tokenService.GetTokenAsync(_options.Value.ApiEmail, _options.Value.ApiOrganisationId, _options.Value.ApiAppSecret);
 
-                            var client = await _clientRepository.GetByOrganisationAsync(language, token, user.OrganisationId);
+                            var client = await _clientRepository.GetByOrganisationAsync(token, language, user.OrganisationId);
 
-                            if (client is not null)
+                            if (client.Id.HasValue)
                             {
-                                client.MarketingApprovals = model.MarketingApprovals;
+                                var clientApprovals = new ClientNotificationTypeApprovals
+                                {
+                                    ClientId = client.Id.Value,
+                                    ClientApprovals = model.ClientApprovals
+                                };
 
-                                await _clientRepository.SaveAsync(language, token, client);
+                                await _clientNotificationTypeRepository.SaveAsync(token, language, clientApprovals);
                             }
                         }
 
