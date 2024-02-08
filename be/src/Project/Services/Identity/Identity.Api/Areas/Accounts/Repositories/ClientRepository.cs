@@ -1,6 +1,5 @@
 ﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Shared.Definitions;
-using Identity.Api.Areas.Accounts.ApiRequestModels;
 using System;
 using System.Threading.Tasks;
 using Foundation.ApiExtensions.Services.ApiClientServices;
@@ -9,7 +8,6 @@ using Microsoft.Extensions.Options;
 using Identity.Api.Configurations;
 using Foundation.ApiExtensions.Models.Request;
 using Identity.Api.Areas.Accounts.Models;
-using Foundation.ApiExtensions.Models.Response;
 
 namespace Identity.Api.Areas.Accounts.Repositories
 {
@@ -24,49 +22,7 @@ namespace Identity.Api.Areas.Accounts.Repositories
             _settings = settings;
         }
 
-        public async Task<Guid?> SaveAsync(string language, string token, Client client)
-        {
-            var requestModel = new SaveClientRequestModel
-            {
-                Id = client.Id,
-                Name = client.Name,
-                Email = client.Email,
-                CommunicationLanguage = client.CommunicationLanguage,
-                PhoneNumber = client.PhoneNumber,
-                CountryId = client.CountryId,
-                OrganisationId = client.OrganisationId,
-                ClientGroupIds = client.ClientGroupIds,
-                ClientManagerIds = client.ClientManagerIds,
-                DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
-                LastModifiedDate = client.LastModifiedDate,
-                CreatedDate = client.CreatedDate,
-                MarketingApprovals = client.MarketingApprovals
-            };
-
-            var apiRequest = new ApiRequest<SaveClientRequestModel>
-            {
-                Language = language,
-                Data = requestModel,
-                AccessToken = token,
-                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.ClientsApiEndpoint}"
-            };
-
-            var response = await _apiClientService.PostAsync<ApiRequest<SaveClientRequestModel>, SaveClientRequestModel, BaseResponseModel>(apiRequest);
-
-            if (response.IsSuccessStatusCode && response.Data?.Id != null)
-            {
-                return response.Data.Id;
-            }
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            return default;
-        }
-
-        public async Task<Client> GetByOrganisationAsync(string language, string token, Guid? id)
+        public async Task<Client> GetByOrganisationAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
@@ -77,13 +33,13 @@ namespace Identity.Api.Areas.Accounts.Repositories
             };
 
             var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Client>(apiRequest);
-            
+
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
-            if (response.IsSuccessStatusCode && response.Data != null) 
+            if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return response.Data;
             }
