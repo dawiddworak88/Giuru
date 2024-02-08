@@ -17,6 +17,5 @@ namespace Identity.Api.Areas.Accounts.Models
         public Guid? DefaultDeliveryAddressId { get; set; }
         public DateTime? LastModifiedDate { get; set; }
         public DateTime? CreatedDate { get; set; }
-        public IEnumerable<string> MarketingApprovals { get; set; }
     }
 }
