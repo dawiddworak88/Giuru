@@ -8,31 +8,16 @@ import { toast } from "react-toastify";
 import ResponseStatusConstants from "../../../../shared/constants/ResponseStatusConstants";
 import NavigationHelper from "../../../../shared/helpers/globals/NavigationHelper";
 import ToastHelper from "../../../../shared/helpers/globals/ToastHelper";
-import SetPasswordConstants from "../../../../shared/constants/SetPasswordConstants";
 
 function SetPasswordForm(props) {
     const [state, dispatch] = useContext(Context);
+    const [notificationTypeIds, setNotificationTypeIds] = useState([]);
+
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         password: { value: null, error: "" },
-        isEmailMarketingAporval: { value: false },
-        isSmsMarketingAporval: { value: false },
         returnUrl: { value: props.returnUrl ? props.returnUrl : null }
     };
-
-    const addNamesToMarketingApporvals = (state) => {
-        let result = [];
-
-        if (state.isEmailMarketingAporval) {
-            result.push(SetPasswordConstants.emailMarketingApprovalName());
-        }
-
-        if (state.isSmsMarketingAporval) {
-            result.push(SetPasswordConstants.smsMarketingApprovalName());
-        }
-
-        return result;
-    }
 
     const stateValidatorSchema = {
         password: {
@@ -52,7 +37,7 @@ function SetPasswordForm(props) {
 
         const payload = {
             ...state,
-            marketingApprovals: addNamesToMarketingApporvals(state)
+            clientApprovals: notificationTypeIds
         }
 
         const requestOptions = {
@@ -81,10 +66,10 @@ function SetPasswordForm(props) {
     };
 
     const {
-        disable, values, errors, dirty, setFieldValue, handleOnChange, handleOnSubmit
+        disable, values, errors, dirty, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
-    const { id, password, isEmailMarketingAporval, isSmsMarketingAporval } = values;
+    const { id, password } = values;
 
     return (
         <section className="section is-flex-centered set-password">
@@ -96,40 +81,34 @@ function SetPasswordForm(props) {
                                 <h1 className="title">{props.marketingApprovalHeader}</h1>
                                 <p className="subtitle mb-2 mt-1">{props.marketingApprovalText}</p>
                             </div>
-                            <div className="field">
-                                <NoSsr>
-                                    <FormControlLabel 
-                                        control={
-                                            <Checkbox
-                                                onChange={e => {
-                                                    setFieldValue({ name: "isEmailMarketingAporval", value: e.target.checked });
-                                                }}
-                                                checked={isEmailMarketingAporval}
-                                                id="emailMarketingApproval"
-                                                name="emailMarketingApproval"
-                                                color="secondary" />
-                                            }
-                                        label={props.emailMarketingApprovalLabel}
-                                    />
-                                </NoSsr>
-                            </div>
-                            <div className="field">
-                                <NoSsr>
-                                    <FormControlLabel 
-                                        control={
-                                            <Checkbox
-                                                onChange={e => {
-                                                    setFieldValue({ name: "isSmsMarketingAporval", value: e.target.checked });
-                                                }}
-                                                checked={isSmsMarketingAporval}
-                                                id="smsMarketingApproval"
-                                                name="smsMarketingApproval"
-                                                color="secondary" />
-                                            }
-                                        label={props.smsMarketingApprovalLabel}
-                                    />
-                                </NoSsr>
-                            </div>
+                            {props.notificationTypes && props.notificationTypes.length > 0 &&
+                                props.notificationTypes.map((notificationType) => {
+                                    return (
+                                        <div className="field" key={notificationType.id}>
+                                            <NoSsr>
+                                                <FormControlLabel
+                                                    control={
+                                                        <Checkbox
+                                                            onChange={e => {
+                                                                notificationType.isApproved = !notificationType.isApproved;
+                                                                if (e.target.checked) {
+                                                                    setNotificationTypeIds(notificationTypeIds.concat(notificationType.id))
+                                                                }
+                                                                else {
+                                                                    setNotificationTypeIds(notificationTypeIds.filter(x => x !== notificationType.id));
+                                                                }
+                                                            }}
+                                                            checked={notificationType.isApproved}
+                                                            id={notificationType.name}
+                                                            name={notificationType.name}
+                                                            color="secondary" />
+                                                    }
+                                                    label={notificationType.name}
+                                                />
+                                            </NoSsr>
+                                        </div>
+                                    )
+                                })}
                         </div>
                         <div className="column is-4">
                             <input type="hidden" name="id" value={id} />
@@ -137,24 +116,24 @@ function SetPasswordForm(props) {
                                 <h1 className="subtitle is-4">{props.setPasswordText}</h1>
                             </div>
                             <div className="field">
-                                <TextField 
-                                    id="password" 
-                                    name="password" 
+                                <TextField
+                                    id="password"
+                                    name="password"
                                     type="password"
                                     variant="standard"
-                                    label={props.passwordLabel} 
-                                    fullWidth={true} 
-                                    value={password} 
-                                    onChange={handleOnChange} 
-                                    helperText={dirty.password ? errors.password : ""} 
+                                    label={props.passwordLabel}
+                                    fullWidth={true}
+                                    value={password}
+                                    onChange={handleOnChange}
+                                    helperText={dirty.password ? errors.password : ""}
                                     error={(errors.password.length > 0) && dirty.password} />
                             </div>
                             <div className="field">
-                                <Button 
-                                    type="submit" 
-                                    variant="contained" 
-                                    color="primary" 
-                                    disabled={state.isLoading || disable} 
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={state.isLoading || disable}
                                     fullWidth={true}>
                                     {props.setPasswordText}
                                 </Button>
