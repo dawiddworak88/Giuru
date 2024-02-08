@@ -28,6 +28,7 @@ namespace Identity.Api.Areas.Accounts.DependencyInjection
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
             services.AddScoped<IClientRepository, ClientRepository>();
+            services.AddScoped<IClientNotificationTypeRepository, ClientNotificationTypeRepository>();
         }
     }
 }
