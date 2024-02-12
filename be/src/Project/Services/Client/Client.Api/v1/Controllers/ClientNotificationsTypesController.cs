@@ -12,13 +12,11 @@ using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Nest;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Reflection.Metadata;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -31,14 +29,11 @@ namespace Client.Api.v1.Controllers
     public class ClientNotificationsTypesController : ControllerBase
     {
         private readonly IClientNotificationTypesService _clientNotificationTypesService;
-        private readonly IClientNotificationTypeApprovalService _clientNotificationTypeApprovalService;
 
         public ClientNotificationsTypesController(
-            IClientNotificationTypesService clientNotificationTypesService,
-            IClientNotificationTypeApprovalService clientNotificationTypeApprovalService)
+            IClientNotificationTypesService clientNotificationTypesService)
         {
             _clientNotificationTypesService = clientNotificationTypesService;
-            _clientNotificationTypeApprovalService = clientNotificationTypeApprovalService;
         }
 
         /// <summary>
@@ -257,69 +252,6 @@ namespace Client.Api.v1.Controllers
             if (validationResult.IsValid)
             {
                 await _clientNotificationTypesService.DeleteAsync(serviceModel);
-
-                return StatusCode((int)HttpStatusCode.OK);
-            }
-
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
-        }
-
-        [HttpGet, MapToApiVersion("1.0")]
-        [Route("Approvals/{clietnId}")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(Guid? clietnId)
-        {
-            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-
-            var serviceModel = new GetClientNotificationTypeApprovalsServiceModel
-            {
-                ClientId = clietnId
-            };
-
-            var validator = new GetClientNotificationTypeApprovalsModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
-
-            if (validationResult.IsValid)
-            {
-                var notificationTypeApprovals = _clientNotificationTypeApprovalService.Get(serviceModel);
-
-                if (notificationTypeApprovals is not null)
-                {
-                    return StatusCode((int)HttpStatusCode.OK, notificationTypeApprovals.Select(x => new ClientNotificationTypeApprovalResponseModel
-                    {
-                        Id = x.Id,
-                        ClientId = x.ClientId,
-                        IsApproved = x.IsApproved,
-                        ApprovalDate = x.ApprovalDate,
-                        NotificationTypeId = x.NotificationTypeId
-                    }));
-                }
-            }
-
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
-        }
-
-        [HttpPost, MapToApiVersion("1.0")]
-        [Route("Approvals")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Save([FromBody] ClintNotificationTypeApprovalRequestModel request)
-        {
-            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-
-            var serviceModel = new SaveNotificationTypeApprovalServiceModel
-            {
-                ClientId = request.ClientId,
-                NotificationTypeIds = request.NotificationTypeIds,
-            };
-
-            var validator = new SaveClientNotificationTypeApprovalModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
-
-            if (validationResult.IsValid)
-            {
-                await _clientNotificationTypeApprovalService.SaveAsync(serviceModel);
 
                 return StatusCode((int)HttpStatusCode.OK);
             }
