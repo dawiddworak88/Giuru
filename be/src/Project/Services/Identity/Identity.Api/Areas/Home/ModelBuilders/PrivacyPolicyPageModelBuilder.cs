@@ -3,6 +3,7 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.Metadatas.ViewModels;
+using Identity.Api.Areas.Home.DomainModels;
 using Identity.Api.Areas.Home.Repositories.Content;
 using Identity.Api.Areas.Home.ViewModels;
 using System.Threading.Tasks;
@@ -30,16 +31,17 @@ namespace Identity.Api.Areas.Home.ModelBuilders
 
         public async Task<PrivacyPolicyPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var content = await _contentRepository.GetContentAsync(componentModel.ContentPageKey, componentModel.Language);
+            var policy = await _contentRepository.GetPolicyAsync(componentModel.Language);
 
             var viewModel = new PrivacyPolicyPageViewModel
             {
                 Metadata = await _seoModelBuilder.BuildModelAsync(componentModel),
                 Header = _headerModelBuilder.BuildModel(),
-                Content = new ContentPageViewModel
+                Policy = new PolicyPageViewModel
                 {
-                    Title = content.Title,
-                    Content = content.Text
+                    Title = policy.Title,
+                    Description = policy.Description,
+                    AccordionItems = policy.Accordions
                 },
                 Footer = _footerModelBuilder.BuildModel()
             };
