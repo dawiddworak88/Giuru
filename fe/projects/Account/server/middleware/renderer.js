@@ -7,13 +7,15 @@ import ResetPasswordPage from "../../src/areas/Accounts/pages/ResetPassword/Rese
 import SignInPage from "../../src/areas/Accounts/pages/SignIn/SignInPage";
 import SetPasswordPage from "../../src/areas/Accounts/pages/SetPassword/SetPasswordPage";
 import ContentPage from "../../src/areas/Home/pages/Content/ContentPage";
+import PrivacyPolicyPage from "../../src/areas/Home/pages/PrivacyPolicy/PrivacyPolicyPage";
 
 const Components = {
 	RegisterPage,
 	ResetPasswordPage,
 	SignInPage,
 	SetPasswordPage,
-	ContentPage
+	ContentPage,
+	PrivacyPolicyPage
 };
 
 const serverRenderer = (req, res, next) => {
