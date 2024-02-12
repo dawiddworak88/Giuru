@@ -11,7 +11,7 @@ const PrivacyPolicyDetail = (props) => {
                 {props.description &&
                     <p>{props.description}</p>
                 }
-                <div className="mt-5">
+                <div>
                     {props.accordionItems && props.accordionItems.length > 0 &&
                         props.accordionItems.map((accordion, index) => {
                             return (
