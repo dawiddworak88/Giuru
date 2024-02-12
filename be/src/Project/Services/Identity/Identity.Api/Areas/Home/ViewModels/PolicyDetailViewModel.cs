@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Identity.Api.Areas.Home.ViewModels
 {
-    public class PolicyPageViewModel
+    public class PolicyDetailViewModel
     {
         public string Title { get; set; }
         public string Description { get; set; }
