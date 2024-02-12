@@ -57,6 +57,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@storybook/addon-essentials": "7.6.10",
     "@storybook/addon-interactions": "7.6.10",
     "@storybook/addon-links": "7.6.10",
@@ -66,7 +67,6 @@
     "@storybook/react": "7.6.10",
     "@storybook/react-webpack5": "7.6.10",
     "@storybook/test": "7.6.10",
-    "storybook": "7.6.10",
     "autoprefixer": "10.4.17",
     "babel-preset-react-app": "10.0.1",
     "clean-webpack-plugin": "4.0.0",
@@ -78,6 +78,7 @@
     "postcss-loader": "8.0.0",
     "sass": "1.70.0",
     "sass-loader": "14.0.0",
+    "storybook": "7.6.10",
     "style-loader": "3.3.4",
     "url-loader": "4.1.1",
     "webpack": "5.89.0",
