@@ -1,6 +1,7 @@
 import React from "react";
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
 import PropTypes from "prop-types";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const PrivacyPolicyDetail = (props) => {
     return (
@@ -17,6 +18,7 @@ const PrivacyPolicyDetail = (props) => {
                                 <div key={index} className="mt-5">
                                     <Accordion className="accordion">
                                         <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon />}
                                             aria-controls="panel-content"
                                             id={index}
                                         >
