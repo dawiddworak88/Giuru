@@ -8,7 +8,10 @@ using System;
 using System.Threading.Tasks;
 using Foundation.Extensions.ExtensionMethods;
 using System.Linq;
-using Identity.Api.Areas.Home.ResponseModels;
+using Identity.Api.Areas.Home.DomainModels;
+using Identity.Api.Areas.Home.ResponseModels.Content;
+using Identity.Api.Areas.Home.ResponseModels.Policy;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace Identity.Api.Areas.Home.Repositories.Content
 {
@@ -65,6 +68,60 @@ namespace Identity.Api.Areas.Home.Repositories.Content
             catch (Exception exception)
             {
                 _logger.LogError(exception, $"Couldn't get content for ${contentPageKey} in language ${language}");
+            }
+
+            return default;
+        }
+
+        public async Task<DomainModels.Policy> GetPolicyAsync(string language)
+        {
+            try
+            {
+                var query = new GraphQLRequest
+                {
+                    Query = $@"query getPrivacyPolicy {{
+                      privacyPolicyPage(locale: ""{language}"") {{
+                        data {{
+                          id
+                          attributes {{
+                            policy {{
+                              title
+                              description
+                              accordion {{
+                                accordionItems {{
+                                  id
+                                  title
+                                  description
+                                }}
+                              }}
+                            }}
+                          }}
+                        }}
+                      }}
+                    }}"
+                };
+
+                var response = await _graphQlClient.SendQueryAsync<JObject>(query);
+
+                if (response.Errors.OrEmptyIfNull().Any() is false && response?.Data is not null)
+                {
+                    var metaData = JsonConvert.DeserializeObject<PolicyGraphQlResponseModel>(response.Data.ToString());
+
+                    return new DomainModels.Policy
+                    {
+                        Title = metaData.Page?.Data?.Attributes?.Policy?.Title,
+                        Description = metaData.Page?.Data?.Attributes?.Policy?.Description,
+                        Accordions = metaData.Page?.Data?.Attributes?.Policy?.Accordion?.AccordionItems.Select(x => new DomainModels.AccordionItem
+                        {
+                            Title = x.Title,
+                            Description = x.Description
+                        })
+                    };
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Couldn't get policy for privacy policy in language ${language}");
             }
 
             return default;
