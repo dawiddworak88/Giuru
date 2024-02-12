@@ -20,14 +20,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: {{ .Values.buyerWeb.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.buyerWeb.readinessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.buyerWeb.readinessProbe.timeoutSeconds }}
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: {{ .Values.buyerWeb.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.buyerWeb.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.buyerWeb.livenessProbe.timeoutSeconds }}
@@ -80,7 +80,7 @@ spec:
         - secretRef:
             name: b2b-buyer-web-secrets
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
