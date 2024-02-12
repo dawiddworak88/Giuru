@@ -17,6 +17,5 @@ namespace Seller.Web.Areas.Clients.DomainModels
         public Guid? DefaultBillingAddressId { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
-        public IEnumerable<ClientMarketingApproval> MarketingApprovals { get; set; }
     }
 }
