@@ -26,16 +26,6 @@
       },
       "component": "shared.seo"
     },
-    "content": {
-      "type": "component",
-      "repeatable": false,
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "component": "blocks.content"
-    },
     "policy": {
       "type": "component",
       "repeatable": false,
