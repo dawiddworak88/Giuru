@@ -28,7 +28,6 @@ namespace Identity.Api.Areas.Home.Controllers
         {
             var componentModel = new ComponentModelBase
             {
-                ContentPageKey = "privacyPolicyPage",
                 Language = CultureInfo.CurrentUICulture.Name
             };
 
