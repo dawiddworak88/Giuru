@@ -322,7 +322,7 @@ function ClientForm(props) {
                         {props.clientApprovals && props.clientApprovals.length > 0 && 
                             props.clientApprovals.map((approval, index) => {
                                 return (
-                                    <div key={approval.id} className="field">
+                                    <div key={index} className="field">
                                         <NoSsr>
                                             <FormControlLabel
                                                 control={
