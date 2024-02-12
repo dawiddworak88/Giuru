@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Identity.Api.Areas.Home.ResponseModels
+namespace Identity.Api.Areas.Home.ResponseModels.Content
 {
     public record Attributes(
         [property: JsonProperty("content")] Content Content
