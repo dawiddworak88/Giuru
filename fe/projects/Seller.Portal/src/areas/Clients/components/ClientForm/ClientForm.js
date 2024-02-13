@@ -15,7 +15,6 @@ import moment from "moment";
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
     const [canCreateAccount, setCanCreateAccount] = useState(props.hasAccount ? props.hasAccount : false);
-    const [notificationTypeIds, setNotificationTypeIds] = useState(props.clientApprovals ? props.clientApprovals.filter(x => x.isApproved).map(x => x.id) : []);
 
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -26,7 +25,8 @@ function ClientForm(props) {
         country: { value: props.countryId ? props.countries.find((item) => item.id === props.countryId) : null },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : [] },
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : [] },
-        hasAccount: { value: props.hasAccount ? props.hasAccount : false }
+        hasAccount: { value: props.hasAccount ? props.hasAccount : false },
+        clientApprovalIds: { value: props.clientApprovals ? props.clientApprovals.filter(x => x.isApproved).map(x => x.id) : [] }
     };
 
     const stateValidatorSchema = {
@@ -66,8 +66,7 @@ function ClientForm(props) {
             ...state,
             countryId: country ? country.id : null,
             defaultDeliveryAddressId: state.deliveryAddress ? state.deliveryAddress.id : null,
-            defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null,
-            clientApprovals: notificationTypeIds
+            defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null
         }
 
         const requestOptions = {
@@ -134,6 +133,20 @@ function ClientForm(props) {
             });
     };
 
+    const handleClientApprovalChange = (e, approval) => {
+        var ids = [];
+
+        approval.isApproved = !approval.isApproved;
+        if (e.target.checked) {
+            ids = clientApprovalIds.concat(approval.id);
+        }
+        else {
+            ids = clientApprovalIds.filter(x => x !== approval.id);
+        }
+
+        return ids
+    }
+
     const {
         values, errors, dirty, disable,
         setFieldValue, handleOnChange, handleOnSubmit
@@ -142,7 +155,7 @@ function ClientForm(props) {
     const {
         id, name, email, country, clientGroupIds,
         communicationLanguage, phoneNumber, clientManagerIds,
-        deliveryAddress, billingAddress
+        deliveryAddress, billingAddress, clientApprovalIds
     } = values;
 
     return (
@@ -276,15 +289,15 @@ function ClientForm(props) {
                                 value={billingAddress}
                                 variant="standard"
                                 onChange={(event, newValue) => {
-                                    setFieldValue({name: "billingAddress", value: newValue});
+                                    setFieldValue({ name: "billingAddress", value: newValue });
                                 }}
                                 autoComplete
                                 renderInput={(params) => (
-                                    <TextField 
-                                        {...params} 
-                                        label={props.billingAddressLabel} 
+                                    <TextField
+                                        {...params}
+                                        label={props.billingAddressLabel}
                                         variant="standard"
-                                        margin="normal"/>
+                                        margin="normal" />
                                 )} />
                         </div>
                         <div className="field">
@@ -319,7 +332,7 @@ function ClientForm(props) {
                                 variant="standard"
                                 onChange={handleOnChange} />
                         </div>
-                        {props.clientApprovals && props.clientApprovals.length > 0 && 
+                        {props.clientApprovals && props.clientApprovals.length > 0 &&
                             props.clientApprovals.map((approval, index) => {
                                 return (
                                     <div key={index} className="field">
@@ -328,13 +341,7 @@ function ClientForm(props) {
                                                 control={
                                                     <Switch
                                                         onChange={e => {
-                                                            approval.isApproved = !approval.isApproved;
-                                                            if (e.target.checked) {
-                                                                setNotificationTypeIds(notificationTypeIds.concat(approval.id));
-                                                            }
-                                                            else {
-                                                                setNotificationTypeIds(notificationTypeIds.filter(x => x !== approval.id));
-                                                            }
+                                                            setFieldValue({ name: "clientApprovalIds", value: handleClientApprovalChange(e, approval) });
                                                         }}
                                                         checked={approval.isApproved}
                                                         id={approval.name}
