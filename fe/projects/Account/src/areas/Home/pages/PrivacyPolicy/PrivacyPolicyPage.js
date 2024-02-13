@@ -9,7 +9,7 @@ const PrivacyPolicyPage = (props) => {
     return (
         <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
             <Header {...props.header}></Header>
-            <PrivacyPolicyDetail {...props.policy}></PrivacyPolicyDetail>
+            <PrivacyPolicyDetail {...props.privacyPolicy}></PrivacyPolicyDetail>
             <Footer {...props.footer}></Footer>
         </ThemeProvider>
     )

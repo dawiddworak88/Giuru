@@ -38,7 +38,7 @@ namespace Identity.Api.Areas.Home.ModelBuilders
             {
                 Metadata = await _seoModelBuilder.BuildModelAsync(componentModel),
                 Header = _headerModelBuilder.BuildModel(),
-                Policy = new PolicyDetailViewModel
+                PrivacyPolicy = new PolicyDetailViewModel
                 {
                     Title = policy.Title,
                     Description = policy.Description,
