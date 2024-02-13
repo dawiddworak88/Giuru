@@ -19,11 +19,11 @@ namespace Client.Api.v1.Controllers
     [Route("api/v{veriosn:apiVersion}/[controller]")]
     [ApiController]
     [Authorize]
-    public class ClientNotificationTypaApprovalsController : ControllerBase
+    public class ClientNotificationTypeApprovalsController : ControllerBase
     {
         private readonly IClientNotificationTypeApprovalService _clientNotificationTypeApprovalService;
 
-        public ClientNotificationTypaApprovalsController(
+        public ClientNotificationTypeApprovalsController(
             IClientNotificationTypeApprovalService clientNotificationTypeApprovalService)
         {
             _clientNotificationTypeApprovalService = clientNotificationTypeApprovalService;
