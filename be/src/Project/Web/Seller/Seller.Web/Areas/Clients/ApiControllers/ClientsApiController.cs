@@ -81,9 +81,9 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
             var clientId = await _clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PhoneNumber, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId);
 
-            if (model.ClientApprovals is not null)
+            if (model.ClientApprovalIds is not null)
             {
-                await _clientNotificationTypeApprovalRepository.SaveAsync(token, language, model.Id, model.ClientApprovals);
+                await _clientNotificationTypeApprovalRepository.SaveAsync(token, language, model.Id, model.ClientApprovalIds);
             }
 
             if (model.HasAccount)
