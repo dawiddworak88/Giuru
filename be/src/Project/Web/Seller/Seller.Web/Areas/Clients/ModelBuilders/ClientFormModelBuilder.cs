@@ -22,10 +22,6 @@ using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Foundation.GenericRepository.Definitions;
 using Seller.Web.Areas.Clients.Repositories.NotificationTypes;
 using Seller.Web.Areas.Clients.DomainModels;
-using System;
-using DocumentFormat.OpenXml.Office2010.ExcelAc;
-using IdentityServer4.Extensions;
-using Foundation.Extensions.ExtensionMethods;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -185,52 +181,33 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 });
             }
 
-            var clientTypeApprovals = await _clientNotificationTypesRepository.GetAsync(componentModel.Token, componentModel.Language, $"{nameof(ClientNotificationType.CreatedDate)} asc");
-            
+            var clientTypesApprovals = (await _clientNotificationTypesRepository.GetAsync(componentModel.Token, componentModel.Language, $"{nameof(ClientNotificationType.CreatedDate)} asc"))
+                    .Select(x => new ClientNotificationTypeViewModel
+                    {
+                        Id = x.Id,
+                        Name = x.Name
+                    }).ToList();
+
             if (componentModel.Id.HasValue)
             {
                 var clientApprovals = await _clientNotificationTypeApprovalRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
-                var clientApprovalTypes = new List<ClientNotificationTypeViewModel>();
-
-                foreach (var typeApproval in clientTypeApprovals.OrEmptyIfNull())
+                if (clientApprovals.Any()) 
                 {
-                    if (clientApprovals.Any(x => x.NotificationTypeId == typeApproval.Id))
+                    foreach (var clientTypeApproval in clientTypesApprovals)
                     {
-                        var clientApproval = clientApprovals.FirstOrDefault(x => x.NotificationTypeId == typeApproval.Id);
+                        if (clientApprovals.Any(x => x.NotificationTypeId == clientTypeApproval.Id))
+                        {
+                            var clientApproval = clientApprovals.FirstOrDefault(x => x.NotificationTypeId == clientTypeApproval.Id);
 
-                        clientApprovalTypes.Add(new ClientNotificationTypeViewModel
-                        {
-                            Id = typeApproval.Id,
-                            Name = typeApproval.Name,
-                            IsApproved = clientApproval.IsApproved,
-                            ApprovalDate = clientApproval.ApprovalDate
-                        });
-                    }
-                    else
-                    {
-                        clientApprovalTypes.Add(new ClientNotificationTypeViewModel
-                        {
-                            Id = typeApproval.Id,
-                            Name = typeApproval.Name,
-                            IsApproved = false,
-                            ApprovalDate = null
-                        });
+                            clientTypeApproval.ApprovalDate = clientApproval.ApprovalDate;
+                            clientTypeApproval.IsApproved = clientApproval.IsApproved;
+                        }
                     }
                 }
+            }
 
-                viewModel.ClientApprovals = clientApprovalTypes;
-            }
-            else
-            {
-                viewModel.ClientApprovals = clientTypeApprovals.Select(x => new ClientNotificationTypeViewModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    IsApproved = false,
-                    ApprovalDate = null
-                });
-            }
+            viewModel.ClientApprovals = clientTypesApprovals;
 
             return viewModel;
         }
