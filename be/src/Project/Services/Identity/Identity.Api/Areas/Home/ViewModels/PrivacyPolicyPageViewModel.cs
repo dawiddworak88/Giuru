@@ -8,7 +8,7 @@ namespace Identity.Api.Areas.Home.ViewModels
     {
         public MetadataViewModel Metadata { get; set; }
         public HeaderViewModel Header { get; set; }
-        public PolicyDetailViewModel PrivacyPolicy { get; set; }
+        public ContentDetailViewModel Content { get; set; }
         public FooterViewModel Footer { get; set; }
     }
 }
