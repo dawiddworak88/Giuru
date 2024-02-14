@@ -7,7 +7,7 @@ using System;
 using System.Threading.Tasks;
 using Foundation.Extensions.ExtensionMethods;
 using System.Linq;
-using Identity.Api.Areas.Home.ResponseModels.Content;
+using Identity.Api.Areas.Home.ResponseModels;
 
 namespace Identity.Api.Areas.Home.Repositories.Content
 {
@@ -30,25 +30,31 @@ namespace Identity.Api.Areas.Home.Repositories.Content
             {
                 var query = new GraphQLRequest
                 {
-                    Query = @$"
-                     query GetContent{{
+                    Query = $@"query getContent {{
                       {contentPageKey}(locale: ""{language}"") {{
-		                data {{
-                          id,
+                        data {{
+                          id
                           attributes {{
                             content {{
-                              title,
-                              text
+                              title
+                              description
+                              accordion {{
+                                accordionItems {{
+                                  id
+                                  title
+                                  description
+                                }}
+                              }}
                             }}
                           }}
-	                    }}
+                        }}
                       }}
                     }}"
                 };
 
                 var response = await _graphQlClient.SendQueryAsync<JObject>(query);
 
-                if (response.Errors.OrEmptyIfNull().Any() is false && response?.Data != null)
+                if (response.Errors.OrEmptyIfNull().Any() is false && response?.Data is not null)
                 {
                     var replacedContentPageKey = response.Data.ToString().Replace(contentPageKey, "page");
 
@@ -56,8 +62,13 @@ namespace Identity.Api.Areas.Home.Repositories.Content
 
                     return new DomainModels.Content
                     {
-                        Title = metaData?.Page?.Data?.Attributes?.Content?.Title,
-                        Text = metaData?.Page?.Data?.Attributes?.Content?.Text
+                        Title = metaData.Page?.Data?.Attributes?.Content?.Title,
+                        Description = metaData.Page?.Data?.Attributes?.Content?.Description,
+                        Accordions = metaData.Page?.Data?.Attributes?.Content?.Accordion?.AccordionItems.Select(x => new DomainModels.AccordionItem
+                        {
+                            Title = x.Title,
+                            Description = x.Description
+                        })
                     };
                 }
             }
