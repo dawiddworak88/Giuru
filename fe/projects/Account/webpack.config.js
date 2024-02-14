@@ -10,8 +10,7 @@ module.exports = {
         resetpasswordpage: ["./src/areas/Accounts/pages/ResetPassword/index.js", "./src/areas/Accounts/pages/ResetPassword/ResetPasswordPage.scss"],
         signinpage: ["./src/areas/Accounts/pages/SignIn/index.js", "./src/areas/Accounts/pages/SignIn/SignInPage.scss"],
         setpasswordpage: ["./src/areas/Accounts/pages/SetPassword/index.js", "./src/areas/Accounts/pages/SetPassword/SetPasswordPage.scss"],
-        contentpage: ["./src/areas/Home/pages/Content/index.js", "./src/areas/Home/pages/Content/ContentPage.scss"],
-        privacypolicypage: ["./src/areas/Home/pages/PrivacyPolicy/index.js", "./src/areas/Home/pages/PrivacyPolicy/PrivacyPolicyPage.scss"],
+        contentpage: ["./src/areas/Home/pages/Content/index.js", "./src/areas/Home/pages/Content/ContentPage.scss"]
     },
     output: {
         publicPath: path.resolve(__dirname, "../../../be/src/Project/Services/Identity/Identity.Api/wwwroot/dist/js"),
