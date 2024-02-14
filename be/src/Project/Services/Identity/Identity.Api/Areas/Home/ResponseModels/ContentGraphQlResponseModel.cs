@@ -17,7 +17,7 @@ namespace Identity.Api.Areas.Home.ResponseModels
         [property: JsonProperty("data")] Data Data
     );
 
-    public record ContentGrpahQlResponseModel(
+    public record ContentGraphQlResponseModel(
         [property: JsonProperty("page")] Page Page
     );
 
