@@ -2,7 +2,6 @@
 using Foundation.PageContent.ComponentModels;
 using Identity.Api.Areas.Home.ModelBuilders;
 using Identity.Api.Areas.Home.Repositories.Content;
-using Identity.Api.Areas.Home.Repositories.Policy;
 using Identity.Api.Areas.Home.Services.Contents;
 using Identity.Api.Areas.Home.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +14,6 @@ namespace Identity.Api.Areas.Home.DependencyInjection
         {
             services.AddScoped<IContentService, ContentService>();
             services.AddScoped<IContentRepository, ContentRepository>();
-            services.AddScoped<IPolicyRepository, PolicyRepository>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, PrivacyPolicyPageViewModel>, PrivacyPolicyPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, RegulationsPageViewModel>, RegulationsPageModelBuilder>();
         }
