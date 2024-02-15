@@ -167,6 +167,12 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         },
                         new DrawerMenuItemViewModel
                         {
+                            Icon = IconsConstants.DollarSign,
+                            Title = _globalLocalizer.GetString("Currencies"),
+                            Url = _linkGenerator.GetPathByAction("Index", "Currencies", new { Area = "Global", culture = CultureInfo.CurrentUICulture.Name })
+                        },
+                        new DrawerMenuItemViewModel
+                        {
                             Icon = IconsConstants.Briefcase,
                             Title = _globalLocalizer.GetString("ClientManagers"),
                             Url = _linkGenerator.GetPathByAction("Index", "ClientAccountManagers", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })

@@ -79,7 +79,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 organisationId = await _organisationsRepository.SaveAsync(token, language, model.Name, model.Email, model.CommunicationLanguage);
             }
 
-            var clientId = await _clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PhoneNumber, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId);
+            var clientId = await _clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PreferedCurrencyId, model.PhoneNumber, model.IsDisabled, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId);
 
             if (model.ClientApprovalIds is not null)
             {
@@ -88,7 +88,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
             if (model.HasAccount)
             {
-                await _identityRepository.UpdateAsync(token, language, clientId, model.Email, model.Name, model.CommunicationLanguage);
+                await _identityRepository.UpdateAsync(token, language, clientId, model.Email, model.Name, model.CommunicationLanguage, model.IsDisabled);
 
                 if (model.ClientGroupIds.OrEmptyIfNull().Any())
                 {

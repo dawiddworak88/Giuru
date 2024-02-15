@@ -1,4 +1,5 @@
-﻿using Foundation.Extensions.ModelBuilders;
+﻿using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
@@ -10,6 +11,7 @@ using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.ModelBuilders.Products
@@ -78,22 +80,13 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                     if (categorySchemas is not null)
                     {
-                        var schemas = new List<CategorySchemaViewModel>();
-
-                        foreach (var schema in categorySchemas.Schemas)
+                        viewModel.Schemas = categorySchemas.Schemas.OrEmptyIfNull().Select(x => new CategorySchemaViewModel
                         {
-                            var categorySchema = new CategorySchemaViewModel
-                            {
-                                Id = schema.Id,
-                                Schema = schema.Schema,
-                                UiSchema = schema.UiSchema,
-                                Language = schema.Language
-                            };
-
-                            schemas.Add(categorySchema);
-                        }
-
-                        viewModel.Schemas = schemas;                        
+                            Id = x.Id,
+                            Schema = x.Schema,
+                            UiSchema = x.UiSchema,
+                            Language = x.Language
+                        });
                     }
                 }
             }

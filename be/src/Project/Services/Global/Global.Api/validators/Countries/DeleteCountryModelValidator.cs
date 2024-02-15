@@ -8,7 +8,7 @@ namespace Global.Api.validators.Countries
     {
         public DeleteCountryModelValidator()
         {
-            this.RuleFor(x => x.Id).NotEmpty().NotNull();
+            RuleFor(x => x.Id).NotEmpty().NotNull();
         }
     }
 }

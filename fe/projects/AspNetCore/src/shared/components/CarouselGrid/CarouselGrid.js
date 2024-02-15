@@ -25,7 +25,7 @@ function CarouselGrid(props) {
                                                 <div className="card-image">
                                                     <figure className="image is-4by3">
                                                         <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
-                                                            <ResponsiveImage sources={carouselItem.sources} imageSrc={carouselItem.imageUrl} imageAlt={carouselItem.imageAlt} />
+                                                            <ResponsiveImage sources={carouselItem.sources} imageSrc={carouselItem.imageUrl} imageAlt={carouselItem.imageAlt} imageClassName="card-image-scale-down" />
                                                         </LazyLoad>
                                                     </figure>
                                                 </div>

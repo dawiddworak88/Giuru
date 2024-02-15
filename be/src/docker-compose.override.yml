@@ -131,7 +131,7 @@ services:
   media-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=MediaDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=MediaDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - StorageConnectionString=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -146,12 +146,12 @@ services:
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
     ports:
-      - "5131:80"
+      - "5131:8080"
 
   client-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=ClientDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=ClientDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
@@ -167,12 +167,12 @@ services:
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
     ports:
-      - "5133:80"
+      - "5133:8080"
 
   inventory-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=InventoryDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=InventoryDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
@@ -185,12 +185,12 @@ services:
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
     ports:
-      - "5134:80"
+      - "5134:8080"
 
   news-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=NewsDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=NewsDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
@@ -199,12 +199,12 @@ services:
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:
-      - "5135:80"
+      - "5135:8080"
 
   catalog-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -221,12 +221,12 @@ services:
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:
-      - "5101:80"
+      - "5101:8080"
 
   catalog-backgroundtasks:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -242,19 +242,19 @@ services:
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:
-      - "5132:80"
+      - "5132:8080"
 
   identity-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - RedisUrl=redis
       - ServerSideRenderingEndpoint=http://account-web-react-ssr:3000
-      - CatalogUrl=http://catalog-api
       - ClientUrl=http://client-api
+      - CatalogUrl=http://catalog-api:8080
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
-      - ConnectionString=Server=sqldata;Database=IdentityDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=IdentityDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - Clients=663bba90-0036-4a58-8516-39faa8baba87&c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9&${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5104;d9316849-7e98-4c5b-853b-5a322aecdc75&693667b0-545e-48b6-9ef8-02ada81be946&${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - SellerClientId=663bba90-0036-4a58-8516-39faa8baba87
       - Accounts=seller@user.com&Greg&Salesman&Gre@tPassw0rd&09affcc9-1665-45d6-919f-3d2026106ba1
@@ -281,7 +281,7 @@ services:
       - ApiEmail=seller@user.com
       - ApiAppSecret=98daf0da-89ac-48db-8b9f-edc6383153ed
     ports:
-      - "5105:80"
+      - "5105:8080"
 
   redis:
     ports:
@@ -304,12 +304,12 @@ services:
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:
-      - "5103:80"
+      - "5103:8080"
 
   ordering-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventBusConnection=amqp://rabbitmq
@@ -327,7 +327,7 @@ services:
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
     ports:
-      - "5102:80"
+      - "5102:8080"
 
   content-api:
     environment:
@@ -352,7 +352,7 @@ services:
   downloadcenter-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=DownloadCenterDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=DownloadCenterDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
@@ -365,12 +365,12 @@ services:
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
     ports:
-      - "5136:80"
+      - "5136:8080"
 
   analytics-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=AnalyticsDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=AnalyticsDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
@@ -382,19 +382,19 @@ services:
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - EventBusRequestedHeartbeat=60
-      - ClientUrl=http://client-api
-      - CatalogUrl=http://catalog-api
-      - GlobalUrl=http://global-api
+      - ClientUrl=http://client-api:8080
+      - CatalogUrl=http://catalog-api:8080
+      - GlobalUrl=http://global-api:8080
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
     ports:
-      - "5137:80"
+      - "5137:8080"
 
   global-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=GlobalDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=GlobalDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - SupportedCultures=${SUPPORTED_CULTURES}
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
@@ -403,7 +403,7 @@ services:
       - DefaultCulture=${DEFAULT_CULTURE}
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
     ports:
-      - "5138:80"
+      - "5138:8080"
 
   seller-web:
     environment:
@@ -412,16 +412,16 @@ services:
       - ClientId=663bba90-0036-4a58-8516-39faa8baba87
       - ClientSecret=c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9
       - RedisUrl=redis
-      - CatalogUrl=http://catalog-api
-      - BasketUrl=http://basket-api
-      - ClientUrl=http://client-api
-      - OrderUrl=http://ordering-api
-      - InventoryUrl=http://inventory-api
-      - NewsUrl=http://news-api
+      - CatalogUrl=http://catalog-api:8080
+      - BasketUrl=http://basket-api:8080
+      - ClientUrl=http://client-api:8080
+      - OrderUrl=http://ordering-api:8080
+      - InventoryUrl=http://inventory-api:8080
+      - NewsUrl=http://news-api:8080
       - SellerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5104
-      - DownloadCenterUrl=http://downloadcenter-api
-      - GlobalUrl=http://global-api
-      - AnalyticsUrl=http://analytics-api
+      - DownloadCenterUrl=http://downloadcenter-api:8080
+      - GlobalUrl=http://global-api:8080
+      - AnalyticsUrl=http://analytics-api:8080
       - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -434,7 +434,7 @@ services:
     volumes:
       - ./Project/Web/Buyer/Buyer.Web/wwwroot/dist:/src/wwwroot/dist
     ports:
-      - "5104:80"
+      - "5104:8080"
 
   buyer-web:
     environment:
@@ -443,17 +443,17 @@ services:
       - ClientId=d9316849-7e98-4c5b-853b-5a322aecdc75
       - ClientSecret=693667b0-545e-48b6-9ef8-02ada81be946
       - RedisUrl=redis
-      - CatalogUrl=http://catalog-api
+      - CatalogUrl=http://catalog-api:8080
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - InventoryUrl=http://inventory-api
-      - OrderUrl=http://ordering-api
-      - BasketUrl=http://basket-api
-      - ClientUrl=http://client-api
-      - NewsUrl=http://news-api
-      - AnalyticsUrl=http://analytics-api
+      - InventoryUrl=http://inventory-api:8080
+      - OrderUrl=http://ordering-api:8080
+      - BasketUrl=http://basket-api:8080
+      - ClientUrl=http://client-api:8080
+      - NewsUrl=http://news-api:8080
+      - AnalyticsUrl=http://analytics-api:8080
       - ContentGraphQlUrl=http://content-api:1337/graphql
-      - DownloadCenterUrl=http://downloadcenter-api
+      - DownloadCenterUrl=http://downloadcenter-api:8080
       - ContentGraphQlAuthorizationKey=${STRAPI_AUTHORIZATION_KEY}
       - MakeComplaintUrl=https://complaints.com
       - ProductAttributes=${PRODUCT_ATTRIBUTES}
@@ -466,7 +466,7 @@ services:
     volumes:
       - ./Project/Web/Seller/Seller.Web/wwwroot/dist:/src/wwwroot/dist
     ports:
-      - "5107:80"
+      - "5107:8080"
 
 volumes:
   mssqldata:

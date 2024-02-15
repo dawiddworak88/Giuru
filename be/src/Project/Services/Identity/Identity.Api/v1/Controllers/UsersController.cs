@@ -8,6 +8,7 @@ using Identity.Api.v1.ResponseModels;
 using Identity.Api.Validators.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -21,12 +22,12 @@ namespace Identity.Api.v1.Controllers
     [ApiController]
     public class UsersController : BaseApiController
     {
-        private readonly IUsersService userService;
+        private readonly IUsersService _userService;
 
         public UsersController(
             IUsersService userService)
         {
-            this.userService = userService;
+            _userService = userService;
         }
 
         /// <summary>
@@ -48,9 +49,10 @@ namespace Identity.Api.v1.Controllers
 
             var validator = new GetUserByEmailModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
+
             if (validationResult.IsValid)
             {
-                var user = await this.userService.GetByEmail(serviceModel);
+                var user = await _userService.GetByEmail(serviceModel);
 
                 if (user is not null)
                 {
@@ -66,19 +68,20 @@ namespace Identity.Api.v1.Controllers
                         EmailConfirmed = user.EmailConfirmed,
                         PhoneNumberConfirmed = user.PhoneNumberConfirmed,
                         OrganisationId = user.OrganisationId.Value,
+                        IsDisabled = user.IsDisabled
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
 
-                return this.StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
-        /// Creates or updates user
+        /// Creates or updates use
         /// </summary>
         /// <param name="request">The model.</param>
         /// <returns>The organisation id.</returns>
@@ -89,7 +92,7 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(UserRequestModel request)
         {
-            if (request.Id == null)
+            if (request.Id.HasValue is false)
             {
                 var serviceModel = new CreateUserServiceModel
                 {
@@ -97,17 +100,18 @@ namespace Identity.Api.v1.Controllers
                     Email = request.Email,
                     CommunicationsLanguage = request.CommunicationLanguage,
                     ReturnUrl = request.ReturnUrl,
-                    Scheme = this.HttpContext.Request.Scheme,
-                    Host = this.HttpContext.Request.Host
+                    Scheme = HttpContext.Request.Scheme,
+                    Host = HttpContext.Request.Host
                 };
 
                 var validator = new CreateUserModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
-                if (validationResult != null)
-                {
-                    var response = await this.userService.CreateAsync(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.Created, new { Id = response.Id });
+                if (validationResult.IsValid)
+                {
+                    var response = await _userService.CreateAsync(serviceModel);
+
+                    return StatusCode((int)HttpStatusCode.Created, new { Id = response.Id });
                 }
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
@@ -124,16 +128,18 @@ namespace Identity.Api.v1.Controllers
                     LastName = request.LastName,
                     TwoFactorEnabled = request.TwoFactorEnabled,
                     AccessFailedCount = request.AccessFailedCount,
-                    LockoutEnd = request.LockoutEnd
+                    LockoutEnd = request.LockoutEnd,
+                    IsDisabled = request.IsDisabled
                 };
 
                 var validator = new UpdateUserModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
-                if (validationResult != null)
-                {
-                    var response = await this.userService.UpdateAsync(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = response.Id });
+                if (validationResult.IsValid)
+                {
+                    var response = await _userService.UpdateAsync(serviceModel);
+
+                    return StatusCode((int)HttpStatusCode.OK, new { Id = response.Id });
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -161,9 +167,10 @@ namespace Identity.Api.v1.Controllers
 
             var validator = new SetUserPasswordModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
-            if (validationResult != null)
+
+            if (validationResult.IsValid)
             {
-                var response = await this.userService.SetPasswordAsync(serviceModel);
+                var response = await _userService.SetPasswordAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK, new { response.Id });
             }
@@ -188,17 +195,18 @@ namespace Identity.Api.v1.Controllers
             {
                 Email = request.Email,
                 ReturnUrl = request.ReturnUrl,
-                Scheme = this.HttpContext.Request.Scheme,
-                Host = this.HttpContext.Request.Host
+                Scheme = HttpContext.Request.Scheme,
+                Host = HttpContext.Request.Host
             };
 
             var validator = new ResetUserPasswordModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
-            if (validationResult != null)
-            {
-                await this.userService.ResetPasswordAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK);
+            if (validationResult.IsValid)
+            {
+                await _userService.ResetPasswordAsync(serviceModel);
+
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);

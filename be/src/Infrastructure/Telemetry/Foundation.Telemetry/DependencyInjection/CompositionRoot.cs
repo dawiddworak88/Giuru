@@ -24,7 +24,7 @@ namespace Foundation.Telemetry.DependencyInjection
         {
             if (string.IsNullOrWhiteSpace(endpoint) is false)
             {
-                services.AddOpenTelemetryTracing(tracerProviderBuilder =>
+                services.AddOpenTelemetry().WithTracing(tracerProviderBuilder =>
                 {
                     tracerProviderBuilder
                         .AddSource(name)
@@ -78,14 +78,14 @@ namespace Foundation.Telemetry.DependencyInjection
 
         public static void AddOpenTelemetryMetrics(
             this IServiceCollection services,
-            string endpoint,
+            string endpoint, 
             string name,
             bool enableHttpClientInstrumentation,
             bool enableAspNetCoreInstrumentation)
         {
             if (string.IsNullOrWhiteSpace(endpoint) is false)
             {
-                services.AddOpenTelemetryMetrics(meterProviderBuilder =>
+                services.AddOpenTelemetry().WithMetrics(meterProviderBuilder =>
                 {
                     meterProviderBuilder
                         .SetResourceBuilder(

@@ -48,7 +48,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
+        public IActionResult Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -68,8 +68,7 @@ namespace Client.Api.v1.Controllers
                 };
 
                 var validator = new GeClientsByIdsModelValidator();
-
-                var validationResult = await validator.ValidateAsync(serviceModel);
+                var validationResult = validator.Validate(serviceModel);
 
                 if (validationResult.IsValid)
                 {
@@ -86,7 +85,9 @@ namespace Client.Api.v1.Controllers
                                 Email = x.Email,
                                 CommunicationLanguage = x.CommunicationLanguage,
                                 CountryId = x.CountryId,
+                                PreferedCurrencyId = x.PreferedCurrencyId,
                                 PhoneNumber = x.PhoneNumber,
+                                IsDisabled = x.IsDisabled,
                                 ClientGroupIds = x.ClientGroupIds,
                                 ClientManagerIds = x.ClientManagerIds,
                                 DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
@@ -116,8 +117,7 @@ namespace Client.Api.v1.Controllers
                 };
 
                 var validator = new GetClientsModelValidator();
-
-                var validationResult = await validator.ValidateAsync(serviceModel);
+                var validationResult = validator.Validate(serviceModel);
 
                 if (validationResult.IsValid)
                 {
@@ -133,8 +133,10 @@ namespace Client.Api.v1.Controllers
                                 Name = x.Name,
                                 Email = x.Email,
                                 CountryId = x.CountryId,
+                                PreferedCurrencyId = x.PreferedCurrencyId,
                                 CommunicationLanguage = x.CommunicationLanguage,
                                 PhoneNumber = x.PhoneNumber,
+                                IsDisabled = x.IsDisabled,
                                 ClientGroupIds = x.ClientGroupIds,
                                 ClientManagerIds = x.ClientManagerIds,
                                 DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
@@ -190,8 +192,10 @@ namespace Client.Api.v1.Controllers
                         Name = client.Name,
                         CommunicationLanguage = client.CommunicationLanguage,
                         CountryId = client.CountryId,
+                        PreferedCurrencyId = client.PreferedCurrencyId,
                         OrganisationId = client.OrganisationId,
                         PhoneNumber = client.PhoneNumber,
+                        IsDisabled = client.IsDisabled,
                         ClientGroupIds = client.ClientGroupIds,
                         ClientManagerIds = client.ClientManagerIds,
                         DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
@@ -237,7 +241,8 @@ namespace Client.Api.v1.Controllers
             if (validationResult.IsValid)
             {
                 var client = await _clientsService.GetByOrganisationAsync(serviceModel);
-                if (client != null)
+
+                if (client is not null)
                 {
                     var response = new ClientResponseModel
                     {
@@ -246,8 +251,10 @@ namespace Client.Api.v1.Controllers
                         Name = client.Name,
                         CommunicationLanguage = client.CommunicationLanguage,
                         CountryId = client.CountryId,
+                        PreferedCurrencyId = client.PreferedCurrencyId,
                         PhoneNumber = client.PhoneNumber,
                         OrganisationId = client.OrganisationId,
+                        IsDisabled = client.IsDisabled,
                         ClientGroupIds = client.ClientGroupIds,
                         ClientManagerIds = client.ClientManagerIds,
                         DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
@@ -290,8 +297,10 @@ namespace Client.Api.v1.Controllers
                     Name = request.Name,
                     Email = request.Email,
                     CountryId = request.CountryId,
+                    PreferedCurrencyId = request.PreferedCurrencyId,
                     CommunicationLanguage = request.CommunicationLanguage,
                     PhoneNumber = request.PhoneNumber,
+                    IsDisabled = request.IsDisabled,
                     ClientOrganisationId = request.OrganisationId,
                     ClientGroupIds = request.ClientGroupIds,
                     ClientManagerIds = request.ClientManagerIds,
@@ -322,6 +331,7 @@ namespace Client.Api.v1.Controllers
                     Name = request.Name,
                     Email = request.Email,
                     CountryId = request.CountryId,
+                    PreferedCurrencyId = request.PreferedCurrencyId,
                     CommunicationLanguage = request.CommunicationLanguage,
                     PhoneNumber = request.PhoneNumber,
                     ClientOrganisationId = request.OrganisationId,

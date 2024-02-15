@@ -20,14 +20,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: {{ .Values.catalogBackgroundTasks.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.catalogBackgroundTasks.readinessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.catalogBackgroundTasks.readinessProbe.timeoutSeconds }}
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: {{ .Values.catalogBackgroundTasks.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.catalogBackgroundTasks.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.catalogBackgroundTasks.livenessProbe.timeoutSeconds }}
@@ -56,4 +56,4 @@ spec:
         - secretRef:
             name: b2b-catalog-backgroundtasks-secrets
         ports:
-        - containerPort: 80
+        - containerPort: 8080

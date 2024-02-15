@@ -1,7 +1,6 @@
 ﻿using Foundation.GenericRepository.Paginations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
 using Global.Api.ServicesModels.Countries;
 
 namespace Global.Api.Services.Countries

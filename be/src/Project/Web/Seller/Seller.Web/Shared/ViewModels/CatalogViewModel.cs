@@ -34,6 +34,8 @@ namespace Seller.Web.Shared.ViewModels
         public int DefaultItemsPerPage { get; set; }
         public string PrevPageAreaText { get; set; }
         public string NextPageAreaText { get; set; }
+        public string ActiveLabel { get; set; }
+        public string InActiveLabel { get; set; }
         public IEnumerable<string> ConfirmationDialogDeleteNameProperty { get; set; }
         public CatalogTableViewModel Table { get; set; }
         public QRCodeDialogViewModel QrCodeDialog { get; set; }

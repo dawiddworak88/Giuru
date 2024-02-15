@@ -20,14 +20,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: {{ .Values.newsApi.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.newsApi.readinessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.newsApi.readinessProbe.timeoutSeconds }}
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: {{ .Values.newsApi.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.newsApi.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.newsApi.livenessProbe.timeoutSeconds }}
@@ -50,4 +50,4 @@ spec:
         - secretRef:
             name: b2b-news-api-secrets
         ports:
-        - containerPort: 80
+        - containerPort: 8080

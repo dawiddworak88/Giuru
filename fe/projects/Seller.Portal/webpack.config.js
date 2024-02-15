@@ -54,6 +54,8 @@ module.exports = {
         categoriespage: ["./src/areas/Products/pages/CategoriesPage/index.js", "./src/areas/Products/pages/CategoriesPage/CategoriesPage.scss"],
         categorypage: ["./src/areas/Products/pages/CategoryPage/index.js", "./src/areas/Products/pages/CategoryPage/CategoryPage.scss"],
         settingspage: ["./src/areas/Settings/pages/SettingsPage/index.js", "./src/areas/Settings/pages/SettingsPage/SettingsPage.scss"],
+        currenciespage: ["./src/areas/Global/pages/CurrenciesPage/index.js", "./src/areas/Global/pages/CurrenciesPage/CurrenciesPage.scss"],
+        currencypage: ["./src/areas/Global/pages/CurrencyPage/index.js", "./src/areas/Global/pages/CurrencyPage/CurrencyPage.scss"],
         clientnotificationtypespage: ["./src/areas/Clients/pages/ClientNotificationTypesPage/index.js", "./src/areas/Clients/pages/ClientNotificationTypesPage/ClientNotificationTypesPage.scss"],
         clientnotificationtypepage: ["./src/areas/Clients/pages/ClientNotificationTypePage/index.js", "./src/areas/Clients/pages/ClientNotificationTypePage/ClientNotificationTypePage.scss"]
     },

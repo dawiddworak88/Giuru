@@ -39,6 +39,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly IClientNotificationTypesRepository _clientNotificationTypesRepository;
         private readonly IClientNotificationTypeApprovalRepository _clientNotificationTypeApprovalRepository;
+        private readonly ICurrenciesRepository _currenciesRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -52,7 +53,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IClientAddressesRepository clientAddressesRepository,
             LinkGenerator linkGenerator,
             IClientNotificationTypesRepository clientNotificationTypesRepository,
-            IClientNotificationTypeApprovalRepository clientNotificationTypeApprovalRepository)
+            IClientNotificationTypeApprovalRepository clientNotificationTypeApprovalRepository,
+            ICurrenciesRepository currenciesRepository)
         {
             _clientsRepository = clientsRepository;
             _globalLocalizer = globalLocalizer;
@@ -66,6 +68,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _clientAddressesRepository = clientAddressesRepository;
             _clientNotificationTypesRepository = clientNotificationTypesRepository;
             _clientNotificationTypeApprovalRepository = clientNotificationTypeApprovalRepository;
+            _currenciesRepository = currenciesRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -109,9 +112,12 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 NoManagersText = _clientLocalizer.GetString("NoManagers"),
                 ClientManagerLabel = _globalLocalizer.GetString("Manager"),
                 CountryLabel = _globalLocalizer.GetString("Country"),
+                PreferedCurrencyLabel = _clientLocalizer.GetString("PreferedCurrencyLabel"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
                 ExpressedOnLabel = _clientLocalizer.GetString("ExpressedOnLabel")
+                ActiveLabel = _globalLocalizer.GetString("Active"),
+                InActiveLabel = _globalLocalizer.GetString("InActive")
             };
 
             if (componentModel.Id.HasValue)
@@ -128,6 +134,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.ClientGroupsIds = client.ClientGroupIds;
                     viewModel.ClientManagersIds = client.ClientManagerIds;
                     viewModel.CountryId = client.CountryId;
+                    viewModel.IsDisabled = client.IsDisabled;
+                    viewModel.PreferedCurrencyId = client.PreferedCurrencyId;
                     viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
                     viewModel.DefaultBillingAddressId = client.DefaultBillingAddressId;
 
@@ -168,6 +176,13 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             if (countries is not null)
             {
                 viewModel.Countries = countries.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
+            }
+
+            var currencies = await _currenciesRepository.GetAsync(componentModel.Token, componentModel.Language, $"{nameof(Country.Name)} asc");
+
+            if (currencies is not null) 
+            {
+                viewModel.Currencies = currencies.Select(x => new ListItemViewModel { Id = x.Id, Name = x.CurrencyCode });
             }
 
             var clientAddresses = await _clientAddressesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);

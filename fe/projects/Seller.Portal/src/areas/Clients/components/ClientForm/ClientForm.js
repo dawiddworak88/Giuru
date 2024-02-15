@@ -2,10 +2,10 @@ import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../shared/stores/Store";
-import {
-    TextField, Button, FormControl, InputLabel,
-    Select, MenuItem, FormHelperText, CircularProgress,
-    Autocomplete, Switch, NoSsr, FormControlLabel
+import { 
+    TextField, Button, FormControl, InputLabel, 
+    Select, MenuItem, FormHelperText, CircularProgress, 
+    Autocomplete, NoSsr, FormControlLabel, Switch
 } from "@mui/material";
 import useForm from "../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../shared/helpers/validators/EmailValidator";
@@ -23,9 +23,13 @@ function ClientForm(props) {
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : null, error: "" },
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
         country: { value: props.countryId ? props.countries.find((item) => item.id === props.countryId) : null },
+        preferedCurrency: { value: props.preferedCurrencyId ? props.currencies.find((item) => item.id === props.preferedCurrencyId) : null },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : [] },
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : [] },
         hasAccount: { value: props.hasAccount ? props.hasAccount : false },
+        isDisabled: { value: props.isDisabled ? props.isDisabled : false },
+        deliveryAddress: { value: props.defaultDeliveryAddressId ? props.clientAddresses.find((item) => item.id === props.defaultDeliveryAddressId) : null },
+        billingAddress: { value: props.defaultBillingAddressId ? props.clientAddresses.find((item) => item.id === props.defaultBillingAddressId) : null },
         clientApprovalIds: { value: props.clientApprovals ? props.clientApprovals.filter(x => x.isApproved).map(x => x.id) : [] }
     };
 
@@ -59,12 +63,18 @@ function ClientForm(props) {
         getOptionLabel: (option) => option.name
     };
 
+    const currenciesPorps = {
+        options: props.currencies,
+        getOptionLabel: (option) => option.name
+    };
+
     function onSubmitForm(state) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const payload = {
             ...state,
-            countryId: country ? country.id : null,
+            countryId: country ? country.id : null, 
+            preferedCurrencyId: preferedCurrency ? preferedCurrency.id : null,
             defaultDeliveryAddressId: state.deliveryAddress ? state.deliveryAddress.id : null,
             defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null
         }
@@ -152,10 +162,10 @@ function ClientForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const {
-        id, name, email, country, clientGroupIds,
+    const { 
+        id, name, email, country, preferedCurrency, clientGroupIds, 
         communicationLanguage, phoneNumber, clientManagerIds,
-        deliveryAddress, billingAddress, clientApprovalIds
+        deliveryAddress, billingAddress, isDisabled
     } = values;
 
     return (
@@ -214,6 +224,26 @@ function ClientForm(props) {
                                         label={props.countryLabel}
                                         variant="standard"
                                         margin="normal" />
+                                )} />
+                        </div>
+                        <div className="field">
+                            <Autocomplete
+                                {...currenciesPorps}
+                                id="preferedCurrency"
+                                name="preferedCurrency"
+                                fullWidth={true}
+                                value={preferedCurrency}
+                                variant="standard"
+                                onChange={(event, newValue) => {
+                                    setFieldValue({name: "preferedCurrency", value: newValue});
+                                }}
+                                autoComplete
+                                renderInput={(params) => (
+                                    <TextField 
+                                        {...params} 
+                                        label={props.preferedCurrencyLabel} 
+                                        variant="standard"
+                                        margin="normal"/>
                                 )} />
                         </div>
                         <div className="field">
@@ -331,6 +361,23 @@ function ClientForm(props) {
                                 value={phoneNumber}
                                 variant="standard"
                                 onChange={handleOnChange} />
+                        </div>
+                        <div className="field">
+                            <NoSsr>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            onChange={e => {
+                                                setFieldValue({ name: "isDisabled", value: !isDisabled });
+                                            }}
+                                            checked={isDisabled ? false : true}
+                                            id="isDisabled"
+                                            name="isDisabled"
+                                            color="secondary" 
+                                        />
+                                    }
+                                    label={isDisabled ? props.inActiveLabel : props.activeLabel} />
+                            </NoSsr>
                         </div>
                         {props.clientApprovals && props.clientApprovals.length > 0 &&
                             props.clientApprovals.map((approval, index) => {

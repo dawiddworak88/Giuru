@@ -94,6 +94,9 @@ namespace Client.Api.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("CurrencyId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("DefaultBillingAddressId")
                         .HasColumnType("uniqueidentifier");
 
@@ -105,6 +108,9 @@ namespace Client.Api.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDisabled")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsOrganisationInformationOutdated")

@@ -9,7 +9,7 @@ import {
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, TablePagination, CircularProgress, Fab,
-    Tooltip, NoSsr
+    Tooltip, NoSsr, Chip
 } from "@mui/material";
 import KeyConstants from "../../../shared/constants/KeyConstants";
 import CatalogConstants from "../../constants/CatalogConstants";
@@ -141,7 +141,6 @@ function Catalog(props) {
     };
 
     const handleDeleteEntity = () => {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const deleteParameters = {
@@ -162,9 +161,7 @@ function Catalog(props) {
                 AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
-
                     if (response.ok) {
-
                         toast.success(jsonResponse.message);
                         setItems(() => items.filter(item => item.id !== entityToDelete.id));
                         setTotal(() => total - 1);
@@ -367,6 +364,13 @@ function Catalog(props) {
                             </NoSsr>
                         )
                     }
+                    else if (property.isActivityTag) {
+                        const isDisabled = item[property.title] === true ? true : false;
+
+                        return (
+                            <TableCell><Chip label={isDisabled ? props.inActiveLabel : props.activeLabel} color={isDisabled ? "default" : "success"}/></TableCell>
+                        )
+                    }
                     else {
                         return (
                             <TableCell key={index}>{item[property.title] !== null ? item[property.title] : "-"}</TableCell>
@@ -499,7 +503,7 @@ function Catalog(props) {
                             props.confirmationDialogDeleteNameProperty.map((property) => {
                                 return entityToDelete[`${property}`]
                             }
-                            ).join(" ") : entityToDelete["name"] : ""
+                            ).join(" ") : ( entityToDelete["name"] ? entityToDelete["name"] : entityToDelete["companyName"] ? entityToDelete["companyName"] : "" ): ""
                     )}
                     noLabel={props.noLabel}
                     yesLabel={props.yesLabel}

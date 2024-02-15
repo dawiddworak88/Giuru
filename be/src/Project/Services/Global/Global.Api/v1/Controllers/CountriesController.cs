@@ -78,10 +78,10 @@ namespace Global.Api.v1.Controllers
                     })
                 };
 
-                return this.StatusCode((int)HttpStatusCode.OK, response);
+                return StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            return StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
@@ -172,7 +172,7 @@ namespace Global.Api.v1.Controllers
             {
                 await _countriesService.DeleteAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -217,7 +217,7 @@ namespace Global.Api.v1.Controllers
                         CreatedDate = country.CreatedDate
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
             }
 

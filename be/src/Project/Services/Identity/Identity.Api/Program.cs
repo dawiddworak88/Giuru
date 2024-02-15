@@ -36,10 +36,7 @@ using Foundation.ApiExtensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.ConfigureAppConfiguration((_, config) =>
-{
-    config.AddEnvironmentVariables();
-});
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 {
@@ -58,7 +55,10 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
             hostingContext.Configuration["LogzIoType"],
             new LogzioOptions
             {
-                DataCenterSubDomain = hostingContext.Configuration["LogzIoDataCenterSubDomain"]
+                DataCenter = new LogzioDataCenter
+                {
+                    SubDomain = hostingContext.Configuration["LogzIoDataCenterSubDomain"]
+                }
             });
     }
 
@@ -190,30 +190,27 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty;
 });
 
-app.UseEndpoints(endpoints =>
+app.MapControllerRoute(
+    name: "localizedAreaRoute",
+    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Accounts}/{controller=SignIn}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{area:exists=Accounts}/{controller=SignIn}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "error",
+    pattern: "{controller=Content}/{action=Error}/{errorId?}");
+
+app.MapHealthChecks("/hc", new HealthCheckOptions 
+{ 
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.MapHealthChecks("/liveness", new HealthCheckOptions
 {
-    endpoints.MapControllerRoute(
-                name: "localizedAreaRoute",
-                pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Accounts}/{controller=SignIn}/{action=Index}/{id?}");
-
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{area:exists=Accounts}/{controller=SignIn}/{action=Index}/{id?}");
-
-    endpoints.MapControllerRoute(
-        name: "error",
-        pattern: "{controller=Content}/{action=Error}/{errorId?}");
-
-    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-    {
-        Predicate = _ => true,
-        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-    });
-
-    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
-    {
-        Predicate = r => r.Name.Contains("self")
-    });
+    Predicate = r => r.Name.Contains("self")
 });
 
 app.Run();

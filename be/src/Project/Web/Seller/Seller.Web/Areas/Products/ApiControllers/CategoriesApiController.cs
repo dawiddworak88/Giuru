@@ -44,7 +44,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
                 searchTerm,
                 pageIndex,
                 itemsPerPage,
-                $"{nameof(Category.Order)} asc");
+                $"{nameof(Category.Order)}");
 
             return StatusCode((int)HttpStatusCode.OK, categories);
         }
@@ -82,27 +82,27 @@ namespace Seller.Web.Areas.Products.ApiControllers
 
             var category = await _categoriesRepository.GetCategoryAsync(token, language, model.Id);
 
-            var mediaItem = await _mediaItemsRepository.GetMediaItemAsync(token, language, category.ThumbnailMediaId.Value);
-
-            if (mediaItem is not null)
-            {
-                var files = new List<Guid>
-                {
-                    mediaItem.Id
-                };
-
-                category.Files = files;
-            }
-
             if (category is not null) 
             {
+                if (category.ThumbnailMediaId.HasValue)
+                {
+                    var mediaItem = await _mediaItemsRepository.GetMediaItemAsync(token, language, category.ThumbnailMediaId.Value);
+
+                    if (mediaItem is not null)
+                    {
+                        var files = new List<Guid> {
+                            mediaItem.Id
+                        };
+
+                        category.Files = files;
+                    }
+                }
+
                 var categorySchemas = await _categoriesRepository.GetCategorySchemasAsync(token, language, model.Id);
 
-                if (categorySchemas is not null)
-                {
-                    await _categoriesRepository.SaveAsync(
-                        token, language, model.Id, category.ParentId, category.Name, category.Files, 
-                        categorySchemas.Schemas.OrEmptyIfNull().Select(x => new CategorySchema
+                await _categoriesRepository.SaveAsync(
+                        token, language, model.Id, category.ParentId, category.Name, category.Files,
+                        categorySchemas?.Schemas.OrEmptyIfNull().Select(x => new CategorySchema
                         {
                             Id = x.Id,
                             Schema = x.Schema,
@@ -110,8 +110,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
                             Language = x.Language
                         }), model.Order);
 
-                    return StatusCode((int)HttpStatusCode.OK);
-                }
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             return StatusCode((int)HttpStatusCode.BadRequest);

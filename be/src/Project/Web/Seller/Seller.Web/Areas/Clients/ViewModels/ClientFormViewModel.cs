@@ -35,12 +35,17 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string PhoneNumberLabel { get; set; }
         public string ResetPasswordText { get; set; }
         public bool HasAccount { get; set; }
+        public bool IsDisabled { get; set; }
         public string NoGroupsText { get; set; }
         public string GroupsLabel { get; set; }
         public string NoManagersText { get; set; }
         public string ClientManagerLabel { get; set; }
         public string CountryLabel { get; set; }
         public Guid? CountryId { get; set; }
+        public string PreferedCurrencyLabel { get; set; }
+        public Guid? PreferedCurrencyId { get; set; }
+        public string ActiveLabel { get; set; }
+        public string InActiveLabel { get; set; }
         public string DeliveryAddressLabel { get; set; }
         public string BillingAddressLabel { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
@@ -50,6 +55,7 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public IEnumerable<LanguageViewModel> Languages { get; set; }
         public IEnumerable<ListItemViewModel> ClientGroups { get; set; }
         public IEnumerable<ListItemViewModel> Countries { get; set; }
+        public IEnumerable<ListItemViewModel> Currencies { get; set; }
         public IEnumerable<ListItemViewModel> ClientAddresses { get; set; }
         public IEnumerable<ClientAccountManagerViewModel> ClientManagers { get; set; }
         public IEnumerable<ClientNotificationTypeViewModel> ClientApprovals { get; set; }

@@ -73,7 +73,7 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
                 }
             };
 
-            var mainNavigationLinks = await _graphQlRepository.GetMainNavigationLinksAsync(componentModel.ContentPageKey, componentModel.Language, _settings.CurrentValue.DefaultCulture);
+            var mainNavigationLinks = await _graphQlRepository.GetMainNavigationLinksAsync(componentModel.Language, _settings.CurrentValue.DefaultCulture);
 
             foreach (var link in mainNavigationLinks.OrEmptyIfNull())
             {

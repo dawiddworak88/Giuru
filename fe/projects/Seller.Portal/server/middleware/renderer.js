@@ -53,6 +53,8 @@ import ClientAddressPage from "../../src/areas/Clients/pages/ClientAddressPage/C
 import ClientAddressesPage from "../../src/areas/Clients/pages/ClientAddressesPage/ClientAddressesPage";
 import ClientNotificationTypesPage from "../../src/areas/Clients/pages/ClientNotificationTypesPage/ClientNotificationTypesPage";
 import ClientNotificationTypePage from "../../src/areas/Clients/pages/ClientNotificationTypePage/ClientNotificationTypePage";
+import CurrenciesPage from "../../src/areas/Global/pages/CurrenciesPage/CurrenciesPage";
+import CurrencyPage from "../../src/areas/Global/pages/CurrencyPage/CurrencyPage";
 
 const Components = {
 	ClientAddressPage,
@@ -104,7 +106,9 @@ const Components = {
 	SellerCategoryPage,
 	SettingsPage,
 	ClientNotificationTypesPage,
-	ClientNotificationTypePage
+	ClientNotificationTypePage,
+	CurrenciesPage,
+	CurrencyPage
 };
 
 const serverRenderer = (req, res, next) => {

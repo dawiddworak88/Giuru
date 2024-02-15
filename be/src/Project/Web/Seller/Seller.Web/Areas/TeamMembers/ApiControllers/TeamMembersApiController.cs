@@ -19,18 +19,18 @@ namespace Seller.Web.Areas.TeamMembers.ApiControllers
     [Area("TeamMembers")]
     public class TeamMembersApiController : BaseApiController
     {
-        private readonly ITeamMembersRepository teamMembersRepository;
-        private readonly IOptions<AppSettings> options;
-        private readonly IStringLocalizer<TeamMembersResources> teamMembersLocalizer;
+        private readonly ITeamMembersRepository _teamMembersRepository;
+        private readonly IOptions<AppSettings> _options;
+        private readonly IStringLocalizer<TeamMembersResources> _teamMembersLocalizer;
 
         public TeamMembersApiController(
             ITeamMembersRepository teamMembersRepository,
             IStringLocalizer<TeamMembersResources> teamMembersLocalizer,
             IOptions<AppSettings> options)
         {
-            this.teamMembersRepository = teamMembersRepository;
-            this.options = options;
-            this.teamMembersLocalizer = teamMembersLocalizer;
+            _teamMembersRepository = teamMembersRepository;
+            _options = options;
+            _teamMembersLocalizer = teamMembersLocalizer;
         }
 
         [HttpGet]
@@ -39,10 +39,10 @@ namespace Seller.Web.Areas.TeamMembers.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var teamMembers = await this.teamMembersRepository.GetAsync(
+            var teamMembers = await _teamMembersRepository.GetAsync(
                 token, language, searchTerm, pageIndex, itemsPerPage, $"{nameof(TeamMember.Email)} desc");
 
-            return this.StatusCode((int)HttpStatusCode.OK, teamMembers);
+            return StatusCode((int)HttpStatusCode.OK, teamMembers);
         }
 
         [HttpPost]
@@ -51,9 +51,9 @@ namespace Seller.Web.Areas.TeamMembers.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var teamMemberId = await this.teamMembersRepository.SaveAsync(token, language, model.Id, model.FirstName, model.LastName, model.Email, this.options.Value.SellerUrl);
+            var teamMemberId = await _teamMembersRepository.SaveAsync(token, language, model.Id, model.FirstName, model.LastName, model.Email, model.IsDisabled, _options.Value.SellerUrl);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = teamMemberId, Message = this.teamMembersLocalizer.GetString("SuccessfullySavedTeamMember").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Id = teamMemberId, Message = _teamMembersLocalizer.GetString("SuccessfullySavedTeamMember").Value });
 
         }
 
@@ -63,9 +63,9 @@ namespace Seller.Web.Areas.TeamMembers.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await this.teamMembersRepository.DeleteAsync(token, language, id);
+            await _teamMembersRepository.DeleteAsync(token, language, id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.teamMembersLocalizer.GetString("SuccessfullyDeletedTeamMember").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Message = _teamMembersLocalizer.GetString("SuccessfullyDeletedTeamMember").Value });
         }
     }
 }

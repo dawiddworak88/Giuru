@@ -97,24 +97,22 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] SetUserPasswordRequestModel model)
         {
-            var validator = new SetPasswordModelValidator();
-            var result = await validator.ValidateAsync(model);
-
-            if (result.IsValid)
+            var serviceModel = new SetUserPasswordServiceModel
             {
-                var language = CultureInfo.CurrentUICulture.Name;
+                ExpirationId = model.Id.Value,
+                Password = model.Password,
+                Language = CultureInfo.CurrentUICulture.Name
+            };
 
-                var serviceModel = new SetUserPasswordServiceModel
+            var validator = new SetPasswordModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                try
                 {
-                    ExpirationId = model.Id.Value,
-                    Password = model.Password,
-                    Language = language
-                };
+                    var user = await _usersService.SetPasswordAsync(serviceModel);
 
-                var user = await _usersService.SetPasswordAsync(serviceModel);
-
-                if (user is not null)
-                {
                     if (await _userService.SignInAsync(user.Email, model.Password, null, null))
                     {
                         if (model.ClientApprovals.Any())
@@ -137,14 +135,14 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
 
                         return StatusCode((int)HttpStatusCode.Redirect, new { Url = model.ReturnUrl });
                     }
-                }
-                else
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { EmailIsConfirmedLabel = _accountLocalizer.GetString("EmailIsConfirmed").Value, SignInLabel = _globalLocalizer.GetString("TrySignIn").Value, SignInUrl = _linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })});
-                }
-            }   
-
+                    catch (Exception ex)
+                    {
+                        return StatusCode((int)HttpStatusCode.BadRequest, new { EmailIsConfirmedLabel = _accountLocalizer.GetString("EmailIsConfirmed").Value, SignInLabel = _globalLocalizer.GetString("TrySignIn").Value, SignInUrl = _linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })});
+                    }
+                }   
+                
             return StatusCode((int)HttpStatusCode.BadRequest);
+            }
         }
     }
 }

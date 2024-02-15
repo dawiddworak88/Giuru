@@ -31,7 +31,7 @@ namespace Catalog.BackgroundTasks.IntegrationEventsHandlers
 
             if (@event.OrganisationId.HasValue && @event.CategoryId.HasValue)
             {
-                await _productsService.IndexCategoryProducts(@event.CategoryId, @event.OrganisationId);
+                // await _productsService.IndexCategoryProducts(@event.CategoryId, @event.OrganisationId);
             }
         }
     }

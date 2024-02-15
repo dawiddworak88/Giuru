@@ -294,9 +294,6 @@
   <data name="BackToAddresses" xml:space="preserve">
     <value>Powróć do adresów</value>
   </data>
-  <data name="NewDeliveryAddress" xml:space="preserve">
-    <value>Dodaj nowy adres dostawy</value>
-  </data>
   <data name="DeliveryAddress" xml:space="preserve">
     <value>Adres dostawy</value>
   </data>
@@ -350,5 +347,8 @@
   </data>
   <data name="NotificationTypeDeleteTypeApprovalConflict" xml:space="preserve">
     <value>Usuń zgody klientów przypisane do tego typu zgody</value>
+  </data>
+  <data name="PreferedCurrencyLabel" xml:space="preserve">
+    <value>Preferowana waluta</value>
   </data>
 </root>

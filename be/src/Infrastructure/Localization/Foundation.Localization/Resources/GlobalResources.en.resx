@@ -721,7 +721,7 @@
     <value>The uploaded file exceeds the maximum size</value>
   </data>
   <data name="ClientAddresses" xml:space="preserve">
-    <value>Clients addresses</value>
+    <value>Addresses</value>
   </data>
   <data name="EditClientAddress" xml:space="preserve">
     <value>Edit address</value>
@@ -734,5 +734,41 @@
   </data>
   <data name="NotificationTypes" xml:space="preserve">
     <value>Clients approvals</value>
+  </data>
+  <data name="CurrencyNotFound" xml:space="preserve">
+    <value>Currency not found</value>
+  </data>
+  <data name="Currencies" xml:space="preserve">
+    <value>Currencies</value>
+  </data>
+  <data name="NewCurrency" xml:space="preserve">
+    <value>Add currency</value>
+  </data>
+  <data name="EditCurrency" xml:space="preserve">
+    <value>Edit currency</value>
+  </data>
+  <data name="NavigateToCurrenciesText" xml:space="preserve">
+    <value>Back to currencies</value>
+  </data>
+  <data name="CurrencyCodeLabel" xml:space="preserve">
+    <value>Currency Code</value>
+  </data>
+  <data name="SymbolLabel" xml:space="preserve">
+    <value>Symbol</value>
+  </data>
+  <data name="CurrencyDeletedSuccessfully" xml:space="preserve">
+    <value>Currency deleted successfully.</value>
+  </data>
+  <data name="CurrencySavedSuccessfully" xml:space="preserve">
+    <value>Currency saved successfully.</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="InActive" xml:space="preserve">
+    <value>Inactive</value>
   </data>
 </root>
