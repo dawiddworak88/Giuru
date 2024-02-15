@@ -72,7 +72,7 @@ namespace Client.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var clients = await _clientsService.GetByIdsAsync(serviceModel);
+                    var clients = _clientsService.GetByIds(serviceModel);
 
                     if (clients is not null)
                     {
@@ -121,7 +121,7 @@ namespace Client.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var clients = await _clientsService.GetAsync(serviceModel);
+                    var clients = _clientsService.Get(serviceModel);
 
                     if (clients is not null)
                     {

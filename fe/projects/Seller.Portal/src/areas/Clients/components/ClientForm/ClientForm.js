@@ -165,7 +165,7 @@ function ClientForm(props) {
     const { 
         id, name, email, country, preferedCurrency, clientGroupIds, 
         communicationLanguage, phoneNumber, clientManagerIds,
-        deliveryAddress, billingAddress, isDisabled
+        deliveryAddress, billingAddress, isDisabled, clientApprovalIds
     } = values;
 
     return (

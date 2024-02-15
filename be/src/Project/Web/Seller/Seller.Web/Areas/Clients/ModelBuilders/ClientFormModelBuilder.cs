@@ -115,7 +115,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 PreferedCurrencyLabel = _clientLocalizer.GetString("PreferedCurrencyLabel"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
-                ExpressedOnLabel = _clientLocalizer.GetString("ExpressedOnLabel")
+                ExpressedOnLabel = _clientLocalizer.GetString("ExpressedOnLabel"),
                 ActiveLabel = _globalLocalizer.GetString("Active"),
                 InActiveLabel = _globalLocalizer.GetString("InActive")
             };

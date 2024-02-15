@@ -97,11 +97,13 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] SetUserPasswordRequestModel model)
         {
+            var language = CultureInfo.CurrentUICulture.Name;
+
             var serviceModel = new SetUserPasswordServiceModel
             {
                 ExpirationId = model.Id.Value,
                 Password = model.Password,
-                Language = CultureInfo.CurrentUICulture.Name
+                Language = language
             };
 
             var validator = new SetPasswordModelValidator();
@@ -113,8 +115,10 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                 {
                     var user = await _usersService.SetPasswordAsync(serviceModel);
 
-                    if (await _userService.SignInAsync(user.Email, model.Password, null, null))
+                    if (user is not null)
                     {
+                        await _userService.SignInAsync(user.Email, model.Password, null, null);
+
                         if (model.ClientApprovals.Any())
                         {
                             var token = await _tokenService.GetTokenAsync(_options.Value.ApiEmail, _options.Value.ApiOrganisationId, _options.Value.ApiAppSecret);
@@ -135,14 +139,14 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
 
                         return StatusCode((int)HttpStatusCode.Redirect, new { Url = model.ReturnUrl });
                     }
-                    catch (Exception ex)
-                    {
-                        return StatusCode((int)HttpStatusCode.BadRequest, new { EmailIsConfirmedLabel = _accountLocalizer.GetString("EmailIsConfirmed").Value, SignInLabel = _globalLocalizer.GetString("TrySignIn").Value, SignInUrl = _linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })});
-                    }
-                }   
-                
-            return StatusCode((int)HttpStatusCode.BadRequest);
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { EmailIsConfirmedLabel = _accountLocalizer.GetString("EmailIsConfirmed").Value, SignInLabel = _globalLocalizer.GetString("TrySignIn").Value, SignInUrl = _linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }) });
+                }
             }
+
+            return StatusCode((int)HttpStatusCode.BadRequest);
         }
     }
 }
