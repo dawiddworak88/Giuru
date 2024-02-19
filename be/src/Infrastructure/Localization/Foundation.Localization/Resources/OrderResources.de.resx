@@ -285,4 +285,16 @@
   <data name="CancelOrderItem" xml:space="preserve">
     <value>Bestellposition stornieren</value>
   </data>
+  <data name="oc_headOne" xml:space="preserve">
+    <value>BESTELLBESTÄTIGUNG</value>
+  </data>
+  <data name="oc_headThree" xml:space="preserve">
+    <value>Bestellte Produkte</value>
+  </data>
+  <data name="oc_headTwo" xml:space="preserve">
+    <value>Willkommen</value>
+  </data>
+  <data name="oc_lineOne" xml:space="preserve">
+    <value>Wir freuen uns, Ihnen mitteilen zu können, dass Ihre Bestellung bestätigt wurde.</value>
+  </data>
 </root>

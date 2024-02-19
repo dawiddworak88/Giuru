@@ -285,4 +285,16 @@
   <data name="CancelOrderItem" xml:space="preserve">
     <value>Anuluj pozycję zamówienia</value>
   </data>
+  <data name="oc_headOne" xml:space="preserve">
+    <value>POTWIERDZENIE ZŁOŻENIA ZAMÓWIENIA</value>
+  </data>
+  <data name="oc_headThree" xml:space="preserve">
+    <value>Zamówione produkty</value>
+  </data>
+  <data name="oc_headTwo" xml:space="preserve">
+    <value>Witaj</value>
+  </data>
+  <data name="oc_lineOne" xml:space="preserve">
+    <value>Z przyejemością informujemy że Twoje zamówienie zostało potiwerdzone.</value>
+  </data>
 </root>
