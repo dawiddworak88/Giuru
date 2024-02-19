@@ -188,6 +188,32 @@ namespace Ordering.Api.Services
 
             using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
             _eventBus.Publish(message);
+
+            if (serviceModel.HasApprovalToSendEmail)
+            {
+                await _mailingService.SendTemplateAsync(new TemplateEmail
+                {
+                    RecipientEmailAddress = serviceModel.Username,
+                    RecipientName = serviceModel.ClientName,
+                    SenderEmailAddress = _configuration.Value.SenderEmail,
+                    SenderName = _configuration.Value.SenderName,
+                    TemplateId = _configuration.Value.ActionSendGridConfirmationOrderPlacementTemplateId,
+                    DynamicTemplateData = new
+                    {
+                        lang = serviceModel.Language,
+                        oc_headOne = _orderLocalizer.GetString("oc_headOne"),
+                        oc_headTwo = _orderLocalizer.GetString("oc_headTwo"),
+                        oc_lineOne = _orderLocalizer.GetString("oc_lineOne"),
+                        oc_headThree = _orderLocalizer.GetString("oc_headThree"),
+                        oc_products = serviceModel.Items.Select(x => new
+                        {
+                            pictureUrl = x.PictureUrl,
+                            name = x.ProductName,
+                            quntity = x.Quantity
+                        })
+                    }
+                });
+            }
         }
 
         public PagedResults<IEnumerable<OrderServiceModel>> Get(GetOrdersServiceModel model)
