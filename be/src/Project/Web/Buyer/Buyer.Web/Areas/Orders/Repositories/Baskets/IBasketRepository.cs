@@ -36,7 +36,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             string shippingStreet,
             string shippingPhoneNumber,
             Guid? shippingCountryId,
-            string moreInfo, bool hasCustomOrder, 
+            string moreInfo, bool hasCustomOrder,
+            bool hasApprovalToSendEmail,
             IEnumerable<Guid> attachments);
     }
 }
