@@ -7,18 +7,17 @@ using System.Threading.Tasks;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.ApiExtensions.Services.ApiClientServices;
-using Foundation.ApiExtensions.Models.Response;
 using System.Collections.Generic;
 using Foundation.Extensions.Exceptions;
 
 namespace Buyer.Web.Areas.Orders.Repositories.ClientNotificationTypeApproval
 {
-    public class ClientNotoficationTypeApproval : IClientNotificationTypeApproval
+    public class ClientNotoficationTypeApprovalRepository : IClientNotificationTypeApproval
     {
         private readonly IOptions<AppSettings> _settings;
         private readonly IApiClientService _apiClientService;
 
-        public ClientNotoficationTypeApproval(
+        public ClientNotoficationTypeApprovalRepository(
             IOptions<AppSettings> settings,
             IApiClientService apiClientService)
         {

@@ -2,6 +2,8 @@
 using Buyer.Web.Areas.Orders.ModelBuilders;
 using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
+using Buyer.Web.Areas.Orders.Repositories.ClientNotificationTypeApproval;
+using Buyer.Web.Areas.Orders.Repositories.NotificationTypeApproval;
 using Buyer.Web.Areas.Orders.Services.OrderFiles;
 using Buyer.Web.Areas.Orders.ViewModel;
 using Buyer.Web.Shared.ViewModels.Catalogs;
@@ -18,6 +20,7 @@ namespace Buyer.Web.Areas.Orders.DependencyInjection
             services.AddScoped<IOrdersRepository, OrdersRepository>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IOrderFileService, OrderFileService>();
+            services.AddScoped<IClientNotificationTypeApproval, ClientNotoficationTypeApprovalRepository>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogOrderViewModel<Order>>, OrdersPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrdersPageViewModel>, OrdersPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel>, OrderPageModelBuilder>();
