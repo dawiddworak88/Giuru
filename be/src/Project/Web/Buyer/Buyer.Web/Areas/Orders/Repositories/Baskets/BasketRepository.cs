@@ -110,7 +110,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             string shippingPhoneNumber,
             Guid? shippingCountryId, 
             string moreInfo, 
-            bool hasCustomOrder, 
+            bool hasCustomOrder,
+            bool hasApprovalToSendEmail,
             IEnumerable<Guid> attachments)
         {
             var requestModel = new CheckoutBasketApiRequestModel
@@ -140,6 +141,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 ShippingCountryId = shippingCountryId,
                 MoreInfo = moreInfo,
                 HasCustomOrder = hasCustomOrder,
+                HasApprovalToSendEmail = hasApprovalToSendEmail,
                 Attachments = attachments
             };
 
