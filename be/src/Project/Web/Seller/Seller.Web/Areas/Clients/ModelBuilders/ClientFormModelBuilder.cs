@@ -22,6 +22,7 @@ using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Foundation.GenericRepository.Definitions;
 using Seller.Web.Areas.Clients.Repositories.NotificationTypes;
 using Seller.Web.Areas.Clients.DomainModels;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -180,7 +181,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             var currencies = await _currenciesRepository.GetAsync(componentModel.Token, componentModel.Language, $"{nameof(Country.Name)} asc");
 
-            if (currencies is not null) 
+            if (currencies is not null)
             {
                 viewModel.Currencies = currencies.Select(x => new ListItemViewModel { Id = x.Id, Name = x.CurrencyCode });
             }
@@ -207,17 +208,14 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             {
                 var clientApprovals = await _clientNotificationTypeApprovalRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
-                if (clientApprovals.Any()) 
+                foreach (var clientTypeApproval in clientTypesApprovals.OrEmptyIfNull())
                 {
-                    foreach (var clientTypeApproval in clientTypesApprovals)
+                    if (clientApprovals.Any(x => x.NotificationTypeId == clientTypeApproval.Id))
                     {
-                        if (clientApprovals.Any(x => x.NotificationTypeId == clientTypeApproval.Id))
-                        {
-                            var clientApproval = clientApprovals.FirstOrDefault(x => x.NotificationTypeId == clientTypeApproval.Id);
+                        var clientApproval = clientApprovals.FirstOrDefault(x => x.NotificationTypeId == clientTypeApproval.Id);
 
-                            clientTypeApproval.ApprovalDate = clientApproval.ApprovalDate;
-                            clientTypeApproval.IsApproved = clientApproval.IsApproved;
-                        }
+                        clientTypeApproval.ApprovalDate = clientApproval.ApprovalDate;
+                        clientTypeApproval.IsApproved = clientApproval.IsApproved;
                     }
                 }
             }
