@@ -15,7 +15,7 @@ namespace Client.Api.Infrastructure.Notifications.Seeds
         }
         private static void SeedNotificationType(ClientContext context, Guid id, string englishName, string polishName, string germanName)
         {
-            if(!context.ClientNotificationTypes.Any(x => x.Id == id))
+            if (!context.ClientNotificationTypes.Any(x => x.Id == id))
             {
                 var notificationType = new ClientNotificationType
                 {
