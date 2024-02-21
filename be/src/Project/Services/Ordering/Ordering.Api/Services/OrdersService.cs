@@ -191,25 +191,34 @@ namespace Ordering.Api.Services
 
             if (serviceModel.HasApprovalToSendEmail)
             {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo(serviceModel.Language);
+                Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+
                 await _mailingService.SendTemplateAsync(new TemplateEmail
                 {
                     RecipientEmailAddress = serviceModel.Username,
                     RecipientName = serviceModel.ClientName,
                     SenderEmailAddress = _configuration.Value.SenderEmail,
                     SenderName = _configuration.Value.SenderName,
-                    TemplateId = _configuration.Value.ActionSendGridConfirmationOrderPlacementTemplateId,
+                    TemplateId = _configuration.Value.ActionSendGridConfirmationOrderTemplateId,
                     DynamicTemplateData = new
                     {
-                        lang = serviceModel.Language,
-                        oc_headOne = _orderLocalizer.GetString("oc_headOne"),
-                        oc_headTwo = _orderLocalizer.GetString("oc_headTwo"),
-                        oc_lineOne = _orderLocalizer.GetString("oc_lineOne"),
-                        oc_headThree = _orderLocalizer.GetString("oc_headThree"),
+                        oc_subject = _orderLocalizer.GetString("oc_subject").Value,
+                        oc_preheader = _orderLocalizer.GetString("oc_preheader").Value,
+                        oc_title = _orderLocalizer.GetString("oc_title").Value,
+                        oc_text = _orderLocalizer.GetString("oc_text").Value,
+                        oc_orderedProducts = _orderLocalizer.GetString("oc_orderedProducts").Value,
+                        oc_name = _orderLocalizer.GetString("oc_name").Value,
+                        oc_quantity = _orderLocalizer.GetString("oc_quantity").Value,
+                        oc_stockQuantity = _orderLocalizer.GetString("oc_stockQuantity").Value,
+                        oc_outletQuantity = _orderLocalizer.GetString("oc_outletQuantity").Value,
                         oc_products = serviceModel.Items.Select(x => new
                         {
                             pictureUrl = x.PictureUrl,
-                            name = x.ProductName,
-                            quntity = x.Quantity
+                            name = $"{x.ProductName} ({x.ProductSku})",
+                            quantity = x.Quantity,
+                            stockQuantity = x.StockQuantity,
+                            outletQuantity = x.OutletQuantity
                         })
                     }
                 });

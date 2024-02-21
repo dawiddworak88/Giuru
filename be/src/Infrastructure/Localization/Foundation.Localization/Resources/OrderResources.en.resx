@@ -285,16 +285,31 @@
   <data name="CancelOrderItem" xml:space="preserve">
     <value>Cancel the order item</value>
   </data>
-  <data name="oc_headOne" xml:space="preserve">
+  <data name="oc_title" xml:space="preserve">
     <value>ORDER CONFIRMATION</value>
   </data>
-  <data name="oc_headThree" xml:space="preserve">
-    <value>Ordered products</value>
+  <data name="oc_orderedProducts" xml:space="preserve">
+    <value>Ordered products:</value>
   </data>
-  <data name="oc_headTwo" xml:space="preserve">
-    <value>Welcome</value>
+  <data name="oc_name" xml:space="preserve">
+    <value>Name</value>
   </data>
-  <data name="oc_lineOne" xml:space="preserve">
+  <data name="oc_text" xml:space="preserve">
     <value>We are pleased to inform you that your order has been confirmed.</value>
+  </data>
+  <data name="oc_outletQuantity" xml:space="preserve">
+    <value>Outlet quantity</value>
+  </data>
+  <data name="oc_preheader" xml:space="preserve">
+    <value>Order Approved: Check Transaction Details</value>
+  </data>
+  <data name="oc_quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="oc_stockQuantity" xml:space="preserve">
+    <value>Stock quantity</value>
+  </data>
+  <data name="oc_subject" xml:space="preserve">
+    <value>Order Confirm</value>
   </data>
 </root>
