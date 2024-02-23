@@ -31,7 +31,7 @@ namespace Foundation.Catalog.Infrastructure.Products.Entities
 
         public string Ean { get; set; }
 
-        public DateTime? FulfilmentDate { get; set; }
+        public int DaysToFulfilment { get; set; }
 
         public virtual Category Category { get; set; }
 

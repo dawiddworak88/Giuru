@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Catalog.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20240222134746_AddedFulfilmentDate")]
-    partial class AddedFulfilmentDate
+    [Migration("20240223094436_DaysToFulfilment")]
+    partial class DaysToFulfilment
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -364,11 +364,11 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("DaysToFulfilment")
+                        .HasColumnType("int");
+
                     b.Property<string>("Ean")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("FulfilmentDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");

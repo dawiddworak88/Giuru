@@ -1,21 +1,21 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Catalog.Api.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedFulfilmentDate : Migration
+    public partial class DaysToFulfilment : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<DateTime>(
-                name: "FulfilmentDate",
+            migrationBuilder.AddColumn<int>(
+                name: "DaysToFulfilment",
                 table: "Products",
-                type: "datetime2",
-                nullable: true);
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.CreateIndex(
                 name: "IX_CategoryImages_CategoryId",
@@ -63,7 +63,7 @@ namespace Catalog.Api.Infrastructure.Migrations
                 table: "Categories");
 
             migrationBuilder.DropColumn(
-                name: "FulfilmentDate",
+                name: "DaysToFulfilment",
                 table: "Products");
         }
     }
