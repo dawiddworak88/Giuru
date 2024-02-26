@@ -9,7 +9,7 @@ using Identity.Api.Configurations;
 using Foundation.ApiExtensions.Models.Request;
 using Identity.Api.Areas.Accounts.Models;
 
-namespace Identity.Api.Areas.Accounts.Repositories
+namespace Identity.Api.Areas.Accounts.Repositories.Clients
 {
     public class ClientRepository : IClientRepository
     {

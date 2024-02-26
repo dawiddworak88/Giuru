@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Client.Api.Services.NotificationsType
+namespace Client.Api.Services.NotificationsTypesApprovals
 {
     public interface IClientNotificationTypeApprovalService
     {

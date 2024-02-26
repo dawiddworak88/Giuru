@@ -8,14 +8,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Client.Api.Services.NotificationsType
+namespace Client.Api.Services.NotificationsTypesApprovals
 {
     public class ClientNotificationTypeApprovalService : IClientNotificationTypeApprovalService
     {
         private readonly ClientContext _context;
 
-        public ClientNotificationTypeApprovalService(ClientContext context) 
-        { 
+        public ClientNotificationTypeApprovalService(ClientContext context)
+        {
             _context = context;
         }
 
@@ -23,7 +23,7 @@ namespace Client.Api.Services.NotificationsType
         {
             var clientNotificationTypeApprovals = _context.ClientNotificationTypeApprovals.Where(x => x.ClientId == model.ClientId);
 
-            if (clientNotificationTypeApprovals is not null) 
+            if (clientNotificationTypeApprovals is not null)
             {
                 return clientNotificationTypeApprovals.Select(x => new ClientNotificationTypeApprovalServiceModel
                 {

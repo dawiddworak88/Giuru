@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Identity.Api.Areas.Accounts.Repositories
+namespace Identity.Api.Areas.Accounts.Repositories.Clients
 {
     public interface IClientRepository
     {

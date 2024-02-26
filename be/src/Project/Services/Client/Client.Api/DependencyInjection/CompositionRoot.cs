@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Client.Api.Services.Addresses;
 using Client.Api.Services.NotificationsType;
+using Client.Api.Services.NotificationsTypesApprovals;
 
 namespace Client.Api.DependencyInjection
 {
