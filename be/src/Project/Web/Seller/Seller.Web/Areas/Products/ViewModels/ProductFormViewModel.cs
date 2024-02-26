@@ -11,6 +11,7 @@ namespace Seller.Web.Areas.Products.ViewModels
         public Guid? Id { get; set; }
         public Guid? CategoryId { get; set; }
         public string Sku { get; set; }
+        public int DaysToFulfilment { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public IEnumerable<FileViewModel> Images { get; set; }
@@ -25,6 +26,7 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string ProductFilesLabel { get; set; }
         public string ProductPicturesLabel { get; set; }
         public string SkuLabel { get; set; }
+        public string DaysToFulfilmentLabel { get; set; }
         public string NameLabel { get; set; }
         public string DescriptionLabel { get; set; }
         public string IsNewLabel { get; set; }
