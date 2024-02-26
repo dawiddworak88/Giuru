@@ -30,7 +30,7 @@ namespace Client.Api.Services.NotificationsType
             _context = context;
             _clientLocalizer = clientLocalizer;
         }
-        
+
         public PagedResults<IEnumerable<ClientNotificationTypeServiceModel>> Get(GetClientNotificationTypesServiceModel model)
         {
             var notificationTypes = _context.ClientNotificationTypes.Where(x => x.IsActive)
@@ -43,7 +43,7 @@ namespace Client.Api.Services.NotificationsType
             }
 
             notificationTypes = notificationTypes.ApplySort(model.OrderBy);
-            
+
             PagedResults<IEnumerable<ClientNotificationType>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
@@ -164,26 +164,19 @@ namespace Client.Api.Services.NotificationsType
             return await GetAsync(new GetClientNotificationTypeServiceModel { Id = notificationType.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
-        public PagedResults<IEnumerable<ClientNotificationTypeServiceModel>> GetByIds(GetClientNotificationTypeByIdsServiceModel model)
+        public IEnumerable<ClientNotificationTypeServiceModel> GetByIds(GetClientNotificationTypeByIdsServiceModel model)
         {
-            var notificationTypes = from n in _context.ClientNotificationTypes
-                                    where model.Ids.Contains(n.Id) && n.IsActive
-                                    join nt in _context.ClientNotificationTypeTranslations on n.Id equals nt.ClientNotificationTypeId
-                                    where nt.ClientNotificationTypeId == n.Id && nt.IsActive && nt.Language == model.Language
-                                    select new ClientNotificationTypeServiceModel
-                                    {
-                                        Id = n.Id,
-                                        Name = nt.Name
-                                    };
+            var notificationTypes = _context.ClientNotificationTypes
+                .Include(x => x.Translations)
+                .AsSingleQuery()
+                .Where(x => x.IsActive && model.Ids.Contains(x.Id));
 
-            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+
+            return notificationTypes.OrEmptyIfNull().Select(x => new ClientNotificationTypeServiceModel
             {
-                notificationTypes = notificationTypes.Take(Constants.MaxItemsPerPageLimit);
-
-                return notificationTypes.PagedIndex(new Pagination(notificationTypes.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
-            }
-
-            return notificationTypes.PagedIndex(new Pagination(notificationTypes.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+                Id = x.Id,
+                Name = x.Translations.FirstOrDefault(t => t.ClientNotificationTypeId == x.Id && t.Language == model.Language && t.IsActive)?.Name ?? x.Translations.FirstOrDefault(t => t.ClientNotificationTypeId == x.Id && t.IsActive)?.Name,
+            });
         }
     }
 }
