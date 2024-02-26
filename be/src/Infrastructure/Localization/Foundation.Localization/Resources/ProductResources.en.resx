@@ -132,6 +132,9 @@
   <data name="CategorySavedSuccessfully" xml:space="preserve">
     <value>Category has been saved successfully.</value>
   </data>
+  <data name="DaysToFulfilmentLabel" xml:space="preserve">
+    <value>Days To Fulfilment:</value>
+  </data>
   <data name="EditCategory" xml:space="preserve">
     <value>Edit category</value>
   </data>
