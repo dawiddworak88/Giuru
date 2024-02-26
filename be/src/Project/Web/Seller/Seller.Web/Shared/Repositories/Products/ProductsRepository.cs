@@ -244,6 +244,7 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
             IEnumerable<Guid> images,
             IEnumerable<Guid> files,
             string ean,
+            int daysToFulfilment,
             string formData)
         {
             var requestModel = new SaveProductApiRequestModel
@@ -259,6 +260,7 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
                 Images = images,
                 Files = files,
                 Ean = ean,
+                DaysToFulfilment = daysToFulfilment,
                 FormData = formData
             };
 

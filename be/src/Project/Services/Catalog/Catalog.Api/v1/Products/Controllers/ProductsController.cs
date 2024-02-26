@@ -267,6 +267,7 @@ namespace Catalog.Api.v1.Products.Controllers
                 Description = request.Description,
                 FormData = request.FormData,
                 Ean = request.Ean,
+                DaysToFulfilment = request.DaysToFulfilment,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Language = CultureInfo.CurrentCulture.Name
@@ -457,6 +458,7 @@ namespace Catalog.Api.v1.Products.Controllers
                 Sku = product.Sku,
                 Videos = product.Videos,
                 Ean = product.Ean,
+                DaysToFulfliment = product.DaysToFulfilment,
                 ProductAttributes = product.ProductAttributes.OrEmptyIfNull().Select(x => new ProductAttributeValuesResponseModel
                 {
                     Key = x.Key,

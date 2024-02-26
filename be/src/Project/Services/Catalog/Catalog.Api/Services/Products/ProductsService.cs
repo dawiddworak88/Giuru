@@ -74,7 +74,8 @@ namespace Catalog.Api.Services.Products
                 Ean = model.Ean,
                 BrandId = brand.Id,
                 CategoryId = category.Id,
-                PrimaryProductId = model.PrimaryProductId
+                PrimaryProductId = model.PrimaryProductId,
+                DaysToFulfilment = model.DaysToFulfilment,
             };
 
             await _context.Products.AddAsync(product.FillCommonProperties());
@@ -174,6 +175,7 @@ namespace Catalog.Api.Services.Products
             product.Ean = model.Ean;
             product.BrandId = brand.Id;
             product.CategoryId = category.Id;
+            product.DaysToFulfilment = model.DaysToFulfilment;
             product.PrimaryProductId = model.PrimaryProductId;
             product.LastModifiedDate = DateTime.UtcNow;
 
