@@ -143,18 +143,21 @@ function ClientForm(props) {
             });
     };
 
-    const handleClientApprovalChange = (e, approval) => {
-        var ids = [];
+    const handleClientApprovalChange = (e, approval, clientApprovalIds) => {
+        const updatedIds = [...clientApprovalIds]; 
 
         approval.isApproved = !approval.isApproved;
+
         if (e.target.checked) {
-            ids = clientApprovalIds.concat(approval.id);
-        }
-        else {
-            ids = clientApprovalIds.filter(x => x !== approval.id);
+            updatedIds.push(approval.id);
+        } else {
+            const index = updatedIds.indexOf(approval.id);
+            if (index !== -1) {
+                updatedIds.splice(index, 1);
+            }
         }
 
-        return ids
+        return setFieldValue({name: "clientApprovalIds", value: updatedIds})
     }
 
     const {
@@ -388,7 +391,7 @@ function ClientForm(props) {
                                                 control={
                                                     <Switch
                                                         onChange={e => {
-                                                            setFieldValue({ name: "clientApprovalIds", value: handleClientApprovalChange(e, approval) });
+                                                            handleClientApprovalChange(e, approval, clientApprovalIds)
                                                         }}
                                                         checked={approval.isApproved}
                                                         id={approval.name}
