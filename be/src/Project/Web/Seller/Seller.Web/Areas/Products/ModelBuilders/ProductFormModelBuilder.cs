@@ -122,7 +122,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                     viewModel.CategoryId = product.CategoryId;
                     viewModel.FormData = product.FormData;
                     viewModel.Ean = product.Ean;
-                    viewModel.DaysToFulfilment = product.DaysToFunfilment;
+                    viewModel.DaysToFulfilment = product.DaysToFulfilment;
 
                     var categorySchema = await _categoriesRepository.GetCategorySchemasAsync(
                         componentModel.Token,
