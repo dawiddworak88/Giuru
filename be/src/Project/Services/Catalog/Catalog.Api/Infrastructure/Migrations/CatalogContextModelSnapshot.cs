@@ -361,7 +361,7 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DaysToFulfilment")
+                    b.Property<int>("DaysToFulfillment")
                         .HasColumnType("int");
 
                     b.Property<string>("Ean")
