@@ -489,6 +489,7 @@ namespace Catalog.Api.Services.Products
                 IsPublished = searchResultItem.IsPublished,
                 IsProtected = searchResultItem.IsProtected,
                 Sku = searchResultItem.Sku,
+                DaysToFulfilment = searchResultItem.DaysToFulfilment,
                 Name = searchResultItem.Name,
                 Description = searchResultItem.Description,
                 FormData = searchResultItem.FormData,
