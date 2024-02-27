@@ -20,14 +20,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: {{ .Values.globalApi.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.globalApi.readinessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.globalApi.readinessProbe.timeoutSeconds }}
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: {{ .Values.globalApi.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.globalApi.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.globalApi.livenessProbe.timeoutSeconds }}
@@ -50,4 +50,4 @@ spec:
         - secretRef:
             name: b2b-global-api-secrets
         ports:
-        - containerPort: 80
+        - containerPort: 8080

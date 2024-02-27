@@ -20,14 +20,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: {{ .Values.downloadCenterApi.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.downloadCenterApi.readinessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.downloadCenterApi.readinessProbe.timeoutSeconds }}
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: {{ .Values.downloadCenterApi.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.downloadCenterApi.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.downloadCenterApi.livenessProbe.timeoutSeconds }}
@@ -56,4 +56,4 @@ spec:
         - secretRef:
             name: b2b-downloadcenter-api-secrets
         ports:
-        - containerPort: 80
+        - containerPort: 8080
