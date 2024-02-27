@@ -19,14 +19,14 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
 {
     public class ProductsRepository : IProductsRepository
     {
-        private readonly IApiClientService apiClientService;
-        private readonly IOptions<AppSettings> settings;
+        private readonly IApiClientService _apiClientService;
+        private readonly IOptions<AppSettings> _settings;
 
         public ProductsRepository(IApiClientService apiClientService,
             IOptions<AppSettings> settings)
         {
-            this.apiClientService = apiClientService;
-            this.settings = settings;
+            _apiClientService = apiClientService;
+            _settings = settings;
         }
 
         public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(
@@ -54,10 +54,10 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
                 Language = language,
                 Data = productsRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
@@ -91,10 +91,10 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
                 Language = language,
                 Data = productsRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
             
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
@@ -108,7 +108,7 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
                 {
                     apiRequest.Data.PageIndex = i;
 
-                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
+                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
 
                     if (!nextPagesResponse.IsSuccessStatusCode)
                     {
@@ -146,10 +146,10 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
                 Language = language,
                 Data = productsRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
@@ -163,7 +163,7 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
                 {
                     apiRequest.Data.PageIndex = i;
 
-                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
+                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
 
                     if (!nextPagesResponse.IsSuccessStatusCode)
                     {
@@ -194,10 +194,10 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}/{id}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode && response?.Data != null)
             {
@@ -212,10 +212,10 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}/{id}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Product>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Product>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -269,10 +269,10 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<SaveProductApiRequestModel>, SaveProductApiRequestModel, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<SaveProductApiRequestModel>, SaveProductApiRequestModel, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -293,10 +293,10 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
             {
                 Language = language,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsSearchIndexApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsSearchIndexApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -311,10 +311,10 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}/sku/{sku}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}/sku/{sku}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Product>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Product>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
