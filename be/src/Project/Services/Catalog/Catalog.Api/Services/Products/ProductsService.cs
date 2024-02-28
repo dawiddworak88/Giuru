@@ -75,7 +75,7 @@ namespace Catalog.Api.Services.Products
                 BrandId = brand.Id,
                 CategoryId = category.Id,
                 PrimaryProductId = model.PrimaryProductId,
-                DaysToFulfilment = model.DaysToFulfilment,
+                DaysToFulfillment = model.DaysToFulfillment,
             };
 
             await _context.Products.AddAsync(product.FillCommonProperties());
@@ -175,7 +175,7 @@ namespace Catalog.Api.Services.Products
             product.Ean = model.Ean;
             product.BrandId = brand.Id;
             product.CategoryId = category.Id;
-            product.DaysToFulfilment = model.DaysToFulfilment;
+            product.DaysToFulfillment = model.DaysToFulfillment;
             product.PrimaryProductId = model.PrimaryProductId;
             product.LastModifiedDate = DateTime.UtcNow;
 
@@ -489,7 +489,7 @@ namespace Catalog.Api.Services.Products
                 IsPublished = searchResultItem.IsPublished,
                 IsProtected = searchResultItem.IsProtected,
                 Sku = searchResultItem.Sku,
-                DaysToFulfilment = searchResultItem.DaysToFulfilment,
+                DaysToFulfillment = searchResultItem.DaysToFulfillment,
                 Name = searchResultItem.Name,
                 Description = searchResultItem.Description,
                 FormData = searchResultItem.FormData,

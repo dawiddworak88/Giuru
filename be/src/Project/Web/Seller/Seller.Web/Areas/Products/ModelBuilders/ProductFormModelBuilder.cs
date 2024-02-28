@@ -66,7 +66,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 EnterSkuText = _productLocalizer.GetString("EnterSkuText"),
                 SkuRequiredErrorMessage = _productLocalizer.GetString("SkuRequiredErrorMessage"),
                 SkuLabel = _productLocalizer.GetString("SkuLabel"),
-                DaysToFulfilmentLabel = _productLocalizer.GetString("DaysToFulfilmentLabel"),
+                DaysToFulfillmentLabel = _productLocalizer.GetString("DaysToFulfillmentLabel"),
                 DropFilesLabel = _globalLocalizer.GetString("DropFile"),
                 DropOrSelectFilesLabel = _globalLocalizer.GetString("DropOrSelectFile"),
                 DeleteLabel = _globalLocalizer.GetString("Delete"),
@@ -122,7 +122,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                     viewModel.CategoryId = product.CategoryId;
                     viewModel.FormData = product.FormData;
                     viewModel.Ean = product.Ean;
-                    viewModel.DaysToFulfilment = product.DaysToFulfilment;
+                    viewModel.DaysToFulfillment = product.DaysToFulfillment;
 
                     var categorySchema = await _categoriesRepository.GetCategorySchemasAsync(
                         componentModel.Token,

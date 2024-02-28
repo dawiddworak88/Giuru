@@ -132,7 +132,7 @@
   <data name="CategorySavedSuccessfully" xml:space="preserve">
     <value>Kategoria została pomyślnie zapisana.</value>
   </data>
-  <data name="DaysToFulfilmentLabel" xml:space="preserve">
+  <data name="DaysToFulfillmentLabel" xml:space="preserve">
     <value>Dni do realizcji:</value>
   </data>
   <data name="EditCategory" xml:space="preserve">

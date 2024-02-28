@@ -48,7 +48,7 @@ function ProductForm(props) {
         formData: { value: props.formData ? JSON.parse(props.formData) : {} },
         isPublished: { value: props.isPublished ? props.isPublished : false },
         ean: { value: props.ean ? props.ean : "" },
-        daysToFulfilment: { value: props.daysToFulfilment }
+        daysToFulfillment: { value: props.daysToFulfillment }
     };
 
     const stateValidatorSchema = {
@@ -134,7 +134,7 @@ function ProductForm(props) {
             files,
             isNew,
             ean,
-            daysToFulfilment,
+            daysToFulfillment,
             formData: JSON.stringify(formData),
             isPublished
         };
@@ -242,7 +242,7 @@ function ProductForm(props) {
 
     const { 
         id, category, sku, name, primaryProduct, images, files, 
-        isNew, schema, uiSchema, formData, isPublished, ean, daysToFulfilment
+        isNew, schema, uiSchema, formData, isPublished, ean, daysToFulfillment
     } = values;
 
     return (
@@ -286,8 +286,8 @@ function ProductForm(props) {
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
-                            <TextField type="number" id="daysToFulfilment" name="daysToFulfilment" label={props.daysToFulfilmentLabel} fullWidth={true} variant="standard"
-                            value={daysToFulfilment} onChange={handleOnChange} />
+                            <TextField type="number" id="daysToFulfillment" name="daysToFulfillment" label={props.daysToFulfillmentLabel} fullWidth={true} variant="standard"
+                            value={daysToFulfillment} onChange={handleOnChange} />
                         </div>
                         <div className="field">
                             <InputLabel id="description-label">{props.descriptionLabel}</InputLabel>
