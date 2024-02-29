@@ -28,7 +28,7 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
             IEnumerable<Guid> images,
             IEnumerable<Guid> files,
             string ean,
-            int daysToFulfillment,
+            int fulfillmentTime,
             string formData);
         Task TriggerProductsReindexingAsync(string token, string language);
     }
