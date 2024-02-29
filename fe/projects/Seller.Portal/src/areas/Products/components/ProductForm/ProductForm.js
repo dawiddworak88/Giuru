@@ -16,6 +16,7 @@ import DynamicForm from "../../../../shared/components/DynamicForm/DynamicForm";
 import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import SearchConstants from "../../../../shared/constants/SearchConstants";
+import moment from "moment";
 
 function ProductForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -48,7 +49,7 @@ function ProductForm(props) {
         formData: { value: props.formData ? JSON.parse(props.formData) : {} },
         isPublished: { value: props.isPublished ? props.isPublished : false },
         ean: { value: props.ean ? props.ean : "" },
-        daysToFulfillment: { value: props.daysToFulfillment }
+        fulfillmentTime: { value: props.fulfillmentTime }
     };
 
     const stateValidatorSchema = {
@@ -134,7 +135,7 @@ function ProductForm(props) {
             files,
             isNew,
             ean,
-            daysToFulfillment,
+            fulfillmentTime,
             formData: JSON.stringify(formData),
             isPublished
         };
@@ -242,8 +243,10 @@ function ProductForm(props) {
 
     const { 
         id, category, sku, name, primaryProduct, images, files, 
-        isNew, schema, uiSchema, formData, isPublished, ean, daysToFulfillment
+        isNew, schema, uiSchema, formData, isPublished, ean, fulfillmentTime
     } = values;
+
+    console.log(props);
 
     return (
         <section className="section section-small-padding product">
@@ -286,8 +289,8 @@ function ProductForm(props) {
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
-                            <TextField type="number" id="daysToFulfillment" name="daysToFulfillment" label={props.daysToFulfillmentLabel} fullWidth={true} variant="standard"
-                            value={daysToFulfillment} onChange={handleOnChange} />
+                            <TextField type="number" id="fulfillmentTime" name="fulfillmentTime" label={props.fulfillmentTimeLabel} fullWidth={true} variant="standard"
+                            value={fulfillmentTime} onChange={handleOnChange} />
                         </div>
                         <div className="field">
                             <InputLabel id="description-label">{props.descriptionLabel}</InputLabel>
