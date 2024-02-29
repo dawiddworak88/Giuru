@@ -5,13 +5,13 @@
 namespace Catalog.Api.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class DaysToFulFillment : Migration
+    public partial class FulfillmentTime : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "DaysToFulfillment",
+                name: "FulfillmentTime",
                 table: "Products",
                 type: "int",
                 nullable: false,
@@ -63,7 +63,7 @@ namespace Catalog.Api.Infrastructure.Migrations
                 table: "Categories");
 
             migrationBuilder.DropColumn(
-                name: "DaysToFulfillment",
+                name: "FulfillmentTime",
                 table: "Products");
         }
     }
