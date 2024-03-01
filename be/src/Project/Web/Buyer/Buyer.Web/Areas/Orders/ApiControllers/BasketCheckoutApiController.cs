@@ -72,50 +72,24 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 deliveryAddressesIds.Add(model.BillingAddressId.Value);
             }
 
-            var deliveryAddresses = await _clientAddressesRepository.GetAsync(token, language, deliveryAddressesIds);
-
             var clientApprovlas = await _clientNotificationTypeRepository.GetAsync(token, language, model.ClientId);
 
-            if (deliveryAddresses is not null)
-            {
-                var billingAddress = deliveryAddresses.FirstOrDefault(x => x.Id == model.BillingAddressId);
-                var deliveryAddress = deliveryAddresses.FirstOrDefault(x => x.Id == model.ShippingAddressId);
+            var clientAddresses = await _clientAddressesRepository.GetAsync(token, language, deliveryAddressesIds);
 
-                await _basketRepository.CheckoutBasketAsync(
+            await _basketRepository.CheckoutBasketAsync(
                 token,
                 language,
                 model.ClientId,
                 model.ClientName,
                 Guid.Parse(reqCookie),
-                model.BillingAddressId,
-                billingAddress?.Company,
-                billingAddress?.FirstName, 
-                billingAddress?.LastName,
-                billingAddress?.Region,
-                billingAddress?.PostCode,
-                billingAddress?.City,
-                billingAddress?.Street,
-                billingAddress?.PhoneNumber,
-                billingAddress?.CountryId,
-                model.ShippingAddressId,
-                deliveryAddress?.Company,
-                deliveryAddress?.FirstName,
-                deliveryAddress?.LastName,
-                deliveryAddress?.Region,
-                deliveryAddress?.PostCode,
-                deliveryAddress?.City,
-                deliveryAddress?.Street,
-                deliveryAddress?.PhoneNumber,
-                deliveryAddress?.CountryId,
+                clientAddresses?.FirstOrDefault(x => x.Id == model.BillingAddressId),
+                clientAddresses?.FirstOrDefault(x => x.Id == model.ShippingAddressId),
                 model.MoreInfo,
                 model.HasCustomOrder,
                 clientApprovlas.Any(x => x.NotificationTypeId == ClientNotificationTypeConstants.ApprovalToSendOrderConfirmationEmailsId),
                 model.Attachments?.Select(x => x.Id));
 
-                return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
-            }
-
-            return StatusCode((int)HttpStatusCode.BadRequest);
+            return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
         }
     }
 }

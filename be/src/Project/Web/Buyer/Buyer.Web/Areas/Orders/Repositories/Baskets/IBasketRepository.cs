@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Orders.DomainModels;
+using Buyer.Web.Shared.DomainModels.Clients;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,26 +17,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             Guid? clientId, 
             string clientName, 
             Guid? basketId,
-            Guid? billingAddressId,
-            string billingCompany,
-            string billingFirstName,
-            string billingLastName,
-            string billingRegion,
-            string billingPostCode,
-            string billingCity,
-            string billingStreet,
-            string billingPhoneNumber,
-            Guid? billingCountryId,
-            Guid? shippingAddressId,
-            string shippingCompany,
-            string shippingFirstName,
-            string shippingLastName,
-            string shippingRegion,
-            string shippingPostCode,
-            string shippingCity,
-            string shippingStreet,
-            string shippingPhoneNumber,
-            Guid? shippingCountryId,
+            ClientAddress billingAddress,
+            ClientAddress shippingAddress,
             string moreInfo, bool hasCustomOrder,
             bool hasApprovalToSendEmail,
             IEnumerable<Guid> attachments);
