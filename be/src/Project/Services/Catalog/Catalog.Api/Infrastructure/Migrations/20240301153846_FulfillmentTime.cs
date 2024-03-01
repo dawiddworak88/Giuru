@@ -14,8 +14,7 @@ namespace Catalog.Api.Infrastructure.Migrations
                 name: "FulfillmentTime",
                 table: "Products",
                 type: "int",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_CategoryImages_CategoryId",

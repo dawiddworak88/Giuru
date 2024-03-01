@@ -364,7 +364,7 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<string>("Ean")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FulfillmentTime")
+                    b.Property<int?>("FulfillmentTime")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")

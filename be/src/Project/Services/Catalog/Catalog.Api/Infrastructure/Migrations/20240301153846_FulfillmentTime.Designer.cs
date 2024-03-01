@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Catalog.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20240229090953_FulfillmentTime")]
+    [Migration("20240301153846_FulfillmentTime")]
     partial class FulfillmentTime
     {
         /// <inheritdoc />
@@ -367,7 +367,7 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<string>("Ean")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FulfillmentTime")
+                    b.Property<int?>("FulfillmentTime")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
