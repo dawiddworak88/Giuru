@@ -244,7 +244,7 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
             IEnumerable<Guid> images,
             IEnumerable<Guid> files,
             string ean,
-            int fulfillmentTime,
+            int? fulfillmentTime,
             string formData)
         {
             var requestModel = new SaveProductApiRequestModel
