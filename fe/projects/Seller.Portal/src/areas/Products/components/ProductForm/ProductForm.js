@@ -49,7 +49,7 @@ function ProductForm(props) {
         formData: { value: props.formData ? JSON.parse(props.formData) : {} },
         isPublished: { value: props.isPublished ? props.isPublished : false },
         ean: { value: props.ean ? props.ean : "" },
-        fulfillmentTime: { value: Number(moment.utc(1000 * props.fulfillmentTime).format("DD"))}
+        fulfillmentTime: { value: Number(moment.utc(1000 * props.fulfillmentTime).format("DD") - 1)}
     };
 
     const stateValidatorSchema = {
@@ -135,7 +135,7 @@ function ProductForm(props) {
             files,
             isNew,
             ean,
-            fulfillmentTime: moment(`${fulfillmentTime + 1}`, 'DD').diff(moment().startOf('month'), 'seconds'),
+            fulfillmentTime: moment.duration(fulfillmentTime, 'days').asSeconds(),
             formData: JSON.stringify(formData),
             isPublished
         };
@@ -245,8 +245,6 @@ function ProductForm(props) {
         id, category, sku, name, primaryProduct, images, files, 
         isNew, schema, uiSchema, formData, isPublished, ean, fulfillmentTime
     } = values;
-
-    console.log(props);
 
     return (
         <section className="section section-small-padding product">
