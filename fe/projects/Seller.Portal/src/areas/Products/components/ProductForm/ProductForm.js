@@ -49,7 +49,7 @@ function ProductForm(props) {
         formData: { value: props.formData ? JSON.parse(props.formData) : {} },
         isPublished: { value: props.isPublished ? props.isPublished : false },
         ean: { value: props.ean ? props.ean : "" },
-        fulfillmentTime: { value: Number(moment.utc(1000 * props.fulfillmentTime).format("DD") - 1)}
+        fulfillmentTime: { value: props.fulfillmentTime ? Number(moment.utc(1000 * props.fulfillmentTime).format("DD") - 1) : null}
     };
 
     const stateValidatorSchema = {
@@ -135,7 +135,7 @@ function ProductForm(props) {
             files,
             isNew,
             ean,
-            fulfillmentTime: moment.duration(fulfillmentTime, 'days').asSeconds(),
+            fulfillmentTime: fulfillmentTime ? moment.duration(fulfillmentTime, 'days').asSeconds() : null,
             formData: JSON.stringify(formData),
             isPublished
         };
