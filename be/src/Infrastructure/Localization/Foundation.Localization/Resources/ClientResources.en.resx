@@ -294,9 +294,6 @@
   <data name="BackToAddresses" xml:space="preserve">
     <value>Back to addresses</value>
   </data>
-  <data name="NewDeliveryAddress" xml:space="preserve">
-    <value>Add new delivery address</value>
-  </data>
   <data name="DeliveryAddress" xml:space="preserve">
     <value>Delivery address</value>
   </data>
@@ -359,5 +356,8 @@
   </data>
   <data name="FieldSavedSuccessfully" xml:space="preserve">
     <value>Successfully saved dynamic field</value>
+  </data>
+  <data name="PreferedCurrencyLabel" xml:space="preserve">
+    <value>Prefered currency</value>
   </data>
 </root>

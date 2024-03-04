@@ -1,5 +1,6 @@
 ﻿using Buyer.Web.Areas.DownloadCenter.ViewModel;
 using Buyer.Web.Shared.ViewModels.Headers;
+using Buyer.Web.Shared.ViewModels.NotificationBar;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
@@ -12,12 +13,13 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
 {
     public class DownloadCenterCategoryPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryPageViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryDetailsViewModel> categoryDetailsModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryBreadcrumbsViewModel> categoryBreadcrumbsModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> _seoModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> _headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> _mainNavigationModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryDetailsViewModel> _categoryDetailsModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryBreadcrumbsViewModel> _categoryBreadcrumbsModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> _footerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> _notificationBarModelBuilder;
 
         public DownloadCenterCategoryPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder,
@@ -25,14 +27,16 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryDetailsViewModel> categoryDetailsModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryBreadcrumbsViewModel> categoryBreadcrumbsModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> notificationBarModelBuilder)
         {
-            this.seoModelBuilder = seoModelBuilder;
-            this.headerModelBuilder = headerModelBuilder;
-            this.mainNavigationModelBuilder = mainNavigationModelBuilder;
-            this.categoryDetailsModelBuilder = categoryDetailsModelBuilder;
-            this.footerModelBuilder = footerModelBuilder;
-            this.categoryBreadcrumbsModelBuilder = categoryBreadcrumbsModelBuilder;
+            _seoModelBuilder = seoModelBuilder;
+            _headerModelBuilder = headerModelBuilder;
+            _mainNavigationModelBuilder = mainNavigationModelBuilder;
+            _categoryDetailsModelBuilder = categoryDetailsModelBuilder;
+            _footerModelBuilder = footerModelBuilder;
+            _categoryBreadcrumbsModelBuilder = categoryBreadcrumbsModelBuilder;
+            _notificationBarModelBuilder = notificationBarModelBuilder;
         }
 
         public async Task<DownloadCenterCategoryPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -40,12 +44,13 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
             var viewModel = new DownloadCenterCategoryPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Metadata = await this.seoModelBuilder.BuildModelAsync(componentModel),
-                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
-                MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
-                Breadcrumbs = await this.categoryBreadcrumbsModelBuilder.BuildModelAsync(componentModel),
-                CategoryDetails = await this.categoryDetailsModelBuilder.BuildModelAsync(componentModel),
-                Footer = await footerModelBuilder.BuildModelAsync(componentModel)
+                Metadata = await _seoModelBuilder.BuildModelAsync(componentModel),
+                NotificationBar = await _notificationBarModelBuilder.BuildModelAsync(componentModel),
+                Header = await _headerModelBuilder.BuildModelAsync(componentModel),
+                MainNavigation = await _mainNavigationModelBuilder.BuildModelAsync(componentModel),
+                Breadcrumbs = await _categoryBreadcrumbsModelBuilder.BuildModelAsync(componentModel),
+                CategoryDetails = await _categoryDetailsModelBuilder.BuildModelAsync(componentModel),
+                Footer = await _footerModelBuilder.BuildModelAsync(componentModel)
             };
 
             return viewModel;

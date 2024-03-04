@@ -1,27 +1,28 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using Buyer.Web.Shared.GraphQlResponseModels.Shared;
 
 namespace Buyer.Web.Shared.GraphQlResponseModels.MainNavigationLinks
 {
     public class MainNavigationLinksGraphQlResponseModel
     {
-        [JsonProperty("page")]
-        public Page Page { get; set; }
+        [JsonProperty("globalConfiguration")]
+        public MainNavigationLinksComponent Component { get; set; }
     }
 
-    public class Page
+    public class MainNavigationLinksComponent
     {
         [JsonProperty("data")]
-        public Data Data { get; set; }
+        public MainNavigationLinksData Data { get; set; }
     }
 
-    public class Data
+    public class MainNavigationLinksData
     {
         [JsonProperty("attributes")]
-        public Attributes Attributes { get; set; }
+        public MainNavigationLinksAttributes Attributes { get; set; }
     }
 
-    public class Attributes
+    public class MainNavigationLinksAttributes
     {
         [JsonProperty("mainNavigationLinks")]
         public MainNavigationLinks MainNavigationLinks { get; set; }
@@ -31,20 +32,5 @@ namespace Buyer.Web.Shared.GraphQlResponseModels.MainNavigationLinks
     {
         [JsonProperty("links")]
         public List<Link> Links { get; set; }
-    }
-
-    public class Link
-    {
-        [JsonProperty("href")]
-        public string Href { get; set; }
-
-        [JsonProperty("label")]
-        public string Label { get; set; }
-
-        [JsonProperty("target")]
-        public string Target { get; set; }
-
-        [JsonProperty("isExternal")]
-        public bool IsExternal { get; set; }
     }
 }

@@ -1,20 +1,20 @@
 .footer {
-    .content {
-        ul {
-            list-style: none;
+    .navbar {
+        background-color: $primary;
+        
+        .navbar-item {
+            
+            a {
+                color: $white;
 
-            li {
-                display: inline;
-
-                a {
-                    color: $white;
-                    margin-right: 2rem;
-
-                    &:hover {
-                        color: $grey-light;
-                    }
+                &:hover {
+                    color: $grey-light;
                 }
             }
         }
+    }
+
+    .content {
+        padding-bottom: 1rem;
     }
 }

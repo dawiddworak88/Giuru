@@ -19,15 +19,15 @@ namespace Seller.Web.Shared.Repositories.Clients
 {
     public class ClientsRepository : IClientsRepository
     {
-        private readonly IApiClientService apiClientService;
-        private readonly IOptions<AppSettings> settings;
+        private readonly IApiClientService _apiClientService;
+        private readonly IOptions<AppSettings> _options;
 
         public ClientsRepository(
             IApiClientService apiClientService,
-            IOptions<AppSettings> settings)
+            IOptions<AppSettings> options)
         {
-            this.apiClientService = apiClientService;
-            this.settings = settings;
+            _apiClientService = apiClientService;
+            _options = options;
         }
 
         public async Task DeleteAsync(string token, string language, Guid? id)
@@ -37,10 +37,10 @@ namespace Seller.Web.Shared.Repositories.Clients
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.ClientsApiEndpoint}/{id}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.ClientsApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode && response?.Data != null)
             {
@@ -61,10 +61,10 @@ namespace Seller.Web.Shared.Repositories.Clients
                 Language = language,
                 Data = clientsRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.ClientsApiEndpoint}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.ClientsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
@@ -78,7 +78,7 @@ namespace Seller.Web.Shared.Repositories.Clients
                 {
                     apiRequest.Data.PageIndex = i;
 
-                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>>(apiRequest);
+                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>>(apiRequest);
 
                     if (!nextPagesResponse.IsSuccessStatusCode)
                     {
@@ -109,10 +109,10 @@ namespace Seller.Web.Shared.Repositories.Clients
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.ClientsApiEndpoint}/{id}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.ClientsApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Client>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Client>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -142,10 +142,10 @@ namespace Seller.Web.Shared.Repositories.Clients
                 Language = language,
                 Data = clientsRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.ClientsApiEndpoint}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.ClientsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>> (apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>> (apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
@@ -177,10 +177,10 @@ namespace Seller.Web.Shared.Repositories.Clients
                 Language = language,
                 Data = clientsRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.ClientsApiEndpoint}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.ClientsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
@@ -194,7 +194,7 @@ namespace Seller.Web.Shared.Repositories.Clients
                 {
                     apiRequest.Data.PageIndex = i;
 
-                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>>(apiRequest);
+                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>>(apiRequest);
 
                     if (!nextPagesResponse.IsSuccessStatusCode)
                     {
@@ -219,8 +219,8 @@ namespace Seller.Web.Shared.Repositories.Clients
         }
 
         public async Task<Guid> SaveAsync(
-            string token, string language, Guid? id, string name, string email, string communicationLanguage, Guid? countryId, 
-            string phoneNumber, Guid organisationId, IEnumerable<Guid> clientGroupIds, IEnumerable<Guid> clientManagerIds, Guid? defaultDeliveryAddressId, Guid? defaultBillingAddressId)
+            string token, string language, Guid? id, string name, string email, string communicationLanguage, Guid? countryId, Guid? preferedCurrencyId, 
+            string phoneNumber, bool isDisabled, Guid organisationId, IEnumerable<Guid> clientGroupIds, IEnumerable<Guid> clientManagerIds, Guid? defaultDeliveryAddressId, Guid? defaultBillingAddressId)
         {
             var requestModel = new SaveClientRequestModel
             {
@@ -229,7 +229,9 @@ namespace Seller.Web.Shared.Repositories.Clients
                 Email = email,
                 CommunicationLanguage = communicationLanguage,
                 CountryId = countryId,
+                PreferedCurrencyId = preferedCurrencyId,
                 PhoneNumber = phoneNumber,
+                IsDisabled = isDisabled,
                 OrganisationId = organisationId,
                 ClientGroupIds = clientGroupIds,
                 ClientManagerIds = clientManagerIds,
@@ -242,10 +244,10 @@ namespace Seller.Web.Shared.Repositories.Clients
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.ClientsApiEndpoint}"
+                EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.ClientsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<SaveClientRequestModel>, SaveClientRequestModel, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<SaveClientRequestModel>, SaveClientRequestModel, BaseResponseModel>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Id != null)
             {

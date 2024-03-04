@@ -20,14 +20,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
@@ -61,7 +61,7 @@ spec:
         - name: OpenTelemetryTracingCollectorUrl
           value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -85,14 +85,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
@@ -130,7 +130,7 @@ spec:
         - name: OpenTelemetryTracingCollectorUrl
           value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -154,14 +154,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
@@ -201,7 +201,7 @@ spec:
         - name: OpenTelemetryTracingCollectorUrl
           value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -225,14 +225,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
@@ -268,7 +268,7 @@ spec:
         - name: OpenTelemetryTracingCollectorUrl
           value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 # ---
 # apiVersion: apps/v1
 # kind: Deployment
@@ -341,14 +341,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
@@ -380,7 +380,7 @@ spec:
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -404,14 +404,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
@@ -453,7 +453,7 @@ spec:
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -502,14 +502,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
@@ -538,6 +538,10 @@ spec:
           value: {{ .Values.identityApi.accounts }}
         - name: Organisations
           value: {{ .Values.identityApi.organisations }}
+        - name: ContentGraphQlUrl
+          value: {{ .Values.contentGraphQlUrl }}
+        - name: ContentGraphQlAuthorizationKey
+          value: {{ .Values.contentGraphQlAuthorizationKey }}
         - name: PrivacyPolicy
           value: {{ .Values.identityApi.privacyPolicy }}
         - name: Regulations
@@ -579,7 +583,7 @@ spec:
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -603,14 +607,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
@@ -642,7 +646,7 @@ spec:
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -666,14 +670,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
@@ -701,7 +705,7 @@ spec:
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -725,14 +729,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
@@ -766,7 +770,7 @@ spec:
         - name: OpenTelemetryTracingCollectorUrl
           value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -790,14 +794,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
@@ -823,7 +827,7 @@ spec:
         - name: OpenTelemetryTracingCollectorUrl
           value: {{ .Values.openTelemetryTracingCollectorUrl }}
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -847,14 +851,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
@@ -900,7 +904,7 @@ spec:
         - name: GlobalUrl
           value: {{ .Values.globalUrl }}
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -949,14 +953,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
@@ -1018,7 +1022,7 @@ spec:
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -1067,14 +1071,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 30
           timeoutSeconds: 15
@@ -1132,4 +1136,4 @@ spec:
         - name: GlobalUrl
           value: {{ .Values.globalUrl }}
         ports:
-        - containerPort: 80
+        - containerPort: 8080

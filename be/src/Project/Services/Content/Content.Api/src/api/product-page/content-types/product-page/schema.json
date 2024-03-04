@@ -16,15 +16,15 @@
     }
   },
   "attributes": {
-    "mainNavigationLinks": {
+    "seo": {
       "type": "component",
       "repeatable": false,
-      "component": "blocks.main-navigation",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      }
+      },
+      "component": "shared.seo"
     }
   }
 }

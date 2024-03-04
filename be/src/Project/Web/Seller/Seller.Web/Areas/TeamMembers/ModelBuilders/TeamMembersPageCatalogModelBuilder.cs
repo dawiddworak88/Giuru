@@ -17,11 +17,11 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
 {
     public class TeamMembersPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<TeamMember>>
     {
-        private readonly ICatalogModelBuilder catalogModelBuilder;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<TeamMembersResources> teamMemberLocalizer;
-        private readonly LinkGenerator linkGenerator;
-        private readonly ITeamMembersRepository teamMembersRepository;
+        private readonly ICatalogModelBuilder _catalogModelBuilder;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<TeamMembersResources> _teamMemberLocalizer;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly ITeamMembersRepository _teamMembersRepository;
 
         public TeamMembersPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
@@ -30,26 +30,26 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
             ITeamMembersRepository teamMembersRepository,
             LinkGenerator linkGenerator)
         {
-            this.catalogModelBuilder = catalogModelBuilder;
-            this.globalLocalizer = globalLocalizer;
-            this.linkGenerator = linkGenerator;
-            this.teamMembersRepository = teamMembersRepository;
-            this.teamMemberLocalizer = teamMemberLocalizer;
+            _catalogModelBuilder = catalogModelBuilder;
+            _globalLocalizer = globalLocalizer;
+            _linkGenerator = linkGenerator;
+            _teamMembersRepository = teamMembersRepository;
+            _teamMemberLocalizer = teamMemberLocalizer;
         }
 
         public async Task<CatalogViewModel<TeamMember>> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<TeamMember>, TeamMember>();
+            var viewModel = _catalogModelBuilder.BuildModel<CatalogViewModel<TeamMember>, TeamMember>();
 
-            viewModel.Title = this.globalLocalizer.GetString("TeamMembers");
+            viewModel.Title = _globalLocalizer.GetString("TeamMembers");
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
-            viewModel.NewText = this.teamMemberLocalizer.GetString("NewText");
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "TeamMember", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "TeamMember", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewText = _teamMemberLocalizer.GetString("NewText");
+            viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "TeamMember", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "TeamMember", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "TeamMembersApi", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "TeamMembersApi", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "TeamMembersApi", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "TeamMembersApi", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.ConfirmationDialogDeleteNameProperty = new List<string>
             {
@@ -63,19 +63,16 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("FirstName"),
-                    this.globalLocalizer.GetString("LastName"),
-                    this.globalLocalizer.GetString("Email"),
+                    _globalLocalizer.GetString("FirstName"),
+                    _globalLocalizer.GetString("LastName"),
+                    _globalLocalizer.GetString("Email"),
+                    _globalLocalizer.GetString("Status")
                 },
                 Actions = new List<CatalogActionViewModel>
                 {
                     new CatalogActionViewModel
                     {
                         IsEdit = true
-                    },
-                    new CatalogActionViewModel
-                    {
-                        IsDelete = true
                     }
                 },
                 Properties = new List<CatalogPropertyViewModel>
@@ -94,11 +91,16 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
                     {
                         Title = nameof(TeamMember.Email).ToCamelCase(),
                         IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(TeamMember.IsDisabled).ToCamelCase(),
+                        IsActivityTag = true
                     }
                 }
             };
 
-            viewModel.PagedItems = await this.teamMembersRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(TeamMember.Email)} desc");
+            viewModel.PagedItems = await _teamMembersRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(TeamMember.Email)} desc");
 
             return viewModel;
         }

@@ -20,14 +20,14 @@ spec:
         readinessProbe:
           httpGet:
             path: /hc
-            port: 80
+            port: 8080
           initialDelaySeconds: {{ .Values.identityApi.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.identityApi.readinessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.identityApi.readinessProbe.timeoutSeconds }}
         livenessProbe:
           httpGet:
             path: /liveness
-            port: 80
+            port: 8080
           initialDelaySeconds: {{ .Values.identityApi.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.identityApi.livenessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.identityApi.livenessProbe.timeoutSeconds }}
@@ -44,6 +44,10 @@ spec:
           value: {{ .Values.identityUrl }}
         - name: BuyerUrl
           value: {{ .Values.buyerUrl }}
+        - name: ContentGraphQlUrl
+          value: {{ .Values.contentGraphQlUrl }}
+        - name: ContentGraphQlAuthorizationKey
+          value: {{ .Values.contentGraphQlAuthorizationKey }}
         - name: PrivacyPolicy
           value: {{ .Values.identityApi.privacyPolicy }}
         - name: Regulations
@@ -76,7 +80,7 @@ spec:
         - secretRef:
             name: b2b-identity-api-secrets
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment

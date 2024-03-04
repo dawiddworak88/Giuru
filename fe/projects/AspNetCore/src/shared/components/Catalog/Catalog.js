@@ -46,7 +46,8 @@ function Catalog(props) {
             brandId: props.brandId,
             pageIndex: newPage + 1,
             itemsPerPage,
-            orderBy: props.orderBy
+            orderBy: props.orderBy,
+            searchTerm: props.searchTerm
         };
 
         const requestOptions = {

@@ -76,8 +76,6 @@ namespace Catalog.Api.v1.Categories.Controllers
                         IsLeaf = x.IsLeaf,
                         Level = x.Level,
                         Name = x.Name,
-                        Schema = x.Schema,
-                        UiSchema = x.UiSchema,
                         Order = x.Order,
                         ParentId = x.ParentId,
                         ThumbnailMediaId = x.ThumbnailMediaId,

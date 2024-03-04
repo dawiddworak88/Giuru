@@ -36,10 +36,11 @@ namespace Identity.Api.Areas.Home.ModelBuilders
             {
                 Metadata = await _seoModelBuilder.BuildModelAsync(componentModel),
                 Header = _headerModelBuilder.BuildModel(),
-                Content = new ContentPageViewModel
-                { 
+                Content = new ContentDetailViewModel
+                {
                     Title = content.Title,
-                    Content = content.Text
+                    Description = content.Description,
+                    AccordionItems = content.Accordions
                 },
                 Footer = _footerModelBuilder.BuildModel()
             };

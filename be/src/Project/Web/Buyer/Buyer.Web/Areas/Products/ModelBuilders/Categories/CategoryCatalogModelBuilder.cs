@@ -53,6 +53,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
                     null,
                     componentModel.Language,
                     componentModel.SearchTerm,
+                    false,
                     PaginationConstants.DefaultPageIndex,
                     ProductConstants.ProductsCatalogPaginationPageSize,
                     componentModel.Token);

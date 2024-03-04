@@ -6,12 +6,12 @@ using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Repositories.MainNavigationLinks;
 using Microsoft.AspNetCore.Routing;
 using System.Globalization;
 using Foundation.Localization;
 using Microsoft.Extensions.Localization;
 using Foundation.Extensions.ExtensionMethods;
+using Buyer.Web.Shared.Repositories.GraphQl;
 
 namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
 {
@@ -21,20 +21,20 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
         private readonly LinkGenerator _linkGenerator;
         private readonly IOptionsMonitor<AppSettings> _settings;
-        private readonly IMainNavigationLinkRepository _mainNavigationLinkRepository;
+        private readonly IGraphQlRepository _graphQlRepository;
 
         public MainNavigationModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             IOptionsMonitor<AppSettings> settings,
             LinkGenerator linkGenerator,
-            IMainNavigationLinkRepository mainNavigationLinkRepository)
+            IGraphQlRepository graphQlRepository)
         {
             _globalLocalizer = globalLocalizer;
             _orderLocalizer = orderLocalizer;
             _settings = settings;
             _linkGenerator = linkGenerator;
-            _mainNavigationLinkRepository = mainNavigationLinkRepository;
+            _graphQlRepository = graphQlRepository;
         }
 
         public async Task<MainNavigationViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -73,7 +73,7 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
                 }
             };
 
-            var mainNavigationLinks = await _mainNavigationLinkRepository.GetMainNavigationLinksAsync(componentModel.ContentPageKey, componentModel.Language, _settings.CurrentValue.DefaultCulture);
+            var mainNavigationLinks = await _graphQlRepository.GetMainNavigationLinksAsync(componentModel.Language, _settings.CurrentValue.DefaultCulture);
 
             foreach (var link in mainNavigationLinks.OrEmptyIfNull())
             {
@@ -81,7 +81,7 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
                 {
                     Url = link.Href,
                     Text = link.Label,
-                    Target = link.Taget
+                    Target = link.Target
                 });
             }
 

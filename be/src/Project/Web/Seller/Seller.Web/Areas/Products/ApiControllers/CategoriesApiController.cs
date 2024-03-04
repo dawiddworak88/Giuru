@@ -8,7 +8,9 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
+using Seller.Web.Areas.Shared.Repositories.Media;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -21,13 +23,16 @@ namespace Seller.Web.Areas.Products.ApiControllers
     {
         private readonly ICategoriesRepository _categoriesRepository;
         private readonly IStringLocalizer _productLocalizer;
+        private readonly IMediaItemsRepository _mediaItemsRepository;
 
         public CategoriesApiController(
             ICategoriesRepository categoriesRepository,
-            IStringLocalizer<ProductResources> productLocalizer)
+            IStringLocalizer<ProductResources> productLocalizer,
+            IMediaItemsRepository mediaItemsRepository)
         {
             _categoriesRepository = categoriesRepository;
             _productLocalizer = productLocalizer;
+            _mediaItemsRepository = mediaItemsRepository;
         }
 
         [HttpGet]
@@ -39,7 +44,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
                 searchTerm,
                 pageIndex,
                 itemsPerPage,
-                $"{nameof(Category.Order)} asc");
+                $"{nameof(Category.Order)}");
 
             return StatusCode((int)HttpStatusCode.OK, categories);
         }
@@ -79,13 +84,25 @@ namespace Seller.Web.Areas.Products.ApiControllers
 
             if (category is not null) 
             {
+                if (category.ThumbnailMediaId.HasValue)
+                {
+                    var mediaItem = await _mediaItemsRepository.GetMediaItemAsync(token, language, category.ThumbnailMediaId.Value);
+
+                    if (mediaItem is not null)
+                    {
+                        var files = new List<Guid> {
+                            mediaItem.Id
+                        };
+
+                        category.Files = files;
+                    }
+                }
+
                 var categorySchemas = await _categoriesRepository.GetCategorySchemasAsync(token, language, model.Id);
 
-                if (categorySchemas is not null)
-                {
-                    await _categoriesRepository.SaveAsync(
-                        token, language, model.Id, category.ParentId, category.Name, category.Files, 
-                        categorySchemas.Schemas.OrEmptyIfNull().Select(x => new CategorySchema
+                await _categoriesRepository.SaveAsync(
+                        token, language, model.Id, category.ParentId, category.Name, category.Files,
+                        categorySchemas?.Schemas.OrEmptyIfNull().Select(x => new CategorySchema
                         {
                             Id = x.Id,
                             Schema = x.Schema,
@@ -93,8 +110,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
                             Language = x.Language
                         }), model.Order);
 
-                    return StatusCode((int)HttpStatusCode.OK);
-                }
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             return StatusCode((int)HttpStatusCode.BadRequest);

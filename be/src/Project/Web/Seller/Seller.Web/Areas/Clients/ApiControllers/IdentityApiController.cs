@@ -17,18 +17,18 @@ namespace Seller.Web.Areas.Clients.ApiControllers
     [Area("Clients")]
     public class IdentityApiController : BaseApiController
     {
-        private readonly IIdentityRepository identityRepository;
-        private readonly IStringLocalizer clientLocalizer;
-        private readonly IOptionsMonitor<AppSettings> options;
+        private readonly IIdentityRepository _identityRepository;
+        private readonly IStringLocalizer _clientLocalizer;
+        private readonly IOptionsMonitor<AppSettings> _options;
 
         public IdentityApiController(
             IIdentityRepository identityRepository,
             IStringLocalizer<ClientResources> clientLocalizer,
             IOptionsMonitor<AppSettings> options)
         {
-            this.identityRepository = identityRepository;
-            this.clientLocalizer = clientLocalizer;
-            this.options = options;
+            _identityRepository = identityRepository;
+            _clientLocalizer = clientLocalizer;
+            _options = options;
         }
 
         [HttpPost]
@@ -37,9 +37,9 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var userId = await this.identityRepository.SaveAsync(token, language, model.Name, model.Email, model.CommunicationLanguage, this.options.CurrentValue.BuyerUrl);
+            var userId = await _identityRepository.SaveAsync(token, language, model.Name, model.Email, model.CommunicationLanguage, _options.CurrentValue.BuyerUrl);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = userId, Message = this.clientLocalizer.GetString("AccountCreated").Value});
+            return StatusCode((int)HttpStatusCode.OK, new { Id = userId, Message = _clientLocalizer.GetString("AccountCreated").Value});
         }
     }
 }

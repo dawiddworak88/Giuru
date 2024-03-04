@@ -14,5 +14,6 @@ namespace Identity.Api.v1.ResponseModels
         public bool EmailConfirmed { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
         public string PhoneNumber { get; set; }
+        public bool IsDisabled { get; set; }
     }
 }

@@ -54,6 +54,8 @@ import ClientAddressesPage from "../../src/areas/Clients/pages/ClientAddressesPa
 import ClientFieldsPage from "../../src/areas/Clients/pages/ClientFieldsPage/ClientFieldsPage";
 import ClientFieldPage from "../../src/areas/Clients/pages/ClientFieldPage/ClientFieldPage";
 import ClientFieldOptionPage from "../../src/areas/Clients/pages/ClientFieldOptionPage/ClientFieldOptionPage";
+import CurrenciesPage from "../../src/areas/Global/pages/CurrenciesPage/CurrenciesPage";
+import CurrencyPage from "../../src/areas/Global/pages/CurrencyPage/CurrencyPage";
 
 const Components = {
 	ClientFieldOptionPage,
@@ -106,7 +108,9 @@ const Components = {
 	ProductAttributeItemPage,
 	CategoriesPage,
 	SellerCategoryPage,
-	SettingsPage
+	SettingsPage,
+	CurrenciesPage,
+	CurrencyPage
 };
 
 const serverRenderer = (req, res, next) => {

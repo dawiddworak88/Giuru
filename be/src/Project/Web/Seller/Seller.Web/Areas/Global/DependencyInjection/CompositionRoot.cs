@@ -14,11 +14,17 @@ namespace Seller.Web.Areas.Global.DependencyInjection
         public static void RegisterGlobalAreaDependencies(this IServiceCollection services)
         {
             services.AddScoped<ICountriesRepository, CountriesRepository>();
+            services.AddScoped<ICurrenciesRepository, CurrenciesRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Country>>, CountriesPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CountriesPageViewModel>, CountriesPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CountryPageViewModel>, CountryPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CountryFormViewModel>, CountryFormModelBuilder>();
+
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Currency>>, CurrenciesPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CurrenciesPageViewModel>, CurrenciesPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CurrencyPageViewModel>, CurrencyPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CurrencyFormViewModel>, CurrencyFormModelBuilder>();
         }
     }
 }

@@ -30,6 +30,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IClientGroupsRepository _clientGroupsRepository;
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
+        private readonly IStringLocalizer _clientLocalizer;
+        private readonly IClientGroupsRepository _clientGroupsRepository;
 
         public ClientsApiController(
             IOrganisationsRepository organisationsRepository,
@@ -94,7 +96,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
             if (model.HasAccount)
             {
-                await _identityRepository.UpdateAsync(token, language, clientId, model.Email, model.Name, model.CommunicationLanguage);
+                await _identityRepository.UpdateAsync(token, language, clientId, model.Email, model.Name, model.CommunicationLanguage, model.IsDisabled);
 
                 if (model.ClientGroupIds.OrEmptyIfNull().Any())
                 {

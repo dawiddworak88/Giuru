@@ -1,9 +1,11 @@
 ﻿using Foundation.Account.Definitions;
 using Foundation.Account.Services;
+using Foundation.Extensions.Definitions;
 using IdentityModel;
 using IdentityServer4;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -37,7 +39,10 @@ namespace Foundation.Account.DependencyInjection
                 });
         }
 
-        public static void RegisterClientAccountDependencies(this IServiceCollection services, IConfiguration configuration)
+        public static void RegisterClientAccountDependencies(
+            this IServiceCollection services, 
+            IConfiguration configuration,
+            IWebHostEnvironment environment)
         {
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -50,6 +55,14 @@ namespace Foundation.Account.DependencyInjection
             .AddCookie("Cookies")
             .AddOpenIdConnect("oidc", options =>
             {
+                if (environment.EnvironmentName == EnvironmentConstants.DevelopmentEnvironmentName)
+                {
+                    options.CorrelationCookie.SameSite = SameSiteMode.Lax;
+                    options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.None;
+                    options.NonceCookie.SameSite = SameSiteMode.Lax;
+                    options.NonceCookie.SecurePolicy = CookieSecurePolicy.None;
+                }
+
                 options.SignInScheme = "Cookies";
                 options.Authority = configuration["IdentityUrl"];
                 options.RequireHttpsMetadata = false;

@@ -8,6 +8,7 @@ import Header from "../../../../shared/components/Header/Header";
 import MainNavigation from "../../../../shared/components/MainNavigation/MainNavigation";
 import Footer from "../../../../shared/components/Footer/Footer";
 import NewsCatalog from "../../components/NewsCatalog/NewsCatalog";
+import NotificationBar from "../../../../shared/components/NotificationBar/NotificationBar";
 
 const NewsPage = (props) => {
     
@@ -17,6 +18,9 @@ const NewsPage = (props) => {
         <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
             <ToastContainer />
             <Store>
+                {props.notificationBar && props.notificationBar.items &&
+                    <NotificationBar {...props.notificationBar}></NotificationBar>
+                }
                 <Header {...props.header}></Header>
                 <MainNavigation {...props.mainNavigation} />
                 <NewsCatalog {...props.newsCatalog} />

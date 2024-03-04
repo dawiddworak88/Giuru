@@ -8,7 +8,7 @@ namespace Global.Api.validators.Countries
     {
         public CreateCountryModelValidator()
         {
-            this.RuleFor(x => x.Name).NotEmpty().NotNull();
+            RuleFor(x => x.Name).NotEmpty().NotNull();
         }
     }
 }

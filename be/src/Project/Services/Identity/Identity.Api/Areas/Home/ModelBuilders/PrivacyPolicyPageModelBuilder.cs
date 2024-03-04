@@ -30,16 +30,17 @@ namespace Identity.Api.Areas.Home.ModelBuilders
 
         public async Task<PrivacyPolicyPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var content = await _contentRepository.GetContentAsync(componentModel.ContentPageKey, componentModel.Language);
+            var conetnt = await _contentRepository.GetContentAsync(componentModel.ContentPageKey, componentModel.Language);
 
             var viewModel = new PrivacyPolicyPageViewModel
             {
                 Metadata = await _seoModelBuilder.BuildModelAsync(componentModel),
                 Header = _headerModelBuilder.BuildModel(),
-                Content = new ContentPageViewModel
+                Content = new ContentDetailViewModel
                 {
-                    Title = content.Title,
-                    Content = content.Text
+                    Title = conetnt.Title,
+                    Description = conetnt.Description,
+                    AccordionItems = conetnt.Accordions
                 },
                 Footer = _footerModelBuilder.BuildModel()
             };
