@@ -124,13 +124,13 @@
     <value>Utwórz konto</value>
   </data>
   <data name="BackToRoles" xml:space="preserve">
-    <value>Powróc do ról</value>
+    <value>Powróć do ról</value>
   </data>
   <data name="ApplicationDeletedSuccessfully" xml:space="preserve">
     <value>Pomyślnie usunięto wniosek klienta</value>
   </data>
   <data name="BackToClientsApplications" xml:space="preserve">
-    <value>Powróc do aplikacji klientów</value>
+    <value>Powróć do aplikacji klientów</value>
   </data>
   <data name="Client" xml:space="preserve">
     <value>Klient</value>
@@ -328,19 +328,19 @@
     <value>Nie znaleziono opcji</value>
   </data>
   <data name="BackToField" xml:space="preserve">
-    <value>Powróc do pola</value>
+    <value>Powróć do definicji pola</value>
   </data>
   <data name="BackToFields" xml:space="preserve">
-    <value>Powróc do pól klienta</value>
+    <value>Powróć do dynamicznych pól klienta</value>
   </data>
   <data name="ClientFields" xml:space="preserve">
-    <value>Pola klientów</value>
+    <value>Dynamiczne pola klientów</value>
   </data>
   <data name="EditClientField" xml:space="preserve">
-    <value>Edytuj pole klienta</value>
+    <value>Edytuj dynamiczne pole klienta</value>
   </data>
   <data name="EditClientFieldOption" xml:space="preserve">
-    <value>Edytuj opcje pola</value>
+    <value>Edytuj opcje dynamicznego pola</value>
   </data>
   <data name="NewClientField" xml:space="preserve">
     <value>Dodaj nowe pole</value>
@@ -349,7 +349,7 @@
     <value>Dodaj opcje pola</value>
   </data>
   <data name="FieldDeletedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie usunięto pole</value>
+    <value>Pomyślnie usunięto dynamiczne pole</value>
   </data>
   <data name="FieldOptionDeletedSuccessfully" xml:space="preserve">
     <value>Pomyślnie usunięto opcje</value>
@@ -358,6 +358,6 @@
     <value>Pomyślnie zapisano opcje</value>
   </data>
   <data name="FieldSavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie zapisano pole</value>
+    <value>Pomyślnie zapisano dynamiczne pole</value>
   </data>
 </root>

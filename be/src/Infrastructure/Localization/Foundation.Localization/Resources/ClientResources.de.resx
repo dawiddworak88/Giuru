@@ -319,28 +319,28 @@
     <value>Adresse hinzufügen</value>
   </data>
   <data name="FieldDefinitionNotFound" xml:space="preserve">
-    <value>Felddefinition nicht gefunden</value>
+    <value>Dynamische Felddefinition nicht gefunden</value>
   </data>
   <data name="FieldDefinitionSelectTypeConflict" xml:space="preserve">
     <value>Die Option kann aufgrund des gewählten Typs nicht der Felddefinition zugeordnet werden</value>
   </data>
   <data name="FieldOptionNotFound" xml:space="preserve">
-    <value>Keine Option gefunden</value>
+    <value>Option für dynamisches Feld nicht gefunden</value>
   </data>
   <data name="BackToField" xml:space="preserve">
-    <value>Zurück zum Feld</value>
+    <value>Zurück zur Felddefinition</value>
   </data>
   <data name="BackToFields" xml:space="preserve">
-    <value>Zurück zu den Kundenfeldern</value>
+    <value>Zurück zu den dynamischen Kundenfeldern</value>
   </data>
   <data name="ClientFields" xml:space="preserve">
-    <value>Kundenfelder</value>
+    <value>Dynamische Kundenfelder</value>
   </data>
   <data name="EditClientField" xml:space="preserve">
-    <value>Kundenfeld bearbeiten</value>
+    <value>Bearbeiten Sie das dynamische Kundenfeld</value>
   </data>
   <data name="EditClientFieldOption" xml:space="preserve">
-    <value>Feldoptionen bearbeiten</value>
+    <value>Bearbeiten Sie die Optionen für dynamische Felder</value>
   </data>
   <data name="NewClientField" xml:space="preserve">
     <value>Neues Kundenfeld</value>
@@ -349,15 +349,15 @@
     <value>Feldoption hinzufügen</value>
   </data>
   <data name="FieldDeletedSuccessfully" xml:space="preserve">
-    <value>Feld erfolgreich gelöscht</value>
+    <value>Dynamisches Feld erfolgreich gelöscht</value>
   </data>
   <data name="FieldOptionDeletedSuccessfully" xml:space="preserve">
-    <value>Feldoption erfolgreich gelöscht</value>
+    <value>Option für dynamische Felder erfolgreich gelöscht</value>
   </data>
   <data name="FieldOptionSavedSuccessfully" xml:space="preserve">
-    <value>Feldoption erfolgreich gespeichert</value>
+    <value>Dynamische Feldoption erfolgreich gespeichert</value>
   </data>
   <data name="FieldSavedSuccessfully" xml:space="preserve">
-    <value>Feld erfolgreich gespeichert</value>
+    <value>Dynamisches Feld erfolgreich gespeichert</value>
   </data>
 </root>

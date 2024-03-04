@@ -319,28 +319,28 @@
     <value>Add address</value>
   </data>
   <data name="FieldDefinitionNotFound" xml:space="preserve">
-    <value>Field definition not found</value>
+    <value>Dynamic field definition not found</value>
   </data>
   <data name="FieldDefinitionSelectTypeConflict" xml:space="preserve">
     <value>Option cannot be assigned to the field definition due to the selected type</value>
   </data>
   <data name="FieldOptionNotFound" xml:space="preserve">
-    <value>Field option not found</value>
+    <value>Dynamic field option not found</value>
   </data>
   <data name="BackToField" xml:space="preserve">
-    <value>Back to field</value>
+    <value>Back to field definition</value>
   </data>
   <data name="BackToFields" xml:space="preserve">
-    <value>Back to client fields</value>
+    <value>Back to dynamic client fields</value>
   </data>
   <data name="ClientFields" xml:space="preserve">
-    <value>Client fields</value>
+    <value>Dynamic client fields</value>
   </data>
   <data name="EditClientField" xml:space="preserve">
-    <value>Edit client field</value>
+    <value>Edit dynamic client field</value>
   </data>
   <data name="EditClientFieldOption" xml:space="preserve">
-    <value>Edit field option</value>
+    <value>Edit dynamic field option</value>
   </data>
   <data name="NewClientField" xml:space="preserve">
     <value>New client field</value>
@@ -349,15 +349,15 @@
     <value>Add field option</value>
   </data>
   <data name="FieldDeletedSuccessfully" xml:space="preserve">
-    <value>Successfully deleted field</value>
+    <value>Successfully deleted dynamic field</value>
   </data>
   <data name="FieldOptionDeletedSuccessfully" xml:space="preserve">
-    <value>Successfully deleted field option</value>
+    <value>Successfully deleted dynamic field option</value>
   </data>
   <data name="FieldOptionSavedSuccessfully" xml:space="preserve">
-    <value>Successfully saved field option</value>
+    <value>Successfully saved dynamic field option</value>
   </data>
   <data name="FieldSavedSuccessfully" xml:space="preserve">
-    <value>Successfully saved field</value>
+    <value>Successfully saved dynamic field</value>
   </data>
 </root>
