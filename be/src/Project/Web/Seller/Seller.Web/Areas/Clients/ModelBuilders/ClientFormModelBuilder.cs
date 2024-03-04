@@ -20,6 +20,8 @@ using Seller.Web.Areas.Global.Repositories;
 using Seller.Web.Areas.Global.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Foundation.GenericRepository.Definitions;
+using Seller.Web.Areas.Clients.Repositories.Fields;
+using Seller.Web.Areas.Clients.Repositories.FieldValues;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -35,6 +37,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IClientAccountManagersRepository _clientManagersRepository;
         private readonly ICountriesRepository _countriesRepository;
         private readonly IClientAddressesRepository _clientAddressesRepository;
+        private readonly IClientFieldsRepository _clientFieldsRepository;
+        private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
         private readonly ICurrenciesRepository _currenciesRepository;
 
         public ClientFormModelBuilder(
@@ -47,6 +51,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IClientAccountManagersRepository clientManagersRepository,
             ICountriesRepository countriesRepository,
             IClientAddressesRepository clientAddressesRepository,
+            IClientFieldsRepository clientFieldsRepository,
+            IClientFieldValuesRepository clientFieldValuesRepository,
             LinkGenerator linkGenerator,
             ICurrenciesRepository currenciesRepository)
         {
@@ -60,6 +66,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _clientManagersRepository = clientManagersRepository;
             _countriesRepository = countriesRepository;
             _clientAddressesRepository = clientAddressesRepository;
+            _clientFieldsRepository = clientFieldsRepository;
+            _clientFieldValuesRepository = clientFieldValuesRepository;
             _currenciesRepository = currenciesRepository;
         }
 
@@ -185,6 +193,32 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     Id = x.Id,
                     Name = $"{x.Company}, {x.FirstName} {x.LastName}, {x.PostCode} {x.City}"
                 });
+            }
+
+            var clientFields = await _clientFieldsRepository.GetAsync(componentModel.Token, componentModel.Language);
+
+            if (clientFields is not null)
+            {
+                var clientFieldsValues = await _clientFieldValuesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+
+                viewModel.ClientFields = clientFields.Select(x =>
+                {
+                    var fieldValue = clientFieldsValues.FirstOrDefault(y => y.FieldDefinitionId == x.Id)?.FieldValue;
+
+                    return new ClientFieldViewModel
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Value = fieldValue,
+                        Type = x.Type,
+                        IsRequired = x.IsRequired,
+                        Options = x.Options.Select(y => new ClientFieldOptionViewModel
+                        {
+                            Name = y.Name,
+                            Value = y.Value
+                        })
+                    };
+                }); 
             }
 
             return viewModel;

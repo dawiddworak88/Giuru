@@ -10,6 +10,10 @@ using Seller.Web.Areas.Clients.ViewModels;
 using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Clients.Repositories.Applications;
 using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
+using Seller.Web.Areas.Clients.Repositories.Fields;
+using Seller.Web.Areas.Clients.Repositories.FieldOptions;
+using Seller.Web.Areas.Clients.ComponentModels;
+using Seller.Web.Areas.Clients.Repositories.FieldValues;
 
 namespace Seller.Web.Areas.Clients.DependencyInjection
 {
@@ -22,6 +26,9 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IClientAccountManagersRepository, ClientAccountManagersRepository>();
             services.AddScoped<IClientApplicationsRepository, ClientApplicationsRepository>();
             services.AddScoped<IClientAddressesRepository, ClientAddressesRepository>();
+            services.AddScoped<IClientFieldsRepository, ClientFieldsRepository>();
+            services.AddScoped<IClientFieldOptionsRepository, ClientFieldOptionsRepository>();
+            services.AddScoped<IClientFieldValuesRepository, ClientFieldValuesRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>>, ClientsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel>, ClientsPageModelBuilder>();
@@ -52,6 +59,14 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientAddressesPageViewModel>, ClientAddressesPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientAddressPageViewModel>, ClientAddressPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientAddressFormViewModel>, ClientAddressFormModelBuilder>();
+
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientField>>, ClientFieldsPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientFieldsPageViewModel>, ClientFieldsPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientFieldPageViewModel>, ClientFieldPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientFieldFormViewModel>, ClientFieldFormModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientFieldOption>>, ClientFieldPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ClientFieldOptionComponentModel, ClientFieldOptionPageViewModel>, ClientFieldOptionPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ClientFieldOptionComponentModel, ClientFieldOptionFormViewModel>, ClientFieldOptionFormModelBuilder>();
         }
     }
 }

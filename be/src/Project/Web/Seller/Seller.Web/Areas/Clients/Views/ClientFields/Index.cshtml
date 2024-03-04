@@ -1,0 +1,22 @@
+﻿<div id="root" asp-prerender-module="ClientFieldsPage" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    <title>@MetaTagsService.GenerateTitle(this.clientLocalizer.GetString("ClientFields"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.clientLocalizer.GetString("ClientFields")))
+    {
+        <meta name="description" content="@this.clientLocalizer.GetString("ClientFields")" />
+    }
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/clientfieldspage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/clientfieldspage.js" asp-append-version="true"></script>
+}

@@ -3,6 +3,7 @@ using Client.Api.Infrastructure.Clients.Entities;
 using Client.Api.Infrastructure.Groups.Entities;
 using Client.Api.Infrastructure.Roles.Entities;
 using Microsoft.EntityFrameworkCore;
+using Client.Api.Infrastructure.Fields;
 
 namespace Client.Api.Infrastructure
 {
@@ -26,5 +27,12 @@ namespace Client.Api.Infrastructure
         public DbSet<ClientRole> ClientRoles { get; set; }
         public DbSet<ClientAccountManager> ClientAccountManagers { get; set; }
         public DbSet<ClientsAccountManagers> ClientsAccountManagers { get; set; }
+        public DbSet<ClientFieldValue> ClientFieldValues { get; set; }
+        public DbSet<ClientFieldValueTranslation> ClientFieldValueTranslations { get; set; }
+        public DbSet<FieldDefinition> FieldDefinitions { get; set; }
+        public DbSet<FieldDefinitionTranslation> FieldDefinitionTranslations { get; set; }
+        public DbSet<Option> FieldOptions { get; set; }
+        public DbSet<OptionTranslation> FieldOptionTranslations { get; set; }
+        public DbSet<OptionSet> FieldOptionSets { get; set; }
     }
 }

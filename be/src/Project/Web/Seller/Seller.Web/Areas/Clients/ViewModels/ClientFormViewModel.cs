@@ -58,5 +58,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public IEnumerable<ListItemViewModel> Currencies { get; set; }
         public IEnumerable<ListItemViewModel> ClientAddresses { get; set; }
         public IEnumerable<ClientAccountManagerViewModel> ClientManagers { get; set; }
+        public IEnumerable<ClientFieldViewModel> ClientFields { get; set; }
     }
 }

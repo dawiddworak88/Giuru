@@ -73,7 +73,7 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
 
         public async Task<PagedResults<IEnumerable<ClientAddress>>> GetAsync(string token, string language, Guid? clientId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
-            var requestModel = new PagedDeliveryAddressesRequestModel
+            var requestModel = new PagedAddressesRequestModel
             {
                 ClientId = clientId,
                 SearchTerm = searchTerm,
@@ -82,7 +82,7 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
                 OrderBy = orderBy
             };
 
-            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            var apiRequest = new ApiRequest<PagedAddressesRequestModel>
             {
                 Language = language,
                 Data = requestModel,
@@ -90,7 +90,7 @@ namespace Seller.Web.Areas.Clients.Repositories.DeliveryAddresses
                 EndpointAddress = $"{_options.Value.ClientUrl}{ApiConstants.Client.AddressesApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientAddress>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedAddressesRequestModel>, PagedAddressesRequestModel, PagedResults<IEnumerable<ClientAddress>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {

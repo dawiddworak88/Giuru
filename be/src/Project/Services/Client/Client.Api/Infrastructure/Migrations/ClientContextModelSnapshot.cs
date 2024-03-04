@@ -215,6 +215,238 @@ namespace Client.Api.Infrastructure.Migrations
                     b.ToTable("ClientsApplications");
                 });
 
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.ClientFieldValue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("FieldDefinitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClientFieldValues");
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.ClientFieldValueTranslation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ClientFieldValueId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FieldValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Language")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientFieldValueId");
+
+                    b.ToTable("ClientFieldValueTranslations");
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.FieldDefinition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FieldType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRequired")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("OptionSetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FieldDefinitions");
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.FieldDefinitionTranslation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("FieldDefinitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FieldName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Language")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FieldDefinitionId");
+
+                    b.ToTable("FieldDefinitionTranslations");
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.Option", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("OptionSetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OptionSetId");
+
+                    b.ToTable("FieldOptions");
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.OptionSet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FieldOptionSets");
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.OptionTranslation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Language")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("OptionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OptionId");
+
+                    b.ToTable("FieldOptionTranslations");
+                });
+
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroup", b =>
                 {
                     b.Property<Guid>("Id")
@@ -420,6 +652,44 @@ namespace Client.Api.Infrastructure.Migrations
                     b.Navigation("Client");
                 });
 
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.ClientFieldValueTranslation", b =>
+                {
+                    b.HasOne("Client.Api.Infrastructure.Fields.ClientFieldValue", null)
+                        .WithMany("Translation")
+                        .HasForeignKey("ClientFieldValueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.FieldDefinitionTranslation", b =>
+                {
+                    b.HasOne("Client.Api.Infrastructure.Fields.FieldDefinition", null)
+                        .WithMany("FieldDefinitionTranslations")
+                        .HasForeignKey("FieldDefinitionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.Option", b =>
+                {
+                    b.HasOne("Client.Api.Infrastructure.Fields.OptionSet", "OptionSet")
+                        .WithMany()
+                        .HasForeignKey("OptionSetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OptionSet");
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.OptionTranslation", b =>
+                {
+                    b.HasOne("Client.Api.Infrastructure.Fields.Option", null)
+                        .WithMany("OptionsTranslations")
+                        .HasForeignKey("OptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroupTranslation", b =>
                 {
                     b.HasOne("Client.Api.Infrastructure.Groups.Entities.ClientGroup", null)
@@ -427,6 +697,21 @@ namespace Client.Api.Infrastructure.Migrations
                         .HasForeignKey("ClientGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.ClientFieldValue", b =>
+                {
+                    b.Navigation("Translation");
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.FieldDefinition", b =>
+                {
+                    b.Navigation("FieldDefinitionTranslations");
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Fields.Option", b =>
+                {
+                    b.Navigation("OptionsTranslations");
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroup", b =>

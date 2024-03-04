@@ -732,6 +732,9 @@
   <data name="Street" xml:space="preserve">
     <value>Straße</value>
   </data>
+  <data name="Value" xml:space="preserve">
+    <value>Wert</value>
+  </data>
   <data name="CurrencyNotFound" xml:space="preserve">
     <value>Währung nicht gefunden</value>
   </data>

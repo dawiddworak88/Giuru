@@ -51,10 +51,16 @@ import SellerCategoryPage from "../../src/areas/Products/pages/CategoryPage/Cate
 import SettingsPage from "../../src/areas/Settings/pages/SettingsPage/SettingsPage";
 import ClientAddressPage from "../../src/areas/Clients/pages/ClientAddressPage/ClientAddressPage";
 import ClientAddressesPage from "../../src/areas/Clients/pages/ClientAddressesPage/ClientAddressesPage";
+import ClientFieldsPage from "../../src/areas/Clients/pages/ClientFieldsPage/ClientFieldsPage";
+import ClientFieldPage from "../../src/areas/Clients/pages/ClientFieldPage/ClientFieldPage";
+import ClientFieldOptionPage from "../../src/areas/Clients/pages/ClientFieldOptionPage/ClientFieldOptionPage";
 import CurrenciesPage from "../../src/areas/Global/pages/CurrenciesPage/CurrenciesPage";
 import CurrencyPage from "../../src/areas/Global/pages/CurrencyPage/CurrencyPage";
 
 const Components = {
+	ClientFieldOptionPage,
+	ClientFieldPage,
+	ClientFieldsPage,
 	ClientAddressPage,
 	ClientAddressesPage,
 	ProductCardPage,

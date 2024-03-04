@@ -1,7 +1,5 @@
-﻿using Client.Api.Infrastructure;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.Extensions.Configuration;
 using System.Linq;
 
 namespace Client.Api.Infrastructure

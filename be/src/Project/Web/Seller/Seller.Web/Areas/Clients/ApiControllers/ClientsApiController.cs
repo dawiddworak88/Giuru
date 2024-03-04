@@ -5,8 +5,10 @@ using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Newtonsoft.Json;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
+using Seller.Web.Areas.Clients.Repositories.FieldValues;
 using Seller.Web.Areas.Clients.Repositories.Groups;
 using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Identity;
@@ -25,21 +27,24 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly IOrganisationsRepository _organisationsRepository;
         private readonly IClientsRepository _clientsRepository;
         private readonly IIdentityRepository _identityRepository;
-        private readonly IStringLocalizer _clientLocalizer;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IClientGroupsRepository _clientGroupsRepository;
+        private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
 
         public ClientsApiController(
             IOrganisationsRepository organisationsRepository,
             IClientsRepository clientsRepository,
             IStringLocalizer<ClientResources> clientLocalizer,
             IIdentityRepository identityRepository,
-            IClientGroupsRepository clientGroupsRepository)
+            IClientGroupsRepository clientGroupsRepository,
+            IClientFieldValuesRepository clientFieldValuesRepository)
         {
             _organisationsRepository = organisationsRepository;
             _clientsRepository = clientsRepository;
             _clientLocalizer = clientLocalizer;
             _identityRepository = identityRepository;
             _clientGroupsRepository = clientGroupsRepository;
+            _clientFieldValuesRepository = clientFieldValuesRepository;
         }
 
         [HttpGet]
@@ -76,6 +81,16 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             }
 
             var clientId = await _clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PreferedCurrencyId, model.PhoneNumber, model.IsDisabled, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId);
+
+            if (model.FieldsValues.Any())
+            {
+                await _clientFieldValuesRepository.SaveAsync(token, language, clientId,
+                  model.FieldsValues.Select(x => new ApiClientFieldValue
+                  {
+                      FieldDefinitionId = x.FieldDefinitionId,
+                      FieldValue = x.FieldValue
+                  }));
+            }
 
             if (model.HasAccount)
             {
