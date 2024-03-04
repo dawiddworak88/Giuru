@@ -45,6 +45,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     null,
                     CultureInfo.CurrentUICulture.Name,
                     null,
+                    false,
                     pageIndex,
                     itemsPerPage,
                     await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName));

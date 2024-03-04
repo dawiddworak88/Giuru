@@ -18,6 +18,7 @@ namespace Seller.Web.Areas.Clients.ApiRequestModels
         public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> ClientManagerIds { get; set; }
         public IEnumerable<Guid> ClientApprovalIds { get; set; }
+        public IEnumerable<ClientFieldValueRequestModel> FieldsValues { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
         public Guid? DefaultBillingAddressId { get; set; }
     }

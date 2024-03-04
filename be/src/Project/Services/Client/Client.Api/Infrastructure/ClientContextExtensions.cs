@@ -1,4 +1,5 @@
-﻿using Client.Api.Infrastructure.Notifications.Seeds;
+using Client.Api.Infrastructure.Notifications.Seeds;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System.Linq;

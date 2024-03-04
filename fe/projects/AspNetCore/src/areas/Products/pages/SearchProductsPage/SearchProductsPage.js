@@ -8,8 +8,12 @@ import MainNavigation from "../../../../shared/components/MainNavigation/MainNav
 import Catalog from "../../../../shared/components/Catalog/Catalog";
 import Footer from "../../../../shared/components/Footer/Footer";
 import NotificationBar from "../../../../shared/components/NotificationBar/NotificationBar";
+import LocaleHelper from "../../../../shared/helpers/globals/LocaleHelper";
 
 function SearchProductsPage(props) {
+
+  LocaleHelper.setMomentLocale(props.locale);
+
   return (
     <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
       <ToastContainer />

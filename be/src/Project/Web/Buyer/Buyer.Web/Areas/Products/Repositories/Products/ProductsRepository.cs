@@ -114,6 +114,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             Guid? sellerId, 
             string language, 
             string searchTerm, 
+            bool? hasPrimaryProduct,
             int pageIndex, 
             int itemsPerPage, 
             string token,
@@ -125,7 +126,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 CategoryId = categoryId,
                 SellerId = sellerId,
                 SearchTerm = searchTerm,
-                HasPrimaryProduct = false,
+                HasPrimaryProduct = hasPrimaryProduct,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
                 OrderBy = orderBy

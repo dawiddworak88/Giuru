@@ -3,7 +3,7 @@ using System;
 
 namespace Seller.Web.Areas.Clients.ApiRequestModels
 {
-    public class PagedDeliveryAddressesRequestModel : PagedRequestModelBase
+    public class PagedAddressesRequestModel : PagedRequestModelBase
     {
         public Guid? ClientId { get; set; }
     }

@@ -5,8 +5,10 @@ using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Newtonsoft.Json;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
+using Seller.Web.Areas.Clients.Repositories.FieldValues;
 using Seller.Web.Areas.Clients.Repositories.Groups;
 using Seller.Web.Areas.Clients.Repositories.NotificationTypesApprovals;
 using Seller.Web.Shared.Repositories.Clients;
@@ -26,9 +28,10 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly IOrganisationsRepository _organisationsRepository;
         private readonly IClientsRepository _clientsRepository;
         private readonly IIdentityRepository _identityRepository;
-        private readonly IStringLocalizer _clientLocalizer;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IClientGroupsRepository _clientGroupsRepository;
         private readonly IClientNotificationTypesApprovalsRepository _clientNotificationTypeApprovalRepository;
+        private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
 
         public ClientsApiController(
             IOrganisationsRepository organisationsRepository,
@@ -36,7 +39,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             IStringLocalizer<ClientResources> clientLocalizer,
             IIdentityRepository identityRepository,
             IClientGroupsRepository clientGroupsRepository,
-            IClientNotificationTypesApprovalsRepository clientNotificationTypeApprovalRepository)
+            IClientNotificationTypesApprovalsRepository clientNotificationTypeApprovalRepository,
+            IClientFieldValuesRepository clientFieldValuesRepository)
         {
             _organisationsRepository = organisationsRepository;
             _clientsRepository = clientsRepository;
@@ -44,6 +48,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             _identityRepository = identityRepository;
             _clientGroupsRepository = clientGroupsRepository;
             _clientNotificationTypeApprovalRepository = clientNotificationTypeApprovalRepository;
+            _clientFieldValuesRepository = clientFieldValuesRepository;
         }
 
         [HttpGet]
@@ -84,6 +89,16 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             if (model.ClientApprovalIds is not null)
             {
                 await _clientNotificationTypeApprovalRepository.SaveAsync(token, language, model.Id, model.ClientApprovalIds);
+            }
+            
+            if (model.FieldsValues.Any())
+            {
+                await _clientFieldValuesRepository.SaveAsync(token, language, clientId,
+                  model.FieldsValues.Select(x => new ApiClientFieldValue
+                  {
+                      FieldDefinitionId = x.FieldDefinitionId,
+                      FieldValue = x.FieldValue
+                  }));
             }
 
             if (model.HasAccount)
