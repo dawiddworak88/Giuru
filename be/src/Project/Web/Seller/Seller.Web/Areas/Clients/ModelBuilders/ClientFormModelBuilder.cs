@@ -23,6 +23,7 @@ using Foundation.GenericRepository.Definitions;
 using Seller.Web.Areas.Clients.Repositories.NotificationTypes;
 using Seller.Web.Areas.Clients.DomainModels;
 using Foundation.Extensions.ExtensionMethods;
+using Seller.Web.Areas.Clients.Repositories.NotificationTypesApprovals;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -39,7 +40,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly ICountriesRepository _countriesRepository;
         private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly IClientNotificationTypesRepository _clientNotificationTypesRepository;
-        private readonly IClientNotificationTypeApprovalRepository _clientNotificationTypeApprovalRepository;
+        private readonly IClientNotificationTypeApprovalsRepository _clientNotificationTypeApprovalRepository;
         private readonly ICurrenciesRepository _currenciesRepository;
 
         public ClientFormModelBuilder(
@@ -54,7 +55,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IClientAddressesRepository clientAddressesRepository,
             LinkGenerator linkGenerator,
             IClientNotificationTypesRepository clientNotificationTypesRepository,
-            IClientNotificationTypeApprovalRepository clientNotificationTypeApprovalRepository,
+            IClientNotificationTypeApprovalsRepository clientNotificationTypeApprovalRepository,
             ICurrenciesRepository currenciesRepository)
         {
             _clientsRepository = clientsRepository;

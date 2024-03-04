@@ -11,6 +11,7 @@ using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Clients.Repositories.Applications;
 using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Seller.Web.Areas.Clients.Repositories.NotificationTypes;
+using Seller.Web.Areas.Clients.Repositories.NotificationTypesApprovals;
 
 namespace Seller.Web.Areas.Clients.DependencyInjection
 {
@@ -24,7 +25,7 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IClientApplicationsRepository, ClientApplicationsRepository>();
             services.AddScoped<IClientAddressesRepository, ClientAddressesRepository>();
             services.AddScoped<IClientNotificationTypesRepository, ClientNotificationTypesRepository>();
-            services.AddScoped<IClientNotificationTypeApprovalRepository, ClientNotificationTypeApprovalRepository>();
+            services.AddScoped<IClientNotificationTypeApprovalsRepository, ClientNotificationTypeApprovalsRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>>, ClientsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel>, ClientsPageModelBuilder>();

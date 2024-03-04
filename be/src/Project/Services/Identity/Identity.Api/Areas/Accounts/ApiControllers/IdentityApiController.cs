@@ -3,7 +3,8 @@ using Foundation.ApiExtensions.Controllers;
 using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
 using Identity.Api.Areas.Accounts.Models;
-using Identity.Api.Areas.Accounts.Repositories;
+using Identity.Api.Areas.Accounts.Repositories.ClientNotificationTypes;
+using Identity.Api.Areas.Accounts.Repositories.Clients;
 using Identity.Api.Areas.Accounts.Services.UserServices;
 using Identity.Api.Areas.Accounts.Validators;
 using Identity.Api.Configurations;
@@ -34,7 +35,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         private readonly LinkGenerator _linkGenerator;
         private readonly IClientRepository _clientRepository;
         private readonly ITokenService _tokenService;
-        private readonly IClientNotificationTypeRepository _clientNotificationTypeRepository;
+        private readonly IClientNotificationTypesRepository _clientNotificationTypeRepository;
 
         public IdentityApiController(
             IUserService userService,
@@ -45,7 +46,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             IUsersService usersService,
             IClientRepository clientRepository,
             ITokenService tokenService,
-            IClientNotificationTypeRepository clientNotificationTypeRepository)
+            IClientNotificationTypesRepository clientNotificationTypeRepository)
         {
             _userService = userService;
             _usersService = usersService;

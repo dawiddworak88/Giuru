@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Clients.DomainModels;
 
-namespace Seller.Web.Areas.Clients.Repositories.NotificationTypes
+namespace Seller.Web.Areas.Clients.Repositories.NotificationTypesApprovals
 {
-    public interface IClientNotificationTypeApprovalRepository
+    public interface IClientNotificationTypeApprovalsRepository
     {
         Task SaveAsync(string token, string language, Guid? clientId, IEnumerable<Guid> notificationTypeIds);
 

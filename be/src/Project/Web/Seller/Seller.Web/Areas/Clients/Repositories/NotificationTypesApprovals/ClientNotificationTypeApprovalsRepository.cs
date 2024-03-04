@@ -12,14 +12,14 @@ using Foundation.Extensions.Exceptions;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Foundation.ApiExtensions.Models.Response;
 
-namespace Seller.Web.Areas.Clients.Repositories.NotificationTypes
+namespace Seller.Web.Areas.Clients.Repositories.NotificationTypesApprovals
 {
-    public class ClientNotificationTypeApprovalRepository : IClientNotificationTypeApprovalRepository
+    public class ClientNotificationTypeApprovalsRepository : IClientNotificationTypeApprovalsRepository
     {
         private readonly IApiClientService _apiClientService;
         private readonly IOptions<AppSettings> _settings;
 
-        public ClientNotificationTypeApprovalRepository(
+        public ClientNotificationTypeApprovalsRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> settings)
         {
@@ -70,7 +70,7 @@ namespace Seller.Web.Areas.Clients.Repositories.NotificationTypes
 
             var response = await _apiClientService.PostAsync<ApiRequest<ClientNotificationTypeApprovalRequestModel>, ClientNotificationTypeApprovalRequestModel, BaseResponseModel>(apiRequest);
 
-            if(!response.IsSuccessStatusCode) 
+            if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Data.Message, (int)response.StatusCode);
             }

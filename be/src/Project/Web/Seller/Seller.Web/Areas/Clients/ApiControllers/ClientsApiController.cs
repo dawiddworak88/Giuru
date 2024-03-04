@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.Groups;
-using Seller.Web.Areas.Clients.Repositories.NotificationTypes;
+using Seller.Web.Areas.Clients.Repositories.NotificationTypesApprovals;
 using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Identity;
 using Seller.Web.Shared.Repositories.Organisations;
@@ -28,7 +28,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly IIdentityRepository _identityRepository;
         private readonly IStringLocalizer _clientLocalizer;
         private readonly IClientGroupsRepository _clientGroupsRepository;
-        private readonly IClientNotificationTypeApprovalRepository _clientNotificationTypeApprovalRepository;
+        private readonly IClientNotificationTypeApprovalsRepository _clientNotificationTypeApprovalRepository;
 
         public ClientsApiController(
             IOrganisationsRepository organisationsRepository,
@@ -36,7 +36,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             IStringLocalizer<ClientResources> clientLocalizer,
             IIdentityRepository identityRepository,
             IClientGroupsRepository clientGroupsRepository,
-            IClientNotificationTypeApprovalRepository clientNotificationTypeApprovalRepository)
+            IClientNotificationTypeApprovalsRepository clientNotificationTypeApprovalRepository)
         {
             _organisationsRepository = organisationsRepository;
             _clientsRepository = clientsRepository;

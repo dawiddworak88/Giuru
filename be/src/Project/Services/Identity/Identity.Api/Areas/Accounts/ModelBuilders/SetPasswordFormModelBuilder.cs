@@ -4,7 +4,6 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ComponentModels;
 using Identity.Api.Areas.Accounts.Definitions;
-using Identity.Api.Areas.Accounts.Repositories;
 using Identity.Api.Areas.Accounts.ViewModels;
 using Identity.Api.Services.Tokens;
 using Identity.Api.Services.Users;
@@ -16,6 +15,7 @@ using Microsoft.Extensions.Options;
 using System.Globalization;
 using System.Threading.Tasks;
 using Identity.Api.Areas.Accounts.Models;
+using Identity.Api.Areas.Accounts.Repositories.ClientNotificationTypes;
 
 namespace Identity.Api.Areas.Accounts.ModelBuilders
 {
@@ -25,7 +25,7 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<AccountResources> _accountLocalizer;
         private readonly LinkGenerator _linkGenerator;
-        private readonly IClientNotificationTypeRepository _clientNotificationTypeRepository;
+        private readonly IClientNotificationTypesRepository _clientNotificationTypeRepository;
         private readonly ITokenService _tokenService;
         private readonly IOptions<AppSettings> _options;
 
@@ -34,7 +34,7 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             IStringLocalizer<AccountResources> accountLocalizer, 
             LinkGenerator linkGenerator,
             IUsersService usersService,
-            IClientNotificationTypeRepository clientNotificationTypeRepository,
+            IClientNotificationTypesRepository clientNotificationTypeRepository,
             ITokenService tokenService,
             IOptions<AppSettings> options)
         {

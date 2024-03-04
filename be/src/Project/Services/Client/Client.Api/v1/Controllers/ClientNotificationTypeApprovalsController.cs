@@ -10,8 +10,8 @@ using System.Net;
 using System.Threading.Tasks;
 using System;
 using Foundation.Account.Definitions;
-using Client.Api.Services.NotificationsType;
 using Client.Api.v1.ResponseModels;
+using Client.Api.Services.NotificationsTypesApprovals;
 
 namespace Client.Api.v1.Controllers
 {

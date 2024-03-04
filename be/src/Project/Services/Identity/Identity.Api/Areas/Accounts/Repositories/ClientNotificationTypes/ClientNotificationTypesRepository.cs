@@ -14,14 +14,14 @@ using Foundation.ApiExtensions.Models.Request;
 using Foundation.GenericRepository.Paginations;
 using System.Text.Json;
 
-namespace Identity.Api.Areas.Accounts.Repositories
+namespace Identity.Api.Areas.Accounts.Repositories.ClientNotificationTypes
 {
-    public class ClientNotificationTypeRepository : IClientNotificationTypeRepository
+    public class ClientNotificationTypesRepository : IClientNotificationTypesRepository
     {
         private readonly IApiClientService _apiClientService;
         private readonly IOptions<AppSettings> _settings;
 
-        public ClientNotificationTypeRepository(IApiClientService apiClientService, IOptions<AppSettings> settings)
+        public ClientNotificationTypesRepository(IApiClientService apiClientService, IOptions<AppSettings> settings)
         {
             _apiClientService = apiClientService;
             _settings = settings;
@@ -58,7 +58,7 @@ namespace Identity.Api.Areas.Accounts.Repositories
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
-            return default; 
+            return default;
         }
 
         public async Task<Guid?> SaveAsync(string token, string language, ClientNotificationTypeApprovals model)

@@ -8,6 +8,7 @@ using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Helpers;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -76,9 +77,9 @@ namespace Client.Api.v1.Controllers
 
                     if (notificationTypes is not null)
                     {
-                        var response = new PagedResults<IEnumerable<ClientNotificationTypeResponseModel>>(notificationTypes.Total, notificationTypes.PageSize)
+                        var response = new PagedResults<IEnumerable<ClientNotificationTypeResponseModel>>(Constants.MaxItemsPerPage, Constants.DefaultPageIndex)
                         {
-                            Data = notificationTypes.Data.OrEmptyIfNull().Select(x => new ClientNotificationTypeResponseModel
+                            Data = notificationTypes.OrEmptyIfNull().Select(x => new ClientNotificationTypeResponseModel
                             {
                                 Id = x.Id,
                                 Name = x.Name
