@@ -136,7 +136,7 @@
     <value>Client</value>
   </data>
   <data name="ClientAlreadyExists" xml:space="preserve">
-    <value>User with this e-mail address has been already created.</value>
+    <value>User with this e-mail address has been already created</value>
   </data>
   <data name="ClientApplicationNotFound" xml:space="preserve">
     <value>Customer application not found</value>
@@ -145,25 +145,25 @@
     <value>Successfully saved client application</value>
   </data>
   <data name="ClientApplyConfirmation" xml:space="preserve">
-    <value>Thank you for registering on our B2B platform. Your application has been sent and is waiting for verification by our team. We will notify you by e-mail about activating the account.</value>
+    <value>Thank you for registering on our B2B platform. Your application has been sent and is waiting for verification by our team. We will notify you by e-mail about activating the account</value>
   </data>
   <data name="ClientApplyConfirmationSubject" xml:space="preserve">
-    <value>Confirmation of sending the request for cooperation.</value>
+    <value>Confirmation of sending the request for cooperation</value>
   </data>
   <data name="ClientApplySubject" xml:space="preserve">
     <value>New cooperation request</value>
   </data>
   <data name="ClientDeletedSuccessfully" xml:space="preserve">
-    <value>Client has been deleted successfully.</value>
+    <value>Client has been deleted successfully</value>
   </data>
   <data name="ClientExists" xml:space="preserve">
-    <value>A customer with this e-mail address already exists.</value>
+    <value>A customer with this e-mail address already exists</value>
   </data>
   <data name="ClientManagers" xml:space="preserve">
     <value>Client account managers</value>
   </data>
   <data name="ClientNotFound" xml:space="preserve">
-    <value>Client has not been found.</value>
+    <value>Client has not been found</value>
   </data>
   <data name="Clients" xml:space="preserve">
     <value>Clients</value>
@@ -172,7 +172,7 @@
     <value>Clients applications</value>
   </data>
   <data name="ClientSavedSuccessfully" xml:space="preserve">
-    <value>Client has been saved successfully.</value>
+    <value>Client has been saved successfully</value>
   </data>
   <data name="ClientsGroups" xml:space="preserve">
     <value>Clients groups</value>
@@ -196,31 +196,31 @@
     <value>Edit client group</value>
   </data>
   <data name="GroupDeleteClientConflict" xml:space="preserve">
-    <value>Unassign clients from this group.</value>
+    <value>Unassign clients from this group</value>
   </data>
   <data name="GroupDeletedSuccessfully" xml:space="preserve">
-    <value>Client group has been deleted successfully.</value>
+    <value>Client group has been deleted successfully</value>
   </data>
   <data name="GroupNotFound" xml:space="preserve">
-    <value>Client group has not been found.</value>
+    <value>Client group has not been found</value>
   </data>
   <data name="GroupSavedSuccessfully" xml:space="preserve">
-    <value>Client group has been saved successfully.</value>
+    <value>Client group has been saved successfully</value>
   </data>
   <data name="ManagerDeleteConflict" xml:space="preserve">
-    <value>Unassign clients from this account manager.</value>
+    <value>Unassign clients from this account manager</value>
   </data>
   <data name="ManagerDeletedSuccessfully" xml:space="preserve">
-    <value>Account manager has been deleted successfully.</value>
+    <value>Account manager has been deleted successfully</value>
   </data>
   <data name="ManagerExist" xml:space="preserve">
     <value>Account manager exist</value>
   </data>
   <data name="ManagerNotFound" xml:space="preserve">
-    <value>Account manager has not been found.</value>
+    <value>Account manager has not been found</value>
   </data>
   <data name="ManagerSavedSuccessfully" xml:space="preserve">
-    <value>Account manager has been saved successfully.</value>
+    <value>Account manager has been saved successfully</value>
   </data>
   <data name="NavigateToClientsLabel" xml:space="preserve">
     <value>Back to clients</value>
@@ -256,7 +256,7 @@
     <value>Reset password</value>
   </data>
   <data name="RoleDeletedSuccessfully" xml:space="preserve">
-    <value>Successfully deleted role.</value>
+    <value>Successfully deleted role</value>
   </data>
   <data name="RoleIsExisting" xml:space="preserve">
     <value>Role exist</value>
@@ -265,13 +265,13 @@
     <value>Role not found</value>
   </data>
   <data name="RoleSavedSuccessfully" xml:space="preserve">
-    <value>Successfully saved role.</value>
+    <value>Successfully saved role</value>
   </data>
   <data name="CountryDeletedSuccessfully" xml:space="preserve">
-    <value>Country deleted successfully.</value>
+    <value>Country deleted successfully</value>
   </data>
   <data name="CountrySavedSuccessfully" xml:space="preserve">
-    <value>Country saved successfully.</value>
+    <value>Country saved successfully</value>
   </data>
   <data name="EditCountry" xml:space="preserve">
     <value>Edit country</value>
@@ -283,10 +283,10 @@
     <value>Add country</value>
   </data>
   <data name="AddressDeleteDefaultConflict" xml:space="preserve">
-    <value>The selected address is assigned as the default.</value>
+    <value>The selected address is assigned as the default</value>
   </data>
   <data name="ClientAddressNotFound" xml:space="preserve">
-    <value>Client address not found.</value>
+    <value>Client address not found</value>
   </data>
   <data name="ClientDeleteAddressConflict" xml:space="preserve">
     <value>Delete the addresses assigned to this Client</value>
@@ -349,15 +349,15 @@
     <value>Add field option</value>
   </data>
   <data name="FieldDeletedSuccessfully" xml:space="preserve">
-    <value>Successfully deleted field.</value>
+    <value>Successfully deleted field</value>
   </data>
   <data name="FieldOptionDeletedSuccessfully" xml:space="preserve">
-    <value>Successfully deleted field option.</value>
+    <value>Successfully deleted field option</value>
   </data>
   <data name="FieldOptionSavedSuccessfully" xml:space="preserve">
-    <value>Successfully saved field option.</value>
+    <value>Successfully saved field option</value>
   </data>
   <data name="FieldSavedSuccessfully" xml:space="preserve">
-    <value>Successfully saved field.</value>
+    <value>Successfully saved field</value>
   </data>
 </root>

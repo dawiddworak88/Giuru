@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Client.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(ClientContext))]
-    [Migration("20240131125206_AddedDynamicClientsFields")]
-    partial class AddedDynamicClientsFields
+    [Migration("20240304111050_AddedDynamicClientFields")]
+    partial class AddedDynamicClientFields
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -276,7 +276,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("ClientFieldValueId");
 
-                    b.ToTable("ClientFieldValuesTranslation");
+                    b.ToTable("ClientFieldValueTranslations");
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.FieldDefinition", b =>
@@ -440,7 +440,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("OptionId");
 
-                    b.ToTable("FieldOptionsTranslation");
+                    b.ToTable("FieldOptionTranslations");
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroup", b =>

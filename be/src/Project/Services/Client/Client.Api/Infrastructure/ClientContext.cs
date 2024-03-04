@@ -28,11 +28,11 @@ namespace Client.Api.Infrastructure
         public DbSet<ClientAccountManager> ClientAccountManagers { get; set; }
         public DbSet<ClientsAccountManagers> ClientsAccountManagers { get; set; }
         public DbSet<ClientFieldValue> ClientFieldValues { get; set; }
-        public DbSet<ClientFieldValueTranslation> ClientFieldValuesTranslation { get; set; }
+        public DbSet<ClientFieldValueTranslation> ClientFieldValueTranslations { get; set; }
         public DbSet<FieldDefinition> FieldDefinitions { get; set; }
         public DbSet<FieldDefinitionTranslation> FieldDefinitionTranslations { get; set; }
         public DbSet<Option> FieldOptions { get; set; }
-        public DbSet<OptionTranslation> FieldOptionsTranslation { get; set; }
+        public DbSet<OptionTranslation> FieldOptionTranslations { get; set; }
         public DbSet<OptionSet> FieldOptionSets { get; set; }
     }
 }

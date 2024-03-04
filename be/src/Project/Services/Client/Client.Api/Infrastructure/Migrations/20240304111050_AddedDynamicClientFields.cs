@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Client.Api.Infrastructure.Migrations
 {
-    public partial class AddedDynamicClientsFields : Migration
+    public partial class AddedDynamicClientFields : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -60,7 +60,7 @@ namespace Client.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientFieldValuesTranslation",
+                name: "ClientFieldValueTranslations",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -74,9 +74,9 @@ namespace Client.Api.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientFieldValuesTranslation", x => x.Id);
+                    table.PrimaryKey("PK_ClientFieldValueTranslations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientFieldValuesTranslation_ClientFieldValues_ClientFieldValueId",
+                        name: "FK_ClientFieldValueTranslations_ClientFieldValues_ClientFieldValueId",
                         column: x => x.ClientFieldValueId,
                         principalTable: "ClientFieldValues",
                         principalColumn: "Id",
@@ -130,7 +130,7 @@ namespace Client.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FieldOptionsTranslation",
+                name: "FieldOptionTranslations",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -144,9 +144,9 @@ namespace Client.Api.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FieldOptionsTranslation", x => x.Id);
+                    table.PrimaryKey("PK_FieldOptionTranslations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FieldOptionsTranslation_FieldOptions_OptionId",
+                        name: "FK_FieldOptionTranslations_FieldOptions_OptionId",
                         column: x => x.OptionId,
                         principalTable: "FieldOptions",
                         principalColumn: "Id",
@@ -154,8 +154,8 @@ namespace Client.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientFieldValuesTranslation_ClientFieldValueId",
-                table: "ClientFieldValuesTranslation",
+                name: "IX_ClientFieldValueTranslations_ClientFieldValueId",
+                table: "ClientFieldValueTranslations",
                 column: "ClientFieldValueId");
 
             migrationBuilder.CreateIndex(
@@ -169,21 +169,21 @@ namespace Client.Api.Infrastructure.Migrations
                 column: "OptionSetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FieldOptionsTranslation_OptionId",
-                table: "FieldOptionsTranslation",
+                name: "IX_FieldOptionTranslations_OptionId",
+                table: "FieldOptionTranslations",
                 column: "OptionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ClientFieldValuesTranslation");
+                name: "ClientFieldValueTranslations");
 
             migrationBuilder.DropTable(
                 name: "FieldDefinitionTranslations");
 
             migrationBuilder.DropTable(
-                name: "FieldOptionsTranslation");
+                name: "FieldOptionTranslations");
 
             migrationBuilder.DropTable(
                 name: "ClientFieldValues");

@@ -74,7 +74,7 @@ namespace Client.Api.Services.Fields
             }
 
             var fieldOptions = _context.FieldOptions.Where(x => x.OptionSetId == fieldDefinition.OptionSetId).ToList();
-            var fieldOptionsTranslations = _context.FieldOptionsTranslation.Where(x => fieldOptions.Select(y => y.Id).Contains(x.OptionId)).ToList();
+            var fieldOptionsTranslations = _context.FieldOptionTranslations.Where(x => fieldOptions.Select(y => y.Id).Contains(x.OptionId)).ToList();
 
             var fieldDefinitionOptions = new List<FieldOptionServiceModel>();
 
@@ -104,7 +104,10 @@ namespace Client.Api.Services.Fields
 
         public PagedResults<IEnumerable<ClientFieldServiceModel>> Get(GetClientFieldsServiceModel model)
         {
-            var fieldDefinitions = _context.FieldDefinitions.Include(fd => fd.FieldDefinitionTranslations).AsSingleQuery().Where(x => x.IsActive);
+            var fieldDefinitions = _context.FieldDefinitions.
+                Include(fd => fd.FieldDefinitionTranslations)
+                .Where(x => x.IsActive)
+                .AsSingleQuery();
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -129,7 +132,7 @@ namespace Client.Api.Services.Fields
             var optionSetIds = pagedResults.Data.Select(x => x.OptionSetId).ToList();
 
             var fieldOptions = _context.FieldOptions.Where(x => optionSetIds.Contains(x.OptionSetId)).ToList();
-            var fieldOptionsTranslations = _context.FieldOptionsTranslation.Where(x => fieldOptions.Select(y => y.Id).Contains(x.OptionId)).ToList();
+            var fieldOptionsTranslations = _context.FieldOptionTranslations.Where(x => fieldOptions.Select(y => y.Id).Contains(x.OptionId)).ToList();
 
             var fieldDefinitionOptions = new List<FieldOptionServiceModel>();
 

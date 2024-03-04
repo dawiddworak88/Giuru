@@ -274,7 +274,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("ClientFieldValueId");
 
-                    b.ToTable("ClientFieldValuesTranslation");
+                    b.ToTable("ClientFieldValueTranslations");
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.FieldDefinition", b =>
@@ -438,7 +438,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("OptionId");
 
-                    b.ToTable("FieldOptionsTranslation");
+                    b.ToTable("FieldOptionTranslations");
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroup", b =>

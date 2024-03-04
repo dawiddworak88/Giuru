@@ -69,7 +69,7 @@ namespace Client.Api.Services.FieldOptions
                 Language = model.Language
             };
 
-            await _context.FieldOptionsTranslation.AddAsync(fieldOptionTranslation.FillCommonProperties());
+            await _context.FieldOptionTranslations.AddAsync(fieldOptionTranslation.FillCommonProperties());
 
             await _context.SaveChangesAsync();
 
@@ -95,8 +95,8 @@ namespace Client.Api.Services.FieldOptions
         {
             var fieldOptions = _context.FieldOptions
                 .Include(x => x.OptionsTranslations)
-                .AsSingleQuery()
-                .Where(x => x.IsActive);
+                .Where(x => x.IsActive)
+                .AsSingleQuery();
 
             if (model.FieldDefinitionId.HasValue)
             {
@@ -128,7 +128,7 @@ namespace Client.Api.Services.FieldOptions
                 pagedResults = fieldOptions.PagedIndex(new Pagination(fieldOptions.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            var optionsTranslations = _context.FieldOptionsTranslation.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.OptionId)).ToList();
+            var optionsTranslations = _context.FieldOptionTranslations.Where(x => pagedResults.Data.Select(y => y.Id).Contains(x.OptionId)).ToList();
 
             return new PagedResults<IEnumerable<ClientFieldOptionServiceModel>>(pagedResults.Total, pagedResults.PageSize)
             {
@@ -195,7 +195,7 @@ namespace Client.Api.Services.FieldOptions
                     Language = model.Language
                 };
 
-                await _context.FieldOptionsTranslation.AddAsync(newFieldOptionTranslation.FillCommonProperties());
+                await _context.FieldOptionTranslations.AddAsync(newFieldOptionTranslation.FillCommonProperties());
             }
 
             fieldOption.LastModifiedDate = DateTime.UtcNow;

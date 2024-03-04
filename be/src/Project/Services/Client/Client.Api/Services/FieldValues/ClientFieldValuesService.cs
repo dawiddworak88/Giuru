@@ -41,9 +41,8 @@ namespace Client.Api.Services.FieldValues
 
             var fieldsValues = _context.ClientFieldValues
                     .Include(x => x.Translation)
+                    .Where(x => x.ClientId == model.ClientId && model.FieldsValues.Select(y => y.FieldDefinitionId).Contains(x.FieldDefinitionId))
                     .AsSingleQuery()
-                    .Where(x => x.ClientId == model.ClientId && 
-                                model.FieldsValues.Select(y => y.FieldDefinitionId).Contains(x.FieldDefinitionId))
                     .ToList();
 
             foreach (var fieldValue in model.FieldsValues.OrEmptyIfNull())
@@ -67,7 +66,7 @@ namespace Client.Api.Services.FieldValues
                         Language = model.Language
                     };
 
-                    await _context.ClientFieldValuesTranslation.AddAsync(newFieldValueTranslation.FillCommonProperties());
+                    await _context.ClientFieldValueTranslations.AddAsync(newFieldValueTranslation.FillCommonProperties());
                 }
                 else
                 {
@@ -82,7 +81,7 @@ namespace Client.Api.Services.FieldValues
                             Language = model.Language
                         };
 
-                        await _context.ClientFieldValuesTranslation.AddAsync(newFieldValueTranslation.FillCommonProperties());
+                        await _context.ClientFieldValueTranslations.AddAsync(newFieldValueTranslation.FillCommonProperties());
                     }
                     else
                     {
@@ -97,7 +96,9 @@ namespace Client.Api.Services.FieldValues
 
         public PagedResults<IEnumerable<ClientFieldValueServiceModel>> Get(GetClientFieldValuesServiceModel model)
         {
-            var fieldValues = _context.ClientFieldValues.Include(x => x.Translation).AsSingleQuery().Where(x => x.IsActive);
+            var fieldValues = _context.ClientFieldValues.
+                Include(x => x.Translation)
+                .Where(x => x.IsActive).AsSingleQuery();
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
