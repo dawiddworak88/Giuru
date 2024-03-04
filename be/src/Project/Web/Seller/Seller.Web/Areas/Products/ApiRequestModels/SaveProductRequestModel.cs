@@ -17,7 +17,7 @@ namespace Seller.Web.Areas.Products.ApiRequestModels
         public IEnumerable<SaveFileRequestModel> Files { get; set; }
         public bool IsNew { get; set; }
         public string Ean { get; set; }
-        public int FulfillmentTime { get; set; }
+        public int? FulfillmentTime { get; set; }
         public bool IsPublished { get; set; }
         public string FormData { get; set; }
     }
