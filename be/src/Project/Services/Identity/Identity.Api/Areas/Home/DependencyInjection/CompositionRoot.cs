@@ -1,6 +1,5 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
-using Foundation.PageContent.Components.Metadatas.ViewModels;
 using Identity.Api.Areas.Home.ModelBuilders;
 using Identity.Api.Areas.Home.Repositories.Content;
 using Identity.Api.Areas.Home.Services.Contents;
