@@ -71,6 +71,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 brandId,
                 CultureInfo.CurrentUICulture.Name,
                 searchTerm,
+                false,
                 pageIndex,
                 itemsPerPage,
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName));
@@ -107,7 +108,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
 
                 var productVariants = await _productsRepository.GetProductsAsync(
-                    product.ProductVariants, null, null, language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, $"{nameof(Product.Name)} ASC");
+                    product.ProductVariants, null, null, language, null, false, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, $"{nameof(Product.Name)} ASC");
 
                 var availableProducts = await _inventoryRepository.GetAvailbleProductsInventoryByIds(token, language, productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
 
