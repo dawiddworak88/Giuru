@@ -40,7 +40,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly ICountriesRepository _countriesRepository;
         private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly IClientNotificationTypesRepository _clientNotificationTypesRepository;
-        private readonly IClientNotificationTypeApprovalsRepository _clientNotificationTypeApprovalRepository;
+        private readonly IClientNotificationTypesApprovalsRepository _clientNotificationTypeApprovalRepository;
         private readonly ICurrenciesRepository _currenciesRepository;
 
         public ClientFormModelBuilder(
@@ -55,7 +55,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IClientAddressesRepository clientAddressesRepository,
             LinkGenerator linkGenerator,
             IClientNotificationTypesRepository clientNotificationTypesRepository,
-            IClientNotificationTypeApprovalsRepository clientNotificationTypeApprovalRepository,
+            IClientNotificationTypesApprovalsRepository clientNotificationTypeApprovalRepository,
             ICurrenciesRepository currenciesRepository)
         {
             _clientsRepository = clientsRepository;

@@ -28,7 +28,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly IIdentityRepository _identityRepository;
         private readonly IStringLocalizer _clientLocalizer;
         private readonly IClientGroupsRepository _clientGroupsRepository;
-        private readonly IClientNotificationTypeApprovalsRepository _clientNotificationTypeApprovalRepository;
+        private readonly IClientNotificationTypesApprovalsRepository _clientNotificationTypeApprovalRepository;
 
         public ClientsApiController(
             IOrganisationsRepository organisationsRepository,
@@ -36,7 +36,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             IStringLocalizer<ClientResources> clientLocalizer,
             IIdentityRepository identityRepository,
             IClientGroupsRepository clientGroupsRepository,
-            IClientNotificationTypeApprovalsRepository clientNotificationTypeApprovalRepository)
+            IClientNotificationTypesApprovalsRepository clientNotificationTypeApprovalRepository)
         {
             _organisationsRepository = organisationsRepository;
             _clientsRepository = clientsRepository;

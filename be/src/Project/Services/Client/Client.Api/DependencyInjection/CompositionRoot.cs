@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Client.Api.Services.Addresses;
-using Client.Api.Services.NotificationsType;
-using Client.Api.Services.NotificationsTypesApprovals;
+using Client.Api.Services.NotificationTypes;
+using Client.Api.Services.NotificationTypesApprovals;
 
 namespace Client.Api.DependencyInjection
 {
@@ -24,7 +24,7 @@ namespace Client.Api.DependencyInjection
             services.AddScoped<IClientAccountManagersService, ClientAccountManagersService>();
             services.AddScoped<IClientAddressesService, ClientAddressesService>();
             services.AddScoped<IClientNotificationTypesService, ClientNotificationTypesService>();
-            services.AddScoped<IClientNotificationTypeApprovalService, ClientNotificationTypeApprovalService>();
+            services.AddScoped<IClientNotificationTypesApprovalsService, ClientNotificationTypesApprovalsService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
