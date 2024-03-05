@@ -3,7 +3,7 @@ using Ordering.Api.ServicesModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Ordering.Api.Services
+namespace Ordering.Api.Services.Orders
 {
     public interface IOrdersService
     {

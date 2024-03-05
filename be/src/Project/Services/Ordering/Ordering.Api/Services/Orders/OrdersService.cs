@@ -29,7 +29,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ordering.Api.Services
+namespace Ordering.Api.Services.Orders
 {
     public class OrdersService : IOrdersService
     {
@@ -118,7 +118,7 @@ namespace Ordering.Api.Services
                     ExternalReference = basketItem.ExternalReference,
                     MoreInfo = basketItem.MoreInfo
                 };
-             
+
                 _context.OrderItems.Add(orderItem.FillCommonProperties());
 
                 var orderItemStatusChange = new OrderItemStatusChange
@@ -163,7 +163,7 @@ namespace Ordering.Api.Services
                     DynamicTemplateData = new
                     {
                         attachmentsLabel = _globalLocalizer.GetString("AttachedAttachments").Value,
-                        attachments = attachments,
+                        attachments,
                         subject = _orderLocalizer.GetString("CustomOrderSubject").Value + " " + serviceModel.ClientName + " (" + order.Id + ")",
                         text = serviceModel.MoreInfo
                     }
@@ -173,7 +173,7 @@ namespace Ordering.Api.Services
             await _context.SaveChangesAsync();
 
             var message = new OrderStartedIntegrationEvent
-            { 
+            {
                 BasketId = serviceModel.BasketId,
                 ClientId = serviceModel.ClientId,
                 OrderItems = serviceModel.Items.OrEmptyIfNull().Select(x => new OrderItemStartedEventModel
@@ -487,13 +487,13 @@ namespace Ordering.Api.Services
         public async Task<PagedResults<IEnumerable<OrderFileServiceModel>>> GetOrderFilesAsync(GetOrderFilesServiceModel model)
         {
             var orderFiles = from f in _context.OrderAttachments
-                                              where f.OrderId == model.Id && f.IsActive
-                                              select new OrderFileServiceModel
-                                              {
-                                                  Id = f.MediaId,
-                                                  LastModifiedDate = f.LastModifiedDate,
-                                                  CreatedDate = f.CreatedDate
-                                              };
+                             where f.OrderId == model.Id && f.IsActive
+                             select new OrderFileServiceModel
+                             {
+                                 Id = f.MediaId,
+                                 LastModifiedDate = f.LastModifiedDate,
+                                 CreatedDate = f.CreatedDate
+                             };
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -576,7 +576,8 @@ namespace Ordering.Api.Services
 
             await _context.SaveChangesAsync();
 
-            return await GetAsync(new GetOrderServiceModel {  
+            return await GetAsync(new GetOrderServiceModel
+            {
                 Id = serviceModel.OrderId,
                 OrganisationId = serviceModel.OrganisationId,
                 Username = serviceModel.Username,
@@ -770,7 +771,7 @@ namespace Ordering.Api.Services
                         CreatedDate = item.CreatedDate
                     };
 
-                    var statusChange = lastOrderItemStatusChanges.GetValueOrDefault<Guid, OrderItemStatusChange>(item.Id);
+                    var statusChange = lastOrderItemStatusChanges.GetValueOrDefault(item.Id);
 
                     if (statusChange is not null)
                     {
@@ -781,7 +782,7 @@ namespace Ordering.Api.Services
 
                     if (item.LastOrderItemStatusChangeId.HasValue)
                     {
-                        var commentTranslation = orderItemStatusChangesCommentTranslations.GetValueOrDefault<Guid, OrderItemStatusChangeCommentTranslation>(item.LastOrderItemStatusChangeId.Value);
+                        var commentTranslation = orderItemStatusChangesCommentTranslations.GetValueOrDefault(item.LastOrderItemStatusChangeId.Value);
 
                         if (commentTranslation is not null)
                         {
