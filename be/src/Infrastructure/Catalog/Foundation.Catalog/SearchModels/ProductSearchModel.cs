@@ -26,6 +26,7 @@ namespace Foundation.Catalog.SearchModels.Products
         public bool IsPublished { get; set; }
         public bool IsProtected { get; set; }
         public string Ean { get; set; }
+        public int? FulfillmentTime { get; set; }
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<Guid> Videos { get; set; }
         public IEnumerable<Guid> Files { get; set; }
