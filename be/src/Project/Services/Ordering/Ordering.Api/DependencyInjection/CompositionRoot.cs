@@ -7,7 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.IntegrationEvents;
-using Ordering.Api.Services;
+using Ordering.Api.Services.OrderAttributes;
+using Ordering.Api.Services.Orders;
 using Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers;
 using System.Reflection;
 
@@ -18,6 +19,7 @@ namespace Ordering.Api.DependencyInjection
         public static void RegisterOrderingApiDependencies(this IServiceCollection services)
         {
             services.AddScoped<IOrdersService, OrdersService>();
+            services.AddScoped<IOrderAttributesService, OrderAttributesService>();
         }
 
         public static void RegisterOrderingDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
