@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Identity.Api.Areas.Accounts.ApiRequestModels
 {
@@ -7,5 +8,6 @@ namespace Identity.Api.Areas.Accounts.ApiRequestModels
         public Guid? Id { get; set; }
         public string Password { get; set; }
         public string ReturnUrl { get; set; }
+        public IEnumerable<Guid> ClientApprovals { get; set; }
     }
 }

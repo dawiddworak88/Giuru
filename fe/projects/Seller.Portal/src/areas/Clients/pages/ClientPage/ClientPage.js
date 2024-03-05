@@ -7,8 +7,12 @@ import Store from "../../../../shared/stores/Store";
 import Footer from "../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../shared/components/MenuTiles/MenuTiles";
 import ClientForm from "../../components/ClientForm/ClientForm";
+import LocaleHelper from "../../../../shared/helpers/globals/LocaleHelper";
 
 function ClientPage(props) {
+
+  LocaleHelper.setMomentLocale(props.locale);
+
   return (
     <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
       <ToastContainer />

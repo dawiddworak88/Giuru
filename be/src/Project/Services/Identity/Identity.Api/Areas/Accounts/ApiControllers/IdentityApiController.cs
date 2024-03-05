@@ -1,19 +1,24 @@
 ﻿using Feature.Account;
 using Foundation.ApiExtensions.Controllers;
-using Foundation.Extensions.Exceptions;
 using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
+using Identity.Api.Areas.Accounts.Models;
+using Identity.Api.Areas.Accounts.Repositories.ClientNotificationTypes;
+using Identity.Api.Areas.Accounts.Repositories.Clients;
 using Identity.Api.Areas.Accounts.Services.UserServices;
 using Identity.Api.Areas.Accounts.Validators;
 using Identity.Api.Configurations;
+using Identity.Api.Services.Tokens;
 using Identity.Api.Services.Users;
 using Identity.Api.ServicesModels.Users;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -27,19 +32,31 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         private readonly IOptions<AppSettings> _options;
         private readonly IStringLocalizer<AccountResources> _accountLocalizer;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IClientRepository _clientRepository;
+        private readonly ITokenService _tokenService;
+        private readonly IClientNotificationTypesRepository _clientNotificationTypeRepository;
 
         public IdentityApiController(
             IUserService userService,
             IOptions<AppSettings> options,
             IStringLocalizer<AccountResources> accountLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IUsersService usersService)
+            LinkGenerator linkGenerator,
+            IUsersService usersService,
+            IClientRepository clientRepository,
+            ITokenService tokenService,
+            IClientNotificationTypesRepository clientNotificationTypeRepository)
         {
             _userService = userService;
             _usersService = usersService;
             _options = options;
             _accountLocalizer = accountLocalizer;
             _globalLocalizer = globalLocalizer;
+            _linkGenerator = linkGenerator;
+            _clientRepository = clientRepository;
+            _tokenService = tokenService;
+            _clientNotificationTypeRepository = clientNotificationTypeRepository;
         }
 
         [HttpGet]
@@ -81,11 +98,13 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] SetUserPasswordRequestModel model)
         {
+            var language = CultureInfo.CurrentUICulture.Name;
+
             var serviceModel = new SetUserPasswordServiceModel
             {
                 ExpirationId = model.Id.Value,
                 Password = model.Password,
-                Language = CultureInfo.CurrentUICulture.Name
+                Language = language
             };
 
             var validator = new SetPasswordModelValidator();
@@ -99,16 +118,34 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
 
                     if (user is not null)
                     {
-                        await _userService.SignInAsync(user.Email, model.Password, model.ReturnUrl, null);
+                        await _userService.SignInAsync(user.Email, model.Password, null, null);
 
-                        return StatusCode((int)HttpStatusCode.Redirect, new { Url = _options.Value.BuyerUrl });
+                        if (model.ClientApprovals.Any())
+                        {
+                            var token = await _tokenService.GetTokenAsync(_options.Value.ApiEmail, _options.Value.ApiOrganisationId, _options.Value.ApiAppSecret);
+
+                            var client = await _clientRepository.GetByOrganisationAsync(token, language, user.OrganisationId);
+
+                            if (client.Id.HasValue)
+                            {
+                                var clientApprovals = new ClientNotificationTypeApprovals
+                                {
+                                    ClientId = client.Id.Value,
+                                    ClientApprovals = model.ClientApprovals
+                                };
+
+                                await _clientNotificationTypeRepository.SaveAsync(token, language, clientApprovals);
+                            }
+                        }
+
+                        return StatusCode((int)HttpStatusCode.Redirect, new { Url = model.ReturnUrl });
                     }
                 }
                 catch (Exception ex)
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { Message = ex.Message, UrlLabel = _globalLocalizer.GetString("TrySignIn").Value, Url = _options.Value.BuyerUrl });
                 }
-            }   
+            }
 
             return StatusCode((int)HttpStatusCode.BadRequest);
         }

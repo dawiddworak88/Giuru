@@ -18,11 +18,11 @@ namespace Identity.Api.Areas.Accounts.Controllers
     [AllowAnonymous]
     public class SetPasswordController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<SetPasswordComponentModel, SetPasswordViewModel> setPasswordModelBuilder;
+        private readonly IAsyncComponentModelBuilder<SetPasswordComponentModel, SetPasswordViewModel> _setPasswordModelBuilder;
 
         public SetPasswordController(IAsyncComponentModelBuilder<SetPasswordComponentModel, SetPasswordViewModel> signPasswordModelBuilder)
         {
-            this.setPasswordModelBuilder = signPasswordModelBuilder;
+            _setPasswordModelBuilder = signPasswordModelBuilder;
         }
             
         [HttpGet]
@@ -36,9 +36,9 @@ namespace Identity.Api.Areas.Accounts.Controllers
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
             };
 
-            var viewModel = await this.setPasswordModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _setPasswordModelBuilder.BuildModelAsync(componentModel);
 
-            return this.View(viewModel);
+            return View(viewModel);
         }
     }
 }

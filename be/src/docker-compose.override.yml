@@ -249,6 +249,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - RedisUrl=redis
       - ServerSideRenderingEndpoint=http://account-web-react-ssr:3000
+      - ClientUrl=http://client-api:8080
       - CatalogUrl=http://catalog-api:8080
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -276,6 +277,9 @@ services:
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
+      - ApiOrganisationId=09affcc9-1665-45d6-919f-3d2026106ba1
+      - ApiEmail=seller@user.com
+      - ApiAppSecret=98daf0da-89ac-48db-8b9f-edc6383153ed
     ports:
       - "5105:8080"
 

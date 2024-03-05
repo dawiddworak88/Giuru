@@ -82,6 +82,9 @@ identityApi:
   regulations: "#{IdentityApi--Regulations}#"
   applyRecipientEmail: "#{IdentityApi--ApplyRecipientEmail}#"
   developersEmail: "#{IdentityApi--DevelopersEmail}#"
+  apiOrganisationId: "#{IdentityApi--ApiOrganisationId}#"
+  apiEmail: "#{IdentityApi--ApiEmail}#"
+  apiAppSecret: "#{IdentityApi--ApiAppSecret}#"
 basketApi:
   connectionString: "#{BasketApi--ConnectionString}#"
 orderingApi:

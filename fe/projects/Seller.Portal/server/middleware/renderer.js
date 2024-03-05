@@ -51,6 +51,8 @@ import SellerCategoryPage from "../../src/areas/Products/pages/CategoryPage/Cate
 import SettingsPage from "../../src/areas/Settings/pages/SettingsPage/SettingsPage";
 import ClientAddressPage from "../../src/areas/Clients/pages/ClientAddressPage/ClientAddressPage";
 import ClientAddressesPage from "../../src/areas/Clients/pages/ClientAddressesPage/ClientAddressesPage";
+import ClientNotificationTypesPage from "../../src/areas/Clients/pages/ClientNotificationTypesPage/ClientNotificationTypesPage";
+import ClientNotificationTypePage from "../../src/areas/Clients/pages/ClientNotificationTypePage/ClientNotificationTypePage";
 import ClientFieldsPage from "../../src/areas/Clients/pages/ClientFieldsPage/ClientFieldsPage";
 import ClientFieldPage from "../../src/areas/Clients/pages/ClientFieldPage/ClientFieldPage";
 import ClientFieldOptionPage from "../../src/areas/Clients/pages/ClientFieldOptionPage/ClientFieldOptionPage";
@@ -109,6 +111,8 @@ const Components = {
 	CategoriesPage,
 	SellerCategoryPage,
 	SettingsPage,
+	ClientNotificationTypesPage,
+	ClientNotificationTypePage,
 	CurrenciesPage,
 	CurrencyPage
 };
