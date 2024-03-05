@@ -207,7 +207,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             }
 
             var clientTypesApprovals = (await _clientNotificationTypesRepository.GetAsync(componentModel.Token, componentModel.Language, $"{nameof(ClientNotificationType.CreatedDate)} asc"))
-                    .Select(x => new ClientNotificationTypeViewModel
+                    .OrEmptyIfNull().Select(x => new ClientNotificationTypeViewModel
                     {
                         Id = x.Id,
                         Name = x.Name
