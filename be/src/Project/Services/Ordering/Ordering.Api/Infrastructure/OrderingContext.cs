@@ -1,8 +1,6 @@
-﻿using Foundation.Extensions.ModelBuilders;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Ordering.Api.Infrastructure.Attributes.Entities;
 using Ordering.Api.Infrastructure.Orders.Entities;
-using System.ComponentModel;
 
 namespace Ordering.Api.Infrastructure
 {
