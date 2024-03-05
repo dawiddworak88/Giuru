@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Microsoft.EntityFrameworkCore;
+using Ordering.Api.Infrastructure.Attributes.Entities;
 using Ordering.Api.Infrastructure.Orders.Entities;
 using System.ComponentModel;
 
@@ -34,5 +35,12 @@ namespace Ordering.Api.Infrastructure
         public DbSet<OrderAttachment> OrderAttachments { get; set; }
         public DbSet<OrderItemStatusChange> OrderItemStatusChanges { get; set; }
         public DbSet<OrderItemStatusChangeCommentTranslation> OrderItemStatusChangesCommentTranslations { get; set; }
+        public DbSet<Attribute> Attributes { get; set; }
+        public DbSet<AttributeTranslation> AttributeTranslations { get; set; }
+        public DbSet<AttributeOption> AttributeOptions { get; set; }
+        public DbSet<AttributeOptionTranslation> AttributeOptionTranslations { get; set; }
+        public DbSet<AttributeOptionSet> AttributeOptionSets { get; set; }
+        public DbSet<AttributeValue> AttributeValues { get; set; }
+        public DbSet<AttributeValueTranslation> AttributeValueTranslations { get; set; }
     }
 }
