@@ -1,6 +1,6 @@
 ﻿using Foundation.EventBus.Abstractions;
 using Ordering.Api.IntegrationEvents;
-using Ordering.Api.Services;
+using Ordering.Api.Services.Orders;
 using Ordering.Api.ServicesModels;
 using Ordering.Api.Validators;
 using System.Diagnostics;

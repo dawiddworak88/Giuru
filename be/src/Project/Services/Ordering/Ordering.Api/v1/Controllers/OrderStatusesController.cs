@@ -10,10 +10,10 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Ordering.Api.Services;
 using Ordering.Api.ServicesModels;
 using Ordering.Api.Validators;
 using Ordering.Api.v1.ResponseModels;
+using Ordering.Api.Services.Orders;
 
 namespace Ordering.Api.v1.Controllers
 {
