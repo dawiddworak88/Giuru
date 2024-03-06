@@ -64,7 +64,7 @@ namespace Ordering.Api.Services.OrderAttributes
             } 
             else if (_context.AttributeValues.Any(x => x.AttributeId == orderAttribute.Id) is true)
             {
-                throw new CustomException(_orderLocalizer.GetString("DeleteOrderAttributeConflict"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_orderLocalizer.GetString("DeleteOrderAttributeConflict"), (int)HttpStatusCode.Conflict);
             }
 
             orderAttribute.IsActive = false;
