@@ -10,14 +10,15 @@ using Foundation.PageContent.Components.Metadatas.ViewModels;
 using Buyer.Web.Shared.ViewModels.NotificationBar;
 using System.Globalization;
 using System.Threading.Tasks;
+using Buyer.Web.Areas.Orders.ComponentModels;
 
 namespace Buyer.Web.Areas.Orders.ModelBuilders
 {
-    public class OrdersPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrdersPageViewModel>
+    public class OrdersPageModelBuilder : IAsyncComponentModelBuilder<OrdersPageComponentModel, OrdersPageViewModel>
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> _seoModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> _headerModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogOrderViewModel<Order>> _ordersCatalogModelBuilder;
+        private readonly IAsyncComponentModelBuilder<OrdersPageComponentModel, CatalogOrderViewModel<Order>> _ordersCatalogModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> _mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> _footerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> _notificationBarModelBuilder;
@@ -25,7 +26,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         public OrdersPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, CatalogOrderViewModel<Order>> ordersCatalogModelBuilder,
+            IAsyncComponentModelBuilder<OrdersPageComponentModel, CatalogOrderViewModel<Order>> ordersCatalogModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> notificationBarModelBuilder)
@@ -38,7 +39,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             _notificationBarModelBuilder = notificationBarModelBuilder;
         }
 
-        public async Task<OrdersPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<OrdersPageViewModel> BuildModelAsync(OrdersPageComponentModel componentModel)
         {
             var viewModel = new OrdersPageViewModel
             {

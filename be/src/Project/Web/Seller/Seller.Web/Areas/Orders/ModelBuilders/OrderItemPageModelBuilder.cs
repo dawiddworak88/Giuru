@@ -1,7 +1,6 @@
 ﻿using Seller.Web.Areas.Orders.ViewModel;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.MenuTiles.ViewModels;
-using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
