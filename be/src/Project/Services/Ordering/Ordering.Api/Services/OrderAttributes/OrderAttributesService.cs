@@ -113,7 +113,7 @@ namespace Ordering.Api.Services.OrderAttributes
                     Name = x.AttributeTranslations?.FirstOrDefault(t => t.AttributeId == x.Id && t.Language == model.Language && t.IsActive)?.Name ?? x.AttributeTranslations.FirstOrDefault(t => t.AttributeId == x.Id && t.IsActive)?.Name,
                     Type = x.Type,
                     IsRequired = x.IsRequired,
-                    OrderAttributeOptions = attributeOptions.Where(y => y.AttributeOptionSetId == x.AttributeOptionSetId).Select(y => new OrderAttributeOptionServiceModel
+                    OrderAttributeOptions = attributeOptions.Where(y => y.AttributeOptionSetId == x.AttributeOptionSetId).Select(y => new AttributeOptionServiceModel
                     {
                         Name = attributeOptionsTranslations?.FirstOrDefault(t => t.AttributeOptionId == y.Id && t.Language == model.Language)?.Name ?? attributeOptionsTranslations?.FirstOrDefault(t => t.AttributeOptionId == y.Id)?.Name,
                         Value = y.Id
@@ -152,7 +152,7 @@ namespace Ordering.Api.Services.OrderAttributes
                 Name = orderAttributeTranslation.Name,
                 Type = orderAttribute.Type,
                 IsRequired = orderAttribute.IsRequired,
-                OrderAttributeOptions = orderAttributeOptions.Select(x => new OrderAttributeOptionServiceModel
+                OrderAttributeOptions = orderAttributeOptions.Select(x => new AttributeOptionServiceModel
                 {
                     Name = orderAttributeOptionsTranslations.FirstOrDefault(x => x.AttributeOptionId == x.Id && x.Language == model.Language && x.IsActive)?.Name ?? orderAttributeOptionsTranslations?.FirstOrDefault(x => x.AttributeOptionId == x.Id && x.IsActive)?.Name,
                     Value = x.Id
