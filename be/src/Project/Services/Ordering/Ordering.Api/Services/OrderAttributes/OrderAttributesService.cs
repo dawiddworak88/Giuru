@@ -1,8 +1,9 @@
 ﻿using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
+using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
-using Google.Protobuf.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Ordering.Api.Infrastructure;
@@ -72,6 +73,57 @@ namespace Ordering.Api.Services.OrderAttributes
             await _context.SaveChangesAsync();
         }
 
+        public PagedResults<IEnumerable<OrderAttributeServiceModel>> Get(GetOrderAttributesServiceModel model)
+        {
+            var orderAttributes = _context.Attributes
+                .Include(x => x.AttributeTranslations)
+                .Where(x => x.IsActive)
+                .AsSingleQuery();
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                orderAttributes = orderAttributes.Where(x => x.AttributeTranslations.Any(y => y.Name.StartsWith(model.SearchTerm)));
+            }
+
+            orderAttributes = orderAttributes.ApplySort(model.OrderBy);
+
+            PagedResults<IEnumerable<Infrastructure.Attributes.Entities.Attribute>> pagedResults;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                orderAttributes = orderAttributes.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = orderAttributes.PagedIndex(new Pagination(orderAttributes.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = orderAttributes.PagedIndex(new Pagination(orderAttributes.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
+
+            var optionSetIds = pagedResults.Data.Select(x => x.AttributeOptionSetId).ToList();
+
+            var attributeOptions = _context.AttributeOptions.Where(x => optionSetIds.Contains(x.AttributeOptionSetId)).ToList();
+            var attributeOptionsTranslations = _context.AttributeOptionTranslations.Where(x => attributeOptions.Select(y => y.Id).Contains(x.AttributeOptionId)).ToList();
+
+            return new PagedResults<IEnumerable<OrderAttributeServiceModel>>(pagedResults.Total, pagedResults.PageSize)
+            {
+                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new OrderAttributeServiceModel
+                {
+                    Id = x.Id,
+                    Name = x.AttributeTranslations?.FirstOrDefault(t => t.AttributeId == x.Id && t.Language == model.Language && t.IsActive)?.Name ?? x.AttributeTranslations.FirstOrDefault(t => t.AttributeId == x.Id && t.IsActive)?.Name,
+                    Type = x.Type,
+                    IsRequired = x.IsRequired,
+                    OrderAttributeOptions = attributeOptions.Where(y => y.AttributeOptionSetId == x.AttributeOptionSetId).Select(y => new OrderAttributeOptionServiceModel
+                    {
+                        Name = attributeOptionsTranslations?.FirstOrDefault(t => t.AttributeOptionId == y.Id && t.Language == model.Language)?.Name ?? attributeOptionsTranslations?.FirstOrDefault(t => t.AttributeOptionId == y.Id)?.Name,
+                        Value = y.Id
+                    }),
+                    LastModifiedDate = x.LastModifiedDate,
+                    CreatedDate = x.CreatedDate
+                })
+            };
+        }
+
         public async Task<OrderAttributeServiceModel> GetAsync(GetOrderAttributeServiceModel model)
         {
             var orderAttribute = await _context.Attributes
@@ -94,27 +146,17 @@ namespace Ordering.Api.Services.OrderAttributes
             var orderAttributeOptions = _context.AttributeOptions.Where(x => x.AttributeOptionSetId == orderAttribute.AttributeOptionSetId).ToList();
             var orderAttributeOptionsTranslations = _context.AttributeOptionTranslations.Where(x => orderAttributeOptions.Select(y => y.Id).Contains(x.AttributeOptionId)).ToList();
 
-            var attributeOptions = new List<OrderAttributeOptionServiceModel>();
-
-            foreach ( var option in orderAttributeOptions.OrEmptyIfNull())
-            {
-                var orderAttributeOption = new OrderAttributeOptionServiceModel
-                {
-                    OrderAttributeOptionSetId = option.AttributeOptionSetId,
-                    Name = orderAttributeOptionsTranslations?.FirstOrDefault(x => x.Language == model.Language && x.AttributeOptionId == option.Id)?.Name ?? orderAttributeOptionsTranslations?.FirstOrDefault(x => x.AttributeOptionId == option.Id)?.Name,
-                    Value = option.Id
-                };
-
-                attributeOptions.Add(orderAttributeOption);
-            }
-
             return new OrderAttributeServiceModel
             {
                 Id = orderAttribute.Id,
                 Name = orderAttributeTranslation.Name,
                 Type = orderAttribute.Type,
                 IsRequired = orderAttribute.IsRequired,
-                OrderAttributeOptions = attributeOptions,
+                OrderAttributeOptions = orderAttributeOptions.Select(x => new OrderAttributeOptionServiceModel
+                {
+                    Name = orderAttributeOptionsTranslations.FirstOrDefault(x => x.AttributeOptionId == x.Id && x.Language == model.Language && x.IsActive)?.Name ?? orderAttributeOptionsTranslations?.FirstOrDefault(x => x.AttributeOptionId == x.Id && x.IsActive)?.Name,
+                    Value = x.Id
+                }),
                 LastModifiedDate = orderAttribute.LastModifiedDate,
                 CreatedDate = orderAttribute.CreatedDate
             };
