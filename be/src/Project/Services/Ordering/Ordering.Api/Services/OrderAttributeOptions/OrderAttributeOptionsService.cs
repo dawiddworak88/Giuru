@@ -98,6 +98,16 @@ namespace Ordering.Api.Services.OrderAttributeOptions
                 .Where(x => x.IsActive)
                 .AsSingleQuery();
 
+            if (model.AttributeId.HasValue)
+            {
+                var attribute = _context.Attributes.FirstOrDefault(x => x.Id == model.AttributeId && x.IsActive);
+
+                if (attribute is not null)
+                {
+                    attributeOptions = attributeOptions.Where(x => x.AttributeOptionSetId == attribute.AttributeOptionSetId);
+                }
+            }
+
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
                 attributeOptions = attributeOptions.Where(x => x.AttributeOptionTranslations.Any(y =>  y.Name.StartsWith(model.SearchTerm)));

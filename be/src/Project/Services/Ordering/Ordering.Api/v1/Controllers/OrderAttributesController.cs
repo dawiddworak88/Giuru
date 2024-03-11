@@ -74,7 +74,7 @@ namespace Ordering.Api.v1.Controllers
                         Name = x.Name,
                         Type = x.Type,
                         IsRequired = x.IsRequired,
-                        Options = x.OrderAttributeOptions.Select(y => new OrderAttributeOptionResponseModel
+                        Options = x.OrderAttributeOptions.Select(y => new AttributeOptionResponseModel
                         {
                             Name = y.Name,
                             Value = y.Value,
@@ -192,7 +192,7 @@ namespace Ordering.Api.v1.Controllers
                         Name = orderAttribute.Name,
                         Type = orderAttribute.Type,
                         IsRequired = orderAttribute.IsRequired,
-                        Options = orderAttribute.OrderAttributeOptions.Select(x => new OrderAttributeOptionResponseModel
+                        Options = orderAttribute.OrderAttributeOptions.Select(x => new AttributeOptionResponseModel
                         {
                             Name = x.Name,
                             Value = x.Value
