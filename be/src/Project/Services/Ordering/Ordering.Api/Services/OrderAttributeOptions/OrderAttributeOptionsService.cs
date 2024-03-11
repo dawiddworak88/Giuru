@@ -1,12 +1,17 @@
 ﻿using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
+using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
+using Google.Protobuf.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.Infrastructure.Attributes.Entities;
 using Ordering.Api.ServicesModels;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -84,6 +89,46 @@ namespace Ordering.Api.Services.OrderAttributeOptions
             orderAttributeOption.LastModifiedDate = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
+        }
+
+        public PagedResults<IEnumerable<OrderAttributeOptionServiceModel>> Get(GetOrderAttributeOptionsServiceModel model)
+        {
+            var attributeOptions = _context.AttributeOptions
+                .Include(x => x.AttributeOptionTranslations)
+                .Where(x => x.IsActive)
+                .AsSingleQuery();
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                attributeOptions = attributeOptions.Where(x => x.AttributeOptionTranslations.Any(y =>  y.Name.StartsWith(model.SearchTerm)));
+            }
+
+            attributeOptions = attributeOptions.ApplySort(model.OrderBy);
+
+            PagedResults<IEnumerable<AttributeOption>> pagedResults;
+
+            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
+            {
+                attributeOptions = attributeOptions.Take(Constants.MaxItemsPerPageLimit);
+
+                pagedResults = attributeOptions.PagedIndex(new Pagination(attributeOptions.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = attributeOptions.PagedIndex(new Pagination(attributeOptions.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            }
+
+            return new PagedResults<IEnumerable<OrderAttributeOptionServiceModel>>(pagedResults.Total, pagedResults.PageSize)
+            {
+                Data = pagedResults.Data.OrEmptyIfNull().Select(x => new OrderAttributeOptionServiceModel
+                {
+                    Id = x.Id,
+                    Name = x.AttributeOptionTranslations?.FirstOrDefault(t => t.Language == model.Language && t.AttributeOptionId == x.Id && t.IsActive)?.Name ?? x.AttributeOptionTranslations?.FirstOrDefault(t => t.AttributeOptionId == x.Id && t.IsActive)?.Name,
+                    Value = x.Id,
+                    LastModifiedDate = x.LastModifiedDate,
+                    CreatedDate = x.CreatedDate
+                })
+            };
         }
 
         public async Task<OrderAttributeOptionServiceModel> GetAsync(GetOrderAttributeOptionServiceModel model)

@@ -1,5 +1,7 @@
-﻿using Ordering.Api.ServicesModels;
+﻿using Foundation.GenericRepository.Paginations;
+using Ordering.Api.ServicesModels;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Ordering.Api.Services.OrderAttributeOptions
@@ -10,5 +12,6 @@ namespace Ordering.Api.Services.OrderAttributeOptions
         Task<Guid> UpdateAsync(UpdateOrderAttributeOptionServiceModel model);
         Task DeleteAsync(DeleteOrderAttributeOptionServiceModel model);
         Task<OrderAttributeOptionServiceModel> GetAsync(GetOrderAttributeOptionServiceModel model);
+        PagedResults<IEnumerable<OrderAttributeOptionServiceModel>> Get(GetOrderAttributeOptionsServiceModel model);
     }
 }
