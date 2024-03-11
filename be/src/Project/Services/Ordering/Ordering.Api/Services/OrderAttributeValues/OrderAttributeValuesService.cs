@@ -3,7 +3,6 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.EntityFrameworkCore;
-using Nest;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.Infrastructure.Attributes.Entities;
 using Ordering.Api.ServicesModels;
