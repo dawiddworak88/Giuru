@@ -1,0 +1,22 @@
+﻿<div id="root" asp-prerender-module="OrderAttributesPage" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("OrderAttributes"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("OrderAttributes")))
+    {
+        <meta name="description" content="@this.Localizer.GetString("OrderAttributes")" />
+    }
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/orderAttributesPage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/orderAttributesPage.js" asp-append-version="true"></script>
+}
