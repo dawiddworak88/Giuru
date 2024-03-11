@@ -171,10 +171,10 @@ namespace Ordering.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Creates or updates attribute option (if client field option id is set).
+        /// Creates or updates attribute option (if attribute option id is set).
         /// </summary>
         /// <param name="request">The model.</param>
-        /// <returns>The client field option id.</returns>
+        /// <returns>The attribute option id.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
