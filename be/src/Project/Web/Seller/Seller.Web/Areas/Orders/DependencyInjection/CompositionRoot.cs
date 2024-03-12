@@ -28,7 +28,10 @@ namespace Seller.Web.Areas.Orders.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemFormViewModel>, OrderItemFormModelBuilder>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderAttributesPageViewModel>, OrderAttributesPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderAttributePageViewModel>, OrderAttributePageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderAttributeFormViewModel>, OrderAttributeFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<OrderAttribute>>, OrderAttributesPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<OrderAttributeOption>>, OrderAttributePageCatalogModelBuilder>();
         }
     }
 }

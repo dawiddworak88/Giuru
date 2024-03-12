@@ -38,6 +38,7 @@ import WarehousesPage from "../../src/areas/Inventory/pages/WarehousesPage/Wareh
 import OrdersPage from "../../src/areas/Orders/pages/OrdersPage/OrdersPage";
 import OrderPage from "../../src/areas/Orders/pages/OrderPage/OrderPage";
 import OrderAttributesPage from "../../src/areas/Orders/pages/OrderAttributesPage/OrderAttributesPage";
+import OrderAttributePage from "../../src/areas/Orders/pages/OrderAttributePage/OrderAttributePage";
 import OrderItemPage from "../../src/areas/Orders/pages/OrderItemPage/OrderItemPage";
 import EditOrderPage from "../../src/areas/Orders/pages/EditOrderPage/EditOrderPage";
 import ClientsPage from "../../src/areas/Clients/pages/ClientsPage/ClientsPage";
@@ -59,6 +60,7 @@ import CurrenciesPage from "../../src/areas/Global/pages/CurrenciesPage/Currenci
 import CurrencyPage from "../../src/areas/Global/pages/CurrencyPage/CurrencyPage";
 
 const Components = {
+	OrderAttributePage,
 	OrderAttributesPage,
 	ClientFieldOptionPage,
 	ClientFieldPage,

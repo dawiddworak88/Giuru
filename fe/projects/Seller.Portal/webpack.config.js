@@ -60,6 +60,7 @@ module.exports = {
         currenciespage: ["./src/areas/Global/pages/CurrenciesPage/index.js", "./src/areas/Global/pages/CurrenciesPage/CurrenciesPage.scss"],
         currencypage: ["./src/areas/Global/pages/CurrencyPage/index.js", "./src/areas/Global/pages/CurrencyPage/CurrencyPage.scss"],
         orderAttributesPage: ["./src/areas/Orders/pages/OrderAttributesPage/index.js", "./src/areas/Orders/pages/OrderAttributesPage/OrderAttributesPage.scss"],
+        orderAttributePage: ["./src/areas/Orders/pages/OrderAttributePage/index.js", "./src/areas/Orders/pages/OrderAttributePage/OrderAttributePage.scss"],
     },
     output: {
         publicPath: path.resolve(__dirname, "../../../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),
