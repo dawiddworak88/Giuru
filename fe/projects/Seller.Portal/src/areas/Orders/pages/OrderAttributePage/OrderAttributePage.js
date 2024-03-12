@@ -21,7 +21,7 @@ const OrderAttributePage = (props) => {
       <Store>
         <Header {...props.header}></Header>
         <MenuTiles {...props.menuTiles} />
-        <OrderAttributeForm {...props.clientFieldForm} />
+        <OrderAttributeForm {...props.orderAttributeForm} />
         {props.id && props.type == FieldTypeConstants.SelectFieldType() &&
           <Fragment>
             <hr />

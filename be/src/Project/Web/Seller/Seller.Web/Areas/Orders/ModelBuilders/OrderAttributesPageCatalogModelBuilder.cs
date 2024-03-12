@@ -40,7 +40,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
             viewModel.NewText = _orderLocalizer.GetString("NewOrderAttribute");
-            viewModel.NewUrl = _linkGenerator.GetPathByAction("Index", "OrderAttribute", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "OrderAttribute", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "OrderAttribute", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "OrderAttributesApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });

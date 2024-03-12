@@ -43,6 +43,12 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 Footer = _footerModelBuilder.BuildModel()
             };
 
+            if (componentModel.Id.HasValue)
+            {
+                viewModel.Id = componentModel.Id;
+                //viewModel.Type =
+            }
+
             return viewModel;
         }
     }
