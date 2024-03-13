@@ -777,4 +777,13 @@
   <data name="InActive" xml:space="preserve">
     <value>Nieaktywny</value>
   </data>
+  <data name="OrderAttribute" xml:space="preserve">
+    <value>Atrybut zamówienia</value>
+  </data>
+  <data name="OrderAttributeOption" xml:space="preserve">
+    <value>Opcja atrybutu zamówienia</value>
+  </data>
+  <data name="OrderAttributes" xml:space="preserve">
+    <value>Atrybuty zamówień</value>
+  </data>
 </root>

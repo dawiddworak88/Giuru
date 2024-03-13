@@ -771,4 +771,13 @@
   <data name="InActive" xml:space="preserve">
     <value>Inaktiv</value>
   </data>
+  <data name="OrderAttribute" xml:space="preserve">
+    <value>Bestellattribut</value>
+  </data>
+  <data name="OrderAttributeOption" xml:space="preserve">
+    <value>Bestellattribut option</value>
+  </data>
+  <data name="OrderAttributes" xml:space="preserve">
+    <value>Bestellattribute</value>
+  </data>
 </root>
