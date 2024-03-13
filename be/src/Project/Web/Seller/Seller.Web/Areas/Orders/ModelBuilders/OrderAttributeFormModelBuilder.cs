@@ -41,7 +41,13 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 OrderAttributesUrl = _linkGenerator.GetPathByAction("Index", "OrderAttributes", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveUrl = _linkGenerator.GetPathByAction("Index", "OrderAttributesApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 EditUrl = _linkGenerator.GetPathByAction("Edit", "OrderAttribute", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                //Types = new List<ClientFieldTypeViewModel>()
+                Types = new List<OrderAttributeTypeViewModel>()
+                {
+                    new() { Value = "text", Text = _globalLocalizer.GetString("String") },
+                    new() { Value = "select", Text = _globalLocalizer.GetString("Array") },
+                    new() { Value = "number", Text = _globalLocalizer.GetString("Number") },
+                    new() { Value = "boolean", Text = _globalLocalizer.GetString("Boolean") }
+                }
             };
 
             if (componentModel.Id.HasValue)

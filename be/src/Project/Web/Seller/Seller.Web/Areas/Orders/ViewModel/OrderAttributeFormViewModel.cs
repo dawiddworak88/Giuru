@@ -19,6 +19,6 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string EditUrl { get; set; }
         public string OrderAttributesUrl { get; set; }
         public string NavigateToAttributesText { get; set; }
-        //public IEnumerable<ClientFieldTypeViewModel> Types { get; set; }
+        public IEnumerable<OrderAttributeTypeViewModel> Types { get; set; }
     }
 }

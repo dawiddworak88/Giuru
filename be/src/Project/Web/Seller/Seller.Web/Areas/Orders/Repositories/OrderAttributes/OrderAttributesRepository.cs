@@ -151,7 +151,7 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributes
             {
                 foreach (var responseItem in response.Data.Data.OrEmptyIfNull())
                 {
-                    responseItem.Type = MapFieldTypeToText(responseItem.Type);
+                    responseItem.Type = MapAttributeTypeToText(responseItem.Type);
                 }
 
                 return new PagedResults<IEnumerable<OrderAttribute>>(response.Data.Total, response.Data.PageSize)
@@ -201,7 +201,7 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributes
             return default;
         }
 
-        private string MapFieldTypeToText(string type)
+        private string MapAttributeTypeToText(string type)
         {
             var typeMappings = new Dictionary<string, string>
             {
