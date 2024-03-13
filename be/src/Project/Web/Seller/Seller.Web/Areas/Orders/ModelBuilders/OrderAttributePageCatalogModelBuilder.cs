@@ -24,11 +24,12 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
         public OrderAttributePageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<ClientResources> clientLocalizer,
+            IStringLocalizer<OrderResources> orderLocalizer,
             LinkGenerator linkGenerator)
         {
             _catalogModelBuilder = catalogModelBuilder;
             _globalLocalizer = globalLocalizer;
+            _orderLocalizer = orderLocalizer;
             _linkGenerator = linkGenerator;
         }
 
@@ -36,7 +37,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
         {
             var viewModel = _catalogModelBuilder.BuildModel<CatalogViewModel<OrderAttributeOption>, OrderAttributeOption>();
 
-            viewModel.NewText = _orderLocalizer.GetString("NewAttributeOption");
+            viewModel.NewText = _orderLocalizer.GetString("NewOrderAttributeOption");
             viewModel.NewUrl = _linkGenerator.GetPathByAction("New", "OrderAttributeOption", new { Id = componentModel.Id, Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "OrderAttributeOption", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
 
