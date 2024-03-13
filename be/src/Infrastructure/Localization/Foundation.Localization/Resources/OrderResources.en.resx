@@ -285,4 +285,22 @@
   <data name="CancelOrderItem" xml:space="preserve">
     <value>Cancel the order item</value>
   </data>
+  <data name="BackToOrderAttribute" xml:space="preserve">
+    <value>Back to attribute</value>
+  </data>
+  <data name="BackToOrderAttributes" xml:space="preserve">
+    <value>Back to attributes</value>
+  </data>
+  <data name="EditOrderAttribute" xml:space="preserve">
+    <value>Edit order attribute</value>
+  </data>
+  <data name="EditOrderAttributeOption" xml:space="preserve">
+    <value>Edit attribute option</value>
+  </data>
+  <data name="NewOrderAttribute" xml:space="preserve">
+    <value>New order attribute</value>
+  </data>
+  <data name="NewOrderAttributeOption" xml:space="preserve">
+    <value>New attribute option</value>
+  </data>
 </root>

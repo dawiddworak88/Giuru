@@ -30,11 +30,11 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             var viewModel = new OrderAttributeOptionFormViewModel
             {
                 IdLabel = _globalLocalizer.GetString("Id"),
-                Title = _orderLocalizer.GetString("EditAttributeOption"),
+                Title = _orderLocalizer.GetString("EditOrderAttributeOption"),
                 SaveText = _globalLocalizer.GetString("SaveText"),
                 NameLabel = _globalLocalizer.GetString("Name"),
                 ValueLabel = _globalLocalizer.GetString("Value"),
-                NavigateToAttributeText = _orderLocalizer.GetString("BackToAttribute"),
+                NavigateToAttributeText = _orderLocalizer.GetString("BackToOrderAttribute"),
                 FieldRequiredErrorMessage = _globalLocalizer.GetString("FieldRequiredErrorMessage"),
                 GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
                 SaveUrl = _linkGenerator.GetPathByAction("Index", "OrderAttributeOptionsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })

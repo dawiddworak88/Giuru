@@ -285,4 +285,22 @@
   <data name="CancelOrderItem" xml:space="preserve">
     <value>Anuluj pozycję zamówienia</value>
   </data>
+  <data name="BackToOrderAttribute" xml:space="preserve">
+    <value>Powróć do atrybutu</value>
+  </data>
+  <data name="BackToOrderAttributes" xml:space="preserve">
+    <value>Powróć do atrybutów</value>
+  </data>
+  <data name="EditOrderAttribute" xml:space="preserve">
+    <value>Edytuj atrybut zamówienia</value>
+  </data>
+  <data name="EditOrderAttributeOption" xml:space="preserve">
+    <value>Edytuj opcje atrybutu</value>
+  </data>
+  <data name="NewOrderAttribute" xml:space="preserve">
+    <value>Nowy atrybut zamówienia</value>
+  </data>
+  <data name="NewOrderAttributeOption" xml:space="preserve">
+    <value>Nowa opcja atrybutu</value>
+  </data>
 </root>

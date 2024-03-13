@@ -285,4 +285,19 @@
   <data name="CancelOrderItem" xml:space="preserve">
     <value>Bestellposition stornieren</value>
   </data>
+  <data name="BackToOrderAttribute" xml:space="preserve">
+    <value>Zurück zum Bestellattribut</value>
+  </data>
+  <data name="BackToOrderAttributes" xml:space="preserve">
+    <value>Zurück zu den Bestellattributen</value>
+  </data>
+  <data name="EditOrderAttribute" xml:space="preserve">
+    <value>Bestellattribut bearbeiten</value>
+  </data>
+  <data name="EditOrderAttributeOption" xml:space="preserve">
+    <value>Bestellattribut bearbeiten</value>
+  </data>
+  <data name="NewOrderAttribute" xml:space="preserve">
+    <value>Neues Bestellattribut</value>
+  </data>
 </root>
