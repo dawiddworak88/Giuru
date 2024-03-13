@@ -3,6 +3,7 @@ using Foundation.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.ComponentModels;
+using Seller.Web.Areas.Orders.Repositories.OrderAttributeOptions;
 using Seller.Web.Areas.Orders.ViewModel;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -13,15 +14,18 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
     {
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly IOrderAttributeOptionsRepository _orderAttributeOptionsRepository;
         private readonly LinkGenerator _linkGenerator;
 
         public OrderAttributeOptionFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer, 
-            IStringLocalizer<OrderResources> orderLocalizer, 
+            IStringLocalizer<OrderResources> orderLocalizer,
+            IOrderAttributeOptionsRepository orderAttributeOptionsRepository,
             LinkGenerator linkGenerator)
         {
             _globalLocalizer = globalLocalizer;
             _orderLocalizer = orderLocalizer;
+            _orderAttributeOptionsRepository = orderAttributeOptionsRepository;
             _linkGenerator = linkGenerator;
         }
 
@@ -42,6 +46,23 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 
             var attributeId = componentModel.OrderAttributeOptionId;
 
+            if (componentModel.Id.HasValue)
+            {
+                viewModel.Id = componentModel.Id;
+
+                var attributeOption = await _orderAttributeOptionsRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+
+                if (attributeOption is not null)
+                {
+                    viewModel.Name = attributeOption.Name;
+                    viewModel.Value = attributeOption.Value;
+
+                    attributeId = attributeOption.AttributeId;
+                }
+            }
+
+            viewModel.AttributeId = attributeId;
+            viewModel.OrderAttributeUrl = _linkGenerator.GetPathByAction("Edit", "OrderAttribute", new { Id = attributeId, Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
 
             return viewModel;
         }

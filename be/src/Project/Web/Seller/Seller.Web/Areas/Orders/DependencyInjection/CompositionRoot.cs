@@ -10,6 +10,7 @@ using Seller.Web.Areas.Orders.Services.OrderFiles;
 using Seller.Web.Areas.Orders.ModelBuilders;
 using Seller.Web.Areas.Orders.ComponentModels;
 using Seller.Web.Areas.Orders.Repositories.OrderAttributes;
+using Seller.Web.Areas.Orders.Repositories.OrderAttributeOptions;
 
 namespace Seller.Web.Areas.Orders.DependencyInjection
 {
@@ -21,6 +22,7 @@ namespace Seller.Web.Areas.Orders.DependencyInjection
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IOrderFileService, OrderFileService>();
             services.AddScoped<IOrderAttributesRepository,  OrderAttributesRepository>();
+            services.AddScoped<IOrderAttributeOptionsRepository, OrderAttributeOptionsRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Order>>, OrdersPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrdersPageViewModel>, OrdersPageModelBuilder>();

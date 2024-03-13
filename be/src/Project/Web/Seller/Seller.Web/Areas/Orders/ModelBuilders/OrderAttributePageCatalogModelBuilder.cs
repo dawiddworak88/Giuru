@@ -6,6 +6,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.DomainModels;
+using Seller.Web.Areas.Orders.Repositories.OrderAttributeOptions;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
@@ -19,17 +20,20 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
         private readonly ICatalogModelBuilder _catalogModelBuilder;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly IOrderAttributeOptionsRepository _orderAttributeOptionsRepository;
         private readonly LinkGenerator _linkGenerator;
 
         public OrderAttributePageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
+            IOrderAttributeOptionsRepository orderAttributeOptionsRepository,
             LinkGenerator linkGenerator)
         {
             _catalogModelBuilder = catalogModelBuilder;
             _globalLocalizer = globalLocalizer;
             _orderLocalizer = orderLocalizer;
+            _orderAttributeOptionsRepository = orderAttributeOptionsRepository;
             _linkGenerator = linkGenerator;
         }
 
@@ -90,6 +94,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     }
                 }
             };
+
+            viewModel.PagedItems = await _orderAttributeOptionsRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(OrderAttributeOption.CreatedDate)} desc");
 
             return viewModel;
         }

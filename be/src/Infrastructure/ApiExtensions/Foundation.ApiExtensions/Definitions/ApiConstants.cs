@@ -106,6 +106,7 @@
             public static readonly string UpdateOrderItemStatusApiEndpoint = "/api/v1/orders/orderitemstatus";
             public static readonly string OrderFilesApiEndpoint = "/api/v1/orders/files";
             public static readonly string OrderAttributesApiEndpoint = "/api/v1/orderattributes";
+            public static readonly string OrderAttributeOptionsApiEndpoint = "/api/v1/orderattributeoptions";
         }
 
         public struct ContentNames
