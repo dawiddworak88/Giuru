@@ -8,6 +8,7 @@ using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
 using Seller.Web.Areas.Orders.Services.OrderFiles;
 using Seller.Web.Areas.Orders.ModelBuilders;
+using Seller.Web.Areas.Orders.ComponentModels;
 
 namespace Seller.Web.Areas.Orders.DependencyInjection
 {
@@ -32,6 +33,8 @@ namespace Seller.Web.Areas.Orders.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderAttributeFormViewModel>, OrderAttributeFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<OrderAttribute>>, OrderAttributesPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<OrderAttributeOption>>, OrderAttributePageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<OrderAttributeOptionComponentModel, OrderAttributeOptionPageViewModel>, OrderAttributeOptionPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<OrderAttributeOptionComponentModel, OrderAttributeOptionFormViewModel>, OrderAttributeOptionFormModelBuilder>();
         }
     }
 }
