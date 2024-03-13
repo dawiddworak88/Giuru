@@ -43,10 +43,13 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 Footer = _footerModelBuilder.BuildModel()
             };
 
-            if (componentModel.Id.HasValue)
+            var attributeType = viewModel.OrderAttributeForm.Type;
+
+            if (componentModel.Id.HasValue && attributeType == "select")
             {
                 viewModel.Id = componentModel.Id;
-                //viewModel.Type =
+                viewModel.Type = attributeType;
+                viewModel.Catalog = await _orderAttributeOptionsCatalogModelBuilder.BuildModelAsync(componentModel);
             } 
             return viewModel;
         }

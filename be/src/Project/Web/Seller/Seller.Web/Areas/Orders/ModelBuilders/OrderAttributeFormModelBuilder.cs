@@ -3,6 +3,7 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Orders.Repositories.OrderAttributes;
 using Seller.Web.Areas.Orders.ViewModel;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,16 +15,19 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
     {
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly IOrderAttributesRepository _orderAttributesRepository;
         private readonly LinkGenerator _linkGenerator;
 
         public OrderAttributeFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
+            IOrderAttributesRepository orderAttributesRepository,
             LinkGenerator linkGenerator)
         {
             _globalLocalizer = globalLocalizer;
             _linkGenerator = linkGenerator;
             _orderLocalizer = orderLocalizer;
+            _orderAttributesRepository = orderAttributesRepository;
         }
 
         public async Task<OrderAttributeFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -53,6 +57,14 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             if (componentModel.Id.HasValue)
             {
                 viewModel.Id = componentModel.Id;
+
+                var orderAttribute = await _orderAttributesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+
+                if (orderAttribute is not null)
+                {
+                    viewModel.Name = orderAttribute.Name;
+                    viewModel.Type = orderAttribute.Type;
+                }
             }
 
             return viewModel;
