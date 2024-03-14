@@ -47,7 +47,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             await _orderAttributeOptionsRepository.DeleteAsync(token, language, id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = _orderLocalizer.GetString("OrderAttributeOptionDeletedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Message = _orderLocalizer.GetString("OrderAttributeOptionDeletedSuccessfully").Value });
         }
 
         [HttpGet]

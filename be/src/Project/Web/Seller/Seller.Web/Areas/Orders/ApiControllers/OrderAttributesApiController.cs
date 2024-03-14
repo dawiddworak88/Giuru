@@ -36,7 +36,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             var orderAttributeId = await _orderAttributesRepository.SaveAsync(token, language, model.Id, model.Name, model.Type, model.IsOrderItemAttribute);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = orderAttributeId, Message = _orderLocalizer.GetString("OrderAttributeSavedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Id = orderAttributeId, Message = _orderLocalizer.GetString("OrderAttributeSavedSuccessfully").Value });
         }
 
         [HttpGet]
@@ -64,7 +64,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             await _orderAttributesRepository.DeleteAsync(token, language, id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = _orderLocalizer.GetString("OrderAttributeDeletedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Message = _orderLocalizer.GetString("OrderAttributeDeletedSuccessfully").Value });
         }
     }
 }

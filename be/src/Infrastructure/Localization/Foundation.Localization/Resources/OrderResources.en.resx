@@ -303,4 +303,28 @@
   <data name="NewOrderAttributeOption" xml:space="preserve">
     <value>New attribute option</value>
   </data>
+  <data name="DeleteOrderAttributeConflict" xml:space="preserve">
+    <value>Attribute cannot be deleted due to the completed attribute</value>
+  </data>
+  <data name="OrderAttributeDeletedSuccessfully" xml:space="preserve">
+    <value>Order attribute successfully deleted</value>
+  </data>
+  <data name="OrderAttributeNotFound" xml:space="preserve">
+    <value>Order attribute not found</value>
+  </data>
+  <data name="OrderAttributeOptionDeletedSuccessfully" xml:space="preserve">
+    <value>Order attribute option successfully deleted</value>
+  </data>
+  <data name="OrderAttributeOptionNotFound" xml:space="preserve">
+    <value>Attribute option not found</value>
+  </data>
+  <data name="OrderAttributeOptionSavedSuccessfully" xml:space="preserve">
+    <value>Order attribute option successfully saved</value>
+  </data>
+  <data name="OrderAttributeSavedSuccessfully" xml:space="preserve">
+    <value>Order attribute successfully saved</value>
+  </data>
+  <data name="OrderAttributeSelectTypeConflict" xml:space="preserve">
+    <value>Option cannot be assigned to the attribute due to the selected type</value>
+  </data>
 </root>

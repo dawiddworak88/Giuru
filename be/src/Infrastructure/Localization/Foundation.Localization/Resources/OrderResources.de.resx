@@ -300,4 +300,28 @@
   <data name="NewOrderAttribute" xml:space="preserve">
     <value>Neues Bestellattribut</value>
   </data>
+  <data name="DeleteOrderAttributeConflict" xml:space="preserve">
+    <value>Das Attribut kann aufgrund des abgeschlossenen Attributs nicht gelöscht werden</value>
+  </data>
+  <data name="OrderAttributeDeletedSuccessfully" xml:space="preserve">
+    <value>Bestellattribut erfolgreich gelöscht</value>
+  </data>
+  <data name="OrderAttributeNotFound" xml:space="preserve">
+    <value>Bestellattribut nicht gefunden</value>
+  </data>
+  <data name="OrderAttributeOptionDeletedSuccessfully" xml:space="preserve">
+    <value>Bestellattributoption erfolgreich gelöscht</value>
+  </data>
+  <data name="OrderAttributeOptionNotFound" xml:space="preserve">
+    <value>Attributoption nicht gefunden</value>
+  </data>
+  <data name="OrderAttributeOptionSavedSuccessfully" xml:space="preserve">
+    <value>Bestellattributoption erfolgreich gespeichert</value>
+  </data>
+  <data name="OrderAttributeSavedSuccessfully" xml:space="preserve">
+    <value>Bestellattribut erfolgreich gespeichert</value>
+  </data>
+  <data name="OrderAttributeSelectTypeConflict" xml:space="preserve">
+    <value>Die Option kann dem Attribut aufgrund des ausgewählten Typs nicht zugewiesen werden</value>
+  </data>
 </root>

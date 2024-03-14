@@ -82,7 +82,7 @@ namespace Ordering.Api.Services.OrderAttributeOptions
 
             if (orderAttributeOption is null)
             {
-                throw new CustomException(_orderLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_orderLocalizer.GetString("OrderAttributeOptionNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             orderAttributeOption.IsActive = false;
