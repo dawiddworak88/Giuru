@@ -1,8 +1,89 @@
-.search {
-    width: 20rem;
-    margin-left: 2rem;
-    height: 56px;
+@import "../../../shared/components/UserPopup/UserPopup.scss";
+@import "../../../shared/components/LanguageSwitcher/LanguageSwitcher.scss";
+
+.navbar {
+    &__start {
+        flex-basis: 20%;
+
+        &__logo {
+            width: 8rem;
+        }
+    }
+
+    &__search {
+        flex-basis: 60%;
+        border: 1px solid $naturalgrey;
+        outline: 1px solid $white;
+        border-radius: 4px;
+        align-items: center;
+        
+        &:focus-within {
+            border-color: $blackbase;
+            outline-color: $blackbase;
+        }
+
+        &__text {
+            width: 100%;
+            padding: 0.9rem;
+            align-items: center;
+
+            &__icon {
+                padding-right: 0.7rem;
+                font-size: 0.1rem;
+            }
+
+            &__input {
+                width: 100%;
+            }
+
+            &__remove {
+                margin-left: 1rem;
+            }
+        }
+
+        &__area {
+            min-width: 225px;
+            border-left: 1px solid $naturalgrey;
+
+            &__icon {
+                padding: 0.3rem 1rem 0 1rem;
+            }
+        }
+    }
+
+    &__actions {
+        width: 20%;
+        padding: 0 1rem 0 1rem;
+    }
 }
+
+// li.MuiButtonBase-root {
+//     border-radius: 4px;
+//     padding: 0;
+// }
+
+
+// .search {
+//     width: 20rem;
+//     margin-left: 2rem;
+//     height: 56px;
+
+//     &__field {
+//         border: 1px solid #737373;
+//         border-radius: 4px;
+//         width: 100%;
+//         padding: 1rem;
+
+//         &:focus {
+//             border: 1px solid #373F49;
+//             padding: 1rem; 
+//         }
+ 
+//         &:hover {
+//             border: 1px solid #737373;
+//         }
+//     }
+// }
 
 .search-button {
     max-height: 40px;
@@ -27,6 +108,10 @@
 .navbar-item {
     display: flex;
     align-items: center;
+}
+
+.navbar_logo {
+    width: 7rem;
 }
 
 @media only screen and (max-width: $desktop){
