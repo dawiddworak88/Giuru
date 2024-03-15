@@ -12,7 +12,7 @@ const NotificationBar = (props) => {
             const IconTag = Icon[iconName];
 
             if (IconTag) {
-                return <IconTag />;
+                return <IconTag style={{ fontSize: "large" }}/>;
             }
         }
         
