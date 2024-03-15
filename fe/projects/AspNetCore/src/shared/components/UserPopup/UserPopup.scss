@@ -1,0 +1,40 @@
+.popup {
+    font-family: $family-primary;
+
+    &__button:hover {
+        background-color: $white;
+    }
+
+    &__body {
+        background-color: $white;
+        border-radius: 4px;
+        padding: 1rem;
+        margin: 8px;
+        z-index: 1;
+        -webkit-box-shadow: 4px 8px 24px -9px rgba(66, 68, 90, 1);
+        -moz-box-shadow: 4px 8px 24px -9px rgba(66, 68, 90, 1);
+        box-shadow: 4px 8px 24px -9px rgba(66, 68, 90, 1);
+
+        &__welcome-text {
+            color: $blackbase;
+            font-weight: bold;
+            padding-bottom: 0.5rem;
+        }
+
+        &__button {
+            display: block;
+            width: 170px;
+            padding: 0.5rem;
+            border-radius: 4px;
+
+            &:hover {
+                background-color: $desertstorm;
+            }
+        }
+    }
+}
+
+.sign-in-out-button {
+    border-top: 1px solid $natuaralgrey200;
+    border-radius: 0px 0px 4px 4px;
+}
