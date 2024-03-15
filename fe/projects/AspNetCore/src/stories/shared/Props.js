@@ -19,22 +19,36 @@ export var header = {
         text: "PL"
       }
     ],
-    selectedLanguageUrl: "/en"
+    selectedLanguageUrl: "/en",
+    selectedLanguageText: "EN"
+  },
+  userPopup: {
+    signOutLink: {
+      url: "#",
+      text: "Logout"
+    },
+    signInLink: {
+      url: "#",
+      text: "Sign In",
+    },
+    actions: [
+      {
+        url: "#",
+        text: "My orders"
+      },
+      {
+        url: "#",
+        text: "Place order"
+      }
+    ],
+    welcomeText: "Hi",
+    name: "PIGU",
+    isLoggedIn: true,
   },
   searchTerm: "",
   searchUrl: "#",
   searchLabel: "Search",
-  searchPlaceholderLabel: "Search",
-  signOutLink: {
-    url: "#",
-    text: "Sign in"
-  },
-  signInLink: {
-    url: "#",
-    text: "Logout",
-  },
-  welcomeText: "Hi",
-  name: "PIGU",
+  searchPlaceholderLabel: "Search"
 };
 
 export var breadcrumbs = {
