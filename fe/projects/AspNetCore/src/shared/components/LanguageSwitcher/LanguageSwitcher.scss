@@ -1,0 +1,28 @@
+.switcher {
+    font-family: $family-primary;
+    
+    &__button:hover {
+        background-color: $white;
+    }
+
+    &__body {
+        background-color: $white;
+        border-radius: 4px;
+        padding: 0.5rem;
+        margin: 8px;
+        z-index: 1;
+        -webkit-box-shadow: 4px 8px 24px -9px rgba(66, 68, 90, 1);
+        -moz-box-shadow: 4px 8px 24px -9px rgba(66, 68, 90, 1);
+        box-shadow: 4px 8px 24px -9px rgba(66, 68, 90, 1);
+
+        &__button {
+            display: block;
+            padding: 0.5rem;
+            border-radius: 4px;
+    
+            &:hover {
+                background-color: $desertstorm;
+            }
+        }
+    }
+}

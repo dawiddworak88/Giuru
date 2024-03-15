@@ -1,24 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { Button } from "@mui/material";
+import ArrowShowMoreIcon from "../../Icons/ArrowShowMore";
+import ArrowShowLessIcon from "../../Icons/ArrowShowLess";
+import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 
 function LanguageSwitcher(props) {
+    const [anchor, setAnchor] = useState(null);
 
-    function handleLanguageChange(e) {
+    const handleClick = (event) => {
+        setAnchor(anchor ? null : event.currentTarget);
+    };
 
-        if (typeof window !== "undefined" && e && e.target) {
+    const open = Boolean(anchor);
+    const id = open ? 'simple-popup' : undefined;
 
-            window.location.href = e.target.value;
+    function handleLanguageChange(href) {
+        
+        if (typeof window !== "undefined" && href) {
+
+            window.location.href = href;
         }
     }
 
     return (
-        <div className="select">
-            <select value={props.selectedLanguageUrl} onChange={(e) => handleLanguageChange(e)}>
-                {props.availableLanguages && props.availableLanguages.length > 0 && props.availableLanguages.map((language, index) => 
-                        <option key={index} value={language.url}>{language.text}</option> 
-                    )
+        <div>
+            <Button
+                className="switcher__button"
+                aria-describedby={id}
+                type="button"
+                onClick={handleClick}
+                disableRipple
+            >
+                <span className="pr-2 is-uppercase has-text-weight-bold">
+                    {props.selectedLanguageText}
+                </span>
+                {open ?
+                    <ArrowShowLessIcon /> : <ArrowShowMoreIcon />
                 }
-            </select>
+            </Button>
+            <BasePopup id={id} open={open} anchor={anchor}>
+                <div className="switcher__body">
+                    {props.availableLanguages && props.availableLanguages.length > 0 && props.availableLanguages.map((language, index) =>
+                        <a key={index} href={language.url} className="switcher__body__button" onClick={() => handleLanguageChange(language.url)}>{language.text}</a>
+                    )}
+                </div>
+            </BasePopup>
         </div>
     );
 }
