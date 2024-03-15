@@ -50,7 +50,8 @@ namespace Foundation.PageContent.Components.LanguageSwitchers.ModelBuilders
             return new LanguageSwitcherViewModel
             {
                 AvailableLanguages = languages,
-                SelectedLanguageUrl = selectedLanguageUrl
+                SelectedLanguageUrl = selectedLanguageUrl,
+                SelectedLanguageText = CultureInfo.CurrentUICulture.Name,
             };
         }
     }
