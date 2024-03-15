@@ -102,22 +102,11 @@
     font-family: inherit;
     width: 100%;
     border: 0;
-    border-bottom: 1px solid lightgrey;
     outline: 0;
-    font-size: 16px;
+    font-size: 1rem;
     color: #212121;
-    padding: 7px 0 7px 0.5rem;
     background: transparent;
     transition: border-color 0.2s;
-}
-
-.search__field:focus {
-    padding-bottom: 6px;
-    border-bottom: 2px solid darkgrey;
-}
-
-.search__field:hover {
-    border-bottom: 2px solid darkgrey;
 }
 
 .react-autosuggest__container {
