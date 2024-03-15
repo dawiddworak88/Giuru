@@ -1,8 +1,10 @@
 .main-nav {
-    background-color: $swamp;
+    background-color: $white;
     height: 4rem;
     position: relative;
-    
+    border-width: 1px 0 1px 0;
+    border-style: solid;
+    border-color: $lightgrey;
 
     &__mobile {
         display: none;
@@ -25,8 +27,17 @@
         animation: all 300ms ease-in-out;
 
         a {
-            color: white;
+            color: $link;
+            font-size: 0.85rem;
             padding: 1rem;
+            align-items: center;
+            border-bottom: 3px solid $white;
+            border-top: 3px solid $white;
+
+            &:hover {
+                color: $swamp;
+                border-bottom-color: $swamp;
+            }
         }
     }
 }
