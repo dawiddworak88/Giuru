@@ -49,7 +49,69 @@ namespace Client.Api.Services.FieldValues
             {
                 var existingFieldValue = fieldsValues.FirstOrDefault(x => x.FieldDefinitionId == fieldValue.FieldDefinitionId);
 
-                if (string.IsNullOrWhiteSpace(fieldValue.FieldValue) is false && existingFieldValue is null)
+                if (string.IsNullOrWhiteSpace(fieldValue.FieldValue) is true)
+                {
+                    if (existingFieldValue != null)
+                    {
+                        var existingTranslation = existingFieldValue.Translation.FirstOrDefault(x => x.Language == model.Language);
+
+                        if (existingTranslation != null)
+                        {
+                            _context.Remove(existingTranslation);
+                        }
+                    }
+
+                    continue;
+                }
+
+                if (existingFieldValue is null)
+                {
+                    var newFieldValue = new ClientFieldValue
+                    {
+                        ClientId = model.ClientId.Value,
+                        FieldDefinitionId = fieldValue.FieldDefinitionId.Value
+                    };
+
+                    _context.ClientFieldValues.Add(newFieldValue.FillCommonProperties());
+
+                    if (string.IsNullOrWhiteSpace(fieldValue.FieldValue) is false)
+                    {
+                        var newFieldValueTranslation = new ClientFieldValueTranslation
+                        {
+                            ClientFieldValueId = newFieldValue.Id,
+                            FieldValue = fieldValue.FieldValue,
+                            Language = model.Language
+                        };
+
+                        _context.ClientFieldValueTranslations.Add(newFieldValueTranslation.FillCommonProperties());
+                    }
+                }
+                else
+                {
+                    var existingTranslation = existingFieldValue.Translation?.FirstOrDefault(x => x.Language == model.Language);
+
+                    if (existingTranslation is null)
+                    {
+                        if (string.IsNullOrWhiteSpace(fieldValue.FieldValue) is false)
+                        {
+                            var newFieldValueTranslation = new ClientFieldValueTranslation
+                            {
+                                ClientFieldValueId = existingFieldValue.Id,
+                                FieldValue = fieldValue.FieldValue,
+                                Language = model.Language
+                            };
+
+                            _context.ClientFieldValueTranslations.Add(newFieldValueTranslation.FillCommonProperties());
+                        }
+                    }
+                    else
+                    {
+                        existingTranslation.FieldValue = fieldValue.FieldValue;
+                        existingTranslation.LastModifiedDate = DateTime.UtcNow;
+                    }
+                }
+
+                /*if (string.IsNullOrWhiteSpace(fieldValue.FieldValue) is false && existingFieldValue is null)
                 {
                     var newFieldValue = new ClientFieldValue
                     {
@@ -95,7 +157,7 @@ namespace Client.Api.Services.FieldValues
                             _context.Remove(existingTranslation);
                         }
                     }
-                }
+                }*/
             }
 
             await _context.SaveChangesAsync();
