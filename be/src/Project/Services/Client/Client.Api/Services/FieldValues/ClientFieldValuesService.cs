@@ -49,16 +49,13 @@ namespace Client.Api.Services.FieldValues
             {
                 var existingFieldValue = fieldsValues.FirstOrDefault(x => x.FieldDefinitionId == fieldValue.FieldDefinitionId);
 
-                if (string.IsNullOrWhiteSpace(fieldValue.FieldValue) is true)
+                if (string.IsNullOrWhiteSpace(fieldValue.FieldValue) is true && existingFieldValue is not null)
                 {
-                    if (existingFieldValue != null)
-                    {
-                        var existingTranslation = existingFieldValue.Translation.FirstOrDefault(x => x.Language == model.Language);
+                    var existingTranslation = existingFieldValue.Translation.FirstOrDefault(x => x.Language == model.Language);
 
-                        if (existingTranslation != null)
-                        {
-                            _context.Remove(existingTranslation);
-                        }
+                    if (existingTranslation is not null)
+                    {
+                        _context.Remove(existingTranslation);
                     }
 
                     continue;
@@ -110,54 +107,6 @@ namespace Client.Api.Services.FieldValues
                         existingTranslation.LastModifiedDate = DateTime.UtcNow;
                     }
                 }
-
-                /*if (string.IsNullOrWhiteSpace(fieldValue.FieldValue) is false && existingFieldValue is null)
-                {
-                    var newFieldValue = new ClientFieldValue
-                    {
-                        ClientId = model.ClientId.Value,
-                        FieldDefinitionId = fieldValue.FieldDefinitionId.Value
-                    };
-
-                    await _context.ClientFieldValues.AddAsync(newFieldValue.FillCommonProperties());
-
-                    var newFieldValueTranslation = new ClientFieldValueTranslation
-                    {
-                        ClientFieldValueId = newFieldValue.Id,
-                        FieldValue = fieldValue.FieldValue,
-                        Language = model.Language
-                    };
-
-                    await _context.ClientFieldValueTranslations.AddAsync(newFieldValueTranslation.FillCommonProperties());
-                }
-                else
-                {
-                    var existingTranslation = existingFieldValue.Translation?.FirstOrDefault(x => x.Language == model.Language);
-
-                    if (existingTranslation is null)
-                    {
-                        var newFieldValueTranslation = new ClientFieldValueTranslation
-                        {
-                            ClientFieldValueId = existingFieldValue.Id,
-                            FieldValue = fieldValue.FieldValue,
-                            Language = model.Language
-                        };
-
-                        await _context.ClientFieldValueTranslations.AddAsync(newFieldValueTranslation.FillCommonProperties());
-                    }
-                    else
-                    {
-                        if (string.IsNullOrWhiteSpace(fieldValue.FieldValue) is false)
-                        {
-                            existingTranslation.FieldValue = fieldValue.FieldValue;
-                            existingTranslation.LastModifiedDate = DateTime.UtcNow;
-                        }
-                        else
-                        {
-                            _context.Remove(existingTranslation);
-                        }
-                    }
-                }*/
             }
 
             await _context.SaveChangesAsync();
