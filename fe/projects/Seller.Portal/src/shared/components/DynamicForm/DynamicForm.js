@@ -1,46 +1,90 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import SchemaField from "../DynamicForm/fields/SchemaField";
-import { getDefaultRegistry } from "./utils/utils";
-import validateFormData from "./validate/validate";
+import React, { useState, useEffect, useMemo } from 'react';
+import { 
+    TextField, Select, MenuItem, NoSsr, Switch,
+    FormControl, InputLabel, FormControlLabel
+} from '@mui/material';
 
-function DynamicForm(props) {
+const DynamicForm = ({ 
+    dynamicFields = [], 
+    formData: initialFormData = {}, 
+    setFormData
+}) => {
+    const [formData, setLocalFormData] = useState(initialFormData || {});
 
-    function getRegistry() {
-        // For BC, accept passed SchemaField and TitleField props and pass them to
-        // the "fields" registry one.
-        const { fields, widgets } = getDefaultRegistry();
+    useEffect(() => {
+        setFormData(formData);
+    }, [formData, setFormData]);
 
-        return {
-            fields: { ...fields },
-            widgets: { ...widgets },
-            definitions: (props.jsonSchema && props.jsonSchema.definitions) ? props.jsonSchema.definitions : {},
-            rootSchema: props.jsonSchema,
-            formContext: props.formContext || {},
-        };
-    }
-
-    const onChangeValidate = (event) => {
-        props.onChange(event);
-        validateFormData(props.formData, props.jsonSchema);
+    const handleChange = (id, value) => {
+        const updatedFormData = { ...formData, [id]: value };
+        setLocalFormData(updatedFormData);
     };
-    
-    return (
-        <div>
-            <SchemaField
-                schema={props.jsonSchema}
-                uiSchema={props.uiSchema}
-                formData={props.formData}
-                onChange={onChangeValidate}
-                registry={getRegistry()} />
-        </div>
-    );
-}
 
-DynamicForm.propTypes = {
-    jsonSchema: PropTypes.object.isRequired,
-    uiSchema: PropTypes.object,
-    formData: PropTypes.object
+    const initialData = useMemo(() => {
+        const initialFormData = {};
+
+        dynamicFields.forEach(field => {
+            if (field.type === "boolean") {
+                const stringValueToBoolean = field.value === "true"
+
+                field.value = stringValueToBoolean;
+            }
+            initialFormData[field.id] = field.value ?? (field.type === 'select' ? '' : null);
+        });
+
+        return initialFormData;
+    }, [dynamicFields]);
+
+    useEffect(() => {
+        setLocalFormData(initialData || {});
+    }, [initialData]);
+
+    return (
+        dynamicFields.map(field => (
+            <div key={field.id} className='field'>
+                {(field.type === 'text' || field.type === 'number') && (
+                    <TextField
+                        id={field.id}
+                        label={field.name}
+                        fullWidth
+                        type={field.type === 'number' ? 'number' : 'text'}
+                        variant="standard"
+                        value={formData[field.id] || ''}
+                        onChange={(e) => handleChange(field.id, e.target.value)}
+                    />
+                )}
+                {field.type === "boolean" && (
+                    <NoSsr>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    onChange={e => handleChange(field.id, e.target.checked)}
+                                    checked={formData[field.id]}
+                                    id={field.id}
+                                    name={field.name}
+                                    color="secondary" />
+                                }
+                            label={field.name} />
+                    </NoSsr>
+                )}
+                {field.type === 'select' && (
+                    <FormControl fullWidth variant="standard">
+                        <InputLabel>{field.name}</InputLabel>
+                        <Select
+                            id={field.id}
+                            value={formData[field.id] || ''}
+                            label={field.name}
+                            onChange={(e) => handleChange(field.id, e.target.value)}
+                        >
+                            {field.options.map(option => (
+                                <MenuItem key={option.value} value={option.value}>{option.name}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                )}
+            </div>
+        ))
+    );
 };
 
 export default DynamicForm;

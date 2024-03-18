@@ -46,5 +46,6 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string BillingAddressLabel { get; set; }
         public string GetClientAddressesUrl { get; set; }
         public int DefaultItemsPerPage { get; set; }
+        public IEnumerable<OrderAttributeViewModel> OrderAttributes { get; set; }
     }
 }

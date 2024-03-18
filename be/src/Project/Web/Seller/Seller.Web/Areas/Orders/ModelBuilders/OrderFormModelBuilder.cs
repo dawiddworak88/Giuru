@@ -5,6 +5,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.ViewModels;
+using Seller.Web.Areas.Orders.Repositories.OrderAttributes;
 using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.Repositories.Clients;
 using System.Globalization;
@@ -18,21 +19,24 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
-        private readonly LinkGenerator _linkGenerator;
         private readonly IClientsRepository _clientsRepository;
+        private readonly IOrderAttributesRepository _orderAttributesRepository;
+        private readonly LinkGenerator _linkGenerator;
 
         public OrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
-            LinkGenerator linkGenerator,
-            IClientsRepository clientsRepository)
+            IClientsRepository clientsRepository,
+            IOrderAttributesRepository orderAttributesRepository,
+            LinkGenerator linkGenerator)
         {
             _globalLocalizer = globalLocalizer;
             _orderLocalizer = orderLocalizer;
             _linkGenerator = linkGenerator;
             _clientsRepository = clientsRepository;
             _clientLocalizer = clientLocalizer;
+            _orderAttributesRepository = orderAttributesRepository;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -81,6 +85,24 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             if (clients is not null)
             {
                 viewModel.Clients = clients.Where(x => !x.IsDisabled).Select(x => new ClientListItemViewModel { Id = x.Id , Name = x.Name, DefaultDeliveryAddressId = x.DefaultDeliveryAddressId, DefaultBillingAddressId = x.DefaultBillingAddressId });
+            }
+
+            var orderAttributes = await _orderAttributesRepository.GetAsync(componentModel.Token, componentModel.Language);
+
+            if (orderAttributes is not null)
+            {
+                viewModel.OrderAttributes = orderAttributes.Select(x => new OrderAttributeViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Type = x.Type,
+                    IsRequired = x.IsRequired,
+                    Options = x.Options.Select(x => new OrderAttributeOptionViewModel
+                    {
+                        Name = x.Name,
+                        Value = x.Value
+                    })
+                });
             }
 
             return viewModel;
