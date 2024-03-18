@@ -70,7 +70,7 @@ namespace Client.Api.Services.FieldValues
                 }
                 else
                 {
-                    var existingTranslation = existingFieldValue.Translation.FirstOrDefault(x => x.Language == model.Language);
+                    var existingTranslation = existingFieldValue.Translation?.FirstOrDefault(x => x.Language == model.Language);
 
                     if (existingTranslation is null)
                     {
