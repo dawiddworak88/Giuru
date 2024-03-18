@@ -8,6 +8,7 @@ namespace Identity.Api.ServicesModels.TeamMembers
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public bool IsDisabled { get; set; }
         public string Scheme { get; set; }
         public HostString Host { get; set; }
         public string ReturnUrl { get; set; }
