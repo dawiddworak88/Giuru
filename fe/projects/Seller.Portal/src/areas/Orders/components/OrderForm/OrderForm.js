@@ -255,6 +255,16 @@ function OrderForm(props) {
             }
         }
 
+        if (formData != null) {
+            order = {
+                ...order,
+                attributesValues: Object.entries(formData).map((attributeEntry) => ({ 
+                    attributeId: attributeEntry[0],
+                    value: attributeEntry[1]
+                }))
+            }
+        }
+
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
