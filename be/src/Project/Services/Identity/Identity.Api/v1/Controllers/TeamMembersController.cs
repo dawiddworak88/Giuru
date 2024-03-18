@@ -187,6 +187,7 @@ namespace Identity.Api.v1.Controllers
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     Email = request.Email,
+                    IsDisabled = request.IsDisabled,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -211,6 +212,7 @@ namespace Identity.Api.v1.Controllers
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     Email = request.Email,
+                    IsDisabled = request.IsDisabled,
                     Host = Request.Host,
                     Scheme = Request.Scheme,
                     ReturnUrl = request.ReturnUrl,
