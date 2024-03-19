@@ -441,11 +441,13 @@ function OrderForm(props) {
                                         renderInput={(params) => <TextField {...params} label={props.billingAddressLabel} margin="normal" variant="standard" />}
                                     />
                                 </div>
-                                <DynamicForm 
-                                    dynamicFields={props.orderAttributes}
-                                    setFormData={setFormData}
-                                    formData={formData}
-                                />
+                                {props.orderAttributes && props.orderAttributes.length > 0 &&
+                                    <DynamicForm 
+                                        dynamicFields={props.orderAttributes}
+                                        setFormData={setFormData}
+                                        formData={formData}
+                                    />
+                                }
                             </Fragment>
                         }
                     </div>

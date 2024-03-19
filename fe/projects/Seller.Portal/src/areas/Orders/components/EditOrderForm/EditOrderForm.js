@@ -10,6 +10,7 @@ import {
 import { Edit } from "@mui/icons-material";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import Files from "../../../../shared/components/Files/Files";
+import DynamicForm from "../../../../shared/components/DynamicForm/DynamicForm";
 
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -110,6 +111,12 @@ function EditOrderForm(props) {
                                         <div className="field">
                                             <InputLabel id="billing-address-label">{props.billingAddressLabel}: {props.billingAddress}</InputLabel>
                                         </div>
+                                    }
+                                    {props.orderAttributes && props.orderAttributes.length > 0 &&
+                                        <DynamicForm 
+                                            dynamicFields={props.orderAttributes}
+                                            readOnly
+                                        />
                                     }
                                 </div>
                             </div>

@@ -7,12 +7,15 @@ import {
 const DynamicForm = ({ 
     dynamicFields = [], 
     formData: initialFormData = {}, 
-    setFormData
+    setFormData,
+    readOnly = false
 }) => {
     const [formData, setLocalFormData] = useState(initialFormData || {});
 
     useEffect(() => {
-        setFormData(formData);
+        if (!readOnly) {
+            setFormData(formData);
+        }
     }, [formData, setFormData]);
 
     const handleChange = (id, value) => {
@@ -51,6 +54,7 @@ const DynamicForm = ({
                         variant="standard"
                         value={formData[field.id] || ''}
                         onChange={(e) => handleChange(field.id, e.target.value)}
+                        readOnly={readOnly}
                     />
                 )}
                 {field.type === "boolean" && (
@@ -62,6 +66,7 @@ const DynamicForm = ({
                                     checked={formData[field.id]}
                                     id={field.id}
                                     name={field.name}
+                                    readOnly={readOnly}
                                     color="secondary" />
                                 }
                             label={field.name} />
@@ -74,6 +79,7 @@ const DynamicForm = ({
                             id={field.id}
                             value={formData[field.id] || ''}
                             label={field.name}
+                            readOnly={readOnly}
                             onChange={(e) => handleChange(field.id, e.target.value)}
                         >
                             {field.options.map(option => (
