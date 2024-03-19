@@ -36,5 +36,6 @@ namespace Ordering.Api.ServicesModels
         public IEnumerable<CheckoutBasketItemServiceModel> Items { get; set; }
         public bool HasCustomOrder { get; set; }
         public IEnumerable<Guid> Attachments { get; set; }
+        public IEnumerable<CheckoutBasketAttributeValueServiceModel> AttributesValues { get; set; }
     }
 }

@@ -15,20 +15,20 @@ namespace Basket.Api.Services
 {
     public class BasketService : IBasketService
     {
-        private readonly IBasketRepository basketRepository;
-        private readonly IEventBus eventBus;
+        private readonly IBasketRepository _basketRepository;
+        private readonly IEventBus _eventBus;
 
         public BasketService(
             IBasketRepository basketRepository,
             IEventBus eventBus)
         {
-            this.basketRepository = basketRepository;
-            this.eventBus = eventBus;
+            _basketRepository = basketRepository;
+            _eventBus = eventBus;
         }
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel checkoutBasketServiceModel)
         {
-            using var source = new ActivitySource(this.GetType().Name);
+            using var source = new ActivitySource(GetType().Name);
 
             var message = new BasketCheckoutAcceptedIntegrationEvent
             {
@@ -62,10 +62,15 @@ namespace Basket.Api.Services
                 ExternalReference = checkoutBasketServiceModel.ExternalReference,
                 MoreInfo = checkoutBasketServiceModel.MoreInfo,
                 HasCustomOrder = checkoutBasketServiceModel.HasCustomOrder,
-                Attachments = checkoutBasketServiceModel.Attachments
+                Attachments = checkoutBasketServiceModel.Attachments,
+                AttributesValues = checkoutBasketServiceModel.AttributesValues.Select(x => new BasketAttributeValueEventModel 
+                { 
+                    AttributeId = x.AttributeId,
+                    Value = x.Value
+                })
             };
 
-            var basket = await this.basketRepository.GetBasketAsync(checkoutBasketServiceModel.BasketId.Value);
+            var basket = await _basketRepository.GetBasketAsync(checkoutBasketServiceModel.BasketId.Value);
 
             if (basket is not null)
             {
@@ -126,24 +131,24 @@ namespace Basket.Api.Services
                 };
 
                 using var outletBookedItemsActivity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {outletBookedItems.GetType().Name}");
-                this.eventBus.Publish(outletBookedItems);
+                _eventBus.Publish(outletBookedItems);
 
                 using var stockBookedItemsActivity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {stockBookedItems.GetType().Name}");
-                this.eventBus.Publish(stockBookedItems);
+                _eventBus.Publish(stockBookedItems);
             }
 
             using var messageActivity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
-            this.eventBus.Publish(message);
+            _eventBus.Publish(message);
         }
 
         public async Task DeleteAsync(DeleteBasketServiceModel serviceModel)
         {
-            await this.basketRepository.DeleteBasketAsync(serviceModel.Id.Value);
+            await _basketRepository.DeleteBasketAsync(serviceModel.Id.Value);
         }
 
         public async Task<BasketServiceModel> GetBasketById(GetBasketByIdServiceModel serviceModel)
         {
-            var basket = await this.basketRepository.GetBasketAsync(serviceModel.Id.Value);
+            var basket = await _basketRepository.GetBasketAsync(serviceModel.Id.Value);
             if (basket == null)
             {
                 var emptyBasket = new BasketServiceModel
@@ -194,7 +199,7 @@ namespace Basket.Api.Services
                 })
             };
 
-            var result = await this.basketRepository.UpdateBasketAsync(basketModel);
+            var result = await _basketRepository.UpdateBasketAsync(basketModel);
 
             return new BasketServiceModel
             {

@@ -1,4 +1,5 @@
-﻿using Foundation.Extensions.Models;
+﻿using Basket.Api.v1.RequestModels;
+using Foundation.Extensions.Models;
 using System;
 using System.Collections.Generic;
 
@@ -34,5 +35,6 @@ namespace Basket.Api.ServicesModels
         public string MoreInfo { get; set; }
         public bool HasCustomOrder { get; set; }
         public IEnumerable<Guid> Attachments { get; set; }
+        public IEnumerable<BasketAttributeValueServiceModel> AttributesValues { get; set; }
     }
 }

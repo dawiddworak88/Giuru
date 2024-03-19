@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.ApiRequestModels;
-using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
 using Seller.Web.Areas.Orders.Repositories.OrderAttributeValues;
 using System.Globalization;
@@ -64,17 +63,12 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 model.ShippingStreet,
                 model.ShippingPhoneNumber,
                 model.ShippingCountryId,
+                model.AttributesValues.Select(x => new AttributeValueRequestModel
+                {
+                    AttributeId = x.AttributeId,
+                    Value = x.Value
+                }),
                 model.MoreInfo);
-
-            if (model.AttributesValues is not null && model.AttributesValues.Any())
-            {
-                await _orderAttributeValuesRepository.BatchAsync(token, language, model.BasketId, 
-                    model.AttributesValues.Select(x => new ApiOrderAttributeValue
-                    {
-                        AttributeId = x.AttributeId,
-                        Value = x.Value
-                    }));
-            }
 
             return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
         }

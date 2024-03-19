@@ -29,6 +29,6 @@ namespace Seller.Web.Areas.Orders.ApiRequestModels
         public string ShippingPhoneNumber { get; set; }
         public Guid? ShippingCountryId { get; set; }
         public string MoreInfo { get; set; }
-        public IEnumerable<BasketAttributeValueRequestModel> AttributesValues { get; set; }
+        public IEnumerable<AttributeValueRequestModel> AttributesValues { get; set; }
     }
 }

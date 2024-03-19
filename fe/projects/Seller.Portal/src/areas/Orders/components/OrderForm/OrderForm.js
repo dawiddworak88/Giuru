@@ -214,7 +214,6 @@ function OrderForm(props) {
     };
 
     const handlePlaceOrder = () => {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         var order = {

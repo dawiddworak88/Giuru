@@ -11,12 +11,12 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
 {
     public class BasketCheckoutAcceptedIntegrationEventHandler : IIntegrationEventHandler<BasketCheckoutAcceptedIntegrationEvent>
     {
-        private readonly IOrdersService ordersService;
+        private readonly IOrdersService _ordersService;
 
         public BasketCheckoutAcceptedIntegrationEventHandler(
             IOrdersService ordersService)
         {
-            this.ordersService = ordersService;
+            _ordersService = ordersService;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
         /// <returns></returns>
         public async Task Handle(BasketCheckoutAcceptedIntegrationEvent @event)
         {
-            using var source = new ActivitySource(this.GetType().Name);
+            using var source = new ActivitySource(GetType().Name);
             using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {@event.GetType().Name}");
 
             var serviceModel = new CheckoutBasketServiceModel
@@ -76,16 +76,20 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo
                 }),
+                AttributesValues = @event.AttributesValues?.Select(x => new CheckoutBasketAttributeValueServiceModel
+                {
+                    AttributeId = x.AttributeId,
+                    Value = x.Value
+                }),
                 Language = @event.Language
             };
 
             var validator = new CheckoutBasketServiceModelValidator();
-
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
-                await this.ordersService.CheckoutAsync(serviceModel);
+                await _ordersService.CheckoutAsync(serviceModel);
             }
         }
     }

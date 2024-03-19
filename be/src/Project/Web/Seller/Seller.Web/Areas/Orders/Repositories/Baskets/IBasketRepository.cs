@@ -1,4 +1,5 @@
-﻿using Seller.Web.Areas.Orders.DomainModels;
+﻿using Seller.Web.Areas.Orders.ApiRequestModels;
+using Seller.Web.Areas.Orders.DomainModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -34,6 +35,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             string shippingStreet,
             string shippingPhoneNumber,
             Guid? shippingCountryId,
+            IEnumerable<AttributeValueRequestModel> attributeValues,
             string moreInfo);
     }
 }

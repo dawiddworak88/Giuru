@@ -170,6 +170,11 @@ namespace Ordering.Api.Services.Orders
                 });
             }
 
+            if (serviceModel.AttributesValues is not null && serviceModel.AttributesValues.Any())
+            {
+                Console.WriteLine("ADASDASDADS");
+            }
+
             await _context.SaveChangesAsync();
 
             var message = new OrderStartedIntegrationEvent
