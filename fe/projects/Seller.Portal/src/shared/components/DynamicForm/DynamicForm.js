@@ -32,7 +32,7 @@ const DynamicForm = ({
 
                 field.value = stringValueToBoolean;
             }
-            initialFormData[field.id] = field.value ?? (field.type === 'select' ? '' : null);
+            initialFormData[field.id] = field.value ?? null;
         });
 
         return initialFormData;
@@ -42,56 +42,55 @@ const DynamicForm = ({
         setLocalFormData(initialData || {});
     }, [initialData]);
 
-    console.log(dynamicFields)
-
     return (
         dynamicFields.map(field => (
-            <div key={field.id} className='field'>
-                {(field.type === 'text' || field.type === 'number') && (
-                    <TextField
-                        id={field.id}
-                        label={field.name}
-                        fullWidth
-                        type={field.type === 'number' ? 'number' : 'text'}
-                        variant="standard"
-                        value={formData[field.id] || ''}
-                        onChange={(e) => handleChange(field.id, e.target.value)}
-                        readOnly={readOnly}
-                    />
-                )}
-                {field.type === "boolean" && (
-                    <NoSsr>
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    onChange={e => handleChange(field.id, e.target.checked)}
-                                    checked={formData[field.id]}
-                                    id={field.id}
-                                    name={field.name}
-                                    readOnly={readOnly}
-                                    color="secondary" />
-                                }
-                            label={field.name} />
-                    </NoSsr>
-                )}
-                {field.type === 'select' && (
-                    <FormControl fullWidth variant="standard">
-                        <InputLabel>{field.name}</InputLabel>
-                        <Select
+            (!readOnly || formData[field.id] !== null) && (
+                <div key={field.id} className='field'>
+                    {(field.type === 'text' || field.type === 'number') && (
+                        <TextField
                             id={field.id}
-                            value={formData[field.id] || ''}
                             label={field.name}
-                            readOnly={readOnly}
+                            fullWidth
+                            type={field.type === 'number' ? 'number' : 'text'}
+                            variant="standard"
+                            value={formData[field.id] || ''}
                             onChange={(e) => handleChange(field.id, e.target.value)}
-                        >
-                            {field.options.map(option => (
-                                <MenuItem key={option.value} value={option.value}>{option.name}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                )}
-            </div>
-        ))
+                            readOnly={readOnly}
+                        />
+                    )}
+                    {field.type === "boolean" && (
+                        <NoSsr>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        onChange={e => handleChange(field.id, e.target.checked)}
+                                        checked={formData[field.id]}
+                                        id={field.id}
+                                        name={field.name}
+                                        readOnly={readOnly}
+                                        color="secondary" />
+                                    }
+                                label={field.name} />
+                        </NoSsr>
+                    )}
+                    {field.type === 'select' && (
+                        <FormControl fullWidth variant="standard">
+                            <InputLabel>{field.name}</InputLabel>
+                            <Select
+                                id={field.id}
+                                value={formData[field.id] || ''}
+                                label={field.name}
+                                readOnly={readOnly}
+                                onChange={(e) => handleChange(field.id, e.target.value)}
+                            >
+                                {field.options.map(option => (
+                                    <MenuItem key={option.value} value={option.value}>{option.name}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    )}
+                </div>
+        )))
     );
 };
 
