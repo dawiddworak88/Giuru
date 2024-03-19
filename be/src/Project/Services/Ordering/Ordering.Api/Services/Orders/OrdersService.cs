@@ -223,9 +223,12 @@ namespace Ordering.Api.Services.Orders
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
+                var orderAttributesValues = _context.AttributeValues.Where(x => x.AttributeValueTranslations.Any(y => y.Value.StartsWith(model.SearchTerm)));
+
                 orders = orders.Where(x => x.ClientName.ToLower().StartsWith(model.SearchTerm.ToLower())
                 || x.OrderItems.Any(y => y.ExternalReference.ToLower().StartsWith(model.SearchTerm.ToLower()))
-                || x.Id.ToString().ToLower() == model.SearchTerm.ToLower());
+                || x.Id.ToString().ToLower() == model.SearchTerm.ToLower()
+                || orderAttributesValues.Select(y => y.OrderId).Contains(x.Id));
             }
 
             if (model.CreatedDateGreaterThan.HasValue)
