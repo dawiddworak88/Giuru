@@ -102,6 +102,12 @@ function StatusOrder(props) {
                             </Button>
                         </div>
                     }
+                    {props.orderAttributes && props.orderAttributes.length > 0 && 
+                        <DynamicForm 
+                            dynamicFields={props.orderAttributes}
+                            readOnly
+                        />
+                    }
                 </div>
             </div>
             {props.orderItems && props.orderItems.length > 0 &&

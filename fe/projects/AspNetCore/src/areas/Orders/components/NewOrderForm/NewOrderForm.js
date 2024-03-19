@@ -17,6 +17,7 @@ import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog
 import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
+import DynamicForm from "../../../../shared/components/DynamicForm/DynamicForm";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -36,6 +37,7 @@ function NewOrderForm(props) {
     const [attachments, setAttachments] = useState([]);
     const [deliveryAddressId, setDeliveryAddressId] = useState(props.defaultDeliveryAddressId ? props.defaultDeliveryAddressId : null);
     const [billingAddressId, setBillingAddressId] = useState(props.defaultBillingAddressId ? props.defaultBillingAddressId : null);
+    const [formData, setFormData] = useState(props.formData ? props.formData : null);
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -360,6 +362,13 @@ function NewOrderForm(props) {
                         </div>
                     </div>
                 </div>
+            }
+            {props.orderAttributes && props.orderAttributes.length > 0 && 
+                <DynamicForm 
+                    dynamicFields={props.orderAttributes}
+                    setFormData={setFormData}
+                    formData={formData}
+                />
             }
             <div className="is-modern-form">
                 <Fragment>
