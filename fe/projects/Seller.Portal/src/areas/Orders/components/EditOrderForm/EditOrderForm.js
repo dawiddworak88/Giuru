@@ -112,7 +112,7 @@ function EditOrderForm(props) {
                                             <InputLabel id="billing-address-label">{props.billingAddressLabel}: {props.billingAddress}</InputLabel>
                                         </div>
                                     }
-                                    {props.orderAttributes && props.orderAttributes.length > 0 &&
+                                    {props.orderAttributes && props.orderAttributes.length > 0 &&   
                                         <DynamicForm 
                                             dynamicFields={props.orderAttributes}
                                             readOnly

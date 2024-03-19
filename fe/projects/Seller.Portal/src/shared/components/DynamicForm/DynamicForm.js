@@ -42,6 +42,8 @@ const DynamicForm = ({
         setLocalFormData(initialData || {});
     }, [initialData]);
 
+    console.log(dynamicFields)
+
     return (
         dynamicFields.map(field => (
             <div key={field.id} className='field'>
