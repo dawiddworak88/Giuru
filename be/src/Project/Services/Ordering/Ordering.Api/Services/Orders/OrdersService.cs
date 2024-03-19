@@ -19,6 +19,7 @@ using Ordering.Api.Infrastructure;
 using Ordering.Api.Infrastructure.Orders.Entities;
 using Ordering.Api.IntegrationEvents;
 using Ordering.Api.IntegrationEventsModels;
+using Ordering.Api.Services.OrderAttributeValues;
 using Ordering.Api.ServicesModels;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,7 @@ namespace Ordering.Api.Services.Orders
         private readonly IMailingService _mailingService;
         private readonly IOptions<AppSettings> _configuration;
         private readonly IMediaService _mediaService;
+        private readonly IOrderAttributeValuesService _orderAttributeValuesService;
         private readonly ILogger _logger;
 
         public OrdersService(
@@ -52,6 +54,7 @@ namespace Ordering.Api.Services.Orders
             IOptionsMonitor<AppSettings> orderingOptions,
             IOptions<AppSettings> configuration,
             IMediaService mediaService,
+            IOrderAttributeValuesService orderAttributeValuesService,
             ILogger<OrdersService> logger)
         {
             _context = context;
@@ -61,6 +64,7 @@ namespace Ordering.Api.Services.Orders
             _configuration = configuration;
             _globalLocalizer = globalLocalizer;
             _orderingOptions = orderingOptions;
+            _orderAttributeValuesService = orderAttributeValuesService;
             _mediaService = mediaService;
             _logger = logger;
         }
@@ -172,7 +176,20 @@ namespace Ordering.Api.Services.Orders
 
             if (serviceModel.AttributesValues is not null && serviceModel.AttributesValues.Any())
             {
-                Console.WriteLine("ADASDASDADS");
+                var batchServiceModel = new CreateBatchOrderAttributeValuesServiceModel
+                {
+                    OrderId = order.Id,
+                    Values = serviceModel.AttributesValues.Select(x => new CreateOrderAttributeValueServiceModel
+                    {
+                        AttributeId = x.AttributeId,
+                        Value = x.Value
+                    }),
+                    Language = serviceModel.Language,
+                    Username = serviceModel.Username,
+                    OrganisationId = serviceModel.OrganisationId
+                };
+
+                await _orderAttributeValuesService.BatchAsync(batchServiceModel);
             }
 
             await _context.SaveChangesAsync();

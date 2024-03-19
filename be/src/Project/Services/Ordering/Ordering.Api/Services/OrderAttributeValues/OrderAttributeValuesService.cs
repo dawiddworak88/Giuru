@@ -35,6 +35,18 @@ namespace Ordering.Api.Services.OrderAttributeValues
             {
                 var existingValue = attributeValues.FirstOrDefault(x => x.AttributeId == attributeValue.AttributeId);
 
+                if (string.IsNullOrWhiteSpace(attributeValue.Value) is true && existingValue is not null)
+                {
+                    var existingTranslation = existingValue.AttributeValueTranslations.FirstOrDefault(x => x.Language == model.Language);
+
+                    if (existingTranslation is not null)
+                    {
+                        _context.Remove(existingTranslation);
+                    }
+
+                    continue;
+                }
+
                 if (existingValue is null)
                 {
                     var newValue = new AttributeValue
@@ -45,18 +57,21 @@ namespace Ordering.Api.Services.OrderAttributeValues
 
                     await _context.AttributeValues.AddAsync(newValue.FillCommonProperties());
 
-                    var newValueTranslation = new AttributeValueTranslation
+                    if (string.IsNullOrWhiteSpace(attributeValue.Value) is false)
                     {
-                        AttributeValueId = newValue.Id,
-                        Value = attributeValue.Value,
-                        Language = model.Language
-                    };
+                        var newValueTranslation = new AttributeValueTranslation
+                        {
+                            AttributeValueId = newValue.Id,
+                            Value = attributeValue.Value,
+                            Language = model.Language
+                        };
 
-                    await _context.AttributeValueTranslations.AddAsync(newValueTranslation.FillCommonProperties());
+                        await _context.AttributeValueTranslations.AddAsync(newValueTranslation.FillCommonProperties());
+                    }
                 }
                 else
                 {
-                    var existingTranslation = existingValue.AttributeValueTranslations.FirstOrDefault(x => x.Language == model.Language);
+                    var existingTranslation = existingValue.AttributeValueTranslations?.FirstOrDefault(x => x.Language == model.Language);
 
                     if (existingTranslation is null)
                     {
