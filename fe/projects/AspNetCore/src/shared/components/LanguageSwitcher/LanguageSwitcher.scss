@@ -1,8 +1,11 @@
 .switcher {
-    font-family: $family-primary;
-    
-    &__button:hover {
-        background-color: $white;
+    &__button {
+        color: $blackbase;
+        font-family: $family-primary;
+
+        &:hover {
+            background-color: $white;
+        }
     }
 
     &__body {
