@@ -82,7 +82,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
             var clientId = await _clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PreferedCurrencyId, model.PhoneNumber, model.IsDisabled, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId);
 
-            if (model.FieldsValues.Any())
+            if (model.FieldsValues is not null && model.FieldsValues.Any())
             {
                 await _clientFieldValuesRepository.SaveAsync(token, language, clientId,
                   model.FieldsValues.Select(x => new ApiClientFieldValue
