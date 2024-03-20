@@ -45,6 +45,44 @@ export var header = {
     name: "PIGU",
     isLoggedIn: true,
   },
+  sidebarMobile: {
+    logo: {
+      targetUrl: "/",
+      logoAltLabel: "Logo",
+      logoUrl: "https://media.eltap.com/api/v1/files/85b14b09-856d-4fd0-8af4-7c077953b214?o=true"
+    },
+    links: [
+      { url: "#", text: "Categories" },
+      { url: "#", text: "Sell" }
+    ],
+    isLoggedIn: true,
+    signOutLink: {
+      url: "#",
+      text: "Logout"
+    },
+    signInLink: {
+      url: "#",
+      text: "Sign In",
+    },
+    languageSwitcher: {
+      availableLanguages: [
+        {
+          url: "/en",
+          text: "EN"
+        },
+        {
+          url: "/de",
+          text: "DE"
+        },
+        {
+          url: "/pl",
+          text: "PL"
+        }
+      ],
+      selectedLanguageUrl: "/en",
+      selectedLanguageText: "EN"
+    }
+  },
   searchTerm: "",
   searchUrl: "#",
   searchLabel: "Search",
