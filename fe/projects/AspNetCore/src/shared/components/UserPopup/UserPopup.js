@@ -23,6 +23,7 @@ const UserPopup = (props) => {
                 type="button"
                 onClick={handleClick}
                 disableRipple
+                sx={{ p: 0 }}
             >
                 <span className="pr-2">
                     <UserIcon />
