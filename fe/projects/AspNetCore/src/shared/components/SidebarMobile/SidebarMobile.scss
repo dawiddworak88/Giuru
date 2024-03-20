@@ -1,0 +1,55 @@
+.sidebar {
+
+    &__menu {
+        font-size: 14px;
+
+        &__header {
+            padding: 1rem;
+
+            &__logo {
+                width: 6rem;
+            }
+        }
+
+        &__links {
+
+            &__button {
+                color: $link;
+                border-bottom: 1px solid $natuaralgrey200;
+                padding: 1rem;
+                display: block;
+
+                &:active {
+                    background-color: $desertstorm;
+                }
+            }
+        }
+    }
+
+    &__language {
+        position: fixed;
+        bottom: 0;
+
+        &__button {
+            display: flex;
+            padding: 0.1rem;
+            margin: 0.9rem;
+            border-bottom: 2px solid $white;
+
+            &:active {
+                border-bottom-color: $primary;
+                color: $primary;
+            }
+        }
+    }
+}
+
+.MuiDrawer-paper {
+    width: 60% !important;
+}
+
+@media only screen and (max-width: $tablet) {
+    .MuiDrawer-paper {
+        width: 100% !important;
+    }
+}
