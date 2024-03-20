@@ -2,8 +2,8 @@ import React from "react";
 
 const ArrowShowLessIcon = () => {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="8" viewBox="0 0 16 8" fill="none">
-            <path d="M15 7L8.47791 1.16954C8.41819 1.11626 8.34475 1.07358 8.26246 1.04435C8.18017 1.01512 8.09092 1 8.00064 1C7.91035 1 7.8211 1.01512 7.73881 1.04435C7.65652 1.07358 7.58308 1.11626 7.52336 1.16954L1 7" stroke="#171717" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
+            <path d="M0.999999 5L4.68533 1.13066C4.72662 1.08924 4.77566 1.05638 4.82966 1.03396C4.88365 1.01154 4.94154 0.999999 5 0.999999C5.05846 0.999999 5.11635 1.01154 5.17034 1.03396C5.22434 1.05638 5.27338 1.08924 5.31467 1.13066L9 5" stroke="#171717" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
     )
 }

@@ -2,14 +2,8 @@ import React from "react";
 
 const ArrowShowMoreIcon = () => {
     return (
-        <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-                stroke="#171717"
-                stroke-width="1.4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M0.999999 1L7.52209 6.83046C7.58181 6.88374 7.65525 6.92642 7.73754 6.95565C7.81983 6.98488 7.90908 7 7.99936 7C8.08965 7 8.1789 6.98488 8.26119 6.95565C8.34348 6.92642 8.41692 6.88374 8.47664 6.83046L15 1"
-            />
+        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
+            <path d="M0.999999 1L4.68533 4.86934C4.72662 4.91076 4.77566 4.94362 4.82966 4.96604C4.88365 4.98846 4.94154 5 5 5C5.05846 5 5.11635 4.98846 5.17034 4.96604C5.22434 4.94362 5.27338 4.91076 5.31467 4.86934L9 1" stroke="#171717" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
     )
 }
