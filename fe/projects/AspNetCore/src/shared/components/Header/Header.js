@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import Autosuggest from "react-autosuggest";
 import PropTypes from "prop-types";
-import { Button, FormControl, Icon, InputLabel, MenuItem, Select } from "@mui/material";
+import { Button, FormControl, MenuItem, Select } from "@mui/material";
 import LanguageSwitcher from "../../../shared/components/LanguageSwitcher/LanguageSwitcher";
 import HeaderConstants from "./HeaderConstants";
 import QueryStringSerializer from "../../../shared/helpers/serializers/QueryStringSerializer";
@@ -11,9 +11,11 @@ import { Context } from "../../stores/Store";
 import CategoryIcon from "../../Icons/Category";
 import RemoveIcon from "../../Icons/Remove";
 import SearchIcon from "../../Icons/Search";
-import { ShoppingCart, ExpandMoreOutlined } from '@mui/icons-material';
+import ShoppingCartIcon from "../../Icons/ShoppingCart";
+import ArrowShowMoreCategoryIcon from "../../Icons/ArrowShowMoreCategory";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import UserPopup from "../UserPopup/UserPopup";
+import SidebarMobile from "../SidebarMobile/SidebarMobile"
 
 function Header(props) {
     const [state, dispatch] = useContext(Context);
@@ -38,7 +40,7 @@ function Header(props) {
         setSearchTerm(args.value);
 
         if (args.value && args.value.length >= HeaderConstants.minSearchTermLength()) {
-        
+
             dispatch({ type: "SET_IS_LOADING", payload: true });
 
             const searchParameters = {
@@ -55,26 +57,26 @@ function Header(props) {
             const url = props.getSuggestionsUrl + "?" + QueryStringSerializer.serialize(searchParameters);
 
             return fetch(url, requestOptions)
-            .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
+                .then(function (response) {
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                AuthenticationHelper.HandleResponse(response);
+                    AuthenticationHelper.HandleResponse(response);
 
-                return response.json().then(jsonResponse => {
+                    return response.json().then(jsonResponse => {
 
-                    if (response.ok) {
+                        if (response.ok) {
 
-                        setSuggestions(() => []);
-                        setSuggestions(() => jsonResponse);
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
+                            setSuggestions(() => []);
+                            setSuggestions(() => jsonResponse);
+                        }
+                        else {
+                            toast.error(props.generalErrorMessage);
+                        }
+                    });
+                }).catch(() => {
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
+                    toast.error(props.generalErrorMessage);
                 });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
         }
     };
 
@@ -101,7 +103,7 @@ function Header(props) {
 
     useEffect(() => {
         const totalItems = state.totalBasketItems;
-        if (totalItems != null && totalItems < props.totalBasketItems){
+        if (totalItems != null && totalItems < props.totalBasketItems) {
             state.totalBasketItems = props.totalBasketItems;
         }
 
@@ -111,10 +113,10 @@ function Header(props) {
 
     return (
         <header>
-            <nav className="is-flex p-4 px-4 is-align-items-center header">
-                <div className="navbar__start is-flex is-justify-content-center">
+            <nav className="navbar p-4 px-4 is-align-items-center header">
+                <div className="navbar__start is-flex">
                     <a href={props.logo.targetUrl}>
-                        <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} className="navbar__start__logo"/>
+                        <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} className="navbar__start__logo" />
                     </a>
                 </div>
                 <div className="navbar__search is-flex">
@@ -132,12 +134,12 @@ function Header(props) {
                                 renderSuggestion={renderSuggestion}
                                 inputProps={searchInputProps}
                             />
-                            </div>
+                        </div>
                         <div className="navbar__search__text__remove">
-                            { searchTerm.length > 0 &&
-                                <Button 
+                            {searchTerm.length > 0 &&
+                                <Button
                                     onClick={() => setSearchTerm("")}
-                                    sx={{ 
+                                    sx={{
                                         p: 0,
                                         minWidth: '24px',
                                     }}
@@ -152,32 +154,33 @@ function Header(props) {
                             <Select
                                 className="navbar__search__area__select"
                                 value={searchArea}
-                                onChange={(e) => {setSearchArea(e.target.value)}}
+                                onChange={(e) => { setSearchArea(e.target.value) }}
                                 displayEmpty
-                                IconComponent={ExpandMoreOutlined}
-                                sx={{ 
+                                IconComponent={props => <ArrowShowMoreCategoryIcon {...props} />}
+                                sx={{
                                     boxShadow: 'none',
                                     borderRadius: 0,
                                     '.MuiOutlinedInput-notchedOutline': { border: 0 },
-                                    '.MuiSelect-select': { p: 1, textAlign: 'center' }
-                                    }}
-                                >
+                                    '.MuiSelect-select': { p: 1, textAlign: 'center' },
+                                    '.MuiSelect-iconOpen': { right: '16px' },
+                                }}
+                            >
                                 <MenuItem value={1}>
                                     <div className="is-flex pt-2 is-justify-content-center">
                                         <div className="pr-2">
                                             <CategoryIcon />
                                         </div>
-                                        <div>
+                                        <div className="navbar__search__area__select__text">
                                             Wszytkie
                                         </div>
                                     </div>
                                 </MenuItem>
                                 <MenuItem value={2}>
-                                <div className="is-flex pt-2">
+                                    <div className="is-flex pt-2">
                                         <div className="pr-2">
                                             <CategoryIcon />
                                         </div>
-                                        <div>
+                                        <div className="navbar__search__area__select__text">
                                             Stany magazynowe
                                         </div>
                                     </div>
@@ -186,11 +189,22 @@ function Header(props) {
                         </FormControl>
                     </div>
                 </div>
-                <div className="navbar__actions is-flex is-justify-content-center">
+                <div className="navbar__actions is-flex">
                     <div className="navbar__actions__language">
                         <LanguageSwitcher {...props.languageSwitcher} />
                     </div>
-                    <UserPopup {...props.userPopup} />
+                    <div className="navbar__actions__userpopup">
+                        <UserPopup {...props.userPopup} />
+                    </div>
+                    <div className="navbar__actions__cart">
+                        <a href={props.basketUrl} title={props.goToCartLabel} aria-label={props.goToCartLabel}>
+                            <ShoppingCartIcon />
+                            <span className="navbar__actions__cart__count">{totalBasketItems}</span>
+                        </a>
+                    </div>
+                    <div className="navbar__actions__sidebar">
+                        <SidebarMobile {...props.sidebarMobile} />
+                    </div>
                 </div>
             </nav>
         </header>
@@ -210,56 +224,3 @@ Header.propTypes = {
 };
 
 export default Header;
-
-{/* <div className="navbar-brand is-align-items-center">
-<a className="navbar-logo" href={props.logo.targetUrl}>
-    <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} />
-</a>
-<div className="navbar-start">
-    <form action={props.searchUrl} method="get" role="search" onSubmit={onSearchSubmit}>
-        <div className="field is-flex is-flex-centered search">
-            <Autosuggest
-                suggestions={suggestions}
-                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={() => setSuggestions([])}
-                getSuggestionValue={getSuggestionValue}
-                onSuggestionSelected={onSuggestionSelected}
-                renderSuggestion={renderSuggestion}
-                inputProps={searchInputProps} 
-            />
-            <Button type="submit" variant="contained" color="secondary" className="search-button">
-                {props.searchLabel}
-            </Button>
-        </div>
-    </form>
-</div>
-</div>
-<div className="navbar-container">
-<div className="navbar-end is-flex is-align-items-center">
-    {props.isLoggedIn ? (
-        props.signOutLink &&
-            <div className="navbar-item">
-                <span className="welcome-text">{props.welcomeText} {props.name}, </span>
-                <a href={props.signOutLink.url} className="button is-text">{props.signOutLink.text}</a>
-            </div>
-    ) : (
-        props.signInLink &&
-            <div className="navbar-item">
-                <a className="button is-text" href={props.signInLink.url}>
-                    {props.signInLink.text}
-                </a>
-            </div>
-    )}
-    <div className="navbar-item">
-        <LanguageSwitcher {...props.languageSwitcher} />
-    </div>
-    <div className="navbar-item">
-        <a href={props.basketUrl} className="button is-text" title={props.goToCartLabel} aria-label={props.goToCartLabel}>
-            <ShoppingCart />
-            {totalBasketItems > 0 &&
-                <span className="count">{totalBasketItems}</span>
-            }
-        </a>
-    </div>
-</div>
-</div> */}

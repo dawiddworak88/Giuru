@@ -1,9 +1,14 @@
 @import "../../../shared/components/UserPopup/UserPopup.scss";
 @import "../../../shared/components/LanguageSwitcher/LanguageSwitcher.scss";
+@import "../../../shared/components/SidebarMobile/SidebarMobile.scss";
 
 .navbar {
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    z-index: 0;
+
     &__start {
-        flex-basis: 20%;
+        justify-content: center;
 
         &__logo {
             width: 8rem;
@@ -11,12 +16,11 @@
     }
 
     &__search {
-        flex-basis: 60%;
         border: 1px solid $naturalgrey;
         outline: 1px solid $white;
         border-radius: 4px;
         align-items: center;
-        
+
         &:focus-within {
             border-color: $blackbase;
             outline-color: $blackbase;
@@ -52,89 +56,108 @@
     }
 
     &__actions {
-        width: 20%;
-        padding: 0 1rem 0 1rem;
+        padding: 0 0 0 1rem;
+        align-items: center;
+
+        &__cart {
+            position: relative;
+            margin: 0 1rem;
+
+            &__count {
+                padding: 0.1rem 0.4rem;
+                position: absolute;
+                background: $errorred;
+                color: white;
+                top: -0.7rem;
+                right: -0.7rem;
+                font-size: 0.7rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 50%;
+            }
+        }
+
+        &__sidebar {
+            display: none;
+            margin-left: 1rem;
+        }
     }
 }
 
-// li.MuiButtonBase-root {
-//     border-radius: 4px;
-//     padding: 0;
-// }
+.MuiMenuItem-root {
+    border-radius: 4px;
 
+    &:hover {
+        background-color: $desertstorm;
+    }
+}
 
-// .search {
-//     width: 20rem;
-//     margin-left: 2rem;
-//     height: 56px;
+.Mui-selected {
+    background-color: $white !important;
 
-//     &__field {
-//         border: 1px solid #737373;
-//         border-radius: 4px;
-//         width: 100%;
-//         padding: 1rem;
+    &:hover {
+        background-color: $desertstorm !important;
+    }
+}
 
-//         &:focus {
-//             border: 1px solid #373F49;
-//             padding: 1rem; 
-//         }
- 
-//         &:hover {
-//             border: 1px solid #737373;
-//         }
-//     }
-// }
+.MuiList-root {
+    padding: 0.5rem;
+}
 
 .search-button {
     max-height: 40px;
     margin-left: 0.5rem !important;
 }
 
-.count {
-    width: 1.2rem;
-    height: 1.2rem;
-    position: absolute;
-    background: $primary;
-    color: white;
-    top: -0.5rem;
-    right: -0.5rem;
-    font-size: 0.7rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-}
+@media only screen and (max-width: $desktop) {
 
-.navbar-item {
-    display: flex;
-    align-items: center;
-}
-
-.navbar_logo {
-    width: 7rem;
-}
-
-@media only screen and (max-width: $desktop){
-    .header {
-        flex-direction: column;
-    }
+    .navbar {
+        &__search {
+            &__area {
+                min-width: 81px;
     
-    .welcome-text {
-        display: none;
+                &__select__text {
+                    display: none;
+                }
+            }
+        }
+        
+        &__actions {
+            &__language {
+                display: none;
+            }
+    
+            &__userpopup {
+                display: none;
+            }
+
+            &__sidebar {
+                display: flex;
+            }
+        }
     }
 }
 
-@media only screen and (max-width: $tablet){
-    .search {
-        width: 12rem;
-        margin-left: 1.5rem;
-    }
+@media only screen and (max-width: $tablet) {
+    .navbar {
+        grid-template-columns: 50% 50%;
+        grid-template-rows: auto;
 
-    .search-button {
-        margin-left: 0.5rem !important;
+        &__start {
+            justify-content: start;
+        }
 
-        .MuiButton-label {
-            padding: 1rem;
+        &__search {
+            grid-column-start: 1;
+            grid-row-end: 3;
+            grid-column: span 2
+        }
+
+        &__actions {
+            grid-column-start: 2;
+            margin: 1rem 0;
+            justify-content: right;
         }
     }
 }
