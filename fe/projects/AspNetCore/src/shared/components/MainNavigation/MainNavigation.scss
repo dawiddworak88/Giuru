@@ -6,25 +6,11 @@
     border-style: solid;
     border-color: $lightgrey;
 
-    &__mobile {
-        display: none;
-        position: absolute;
-        top: 1.2rem;
-        right: 1rem;
-
-        svg {
-            fill:white;
-            height: 2rem;
-            width: 2rem;
-        }
-    }
-
     &__links-container {
         height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-        animation: all 300ms ease-in-out;
 
         a {
             color: $link;
@@ -44,23 +30,6 @@
 
 @media only screen and (max-width: $desktop) {
     .main-nav {
-        &__mobile {
-            display: block;
-        }
-
-        &__links-container {
-            z-index: 10;
-            position: absolute;
-            display: none;
-            flex-direction: column;
-            margin-top: 4rem;
-            height: auto;
-            width: 100%;
-            background: $primary;
-
-            &.active {
-                display: flex;
-            }
-        }
+        display: none;
     }
 }
