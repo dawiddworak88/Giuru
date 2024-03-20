@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Orders.ViewModel;
+﻿using Buyer.Web.Areas.Orders.Repositories.OrderAttributes;
+using Buyer.Web.Areas.Orders.ViewModel;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Services.Baskets;
 using Foundation.Extensions.ModelBuilders;
@@ -21,8 +22,9 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IClientsRepository _clientsRepository;
         private readonly IClientAddressesRepository _clientAddressesRepository;
-        private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
+        private readonly IOrderAttributesRepository _orderAttributesRepository;
+        private readonly LinkGenerator _linkGenerator;
 
         public OrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -31,6 +33,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             IClientsRepository clientsRepository,
             IClientAddressesRepository clientAddressesRepository,
             IBasketService basketService,
+            IOrderAttributesRepository orderAttributesRepository,
             LinkGenerator linkGenerator)
         {
             _globalLocalizer = globalLocalizer;
@@ -40,6 +43,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             _clientLocalizer = clientLocalizer;
             _clientsRepository = clientsRepository;
             _clientAddressesRepository = clientAddressesRepository;
+            _orderAttributesRepository = orderAttributesRepository;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -124,6 +128,25 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         });
                     }
                 }
+            }
+
+            var orderAttributes = await _orderAttributesRepository.GetAsync(componentModel.Token, componentModel.Language);
+
+            if (orderAttributes is not null)
+            {
+                viewModel.OrderAttributes = orderAttributes.Select(x => new OrderAttributeViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Type = x.Type,
+                    Value = null,
+                    IsRequired = x.IsRequired,
+                    Options = x.Options.Select(x => new OrderAttributeOptionViewModel
+                    {
+                        Name = x.Name,
+                        Value = x.Value
+                    })
+                });
             }
 
             return viewModel;
