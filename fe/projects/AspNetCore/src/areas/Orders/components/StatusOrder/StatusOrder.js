@@ -12,6 +12,7 @@ import moment from "moment";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import Files from "../../../../shared/components/Files/Files";
 import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
+import DynamicForm from "../../../../shared/components/DynamicForm/DynamicForm";
 
 function StatusOrder(props) {
     const [state, dispatch] = useContext(Context);
@@ -71,7 +72,7 @@ function StatusOrder(props) {
         <section className="section status-order">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
-                <div className="column">
+                <div className="column is-one-third">
                     {props.deliveryAddress &&
                         <div className="field">
                             <InputLabel id="delivery-address-label">{props.deliveryAddressLabel}: {props.deliveryAddress}</InputLabel>

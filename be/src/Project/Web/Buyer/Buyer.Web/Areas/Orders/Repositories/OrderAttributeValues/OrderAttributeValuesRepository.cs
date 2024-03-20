@@ -1,7 +1,7 @@
-﻿using Buyer.Web.Areas.Orders.DomainModels;
+﻿using Buyer.Web.Areas.Orders.ApiRequestModels;
+using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;
-using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
@@ -12,44 +12,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Orders.Repositories.OrderAttributes
+namespace Buyer.Web.Areas.Orders.Repositories.OrderAttributeValues
 {
-    public class OrderAttributesRepository : IOrderAttributesRepository
+    public class OrderAttributeValuesRepository : IOrderAttributeValuesRepository
     {
         private readonly IApiClientService _apiClientService;
         private readonly IOptions<AppSettings> _options;
 
-        public OrderAttributesRepository(
-            IApiClientService apiClientService, 
+        public OrderAttributeValuesRepository(
+            IApiClientService apiClientService,
             IOptions<AppSettings> options)
         {
             _apiClientService = apiClientService;
             _options = options;
         }
 
-        public async Task<IEnumerable<OrderAttribute>> GetAsync(string token, string language)
+        public async Task<IEnumerable<OrderAttributeValue>> GetAsync(string token, string language, Guid? orderId)
         {
-            var requestModel = new PagedRequestModelBase
+            var requestModel = new PagedOrderAttributeValuesRequestModel
             {
+                OrderId = orderId,
                 PageIndex = PaginationConstants.DefaultPageIndex,
                 ItemsPerPage = PaginationConstants.DefaultPageSize
             };
 
-            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            var apiRequest = new ApiRequest<PagedOrderAttributeValuesRequestModel>
             {
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{_options.Value.OrderUrl}{ApiConstants.Order.OrderAttributesApiEndpoint}"
+                EndpointAddress = $"{_options.Value.OrderUrl}{ApiConstants.Order.OrderAttributeValuesApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<OrderAttribute>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedOrderAttributeValuesRequestModel>, PagedOrderAttributeValuesRequestModel, PagedResults<IEnumerable<OrderAttributeValue>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
-                var orderAttributes = new List<OrderAttribute>();
+                var attributesValues = new List<OrderAttributeValue>();
 
-                orderAttributes.AddRange(response.Data.Data);
+                attributesValues.AddRange(response.Data.Data);
 
                 int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
 
@@ -57,7 +58,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.OrderAttributes
                 {
                     apiRequest.Data.PageIndex = i;
 
-                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<OrderAttribute>>>(apiRequest);
+                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedOrderAttributeValuesRequestModel>, PagedOrderAttributeValuesRequestModel, PagedResults<IEnumerable<OrderAttributeValue>>>(apiRequest);
 
                     if (!nextPagesResponse.IsSuccessStatusCode)
                     {
@@ -66,11 +67,11 @@ namespace Buyer.Web.Areas.Orders.Repositories.OrderAttributes
 
                     if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Count() > 0)
                     {
-                        orderAttributes.AddRange(nextPagesResponse.Data.Data);
+                        attributesValues.AddRange(nextPagesResponse.Data.Data);
                     }
                 }
 
-                return orderAttributes;
+                return attributesValues;
             }
 
             return default;

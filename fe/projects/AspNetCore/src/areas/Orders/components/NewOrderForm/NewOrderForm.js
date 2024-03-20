@@ -213,6 +213,16 @@ function NewOrderForm(props) {
             hasCustomOrder
         };
 
+        if (formData != null) {
+            order = {
+                ...order,
+                attributesValues: Object.entries(formData).map((attributeEntry) => ({ 
+                    attributeId: attributeEntry[0],
+                    value: attributeEntry[1]
+                }))
+            }
+        }
+
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
@@ -323,7 +333,7 @@ function NewOrderForm(props) {
     }
 
     const disabledActionButtons = orderItems.length === 0 ? !customOrder ? true : false : false;
-    
+
     return (
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -362,13 +372,6 @@ function NewOrderForm(props) {
                         </div>
                     </div>
                 </div>
-            }
-            {props.orderAttributes && props.orderAttributes.length > 0 && 
-                <DynamicForm 
-                    dynamicFields={props.orderAttributes}
-                    setFormData={setFormData}
-                    formData={formData}
-                />
             }
             <div className="is-modern-form">
                 <Fragment>
@@ -489,6 +492,17 @@ function NewOrderForm(props) {
                             )}
                         </div>
                 </Fragment>
+                {props.orderAttributes && props.orderAttributes.length > 0 && 
+                    <div className="columns is-desktop">
+                        <div className="column is-one-third">
+                            <DynamicForm 
+                                dynamicFields={props.orderAttributes}
+                                setFormData={setFormData}
+                                formData={formData}
+                            />
+                        </div>
+                    </div>
+                }
                 <div className="field">
                     <NoSsr>
                         <FormControlLabel 

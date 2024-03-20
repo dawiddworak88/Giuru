@@ -39,8 +39,9 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string DeliveryAddress { get; set; }
         public string BillingAddressLabel { get; set; }
         public string BillingAddress { get; set; }
+        public FilesViewModel Attachments { get; set; }
         public IEnumerable<ListItemViewModel> OrderStatuses { get; set; }
         public IEnumerable<OrderItemViewModel> OrderItems { get; set; }
-        public FilesViewModel Attachments { get; set; }
+        public IEnumerable<OrderAttributeViewModel> OrderAttributes { get; set; }
     }
 }

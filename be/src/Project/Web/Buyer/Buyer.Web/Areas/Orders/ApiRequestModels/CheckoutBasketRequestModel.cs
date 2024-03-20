@@ -13,5 +13,6 @@ namespace Buyer.Web.Areas.Orders.ApiRequestModels
         public string MoreInfo { get; set; }
         public bool HasCustomOrder { get; set; }
         public IEnumerable<AttachmentRequestModel> Attachments { get; set; }
+        public IEnumerable<AttributeValueRequestModel> AttributesValues { get; set; }
     }
 }

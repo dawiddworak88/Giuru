@@ -101,7 +101,7 @@ function EditOrderForm(props) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="column">
+                                <div className="column p-0">
                                     {props.deliveryAddress &&
                                         <div className="field">
                                             <InputLabel id="delivery-address-label">{props.deliveryAddressLabel}: {props.deliveryAddress}</InputLabel>
