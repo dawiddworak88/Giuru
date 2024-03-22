@@ -113,6 +113,7 @@ namespace Ordering.Api.Services.OrderAttributes
                     Name = x.AttributeTranslations?.FirstOrDefault(t => t.AttributeId == x.Id && t.Language == model.Language && t.IsActive)?.Name ?? x.AttributeTranslations.FirstOrDefault(t => t.AttributeId == x.Id && t.IsActive)?.Name,
                     Type = x.Type,
                     IsRequired = x.IsRequired,
+                    IsOrderItemAttribute = x.IsOrderItemAttribute,
                     OrderAttributeOptions = attributeOptions.Where(y => y.AttributeOptionSetId == x.AttributeOptionSetId).Select(y => new AttributeOptionServiceModel
                     {
                         Name = attributeOptionsTranslations?.FirstOrDefault(t => t.AttributeOptionId == y.Id && t.Language == model.Language)?.Name ?? attributeOptionsTranslations?.FirstOrDefault(t => t.AttributeOptionId == y.Id)?.Name,
@@ -152,6 +153,7 @@ namespace Ordering.Api.Services.OrderAttributes
                 Name = orderAttributeTranslation.Name,
                 Type = orderAttribute.Type,
                 IsRequired = orderAttribute.IsRequired,
+                IsOrderItemAttribute = orderAttribute.IsOrderItemAttribute,
                 OrderAttributeOptions = orderAttributeOptions.Select(x => new AttributeOptionServiceModel
                 {
                     Name = orderAttributeOptionsTranslations.FirstOrDefault(x => x.AttributeOptionId == x.Id && x.Language == model.Language && x.IsActive)?.Name ?? orderAttributeOptionsTranslations?.FirstOrDefault(x => x.AttributeOptionId == x.Id && x.IsActive)?.Name,
@@ -193,8 +195,9 @@ namespace Ordering.Api.Services.OrderAttributes
                 await _context.AttributeTranslations.AddAsync(newOrderAttributeTranslation.FillCommonProperties());
             }
 
-            orderAttribute.IsRequired = model.IsRequired;
             orderAttribute.Type = model.Type;
+            orderAttribute.IsRequired = model.IsRequired;
+            orderAttribute.IsOrderItemAttribute = model.IsOrderItemAttribute;
             orderAttribute.LastModifiedDate = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();

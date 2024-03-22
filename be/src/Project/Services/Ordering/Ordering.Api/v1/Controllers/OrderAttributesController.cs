@@ -74,6 +74,7 @@ namespace Ordering.Api.v1.Controllers
                         Name = x.Name,
                         Type = x.Type,
                         IsRequired = x.IsRequired,
+                        IsOrderItemAttribute = x.IsOrderItemAttribute,
                         Options = x.OrderAttributeOptions.Select(y => new AttributeOptionResponseModel
                         {
                             Name = y.Name,
@@ -112,6 +113,7 @@ namespace Ordering.Api.v1.Controllers
                     Name = request.Name,
                     Type = request.Type,
                     IsRequired = request.IsRequired,
+                    IsOrderItemAttribute = request.IsOrderItemAttribute,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -136,6 +138,7 @@ namespace Ordering.Api.v1.Controllers
                     Name = request.Name,
                     Type = request.Type,
                     IsRequired = request.IsRequired,
+                    IsOrderItemAttribute = request.IsOrderItemAttribute,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -192,6 +195,7 @@ namespace Ordering.Api.v1.Controllers
                         Name = orderAttribute.Name,
                         Type = orderAttribute.Type,
                         IsRequired = orderAttribute.IsRequired,
+                        IsOrderItemAttribute = orderAttribute.IsOrderItemAttribute,
                         Options = orderAttribute.OrderAttributeOptions.Select(x => new AttributeOptionResponseModel
                         {
                             Name = x.Name,

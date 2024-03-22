@@ -10,8 +10,10 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string Title { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
+        public bool IsOrderItemAttribute { get; set; }
         public string NameLabel { get; set; }
         public string TypeLabel { get; set; }
+        public string OrderItemAttributeLabel { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string FieldRequiredErrorMessage { get; set; }
         public string SaveText { get; set; }

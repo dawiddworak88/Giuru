@@ -45,6 +45,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 OrderAttributesUrl = _linkGenerator.GetPathByAction("Index", "OrderAttributes", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveUrl = _linkGenerator.GetPathByAction("Index", "OrderAttributesApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 EditUrl = _linkGenerator.GetPathByAction("Edit", "OrderAttribute", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                OrderItemAttributeLabel = "Czy jest to atrybut dla zamawianego produktu",
                 Types = new List<OrderAttributeTypeViewModel>()
                 {
                     new() { Value = "text", Text = _globalLocalizer.GetString("String") },
@@ -64,6 +65,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 {
                     viewModel.Name = orderAttribute.Name;
                     viewModel.Type = orderAttribute.Type;
+                    viewModel.IsOrderItemAttribute = orderAttribute.IsOrderItemAttribute;
                 }
             }
 

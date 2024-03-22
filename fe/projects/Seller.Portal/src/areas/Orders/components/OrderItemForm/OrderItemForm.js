@@ -8,12 +8,14 @@ import {
 } from "@mui/material";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import OrderItemStatusChanges from "../../../../shared/components/OrderItemStatusChanges/OrderItemStatusChanges";
+import DynamicForm from "../../../../shared/components/DynamicForm/DynamicForm";
 
 const OrderItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [orderItemStatusId, setOrderItemStatusId] = useState(props.orderItemStatusId ? props.orderItemStatusId : "");
     const [expectedDateOfProductOnStock, setExpectedDateOfProductOnStock] = useState(props.expectedDateOfProductOnStock ? props.expectedDateOfProductOnStock : "");
     const [orderItemStatusChanges, setOrderItemStatusChanges] = useState(props.statusChanges ? props.statusChanges : []);
+    const [formData, setFormData] = useState(props.formData ? props.formData : null);
 
     const handleSubmitForm = (e) => {
         e.preventDefault();
@@ -200,6 +202,13 @@ const OrderItemForm = (props) => {
                                 onChange={(e) => setExpectedDateOfProductOnStock(e.target.value)}
                             />
                         </div>
+                        {props.orderAttributes && props.orderAttributes.length > 0 &&
+                            <DynamicForm 
+                                dynamicFields={props.orderAttributes}
+                                formData={formData}
+                                setFormData={setFormData}
+                            />
+                        }
                         <div className="field">
                             <Button 
                                 type="submit" 

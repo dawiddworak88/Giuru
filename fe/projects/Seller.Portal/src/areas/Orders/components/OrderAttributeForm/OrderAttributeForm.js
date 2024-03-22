@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import useForm from "../../../../shared/helpers/forms/useForm";
 import { 
     TextField, Button, InputLabel, CircularProgress, 
-    FormControl, Select, FormHelperText, MenuItem
+    FormControl, Select, FormHelperText, MenuItem,
+    NoSsr, FormControlLabel, Switch
 } from "@mui/material";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import { Context } from "../../../../shared/stores/Store";
@@ -15,7 +16,8 @@ const OrderAttributeForm = (props) => {
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : null, error: "" },
-        type: { value: props.types ? props.types.find(type => type.value == props.type) : null, error: ""}
+        type: { value: props.types ? props.types.find(type => type.value == props.type) : null, error: ""},
+        isOrderItemAttribute: { value: props.isOrderItemAttribute ? props.isOrderItemAttribute : false }
     };
 
     const stateValidatorSchema = {
@@ -39,7 +41,8 @@ const OrderAttributeForm = (props) => {
         const requestPayload = {
             id: state.id,
             name: state.name,
-            type: state.type ? state.type.value : null
+            type: state.type ? state.type.value : null,
+            isOrderItemAttribute: state.isOrderItemAttribute
         }
         
         const requestOptions = {
@@ -81,7 +84,7 @@ const OrderAttributeForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, type } = values;
+    const { id, name, type, isOrderItemAttribute } = values;
 
     return (
         <section className="section section-small-padding">
@@ -125,6 +128,18 @@ const OrderAttributeForm = (props) => {
                                     <FormHelperText>{errors.type}</FormHelperText>
                                 )}
                             </FormControl>
+                        </div>
+                        <div className="field">
+                            <NoSsr>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            onChange={e => setFieldValue({name: "isOrderItemAttribute", value: e.target.checked})}
+                                            checked={isOrderItemAttribute}
+                                            color="secondary" />
+                                        }
+                                    label={props.orderItemAttributeLabel} />
+                            </NoSsr>
                         </div>
                         <div className="field">
                             <Button 
