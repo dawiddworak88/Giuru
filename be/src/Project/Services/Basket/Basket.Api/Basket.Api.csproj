@@ -14,8 +14,8 @@
 	<PackageReference Include="AspNetCore.HealthChecks.Redis" Version="8.0.0" />
 	<PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="8.0.0" />
 	<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.0" />
-	<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.1" />
+	<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.3" />
     <PackageReference Include="FluentValidation" Version="11.9.0" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
