@@ -41,13 +41,14 @@ namespace Ordering.Api.v1.Controllers
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
+        /// <param name="forOrderItems">Set to null to get all attributes including attributes for order items. Set to false to get order attributes. Set to true to get order item attributes only.</param>
         /// <param name="orderBy">The optional order by.</param>
         /// <returns>The list of order attributes.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
+        public IActionResult Get(string searchTerm, int? pageIndex, int? itemsPerPage, bool? forOrderItems, string orderBy)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -56,6 +57,7 @@ namespace Ordering.Api.v1.Controllers
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
+                ForOrderItems = forOrderItems,
                 OrderBy = orderBy,
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,

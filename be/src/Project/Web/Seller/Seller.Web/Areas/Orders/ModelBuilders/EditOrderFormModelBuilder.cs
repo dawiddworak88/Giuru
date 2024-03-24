@@ -149,7 +149,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 
                     viewModel.OrderItemsStatuses = orderItemsStatuses;
 
-                    var orderAttributes = await _orderAttributesRepository.GetAsync(componentModel.Token, componentModel.Language);
+                    var orderAttributes = await _orderAttributesRepository.GetAsync(componentModel.Token, componentModel.Language, false);
 
                     if (orderAttributes is not null)
                     {

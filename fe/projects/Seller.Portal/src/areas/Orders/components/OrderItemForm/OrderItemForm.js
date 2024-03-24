@@ -22,10 +22,21 @@ const OrderItemForm = (props) => {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        const requestPayload = {
+        let requestPayload = {
             id: props.id,
+            orderId: props.orderId,
             orderItemStatusId,
             expectedDateOfProductOnStock
+        }
+
+        if (formData != null) {
+            requestPayload = {
+                ...requestPayload,
+                attributesValues: Object.entries(formData).map((attributeEntry) => ({ 
+                    attributeId: attributeEntry[0],
+                    value: attributeEntry[1]
+                }))
+            }
         }
 
         const requestOptions = {

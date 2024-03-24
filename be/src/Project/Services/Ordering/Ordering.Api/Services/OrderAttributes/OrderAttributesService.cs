@@ -85,6 +85,11 @@ namespace Ordering.Api.Services.OrderAttributes
                 orderAttributes = orderAttributes.Where(x => x.AttributeTranslations.Any(y => y.Name.StartsWith(model.SearchTerm)));
             }
 
+            if (model.ForOrderItems is not null)
+            {
+                orderAttributes = orderAttributes.Where(x => x.IsOrderItemAttribute == model.ForOrderItems);
+            }
+
             orderAttributes = orderAttributes.ApplySort(model.OrderBy);
 
             PagedResults<IEnumerable<Infrastructure.Attributes.Entities.Attribute>> pagedResults;

@@ -53,12 +53,13 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributes
             }
         }
 
-        public async Task<IEnumerable<OrderAttribute>> GetAsync(string token, string language)
+        public async Task<IEnumerable<OrderAttribute>> GetAsync(string token, string language, bool? forOrderItems)
         {
-            var requestModel = new PagedRequestModelBase
+            var requestModel = new PagedOrderAttributesRequestModel
             {
                 PageIndex = PaginationConstants.DefaultPageIndex,
-                ItemsPerPage = PaginationConstants.DefaultPageSize
+                ItemsPerPage = PaginationConstants.DefaultPageSize,
+                ForOrderItems = forOrderItems
             };
 
             var apiRequest = new ApiRequest<PagedRequestModelBase>

@@ -82,6 +82,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 if (orderItem is not null)
                 {
                     viewModel.Id = orderItem.Id;
+                    viewModel.OrderId = orderItem.OrderId;
                     viewModel.ProductName = orderItem.ProductName;
                     viewModel.ProductSku = orderItem.ProductSku;
                     viewModel.OrderItemStatusId = orderItem.OrderItemStatusId;
@@ -101,7 +102,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                         viewModel.CanCancelOrderItem = true;
                     }
 
-                    var orderAttributes = await _orderAttributesRepository.GetAsync(componentModel.Token, componentModel.Language);
+                    var orderAttributes = await _orderAttributesRepository.GetAsync(componentModel.Token, componentModel.Language, true);
 
                     if (orderAttributes is not null)
                     {
