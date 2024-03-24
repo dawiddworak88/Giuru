@@ -55,7 +55,9 @@ const DynamicForm = ({
                             variant="standard"
                             value={formData[field.id] || ''}
                             onChange={(e) => handleChange(field.id, e.target.value)}
-                            readOnly={readOnly}
+                            InputProps={{
+                                readOnly
+                            }}
                         />
                     )}
                     {field.type === "boolean" && (
@@ -68,7 +70,10 @@ const DynamicForm = ({
                                         id={field.id}
                                         name={field.name}
                                         readOnly={readOnly}
-                                        color="secondary" />
+                                        color="secondary" 
+                                        inputProps={{
+                                            readOnly
+                                        }}/>
                                     }
                                 label={field.name} />
                         </NoSsr>
@@ -80,7 +85,6 @@ const DynamicForm = ({
                                 id={field.id}
                                 value={formData[field.id] || ''}
                                 label={field.name}
-                                readOnly={readOnly}
                                 onChange={(e) => handleChange(field.id, e.target.value)}
                             >
                                 {field.options.map(option => (
