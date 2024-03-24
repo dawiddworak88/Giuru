@@ -52,6 +52,7 @@ namespace Ordering.Api.Services.OrderAttributeValues
                     var newValue = new AttributeValue
                     {
                         OrderId = model.OrderId.Value,
+                        OrderItemId = attributeValue.OrderItemId,
                         AttributeId = attributeValue.AttributeId.Value,
                     };
 
@@ -134,6 +135,7 @@ namespace Ordering.Api.Services.OrderAttributeValues
                     Id = x.Id,
                     Value = x.AttributeValueTranslations?.FirstOrDefault(t => t.Language == model.Language && t.AttributeValueId == x.Id && t.IsActive)?.Value ?? x.AttributeValueTranslations?.FirstOrDefault(x => x.IsActive)?.Value,
                     AttributeId = x.AttributeId,
+                    OrderItemId = x.OrderItemId,
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
                 })

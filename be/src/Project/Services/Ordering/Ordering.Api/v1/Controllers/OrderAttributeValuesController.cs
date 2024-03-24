@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Ordering.Api.Services.OrderAttributeValues;
 using Ordering.Api.ServicesModels;
 using Ordering.Api.v1.RequestModels;
+using Ordering.Api.v1.ResponseModels;
 using Ordering.Api.Validators;
 using System;
 using System.Collections.Generic;
@@ -67,9 +68,9 @@ namespace Ordering.Api.v1.Controllers
 
             if (attributeValues is not null)
             {
-                var response = new PagedResults<IEnumerable<OrderAttributeValueServiceModel>>(attributeValues.Total, attributeValues.PageSize)
+                var response = new PagedResults<IEnumerable<OrderAttributeValueResponseModel>>(attributeValues.Total, attributeValues.PageSize)
                 {
-                    Data = attributeValues.Data.OrEmptyIfNull().Select(x => new OrderAttributeValueServiceModel
+                    Data = attributeValues.Data.OrEmptyIfNull().Select(x => new OrderAttributeValueResponseModel
                     {
                         Id = x.Id,
                         Value = x.Value,
@@ -105,6 +106,7 @@ namespace Ordering.Api.v1.Controllers
                 Values = request.Values.OrEmptyIfNull().Select(x => new CreateOrderAttributeValueServiceModel
                 {
                     AttributeId = x.AttributeId,
+                    OrderItemId = x.OrderItemId,
                     Value = x.Value
                 }),
                 Language = CultureInfo.CurrentCulture.Name,

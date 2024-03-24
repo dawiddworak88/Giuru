@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Ordering.Api.ServicesModels
+namespace Ordering.Api.v1.ResponseModels
 {
-    public class OrderAttributeValueServiceModel
+    public class OrderAttributeValueResponseModel
     {
         public Guid? Id { get; set; }
         public string Value { get; set; }
