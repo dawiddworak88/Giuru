@@ -10,6 +10,7 @@ using Ordering.Api.IntegrationEvents;
 using Ordering.Api.Services.OrderAttributeOptions;
 using Ordering.Api.Services.OrderAttributes;
 using Ordering.Api.Services.OrderAttributeValues;
+using Ordering.Api.Services.OrderItems;
 using Ordering.Api.Services.Orders;
 using Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers;
 using System.Reflection;
@@ -21,6 +22,7 @@ namespace Ordering.Api.DependencyInjection
         public static void RegisterOrderingApiDependencies(this IServiceCollection services)
         {
             services.AddScoped<IOrdersService, OrdersService>();
+            services.AddScoped<IOrderItemsService, OrderItemsService>();
             services.AddScoped<IOrderAttributesService, OrderAttributesService>();
             services.AddScoped<IOrderAttributeOptionsService, OrderAttributeOptionsService>();
             services.AddScoped<IOrderAttributeValuesService, OrderAttributeValuesService>();

@@ -1,6 +1,7 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Ordering.Api.Services.OrderItems;
 
 namespace Ordering.Api.v1.Controllers
 {
@@ -10,5 +11,12 @@ namespace Ordering.Api.v1.Controllers
     [ApiController]
     public class OrderItemsController : BaseApiController
     {
+        private readonly IOrderItemsService _orderItemsService;
+
+        public OrderItemsController(
+            IOrderItemsService orderItemsService)
+        {
+            _orderItemsService = orderItemsService;
+        }
     }
 }
