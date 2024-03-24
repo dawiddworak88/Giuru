@@ -12,8 +12,8 @@ using Ordering.Api.Infrastructure;
 namespace Ordering.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(OrderingContext))]
-    [Migration("20240305104826_AddedAttributes")]
-    partial class AddedAttributes
+    [Migration("20240324004730_AddedOrderAttributes")]
+    partial class AddedOrderAttributes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -214,6 +214,9 @@ namespace Ordering.Api.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("OrderItemId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("RowVersion")
