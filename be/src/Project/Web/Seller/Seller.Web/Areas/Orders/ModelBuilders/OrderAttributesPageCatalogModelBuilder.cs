@@ -58,7 +58,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 {
                     _globalLocalizer.GetString("Name"),
                     _globalLocalizer.GetString("Type"),
-                    _globalLocalizer.GetString("   "),
+                    _globalLocalizer.GetString("Czy jest dla order itema"),
                     _globalLocalizer.GetString("LastModifiedDate"),
                     _globalLocalizer.GetString("CreatedDate")
                 },
@@ -87,7 +87,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(OrderAttribute.Type).ToCamelCase(),
+                        Title = nameof(OrderAttribute.IsOrderItemAttributeText).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel

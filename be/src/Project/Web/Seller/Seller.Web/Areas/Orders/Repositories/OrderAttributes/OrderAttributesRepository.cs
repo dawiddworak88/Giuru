@@ -146,18 +146,28 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributes
                 EndpointAddress = $"{_options.Value.OrderUrl}{ApiConstants.Order.OrderAttributesApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<OrderAttribute>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<OrderAttributeApi>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
-                foreach (var responseItem in response.Data.Data.OrEmptyIfNull())
-                {
-                    responseItem.Type = MapAttributeTypeToText(responseItem.Type);
-                }
-
                 return new PagedResults<IEnumerable<OrderAttribute>>(response.Data.Total, response.Data.PageSize)
                 {
-                    Data = response.Data.Data
+                    Data = response.Data.Data.Select(x => new OrderAttribute
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Type = MapAttributeTypeToText(x.Type),
+                        IsRequired = x.IsRequired,
+                        IsOrderItemAttribute = x.IsOrderItemAttribute,
+                        IsOrderItemAttributeText = x.IsOrderItemAttribute ? _globalLocalizer.GetString("Yes") : _globalLocalizer.GetString("No"),
+                        Options = x.Options.Select(o => new OrderAttributeOptionItem
+                        {
+                            Name = o.Name,
+                            Value = o.Value
+                        }),
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
+                    })
                 };
             }
 
