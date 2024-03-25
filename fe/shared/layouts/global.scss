@@ -140,14 +140,22 @@
 .react-autosuggest__suggestions-container--open {
     display: block;
     position: absolute;
-    top: 2.5rem;
-    width: 100%;
+    top: 3.2rem;
+    left: calc(-16px + -1.6rem + -3px);
+    width: calc(100% + 268px + 3.5rem);
     margin-left: 1px;
     background-color: #fff;
     border-radius: 0 0 4px 4px;
-    z-index: 2;
+    z-index: 1;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     background-clip: padding-box;
+    padding: 0.5rem;
+}
+
+@media only screen and (max-width: $desktop) {
+    .react-autosuggest__suggestions-container--open {
+        width: calc(100% + 124px + 3.5rem);
+    }
 }
 
 .react-autosuggest__suggestions-list {
@@ -158,11 +166,13 @@
 
 .react-autosuggest__suggestion {
     cursor: pointer;
-    padding: 10px 20px 10px 0.5rem;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 4px;
 }
 
 .react-autosuggest__suggestion--highlighted {
-    background-color: lightgray;
+    background-color: $desertstorm;
 }
 
 img {
