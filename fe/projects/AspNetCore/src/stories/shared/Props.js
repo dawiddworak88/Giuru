@@ -83,6 +83,12 @@ export var header = {
       selectedLanguageText: "EN"
     }
   },
+  sidebarSearch: {
+    searchTerm: "",
+    searchUrl: "#",
+    searchLabel: "Search",
+    searchPlaceholderLabel: "Search"
+  },
   searchTerm: "",
   searchUrl: "#",
   searchLabel: "Search",

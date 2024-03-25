@@ -1,6 +1,7 @@
 @import "../../../shared/components/UserPopup/UserPopup.scss";
 @import "../../../shared/components/LanguageSwitcher/LanguageSwitcher.scss";
 @import "../../../shared/components/SidebarMobile/SidebarMobile.scss";
+@import "../../../shared/components/Search/Search.scss";
 
 .navbar {
     display: grid;
@@ -12,46 +13,6 @@
 
         &__logo {
             width: 8rem;
-        }
-    }
-
-    &__search {
-        border: 1px solid $naturalgrey;
-        outline: 1px solid $white;
-        border-radius: 4px;
-        align-items: center;
-
-        &:focus-within {
-            border-color: $blackbase;
-            outline-color: $blackbase;
-        }
-
-        &__text {
-            width: 100%;
-            padding: 0.9rem;
-            align-items: center;
-
-            &__icon {
-                padding-right: 0.7rem;
-                font-size: 0.1rem;
-            }
-
-            &__input {
-                width: 100%;
-            }
-
-            &__remove {
-                margin-left: 1rem;
-            }
-        }
-
-        &__area {
-            min-width: 225px;
-            border-left: 1px solid $naturalgrey;
-
-            &__icon {
-                padding: 0.3rem 1rem 0 1rem;
-            }
         }
     }
 
@@ -85,26 +46,6 @@
     }
 }
 
-.MuiMenuItem-root {
-    border-radius: 4px;
-
-    &:hover {
-        background-color: $desertstorm;
-    }
-}
-
-.Mui-selected {
-    background-color: $white !important;
-
-    &:hover {
-        background-color: $desertstorm !important;
-    }
-}
-
-.MuiList-root {
-    padding: 0.5rem;
-}
-
 .search-button {
     max-height: 40px;
     margin-left: 0.5rem !important;
@@ -113,15 +54,6 @@
 @media only screen and (max-width: $desktop) {
 
     .navbar {
-        &__search {
-            &__area {
-                min-width: 81px;
-    
-                &__select__text {
-                    display: none;
-                }
-            }
-        }
         
         &__actions {
             &__language {
@@ -162,6 +94,3 @@
     }
 }
 
-.react-autosuggest__suggestions-container {
-    z-index: 5;
-}
