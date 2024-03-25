@@ -39,6 +39,7 @@ namespace Ordering.Api.v1.Controllers
         /// Gets list of attributes values.
         /// </summary>
         /// <param name="orderId">The order id.</param>
+        /// <param name="orderItemId">The order item id that is available for part of the order.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
@@ -48,13 +49,14 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public IActionResult Get(Guid? orderId, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
+        public IActionResult Get(Guid? orderId, Guid? orderItemId, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetOrderAttributeValuesServiceModel
             {
                 OrderId = orderId,
+                OrderItemId = orderItemId,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,

@@ -53,31 +53,6 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
             return default;
         }
 
-        public async Task<OrderItem> GetOrderItemAsync(string token, string language, Guid? id)
-        {
-            var apiRequest = new ApiRequest<RequestModelBase>
-            {
-                Language = language,
-                Data = new RequestModelBase(),
-                AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.OrderItemsApiEndpoint}/{id}"
-            };
-
-            var response = await this.apiOrderService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OrderItem>(apiRequest);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            if (response.IsSuccessStatusCode && response.Data != null)
-            {
-                return response.Data;
-            }
-
-            return default;
-        }
-        
         public async Task<PagedResults<IEnumerable<OrderFile>>> GetOrderFilesAsync(string token, string language, Guid? id, int pageIndex, int itemsPerPage, string searchTerm, string orderBy)
         {
             var requestModel = new PagedRequestModelBase

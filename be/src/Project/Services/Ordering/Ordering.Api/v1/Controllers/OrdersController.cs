@@ -390,66 +390,6 @@ namespace Ordering.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Gets order item by id.
-        /// </summary>
-        /// <param name="id">The id.</param>
-        /// <returns>The order item.</returns>
-        [HttpGet, MapToApiVersion("1.0")]
-        [Route("orderitems/{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetOrderItem(Guid? id)
-        {
-            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-
-            var serviceModel = new GetOrderItemServiceModel
-            {
-                Id = id,
-                Language = CultureInfo.CurrentCulture.Name,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
-            };
-
-            var validator = new GetOrderItemModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
-
-            if (validationResult.IsValid)
-            {
-                var orderItem = await _ordersService.GetAsync(serviceModel);
-
-                if (orderItem is not null)
-                {
-                    var response = new OrderItemResponseModel
-                    {
-                        Id = orderItem.Id,
-                        OrderId = orderItem.OrderId,
-                        ProductId = orderItem.ProductId,
-                        ProductSku = orderItem.ProductSku,
-                        ProductName = orderItem.ProductName,
-                        PictureUrl = orderItem.PictureUrl,
-                        Quantity = orderItem.Quantity,
-                        StockQuantity = orderItem.StockQuantity,
-                        OutletQuantity = orderItem.OutletQuantity,
-                        ExternalReference = orderItem.ExternalReference,
-                        MoreInfo = orderItem.MoreInfo,
-                        OrderItemStateId = orderItem.OrderItemStateId,
-                        OrderItemStatusId = orderItem.OrderItemStatusId,
-                        OrderItemStatusName = orderItem.OrderItemStatusName,
-                        OrderItemStatusChangeComment = orderItem.OrderItemStatusChangeComment,
-                        LastOrderItemStatusChangeId = orderItem.LastOrderItemStatusChangeId,
-                        LastModifiedDate = orderItem.LastModifiedDate,
-                        CreatedDate = orderItem.CreatedDate
-                    };
-
-                    return StatusCode((int)HttpStatusCode.OK, response);
-                }
-            }
-
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
-        }
-
-        /// <summary>
         /// Gets order item statuses history by order item id.
         /// </summary>
         /// <param name="id">The id.</param>
@@ -499,7 +439,7 @@ namespace Ordering.Api.v1.Controllers
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
-        /// <summary>
+        /*/// <summary>
         ///  Updates the order item status.
         /// </summary>
         /// <returns>The updated order item status.</returns>
@@ -533,7 +473,7 @@ namespace Ordering.Api.v1.Controllers
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
-        }
+        }*/
 
         /// <summary>
         ///  Updates the order items statuses.

@@ -13,10 +13,8 @@ namespace Ordering.Api.Services.Orders
         Task CheckoutAsync(CheckoutBasketServiceModel serviceModel);
         Task<IEnumerable<OrderStatusServiceModel>> GetOrderStatusesAsync(GetOrderStatusesServiceModel serviceModel);
         Task<OrderServiceModel> SaveOrderStatusAsync(UpdateOrderStatusServiceModel serviceModel);
-        Task UpdateOrderItemStatusAsync(UpdateOrderItemStatusServiceModel model);
         Task SyncOrderItemsStatusesAsync(UpdateOrderItemsStatusesServiceModel model);
         Task SyncOrderLinesStatusesAsync(UpdateOrderLinesStatusesServiceModel model);
-        Task<OrderItemServiceModel> GetAsync(GetOrderItemServiceModel model);
         Task<OrderItemStatusChangesServiceModel> GetAsync(GetOrderItemStatusChangesServiceModel model);
         Task<PagedResults<IEnumerable<OrderFileServiceModel>>> GetOrderFilesAsync(GetOrderFilesServiceModel model);
     }

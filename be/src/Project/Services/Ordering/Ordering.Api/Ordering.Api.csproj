@@ -50,8 +50,4 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\Telemetry\Foundation.Telemetry\Foundation.Telemetry.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\NewFolder\" />
-  </ItemGroup>
-
 </Project>

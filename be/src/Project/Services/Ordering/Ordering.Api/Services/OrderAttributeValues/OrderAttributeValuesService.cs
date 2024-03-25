@@ -108,6 +108,11 @@ namespace Ordering.Api.Services.OrderAttributeValues
                 attributeValues = attributeValues.Where(x => x.OrderId == model.OrderId);
             }
 
+            if (model.OrderItemId.HasValue)
+            {
+                attributeValues = attributeValues.Where(x => x.OrderItemId == model.OrderItemId);
+            }
+
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
                 attributeValues = attributeValues.Where(x => x.AttributeValueTranslations.Any(y => y.Value.StartsWith(model.SearchTerm)));

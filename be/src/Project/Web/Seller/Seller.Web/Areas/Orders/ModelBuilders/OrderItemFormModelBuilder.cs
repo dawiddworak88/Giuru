@@ -7,6 +7,7 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.Repositories.OrderAttributes;
 using Seller.Web.Areas.Orders.Repositories.OrderAttributeValues;
+using Seller.Web.Areas.Orders.Repositories.OrderItems;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.ViewModels;
@@ -23,6 +24,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
         private readonly IOrdersRepository _ordersRepository;
+        private readonly IOrderItemsRepository _orderItemsRepository;
         private readonly IOrderAttributesRepository _orderAttributesRepository;
         private readonly IOrderAttributeValuesRepository _orderAttributeValuesRepository;
         private readonly LinkGenerator _linkGenerator;
@@ -33,6 +35,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             IOrdersRepository ordersRepository,
+            IOrderItemsRepository orderItemsRepository,
             IOrderAttributesRepository orderAttributesRepository,
             IOrderAttributeValuesRepository orderAttributeValuesRepository,
             LinkGenerator linkGenerator)
@@ -41,6 +44,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             _orderLocalizer = orderLocalizer;
             _linkGenerator = linkGenerator;
             _ordersRepository = ordersRepository;
+            _orderItemsRepository = orderItemsRepository;
             _orderItemStatusChangesModelBuilder = orderItemStatusChangesModelBuilder;
             _orderAttributesRepository = orderAttributesRepository;
             _orderAttributeValuesRepository = orderAttributeValuesRepository;
@@ -77,7 +81,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     viewModel.OrderItemStatuses = orderStatuses.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
                 }
 
-                var orderItem = await _ordersRepository.GetOrderItemAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                var orderItem = await _orderItemsRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                 if (orderItem is not null)
                 {
@@ -106,11 +110,11 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 
                     if (orderAttributes is not null)
                     {
-                        var orderAttributesValues = await _orderAttributeValuesRepository.GetAsync(componentModel.Token, componentModel.Language, orderItem.OrderId);
+                        var orderAttributesValues = await _orderAttributeValuesRepository.GetAsync(componentModel.Token, componentModel.Language, orderItem.OrderId, componentModel.Id);
 
                         viewModel.OrderAttributes = orderAttributes.Select(x =>
                         {
-                            var orderAttributeValue = orderAttributesValues.FirstOrDefault(y => y.AttributeId == x.Id);
+                            var orderAttributeValue = orderAttributesValues.FirstOrDefault(y => y.AttributeId == x.Id && y.OrderItemId == orderItem.Id);
 
                             return new OrderAttributeViewModel
                             {

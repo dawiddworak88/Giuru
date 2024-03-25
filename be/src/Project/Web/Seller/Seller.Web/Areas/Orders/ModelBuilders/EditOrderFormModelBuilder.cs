@@ -153,7 +153,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 
                     if (orderAttributes is not null)
                     {
-                        var orderAttributeValues = await _orderAttributeValuesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                        var orderAttributeValues = await _orderAttributeValuesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id, null);
 
                         viewModel.OrderAttributes = orderAttributes.Select(x =>
                         {
