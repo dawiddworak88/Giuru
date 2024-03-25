@@ -48,7 +48,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "ClientNotificationType", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "ClientNotificationType", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "ClientNotificationTypeApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "ClientNotificationTypesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ClientNotificationTypeApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(ClientNotificationType.CreatedDate)} desc";
