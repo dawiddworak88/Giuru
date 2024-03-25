@@ -99,7 +99,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.OrderItemStatusesApiEndpoint}/{id}"
+                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.OrderItemStatusChangesApiEndpoint}/{id}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OrderItemStatusChanges>(apiRequest);

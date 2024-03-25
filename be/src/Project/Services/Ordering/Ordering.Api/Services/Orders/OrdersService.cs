@@ -20,7 +20,9 @@ using Ordering.Api.Infrastructure.Orders.Entities;
 using Ordering.Api.IntegrationEvents;
 using Ordering.Api.IntegrationEventsModels;
 using Ordering.Api.Services.OrderAttributeValues;
-using Ordering.Api.ServicesModels;
+using Ordering.Api.ServicesModels.OrderAttributeValues;
+using Ordering.Api.ServicesModels.OrderItems;
+using Ordering.Api.ServicesModels.Orders;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -361,59 +363,6 @@ namespace Ordering.Api.Services.Orders
             return order;
         }
 
-        public async Task<OrderItemStatusChangesServiceModel> GetAsync(GetOrderItemStatusChangesServiceModel model)
-        {
-            var orderItem = _context.OrderItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
-
-            if (orderItem is null)
-            {
-                throw new CustomException(_orderLocalizer.GetString("OrderItemNotFound"), (int)HttpStatusCode.NotFound);
-            }
-
-            var orderItemStatusesHistory = new OrderItemStatusChangesServiceModel
-            {
-                OrderItemId = orderItem.Id,
-            };
-
-            var orderItemStatuses = _context.OrderItemStatusChanges.Where(x => x.OrderItemId == model.Id && x.IsActive).OrderByDescending(x => x.CreatedDate);
-
-            var orderItemStatusChanges = new List<OrderItemStatusChangeServiceModel>();
-
-            foreach (var orderItemStatus in orderItemStatuses.OrEmptyIfNull().ToList())
-            {
-                var orderItemStatusChange = new OrderItemStatusChangeServiceModel
-                {
-                    OrderItemStateId = orderItemStatus.OrderItemStateId,
-                    OrderItemStatusId = orderItemStatus.OrderItemStatusId,
-                    CreatedDate = orderItemStatus.CreatedDate
-                };
-
-                var orderItemStatusTranslation = _context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == orderItemStatus.OrderItemStatusId && x.Language == model.Language && x.IsActive);
-
-                if (orderItemStatusTranslation is null)
-                {
-                    orderItemStatusTranslation = _context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == orderItemStatus.OrderItemStatusId && x.IsActive);
-                }
-
-                orderItemStatusChange.OrderItemStatusName = orderItemStatusTranslation?.Name;
-
-                var orderItemStatusChangeCommentTranslation = _context.OrderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == orderItemStatus.Id && x.Language == model.Language && x.IsActive);
-
-                if (orderItemStatusChangeCommentTranslation is null)
-                {
-                    orderItemStatusChangeCommentTranslation = _context.OrderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == orderItemStatus.Id && x.IsActive);
-                }
-
-                orderItemStatusChange.OrderItemStatusChangeComment = orderItemStatusChangeCommentTranslation?.OrderItemStatusChangeComment;
-
-                orderItemStatusChanges.Add(orderItemStatusChange);
-            }
-
-            orderItemStatusesHistory.OrderItemStatusChanges = orderItemStatusChanges;
-
-            return orderItemStatusesHistory;
-        }
-
         public PagedResults<IEnumerable<OrderServiceModel>> Get(GetOrdersByIdsServiceModel model)
         {
             var orders = _context.Orders.Where(x => x.IsActive && model.Ids.Contains(x.Id));
@@ -648,50 +597,6 @@ namespace Ordering.Api.Services.Orders
             };
         }
 
-        public async Task UpdateOrderItemStatusAsync(UpdateOrderItemStatusServiceModel model)
-        {
-            var orderItem = await _context.OrderItems.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
-
-            if (orderItem is null)
-            {
-                throw new CustomException(_orderLocalizer.GetString("OrderItemNotFound"), (int)HttpStatusCode.NoContent);
-            }
-
-            var newOrderItemStatus = await _context.OrderStatuses.FirstOrDefaultAsync(x => x.Id == model.OrderItemStatusId && x.IsActive);
-
-            if (newOrderItemStatus is null)
-            {
-                throw new CustomException(_orderLocalizer.GetString("OrderStatusNotFound"), (int)HttpStatusCode.NoContent);
-            }
-
-            var orderItemStatusChange = new OrderItemStatusChange
-            {
-                OrderItemId = orderItem.Id,
-                OrderItemStateId = newOrderItemStatus.OrderStateId,
-                OrderItemStatusId = newOrderItemStatus.Id
-            };
-
-            await _context.OrderItemStatusChanges.AddAsync(orderItemStatusChange.FillCommonProperties());
-
-            if (model.OrderItemStatusChangeComment is not null)
-            {
-                var orderItemStatusChangeTranslation = new OrderItemStatusChangeCommentTranslation
-                {
-                    OrderItemStatusChangeComment = model.OrderItemStatusChangeComment,
-                    Language = model.Language,
-                    OrderItemStatusChangeId = orderItemStatusChange.Id
-                };
-
-                await _context.OrderItemStatusChangesCommentTranslations.AddAsync(orderItemStatusChangeTranslation.FillCommonProperties());
-            }
-
-            orderItem.LastOrderItemStatusChangeId = orderItemStatusChange.Id;
-            orderItem.LastModifiedDate = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-            await MapStatusesToOrderStatusId(orderItem.OrderId);
-        }
-
         private PagedResults<IEnumerable<OrderServiceModel>> GetOrdersDetails(string language, PagedResults<IEnumerable<Order>> pagedResults)
         {
             var orderStatusTranslations = _context.OrderStatusTranslations.ToList();
@@ -801,7 +706,7 @@ namespace Ordering.Api.Services.Orders
             };
         }
 
-        private async Task MapStatusesToOrderStatusId(Guid? orderId)
+        public async Task MapStatusesToOrderStatusId(Guid? orderId)
         {
             var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == orderId && x.IsActive);
 

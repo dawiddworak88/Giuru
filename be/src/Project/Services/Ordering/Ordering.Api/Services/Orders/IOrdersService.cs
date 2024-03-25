@@ -1,5 +1,7 @@
 ﻿using Foundation.GenericRepository.Paginations;
-using Ordering.Api.ServicesModels;
+using Ordering.Api.ServicesModels.OrderItems;
+using Ordering.Api.ServicesModels.Orders;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,7 +17,7 @@ namespace Ordering.Api.Services.Orders
         Task<OrderServiceModel> SaveOrderStatusAsync(UpdateOrderStatusServiceModel serviceModel);
         Task SyncOrderItemsStatusesAsync(UpdateOrderItemsStatusesServiceModel model);
         Task SyncOrderLinesStatusesAsync(UpdateOrderLinesStatusesServiceModel model);
-        Task<OrderItemStatusChangesServiceModel> GetAsync(GetOrderItemStatusChangesServiceModel model);
         Task<PagedResults<IEnumerable<OrderFileServiceModel>>> GetOrderFilesAsync(GetOrderFilesServiceModel model);
+        Task MapStatusesToOrderStatusId(Guid? orderId);
     }
 }

@@ -8,9 +8,9 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Ordering.Api.ServicesModels;
 using Ordering.Api.v1.ResponseModels;
 using Ordering.Api.Services.Orders;
+using Ordering.Api.ServicesModels.Orders;
 
 namespace Ordering.Api.v1.Controllers
 {

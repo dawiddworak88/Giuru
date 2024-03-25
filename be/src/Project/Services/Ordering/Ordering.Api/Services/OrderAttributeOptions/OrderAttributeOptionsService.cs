@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.Infrastructure.Attributes.Entities;
-using Ordering.Api.ServicesModels;
+using Ordering.Api.ServicesModels.OrderAttributeOptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

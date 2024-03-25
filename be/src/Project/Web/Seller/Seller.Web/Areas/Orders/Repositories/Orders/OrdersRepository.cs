@@ -90,32 +90,6 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
             return default;
         }
 
-
-        public async Task<OrderItemStatusChanges> GetOrderItemStatusesAsync(string token, string language, Guid? id)
-        {
-            var apiRequest = new ApiRequest<RequestModelBase>
-            {
-                Language = language,
-                Data = new RequestModelBase(),
-                AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.OrderItemStatusesApiEndpoint}/{id}"
-            };
-
-            var response = await this.apiOrderService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OrderItemStatusChanges>(apiRequest);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            if (response.IsSuccessStatusCode && response.Data != null)
-            {
-                return response.Data;
-            }
-
-            return default;
-        }
-
         public async Task<PagedResults<IEnumerable<Order>>> GetOrdersAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var ordersRequestModel = new PagedRequestModelBase
@@ -204,31 +178,6 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
             }
 
             return default;
-        }
-
-        public async Task UpdateOrderItemStatusAsync(string token, string language, Guid id, Guid orderItemStatusId, string expectedDateOfProductOnStock)
-        {
-            var requestModel = new UpdateOrderItemStatusRequestModel
-            {
-                Id = id,
-                OrderItemStatusId = orderItemStatusId,
-                ExpectedDateOfProductOnStock = expectedDateOfProductOnStock
-            };
-
-            var apiRequest = new ApiRequest<UpdateOrderItemStatusRequestModel>
-            {
-                Language = language,
-                Data = requestModel,
-                AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.UpdateOrderItemStatusApiEndpoint}"
-            };
-
-            var response = await this.apiOrderService.PostAsync<ApiRequest<UpdateOrderItemStatusRequestModel>, UpdateOrderItemStatusRequestModel, BaseResponseModel>(apiRequest);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
         }
     }
 }

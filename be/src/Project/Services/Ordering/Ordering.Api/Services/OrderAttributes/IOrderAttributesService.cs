@@ -1,5 +1,5 @@
 ﻿using Foundation.GenericRepository.Paginations;
-using Ordering.Api.ServicesModels;
+using Ordering.Api.ServicesModels.OrderAttributes;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

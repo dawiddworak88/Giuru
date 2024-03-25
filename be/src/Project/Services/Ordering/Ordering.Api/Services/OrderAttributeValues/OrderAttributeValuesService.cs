@@ -5,7 +5,7 @@ using Foundation.GenericRepository.Paginations;
 using Microsoft.EntityFrameworkCore;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.Infrastructure.Attributes.Entities;
-using Ordering.Api.ServicesModels;
+using Ordering.Api.ServicesModels.OrderAttributeValues;
 using System;
 using System.Collections.Generic;
 using System.Linq;

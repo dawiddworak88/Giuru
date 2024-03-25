@@ -100,10 +100,10 @@
         {
             public static readonly string OrdersApiEndpoint = "/api/v1/orders";
             public static readonly string OrderItemsApiEndpoint = "/api/v1/orderitems";
-            public static readonly string OrderItemStatusesApiEndpoint = "/api/v1/orders/orderitemstatuses";
+            public static readonly string OrderItemStatusChangesApiEndpoint = "/api/v1/orderitems/statuschanges";
             public static readonly string OrderStatusesApiEndpoint = "/api/v1/orderstatuses";
             public static readonly string UpdateOrderStatusApiEndpoint = "/api/v1/orders/orderstatus";
-            public static readonly string UpdateOrderItemStatusApiEndpoint = "/api/v1/orders/orderitemstatus";
+            public static readonly string UpdateOrderItemStatusApiEndpoint = "/api/v1/orderitems/status";
             public static readonly string OrderFilesApiEndpoint = "/api/v1/orders/files";
             public static readonly string OrderAttributesApiEndpoint = "/api/v1/orderattributes";
             public static readonly string OrderAttributeOptionsApiEndpoint = "/api/v1/orderattributeoptions";

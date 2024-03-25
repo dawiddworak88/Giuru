@@ -62,14 +62,14 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 SaveText = _globalLocalizer.GetString("SaveText"),
                 NavigateToOrderLabel = _orderLocalizer.GetString("NavigateToOrder"),
                 ExpectedDateOfProductOnStockLabel = _orderLocalizer.GetString("ExpectedDateOfProductOnStock"),
-                SaveUrl = _linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveUrl = _linkGenerator.GetPathByAction("Index", "OrderItemsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 QuantityLabel = _orderLocalizer.GetString("QuantityLabel"),
                 OutletQuantityLabel = _orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = _orderLocalizer.GetString("StockQuantityLabel"),
                 ExternalReferenceLabel = _orderLocalizer.GetString("ExternalReferenceLabel"),
                 MoreInfoLabel = _orderLocalizer.GetString("MoreInfoLabel"),
                 CancelOrderItemLabel = _orderLocalizer.GetString("CancelOrder"),
-                CancelOrderItemStatusUrl = _linkGenerator.GetPathByAction("CancelOrderItem", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                CancelOrderItemStatusUrl = _linkGenerator.GetPathByAction("Cancel", "OrderItemsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             if (componentModel.Id.HasValue)
@@ -110,18 +110,18 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 
                     if (orderAttributes is not null)
                     {
-                        var orderAttributesValues = await _orderAttributeValuesRepository.GetAsync(componentModel.Token, componentModel.Language, orderItem.OrderId, componentModel.Id);
+                        var orderItemAttributesValues = await _orderAttributeValuesRepository.GetAsync(componentModel.Token, componentModel.Language, orderItem.OrderId, componentModel.Id);
 
                         viewModel.OrderAttributes = orderAttributes.Select(x =>
                         {
-                            var orderAttributeValue = orderAttributesValues.FirstOrDefault(y => y.AttributeId == x.Id && y.OrderItemId == orderItem.Id);
+                            var orderItemAttributeValue = orderItemAttributesValues.FirstOrDefault(y => y.AttributeId == x.Id);
 
                             return new OrderAttributeViewModel
                             {
                                 Id = x.Id,
                                 Name = x.Name,
                                 Type = x.Type,
-                                Value = orderAttributeValue?.Value,
+                                Value = orderItemAttributeValue?.Value,
                                 IsRequired = x.IsRequired,
                                 Options = x.Options.Select(x => new OrderAttributeOptionViewModel
                                 {
@@ -135,7 +135,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 
                 if (orderItem.LastOrderItemStatusChangeId is not null)
                 {
-                    var orderItemStatusChanges = await _ordersRepository.GetOrderItemStatusesAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                    var orderItemStatusChanges = await _orderItemsRepository.GetStatusChangesAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                     if (orderItemStatusChanges is not null)
                     {
