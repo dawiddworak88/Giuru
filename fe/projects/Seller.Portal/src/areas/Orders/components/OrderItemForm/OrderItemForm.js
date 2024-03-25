@@ -225,7 +225,7 @@ const OrderItemForm = (props) => {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || props.orderItemStatusId === orderItemStatusId}>
+                                disabled={state.isLoading}>
                                 {props.saveText}
                             </Button>
                             <a href={props.orderUrl} className="ml-2 button is-text">{props.navigateToOrderLabel}</a>

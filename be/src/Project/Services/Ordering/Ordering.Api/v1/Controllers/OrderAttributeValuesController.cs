@@ -105,10 +105,10 @@ namespace Ordering.Api.v1.Controllers
             var serviceModel = new CreateBatchOrderAttributeValuesServiceModel
             {
                 OrderId = request.OrderId,
+                OrderItemId = request.OrderItemId,
                 Values = request.Values.OrEmptyIfNull().Select(x => new CreateOrderAttributeValueServiceModel
                 {
                     AttributeId = x.AttributeId,
-                    OrderItemId = x.OrderItemId,
                     Value = x.Value
                 }),
                 Language = CultureInfo.CurrentCulture.Name,

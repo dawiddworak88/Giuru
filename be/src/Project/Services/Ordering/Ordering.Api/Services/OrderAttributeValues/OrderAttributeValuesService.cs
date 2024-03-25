@@ -52,7 +52,7 @@ namespace Ordering.Api.Services.OrderAttributeValues
                     var newValue = new AttributeValue
                     {
                         OrderId = model.OrderId.Value,
-                        OrderItemId = attributeValue.OrderItemId,
+                        OrderItemId = model.OrderItemId,
                         AttributeId = attributeValue.AttributeId.Value,
                     };
 

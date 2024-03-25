@@ -6,8 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.ApiRequestModels;
 using Seller.Web.Areas.Orders.Definitions;
+using Seller.Web.Areas.Orders.DomainModels;
+using Seller.Web.Areas.Orders.Repositories.OrderAttributeValues;
 using Seller.Web.Areas.Orders.Repositories.OrderItems;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -18,13 +21,16 @@ namespace Seller.Web.Areas.Orders.ApiControllers
     {
         private readonly IOrderItemsRepository _orderItemsRepository;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly IOrderAttributeValuesRepository _orderAttributeValuesRepository;
 
         public OrderItemsApiController(
             IOrderItemsRepository orderItemsRepository, 
-            IStringLocalizer<OrderResources> orderLocalizer)
+            IStringLocalizer<OrderResources> orderLocalizer,
+            IOrderAttributeValuesRepository orderAttributeValuesRepository)
         {
             _orderItemsRepository = orderItemsRepository;
             _orderLocalizer = orderLocalizer;
+            _orderAttributeValuesRepository = orderAttributeValuesRepository;
         }
 
         [HttpPost]
@@ -42,12 +48,23 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateStatus([FromBody] UpdateOrderItemStatusRequestModel request)
+        public async Task<IActionResult> Index([FromBody] SaveOrderItemRequestModel request)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
             await _orderItemsRepository.UpdateStatusAsync(token, language, request.Id, request.OrderItemStatusId, request.ExpectedDateOfProductOnStock);
+
+            if (request.AttributesValues is not null && 
+                request.AttributesValues.Any())
+            {
+                await _orderAttributeValuesRepository.BatchAsync(token, language, request.OrderId, request.Id,
+                    request.AttributesValues.Select(x => new ApiOrderAttributeValue
+                    {
+                        AttributeId = x.AttributeId,
+                        Value = x.Value
+                    }));
+            }
 
             var orderItemStatusChanges = await _orderItemsRepository.GetStatusChangesAsync(token, language, request.Id);
 

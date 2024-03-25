@@ -5,7 +5,6 @@ namespace Ordering.Api.v1.RequestModels
     public class BatchOrderAttributeValueRequestModel
     {
         public Guid? AttributeId { get; set; }
-        public Guid? OrderItemId { get; set; }
         public string Value { get; set; }
     }
 }

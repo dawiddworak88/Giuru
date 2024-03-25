@@ -29,11 +29,12 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributeValues
             _options = options;
         }
 
-        public async Task BatchAsync(string token, string language, Guid? orderId, IEnumerable<ApiOrderAttributeValue> values)
+        public async Task BatchAsync(string token, string language, Guid? orderId, Guid? orderItemId, IEnumerable<ApiOrderAttributeValue> values)
         {
             var requestModel = new OrderAttributeValuesRequestModel
             {
                 OrderId = orderId,
+                OrderItemId = orderItemId,
                 Values = values.Select(x => new OrderAttributeValueRequestModel
                 {
                     AttributeId = x.AttributeId,
@@ -46,7 +47,7 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributeValues
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{_options.Value.OrderUrl}{ApiConstants.Order.OrderAttributeValuesApiEndpoint}"
+                EndpointAddress = $"{_options.Value.OrderUrl}{ApiConstants.Order.BatchOrderAttributeValuesApiEndpoint}"
             };
 
             var response = await _apiClientService.PostAsync<ApiRequest<OrderAttributeValuesRequestModel>, OrderAttributeValuesRequestModel, BaseResponseModel>(apiRequest);
