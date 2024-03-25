@@ -21,6 +21,8 @@ using Ordering.Api.v1.RequestModels;
 using Ordering.Api.Services.Orders;
 using Ordering.Api.Validators.Orders;
 using Ordering.Api.ServicesModels.Orders;
+using Ordering.Api.ServicesModels.OrderItems;
+using Ordering.Api.Validators.OrderItems;
 
 namespace Ordering.Api.v1.Controllers
 {

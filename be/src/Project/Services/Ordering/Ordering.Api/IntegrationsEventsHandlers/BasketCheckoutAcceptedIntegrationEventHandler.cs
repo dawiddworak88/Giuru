@@ -1,9 +1,10 @@
 ﻿using Foundation.EventBus.Abstractions;
 using Ordering.Api.IntegrationEvents;
 using Ordering.Api.Services.Orders;
-using Ordering.Api.ServicesModels;
-using Ordering.Api.Validators;
-using System;
+using Ordering.Api.ServicesModels.OrderAttributeValues;
+using Ordering.Api.ServicesModels.OrderItems;
+using Ordering.Api.ServicesModels.Orders;
+using Ordering.Api.Validators.Orders;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;

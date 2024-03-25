@@ -11,6 +11,7 @@ using Ordering.Api.Services.OrderAttributeValues;
 using Ordering.Api.ServicesModels.OrderAttributeValues;
 using Ordering.Api.v1.RequestModels;
 using Ordering.Api.v1.ResponseModels;
+using Ordering.Api.Validators.OrderAttributeValues;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
