@@ -108,6 +108,7 @@
             public static readonly string OrderAttributesApiEndpoint = "/api/v1/orderattributes";
             public static readonly string OrderAttributeOptionsApiEndpoint = "/api/v1/orderattributeoptions";
             public static readonly string OrderAttributeValuesApiEndpoint = "/api/v1/orderattributevalues";
+            public static readonly string BatchOrderAttributeValuesApiEndpoint = "/api/v1/orderattributevalues/batch";
         }
 
         public struct ContentNames
