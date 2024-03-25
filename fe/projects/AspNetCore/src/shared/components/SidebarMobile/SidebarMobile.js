@@ -6,8 +6,6 @@ import RemoveIcon from "../../Icons/Remove";
 const SidebarMobile = (props) => {
     const [open, setOpen] = useState(false);
 
-    console.log(props);
-
     return (
         <div className="sidebar">
             <Button
@@ -18,7 +16,7 @@ const SidebarMobile = (props) => {
             >
                 <MenuIcon />
             </Button>
-            <Drawer open={open} onClose={() => setOpen(!open)}>
+            <Drawer PaperProps={{sx: { width: '80%'}}} open={open} onClose={() => setOpen(!open)}>
                 <div className="sidebar__menu">
                     <div className="sidebar__menu__header is-flex is-justify-content-space-between is-align-items-center">
                         <div>
