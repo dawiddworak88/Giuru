@@ -205,6 +205,7 @@ namespace Basket.Api.v1.Controllers
                 ShippingStreet = request.ShippingStreet,
                 MoreInfo = request.MoreInfo,
                 HasCustomOrder = request.HasCustomOrder,
+                HasApprovalToSendEmail = request.HasApprovalToSendEmail,
                 Attachments = request.Attachments,
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,

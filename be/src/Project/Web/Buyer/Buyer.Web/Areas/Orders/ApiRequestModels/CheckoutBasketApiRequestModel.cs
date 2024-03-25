@@ -30,6 +30,7 @@ namespace Buyer.Web.Areas.Orders.ApiRequestModels
         public Guid? ShippingCountryId { get; set; }
         public string MoreInfo { get; set; }
         public bool HasCustomOrder { get; set; }
+        public bool HasApprovalToSendEmail { get; set; }
         public IEnumerable<Guid> Attachments { get; set; }
     }
 }

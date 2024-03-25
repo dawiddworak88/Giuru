@@ -1,5 +1,7 @@
 ﻿using Buyer.Web.Areas.Orders.ApiRequestModels;
+using Buyer.Web.Areas.Orders.Definitions;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
+using Buyer.Web.Areas.Orders.Repositories.NotificationTypeApproval;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Repositories.Clients;
 using Foundation.ApiExtensions.Controllers;
@@ -24,15 +26,18 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IBasketRepository _basketRepository;
         private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly IClientNotificationTypeApproval _clientNotificationTypeRepository;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
             IClientAddressesRepository clientAddressesRepository,
-            IStringLocalizer<OrderResources> orderLocalizer)
+            IStringLocalizer<OrderResources> orderLocalizer,
+            IClientNotificationTypeApproval clientNotificationTypeRepository)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
             _clientAddressesRepository = clientAddressesRepository;
+            _clientNotificationTypeRepository = clientNotificationTypeRepository; 
         }
 
         [HttpPost]
@@ -67,47 +72,24 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 deliveryAddressesIds.Add(model.BillingAddressId.Value);
             }
 
-            var deliveryAddresses = await _clientAddressesRepository.GetAsync(token, language, deliveryAddressesIds);
+            var clientApprovlas = await _clientNotificationTypeRepository.GetAsync(token, language, model.ClientId);
 
-            if (deliveryAddresses is not null)
-            {
-                var billingAddress = deliveryAddresses.FirstOrDefault(x => x.Id == model.BillingAddressId);
-                var deliveryAddress = deliveryAddresses.FirstOrDefault(x => x.Id == model.ShippingAddressId);
+            var clientAddresses = await _clientAddressesRepository.GetAsync(token, language, deliveryAddressesIds);
 
-                await _basketRepository.CheckoutBasketAsync(
+            await _basketRepository.CheckoutBasketAsync(
                 token,
                 language,
                 model.ClientId,
                 model.ClientName,
                 Guid.Parse(reqCookie),
-                model.BillingAddressId,
-                billingAddress?.Company,
-                billingAddress?.FirstName, 
-                billingAddress?.LastName,
-                billingAddress?.Region,
-                billingAddress?.PostCode,
-                billingAddress?.City,
-                billingAddress?.Street,
-                billingAddress?.PhoneNumber,
-                billingAddress?.CountryId,
-                model.ShippingAddressId,
-                deliveryAddress?.Company,
-                deliveryAddress?.FirstName,
-                deliveryAddress?.LastName,
-                deliveryAddress?.Region,
-                deliveryAddress?.PostCode,
-                deliveryAddress?.City,
-                deliveryAddress?.Street,
-                deliveryAddress?.PhoneNumber,
-                deliveryAddress?.CountryId,
+                clientAddresses?.FirstOrDefault(x => x.Id == model.BillingAddressId),
+                clientAddresses?.FirstOrDefault(x => x.Id == model.ShippingAddressId),
                 model.MoreInfo,
                 model.HasCustomOrder,
+                clientApprovlas.Any(x => x.NotificationTypeId == ClientNotificationTypeConstants.ApprovalToSendOrderConfirmationEmailsId),
                 model.Attachments?.Select(x => x.Id));
 
-                return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
-            }
-
-            return StatusCode((int)HttpStatusCode.BadRequest);
+            return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
         }
     }
 }

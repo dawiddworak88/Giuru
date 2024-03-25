@@ -285,4 +285,31 @@
   <data name="CancelOrderItem" xml:space="preserve">
     <value>Bestellposition stornieren</value>
   </data>
+  <data name="oc_title" xml:space="preserve">
+    <value>BESTELLBESTÄTIGUNG</value>
+  </data>
+  <data name="oc_orderedProducts" xml:space="preserve">
+    <value>Bestellte Produkte</value>
+  </data>
+  <data name="oc_name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="oc_text" xml:space="preserve">
+    <value>Wir freuen uns, Ihnen mitteilen zu können, dass Ihre Bestellung bestätigt wurde.</value>
+  </data>
+  <data name="oc_outletQuantity" xml:space="preserve">
+    <value>Ausverkaufsbestand</value>
+  </data>
+  <data name="oc_preheader" xml:space="preserve">
+    <value>Bestellung genehmigt: Überprüfen Sie die Transaktionsdetails</value>
+  </data>
+  <data name="oc_quantity" xml:space="preserve">
+    <value>Menge</value>
+  </data>
+  <data name="oc_stockQuantity" xml:space="preserve">
+    <value>Bestandsmenge</value>
+  </data>
+  <data name="oc_subject" xml:space="preserve">
+    <value>Bestellbestätigung</value>
+  </data>
 </root>
