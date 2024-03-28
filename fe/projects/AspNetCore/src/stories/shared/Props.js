@@ -83,16 +83,14 @@ export var header = {
       selectedLanguageText: "EN"
     }
   },
-  sidebarSearch: {
+  search: {
     searchTerm: "",
     searchUrl: "#",
     searchLabel: "Search",
-    searchPlaceholderLabel: "Search"
-  },
-  searchTerm: "",
-  searchUrl: "#",
-  searchLabel: "Search",
-  searchPlaceholderLabel: "Search"
+    searchPlaceholderLabel: "Search",
+    noResultText: "No results found for the searched phrase",
+    changeSearchTermText: "Unfortunately, we couldn't find what you're looking for. Please try entering a different phrase"
+  }
 };
 
 export var breadcrumbs = {
