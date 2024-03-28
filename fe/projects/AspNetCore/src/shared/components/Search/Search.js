@@ -1,7 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Autosuggest from "react-autosuggest";
 import { toast } from "react-toastify";
-import { Button, FormControl, MenuItem, Select, Drawer } from "@mui/material";
+import { Button, FormControl, MenuItem, Select, Drawer, Tabs, Tab } from "@mui/material";
 import CategoryIcon from "../../Icons/Category";
 import RemoveIcon from "../../Icons/Remove";
 import SearchIcon from "../../Icons/Search";
@@ -19,33 +19,7 @@ const Search = (props) => {
     const [searchTerm, setSearchTerm] = useState(props.searchTerm ? props.searchTerm : "");
     const [state, dispatch] = useContext(Context);
     const [open, setOpen] = useState(false);
-
-    const getSuggestionValue = (suggestion) => {
-        return suggestion;
-    };
-
-    const renderSuggestion = (suggestion) => {
-        return (
-            <div className="suggestion">
-                {suggestion && suggestion.length > 0 ?
-                    <div className="is-flex">
-                        {console.log("siema")}
-                        <div className="suggestion__icon">
-                            <SearchIcon />
-                        </div>
-                        <div className="suggestion__text">
-                            {suggestion}
-                        </div>
-                    </div>
-                    :
-                    <div className="suggestion">
-                        {console.log("lol")}
-                        No results found for the searched phrase "{searchTerm}"
-                    </div>
-                }
-            </div>
-        );
-    };
+    const [isFocused, setIsFocused] = useState(false);
 
     const onSuggestionsFetchRequested = (args) => {
         setSearchTerm(args.value);
@@ -91,9 +65,33 @@ const Search = (props) => {
         }
     };
 
+    const onSuggestionsClearRequest = () => {
+        if (searchTerm.length < 1) {
+            setSuggestions([]);
+        }
+    }
+
     const onSuggestionSelected = (event, { suggestion }) => {
         NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(suggestion));
     };
+
+    const onSidebarSuggestionSelected = (name) => {
+        NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(name));
+    };
+
+    useEffect(() => {
+        const keyDownHandler = event => {
+            if (event.key === 'Enter') {
+                onSearchSubmit(event);
+            }
+        };
+
+        document.addEventListener('keydown', keyDownHandler);
+
+        return () => {
+            document.removeEventListener('keydown', keyDownHandler);
+        }
+    }, []);
 
     const onSearchSubmit = (e) => {
         e.preventDefault();
@@ -103,19 +101,68 @@ const Search = (props) => {
         }
     };
 
+    const getSuggestionValue = (suggestion) => {
+        return suggestion;
+    };
+
+    const renderSuggestion = (suggestion) => {
+        return (
+            <div className="suggestion">
+                <div className="is-flex">
+                    <div className="suggestion__icon">
+                        <SearchIcon />
+                    </div>
+                    <div className="suggestion__text">
+                        {suggestion}
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     const searchInputProps = {
         placeholder: props.searchPlaceholderLabel,
         value: searchTerm,
         className: "search__field",
         onChange: (_, { newValue, method }) => {
             setSearchTerm(newValue)
-            setSuggestions(['Narożnik Amando', 'Narożnik Ume',]);
-        }
+        },
+        onFocus: () => setIsFocused(true),
+        onBlur: () => setIsFocused(false)
     };
+
+    const noResultInformation = (query) => {
+        return (
+            <div>
+                <div className="has-text-weight-bold p-1">{props.noResultText} "{query}"</div>
+                <div className="pl-1">{props.changeSearchTermText}</div>
+            </div>
+        )
+    }
+
+    function renderSuggestionsContainer({ containerProps, children, query }) {
+        return (
+            <div>
+                {!open &&
+                    <div>
+                        {isFocused && searchTerm && searchTerm.length > 0 &&
+                            <div {...containerProps}>
+                                {children ? children :
+                                    <div>
+                                        {noResultInformation(query)}
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        );
+    }
 
     const searchInput = () => {
         return (
-            <div className="search__text is-flex">
+            <div className={`search__text is-flex ${open ? "search__text__no-border" : ""}`}>
                 <div className="search__text__icon">
                     <SearchIcon />
                 </div>
@@ -123,14 +170,13 @@ const Search = (props) => {
                     <Autosuggest
                         suggestions={suggestions}
                         onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                        onSuggestionsClearRequested={() => setSuggestions([])}
+                        onSuggestionsClearRequested={onSuggestionsClearRequest}
                         getSuggestionValue={getSuggestionValue}
                         onSuggestionSelected={onSuggestionSelected}
                         renderSuggestion={renderSuggestion}
                         inputProps={searchInputProps}
-                        shouldRenderSuggestions={(value, reason) => {
-                            return reason == 'input-focused';
-                        }}
+                        renderSuggestionsContainer={renderSuggestionsContainer}
+                        shouldRenderSuggestions={() => !open}
                     />
                 </div>
                 <div className="search__text__remove">
@@ -153,53 +199,74 @@ const Search = (props) => {
     return (
         <div className="search">
             <div className="is-flex">
-                {searchInput()}
-                <div className="search__area">
-                    <FormControl fullWidth>
-                        <Select
-                            className="search__area__select"
-                            value={searchArea}
-                            onChange={(e) => { setSearchArea(e.target.value) }}
-                            displayEmpty
-                            IconComponent={props => <ArrowShowMoreCategoryIcon {...props} />}
-                            sx={{
-                                boxShadow: 'none',
-                                borderRadius: 0,
-                                '.MuiOutlinedInput-notchedOutline': { border: 0 },
-                                '.MuiSelect-select': { p: 1, textAlign: 'center' },
-                                '.MuiSelect-iconOpen': { right: '16px' },
-                            }}
-                        >
-                            <MenuItem value={1}>
-                                <div className="is-flex pt-2 is-justify-content-center">
-                                    <div className="pr-2">
-                                        <CategoryIcon />
-                                    </div>
-                                    <div className="search__area__select__text">
-                                        Wszytkie
-                                    </div>
+                <form onSubmit={onSearchSubmit} className="search is-flex">
+                    {searchInput()}
+                    <div className="search__area">
+                        <div className="search__area__desktop">
+                            <FormControl fullWidth>
+                                <Select
+                                    className="search__area__select"
+                                    value={searchArea}
+                                    onChange={(e) => { setSearchArea(e.target.value) }}
+                                    displayEmpty
+                                    IconComponent={props => <ArrowShowMoreCategoryIcon {...props} />}
+                                    sx={{
+                                        boxShadow: 'none',
+                                        borderRadius: 0,
+                                        '.MuiOutlinedInput-notchedOutline': { border: 0 },
+                                        '.MuiSelect-select': { p: 1, textAlign: 'center' },
+                                        '.MuiSelect-iconOpen': { right: '16px' },
+                                    }}
+                                >
+                                    <MenuItem value={1}>
+                                        <div className="is-flex pt-2 is-justify-content-center">
+                                            <div className="pr-2">
+                                                <CategoryIcon />
+                                            </div>
+                                            <div className="search__area__select__text">
+                                                Wszytkie
+                                            </div>
+                                        </div>
+                                    </MenuItem>
+                                    <MenuItem value={2}>
+                                        <div className="is-flex pt-2">
+                                            <div className="pr-2">
+                                                <CategoryIcon />
+                                            </div>
+                                            <div className="search__area__select__text">
+                                                Stany magazynowe
+                                            </div>
+                                        </div>
+                                    </MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <div className="search__area__mobile">
+                            <Button
+                                disableRipple
+                                onClick={() => setOpen(true)}
+                                sx={{ pt: '0.9rem', pl: '0.8rem' }}
+                            >
+                                <div className="pr-2">
+                                    <CategoryIcon />
                                 </div>
-                            </MenuItem>
-                            <MenuItem value={2}>
-                                <div className="is-flex pt-2">
-                                    <div className="pr-2">
-                                        <CategoryIcon />
-                                    </div>
-                                    <div className="search__area__select__text">
-                                        Stany magazynowe
-                                    </div>
+                                <div>
+                                    <ArrowShowMoreCategoryIcon />
                                 </div>
-                            </MenuItem>
-                        </Select>
-                    </FormControl>
-                </div>
+                            </Button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <Drawer open={open} PaperProps={{ sx: { width: '100%' } }}>
+            <Drawer open={open} PaperProps={{ sx: { width: '100%' } }} className="lol">
                 <div className="sidebar">
                     <div className="sidebar__header is-flex">
                         <div className="sidebar__header__back">
                             <Button
-                                onClick={() => setOpen(false)}
+                                onClick={() => {
+                                    setOpen(false) 
+                                    setSearchTerm('')
+                                }}
                                 disableRipple
                                 sx={{
                                     p: 0,
@@ -214,12 +281,31 @@ const Search = (props) => {
                         </div>
                     </div>
                     <div className="sidebar__header__areas is-flex">
-                        <Button disableRipple className="sidebar__header__areas__button">
-                            Wszytko
-                        </Button>
-                        <Button disableRipple className="sidebar__header__areas__button">
-                            Stany magazynowe
-                        </Button>
+                        <Tabs value={searchArea} onChange={(e, newValue) => setSearchArea(newValue)}>
+                            <Tab label="Wszystko" value={1} className="sidebar__header__areas__button" disableRipple />
+                            <Tab label="Stany magazynowe" value={2} className="sidebar__header__areas__button" disableRipple />
+                        </Tabs>
+                    </div>
+                    <div className="sidebar__suggestions">
+                        {suggestions && suggestions.length > 0 ? suggestions.map((name, index) =>
+                            <Button
+                                key={index}
+                                className="sidebar__suggestions"
+                                sx={{ width: '100%', justifyContent: 'left', color: '#171717' }}
+                                disableRipple
+                                onClick={() => onSidebarSuggestionSelected(name)}
+                            >
+                                {renderSuggestion(name)}
+                            </Button>
+                        ) :
+                            <div>
+                                {isFocused && searchTerm &&
+                                    <div>
+                                        {noResultInformation(searchTerm)}
+                                    </div>
+                                }
+                            </div>
+                        }
                     </div>
                 </div>
             </Drawer>
