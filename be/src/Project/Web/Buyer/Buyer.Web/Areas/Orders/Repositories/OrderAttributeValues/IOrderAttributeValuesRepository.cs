@@ -7,6 +7,6 @@ namespace Buyer.Web.Areas.Orders.Repositories.OrderAttributeValues
 {
     public interface IOrderAttributeValuesRepository
     {
-        Task<IEnumerable<OrderAttributeValue>> GetAsync(string token, string language, Guid? orderId);
+        Task<IEnumerable<OrderAttributeValue>> GetAsync(string token, string language, Guid? orderId, Guid? orderItemId);
     }
 }

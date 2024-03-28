@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Orders.DomainModels;
+﻿using Buyer.Web.Areas.Orders.ApiRequestModels;
+using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
@@ -27,15 +28,16 @@ namespace Buyer.Web.Areas.Orders.Repositories.OrderAttributes
             _options = options;
         }
 
-        public async Task<IEnumerable<OrderAttribute>> GetAsync(string token, string language)
+        public async Task<IEnumerable<OrderAttribute>> GetAsync(string token, string language, bool? forOrderItems)
         {
-            var requestModel = new PagedRequestModelBase
+            var requestModel = new PagedOrderAttributesRequestModel
             {
                 PageIndex = PaginationConstants.DefaultPageIndex,
-                ItemsPerPage = PaginationConstants.DefaultPageSize
+                ItemsPerPage = PaginationConstants.DefaultPageSize,
+                ForIderItems = forOrderItems
             };
 
-            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            var apiRequest = new ApiRequest<PagedOrderAttributesRequestModel>
             {
                 Language = language,
                 Data = requestModel,
@@ -43,7 +45,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.OrderAttributes
                 EndpointAddress = $"{_options.Value.OrderUrl}{ApiConstants.Order.OrderAttributesApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<OrderAttribute>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedOrderAttributesRequestModel>, PagedOrderAttributesRequestModel, PagedResults<IEnumerable<OrderAttribute>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
@@ -57,7 +59,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.OrderAttributes
                 {
                     apiRequest.Data.PageIndex = i;
 
-                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<OrderAttribute>>>(apiRequest);
+                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedOrderAttributesRequestModel>, PagedOrderAttributesRequestModel, PagedResults<IEnumerable<OrderAttribute>>>(apiRequest);
 
                     if (!nextPagesResponse.IsSuccessStatusCode)
                     {

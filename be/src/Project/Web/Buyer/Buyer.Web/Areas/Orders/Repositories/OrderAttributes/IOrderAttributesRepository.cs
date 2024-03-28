@@ -6,6 +6,6 @@ namespace Buyer.Web.Areas.Orders.Repositories.OrderAttributes
 {
     public interface IOrderAttributesRepository
     {
-        Task<IEnumerable<OrderAttribute>> GetAsync(string token, string language);
+        Task<IEnumerable<OrderAttribute>> GetAsync(string token, string language, bool? forOderItems);
     }
 }

@@ -130,7 +130,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 }
             }
 
-            var orderAttributes = await _orderAttributesRepository.GetAsync(componentModel.Token, componentModel.Language);
+            var orderAttributes = await _orderAttributesRepository.GetAsync(componentModel.Token, componentModel.Language, false);
 
             if (orderAttributes is not null)
             {

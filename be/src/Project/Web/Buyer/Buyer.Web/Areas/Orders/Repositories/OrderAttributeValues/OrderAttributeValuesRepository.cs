@@ -27,11 +27,12 @@ namespace Buyer.Web.Areas.Orders.Repositories.OrderAttributeValues
             _options = options;
         }
 
-        public async Task<IEnumerable<OrderAttributeValue>> GetAsync(string token, string language, Guid? orderId)
+        public async Task<IEnumerable<OrderAttributeValue>> GetAsync(string token, string language, Guid? orderId, Guid? orderItemId)
         {
             var requestModel = new PagedOrderAttributeValuesRequestModel
             {
                 OrderId = orderId,
+                OrderItemId = orderItemId,
                 PageIndex = PaginationConstants.DefaultPageIndex,
                 ItemsPerPage = PaginationConstants.DefaultPageSize
             };

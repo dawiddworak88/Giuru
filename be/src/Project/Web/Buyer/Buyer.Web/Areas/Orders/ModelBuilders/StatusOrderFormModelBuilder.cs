@@ -15,6 +15,7 @@ using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -121,13 +122,13 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         ImageSrc = x.PictureUrl
                     });
 
-                    var orderAttributes = await _orderAttributesRepository.GetAsync(componentModel.Token, componentModel.Language);
+                    var orderAttributes = await _orderAttributesRepository.GetAsync(componentModel.Token, componentModel.Language, (bool?)null);
 
                     if (orderAttributes is not null)
                     {
-                        var orderAttributeValues = await _orderAttributeValuesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                        var orderAttributeValues = await _orderAttributeValuesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id, null);
 
-                        viewModel.OrderAttributes = orderAttributes.Select(x =>
+                        viewModel.OrderAttributes = orderAttributes.Where(x => !x.IsOrderItemAttribute).Select(x =>
                         {
                             var attributeValue = orderAttributeValues.FirstOrDefault(y => y.AttributeId == x.Id);
 
@@ -145,6 +146,45 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                                 })
                             };
                         });
+
+                        var orderItemsAttributes = new List<OrderItemAttributeViewModel>();
+
+                        foreach (var orderItem in order.OrderItems.OrEmptyIfNull())
+                        {
+                            foreach (var attribute in orderAttributes.Where(x => x.IsOrderItemAttribute))
+                            {
+                                var orderItemAttributeValue = orderAttributeValues.FirstOrDefault(y => y.AttributeId == attribute.Id && y.OrderItemId == orderItem.Id);
+
+                                var orderItemAttribute = new OrderItemAttributeViewModel
+                                {
+                                    Id = orderItem.Id,
+                                };
+
+                                if (orderItemAttributeValue?.Value is not null)
+                                {
+                                    if (attribute.Type == "boolean")
+                                    {
+                                        orderItemAttribute.Value = orderItemAttributeValue?.Value == "true" ? _globalLocalizer.GetString("Yes") : _globalLocalizer.GetString("No");
+                                    }
+                                    else if (attribute.Type == "select")
+                                    {
+                                        orderItemAttribute.Value = attribute.Options.FirstOrDefault(x => x.Value == orderItemAttributeValue.Value).Name;
+                                    }
+                                    else
+                                    {
+                                        orderItemAttribute.Value = orderItemAttributeValue?.Value;
+                                    }
+                                }
+
+                                orderItemsAttributes.Add(orderItemAttribute);
+                            }
+                        }
+
+                        viewModel.OrderItemsAttributesTable = new OrderItemAttributeTableViewModel
+                        {
+                            Labels = orderAttributes.Where(x => x.IsOrderItemAttribute).Select(x => x.Name),
+                            OrderItemsAttributes = orderItemsAttributes
+                        };
                     }
                 }
 
