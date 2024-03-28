@@ -31,7 +31,7 @@ function Header(props) {
                     </a>
                 </div>
                 <div className="navbar__search">
-                    <Search {...props}/>
+                    <Search {...props.search}/>
                 </div>
                 <div className="navbar__actions is-flex">
                     <div className="navbar__actions__language">
