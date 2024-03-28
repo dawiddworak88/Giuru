@@ -18,20 +18,17 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
     public class MainNavigationModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>
     {
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
-        private readonly IStringLocalizer<OrderResources> _orderLocalizer;
         private readonly LinkGenerator _linkGenerator;
         private readonly IOptionsMonitor<AppSettings> _settings;
         private readonly IGraphQlRepository _graphQlRepository;
 
         public MainNavigationModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<OrderResources> orderLocalizer,
             IOptionsMonitor<AppSettings> settings,
             LinkGenerator linkGenerator,
             IGraphQlRepository graphQlRepository)
         {
             _globalLocalizer = globalLocalizer;
-            _orderLocalizer = orderLocalizer;
             _settings = settings;
             _linkGenerator = linkGenerator;
             _graphQlRepository = graphQlRepository;
@@ -41,16 +38,6 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
         {
             var links = new List<LinkViewModel>
             {
-                new LinkViewModel
-                {
-                    Text = _orderLocalizer.GetString("MyOrders").Value,
-                    Url = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
-                },
-                new LinkViewModel
-                {
-                    Text = _orderLocalizer.GetString("PlaceOrder").Value,
-                    Url = _linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
-                },
                 new LinkViewModel
                 {
                     Text = _globalLocalizer.GetString("AvailableProducts"),
