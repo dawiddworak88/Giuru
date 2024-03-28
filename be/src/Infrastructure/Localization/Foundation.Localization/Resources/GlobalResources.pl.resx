@@ -777,4 +777,10 @@
   <data name="InActive" xml:space="preserve">
     <value>Nieaktywny</value>
   </data>
+  <data name="ChangeSearchTermText" xml:space="preserve">
+    <value>Niestety nie znaleźliśmy tego czego szukasz, spróbuj wpisać inną frazę.</value>
+  </data>
+  <data name="NoResultText" xml:space="preserve">
+    <value>Brak wyników dla wyszukiwanej frazy</value>
+  </data>
 </root>
