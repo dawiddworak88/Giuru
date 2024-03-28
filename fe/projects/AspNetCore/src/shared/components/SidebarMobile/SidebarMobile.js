@@ -16,7 +16,7 @@ const SidebarMobile = (props) => {
             >
                 <MenuIcon />
             </Button>
-            <Drawer PaperProps={{sx: { width: '80%'}}} open={open} onClose={() => setOpen(!open)}>
+            <Drawer PaperProps={{ sx: { width: '80%' } }} open={open} onClose={() => setOpen(!open)}>
                 <div className="sidebar__menu">
                     <div className="sidebar__menu__header is-flex is-justify-content-space-between is-align-items-center">
                         <div>
@@ -37,7 +37,7 @@ const SidebarMobile = (props) => {
                         </div>
                     </div>
                     <div className="sidebar__menu__links">
-                        {props.links && props.links.map((link, index) => 
+                        {props.links && props.links.map((link, index) =>
                             <div>
                                 <a key={index} href={link.url} className="sidebar__menu__links__button has-text-weight-bold">{link.text}</a>
                             </div>
