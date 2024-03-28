@@ -132,16 +132,12 @@
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
-    
-.react-autosuggest__suggestions-container {
-    display: none;
-}
 
-.react-autosuggest__suggestions-container--open {
+.react-autosuggest__suggestions-container, .react-autosuggest__suggestions-container--open {
     display: block;
     position: absolute;
     top: 3.2rem;
-    left: calc(-16px + -1.6rem + -3px);
+    left: calc(-19px + -1.6rem);
     width: calc(100% + 268px + 3.5rem);
     margin-left: 1px;
     background-color: #fff;
@@ -149,12 +145,19 @@
     z-index: 1;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     background-clip: padding-box;
+}
+
+.react-autosuggest__suggestions-container {
+    padding: 1rem;
+}
+
+.react-autosuggest__suggestions-container--open {
     padding: 0.5rem;
 }
 
 @media only screen and (max-width: $desktop) {
-    .react-autosuggest__suggestions-container--open {
-        width: calc(100% + 124px + 3.5rem);
+    .react-autosuggest__suggestions-container, .react-autosuggest__suggestions-container--open {
+        width: calc(100% + 130px + 3.5rem);
     }
 }
 
