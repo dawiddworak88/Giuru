@@ -77,6 +77,7 @@ namespace Ordering.Api.v1.Controllers
                         Id = x.Id,
                         Value = x.Value,
                         AttributeId = x.AttributeId,
+                        OrderItemId = x.OrderItemId,
                         LastModifiedDate = x.LastModifiedDate,
                         CreatedDate = x.CreatedDate
                     })

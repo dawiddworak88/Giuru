@@ -45,5 +45,6 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public IEnumerable<OrderItemViewModel> OrderItems { get; set; }
         public IEnumerable<OrderItemStatusViewModel> OrderItemsStatuses { get; set; }
         public IEnumerable<OrderAttributeViewModel> OrderAttributes { get; set; }
+        public OrderItemAttributeTableViewModel OrderItemsAttributesTable { get; set; }
     }
 }

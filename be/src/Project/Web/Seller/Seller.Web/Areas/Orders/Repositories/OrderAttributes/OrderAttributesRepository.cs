@@ -53,7 +53,7 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributes
             }
         }
 
-        public async Task<IEnumerable<OrderAttribute>> GetAsync(string token, string language, bool? forOrderItems)
+        public async Task<IEnumerable<OrderAttributeApi>> GetAsync(string token, string language, bool? forOrderItems)
         {
             var requestModel = new PagedOrderAttributesRequestModel
             {
@@ -70,11 +70,11 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributes
                 EndpointAddress = $"{_options.Value.OrderUrl}{ApiConstants.Order.OrderAttributesApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<OrderAttribute>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<OrderAttributeApi>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
-                var orderAttributes = new List<OrderAttribute>();
+                var orderAttributes = new List<OrderAttributeApi>();
 
                 orderAttributes.AddRange(response.Data.Data);
 
@@ -84,7 +84,7 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributes
                 {
                     apiRequest.Data.PageIndex = i;
 
-                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<OrderAttribute>>>(apiRequest);
+                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<OrderAttributeApi>>>(apiRequest);
 
                     if (!nextPagesResponse.IsSuccessStatusCode)
                     {
@@ -103,7 +103,7 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributes
             return default;
         }
 
-        public async Task<OrderAttribute> GetAsync(string token, string language, Guid? id)
+        public async Task<OrderAttributeApi> GetAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
@@ -113,7 +113,7 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributes
                 EndpointAddress = $"{_options.Value.OrderUrl}{ApiConstants.Order.OrderAttributesApiEndpoint}/{id}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OrderAttribute>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OrderAttributeApi>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -160,6 +160,7 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributes
                         IsRequired = x.IsRequired,
                         IsOrderItemAttribute = x.IsOrderItemAttribute,
                         IsOrderItemAttributeText = x.IsOrderItemAttribute ? _globalLocalizer.GetString("Yes") : _globalLocalizer.GetString("No"),
+                        OrderItemId = x.OrderItemId,
                         Options = x.Options.Select(o => new OrderAttributeOptionItem
                         {
                             Name = o.Name,

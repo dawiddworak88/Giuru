@@ -33,7 +33,7 @@ namespace Ordering.Api.Services.OrderAttributeValues
 
             foreach (var attributeValue in model.Values.OrEmptyIfNull())
             {
-                var existingValue = attributeValues.FirstOrDefault(x => x.AttributeId == attributeValue.AttributeId);
+                var existingValue = attributeValues.FirstOrDefault(x => x.AttributeId == attributeValue.AttributeId && x.OrderItemId == model.OrderItemId);
 
                 if (string.IsNullOrWhiteSpace(attributeValue.Value) is true && existingValue is not null)
                 {
@@ -138,7 +138,7 @@ namespace Ordering.Api.Services.OrderAttributeValues
                 Data = pagedResults.Data.OrEmptyIfNull().Select(x => new OrderAttributeValueServiceModel
                 {
                     Id = x.Id,
-                    Value = x.AttributeValueTranslations?.FirstOrDefault(t => t.Language == model.Language && t.AttributeValueId == x.Id && t.IsActive)?.Value ?? x.AttributeValueTranslations?.FirstOrDefault(x => x.IsActive)?.Value,
+                    Value = x.AttributeValueTranslations?.FirstOrDefault(t => t.Language == model.Language && t.AttributeValueId == x.Id && t.IsActive)?.Value ?? x.AttributeValueTranslations?.FirstOrDefault(t => t.AttributeValueId == x.Id && t.IsActive)?.Value,
                     AttributeId = x.AttributeId,
                     OrderItemId = x.OrderItemId,
                     LastModifiedDate = x.LastModifiedDate,

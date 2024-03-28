@@ -150,6 +150,11 @@ function EditOrderForm(props) {
                                             <TableCell>{props.expectedDateOfProductOnStockLabel}</TableCell>
                                             <TableCell>{props.externalReferenceLabel}</TableCell>
                                             <TableCell>{props.moreInfoLabel}</TableCell>
+                                            {props.orderItemsAttributesTable && props.orderItemsAttributesTable.labels && 
+                                                props.orderItemsAttributesTable.labels.map(label => (
+                                                    <TableCell>{label}</TableCell>
+                                                )
+                                            )}
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -171,6 +176,11 @@ function EditOrderForm(props) {
                                                     <TableCell>{item.expectedDateOfProductOnStock}</TableCell>
                                                     <TableCell>{item.externalReference}</TableCell>
                                                     <TableCell>{item.moreInfo}</TableCell>
+                                                    {props.orderItemsAttributesTable && props.orderItemsAttributesTable.orderItemsAttributes && 
+                                                        props.orderItemsAttributesTable.orderItemsAttributes.filter(x => x.id == item.id).map(attribute => (
+                                                            <TableCell>{attribute.value}</TableCell>
+                                                        )
+                                                    )}
                                                 </TableRow>
                                             )
                                         })}

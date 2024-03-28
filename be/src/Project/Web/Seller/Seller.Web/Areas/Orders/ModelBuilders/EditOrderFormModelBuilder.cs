@@ -14,6 +14,7 @@ using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.ComponentModels.Files;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -136,26 +137,19 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                         viewModel.CanCancelOrder = true;
                     }
 
-                    var orderItemsStatuses = new List<OrderItemStatusViewModel>();
-
-                    foreach (var orderItem in order.OrderItems.OrEmptyIfNull())
+                    viewModel.OrderItemsStatuses = order.OrderItems.OrEmptyIfNull().Select(x => new OrderItemStatusViewModel
                     {
-                        orderItemsStatuses.Add(new OrderItemStatusViewModel
-                        {
-                            Id = orderItem.Id,
-                            OrderStatusId = orderItem.OrderItemStatusId
-                        });
-                    }
+                        Id = x.Id,
+                        OrderStatusId = x.OrderItemStatusId
+                    });
 
-                    viewModel.OrderItemsStatuses = orderItemsStatuses;
-
-                    var orderAttributes = await _orderAttributesRepository.GetAsync(componentModel.Token, componentModel.Language, false);
+                    var orderAttributes = await _orderAttributesRepository.GetAsync(componentModel.Token, componentModel.Language, (Boolean?)null);
 
                     if (orderAttributes is not null)
                     {
                         var orderAttributeValues = await _orderAttributeValuesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id, null);
 
-                        viewModel.OrderAttributes = orderAttributes.Select(x =>
+                        viewModel.OrderAttributes = orderAttributes.Where(x => !x.IsOrderItemAttribute).Select(x =>
                         {
                             var orderAttributeValue = orderAttributeValues.FirstOrDefault(y => y.AttributeId == x.Id);
 
@@ -173,6 +167,45 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                                 })
                             };
                         });
+
+                        var orderItemsAttributes = new List<OrderItemAttributeViewModel>();
+
+                        foreach (var orderItem in order.OrderItems.OrEmptyIfNull())
+                        {
+                            foreach (var attribute in orderAttributes.Where(x => x.IsOrderItemAttribute))
+                            {
+                                var orderItemAttributeValue = orderAttributeValues.FirstOrDefault(y => y.AttributeId == attribute.Id && y.OrderItemId == orderItem.Id);
+
+                                var orderItemAttribute = new OrderItemAttributeViewModel
+                                {
+                                    Id = orderItem.Id,
+                                };
+
+                                if (orderItemAttributeValue?.Value is not null)
+                                {
+                                    if (attribute.Type == "boolean")
+                                    {
+                                        orderItemAttribute.Value = orderItemAttributeValue?.Value == "true" ? "Tak" : "Nie";
+                                    }
+                                    else if (attribute.Type == "select")
+                                    {
+                                        orderItemAttribute.Value = attribute.Options.FirstOrDefault(x => x.Value == orderItemAttributeValue.Value).Name;
+                                    }
+                                    else
+                                    {
+                                        orderItemAttribute.Value = orderItemAttributeValue?.Value;
+                                    }
+                                }
+
+                                orderItemsAttributes.Add(orderItemAttribute);
+                            }
+                        }
+
+                        viewModel.OrderItemsAttributesTable = new OrderItemAttributeTableViewModel
+                        {
+                            Labels = orderAttributes.Where(x => x.IsOrderItemAttribute).Select(x => x.Name),
+                            OrderItemsAttributes = orderItemsAttributes
+                        };
                     }
                 }
 

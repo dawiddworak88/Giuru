@@ -10,8 +10,8 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributes
     {
         Task DeleteAsync(string token, string language, Guid? id);
         Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string type, bool isOrderItemAttribute);
-        Task<IEnumerable<OrderAttribute>> GetAsync(string token, string language, bool? forOrderItems);
-        Task<OrderAttribute> GetAsync(string token, string language, Guid? id);
+        Task<IEnumerable<OrderAttributeApi>> GetAsync(string token, string language, bool? forOrderItems);
+        Task<OrderAttributeApi> GetAsync(string token, string language, Guid? id);
         Task<PagedResults<IEnumerable<OrderAttribute>>> GetAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
     }
 }
