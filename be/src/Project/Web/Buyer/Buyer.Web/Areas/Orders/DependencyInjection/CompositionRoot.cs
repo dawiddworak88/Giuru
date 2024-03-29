@@ -4,6 +4,7 @@ using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Areas.Orders.Repositories.OrderAttributes;
 using Buyer.Web.Areas.Orders.Repositories.OrderAttributeValues;
+using Buyer.Web.Areas.Orders.Repositories.OrderItems;
 using Buyer.Web.Areas.Orders.Services.OrderFiles;
 using Buyer.Web.Areas.Orders.ViewModel;
 using Buyer.Web.Shared.ViewModels.Catalogs;
@@ -20,6 +21,7 @@ namespace Buyer.Web.Areas.Orders.DependencyInjection
             services.AddScoped<IOrdersRepository, OrdersRepository>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IOrderFileService, OrderFileService>();
+            services.AddScoped<IOrderItemsRepository, OrderItemsRepository>();
             services.AddScoped<IOrderAttributesRepository, OrderAttributesRepository>();
             services.AddScoped<IOrderAttributeValuesRepository, OrderAttributeValuesRepository>();
 

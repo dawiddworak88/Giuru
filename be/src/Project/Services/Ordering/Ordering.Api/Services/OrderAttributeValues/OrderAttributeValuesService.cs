@@ -33,7 +33,7 @@ namespace Ordering.Api.Services.OrderAttributeValues
 
             foreach (var attributeValue in model.Values.OrEmptyIfNull())
             {
-                var existingValue = attributeValues.FirstOrDefault(x => x.AttributeId == attributeValue.AttributeId && x.OrderItemId == model.OrderItemId);
+                var existingValue = attributeValues.FirstOrDefault(x => x.AttributeId == attributeValue.AttributeId && x.OrderItemId == attributeValue.OrderItemId);
 
                 if (string.IsNullOrWhiteSpace(attributeValue.Value) is true && existingValue is not null)
                 {
@@ -52,7 +52,7 @@ namespace Ordering.Api.Services.OrderAttributeValues
                     var newValue = new AttributeValue
                     {
                         OrderId = model.OrderId.Value,
-                        OrderItemId = model.OrderItemId,
+                        OrderItemId = attributeValue.OrderItemId,
                         AttributeId = attributeValue.AttributeId.Value,
                     };
 

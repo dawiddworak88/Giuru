@@ -34,7 +34,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.OrderAttributes
             {
                 PageIndex = PaginationConstants.DefaultPageIndex,
                 ItemsPerPage = PaginationConstants.DefaultPageSize,
-                ForIderItems = forOrderItems
+                ForOrderItems = forOrderItems
             };
 
             var apiRequest = new ApiRequest<PagedOrderAttributesRequestModel>

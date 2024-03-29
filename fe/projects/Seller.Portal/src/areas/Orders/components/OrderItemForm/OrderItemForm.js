@@ -25,7 +25,8 @@ const OrderItemForm = (props) => {
         let requestPayload = {
             id: props.id,
             orderId: props.orderId,
-            orderItemStatusId,
+            lastOrderItemStatusId: props.orderItemStatusId,
+            newOrderItemStatusId: orderItemStatusId,
             expectedDateOfProductOnStock
         }
 
@@ -58,7 +59,10 @@ const OrderItemForm = (props) => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
                         setOrderItemStatusChangeComment(null);
-                        setOrderItemStatusChanges(jsonResponse.statusChanges);
+
+                        if (jsonResponse.statusChanges != null) {
+                            setOrderItemStatusChanges(jsonResponse.statusChanges);
+                        }
                     }
                     else {
                         toast.error(jsonResponse.message);

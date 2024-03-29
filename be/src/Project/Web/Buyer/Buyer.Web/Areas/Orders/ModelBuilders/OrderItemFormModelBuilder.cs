@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Orders.Repositories;
+﻿using Buyer.Web.Areas.Orders.Repositories.OrderItems;
 using Buyer.Web.Areas.Orders.ViewModel;
 using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
 using Foundation.Extensions.ModelBuilders;
@@ -18,7 +18,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
         private readonly LinkGenerator _linkGenerator;
-        private readonly IOrdersRepository _ordersRepository;
+        private readonly IOrderItemsRepository _orderItemsRepository;
 
         public OrderItemFormModelBuilder
         (
@@ -26,12 +26,12 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             LinkGenerator linkGenerator,
-            IOrdersRepository ordersRepository)
+            IOrderItemsRepository orderItemsRepository)
         {
             _globalLocalizer = globalLocalizer;
             _orderLocalizer = orderLocalizer;
             _linkGenerator = linkGenerator;
-            _ordersRepository = ordersRepository;
+            _orderItemsRepository = orderItemsRepository;
             _orderItemStatusChangesModelBuilder = orderItemStatusChangesModelBuilder;
         }
 
@@ -51,12 +51,12 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 ExternalReferenceLabel = _orderLocalizer.GetString("ExternalReferenceLabel"),
                 MoreInfoLabel = _orderLocalizer.GetString("MoreInfoLabel"),
                 CancelOrderItemLabel = _orderLocalizer.GetString("CancelOrderItem"),
-                CancelOrderItemStatusUrl = _linkGenerator.GetPathByAction("CancelOrderItem", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                CancelOrderItemStatusUrl = _linkGenerator.GetPathByAction("Cancel", "OrderItemsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             if (componentModel.Id.HasValue)
             {
-                var orderItem = await _ordersRepository.GetOrderItemAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                var orderItem = await _orderItemsRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                 if (orderItem is not null)
                 {
@@ -78,7 +78,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 
                 if (orderItem.LastOrderItemStatusChangeId is not null)
                 {
-                    var orderItemStatusChanges = await _ordersRepository.GetOrderItemStatusesAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                    var orderItemStatusChanges = await _orderItemsRepository.GetStatusChangesAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                     if (orderItemStatusChanges is not null)
                     {
