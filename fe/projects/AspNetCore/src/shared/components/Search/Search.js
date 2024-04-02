@@ -73,7 +73,7 @@ const Search = (props) => {
     }
 
     const onSuggestionSelected = (event, { suggestion }) => {
-        NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(suggestion));
+        NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(suggestion) + "&searchArea=" + encodeURI(searchArea));
         setSearchTerm('');
     };
 
