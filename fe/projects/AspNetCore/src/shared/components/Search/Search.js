@@ -15,7 +15,7 @@ import { Context } from "../../stores/Store";
 
 const Search = (props) => {
     const [suggestions, setSuggestions] = useState([]);
-    const [searchArea, setSearchArea] = useState(1);
+    const [searchArea, setSearchArea] = useState(HeaderConstants.searchAreaAllValue);
     const [searchTerm, setSearchTerm] = useState(props.searchTerm ? props.searchTerm : "");
     const [state, dispatch] = useContext(Context);
     const [open, setOpen] = useState(false);
@@ -31,7 +31,8 @@ const Search = (props) => {
             const searchParameters = {
 
                 searchTerm: args.value,
-                size: HeaderConstants.searchSuggenstionsSize()
+                size: HeaderConstants.searchSuggenstionsSize(),
+                searchArea: searchArea
             };
 
             const requestOptions = {
@@ -73,6 +74,7 @@ const Search = (props) => {
 
     const onSuggestionSelected = (event, { suggestion }) => {
         NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(suggestion));
+        setSearchTerm('');
     };
 
     const onSidebarSuggestionSelected = (name) => {
@@ -218,26 +220,18 @@ const Search = (props) => {
                                         '.MuiSelect-iconOpen': { right: '16px' },
                                     }}
                                 >
-                                    <MenuItem value={1}>
-                                        <div className="is-flex pt-2 is-justify-content-center">
-                                            <div className="pr-2">
-                                                <CategoryIcon />
+                                    {props.searchAreas && props.searchAreas.length > 0 && props.searchAreas.map((area, index) =>
+                                        <MenuItem key={index} value={area.value}>
+                                            <div className="is-flex pt-2 is-justify-content-center">
+                                                <div className="pr-2">
+                                                    <CategoryIcon />
+                                                </div>
+                                                <div className="search__area__select__text">
+                                                    {area.name}
+                                                </div>
                                             </div>
-                                            <div className="search__area__select__text">
-                                                Wszytkie
-                                            </div>
-                                        </div>
-                                    </MenuItem>
-                                    <MenuItem value={2}>
-                                        <div className="is-flex pt-2">
-                                            <div className="pr-2">
-                                                <CategoryIcon />
-                                            </div>
-                                            <div className="search__area__select__text">
-                                                Stany magazynowe
-                                            </div>
-                                        </div>
-                                    </MenuItem>
+                                        </MenuItem>
+                                    )}
                                 </Select>
                             </FormControl>
                         </div>
@@ -264,7 +258,7 @@ const Search = (props) => {
                         <div className="sidebar__header__back">
                             <Button
                                 onClick={() => {
-                                    setOpen(false) 
+                                    setOpen(false)
                                     setSearchTerm('')
                                 }}
                                 disableRipple
@@ -282,8 +276,9 @@ const Search = (props) => {
                     </div>
                     <div className="sidebar__header__areas is-flex">
                         <Tabs value={searchArea} onChange={(e, newValue) => setSearchArea(newValue)}>
-                            <Tab label="Wszystko" value={1} className="sidebar__header__areas__button" disableRipple />
-                            <Tab label="Stany magazynowe" value={2} className="sidebar__header__areas__button" disableRipple />
+                            {props.searchAreas && props.searchAreas.length > 0 && props.searchAreas.map((area, index) => 
+                                <Tab key={index} label={area.name} value={area.value} className="sidebar__header__areas__button" disableRipple />
+                            )}
                         </Tabs>
                     </div>
                     <div className="sidebar__suggestions">

@@ -7,4 +7,8 @@ export default class HeaderConstants {
     static searchSuggenstionsSize() {
         return 7;
     }
+
+    static searchAreaAllValue() {
+        return 1;
+    }
 }
