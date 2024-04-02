@@ -38,8 +38,8 @@ const SidebarMobile = (props) => {
                     </div>
                     <div className="sidebar__menu__links">
                         {props.links && props.links.map((link, index) =>
-                            <div>
-                                <a key={index} href={link.url} className="sidebar__menu__links__button has-text-weight-bold">{link.text}</a>
+                            <div key={index}>
+                                <a href={link.url} className="sidebar__menu__links__button has-text-weight-bold">{link.text}</a>
                             </div>
                         )}
                         {props.isLoggedIn ?
