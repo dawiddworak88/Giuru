@@ -22,12 +22,13 @@ namespace Buyer.Web.Areas.Products.Controllers
             this.searchProductsPageModelBuilder = searchProductsPageModelBuilder;
         }
 
-        public async Task<IActionResult> Index(string searchTerm)
+        public async Task<IActionResult> Index(string searchTerm, string searchArea)
         {
             var componentModel = new SearchProductsComponentModel
             {
                 ContentPageKey = "searchProductsPage",
                 SearchTerm = searchTerm,
+                SearchArea = searchArea,
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name,
