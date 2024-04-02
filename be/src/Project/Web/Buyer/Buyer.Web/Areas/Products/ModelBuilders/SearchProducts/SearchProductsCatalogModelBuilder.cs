@@ -19,6 +19,7 @@ using Microsoft.Extensions.Localization;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Routing;
 using System.Globalization;
+using Buyer.Web.Shared.Definitions.Header;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 {
@@ -66,34 +67,26 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             viewModel.SearchTerm = componentModel.SearchTerm;
             viewModel.ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "SearchProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
 
-            var products = await _productsService.GetProductsAsync(
-                null,
-                null,
-                null,
-                componentModel.Language,
-                componentModel.SearchTerm,
-                true,
-                PaginationConstants.DefaultPageIndex,
-                ProductConstants.ProductsCatalogPaginationPageSize,
-                componentModel.Token);
+            PagedResults<IEnumerable<CatalogItemViewModel>> products;
 
-            if (products.Data is not null)
+            if (componentModel.SearchArea == SearchConstants.SearchArea.StockLevel)
             {
-                var outletItems = await _outletRepository.GetOutletProductsByIdsAsync(componentModel.Token, componentModel.Language, products.Data.Select(x => x.Id));
-                var inventoryItems = await _inventoryRepository.GetAvailbleProductsInventoryByIds(componentModel.Token, componentModel.Language, products.Data.Select(x => x.Id));
+                var inventoryItems = await _inventoryRepository.GetAvailbleProductsInventory(componentModel.Language, PaginationConstants.DefaultPageIndex, ProductConstants.ProductsCatalogPaginationPageSize, componentModel.Token);
+
+                products = await _productsService.GetProductsAsync(
+                    inventoryItems.Data.Select(x => x.ProductId),
+                    null,
+                    null,
+                    componentModel.Language,
+                    componentModel.SearchTerm,
+                    true,
+                    PaginationConstants.DefaultPageIndex,
+                    ProductConstants.ProductsCatalogPaginationPageSize,
+                    componentModel.Token);
 
                 foreach (var product in products.Data.OrEmptyIfNull())
                 {
-                    var outletItem = outletItems.FirstOrDefault(x => x.ProductSku == product.Sku);
-
-                    if (outletItem is not null)
-                    {
-                        product.InOutlet = true;
-                        product.AvailableOutletQuantity = outletItem.AvailableQuantity;
-                        product.OutletTitle = outletItem.Title;
-                    }
-
-                    var inventoryItem = inventoryItems.FirstOrDefault(x => x.ProductSku == product.Sku);
+                    var inventoryItem = inventoryItems.Data.FirstOrDefault(x => x.ProductSku == product.Sku);
 
                     if (inventoryItem is not null)
                     {
@@ -104,12 +97,54 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 
                     product.CanOrder = true;
                 }
-
-                viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(products.Total, products.PageSize)
-                {
-                    Data = products.Data
-                };
             }
+            else
+            {
+                products = await _productsService.GetProductsAsync(
+                    null,
+                    null,
+                    null,
+                    componentModel.Language,
+                    componentModel.SearchTerm,
+                    true,
+                    PaginationConstants.DefaultPageIndex,
+                    ProductConstants.ProductsCatalogPaginationPageSize,
+                    componentModel.Token);
+
+                if (products.Data is not null)
+                {
+                    var outletItems = await _outletRepository.GetOutletProductsByIdsAsync(componentModel.Token, componentModel.Language, products.Data.Select(x => x.Id));
+                    var inventoryItems = await _inventoryRepository.GetAvailbleProductsInventoryByIds(componentModel.Token, componentModel.Language, products.Data.Select(x => x.Id));
+
+                    foreach (var product in products.Data.OrEmptyIfNull())
+                    {
+                        var outletItem = outletItems.FirstOrDefault(x => x.ProductSku == product.Sku);
+
+                        if (outletItem is not null)
+                        {
+                            product.InOutlet = true;
+                            product.AvailableOutletQuantity = outletItem.AvailableQuantity;
+                            product.OutletTitle = outletItem.Title;
+                        }
+
+                        var inventoryItem = inventoryItems.FirstOrDefault(x => x.ProductSku == product.Sku);
+
+                        if (inventoryItem is not null)
+                        {
+                            product.InStock = true;
+                            product.AvailableQuantity = inventoryItem.AvailableQuantity;
+                            product.ExpectedDelivery = inventoryItem.ExpectedDelivery;
+                        }
+
+                        product.CanOrder = true;
+                    }
+                }
+            }
+
+            viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(products.Total, products.PageSize)
+            {
+                Data = products.Data
+            };
 
             return viewModel;
         }
