@@ -4,8 +4,8 @@
     {
         public static class SearchArea
         {
-            public static int All = 1;
-            public static int StockLevel = 2;
+            public static string All = "all";
+            public static string StockLevel = "stock";
         }
     }
 }
