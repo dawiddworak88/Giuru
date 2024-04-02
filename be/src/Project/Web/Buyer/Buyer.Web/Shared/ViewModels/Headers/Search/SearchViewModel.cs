@@ -1,4 +1,7 @@
-﻿namespace Buyer.Web.Shared.ViewModels.Headers.Search
+﻿using Buyer.Web.Shared.ViewModels.Headers.Search.SearchArea;
+using System.Collections.Generic;
+
+namespace Buyer.Web.Shared.ViewModels.Headers.Search
 {
     public class SearchViewModel
     {
@@ -9,5 +12,6 @@
         public string GetSuggestionsUrl { get; set; }
         public string NoResultText { get; set; }
         public string ChangeSearchTermText { get; set; }
+        public IEnumerable<SearchAreaViewModel> SearchAreas { get; set; }
     }
 }

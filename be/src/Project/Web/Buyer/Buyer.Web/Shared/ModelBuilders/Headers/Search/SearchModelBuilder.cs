@@ -1,8 +1,11 @@
-﻿using Buyer.Web.Shared.ViewModels.Headers.Search;
+﻿using Buyer.Web.Shared.Definitions.Header;
+using Buyer.Web.Shared.ViewModels.Headers.Search;
+using Buyer.Web.Shared.ViewModels.Headers.Search.SearchArea;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Buyer.Web.Shared.ModelBuilders.Headers.Search
@@ -18,7 +21,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers.Search
         {
             _globalLocalizer = globalLocalizer;
             _linkGenerator = linkGenerator;
-            
+
         }
 
         public SearchViewModel BuildModel()
@@ -33,6 +36,22 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers.Search
                 NoResultText = _globalLocalizer.GetString("NoResultText"),
                 ChangeSearchTermText = _globalLocalizer.GetString("ChangeSearchTermText")
             };
+
+            var searchAreas = new List<SearchAreaViewModel>
+            {
+                new SearchAreaViewModel 
+                { 
+                    Value = SearchConstants.SearchArea.All,
+                    Name = _globalLocalizer.GetString("SearchAreaAll")
+                },
+                new SearchAreaViewModel 
+                {
+                    Value = SearchConstants.SearchArea.StockLevel,
+                    Name = _globalLocalizer.GetString("SearchAreaStockLevel")
+                }
+            };
+
+            viewModel.SearchAreas = searchAreas;
 
             return viewModel;
         }
