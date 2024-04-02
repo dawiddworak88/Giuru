@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Threading.Tasks;
 
 namespace Buyer.Web.Shared.ModelBuilders.Headers.UserPopup
 {
