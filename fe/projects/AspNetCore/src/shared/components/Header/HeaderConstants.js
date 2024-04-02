@@ -9,6 +9,6 @@ export default class HeaderConstants {
     }
 
     static searchAreaAllValue() {
-        return 1;
+        return 'all';
     }
 }
