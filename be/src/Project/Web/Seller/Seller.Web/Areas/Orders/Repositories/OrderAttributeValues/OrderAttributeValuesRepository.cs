@@ -74,9 +74,9 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributeValues
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
-                var fieldsValues = new List<OrderAttributeValue>();
+                var orderAttributeValues = new List<OrderAttributeValue>();
 
-                fieldsValues.AddRange(response.Data.Data);
+                orderAttributeValues.AddRange(response.Data.Data);
 
                 int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
 
@@ -93,11 +93,11 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributeValues
 
                     if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Count() > 0)
                     {
-                        fieldsValues.AddRange(nextPagesResponse.Data.Data);
+                        orderAttributeValues.AddRange(nextPagesResponse.Data.Data);
                     }
                 }
 
-                return fieldsValues;
+                return orderAttributeValues;
             }
 
             return default;
