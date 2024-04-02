@@ -89,7 +89,15 @@ export var header = {
     searchLabel: "Search",
     searchPlaceholderLabel: "Search",
     noResultText: "No results found for the searched phrase",
-    changeSearchTermText: "Unfortunately, we couldn't find what you're looking for. Please try entering a different phrase"
+    changeSearchTermText: "Unfortunately, we couldn't find what you're looking for. Please try entering a different phrase",
+    searchAreas: [
+      {
+        value: 1, name: 'All' 
+      },
+      {
+        value: 2, name: 'Stock levels'
+      }
+    ]
   }
 };
 
