@@ -777,4 +777,10 @@
   <data name="NoResultText" xml:space="preserve">
     <value>Keine Ergebnisse für den gesuchten Begriff gefunden</value>
   </data>
+  <data name="SearchAreaAll" xml:space="preserve">
+    <value>Alles</value>
+  </data>
+  <data name="SearchAreaStockLevel" xml:space="preserve">
+    <value>Lagerbestände</value>
+  </data>
 </root>
