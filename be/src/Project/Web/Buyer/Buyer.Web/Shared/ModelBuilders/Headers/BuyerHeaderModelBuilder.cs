@@ -14,70 +14,67 @@ using System.Threading.Tasks;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Foundation.Extensions.ExtensionMethods;
 using System.Linq;
+using Buyer.Web.Shared.ViewModels.Headers.Search;
+using Buyer.Web.Shared.ViewModels.Headers.SidebarMobile;
+using Buyer.Web.Shared.ViewModels.Headers.UserPopup;
 
 namespace Buyer.Web.Shared.ModelBuilders.Headers
 {
     public class BuyerHeaderModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel>
     {
-        private readonly IModelBuilder<LogoViewModel> logoModelBuilder;
-        private readonly IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IBasketRepository basketRepository;
+        private readonly IModelBuilder<LogoViewModel> _logoModelBuilder;
+        private readonly IModelBuilder<SearchViewModel> _searchModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarMobileViewModel> _sidebarMobileModelBuilder;
+        private readonly IComponentModelBuilder<ComponentModelBase, UserPopupViewModel> _userPopupModelBuilder;
+        private readonly IModelBuilder<LanguageSwitcherViewModel> _languageSwitcherViewModel;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IBasketRepository _basketRepository;
 
         public BuyerHeaderModelBuilder(
             IModelBuilder<LogoViewModel> logoModelBuilder,
+            IModelBuilder<SearchViewModel> searchModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, SidebarMobileViewModel> sidebarMobileModelBuilder,
+            IComponentModelBuilder<ComponentModelBase, UserPopupViewModel> userPopupModelBuilder,
             IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IBasketRepository basketRepository,
             LinkGenerator linkGenerator)
         {
-            this.logoModelBuilder = logoModelBuilder;
-            this.languageSwitcherViewModel = languageSwitcherViewModel;
-            this.globalLocalizer = globalLocalizer;
-            this.linkGenerator = linkGenerator;
-            this.basketRepository = basketRepository;
+            _logoModelBuilder = logoModelBuilder;
+            _searchModelBuilder = searchModelBuilder;
+            _sidebarMobileModelBuilder = sidebarMobileModelBuilder;
+            _userPopupModelBuilder = userPopupModelBuilder;
+            _languageSwitcherViewModel = languageSwitcherViewModel;
+            _globalLocalizer = globalLocalizer;
+            _linkGenerator = linkGenerator;
+            _basketRepository = basketRepository;
         }
 
         public async Task<BuyerHeaderViewModel> BuildModelAsync(ComponentModelBase model)
         {
             var links = new List<LinkViewModel>
             {
-                new LinkViewModel { Text = this.globalLocalizer["PriceList"], Url = "#price-list" },
-                new LinkViewModel { Text = this.globalLocalizer["Contact"], Url = "#contact" }
+                new LinkViewModel { Text = _globalLocalizer["PriceList"], Url = "#price-list" },
+                new LinkViewModel { Text = _globalLocalizer["Contact"], Url = "#contact" }
             };
 
             var viewModel = new BuyerHeaderViewModel
             {
-                WelcomeText = this.globalLocalizer.GetString("Welcome").Value,
-                GoToCartLabel = this.globalLocalizer.GetString("Basket"),
-                Name = model.Name,
-                IsLoggedIn = model.IsAuthenticated,
-                SearchUrl = this.linkGenerator.GetPathByAction("Index", "SearchProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                SearchLabel = this.globalLocalizer.GetString("Search"),
-                SearchPlaceholderLabel = this.globalLocalizer.GetString("Search"),
-                Logo = this.logoModelBuilder.BuildModel(),
-                BasketUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                LanguageSwitcher = this.languageSwitcherViewModel.BuildModel(),
-                GetSuggestionsUrl = this.linkGenerator.GetPathByAction("Get", "SearchSuggestionsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                SearchTerm = string.Empty,
-                SignInLink = new LinkViewModel
-                {
-                    Url = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                    Text = this.globalLocalizer.GetString("SignIn")
-                },
-                SignOutLink = new LinkViewModel
-                {
-                    Url = this.linkGenerator.GetPathByAction("SignOutNow", "Account", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
-                    Text = this.globalLocalizer.GetString("SignOut")
-                },
+                Search = _searchModelBuilder.BuildModel(),
+                LanguageSwitcher = _languageSwitcherViewModel.BuildModel(),
+                UserPopup = _userPopupModelBuilder.BuildModel(model),
+                SidebarMobile = await _sidebarMobileModelBuilder.BuildModelAsync(model),
+                GoToCartLabel = _globalLocalizer.GetString("Basket"),
+                Logo = _logoModelBuilder.BuildModel(),
+                BasketUrl = _linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
                 Links = links
             };
 
             if (model.IsAuthenticated && model.BasketId.HasValue)
             {
-                var existingBasket = await this.basketRepository.GetBasketById(model.Token, model.Language, model.BasketId);
+                var existingBasket = await _basketRepository.GetBasketById(model.Token, model.Language, model.BasketId);
                 if (existingBasket is not null)
                 {
                     var basketItems = existingBasket.Items.OrEmptyIfNull();
