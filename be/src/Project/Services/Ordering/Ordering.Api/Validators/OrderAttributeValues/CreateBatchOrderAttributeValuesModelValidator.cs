@@ -8,7 +8,6 @@ namespace Ordering.Api.Validators.OrderAttributeValues
     {
         public CreateBatchOrderAttributeValuesModelValidator()
         {
-            RuleFor(x => x.OrderId).NotNull().NotEmpty();
             RuleFor(x => x.Values).NotNull().NotEmpty();
         }
     }

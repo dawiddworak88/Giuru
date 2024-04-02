@@ -180,9 +180,9 @@ namespace Ordering.Api.Services.Orders
             {
                 var batchServiceModel = new CreateBatchOrderAttributeValuesServiceModel
                 {
-                    OrderId = order.Id,
                     Values = serviceModel.AttributesValues.Select(x => new CreateOrderAttributeValueServiceModel
                     {
+                        OrderId = order.Id,
                         AttributeId = x.AttributeId,
                         Value = x.Value
                     }),

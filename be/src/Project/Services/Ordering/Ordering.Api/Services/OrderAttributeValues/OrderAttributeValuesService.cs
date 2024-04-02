@@ -27,13 +27,13 @@ namespace Ordering.Api.Services.OrderAttributeValues
         {
             var attributeValues = _context.AttributeValues
                 .Include(x => x.AttributeValueTranslations)
-                .Where(x => x.OrderId == model.OrderId && model.Values.Select(y => y.AttributeId).Contains(x.AttributeId))
+                .Where(x => model.Values.Select(y => y.OrderId).Contains(x.OrderId) && model.Values.Select(y => y.AttributeId).Contains(x.AttributeId))
                 .AsSingleQuery()
                 .ToList();
 
             foreach (var attributeValue in model.Values.OrEmptyIfNull())
             {
-                var existingValue = attributeValues.FirstOrDefault(x => x.AttributeId == attributeValue.AttributeId && x.OrderItemId == attributeValue.OrderItemId);
+                var existingValue = attributeValues.FirstOrDefault(x => x.OrderId == attributeValue.OrderId && x.AttributeId == attributeValue.AttributeId && x.OrderItemId == attributeValue.OrderItemId);
 
                 if (string.IsNullOrWhiteSpace(attributeValue.Value) is true && existingValue is not null)
                 {
@@ -51,7 +51,7 @@ namespace Ordering.Api.Services.OrderAttributeValues
                 {
                     var newValue = new AttributeValue
                     {
-                        OrderId = model.OrderId.Value,
+                        OrderId = attributeValue.OrderId.Value,
                         OrderItemId = attributeValue.OrderItemId,
                         AttributeId = attributeValue.AttributeId.Value,
                     };

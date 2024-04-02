@@ -99,16 +99,16 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Batch([FromBody] BatchOrderAttributeValuesRequestModel request)
+        public async Task<IActionResult> Batch([FromBody] IEnumerable<BatchOrderAttributeValueRequestModel> request)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new CreateBatchOrderAttributeValuesServiceModel
             {
-                OrderId = request.OrderId,
-                Values = request.Values.OrEmptyIfNull().Select(x => new CreateOrderAttributeValueServiceModel
+                Values = request.OrEmptyIfNull().Select(x => new CreateOrderAttributeValueServiceModel
                 {
                     AttributeId = x.AttributeId,
+                    OrderId = x.OrderId,
                     OrderItemId = x.OrderItemId,
                     Value = x.Value
                 }),

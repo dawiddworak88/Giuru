@@ -53,20 +53,27 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await _orderItemsRepository.UpdateStatusAsync(token, language, request.Id, request.OrderItemStatusId, request.ExpectedDateOfProductOnStock);
-
             if (request.AttributesValues is not null && 
                 request.AttributesValues.Any())
             {
-                await _orderAttributeValuesRepository.BatchAsync(token, language, request.OrderId, request.Id,
+                await _orderAttributeValuesRepository.BatchAsync(token, language,
                     request.AttributesValues.Select(x => new ApiOrderAttributeValue
                     {
+                        OrderId = request.OrderId,
+                        OrderItemId = request.Id,
                         AttributeId = x.AttributeId,
                         Value = x.Value
                     }));
             }
 
-            var orderItemStatusChanges = await _orderItemsRepository.GetStatusChangesAsync(token, language, request.Id);
+            var orderItemStatusChanges = new OrderItemStatusChanges();
+
+            if (request.LastOrderItemStatusId != request.NewOrderItemStatusId)
+            {
+                await _orderItemsRepository.UpdateStatusAsync(token, language, request.Id, request.NewOrderItemStatusId, request.ExpectedDateOfProductOnStock);
+
+                orderItemStatusChanges = await _orderItemsRepository.GetStatusChangesAsync(token, language, request.Id);
+            }
 
             return StatusCode((int)HttpStatusCode.OK, new { StatusChanges = orderItemStatusChanges.StatusChanges, Message = _orderLocalizer.GetString("OrderStatusUpdatedSuccessfully").Value });
         }

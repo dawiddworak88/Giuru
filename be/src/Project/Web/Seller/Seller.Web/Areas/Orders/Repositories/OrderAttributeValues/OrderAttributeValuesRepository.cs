@@ -5,7 +5,6 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
-using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Orders.ApiRequestModels;
 using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Shared.Configurations;
@@ -29,28 +28,23 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributeValues
             _options = options;
         }
 
-        public async Task BatchAsync(string token, string language, Guid? orderId, Guid? orderItemId, IEnumerable<ApiOrderAttributeValue> values)
+        public async Task BatchAsync(string token, string language, IEnumerable<ApiOrderAttributeValue> values)
         {
-            var requestModel = new OrderAttributeValuesRequestModel
-            {
-                OrderId = orderId,
-                OrderItemId = orderItemId,
-                Values = values.Select(x => new OrderAttributeValueRequestModel
-                {
-                    AttributeId = x.AttributeId,
-                    Value = x.Value
-                })
-            };
-
-            var apiRequest = new ApiRequest<OrderAttributeValuesRequestModel>
+            var apiRequest = new ApiRequest<IEnumerable<ApiOrderAttributeValue>>
             {
                 Language = language,
-                Data = requestModel,
+                Data = values.Select(x => new ApiOrderAttributeValue
+                {
+                    OrderId = x.OrderId,
+                    OrderItemId = x.OrderItemId,
+                    AttributeId = x.AttributeId,
+                    Value = x.Value
+                }),
                 AccessToken = token,
                 EndpointAddress = $"{_options.Value.OrderUrl}{ApiConstants.Order.BatchOrderAttributeValuesApiEndpoint}"
             };
 
-            var response = await _apiClientService.PostAsync<ApiRequest<OrderAttributeValuesRequestModel>, OrderAttributeValuesRequestModel, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<IEnumerable<ApiOrderAttributeValue>>, IEnumerable<ApiOrderAttributeValue>, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {

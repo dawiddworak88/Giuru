@@ -8,6 +8,6 @@ namespace Seller.Web.Areas.Orders.Repositories.OrderAttributeValues
     public interface IOrderAttributeValuesRepository
     {
         Task<IEnumerable<OrderAttributeValue>> GetAsync(string token, string language, Guid? orderId, Guid? orderItemId);
-        Task BatchAsync(string token, string language, Guid? orderId, Guid? orderItemId, IEnumerable<ApiOrderAttributeValue> values);
+        Task BatchAsync(string token, string language, IEnumerable<ApiOrderAttributeValue> values);
     }
 }
