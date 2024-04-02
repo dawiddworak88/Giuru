@@ -48,7 +48,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 Footer = await _footerModelBuilder.BuildModelAsync(componentModel)
             };
 
-            viewModel.Header.SearchTerm = componentModel.SearchTerm;
+            viewModel.Header.Search.SearchTerm = componentModel.SearchTerm;
 
             return viewModel;
         }
