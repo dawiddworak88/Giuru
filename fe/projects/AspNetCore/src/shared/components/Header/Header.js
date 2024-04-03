@@ -57,14 +57,7 @@ function Header(props) {
 
 Header.propTypes = {
     logo: PropTypes.object.isRequired,
-    searchPlaceholderLabel: PropTypes.string.isRequired,
-    searchLabel: PropTypes.string.isRequired,
-    searchUrl: PropTypes.string.isRequired,
-    searchTerm: PropTypes.string.isRequired,
-    getSuggestionsUrl: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
-    isLoggedIn: PropTypes.bool,
-    signOutLink: PropTypes.object
 };
 
 export default Header;

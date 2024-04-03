@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Drawer } from "@mui/material";
 import MenuIcon from "../../Icons/Menu"
 import RemoveIcon from "../../Icons/Remove";
+import PropTypes from "prop-types";
 
 const SidebarMobile = (props) => {
     const [open, setOpen] = useState(false);
@@ -61,6 +62,14 @@ const SidebarMobile = (props) => {
             </Drawer>
         </div>
     )
+}
+
+SidebarMobile.propTypes = {
+    logo: PropTypes.object.isRequired,
+    links: PropTypes.array,
+    sLoggedIn: PropTypes.bool,
+    signOutLink: PropTypes.object,
+    signInLink: PropTypes.object
 }
 
 export default SidebarMobile;

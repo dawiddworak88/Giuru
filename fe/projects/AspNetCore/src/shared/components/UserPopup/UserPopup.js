@@ -4,6 +4,7 @@ import UserIcon from "../../Icons/User";
 import ArrowShowMoreIcon from "../../Icons/ArrowShowMore";
 import ArrowShowLessIcon from "../../Icons/ArrowShowLess";
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
+import PropTypes from "prop-types";
 
 const UserPopup = (props) => {
     const [anchor, setAnchor] = useState(null);
@@ -55,6 +56,13 @@ const UserPopup = (props) => {
             </BasePopup>
         </div>
     );
+}
+
+UserPopup.propTypes = {
+    actions: PropTypes.array,
+    isLoggedIn: PropTypes.bool,
+    signOutLink: PropTypes.object,
+    signInLink: PropTypes.object
 }
 
 export default UserPopup;
