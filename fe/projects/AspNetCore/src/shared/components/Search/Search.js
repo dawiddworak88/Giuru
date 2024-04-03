@@ -12,6 +12,7 @@ import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 import NavigationHelper from "../../helpers/globals/NavigationHelper";
 import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
 import { Context } from "../../stores/Store";
+import PropTypes from "prop-types";
 
 const Search = (props) => {
     const [suggestions, setSuggestions] = useState([]);
@@ -25,7 +26,6 @@ const Search = (props) => {
         setSearchTerm(args.value);
 
         if (args.value && args.value.length >= HeaderConstants.minSearchTermLength()) {
-
             dispatch({ type: "SET_IS_LOADING", payload: true });
 
             const searchParameters = {
@@ -78,7 +78,8 @@ const Search = (props) => {
     };
 
     const onSidebarSuggestionSelected = (name) => {
-        NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(name));
+        NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(name) + "&searchArea=" + encodeURI(searchArea));
+        setOpen(false);
     };
 
     useEffect(() => {
@@ -164,7 +165,7 @@ const Search = (props) => {
 
     const searchInput = () => {
         return (
-            <div className={`search__text is-flex ${open ? "search__text__no-border" : ""}`}>
+            <div className="search__text is-flex">
                 <div className="search__text__icon">
                     <SearchIcon />
                 </div>
@@ -178,7 +179,6 @@ const Search = (props) => {
                         renderSuggestion={renderSuggestion}
                         inputProps={searchInputProps}
                         renderSuggestionsContainer={renderSuggestionsContainer}
-                        shouldRenderSuggestions={() => !open}
                     />
                 </div>
                 <div className="search__text__remove">
@@ -276,7 +276,7 @@ const Search = (props) => {
                     </div>
                     <div className="sidebar__header__areas is-flex">
                         <Tabs value={searchArea} onChange={(e, newValue) => setSearchArea(newValue)}>
-                            {props.searchAreas && props.searchAreas.length > 0 && props.searchAreas.map((area, index) => 
+                            {props.searchAreas && props.searchAreas.length > 0 && props.searchAreas.map((area, index) =>
                                 <Tab key={index} label={area.name} value={area.value} className="sidebar__header__areas__button" disableRipple />
                             )}
                         </Tabs>
@@ -306,6 +306,14 @@ const Search = (props) => {
             </Drawer>
         </div>
     )
+}
+
+Search.propTypes = {
+    searchPlaceholderLabel: PropTypes.string.isRequired,
+    searchLabel: PropTypes.string.isRequired,
+    searchUrl: PropTypes.string.isRequired,
+    searchTerm: PropTypes.string.isRequired,
+    getSuggestionsUrl: PropTypes.string.isRequired,
 }
 
 export default Search;

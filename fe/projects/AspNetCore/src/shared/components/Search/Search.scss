@@ -12,6 +12,7 @@
 
     &__text {
         width: 100%;
+        height: 100%;
         padding: 0.9rem;
         align-items: center;
         border-right: 1px solid $naturalgrey;
@@ -27,14 +28,6 @@
 
         &__remove {
             margin-left: 1rem;
-        }
-
-        &__no-border {
-            border: 0;
-        }
-
-        &:focus-within {
-            border-right: 2px solid $blackbase;
         }
     }
 
@@ -128,9 +121,13 @@
 
 @media only screen and (max-width: $desktop) {
     .search {
+        &__text {
+            border-right: 0;
+        }
 
         &__area {
             min-width: 81px;
+            border-left: 1px solid $naturalgrey;
 
             &__desktop {
                 display: none;
@@ -138,6 +135,18 @@
 
             &__mobile {
                 display: block;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: $desktop) {
+    .search {
+
+        &__text {
+
+            &:focus-within {
+                border-right: 2px solid $blackbase;
             }
         }
     }
