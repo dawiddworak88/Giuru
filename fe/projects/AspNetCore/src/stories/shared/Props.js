@@ -92,10 +92,10 @@ export var header = {
     changeSearchTermText: "Unfortunately, we couldn't find what you're looking for. Please try entering a different phrase",
     searchAreas: [
       {
-        value: 1, name: 'All' 
+        value: 'all', name: 'All' 
       },
       {
-        value: 2, name: 'Stock levels'
+        value: 'stock', name: 'Stock levels'
       }
     ]
   }
