@@ -3,7 +3,6 @@ using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
@@ -21,7 +20,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string searchTerm, int size, int searchArea)
+        public async Task<IActionResult> Get(string searchTerm, int size, string searchArea)
         {
             var suggestions = await _productsService.GetProductSuggestionsAsync(
                 searchTerm,
