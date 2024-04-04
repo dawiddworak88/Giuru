@@ -15,6 +15,8 @@ using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Media.Services.MediaServices;
+using Buyer.Web.Shared.Definitions.Header;
+using Buyer.Web.Areas.Products.Repositories.Inventories;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -24,17 +26,20 @@ namespace Buyer.Web.Areas.Products.Services.Products
         private readonly IMediaService _mediaService;
         private readonly IOptions<AppSettings> _options;
         private readonly LinkGenerator _linkGenerator;
+        private readonly IInventoryRepository _inventoryRepository;
 
         public ProductsService(
             IProductsRepository productsRepository,
             IMediaService mediaService,
             IOptions<AppSettings> options,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IInventoryRepository inventoryRepository)
         {
             _productsRepository = productsRepository;
             _mediaService = mediaService;
             _options = options;
             _linkGenerator = linkGenerator;
+            _inventoryRepository = inventoryRepository;
         }
 
         public async Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes)
@@ -118,9 +123,16 @@ namespace Buyer.Web.Areas.Products.Services.Products
             };
         }
 
-        public async Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token, int searchArea)
+        public async Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token, string searchArea)
         {
-            return await _productsRepository.GetProductSuggestionsAsync(searchTerm, size, language, token);
+            if (searchArea == SearchConstants.SearchArea.StockLevel)
+            {
+                return await _inventoryRepository.GetAvailbleProductsInventorySuggestions(token, language, searchTerm, size);
+            }
+            else
+            {
+                return await _productsRepository.GetProductSuggestionsAsync(searchTerm, size, language, token);
+            }
         }
     }
 }
