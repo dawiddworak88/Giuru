@@ -72,6 +72,7 @@
             public static readonly string WarehousesApiEndpoint = "/api/v1/warehouse";
             public static readonly string InventoryApiEndpoint = "/api/v1/inventory";
             public static readonly string AvailableProductsApiEndpoint = "/api/v1/inventory/availableproducts";
+            public static readonly string AvailableProductsSuggestionsApiEndpoint = "/api/v1/inventory/availableproductssuggestions";
         }
 
         public struct Outlet

@@ -475,5 +475,15 @@ namespace Inventory.Api.Services.InventoryItems
                 await _context.SaveChangesAsync();
             }
         }
+
+        public IEnumerable<string> GetInventorySuggestions(GetInventorySuggestionsServiceModel model)
+        {
+            var inventoryItems = _context.Inventory.Where(x => x.IsActive)
+                    .Include(x => x.Product)
+                    .AsSingleQuery()
+                    .Select(y => y.Product.Name);
+
+            return inventoryItems.Where(x => x.StartsWith(model.SearchTerm)).Take(model.Size);
+        }
     }
 }

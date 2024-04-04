@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Products.DomainModels;
+﻿using Buyer.Web.Areas.Products.ApiRequestModels;
+using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
@@ -120,6 +121,32 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
+        }
+
+        public async Task<IEnumerable<string>> GetAvailbleProductsInventorySuggestions(string token, string language, string searchTerm, int size)
+        {
+            var requestModel = new AvaibleProductsInventorySuggesrtionsRequestModel
+            {
+                SearchTerm = searchTerm,
+                Size = size
+            };
+
+            var apiRequest = new ApiRequest<AvaibleProductsInventorySuggesrtionsRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Inventory.AvailableProductsSuggestionsApiEndpoint}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<AvaibleProductsInventorySuggesrtionsRequestModel>, AvaibleProductsInventorySuggesrtionsRequestModel, IEnumerable<string>>(apiRequest);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return response.Data;
             }
 
             return default;
