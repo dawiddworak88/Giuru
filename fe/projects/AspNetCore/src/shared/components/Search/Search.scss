@@ -115,8 +115,18 @@
     display: none;
 }
 
-.react-autosuggest__suggestions-container {
-    z-index: 5;
+.react-autosuggest__suggestions-container, .react-autosuggest__suggestions-container--open {
+    display: block;
+    position: absolute;
+    top: 3.2rem;
+    left: calc(-19px + -1.6rem);
+    width: calc(100% + 268px + 3.5rem);
+    margin-left: 1px;
+    background-color: #fff;
+    border-radius: 0 0 4px 4px;
+    z-index: 1;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    background-clip: padding-box;
 }
 
 @media only screen and (max-width: $desktop) {
