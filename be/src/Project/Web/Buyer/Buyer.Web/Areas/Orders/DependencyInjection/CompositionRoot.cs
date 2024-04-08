@@ -1,4 +1,7 @@
-﻿using Buyer.Web.Areas.Orders.DomainModels;
+﻿using Buyer.Web.Areas.Content.ComponentModels;
+using Buyer.Web.Areas.Content.ModelBuilders;
+using Buyer.Web.Areas.Content.ViewModel;
+using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.ModelBuilders;
 using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
@@ -26,6 +29,7 @@ namespace Buyer.Web.Areas.Orders.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, StatusOrderFormViewModel>, StatusOrderFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemPageViewModel>, OrderItemPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemFormViewModel>, OrderItemFormModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<SlugContentComponentModel, SlugPageViewModel>, SlugPageModelBuilder>();
         }
     }
 }
