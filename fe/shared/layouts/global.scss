@@ -60,7 +60,7 @@
 
     img {
         transition: 0.4s ease;
-      }
+    }
 
     &:hover img {
         transform: scale(1.08);
@@ -136,15 +136,26 @@
 .react-autosuggest__suggestions-container, .react-autosuggest__suggestions-container--open {
     display: block;
     position: absolute;
-    top: 3.2rem;
+    top: 3.5rem;
     left: calc(-19px + -1.6rem);
     width: calc(100% + 268px + 3.5rem);
     margin-left: 1px;
     background-color: $white;
     border-radius: 0 0 4px 4px;
-    z-index: 1;
+    z-index: 3;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     background-clip: padding-box;
+}
+
+.blur {
+    background-color: $blackbase;
+    opacity: 0.5;
+    width: 180vw;
+    height: 200vh;
+    position: absolute;
+    z-index: 2;
+    top: 3.5rem;
+    left: -30vw;
 }
 
 .react-autosuggest__suggestions-container {
@@ -157,7 +168,8 @@
 
 @media only screen and (max-width: $desktop) {
     .react-autosuggest__suggestions-container, .react-autosuggest__suggestions-container--open {
-        width: calc(100% + 130px + 3.5rem);
+        width: calc(100% + 130px + 1.7rem);
+        left: calc(-1rem + -5px);
     }
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import Autosuggest from "react-autosuggest";
 import { toast } from "react-toastify";
 import { Button, FormControl, MenuItem, Select, Drawer, Tabs, Tab } from "@mui/material";
@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 
 const Search = (props) => {
     const [suggestions, setSuggestions] = useState([]);
+    const [searchHistory, setSearchHistory] = useState([]);
     const [searchArea, setSearchArea] = useState(HeaderConstants.searchAreaAllValue);
     const [searchTerm, setSearchTerm] = useState(props.searchTerm ? props.searchTerm : "");
     const [state, dispatch] = useContext(Context);
@@ -74,11 +75,13 @@ const Search = (props) => {
 
     const onSuggestionSelected = (event, { suggestion }) => {
         NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(suggestion) + "&searchArea=" + encodeURI(searchArea));
+        updateSearchHistory(suggestion);
         setSearchTerm('');
     };
 
     const onSidebarSuggestionSelected = (name) => {
         NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(name) + "&searchArea=" + encodeURI(searchArea));
+        updateSearchHistory(name);
         setOpen(false);
     };
 
@@ -108,10 +111,22 @@ const Search = (props) => {
         return suggestion;
     };
 
+    const updateSearchHistory = (suggestion) => {
+        const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+        if (!searchHistory.includes(suggestion)) {
+            localStorage.setItem('searchHistory', JSON.stringify([...searchHistory, suggestion]));
+        }
+    };
+
+    const clearSearchHistory = () => {
+        localStorage.removeItem('searchHistory');
+        setSearchHistory([]);
+    }
+
     const renderSuggestion = (suggestion) => {
         return (
             <div className="suggestion">
-                <div className="is-flex">
+                <div className="is-flex is-align-items-center">
                     <div className="suggestion__icon">
                         <SearchIcon />
                     </div>
@@ -123,6 +138,19 @@ const Search = (props) => {
         );
     };
 
+    const renderSearchHistorySidebar = (suggestion) => {
+        return (
+            <Button
+                className="sidebar__suggestions__item"
+                sx={{ width: '100%', justifyContent: 'left', color: '#171717' }}
+                disableRipple
+                onClick={() => onSidebarSuggestionSelected(suggestion)}
+            >
+                {renderSuggestion(suggestion)}
+            </Button>
+        )
+    }
+
     const searchInputProps = {
         placeholder: props.searchPlaceholderLabel,
         value: searchTerm,
@@ -130,15 +158,58 @@ const Search = (props) => {
         onChange: (_, { newValue, method }) => {
             setSearchTerm(newValue)
         },
-        onFocus: () => setIsFocused(true),
-        onBlur: () => setIsFocused(false)
+        onFocus: () => {
+            setIsFocused(true);
+            setSearchHistory(JSON.parse(localStorage.getItem('searchHistory') || "[]"))
+        },
+        onBlur: () => {
+            setTimeout(() => {
+                setIsFocused(false)
+            }, 100)
+        }
     };
 
     const noResultInformation = (query) => {
         return (
             <div>
-                <div className="has-text-weight-bold p-1">{props.noResultText} "{query}"</div>
-                <div className="pl-1">{props.changeSearchTermText}</div>
+                <div className="has-text-weight-bold pl-1 pb-3">{props.noResultText} "{query}"</div>
+                <div className="pl-1 pb-3">{props.changeSearchTermText}</div>
+            </div>
+        )
+    }
+
+    const renderSearchHistory = () => {
+        return (
+            <div className="history">
+                <div className="pb-2 is-flex">
+                    <div className="history__text">
+                        {props.userSearchHistoryText}
+                    </div>
+                    <Button
+                        className="history__button"
+                        disableRipple
+                        onClick={clearSearchHistory}
+                        sx={{
+                            p: 0,
+                            minWidth: 0,
+                            textDecoration: 'underline',
+                            color: '#373f49',
+                            '&:hover': {
+                                backgroundColor: "#fff",
+                                textDecoration: 'underline'
+                            }
+                        }}
+                    >
+                        {props.clearText}
+                    </Button>
+                </div>
+                <div>
+                    {searchHistory.map((name, index) =>
+                        <div key={index}>
+                            {renderSearchHistorySidebar(name)}
+                        </div>
+                    )}
+                </div>
             </div>
         )
     }
@@ -148,11 +219,28 @@ const Search = (props) => {
             <div>
                 {!open &&
                     <div>
-                        {isFocused && searchTerm && searchTerm.length > 0 &&
-                            <div {...containerProps}>
-                                {children ? children :
+                        {isFocused &&
+                            <div>
+                                {searchTerm && searchTerm.length > 0 ?
+                                    <div className="relative">
+                                        <div className="blur"></div>
+                                        <div {...containerProps}>
+                                            {children ? children :
+                                                <div>
+                                                    {noResultInformation(query)}
+                                                </div>
+                                            }
+                                        </div>
+                                    </div> :
                                     <div>
-                                        {noResultInformation(query)}
+                                        {searchHistory && searchHistory.length > 0 &&
+                                            <div className="relative">
+                                                <div className="blur"></div>
+                                                <div {...containerProps}>
+                                                    {renderSearchHistory()}
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
                                 }
                             </div>
@@ -184,10 +272,11 @@ const Search = (props) => {
                 <div className="search__text__remove">
                     {searchTerm.length > 0 &&
                         <Button
+                            className="search__text__remove__button"
                             onClick={() => setSearchTerm("")}
                             sx={{
                                 p: 0,
-                                minWidth: '24px',
+                                minWidth: '24px'
                             }}
                         >
                             <RemoveIcon />
@@ -216,13 +305,13 @@ const Search = (props) => {
                                         boxShadow: 'none',
                                         borderRadius: 0,
                                         '.MuiOutlinedInput-notchedOutline': { border: 0 },
-                                        '.MuiSelect-select': { p: 1, textAlign: 'center' },
-                                        '.MuiSelect-iconOpen': { right: '16px' },
+                                        '.MuiSelect-select': { p: '0.5rem 0.5rem 0.5rem 1.5rem', textAlign: 'center' },
+                                        '.MuiSelect-iconOpen': { right: '16px' }
                                     }}
                                 >
                                     {props.searchAreas && props.searchAreas.length > 0 && props.searchAreas.map((area, index) =>
                                         <MenuItem key={index} value={area.value}>
-                                            <div className="is-flex pt-2 is-justify-content-center">
+                                            <div className="is-flex pt-2">
                                                 <div className="pr-2">
                                                     <CategoryIcon />
                                                 </div>
@@ -285,7 +374,7 @@ const Search = (props) => {
                         {suggestions && suggestions.length > 0 ? suggestions.map((name, index) =>
                             <Button
                                 key={index}
-                                className="sidebar__suggestions"
+                                className="sidebar__suggestions__item"
                                 sx={{ width: '100%', justifyContent: 'left', color: '#171717' }}
                                 disableRipple
                                 onClick={() => onSidebarSuggestionSelected(name)}
@@ -294,9 +383,13 @@ const Search = (props) => {
                             </Button>
                         ) :
                             <div>
-                                {isFocused && searchTerm &&
+                                {isFocused && searchTerm ?
+                                    noResultInformation(searchTerm)
+                                    :
                                     <div>
-                                        {noResultInformation(searchTerm)}
+                                        {searchHistory && searchHistory.length > 0 &&
+                                            renderSearchHistory()
+                                        }
                                     </div>
                                 }
                             </div>
