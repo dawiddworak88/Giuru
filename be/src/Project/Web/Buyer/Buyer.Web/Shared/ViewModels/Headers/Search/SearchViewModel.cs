@@ -12,6 +12,8 @@ namespace Buyer.Web.Shared.ViewModels.Headers.Search
         public string GetSuggestionsUrl { get; set; }
         public string NoResultText { get; set; }
         public string ChangeSearchTermText { get; set; }
+        public string UserSearchHistoryText { get; set; }
+        public string ClearText { get; set; }
         public IEnumerable<SearchAreaViewModel> SearchAreas { get; set; }
     }
 }

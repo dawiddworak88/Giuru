@@ -34,7 +34,9 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers.Search
                 SearchPlaceholderLabel = _globalLocalizer.GetString("Search"),
                 GetSuggestionsUrl = _linkGenerator.GetPathByAction("Get", "SearchSuggestionsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 NoResultText = _globalLocalizer.GetString("NoResultText"),
-                ChangeSearchTermText = _globalLocalizer.GetString("ChangeSearchTermText")
+                ChangeSearchTermText = _globalLocalizer.GetString("ChangeSearchTermText"),
+                UserSearchHistoryText = _globalLocalizer.GetString("UserSearchHistoryText"),
+                ClearText = _globalLocalizer.GetString("ClearText"),
             };
 
             var searchAreas = new List<SearchAreaViewModel>
