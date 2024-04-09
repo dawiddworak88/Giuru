@@ -352,7 +352,7 @@
     <value>Zapisz</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Wyszukaj</value>
+    <value>Wyszukaj produkt za nazwą albo SKU.</value>
   </data>
   <data name="SelectLanguage" xml:space="preserve">
     <value>Wybierz język</value>
@@ -788,5 +788,11 @@
   </data>
   <data name="SearchAreaStockLevel" xml:space="preserve">
     <value>Stany magazynowe</value>
+  </data>
+  <data name="ClearText" xml:space="preserve">
+    <value>Wyczyść</value>
+  </data>
+  <data name="UserSearchHistoryText" xml:space="preserve">
+    <value>Twoja historia wyszukiwania.</value>
   </data>
 </root>

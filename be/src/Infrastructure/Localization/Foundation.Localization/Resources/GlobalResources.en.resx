@@ -349,7 +349,7 @@
     <value>Save</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Search</value>
+    <value>Search for a product by name or SKU.</value>
   </data>
   <data name="SelectLanguage" xml:space="preserve">
     <value>Select language</value>
@@ -782,5 +782,11 @@
   </data>
   <data name="SearchAreaStockLevel" xml:space="preserve">
     <value>Stock levels</value>
+  </data>
+  <data name="ClearText" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="UserSearchHistoryText" xml:space="preserve">
+    <value>Your search history.</value>
   </data>
 </root>

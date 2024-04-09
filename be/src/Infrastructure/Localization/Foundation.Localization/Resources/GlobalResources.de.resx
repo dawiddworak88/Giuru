@@ -349,7 +349,7 @@
     <value>Speichern</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Suche</value>
+    <value>Suche nach einem Produkt nach Namen oder SKU.</value>
   </data>
   <data name="SelectLanguage" xml:space="preserve">
     <value>Sprache auswählen</value>
@@ -782,5 +782,11 @@
   </data>
   <data name="SearchAreaStockLevel" xml:space="preserve">
     <value>Lagerbestände</value>
+  </data>
+  <data name="ClearText" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="UserSearchHistoryText" xml:space="preserve">
+    <value>Dein Suchverlauf.</value>
   </data>
 </root>
