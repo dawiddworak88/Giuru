@@ -1,4 +1,4 @@
-.sidebar {
+.sidebar-mobile {
 
     &__menu {
         font-size: 14px;
@@ -7,7 +7,7 @@
             padding: 1rem;
 
             &__logo {
-                width: 6rem;
+                width: 8rem;
             }
         }
 
@@ -16,7 +16,7 @@
             &__button {
                 color: $link;
                 border-bottom: 1px solid $natuaralgrey200;
-                padding: 1rem;
+                padding: 2rem;
                 display: block;
 
                 &:active {
@@ -32,19 +32,24 @@
 
         &__button {
             display: flex;
-            padding: 0.1rem;
-            margin: 0.9rem;
+            margin-bottom: 1rem;
+            margin-left: 1rem;
             border-bottom: 2px solid $white;
-
-            &:active {
-                border-bottom-color: $primary;
-                color: $primary;
-            }
         }
     }
 }
 
+.selected {
+    color: $swamp;
+    border-bottom: 2px solid $swamp;
+}
+
+.MuiTabs-indicator {
+    display: none;
+}
+
 @media only screen and (max-width: $tablet) {
+
     .MuiDrawer-paper {
         width: 100% !important;
     }
