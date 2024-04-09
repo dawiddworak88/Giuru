@@ -1,10 +1,9 @@
 .switcher {
-    &__button {
-        color: $blackbase;
-        font-family: $family-primary;
 
-        &:hover {
-            background-color: $white;
+    &__button {
+        
+        &__text {
+            font-weight: 700;
         }
     }
 
@@ -14,9 +13,9 @@
         padding: 0.5rem;
         margin: 8px;
         z-index: 1;
-        -webkit-box-shadow: 4px 8px 24px -9px rgba(66, 68, 90, 1);
-        -moz-box-shadow: 4px 8px 24px -9px rgba(66, 68, 90, 1);
-        box-shadow: 4px 8px 24px -9px rgba(66, 68, 90, 1);
+        -webkit-box-shadow: $box-shadow;
+        -moz-box-shadow: $box-shadow;
+        box-shadow: $box-shadow;
 
         &__button {
             display: block;

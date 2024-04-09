@@ -31,9 +31,16 @@ function LanguageSwitcher(props) {
                 type="button"
                 onClick={handleClick}
                 disableRipple
-                sx={{ p: 0 }}
+                sx={{ 
+                    p: 0,
+                    color: '#171717',
+                    fontFamily: 'Nunito, sans-serif',
+                    '&:hover': {
+                        backgroundColor: '#fff'
+                    } 
+                }}
             >
-                <span className="pr-2 is-uppercase has-text-weight-bold">
+                <span className="pr-2 switcher__button__text">
                     {props.selectedLanguageText}
                 </span>
                 {open ?
