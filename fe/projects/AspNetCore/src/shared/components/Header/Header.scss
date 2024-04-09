@@ -1,7 +1,7 @@
 @import "../../../shared/components/UserPopup/UserPopup.scss";
 @import "../../../shared/components/LanguageSwitcher/LanguageSwitcher.scss";
-@import "../../../shared/components/SidebarMobile/SidebarMobile.scss";
 @import "../../../shared/components/Search/Search.scss";
+@import "../../../shared/components/SidebarMobile/SidebarMobile.scss";
 
 .navbar {
     display: grid;
@@ -9,7 +9,7 @@
     z-index: 0;
 
     &__start {
-        justify-content: center;
+        justify-content: left;
 
         &__logo {
             width: 8rem;
@@ -19,6 +19,7 @@
     &__actions {
         padding: 0 0 0 1rem;
         align-items: center;
+        justify-content: right;
 
         &__cart {
             position: relative;
@@ -29,8 +30,8 @@
                 position: absolute;
                 background: $errorred;
                 color: white;
-                top: -0.7rem;
-                right: -0.7rem;
+                top: -0.5rem;
+                right: -0.9rem;
                 font-size: 0.7rem;
                 display: flex;
                 justify-content: center;
@@ -53,7 +54,8 @@
 @media only screen and (max-width: $desktop) {
 
     .navbar {
-        
+        border-bottom: 1px solid $natuaralgrey300;
+
         &__actions {
             &__language {
                 display: none;
