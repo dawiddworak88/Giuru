@@ -1,19 +1,16 @@
 .popup {
     font-family: $family-primary;
 
-    &__button:hover {
-        background-color: $white;
-    }
-
     &__body {
+        min-width: 174px;
         background-color: $white;
         border-radius: 4px;
         padding: 1rem;
         margin: 8px;
         z-index: 2;
-        -webkit-box-shadow: 4px 8px 24px -9px rgba(66, 68, 90, 1);
-        -moz-box-shadow: 4px 8px 24px -9px rgba(66, 68, 90, 1);
-        box-shadow: 4px 8px 24px -9px rgba(66, 68, 90, 1);
+        -webkit-box-shadow: $box-shadow;
+        -moz-box-shadow: $box-shadow;
+        box-shadow: $box-shadow;
 
         &__welcome-text {
             color: $blackbase;
@@ -23,7 +20,9 @@
 
         &__button {
             display: block;
-            width: 170px;
+            font-size: 14px;
+            color: $blackbase;
+            width: 100%;
             padding: 0.5rem;
             border-radius: 4px;
 

@@ -24,7 +24,12 @@ const UserPopup = (props) => {
                 type="button"
                 onClick={handleClick}
                 disableRipple
-                sx={{ p: 0 }}
+                sx={{ 
+                    p: 0,
+                    '&:hover': {
+                        backgroundColor: '#fff'
+                    }
+                 }}
             >
                 <span className="pr-2">
                     <UserIcon />
