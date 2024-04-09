@@ -3,9 +3,12 @@
     background-color: $primarymint;
     padding: 0.4rem;
     color: $white;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
 
     &_list {
-        gap: 1rem;
+        gap: 32px;
     }
 
     &_item {
@@ -16,6 +19,7 @@
 
     &_link {
         color: $white;
+        font-family: 'Nunito sans';
 
         &:hover {
             color: $lightgrey;
