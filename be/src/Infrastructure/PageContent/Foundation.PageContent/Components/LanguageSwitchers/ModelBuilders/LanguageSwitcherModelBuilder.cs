@@ -51,7 +51,7 @@ namespace Foundation.PageContent.Components.LanguageSwitchers.ModelBuilders
             {
                 AvailableLanguages = languages,
                 SelectedLanguageUrl = selectedLanguageUrl,
-                SelectedLanguageText = CultureInfo.CurrentUICulture.Name,
+                SelectedLanguageText = CultureInfo.CurrentUICulture.Name.ToUpper(),
             };
         }
     }
