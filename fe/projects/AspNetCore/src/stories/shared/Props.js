@@ -87,9 +87,11 @@ export var header = {
     searchTerm: "",
     searchUrl: "#",
     searchLabel: "Search",
-    searchPlaceholderLabel: "Search",
+    searchPlaceholderLabel: "Search for a product by name or SKU...",
     noResultText: "No results found for the searched phrase",
     changeSearchTermText: "Unfortunately, we couldn't find what you're looking for. Please try entering a different phrase",
+    userSearchHistoryText: "Your search history.",
+    clearText: "Clear",
     searchAreas: [
       {
         value: 'all', name: 'All' 
