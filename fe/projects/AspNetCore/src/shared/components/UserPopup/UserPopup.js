@@ -38,7 +38,7 @@ const UserPopup = (props) => {
                     <ArrowShowLessIcon /> : <ArrowShowMoreIcon />
                 }
             </Button>
-            <BasePopup id={id} open={open} anchor={anchor}>
+            <BasePopup id={id} open={open} anchor={anchor} className="popup">
                 <div className="popup__body">
                     {props.isLoggedIn ? (
                         props.signOutLink &&

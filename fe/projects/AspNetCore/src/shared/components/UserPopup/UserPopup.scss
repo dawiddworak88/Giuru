@@ -1,5 +1,6 @@
 .popup {
     font-family: $family-primary;
+    z-index: 1;
 
     &__body {
         min-width: 174px;

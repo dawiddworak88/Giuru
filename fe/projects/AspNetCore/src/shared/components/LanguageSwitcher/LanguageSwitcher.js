@@ -47,7 +47,7 @@ function LanguageSwitcher(props) {
                     <ArrowShowLessIcon /> : <ArrowShowMoreIcon />
                 }
             </Button>
-            <BasePopup id={id} open={open} anchor={anchor}>
+            <BasePopup id={id} open={open} anchor={anchor} className="switcher">
                 <div className="switcher__body">
                     {props.availableLanguages && props.availableLanguages.length > 0 && props.availableLanguages.map((language, index) =>
                         <a key={index} href={language.url} className="switcher__body__button" onClick={() => handleLanguageChange(language.url)}>{language.text}</a>

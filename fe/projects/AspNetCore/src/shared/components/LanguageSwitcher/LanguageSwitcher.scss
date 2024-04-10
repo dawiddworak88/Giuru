@@ -1,4 +1,5 @@
 .switcher {
+    z-index: 1;
 
     &__button {
         
@@ -10,9 +11,8 @@
     &__body {
         background-color: $white;
         border-radius: 4px;
+        margin-top: 1rem;
         padding: 0.5rem;
-        margin: 8px;
-        z-index: 1;
         -webkit-box-shadow: $box-shadow;
         -moz-box-shadow: $box-shadow;
         box-shadow: $box-shadow;
