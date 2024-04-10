@@ -19,7 +19,7 @@
 
     &_link {
         color: $white;
-        font-family: 'Nunito sans';
+        font-family: $family-primary;
 
         &:hover {
             color: $lightgrey;
