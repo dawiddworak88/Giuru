@@ -1,13 +1,6 @@
 .switcher {
     z-index: 1;
 
-    &__button {
-        
-        &__text {
-            font-weight: 700;
-        }
-    }
-
     &__body {
         background-color: $white;
         border-radius: 4px;
