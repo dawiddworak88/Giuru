@@ -6,7 +6,7 @@
 .navbar {
     display: grid;
     grid-template-columns: 20% 60% 20%;
-    z-index: 0;
+    z-index: 1;
 
     &__start {
         justify-content: left;
@@ -57,6 +57,8 @@
         border-bottom: 1px solid $natuaralgrey300;
 
         &__actions {
+            justify-content: center;
+
             &__language {
                 display: none;
             }
