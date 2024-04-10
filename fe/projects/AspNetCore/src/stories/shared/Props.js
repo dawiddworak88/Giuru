@@ -2,7 +2,7 @@ export var header = {
   logo: {
     targetUrl: "/",
     logoAltLabel: "Logo",
-    logoUrl: "https://media.eltap.com/api/v1/files/85b14b09-856d-4fd0-8af4-7c077953b214?o=true"
+    logoUrl: "https://media.eltap.com/api/v1/files/54f48c59-5ebb-4d48-63c2-08db23358558"
   },
   languageSwitcher: {
     availableLanguages: [
@@ -49,7 +49,7 @@ export var header = {
     logo: {
       targetUrl: "/",
       logoAltLabel: "Logo",
-      logoUrl: "https://media.eltap.com/api/v1/files/85b14b09-856d-4fd0-8af4-7c077953b214?o=true"
+      logoUrl: "https://media.eltap.com/api/v1/files/54f48c59-5ebb-4d48-63c2-08db23358558"
     },
     links: [
       { url: "#", text: "Categories" },
