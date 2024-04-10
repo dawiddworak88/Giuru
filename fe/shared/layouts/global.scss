@@ -136,7 +136,7 @@
 .react-autosuggest__suggestions-container, .react-autosuggest__suggestions-container--open {
     display: block;
     position: absolute;
-    top: 3.5rem;
+    top: 2rem;
     left: calc(-19px + -1.6rem);
     width: calc(100% + 268px + 3.5rem);
     margin-left: 1px;
@@ -154,7 +154,7 @@
     height: 200vh;
     position: absolute;
     z-index: 2;
-    top: 3.5rem;
+    top: 2rem;
     left: -30vw;
 }
 
