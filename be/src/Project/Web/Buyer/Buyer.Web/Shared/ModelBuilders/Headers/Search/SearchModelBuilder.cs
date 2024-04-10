@@ -30,8 +30,8 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers.Search
             {
                 SearchTerm = string.Empty,
                 SearchUrl = _linkGenerator.GetPathByAction("Index", "SearchProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                SearchLabel = _globalLocalizer.GetString("Search"),
-                SearchPlaceholderLabel = _globalLocalizer.GetString("Search"),
+                SearchLabel = _globalLocalizer.GetString("SearchByNameOrSKU"),
+                SearchPlaceholderLabel = _globalLocalizer.GetString("SearchByNameOrSKU"),
                 GetSuggestionsUrl = _linkGenerator.GetPathByAction("Get", "SearchSuggestionsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 NoResultText = _globalLocalizer.GetString("NoResultText"),
                 ChangeSearchTermText = _globalLocalizer.GetString("ChangeSearchTermText"),
