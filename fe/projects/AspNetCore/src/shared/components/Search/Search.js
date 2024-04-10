@@ -85,28 +85,6 @@ const Search = (props) => {
         setOpen(false);
     };
 
-    useEffect(() => {
-        const keyDownHandler = event => {
-            if (event.key === 'Enter') {
-                onSearchSubmit(event);
-            }
-        };
-
-        document.addEventListener('keydown', keyDownHandler);
-
-        return () => {
-            document.removeEventListener('keydown', keyDownHandler);
-        }
-    }, []);
-
-    const onSearchSubmit = (e) => {
-        e.preventDefault();
-
-        if (searchTerm && searchTerm.length >= HeaderConstants.minSearchTermLength()) {
-            NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(searchTerm));
-        }
-    };
-
     const getSuggestionValue = (suggestion) => {
         return suggestion;
     };
@@ -290,7 +268,6 @@ const Search = (props) => {
     return (
         <div className="search">
             <div className="is-flex">
-                <form onSubmit={onSearchSubmit} className="search is-flex">
                     {searchInput()}
                     <div className="search__area">
                         <div className="search__area__desktop">
@@ -339,7 +316,6 @@ const Search = (props) => {
                             </Button>
                         </div>
                     </div>
-                </form>
             </div>
             <Drawer open={open} PaperProps={{ sx: { width: '100%' } }} className="lol">
                 <div className="sidebar">
