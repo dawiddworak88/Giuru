@@ -99,6 +99,27 @@ namespace Client.Api.v1.Controllers
                     CompanyName = request.CompanyName,
                     CompanyPostalCode = request.CompanyPostalCode,
                     CompanyRegion = request.CompanyRegion,
+                    IsDeliveryAddressEqualBillingAddress = request.IsDeliveryAddressEqualBillingAddress,
+                    BillingAddress = new ClientApplicationAddressServiceModel
+                    { 
+                        FullName = request.BillingAddress.FullName,
+                        PhoneNumber = request.BillingAddress.PhoneNumber,
+                        Street = request.BillingAddress.Street,
+                        Region = request.BillingAddress.Region,
+                        PostalCode = request.BillingAddress.PostalCode,
+                        City = request.BillingAddress.City,
+                        Country = request.BillingAddress.Country
+                    },
+                    DeliveryAddress = new ClientApplicationAddressServiceModel
+                    {
+                        FullName = request.DeliveryAddress.FullName,
+                        PhoneNumber = request.DeliveryAddress.PhoneNumber,
+                        Street = request.DeliveryAddress.Street,
+                        Region = request.DeliveryAddress.Region,
+                        PostalCode = request.DeliveryAddress.PostalCode,
+                        City = request.DeliveryAddress.City,
+                        Country = request.DeliveryAddress.Country
+                    },
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
