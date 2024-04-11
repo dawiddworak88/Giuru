@@ -12,21 +12,22 @@ namespace Buyer.Web.Areas.Clients.Repositories
 {
     public class ApplicationsRepository : IApplicationsRepository
     {
-        private readonly IApiClientService apiClientService;
-        private readonly IOptions<AppSettings> settings;
+        private readonly IApiClientService _apiClientService;
+        private readonly IOptions<AppSettings> _settings;
 
         public ApplicationsRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> settings)
         {
-            this.apiClientService = apiClientService;
-            this.settings = settings;
+            _apiClientService = apiClientService;
+            _settings = settings;
         }
+            
+        public async Task CreateClientApplicationAsync(string token, string language, string firstName, string lastName, string contactJobTitle, string email, string phoneNumber,
+            string companyName, string companyAddress, string companyCountry, string companyCity, string companyRegion, string companyPostalCode, bool isDeliveryAddressEqualBillingAddress,
+            ClientApplicationAddressRequestModel billingAddress, ClientApplicationAddressRequestModel deliveryAddress)
+        { 
 
-        public async Task CreateClientApplicationAsync(
-            string token, string language, string firstName, string lastName, string contactJobTitle, string email, string phoneNumber, string companyName,
-            string companyAddress, string companyCountry, string companyCity, string companyRegion, string companyPostalCode)
-        {
             var requestModel = new ClientApplicationRequestModel
             {
                 FirstName = firstName,
@@ -39,7 +40,10 @@ namespace Buyer.Web.Areas.Clients.Repositories
                 CompanyCountry = companyCountry,
                 CompanyCity = companyCity,
                 CompanyRegion = companyRegion,
-                CompanyPostalCode = companyPostalCode
+                CompanyPostalCode = companyPostalCode,
+                IsDeliveryAddressEqualBillingAddress = isDeliveryAddressEqualBillingAddress,
+                BillingAddress = billingAddress,
+                DeliveryAddress = deliveryAddress
             };
 
             var apiRequest = new ApiRequest<ClientApplicationRequestModel>
@@ -47,10 +51,10 @@ namespace Buyer.Web.Areas.Clients.Repositories
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.ApplicationsApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.ApplicationsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<ClientApplicationRequestModel>, ClientApplicationRequestModel, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<ClientApplicationRequestModel>, ClientApplicationRequestModel, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
