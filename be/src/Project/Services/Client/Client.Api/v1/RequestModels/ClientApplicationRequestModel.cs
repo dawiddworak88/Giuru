@@ -16,5 +16,8 @@ namespace Client.Api.v1.RequestModels
         public string CompanyCity { get; set; }
         public string CompanyRegion { get; set; }
         public string CompanyPostalCode { get; set; }
+        public bool IsDeliveryAddressEqualBillingAddress { get; set; }
+        public ClientApplicationAddressRequestModel BillingAddress { get; set; }
+        public ClientApplicationAddressRequestModel DeliveryAddress { get; set; }
     }
 }

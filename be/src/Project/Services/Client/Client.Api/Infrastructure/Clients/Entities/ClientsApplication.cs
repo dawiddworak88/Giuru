@@ -1,4 +1,5 @@
 ﻿using Foundation.GenericRepository.Entities;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Client.Api.Infrastructure.Clients.Entities
@@ -37,5 +38,14 @@ namespace Client.Api.Infrastructure.Clients.Entities
 
         [Required]
         public string CompanyPostalCode { get; set; }
+        
+        [Required]
+        public bool IsDeliveryAddressEqualBillingAddress { get; set; }
+
+        [Required]
+        public Guid BillingAddressId { get; set; }
+
+        [Required]
+        public Guid DeliveryAddressId { get; set; }
     }
 }
