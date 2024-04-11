@@ -2,7 +2,9 @@
 using Buyer.Web.Shared.Configurations;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
+using Foundation.Localization.Definitions;
 using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.Languages.ViewModels;
 using Foundation.Security.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
@@ -19,17 +21,20 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
         private readonly IStringLocalizer<CookieConsentResources> cookieConsentLocalizer;
         private readonly IOptions<AppSettings> options;
         private readonly LinkGenerator linkGenerator;
+        private readonly IOptionsMonitor<LocalizationSettings> _localizationOptions;
 
         public ApplicationFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<CookieConsentResources> cookieConsentLocalizer,
             IOptions<AppSettings> options,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IOptionsMonitor<LocalizationSettings> localizationOptions)
         {
             this.globalLocalizer = globalLocalizer;
             this.linkGenerator = linkGenerator;
             this.cookieConsentLocalizer = cookieConsentLocalizer;
             this.options = options;
+            _localizationOptions = localizationOptions;
         }
 
         public async Task<ApplicationFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -44,6 +49,7 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
                 LastNameLabel = this.globalLocalizer.GetString("LastName"),
                 EmailLabel = this.globalLocalizer.GetString("Email"),
                 PhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel"),
+                LanguageLabel = this.globalLocalizer.GetString("CommunicationLanguageLabel"),
                 EmailFormatErrorMessage = this.globalLocalizer.GetString("EmailFormatErrorMessage"),
                 ContactJobTitleLabel = this.globalLocalizer.GetString("ContactJobTitle"),
                 CompanyPostalCodeLabel = this.globalLocalizer.GetString("PostalCode"),
@@ -53,6 +59,15 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
                 CompanyCityLabel = this.globalLocalizer.GetString("City"),
                 CompanyRegionLabel = this.globalLocalizer.GetString("Region"),
                 CompanyCountryLabel = this.globalLocalizer.GetString("Country"),
+                BillingAddressTitle = this.globalLocalizer.GetString("BillingAddressTitle"),
+                DeliveryAddressTitle = this.globalLocalizer.GetString("DeliveryAddressTitle"),
+                AddressFullNameLabel = $"{this.globalLocalizer.GetString("FirstName")} {this.globalLocalizer.GetString("LastName")}",
+                AddressPhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel"),
+                AddressStreetLabel = this.globalLocalizer.GetString("Street"),
+                AddressRegionLabel = this.globalLocalizer.GetString("Region"),
+                AddressPostalCodeLabel = this.globalLocalizer.GetString("PostalCode"),
+                AddressCityLabel = this.globalLocalizer.GetString("City"),
+                AddressCountryLabel = this.globalLocalizer.GetString("Country"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Application", "ApplicationsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 OnlineRetailersLabel = this.globalLocalizer.GetString("OnlineRetailers"),
                 YesLabel = this.globalLocalizer.GetString("Yes"),
@@ -62,6 +77,7 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
                 SelectJobTitle = this.globalLocalizer.GetString("SelectJobTitle"),
                 SignInUrl = this.linkGenerator.GetPathByAction("Index", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
                 AcceptTermsText = this.cookieConsentLocalizer.GetString("Accept"),
+                DeliveryAddressEqualBillingAddressText = this.globalLocalizer.GetString("DeliveryAddressEqualBillingAddressText"),
                 PrivacyPolicyUrl = $"{options.Value.IdentityUrl}{SecurityConstants.PrivacyPolicyEndpoint}",
                 RegulationsUrl = $"{options.Value.IdentityUrl}{SecurityConstants.RegulationsEndpoint}",
                 PrivacyPolicy = this.globalLocalizer.GetString("LowerPrivacyPolicy"),
@@ -112,6 +128,18 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
                 }
             };
 
+            var languages = new List<LanguageViewModel>
+            {
+                new LanguageViewModel { Text = this.globalLocalizer.GetString("SelectLanguage") , Value = string.Empty }
+            };
+
+            foreach (var language in _localizationOptions.CurrentValue.SupportedCultures.Split(','))
+            {
+                languages.Add(new LanguageViewModel { Text = language.ToUpperInvariant(), Value = language.ToLowerInvariant() });
+            }
+
+            viewModel.Languages = languages;
+
             viewModel.Steps = new List<StepViewModel>
             {
                 new StepViewModel
@@ -123,6 +151,11 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
                 {
                     Title = this.globalLocalizer.GetString("BusinessInformation"),
                     Subtitle = this.globalLocalizer.GetString("BusinessInformationDescription")
+                },
+                new StepViewModel
+                {
+                    Title = this.globalLocalizer.GetString("AdressesInformation"),
+                    Subtitle = this.globalLocalizer.GetString("AdressesInformationDescription"),
                 }
             };
 
