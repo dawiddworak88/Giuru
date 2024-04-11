@@ -60,8 +60,58 @@ namespace Client.Api.Services.Applications
                 CompanyCountry = model.CompanyCountry,
                 CompanyCity = model.CompanyCity,
                 CompanyRegion = model.CompanyRegion,
-                CompanyPostalCode = model.CompanyPostalCode
+                CompanyPostalCode = model.CompanyPostalCode,
+                IsDeliveryAddressEqualBillingAddress = model.IsDeliveryAddressEqualBillingAddress
             };
+
+            if (model.IsDeliveryAddressEqualBillingAddress)
+            {
+                var addresses = new ClientsApplicationAddress
+                {
+                    FullName = model.BillingAddress.FullName,
+                    PhoneNumber = model.BillingAddress.PhoneNumber,
+                    Street = model.BillingAddress.Street,
+                    Region = model.BillingAddress.Region,
+                    PostalCode = model.BillingAddress.PostalCode,
+                    City = model.BillingAddress.City,
+                    Country = model.BillingAddress.Country
+                };
+
+                await this.context.ClientsApplicationAddresses.AddAsync(addresses);
+
+                clientApplication.BillingAddressId = addresses.Id;
+                clientApplication.DeliveryAddressId = addresses.Id;
+            }
+            else
+            {
+                var bilingAddress = new ClientsApplicationAddress
+                {
+                    FullName = model.BillingAddress.FullName,
+                    PhoneNumber = model.BillingAddress.PhoneNumber,
+                    Street = model.BillingAddress.Street,
+                    Region = model.BillingAddress.Region,
+                    PostalCode = model.BillingAddress.PostalCode,
+                    City = model.BillingAddress.City,
+                    Country = model.BillingAddress.Country
+                };
+
+                var deliveryAddress = new ClientsApplicationAddress
+                {
+                    FullName = model.DeliveryAddress.FullName,
+                    PhoneNumber = model.DeliveryAddress.PhoneNumber,
+                    Street = model.DeliveryAddress.Street,
+                    PostalCode = model.DeliveryAddress.PostalCode,
+                    Region = model.DeliveryAddress.Region,
+                    City = model.DeliveryAddress.City,
+                    Country = model.DeliveryAddress.Country
+                };
+
+                await this.context.ClientsApplicationAddresses.AddAsync(bilingAddress);
+                await this.context.ClientsApplicationAddresses.AddAsync(deliveryAddress);
+
+                clientApplication.BillingAddressId = bilingAddress.Id;
+                clientApplication.DeliveryAddressId = deliveryAddress.Id;
+            }
 
             await this.context.ClientsApplications.AddAsync(clientApplication.FillCommonProperties());
             await this.context.SaveChangesAsync();
