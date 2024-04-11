@@ -777,4 +777,19 @@
   <data name="InActive" xml:space="preserve">
     <value>Nieaktywny</value>
   </data>
+  <data name="BillingAddressTitle" xml:space="preserve">
+    <value>Adres bilingowy</value>
+  </data>
+  <data name="DeliveryAddressEqualBillingAddressText" xml:space="preserve">
+    <value>Adres dostawy taki sam jak adres bilingowy</value>
+  </data>
+  <data name="AdressesInformation" xml:space="preserve">
+    <value>Informacje adresowe</value>
+  </data>
+  <data name="AdressesInformationDescription" xml:space="preserve">
+    <value>Podaj adres bilingowy oraz dostawy do łatwiejszej współpracy</value>
+  </data>
+  <data name="DeliveryAddressTitle" xml:space="preserve">
+    <value>Adres dostawy</value>
+  </data>
 </root>

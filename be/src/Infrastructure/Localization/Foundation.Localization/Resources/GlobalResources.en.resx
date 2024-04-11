@@ -771,4 +771,19 @@
   <data name="InActive" xml:space="preserve">
     <value>Inactive</value>
   </data>
+  <data name="BillingAddressTitle" xml:space="preserve">
+    <value>Billing address</value>
+  </data>
+  <data name="DeliveryAddressEqualBillingAddressText" xml:space="preserve">
+    <value>Delivery address same as billing address</value>
+  </data>
+  <data name="AdressesInformation" xml:space="preserve">
+    <value>Address information</value>
+  </data>
+  <data name="AdressesInformationDescription" xml:space="preserve">
+    <value>Provide both billing and delivery addresses for easier cooperation</value>
+  </data>
+  <data name="DeliveryAddressTitle" xml:space="preserve">
+    <value>Delivery address</value>
+  </data>
 </root>
