@@ -1,6 +1,7 @@
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
 using Buyer.Web.Shared.DependencyInjection;
+using Buyer.Web.Areas.Content.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -103,6 +104,8 @@ builder.Services.RegisterNewsDependencies();
 builder.Services.RegisterDownloadCenterDependencies();
 
 builder.Services.RegisterDashboardAreaDependencies();
+
+builder.Services.RegisterContentDependencies();
 
 builder.Services.RegisterGeneralDependencies();
 

@@ -17,17 +17,20 @@ namespace Buyer.Web.Areas.Content.ModelBuilders
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> _mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> _footerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> _notificationBarModelBuilder;
+        private readonly IAsyncComponentModelBuilder<SlugContentComponentModel, SlugPageContentWidgetsViewModel> _slugPageWidgetsModelBuilder;
 
         public SlugPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> notificationBarModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> notificationBarModelBuilder,
+            IAsyncComponentModelBuilder<SlugContentComponentModel, SlugPageContentWidgetsViewModel> slugPageWidgetsModelBuilder)
         {
             _headerModelBuilder = headerModelBuilder;
             _footerModelBuilder = footerModelBuilder;
             _mainNavigationModelBuilder = mainNavigationModelBuilder;
             _notificationBarModelBuilder = notificationBarModelBuilder;
+            _slugPageWidgetsModelBuilder = slugPageWidgetsModelBuilder;
         }
 
         public async Task<SlugPageViewModel> BuildModelAsync(SlugContentComponentModel componentModel)
@@ -38,6 +41,7 @@ namespace Buyer.Web.Areas.Content.ModelBuilders
                 NotificationBar = await _notificationBarModelBuilder.BuildModelAsync(componentModel),
                 Header = await _headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await _mainNavigationModelBuilder.BuildModelAsync(componentModel),
+                StrapiContentWidgets = await _slugPageWidgetsModelBuilder.BuildModelAsync(componentModel),
                 Footer = await _footerModelBuilder.BuildModelAsync(componentModel)
             };
 
