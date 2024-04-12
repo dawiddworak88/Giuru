@@ -10,6 +10,7 @@ import {
 import { Edit } from "@mui/icons-material";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import Files from "../../../../shared/components/Files/Files";
+import DynamicForm from "../../../../shared/components/DynamicForm/DynamicForm";
 
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -100,7 +101,7 @@ function EditOrderForm(props) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="column">
+                                <div className="column p-0">
                                     {props.deliveryAddress &&
                                         <div className="field">
                                             <InputLabel id="delivery-address-label">{props.deliveryAddressLabel}: {props.deliveryAddress}</InputLabel>
@@ -110,6 +111,12 @@ function EditOrderForm(props) {
                                         <div className="field">
                                             <InputLabel id="billing-address-label">{props.billingAddressLabel}: {props.billingAddress}</InputLabel>
                                         </div>
+                                    }
+                                    {props.orderAttributes && props.orderAttributes.length > 0 &&   
+                                        <DynamicForm 
+                                            dynamicFields={props.orderAttributes}
+                                            readOnly
+                                        />
                                     }
                                 </div>
                             </div>
@@ -143,6 +150,11 @@ function EditOrderForm(props) {
                                             <TableCell>{props.expectedDateOfProductOnStockLabel}</TableCell>
                                             <TableCell>{props.externalReferenceLabel}</TableCell>
                                             <TableCell>{props.moreInfoLabel}</TableCell>
+                                            {props.orderItemsAttributesTable && props.orderItemsAttributesTable.labels && 
+                                                props.orderItemsAttributesTable.labels.map(label => (
+                                                    <TableCell>{label}</TableCell>
+                                                )
+                                            )}
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -164,6 +176,11 @@ function EditOrderForm(props) {
                                                     <TableCell>{item.expectedDateOfProductOnStock}</TableCell>
                                                     <TableCell>{item.externalReference}</TableCell>
                                                     <TableCell>{item.moreInfo}</TableCell>
+                                                    {props.orderItemsAttributesTable && props.orderItemsAttributesTable.orderItemsAttributes && 
+                                                        props.orderItemsAttributesTable.orderItemsAttributes.filter(x => x.id == item.id).map(attribute => (
+                                                            <TableCell>{attribute.value}</TableCell>
+                                                        )
+                                                    )}
                                                 </TableRow>
                                             )
                                         })}

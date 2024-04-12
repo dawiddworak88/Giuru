@@ -12,7 +12,7 @@ import {
     Switch, InputLabel, NoSsr, Autocomplete 
 } from "@mui/material";
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
-import DynamicForm from "../../../../shared/components/DynamicForm/DynamicForm";
+import ProductDynamicForm from "../../../../shared/components/ProductDynamicForm/ProductDynamicForm";
 import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import SearchConstants from "../../../../shared/constants/SearchConstants";
@@ -387,7 +387,7 @@ function ProductForm(props) {
                                     label={props.isNewLabel} />
                             </NoSsr>
                         </div>
-                        <DynamicForm 
+                        <ProductDynamicForm 
                             jsonSchema={schema} 
                             uiSchema={uiSchema} 
                             formData={formData} 

@@ -285,4 +285,46 @@
   <data name="CancelOrderItem" xml:space="preserve">
     <value>Anuluj pozycję zamówienia</value>
   </data>
+  <data name="BackToOrderAttribute" xml:space="preserve">
+    <value>Powróć do atrybutu</value>
+  </data>
+  <data name="BackToOrderAttributes" xml:space="preserve">
+    <value>Powróć do atrybutów</value>
+  </data>
+  <data name="EditOrderAttribute" xml:space="preserve">
+    <value>Edytuj atrybut zamówienia</value>
+  </data>
+  <data name="EditOrderAttributeOption" xml:space="preserve">
+    <value>Edytuj opcje atrybutu</value>
+  </data>
+  <data name="NewOrderAttribute" xml:space="preserve">
+    <value>Nowy atrybut zamówienia</value>
+  </data>
+  <data name="NewOrderAttributeOption" xml:space="preserve">
+    <value>Nowa opcja atrybutu</value>
+  </data>
+  <data name="DeleteOrderAttributeConflict" xml:space="preserve">
+    <value>Nie można usunąć atrybutu, ze wzgledu na uzupełniony atrybut</value>
+  </data>
+  <data name="OrderAttributeDeletedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie usunięto atrybut zamówienia</value>
+  </data>
+  <data name="OrderAttributeNotFound" xml:space="preserve">
+    <value>Nie znaleziono atrybutu zamówienia</value>
+  </data>
+  <data name="OrderAttributeOptionDeletedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie usunięto opcje atrybutu zamówienia</value>
+  </data>
+  <data name="OrderAttributeOptionNotFound" xml:space="preserve">
+    <value>Nie znaleziono opcji atrybutu</value>
+  </data>
+  <data name="OrderAttributeOptionSavedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie zapisano opcje atrybutu zamówienia</value>
+  </data>
+  <data name="OrderAttributeSavedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie zapisano atrybut zamówienia</value>
+  </data>
+  <data name="OrderAttributeSelectTypeConflict" xml:space="preserve">
+    <value>Nie można przypisać opcji do atrybutu ze względu na wybrany typ</value>
+  </data>
 </root>

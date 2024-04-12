@@ -41,6 +41,12 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                             Icon = IconsConstants.ShoppingCart,
                             Title = _globalLocalizer.GetString("Orders"),
                             Url = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                        },
+                        new DrawerMenuItemViewModel
+                        {
+                            Icon = IconsConstants.Hexagon,
+                            Title = _globalLocalizer.GetString("OrderAttributes"),
+                            Url = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                         }
                     }
                 },

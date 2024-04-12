@@ -8,6 +8,11 @@ using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
 using Seller.Web.Areas.Orders.Services.OrderFiles;
 using Seller.Web.Areas.Orders.ModelBuilders;
+using Seller.Web.Areas.Orders.ComponentModels;
+using Seller.Web.Areas.Orders.Repositories.OrderAttributes;
+using Seller.Web.Areas.Orders.Repositories.OrderAttributeOptions;
+using Seller.Web.Areas.Orders.Repositories.OrderAttributeValues;
+using Seller.Web.Areas.Orders.Repositories.OrderItems;
 
 namespace Seller.Web.Areas.Orders.DependencyInjection
 {
@@ -16,8 +21,13 @@ namespace Seller.Web.Areas.Orders.DependencyInjection
         public static void RegisterOrdersAreaDependencies(this IServiceCollection services)
         {
             services.AddScoped<IOrdersRepository, OrdersRepository>();
+            services.AddScoped<IOrderItemsRepository, OrderItemsRepository>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IOrderFileService, OrderFileService>();
+            services.AddScoped<IOrderAttributesRepository,  OrderAttributesRepository>();
+            services.AddScoped<IOrderAttributeOptionsRepository, OrderAttributeOptionsRepository>();
+            services.AddScoped<IOrderAttributeValuesRepository, OrderAttributeValuesRepository>();
+
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Order>>, OrdersPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrdersPageViewModel>, OrdersPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel>, OrderPageModelBuilder>();
@@ -26,6 +36,14 @@ namespace Seller.Web.Areas.Orders.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, EditOrderFormViewModel>, EditOrderFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemPageViewModel>, OrderItemPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemFormViewModel>, OrderItemFormModelBuilder>();
+
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderAttributesPageViewModel>, OrderAttributesPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderAttributePageViewModel>, OrderAttributePageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderAttributeFormViewModel>, OrderAttributeFormModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<OrderAttribute>>, OrderAttributesPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<OrderAttributeOption>>, OrderAttributePageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<OrderAttributeOptionComponentModel, OrderAttributeOptionPageViewModel>, OrderAttributeOptionPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<OrderAttributeOptionComponentModel, OrderAttributeOptionFormViewModel>, OrderAttributeOptionFormModelBuilder>();
         }
     }
 }

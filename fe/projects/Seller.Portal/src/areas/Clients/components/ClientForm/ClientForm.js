@@ -10,7 +10,7 @@ import {
 import useForm from "../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
-import ClientDynamicForm from "../ClientDynamicForm/ClientDynamicForm";
+import DynamicForm from "../../../../shared/components/DynamicForm/DynamicForm";
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -359,7 +359,7 @@ function ClientForm(props) {
                                 onChange={handleOnChange} />
                         </div>
                         {props.clientFields && props.clientFields.length > 0 && 
-                            <ClientDynamicForm 
+                            <DynamicForm 
                                 dynamicFields={props.clientFields}
                                 setFormData={setFormData}
                                 formData={formData}

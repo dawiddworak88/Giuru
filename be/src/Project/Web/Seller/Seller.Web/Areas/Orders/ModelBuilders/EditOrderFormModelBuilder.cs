@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.DomainModels;
+using Seller.Web.Areas.Orders.Repositories.OrderAttributes;
+using Seller.Web.Areas.Orders.Repositories.OrderAttributeValues;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.ComponentModels.Files;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -25,8 +28,10 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
-        private readonly LinkGenerator _linkGenerator;
         private readonly IOrdersRepository _ordersRepository;
+        private readonly IOrderAttributesRepository _orderAttributesRepository;
+        private readonly IOrderAttributeValuesRepository _orderAttributeValuesRepository;
+        private readonly LinkGenerator _linkGenerator;
 
         public EditOrderFormModelBuilder
         (
@@ -34,8 +39,10 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
-            LinkGenerator linkGenerator,
-            IOrdersRepository ordersRepository)
+            IOrdersRepository ordersRepository,
+            IOrderAttributesRepository orderAttributesRepository,
+            IOrderAttributeValuesRepository orderAttributeValuesRepository,
+            LinkGenerator linkGenerator)
         {
             _globalLocalizer = globalLocalizer;
             _orderLocalizer = orderLocalizer;
@@ -43,6 +50,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             _ordersRepository = ordersRepository;
             _filesModelBuilder = filesModelBuilder;
             _clientLocalizer = clientLocalizer;
+            _orderAttributesRepository = orderAttributesRepository;
+            _orderAttributeValuesRepository = orderAttributeValuesRepository;
         }
 
         public async Task<EditOrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -128,18 +137,76 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                         viewModel.CanCancelOrder = true;
                     }
 
-                    var orderItemsStatuses = new List<OrderItemStatusViewModel>();
-
-                    foreach (var orderItem in order.OrderItems.OrEmptyIfNull())
+                    viewModel.OrderItemsStatuses = order.OrderItems.OrEmptyIfNull().Select(x => new OrderItemStatusViewModel
                     {
-                        orderItemsStatuses.Add(new OrderItemStatusViewModel
-                        {
-                            Id = orderItem.Id,
-                            OrderStatusId = orderItem.OrderItemStatusId
-                        });
-                    }
+                        Id = x.Id,
+                        OrderStatusId = x.OrderItemStatusId
+                    });
 
-                    viewModel.OrderItemsStatuses = orderItemsStatuses;
+                    var orderAttributes = await _orderAttributesRepository.GetAsync(componentModel.Token, componentModel.Language, (Boolean?)null);
+
+                    if (orderAttributes is not null)
+                    {
+                        var orderAttributeValues = await _orderAttributeValuesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id, null);
+
+                        viewModel.OrderAttributes = orderAttributes.Where(x => !x.IsOrderItemAttribute).Select(x =>
+                        {
+                            var orderAttributeValue = orderAttributeValues.FirstOrDefault(y => y.AttributeId == x.Id);
+
+                            return new OrderAttributeViewModel
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                Type = x.Type,
+                                Value = orderAttributeValue?.Value,
+                                IsRequired = x.IsRequired,
+                                Options = x.Options.Select(x => new OrderAttributeOptionViewModel
+                                {
+                                    Name = x.Name,
+                                    Value = x.Value
+                                })
+                            };
+                        });
+
+                        var orderItemsAttributes = new List<OrderItemAttributeViewModel>();
+
+                        foreach (var orderItem in order.OrderItems.OrEmptyIfNull())
+                        {
+                            foreach (var attribute in orderAttributes.Where(x => x.IsOrderItemAttribute))
+                            {
+                                var orderItemAttributeValue = orderAttributeValues.FirstOrDefault(y => y.AttributeId == attribute.Id && y.OrderItemId == orderItem.Id);
+
+                                var orderItemAttribute = new OrderItemAttributeViewModel
+                                {
+                                    Id = orderItem.Id,
+                                };
+
+                                if (orderItemAttributeValue?.Value is not null)
+                                {
+                                    if (attribute.Type == "boolean")
+                                    {
+                                        orderItemAttribute.Value = orderItemAttributeValue?.Value == "true" ? "Tak" : "Nie";
+                                    }
+                                    else if (attribute.Type == "select")
+                                    {
+                                        orderItemAttribute.Value = attribute.Options.FirstOrDefault(x => x.Value == orderItemAttributeValue.Value).Name;
+                                    }
+                                    else
+                                    {
+                                        orderItemAttribute.Value = orderItemAttributeValue?.Value;
+                                    }
+                                }
+
+                                orderItemsAttributes.Add(orderItemAttribute);
+                            }
+                        }
+
+                        viewModel.OrderItemsAttributesTable = new OrderItemAttributeTableViewModel
+                        {
+                            Labels = orderAttributes.Where(x => x.IsOrderItemAttribute).Select(x => x.Name),
+                            OrderItemsAttributes = orderItemsAttributes
+                        };
+                    }
                 }
 
                 var orderFiles = await _ordersRepository.GetOrderFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(OrderFile.CreatedDate)} desc");

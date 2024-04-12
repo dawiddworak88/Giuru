@@ -17,6 +17,7 @@ import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog
 import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
+import DynamicForm from "../../../../shared/components/DynamicForm/DynamicForm";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -36,6 +37,7 @@ function NewOrderForm(props) {
     const [attachments, setAttachments] = useState([]);
     const [deliveryAddressId, setDeliveryAddressId] = useState(props.defaultDeliveryAddressId ? props.defaultDeliveryAddressId : null);
     const [billingAddressId, setBillingAddressId] = useState(props.defaultBillingAddressId ? props.defaultBillingAddressId : null);
+    const [formData, setFormData] = useState(props.formData ? props.formData : null);
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -211,6 +213,16 @@ function NewOrderForm(props) {
             hasCustomOrder
         };
 
+        if (formData != null) {
+            order = {
+                ...order,
+                attributesValues: Object.entries(formData).map((attributeEntry) => ({ 
+                    attributeId: attributeEntry[0],
+                    value: attributeEntry[1]
+                }))
+            }
+        }
+
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
@@ -321,46 +333,55 @@ function NewOrderForm(props) {
     }
 
     const disabledActionButtons = orderItems.length === 0 ? !customOrder ? true : false : false;
-    
+
     return (
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
-            {props.clientAddresses && props.clientAddresses.length > 0 &&
-                <div className="columns is-desktop">
-                    <div className="column is-one-third">
-                        <div className="field">
-                            <FormControl fullWidth={true} variant="standard">
-                                <InputLabel id="deliveryAddressId-label">{props.deliveryAddressLabel}</InputLabel>
-                                <Select
-                                    labelId="deliveryAddressId-label"
-                                    id="deliveryAddressId"
-                                    name="deliveryAddressId"
-                                    value={deliveryAddressId}
-                                    onChange={(e) => setDeliveryAddressId(e.target.value)}>
-                                    {props.clientAddresses && props.clientAddresses.map((deliveryAddress, index) =>
-                                        <MenuItem key={index} value={deliveryAddress.id}>{deliveryAddress.name}</MenuItem>
-                                    )}
-                                </Select>
-                            </FormControl>
-                        </div>
-                        <div className="field">
-                            <FormControl fullWidth={true} variant="standard">
-                                <InputLabel id="billingAddressId-label">{props.billingAddressLabel}</InputLabel>
-                                <Select
-                                    labelId="billingAddressId-label"
-                                    id="billingAddressId"
-                                    name="billingAddressId"
-                                    value={billingAddressId}
-                                    onChange={(e) => setBillingAddressId(e.target.value)}>
-                                    {props.clientAddresses && props.clientAddresses.map((billingAddress, index) =>
-                                        <MenuItem key={index} value={billingAddress.id}>{billingAddress.name}</MenuItem>
-                                    )}
-                                </Select>
-                            </FormControl>
-                        </div>
-                    </div>
+            <div className="columns is-desktop">
+                <div className="column is-one-third">
+                    {props.clientAddresses && props.clientAddresses.length > 0 &&
+                        <Fragment>
+                            <div className="field">
+                                <FormControl fullWidth={true} variant="standard">
+                                    <InputLabel id="deliveryAddressId-label">{props.deliveryAddressLabel}</InputLabel>
+                                    <Select
+                                        labelId="deliveryAddressId-label"
+                                        id="deliveryAddressId"
+                                        name="deliveryAddressId"
+                                        value={deliveryAddressId}
+                                        onChange={(e) => setDeliveryAddressId(e.target.value)}>
+                                        {props.clientAddresses && props.clientAddresses.map((deliveryAddress, index) =>
+                                            <MenuItem key={index} value={deliveryAddress.id}>{deliveryAddress.name}</MenuItem>
+                                        )}
+                                    </Select>
+                                </FormControl>
+                            </div>
+                            <div className="field">
+                                <FormControl fullWidth={true} variant="standard">
+                                    <InputLabel id="billingAddressId-label">{props.billingAddressLabel}</InputLabel>
+                                    <Select
+                                        labelId="billingAddressId-label"
+                                        id="billingAddressId"
+                                        name="billingAddressId"
+                                        value={billingAddressId}
+                                        onChange={(e) => setBillingAddressId(e.target.value)}>
+                                        {props.clientAddresses && props.clientAddresses.map((billingAddress, index) =>
+                                            <MenuItem key={index} value={billingAddress.id}>{billingAddress.name}</MenuItem>
+                                        )}
+                                    </Select>
+                                </FormControl>
+                            </div>
+                        </Fragment>
+                    }
+                    {props.orderAttributes && props.orderAttributes.length > 0 && 
+                        <DynamicForm 
+                            dynamicFields={props.orderAttributes}
+                            setFormData={setFormData}
+                            formData={formData}
+                        />
+                    }
                 </div>
-            }
+            </div>
             <div className="is-modern-form">
                 <Fragment>
                     <div className="container">

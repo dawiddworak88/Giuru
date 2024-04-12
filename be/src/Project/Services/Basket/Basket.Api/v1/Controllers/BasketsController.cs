@@ -28,11 +28,11 @@ namespace Basket.Api.v1.Controllers
     [ApiController]
     public class BasketsController : BaseApiController
     {
-        private readonly IBasketService basketService;
+        private readonly IBasketService _basketService;
 
         public BasketsController(IBasketService basketService)
         {
-            this.basketService = basketService;
+            _basketService = basketService;
         }
 
         [HttpPost, MapToApiVersion("1.0")]
@@ -40,8 +40,9 @@ namespace Basket.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Post(BasketRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-            var isSellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role && x.Value == AccountConstants.Roles.Seller);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var isSellerClaim = User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role && x.Value == AccountConstants.Roles.Seller);
+
             var serviceModel = new UpdateBasketServiceModel
             {
                 Id = request.Id ?? Guid.NewGuid(),
@@ -59,15 +60,16 @@ namespace Basket.Api.v1.Controllers
                     MoreInfo = x.MoreInfo
                 }),
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new UpdateBasketModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
+
             if (validationResult.IsValid)
             {
-                var basket = await this.basketService.UpdateAsync(serviceModel);
+                var basket = await _basketService.UpdateAsync(serviceModel);
 
                 if (basket != null)
                 {
@@ -88,7 +90,7 @@ namespace Basket.Api.v1.Controllers
                         })
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
             }
 
@@ -101,22 +103,23 @@ namespace Basket.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new DeleteBasketServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new DeleteBasketModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
+
             if (validationResult.IsValid)
             {
-                await this.basketService.DeleteAsync(serviceModel);
+                await _basketService.DeleteAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -129,20 +132,21 @@ namespace Basket.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetBasketByIdServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new GetBasketByIdModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
+
             if (validationResult.IsValid)
             {
-                var basket = await this.basketService.GetBasketById(serviceModel);
+                var basket = await _basketService.GetBasketById(serviceModel);
                 if (basket is not null)
                 {
                     var response = new BasketResponseModel
@@ -162,7 +166,7 @@ namespace Basket.Api.v1.Controllers
                         })
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
             }
 
@@ -175,8 +179,9 @@ namespace Basket.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> BasketCheckoutPost(BasketCheckoutRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-            var isSellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role && x.Value == AccountConstants.Roles.Seller);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var isSellerClaim = User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role && x.Value == AccountConstants.Roles.Seller);
+            
             var serviceModel = new CheckoutBasketServiceModel
             {
                 BasketId = request.BasketId,
@@ -206,20 +211,24 @@ namespace Basket.Api.v1.Controllers
                 MoreInfo = request.MoreInfo,
                 HasCustomOrder = request.HasCustomOrder,
                 Attachments = request.Attachments,
+                AttributesValues = request.AttributesValues.Select(x => new BasketAttributeValueServiceModel
+                {
+                    AttributeId = x.AttributeId,
+                    Value = x.Value,
+                }),
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new CheckoutBasketServiceModelValidator();
-
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
-                await this.basketService.CheckoutAsync(serviceModel);
+                await _basketService.CheckoutAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.Accepted);
+                return StatusCode((int)HttpStatusCode.Accepted);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);

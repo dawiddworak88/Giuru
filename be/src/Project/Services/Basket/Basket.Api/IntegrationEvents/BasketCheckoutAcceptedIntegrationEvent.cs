@@ -36,5 +36,6 @@ namespace Basket.Api.IntegrationEvents
         public BasketEventModel Basket { get; set; }
         public bool HasCustomOrder { get; set; }
         public IEnumerable<Guid> Attachments { get; set; }
+        public IEnumerable<BasketAttributeValueEventModel> AttributesValues { get; set; }
     }
 }

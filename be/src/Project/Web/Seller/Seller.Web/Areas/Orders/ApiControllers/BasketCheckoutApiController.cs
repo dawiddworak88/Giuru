@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.ApiRequestModels;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
+using Seller.Web.Areas.Orders.Repositories.OrderAttributeValues;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -17,21 +19,27 @@ namespace Seller.Web.Areas.Orders.ApiControllers
     {
         private readonly IBasketRepository _basketRepository;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly IOrderAttributeValuesRepository _orderAttributeValuesRepository;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
-            IStringLocalizer<OrderResources> orderLocalizer)
+            IStringLocalizer<OrderResources> orderLocalizer,
+            IOrderAttributeValuesRepository orderAttributeValuesRepository)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
+            _orderAttributeValuesRepository = orderAttributeValuesRepository;
         }
 
         [HttpPost]
         public async Task<IActionResult> Checkout([FromBody] CheckoutBasketRequestModel model)
         {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
             await _basketRepository.CheckoutBasketAsync(
-                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                CultureInfo.CurrentUICulture.Name,
+                token,
+                language,
                 model.ClientId,
                 model.ClientName,
                 model.BasketId,
@@ -55,6 +63,11 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 model.ShippingStreet,
                 model.ShippingPhoneNumber,
                 model.ShippingCountryId,
+                model.AttributesValues.Select(x => new AttributeValueRequestModel
+                {
+                    AttributeId = x.AttributeId,
+                    Value = x.Value
+                }),
                 model.MoreInfo);
 
             return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });

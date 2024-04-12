@@ -111,7 +111,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             Guid? shippingCountryId, 
             string moreInfo, 
             bool hasCustomOrder, 
-            IEnumerable<Guid> attachments)
+            IEnumerable<Guid> attachments,
+            IEnumerable<AttributeValueRequestModel> attributesValues)
         {
             var requestModel = new CheckoutBasketApiRequestModel
             {
@@ -140,7 +141,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 ShippingCountryId = shippingCountryId,
                 MoreInfo = moreInfo,
                 HasCustomOrder = hasCustomOrder,
-                Attachments = attachments
+                Attachments = attachments,
+                AttributesValues = attributesValues
             };
 
             var apiRequest = new ApiRequest<CheckoutBasketApiRequestModel>

@@ -8,6 +8,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
     public class OrderItemFormViewModel
     {
         public Guid? Id { get; set; }
+        public Guid? OrderId { get; set; }
         public Guid? OrderItemStatusId { get; set; }
         public string IdLabel { get; set; }
         public string Title { get; set; }
@@ -40,5 +41,6 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public IEnumerable<OrderItemStatusChangeViewModel> StatusChanges { get; set; }
         public OrderItemStatusChangesViewModel OrderItemStatusChanges { get; set; }
         public IEnumerable<ListItemViewModel> OrderItemStatuses { get; set; }
+        public IEnumerable<OrderAttributeViewModel> OrderAttributes { get; set; }
     }
 }

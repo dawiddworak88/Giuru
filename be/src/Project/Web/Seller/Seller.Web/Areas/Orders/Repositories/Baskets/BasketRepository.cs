@@ -107,6 +107,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             string shippingStreet,
             string shippingPhoneNumber,
             Guid? shippingCountryId,
+            IEnumerable<AttributeValueRequestModel> attributesValues,
             string moreInfo)
         {
             var requestModel = new CheckoutBasketRequestModel
@@ -134,6 +135,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 ShippingStreet = shippingStreet,
                 ShippingPhoneNumber = shippingPhoneNumber,
                 ShippingCountryId = shippingCountryId,
+                AttributesValues = attributesValues,
                 MoreInfo = moreInfo
             };
 

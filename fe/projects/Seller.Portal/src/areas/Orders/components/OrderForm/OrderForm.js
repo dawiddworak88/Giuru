@@ -16,6 +16,7 @@ import OrderFormConstants from "../../../../shared/constants/OrderFormConstants"
 import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
 import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
+import DynamicForm from "../../../../shared/components/DynamicForm/DynamicForm";
 
 function OrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -35,6 +36,7 @@ function OrderForm(props) {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
     const [disableSaveButton, setDisableSaveButton] = useState(false);
+    const [formData, setFormData] = useState(props.formData ? props.formData : null);
 
     const onSuggestionsFetchRequested = (args) => {
 
@@ -212,7 +214,6 @@ function OrderForm(props) {
     };
 
     const handlePlaceOrder = () => {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         var order = {
@@ -250,6 +251,16 @@ function OrderForm(props) {
                 billingStreet: billingAddress.street,
                 billingPhoneNumber: billingAddress.phoneNumber,
                 billingCountryId: billingAddress.countryId
+            }
+        }
+
+        if (formData != null) {
+            order = {
+                ...order,
+                attributesValues: Object.entries(formData).map((attributeEntry) => ({ 
+                    attributeId: attributeEntry[0],
+                    value: attributeEntry[1]
+                }))
             }
         }
 
@@ -431,6 +442,13 @@ function OrderForm(props) {
                                     />
                                 </div>
                             </Fragment>
+                        }
+                        {props.orderAttributes && props.orderAttributes.length > 0 &&
+                            <DynamicForm 
+                                dynamicFields={props.orderAttributes}
+                                setFormData={setFormData}
+                                formData={formData}
+                            />
                         }
                     </div>
                 </div>

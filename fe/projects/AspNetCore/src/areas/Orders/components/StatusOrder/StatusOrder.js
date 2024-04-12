@@ -12,6 +12,7 @@ import moment from "moment";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import Files from "../../../../shared/components/Files/Files";
 import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
+import DynamicForm from "../../../../shared/components/DynamicForm/DynamicForm";
 
 function StatusOrder(props) {
     const [state, dispatch] = useContext(Context);
@@ -71,7 +72,7 @@ function StatusOrder(props) {
         <section className="section status-order">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
-                <div className="column">
+                <div className="column is-one-third">
                     {props.deliveryAddress &&
                         <div className="field">
                             <InputLabel id="delivery-address-label">{props.deliveryAddressLabel}: {props.deliveryAddress}</InputLabel>
@@ -102,6 +103,14 @@ function StatusOrder(props) {
                             </Button>
                         </div>
                     }
+                    {props.orderAttributes && props.orderAttributes.length > 0 && 
+                        <div className="mt-2">
+                            <DynamicForm 
+                                dynamicFields={props.orderAttributes}
+                                readOnly
+                            />
+                        </div>
+                    }
                 </div>
             </div>
             {props.orderItems && props.orderItems.length > 0 &&
@@ -125,6 +134,11 @@ function StatusOrder(props) {
                                             <TableCell>{props.expectedDateOfProductOnStockLabel}</TableCell>
                                             <TableCell>{props.externalReferenceLabel}</TableCell>
                                             <TableCell>{props.moreInfoLabel}</TableCell>
+                                            {props.orderItemsAttributesTable && props.orderItemsAttributesTable.labels && 
+                                                props.orderItemsAttributesTable.labels.map(label => (
+                                                    <TableCell>{label}</TableCell>
+                                                )
+                                            )}
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -147,6 +161,11 @@ function StatusOrder(props) {
                                                     <TableCell>{item.expectedDateOfProductOnStock}</TableCell>
                                                     <TableCell>{item.externalReference}</TableCell>
                                                     <TableCell>{item.moreInfo}</TableCell>
+                                                    {props.orderItemsAttributesTable && props.orderItemsAttributesTable.orderItemsAttributes && 
+                                                        props.orderItemsAttributesTable.orderItemsAttributes.filter(x => x.id == item.id).map(attribute => (
+                                                            <TableCell>{attribute.value}</TableCell>
+                                                        )
+                                                    )}
                                                 </TableRow>
                                             )
                                         })}

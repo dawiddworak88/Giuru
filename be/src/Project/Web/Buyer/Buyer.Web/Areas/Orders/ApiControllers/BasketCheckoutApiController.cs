@@ -102,7 +102,12 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 deliveryAddress?.CountryId,
                 model.MoreInfo,
                 model.HasCustomOrder,
-                model.Attachments?.Select(x => x.Id));
+                model.Attachments?.Select(x => x.Id),
+                model.AttributesValues?.Select(x => new AttributeValueRequestModel
+                {
+                    AttributeId = x.AttributeId,
+                    Value = x.Value
+                }));
 
                 return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
             }

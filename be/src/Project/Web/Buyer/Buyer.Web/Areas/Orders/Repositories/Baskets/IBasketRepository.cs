@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Orders.DomainModels;
+﻿using Buyer.Web.Areas.Orders.ApiRequestModels;
+using Buyer.Web.Areas.Orders.DomainModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -36,7 +37,9 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             string shippingStreet,
             string shippingPhoneNumber,
             Guid? shippingCountryId,
-            string moreInfo, bool hasCustomOrder, 
-            IEnumerable<Guid> attachments);
+            string moreInfo, 
+            bool hasCustomOrder,
+            IEnumerable<Guid> attachments,
+            IEnumerable<AttributeValueRequestModel> attributesValues);
     }
 }
