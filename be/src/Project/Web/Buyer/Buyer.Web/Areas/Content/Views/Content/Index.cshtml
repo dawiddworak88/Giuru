@@ -5,13 +5,16 @@
     window.data = @Html.Raw(Json.Serialize(@Model));
 </script>
 
-@* @section MetaTags {
-    <title>@Model.Metadata.MetaTitle</title>
-    @if (string.IsNullOrWhiteSpace(@Model.Metadata.MetaDescription) is false)
+@section MetaTags {
+    @if (!string.IsNullOrWhiteSpace(((SlugPageViewModel)Model)?.StrapiContentWidgets?.Title))
+    {
+        <title>@MetaTagsService.GenerateTitle($"{((SlugPageViewModel)Model)?.StrapiContentWidgets?.Title}", true)</title>
+    }
+@*     @if (string.IsNullOrWhiteSpace(@Model.Metadata.MetaDescription) is false)
     {
         <meta name="description" content="@Model.Metadata.MetaDescription" />
-    }
-} *@
+    } *@
+}
 
 @section HeadStyles {
     <link rel="stylesheet" href="~/dist/css/slugPage.css" type="text/css" asp-append-version="true" />
