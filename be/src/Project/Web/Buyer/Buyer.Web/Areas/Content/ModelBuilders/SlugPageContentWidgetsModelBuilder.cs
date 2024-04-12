@@ -14,11 +14,14 @@ namespace Buyer.Web.Areas.Content.ModelBuilders
 {
     public class SlugPageContentWidgetsModelBuilder : IAsyncComponentModelBuilder<SlugContentComponentModel, SlugPageContentWidgetsViewModel>
     {
+        private readonly IAsyncComponentModelBuilder<CarouselGridWidgetComponentModel, CarouselGridWidgetViewModel> _carouselWidgetModelBuilder;
         private readonly ISlugRepository _slugRepository;
 
         public SlugPageContentWidgetsModelBuilder(
+            IAsyncComponentModelBuilder<CarouselGridWidgetComponentModel, CarouselGridWidgetViewModel> carouselWidgetModelBuilder,
             ISlugRepository slugRepository)
         {
+            _carouselWidgetModelBuilder = carouselWidgetModelBuilder;
             _slugRepository = slugRepository;
         }
 
@@ -41,7 +44,23 @@ namespace Buyer.Web.Areas.Content.ModelBuilders
                 {
                     if (block is SliderBlockPage sliderBlock)
                     {
+                        var sliderWidget = new SliderWidgetViewModel
+                        {
+                            Typename = sliderBlock.Typename,
+                            Slider = await _carouselWidgetModelBuilder.BuildModelAsync(new CarouselGridWidgetComponentModel
+                            {
+                                Title = sliderBlock.Title,
+                                Skus = sliderBlock.Skus,
+                                IsAuthenticated = componentModel.IsAuthenticated,
+                                BasketId = componentModel.BasketId,
+                                Language = componentModel.Language,
+                                Name = componentModel.Name,
+                                Token = componentModel.Token,
+                                SellerId = componentModel.SellerId
+                            })
+                        };
 
+                        widgets.Add(sliderWidget);
                     }
                     else if (block is ContentBlockPage contentBlock)
                     {

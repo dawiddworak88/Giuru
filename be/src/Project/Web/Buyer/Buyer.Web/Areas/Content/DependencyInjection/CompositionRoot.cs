@@ -15,6 +15,7 @@ namespace Buyer.Web.Areas.Content.DependencyInjection
 
             services.AddScoped<IAsyncComponentModelBuilder<SlugContentComponentModel, SlugPageViewModel>, SlugPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<SlugContentComponentModel, SlugPageContentWidgetsViewModel>, SlugPageContentWidgetsModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<CarouselGridWidgetComponentModel, CarouselGridWidgetViewModel>, CarouselGridWidgetModelBuilder>();
         }
     }
 }
