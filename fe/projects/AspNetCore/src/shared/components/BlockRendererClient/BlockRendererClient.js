@@ -6,16 +6,12 @@ import {
 const BlockRendererClient = ({
   content,
 }) => {
-  console.log(content);
-  
   if (!content) return null;
   
   return (
-    content.length > 0 && (
-      <BlocksRenderer
-        content={content}
-      />
-    )
+    <BlocksRenderer
+      content={JSON.parse(content) | []}
+    />
   );
 }
 
