@@ -28,12 +28,12 @@ namespace Client.Api.v1.Controllers
     [ApiController]
     public class ClientsApplicationsController : BaseApiController
     {
-        private readonly IClientsApplicationsService clientsApplicationService;
+        private readonly IClientsApplicationsService _clientsApplicationService;
 
         public ClientsApplicationsController(
             IClientsApplicationsService clientsApplicationService)
         {
-            this.clientsApplicationService = clientsApplicationService;
+            _clientsApplicationService = clientsApplicationService;
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(ClientApplicationRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             if (request.Id.HasValue)
             {
@@ -67,8 +67,31 @@ namespace Client.Api.v1.Controllers
                     CompanyName = request.CompanyName,
                     CompanyPostalCode = request.CompanyPostalCode,
                     CompanyRegion = request.CompanyRegion,
+                    IsDeliveryAddressEqualBillingAddress = request.IsDeliveryAddressEqualBillingAddress,
+                    BillingAddress = new ClientApplicationAddressServiceModel
+                    {
+                        Id = request.BillingAddress.Id,
+                        FullName = request.BillingAddress.FullName,
+                        PhoneNumber = request.BillingAddress.PhoneNumber,
+                        Street = request.BillingAddress.Street,
+                        Region = request.BillingAddress.Region,
+                        PostalCode = request.BillingAddress.PostalCode,
+                        City = request.BillingAddress.City,
+                        Country = request.BillingAddress.Country
+                    },
+                    DeliveryAddress = new ClientApplicationAddressServiceModel
+                    {
+                        Id = request.DeliveryAddress.Id,
+                        FullName = request.DeliveryAddress.FullName,
+                        PhoneNumber = request.DeliveryAddress.PhoneNumber,
+                        Street = request.DeliveryAddress.Street,
+                        Region = request.DeliveryAddress.Region,
+                        PostalCode = request.DeliveryAddress.PostalCode,
+                        City = request.DeliveryAddress.City,
+                        Country = request.DeliveryAddress.Country
+                    },
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -77,9 +100,9 @@ namespace Client.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var clientApplicationId = await this.clientsApplicationService.UpdateAsync(serviceModel);
+                    var clientApplicationId = await _clientsApplicationService.UpdateAsync(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = clientApplicationId });
+                    return StatusCode((int)HttpStatusCode.OK, new { Id = clientApplicationId });
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -121,7 +144,7 @@ namespace Client.Api.v1.Controllers
                         Country = request.DeliveryAddress.Country
                     },
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -130,9 +153,9 @@ namespace Client.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var clientApplicationId = await this.clientsApplicationService.CreateAsync(serviceModel);
+                    var clientApplicationId = await _clientsApplicationService.CreateAsync(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.Created, new { Id = clientApplicationId });
+                    return StatusCode((int)HttpStatusCode.Created, new { Id = clientApplicationId });
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -151,13 +174,13 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new DeleteClientApplicationServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -166,9 +189,9 @@ namespace Client.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.clientsApplicationService.DeleteAsync(serviceModel);
+                await _clientsApplicationService.DeleteAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -185,13 +208,13 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetByEmail(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetClientApplicationServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -200,7 +223,7 @@ namespace Client.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var clientApplication = await this.clientsApplicationService.GetAsync(serviceModel);
+                var clientApplication = await _clientsApplicationService.GetAsync(serviceModel);
 
                 if (clientApplication is not null)
                 {
@@ -218,14 +241,37 @@ namespace Client.Api.v1.Controllers
                         CompanyCity = clientApplication.CompanyCity,
                         CompanyCountry = clientApplication.CompanyCountry,
                         CompanyName = clientApplication.CompanyName,
+                        IsDeliveryAddressEqualBillingAddress = clientApplication.IsDeliveryAddressEqualBillingAddress,
+                        BillingAddress = new ClientApplicationAddressResponseModel
+                        {
+                            Id = clientApplication.BillingAddress.Id,
+                            FullName = clientApplication.BillingAddress.FullName,
+                            PhoneNumber = clientApplication.BillingAddress.PhoneNumber,
+                            Region = clientApplication.BillingAddress.Region,
+                            Street = clientApplication.BillingAddress.Street,
+                            PostalCode = clientApplication.BillingAddress.PostalCode,
+                            City = clientApplication?.BillingAddress.City,
+                            Country = clientApplication.BillingAddress.Country
+                        },
+                        DeliveryAddress = new ClientApplicationAddressResponseModel 
+                        {
+                            Id = clientApplication.DeliveryAddress.Id,
+                            FullName = clientApplication.DeliveryAddress.FullName,
+                            PhoneNumber = clientApplication.DeliveryAddress.PhoneNumber,
+                            Region = clientApplication.DeliveryAddress.Region,
+                            Street = clientApplication.DeliveryAddress.Street,
+                            PostalCode = clientApplication.DeliveryAddress.PostalCode,
+                            City = clientApplication.DeliveryAddress.City,
+                            Country = clientApplication.DeliveryAddress.Country
+                        },
                         LastModifiedDate = clientApplication.LastModifiedDate,
                         CreatedDate = clientApplication.CreatedDate
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
 
-                return this.StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -245,7 +291,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var clientsApplicationIds = ids.ToEnumerableGuidIds();
 
             if (clientsApplicationIds.OrEmptyIfNull().Any())
@@ -258,7 +304,7 @@ namespace Client.Api.v1.Controllers
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -267,7 +313,7 @@ namespace Client.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var clientsApplications = await this.clientsApplicationService.GetByIds(serviceModel);
+                    var clientsApplications = await _clientsApplicationService.GetByIds(serviceModel);
 
                     if (clientsApplications is not null)
                     {
@@ -292,7 +338,7 @@ namespace Client.Api.v1.Controllers
                             })
                         };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                        return StatusCode((int)HttpStatusCode.OK, response);
                     }
                 }
 
@@ -307,11 +353,11 @@ namespace Client.Api.v1.Controllers
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
-                var clientsApplications = await this.clientsApplicationService.GetAsync(serviceModel);
+                var clientsApplications = await _clientsApplicationService.GetAsync(serviceModel);
 
                 if (clientsApplications is not null)
                 {
@@ -336,10 +382,10 @@ namespace Client.Api.v1.Controllers
                         })
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
 
-                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+                return StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
     }
