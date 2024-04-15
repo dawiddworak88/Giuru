@@ -1,13 +1,10 @@
-﻿using Buyer.Web.Areas.Products.ApiRequestModels;
-using Buyer.Web.Shared.ApiRequestModels.Catalogs;
+﻿using Buyer.Web.Shared.ApiRequestModels.Catalogs;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.DomainModels.CatalogProducts;
 using Foundation.ApiExtensions.Communications;
-using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
-using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
@@ -93,7 +90,7 @@ namespace Buyer.Web.Shared.Repositories.Products
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsSkusApiEndpoint}"
             };
 
             var response = await _apiClientService.GetAsync<ApiRequest<GetProductsBySkusRequestModel>, GetProductsBySkusRequestModel, PagedResults<IEnumerable<CatalogProduct>>>(apiRequest);
@@ -104,7 +101,7 @@ namespace Buyer.Web.Shared.Repositories.Products
 
                 products.AddRange(response.Data.Data);
 
-                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
+                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)Constants.DefaultItemsPerPage);
 
                 for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
                 {
