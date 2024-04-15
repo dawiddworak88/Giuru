@@ -24,7 +24,7 @@ namespace Buyer.Web.Areas.Clients.Repositories
         }
             
         public async Task CreateClientApplicationAsync(string token, string language, string firstName, string lastName, string contactJobTitle, string email, string phoneNumber,
-            string companyName, string companyAddress, string companyCountry, string companyCity, string companyRegion, string companyPostalCode, bool isDeliveryAddressEqualBillingAddress,
+            string companyName, string companyAddress, string companyCountry, string companyCity, string companyRegion, string companyPostalCode, string communicationLanguage, bool isDeliveryAddressEqualBillingAddress,
             ClientApplicationAddressRequestModel billingAddress, ClientApplicationAddressRequestModel deliveryAddress)
         { 
 
@@ -35,6 +35,7 @@ namespace Buyer.Web.Areas.Clients.Repositories
                 ContactJobTitle = contactJobTitle,
                 Email = email,
                 PhoneNumber = phoneNumber,
+                CommunicationLanguage = communicationLanguage,
                 CompanyName = companyName,
                 CompanyAddress = companyAddress,
                 CompanyCountry = companyCountry,

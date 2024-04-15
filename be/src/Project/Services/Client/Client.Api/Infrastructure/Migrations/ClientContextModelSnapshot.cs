@@ -158,6 +158,10 @@ namespace Client.Api.Infrastructure.Migrations
                     b.Property<Guid>("BillingAddressId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("CommunicationLanguage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CompanyAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

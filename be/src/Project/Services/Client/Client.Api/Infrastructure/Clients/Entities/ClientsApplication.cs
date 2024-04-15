@@ -22,6 +22,9 @@ namespace Client.Api.Infrastructure.Clients.Entities
         public string PhoneNumber { get; set; }
 
         [Required]
+        public string CommunicationLanguage { get; set; }
+
+        [Required]
         public string CompanyName { get; set; }
 
         [Required]

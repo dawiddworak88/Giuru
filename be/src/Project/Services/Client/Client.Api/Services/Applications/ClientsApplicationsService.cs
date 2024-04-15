@@ -56,6 +56,7 @@ namespace Client.Api.Services.Applications
                 ContactJobTitle = model.ContactJobTitle,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
+                CommunicationLanguage = model.CommunicationLanguage,
                 CompanyName = model.CompanyName,
                 CompanyAddress = model.CompanyAddress,
                 CompanyCountry = model.CompanyCountry,
@@ -258,6 +259,7 @@ namespace Client.Api.Services.Applications
                 LastName = existingApplication.LastName,
                 Email = existingApplication.Email,
                 PhoneNumber = existingApplication.PhoneNumber,
+                CommunicationLanguage = existingApplication.CommunicationLanguage,
                 ContactJobTitle = existingApplication.ContactJobTitle,
                 CompanyAddress = existingApplication.CompanyAddress,
                 CompanyCity = existingApplication.CompanyCity,
@@ -386,6 +388,7 @@ namespace Client.Api.Services.Applications
             clientApplication.ContactJobTitle = model.ContactJobTitle;
             clientApplication.Email = model.Email;
             clientApplication.PhoneNumber = model.PhoneNumber;
+            clientApplication.CommunicationLanguage = model.CommunicationLanguage;
             clientApplication.CompanyCity = model.CompanyCity;
             clientApplication.CompanyPostalCode = model.CompanyPostalCode;
             clientApplication.CompanyRegion = model.CompanyRegion;

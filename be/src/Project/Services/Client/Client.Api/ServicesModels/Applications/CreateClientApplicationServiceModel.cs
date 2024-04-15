@@ -9,6 +9,7 @@ namespace Client.Api.ServicesModels.Applications
         public string ContactJobTitle { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        public string CommunicationLanguage { get; set; }
         public string CompanyName { get; set; }
         public string CompanyAddress { get; set; }
         public string CompanyCountry { get; set; }

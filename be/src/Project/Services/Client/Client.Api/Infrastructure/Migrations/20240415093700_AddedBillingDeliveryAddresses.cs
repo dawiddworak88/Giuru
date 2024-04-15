@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Client.Api.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedAddressesToClientsApplication : Migration
+    public partial class AddedBillingDeliveryAddresses : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,6 +17,13 @@ namespace Client.Api.Infrastructure.Migrations
                 type: "uniqueidentifier",
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
+            migrationBuilder.AddColumn<string>(
+                name: "CommunicationLanguage",
+                table: "ClientsApplications",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "DeliveryAddressId",
@@ -63,6 +70,10 @@ namespace Client.Api.Infrastructure.Migrations
 
             migrationBuilder.DropColumn(
                 name: "BillingAddressId",
+                table: "ClientsApplications");
+
+            migrationBuilder.DropColumn(
+                name: "CommunicationLanguage",
                 table: "ClientsApplications");
 
             migrationBuilder.DropColumn(

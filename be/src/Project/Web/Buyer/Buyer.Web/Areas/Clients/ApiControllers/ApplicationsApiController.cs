@@ -36,7 +36,7 @@ namespace Buyer.Web.Areas.Clients.ApiControllers
 
             await _applicationsRepository.CreateClientApplicationAsync(
                 token, language, model.FirstName, model.LastName, model.ContactJobTitle, model.Email, model.PhoneNumber, model.CompanyName,
-                model.CompanyAddress, model.CompanyCountry, model.CompanyCity, model.CompanyRegion, model.CompanyPostalCode, model.IsDeliveryAddressEqualBillingAddress,
+                model.CompanyAddress, model.CompanyCountry, model.CompanyCity, model.CompanyRegion, model.CompanyPostalCode, model.CommunicationLanguage, model.IsDeliveryAddressEqualBillingAddress,
                 model.BillingAddress, model.DeliveryAddress);
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = _globalLocalizer.GetString("SuccessfullyClientApply").Value });

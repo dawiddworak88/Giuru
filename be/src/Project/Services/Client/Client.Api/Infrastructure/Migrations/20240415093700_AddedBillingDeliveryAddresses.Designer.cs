@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Client.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(ClientContext))]
-    [Migration("20240411172250_AddedAddressesToClientsApplication")]
-    partial class AddedAddressesToClientsApplication
+    [Migration("20240415093700_AddedBillingDeliveryAddresses")]
+    partial class AddedBillingDeliveryAddresses
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -160,6 +160,10 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.Property<Guid>("BillingAddressId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CommunicationLanguage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CompanyAddress")
                         .IsRequired()
