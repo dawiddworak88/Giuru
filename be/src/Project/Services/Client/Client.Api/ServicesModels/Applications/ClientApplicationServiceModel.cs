@@ -19,5 +19,8 @@ namespace Client.Api.ServicesModels.Applications
         public string CompanyPostalCode { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public bool IsDeliveryAddressEqualBillingAddress { get; set; }
+        public ClientApplicationAddressServiceModel BillingAddress { get; set; }
+        public ClientApplicationAddressServiceModel DeliveryAddress { get; set; }
     }
 }

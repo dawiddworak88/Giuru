@@ -16,6 +16,9 @@ namespace Client.Api.v1.ResponseModels
         public string CompanyCity { get; set; }
         public string CompanyRegion { get; set; }
         public string CompanyPostalCode { get; set; }
+        public bool IsDeliveryAddressEqualBillingAddress { get; set; }
+        public ClientApplicationAddressResponseModel BillingAddress { get; set; }
+        public ClientApplicationAddressResponseModel DeliveryAddress { get; set; }
         public DateTime? LastModifiedDate { get; set; }
         public DateTime? CreatedDate { get; set; }
     }
