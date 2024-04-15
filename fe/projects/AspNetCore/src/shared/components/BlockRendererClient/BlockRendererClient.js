@@ -10,7 +10,7 @@ const BlockRendererClient = ({
   
   return (
     <BlocksRenderer
-      content={JSON.parse(content) | []}
+      content={content}
     />
   );
 }

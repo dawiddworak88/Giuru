@@ -8,7 +8,7 @@ export const StrapiContent = (props) => {
     const generateWidget = (widget) => {
         switch (widget.typename) {
             case "ComponentSharedContent": 
-                return <BlockRendererClient content={widget.content} />;
+                return <BlockRendererClient content={JSON.parse(widget.content)} />;
             case "ComponentSharedSlider":
                 return <CarouselGrid {...widget.slider} />;
             default:

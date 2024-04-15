@@ -32,7 +32,7 @@ namespace Buyer.Web.Areas.Content.Repositories
             {
                 var response = await _graphQLClient.SendQueryAsync<JObject>(GetPageBySlugQuery(language, slug));
 
-                if (response?.Data is null)
+                if (response.Data is not null && response.Data["landingPages"]["data"].OrEmptyIfNull().Any() is false)
                 {
                     response = await _graphQLClient.SendQueryAsync<JObject>(GetPageBySlugQuery(fallbackLanguage, slug));
                 }
@@ -42,7 +42,6 @@ namespace Buyer.Web.Areas.Content.Repositories
                 var t = new Slug
                 {
                     Title = slugPageResponse?.Test?.Data.FirstOrDefault()?.Attributes?.Title,
-                    
                 };
 
                 var slugPageBlocks = new List<BlockPage>();
@@ -91,7 +90,7 @@ namespace Buyer.Web.Areas.Content.Repositories
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, $"Couldn't get slug ({slug}) page in language {language}");
+                _logger.LogError(exception, $"Couldn't get slug {slug} page in language {language}");
             }
 
             return default;
