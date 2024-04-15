@@ -19,10 +19,10 @@ namespace Buyer.Web.Areas.Content.Controllers
     [Area("Content")]
     public class ContentController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<SlugContentComponentModel, SlugPageViewModel> _slugPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ContentComponentModel, ContentPageViewModel> _slugPageModelBuilder;
 
         public ContentController(
-            IAsyncComponentModelBuilder<SlugContentComponentModel, SlugPageViewModel> slugPageModelBuilder)
+            IAsyncComponentModelBuilder<ContentComponentModel, ContentPageViewModel> slugPageModelBuilder)
         {
             _slugPageModelBuilder = slugPageModelBuilder;
         }
@@ -30,7 +30,7 @@ namespace Buyer.Web.Areas.Content.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string slug)
         {
-            var componentModel = new SlugContentComponentModel
+            var componentModel = new ContentComponentModel
             {
                 Slug = slug,
                 Language = CultureInfo.CurrentUICulture.Name,

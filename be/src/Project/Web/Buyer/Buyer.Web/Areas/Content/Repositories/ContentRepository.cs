@@ -13,90 +13,88 @@ using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Content.Repositories
 {
-    public class SlugRepository : ISlugRepository
+    public class ContentRepository : IContentRepository
     {
         private readonly IGraphQLClient _graphQLClient;
-        private readonly ILogger<SlugRepository> _logger;
+        private readonly ILogger<ContentRepository> _logger;
 
-        public SlugRepository(
+        public ContentRepository(
             IGraphQLClient graphQLClient,
-            ILogger<SlugRepository> logger) 
+            ILogger<ContentRepository> logger) 
         { 
             _graphQLClient = graphQLClient;
             _logger = logger;
         }
 
-        public async Task<Slug> GetPageBySlugAsync(string language, string fallbackLanguage, string slug)
+        public async Task<DomainModel.Content> GetContentPageBySlugAsync(string language, string fallbackLanguage, string slug)
         {
             try
             {
-                var response = await _graphQLClient.SendQueryAsync<JObject>(GetPageBySlugQuery(language, slug));
+                var response = await _graphQLClient.SendQueryAsync<JObject>(GetContentPageBySlugQuery(language, slug));
 
                 if (response.Data is not null && response.Data["landingPages"]["data"].OrEmptyIfNull().Any() is false)
                 {
-                    response = await _graphQLClient.SendQueryAsync<JObject>(GetPageBySlugQuery(fallbackLanguage, slug));
+                    response = await _graphQLClient.SendQueryAsync<JObject>(GetContentPageBySlugQuery(fallbackLanguage, slug));
                 }
 
-                var slugPageResponse = JsonConvert.DeserializeObject<SlugPageGraphQlResponseModel>(response.Data.ToString());
+                var contentPageResponse = JsonConvert.DeserializeObject<SlugPageGraphQlResponseModel>(response.Data.ToString());
 
-                var t = new Slug
+                var contentPage = new DomainModel.Content
                 {
-                    Title = slugPageResponse?.Test?.Data.FirstOrDefault()?.Attributes?.Title,
+                    Title = contentPageResponse?.LandingPage?.Data.FirstOrDefault()?.Attributes?.Title,
                 };
 
-                var slugPageBlocks = new List<BlockPage>();
+                var sharedComponents = new List<SharedComponent>();
 
-                foreach (var block in slugPageResponse?.Test?.Data.FirstOrDefault()?.Attributes?.Blocks.OrEmptyIfNull())
+                foreach (var sharedComponent in contentPageResponse?.LandingPage?.Data.FirstOrDefault()?.Attributes?.Blocks.OrEmptyIfNull())
                 {
-                    switch (block.TypeName)
+                    switch (sharedComponent.Typename)
                     {
                         case "ComponentSharedSlider":
-                            if (block is ComponentSharedSlider sliderBlock)
+                            if (sharedComponent is ComponentSharedSlider sharedSlider)
                             {
-                                var newSliderBlock = new SliderBlockPage
+                                var sliderComponent = new SharedSliderComponent
                                 {
-                                    HasNavigation = sliderBlock.HasNavigation,
-                                    Skus = sliderBlock.Skus,
-                                    Title = sliderBlock.Title,
-                                    Typename = sliderBlock.TypeName
+                                    HasNavigation = sharedSlider.HasNavigation,
+                                    Skus = sharedSlider.Skus,
+                                    Title = sharedSlider.Title,
+                                    Typename = sharedSlider.Typename
                                 };
 
-                                slugPageBlocks.Add(newSliderBlock);
+                                sharedComponents.Add(sliderComponent);
                             }
                             break;
-
                         case "ComponentSharedContent":
-                            if (block is ComponentSharedContent contentBlock)
+                            if (sharedComponent is ComponentSharedContent sharedContent)
                             {
-                                var newContentBlock = new ContentBlockPage
+                                var contentComponent = new SharedContentComponent
                                 {
-                                    Typename = contentBlock.TypeName,
-                                    Content = JsonConvert.SerializeObject(contentBlock.Content)
+                                    Typename = sharedContent.Typename,
+                                    Content = JsonConvert.SerializeObject(sharedContent.Content)
                                 };
 
-                                slugPageBlocks.Add(newContentBlock);
+                                sharedComponents.Add(contentComponent);
                             }
                             break;
-
                         default:
                             break;
                     }
                 }
 
-                t.Blocks = slugPageBlocks;
+                contentPage.SharedComponents = sharedComponents;
 
-                return t;
+                return contentPage;
 
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, $"Couldn't get slug {slug} page in language {language}");
+                _logger.LogError(exception, $"Couldn't get slug page ({slug}) in language {language}");
             }
 
             return default;
         }
 
-        private GraphQLRequest GetPageBySlugQuery(string language, string slug)
+        private GraphQLRequest GetContentPageBySlugQuery(string language, string slug)
         {
             return new GraphQLRequest
             {
@@ -148,7 +146,8 @@ namespace Buyer.Web.Areas.Content.Repositories
             foreach (var token in jArray)
             {
                 var block = token.ToObject<Block>(serializer);
-                switch (block.TypeName)
+
+                switch (block.Typename)
                 {
                     case "ComponentSharedSlider":
                         result.Add(token.ToObject<ComponentSharedSlider>(serializer));

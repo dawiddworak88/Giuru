@@ -1,6 +1,6 @@
 ﻿namespace Buyer.Web.Areas.Content.DomainModel
 {
-    public class BlockPage
+    public class SharedComponent
     {
         public string Typename { get; set; }
     }

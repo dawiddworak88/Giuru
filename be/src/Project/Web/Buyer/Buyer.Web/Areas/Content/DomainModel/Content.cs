@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Buyer.Web.Areas.Content.DomainModel
 {
-    public class Slug
+    public class Content
     {
         public string Title { get; set; }
         public Seo Seo { get; set; }
-        public IEnumerable<BlockPage> Blocks { get; set; }
+        public IEnumerable<SharedComponent> SharedComponents { get; set; }
     }
 }

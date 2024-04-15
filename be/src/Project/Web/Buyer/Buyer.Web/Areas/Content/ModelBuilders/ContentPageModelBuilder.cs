@@ -11,20 +11,20 @@ using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Content.ModelBuilders
 {
-    public class SlugPageModelBuilder : IAsyncComponentModelBuilder<SlugContentComponentModel, SlugPageViewModel>
+    public class ContentPageModelBuilder : IAsyncComponentModelBuilder<ContentComponentModel, ContentPageViewModel>
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> _headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> _mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> _footerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> _notificationBarModelBuilder;
-        private readonly IAsyncComponentModelBuilder<SlugContentComponentModel, SlugPageContentWidgetsViewModel> _slugPageWidgetsModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ContentComponentModel, StrapiContentWidgetsViewModel> _slugPageWidgetsModelBuilder;
 
-        public SlugPageModelBuilder(
+        public ContentPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> notificationBarModelBuilder,
-            IAsyncComponentModelBuilder<SlugContentComponentModel, SlugPageContentWidgetsViewModel> slugPageWidgetsModelBuilder)
+            IAsyncComponentModelBuilder<ContentComponentModel, StrapiContentWidgetsViewModel> slugPageWidgetsModelBuilder)
         {
             _headerModelBuilder = headerModelBuilder;
             _footerModelBuilder = footerModelBuilder;
@@ -33,9 +33,9 @@ namespace Buyer.Web.Areas.Content.ModelBuilders
             _slugPageWidgetsModelBuilder = slugPageWidgetsModelBuilder;
         }
 
-        public async Task<SlugPageViewModel> BuildModelAsync(SlugContentComponentModel componentModel)
+        public async Task<ContentPageViewModel> BuildModelAsync(ContentComponentModel componentModel)
         {
-            var viewModel = new SlugPageViewModel
+            var viewModel = new ContentPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
                 NotificationBar = await _notificationBarModelBuilder.BuildModelAsync(componentModel),

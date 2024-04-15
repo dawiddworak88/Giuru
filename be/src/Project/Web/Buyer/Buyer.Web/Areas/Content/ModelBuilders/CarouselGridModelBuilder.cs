@@ -1,12 +1,9 @@
 ﻿using Buyer.Web.Areas.Content.ComponentModels;
 using Buyer.Web.Areas.Content.ViewModel;
-using Buyer.Web.Areas.Home.Definitions;
 using Buyer.Web.Shared.Repositories.Products;
-using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Media.Services.MediaServices;
-using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Microsoft.AspNetCore.Routing;
@@ -17,13 +14,13 @@ using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Content.ModelBuilders
 {
-    public class CarouselGridWidgetModelBuilder : IAsyncComponentModelBuilder<CarouselGridWidgetComponentModel, CarouselGridWidgetViewModel>
+    public class CarouselGridModelBuilder : IAsyncComponentModelBuilder<CarouselGridComponentModel, CarouselGridViewModel>
     {
         private readonly ICatalogProductsRepository _catalogProductsRepository;
         private readonly IMediaService _mediaService;
         private readonly LinkGenerator _linkGenerator;
 
-        public CarouselGridWidgetModelBuilder(
+        public CarouselGridModelBuilder(
             ICatalogProductsRepository catalogProductsRepository,
             IMediaService mediaService,
             LinkGenerator linkGenerator)
@@ -33,9 +30,9 @@ namespace Buyer.Web.Areas.Content.ModelBuilders
             _linkGenerator = linkGenerator;
         }
 
-        public async Task<CarouselGridWidgetViewModel> BuildModelAsync(CarouselGridWidgetComponentModel componentModel)
+        public async Task<CarouselGridViewModel> BuildModelAsync(CarouselGridComponentModel componentModel)
         {
-            var viewModel = new CarouselGridWidgetViewModel
+            var viewModel = new CarouselGridViewModel
             {
                 Title = componentModel.Title,
 
@@ -43,16 +40,15 @@ namespace Buyer.Web.Areas.Content.ModelBuilders
 
             var products = await _catalogProductsRepository.GetProductsAsync(componentModel.Token, componentModel.Language, componentModel.Skus);
 
-            var items = new List<CarouselGridItemWidgetViewModel>();
+            var contentGridItems = new List<CarouselGridItemViewModel>();
 
             if (products is not null && products.OrEmptyIfNull().Any())
             {
-
-                var contentGridCarouselItems = new List<CarouselGridCarouselItemWidgetViewModel>();
+                var contentGridCarouselItems = new List<CarouselGridCarouselItemViewModel>();
 
                 foreach (var product in products)
                 {
-                    var carouselItem = new CarouselGridCarouselItemWidgetViewModel
+                    var carouselItem = new CarouselGridCarouselItemViewModel
                     {
                         Title = product.Name,
                         Subtitle = product.Sku,
@@ -69,10 +65,10 @@ namespace Buyer.Web.Areas.Content.ModelBuilders
                     contentGridCarouselItems.Add(carouselItem);
                 }
 
-                items.Add(new CarouselGridItemWidgetViewModel { Title = componentModel.Title, CarouselItems = contentGridCarouselItems });
+                contentGridItems.Add(new CarouselGridItemViewModel { Title = componentModel.Title, CarouselItems = contentGridCarouselItems });
             }
 
-            viewModel.Items = items;
+            viewModel.Items = contentGridItems;
 
             return viewModel;
         }

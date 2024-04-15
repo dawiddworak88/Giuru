@@ -2,9 +2,9 @@
 
 namespace Buyer.Web.Areas.Content.ViewModel
 {
-    public class SlugPageContentWidgetsViewModel
+    public class CarouselGridItemViewModel
     {
         public string Title { get; set; }
-        public IEnumerable<WidgetViewModel> Widgets { get; set; }
+        public IEnumerable<CarouselGridCarouselItemViewModel> CarouselItems { get; set; }
     }
 }

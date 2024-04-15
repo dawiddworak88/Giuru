@@ -2,19 +2,17 @@
 using Foundation.PageContent.ResponseModels.Seo;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Buyer.Web.Areas.Content.GraphQlResponseModels
 {
     public class SlugPageGraphQlResponseModel
     {
         [JsonProperty("landingPages")]
-        public LandingPagec Test { get; set; }
+        public LandingPage LandingPage { get; set; }
     }
 
-    public class LandingPagec
+    public class LandingPage
     {
         [JsonProperty("data")]
         public IEnumerable<Page> Data { get; set; }
@@ -44,7 +42,7 @@ namespace Buyer.Web.Areas.Content.GraphQlResponseModels
     public class Block
     {
         [JsonProperty("__typename")]
-        public string TypeName { get; set; }
+        public string Typename { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Buyer.Web.Areas.Content.ComponentModels
 {
-    public class CarouselGridWidgetComponentModel : ComponentModelBase
+    public class CarouselGridComponentModel : ComponentModelBase
     {
         public string Title { get; set; }
         public string Skus { get; set; }

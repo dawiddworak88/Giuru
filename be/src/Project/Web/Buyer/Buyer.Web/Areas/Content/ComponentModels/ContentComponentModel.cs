@@ -2,7 +2,7 @@
 
 namespace Buyer.Web.Areas.Content.ComponentModels
 {
-    public class SlugContentComponentModel : ComponentModelBase
+    public class ContentComponentModel : ComponentModelBase
     {
         public string Slug { get; set; }
     }

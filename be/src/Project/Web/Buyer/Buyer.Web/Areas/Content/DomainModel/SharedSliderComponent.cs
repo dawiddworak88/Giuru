@@ -1,6 +1,6 @@
 ﻿namespace Buyer.Web.Areas.Content.DomainModel
 {
-    public class SliderBlockPage : BlockPage
+    public class SharedSliderComponent : SharedComponent
     {
         public string Title { get; set; }
         public bool HasNavigation { get; set; }

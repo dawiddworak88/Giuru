@@ -11,11 +11,11 @@ namespace Buyer.Web.Areas.Content.DependencyInjection
     {
         public static void RegisterContentDependencies(this IServiceCollection services)
         {
-            services.AddScoped<ISlugRepository, SlugRepository>();
+            services.AddScoped<IContentRepository, ContentRepository>();
 
-            services.AddScoped<IAsyncComponentModelBuilder<SlugContentComponentModel, SlugPageViewModel>, SlugPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<SlugContentComponentModel, SlugPageContentWidgetsViewModel>, SlugPageContentWidgetsModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<CarouselGridWidgetComponentModel, CarouselGridWidgetViewModel>, CarouselGridWidgetModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ContentComponentModel, ContentPageViewModel>, ContentPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ContentComponentModel, StrapiContentWidgetsViewModel>, StrapiContentWidgetsModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<CarouselGridComponentModel, CarouselGridViewModel>, CarouselGridModelBuilder>();
         }
     }
 }
