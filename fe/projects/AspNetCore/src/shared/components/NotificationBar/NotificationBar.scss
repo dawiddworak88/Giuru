@@ -7,6 +7,10 @@
     align-items: center;
     justify-content: center;
 
+    &_icon {
+        font-size: large;
+    }
+
     &_list {
         gap: 32px;
     }
