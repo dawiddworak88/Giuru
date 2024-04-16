@@ -1,8 +1,12 @@
-﻿using Foundation.Extensions.ModelBuilders;
+﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
+using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
+using Foundation.Localization.Definitions;
 using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.Languages.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Clients.Repositories.Applications;
 using Seller.Web.Areas.Clients.ViewModels;
 using System.Collections.Generic;
@@ -17,17 +21,20 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
         private readonly IClientApplicationsRepository clientApplicationsRepository;
         private readonly LinkGenerator linkGenerator;
+        private readonly IOptionsMonitor<LocalizationSettings> _localizationOptions;
 
         public ClientApplicationFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
             IClientApplicationsRepository clientApplicationsRepository,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IOptionsMonitor<LocalizationSettings> localizationOptions)
         {
             this.globalLocalizer = globalLocalizer;
             this.clientLocalizer = clientLocalizer;
             this.clientApplicationsRepository = clientApplicationsRepository;
             this.linkGenerator = linkGenerator;
+            _localizationOptions = localizationOptions;
         }
 
         public async Task<ClientApplicationFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -53,52 +60,76 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 EmailFormatErrorMessage = this.globalLocalizer.GetString("EmailFormatErrorMessage"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ClientsApplicationApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
-                SelectJobTitle = this.globalLocalizer.GetString("SelectJobTitle")
+                SelectJobTitle = this.globalLocalizer.GetString("SelectJobTitle"),
+
+                LanguageLabel = this.globalLocalizer.GetString("CommunicationLanguageLabel"),
+                BillingAddressTitle = this.globalLocalizer.GetString("BillingAddressTitle"),
+                DeliveryAddressTitle = this.globalLocalizer.GetString("DeliveryAddressTitle"),
+                AddressFullNameLabel = $"{this.globalLocalizer.GetString("FirstName")} {this.globalLocalizer.GetString("LastName")}",
+                AddressPhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel"),
+                AddressStreetLabel = this.globalLocalizer.GetString("Street"),
+                AddressRegionLabel = this.globalLocalizer.GetString("Region"),
+                AddressPostalCodeLabel = this.globalLocalizer.GetString("PostalCode"),
+                AddressCityLabel = this.globalLocalizer.GetString("City"),
+                AddressCountryLabel = this.globalLocalizer.GetString("Country"),
+                DeliveryAddressEqualBillingAddressText = this.globalLocalizer.GetString("DeliveryAddressEqualBillingAddressText"),
             };
 
             viewModel.ContactJobTitles = new List<ContactJobTitle>
             {
-                new ContactJobTitle { 
-                    Name = this.globalLocalizer.GetString("SalesRep").Name, 
-                    Value = this.globalLocalizer.GetString("SalesRep").Value 
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("SalesRep").Name,
+                    Value = this.globalLocalizer.GetString("SalesRep").Value
                 },
-                new ContactJobTitle { 
-                    Name = this.globalLocalizer.GetString("SalesManager").Name, 
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("SalesManager").Name,
                     Value = this.globalLocalizer.GetString("SalesManager").Value
                 },
-                new ContactJobTitle { 
-                    Name = this.globalLocalizer.GetString("President").Name, 
-                    Value = this.globalLocalizer.GetString("President").Value 
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("President").Name,
+                    Value = this.globalLocalizer.GetString("President").Value
                 },
-                new ContactJobTitle { 
-                    Name = this.globalLocalizer.GetString("CEO").Name, 
-                    Value = this.globalLocalizer.GetString("CEO").Value 
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("CEO").Name,
+                    Value = this.globalLocalizer.GetString("CEO").Value
                 },
-                new ContactJobTitle { 
-                    Name = this.globalLocalizer.GetString("AccountManager").Name, 
-                    Value = this.globalLocalizer.GetString("AccountManager").Value 
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("AccountManager").Name,
+                    Value = this.globalLocalizer.GetString("AccountManager").Value
                 },
-                new ContactJobTitle { 
-                    Name = this.globalLocalizer.GetString("Owner").Name, 
-                    Value = this.globalLocalizer.GetString("Owner").Value 
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("Owner").Name,
+                    Value = this.globalLocalizer.GetString("Owner").Value
                 },
-                new ContactJobTitle { 
-                    Name = this.globalLocalizer.GetString("VicePresident").Name, 
-                    Value = this.globalLocalizer.GetString("VicePresident").Value 
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("VicePresident").Name,
+                    Value = this.globalLocalizer.GetString("VicePresident").Value
                 },
-                new ContactJobTitle { 
-                    Name = this.globalLocalizer.GetString("GeneralManager").Name, 
-                    Value = this.globalLocalizer.GetString("GeneralManager").Value 
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("GeneralManager").Name,
+                    Value = this.globalLocalizer.GetString("GeneralManager").Value
                 },
-                new ContactJobTitle { 
-                    Name = this.globalLocalizer.GetString("OperationsManager").Name, 
-                    Value = this.globalLocalizer.GetString("OperationsManager").Value 
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("OperationsManager").Name,
+                    Value = this.globalLocalizer.GetString("OperationsManager").Value
                 },
-                new ContactJobTitle { 
-                    Name = this.globalLocalizer.GetString("Other").Name, 
-                    Value = this.globalLocalizer.GetString("Other").Value 
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("Other").Name,
+                    Value = this.globalLocalizer.GetString("Other").Value
                 }
             };
+
+            var languages = new List<LanguageViewModel>
+            {
+                new LanguageViewModel { Text = this.globalLocalizer.GetString("SelectLanguage") , Value = string.Empty }
+            };
+
+            foreach (var language in _localizationOptions.CurrentValue.SupportedCultures.Split(','))
+            {
+                languages.Add(new LanguageViewModel { Text = language.ToUpperInvariant(), Value = language.ToLowerInvariant() });
+            }
+
+            viewModel.Languages = languages;
 
             if (componentModel.Id.HasValue)
             {
@@ -112,12 +143,38 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.Email = clientApplication.Email;
                     viewModel.ContactJobTitle = clientApplication.ContactJobTitle;
                     viewModel.PhoneNumber = clientApplication.PhoneNumber;
+                    viewModel.CommunicationLanguage = clientApplication.CommunicationLanguage;
                     viewModel.CompanyName = clientApplication.CompanyName;
                     viewModel.CompanyAddress = clientApplication.CompanyAddress;
                     viewModel.CompanyCity = clientApplication.CompanyCity;
                     viewModel.CompanyCountry = clientApplication.CompanyCountry;
                     viewModel.CompanyRegion = clientApplication.CompanyRegion;
                     viewModel.CompanyPostalCode = clientApplication.CompanyPostalCode;
+                    viewModel.IsDeliveryAddressEqualBillingAddress = clientApplication.IsDeliveryAddressEqualBillingAddress;
+
+                    viewModel.BillingAddress = new ClientApplicationAddressViewModel
+                    {
+                        Id = clientApplication.BillingAddress.Id,
+                        FullName = clientApplication.BillingAddress.FullName,
+                        PhoneNumber = clientApplication.BillingAddress.PhoneNumber,
+                        Street = clientApplication.BillingAddress.Street,
+                        Region = clientApplication.BillingAddress.Region,
+                        PostalCode = clientApplication.BillingAddress.PostalCode,
+                        City = clientApplication.BillingAddress.City,
+                        Country = clientApplication.BillingAddress.Country
+                    };
+
+                    viewModel.DeliveryAddress = new ClientApplicationAddressViewModel
+                    {
+                        Id = clientApplication.DeliveryAddress.Id,
+                        FullName = clientApplication.DeliveryAddress.FullName,
+                        PhoneNumber = clientApplication.DeliveryAddress.PhoneNumber,
+                        Street = clientApplication.DeliveryAddress.Street,
+                        Region = clientApplication.DeliveryAddress.Region,
+                        PostalCode = clientApplication.DeliveryAddress.PostalCode,
+                        City = clientApplication.DeliveryAddress.City,
+                        Country = clientApplication.DeliveryAddress.Country
+                    };
                 }
             }
 

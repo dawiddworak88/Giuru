@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Foundation.PageContent.Components.Languages.ViewModels;
+using System;
 using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Clients.ViewModels
@@ -37,6 +38,22 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string FieldRequiredErrorMessage { get; set; }
         public string EmailFormatErrorMessage { get; set; }
         public string SelectJobTitle { get; set; }
+        public string LanguageLabel { get; set; }
+        public string CommunicationLanguage { get; set; }
+        public string AddressFullNameLabel { get; set; }
+        public string AddressPhoneNumberLabel { get; set; }
+        public string AddressStreetLabel { get; set; }
+        public string AddressRegionLabel { get; set; }
+        public string AddressPostalCodeLabel { get; set; }
+        public string AddressCityLabel { get; set; }
+        public string AddressCountryLabel { get; set; }
+        public string DeliveryAddressEqualBillingAddressText { get; set; }
+        public bool IsDeliveryAddressEqualBillingAddress { get; set; }
+        public string BillingAddressTitle { get; set; }
+        public ClientApplicationAddressViewModel BillingAddress { get; set; }
+        public string DeliveryAddressTitle { get; set; }
+        public ClientApplicationAddressViewModel DeliveryAddress { get; set; }
         public IEnumerable<ContactJobTitle> ContactJobTitles { get; set; }
+        public IEnumerable<LanguageViewModel> Languages { get; set; }
     }
 }
