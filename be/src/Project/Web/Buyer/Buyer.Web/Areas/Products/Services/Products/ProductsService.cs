@@ -47,7 +47,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
             var attributesToDisplay = _options.Value.ProductAttributes.ToEnumerableString();
 
             var attributes = new List<string>();
-            foreach(var productAttribute in attributesToDisplay.OrEmptyIfNull())
+            foreach (var productAttribute in attributesToDisplay.OrEmptyIfNull())
             {
                 var existingAttribute = productAttributes.FirstOrDefault(x => x.Key == productAttribute);
                 if (existingAttribute is not null)
@@ -66,7 +66,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
             var catalogItemList = new List<CatalogItemViewModel>();
             var pagedProducts = await _productsRepository.GetProductsAsync(ids, categoryId, sellerId, language, searchTerm, hasPrimaryProduct, pageIndex, itemsPerPage, token, nameof(Product.Name));
 
-            if (searchTerm is not null)
+            if (string.IsNullOrWhiteSpace(searchTerm))
             {
                 pagedProducts.Data = pagedProducts.Data.Where(x => x.Name.StartsWith(searchTerm));
             }
@@ -125,14 +125,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
         public async Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token, string searchArea)
         {
-            if (searchArea == SearchConstants.SearchArea.StockLevel)
-            {
-                return await _inventoryRepository.GetAvailbleProductsInventorySuggestions(token, language, searchTerm, size);
-            }
-            else
-            {
-                return await _productsRepository.GetProductSuggestionsAsync(searchTerm, size, language, token);
-            }
+            return await _productsRepository.GetProductSuggestionsAsync(searchTerm, size, language, token);
         }
     }
 }

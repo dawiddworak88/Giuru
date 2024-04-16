@@ -483,7 +483,14 @@ namespace Inventory.Api.Services.InventoryItems
                     .AsSingleQuery()
                     .Select(y => y.Product.Name);
 
-            return inventoryItems.Where(x => x.StartsWith(model.SearchTerm)).Take(model.Size);
+            if (string.IsNullOrEmpty(model.SearchTerm))
+            {
+                return inventoryItems.Take(model.SuggestionsCount);
+            }
+            else
+            {
+                return inventoryItems.Where(x => x.StartsWith(model.SearchTerm)).Take(model.SuggestionsCount);
+            }
         }
     }
 }

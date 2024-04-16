@@ -200,14 +200,14 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<string>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetAvailableProductsInventorySuggestions(
-            string searchTerm, int size)
+            string searchTerm, int suggestionsCount)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetInventorySuggestionsServiceModel
             {
                 SearchTerm = searchTerm,
-                Size = size
+                SuggestionsCount = suggestionsCount
             };
 
             var validatior = new GetInventorySuggestionsModelValidator();
