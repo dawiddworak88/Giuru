@@ -164,49 +164,7 @@ const ApplicationForm = (props) => {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
             }
-        },
-        deliveryAddressFullName: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        deliveryAddressPhoneNumber: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        deliveryAddressStreet: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        deliveryAddressRegion: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        deliveryAddressPostalCode: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        deliveryAddressCity: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        deliveryAddressCountry: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
+        }
     };
 
     const onSubmitForm = (state) => {
