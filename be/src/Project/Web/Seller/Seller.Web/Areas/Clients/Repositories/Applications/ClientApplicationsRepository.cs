@@ -29,8 +29,9 @@ namespace Seller.Web.Areas.Clients.Repositories.Applications
         }
 
         public async Task<Guid> SaveAsync(
-            string token, string language, Guid? id, string firstName, string lastName, string contactJobTitle, string email, string phoneNumber,
-            string companyName, string companyAddress, string companyCountry, string companyCity, string companyRegion, string companyPostalCode)
+            string token, string language, Guid? id, string firstName, string lastName, string contactJobTitle, string email, string phoneNumber, string communicationLanguage,
+            string companyName, string companyAddress, string companyCountry, string companyCity, string companyRegion, string companyPostalCode, bool isDeliveryAddressEqualBillingAddress,
+            ClientApplicationAddressRequestModel billingAddress, ClientApplicationAddressRequestModel deliveryAddress)
         {
             var requestModel = new ClientApplicationRequestModel
             {
@@ -40,12 +41,16 @@ namespace Seller.Web.Areas.Clients.Repositories.Applications
                 ContactJobTitle = contactJobTitle,
                 Email = email,
                 PhoneNumber = phoneNumber,
+                CommunicationLanguage = communicationLanguage,
                 CompanyName = companyName,
                 CompanyAddress = companyAddress,
                 CompanyCountry = companyCountry,
                 CompanyCity = companyCity,
                 CompanyRegion = companyRegion,
-                CompanyPostalCode = companyPostalCode
+                CompanyPostalCode = companyPostalCode,
+                IsDeliveryAddressEqualBillingAddress = isDeliveryAddressEqualBillingAddress,
+                BillingAddress = billingAddress,
+                DeliveryAddress = deliveryAddress
             };
 
             var apiRequest = new ApiRequest<ClientApplicationRequestModel>
