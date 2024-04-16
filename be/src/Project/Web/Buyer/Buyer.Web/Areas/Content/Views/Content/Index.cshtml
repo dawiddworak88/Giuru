@@ -6,14 +6,10 @@
 </script>
 
 @section MetaTags {
-    @if (!string.IsNullOrWhiteSpace(((SlugPageViewModel)Model)?.StrapiContentWidgets?.Title))
+    @if (string.IsNullOrWhiteSpace(((ContentPageViewModel)Model)?.StrapiContentWidgets?.Title) is false)
     {
-        <title>@MetaTagsService.GenerateTitle($"{((SlugPageViewModel)Model)?.StrapiContentWidgets?.Title}", true)</title>
+        <title>@MetaTagsService.GenerateTitle($"{((ContentPageViewModel)Model)?.StrapiContentWidgets?.Title}", true)</title>
     }
-@*     @if (string.IsNullOrWhiteSpace(@Model.Metadata.MetaDescription) is false)
-    {
-        <meta name="description" content="@Model.Metadata.MetaDescription" />
-    } *@
 }
 
 @section HeadStyles {
