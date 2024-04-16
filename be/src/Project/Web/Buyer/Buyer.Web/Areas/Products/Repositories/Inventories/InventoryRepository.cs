@@ -126,12 +126,12 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
             return default;
         }
 
-        public async Task<IEnumerable<string>> GetAvailbleProductsInventorySuggestions(string token, string language, string searchTerm, int size)
+        public async Task<IEnumerable<string>> GetAvailbleProductsInventorySuggestions(string token, string language, string searchTerm, int suggestionsCount)
         {
             var requestModel = new AvaibleProductsInventorySuggesrtionsRequestModel
             {
                 SearchTerm = searchTerm,
-                Size = size
+                SuggestionsCount = suggestionsCount
             };
 
             var apiRequest = new ApiRequest<AvaibleProductsInventorySuggesrtionsRequestModel>

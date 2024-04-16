@@ -9,7 +9,7 @@ namespace Inventory.Api.Validators.InventoryValidators
         public GetInventorySuggestionsModelValidator() 
         { 
             RuleFor(x => x.SearchTerm).NotNull().NotEmpty();
-            RuleFor(x => x.Size).LessThanOrEqualTo(100);
+            RuleFor(x => x.SuggestionsCount).LessThanOrEqualTo(100);
         }
     }
 }
