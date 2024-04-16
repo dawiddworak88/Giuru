@@ -1,6 +1,16 @@
 .switcher {
     z-index: 1;
 
+    &__button {
+        padding: 0;
+        color: $blackbase;
+        font-family: $family-primary;
+
+        &:hover {
+            background-color: $white;
+        }
+    }
+
     &__body {
         background-color: $white;
         border-radius: 4px;
