@@ -104,7 +104,7 @@
     border: 0;
     outline: 0;
     font-size: 1rem;
-    color: #212121;
+    color: $blackbase;
     background: transparent;
     transition: border-color 0.2s;
 }
@@ -138,7 +138,7 @@
     position: absolute;
     top: 2rem;
     left: calc(-19px + -1.6rem);
-    width: calc(100% + 268px + 3.5rem);
+    width: calc(100% + 40px + 18rem);
     margin-left: 1px;
     background-color: $white;
     border-radius: 0 0 4px 4px;
@@ -150,12 +150,12 @@
 .blur {
     background-color: $blackbase;
     opacity: 0.5;
-    width: 180vw;
+    width: 110vw;
     height: 200vh;
     position: absolute;
     z-index: 2;
     top: 2rem;
-    left: -30vw;
+    left: -20rem;
 }
 
 .react-autosuggest__suggestions-container {
@@ -166,10 +166,20 @@
     padding: 0.5rem;
 }
 
+@media only screen and (min-width: $widescreen) {
+    .blur {
+        left: -37rem;
+    }
+}
+
 @media only screen and (max-width: $desktop) {
     .react-autosuggest__suggestions-container, .react-autosuggest__suggestions-container--open {
-        width: calc(100% + 130px + 1.7rem);
+        width: calc(100% + 24px + 8rem);
         left: calc(-1rem + -5px);
+    }
+
+    .blur {
+        left: -3rem;
     }
 }
 
