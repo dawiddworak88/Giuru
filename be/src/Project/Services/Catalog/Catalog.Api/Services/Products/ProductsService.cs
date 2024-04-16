@@ -21,7 +21,6 @@ using Newtonsoft.Json.Linq;
 using Foundation.Catalog.Repositories.ProductSearchRepositories;
 using System.Diagnostics;
 using Foundation.GenericRepository.Definitions;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Catalog.Api.Services.Products
 {
@@ -333,7 +332,7 @@ namespace Catalog.Api.Services.Products
         {
             var searchResults = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Ids, model.OrderBy);
             
-            if (model.SearchTerm is not null)
+            if (string.IsNullOrEmpty(model.SearchTerm))
             {
                 searchResults.Data = searchResults.Data.Where(x => x.Name.StartsWith(model.SearchTerm));
             }
