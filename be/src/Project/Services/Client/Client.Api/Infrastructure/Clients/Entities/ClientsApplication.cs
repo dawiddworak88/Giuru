@@ -7,6 +7,9 @@ namespace Client.Api.Infrastructure.Clients.Entities
     public class ClientsApplication : Entity
     {
         [Required]
+        public string CompanyName { get; set; }
+
+        [Required]
         public string FirstName { get; set; }
 
         [Required]
@@ -23,24 +26,6 @@ namespace Client.Api.Infrastructure.Clients.Entities
 
         [Required]
         public string CommunicationLanguage { get; set; }
-
-        [Required]
-        public string CompanyName { get; set; }
-
-        [Required]
-        public string CompanyAddress { get; set; }
-
-        [Required]
-        public string CompanyCountry { get; set; }
-
-        [Required]
-        public string CompanyCity { get; set; }
-
-        [Required]
-        public string CompanyRegion { get; set; }
-
-        [Required]
-        public string CompanyPostalCode { get; set; }
         
         [Required]
         public bool IsDeliveryAddressEqualBillingAddress { get; set; }

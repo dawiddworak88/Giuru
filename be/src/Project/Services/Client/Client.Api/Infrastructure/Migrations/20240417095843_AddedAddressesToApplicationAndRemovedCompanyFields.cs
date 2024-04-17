@@ -6,24 +6,38 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Client.Api.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedBillingDeliveryAddresses : Migration
+    public partial class AddedAddressesToApplicationAndRemovedCompanyFields : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "CompanyAddress",
+                table: "ClientsApplications");
+
+            migrationBuilder.DropColumn(
+                name: "CompanyCity",
+                table: "ClientsApplications");
+
+            migrationBuilder.DropColumn(
+                name: "CompanyCountry",
+                table: "ClientsApplications");
+
+            migrationBuilder.DropColumn(
+                name: "CompanyPostalCode",
+                table: "ClientsApplications");
+
+            migrationBuilder.RenameColumn(
+                name: "CompanyRegion",
+                table: "ClientsApplications",
+                newName: "CommunicationLanguage");
+
             migrationBuilder.AddColumn<Guid>(
                 name: "BillingAddressId",
                 table: "ClientsApplications",
                 type: "uniqueidentifier",
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
-
-            migrationBuilder.AddColumn<string>(
-                name: "CommunicationLanguage",
-                table: "ClientsApplications",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "DeliveryAddressId",
@@ -73,16 +87,45 @@ namespace Client.Api.Infrastructure.Migrations
                 table: "ClientsApplications");
 
             migrationBuilder.DropColumn(
-                name: "CommunicationLanguage",
-                table: "ClientsApplications");
-
-            migrationBuilder.DropColumn(
                 name: "DeliveryAddressId",
                 table: "ClientsApplications");
 
             migrationBuilder.DropColumn(
                 name: "IsDeliveryAddressEqualBillingAddress",
                 table: "ClientsApplications");
+
+            migrationBuilder.RenameColumn(
+                name: "CommunicationLanguage",
+                table: "ClientsApplications",
+                newName: "CompanyRegion");
+
+            migrationBuilder.AddColumn<string>(
+                name: "CompanyAddress",
+                table: "ClientsApplications",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "CompanyCity",
+                table: "ClientsApplications",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "CompanyCountry",
+                table: "ClientsApplications",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "CompanyPostalCode",
+                table: "ClientsApplications",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
         }
     }
 }
