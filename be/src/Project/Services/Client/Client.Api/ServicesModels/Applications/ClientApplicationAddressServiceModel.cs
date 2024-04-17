@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Foundation.Extensions.Models;
+using System;
 
 namespace Client.Api.ServicesModels.Applications
 {
-    public class ClientApplicationAddressServiceModel
+    public class ClientApplicationAddressServiceModel : BaseServiceModel
     {
         public Guid? Id { get; set; }
         public string FullName { get; set; }

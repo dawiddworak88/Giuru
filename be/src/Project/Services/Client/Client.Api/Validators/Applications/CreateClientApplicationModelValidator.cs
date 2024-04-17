@@ -8,17 +8,14 @@ namespace Client.Api.Validators.Applications
     {
         public CreateClientApplicationModelValidator()
         {
-            this.RuleFor(x => x.Email).NotEmpty().NotNull();
-            this.RuleFor(x => x.FirstName).NotEmpty().NotNull();
-            this.RuleFor(x => x.LastName).NotEmpty().NotNull();
-            this.RuleFor(x => x.PhoneNumber).NotEmpty().NotNull();
-            this.RuleFor(x => x.ContactJobTitle).NotEmpty().NotNull();
-            this.RuleFor(x => x.CompanyAddress).NotEmpty().NotNull();
-            this.RuleFor(x => x.CompanyCity).NotEmpty().NotNull();
-            this.RuleFor(x => x.CompanyCountry).NotEmpty().NotNull();
-            this.RuleFor(x => x.CompanyName).NotEmpty().NotNull();
-            this.RuleFor(x => x.CompanyRegion).NotEmpty().NotNull();
-            this.RuleFor(x => x.CompanyPostalCode).NotEmpty().NotNull();
+            RuleFor(x => x.CompanyName).NotEmpty().NotNull();
+            RuleFor(x => x.Email).NotEmpty().NotNull();
+            RuleFor(x => x.FirstName).NotEmpty().NotNull();
+            RuleFor(x => x.LastName).NotEmpty().NotNull();
+            RuleFor(x => x.PhoneNumber).NotEmpty().NotNull();
+            RuleFor(x => x.ContactJobTitle).NotEmpty().NotNull();
+            RuleFor(x => x.BillingAddress).SetValidator(new ClientApplicationAddressModelValidator());
+            RuleFor(x => x.DeliveryAddress).SetValidator(new ClientApplicationAddressModelValidator()).When(x => !x.IsDeliveryAddressEqualBillingAddress);
         }
     }
 }
