@@ -440,7 +440,7 @@ const ClientApplicationForm = (props) => {
                                 <TextField
                                     id="billingAddressStreet"
                                     name="billingAddressStreet"
-                                    value={billingAddressStreet}łł
+                                    value={billingAddressStreet}
                                     fullWidth={true}
                                     variant="standard"
                                     label={props.addressStreetLabel}
