@@ -51,18 +51,13 @@ namespace Client.Api.Services.Applications
         {
             var clientApplication = new ClientsApplication
             {
+                CompanyName = model.CompanyName,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 ContactJobTitle = model.ContactJobTitle,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
                 CommunicationLanguage = model.CommunicationLanguage,
-                CompanyName = model.CompanyName,
-                CompanyAddress = model.CompanyAddress,
-                CompanyCountry = model.CompanyCountry,
-                CompanyCity = model.CompanyCity,
-                CompanyRegion = model.CompanyRegion,
-                CompanyPostalCode = model.CompanyPostalCode,
                 IsDeliveryAddressEqualBillingAddress = model.IsDeliveryAddressEqualBillingAddress
             };
 
@@ -156,17 +151,17 @@ namespace Client.Api.Services.Applications
                     companyNameLabel = _globalLocalizer.GetString("CompanyName").Value,
                     companyName = model.CompanyName,
                     addressLabel = _globalLocalizer.GetString("Address").Value,
-                    address = model.CompanyAddress,
+                    address = model.BillingAddress.Street,
                     cityLabel = _globalLocalizer.GetString("City").Value,
-                    city = model.CompanyCity,
+                    city = model.BillingAddress.City,
                     regionLabel = _globalLocalizer.GetString("Region").Value,
-                    region = model.CompanyRegion,
+                    region = model.BillingAddress.Region,
                     postalCodeLabel = _globalLocalizer.GetString("PostalCode").Value,
-                    postalCode = model.CompanyPostalCode,
+                    postalCode = model.BillingAddress.PostalCode,
                     contactJobLabel = _globalLocalizer.GetString("ContactJobTitle").Value,
                     contactJobTitle = model.ContactJobTitle,
                     countryLabel = _globalLocalizer.GetString("Country").Value,
-                    country = model.CompanyCountry
+                    country = model.BillingAddress.Country
                 }
             });
 
@@ -211,17 +206,12 @@ namespace Client.Api.Services.Applications
                                       select new ClientApplicationServiceModel
                                       {
                                           Id = c.Id,
+                                          CompanyName = c.CompanyName,
                                           FirstName = c.FirstName,
                                           LastName = c.LastName,
                                           ContactJobTitle = c.ContactJobTitle,
                                           PhoneNumber = c.PhoneNumber,
                                           Email = c.Email,
-                                          CompanyAddress = c.CompanyAddress,
-                                          CompanyCity = c.CompanyCity,
-                                          CompanyCountry = c.CompanyCountry,
-                                          CompanyName = c.CompanyName,
-                                          CompanyPostalCode = c.CompanyPostalCode,
-                                          CompanyRegion = c.CompanyRegion,
                                           LastModifiedDate = c.LastModifiedDate,
                                           CreatedDate = c.CreatedDate
                                       };
@@ -255,18 +245,13 @@ namespace Client.Api.Services.Applications
             var clientApplication = new ClientApplicationServiceModel
             {
                 Id = existingApplication.Id,
+                CompanyName = existingApplication.CompanyName,
                 FirstName = existingApplication.FirstName,
                 LastName = existingApplication.LastName,
                 Email = existingApplication.Email,
                 PhoneNumber = existingApplication.PhoneNumber,
                 CommunicationLanguage = existingApplication.CommunicationLanguage,
                 ContactJobTitle = existingApplication.ContactJobTitle,
-                CompanyAddress = existingApplication.CompanyAddress,
-                CompanyCity = existingApplication.CompanyCity,
-                CompanyCountry = existingApplication.CompanyCountry,
-                CompanyName = existingApplication.CompanyName,
-                CompanyPostalCode = existingApplication.CompanyPostalCode,
-                CompanyRegion = existingApplication.CompanyRegion,
                 LastModifiedDate = existingApplication.LastModifiedDate,
                 CreatedDate = existingApplication.CreatedDate,
                 IsDeliveryAddressEqualBillingAddress = existingApplication.IsDeliveryAddressEqualBillingAddress,
@@ -342,17 +327,12 @@ namespace Client.Api.Services.Applications
                                       select new ClientApplicationServiceModel
                                       {
                                           Id = c.Id,
+                                          CompanyName = c.CompanyName,
                                           FirstName = c.FirstName,
                                           LastName = c.LastName,
                                           ContactJobTitle = c.ContactJobTitle,
                                           PhoneNumber = c.PhoneNumber,
                                           Email = c.Email,
-                                          CompanyAddress = c.CompanyAddress,
-                                          CompanyCity = c.CompanyCity,
-                                          CompanyCountry = c.CompanyCountry,
-                                          CompanyName = c.CompanyName,
-                                          CompanyPostalCode = c.CompanyPostalCode,
-                                          CompanyRegion = c.CompanyRegion,
                                           LastModifiedDate = c.LastModifiedDate,
                                           CreatedDate = c.CreatedDate
                                       };
@@ -383,18 +363,13 @@ namespace Client.Api.Services.Applications
                 throw new CustomException(_clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NoContent);
             }
 
+            clientApplication.CompanyName = model.CompanyName;
             clientApplication.FirstName = model.FirstName;
             clientApplication.LastName = model.LastName;
             clientApplication.ContactJobTitle = model.ContactJobTitle;
             clientApplication.Email = model.Email;
             clientApplication.PhoneNumber = model.PhoneNumber;
             clientApplication.CommunicationLanguage = model.CommunicationLanguage;
-            clientApplication.CompanyCity = model.CompanyCity;
-            clientApplication.CompanyPostalCode = model.CompanyPostalCode;
-            clientApplication.CompanyRegion = model.CompanyRegion;
-            clientApplication.CompanyCountry = model.CompanyCountry;
-            clientApplication.CompanyAddress = model.CompanyAddress;
-            clientApplication.CompanyName = model.CompanyName;
             clientApplication.IsDeliveryAddressEqualBillingAddress = model.IsDeliveryAddressEqualBillingAddress;
 
             if (model.IsDeliveryAddressEqualBillingAddress)

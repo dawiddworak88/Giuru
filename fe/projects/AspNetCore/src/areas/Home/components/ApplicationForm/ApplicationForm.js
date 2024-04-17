@@ -23,11 +23,6 @@ const ApplicationForm = (props) => {
         contactJobTitle: { value: "", error: "" },
         communicationLanguage: { value: "", error: "" },
         companyName: { value: "", error: "" },
-        companyAddress: { value: "", error: "" },
-        companyCity: { value: "", error: "" },
-        companyRegion: { value: "", error: "" },
-        companyPostalCode: { value: "", error: "" },
-        companyCountry: { value: "", error: "" },
         billingAddressFullName: { value: "", error: "" },
         billingAddressPhoneNumber: { value: "", error: "" },
         billingAddressStreet: { value: "", error: "" },
@@ -88,36 +83,6 @@ const ApplicationForm = (props) => {
             }
         },
         companyName: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        companyAddress: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        companyCity: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        companyRegion: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        companyPostalCode: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        companyCountry: {
             required: {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
@@ -230,7 +195,6 @@ const ApplicationForm = (props) => {
 
     const {
         firstName, lastName, email, phoneNumber, contactJobTitle, communicationLanguage, companyName,
-        companyAddress, companyCity, companyCountry, companyRegion, companyPostalCode,
         billingAddressFullName, billingAddressPhoneNumber, billingAddressStreet, billingAddressRegion, billingAddressPostalCode, billingAddressCity, billingAddressCountry,
         isDeliveryAddressEqualBillingAddress,
         deliveryAddressFullName, deliveryAddressPhoneNumber, deliveryAddressStreet, deliveryAddressRegion, deliveryAddressPostalCode, deliveryAddressCity, deliveryAddressCountry,
@@ -260,6 +224,18 @@ const ApplicationForm = (props) => {
                     <form className="application-form__groups p-6" onSubmit={handleOnSubmit}>
                         <div className="group mb-6" onFocus={() => setActiveStep(0)}>
                             <h1 className="subtitle has-text-centered">{props.contactInformationTitle}</h1>
+                            <div className="field">
+                                <TextField
+                                    id="companyName"
+                                    name="companyName"
+                                    value={companyName}
+                                    fullWidth={true}
+                                    variant="standard"
+                                    label={props.companyNameLabel}
+                                    onChange={handleOnChange}
+                                    helperText={dirty.companyName ? errors.companyName : ""}
+                                    error={(errors.companyName.length > 0) && dirty.companyName} />
+                            </div>
                             <div className="field">
                                 <TextField
                                     id="firstName"
@@ -350,83 +326,7 @@ const ApplicationForm = (props) => {
                                 </FormControl>
                             </div>
                         </div>
-                        <div className="group mb-6" onFocus={() => setActiveStep(1)}>
-                            <h1 className="subtitle has-text-centered">{props.businessInformationTitle}</h1>
-                            <div className="field">
-                                <TextField
-                                    id="companyName"
-                                    name="companyName"
-                                    value={companyName}
-                                    fullWidth={true}
-                                    variant="standard"
-                                    label={props.companyNameLabel}
-                                    onChange={handleOnChange}
-                                    helperText={dirty.companyName ? errors.companyName : ""}
-                                    error={(errors.companyName.length > 0) && dirty.companyName} />
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="companyAddress"
-                                    name="companyAddress"
-                                    value={companyAddress}
-                                    fullWidth={true}
-                                    variant="standard"
-                                    label={props.companyAddressLabel}
-                                    onChange={handleOnChange}
-                                    helperText={dirty.companyAddress ? errors.companyAddress : ""}
-                                    error={(errors.companyAddress.length > 0) && dirty.companyAddress} />
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="companyCountry"
-                                    name="companyCountry"
-                                    value={companyCountry}
-                                    fullWidth={true}
-                                    variant="standard"
-                                    label={props.companyCountryLabel}
-                                    onChange={handleOnChange}
-                                    helperText={dirty.companyCountry ? errors.companyCountry : ""}
-                                    error={(errors.companyCountry.length > 0) && dirty.companyCountry} />
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="companyCity"
-                                    name="companyCity"
-                                    value={companyCity}
-                                    fullWidth={true}
-                                    variant="standard"
-                                    label={props.companyCityLabel}
-                                    onChange={handleOnChange}
-                                    helperText={dirty.companyCity ? errors.companyCity : ""}
-                                    error={(errors.companyCity.length > 0) && dirty.companyCity} />
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="companyRegion"
-                                    name="companyRegion"
-                                    value={companyRegion}
-                                    fullWidth={true}
-                                    variant="standard"
-                                    label={props.companyRegionLabel}
-                                    onChange={handleOnChange}
-                                    helperText={dirty.companyRegion ? errors.companyRegion : ""}
-                                    error={(errors.companyRegion.length > 0) && dirty.companyRegion}
-                                />
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="companyPostalCode"
-                                    name="companyPostalCode"
-                                    fullWidth={true}
-                                    value={companyPostalCode}
-                                    variant="standard"
-                                    label={props.companyPostalCodeLabel}
-                                    onChange={handleOnChange}
-                                    helperText={dirty.companyPostalCode ? errors.companyPostalCode : ""}
-                                    error={(errors.companyPostalCode.length > 0) && dirty.companyPostalCode} />
-                            </div>
-                        </div>
-                        <div className="group mb-4" onFocus={() => setActiveStep(2)}>
+                        <div className="group mb-4" onFocus={() => setActiveStep(1)}>
                             <div className="group mb-4">
                                 <h1 className="subtitle has-text-centered">{props.billingAddressTitle}</h1>
                                 <div className="field">

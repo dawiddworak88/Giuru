@@ -56,18 +56,13 @@ namespace Client.Api.v1.Controllers
                 var serviceModel = new UpdateClientApplicationServiceModel
                 {
                     Id = request.Id,
+                    CompanyName = request.CompanyName,
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     ContactJobTitle = request.ContactJobTitle,
                     Email = request.Email,
                     PhoneNumber = request.PhoneNumber,
                     CommunicationLanguage = request.CommunicationLanguage,
-                    CompanyAddress = request.CompanyAddress,
-                    CompanyCity = request.CompanyCity,
-                    CompanyCountry = request.CompanyCountry,
-                    CompanyName = request.CompanyName,
-                    CompanyPostalCode = request.CompanyPostalCode,
-                    CompanyRegion = request.CompanyRegion,
                     IsDeliveryAddressEqualBillingAddress = request.IsDeliveryAddressEqualBillingAddress,
                     BillingAddress = new ClientApplicationAddressServiceModel
                     {
@@ -112,18 +107,13 @@ namespace Client.Api.v1.Controllers
             {
                 var serviceModel = new CreateClientApplicationServiceModel
                 {
+                    CompanyName = request.CompanyName,
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     ContactJobTitle = request.ContactJobTitle,
                     Email = request.Email,
                     PhoneNumber = request.PhoneNumber,
                     CommunicationLanguage = request.CommunicationLanguage,
-                    CompanyAddress = request.CompanyAddress,
-                    CompanyCity = request.CompanyCity,
-                    CompanyCountry = request.CompanyCountry,
-                    CompanyName = request.CompanyName,
-                    CompanyPostalCode = request.CompanyPostalCode,
-                    CompanyRegion = request.CompanyRegion,
                     IsDeliveryAddressEqualBillingAddress = request.IsDeliveryAddressEqualBillingAddress,
                     BillingAddress = new ClientApplicationAddressServiceModel
                     { 
@@ -232,18 +222,13 @@ namespace Client.Api.v1.Controllers
                     var response = new ClientApplicationResponseModel
                     {
                         Id = clientApplication.Id,
+                        CompanyName = clientApplication.CompanyName,
                         FirstName = clientApplication.FirstName,
                         LastName = clientApplication.LastName,
                         Email = clientApplication.Email,
                         PhoneNumber = clientApplication.PhoneNumber,
                         CommunicationLanguage = clientApplication.CommunicationLanguage,
                         ContactJobTitle = clientApplication.ContactJobTitle,
-                        CompanyRegion = clientApplication.CompanyRegion,
-                        CompanyPostalCode = clientApplication.CompanyPostalCode,
-                        CompanyAddress = clientApplication.CompanyAddress,
-                        CompanyCity = clientApplication.CompanyCity,
-                        CompanyCountry = clientApplication.CompanyCountry,
-                        CompanyName = clientApplication.CompanyName,
                         IsDeliveryAddressEqualBillingAddress = clientApplication.IsDeliveryAddressEqualBillingAddress,
                         BillingAddress = new ClientApplicationAddressResponseModel
                         {
@@ -325,17 +310,12 @@ namespace Client.Api.v1.Controllers
                             Data = clientsApplications.Data.OrEmptyIfNull().Select(x => new ClientApplicationResponseModel
                             {
                                 Id = x.Id,
+                                CompanyName = x.CompanyName,
                                 FirstName = x.FirstName,
                                 LastName = x.LastName,
                                 ContactJobTitle = x.ContactJobTitle,
                                 PhoneNumber = x.PhoneNumber,
                                 Email = x.Email,
-                                CompanyName = x.CompanyName,
-                                CompanyAddress = x.CompanyAddress,
-                                CompanyCity = x.CompanyCity,
-                                CompanyCountry = x.CompanyCountry,
-                                CompanyPostalCode = x.CompanyPostalCode,
-                                CompanyRegion = x.CompanyRegion,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -369,17 +349,12 @@ namespace Client.Api.v1.Controllers
                         Data = clientsApplications.Data.OrEmptyIfNull().Select(x => new ClientApplicationResponseModel
                         {
                             Id = x.Id,
+                            CompanyName = x.CompanyName,
                             FirstName = x.FirstName,
                             LastName = x.LastName,
                             ContactJobTitle = x.ContactJobTitle,
                             PhoneNumber = x.PhoneNumber,
                             Email = x.Email,
-                            CompanyName = x.CompanyName,
-                            CompanyAddress = x.CompanyAddress,
-                            CompanyCity = x.CompanyCity,
-                            CompanyCountry = x.CompanyCountry,
-                            CompanyPostalCode = x.CompanyPostalCode,
-                            CompanyRegion = x.CompanyRegion,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         })

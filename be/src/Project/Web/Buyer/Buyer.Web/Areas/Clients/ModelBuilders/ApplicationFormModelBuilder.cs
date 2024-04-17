@@ -44,7 +44,6 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
                 Title = this.globalLocalizer.GetString("ApplicationPartner"),
                 Subtitle = this.globalLocalizer.GetString("ApplicationPartnerDescription"),
                 ContactInformationTitle = this.globalLocalizer.GetString("ContactInformation"),
-                BusinessInformationTitle = this.globalLocalizer.GetString("BusinessInformation"),
                 FirstNameLabel = this.globalLocalizer.GetString("FirstName"),
                 LastNameLabel = this.globalLocalizer.GetString("LastName"),
                 EmailLabel = this.globalLocalizer.GetString("Email"),
@@ -52,13 +51,8 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
                 LanguageLabel = this.globalLocalizer.GetString("CommunicationLanguageLabel"),
                 EmailFormatErrorMessage = this.globalLocalizer.GetString("EmailFormatErrorMessage"),
                 ContactJobTitleLabel = this.globalLocalizer.GetString("ContactJobTitle"),
-                CompanyPostalCodeLabel = this.globalLocalizer.GetString("PostalCode"),
                 FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
                 CompanyNameLabel = this.globalLocalizer.GetString("CompanyName"),
-                CompanyAddressLabel = this.globalLocalizer.GetString("Address"),
-                CompanyCityLabel = this.globalLocalizer.GetString("City"),
-                CompanyRegionLabel = this.globalLocalizer.GetString("Region"),
-                CompanyCountryLabel = this.globalLocalizer.GetString("Country"),
                 BillingAddressTitle = this.globalLocalizer.GetString("BillingAddressTitle"),
                 DeliveryAddressTitle = this.globalLocalizer.GetString("DeliveryAddressTitle"),
                 AddressFullNameLabel = $"{this.globalLocalizer.GetString("FirstName")} {this.globalLocalizer.GetString("LastName")}",
@@ -146,11 +140,6 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
                 {
                     Title = this.globalLocalizer.GetString("ContactInformation"),
                     Subtitle = this.globalLocalizer.GetString("ContactInformationDescription")
-                },
-                new StepViewModel
-                {
-                    Title = this.globalLocalizer.GetString("BusinessInformation"),
-                    Subtitle = this.globalLocalizer.GetString("BusinessInformationDescription")
                 },
                 new StepViewModel
                 {

@@ -6,8 +6,9 @@ namespace Buyer.Web.Areas.Clients.Repositories
     public interface IApplicationsRepository
     {
         Task CreateClientApplicationAsync(
-            string token, string language, string firstName, string lastName, string contactJobTitle, string email, string phoneNumber,
-            string companyName, string companyAddress, string companyCountry, string companyCity, string companyRegion, string companyPostalCode, string communicationLanguage,
-            bool isDeliveryAddressEqualBillingAddress, ClientApplicationAddressRequestModel billingAddress, ClientApplicationAddressRequestModel deliveryAddress);
+            string token, string language, string companyName, string firstName, string lastName,
+            string contactJobTitle, string email, string phoneNumber, string communicationLanguage,
+            bool isDeliveryAddressEqualBillingAddress,
+            ClientApplicationAddressRequestModel billingAddress, ClientApplicationAddressRequestModel deliveryAddress);
     }
 }
