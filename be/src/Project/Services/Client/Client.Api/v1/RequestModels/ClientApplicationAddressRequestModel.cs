@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Foundation.ApiExtensions.Models.Request;
+using System;
 
 namespace Client.Api.v1.RequestModels
 {
-    public class ClientApplicationAddressRequestModel
+    public class ClientApplicationAddressRequestModel : RequestModelBase
     {
-        public Guid Id { get; set; }
         public string FullName { get; set; }
         public string PhoneNumber { get; set; }
         public string Street { get; set; }
