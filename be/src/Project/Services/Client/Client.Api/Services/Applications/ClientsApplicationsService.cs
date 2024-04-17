@@ -274,7 +274,6 @@ namespace Client.Api.Services.Applications
                 };
 
                 clientApplication.BillingAddress = addresses;
-                clientApplication.DeliveryAddress = addresses;
             }
             else
             {

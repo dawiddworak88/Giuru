@@ -241,7 +241,13 @@ namespace Client.Api.v1.Controllers
                             City = clientApplication?.BillingAddress.City,
                             Country = clientApplication.BillingAddress.Country
                         },
-                        DeliveryAddress = new ClientApplicationAddressResponseModel 
+                        LastModifiedDate = clientApplication.LastModifiedDate,
+                        CreatedDate = clientApplication.CreatedDate
+                    };
+
+                    if (!clientApplication.IsDeliveryAddressEqualBillingAddress)
+                    {
+                        response.DeliveryAddress = new ClientApplicationAddressResponseModel
                         {
                             Id = clientApplication.DeliveryAddress.Id,
                             FullName = clientApplication.DeliveryAddress.FullName,
@@ -251,10 +257,8 @@ namespace Client.Api.v1.Controllers
                             PostalCode = clientApplication.DeliveryAddress.PostalCode,
                             City = clientApplication.DeliveryAddress.City,
                             Country = clientApplication.DeliveryAddress.Country
-                        },
-                        LastModifiedDate = clientApplication.LastModifiedDate,
-                        CreatedDate = clientApplication.CreatedDate
-                    };
+                        };
+                    }
 
                     return StatusCode((int)HttpStatusCode.OK, response);
                 }

@@ -153,17 +153,20 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                         Country = clientApplication.BillingAddress.Country
                     };
 
-                    viewModel.DeliveryAddress = new ClientApplicationAddressViewModel
+                    if (!clientApplication.IsDeliveryAddressEqualBillingAddress)
                     {
-                        Id = clientApplication.DeliveryAddress.Id,
-                        FullName = clientApplication.DeliveryAddress.FullName,
-                        PhoneNumber = clientApplication.DeliveryAddress.PhoneNumber,
-                        Street = clientApplication.DeliveryAddress.Street,
-                        Region = clientApplication.DeliveryAddress.Region,
-                        PostalCode = clientApplication.DeliveryAddress.PostalCode,
-                        City = clientApplication.DeliveryAddress.City,
-                        Country = clientApplication.DeliveryAddress.Country
-                    };
+                        viewModel.DeliveryAddress = new ClientApplicationAddressViewModel
+                        {
+                            Id = clientApplication.DeliveryAddress.Id,
+                            FullName = clientApplication.DeliveryAddress.FullName,
+                            PhoneNumber = clientApplication.DeliveryAddress.PhoneNumber,
+                            Street = clientApplication.DeliveryAddress.Street,
+                            Region = clientApplication.DeliveryAddress.Region,
+                            PostalCode = clientApplication.DeliveryAddress.PostalCode,
+                            City = clientApplication.DeliveryAddress.City,
+                            Country = clientApplication.DeliveryAddress.Country
+                        };
+                    }
                 }
             }
 
