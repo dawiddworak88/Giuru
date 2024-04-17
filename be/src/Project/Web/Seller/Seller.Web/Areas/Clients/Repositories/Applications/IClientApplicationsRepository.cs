@@ -13,8 +13,8 @@ namespace Seller.Web.Areas.Clients.Repositories.Applications
         Task DeleteAsync(string token, string language, Guid? id);
         Task<ClientApplication> GetAsync(string token, string language, Guid? id);
         Task<Guid> SaveAsync(
-            string token, string language, Guid? id, string firstName, string lastName, string contactJobTitle, string email, string phoneNumber, string communicationLanguage,
-            string companyName, string companyAddress, string companyCountry, string companyCity, string companyRegion, string companyPostalCode, bool isDeliveryAddressEqualBillingAddress,
+            string token, string language, Guid? id, string companyName, string firstName, string lastName, string contactJobTitle,
+            string email, string phoneNumber, string communicationLanguage, bool isDeliveryAddressEqualBillingAddress,
             ClientApplicationAddressRequestModel billingAddress, ClientApplicationAddressRequestModel deliveryAddress);
     }
 }

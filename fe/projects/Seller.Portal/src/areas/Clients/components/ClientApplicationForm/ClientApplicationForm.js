@@ -14,18 +14,13 @@ const ClientApplicationForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null },
+        companyName: { value: props.companyName ? props.companyName : "", error: "" },
         firstName: { value: props.firstName ? props.firstName : "", error: "" },
         lastName: { value: props.lastName ? props.lastName : "", error: "" },
         email: { value: props.email ? props.email : "", error: "" },
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : "", error: "" },
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
         contactJobTitle: { value: props.contactJobTitle ? props.contactJobTitle : "", error: "" },
-        companyName: { value: props.companyName ? props.companyName : "", error: "" },
-        companyAddress: { value: props.companyAddress ? props.companyAddress : "", error: "" },
-        companyCity: { value: props.companyCity ? props.companyCity : "", error: "" },
-        companyRegion: { value: props.companyRegion ? props.companyRegion : "", error: "" },
-        companyPostalCode: { value: props.companyPostalCode ? props.companyPostalCode : "", error: "" },
-        companyCountry: { value: props.companyCountry ? props.companyCountry : "", error: "" },
         billingAddressId: { value: props.billingAddress ? props.billingAddress.id : "" },
         billingAddressFullName: { value: props.billingAddress ? props.billingAddress.fullName : "", error: "" },
         billingAddressPhoneNumber: { value: props.billingAddress ? props.billingAddress.phoneNumber : "", error: "" },
@@ -46,6 +41,12 @@ const ClientApplicationForm = (props) => {
     };
 
     const stateValidatorSchema = {
+        companyName: {
+            required: {
+                isRequired: true,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
         firstName: {
             required: {
                 isRequired: true,
@@ -81,42 +82,6 @@ const ClientApplicationForm = (props) => {
             }
         },
         communicationLanguage: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        companyName: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        companyAddress: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        companyCity: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        companyRegion: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        companyPostalCode: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        companyCountry: {
             required: {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
@@ -168,7 +133,7 @@ const ClientApplicationForm = (props) => {
 
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
-        
+
         const payload = {
             ...state,
             billingAddress: {
@@ -199,8 +164,6 @@ const ClientApplicationForm = (props) => {
             body: JSON.stringify(payload)
         };
 
-        console.log("requestOptions", requestOptions);
-
         fetch(props.saveUrl, requestOptions)
             .then(response => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
@@ -227,12 +190,13 @@ const ClientApplicationForm = (props) => {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const {
-        id, firstName, lastName, email, phoneNumber, contactJobTitle, companyAddress, companyCity, communicationLanguage,
-        companyCountry, companyName, companyPostalCode, companyRegion,
+        id, companyName, firstName, lastName, email, phoneNumber, communicationLanguage, contactJobTitle,
         billingAddressId, billingAddressFullName, billingAddressPhoneNumber, billingAddressStreet, billingAddressRegion, billingAddressPostalCode, billingAddressCity, billingAddressCountry,
         isDeliveryAddressEqualBillingAddress,
         deliveryAddressId, deliveryAddressFullName, deliveryAddressPhoneNumber, deliveryAddressStreet, deliveryAddressRegion, deliveryAddressPostalCode, deliveryAddressCity, deliveryAddressCountry,
     } = values;
+
+    console.log(props);
 
     return (
         <section className="section section-small-padding product client-form">
@@ -246,6 +210,18 @@ const ClientApplicationForm = (props) => {
                             </div>
                         }
                         <div className="group mb-4">
+                            <div className="field">
+                                <TextField
+                                    id="companyName"
+                                    name="companyName"
+                                    label={props.companyNameLabel}
+                                    fullWidth={true}
+                                    value={companyName}
+                                    onChange={handleOnChange}
+                                    variant="standard"
+                                    error={(errors.companyName.length > 0) && dirty.companyName}
+                                    helperText={dirty.companyName ? errors.companyName : ""} />
+                            </div>
                             <div className="field">
                                 <TextField
                                     id="firstName"
@@ -334,80 +310,6 @@ const ClientApplicationForm = (props) => {
                                     variant="standard"
                                     error={(errors.phoneNumber.length > 0) && dirty.phoneNumber}
                                     helperText={dirty.phoneNumber ? errors.phoneNumber : ""} />
-                            </div>
-                        </div>
-                        <div className="group mb-4">
-                            <div className="field">
-                                <TextField
-                                    id="companyName"
-                                    name="companyName"
-                                    label={props.companyNameLabel}
-                                    fullWidth={true}
-                                    value={companyName}
-                                    onChange={handleOnChange}
-                                    variant="standard"
-                                    error={(errors.companyName.length > 0) && dirty.companyName}
-                                    helperText={dirty.companyName ? errors.companyName : ""} />
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="companyAddress"
-                                    name="companyAddress"
-                                    label={props.addressLabel}
-                                    fullWidth={true}
-                                    value={companyAddress}
-                                    onChange={handleOnChange}
-                                    variant="standard"
-                                    error={(errors.companyAddress.length > 0) && dirty.companyAddress}
-                                    helperText={dirty.companyAddress ? errors.companyAddress : ""} />
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="companyCountry"
-                                    name="companyCountry"
-                                    label={props.countryLabel}
-                                    fullWidth={true}
-                                    value={companyCountry}
-                                    onChange={handleOnChange}
-                                    variant="standard"
-                                    error={(errors.companyCountry.length > 0) && dirty.companyCountry}
-                                    helperText={dirty.companyCountry ? errors.companyCountry : ""} />
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="companyCity"
-                                    name="companyCity"
-                                    label={props.cityLabel}
-                                    fullWidth={true}
-                                    value={companyCity}
-                                    onChange={handleOnChange}
-                                    variant="standard"
-                                    error={(errors.companyCity.length > 0) && dirty.companyCity}
-                                    helperText={dirty.companyCity ? errors.companyCity : ""} />
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="companyRegion"
-                                    name="companyRegion"
-                                    label={props.regionLabel}
-                                    fullWidth={true}
-                                    value={companyRegion}
-                                    onChange={handleOnChange}
-                                    variant="standard"
-                                    error={(errors.companyRegion.length > 0) && dirty.companyRegion}
-                                    helperText={dirty.companyRegion ? errors.companyRegion : ""} />
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="companyPostalCode"
-                                    name="companyPostalCode"
-                                    label={props.postalCodeLabel}
-                                    fullWidth={true}
-                                    value={companyPostalCode}
-                                    onChange={handleOnChange}
-                                    variant="standard"
-                                    error={(errors.companyPostalCode.length > 0) && dirty.companyPostalCode}
-                                    helperText={dirty.companyPostalCode ? errors.companyPostalCode : ""} />
                             </div>
                         </div>
                         <div className="group">

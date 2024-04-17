@@ -49,11 +49,6 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 ContactJobTitleLabel = this.globalLocalizer.GetString("ContactJobTitle"),
                 PhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel"),
                 CompanyNameLabel = this.globalLocalizer.GetString("CompanyName"),
-                AddressLabel = this.globalLocalizer.GetString("Address"),
-                CountryLabel = this.globalLocalizer.GetString("Country"),
-                CityLabel = this.globalLocalizer.GetString("City"),
-                RegionLabel = this.globalLocalizer.GetString("Region"),
-                PostalCodeLabel = this.globalLocalizer.GetString("PostalCode"),
                 BackToClientsApplicationsText = this.clientLocalizer.GetString("BackToClientsApplications"),
                 ClientsApplicationsUrl = this.linkGenerator.GetPathByAction("Index", "ClientApplications", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
@@ -61,7 +56,6 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ClientsApplicationApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 SelectJobTitle = this.globalLocalizer.GetString("SelectJobTitle"),
-
                 LanguageLabel = this.globalLocalizer.GetString("CommunicationLanguageLabel"),
                 BillingAddressTitle = this.globalLocalizer.GetString("BillingAddressTitle"),
                 DeliveryAddressTitle = this.globalLocalizer.GetString("DeliveryAddressTitle"),
@@ -138,18 +132,13 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 if (clientApplication is not null)
                 {
                     viewModel.Id = clientApplication.Id;
+                    viewModel.CompanyName = clientApplication.CompanyName;
                     viewModel.FirstName = clientApplication.FirstName;
                     viewModel.LastName = clientApplication.LastName;
                     viewModel.Email = clientApplication.Email;
                     viewModel.ContactJobTitle = clientApplication.ContactJobTitle;
                     viewModel.PhoneNumber = clientApplication.PhoneNumber;
                     viewModel.CommunicationLanguage = clientApplication.CommunicationLanguage;
-                    viewModel.CompanyName = clientApplication.CompanyName;
-                    viewModel.CompanyAddress = clientApplication.CompanyAddress;
-                    viewModel.CompanyCity = clientApplication.CompanyCity;
-                    viewModel.CompanyCountry = clientApplication.CompanyCountry;
-                    viewModel.CompanyRegion = clientApplication.CompanyRegion;
-                    viewModel.CompanyPostalCode = clientApplication.CompanyPostalCode;
                     viewModel.IsDeliveryAddressEqualBillingAddress = clientApplication.IsDeliveryAddressEqualBillingAddress;
 
                     viewModel.BillingAddress = new ClientApplicationAddressViewModel

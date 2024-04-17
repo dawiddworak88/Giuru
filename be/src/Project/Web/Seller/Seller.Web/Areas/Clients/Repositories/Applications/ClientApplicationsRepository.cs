@@ -29,25 +29,20 @@ namespace Seller.Web.Areas.Clients.Repositories.Applications
         }
 
         public async Task<Guid> SaveAsync(
-            string token, string language, Guid? id, string firstName, string lastName, string contactJobTitle, string email, string phoneNumber, string communicationLanguage,
-            string companyName, string companyAddress, string companyCountry, string companyCity, string companyRegion, string companyPostalCode, bool isDeliveryAddressEqualBillingAddress,
+            string token, string language, Guid? id, string companyName, string firstName, string lastName, string contactJobTitle,
+            string email, string phoneNumber, string communicationLanguage, bool isDeliveryAddressEqualBillingAddress,
             ClientApplicationAddressRequestModel billingAddress, ClientApplicationAddressRequestModel deliveryAddress)
         {
             var requestModel = new ClientApplicationRequestModel
             {
                 Id = id,
+                CompanyName = companyName,
                 FirstName = firstName,
                 LastName = lastName,
                 ContactJobTitle = contactJobTitle,
                 Email = email,
                 PhoneNumber = phoneNumber,
                 CommunicationLanguage = communicationLanguage,
-                CompanyName = companyName,
-                CompanyAddress = companyAddress,
-                CompanyCountry = companyCountry,
-                CompanyCity = companyCity,
-                CompanyRegion = companyRegion,
-                CompanyPostalCode = companyPostalCode,
                 IsDeliveryAddressEqualBillingAddress = isDeliveryAddressEqualBillingAddress,
                 BillingAddress = billingAddress,
                 DeliveryAddress = deliveryAddress

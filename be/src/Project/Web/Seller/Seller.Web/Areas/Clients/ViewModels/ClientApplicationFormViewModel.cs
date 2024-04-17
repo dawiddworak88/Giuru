@@ -9,6 +9,8 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public Guid? Id { get; set; }
         public string Title { get; set; }
         public string IdLabel { get; set; }
+        public string CompanyNameLabel { get; set; }
+        public string CompanyName { get; set; }
         public string FirstNameLabel { get; set; }
         public string FirstName { get; set; }
         public string LastNameLabel { get; set; }
@@ -19,18 +21,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string Email { get; set; }
         public string PhoneNumberLabel { get; set; }
         public string PhoneNumber { get; set; }
-        public string CompanyNameLabel { get; set; }
-        public string CompanyName { get; set; }
-        public string AddressLabel { get; set; }
-        public string CompanyAddress { get; set; }
-        public string CountryLabel { get; set; }
-        public string CompanyCountry { get; set; }
-        public string CityLabel { get; set; }
-        public string CompanyCity { get; set; }
-        public string PostalCodeLabel { get; set; }
-        public string CompanyPostalCode { get; set; }
-        public string RegionLabel { get; set; }
-        public string CompanyRegion { get; set; }
         public string SaveText { get; set; }
         public string SaveUrl { get; set; }
         public string BackToClientsApplicationsText { get; set; }
