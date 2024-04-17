@@ -1,5 +1,4 @@
 ﻿using Foundation.ApiExtensions.Models.Request;
-using System;
 
 namespace Client.Api.v1.RequestModels
 {
