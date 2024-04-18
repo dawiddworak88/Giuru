@@ -29,9 +29,19 @@ namespace Seller.Web.Areas.Clients.Repositories.Applications
         }
 
         public async Task<Guid> SaveAsync(
-            string token, string language, Guid? id, string companyName, string firstName, string lastName, string contactJobTitle,
-            string email, string phoneNumber, string communicationLanguage, bool isDeliveryAddressEqualBillingAddress,
-            ClientApplicationAddressRequestModel billingAddress, ClientApplicationAddressRequestModel deliveryAddress)
+            string token,
+            string language,
+            Guid? id,
+            string companyName,
+            string firstName,
+            string lastName,
+            string contactJobTitle,
+            string email,
+            string phoneNumber,
+            string communicationLanguage,
+            bool isDeliveryAddressEqualBillingAddress,
+            ClientApplicationAddressRequestModel billingAddress,
+            ClientApplicationAddressRequestModel deliveryAddress)
         {
             var requestModel = new ClientApplicationRequestModel
             {

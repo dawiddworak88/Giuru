@@ -23,9 +23,19 @@ namespace Buyer.Web.Areas.Clients.Repositories
             _settings = settings;
         }
             
-        public async Task CreateClientApplicationAsync(string token, string language, string companyName, string firstName,string lastName,
-            string contactJobTitle, string email, string phoneNumber, string communicationLanguage, bool isDeliveryAddressEqualBillingAddress,
-            ClientApplicationAddressRequestModel billingAddress, ClientApplicationAddressRequestModel deliveryAddress)
+        public async Task CreateClientApplicationAsync(
+            string token,
+            string language,
+            string companyName,
+            string firstName,
+            string lastName,
+            string contactJobTitle,
+            string email,
+            string phoneNumber,
+            string communicationLanguage,
+            bool isDeliveryAddressEqualBillingAddress,
+            ClientApplicationAddressRequestModel billingAddress,
+            ClientApplicationAddressRequestModel deliveryAddress)
         { 
 
             var requestModel = new ClientApplicationRequestModel

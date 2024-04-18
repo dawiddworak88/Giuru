@@ -57,9 +57,19 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             var clientApplication = await _clientApplicationsRepository.SaveAsync(
-                token, language, model.Id, model.CompanyName, model.FirstName, model.LastName, model.ContactJobTitle,
-                model.Email, model.PhoneNumber, model.CommunicationLanguage, model.IsDeliveryAddressEqualBillingAddress,
-                model.BillingAddress, model.DeliveryAddress);
+                token,
+                language,
+                model.Id,
+                model.CompanyName,
+                model.FirstName,
+                model.LastName,
+                model.ContactJobTitle,
+                model.Email,
+                model.PhoneNumber,
+                model.CommunicationLanguage,
+                model.IsDeliveryAddressEqualBillingAddress,
+                model.BillingAddress,
+                model.DeliveryAddress);
 
             return StatusCode((int)HttpStatusCode.OK, new { Id = clientApplication, Message = _clientLocalizer.GetString("ClientApplicationSavedSuccessfully").Value });
         }
