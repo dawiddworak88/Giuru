@@ -245,7 +245,7 @@ namespace Client.Api.v1.Controllers
                         CreatedDate = clientApplication.CreatedDate
                     };
 
-                    if (!clientApplication.IsDeliveryAddressEqualBillingAddress)
+                    if (clientApplication.IsDeliveryAddressEqualBillingAddress is false)
                     {
                         response.DeliveryAddress = new ClientApplicationAddressResponseModel
                         {

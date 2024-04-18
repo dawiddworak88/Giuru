@@ -153,7 +153,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                         Country = clientApplication.BillingAddress.Country
                     };
 
-                    if (!clientApplication.IsDeliveryAddressEqualBillingAddress)
+                    if (clientApplication.IsDeliveryAddressEqualBillingAddress is false)
                     {
                         viewModel.DeliveryAddress = new ClientApplicationAddressViewModel
                         {
