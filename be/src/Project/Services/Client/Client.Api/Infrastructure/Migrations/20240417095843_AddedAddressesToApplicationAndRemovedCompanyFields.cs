@@ -1,5 +1,4 @@
 ﻿using System;
-using Client.Api.Infrastructure.Migrations.Mapping;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
