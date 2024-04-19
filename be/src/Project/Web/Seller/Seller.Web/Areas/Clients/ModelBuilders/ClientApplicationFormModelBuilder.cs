@@ -123,6 +123,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             }
 
             viewModel.Languages = languages;
+            viewModel.IsDeliveryAddressEqualBillingAddress = true;
 
             if (componentModel.Id.HasValue)
             {
