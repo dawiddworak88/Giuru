@@ -1,4 +1,5 @@
 ﻿using System;
+using Client.Api.Infrastructure.Migrations.Mapping;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -8,36 +9,10 @@ namespace Client.Api.Infrastructure.Migrations
     /// <inheritdoc />
     public partial class AddedAddressesToApplicationAndRemovedCompanyFields : Migration
     {
+
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "ClientsApplicationAddresses",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Region = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClientsApplicationAddresses", x => x.Id);
-                });
-
-            migrationBuilder.Sql(
-                "INSERT INTO ClientsApplicationAddress (FullName, PhoneNumber, Street, Region, PostalCode, City, Country) " +
-                "SELECT CONCAT(FirstName, ' ', LastName) AS FullName, PhoneNumber, CompanyAddress, CompanyRegion, CompanyPostalCode, CompanyCity, CompanyCountry " +
-                "FROM ClientsApplication");
-
             migrationBuilder.DropColumn(
                 name: "CompanyAddress",
                 table: "ClientsApplications");
@@ -79,6 +54,28 @@ namespace Client.Api.Infrastructure.Migrations
                 type: "bit",
                 nullable: false,
                 defaultValue: false);
+
+            migrationBuilder.CreateTable(
+                name: "ClientsApplicationAddresses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Region = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClientsApplicationAddresses", x => x.Id);
+                });
         }
 
         /// <inheritdoc />
@@ -111,19 +108,6 @@ namespace Client.Api.Infrastructure.Migrations
                 type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "");
-
-            migrationBuilder.Sql(
-                "UPDATE ClientsApplication " +
-                "SET FirstName = (SELECT SUBSTRING(FullName, 1, CHARINDEX(' ', FullName) - 1)), " +
-                "    LastName = (SELECT SUBSTRING(FullName, CHARINDEX(' ', FullName) + 1, LEN(FullName) - CHARINDEX(' ', FullName))), " +
-                "    PhoneNumber = (SELECT PhoneNumber), " +
-                "    CompanyAddress = (SELECT Street), " +
-                "    CompanyRegion = (SELECT Region), " +
-                "    CompanyPostalCode = (SELECT PostalCode), " +
-                "    CompanyCity = (SELECT City), " +
-                "    CompanyCountry = (SELECT Country) " +
-                "FROM ClientsApplicationAddress " +
-                "WHERE ClientsApplication.BillingAddressId = ClientsApplicationAddress.Id");
 
             migrationBuilder.DropTable(
                name: "ClientsApplicationAddresses");
