@@ -229,7 +229,7 @@ const ClientApplicationForm = (props) => {
 
     const {
         values, errors, dirty, disable,
-        setFieldValue, handleOnChange, handleOnSubmit
+        handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const {
@@ -237,8 +237,6 @@ const ClientApplicationForm = (props) => {
         billingAddressId, billingAddressFullName, billingAddressPhoneNumber, billingAddressStreet, billingAddressRegion, billingAddressPostalCode, billingAddressCity, billingAddressCountry,
         deliveryAddressId, deliveryAddressFullName, deliveryAddressPhoneNumber, deliveryAddressStreet, deliveryAddressRegion, deliveryAddressPostalCode, deliveryAddressCity, deliveryAddressCountry,
     } = values;
-
-    console.log(props);
 
     return (
         <section className="section section-small-padding product client-form">
