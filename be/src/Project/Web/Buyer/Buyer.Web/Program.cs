@@ -1,6 +1,7 @@
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
 using Buyer.Web.Shared.DependencyInjection;
+using Buyer.Web.Areas.Content.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -104,6 +105,8 @@ builder.Services.RegisterDownloadCenterDependencies();
 
 builder.Services.RegisterDashboardAreaDependencies();
 
+builder.Services.RegisterContentDependencies();
+
 builder.Services.RegisterGeneralDependencies();
 
 builder.Services.RegisterDependencies(builder.Configuration);
@@ -174,11 +177,21 @@ app.UseCustomRouteRequestLocalizationProvider(app.Services.GetService<IOptionsMo
 app.UseSecurityHeaders(builder.Configuration);
 
 app.MapControllerRoute(
+    name: "localizedAreaSlugRoute",
+    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{slug?}",
+    defaults: new
+    {
+        area = "Content",
+        controller = "Content",
+        action = "Index"
+    }).RequireAuthorization();
+
+app.MapControllerRoute(
     name: "localizedAreaRoute",
     pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
 
 app.MapControllerRoute(
-    name: "defautl",
+    name: "default",
     pattern: "{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
 
 app.MapHealthChecks("/hc", new HealthCheckOptions

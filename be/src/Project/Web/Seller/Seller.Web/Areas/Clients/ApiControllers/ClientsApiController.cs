@@ -91,7 +91,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 await _clientNotificationTypeApprovalRepository.SaveAsync(token, language, model.Id, model.ClientApprovalIds);
             }
             
-            if (model.FieldsValues.Any())
+            if (model.FieldsValues is not null && model.FieldsValues.Any())
             {
                 await _clientFieldValuesRepository.SaveAsync(token, language, clientId,
                   model.FieldsValues.Select(x => new ApiClientFieldValue

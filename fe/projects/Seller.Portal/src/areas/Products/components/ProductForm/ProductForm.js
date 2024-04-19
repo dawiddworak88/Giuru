@@ -16,6 +16,7 @@ import DynamicForm from "../../../../shared/components/DynamicForm/DynamicForm";
 import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import SearchConstants from "../../../../shared/constants/SearchConstants";
+import moment from "moment";
 
 function ProductForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -47,7 +48,8 @@ function ProductForm(props) {
         uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : {} },
         formData: { value: props.formData ? JSON.parse(props.formData) : {} },
         isPublished: { value: props.isPublished ? props.isPublished : false },
-        ean: { value: props.ean ? props.ean : "" }
+        ean: { value: props.ean ? props.ean : "" },
+        fulfillmentTime: { value: props.fulfillmentTime ? Number(moment.utc(1000 * props.fulfillmentTime).format("DD") - 1) : null}
     };
 
     const stateValidatorSchema = {
@@ -133,10 +135,11 @@ function ProductForm(props) {
             files,
             isNew,
             ean,
+            fulfillmentTime: fulfillmentTime ? moment.duration(fulfillmentTime, 'days').asSeconds() : null,
             formData: JSON.stringify(formData),
             isPublished
         };
-        
+
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
@@ -240,7 +243,7 @@ function ProductForm(props) {
 
     const { 
         id, category, sku, name, primaryProduct, images, files, 
-        isNew, schema, uiSchema, formData, isPublished, ean 
+        isNew, schema, uiSchema, formData, isPublished, ean, fulfillmentTime
     } = values;
 
     return (
@@ -282,6 +285,10 @@ function ProductForm(props) {
                         <div className="field">
                             <TextField id="name" name="name" label={props.nameLabel} fullWidth={true} variant="standard"
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
+                        </div>
+                        <div className="field">
+                            <TextField type="number" id="fulfillmentTime" name="fulfillmentTime" label={props.fulfillmentTimeLabel} fullWidth={true} variant="standard"
+                            value={fulfillmentTime} onChange={handleOnChange} />
                         </div>
                         <div className="field">
                             <InputLabel id="description-label">{props.descriptionLabel}</InputLabel>

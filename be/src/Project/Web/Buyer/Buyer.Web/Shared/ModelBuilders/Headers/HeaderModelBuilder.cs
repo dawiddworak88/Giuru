@@ -41,6 +41,8 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers
             {
                 IsLoggedIn = this.httpContextAccessor.HttpContext.User.Identity.IsAuthenticated,
                 DrawerBackLabel = this.globalLocalizer.GetString("Back"),
+                SearchLabel = this.globalLocalizer.GetString("Search"),
+                SearchPlaceholderLabel = this.globalLocalizer.GetString("Search"),
                 DrawerBackIcon = IconsConstants.ArrowLeft,
                 Logo = this.logoModelBuilder.BuildModel(),
                 LanguageSwitcher = this.languageSwitcherViewModel.BuildModel(),

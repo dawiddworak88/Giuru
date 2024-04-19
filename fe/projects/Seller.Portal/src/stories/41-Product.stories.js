@@ -10,6 +10,7 @@ var productForm = {
   enterNameText: "Enter name",
   selectSchemaLabel: "Select schema",
   skuLabel: "SKU:",
+  fulfillmentTime: 1,
   isNewLabel: "New",
   skuRequiredErrorMessage: "Enter SKU",
   enterSkuText: "Enter SKU",

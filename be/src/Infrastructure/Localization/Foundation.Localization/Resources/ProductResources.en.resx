@@ -159,6 +159,9 @@
   <data name="EnterSkuText" xml:space="preserve">
     <value>Enter SKU</value>
   </data>
+  <data name="FulfillmentTimeLabel" xml:space="preserve">
+    <value>Days To Fulfillment:</value>
+  </data>
   <data name="IsNew" xml:space="preserve">
     <value>New</value>
   </data>

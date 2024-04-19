@@ -13,11 +13,11 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 {
     public class ProductSearchRepository : IProductSearchRepository
     {
-        private readonly IElasticClient elasticClient;
+        private readonly IElasticClient _elasticClient;
 
         public ProductSearchRepository(IElasticClient elasticClient)
         {
-            this.elasticClient = elasticClient;
+            _elasticClient = elasticClient;
         }
 
         public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(
@@ -74,7 +74,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 itemsPerPage = Constants.MaxItemsPerPageLimit;
             }
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.TrackTotalHits().From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(s => s.TrackTotalHits().From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
 
             if (response.IsValid)
             {
@@ -102,7 +102,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsPublished).Value(true));
             }
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query));
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query));
 
             if (response.IsValid && response.Hits.Any())
             {
@@ -127,7 +127,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsPublished).Value(true));
             }
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query));
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query));
 
             if (response.IsValid && response.Hits.Any())
             {
@@ -160,7 +160,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
             query = query && idsQuery;
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(q => q.From(ProductSearchConstants.Pagination.BeginningPage).Size(ProductSearchConstants.Pagination.ProductsMaxSize).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(q => q.From(ProductSearchConstants.Pagination.BeginningPage).Size(ProductSearchConstants.Pagination.ProductsMaxSize).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
 
             if (response.IsValid && response.Hits.Any())
             {
@@ -196,7 +196,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
             query = query && skusQuery;
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(q => q.From(ProductSearchConstants.Pagination.BeginningPage).Size(ProductSearchConstants.Pagination.ProductsMaxSize).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(q => q.From(ProductSearchConstants.Pagination.BeginningPage).Size(ProductSearchConstants.Pagination.ProductsMaxSize).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
 
             if (response.IsValid && response.Hits.Any())
             {
@@ -213,7 +213,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
         {
             var query = Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query));
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query));
 
             if (response.IsValid)
             {
@@ -245,7 +245,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 Query = query
             };
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(searchRequest);
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(searchRequest);
 
             if (response.IsValid && response.Hits.Any())
             {
@@ -260,7 +260,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
         public IEnumerable<string> GetProductSuggestions(string searchTerm, int size, string language, Guid? organisationId)
         {
-            var nameResponse = this.elasticClient.Search<ProductSearchModel>(s => s
+            var nameResponse = _elasticClient.Search<ProductSearchModel>(s => s
                 .Suggest(su => su
                     .Completion("name", cs => cs
                         .Contexts(ctx => ctx

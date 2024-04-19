@@ -17,15 +17,15 @@ namespace Buyer.Web.Areas.Clients.ApiControllers
     [AllowAnonymous]
     public class ApplicationsApiController : BaseApiController
     {
-        private readonly IApplicationsRepository applicationsRepository;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IApplicationsRepository _applicationsRepository;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
 
         public ApplicationsApiController(
             IApplicationsRepository applicationsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer)
         {
-            this.applicationsRepository = applicationsRepository;
-            this.globalLocalizer = globalLocalizer;
+            _applicationsRepository = applicationsRepository;
+            _globalLocalizer = globalLocalizer;
         }
 
         [HttpPost]
@@ -34,11 +34,21 @@ namespace Buyer.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await this.applicationsRepository.CreateClientApplicationAsync(
-                token, language, model.FirstName, model.LastName, model.ContactJobTitle, model.Email, model.PhoneNumber, model.CompanyName,
-                model.CompanyAddress, model.CompanyCountry, model.CompanyCity, model.CompanyRegion, model.CompanyPostalCode);
+            await _applicationsRepository.CreateClientApplicationAsync(
+                token,
+                language,
+                model.CompanyName,
+                model.FirstName,
+                model.LastName,
+                model.ContactJobTitle,
+                model.Email,
+                model.PhoneNumber,
+                model.CommunicationLanguage,
+                model.IsDeliveryAddressEqualBillingAddress,
+                model.BillingAddress,
+                model.DeliveryAddress);
 
-            return StatusCode((int)HttpStatusCode.OK, new { Message = globalLocalizer.GetString("SuccessfullyClientApply").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Message = _globalLocalizer.GetString("SuccessfullyClientApply").Value });
         }
     }
 }

@@ -64,6 +64,8 @@ namespace Identity.Api.Services.TeamMembers
 
             if (user is not null)
             {
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
                 user.OrganisationId = organisation.Id;
 
                 await _context.SaveChangesAsync();

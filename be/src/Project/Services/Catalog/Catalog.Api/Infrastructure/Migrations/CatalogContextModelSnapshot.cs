@@ -17,10 +17,13 @@ namespace Catalog.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Foundation.Catalog.Infrastructure.Categories.Entites.CategoryImage", b =>
                 {
@@ -52,6 +55,8 @@ namespace Catalog.Api.Infrastructure.Migrations
                         .HasColumnType("rowversion");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("CategoryImages");
                 });
@@ -164,6 +169,8 @@ namespace Catalog.Api.Infrastructure.Migrations
                         .HasColumnType("rowversion");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Parentid");
 
                     b.ToTable("Categories");
                 });
@@ -357,6 +364,9 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<string>("Ean")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("FulfillmentTime")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -536,6 +546,15 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.ToTable("ProductVideos");
                 });
 
+            modelBuilder.Entity("Foundation.Catalog.Infrastructure.Categories.Entites.CategoryImage", b =>
+                {
+                    b.HasOne("Foundation.Catalog.Infrastructure.Categories.Entities.Category", null)
+                        .WithMany("Images")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Foundation.Catalog.Infrastructure.Categories.Entites.CategorySchema", b =>
                 {
                     b.HasOne("Foundation.Catalog.Infrastructure.Categories.Entities.Category", null)
@@ -552,6 +571,15 @@ namespace Catalog.Api.Infrastructure.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Foundation.Catalog.Infrastructure.Categories.Entities.Category", b =>
+                {
+                    b.HasOne("Foundation.Catalog.Infrastructure.Categories.Entities.Category", "ParentCategory")
+                        .WithMany()
+                        .HasForeignKey("Parentid");
+
+                    b.Navigation("ParentCategory");
                 });
 
             modelBuilder.Entity("Foundation.Catalog.Infrastructure.ProductAttributes.Entities.ProductAttributeItem", b =>
@@ -611,6 +639,8 @@ namespace Catalog.Api.Infrastructure.Migrations
 
             modelBuilder.Entity("Foundation.Catalog.Infrastructure.Categories.Entities.Category", b =>
                 {
+                    b.Navigation("Images");
+
                     b.Navigation("Schemas");
 
                     b.Navigation("Translations");

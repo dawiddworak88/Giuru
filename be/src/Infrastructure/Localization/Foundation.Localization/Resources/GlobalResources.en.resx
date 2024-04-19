@@ -588,9 +588,6 @@
   <data name="Manager" xml:space="preserve">
     <value>Account Manager</value>
   </data>
-  <data name="BusinessInformation" xml:space="preserve">
-    <value>Business information</value>
-  </data>
   <data name="ContactInformation" xml:space="preserve">
     <value>Contact information</value>
   </data>
@@ -602,9 +599,6 @@
   </data>
   <data name="ApplyApplicationSubmit" xml:space="preserve">
     <value>Submit your application now</value>
-  </data>
-  <data name="BusinessInformationDescription" xml:space="preserve">
-    <value>Let us know your business details</value>
   </data>
   <data name="ContactInformationDescription" xml:space="preserve">
     <value>Your primary contact person for ELTAP will be the contact person provided in the form</value>
@@ -773,5 +767,20 @@
   </data>
   <data name="InActive" xml:space="preserve">
     <value>Inactive</value>
+  </data>
+  <data name="BillingAddressTitle" xml:space="preserve">
+    <value>Billing address</value>
+  </data>
+  <data name="DeliveryAddressEqualBillingAddressText" xml:space="preserve">
+    <value>Delivery address same as billing address</value>
+  </data>
+  <data name="AdressesInformation" xml:space="preserve">
+    <value>Address information</value>
+  </data>
+  <data name="AdressesInformationDescription" xml:space="preserve">
+    <value>Provide both billing and delivery addresses for easier cooperation</value>
+  </data>
+  <data name="DeliveryAddressTitle" xml:space="preserve">
+    <value>Delivery address</value>
   </data>
 </root>
