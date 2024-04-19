@@ -15,7 +15,7 @@ namespace Client.Api.Validators.Applications
             RuleFor(x => x.PhoneNumber).NotEmpty().NotNull();
             RuleFor(x => x.ContactJobTitle).NotEmpty().NotNull();
             RuleFor(x => x.BillingAddress).SetValidator(new ClientApplicationAddressModelValidator());
-            RuleFor(x => x.DeliveryAddress).SetValidator(new ClientApplicationAddressModelValidator()).When(x => !x.IsDeliveryAddressEqualBillingAddress);
+            RuleFor(x => x.DeliveryAddress).SetValidator(new ClientApplicationAddressModelValidator()).When(x => x.IsDeliveryAddressEqualBillingAddress is false);
         }
     }
 }

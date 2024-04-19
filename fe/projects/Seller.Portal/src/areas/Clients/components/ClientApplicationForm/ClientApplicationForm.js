@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import {
     TextField, Button, InputLabel, CircularProgress,
@@ -12,6 +12,7 @@ import AuthenticationHelper from "../../../../shared/helpers/globals/Authenticat
 
 const ClientApplicationForm = (props) => {
     const [state, dispatch] = useContext(Context);
+    const [isDeliveryAddressEqualBillingAddress, setIsDeliveryAddressEqualBillingAddress] = useState(props.isDeliveryAddressEqualBillingAddress);
     const stateSchema = {
         id: { value: props.id ? props.id : null },
         companyName: { value: props.companyName ? props.companyName : "", error: "" },
@@ -29,15 +30,14 @@ const ClientApplicationForm = (props) => {
         billingAddressPostalCode: { value: props.billingAddress ? props.billingAddress.postalCode : "", error: "" },
         billingAddressCity: { value: props.billingAddress ? props.billingAddress.city : "", error: "" },
         billingAddressCountry: { value: props.billingAddress ? props.billingAddress.country : "", error: "" },
-        isDeliveryAddressEqualBillingAddress: { value: props.isDeliveryAddressEqualBillingAddress },
         deliveryAddressId: { value: props.deliveryAddress ? props.deliveryAddress.id : "" },
-        deliveryAddressFullName: { value: props.deliveryAddress ? props.deliveryAddress.fullName : "" },
-        deliveryAddressPhoneNumber: { value: props.deliveryAddress ? props.deliveryAddress.phoneNumber : "" },
-        deliveryAddressStreet: { value: props.deliveryAddress ? props.deliveryAddress.street : "" },
-        deliveryAddressRegion: { value: props.deliveryAddress ? props.deliveryAddress.region : "" },
-        deliveryAddressPostalCode: { value: props.deliveryAddress ? props.deliveryAddress.postalCode : "" },
-        deliveryAddressCity: { value: props.deliveryAddress ? props.deliveryAddress.city : "" },
-        deliveryAddressCountry: { value: props.deliveryAddress ? props.deliveryAddress.country : "" },
+        deliveryAddressFullName: { value: props.deliveryAddress ? props.deliveryAddress.fullName : "", error: ""  },
+        deliveryAddressPhoneNumber: { value: props.deliveryAddress ? props.deliveryAddress.phoneNumber : "", error: "" },
+        deliveryAddressStreet: { value: props.deliveryAddress ? props.deliveryAddress.street : "", error: "" },
+        deliveryAddressRegion: { value: props.deliveryAddress ? props.deliveryAddress.region : "", error: "" },
+        deliveryAddressPostalCode: { value: props.deliveryAddress ? props.deliveryAddress.postalCode : "", error: "" },
+        deliveryAddressCity: { value: props.deliveryAddress ? props.deliveryAddress.city : "", error: "" },
+        deliveryAddressCountry: { value: props.deliveryAddress ? props.deliveryAddress.country : "", error: "" },
     };
 
     const stateValidatorSchema = {
@@ -128,6 +128,48 @@ const ClientApplicationForm = (props) => {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
             }
+        },
+        deliveryAddressFullName: {
+            required: {
+                isRequired: !isDeliveryAddressEqualBillingAddress,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
+        deliveryAddressPhoneNumber: {
+            required: {
+                isRequired: !isDeliveryAddressEqualBillingAddress,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
+        deliveryAddressStreet: {
+            required: {
+                isRequired: !isDeliveryAddressEqualBillingAddress,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
+        deliveryAddressRegion: {
+            required: {
+                isRequired: !isDeliveryAddressEqualBillingAddress,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
+        deliveryAddressPostalCode: {
+            required: {
+                isRequired: !isDeliveryAddressEqualBillingAddress,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
+        deliveryAddressCity: {
+            required: {
+                isRequired: !isDeliveryAddressEqualBillingAddress,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
+        deliveryAddressCountry: {
+            required: {
+                isRequired: !isDeliveryAddressEqualBillingAddress,
+                error: props.fieldRequiredErrorMessage
+            }
         }
     };
 
@@ -136,6 +178,7 @@ const ClientApplicationForm = (props) => {
 
         const payload = {
             ...state,
+            isDeliveryAddressEqualBillingAddress,
             billingAddress: {
                 id: billingAddressId,
                 fullName: billingAddressFullName,
@@ -186,17 +229,14 @@ const ClientApplicationForm = (props) => {
 
     const {
         values, errors, dirty, disable,
-        setFieldValue, handleOnChange, handleOnSubmit
+        handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const {
         id, companyName, firstName, lastName, email, phoneNumber, communicationLanguage, contactJobTitle,
         billingAddressId, billingAddressFullName, billingAddressPhoneNumber, billingAddressStreet, billingAddressRegion, billingAddressPostalCode, billingAddressCity, billingAddressCountry,
-        isDeliveryAddressEqualBillingAddress,
         deliveryAddressId, deliveryAddressFullName, deliveryAddressPhoneNumber, deliveryAddressStreet, deliveryAddressRegion, deliveryAddressPostalCode, deliveryAddressCity, deliveryAddressCountry,
     } = values;
-
-    console.log(props);
 
     return (
         <section className="section section-small-padding product client-form">
@@ -404,7 +444,7 @@ const ClientApplicationForm = (props) => {
                                         <Checkbox
                                             checked={isDeliveryAddressEqualBillingAddress}
                                             onChange={(e) => {
-                                                setFieldValue({ name: "isDeliveryAddressEqualBillingAddress", value: e.target.checked })
+                                                setIsDeliveryAddressEqualBillingAddress(e.target.checked);
                                             }} />
                                     } />
                                 <span>{props.deliveryAddressEqualBillingAddressText}</span>
@@ -421,7 +461,9 @@ const ClientApplicationForm = (props) => {
                                         fullWidth={true}
                                         variant="standard"
                                         label={props.addressFullNameLabel}
-                                        onChange={handleOnChange} />
+                                        onChange={handleOnChange} 
+                                        helperText={dirty.deliveryAddressFullName ? errors.deliveryAddressFullName : ""}
+                                        error={(errors.deliveryAddressFullName.length > 0) && dirty.deliveryAddressFullName} />
                                 </div>
                                 <div className="field">
                                     <TextField
@@ -431,7 +473,9 @@ const ClientApplicationForm = (props) => {
                                         fullWidth={true}
                                         variant="standard"
                                         label={props.addressPhoneNumberLabel}
-                                        onChange={handleOnChange} />
+                                        onChange={handleOnChange}
+                                        helperText={dirty.deliveryAddressPhoneNumber ? errors.deliveryAddressPhoneNumber : ""}
+                                        error={(errors.deliveryAddressPhoneNumber.length > 0) && dirty.deliveryAddressPhoneNumber} />
                                 </div>
                                 <div className="field">
                                     <TextField
@@ -441,7 +485,9 @@ const ClientApplicationForm = (props) => {
                                         fullWidth={true}
                                         variant="standard"
                                         label={props.addressStreetLabel}
-                                        onChange={handleOnChange} />
+                                        onChange={handleOnChange}
+                                        helperText={dirty.deliveryAddressStreet ? errors.deliveryAddressStreet : ""}
+                                        error={(errors.deliveryAddressStreet.length > 0) && dirty.deliveryAddressStreet} />
                                 </div>
                                 <div className="field">
                                     <TextField
@@ -451,7 +497,9 @@ const ClientApplicationForm = (props) => {
                                         fullWidth={true}
                                         variant="standard"
                                         label={props.addressRegionLabel}
-                                        onChange={handleOnChange} />
+                                        onChange={handleOnChange}
+                                        helperText={dirty.deliveryAddressRegion ? errors.deliveryAddressRegion : ""}
+                                        error={(errors.deliveryAddressRegion.length > 0) && dirty.deliveryAddressRegion} />
                                 </div>
                                 <div className="field">
                                     <TextField
@@ -461,7 +509,9 @@ const ClientApplicationForm = (props) => {
                                         fullWidth={true}
                                         variant="standard"
                                         label={props.addressPostalCodeLabel}
-                                        onChange={handleOnChange} />
+                                        onChange={handleOnChange}
+                                        helperText={dirty.deliveryAddressPostalCode ? errors.deliveryAddressPostalCode : ""}
+                                        error={(errors.deliveryAddressPostalCode.length > 0) && dirty.deliveryAddressPostalCode} />
                                 </div>
                                 <div className="field">
                                     <TextField
@@ -471,7 +521,9 @@ const ClientApplicationForm = (props) => {
                                         fullWidth={true}
                                         variant="standard"
                                         label={props.addressCityLabel}
-                                        onChange={handleOnChange} />
+                                        onChange={handleOnChange}
+                                        helperText={dirty.deliveryAddressCity ? errors.deliveryAddressCity : ""}
+                                        error={(errors.deliveryAddressCity.length > 0) && dirty.deliveryAddressCity} />
                                 </div>
                                 <div className="field">
                                     <TextField
@@ -481,7 +533,9 @@ const ClientApplicationForm = (props) => {
                                         fullWidth={true}
                                         variant="standard"
                                         label={props.addressCountryLabel}
-                                        onChange={handleOnChange} />
+                                        onChange={handleOnChange}
+                                        helperText={dirty.deliveryAddressCountry ? errors.deliveryAddressCountry : ""}
+                                        error={(errors.deliveryAddressCountry.length > 0) && dirty.deliveryAddressCountry} />
                                 </div>
                             </div>
                         }
@@ -512,10 +566,16 @@ ClientApplicationForm.propTypes = {
     cityLabel: PropTypes.string.isRequired,
     countryLabel: PropTypes.string.isRequired,
     addressLabel: PropTypes.string.isRequired,
-    companyNameLabel: PropTypes.string.isRequired,
     phoneNumberLabel: PropTypes.string.isRequired,
     emailLabel: PropTypes.string.isRequired,
     contactJobTitleLabel: PropTypes.string.isRequired,
+    addressFullNameLabel: PropTypes.string.isRequired,
+    addressPhoneNumberLabel: PropTypes.string.isRequired,
+    addressStreetLabel: PropTypes.string.isRequired,
+    addressRegionLabel: PropTypes.string.isRequired,
+    addressPostalCodeLabel: PropTypes.string.isRequired,
+    deliveryAddressCity: PropTypes.string.isRequired,
+    addressCountryLabel: PropTypes.string.isRequired,
     lastNameLabel: PropTypes.string.isRequired,
     firstNameLabel: PropTypes.string.isRequired,
     firstName: PropTypes.string,
