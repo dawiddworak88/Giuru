@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import { 
+import {
     TextField, Button, InputLabel, CircularProgress,
-    FormControl, Select, MenuItem, FormHelperText
+    FormControl, FormControlLabel, Select, MenuItem, FormHelperText, Checkbox
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { Context } from "../../../../shared/stores/Store";
@@ -14,20 +14,39 @@ const ClientApplicationForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null },
+        companyName: { value: props.companyName ? props.companyName : "", error: "" },
         firstName: { value: props.firstName ? props.firstName : "", error: "" },
         lastName: { value: props.lastName ? props.lastName : "", error: "" },
         email: { value: props.email ? props.email : "", error: "" },
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : "", error: "" },
+        communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
         contactJobTitle: { value: props.contactJobTitle ? props.contactJobTitle : "", error: "" },
-        companyName: { value: props.companyName ? props.companyName : "", error: "" },
-        companyAddress: { value: props.companyAddress ? props.companyAddress : "", error: "" },
-        companyCity: { value: props.companyCity ? props.companyCity : "", error: "" },
-        companyRegion: { value: props.companyRegion ? props.companyRegion : "", error: "" },
-        companyPostalCode: { value: props.companyPostalCode ? props.companyPostalCode : "", error: "" },
-        companyCountry: { value: props.companyCountry ? props.companyCountry : "", error: "" }
+        billingAddressId: { value: props.billingAddress ? props.billingAddress.id : "" },
+        billingAddressFullName: { value: props.billingAddress ? props.billingAddress.fullName : "", error: "" },
+        billingAddressPhoneNumber: { value: props.billingAddress ? props.billingAddress.phoneNumber : "", error: "" },
+        billingAddressStreet: { value: props.billingAddress ? props.billingAddress.street : "", error: "" },
+        billingAddressRegion: { value: props.billingAddress ? props.billingAddress.region : "", error: "" },
+        billingAddressPostalCode: { value: props.billingAddress ? props.billingAddress.postalCode : "", error: "" },
+        billingAddressCity: { value: props.billingAddress ? props.billingAddress.city : "", error: "" },
+        billingAddressCountry: { value: props.billingAddress ? props.billingAddress.country : "", error: "" },
+        isDeliveryAddressEqualBillingAddress: { value: props.isDeliveryAddressEqualBillingAddress },
+        deliveryAddressId: { value: props.deliveryAddress ? props.deliveryAddress.id : "" },
+        deliveryAddressFullName: { value: props.deliveryAddress ? props.deliveryAddress.fullName : "" },
+        deliveryAddressPhoneNumber: { value: props.deliveryAddress ? props.deliveryAddress.phoneNumber : "" },
+        deliveryAddressStreet: { value: props.deliveryAddress ? props.deliveryAddress.street : "" },
+        deliveryAddressRegion: { value: props.deliveryAddress ? props.deliveryAddress.region : "" },
+        deliveryAddressPostalCode: { value: props.deliveryAddress ? props.deliveryAddress.postalCode : "" },
+        deliveryAddressCity: { value: props.deliveryAddress ? props.deliveryAddress.city : "" },
+        deliveryAddressCountry: { value: props.deliveryAddress ? props.deliveryAddress.country : "" },
     };
 
     const stateValidatorSchema = {
+        companyName: {
+            required: {
+                isRequired: true,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
         firstName: {
             required: {
                 isRequired: true,
@@ -62,37 +81,49 @@ const ClientApplicationForm = (props) => {
                 error: props.fieldRequiredErrorMessage
             }
         },
-        companyName: {
+        communicationLanguage: {
             required: {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
             }
         },
-        companyAddress: {
+        billingAddressFullName: {
             required: {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
             }
         },
-        companyCity: {
+        billingAddressPhoneNumber: {
             required: {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
             }
         },
-        companyRegion: {
+        billingAddressStreet: {
             required: {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
             }
         },
-        companyPostalCode: {
+        billingAddressRegion: {
             required: {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
             }
         },
-        companyCountry: {
+        billingAddressPostalCode: {
+            required: {
+                isRequired: true,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
+        billingAddressCity: {
+            required: {
+                isRequired: true,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
+        billingAddressCountry: {
             required: {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
@@ -103,16 +134,39 @@ const ClientApplicationForm = (props) => {
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        const payload = {
+            ...state,
+            billingAddress: {
+                id: billingAddressId,
+                fullName: billingAddressFullName,
+                phoneNumber: billingAddressPhoneNumber,
+                street: billingAddressStreet,
+                region: billingAddressRegion,
+                postalCode: billingAddressPostalCode,
+                city: billingAddressCity,
+                country: billingAddressCountry
+            },
+            deliveryAddress: {
+                id: deliveryAddressId,
+                fullName: deliveryAddressFullName,
+                phoneNumber: deliveryAddressPhoneNumber,
+                street: deliveryAddressStreet,
+                region: deliveryAddressRegion,
+                postalCode: deliveryAddressPostalCode,
+                city: deliveryAddressCity,
+                country: deliveryAddressCountry
+            }
+        }
+
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(state)
+            body: JSON.stringify(payload)
         };
 
         fetch(props.saveUrl, requestOptions)
             .then(response => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-
                 AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
@@ -132,13 +186,17 @@ const ClientApplicationForm = (props) => {
 
     const {
         values, errors, dirty, disable,
-        handleOnChange, handleOnSubmit
+        setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { 
-        id, firstName, lastName, email, phoneNumber, contactJobTitle, companyAddress, companyCity, 
-        companyCountry, companyName, companyPostalCode, companyRegion 
+    const {
+        id, companyName, firstName, lastName, email, phoneNumber, communicationLanguage, contactJobTitle,
+        billingAddressId, billingAddressFullName, billingAddressPhoneNumber, billingAddressStreet, billingAddressRegion, billingAddressPostalCode, billingAddressCity, billingAddressCountry,
+        isDeliveryAddressEqualBillingAddress,
+        deliveryAddressId, deliveryAddressFullName, deliveryAddressPhoneNumber, deliveryAddressStreet, deliveryAddressRegion, deliveryAddressPostalCode, deliveryAddressCity, deliveryAddressCountry,
     } = values;
+
+    console.log(props);
 
     return (
         <section className="section section-small-padding product client-form">
@@ -153,25 +211,37 @@ const ClientApplicationForm = (props) => {
                         }
                         <div className="group mb-4">
                             <div className="field">
-                                <TextField 
-                                    id="firstName" 
-                                    name="firstName" 
-                                    label={props.firstNameLabel} 
+                                <TextField
+                                    id="companyName"
+                                    name="companyName"
+                                    label={props.companyNameLabel}
                                     fullWidth={true}
-                                    value={firstName} 
+                                    value={companyName}
+                                    onChange={handleOnChange}
+                                    variant="standard"
+                                    error={(errors.companyName.length > 0) && dirty.companyName}
+                                    helperText={dirty.companyName ? errors.companyName : ""} />
+                            </div>
+                            <div className="field">
+                                <TextField
+                                    id="firstName"
+                                    name="firstName"
+                                    label={props.firstNameLabel}
+                                    fullWidth={true}
+                                    value={firstName}
                                     onChange={handleOnChange}
                                     variant="standard"
                                     error={(errors.firstName.length > 0) && dirty.firstName}
                                     helperText={dirty.firstName ? errors.firstName : ""} />
                             </div>
                             <div className="field">
-                                <TextField 
-                                    id="lastName" 
-                                    name="lastName" 
-                                    label={props.lastNameLabel} 
+                                <TextField
+                                    id="lastName"
+                                    name="lastName"
+                                    label={props.lastNameLabel}
                                     fullWidth={true}
                                     value={lastName}
-                                    onChange={handleOnChange} 
+                                    onChange={handleOnChange}
                                     variant="standard"
                                     error={(errors.lastName.length > 0) && dirty.lastName}
                                     helperText={dirty.lastName ? errors.lastName : ""} />
@@ -198,107 +268,226 @@ const ClientApplicationForm = (props) => {
                                 </FormControl>
                             </div>
                             <div className="field">
-                                <TextField 
-                                    id="email" 
-                                    name="email" 
-                                    label={props.emailLabel} 
+                                <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage} variant="standard">
+                                    <InputLabel id="language-label">{props.languageLabel}</InputLabel>
+                                    <Select
+                                        labelId="language-label"
+                                        id="communicationLanguage"
+                                        name="communicationLanguage"
+                                        value={communicationLanguage}
+                                        onChange={handleOnChange}>
+                                        {props.languages && props.languages.length > 0 && props.languages.map((language, index) => {
+                                            return (
+                                                <MenuItem key={index} value={language.value}>{language.text}</MenuItem>
+                                            );
+                                        })}
+                                    </Select>
+                                    {errors.communicationLanguage && dirty.communicationLanguage && (
+                                        <FormHelperText>{errors.communicationLanguage}</FormHelperText>
+                                    )}
+                                </FormControl>
+                            </div>
+                            <div className="field">
+                                <TextField
+                                    id="email"
+                                    name="email"
+                                    label={props.emailLabel}
                                     fullWidth={true}
-                                    value={email} 
+                                    value={email}
                                     onChange={handleOnChange}
                                     variant="standard"
                                     error={(errors.email.length > 0) && dirty.email}
-                                    helperText={dirty.email ? errors.email : ""}/>
+                                    helperText={dirty.email ? errors.email : ""} />
                             </div>
                             <div className="field">
-                                <TextField 
-                                    id="phoneNumber" 
-                                    name="phoneNumber" 
-                                    label={props.phoneNumberLabel} 
+                                <TextField
+                                    id="phoneNumber"
+                                    name="phoneNumber"
+                                    label={props.phoneNumberLabel}
                                     fullWidth={true}
-                                    value={phoneNumber} 
+                                    value={phoneNumber}
                                     onChange={handleOnChange}
                                     variant="standard"
                                     error={(errors.phoneNumber.length > 0) && dirty.phoneNumber}
                                     helperText={dirty.phoneNumber ? errors.phoneNumber : ""} />
                             </div>
                         </div>
-                        <div className="group mb-4">
+                        <div className="group">
+                            <h1 className="subtitle has-text-centered">{props.billingAddressTitle}</h1>
                             <div className="field">
-                                <TextField 
-                                    id="companyName"
-                                    name="companyName"
-                                    label={props.companyNameLabel} 
+                                <TextField
+                                    id="billingAddressFullName"
+                                    name="billingAddressFullName"
+                                    value={billingAddressFullName}
                                     fullWidth={true}
-                                    value={companyName} 
-                                    onChange={handleOnChange}
                                     variant="standard"
-                                    error={(errors.companyName.length > 0) && dirty.companyName}
-                                    helperText={dirty.companyName ? errors.companyName : ""} />
+                                    label={props.addressFullNameLabel}
+                                    onChange={handleOnChange}
+                                    helperText={dirty.billingAddressFullName ? errors.billingAddressFullName : ""}
+                                    error={(errors.billingAddressFullName.length > 0) && dirty.billingAddressFullName} />
                             </div>
                             <div className="field">
-                                <TextField 
-                                    id="companyAddress" 
-                                    name="companyAddress" 
-                                    label={props.addressLabel} 
+                                <TextField
+                                    id="billingAddressPhoneNumber"
+                                    name="billingAddressPhoneNumber"
+                                    value={billingAddressPhoneNumber}
                                     fullWidth={true}
-                                    value={companyAddress} 
-                                    onChange={handleOnChange}
                                     variant="standard"
-                                    error={(errors.companyAddress.length > 0) && dirty.companyAddress}
-                                    helperText={dirty.companyAddress ? errors.companyAddress : ""} />
+                                    label={props.addressPhoneNumberLabel}
+                                    onChange={handleOnChange}
+                                    helperText={dirty.billingAddressPhoneNumber ? errors.billingAddressPhoneNumber : ""}
+                                    error={(errors.billingAddressPhoneNumber.length > 0) && dirty.billingAddressPhoneNumber} />
                             </div>
                             <div className="field">
-                                <TextField 
-                                    id="companyCountry" 
-                                    name="companyCountry" 
-                                    label={props.countryLabel} 
+                                <TextField
+                                    id="billingAddressStreet"
+                                    name="billingAddressStreet"
+                                    value={billingAddressStreet}
                                     fullWidth={true}
-                                    value={companyCountry} 
-                                    onChange={handleOnChange}
-                                    variant="standard" 
-                                    error={(errors.companyCountry.length > 0) && dirty.companyCountry}
-                                    helperText={dirty.companyCountry ? errors.companyCountry : ""}/>
-                            </div>
-                            <div className="field">
-                                <TextField 
-                                    id="companyCity" 
-                                    name="companyCity" 
-                                    label={props.cityLabel} 
-                                    fullWidth={true}
-                                    value={companyCity} 
-                                    onChange={handleOnChange}
                                     variant="standard"
-                                    error={(errors.companyCity.length > 0) && dirty.companyCity}
-                                    helperText={dirty.companyCity ? errors.companyCity : ""} />
+                                    label={props.addressStreetLabel}
+                                    onChange={handleOnChange}
+                                    helperText={dirty.billingAddressStreet ? errors.billingAddressStreet : ""}
+                                    error={(errors.billingAddressStreet.length > 0) && dirty.billingAddressStreet} />
                             </div>
                             <div className="field">
-                                <TextField 
-                                    id="companyRegion" 
-                                    name="companyRegion" 
-                                    label={props.regionLabel} 
+                                <TextField
+                                    id="billingAddressRegion"
+                                    name="billingAddressRegion"
+                                    value={billingAddressRegion}
                                     fullWidth={true}
-                                    value={companyRegion} 
+                                    variant="standard"
+                                    label={props.addressRegionLabel}
                                     onChange={handleOnChange}
-                                    variant="standard" 
-                                    error={(errors.companyRegion.length > 0) && dirty.companyRegion}
-                                    helperText={dirty.companyRegion ? errors.companyRegion : ""}/>
+                                    helperText={dirty.billingAddressRegion ? errors.billingAddressRegion : ""}
+                                    error={(errors.billingAddressRegion.length > 0) && dirty.billingAddressRegion} />
                             </div>
                             <div className="field">
-                                <TextField 
-                                    id="companyPostalCode" 
-                                    name="companyPostalCode" 
-                                    label={props.postalCodeLabel} 
+                                <TextField
+                                    id="billingAddressPostalCode"
+                                    name="billingAddressPostalCode"
+                                    value={billingAddressPostalCode}
                                     fullWidth={true}
-                                    value={companyPostalCode} 
+                                    variant="standard"
+                                    label={props.addressPostalCodeLabel}
                                     onChange={handleOnChange}
-                                    variant="standard" 
-                                    error={(errors.companyPostalCode.length > 0) && dirty.companyPostalCode}
-                                    helperText={dirty.companyPostalCode ? errors.companyPostalCode : ""}/>
+                                    helperText={dirty.billingAddressPostalCode ? errors.billingAddressPostalCode : ""}
+                                    error={(errors.billingAddressPostalCode.length > 0) && dirty.billingAddressPostalCode} />
+                            </div>
+                            <div className="field">
+                                <TextField
+                                    id="billingAddressCity"
+                                    name="billingAddressCity"
+                                    value={billingAddressCity}
+                                    fullWidth={true}
+                                    variant="standard"
+                                    label={props.addressCityLabel}
+                                    onChange={handleOnChange}
+                                    helperText={dirty.billingAddressCity ? errors.billingAddressCity : ""}
+                                    error={(errors.billingAddressCity.length > 0) && dirty.billingAddressCity} />
+                            </div>
+                            <div className="field">
+                                <TextField
+                                    id="billingAddressCountry"
+                                    name="billingAddressCountry"
+                                    value={billingAddressCountry}
+                                    fullWidth={true}
+                                    variant="standard"
+                                    label={props.addressCountryLabel}
+                                    onChange={handleOnChange}
+                                    helperText={dirty.billingAddressCountry ? errors.billingAddressCountry : ""}
+                                    error={(errors.billingAddressCountry.length > 0) && dirty.billingAddressCountry} />
+                            </div>
+                            <div className="field">
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={isDeliveryAddressEqualBillingAddress}
+                                            onChange={(e) => {
+                                                setFieldValue({ name: "isDeliveryAddressEqualBillingAddress", value: e.target.checked })
+                                            }} />
+                                    } />
+                                <span>{props.deliveryAddressEqualBillingAddressText}</span>
                             </div>
                         </div>
+                        {!isDeliveryAddressEqualBillingAddress &&
+                            <div>
+                                <h1 className="subtitle has-text-centered">{props.deliveryAddressTitle}</h1>
+                                <div className="field">
+                                    <TextField
+                                        id="deliveryAddressFullName"
+                                        name="deliveryAddressFullName"
+                                        value={deliveryAddressFullName}
+                                        fullWidth={true}
+                                        variant="standard"
+                                        label={props.addressFullNameLabel}
+                                        onChange={handleOnChange} />
+                                </div>
+                                <div className="field">
+                                    <TextField
+                                        id="deliveryAddressPhoneNumber"
+                                        name="deliveryAddressPhoneNumber"
+                                        value={deliveryAddressPhoneNumber}
+                                        fullWidth={true}
+                                        variant="standard"
+                                        label={props.addressPhoneNumberLabel}
+                                        onChange={handleOnChange} />
+                                </div>
+                                <div className="field">
+                                    <TextField
+                                        id="deliveryAddressStreet"
+                                        name="deliveryAddressStreet"
+                                        value={deliveryAddressStreet}
+                                        fullWidth={true}
+                                        variant="standard"
+                                        label={props.addressStreetLabel}
+                                        onChange={handleOnChange} />
+                                </div>
+                                <div className="field">
+                                    <TextField
+                                        id="deliveryAddressRegion"
+                                        name="deliveryAddressRegion"
+                                        value={deliveryAddressRegion}
+                                        fullWidth={true}
+                                        variant="standard"
+                                        label={props.addressRegionLabel}
+                                        onChange={handleOnChange} />
+                                </div>
+                                <div className="field">
+                                    <TextField
+                                        id="deliveryAddressPostalCode"
+                                        name="deliveryAddressPostalCode"
+                                        value={deliveryAddressPostalCode}
+                                        fullWidth={true}
+                                        variant="standard"
+                                        label={props.addressPostalCodeLabel}
+                                        onChange={handleOnChange} />
+                                </div>
+                                <div className="field">
+                                    <TextField
+                                        id="deliveryAddressCity"
+                                        name="deliveryAddressCity"
+                                        value={deliveryAddressCity}
+                                        fullWidth={true}
+                                        variant="standard"
+                                        label={props.addressCityLabel}
+                                        onChange={handleOnChange} />
+                                </div>
+                                <div className="field">
+                                    <TextField
+                                        id="deliveryAddressCountry"
+                                        name="deliveryAddressCountry"
+                                        value={deliveryAddressCountry}
+                                        fullWidth={true}
+                                        variant="standard"
+                                        label={props.addressCountryLabel}
+                                        onChange={handleOnChange} />
+                                </div>
+                            </div>
+                        }
                         <div className="field">
-                            <Button 
-                                type="submit" 
+                            <Button
+                                type="submit"
                                 variant="contained"
                                 color="primary"
                                 disabled={state.isLoading || disable}>

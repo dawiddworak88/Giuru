@@ -591,9 +591,6 @@
   <data name="Manager" xml:space="preserve">
     <value>Account Menedżer</value>
   </data>
-  <data name="BusinessInformation" xml:space="preserve">
-    <value>Informacje biznesowe</value>
-  </data>
   <data name="ContactInformation" xml:space="preserve">
     <value>Informacje kontaktowe</value>
   </data>
@@ -605,9 +602,6 @@
   </data>
   <data name="ApplyApplicationSubmit" xml:space="preserve">
     <value>Wyślij wniosek teraz</value>
-  </data>
-  <data name="BusinessInformationDescription" xml:space="preserve">
-    <value>Podaj informacje o twojej firmie</value>
   </data>
   <data name="ContactInformationDescription" xml:space="preserve">
     <value>Twoją główną osobą kontaktową z ELTAP będzie osoba kontaktowa podana w formularzu</value>
@@ -776,5 +770,20 @@
   </data>
   <data name="InActive" xml:space="preserve">
     <value>Nieaktywny</value>
+  </data>
+  <data name="BillingAddressTitle" xml:space="preserve">
+    <value>Adres bilingowy</value>
+  </data>
+  <data name="DeliveryAddressEqualBillingAddressText" xml:space="preserve">
+    <value>Adres dostawy taki sam jak adres bilingowy</value>
+  </data>
+  <data name="AdressesInformation" xml:space="preserve">
+    <value>Informacje adresowe</value>
+  </data>
+  <data name="AdressesInformationDescription" xml:space="preserve">
+    <value>Podaj adres bilingowy oraz dostawy do łatwiejszej współpracy</value>
+  </data>
+  <data name="DeliveryAddressTitle" xml:space="preserve">
+    <value>Adres dostawy</value>
   </data>
 </root>
