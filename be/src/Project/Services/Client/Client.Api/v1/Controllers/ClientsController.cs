@@ -51,6 +51,7 @@ namespace Client.Api.v1.Controllers
         public IActionResult Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
             var clientIds = ids.ToEnumerableGuidIds();
 
             if (clientIds is not null)
@@ -220,17 +221,18 @@ namespace Client.Api.v1.Controllers
         /// </summary>
         /// <returns>The client.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [Route("organisation")]
+        [Route("organisation/{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetByOrganisation()
+        public async Task<IActionResult> GetByOrganisation(Guid? id)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
             var serviceModel = new GetClientByOrganisationServiceModel
             {
-                Id = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Id = id
             };
 
             var validator = new GetClientByOrganisationModelValidator();
@@ -251,6 +253,7 @@ namespace Client.Api.v1.Controllers
                         CountryId = client.CountryId,
                         PreferedCurrencyId = client.PreferedCurrencyId,
                         PhoneNumber = client.PhoneNumber,
+                        OrganisationId = client.OrganisationId,
                         IsDisabled = client.IsDisabled,
                         ClientGroupIds = client.ClientGroupIds,
                         ClientManagerIds = client.ClientManagerIds,

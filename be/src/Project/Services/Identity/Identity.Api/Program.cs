@@ -32,6 +32,7 @@ using StackExchange.Redis;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Foundation.Telemetry.DependencyInjection;
+using Foundation.ApiExtensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,6 +81,8 @@ builder.Services.AddCultureRouteConstraint();
 builder.Services.AddControllersWithViews();
 
 builder.Services.RegisterLocalizationDependencies();
+
+builder.Services.RegisterApiExtensionsDependencies();
 
 builder.Services.RegisterFoundationMediaDependencies();
 

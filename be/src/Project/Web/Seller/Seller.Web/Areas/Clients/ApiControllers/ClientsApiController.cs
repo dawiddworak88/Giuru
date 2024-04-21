@@ -10,6 +10,7 @@ using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
 using Seller.Web.Areas.Clients.Repositories.Groups;
+using Seller.Web.Areas.Clients.Repositories.NotificationTypesApprovals;
 using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Identity;
 using Seller.Web.Shared.Repositories.Organisations;
@@ -29,6 +30,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly IIdentityRepository _identityRepository;
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IClientGroupsRepository _clientGroupsRepository;
+        private readonly IClientNotificationTypesApprovalsRepository _clientNotificationTypeApprovalRepository;
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
 
         public ClientsApiController(
@@ -37,6 +39,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             IStringLocalizer<ClientResources> clientLocalizer,
             IIdentityRepository identityRepository,
             IClientGroupsRepository clientGroupsRepository,
+            IClientNotificationTypesApprovalsRepository clientNotificationTypeApprovalRepository,
             IClientFieldValuesRepository clientFieldValuesRepository)
         {
             _organisationsRepository = organisationsRepository;
@@ -44,6 +47,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             _clientLocalizer = clientLocalizer;
             _identityRepository = identityRepository;
             _clientGroupsRepository = clientGroupsRepository;
+            _clientNotificationTypeApprovalRepository = clientNotificationTypeApprovalRepository;
             _clientFieldValuesRepository = clientFieldValuesRepository;
         }
 
@@ -82,6 +86,11 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
             var clientId = await _clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PreferedCurrencyId, model.PhoneNumber, model.IsDisabled, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId);
 
+            if (model.ClientApprovalIds is not null)
+            {
+                await _clientNotificationTypeApprovalRepository.SaveAsync(token, language, model.Id, model.ClientApprovalIds);
+            }
+            
             if (model.FieldsValues is not null && model.FieldsValues.Any())
             {
                 await _clientFieldValuesRepository.SaveAsync(token, language, clientId,

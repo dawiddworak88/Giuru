@@ -4,6 +4,8 @@ using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Identity.Api.Areas.Accounts.ComponentModels;
 using Identity.Api.Areas.Accounts.ModelBuilders;
+using Identity.Api.Areas.Accounts.Repositories.ClientNotificationTypes;
+using Identity.Api.Areas.Accounts.Repositories.Clients;
 using Identity.Api.Areas.Accounts.ViewModels;
 using Identity.Api.ModelBuilders;
 using Identity.Api.ModelBuilders.SignInForm;
@@ -26,7 +28,8 @@ namespace Identity.Api.Areas.Accounts.DependencyInjection
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
-            services.AddScoped<IApiClientService, ApiClientService>();
+            services.AddScoped<IClientRepository, ClientRepository>();
+            services.AddScoped<IClientNotificationTypesRepository, ClientNotificationTypesRepository>();
         }
     }
 }

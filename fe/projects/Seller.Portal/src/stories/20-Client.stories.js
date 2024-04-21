@@ -28,6 +28,11 @@ var clientForm = {
   deliveryAddresses: [
     { id: "1", name: "Mroczeń 203, 63-640, Poland" }
   ],
+  clientApprovals:  [
+    { id: '1', name: 'Approval to sending e-mails', isApproved: true, approvalDate: '2024-02-01T10:52:18.0398958' },
+    { id: '2', name: 'Approval to sending SMS' }
+  ],
+  expressedOnLabel: "Expressed on",
   communicationLanguage: "",
   saveText: "Save"
 };
