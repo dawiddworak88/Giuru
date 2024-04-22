@@ -20,6 +20,10 @@ using Seller.Web.Areas.Global.Repositories;
 using Seller.Web.Areas.Global.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Foundation.GenericRepository.Definitions;
+using Seller.Web.Areas.Clients.Repositories.NotificationTypes;
+using Seller.Web.Areas.Clients.DomainModels;
+using Foundation.Extensions.ExtensionMethods;
+using Seller.Web.Areas.Clients.Repositories.NotificationTypesApprovals;
 using Seller.Web.Areas.Clients.Repositories.Fields;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
 
@@ -37,6 +41,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IClientAccountManagersRepository _clientManagersRepository;
         private readonly ICountriesRepository _countriesRepository;
         private readonly IClientAddressesRepository _clientAddressesRepository;
+        private readonly IClientNotificationTypesRepository _clientNotificationTypesRepository;
+        private readonly IClientNotificationTypesApprovalsRepository _clientNotificationTypeApprovalRepository;
         private readonly IClientFieldsRepository _clientFieldsRepository;
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
         private readonly ICurrenciesRepository _currenciesRepository;
@@ -54,6 +60,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IClientFieldsRepository clientFieldsRepository,
             IClientFieldValuesRepository clientFieldValuesRepository,
             LinkGenerator linkGenerator,
+            IClientNotificationTypesRepository clientNotificationTypesRepository,
+            IClientNotificationTypesApprovalsRepository clientNotificationTypeApprovalRepository,
             ICurrenciesRepository currenciesRepository)
         {
             _clientsRepository = clientsRepository;
@@ -66,6 +74,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _clientManagersRepository = clientManagersRepository;
             _countriesRepository = countriesRepository;
             _clientAddressesRepository = clientAddressesRepository;
+            _clientNotificationTypesRepository = clientNotificationTypesRepository;
+            _clientNotificationTypeApprovalRepository = clientNotificationTypeApprovalRepository;
             _clientFieldsRepository = clientFieldsRepository;
             _clientFieldValuesRepository = clientFieldValuesRepository;
             _currenciesRepository = currenciesRepository;
@@ -115,6 +125,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 PreferedCurrencyLabel = _clientLocalizer.GetString("PreferedCurrencyLabel"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
+                ExpressedOnLabel = _clientLocalizer.GetString("ExpressedOnLabel"),
                 ActiveLabel = _globalLocalizer.GetString("Active"),
                 InActiveLabel = _globalLocalizer.GetString("InActive")
             };
@@ -179,7 +190,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             var currencies = await _currenciesRepository.GetAsync(componentModel.Token, componentModel.Language, $"{nameof(Country.Name)} asc");
 
-            if (currencies is not null) 
+            if (currencies is not null)
             {
                 viewModel.Currencies = currencies.Select(x => new ListItemViewModel { Id = x.Id, Name = x.CurrencyCode });
             }
@@ -194,6 +205,31 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     Name = $"{x.Company}, {x.FirstName} {x.LastName}, {x.PostCode} {x.City}"
                 });
             }
+
+            var clientTypesApprovals = (await _clientNotificationTypesRepository.GetAsync(componentModel.Token, componentModel.Language, $"{nameof(ClientNotificationType.CreatedDate)} asc"))
+                    .OrEmptyIfNull().Select(x => new ClientNotificationTypeViewModel
+                    {
+                        Id = x.Id,
+                        Name = x.Name
+                    }).ToList();
+
+            if (componentModel.Id.HasValue)
+            {
+                var clientApprovals = await _clientNotificationTypeApprovalRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+
+                foreach (var clientTypeApproval in clientTypesApprovals.OrEmptyIfNull())
+                {
+                    if (clientApprovals.Any(x => x.NotificationTypeId == clientTypeApproval.Id))
+                    {
+                        var clientApproval = clientApprovals.FirstOrDefault(x => x.NotificationTypeId == clientTypeApproval.Id);
+
+                        clientTypeApproval.ApprovalDate = clientApproval.ApprovalDate;
+                        clientTypeApproval.IsApproved = clientApproval.IsApproved;
+                    }
+                }
+            }
+
+            viewModel.ClientApprovals = clientTypesApprovals;
 
             var clientFields = await _clientFieldsRepository.GetAsync(componentModel.Token, componentModel.Language);
 

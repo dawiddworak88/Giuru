@@ -68,6 +68,7 @@ stages:
               --set identityUrl='$(identityUrl)' \
               --set redisUrl='$(redisUrl)' \
               --set buyerUrl='$(buyerUrl)' \
+              --set clientUrl='$(clientUrl)' \
               --set sendGridApiKey='$(sendGridApiKey)' \
               --set logzIoToken='$(logzIoToken)' \
               --set logzIoType='$(logzIoType)' \
