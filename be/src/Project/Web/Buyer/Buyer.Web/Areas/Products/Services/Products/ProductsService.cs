@@ -59,11 +59,12 @@ namespace Buyer.Web.Areas.Products.Services.Products
         public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage, string token)
         {
             var catalogItemList = new List<CatalogItemViewModel>();
+            
             var pagedProducts = await this.productsRepository.GetProductsAsync(ids, categoryId, sellerId, language, searchTerm, hasPrimaryProduct, pageIndex, itemsPerPage, token, nameof(Product.Name));
 
             if (pagedProducts?.Data != null)
             {
-                foreach (var product in pagedProducts.Data)
+                foreach (var product in pagedProducts.Data.OrEmptyIfNull())
                 {
                     var catalogItem = new CatalogItemViewModel
                     {
