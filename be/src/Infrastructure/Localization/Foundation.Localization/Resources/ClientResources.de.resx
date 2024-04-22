@@ -136,7 +136,7 @@
     <value>Kunde</value>
   </data>
   <data name="ClientAlreadyExists" xml:space="preserve">
-    <value>Der Kunder mit dieser E-Mail-Adresse wurde schon erstellt.</value>
+    <value>Der Kunder mit dieser E-Mail-Adresse wurde schon erstellt</value>
   </data>
   <data name="ClientApplicationNotFound" xml:space="preserve">
     <value>Kundenanwendung nicht gefunden</value>
@@ -145,25 +145,25 @@
     <value>Client-Anwendung erfolgreich gespeichert</value>
   </data>
   <data name="ClientApplyConfirmation" xml:space="preserve">
-    <value>Vielen Dank für die Registrierung auf unserer B2B-Plattform. Ihre Bewerbung wurde gesendet und wartet auf die Überprüfung durch unser Team. Wir benachrichtigen Sie per E-Mail über die Aktivierung des Kontos.</value>
+    <value>Vielen Dank für die Registrierung auf unserer B2B-Plattform. Ihre Bewerbung wurde gesendet und wartet auf die Überprüfung durch unser Team. Wir benachrichtigen Sie per E-Mail über die Aktivierung des Kontos</value>
   </data>
   <data name="ClientApplyConfirmationSubject" xml:space="preserve">
-    <value>Bestätigung des Absendens der Kooperationsanfrage.</value>
+    <value>Bestätigung des Absendens der Kooperationsanfrage</value>
   </data>
   <data name="ClientApplySubject" xml:space="preserve">
     <value>Neue Kooperationsanfrage</value>
   </data>
   <data name="ClientDeletedSuccessfully" xml:space="preserve">
-    <value>Kunde wurde erfolgreich gelöscht.</value>
+    <value>Kunde wurde erfolgreich gelöscht</value>
   </data>
   <data name="ClientExists" xml:space="preserve">
-    <value>Ein Kunde mit dieser E-Mail-Adresse existiert bereits.</value>
+    <value>Ein Kunde mit dieser E-Mail-Adresse existiert bereits</value>
   </data>
   <data name="ClientManagers" xml:space="preserve">
     <value>Kundenbetreuer</value>
   </data>
   <data name="ClientNotFound" xml:space="preserve">
-    <value>Kunde wurde nicht gefunden.</value>
+    <value>Kunde wurde nicht gefunden</value>
   </data>
   <data name="Clients" xml:space="preserve">
     <value>Kunden</value>
@@ -172,7 +172,7 @@
     <value>Client-Anwendungen</value>
   </data>
   <data name="ClientSavedSuccessfully" xml:space="preserve">
-    <value>Der Kunde wurde erfolgreich gespeichert.</value>
+    <value>Der Kunde wurde erfolgreich gespeichert</value>
   </data>
   <data name="ClientsGroups" xml:space="preserve">
     <value>Kundengruppen</value>
@@ -196,31 +196,31 @@
     <value>Kundengruppe bearbeiten</value>
   </data>
   <data name="GroupDeleteClientConflict" xml:space="preserve">
-    <value>Heben Sie die Zuweisung von Clients zu dieser Gruppe auf.</value>
+    <value>Heben Sie die Zuweisung von Clients zu dieser Gruppe auf</value>
   </data>
   <data name="GroupDeletedSuccessfully" xml:space="preserve">
-    <value>Gruppe wurde erfolgreich gelöscht.</value>
+    <value>Gruppe wurde erfolgreich gelöscht</value>
   </data>
   <data name="GroupNotFound" xml:space="preserve">
-    <value>Gruppe wurde nicht gefunden.</value>
+    <value>Gruppe wurde nicht gefunden</value>
   </data>
   <data name="GroupSavedSuccessfully" xml:space="preserve">
-    <value>Gruppe wurde erfolgreich gespeichert.</value>
+    <value>Gruppe wurde erfolgreich gespeichert</value>
   </data>
   <data name="ManagerDeleteConflict" xml:space="preserve">
-    <value>Heben Sie die Zuweisung von Clients zu diesem Account-Manager auf.</value>
+    <value>Heben Sie die Zuweisung von Clients zu diesem Account-Manager auf</value>
   </data>
   <data name="ManagerDeletedSuccessfully" xml:space="preserve">
-    <value>Account-Manager wurde erfolgreich gelöscht.</value>
+    <value>Account-Manager wurde erfolgreich gelöscht</value>
   </data>
   <data name="ManagerExist" xml:space="preserve">
     <value>Account-Manager existiert bereit</value>
   </data>
   <data name="ManagerNotFound" xml:space="preserve">
-    <value>Account-Manager wurde nicht gefunden.</value>
+    <value>Account-Manager wurde nicht gefunden</value>
   </data>
   <data name="ManagerSavedSuccessfully" xml:space="preserve">
-    <value>Account-Manager wurde erfolgreich gespeichert.</value>
+    <value>Account-Manager wurde erfolgreich gespeichert</value>
   </data>
   <data name="NavigateToClientsLabel" xml:space="preserve">
     <value>Zurück zu den Kunden</value>
@@ -256,7 +256,7 @@
     <value>Passwort zurücksetzen</value>
   </data>
   <data name="RoleDeletedSuccessfully" xml:space="preserve">
-    <value>Rolle erfolgreich gelöscht.</value>
+    <value>Rolle erfolgreich gelöscht</value>
   </data>
   <data name="RoleIsExisting" xml:space="preserve">
     <value>Rolle vorhanden</value>
@@ -265,13 +265,13 @@
     <value>Rolle nicht gefunden</value>
   </data>
   <data name="RoleSavedSuccessfully" xml:space="preserve">
-    <value>Rolle erfolgreich gespeichert.</value>
+    <value>Rolle erfolgreich gespeichert</value>
   </data>
   <data name="CountryDeletedSuccessfully" xml:space="preserve">
-    <value>Land erfolgreich gelöscht.</value>
+    <value>Land erfolgreich gelöscht</value>
   </data>
   <data name="CountrySavedSuccessfully" xml:space="preserve">
-    <value>Land erfolgreich gespeichert.</value>
+    <value>Land erfolgreich gespeichert</value>
   </data>
   <data name="EditCountry" xml:space="preserve">
     <value>Land bearbeiten</value>
@@ -286,10 +286,10 @@
     <value>Die ausgewählte Adresse wird als Standard zugewiesen.</value>
   </data>
   <data name="ClientAddressNotFound" xml:space="preserve">
-    <value>Kundenadresse nicht gefunden.</value>
+    <value>Kundenadresse nicht gefunden</value>
   </data>
   <data name="ClientDeleteAddressConflict" xml:space="preserve">
-    <value>Löschen Sie die diesem Kunden zugewiesenen Adressen.</value>
+    <value>Löschen Sie die diesem Kunden zugewiesenen Adressen</value>
   </data>
   <data name="BackToAddresses" xml:space="preserve">
     <value>Zurück zu den Adressen</value>
@@ -347,6 +347,48 @@
   </data>
   <data name="NotificationTypeDeleteTypeApprovalConflict" xml:space="preserve">
     <value>Löschen Sie Kunden-Einwilligungen, die diesem Einwilligungstyp zugeordnet sind</value>
+  </data>
+  <data name="FieldDefinitionNotFound" xml:space="preserve">
+    <value>Dynamische Felddefinition nicht gefunden</value>
+  </data>
+  <data name="FieldDefinitionSelectTypeConflict" xml:space="preserve">
+    <value>Die Option kann aufgrund des gewählten Typs nicht der Felddefinition zugeordnet werden</value>
+  </data>
+  <data name="FieldOptionNotFound" xml:space="preserve">
+    <value>Option für dynamisches Feld nicht gefunden</value>
+  </data>
+  <data name="BackToField" xml:space="preserve">
+    <value>Zurück zur Felddefinition</value>
+  </data>
+  <data name="BackToFields" xml:space="preserve">
+    <value>Zurück zu den dynamischen Kundenfeldern</value>
+  </data>
+  <data name="ClientFields" xml:space="preserve">
+    <value>Dynamische Kundenfelder</value>
+  </data>
+  <data name="EditClientField" xml:space="preserve">
+    <value>Bearbeiten Sie das dynamische Kundenfeld</value>
+  </data>
+  <data name="EditClientFieldOption" xml:space="preserve">
+    <value>Bearbeiten Sie die Optionen für dynamische Felder</value>
+  </data>
+  <data name="NewClientField" xml:space="preserve">
+    <value>Neues Kundenfeld</value>
+  </data>
+  <data name="NewClientFieldOption" xml:space="preserve">
+    <value>Feldoption hinzufügen</value>
+  </data>
+  <data name="FieldDeletedSuccessfully" xml:space="preserve">
+    <value>Dynamisches Feld erfolgreich gelöscht</value>
+  </data>
+  <data name="FieldOptionDeletedSuccessfully" xml:space="preserve">
+    <value>Option für dynamische Felder erfolgreich gelöscht</value>
+  </data>
+  <data name="FieldOptionSavedSuccessfully" xml:space="preserve">
+    <value>Dynamische Feldoption erfolgreich gespeichert</value>
+  </data>
+  <data name="FieldSavedSuccessfully" xml:space="preserve">
+    <value>Dynamisches Feld erfolgreich gespeichert</value>
   </data>
   <data name="PreferedCurrencyLabel" xml:space="preserve">
     <value>Bevorzugte währung</value>

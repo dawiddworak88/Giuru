@@ -11,11 +11,12 @@ import useForm from "../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
+import ClientDynamicForm from "../ClientDynamicForm/ClientDynamicForm";
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
     const [canCreateAccount, setCanCreateAccount] = useState(props.hasAccount ? props.hasAccount : false);
-
+    const [formData, setFormData] = useState(props.formData ? props.formData : null);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
@@ -71,12 +72,23 @@ function ClientForm(props) {
     function onSubmitForm(state) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        const payload = {
+        let payload = {
             ...state,
             countryId: country ? country.id : null, 
             preferedCurrencyId: preferedCurrency ? preferedCurrency.id : null,
             defaultDeliveryAddressId: state.deliveryAddress ? state.deliveryAddress.id : null,
-            defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null
+            defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null,
+            
+        }
+
+        if (formData != null) {
+            payload = {
+                ...payload,
+                fieldsValues: Object.entries(formData).map((fieldEntry) => ({ 
+                    fieldDefinitionId: fieldEntry[0],
+                    fieldValue: fieldEntry[1]
+                }))
+            }
         }
 
         const requestOptions = {
@@ -365,6 +377,13 @@ function ClientForm(props) {
                                 variant="standard"
                                 onChange={handleOnChange} />
                         </div>
+                        {props.clientFields && props.clientFields.length > 0 && 
+                            <ClientDynamicForm 
+                                dynamicFields={props.clientFields}
+                                setFormData={setFormData}
+                                formData={formData}
+                            />
+                        }
                         <div className="field">
                             <NoSsr>
                                 <FormControlLabel

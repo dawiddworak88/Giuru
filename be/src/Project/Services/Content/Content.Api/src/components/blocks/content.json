@@ -1,5 +1,5 @@
 {
-  "collectionName": "components_blocks_contents",
+  "collectionName": "components_blocks_policies",
   "info": {
     "displayName": "Content",
     "description": ""
@@ -7,11 +7,16 @@
   "options": {},
   "attributes": {
     "title": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
-    "text": {
+    "description": {
       "type": "richtext"
+    },
+    "accordion": {
+      "displayName": "Accordion",
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.accordion"
     }
   }
 }

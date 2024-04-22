@@ -68,6 +68,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 model.Images.Select(x => x.Id),
                 model.Files.Select(x => x.Id),
                 model.Ean,
+                model.FulfillmentTime,
                 model.FormData);
 
             return StatusCode((int)HttpStatusCode.OK, new { Id = productId, Message = _productLocalizer.GetString("ProductSavedSuccessfully").Value });

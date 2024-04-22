@@ -29,11 +29,11 @@ namespace Catalog.Api.v1.Products.Controllers
     [ApiController]
     public class ProductsController : BaseApiController
     {
-        private readonly IProductsService productService;
+        private readonly IProductsService _productService;
 
         public ProductsController(IProductsService productService)
         {
-            this.productService = productService;
+            _productService = productService;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Catalog.Api.v1.Products.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Files(Guid? id, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetProductFilesServiceModel
             {
@@ -60,7 +60,7 @@ namespace Catalog.Api.v1.Products.Controllers
                 ItemsPerPage = itemsPerPage,
                 OrderBy = orderBy,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -69,7 +69,7 @@ namespace Catalog.Api.v1.Products.Controllers
 
             if (validationResult.IsValid)
             {
-                var productFiles = await this.productService.GetProductFiles(serviceModel);
+                var productFiles = await _productService.GetProductFiles(serviceModel);
 
                 if (productFiles is not null)
                 {
@@ -83,7 +83,7 @@ namespace Catalog.Api.v1.Products.Controllers
                         })
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
             }
 
@@ -106,7 +106,7 @@ namespace Catalog.Api.v1.Products.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetBySkus(string skus, int? pageIndex, int? itemsPerPage, string orderBy)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var productSkus = skus.ToEnumerableString();
 
             if (productSkus is not null)
@@ -117,7 +117,7 @@ namespace Catalog.Api.v1.Products.Controllers
                     PageIndex = pageIndex,
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = CultureInfo.CurrentCulture.Name
                 };
@@ -127,7 +127,7 @@ namespace Catalog.Api.v1.Products.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var products = await this.productService.GetBySkusAsync(serviceModel);
+                    var products = await _productService.GetBySkusAsync(serviceModel);
 
                     if (products is not null)
                     {
@@ -136,7 +136,7 @@ namespace Catalog.Api.v1.Products.Controllers
                             Data = products.Data.OrEmptyIfNull().Select(x => MapProductServiceModelToProductResponseModel(x))
                         };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                        return StatusCode((int)HttpStatusCode.OK, response);
                     }
                 }
 
@@ -192,7 +192,7 @@ namespace Catalog.Api.v1.Products.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var products = await this.productService.GetByIdsAsync(serviceModel);
+                    var products = await _productService.GetByIdsAsync(serviceModel);
 
                     if (products is not null)
                     {
@@ -201,7 +201,7 @@ namespace Catalog.Api.v1.Products.Controllers
                             Data = products.Data.OrEmptyIfNull().Select(x => MapProductServiceModelToProductResponseModel(x))
                         };
 
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                        return StatusCode((int)HttpStatusCode.OK, response);
                     }
                 }
 
@@ -222,7 +222,7 @@ namespace Catalog.Api.v1.Products.Controllers
                     IsNew = isNew
                 };
 
-                var products = await this.productService.GetAsync(serviceModel);
+                var products = await _productService.GetAsync(serviceModel);
 
                 if (products is not null)
                 {
@@ -231,10 +231,10 @@ namespace Catalog.Api.v1.Products.Controllers
                         Data = products.Data.OrEmptyIfNull().Select(x => MapProductServiceModelToProductResponseModel(x))
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
 
-                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+                return StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
 
@@ -249,7 +249,7 @@ namespace Catalog.Api.v1.Products.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save([FromBody] ProductRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new CreateUpdateProductModel
             {
@@ -267,7 +267,8 @@ namespace Catalog.Api.v1.Products.Controllers
                 Description = request.Description,
                 FormData = request.FormData,
                 Ean = request.Ean,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                FulfillmentTime = request.FulfillmentTime,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Language = CultureInfo.CurrentCulture.Name
             };
@@ -280,11 +281,11 @@ namespace Catalog.Api.v1.Products.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var productId = await this.productService.UpdateAsync(serviceModel);
+                    var productId = await _productService.UpdateAsync(serviceModel);
 
                     if (productId != null)
                     {
-                        return this.StatusCode((int)HttpStatusCode.OK, new { Id = productId });
+                        return StatusCode((int)HttpStatusCode.OK, new { Id = productId });
                     }
                 }
 
@@ -298,11 +299,11 @@ namespace Catalog.Api.v1.Products.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var productId = await this.productService.CreateAsync(serviceModel);
+                    var productId = await _productService.CreateAsync(serviceModel);
 
                     if (productId != null)
                     {
-                        return this.StatusCode((int)HttpStatusCode.Created, new { Id = productId });
+                        return StatusCode((int)HttpStatusCode.Created, new { Id = productId });
                     }
                 }
 
@@ -323,12 +324,12 @@ namespace Catalog.Api.v1.Products.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetById(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetProductByIdServiceModel
             {
                 Id = id.Value,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Language = CultureInfo.CurrentCulture.Name
             };
@@ -339,19 +340,19 @@ namespace Catalog.Api.v1.Products.Controllers
 
             if (validationResult.IsValid)
             {
-                var product = await this.productService.GetByIdAsync(serviceModel);
+                var product = await _productService.GetByIdAsync(serviceModel);
 
                 if (product != null)
                 {
-                    return this.StatusCode((int)HttpStatusCode.OK, MapProductServiceModelToProductResponseModel(product));
+                    return StatusCode((int)HttpStatusCode.OK, MapProductServiceModelToProductResponseModel(product));
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NoContent);
+                    return StatusCode((int)HttpStatusCode.NoContent);
                 }
             }
 
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            return StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
@@ -367,12 +368,12 @@ namespace Catalog.Api.v1.Products.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetBySku(string sku)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetProductBySkuServiceModel
             {
                 Sku = sku,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Language = CultureInfo.CurrentCulture.Name
             };
@@ -383,19 +384,19 @@ namespace Catalog.Api.v1.Products.Controllers
 
             if (validationResult.IsValid)
             {
-                var product = await this.productService.GetBySkuAsync(serviceModel);
+                var product = await _productService.GetBySkuAsync(serviceModel);
 
                 if (product != null)
                 {
-                    return this.StatusCode((int)HttpStatusCode.OK, MapProductServiceModelToProductResponseModel(product));
+                    return StatusCode((int)HttpStatusCode.OK, MapProductServiceModelToProductResponseModel(product));
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NoContent);
+                    return StatusCode((int)HttpStatusCode.NoContent);
                 }
             }
 
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            return StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
@@ -411,13 +412,13 @@ namespace Catalog.Api.v1.Products.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new DeleteProductServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -427,9 +428,9 @@ namespace Catalog.Api.v1.Products.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.productService.DeleteAsync(serviceModel);
+                await _productService.DeleteAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -457,6 +458,7 @@ namespace Catalog.Api.v1.Products.Controllers
                 Sku = product.Sku,
                 Videos = product.Videos,
                 Ean = product.Ean,
+                FulfillmentTime = product.FulfillmentTime,
                 ProductAttributes = product.ProductAttributes.OrEmptyIfNull().Select(x => new ProductAttributeValuesResponseModel
                 {
                     Key = x.Key,

@@ -48,6 +48,7 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string InActiveLabel { get; set; }
         public string DeliveryAddressLabel { get; set; }
         public string BillingAddressLabel { get; set; }
+        public string ExpressedOnLabel { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
         public Guid? DefaultBillingAddressId { get; set; }
         public IEnumerable<Guid> ClientGroupsIds { get; set; }
@@ -60,5 +61,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public IEnumerable<ClientAccountManagerViewModel> ClientManagers { get; set; }
         public IEnumerable<ClientNotificationTypeViewModel> ClientApprovals { get; set; }
         public string ExpressedOnLabel { get; set; }
+        public IEnumerable<ClientFieldViewModel> ClientFields { get; set; }
     }
 }

@@ -37,7 +37,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 NameRequiredErrorMessage = _globalLocalizer.GetString("NameRequiredErrorMessage"),
                 NameLabel = _globalLocalizer.GetString("Name"),
                 SaveText = _globalLocalizer.GetString("SaveText"),
-                SaveUrl = _linkGenerator.GetPathByAction("Index", "ClientNotificationTypeApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveUrl = _linkGenerator.GetPathByAction("Index", "ClientNotificationTypesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
                 IdLabel = _globalLocalizer.GetString("Id"),
                 ClientNotificationTypesUrl = _linkGenerator.GetPathByAction("Index", "ClientNotificationTypes", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),

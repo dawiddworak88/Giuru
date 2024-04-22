@@ -14,10 +14,10 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
 {
     public class ProductIndexingRepository : IProductIndexingRepository
     {
-        private readonly CatalogContext catalogContext;
-        private readonly IElasticClient elasticClient;
-        private readonly IConfiguration configuration;
-        private readonly ILogger<ProductIndexingRepository> logger;
+        private readonly CatalogContext _catalogContext;
+        private readonly IElasticClient _elasticClient;
+        private readonly IConfiguration _configuration;
+        private readonly ILogger<ProductIndexingRepository> _logger;
 
         public ProductIndexingRepository(
             ILogger<ProductIndexingRepository> logger,
@@ -25,28 +25,28 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
             IElasticClient elasticClient,
             IConfiguration configuration)
         {
-            this.catalogContext = catalogContext;
-            this.elasticClient = elasticClient;
-            this.configuration = configuration;
-            this.logger = logger;
+            _catalogContext = catalogContext;
+            _elasticClient = elasticClient;
+            _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task DeleteAsync(Guid sellerId)
         {
-            await this.elasticClient.DeleteByQueryAsync<ProductSearchModel>(q => q.Query(z => z.Term(p => p.SellerId, sellerId)));
+            await _elasticClient.DeleteByQueryAsync<ProductSearchModel>(q => q.Query(z => z.Term(p => p.SellerId, sellerId)));
         }
 
         public async Task IndexAsync(Guid productId)
         {
-            var product = await this.catalogContext.Products.FirstOrDefaultAsync(x => x.Id == productId);
+            var product = await _catalogContext.Products.FirstOrDefaultAsync(x => x.Id == productId);
 
             if (product != null)
             {
-                await this.elasticClient.DeleteByQueryAsync<ProductSearchModel>(q => q.Query(z => z.Term(p => p.ProductId, product.Id)));
+                await _elasticClient.DeleteByQueryAsync<ProductSearchModel>(q => q.Query(z => z.Term(p => p.ProductId, product.Id)));
 
                 var descriptor = new BulkDescriptor();
 
-                foreach (var language in this.configuration["SupportedCultures"].Split(","))
+                foreach (var language in _configuration["SupportedCultures"].Split(","))
                 {
                     var productTranslations = product.Translations.FirstOrDefault(x => x.Language == language && x.IsActive);
 
@@ -106,11 +106,12 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
                             IsNew = product.IsNew,
                             IsPublished = product.IsPublished,
                             IsProtected = product.IsProtected,
-                            Images = this.catalogContext.ProductImages.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId),
-                            Videos = this.catalogContext.ProductVideos.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId),
-                            Files = this.catalogContext.ProductFiles.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId),
+                            Images = _catalogContext.ProductImages.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId),
+                            Videos = _catalogContext.ProductVideos.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId),
+                            Files = _catalogContext.ProductFiles.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId),
                             IsActive = product.IsActive,
                             Sku = product.Sku,
+                            FulfillmentTime = product.FulfillmentTime,
                             FormData = productTranslations.FormData,
                             Name = productTranslations.Name,
                             NameSuggest = new CompletionField
@@ -137,11 +138,11 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
 
                         if (!string.IsNullOrWhiteSpace(productTranslations.FormData))
                         {
-                            var categorySchema = this.catalogContext.CategorySchemas.FirstOrDefault(x => x.CategoryId == product.CategoryId && x.Language == language && x.IsActive);
+                            var categorySchema = _catalogContext.CategorySchemas.FirstOrDefault(x => x.CategoryId == product.CategoryId && x.Language == language && x.IsActive);
 
                             if (categorySchema == null)
                             {
-                                categorySchema = this.catalogContext.CategorySchemas.FirstOrDefault(x => x.CategoryId == product.CategoryId && x.IsActive);
+                                categorySchema = _catalogContext.CategorySchemas.FirstOrDefault(x => x.CategoryId == product.CategoryId && x.IsActive);
                             }
 
                             if (!string.IsNullOrWhiteSpace(categorySchema?.Schema))
@@ -258,13 +259,13 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
                     }
                 }
 
-                await this.elasticClient.DeleteByQueryAsync<ProductSearchModel>(q => q.Query(z => z.Term(p => p.ProductId, productId)));
+                await _elasticClient.DeleteByQueryAsync<ProductSearchModel>(q => q.Query(z => z.Term(p => p.ProductId, productId)));
 
-                var response = await this.elasticClient.BulkAsync(descriptor);
+                var response = await _elasticClient.BulkAsync(descriptor);
 
                 if (response.IsValid is false)
                 {
-                    this.logger.LogError(response.DebugInformation);
+                    _logger.LogError(response.DebugInformation);
                 }
             }
         }

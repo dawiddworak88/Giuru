@@ -532,6 +532,8 @@ spec:
           value: {{ .Values.identityUrl }}
         - name: BuyerUrl
           value: {{ .Values.buyerUrl }}
+        - name: ClientUrl
+          value: {{ .Values.clientUrl }}
         - name: Clients
           value: {{ .Values.identityApi.clients }}
         - name: SellerClientId

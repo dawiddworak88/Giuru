@@ -18,18 +18,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Client.Api.Services.Applications
 {
     public class ClientsApplicationsService : IClientsApplicationsService
     {
-        private readonly ClientContext context;
-        private readonly IMailingService mailingService;
-        private readonly IOptionsMonitor<AppSettings> options;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<ClientResources> clientLocalizer;
-        private readonly IOptionsMonitor<MailingConfiguration> mailingOptions;
+        private readonly ClientContext _context;
+        private readonly IMailingService _mailingService;
+        private readonly IOptionsMonitor<AppSettings> _options;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
+        private readonly IOptionsMonitor<MailingConfiguration> _mailingOptions;
         public ClientsApplicationsService(
             ClientContext context,
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -38,84 +39,129 @@ namespace Client.Api.Services.Applications
             IMailingService mailingService,
             IOptionsMonitor<AppSettings> options)
         {
-            this.context = context;
-            this.clientLocalizer = clientLocalizer;
-            this.globalLocalizer = globalLocalizer;
-            this.mailingOptions = mailingOptions;
-            this.options = options;
-            this.mailingService = mailingService;
+            _context = context;
+            _clientLocalizer = clientLocalizer;
+            _globalLocalizer = globalLocalizer;
+            _mailingOptions = mailingOptions;
+            _options = options;
+            _mailingService = mailingService;
         }
 
         public async Task<Guid> CreateAsync(CreateClientApplicationServiceModel model)
         {
             var clientApplication = new ClientsApplication
             {
+                CompanyName = model.CompanyName,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 ContactJobTitle = model.ContactJobTitle,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
-                CompanyName = model.CompanyName,
-                CompanyAddress = model.CompanyAddress,
-                CompanyCountry = model.CompanyCountry,
-                CompanyCity = model.CompanyCity,
-                CompanyRegion = model.CompanyRegion,
-                CompanyPostalCode = model.CompanyPostalCode
+                CommunicationLanguage = model.CommunicationLanguage,
+                IsDeliveryAddressEqualBillingAddress = model.IsDeliveryAddressEqualBillingAddress
             };
 
-            await this.context.ClientsApplications.AddAsync(clientApplication.FillCommonProperties());
-            await this.context.SaveChangesAsync();
+            if (model.IsDeliveryAddressEqualBillingAddress)
+            {
+                var addresses = new ClientsApplicationAddress
+                {
+                    FullName = model.BillingAddress.FullName,
+                    PhoneNumber = model.BillingAddress.PhoneNumber,
+                    Street = model.BillingAddress.Street,
+                    Region = model.BillingAddress.Region,
+                    PostalCode = model.BillingAddress.PostalCode,
+                    City = model.BillingAddress.City,
+                    Country = model.BillingAddress.Country
+                };
 
-            await this.mailingService.SendTemplateAsync(new TemplateEmail
+                await _context.ClientsApplicationAddresses.AddAsync(addresses.FillCommonProperties());
+
+                clientApplication.BillingAddressId = addresses.Id;
+            }
+            else
+            {
+                var bilingAddress = new ClientsApplicationAddress
+                {
+                    FullName = model.BillingAddress.FullName,
+                    PhoneNumber = model.BillingAddress.PhoneNumber,
+                    Street = model.BillingAddress.Street,
+                    Region = model.BillingAddress.Region,
+                    PostalCode = model.BillingAddress.PostalCode,
+                    City = model.BillingAddress.City,
+                    Country = model.BillingAddress.Country
+                };
+
+                var deliveryAddress = new ClientsApplicationAddress
+                {
+                    FullName = model.DeliveryAddress.FullName,
+                    PhoneNumber = model.DeliveryAddress.PhoneNumber,
+                    Street = model.DeliveryAddress.Street,
+                    PostalCode = model.DeliveryAddress.PostalCode,
+                    Region = model.DeliveryAddress.Region,
+                    City = model.DeliveryAddress.City,
+                    Country = model.DeliveryAddress.Country
+                };
+
+                await _context.ClientsApplicationAddresses.AddAsync(bilingAddress.FillCommonProperties());
+                await _context.ClientsApplicationAddresses.AddAsync(deliveryAddress.FillCommonProperties());
+
+                clientApplication.BillingAddressId = bilingAddress.Id;
+                clientApplication.DeliveryAddressId = deliveryAddress.Id;
+            }
+
+            await _context.ClientsApplications.AddAsync(clientApplication.FillCommonProperties());
+            await _context.SaveChangesAsync();
+
+            await _mailingService.SendTemplateAsync(new TemplateEmail
             {
                 RecipientEmailAddress = model.Email,
                 RecipientName = model.FirstName + " " + model.LastName,
-                SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
-                SenderName = this.mailingOptions.CurrentValue.SenderName,
-                TemplateId = this.options.CurrentValue.ActionSendGridClientApplyConfirmationTemplateId,
+                SenderEmailAddress = _mailingOptions.CurrentValue.SenderEmail,
+                SenderName = _mailingOptions.CurrentValue.SenderName,
+                TemplateId = _options.CurrentValue.ActionSendGridClientApplyConfirmationTemplateId,
                 DynamicTemplateData = new
                 {
-                    welcomeLabel = this.globalLocalizer.GetString("Welcome").Value,
+                    welcomeLabel = _globalLocalizer.GetString("Welcome").Value,
                     firstName = model.FirstName,
                     lastName = model.LastName,
-                    subject = this.clientLocalizer.GetString("ClientApplyConfirmationSubject").Value,
-                    lineOne = this.clientLocalizer.GetString("ClientApplyConfirmation").Value
+                    subject = _clientLocalizer.GetString("ClientApplyConfirmationSubject").Value,
+                    lineOne = _clientLocalizer.GetString("ClientApplyConfirmation").Value
                 }
             });
 
-            await this.mailingService.SendTemplateAsync(new TemplateEmail
+            await _mailingService.SendTemplateAsync(new TemplateEmail
             {
-                RecipientEmailAddress = this.options.CurrentValue.ApplyRecipientEmail,
-                RecipientName = this.mailingOptions.CurrentValue.SenderName,
-                SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
-                SenderName = this.mailingOptions.CurrentValue.SenderName,
-                TemplateId = this.options.CurrentValue.ActionSendGridClientApplyTemplateId,
+                RecipientEmailAddress = _options.CurrentValue.ApplyRecipientEmail,
+                RecipientName = _mailingOptions.CurrentValue.SenderName,
+                SenderEmailAddress = _mailingOptions.CurrentValue.SenderEmail,
+                SenderName = _mailingOptions.CurrentValue.SenderName,
+                TemplateId = _options.CurrentValue.ActionSendGridClientApplyTemplateId,
                 DynamicTemplateData = new
                 {
                     firstName = model.FirstName,
                     lastName = model.LastName,
                     email = model.Email,
-                    phoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel").Value,
+                    phoneNumberLabel = _globalLocalizer.GetString("PhoneNumberLabel").Value,
                     phoneNumber = model.PhoneNumber,
-                    subject = $"{model.CompanyName} - {model.FirstName} {model.LastName} - {this.clientLocalizer.GetString("ClientApplySubject").Value}",
-                    contactInformation = this.globalLocalizer.GetString("ContactInformation").Value,
-                    businessInformation = this.globalLocalizer.GetString("BusinessInformation").Value,
-                    firstNameLabel = this.globalLocalizer.GetString("FirstName").Value,
-                    lastNameLabel = this.globalLocalizer.GetString("LastName").Value,
-                    companyNameLabel = this.globalLocalizer.GetString("CompanyName").Value,
+                    subject = $"{model.CompanyName} - {model.FirstName} {model.LastName} - {_clientLocalizer.GetString("ClientApplySubject").Value}",
+                    contactInformation = _globalLocalizer.GetString("ContactInformation").Value,
+                    businessInformation = _globalLocalizer.GetString("BusinessInformation").Value,
+                    firstNameLabel = _globalLocalizer.GetString("FirstName").Value,
+                    lastNameLabel = _globalLocalizer.GetString("LastName").Value,
+                    companyNameLabel = _globalLocalizer.GetString("CompanyName").Value,
                     companyName = model.CompanyName,
-                    addressLabel = this.globalLocalizer.GetString("Address").Value,
-                    address = model.CompanyAddress,
-                    cityLabel = this.globalLocalizer.GetString("City").Value,
-                    city = model.CompanyCity,
-                    regionLabel = this.globalLocalizer.GetString("Region").Value,
-                    region = model.CompanyRegion,
-                    postalCodeLabel = this.globalLocalizer.GetString("PostalCode").Value,
-                    postalCode = model.CompanyPostalCode,
-                    contactJobLabel = this.globalLocalizer.GetString("ContactJobTitle").Value,
+                    addressLabel = _globalLocalizer.GetString("Address").Value,
+                    address = model.BillingAddress.Street,
+                    cityLabel = _globalLocalizer.GetString("City").Value,
+                    city = model.BillingAddress.City,
+                    regionLabel = _globalLocalizer.GetString("Region").Value,
+                    region = model.BillingAddress.Region,
+                    postalCodeLabel = _globalLocalizer.GetString("PostalCode").Value,
+                    postalCode = model.BillingAddress.PostalCode,
+                    contactJobLabel = _globalLocalizer.GetString("ContactJobTitle").Value,
                     contactJobTitle = model.ContactJobTitle,
-                    countryLabel = this.globalLocalizer.GetString("Country").Value,
-                    country = model.CompanyCountry
+                    countryLabel = _globalLocalizer.GetString("Country").Value,
+                    country = model.BillingAddress.Country
                 }
             });
 
@@ -124,36 +170,48 @@ namespace Client.Api.Services.Applications
 
         public async Task DeleteAsync(DeleteClientApplicationServiceModel model)
         {
-            var clientApplication = await this.context.ClientsApplications.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var clientApplication = await _context.ClientsApplications.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (clientApplication is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NoContent);
+            }
+
+            if (clientApplication.IsDeliveryAddressEqualBillingAddress)
+            {
+                var addresses = await _context.ClientsApplicationAddresses.FirstOrDefaultAsync(x => x.Id == clientApplication.BillingAddressId && x.IsActive);
+
+                addresses.IsActive = false;
+            }
+            else
+            {
+                var billingAddress = await _context.ClientsApplicationAddresses.FirstOrDefaultAsync(x => x.Id == clientApplication.BillingAddressId && x.IsActive);
+
+                billingAddress.IsActive = false;
+
+                var deliveryAddress = await _context.ClientsApplicationAddresses.FirstOrDefaultAsync(x => x.Id == clientApplication.DeliveryAddressId && x.IsActive);
+
+                deliveryAddress.IsActive = false;
             }
 
             clientApplication.IsActive = false;
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<PagedResults<IEnumerable<ClientApplicationServiceModel>>> GetAsync(GetClientsApplicationsServiceModel model)
         {
-            var clientsApplications = from c in this.context.ClientsApplications
+            var clientsApplications = from c in _context.ClientsApplications
                                       where c.IsActive
                                       select new ClientApplicationServiceModel
                                       {
                                           Id = c.Id,
+                                          CompanyName = c.CompanyName,
                                           FirstName = c.FirstName,
                                           LastName = c.LastName,
                                           ContactJobTitle = c.ContactJobTitle,
                                           PhoneNumber = c.PhoneNumber,
                                           Email = c.Email,
-                                          CompanyAddress = c.CompanyAddress,
-                                          CompanyCity = c.CompanyCity,
-                                          CompanyCountry = c.CompanyCountry,
-                                          CompanyName = c.CompanyName,
-                                          CompanyPostalCode = c.CompanyPostalCode,
-                                          CompanyRegion = c.CompanyRegion,
                                           LastModifiedDate = c.LastModifiedDate,
                                           CreatedDate = c.CreatedDate
                                       };
@@ -177,52 +235,103 @@ namespace Client.Api.Services.Applications
 
         public async Task<ClientApplicationServiceModel> GetAsync(GetClientApplicationServiceModel model)
         {
-            var existingApplication = await this.context.ClientsApplications.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var existingApplication = await _context.ClientsApplications.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (existingApplication is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             var clientApplication = new ClientApplicationServiceModel
             {
                 Id = existingApplication.Id,
+                CompanyName = existingApplication.CompanyName,
                 FirstName = existingApplication.FirstName,
                 LastName = existingApplication.LastName,
                 Email = existingApplication.Email,
                 PhoneNumber = existingApplication.PhoneNumber,
+                CommunicationLanguage = existingApplication.CommunicationLanguage,
                 ContactJobTitle = existingApplication.ContactJobTitle,
-                CompanyAddress = existingApplication.CompanyAddress,
-                CompanyCity = existingApplication.CompanyCity,
-                CompanyCountry = existingApplication.CompanyCountry,
-                CompanyName = existingApplication.CompanyName,
-                CompanyPostalCode = existingApplication.CompanyPostalCode,
-                CompanyRegion = existingApplication.CompanyRegion,
                 LastModifiedDate = existingApplication.LastModifiedDate,
-                CreatedDate = existingApplication.CreatedDate
+                CreatedDate = existingApplication.CreatedDate,
+                IsDeliveryAddressEqualBillingAddress = existingApplication.IsDeliveryAddressEqualBillingAddress,
             };
+
+            if (existingApplication.IsDeliveryAddressEqualBillingAddress)
+            {
+                var address = await _context.ClientsApplicationAddresses.FirstOrDefaultAsync(x => x.Id == existingApplication.BillingAddressId && x.IsActive);
+
+                var addresses = new ClientApplicationAddressServiceModel
+                {
+                    Id = address.Id,
+                    FullName = address.FullName,
+                    PhoneNumber = address.PhoneNumber,
+                    Region = address.Region,
+                    Street = address.Street,
+                    PostalCode = address.PostalCode,
+                    City = address.City,
+                    Country = address.Country
+                };
+
+                clientApplication.BillingAddress = addresses;
+            }
+            else
+            {
+                var billingAddress = await _context.ClientsApplicationAddresses.FirstOrDefaultAsync(x => x.Id == existingApplication.BillingAddressId && x.IsActive);
+
+                if (billingAddress is not null)
+                {
+                    clientApplication.BillingAddress = new ClientApplicationAddressServiceModel
+                    {
+                        Id = billingAddress.Id,
+                        FullName = billingAddress.FullName,
+                        PhoneNumber = billingAddress.PhoneNumber,
+                        Region = billingAddress.Region,
+                        Street = billingAddress.Street,
+                        PostalCode = billingAddress.PostalCode,
+                        City = billingAddress.City,
+                        Country = billingAddress.Country
+                    };
+                }
+
+                var deliveryAddress = await _context.ClientsApplicationAddresses.FirstOrDefaultAsync(x => x.Id == existingApplication.DeliveryAddressId && x.IsActive);
+
+                if (deliveryAddress is not null) 
+                {
+                    clientApplication.DeliveryAddress = new ClientApplicationAddressServiceModel
+                    {
+                        Id = deliveryAddress.Id,
+                        FullName = deliveryAddress.FullName,
+                        PhoneNumber = deliveryAddress.PhoneNumber,
+                        Region = deliveryAddress.Region,
+                        Street = deliveryAddress.Street,
+                        PostalCode = deliveryAddress.PostalCode,
+                        City = deliveryAddress.City,
+                        Country = deliveryAddress.Country
+                    };
+                }
+                else
+                {
+                    clientApplication.DeliveryAddress = new ClientApplicationAddressServiceModel();
+                }
+            }
 
             return clientApplication;
         }
 
         public async Task<PagedResults<IEnumerable<ClientApplicationServiceModel>>> GetByIds(GetClientsApplicationsByIdsServiceModel model)
         {
-            var clientsApplications = from c in this.context.ClientsApplications
+            var clientsApplications = from c in _context.ClientsApplications
                                       where model.Ids.Contains(c.Id) && c.IsActive
                                       select new ClientApplicationServiceModel
                                       {
                                           Id = c.Id,
+                                          CompanyName = c.CompanyName,
                                           FirstName = c.FirstName,
                                           LastName = c.LastName,
                                           ContactJobTitle = c.ContactJobTitle,
                                           PhoneNumber = c.PhoneNumber,
                                           Email = c.Email,
-                                          CompanyAddress = c.CompanyAddress,
-                                          CompanyCity = c.CompanyCity,
-                                          CompanyCountry = c.CompanyCountry,
-                                          CompanyName = c.CompanyName,
-                                          CompanyPostalCode = c.CompanyPostalCode,
-                                          CompanyRegion = c.CompanyRegion,
                                           LastModifiedDate = c.LastModifiedDate,
                                           CreatedDate = c.CreatedDate
                                       };
@@ -246,26 +355,118 @@ namespace Client.Api.Services.Applications
 
         public async Task<Guid> UpdateAsync(UpdateClientApplicationServiceModel model)
         {
-            var clientApplication = await this.context.ClientsApplications.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var clientApplication = await _context.ClientsApplications.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (clientApplication == null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NoContent);
             }
 
+            clientApplication.CompanyName = model.CompanyName;
             clientApplication.FirstName = model.FirstName;
             clientApplication.LastName = model.LastName;
             clientApplication.ContactJobTitle = model.ContactJobTitle;
             clientApplication.Email = model.Email;
             clientApplication.PhoneNumber = model.PhoneNumber;
-            clientApplication.CompanyCity = model.CompanyCity;
-            clientApplication.CompanyPostalCode = model.CompanyPostalCode;
-            clientApplication.CompanyRegion = model.CompanyRegion;
-            clientApplication.CompanyCountry = model.CompanyCountry;
-            clientApplication.CompanyAddress = model.CompanyAddress;
-            clientApplication.CompanyName = model.CompanyName;
+            clientApplication.CommunicationLanguage = model.CommunicationLanguage;
+            clientApplication.IsDeliveryAddressEqualBillingAddress = model.IsDeliveryAddressEqualBillingAddress;
 
-            await this.context.SaveChangesAsync();
+            if (model.IsDeliveryAddressEqualBillingAddress)
+            {
+                var address = await _context.ClientsApplicationAddresses.FirstOrDefaultAsync(x => x.Id == model.BillingAddress.Id && x.IsActive);
+
+                if (address is not null)
+                {
+                    address.FullName = model.BillingAddress.FullName;
+                    address.PhoneNumber = model.BillingAddress.PhoneNumber;
+                    address.Region = model.BillingAddress.Region;
+                    address.Street = model.BillingAddress.Street;
+                    address.PostalCode = model.BillingAddress.PostalCode;
+                    address.City = model.BillingAddress.City;
+                    address.Country = model.BillingAddress.Country;
+                }
+                else
+                {
+                    var billingAndDeliveryAddresses = new ClientsApplicationAddress
+                    {
+                        FullName = model.BillingAddress.FullName,
+                        PhoneNumber = model.BillingAddress.PhoneNumber,
+                        Region = model.BillingAddress.Region,
+                        Street = model.BillingAddress.Street,
+                        PostalCode = model.BillingAddress.PostalCode,
+                        City = model.BillingAddress.City,
+                        Country = model.BillingAddress.Country
+                    };
+
+                    _context.ClientsApplicationAddresses.Add(billingAndDeliveryAddresses.FillCommonProperties());
+
+                    clientApplication.BillingAddressId = billingAndDeliveryAddresses.Id;
+                }
+            }
+            else
+            {
+                var billingAddress = await _context.ClientsApplicationAddresses.FirstOrDefaultAsync(x => x.Id == model.BillingAddress.Id && x.IsActive);
+
+                if (billingAddress is not null)
+                {
+                    billingAddress.FullName = model.BillingAddress.FullName;
+                    billingAddress.PhoneNumber = model.BillingAddress.PhoneNumber;
+                    billingAddress.Region = model.BillingAddress.Region;
+                    billingAddress.Street = model.BillingAddress.Street;
+                    billingAddress.PostalCode = model.BillingAddress.PostalCode;
+                    billingAddress.City = model.BillingAddress.City;
+                    billingAddress.Country = model.BillingAddress.Country;
+                }
+                else
+                {
+                    var newBillingAddress = new ClientsApplicationAddress
+                    {
+                        FullName = model.BillingAddress.FullName,
+                        PhoneNumber = model.BillingAddress.PhoneNumber,
+                        Region = model.BillingAddress.Region,
+                        Street = model.BillingAddress.Street,
+                        PostalCode = model.BillingAddress.PostalCode,
+                        City = model.BillingAddress.City,
+                        Country = model.BillingAddress.Country
+                    };
+
+                    _context.ClientsApplicationAddresses.Add(newBillingAddress.FillCommonProperties());
+
+                    clientApplication.BillingAddressId = newBillingAddress.Id;
+                }
+
+                var deliveryAddress = await _context.ClientsApplicationAddresses.FirstOrDefaultAsync(x => x.Id == model.DeliveryAddress.Id && x.IsActive);
+
+                if (deliveryAddress is not null)
+                {
+                    deliveryAddress.FullName = model.DeliveryAddress.FullName;
+                    deliveryAddress.PhoneNumber = model.DeliveryAddress.PhoneNumber;
+                    deliveryAddress.Region = model.DeliveryAddress.Region;
+                    deliveryAddress.Street = model.DeliveryAddress.Street;
+                    deliveryAddress.PostalCode = model.DeliveryAddress.PostalCode;
+                    deliveryAddress.City = model.DeliveryAddress.City;
+                    deliveryAddress.Country = model.DeliveryAddress.Country;
+                }
+                else
+                {
+                    var newDeliveryAddress = new ClientsApplicationAddress
+                    {
+                        FullName = model.DeliveryAddress.FullName,
+                        PhoneNumber = model.DeliveryAddress.PhoneNumber,
+                        Region = model.DeliveryAddress.Region,
+                        Street = model.DeliveryAddress.Street,
+                        PostalCode = model.DeliveryAddress.PostalCode,
+                        City = model.DeliveryAddress.City,
+                        Country = model.DeliveryAddress.Country
+                    };
+
+                    _context.ClientsApplicationAddresses.Add(newDeliveryAddress.FillCommonProperties());
+
+                    clientApplication.DeliveryAddressId = newDeliveryAddress.Id;
+                }
+            }
+
+            await _context.SaveChangesAsync();
 
             return clientApplication.Id;
         }

@@ -198,7 +198,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 if (product.ProductVariants is not null)
                 {
-                    var productVariants = await _productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, nameof(Product.CreatedDate));
+                    var productVariants = await _productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, false, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, nameof(Product.CreatedDate));
 
                     if (productVariants != null)
                     {

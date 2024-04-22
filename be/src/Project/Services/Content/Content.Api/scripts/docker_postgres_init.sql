@@ -2069,6 +2069,9 @@ CREATE SEQUENCE public.privacy_policy_pages_localizations_links_id_seq
 
 ALTER TABLE public.privacy_policy_pages_localizations_links_id_seq OWNER TO postgres;
 
+ALTER TABLE privacy_policy_pages
+    ADD CONSTRAINT unique_id_constraint_privacy_policy_pages UNIQUE (id);
+
 --
 -- TOC entry 4020 (class 0 OID 0)
 -- Dependencies: 312
@@ -2095,6 +2098,9 @@ CREATE TABLE public.regulations_pages (
 
 
 ALTER TABLE public.regulations_pages OWNER TO postgres;
+
+ALTER TABLE regulations_pages
+    ADD CONSTRAINT unique_id_constraint_regulations_pages UNIQUE (id);
 
 --
 -- TOC entry 305 (class 1259 OID 214194)
@@ -2237,6 +2243,10 @@ CREATE TABLE public.search_products_pages_components (
 
 
 ALTER TABLE public.search_products_pages_components OWNER TO postgres;
+
+ALTER TABLE search_products_pages
+    ADD CONSTRAINT unique_id_constraint_search_products_pages UNIQUE (id);
+
 
 --
 -- TOC entry 328 (class 1259 OID 214605)
@@ -2930,6 +2940,10 @@ CREATE TABLE public.components_blocks_main_navigations (
 
 ALTER TABLE public.components_blocks_main_navigations OWNER TO postgres;
 
+ALTER TABLE components_blocks_main_navigations
+    ADD CONSTRAINT unique_id_constraint_components_blocks_main_navigations UNIQUE (id);
+
+
 --
 -- Name: components_blocks_main_navigations_components; Type: TABLE; Schema: public; Owner: postgres
 --
@@ -2986,6 +3000,9 @@ CREATE TABLE public.components_blocks_notification_bars (
 
 
 ALTER TABLE public.components_blocks_notification_bars OWNER TO postgres;
+
+ALTER TABLE components_blocks_notification_bars
+    ADD CONSTRAINT unique_id_constraint_notification_bars UNIQUE (id);
 
 --
 -- Name: components_blocks_notification_bars_components; Type: TABLE; Schema: public; Owner: postgres
@@ -3049,6 +3066,10 @@ CREATE TABLE public.components_blocks_notification_bar_items (
 
 
 ALTER TABLE public.components_blocks_notification_bar_items OWNER TO postgres;
+
+ALTER TABLE components_blocks_notification_bar_items
+    ADD CONSTRAINT unique_id_constraint_notification_bar_items UNIQUE (id);
+
 
 --
 -- Name: components_blocks_notification_bar_items_components; Type: TABLE; Schema: public; Owner: postgres
@@ -3139,6 +3160,9 @@ CREATE TABLE public.components_shared_footers (
 
 
 ALTER TABLE public.components_shared_footers OWNER TO postgres;
+
+ALTER TABLE components_shared_footers
+    ADD CONSTRAINT unique_id_constraint_shared_footers UNIQUE (id);
 
 --
 -- Name: components_shared_footers_components; Type: TABLE; Schema: public; Owner: postgres
@@ -4898,7 +4922,7 @@ INSERT INTO public.privacy_policy_pages (id, created_at, updated_at, published_a
 INSERT INTO public.privacy_policy_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (1, 1, 34, 'shared.seo', 'seo', NULL);
 INSERT INTO public.privacy_policy_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (2, 2, 35, 'shared.seo', 'seo', NULL);
 INSERT INTO public.privacy_policy_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (3, 3, 36, 'shared.seo', 'seo', NULL);
-
+INSERT INTO public.privacy_policy_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (1, 1, 1, 'blocks.content', 'content', NULL);
 
 --
 -- TOC entry 3946 (class 0 OID 214300)
@@ -4934,7 +4958,7 @@ INSERT INTO public.regulations_pages (id, created_at, updated_at, published_at, 
 INSERT INTO public.regulations_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (1, 1, 31, 'shared.seo', 'seo', NULL);
 INSERT INTO public.regulations_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (3, 2, 32, 'shared.seo', 'seo', NULL);
 INSERT INTO public.regulations_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (4, 3, 33, 'shared.seo', 'seo', NULL);
-
+INSERT INTO public.regulations_pages_components (id, entity_id, component_id, component_type, field, "order") VALUES (1, 1, 2, 'blocks.content', 'content', NULL);
 
 --
 -- TOC entry 3940 (class 0 OID 214210)
@@ -5064,7 +5088,7 @@ INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (83, 'plugin_content_manager_configuration_content_types::api::basket-page.basket-page', '{"uid":"api::basket-page.basket-page","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"id","defaultSortBy":"id","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"seo":{"edit":{"label":"seo","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"seo","searchable":false,"sortable":false}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","seo","createdAt","updatedAt"],"edit":[[{"name":"seo","size":12}]]}}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (84, 'plugin_content_manager_configuration_content_types::api::order-item-page.order-item-page', '{"uid":"api::order-item-page.order-item-page","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"id","defaultSortBy":"id","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"seo":{"edit":{"label":"seo","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"seo","searchable":false,"sortable":false}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","seo","createdAt","updatedAt"],"edit":[[{"name":"seo","size":12}]]}}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (85, 'plugin_content_manager_configuration_content_types::api::search-products-page.search-products-page', '{"uid":"api::search-products-page.search-products-page","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"id","defaultSortBy":"id","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"seo":{"edit":{"label":"seo","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"seo","searchable":false,"sortable":false}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","seo","createdAt","updatedAt"],"edit":[[{"name":"seo","size":12}]]}}', 'object', NULL, NULL);
-INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (87, 'plugin_content_manager_configuration_components::blocks.content', '{"uid":"blocks.content","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"title","defaultSortBy":"title","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"title":{"edit":{"label":"title","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"title","searchable":true,"sortable":true}},"text":{"edit":{"label":"text","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"text","searchable":false,"sortable":false}}},"layouts":{"list":["id","title"],"edit":[[{"name":"title","size":6}],[{"name":"text","size":12}]]},"isComponent":true}', 'object', NULL, NULL);
+INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (87, 'plugin_content_manager_configuration_components::blocks.content', '{"settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"title","defaultSortBy":"title","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":false,"sortable":false}},"title":{"edit":{"label":"title","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"title","searchable":true,"sortable":true}},"description":{"edit":{"label":"description","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"description","searchable":false,"sortable":false}},"accordion":{"edit":{"label":"accordion","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"accordion","searchable":false,"sortable":false}}},"layouts":{"list":["id","title","accordion"],"edit":[[{"name":"title","size":6}],[{"name":"description","size":12}],[{"name":"accordion","size":12}]]},"uid":"blocks.content","isComponent":true}', 'object', NULL, NULL);
 INSERT INTO public.strapi_core_store_settings (id, key, value, type, environment, tag) VALUES (82, 'plugin_content_manager_configuration_content_types::api::privacy-policy-page.privacy-policy-page', '{"uid":"api::privacy-policy-page.privacy-policy-page","settings":{"bulkable":true,"filterable":true,"searchable":true,"pageSize":10,"mainField":"id","defaultSortBy":"id","defaultSortOrder":"ASC"},"metadatas":{"id":{"edit":{},"list":{"label":"id","searchable":true,"sortable":true}},"seo":{"edit":{"label":"seo","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"seo","searchable":false,"sortable":false}},"content":{"edit":{"label":"content","description":"","placeholder":"","visible":true,"editable":true},"list":{"label":"content","searchable":false,"sortable":false}},"createdAt":{"edit":{"label":"createdAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"createdAt","searchable":true,"sortable":true}},"updatedAt":{"edit":{"label":"updatedAt","description":"","placeholder":"","visible":false,"editable":true},"list":{"label":"updatedAt","searchable":true,"sortable":true}}},"layouts":{"list":["id","seo","createdAt","updatedAt"],"edit":[[{"name":"seo","size":12}],[{"name":"content","size":12}]]}}', 'object', NULL, NULL);
 
 
@@ -6728,6 +6752,12 @@ ALTER TABLE ONLY public.up_permissions_role_links
     ADD CONSTRAINT up_permissions_role_links_pkey PRIMARY KEY (id);
 
 
+ALTER TABLE strapi_api_tokens
+    ADD CONSTRAINT unique_id_constraint UNIQUE (id);
+
+ALTER TABLE up_permissions
+    ADD CONSTRAINT unique_id_constraint_up_permissions UNIQUE (id);
+
 --
 -- TOC entry 3355 (class 2606 OID 16707)
 -- Name: up_permissions_role_links up_permissions_role_links_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
@@ -6745,6 +6775,8 @@ ALTER TABLE ONLY public.up_permissions_role_links
 ALTER TABLE ONLY public.up_roles
     ADD CONSTRAINT up_roles_pkey PRIMARY KEY (id);
 
+ALTER TABLE up_roles
+    ADD CONSTRAINT unique_id_constraint_up_roles UNIQUE (id);
 
 --
 -- TOC entry 3362 (class 2606 OID 16711)
@@ -6754,6 +6786,8 @@ ALTER TABLE ONLY public.up_roles
 ALTER TABLE ONLY public.up_users
     ADD CONSTRAINT up_users_pkey PRIMARY KEY (id);
 
+ALTER TABLE up_users
+    ADD CONSTRAINT unique_id_constraint_up_users UNIQUE (id);
 
 --
 -- TOC entry 3368 (class 2606 OID 16713)
@@ -6799,6 +6833,9 @@ ALTER TABLE ONLY public.upload_folders_parent_links
 ALTER TABLE ONLY public.upload_folders
     ADD CONSTRAINT upload_folders_path_id_index UNIQUE (path_id);
 
+
+ALTER TABLE upload_folders
+    ADD CONSTRAINT unique_id_constraint_upload_folders UNIQUE (id);
 
 --
 -- TOC entry 3375 (class 2606 OID 16723)
@@ -6930,6 +6967,8 @@ ALTER TABLE ONLY public.global_configurations_components
 ALTER TABLE ONLY public.category_pages_components
     ADD CONSTRAINT category_pages_components_pkey PRIMARY KEY (id);
 
+ALTER TABLE category_pages
+    ADD CONSTRAINT unique_id_constraint_category_pages UNIQUE (id);
 
 --
 -- Name: category_pages_localizations_links category_pages_localizations_links_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
@@ -9335,6 +9374,9 @@ ALTER TABLE ONLY public.global_configurations_localizations_links
 
 ALTER TABLE ONLY public.global_configurations
     ADD CONSTRAINT global_configurations_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES public.admin_users(id) ON DELETE SET NULL;
+
+ALTER TABLE global_configurations
+    ADD CONSTRAINT unique_id_constraint_global_configurations UNIQUE (id);
 
 --
 -- Name: category_pages category_pages_created_by_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres

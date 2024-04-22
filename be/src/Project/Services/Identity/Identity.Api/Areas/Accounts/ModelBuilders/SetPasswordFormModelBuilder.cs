@@ -51,7 +51,7 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
         {
             var viewModel = new SetPasswordFormViewModel
             {
-                Id = componentModel.Id.Value,
+                Id = componentModel.Id,
                 ReturnUrl = componentModel.ReturnUrl,
                 PasswordFormatErrorMessage = _globalLocalizer["PasswordFormatErrorMessage"],
                 PasswordRequiredErrorMessage = _globalLocalizer["PasswordRequiredErrorMessage"],

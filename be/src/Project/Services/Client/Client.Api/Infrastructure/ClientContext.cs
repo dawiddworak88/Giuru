@@ -4,6 +4,7 @@ using Client.Api.Infrastructure.Groups.Entities;
 using Client.Api.Infrastructure.Roles.Entities;
 using Microsoft.EntityFrameworkCore;
 using Client.Api.Infrastructure.Notifications.Entities;
+using Client.Api.Infrastructure.Fields;
 
 namespace Client.Api.Infrastructure
 {
@@ -21,6 +22,7 @@ namespace Client.Api.Infrastructure
         public DbSet<Clients.Entities.Client> Clients { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<ClientsApplication> ClientsApplications { get; set; }
+        public DbSet<ClientsApplicationAddress> ClientsApplicationAddresses { get; set; }
         public DbSet<ClientGroup> ClientGroups { get; set; }
         public DbSet<ClientGroupTranslation> ClientGroupTranslations { get; set; }
         public DbSet<ClientsGroup> ClientsGroups { get; set; }
@@ -32,5 +34,12 @@ namespace Client.Api.Infrastructure
         public DbSet<ClientNotificationTypeApproval> ClientNotificationTypeApprovals { get; set; }
         public DbSet<ClientNotification> ClientNotifications { get; set; }
         public DbSet<ClientNotificationTranslation> ClientNotificationsTranslations { get; set; }
+        public DbSet<ClientFieldValue> ClientFieldValues { get; set; }
+        public DbSet<ClientFieldValueTranslation> ClientFieldValueTranslations { get; set; }
+        public DbSet<FieldDefinition> FieldDefinitions { get; set; }
+        public DbSet<FieldDefinitionTranslation> FieldDefinitionTranslations { get; set; }
+        public DbSet<Option> FieldOptions { get; set; }
+        public DbSet<OptionTranslation> FieldOptionTranslations { get; set; }
+        public DbSet<OptionSet> FieldOptionSets { get; set; }
     }
 }

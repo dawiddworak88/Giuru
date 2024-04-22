@@ -25,13 +25,13 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 {
     public class DuplicateProductFormModelBuilder : IAsyncComponentModelBuilder<DuplicateProductComponentModel, ProductFormViewModel>
     {
-        private readonly IProductsRepository productsRepository;
-        private readonly ICategoriesRepository categoriesRepository;
-        private readonly IMediaItemsRepository mediaItemsRepository;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
-        private readonly IMediaService mediaService;
-        private readonly LinkGenerator linkGenerator;
+        private readonly IProductsRepository _productsRepository;
+        private readonly ICategoriesRepository _categoriesRepository;
+        private readonly IMediaItemsRepository _mediaItemsRepository;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<ProductResources> _productLocalizer;
+        private readonly IMediaService _mediaService;
+        private readonly LinkGenerator _linkGenerator;
 
         public DuplicateProductFormModelBuilder(
             IProductsRepository productsRepository,
@@ -42,55 +42,56 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             IMediaService mediaService,
             LinkGenerator linkGenerator)
         {
-            this.productsRepository = productsRepository;
-            this.categoriesRepository = categoriesRepository;
-            this.mediaItemsRepository = mediaItemsRepository;
-            this.globalLocalizer = globalLocalizer;
-            this.productLocalizer = productLocalizer;
-            this.mediaService = mediaService;
-            this.linkGenerator = linkGenerator;
+            _productsRepository = productsRepository;
+            _categoriesRepository = categoriesRepository;
+            _mediaItemsRepository = mediaItemsRepository;
+            _globalLocalizer = globalLocalizer;
+            _productLocalizer = productLocalizer;
+            _mediaService = mediaService;
+            _linkGenerator = linkGenerator;
         }
 
         public async Task<ProductFormViewModel> BuildModelAsync(DuplicateProductComponentModel componentModel)
         {
             var viewModel = new ProductFormViewModel
             {
-                IdLabel = this.globalLocalizer.GetString("Id"),
-                Title = this.productLocalizer.GetString("EditProduct"),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                NameLabel = this.globalLocalizer.GetString("NameLabel"),
-                DescriptionLabel = this.globalLocalizer.GetString("DescriptionLabel"),
-                NameRequiredErrorMessage = this.globalLocalizer.GetString("NameRequiredErrorMessage"),
-                EnterNameText = this.globalLocalizer.GetString("EnterNameText"),
-                EnterSkuText = this.productLocalizer.GetString("EnterSkuText"),
-                SkuRequiredErrorMessage = this.productLocalizer.GetString("SkuRequiredErrorMessage"),
-                SkuLabel = this.productLocalizer.GetString("SkuLabel"),
-                DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
-                DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
-                DeleteLabel = this.globalLocalizer.GetString("Delete"),
-                SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
-                SaveMediaChunkUrl = this.linkGenerator.GetPathByAction("PostChunk", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
-                SaveMediaChunkCompleteUrl = this.linkGenerator.GetPathByAction("PostChunksComplete", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                IdLabel = _globalLocalizer.GetString("Id"),
+                Title = _productLocalizer.GetString("EditProduct"),
+                GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
+                NameLabel = _globalLocalizer.GetString("NameLabel"),
+                DescriptionLabel = _globalLocalizer.GetString("DescriptionLabel"),
+                NameRequiredErrorMessage = _globalLocalizer.GetString("NameRequiredErrorMessage"),
+                EnterNameText = _globalLocalizer.GetString("EnterNameText"),
+                EnterSkuText = _productLocalizer.GetString("EnterSkuText"),
+                SkuRequiredErrorMessage = _productLocalizer.GetString("SkuRequiredErrorMessage"),
+                SkuLabel = _productLocalizer.GetString("SkuLabel"),
+                DropFilesLabel = _globalLocalizer.GetString("DropFile"),
+                DropOrSelectFilesLabel = _globalLocalizer.GetString("DropOrSelectFile"),
+                DeleteLabel = _globalLocalizer.GetString("Delete"),
+                SaveMediaUrl = _linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveMediaChunkUrl = _linkGenerator.GetPathByAction("PostChunk", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveMediaChunkCompleteUrl = _linkGenerator.GetPathByAction("PostChunksComplete", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 IsUploadInChunksEnabled = true,
                 ChunkSize = MediaConstants.DefaultChunkSize,
                 VideoFileSizeLimit = ProductsConstants.Limits.VideoFileSizeLimit,
-                FileSizeLimitErrorMessage = this.globalLocalizer.GetString("FileSizeLimit"),
-                SaveText = this.globalLocalizer.GetString("SaveText"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                ProductPicturesLabel = this.productLocalizer.GetString("ProductPicturesLabel"),
-                ProductFilesLabel = this.productLocalizer.GetString("ProductFilesLabel"),
-                SelectCategoryLabel = this.productLocalizer.GetString("SelectCategory"),
-                SelectPrimaryProductLabel = this.productLocalizer.GetString("SelectPrimaryProduct"),
-                IsNewLabel = this.productLocalizer.GetString("IsNew"),
-                IsPublishedLabel = this.productLocalizer.GetString("IsPublished"),
-                GetCategorySchemaUrl = this.linkGenerator.GetPathByAction("Get", "CategorySchemasApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                ProductsUrl = this.linkGenerator.GetPathByAction("Index", "Products", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                EanLabel = this.globalLocalizer.GetString("Ean"),
-                NavigateToProductsLabel = this.productLocalizer.GetString("NavigateToProductsLabel"),
-                ProductsSuggestionUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                FileSizeLimitErrorMessage = _globalLocalizer.GetString("FileSizeLimit"),
+                SaveText = _globalLocalizer.GetString("SaveText"),
+                SaveUrl = _linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                ProductPicturesLabel = _productLocalizer.GetString("ProductPicturesLabel"),
+                ProductFilesLabel = _productLocalizer.GetString("ProductFilesLabel"),
+                SelectCategoryLabel = _productLocalizer.GetString("SelectCategory"),
+                SelectPrimaryProductLabel = _productLocalizer.GetString("SelectPrimaryProduct"),
+                IsNewLabel = _productLocalizer.GetString("IsNew"),
+                IsPublishedLabel = _productLocalizer.GetString("IsPublished"),
+                GetCategorySchemaUrl = _linkGenerator.GetPathByAction("Get", "CategorySchemasApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                ProductsUrl = _linkGenerator.GetPathByAction("Index", "Products", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                EanLabel = _globalLocalizer.GetString("Ean"),
+                FulfillmentTimeLabel = _productLocalizer.GetString("FulfillmentTimeLabel"),
+                NavigateToProductsLabel = _productLocalizer.GetString("NavigateToProductsLabel"),
+                ProductsSuggestionUrl = _linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             };
 
-            var categories = await this.categoriesRepository.GetAllCategoriesAsync(
+            var categories = await _categoriesRepository.GetAllCategoriesAsync(
                 componentModel.Token,
                 componentModel.Language,
                 true,
@@ -101,7 +102,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 viewModel.Categories = categories.OrderBy(x => x.Level).ThenBy(x => x.Name).Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
-            var primaryProducts = await this.productsRepository.GetProductsAsync(componentModel.Token, componentModel.Language, null, false, componentModel.SellerId, Constants.ProductsSuggestionDefaultPageIndex, Constants.ProductsSuggestionDefaultItemsPerPage, $"{nameof(Product.Name)} ASC");
+            var primaryProducts = await _productsRepository.GetProductsAsync(componentModel.Token, componentModel.Language, null, false, componentModel.SellerId, Constants.ProductsSuggestionDefaultPageIndex, Constants.ProductsSuggestionDefaultItemsPerPage, $"{nameof(Product.Name)} ASC");
 
             if (primaryProducts != null)
             {
@@ -110,23 +111,24 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
             if (componentModel.Id.HasValue)
             {
-                var product = await this.productsRepository.GetProductAsync(
+                var product = await _productsRepository.GetProductAsync(
                     componentModel.Token,
                     componentModel.Language,
                     componentModel.Id);
 
                 if (product != null)
                 {
-                    viewModel.Name = $"{product.Name} {this.globalLocalizer.GetString("Copy")}";
-                    viewModel.Sku = $"{product.Sku} {this.globalLocalizer.GetString("Copy")}";
+                    viewModel.Name = $"{product.Name} {_globalLocalizer.GetString("Copy")}";
+                    viewModel.Sku = $"{product.Sku} {_globalLocalizer.GetString("Copy")}";
                     viewModel.Description = product.Description;
                     viewModel.IsNew = product.IsNew;
                     viewModel.Ean = product.Ean;
                     viewModel.IsPublished = product.IsPublished;
                     viewModel.CategoryId = product.CategoryId;
                     viewModel.FormData = product.FormData;
+                    viewModel.FulfillmentTime = product.FulfillmentTime;
 
-                    var categorySchema = await this.categoriesRepository.GetCategorySchemasAsync(
+                    var categorySchema = await _categoriesRepository.GetCategorySchemasAsync(
                         componentModel.Token,
                         componentModel.Language,
                         product.CategoryId);
@@ -139,7 +141,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                     if (product.PrimaryProductId.HasValue)
                     {
-                        var primaryProduct = await this.productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, product.PrimaryProductId);
+                        var primaryProduct = await _productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, product.PrimaryProductId);
 
                         if (primaryProduct is not null)
                         {
@@ -149,7 +151,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                     if (product.Images != null && product.Images.Any())
                     {
-                        var imageMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
+                        var imageMediaItems = await _mediaItemsRepository.GetAllMediaItemsAsync(
                             componentModel.Token,
                             componentModel.Language,
                             product.Images.ToEndpointParameterString(),
@@ -163,7 +165,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                             images.Add(new FileViewModel 
                             {
                                 Id = mediaItem.Id,
-                                Url = this.mediaService.GetMediaUrl(mediaItem.Id, Constants.PreviewMaxWidth),
+                                Url = _mediaService.GetMediaUrl(mediaItem.Id, Constants.PreviewMaxWidth),
                                 Name = mediaItem.Name,
                                 MimeType = mediaItem.MimeType,
                                 Filename = mediaItem.Filename,
@@ -176,7 +178,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                     if (product.Files != null && product.Files.Any())
                     {
-                        var fileMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
+                        var fileMediaItems = await _mediaItemsRepository.GetAllMediaItemsAsync(
                             componentModel.Token,
                             componentModel.Language,
                             product.Files.ToEndpointParameterString(),
@@ -190,7 +192,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                             files.Add(new FileViewModel
                             {
                                 Id = file.Id,
-                                Url = this.mediaService.GetMediaUrl(file.Id, Constants.PreviewMaxWidth),
+                                Url = _mediaService.GetMediaUrl(file.Id, Constants.PreviewMaxWidth),
                                 Name = file.Name,
                                 MimeType = file.MimeType,
                                 Filename = file.Filename,
