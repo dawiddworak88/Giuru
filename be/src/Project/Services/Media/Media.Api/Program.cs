@@ -103,7 +103,9 @@ builder.Services.AddOpenTelemetryMetrics(
     true,
     true);
 
-builder.Services.ConigureHealthChecks(builder.Configuration);
+// builder.Services.ConigureHealthChecks(builder.Configuration);
+
+builder.Services.AddHealthChecks();
 
 builder.Services.AddSwaggerGen(c =>
 {

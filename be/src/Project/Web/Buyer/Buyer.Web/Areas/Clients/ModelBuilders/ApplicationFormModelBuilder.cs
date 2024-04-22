@@ -2,7 +2,9 @@
 using Buyer.Web.Shared.Configurations;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
+using Foundation.Localization.Definitions;
 using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.Languages.ViewModels;
 using Foundation.Security.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
@@ -15,114 +17,134 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
 {
     public class ApplicationFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ApplicationFormViewModel>
     {
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<CookieConsentResources> cookieConsentLocalizer;
-        private readonly IOptions<AppSettings> options;
-        private readonly LinkGenerator linkGenerator;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<CookieConsentResources> _cookieConsentLocalizer;
+        private readonly IOptions<AppSettings> _options;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IOptionsMonitor<LocalizationSettings> _localizationOptions;
 
         public ApplicationFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<CookieConsentResources> cookieConsentLocalizer,
             IOptions<AppSettings> options,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IOptionsMonitor<LocalizationSettings> localizationOptions)
         {
-            this.globalLocalizer = globalLocalizer;
-            this.linkGenerator = linkGenerator;
-            this.cookieConsentLocalizer = cookieConsentLocalizer;
-            this.options = options;
+            _globalLocalizer = globalLocalizer;
+            _linkGenerator = linkGenerator;
+            _cookieConsentLocalizer = cookieConsentLocalizer;
+            _options = options;
+            _localizationOptions = localizationOptions;
         }
 
         public async Task<ApplicationFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new ApplicationFormViewModel
             {
-                Title = this.globalLocalizer.GetString("ApplicationPartner"),
-                Subtitle = this.globalLocalizer.GetString("ApplicationPartnerDescription"),
-                ContactInformationTitle = this.globalLocalizer.GetString("ContactInformation"),
-                BusinessInformationTitle = this.globalLocalizer.GetString("BusinessInformation"),
-                FirstNameLabel = this.globalLocalizer.GetString("FirstName"),
-                LastNameLabel = this.globalLocalizer.GetString("LastName"),
-                EmailLabel = this.globalLocalizer.GetString("Email"),
-                PhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel"),
-                EmailFormatErrorMessage = this.globalLocalizer.GetString("EmailFormatErrorMessage"),
-                ContactJobTitleLabel = this.globalLocalizer.GetString("ContactJobTitle"),
-                CompanyPostalCodeLabel = this.globalLocalizer.GetString("PostalCode"),
-                FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
-                CompanyNameLabel = this.globalLocalizer.GetString("CompanyName"),
-                CompanyAddressLabel = this.globalLocalizer.GetString("Address"),
-                CompanyCityLabel = this.globalLocalizer.GetString("City"),
-                CompanyRegionLabel = this.globalLocalizer.GetString("Region"),
-                CompanyCountryLabel = this.globalLocalizer.GetString("Country"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Application", "ApplicationsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
-                OnlineRetailersLabel = this.globalLocalizer.GetString("OnlineRetailers"),
-                YesLabel = this.globalLocalizer.GetString("Yes"),
-                NoLabel = this.globalLocalizer.GetString("No"),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                SaveText = this.globalLocalizer.GetString("ApplyApplicationSubmit"),
-                SelectJobTitle = this.globalLocalizer.GetString("SelectJobTitle"),
-                SignInUrl = this.linkGenerator.GetPathByAction("Index", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
-                AcceptTermsText = this.cookieConsentLocalizer.GetString("Accept"),
-                PrivacyPolicyUrl = $"{options.Value.IdentityUrl}{SecurityConstants.PrivacyPolicyEndpoint}",
-                RegulationsUrl = $"{options.Value.IdentityUrl}{SecurityConstants.RegulationsEndpoint}",
-                PrivacyPolicy = this.globalLocalizer.GetString("LowerPrivacyPolicy"),
-                Regulations = this.globalLocalizer.GetString("LowerRegulations")
+                Title = _globalLocalizer.GetString("ApplicationPartner"),
+                Subtitle = _globalLocalizer.GetString("ApplicationPartnerDescription"),
+                ContactInformationTitle = _globalLocalizer.GetString("ContactInformation"),
+                FirstNameLabel = _globalLocalizer.GetString("FirstName"),
+                LastNameLabel = _globalLocalizer.GetString("LastName"),
+                EmailLabel = _globalLocalizer.GetString("Email"),
+                PhoneNumberLabel = _globalLocalizer.GetString("PhoneNumberLabel"),
+                LanguageLabel = _globalLocalizer.GetString("CommunicationLanguageLabel"),
+                EmailFormatErrorMessage = _globalLocalizer.GetString("EmailFormatErrorMessage"),
+                ContactJobTitleLabel = _globalLocalizer.GetString("ContactJobTitle"),
+                FieldRequiredErrorMessage = _globalLocalizer.GetString("FieldRequiredErrorMessage"),
+                CompanyNameLabel = _globalLocalizer.GetString("CompanyName"),
+                BillingAddressTitle = _globalLocalizer.GetString("BillingAddressTitle"),
+                DeliveryAddressTitle = _globalLocalizer.GetString("DeliveryAddressTitle"),
+                AddressFullNameLabel = $"{_globalLocalizer.GetString("FirstName")} {_globalLocalizer.GetString("LastName")}",
+                AddressPhoneNumberLabel = _globalLocalizer.GetString("PhoneNumberLabel"),
+                AddressStreetLabel = _globalLocalizer.GetString("Street"),
+                AddressRegionLabel = _globalLocalizer.GetString("Region"),
+                AddressPostalCodeLabel = _globalLocalizer.GetString("PostalCode"),
+                AddressCityLabel = _globalLocalizer.GetString("City"),
+                AddressCountryLabel = _globalLocalizer.GetString("Country"),
+                SaveUrl = _linkGenerator.GetPathByAction("Application", "ApplicationsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                OnlineRetailersLabel = _globalLocalizer.GetString("OnlineRetailers"),
+                YesLabel = _globalLocalizer.GetString("Yes"),
+                NoLabel = _globalLocalizer.GetString("No"),
+                GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
+                SaveText = _globalLocalizer.GetString("ApplyApplicationSubmit"),
+                SelectJobTitle = _globalLocalizer.GetString("SelectJobTitle"),
+                SignInUrl = _linkGenerator.GetPathByAction("Index", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
+                AcceptTermsText = _cookieConsentLocalizer.GetString("Accept"),
+                DeliveryAddressEqualBillingAddressText = _globalLocalizer.GetString("DeliveryAddressEqualBillingAddressText"),
+                PrivacyPolicyUrl = $"{_options.Value.IdentityUrl}{SecurityConstants.PrivacyPolicyEndpoint}",
+                RegulationsUrl = $"{_options.Value.IdentityUrl}{SecurityConstants.RegulationsEndpoint}",
+                PrivacyPolicy = _globalLocalizer.GetString("LowerPrivacyPolicy"),
+                Regulations = _globalLocalizer.GetString("LowerRegulations")
             };
 
             viewModel.ContactJobTitles = new List<ContactJobTitle>
             {
                 new ContactJobTitle {
-                    Name = this.globalLocalizer.GetString("SalesRep").Name,
-                    Value = this.globalLocalizer.GetString("SalesRep").Value
+                    Name = _globalLocalizer.GetString("SalesRep").Name,
+                    Value = _globalLocalizer.GetString("SalesRep").Value
                 },
                 new ContactJobTitle {
-                    Name = this.globalLocalizer.GetString("SalesManager").Name,
-                    Value = this.globalLocalizer.GetString("SalesManager").Value
+                    Name = _globalLocalizer.GetString("SalesManager").Name,
+                    Value = _globalLocalizer.GetString("SalesManager").Value
                 },
                 new ContactJobTitle {
-                    Name = this.globalLocalizer.GetString("President").Name,
-                    Value = this.globalLocalizer.GetString("President").Value
+                    Name = _globalLocalizer.GetString("President").Name,
+                    Value = _globalLocalizer.GetString("President").Value
                 },
                 new ContactJobTitle {
-                    Name = this.globalLocalizer.GetString("CEO").Name,
-                    Value = this.globalLocalizer.GetString("CEO").Value
+                    Name = _globalLocalizer.GetString("CEO").Name,
+                    Value = _globalLocalizer.GetString("CEO").Value
                 },
                 new ContactJobTitle {
-                    Name = this.globalLocalizer.GetString("AccountManager").Name,
-                    Value = this.globalLocalizer.GetString("AccountManager").Value
+                    Name = _globalLocalizer.GetString("AccountManager").Name,
+                    Value = _globalLocalizer.GetString("AccountManager").Value
                 },
                 new ContactJobTitle {
-                    Name = this.globalLocalizer.GetString("Owner").Name,
-                    Value = this.globalLocalizer.GetString("Owner").Value
+                    Name = _globalLocalizer.GetString("Owner").Name,
+                    Value = _globalLocalizer.GetString("Owner").Value
                 },
                 new ContactJobTitle {
-                    Name = this.globalLocalizer.GetString("VicePresident").Name,
-                    Value = this.globalLocalizer.GetString("VicePresident").Value
+                    Name = _globalLocalizer.GetString("VicePresident").Name,
+                    Value = _globalLocalizer.GetString("VicePresident").Value
                 },
                 new ContactJobTitle {
-                    Name = this.globalLocalizer.GetString("GeneralManager").Name,
-                    Value = this.globalLocalizer.GetString("GeneralManager").Value
+                    Name = _globalLocalizer.GetString("GeneralManager").Name,
+                    Value = _globalLocalizer.GetString("GeneralManager").Value
                 },
                 new ContactJobTitle {
-                    Name = this.globalLocalizer.GetString("OperationsManager").Name,
-                    Value = this.globalLocalizer.GetString("OperationsManager").Value
+                    Name = _globalLocalizer.GetString("OperationsManager").Name,
+                    Value = _globalLocalizer.GetString("OperationsManager").Value
                 },
                 new ContactJobTitle {
-                    Name = this.globalLocalizer.GetString("Other").Name,
-                    Value = this.globalLocalizer.GetString("Other").Value
+                    Name = _globalLocalizer.GetString("Other").Name,
+                    Value = _globalLocalizer.GetString("Other").Value
                 }
             };
+
+            var languages = new List<LanguageViewModel>
+            {
+                new LanguageViewModel { Text = _globalLocalizer.GetString("SelectLanguage") , Value = string.Empty }
+            };
+
+            foreach (var language in _localizationOptions.CurrentValue.SupportedCultures.Split(','))
+            {
+                languages.Add(new LanguageViewModel { Text = language.ToUpperInvariant(), Value = language.ToLowerInvariant() });
+            }
+
+            viewModel.Languages = languages;
 
             viewModel.Steps = new List<StepViewModel>
             {
                 new StepViewModel
                 {
-                    Title = this.globalLocalizer.GetString("ContactInformation"),
-                    Subtitle = this.globalLocalizer.GetString("ContactInformationDescription")
+                    Title = _globalLocalizer.GetString("ContactInformation"),
+                    Subtitle = _globalLocalizer.GetString("ContactInformationDescription")
                 },
                 new StepViewModel
                 {
-                    Title = this.globalLocalizer.GetString("BusinessInformation"),
-                    Subtitle = this.globalLocalizer.GetString("BusinessInformationDescription")
+                    Title = _globalLocalizer.GetString("AdressesInformation"),
+                    Subtitle = _globalLocalizer.GetString("AdressesInformationDescription"),
                 }
             };
 

@@ -588,9 +588,6 @@
   <data name="Manager" xml:space="preserve">
     <value>Account Manager</value>
   </data>
-  <data name="BusinessInformation" xml:space="preserve">
-    <value>Geschäftsinformationen</value>
-  </data>
   <data name="ContactInformation" xml:space="preserve">
     <value>Kontaktinformationen</value>
   </data>
@@ -602,9 +599,6 @@
   </data>
   <data name="ApplyApplicationSubmit" xml:space="preserve">
     <value>Reichen Sie jetzt Ihre Bewerbung ein</value>
-  </data>
-  <data name="BusinessInformationDescription" xml:space="preserve">
-    <value>Teilen Sie uns Ihren Firmennamen und Standort mit</value>
   </data>
   <data name="ContactInformationDescription" xml:space="preserve">
     <value>Ihr primärer Ansprechpartner für ELTAP ist der im Formular angegebene Ansprechpartner</value>
@@ -791,5 +785,20 @@
   </data>
   <data name="SearchByNameOrSKU" xml:space="preserve">
     <value>Suche nach einem Produkt nach Namen oder SKU.</value>
+  </data>
+  <data name="BillingAddressTitle" xml:space="preserve">
+    <value>Rechnungsadressen</value>
+  </data>
+  <data name="DeliveryAddressEqualBillingAddressText" xml:space="preserve">
+    <value>Lieferadresse gleich wie Rechnungsadresse</value>
+  </data>
+  <data name="AdressesInformation" xml:space="preserve">
+    <value>Adressinformationen</value>
+  </data>
+  <data name="AdressesInformationDescription" xml:space="preserve">
+    <value>Geben Sie sowohl die Rechnungs- als auch die Lieferadresse für eine einfachere Zusammenarbeit an</value>
+  </data>
+  <data name="DeliveryAddressTitle" xml:space="preserve">
+    <value>Lieferadresse</value>
   </data>
 </root>
