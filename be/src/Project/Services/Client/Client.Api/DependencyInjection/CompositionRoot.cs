@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Client.Api.Services.Addresses;
-using Client.Api.Services.NotificationsType;
 using Client.Api.Services.NotificationsTypesApprovals;
 using Client.Api.Services.NotificationTypes;
 using Client.Api.Services.NotificationTypesApprovals;
