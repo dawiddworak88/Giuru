@@ -50,6 +50,7 @@
             public static readonly string OrganisationsApiEndpoint = "/api/v1/organisations";
             public static readonly string SellersApiEndpoint = "/api/v1/sellers";
             public static readonly string ClientByOrganisationApiEndpoint = "/api/v1/clients/organisation";
+            public static readonly string ClientBySellerApiEndpoint = "/api/v1/clients/seller";
             public static readonly string UsersApiEndpoint = "/api/v1/users";
             public static readonly string RolesApiEndpoint = "/api/v1/roles";
             public static readonly string TeamMembersEndpoint = "/api/v1/teammembers";
