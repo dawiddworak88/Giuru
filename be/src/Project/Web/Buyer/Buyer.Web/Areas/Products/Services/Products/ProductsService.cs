@@ -15,6 +15,8 @@ using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Media.Services.MediaServices;
+using System.Text.Json;
+using System.Diagnostics;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -120,7 +122,19 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
         public async Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token, string searchArea)
         {
-            return await _productsRepository.GetProductSuggestionsAsync(searchTerm, size, language, token);
+            var products = await _productsRepository.GetProductsAsync(
+                null,
+                null,
+                null,
+                language,
+                searchTerm,
+                true,
+                PaginationConstants.DefaultPageIndex,
+                ProductConstants.ProductsCatalogPaginationPageSize,
+                token,
+                nameof(Product.Name));
+
+            return products?.Data?.Select(x => x.Name);
         }
     }
 }
