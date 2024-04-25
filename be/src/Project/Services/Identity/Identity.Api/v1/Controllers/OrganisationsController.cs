@@ -25,11 +25,11 @@ namespace Identity.Api.v1.Controllers
     [ApiController]
     public class OrganisationsController : BaseApiController
     {
-        private readonly IOrganisationService organisationService;
+        private readonly IOrganisationService _organisationService;
 
         public OrganisationsController(IOrganisationService organisationService)
         {
-            this.organisationService = organisationService;
+            _organisationService = organisationService;
         }
 
         /// <summary>
@@ -39,7 +39,6 @@ namespace Identity.Api.v1.Controllers
         /// <returns>The seller.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{email}")]
-        [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
@@ -57,7 +56,7 @@ namespace Identity.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var organisation = await this.organisationService.GetAsync(serviceModel);
+                var organisation = await _organisationService.GetAsync(serviceModel);
 
                 if (organisation != null)
                 {
@@ -71,15 +70,15 @@ namespace Identity.Api.v1.Controllers
                         Videos = organisation.Videos
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return StatusCode((int)HttpStatusCode.OK, response);
                 }
                 else
                 {
-                    return this.StatusCode((int)HttpStatusCode.NoContent);
+                    return StatusCode((int)HttpStatusCode.NoContent);
                 }
             }
 
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            return StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
@@ -94,7 +93,7 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save([FromBody] OrganisationRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             if (!request.Id.HasValue)
             {
@@ -104,7 +103,7 @@ namespace Identity.Api.v1.Controllers
                     Email = request.Email,
                     CommunicationsLanguage = request.CommunicationLanguage,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
@@ -114,7 +113,7 @@ namespace Identity.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var organisation = await this.organisationService.CreateAsync(serviceModel);
+                    var organisation = await _organisationService.CreateAsync(serviceModel);
 
                     if (organisation != null)
                     {
@@ -128,14 +127,14 @@ namespace Identity.Api.v1.Controllers
                             Videos = organisation.Videos
                         };
 
-                        return this.StatusCode((int)HttpStatusCode.Created, response);
+                        return StatusCode((int)HttpStatusCode.Created, response);
                     }
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
 
-            return this.StatusCode((int)HttpStatusCode.BadRequest);
+            return StatusCode((int)HttpStatusCode.BadRequest);
         }
     }
 }
