@@ -25,7 +25,6 @@
             public static readonly string ProductAttributesApiEndpoint = "/api/v1/productattributes";
             public static readonly string ProductAttributeItemsApiEndpoint = "/api/v1/productattributeitems";
             public static readonly string ProductsSearchIndexApiEndpoint = "/api/v1/productssearchindex";
-            public static readonly string ProductSuggestionsApiEndpoint = "/api/v1/productsuggestions";
             public static readonly string ProductFilesApiEndpoint = "/api/v1/products/files";
             public static readonly string ProductsSkusApiEndpoint = "/api/v1/products/skus";
         }

@@ -257,31 +257,5 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
             return default;
         }
-
-        public IEnumerable<string> GetProductSuggestions(string searchTerm, int size, string language, Guid? organisationId)
-        {
-            var nameResponse = _elasticClient.Search<ProductSearchModel>(s => s
-                .Suggest(su => su
-                    .Completion("name", cs => cs
-                        .Contexts(ctx => ctx
-                            .Context("isActive", x => x.Context(true.ToString())))
-                        .Contexts(ctx => ctx
-                            .Context("primaryProductIdHasValue", x => x.Context(false.ToString())))
-                        .Field(f => f.NameSuggest)
-                        .Prefix(searchTerm)
-                        .Fuzzy(f => f
-                            .Fuzziness(Fuzziness.Auto)
-                        )
-                    )
-                )
-            );
-
-            var nameSuggestions = 
-                from suggest in nameResponse.Suggest["name"]
-                from option in suggest.Options
-                select option.Text;
-
-            return nameSuggestions.Distinct().Take(size);
-        }
     }
 }

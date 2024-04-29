@@ -380,11 +380,6 @@ namespace Catalog.Api.Services.Products
             return default;
         }
 
-        public IEnumerable<string> GetProductSuggestions(GetProductSuggestionsServiceModel model)
-        {
-            return _productSearchRepository.GetProductSuggestions(model.SearchTerm, model.Size, model.Language, model.OrganisationId);
-        }
-
         public async Task<PagedResults<IEnumerable<ProductServiceModel>>> GetBySkusAsync(GetProductsBySkusServiceModel model)
         {
             var products = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Skus, model.OrderBy);
