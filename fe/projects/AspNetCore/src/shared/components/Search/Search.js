@@ -74,13 +74,13 @@ const Search = (props) => {
     }
 
     const onSuggestionSelected = (event, { suggestion }) => {
-        NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(suggestion) + "&searchArea=" + encodeURI(searchArea));
-        updateSearchHistory(suggestion);
+        NavigationHelper.redirect(suggestion.url);;
+        updateSearchHistory(suggestion.name);
         setSearchTerm('');
     };
 
-    const onSidebarSuggestionSelected = (name) => {
-        NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(name) + "&searchArea=" + encodeURI(searchArea));
+    const onSidebarSuggestionSelected = (name, url) => {
+        NavigationHelper.redirect(url);
         updateSearchHistory(name);
         setOpen(false);
     };
@@ -109,7 +109,7 @@ const Search = (props) => {
                         <SearchIcon />
                     </div>
                     <div className="suggestion__text">
-                        {suggestion}
+                        {suggestion.name}
                     </div>
                 </div>
             </div>
@@ -347,15 +347,15 @@ const Search = (props) => {
                         </Tabs>
                     </div>
                     <div className="sidebar__suggestions">
-                        {suggestions && suggestions.length > 0 ? suggestions.map((name, index) =>
+                        {suggestions && suggestions.length > 0 ? suggestions.map((suggestion, index) =>
                             <Button
                                 key={index}
                                 className="sidebar__suggestions__item"
                                 sx={{ width: '100%', justifyContent: 'left', color: '#171717' }}
                                 disableRipple
-                                onClick={() => onSidebarSuggestionSelected(name)}
+                                onClick={() => onSidebarSuggestionSelected(suggestion.name, suggestion.url)}
                             >
-                                {renderSuggestion(name)}
+                                {renderSuggestion(suggestion)}
                             </Button>
                         ) :
                             <div>
@@ -380,7 +380,6 @@ const Search = (props) => {
 Search.propTypes = {
     searchPlaceholderLabel: PropTypes.string.isRequired,
     searchLabel: PropTypes.string.isRequired,
-    searchUrl: PropTypes.string.isRequired,
     searchTerm: PropTypes.string.isRequired,
     getSuggestionsUrl: PropTypes.string.isRequired,
 }
