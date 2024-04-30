@@ -212,7 +212,7 @@ namespace Ordering.Api.Services
                         oc_quantity = _orderLocalizer.GetString("oc_quantity").Value,
                         oc_stockQuantity = _orderLocalizer.GetString("oc_stockQuantity").Value,
                         oc_outletQuantity = _orderLocalizer.GetString("oc_outletQuantity").Value,
-                        oc_products = serviceModel.Items.Select(x => new
+                        oc_products = serviceModel.Items.OrEmptyIfNull().Select(x => new
                         {
                             pictureUrl = x.PictureUrl,
                             name = $"{x.ProductName} ({x.ProductSku})",
