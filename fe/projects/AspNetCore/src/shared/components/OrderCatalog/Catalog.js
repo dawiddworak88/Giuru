@@ -23,7 +23,7 @@ import { TextSnippet } from "@mui/icons-material";
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
     const [page, setPage] = React.useState(0);
-    const [searchTerm, setSearchTerm] = React.useState("");
+    const [searchTerm, setSearchTerm] = React.useState(props.searchTerm ? props.searchTerm : "");
     const [items, setItems] = React.useState(props.pagedItems ? props.pagedItems.data : []);
     const [total, setTotal] = React.useState(props.pagedItems ? props.pagedItems.total : 0);
     const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
@@ -226,7 +226,7 @@ function Catalog(props) {
                                                         {props.table.actions.map((actionItem, index) => {
                                                             if (actionItem.isEdit) return (
                                                                 <Tooltip title={props.editLabel} aria-label={props.editLabel} key={index}>
-                                                                    <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary">
+                                                                    <Fab href={props.editUrl + "/" + item.id + (searchTerm ? `?searchTerm=${searchTerm}` : "")} size="small" color="secondary">
                                                                         <Edit />
                                                                     </Fab>
                                                                 </Tooltip>)

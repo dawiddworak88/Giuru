@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Orders.ViewModel;
+﻿using Buyer.Web.Areas.Orders.ComponentModels;
+using Buyer.Web.Areas.Orders.ViewModel;
 using Buyer.Web.Shared.Definitions.Basket;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Definitions;
@@ -22,15 +23,15 @@ namespace Buyer.Web.Areas.Orders.Controllers
     [Authorize]
     public class OrderController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, StatusOrderPageViewModel> editOrderPageModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<OrdersPageComponentModel, StatusOrderPageViewModel> _editOrderPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> _orderPageModelBuilder;
 
         public OrderController(
-            IAsyncComponentModelBuilder<ComponentModelBase, StatusOrderPageViewModel> editOrderPageModelBuilder,
+            IAsyncComponentModelBuilder<OrdersPageComponentModel, StatusOrderPageViewModel> editOrderPageModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder)
         {
-            this.editOrderPageModelBuilder = editOrderPageModelBuilder;
-            this.orderPageModelBuilder = orderPageModelBuilder;
+            _editOrderPageModelBuilder = editOrderPageModelBuilder;
+            _orderPageModelBuilder = orderPageModelBuilder;
         }
 
         public async Task<IActionResult> Index()
@@ -39,34 +40,35 @@ namespace Buyer.Web.Areas.Orders.Controllers
             {
                 ContentPageKey = "basketPage",
                 Language = CultureInfo.CurrentUICulture.Name,
-                IsAuthenticated = this.User.Identity.IsAuthenticated,
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
-                Name = this.User.Identity.Name,
+                IsAuthenticated = User.Identity.IsAuthenticated,
+                SellerId = GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
+                Name = User.Identity.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName])
+                BasketId = string.IsNullOrWhiteSpace(Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(Request.Cookies[BasketConstants.BasketCookieName])
             };
 
-            var viewModel = await this.orderPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _orderPageModelBuilder.BuildModelAsync(componentModel);
 
-            return this.View(viewModel);
+            return View(viewModel);
         }
 
-        public async Task<IActionResult> Status(Guid? id)
+        public async Task<IActionResult> Status(Guid? id, string searchTerm)
         {
-            var componentModel = new ComponentModelBase
+            var componentModel = new OrdersPageComponentModel
             {
                 Id = id,
                 ContentPageKey = "orderPage",
                 Language = CultureInfo.CurrentUICulture.Name,
-                IsAuthenticated = this.User.Identity.IsAuthenticated,
+                IsAuthenticated = User.Identity.IsAuthenticated,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
-                Name = this.User.Identity.Name
+                SellerId = GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
+                Name = User.Identity.Name,
+                SearchTerm = searchTerm
             };
 
-            var viewModel = await this.editOrderPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _editOrderPageModelBuilder.BuildModelAsync(componentModel);
 
-            return this.View(viewModel);
+            return View(viewModel);
         }
     }
 }

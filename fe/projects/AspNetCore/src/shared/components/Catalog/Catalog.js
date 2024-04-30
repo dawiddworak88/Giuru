@@ -41,14 +41,20 @@ function Catalog(props) {
 
         setPage(() => newPage);
 
-        const searchParameters = {
+        let searchParameters = {
             categoryId: props.categoryId,
             brandId: props.brandId,
             pageIndex: newPage + 1,
             itemsPerPage,
-            orderBy: props.orderBy,
-            searchTerm: props.searchTerm
+            orderBy: props.orderBy
         };
+
+        if (props.searchTerm != null) {
+            searchParameters = {
+                ...searchParameters,
+                searchTerm: props.searchTerm
+            }
+        }
 
         const requestOptions = {
             method: "GET",
@@ -56,6 +62,7 @@ function Catalog(props) {
         };
 
         const url = props.productsApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+
         return fetch(url, requestOptions)
             .then(function (response) {
 
