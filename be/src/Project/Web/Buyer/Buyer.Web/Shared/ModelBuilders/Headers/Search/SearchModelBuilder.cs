@@ -5,6 +5,7 @@ using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -29,7 +30,6 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers.Search
             var viewModel = new SearchViewModel
             {
                 SearchTerm = string.Empty,
-                SearchUrl = _linkGenerator.GetPathByAction("Index", "SearchProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 SearchLabel = _globalLocalizer.GetString("SearchByNameOrSKU"),
                 SearchPlaceholderLabel = _globalLocalizer.GetString("SearchByNameOrSKU"),
                 GetSuggestionsUrl = _linkGenerator.GetPathByAction("Get", "SearchSuggestionsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),

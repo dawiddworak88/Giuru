@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Products.DomainModels;
+using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Foundation.GenericRepository.Paginations;
 using System;
@@ -10,7 +11,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
     public interface IProductsService
     {
         Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage, string token);
-        Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token, string searchArea);
+        Task<IEnumerable<ProductSuggestionViewModel>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token, string searchArea);
         Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes);
     }
 }

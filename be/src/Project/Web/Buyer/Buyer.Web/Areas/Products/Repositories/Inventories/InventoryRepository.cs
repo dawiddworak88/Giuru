@@ -126,7 +126,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
             return default;
         }
 
-        public async Task<IEnumerable<string>> GetAvailbleProductsInventorySuggestions(string token, string language, string searchTerm, int suggestionsCount)
+        public async Task<IEnumerable<InventorySuggestion>> GetAvailbleProductsInventorySuggestions(string token, string language, string searchTerm, int suggestionsCount)
         {
             var requestModel = new AvaibleProductsInventorySuggesrtionsRequestModel
             {
@@ -142,7 +142,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
                 EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Inventory.AvailableProductsSuggestionsApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<AvaibleProductsInventorySuggesrtionsRequestModel>, AvaibleProductsInventorySuggesrtionsRequestModel, IEnumerable<string>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<AvaibleProductsInventorySuggesrtionsRequestModel>, AvaibleProductsInventorySuggesrtionsRequestModel, IEnumerable<InventorySuggestion>>(apiRequest);
 
             if (response.IsSuccessStatusCode)
             {

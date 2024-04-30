@@ -17,6 +17,7 @@ using Foundation.Extensions.ExtensionMethods;
 using Foundation.Media.Services.MediaServices;
 using System.Text.Json;
 using System.Diagnostics;
+using Buyer.Web.Areas.Products.ViewModels.Products;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -120,7 +121,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
             };
         }
 
-        public async Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token, string searchArea)
+        public async Task<IEnumerable<ProductSuggestionViewModel>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token, string searchArea)
         {
             var products = await _productsRepository.GetProductsAsync(
                 null,
@@ -134,7 +135,11 @@ namespace Buyer.Web.Areas.Products.Services.Products
                 token,
                 nameof(Product.Name));
 
-            return products?.Data?.Select(x => x.Name);
+            return products?.Data?.Select(x => new ProductSuggestionViewModel
+            { 
+                Name = x.Name,
+                Url = _linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, x.Id }),
+            });
         }
     }
 }

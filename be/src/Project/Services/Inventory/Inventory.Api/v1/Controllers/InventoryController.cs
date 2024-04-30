@@ -217,7 +217,18 @@ namespace Inventory.Api.v1.Controllers
             {
                 var inventorySuggestions = _inventoriesService.GetInventorySuggestions(serviceModel);
 
-                return StatusCode((int)HttpStatusCode.OK, inventorySuggestions);
+                var response = new List<InventorySuggestionResponseModel>();
+
+                foreach (var inventorySuggestion in inventorySuggestions.OrEmptyIfNull())
+                {
+                    response.Add(new InventorySuggestionResponseModel
+                    {
+                        Id = inventorySuggestion.Id,
+                        Name = inventorySuggestion.Name
+                    });
+                }
+
+                return StatusCode((int)HttpStatusCode.OK, response);
             }
 
             return StatusCode((int)HttpStatusCode.BadRequest);

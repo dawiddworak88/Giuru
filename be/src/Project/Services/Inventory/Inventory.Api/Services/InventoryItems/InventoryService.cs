@@ -476,12 +476,12 @@ namespace Inventory.Api.Services.InventoryItems
             }
         }
 
-        public IEnumerable<string> GetInventorySuggestions(GetInventorySuggestionsServiceModel model)
+        public IEnumerable<InventorySuggestionServiceModel> GetInventorySuggestions(GetInventorySuggestionsServiceModel model)
         {
             var inventoryItems = _context.Inventory.Where(x => x.IsActive)
                     .Include(x => x.Product)
                     .AsSingleQuery()
-                    .Select(y => y.Product.Name);
+                    .Select(y => new InventorySuggestionServiceModel { Id = y.ProductId, Name = y.Product.Name});
 
             if (string.IsNullOrEmpty(model.SearchTerm))
             {
@@ -489,7 +489,7 @@ namespace Inventory.Api.Services.InventoryItems
             }
             else
             {
-                return inventoryItems.Where(x => x.StartsWith(model.SearchTerm)).Take(model.SuggestionsCount);
+                return inventoryItems.Where(x => x.Name.StartsWith(model.SearchTerm)).Take(model.SuggestionsCount);
             }
         }
     }

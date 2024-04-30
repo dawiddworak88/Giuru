@@ -1,5 +1,6 @@
 ﻿using Buyer.Web.Areas.Products.Services.Inventory;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Definitions.Header;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -30,7 +32,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         [HttpGet]
         public async Task<IActionResult> Get(string searchTerm, int size, string searchArea)
         {
-            IEnumerable<string> suggestions;
+            IEnumerable<ProductSuggestionViewModel> suggestions;
 
             if (searchArea == SearchConstants.SearchArea.StockLevel)
             {
@@ -51,7 +53,6 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     searchArea);
             }
             
-
             return StatusCode((int)HttpStatusCode.OK, suggestions);
         }
     }
