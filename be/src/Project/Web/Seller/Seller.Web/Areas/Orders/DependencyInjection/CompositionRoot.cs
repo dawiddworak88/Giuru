@@ -8,6 +8,7 @@ using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
 using Seller.Web.Areas.Orders.Services.OrderFiles;
 using Seller.Web.Areas.Orders.ModelBuilders;
+using Seller.Web.Areas.Orders.Repositories.ClientNotificationTypeApproval;
 using Seller.Web.Areas.Orders.ComponetModels;
 
 namespace Seller.Web.Areas.Orders.DependencyInjection
@@ -19,6 +20,7 @@ namespace Seller.Web.Areas.Orders.DependencyInjection
             services.AddScoped<IOrdersRepository, OrdersRepository>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IOrderFileService, OrderFileService>();
+            services.AddScoped<IClientNotificationTypeApprovalRepository, ClientNotificationTypeApprovalRepository>();
             services.AddScoped<IAsyncComponentModelBuilder<OrdersPageComponentModel, CatalogViewModel<Order>>, OrdersPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<OrdersPageComponentModel, OrdersPageViewModel>, OrdersPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel>, OrderPageModelBuilder>();

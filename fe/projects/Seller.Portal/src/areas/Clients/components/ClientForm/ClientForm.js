@@ -17,7 +17,6 @@ function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
     const [canCreateAccount, setCanCreateAccount] = useState(props.hasAccount ? props.hasAccount : false);
     const [formData, setFormData] = useState(props.formData ? props.formData : null);
-    
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },

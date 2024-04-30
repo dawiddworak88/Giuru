@@ -31,7 +31,7 @@ namespace Buyer.Web.Shared.Repositories.Clients
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Identity.ClientByOrganisationApiEndpoint}/{id}"
+                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Identity.ClientBySellerApiEndpoint}/{id}"
             };
 
             var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Client>(apiRequest);

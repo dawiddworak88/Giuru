@@ -62,6 +62,7 @@ namespace Basket.Api.Services
                 ExternalReference = checkoutBasketServiceModel.ExternalReference,
                 MoreInfo = checkoutBasketServiceModel.MoreInfo,
                 HasCustomOrder = checkoutBasketServiceModel.HasCustomOrder,
+                HasApprovalToSendEmail = checkoutBasketServiceModel.HasApprovalToSendEmail,
                 Attachments = checkoutBasketServiceModel.Attachments
             };
 

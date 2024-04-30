@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Client.Api.Services.Addresses;
+using Client.Api.Services.NotificationsTypesApprovals;
 using Client.Api.Services.NotificationTypes;
 using Client.Api.Services.NotificationTypesApprovals;
 using Client.Api.Services.Fields;
@@ -27,6 +28,7 @@ namespace Client.Api.DependencyInjection
             services.AddScoped<IClientAccountManagersService, ClientAccountManagersService>();
             services.AddScoped<IClientAddressesService, ClientAddressesService>();
             services.AddScoped<IClientNotificationTypesService, ClientNotificationTypesService>();
+            services.AddScoped<IClientNotificationTypeApprovalService, ClientNotificationTypeApprovalService>();
             services.AddScoped<IClientNotificationTypesApprovalsService, ClientNotificationTypesApprovalsService>();
             services.AddScoped<IClientFieldsService,  ClientFieldsService>();
             services.AddScoped<IClientFieldOptionsService, ClientFieldOptionsService>();

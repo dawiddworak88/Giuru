@@ -143,7 +143,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                 }
                 catch (Exception ex)
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { Message = ex.Message, UrlLabel = _globalLocalizer.GetString("TrySignIn").Value, Url = _options.Value.BuyerUrl });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { EmailIsConfirmedLabel = _accountLocalizer.GetString("EmailIsConfirmed").Value, SignInLabel = _globalLocalizer.GetString("TrySignIn").Value, SignInUrl = _linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }) });
                 }
             }
 
