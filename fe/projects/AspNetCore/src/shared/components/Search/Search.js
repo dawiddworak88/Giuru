@@ -109,7 +109,7 @@ const Search = (props) => {
                         <SearchIcon />
                     </div>
                     <div className="suggestion__text">
-                        {suggestion.name}
+                        {suggestion.name ? suggestion.name : suggestion}
                     </div>
                 </div>
             </div>
