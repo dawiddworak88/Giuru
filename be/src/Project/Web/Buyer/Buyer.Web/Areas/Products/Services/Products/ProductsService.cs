@@ -71,7 +71,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
             if (pagedProducts?.Data != null)
             {
-                foreach (var product in pagedProducts.Data)
+                foreach (var product in pagedProducts.Data.OrEmptyIfNull())
                 {
                     var catalogItem = new CatalogItemViewModel
                     {

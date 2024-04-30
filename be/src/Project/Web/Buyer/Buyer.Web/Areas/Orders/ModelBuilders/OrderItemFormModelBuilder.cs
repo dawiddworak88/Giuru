@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Orders.Definitions;
-using Buyer.Web.Areas.Orders.Repositories;
+﻿using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.ViewModel;
 using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
 using Foundation.Extensions.ModelBuilders;

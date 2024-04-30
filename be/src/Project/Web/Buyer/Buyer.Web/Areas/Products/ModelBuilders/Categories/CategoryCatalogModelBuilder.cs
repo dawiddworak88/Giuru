@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Foundation.PageContent.ComponentModels;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Buyer.Web.Shared.ViewModels.Modals;
+using Buyer.Web.Areas.Products.DomainModels;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
 {
@@ -47,6 +48,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
                 viewModel.CategoryId = category.Id;
                 viewModel.Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel);
                 viewModel.Modal = await this.modalModelBuilder.BuildModelAsync(componentModel);
+                viewModel.OrderBy = nameof(Product.Name);
                 viewModel.PagedItems = await this.productsService.GetProductsAsync(
                     null,
                     componentModel.Id,
