@@ -15,9 +15,8 @@ using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Media.Services.MediaServices;
-using System.Text.Json;
-using System.Diagnostics;
 using Buyer.Web.Areas.Products.ViewModels.Products;
+using Buyer.Web.Areas.Products.Definitions;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -138,6 +137,9 @@ namespace Buyer.Web.Areas.Products.Services.Products
             return products?.Data?.Select(x => new ProductSuggestionViewModel
             { 
                 Name = x.Name,
+                PrimaryFabric = x.ProductAttributes.FirstOrDefault(x => x.Key == ProductFabricsConstants.GetPrimaryFabircKey(language))?.Values.FirstOrDefault(),
+                SecondaryFabric = x.ProductAttributes.FirstOrDefault(x => x.Key == ProductFabricsConstants.GetSecondaryFabircKey(language))?.Values.FirstOrDefault(),
+                Sku = x.Sku,
                 Url = _linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, x.Id }),
             });
         }
