@@ -26,6 +26,7 @@ namespace Buyer.Web.Areas.Products.Services.Inventory
             return suggestions.Select(x => new ProductSuggestionViewModel
             {
                 Name = x.Name,
+                Sku = x.Sku,
                 Url = _linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, x.Id }),
             });
         }

@@ -224,7 +224,8 @@ namespace Inventory.Api.v1.Controllers
                     response.Add(new InventorySuggestionResponseModel
                     {
                         Id = inventorySuggestion.Id,
-                        Name = inventorySuggestion.Name
+                        Name = inventorySuggestion.Name,
+                        Sku = inventorySuggestion.Sku
                     });
                 }
 
