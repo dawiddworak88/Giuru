@@ -6,10 +6,8 @@ using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -52,7 +50,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                     searchArea);
             }
-            
+
             return StatusCode((int)HttpStatusCode.OK, suggestions);
         }
     }
