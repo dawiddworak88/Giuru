@@ -332,7 +332,7 @@ namespace Catalog.Api.Services.Products
         {
             var searchResults = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Ids, model.OrderBy);
             
-            if (string.IsNullOrEmpty(model.SearchTerm))
+            if (string.IsNullOrEmpty(model.SearchTerm) is false)
             {
                 searchResults.Data = searchResults.Data.Where(x => x.Name.StartsWith(model.SearchTerm));
             }
