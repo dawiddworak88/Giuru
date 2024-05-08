@@ -18,7 +18,6 @@ function LanguageSwitcher(props) {
     function handleLanguageChange(href) {
         
         if (typeof window !== "undefined" && href) {
-
             window.location.href = href;
         }
     }
