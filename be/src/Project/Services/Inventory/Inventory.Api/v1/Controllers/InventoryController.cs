@@ -195,7 +195,6 @@ namespace Inventory.Api.v1.Controllers
         }
 
         [HttpGet, MapToApiVersion("1.0")]
-        [AllowAnonymous]
         [Route("availableproductssuggestions")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<string>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
