@@ -133,13 +133,13 @@ namespace Buyer.Web.Areas.Products.Services.Products
                 token,
                 nameof(Product.Name));
 
-            return products?.Data?.Select(x => new ProductSuggestionViewModel
+            return await Task.WhenAll(products?.Data?.Select(async x => new ProductSuggestionViewModel
             {
                 Name = x.Name,
-                Attributes = GetProductAttributesAsync(x.ProductAttributes).Result,
+                Attributes = await GetProductAttributesAsync(x.ProductAttributes),
                 Sku = x.Sku,
                 Url = _linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, x.Id }),
-            });
+            }));
         }
     }
 }
