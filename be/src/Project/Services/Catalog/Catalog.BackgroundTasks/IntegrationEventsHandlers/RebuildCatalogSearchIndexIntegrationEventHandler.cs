@@ -31,7 +31,7 @@ namespace Catalog.BackgroundTasks.IntegrationEventsHandlers
 
             if (@event.OrganisationId.HasValue)
             {
-                // await this.productsService.IndexAllAsync(@event.OrganisationId);
+                await this.productsService.IndexAllAsync(@event.OrganisationId);
             }
         }
     }

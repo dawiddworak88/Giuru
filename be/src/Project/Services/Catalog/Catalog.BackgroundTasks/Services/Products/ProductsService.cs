@@ -27,7 +27,7 @@ namespace Catalog.BackgroundTasks.Services.Products
         {
             if (sellerId.HasValue)
             {
-                foreach (var productId in _context.Products.Where(x => x.Brand.SellerId == sellerId).Select(x => x.Id).ToList())
+                foreach (var productId in _context.Products.Where(x => x.Brand.SellerId == sellerId && x.LastModifiedDate >= new DateTime(2024, 3, 1)).Select(x => x.Id).ToList())
                 {
                     try
                     {
