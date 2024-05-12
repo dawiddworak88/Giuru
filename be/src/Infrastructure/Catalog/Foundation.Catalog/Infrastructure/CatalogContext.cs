@@ -20,6 +20,7 @@ namespace Foundation.Catalog.Infrastructure
         public DbSet<Category> Categories { get; set; }
         public DbSet<CategoryTranslation> CategoryTranslations { get; set; }
         public DbSet<CategorySchema> CategorySchemas { get; set; }
+        public DbSet<CategorySchemaSummary> CategorySchemasSummary { get; set; }
         public DbSet<CategoryImage> CategoryImages { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
         public DbSet<ProductAttributeTranslation> ProductAttributeTranslations { get; set; }
