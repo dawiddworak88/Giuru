@@ -19,6 +19,9 @@ using Foundation.EventBus.Abstractions;
 using System.Diagnostics;
 using Catalog.Api.IntegrationEvents;
 using System.Linq.Dynamic.Core;
+using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Options;
+using Catalog.Api.Configurations;
 
 namespace Catalog.Api.Services.Categories
 {
@@ -27,15 +30,18 @@ namespace Catalog.Api.Services.Categories
         private readonly IEventBus _eventBus;
         private readonly CatalogContext _context;
         private readonly IStringLocalizer<ProductResources> _productLocalizer;
+        private readonly IOptions<AppSettings> _options;
 
         public CategoriesService(
             CatalogContext context,
             IEventBus eventBus,
-            IStringLocalizer<ProductResources> productLocalizer)
+            IStringLocalizer<ProductResources> productLocalizer,
+            IOptions<AppSettings> options)
         {
             _context = context;
             _productLocalizer = productLocalizer;
             _eventBus = eventBus;
+            _options = options;
         }
 
         public PagedResults<IEnumerable<CategoryServiceModel>> Get(GetCategoriesServiceModel model)
@@ -301,6 +307,7 @@ namespace Catalog.Api.Services.Categories
                 };
 
                 schemas.Add(categorySchema.FillCommonProperties());
+                await CheckAndUpdateCategorySchemaSummary(schema.Id, schema.Schema);
             }
 
             await _context.CategorySchemas.AddRangeAsync(schemas);
@@ -333,6 +340,7 @@ namespace Catalog.Api.Services.Categories
                 _context.CategorySchemas.Add(newCategorySchema.FillCommonProperties());
             }
 
+            await CheckAndUpdateCategorySchemaSummary(model.Id, model.Schema);
             await _context.SaveChangesAsync();
 
             TriggerCategoryProductsIndexRebuild(new RebuildCategoryProductsIndexServiceModel
@@ -394,6 +402,57 @@ namespace Catalog.Api.Services.Categories
             using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
 
             _eventBus.Publish(message);
+        }
+
+        private async Task CheckAndUpdateCategorySchemaSummary(Guid? categoryId, string schema)
+        {
+            int totalSchemaAttributes = CalculateCategoryTotalAttributes(schema);
+
+            int totalCategoriesAttributes = _context.CategorySchemasSummary.Where(x => x.CategoryId != categoryId).Sum(x => x.AttributeCount);
+
+            int totalAttributes = totalSchemaAttributes + totalCategoriesAttributes;
+
+            if (totalAttributes < _options.Value.AttributesLimit)
+            {
+                var categorySummary = await _context.CategorySchemasSummary.FirstOrDefaultAsync(x => x.CategoryId == categoryId);
+
+                if (categorySummary is not null)
+                {
+                    categorySummary.AttributeCount = totalSchemaAttributes;
+                }
+                else
+                {
+                    var categorySchemaSummary = new CategorySchemaSummary
+                    {
+                        CategoryId = categoryId.Value,
+                        AttributeCount = totalSchemaAttributes
+                    };
+
+                    await _context.CategorySchemasSummary.AddAsync(categorySchemaSummary.FillCommonProperties());
+                }
+            }
+            else
+            {
+                throw new CustomException(_productLocalizer.GetString("AttributesLimit"), (int)HttpStatusCode.Conflict);
+            }
+        }
+
+        private int CalculateCategoryTotalAttributes(string schema)
+        {
+            JObject jsonSchema = JObject.Parse(schema);
+
+            if (jsonSchema["properties"] is not null)
+            {
+                JObject properties = (JObject)jsonSchema["properties"];
+
+                int count = properties.Count;
+
+                return count;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }
