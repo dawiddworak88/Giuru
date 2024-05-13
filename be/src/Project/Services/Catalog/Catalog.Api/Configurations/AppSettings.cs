@@ -4,5 +4,6 @@
     {
         public string ElasticsearchIndex { get; set; }
         public string SupportedCultures { get; set; }
+        public int AttributesLimit { get; set; }
     }
 }
