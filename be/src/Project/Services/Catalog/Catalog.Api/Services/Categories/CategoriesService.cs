@@ -408,7 +408,7 @@ namespace Catalog.Api.Services.Categories
 
             int totalAttributes = totalSchemaAttributes + totalCategoriesAttributes;
 
-            if (totalAttributes < _options.Value.AttributesLimit)
+            if (totalAttributes < _options.Value.AttributeLimit)
             {
                 var categorySummary = await _context.CategorySchemasSummary.FirstOrDefaultAsync(x => x.CategorySchemaId == categorySchemaId);
 
