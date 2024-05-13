@@ -120,6 +120,9 @@
   <data name="AddCategory" xml:space="preserve">
     <value>Dodaj kategorię</value>
   </data>
+  <data name="AttributeLimit" xml:space="preserve">
+    <value>Osiągnięto maksymalny limit atrybutów</value>
+  </data>
   <data name="CategoryDeletedSuccessfully" xml:space="preserve">
     <value>Kategoria została usunięta.</value>
   </data>

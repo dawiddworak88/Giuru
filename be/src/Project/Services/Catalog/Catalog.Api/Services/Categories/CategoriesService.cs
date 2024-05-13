@@ -429,7 +429,7 @@ namespace Catalog.Api.Services.Categories
             }
             else
             {
-                throw new CustomException(_productLocalizer.GetString("AttributesLimit"), (int)HttpStatusCode.Conflict);
+                throw new CustomException(_productLocalizer.GetString("AttributeLimit"), (int)HttpStatusCode.Conflict);
             }
         }
 
