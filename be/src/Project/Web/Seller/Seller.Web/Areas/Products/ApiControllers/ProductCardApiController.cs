@@ -57,7 +57,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
             }
             catch (Exception exception)
             {
-                return StatusCode((int)HttpStatusCode.OK, new { Message = exception.Message });
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = exception.Message });
             }
         }
 
