@@ -294,8 +294,6 @@ namespace Catalog.Api.Services.Categories
 
             await _context.CategoryImages.AddRangeAsync(images);
 
-            var schemas = new List<CategorySchema>();
-
             foreach (var schema in model.Schemas.OrEmptyIfNull())
             {
                 var categorySchema = new CategorySchema
@@ -306,11 +304,9 @@ namespace Catalog.Api.Services.Categories
                     Language = schema.Language
                 };
 
-                schemas.Add(categorySchema.FillCommonProperties());
-                await CheckAndUpdateCategorySchemaSummary(schema.Id, schema.Schema);
+                await _context.CategorySchemas.AddAsync(categorySchema.FillCommonProperties());
+                await CheckAndUpdateCategorySchemaSummary(categorySchema.Id, schema.Schema);
             }
-
-            await _context.CategorySchemas.AddRangeAsync(schemas);
 
             await _context.SaveChangesAsync();
 
@@ -340,7 +336,7 @@ namespace Catalog.Api.Services.Categories
                 _context.CategorySchemas.Add(newCategorySchema.FillCommonProperties());
             }
 
-            await CheckAndUpdateCategorySchemaSummary(model.Id, model.Schema);
+            await CheckAndUpdateCategorySchemaSummary(categorySchema.Id, model.Schema);
             await _context.SaveChangesAsync();
 
             TriggerCategoryProductsIndexRebuild(new RebuildCategoryProductsIndexServiceModel
@@ -404,17 +400,17 @@ namespace Catalog.Api.Services.Categories
             _eventBus.Publish(message);
         }
 
-        private async Task CheckAndUpdateCategorySchemaSummary(Guid? categoryId, string schema)
+        private async Task CheckAndUpdateCategorySchemaSummary(Guid categorySchemaId, string schema)
         {
             int totalSchemaAttributes = CalculateCategoryTotalAttributes(schema);
 
-            int totalCategoriesAttributes = _context.CategorySchemasSummary.Where(x => x.CategoryId != categoryId).Sum(x => x.AttributeCount);
+            int totalCategoriesAttributes = _context.CategorySchemasSummary.Where(x => x.CategorySchemaId != categorySchemaId).Sum(x => x.AttributeCount);
 
             int totalAttributes = totalSchemaAttributes + totalCategoriesAttributes;
 
             if (totalAttributes < _options.Value.AttributesLimit)
             {
-                var categorySummary = await _context.CategorySchemasSummary.FirstOrDefaultAsync(x => x.CategoryId == categoryId);
+                var categorySummary = await _context.CategorySchemasSummary.FirstOrDefaultAsync(x => x.CategorySchemaId == categorySchemaId);
 
                 if (categorySummary is not null)
                 {
@@ -424,7 +420,7 @@ namespace Catalog.Api.Services.Categories
                 {
                     var categorySchemaSummary = new CategorySchemaSummary
                     {
-                        CategoryId = categoryId.Value,
+                        CategorySchemaId = categorySchemaId,
                         AttributeCount = totalSchemaAttributes
                     };
 

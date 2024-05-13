@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Catalog.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20240512162814_AddedCategorySchemasSummary")]
+    [Migration("20240513004303_AddedCategorySchemasSummary")]
     partial class AddedCategorySchemasSummary
     {
         /// <inheritdoc />
@@ -112,7 +112,7 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<int>("AttributeCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid>("CategorySchemaId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")

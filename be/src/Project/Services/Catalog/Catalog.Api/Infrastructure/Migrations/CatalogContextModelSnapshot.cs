@@ -109,7 +109,7 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<int>("AttributeCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid>("CategorySchemaId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")

@@ -7,8 +7,9 @@ namespace Foundation.Catalog.Infrastructure.Categories.Entites
     public class CategorySchemaSummary : Entity
     {
         [Required]
-        public Guid CategoryId { get; set; }
+        public Guid CategorySchemaId { get; set; }
 
+        [Required]
         public int AttributeCount { get; set; }
     }
 }
