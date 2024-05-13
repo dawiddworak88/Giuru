@@ -247,7 +247,7 @@ namespace Seller.Web.Areas.Categories.Repositories
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new CustomException(response.Message, (int)response.StatusCode);
+                throw new CustomException(response.Data?.Message, (int)response.StatusCode);
             }
         }
     }

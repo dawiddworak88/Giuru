@@ -45,13 +45,20 @@ namespace Seller.Web.Areas.Products.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await _categoriesRepository.SaveAsync(token, language, request.Id, new CategorySchema 
-            { 
-                Schema = request.Schema,
-                UiSchema = request.UiSchema
-            });
+            try
+            {
+                await _categoriesRepository.SaveAsync(token, language, request.Id, new CategorySchema
+                {
+                    Schema = request.Schema,
+                    UiSchema = request.UiSchema
+                });
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = _productLocalizer.GetString("SuccessfullySavedProductCard").Value });
+                return StatusCode((int)HttpStatusCode.OK, new { Message = _productLocalizer.GetString("SuccessfullySavedProductCard").Value });
+            }
+            catch (Exception exception)
+            {
+                return StatusCode((int)HttpStatusCode.OK, new { Message = exception.Message });
+            }
         }
 
         [HttpGet]
@@ -83,11 +90,11 @@ namespace Seller.Web.Areas.Products.ApiControllers
                         Title = x.Name
                     });
 
-                    return this.StatusCode((int)HttpStatusCode.OK, new { Data = response });
+                    return StatusCode((int)HttpStatusCode.OK, new { Data = response });
                 }
             }
 
-            return this.StatusCode((int)HttpStatusCode.BadRequest);
+            return StatusCode((int)HttpStatusCode.BadRequest);
         }
     }
 }
