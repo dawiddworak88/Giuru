@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data.SqlTypes;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Catalog.Api.v1.Categories.RequestModels
 {
