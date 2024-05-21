@@ -4,7 +4,7 @@ run-name: ${{ github.actor }} is deploying Identity-Api to Production 🚀
 on:
   workflow_run:
     workflows: ["Identity-Api Continuous Integration"]
-    branches: [main]
+    branches: [main, release/*]
     types: [completed]
 
 permissions:

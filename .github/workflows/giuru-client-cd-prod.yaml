@@ -4,7 +4,7 @@ run-name: ${{ github.actor }} is deploying Client-Api to Production 🚀
 on:
   workflow_run:
     workflows: ["Client-Api Continuous Integration"]
-    branches: [main]
+    branches: [main, release/*]
     types: [completed]
 
 permissions:
