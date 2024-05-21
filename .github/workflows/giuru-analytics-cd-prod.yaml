@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is deploying Analytics-Api to Production 🚀
 
 on:
   workflow_run:
-    workflows: ["Continuous Integration"]
+    workflows: ["Analytics-Api Continuous Integration"]
     branches: [main]
     types: [completed]
 

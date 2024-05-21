@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is deploying Global-Api to Production 🚀
 
 on:
   workflow_run:
-    workflows: ["Continuous Integration"]
+    workflows: ["Global-Api Continuous Integration"]
     branches: [main]
     types: [completed]
 

@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is deploying Catalog-Background-Tasks to Productio
 
 on:
   workflow_run:
-    workflows: ["Continuous Integration"]
+    workflows: ["Catalog-Background-Tasks Continuous Integration"]
     branches: [main]
     types: [completed]
 

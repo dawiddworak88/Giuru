@@ -1,13 +1,15 @@
-name: Continuous Integration
-run-name: ${{ github.actor }} is testing out Giuru 🚀
+name: Inventory-Api Continuous Integration
+run-name: ${{ github.actor }} is testing out Inventory-Api 🚀
 on:
   workflow_dispatch:
   push:
     paths:
-      - 'be/**'
+      - 'be/src/Infrastructure/**'
+      - 'be/src/Project/Services/Inventory/Inventory.Api'
   pull_request:
     paths:
-      - 'be/**'
+      - 'be/src/Infrastructure/**'
+      - 'be/src/Project/Services/Inventory/Inventory.Api'
 jobs:
   Build-and-Test-Solutions:
     runs-on: ubuntu-latest

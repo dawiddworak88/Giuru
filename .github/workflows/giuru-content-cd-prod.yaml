@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is deploying Content-Api to Production 🚀
 
 on:
   workflow_run:
-    workflows: ["Continuous Integration"]
+    workflows: ["Content-Api Continuous Integration"]
     branches: [main]
     types: [completed]
 

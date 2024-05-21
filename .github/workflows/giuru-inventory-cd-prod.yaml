@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is deploying Inventory-Api to Production 🚀
 
 on:
   workflow_run:
-    workflows: ["Continuous Integration"]
+    workflows: ["Inventory-Api Continuous Integration"]
     branches: [main]
     types: [completed]
 

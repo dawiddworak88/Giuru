@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is deploying Ordering-Api to Production 🚀
 
 on:
   workflow_run:
-    workflows: ["Continuous Integration"]
+    workflows: ["Ordering-Api Continuous Integration"]
     branches: [main]
     types: [completed]
 

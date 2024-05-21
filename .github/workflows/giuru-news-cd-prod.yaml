@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is deploying News-Api to Production 🚀
 
 on:
   workflow_run:
-    workflows: ["Continuous Integration"]
+    workflows: ["News-Api Continuous Integration"]
     branches: [main]
     types: [completed]
 
