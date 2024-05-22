@@ -11,6 +11,10 @@ permissions:
   id-token: write
   contents: read
 
+concurrency:
+  group: cd-prod-jobs-queue
+  cancel-in-progress: false
+
 jobs:
   Build-and-Deploy-Docker-Images:
     runs-on: ubuntu-latest

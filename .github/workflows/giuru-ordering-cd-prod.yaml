@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: cd-prod
+  group: cd-prod-jobs-queue
   cancel-in-progress: false
 
 jobs:
