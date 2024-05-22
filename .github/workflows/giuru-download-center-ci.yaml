@@ -5,11 +5,11 @@ on:
   push:
     paths:
       - 'be/src/Infrastructure/**'
-      - 'be/src/Project/Services/DownloadCenter/DownloadCenter.Api'
+      - 'be/src/Project/Services/DownloadCenter/DownloadCenter.Api/**'
   pull_request:
     paths:
       - 'be/src/Infrastructure/**'
-      - 'be/src/Project/Services/DownloadCenter/DownloadCenter.Api'
+      - 'be/src/Project/Services/DownloadCenter/DownloadCenter.Api/**'
 jobs:
   Build-and-Test-Solutions:
     runs-on: ubuntu-latest

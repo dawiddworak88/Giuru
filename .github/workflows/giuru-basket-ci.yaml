@@ -9,7 +9,7 @@ on:
   pull_request:
     paths:
       - 'be/src/Infrastructure/**'
-      - 'be/src/Project/Services/Basket/Basket.Api'
+      - 'be/src/Project/Services/Basket/Basket.Api/**'
 jobs:
   Build-and-Test-Solutions:
     runs-on: ubuntu-latest

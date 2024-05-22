@@ -5,11 +5,11 @@ on:
   push:
     paths:
       - 'be/src/Infrastructure/**'
-      - 'be/src/Project/Services/Inventory/Inventory.Api'
+      - 'be/src/Project/Services/Inventory/Inventory.Api/**'
   pull_request:
     paths:
       - 'be/src/Infrastructure/**'
-      - 'be/src/Project/Services/Inventory/Inventory.Api'
+      - 'be/src/Project/Services/Inventory/Inventory.Api/**'
 jobs:
   Build-and-Test-Solutions:
     runs-on: ubuntu-latest

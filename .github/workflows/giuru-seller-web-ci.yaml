@@ -5,12 +5,12 @@ on:
   push:
     paths:
       - 'be/src/Infrastructure/**'
-      - 'be/src/Project/Web/Seller/Seller.Web'
+      - 'be/src/Project/Web/Seller/Seller.Web/**'
       - 'fe/projects/Seller.Portal/**'
   pull_request:
     paths:
       - 'be/src/Infrastructure/**'
-      - 'be/src/Project/Web/Seller/Seller.Web'
+      - 'be/src/Project/Web/Seller/Seller.Web/**'
       - 'fe/projects/Seller.Portal/**'
 jobs:
   Build-and-Test-Solutions:
