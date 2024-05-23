@@ -1,0 +1,45 @@
+name: Identity-Api Continuous Integration
+run-name: ${{ github.actor }} is testing out Identity-Api 🚀
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'be/src/Infrastructure/**'
+      - 'be/src/Project/Services/Identity/Identity.Api/**'
+      - 'fe/projects/Account/**'
+  pull_request:
+    paths:
+      - 'be/src/Infrastructure/**'
+      - 'be/src/Project/Services/Identity/Identity.Api/**'
+      - 'fe/projects/Account/**'
+
+jobs:
+  Build-and-Test-Solutions:
+    runs-on: ubuntu-latest
+    env:
+      API_SOLUTION_PATH: '${{ github.workspace }}/be/src/AspNetCore.sln'
+      TESTS_RESULTS_UPLOAD_FOLDER: 'testresults'
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - name: Setup .NET 8.x
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.API_SOLUTION_PATH }}
+      - name: Build
+        run: dotnet build --no-restore ${{ env.API_SOLUTION_PATH }}
+      - name: Test
+        run: dotnet test --logger trx --results-directory ${{ env.TESTS_RESULTS_UPLOAD_FOLDER }} --no-build ${{ env.API_SOLUTION_PATH }}
+      - name: Upload dotnet test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: dotnet-results-${{ env.TESTS_RESULTS_UPLOAD_FOLDER }}
+          path: ${{ env.TESTS_RESULTS_UPLOAD_FOLDER }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."
