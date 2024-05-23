@@ -13,10 +13,6 @@ on:
       - 'be/src/Project/Services/Identity/Identity.Api/**'
       - 'fe/projects/Account/**'
 
-concurrency:
-  group: ci-jobs-queue
-  cancel-in-progress: false
-
 jobs:
   Build-and-Test-Solutions:
     runs-on: ubuntu-latest

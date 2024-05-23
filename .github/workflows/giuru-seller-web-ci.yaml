@@ -13,10 +13,6 @@ on:
       - 'be/src/Project/Web/Seller/Seller.Web/**'
       - 'fe/projects/Seller.Portal/**'
 
-concurrency:
-  group: ci-jobs-queue
-  cancel-in-progress: false
-
 jobs:
   Build-and-Test-Solutions:
     runs-on: ubuntu-latest

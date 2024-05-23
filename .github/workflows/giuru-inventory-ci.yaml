@@ -11,10 +11,6 @@ on:
       - 'be/src/Infrastructure/**'
       - 'be/src/Project/Services/Inventory/Inventory.Api/**'
 
-concurrency:
-  group: ci-jobs-queue
-  cancel-in-progress: false
-
 jobs:
   Build-and-Test-Solutions:
     runs-on: ubuntu-latest
