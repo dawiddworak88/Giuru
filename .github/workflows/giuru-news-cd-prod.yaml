@@ -2,7 +2,6 @@ name: News-Api Production Deployment
 run-name: ${{ github.actor }} is deploying News-Api to Production 🚀
 
 on:
-  workflow_dispatch:
   workflow_run:
     workflows: ["News-Api Continuous Integration"]
     branches: [main, release/*]
