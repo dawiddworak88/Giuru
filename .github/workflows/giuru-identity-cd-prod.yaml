@@ -51,7 +51,7 @@ jobs:
       - name: Build and push Account-Web-React-SSR Docker Image
         uses: docker/build-push-action@v5.0.0
         with:
-          file: ./Dockerfile-ssr
+          file: ./fe/projects/Account/Dockerfile-ssr
           context: ./fe/projects/Account
           push: true
           tags: ${{ secrets.ACR_PROD_NAME }}/account-web-react-ssr:latest, ${{ secrets.ACR_PROD_NAME }}/account-web-react-ssr:${{ github.sha }}
