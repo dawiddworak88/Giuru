@@ -19,7 +19,7 @@ import CategoryPage from "../../src/areas/Products/pages/CategoryPage/CategoryPa
 import SearchProductsPage from "../../src/areas/Products/pages/SearchProductsPage/SearchProductsPage";
 import AvailableProductsPage from "../../src/areas/Products/pages/AvailableProductsPage/AvailableProductsPage";
 import BuyerProductPage from "../../src/areas/Products/pages/ProductPage/ProductPage";
-import SlugPage from "../../src/areas/Content/Pages/SlugPage/SlugPage";
+import SlugPage from "../../src/areas/Content/pages/SlugPage/SlugPage";
 
 const Components = {
 	BuyerOrderItemPage,
