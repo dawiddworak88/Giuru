@@ -27,15 +27,10 @@ namespace Catalog.BackgroundTasks.Services.Products
         {
             if (sellerId.HasValue)
             {
-                _logger.LogError($"Selller ID equals {sellerId.Value}");
-
-                _logger.LogError($"Products to index count: {_context.Products.Where(x => x.Brand.SellerId == sellerId).Count()}");
-
                 foreach (var productId in _context.Products.Where(x => x.Brand.SellerId == sellerId).Select(x => x.Id).ToList())
                 {
                     try
                     {
-                        _logger.LogError($"Indexing product: {productId}");
                         await _productIndexingRepository.IndexAsync(productId);
                     }
                     catch (Exception exception)
@@ -43,10 +38,6 @@ namespace Catalog.BackgroundTasks.Services.Products
                         _logger.LogError(exception, $"Couldn't index product: {productId}");
                     }
                 }
-            }
-            else
-            {
-                _logger.LogError("Seller ID has no value");
             }
         }
 
