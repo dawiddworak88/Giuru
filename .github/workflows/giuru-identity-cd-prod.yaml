@@ -24,14 +24,16 @@ jobs:
 
       - name: Checkout Repository
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "20"
+          node-version: "20.x"
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
         working-directory: ./fe/projects/Account
 
       - name: Build Website
@@ -51,7 +53,7 @@ jobs:
       - name: Build and push Account-Web-React-SSR Docker Image
         uses: docker/build-push-action@v5.0.0
         with:
-          file: ./Dockerfile-ssr
+          file: ./fe/projects/Account/Dockerfile-ssr
           context: ./fe/projects/Account
           push: true
           tags: ${{ secrets.ACR_PROD_NAME }}/account-web-react-ssr:latest, ${{ secrets.ACR_PROD_NAME }}/account-web-react-ssr:${{ github.sha }}

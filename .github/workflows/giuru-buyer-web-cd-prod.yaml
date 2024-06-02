@@ -24,11 +24,13 @@ jobs:
 
       - name: Checkout Repository
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "20"
+          node-version: "20.x"
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
@@ -51,7 +53,7 @@ jobs:
       - name: Build and push Buyer-Web-React-SSR Docker Image
         uses: docker/build-push-action@v5.0.0
         with:
-          file: ./Dockerfile-ssr
+          file: ./fe/projects/AspNetCore/Dockerfile-ssr
           context: ./fe/projects/AspNetCore
           push: true
           tags: ${{ secrets.ACR_PROD_NAME }}/buyer-web-react-ssr:latest, ${{ secrets.ACR_PROD_NAME }}/buyer-web-react-ssr:${{ github.sha }}
