@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Foundation.GenericRepository.Entities;
+using System;
 
 namespace Global.Api.Infrastructure.Entities.Settings
 {
-    [Keyless]
-    public class Setting
+    public class Setting : Entity
     {
-        public bool ExternalCompletionDates { get; set; }
+        public string Key { get; set; }
+        public string Value { get; set; }
+        public Guid SellerId { get; set; }
     }
 }

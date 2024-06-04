@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Global.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(GlobalContext))]
-    [Migration("20240603084320_AddedSettings")]
+    [Migration("20240604062422_AddedSettings")]
     partial class AddedSettings
     {
         /// <inheritdoc />
@@ -159,8 +159,34 @@ namespace Global.Api.Infrastructure.Migrations
 
             modelBuilder.Entity("Global.Api.Infrastructure.Entities.Settings.Setting", b =>
                 {
-                    b.Property<bool>("ExternalCompletionDates")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<Guid>("SellerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Settings");
                 });
