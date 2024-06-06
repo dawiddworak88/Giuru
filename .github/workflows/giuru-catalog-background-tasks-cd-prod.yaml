@@ -43,7 +43,7 @@ jobs:
           file: ./be/src/Project/Services/Catalog/Catalog.BackgroundTasks/Dockerfile
           context: ./be/src
           push: true
-          tags: ${{ secrets.ACR_PROD_NAME }}/catalog-background-tasks:latest, ${{ secrets.ACR_PROD_NAME }}/catalog-background-tasks:${{ github.sha }}
+          tags: ${{ secrets.ACR_PROD_NAME }}/catalog-background-tasks:latest, ${{ secrets.ACR_PROD_NAME }}/catalog-background-tasks:${{ github.run_number }}
 
       - name: Checkout GitOps Repo
         uses: actions/checkout@v2
@@ -56,7 +56,7 @@ jobs:
 
       - name: Update the image tag in Catalog-Background-Tasks Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "catalog-background-tasks-container").image) = "b2beltapv2prodacr.azurecr.io/catalog-background-tasks:${{ github.sha }}"' apps/catalog-background-tasks/overlays/production/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "catalog-background-tasks-container").image) = "b2beltapv2prodacr.azurecr.io/catalog-background-tasks:${{ github.run_number }}"' apps/catalog-background-tasks/overlays/production/deployment.yaml -i
 
       - name: Commit and Push changes
         run: |

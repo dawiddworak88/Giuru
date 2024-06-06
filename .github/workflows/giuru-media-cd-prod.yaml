@@ -43,7 +43,7 @@ jobs:
           file: ./be/src/Project/Services/Media/Media.Api/Dockerfile
           context: ./be/src
           push: true
-          tags: ${{ secrets.ACR_PROD_NAME }}/media-api:latest, ${{ secrets.ACR_PROD_NAME }}/media-api:${{ github.sha }}
+          tags: ${{ secrets.ACR_PROD_NAME }}/media-api:latest, ${{ secrets.ACR_PROD_NAME }}/media-api:${{ github.run_number }}
 
       - name: Checkout GitOps Repo
         uses: actions/checkout@v2
@@ -56,12 +56,12 @@ jobs:
 
       - name: Update the image tag in Media-Api Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "media-api-container").image) = "b2beltapv2prodacr.azurecr.io/media-api:${{ github.sha }}"' apps/media/overlays/production/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "media-api-container").image) = "b2beltapv2prodacr.azurecr.io/media-api:${{ github.run_number }}"' apps/media/overlays/production/deployment.yaml -i
 
       - name: Commit and Push changes
         run: |
           git config --global user.name 'Production Deployment'
           git config --global user.email 'production@deployment.com'
           git add apps/media/overlays/production/deployment.yaml
-          git commit -m "Updated image tag to ${{ github.sha }} for Media-Api service"
+          git commit -m "Updated image tag to ${{ github.run_number }} for Media-Api service"
           git push
