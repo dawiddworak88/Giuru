@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Foundation.GenericRepository.Extensions;
 using System;
+using Microsoft.IdentityModel.Tokens;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Global.Api.Services.Settings
 {
@@ -42,7 +44,7 @@ namespace Global.Api.Services.Settings
         {
             var existingSettings = await _context.Settings.Where(s => s.SellerId == model.SellerId).ToListAsync();
 
-            foreach (var setting in model.Settings)
+            foreach (var setting in model.Settings.OrEmptyIfNull())
             {
                 var existingSetting = existingSettings.FirstOrDefault(s => s.Key == setting.Key);
 
