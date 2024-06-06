@@ -43,7 +43,7 @@ jobs:
           file: ./be/src/Project/Services/Global/Global.Api/Dockerfile
           context: ./be/src
           push: true
-          tags: ${{ secrets.ACR_PROD_NAME }}/global-api:latest, ${{ secrets.ACR_PROD_NAME }}/global-api:${{ github.sha }}
+          tags: ${{ secrets.ACR_PROD_NAME }}/global-api:latest, ${{ secrets.ACR_PROD_NAME }}/global-api:${{ github.run_number }}
 
       - name: Checkout GitOps Repo
         uses: actions/checkout@v2
@@ -56,12 +56,12 @@ jobs:
 
       - name: Update the image tag in Global-Api Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "global-api-container").image) = "b2beltapv2prodacr.azurecr.io/global-api:${{ github.sha }}"' apps/global/overlays/production/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "global-api-container").image) = "b2beltapv2prodacr.azurecr.io/global-api:${{ github.run_number }}"' apps/global/overlays/production/deployment.yaml -i
 
       - name: Commit and Push changes
         run: |
           git config --global user.name 'Production Deployment'
           git config --global user.email 'production@deployment.com'
           git add apps/global/overlays/production/deployment.yaml
-          git commit -m "Updated image tag to ${{ github.sha }} for Global-Api service"
+          git commit -m "Updated image tag to ${{ github.run_number }} for Global-Api service"
           git push
