@@ -783,4 +783,10 @@
   <data name="DeliveryAddressTitle" xml:space="preserve">
     <value>Lieferadresse</value>
   </data>
+  <data name="ExternalCompletionDatesText" xml:space="preserve">
+    <value>Erhalten Sie das Abschlussdatum vom externen Dienst</value>
+  </data>
+  <data name="SettingsSavedSuccessfully" xml:space="preserve">
+    <value>Einstellungen erfolgreich gespeichert</value>
+  </data>
 </root>

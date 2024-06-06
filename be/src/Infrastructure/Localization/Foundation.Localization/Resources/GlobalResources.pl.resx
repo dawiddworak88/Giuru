@@ -789,4 +789,10 @@
   <data name="DeliveryAddressTitle" xml:space="preserve">
     <value>Adres dostawy</value>
   </data>
+  <data name="ExternalCompletionDatesText" xml:space="preserve">
+    <value>Pobierz daty zakończenia z zewnętrznego serwisu</value>
+  </data>
+  <data name="SettingsSavedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie zapisano ustawienia</value>
+  </data>
 </root>
