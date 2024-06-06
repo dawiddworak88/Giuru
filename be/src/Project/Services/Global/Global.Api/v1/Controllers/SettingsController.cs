@@ -28,7 +28,7 @@ namespace Global.Api.v1.Controllers
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns>Http code Ok.</returns>
-        [HttpPost]
+        [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> SaveAsync(SettingRequestModel model)
@@ -57,7 +57,8 @@ namespace Global.Api.v1.Controllers
         /// </summary>
         /// <param name="sellerId">The seller id.</param>
         /// <returns>The list of settings.</returns>
-        [HttpGet]
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("{sellerId}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(SettingServiceModel))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetAsync(Guid sellerId)
