@@ -2,6 +2,7 @@
 using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.DependencyInjection;
 using Seller.Web.Areas.Settings.ModelBuilders;
+using Seller.Web.Areas.Settings.Repositories;
 using Seller.Web.Areas.Settings.ViewModels;
 
 namespace Seller.Web.Areas.Settings.DependencyInjection
@@ -10,6 +11,8 @@ namespace Seller.Web.Areas.Settings.DependencyInjection
     {
         public static void RegisterSettingsAreaDependencies(this IServiceCollection services)
         {
+            services.AddScoped<ISettingRepository, SettingsRepository>();
+
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SettingsPageViewModel>, SettingsPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SettingsFormViewModel>, SettingsFormModelBuilder>();
         }
