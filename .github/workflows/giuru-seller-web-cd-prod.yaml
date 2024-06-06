@@ -56,7 +56,7 @@ jobs:
           file: ./fe/projects/Seller.Portal/Dockerfile-ssr
           context: ./fe/projects/Seller.Portal
           push: true
-          tags: ${{ secrets.ACR_PROD_NAME }}/seller-web-react-ssr:latest, ${{ secrets.ACR_PROD_NAME }}/seller-web-react-ssr:${{ github.sha }}
+          tags: ${{ secrets.ACR_PROD_NAME }}/seller-web-react-ssr:latest, ${{ secrets.ACR_PROD_NAME }}/seller-web-react-ssr:${{ github.run_number }}
 
       - name: Build and push Seller-Web Docker Image
         uses: docker/build-push-action@v5.0.0
@@ -64,7 +64,7 @@ jobs:
           file: ./be/src/Project/Web/Seller/Seller.Web/Dockerfile
           context: ./be/src
           push: true
-          tags: ${{ secrets.ACR_PROD_NAME }}/seller-web:latest, ${{ secrets.ACR_PROD_NAME }}/seller-web:${{ github.sha }}
+          tags: ${{ secrets.ACR_PROD_NAME }}/seller-web:latest, ${{ secrets.ACR_PROD_NAME }}/seller-web:${{ github.run_number }}
 
       - name: Checkout GitOps Repo
         uses: actions/checkout@v2
@@ -77,11 +77,11 @@ jobs:
 
       - name: Update the image tag in Seller-Web-React-SSR Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "seller-web-react-ssr-container").image) = "b2beltapv2prodacr.azurecr.io/seller-web-react-ssr:${{ github.sha }}"' apps/seller-web-react-ssr/overlays/production/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "seller-web-react-ssr-container").image) = "b2beltapv2prodacr.azurecr.io/seller-web-react-ssr:${{ github.run_number }}"' apps/seller-web-react-ssr/overlays/production/deployment.yaml -i
 
       - name: Update the image tag in Seller-Web Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "seller-web-container").image) = "b2beltapv2prodacr.azurecr.io/seller-web:${{ github.sha }}"' apps/seller-web/overlays/production/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "seller-web-container").image) = "b2beltapv2prodacr.azurecr.io/seller-web:${{ github.run_number }}"' apps/seller-web/overlays/production/deployment.yaml -i
       
       - name: Commit and Push changes
         run: |
@@ -89,5 +89,5 @@ jobs:
           git config --global user.email 'production@deployment.com'
           git add apps/seller-web/overlays/production/deployment.yaml
           git add apps/seller-web-react-ssr/overlays/production/deployment.yaml
-          git commit -m "Updated image tag to ${{ github.sha }} for Seller-Web"
+          git commit -m "Updated image tag to ${{ github.run_number }} for Seller-Web"
           git push
