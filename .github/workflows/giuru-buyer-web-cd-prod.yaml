@@ -7,6 +7,10 @@ on:
     branches: [main, release/*]
     types: [completed]
 
+concurrency:
+  group: cd-giuru-prod
+  cancel-in-progress: false
+
 permissions:
   id-token: write
   contents: read
@@ -30,7 +34,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "20.x"
+          node-version: "20.11.1"
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
