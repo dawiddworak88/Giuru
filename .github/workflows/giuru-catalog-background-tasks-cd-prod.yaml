@@ -7,6 +7,10 @@ on:
     branches: [main, release/*]
     types: [completed]
 
+concurrency:
+  group: cd-giuru-prod
+  cancel-in-progress: false
+
 permissions:
   id-token: write
   contents: read
@@ -63,5 +67,5 @@ jobs:
           git config --global user.name 'Production Deployment'
           git config --global user.email 'production@deployment.com'
           git add apps/catalog-background-tasks/overlays/production/deployment.yaml
-          git commit -m "Updated image tag to ${{ github.run_number }} for Catalog-Background-Tasks service"
+          git commit -m "Updated image tag to ${{ github.sha }} for Catalog-Background-Tasks service"
           git push
