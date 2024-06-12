@@ -60,7 +60,7 @@ jobs:
 
       - name: Update the image tag in Global-Api Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "global-api-container").image) = "b2beltapv2prodacr.azurecr.io/global-api:${{ github.run_number }}"' apps/global/overlays/production/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "global-api-container").image) = "${{ secrets.ACR_PROD_NAME }}/global-api:${{ github.run_number }}"' apps/global/overlays/production/deployment.yaml -i
 
       - name: Commit and Push changes
         run: |

@@ -60,7 +60,7 @@ jobs:
 
       - name: Update the image tag in Catalog-Api Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "catalog-api-container").image) = "b2beltapv2prodacr.azurecr.io/catalog-api:${{ github.run_number }}"' apps/catalog/overlays/production/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "catalog-api-container").image) = "${{ secrets.ACR_PROD_NAME }}/catalog-api:${{ github.run_number }}"' apps/catalog/overlays/production/deployment.yaml -i
 
       - name: Commit and Push changes
         run: |
