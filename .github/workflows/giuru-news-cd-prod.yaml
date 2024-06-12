@@ -60,7 +60,7 @@ jobs:
 
       - name: Update the image tag in News-Api Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "news-api-container").image) = "b2beltapv2prodacr.azurecr.io/news-api:${{ github.run_number }}"' apps/news/overlays/production/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "news-api-container").image) = "${{ secrets.ACR_PROD_NAME }}/news-api:${{ github.run_number }}"' apps/news/overlays/production/deployment.yaml -i
 
       - name: Commit and Push changes
         run: |

@@ -81,11 +81,11 @@ jobs:
 
       - name: Update the image tag in Seller-Web-React-SSR Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "seller-web-react-ssr-container").image) = "b2beltapv2prodacr.azurecr.io/seller-web-react-ssr:${{ github.run_number }}"' apps/seller-web-react-ssr/overlays/production/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "seller-web-react-ssr-container").image) = "${{ secrets.ACR_PROD_NAME }}/seller-web-react-ssr:${{ github.run_number }}"' apps/seller-web-react-ssr/overlays/production/deployment.yaml -i
 
       - name: Update the image tag in Seller-Web Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "seller-web-container").image) = "b2beltapv2prodacr.azurecr.io/seller-web:${{ github.run_number }}"' apps/seller-web/overlays/production/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "seller-web-container").image) = "${{ secrets.ACR_PROD_NAME }}/seller-web:${{ github.run_number }}"' apps/seller-web/overlays/production/deployment.yaml -i
       
       - name: Commit and Push changes
         run: |

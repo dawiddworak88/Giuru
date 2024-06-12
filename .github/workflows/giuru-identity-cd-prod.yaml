@@ -81,11 +81,11 @@ jobs:
 
       - name: Update the image tag in Account-Web-React-SSR Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "account-web-react-ssr-container").image) = "b2beltapv2prodacr.azurecr.io/account-web-react-ssr:${{ github.run_number }}"' apps/account-web-react-ssr/overlays/production/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "account-web-react-ssr-container").image) = "${{ secrets.ACR_PROD_NAME }}/account-web-react-ssr:${{ github.run_number }}"' apps/account-web-react-ssr/overlays/production/deployment.yaml -i
 
       - name: Update the image tag in Identity-Api Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "identity-api-container").image) = "b2beltapv2prodacr.azurecr.io/identity-api:${{ github.run_number }}"' apps/identity/overlays/production/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "identity-api-container").image) = "${{ secrets.ACR_PROD_NAME }}/identity-api:${{ github.run_number }}"' apps/identity/overlays/production/deployment.yaml -i
 
       - name: Commit and Push changes
         run: |
