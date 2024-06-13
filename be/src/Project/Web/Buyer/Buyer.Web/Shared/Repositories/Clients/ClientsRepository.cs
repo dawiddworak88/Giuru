@@ -8,6 +8,10 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.DomainModels.Clients;
 using System;
+using Foundation.GenericRepository.Paginations;
+using Buyer.Web.Shared.ApiRequestModels.Clients;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Buyer.Web.Shared.Repositories.Clients
 {
@@ -44,6 +48,56 @@ namespace Buyer.Web.Shared.Repositories.Clients
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return response.Data;
+            }
+
+            return default;
+        }
+
+        public async Task<List<ClientFieldValue>> GetClientFieldValuesAsync(string token, string language, Guid? id)
+        {
+            var requestModel = new PagedClientFieldValuesRequestModel
+            {
+                ClientId = id,
+                PageIndex = PaginationConstants.DefaultPageIndex,
+                ItemsPerPage = PaginationConstants.DefaultPageSize
+            };
+
+            var apiRequest = new ApiRequest<PagedClientFieldValuesRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.FieldValuesApiEndpoint}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedClientFieldValuesRequestModel>, PagedClientFieldValuesRequestModel, PagedResults<IEnumerable<ClientFieldValue>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                var fieldsValues = new List<ClientFieldValue>();
+
+                fieldsValues.AddRange(response.Data.Data);
+
+                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
+
+                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
+                {
+                    apiRequest.Data.PageIndex = i;
+
+                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedClientFieldValuesRequestModel>, PagedClientFieldValuesRequestModel, PagedResults<IEnumerable<ClientFieldValue>>>(apiRequest);
+
+                    if (!nextPagesResponse.IsSuccessStatusCode)
+                    {
+                        throw new CustomException(response.Message, (int)response.StatusCode);
+                    }
+
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Count() > 0)
+                    {
+                        fieldsValues.AddRange(nextPagesResponse.Data.Data);
+                    }
+                }
+
+                return fieldsValues;
             }
 
             return default;
