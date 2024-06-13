@@ -25,6 +25,10 @@ using Foundation.PageContent.Definitions;
 using Foundation.Media.Services.MediaServices;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Repositories.Media;
+using Buyer.Web.Areas.Products.Services.CompletionDates;
+using Buyer.Web.Shared.Services.Settings;
+using System;
+using System.Text.Json;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -42,6 +46,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
         private readonly IMediaItemsRepository _mediaItemsRepository;
+        private readonly ICompletionDatesService _completionDatesService;
+        private readonly ISettingsService _settingsService;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -55,7 +61,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IMediaService mediaService,
             IBasketService basketService,
             LinkGenerator linkGenerator,
-            IMediaItemsRepository mediaItemsRepository)
+            IMediaItemsRepository mediaItemsRepository,
+            ICompletionDatesService completionDatesService,
+            ISettingsService settingsService)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -69,6 +77,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _orderResources = orderResources;
             _modalModelBuilder = modalModelBuilder;
             _mediaItemsRepository = mediaItemsRepository;
+            _completionDatesService = completionDatesService;
+            _settingsService = settingsService;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -103,10 +113,21 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
             if (product != null)
             {
+                if (await _settingsService.IsExternalCompletionDatesEnable(componentModel.Token, componentModel.Language, componentModel.SellerId))
+                {
+                    var list = new List<Product>
+                    {
+                        product
+                    };
+
+                    await _completionDatesService.GetCompletionDatesAsync(componentModel.Token, componentModel.Language, list, componentModel.SellerId);
+                }
+
                 viewModel.Ean = product.Ean;
                 viewModel.ProductId = product.Id;
                 viewModel.Title = product.Name;
                 viewModel.BrandName = product.BrandName;
+                viewModel.CompletionDate = product.CompletionDate;
                 viewModel.BrandUrl = _linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId });
                 viewModel.Description = product.Description;
                 viewModel.Sku = product.Sku;
@@ -124,7 +145,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 foreach (var mediaItemId in product.Images.OrEmptyIfNull())
                 {
-                    var mediaItem = imagesMediaItems.FirstOrDefault(x =>  x.Id == mediaItemId);
+                    var mediaItem = imagesMediaItems.FirstOrDefault(x => x.Id == mediaItemId);
 
                     if (mediaItem is not null)
                     {
@@ -144,7 +165,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                         mediaItems.Add(mediaItemViewModel);
                     }
-                }                
+                }
 
                 viewModel.MediaItems = mediaItems;
 
