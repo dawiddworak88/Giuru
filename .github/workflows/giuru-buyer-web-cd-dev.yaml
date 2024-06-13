@@ -1,0 +1,97 @@
+name: Buyer-Web Development Deployment
+run-name: ${{ github.actor }} is deploying Buyer-Web to Development 🚀
+
+on:
+  workflow_run:
+    workflows: ["Buyer-Web Continuous Integration"]
+    branches: [develop]
+    types: [completed]
+
+concurrency:
+  group: cd-giuru-dev
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  Build-and-Deploy-Docker-Images:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Display Workflow Details
+        run: |
+          echo "The job was automatically triggered by a ${{ github.event_name }} event."
+          echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+          echo "The name of your branch is ${{ github.event.workflow_run.head_branch }} and your repository is ${{ github.repository }}."
+
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20.11.1"
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+        working-directory: ./fe/projects/AspNetCore
+
+      - name: Build Website
+        run: npm run build-fe-deploy
+        working-directory: ./fe/projects/AspNetCore
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3.0.0
+
+      - name: Docker Login
+        uses: docker/login-action@v3.0.0
+        with:
+          registry: ${{ secrets.ACR_DEV_NAME }}
+          username: ${{ secrets.ACR_DEV_LOGIN }}
+          password: ${{ secrets.ACR_DEV_PASSWORD }}
+
+      - name: Build and push Buyer-Web-React-SSR Docker Image
+        uses: docker/build-push-action@v5.0.0
+        with:
+          file: ./fe/projects/AspNetCore/Dockerfile-ssr
+          context: ./fe/projects/AspNetCore
+          push: true
+          tags: ${{ secrets.ACR_DEV_NAME }}/buyer-web-react-ssr:latest, ${{ secrets.ACR_DEV_NAME }}/buyer-web-react-ssr:${{ github.run_number }}
+
+      - name: Build and push Buyer-Web Docker Image
+        uses: docker/build-push-action@v5.0.0
+        with:
+          file: ./be/src/Project/Web/Buyer/Buyer.Web/Dockerfile
+          context: ./be/src
+          push: true
+          tags: ${{ secrets.ACR_DEV_NAME }}/buyer-web:latest, ${{ secrets.ACR_DEV_NAME }}/buyer-web:${{ github.run_number }}
+
+      - name: Checkout GitOps Repo
+        uses: actions/checkout@v2
+        with:
+          repository: "Team-Eltap/giuru-gitops"
+          token: ${{ secrets.GIT_REPOSITORY_TOKEN }}
+
+      - name: Install yq (YAML Processor)
+        run: sudo snap install yq
+
+      - name: Update the image tag in Buyer-Web-React-SSR Container deployment.yaml
+        run: |
+          yq eval '(.spec.template.spec.containers[] | select(.name == "buyer-web-react-ssr-container").image) = "${{ secrets.ACR_DEV_NAME }}/buyer-web-react-ssr:${{ github.run_number }}"' apps/buyer-web-react-ssr/overlays/development/deployment.yaml -i
+
+      - name: Update the image tag in Buyer-Web Container deployment.yaml
+        run: |
+          yq eval '(.spec.template.spec.containers[] | select(.name == "buyer-web-container").image) = "${{ secrets.ACR_DEV_NAME }}/buyer-web:${{ github.run_number }}"' apps/buyer-web/overlays/development/deployment.yaml -i
+      
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name 'Development Deployment'
+          git config --global user.email 'development@deployment.com'
+          git add apps/buyer-web/overlays/development/deployment.yaml
+          git add apps/buyer-web-react-ssr/overlays/development/deployment.yaml
+          git commit -m "Updated image tag to ${{ github.run_number }} for Buyer-Web"
+          git push
