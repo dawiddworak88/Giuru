@@ -27,8 +27,6 @@ using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Repositories.Media;
 using Buyer.Web.Areas.Products.Services.CompletionDates;
 using Buyer.Web.Shared.Services.Settings;
-using System;
-using System.Text.Json;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
