@@ -2,6 +2,7 @@ name: News-Api Development Deployment
 run-name: ${{ github.actor }} is deploying News-Api to Development 🚀
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["News-Api Continuous Integration"]
     branches: [develop]

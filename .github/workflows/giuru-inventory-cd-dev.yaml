@@ -2,6 +2,7 @@ name: Inventory-Api Development Deployment
 run-name: ${{ github.actor }} is deploying Inventory-Api to Development 🚀
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Inventory-Api Continuous Integration"]
     branches: [develop]

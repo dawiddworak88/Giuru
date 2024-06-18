@@ -2,6 +2,7 @@ name: Ordering-Api Development Deployment
 run-name: ${{ github.actor }} is deploying Ordering-Api to Development 🚀
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Ordering-Api Continuous Integration"]
     branches: [develop]

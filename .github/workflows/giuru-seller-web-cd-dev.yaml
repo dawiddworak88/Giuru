@@ -2,6 +2,7 @@ name: Seller-Web Development Deployment
 run-name: ${{ github.actor }} is deploying Seller-Web to Development 🚀
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Seller-Web Continuous Integration"]
     branches: [develop]

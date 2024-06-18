@@ -2,6 +2,7 @@ name: Catalog-Background-Tasks Development Deployment
 run-name: ${{ github.actor }} is deploying Catalog-Background-Tasks to Development 🚀
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Catalog-Background-Tasks Continuous Integration"]
     branches: [develop]

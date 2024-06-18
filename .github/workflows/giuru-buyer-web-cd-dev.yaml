@@ -2,6 +2,7 @@ name: Buyer-Web Development Deployment
 run-name: ${{ github.actor }} is deploying Buyer-Web to Development 🚀
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Buyer-Web Continuous Integration"]
     branches: [develop]

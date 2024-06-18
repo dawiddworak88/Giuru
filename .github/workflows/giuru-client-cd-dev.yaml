@@ -2,6 +2,7 @@ name: Client-Api Development Deployment
 run-name: ${{ github.actor }} is deploying Client-Api to Development 🚀
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Client-Api Continuous Integration"]
     branches: [develop]

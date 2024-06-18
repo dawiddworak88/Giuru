@@ -2,6 +2,7 @@ name: Analytics-Api Development Deployment
 run-name: ${{ github.actor }} is deploying Analytics-Api to Development 🚀
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Analytics-Api Continuous Integration"]
     branches: [develop]

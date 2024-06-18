@@ -2,6 +2,7 @@ name: Media-Api Development Deployment
 run-name: ${{ github.actor }} is deploying Media-Api to Development 🚀
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Media-Api Continuous Integration"]
     branches: [develop]

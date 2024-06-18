@@ -2,6 +2,7 @@ name: Global-Api Development Deployment
 run-name: ${{ github.actor }} is deploying Global-Api to Development 🚀
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Global-Api Continuous Integration"]
     branches: [develop]

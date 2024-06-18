@@ -2,6 +2,7 @@ name: Basket-Api Development Deployment
 run-name: ${{ github.actor }} is deploying Basket-Api to Development 🚀
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Basket-Api Continuous Integration"]
     branches: [develop]
