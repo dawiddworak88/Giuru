@@ -1,15 +1,15 @@
-name: Global-Api Development Deployment
-run-name: ${{ github.actor }} is deploying Global-Api to Development 🚀
+name: News-Api Test Deployment
+run-name: ${{ github.actor }} is deploying News-Api to Test environment 🚀
 
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: ["Global-Api Continuous Integration"]
+    workflows: ["News-Api Continuous Integration"]
     branches: [develop]
     types: [completed]
 
 concurrency:
-  group: cd-giuru-dev
+  group: cd-giuru-test
   cancel-in-progress: false
 
 permissions:
@@ -42,13 +42,13 @@ jobs:
           username: ${{ secrets.ACR_TEST_LOGIN }}
           password: ${{ secrets.ACR_TEST_PASSWORD }}
 
-      - name: Build and push Global-Api Docker Image
+      - name: Build and push News-Api Docker Image
         uses: docker/build-push-action@v5.0.0
         with:
-          file: ./be/src/Project/Services/Global/Global.Api/Dockerfile
+          file: ./be/src/Project/Services/News/News.Api/Dockerfile
           context: ./be/src
           push: true
-          tags: ${{ secrets.ACR_TEST_NAME }}/global-api:latest, ${{ secrets.ACR_TEST_NAME }}/global-api:${{ github.run_number }}
+          tags: ${{ secrets.ACR_TEST_NAME }}/news-api:latest, ${{ secrets.ACR_TEST_NAME }}/news-api:${{ github.run_number }}
 
       - name: Checkout GitOps Repo
         uses: actions/checkout@v2
@@ -59,14 +59,14 @@ jobs:
       - name: Install yq (YAML Processor)
         run: sudo snap install yq
 
-      - name: Update the image tag in Global-Api Container deployment.yaml
+      - name: Update the image tag in News-Api Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "global-api-container").image) = "${{ secrets.ACR_TEST_NAME }}/global-api:${{ github.run_number }}"' apps/global/overlays/test/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "news-api-container").image) = "${{ secrets.ACR_TEST_NAME }}/news-api:${{ github.run_number }}"' apps/news/overlays/test/deployment.yaml -i
 
       - name: Commit and Push changes
         run: |
-          git config --global user.name 'Development Deployment'
-          git config --global user.email 'development@deployment.com'
-          git add apps/global/overlays/test/deployment.yaml
-          git commit -m "Updated image tag to ${{ github.run_number }} for Global-Api service"
+          git config --global user.name 'Test Deployment'
+          git config --global user.email 'test@deployment.com'
+          git add apps/news/overlays/test/deployment.yaml
+          git commit -m "Updated image tag to ${{ github.run_number }} for News-Api service"
           git push
