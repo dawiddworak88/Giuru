@@ -1,15 +1,15 @@
-name: Content-Api Development Deployment
-run-name: ${{ github.actor }} is deploying Content-Api to Development 🚀
+name: Catalog-Api Test Deployment
+run-name: ${{ github.actor }} is deploying Catalog-Api to Test environment 🚀
 
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: ["Content-Api Continuous Integration"]
+    workflows: ["Catalog-Api Continuous Integration"]
     branches: [develop]
     types: [completed]
 
 concurrency:
-  group: cd-giuru-dev
+  group: cd-giuru-test
   cancel-in-progress: false
 
 permissions:
@@ -42,13 +42,13 @@ jobs:
           username: ${{ secrets.ACR_TEST_LOGIN }}
           password: ${{ secrets.ACR_TEST_PASSWORD }}
 
-      - name: Build and push Content-Api Docker Image
+      - name: Build and push Catalog-Api Docker Image
         uses: docker/build-push-action@v5.0.0
         with:
-          file: ./be/src/Project/Services/Content/Content.Api/Dockerfile
-          context: ./be/src/Project/Services/Content/Content.Api
+          file: ./be/src/Project/Services/Catalog/Catalog.Api/Dockerfile
+          context: ./be/src
           push: true
-          tags: ${{ secrets.ACR_TEST_NAME }}/content-api:latest, ${{ secrets.ACR_TEST_NAME }}/content-api:${{ github.run_number }}
+          tags: ${{ secrets.ACR_TEST_NAME }}/catalog-api:latest, ${{ secrets.ACR_TEST_NAME }}/catalog-api:${{ github.run_number }}
 
       - name: Checkout GitOps Repo
         uses: actions/checkout@v2
@@ -59,14 +59,14 @@ jobs:
       - name: Install yq (YAML Processor)
         run: sudo snap install yq
 
-      - name: Update the image tag in Content-Api Container deployment.yaml
+      - name: Update the image tag in Catalog-Api Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "content-api-container").image) = "${{ secrets.ACR_TEST_NAME }}/content-api:${{ github.run_number }}"' apps/content/overlays/test/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "catalog-api-container").image) = "${{ secrets.ACR_TEST_NAME }}/catalog-api:${{ github.run_number }}"' apps/catalog/overlays/test/deployment.yaml -i
 
       - name: Commit and Push changes
         run: |
-          git config --global user.name 'Development Deployment'
-          git config --global user.email 'development@deployment.com'
-          git add apps/content/overlays/test/deployment.yaml
-          git commit -m "Updated image tag to ${{ github.run_number }} for Content-Api service"
+          git config --global user.name 'Test Deployment'
+          git config --global user.email 'test@deployment.com'
+          git add apps/catalog/overlays/test/deployment.yaml
+          git commit -m "Updated image tag to ${{ github.run_number }} for Catalog-Api service"
           git push

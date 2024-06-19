@@ -1,5 +1,5 @@
-name: Seller-Web Development Deployment
-run-name: ${{ github.actor }} is deploying Seller-Web to Development 🚀
+name: Seller-Web Test Deployment
+run-name: ${{ github.actor }} is deploying Seller-Web to Test environment 🚀
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ on:
     types: [completed]
 
 concurrency:
-  group: cd-giuru-dev
+  group: cd-giuru-test
   cancel-in-progress: false
 
 permissions:
@@ -90,8 +90,8 @@ jobs:
       
       - name: Commit and Push changes
         run: |
-          git config --global user.name 'Development Deployment'
-          git config --global user.email 'development@deployment.com'
+          git config --global user.name 'Test Deployment'
+          git config --global user.email 'test@deployment.com'
           git add apps/seller-web/overlays/test/deployment.yaml
           git add apps/seller-web-react-ssr/overlays/test/deployment.yaml
           git commit -m "Updated image tag to ${{ github.run_number }} for Seller-Web"

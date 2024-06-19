@@ -1,15 +1,15 @@
-name: Ordering-Api Development Deployment
-run-name: ${{ github.actor }} is deploying Ordering-Api to Development 🚀
+name: Media-Api Test Deployment
+run-name: ${{ github.actor }} is deploying Media-Api to Test environment 🚀
 
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: ["Ordering-Api Continuous Integration"]
+    workflows: ["Media-Api Continuous Integration"]
     branches: [develop]
     types: [completed]
 
 concurrency:
-  group: cd-giuru-dev
+  group: cd-giuru-test
   cancel-in-progress: false
 
 permissions:
@@ -42,13 +42,13 @@ jobs:
           username: ${{ secrets.ACR_TEST_LOGIN }}
           password: ${{ secrets.ACR_TEST_PASSWORD }}
 
-      - name: Build and push Ordering-Api Docker Image
+      - name: Build and push Media-Api Docker Image
         uses: docker/build-push-action@v5.0.0
         with:
-          file: ./be/src/Project/Services/Ordering/Ordering.Api/Dockerfile
+          file: ./be/src/Project/Services/Media/Media.Api/Dockerfile
           context: ./be/src
           push: true
-          tags: ${{ secrets.ACR_TEST_NAME }}/ordering-api:latest, ${{ secrets.ACR_TEST_NAME }}/ordering-api:${{ github.run_number }}
+          tags: ${{ secrets.ACR_TEST_NAME }}/media-api:latest, ${{ secrets.ACR_TEST_NAME }}/media-api:${{ github.run_number }}
 
       - name: Checkout GitOps Repo
         uses: actions/checkout@v2
@@ -59,14 +59,14 @@ jobs:
       - name: Install yq (YAML Processor)
         run: sudo snap install yq
 
-      - name: Update the image tag in Ordering-Api Container deployment.yaml
+      - name: Update the image tag in Media-Api Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "ordering-api-container").image) = "${{ secrets.ACR_TEST_NAME }}/ordering-api:${{ github.run_number }}"' apps/ordering/overlays/test/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "media-api-container").image) = "${{ secrets.ACR_TEST_NAME }}/media-api:${{ github.run_number }}"' apps/media/overlays/test/deployment.yaml -i
 
       - name: Commit and Push changes
         run: |
-          git config --global user.name 'Development Deployment'
-          git config --global user.email 'development@deployment.com'
-          git add apps/ordering/overlays/test/deployment.yaml
-          git commit -m "Updated image tag to ${{ github.run_number }} for Ordering-Api service"
+          git config --global user.name 'Test Deployment'
+          git config --global user.email 'test@deployment.com'
+          git add apps/media/overlays/test/deployment.yaml
+          git commit -m "Updated image tag to ${{ github.run_number }} for Media-Api service"
           git push

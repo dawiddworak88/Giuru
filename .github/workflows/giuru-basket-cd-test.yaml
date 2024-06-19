@@ -1,15 +1,15 @@
-name: Catalog-Api Development Deployment
-run-name: ${{ github.actor }} is deploying Catalog-Api to Development 🚀
+name: Basket-Api Test Deployment
+run-name: ${{ github.actor }} is deploying Basket-Api to Test environment 🚀
 
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: ["Catalog-Api Continuous Integration"]
+    workflows: ["Basket-Api Continuous Integration"]
     branches: [develop]
     types: [completed]
 
 concurrency:
-  group: cd-giuru-dev
+  group: cd-giuru-test
   cancel-in-progress: false
 
 permissions:
@@ -42,13 +42,13 @@ jobs:
           username: ${{ secrets.ACR_TEST_LOGIN }}
           password: ${{ secrets.ACR_TEST_PASSWORD }}
 
-      - name: Build and push Catalog-Api Docker Image
+      - name: Build and push Basket-Api Docker Image
         uses: docker/build-push-action@v5.0.0
         with:
-          file: ./be/src/Project/Services/Catalog/Catalog.Api/Dockerfile
+          file: ./be/src/Project/Services/Basket/Basket.Api/Dockerfile
           context: ./be/src
           push: true
-          tags: ${{ secrets.ACR_TEST_NAME }}/catalog-api:latest, ${{ secrets.ACR_TEST_NAME }}/catalog-api:${{ github.run_number }}
+          tags: ${{ secrets.ACR_TEST_NAME }}/basket-api:latest, ${{ secrets.ACR_TEST_NAME }}/basket-api:${{ github.run_number }}
 
       - name: Checkout GitOps Repo
         uses: actions/checkout@v2
@@ -59,14 +59,14 @@ jobs:
       - name: Install yq (YAML Processor)
         run: sudo snap install yq
 
-      - name: Update the image tag in Catalog-Api Container deployment.yaml
+      - name: Update the image tag in Basket-Api Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "catalog-api-container").image) = "${{ secrets.ACR_TEST_NAME }}/catalog-api:${{ github.run_number }}"' apps/catalog/overlays/test/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "basket-api-container").image) = "${{ secrets.ACR_TEST_NAME }}/basket-api:${{ github.run_number }}"' apps/basket/overlays/test/deployment.yaml -i
 
       - name: Commit and Push changes
         run: |
-          git config --global user.name 'Development Deployment'
-          git config --global user.email 'development@deployment.com'
-          git add apps/catalog/overlays/test/deployment.yaml
-          git commit -m "Updated image tag to ${{ github.run_number }} for Catalog-Api service"
+          git config --global user.name 'Test Deployment'
+          git config --global user.email 'test@deployment.com'
+          git add apps/basket/overlays/test/deployment.yaml
+          git commit -m "Updated image tag to ${{ github.run_number }} for Basket-Api service"
           git push
