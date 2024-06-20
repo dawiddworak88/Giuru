@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Shared.Definitions.Products;
-using Buyer.Web.Areas.Products.Repositories.Products;
+﻿using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.ComponentModels.Files;
 using Buyer.Web.Shared.ViewModels.Files;
@@ -113,12 +112,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             {
                 if (await _settingsService.IsExternalCompletionDatesEnable(componentModel.Token, componentModel.Language, componentModel.SellerId))
                 {
-                    var list = new List<Product>
-                    {
-                        product
-                    };
-
-                    await _completionDatesService.GetCompletionDatesAsync(componentModel.Token, componentModel.Language, list, componentModel.SellerId);
+                    await _completionDatesService.GetCompletionDatesAsync(componentModel.Token, componentModel.Language, product, componentModel.SellerId);
                 }
 
                 viewModel.Ean = product.Ean;
