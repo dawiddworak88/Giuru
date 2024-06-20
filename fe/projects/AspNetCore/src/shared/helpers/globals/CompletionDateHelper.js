@@ -5,7 +5,7 @@ import updateLocale from "dayjs/plugin/updateLocale";
 import {
     datesOfPermanentHolidays,
     movableHolidays as datesOfMovableHolidays,
-  } from "../holidays";
+  } from "../../constants/HolidaysConstants";
 
 const SHIPMENT_ON_THE_SAME_DAY_BY_HOUR = 12;
 const MOVE_DATE_BY_1_DAY = 1;
@@ -177,57 +177,5 @@ const allHolidaysInYear = [
       "czwartek",
       "piątek",
       "sobotę",
-    ]
-  });
-
-  dayjs.updateLocale("en", {
-    months: [
-        "sanuary",
-        "february",
-        "march",
-        "april",
-        "may",
-        "june",
-        "july",
-        "august",
-        "september",
-        "october",
-        "november",
-        "december"
-    ],
-    weekdays: [
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-    ]
-  });
-
-  dayjs.updateLocale("de", {
-    months: [
-        "Januar",
-        "Februar",
-        "März",
-        "April",
-        "Mai",
-        "Juni",
-        "Juli",
-        "August",
-        "September",
-        "Oktober",
-        "November",
-        "Dezember"
-    ],
-    weekdays: [
-        "Sonntag",
-        "Montag",
-        "Dienstag",
-        "Mittwoch",
-        "Donnerstag",
-        "Freitag",
-        "Samstag"
     ]
   });
