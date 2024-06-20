@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Buyer.Web.Areas.Products.Repositories.CompletionDates;
 using Buyer.Web.Shared.Definitions.CompletionDate;
 using Buyer.Web.Shared.DomainModels.Clients;
+using Foundation.GenericRepository.Paginations;
 
 namespace Buyer.Web.Areas.Products.Services.CompletionDates
 {
@@ -65,6 +66,40 @@ namespace Buyer.Web.Areas.Products.Services.CompletionDates
 
                 product.CompletionDate = completionDate;
             }
+        }
+
+        public async Task GetCompletionDatesAsync(string token, string language, Product product, Guid? clientId)
+        {
+            var inStockProduct = _inventoryRepository.GetAvailbleProductsInventory(language, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token).Result.Data.FirstOrDefault(x => x.ProductId == product.Id);
+
+            var clientFieldValues = await GetClientFieldValuesAsync(token, language, clientId);
+
+            var transportId = GetParameterValue(clientFieldValues, CompletionDateConstants.Transport.Id);
+            var zoneId = GetParameterValue(clientFieldValues, CompletionDateConstants.Zone.Id);
+            var campaignId = GetParameterValue(clientFieldValues, CompletionDateConstants.Campaign.Id);
+
+            var conditionId = CompletionDateConstants.Condition.StandardId;
+
+            if (IsFastDeliveryEnable(product))
+            {
+                conditionId = CompletionDateConstants.Condition.FastDeliveryId;
+            }
+            else if (inStockProduct is not null)
+            {
+                conditionId = CompletionDateConstants.Condition.IsStockId;
+            }
+
+            var completionDate = await _completionDatesRepository.GetAsync(
+                token,
+                language,
+                transportId,
+                conditionId,
+                zoneId,
+                campaignId,
+                DateTime.Now);
+
+            product.CompletionDate = completionDate;
+
         }
 
         private Guid GetParameterValue(List<ClientFieldValue> clientFieldValues, Guid id)
