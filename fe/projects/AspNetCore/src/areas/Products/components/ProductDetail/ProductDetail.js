@@ -16,6 +16,7 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ProductDetailModal from "../ProductDetailModal/ProductDetailModal";
+import { calculateFinalDeliveryDay } from "../../../../shared/helpers/globals/CompletionDateHelper";
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
@@ -246,6 +247,9 @@ function ProductDetail(props) {
                         }
                         <h1 className="title is-4 mt-1">{props.title}</h1>
                         <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
+                        {props.completionDate > 0 &&
+                            <h2>{calculateFinalDeliveryDay(5)}</h2>
+                        }
                         {props.outletTitle &&
                             <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>
                         }

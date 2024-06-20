@@ -13,6 +13,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
 import Modal from "../Modal/Modal";
+import { calculateFinalDeliveryDay } from "../../helpers/globals/CompletionDateHelper";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -197,6 +198,9 @@ function Catalog(props) {
                                                     <div className="catalog-item__productAttributes">
                                                         <h3>{item.productAttributes}</h3>
                                                     </div>
+                                                }
+                                                {item.completionDate > 0 &&
+                                                    <h5>{calculateFinalDeliveryDay(5)}</h5>
                                                 }
                                                 {item.inStock &&
                                                     <div className="catalog-item__in-stock-details">
