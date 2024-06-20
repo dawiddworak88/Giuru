@@ -15,6 +15,8 @@ using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Media.Services.MediaServices;
+using Buyer.Web.Shared.Services.Settings;
+using Buyer.Web.Areas.Products.Services.CompletionDates;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -24,17 +26,23 @@ namespace Buyer.Web.Areas.Products.Services.Products
         private readonly IMediaService mediaService;
         private readonly IOptions<AppSettings> options;
         private readonly LinkGenerator linkGenerator;
+        private readonly ISettingsService _settingsService;
+        private readonly ICompletionDatesService _completionDatesService;
 
         public ProductsService(
             IProductsRepository productsRepository,
             IMediaService mediaService,
             IOptions<AppSettings> options,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            ISettingsService settingsService,
+            ICompletionDatesService completionDatesService)
         {
             this.productsRepository = productsRepository;
             this.mediaService = mediaService;
             this.options = options;
             this.linkGenerator = linkGenerator;
+            _settingsService = settingsService;
+            _completionDatesService = completionDatesService;
         }
 
         public async Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes)
@@ -64,6 +72,11 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
             if (pagedProducts?.Data != null)
             {
+                if (await _settingsService.IsExternalCompletionDatesEnable(token, language, sellerId))
+                {
+                    await _completionDatesService.GetCompletionDatesAsync(token, language, pagedProducts.Data.ToList(), sellerId);
+                }
+
                 foreach (var product in pagedProducts.Data.OrEmptyIfNull())
                 {
                     var catalogItem = new CatalogItemViewModel
@@ -71,6 +84,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         Id = product.Id,
                         Sku = product.Sku,
                         Title = product.Name,
+                        CompletionDate = product.CompletionDate,
                         Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
                         BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId }),
                         BrandName = product.BrandName,
