@@ -4,7 +4,7 @@ run-name: ${{ github.actor }} is deploying Media-Api to Production 🚀
 on:
   workflow_run:
     workflows: ["Media-Api Continuous Integration"]
-    branches: [main, release/*]
+    branches: [main]
     types: [completed]
 
 concurrency:

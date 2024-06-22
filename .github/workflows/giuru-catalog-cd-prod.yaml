@@ -4,7 +4,7 @@ run-name: ${{ github.actor }} is deploying Catalog-Api to Production 🚀
 on:
   workflow_run:
     workflows: ["Catalog-Api Continuous Integration"]
-    branches: [main, release/*]
+    branches: [main]
     types: [completed]
 
 concurrency:

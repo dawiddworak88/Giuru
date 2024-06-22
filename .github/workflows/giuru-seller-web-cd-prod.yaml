@@ -4,7 +4,7 @@ run-name: ${{ github.actor }} is deploying Seller-Web to Production 🚀
 on:
   workflow_run:
     workflows: ["Seller-Web Continuous Integration"]
-    branches: [main, release/*]
+    branches: [main]
     types: [completed]
 
 concurrency:
