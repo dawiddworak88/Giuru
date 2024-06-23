@@ -17,56 +17,86 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
         private readonly CatalogContext _catalogContext;
         private readonly IElasticClient _elasticClient;
         private readonly IConfiguration _configuration;
-        private readonly ILogger<BulkProductIndexingRepository> _logger;
+        private readonly ILogger<ProductIndexingRepository> _logger;
 
         public BulkProductIndexingRepository(
-            ILogger<BulkProductIndexingRepository> logger,
+            ILogger<ProductIndexingRepository> logger,
             CatalogContext catalogContext,
             IElasticClient elasticClient,
             IConfiguration configuration)
         {
-            _catalogContext = catalogContext ?? throw new ArgumentNullException(nameof(catalogContext));
-            _elasticClient = elasticClient ?? throw new ArgumentNullException(nameof(elasticClient));
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _catalogContext = catalogContext;
+            _elasticClient = elasticClient;
+            _configuration = configuration;
+            _logger = logger;
+        }
+
+        public async Task DeleteAsync(Guid sellerId)
+        {
+            await _elasticClient.DeleteByQueryAsync<ProductSearchModel>(q => q.Query(z => z.Term(p => p.SellerId, sellerId)));
         }
 
         public async Task IndexAsync(Guid productId)
         {
             var product = await _catalogContext.Products
                 .Include(p => p.Translations)
-                .Include(p => p.Category)
-                .ThenInclude(c => c.Translations)
+                .Include(p => p.Category).ThenInclude(c => c.Translations)
+                .Include(p => p.Brand)
                 .FirstOrDefaultAsync(x => x.Id == productId);
 
-            if (product == null) return;
-
-            await DeleteAsync(product.Id);
-
-            var descriptor = new BulkDescriptor();
-
-            foreach (var language in _configuration["SupportedCultures"].Split(","))
+            if (product != null)
             {
-                var document = CreateProductSearchModel(product, language);
-                descriptor.Index<ProductSearchModel>(i => i.Document(document));
-            }
+                await _elasticClient.DeleteByQueryAsync<ProductSearchModel>(q => q.Query(z => z.Term(p => p.ProductId, product.Id)));
 
-            var response = await _elasticClient.BulkAsync(descriptor);
+                var descriptor = new BulkDescriptor();
+                var supportedCultures = _configuration["SupportedCultures"].Split(",");
 
-            if (!response.IsValid)
-            {
-                _logger.LogError($"Failed to index product {productId}: {response.DebugInformation}");
+                foreach (var language in supportedCultures)
+                {
+                    var productTranslations = product.Translations.FirstOrDefault(x => x.Language == language && x.IsActive)
+                        ?? product.Translations.FirstOrDefault(x => x.IsActive);
+                    var categoryTranslations = product.Category.Translations.FirstOrDefault(x => x.Language == language && x.IsActive)
+                        ?? product.Category.Translations.FirstOrDefault(x => x.IsActive);
+
+                    if (productTranslations != null)
+                    {
+                        var document = CreateProductSearchModel(product, productTranslations, categoryTranslations, language);
+                        await PopulateProductAttributesAsync(document, productTranslations.FormData, product.CategoryId, language);
+
+                        descriptor.Index<ProductSearchModel>(i => i.Document(document));
+                    }
+                }
+
+                await _elasticClient.DeleteByQueryAsync<ProductSearchModel>(q => q.Query(z => z.Term(p => p.ProductId, productId)));
+
+                var response = await _elasticClient.BulkAsync(descriptor);
+
+                if (!response.IsValid)
+                {
+                    _logger.LogError(response.DebugInformation);
+                }
             }
         }
 
-        private ProductSearchModel CreateProductSearchModel(Infrastructure.Products.Entities.Product product, string language)
+        private ProductSearchModel CreateProductSearchModel(Infrastructure.Products.Entities.Product product, Infrastructure.Products.Entities.ProductTranslation productTranslations, Infrastructure.Categories.Entites.CategoryTranslation categoryTranslations, string language)
         {
-            var productTranslations = product.Translations.FirstOrDefault(t => t.Language == language && t.IsActive) ??
-                                      product.Translations.FirstOrDefault(t => t.IsActive);
-            var categoryTranslations = product.Category.Translations.FirstOrDefault(t => t.Language == language && t.IsActive) ??
-                                       product.Category.Translations.FirstOrDefault(t => t.IsActive);
+            var categoryContexts = new Dictionary<string, IEnumerable<string>>
+            {
+                { "isActive", new[] { product.Category.IsActive.ToString() } },
+                { "language", new[] { language } }
+            };
 
-            if (productTranslations == null || categoryTranslations == null) return null;
+            var brandContexts = new Dictionary<string, IEnumerable<string>>
+            {
+                { "isActive", new[] { product.IsActive.ToString() } },
+                { "primaryProductIdHasValue", new[] { product.PrimaryProductId.HasValue.ToString() } }
+            };
+
+            var nameContexts = new Dictionary<string, IEnumerable<string>>
+            {
+                { "isActive", new[] { product.IsActive.ToString() } },
+                { "primaryProductIdHasValue", new[] { product.PrimaryProductId.HasValue.ToString() } }
+            };
 
             return new ProductSearchModel
             {
@@ -74,11 +104,11 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                 ProductId = product.Id,
                 CategoryId = product.CategoryId,
                 Ean = product.Ean,
-                CategoryName = categoryTranslations.Name,
-                CategoryNameSuggest = CreateCompletionField(categoryTranslations.Name, "isActive", product.Category.IsActive.ToString(), "language", language),
+                CategoryName = categoryTranslations?.Name,
+                CategoryNameSuggest = CreateCompletionField(categoryTranslations?.Name, categoryContexts),
                 SellerId = product.Brand.SellerId,
                 BrandName = product.Brand.Name,
-                BrandNameSuggest = CreateCompletionField(product.Brand.Name, "isActive", product.IsActive.ToString(), "primaryProductIdHasValue", product.PrimaryProductId.HasValue.ToString()),
+                BrandNameSuggest = CreateCompletionField(product.Brand.Name, brandContexts),
                 IsNew = product.IsNew,
                 IsPublished = product.IsPublished,
                 IsProtected = product.IsProtected,
@@ -90,119 +120,109 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                 FulfillmentTime = product.FulfillmentTime,
                 FormData = productTranslations.FormData,
                 Name = productTranslations.Name,
-                NameSuggest = CreateCompletionField(productTranslations.Name, "isActive", product.IsActive.ToString(), "primaryProductIdHasValue", product.PrimaryProductId.HasValue.ToString()),
+                NameSuggest = CreateCompletionField(productTranslations.Name, nameContexts),
                 PrimaryProductId = product.PrimaryProductId,
                 PrimaryProductIdHasValue = product.PrimaryProductId.HasValue,
                 Description = productTranslations.Description,
                 LastModifiedDate = product.LastModifiedDate,
-                CreatedDate = product.CreatedDate,
-                ProductAttributes = ExtractProductAttributes(product, productTranslations)
+                CreatedDate = product.CreatedDate
             };
         }
 
-        private Dictionary<string, object> ExtractProductAttributes(Infrastructure.Products.Entities.Product product, Infrastructure.Products.Entities.ProductTranslation translation)
-        {
-            var productAttributes = new Dictionary<string, object>();
-
-            if (string.IsNullOrWhiteSpace(translation.FormData))
-                return productAttributes;
-
-            var formDataObject = JObject.Parse(translation.FormData);
-            var categorySchema = _catalogContext.CategorySchemas
-                                .FirstOrDefault(x => x.CategoryId == product.CategoryId && x.Language == translation.Language && x.IsActive) ??
-                                _catalogContext.CategorySchemas
-                                .FirstOrDefault(x => x.CategoryId == product.CategoryId && x.IsActive);
-
-            if (categorySchema == null || string.IsNullOrWhiteSpace(categorySchema.Schema))
-                return productAttributes;
-
-            var schemaObject = JObject.Parse(categorySchema.Schema);
-
-            foreach (var formDataProperty in formDataObject.Properties())
-            {
-                var key = formDataProperty.Name;
-                var schemaProperty = (JObject)schemaObject["properties"]?[key];
-
-                if (schemaProperty == null)
-                    continue;
-
-                var propertyTitle = schemaProperty["title"]?.ToString();
-                var propertyType = schemaProperty["type"]?.ToString();
-
-                if (formDataProperty.Value.Type == JTokenType.Array)
-                {
-                    var items = new List<object>();
-                    foreach (var item in formDataProperty.Values())
-                    {
-                        items.Add(ResolveEnumTitle(item, schemaObject));
-                    }
-                    productAttributes.Add(key, new { Name = propertyTitle, Value = items });
-                }
-                else
-                {
-                    object value;
-                    switch (propertyType)
-                    {
-                        case "integer":
-                            value = formDataProperty.Value.Value<int>();
-                            break;
-                        case "number":
-                            value = formDataProperty.Value.Value<float>();
-                            break;
-                        case "boolean":
-                            value = formDataProperty.Value.Value<bool>();
-                            break;
-                        case "string":
-                            if (schemaProperty["enum"] != null)
-                            {
-                                value = ResolveEnumTitle(formDataProperty.Value, schemaObject);
-                            }
-                            else
-                            {
-                                value = formDataProperty.Value.ToString();
-                            }
-                            break;
-                        default:
-                            value = formDataProperty.Value.ToString();
-                            break;
-                    }
-
-                    productAttributes.Add(key, new { Name = propertyTitle, Value = value });
-                }
-            }
-
-            return productAttributes;
-        }
-
-        private object ResolveEnumTitle(JToken enumValue, JObject schemaObject)
-        {
-            var titlePath = $"$.definitions...anyOf[?(@.enum[0] == '{enumValue}')].title";
-            var title = (string)schemaObject.SelectToken(titlePath);
-            return new { Id = enumValue, Name = title ?? enumValue.ToString() };
-        }
-
-        private CompletionField CreateCompletionField(string input, string contextKey1, string contextValue1, string contextKey2, string contextValue2)
+        private CompletionField CreateCompletionField(string input, Dictionary<string, IEnumerable<string>> contexts)
         {
             return new CompletionField
             {
-                Input = input.Split(' '),
-                Contexts = new Dictionary<string, IEnumerable<string>>
-                {
-                    {contextKey1, new[] {contextValue1}},
-                    {contextKey2, new[] {contextValue2}}
-                }
+                Input = input?.Split(' ', StringSplitOptions.RemoveEmptyEntries),
+                Contexts = contexts
             };
         }
 
-        private async Task DeleteAsync(Guid sellerId)
+        private async Task PopulateProductAttributesAsync(ProductSearchModel document, string formData, Guid categoryId, string language)
         {
-            var response = await _elasticClient.DeleteByQueryAsync<ProductSearchModel>(
-                q => q.Query(z => z.Term(p => p.SellerId, sellerId)));
-
-            if (!response.IsValid)
+            if (!string.IsNullOrWhiteSpace(formData))
             {
-                _logger.LogError($"Failed to delete products for sellerId {sellerId}: {response.DebugInformation}");
+                var categorySchema = await _catalogContext.CategorySchemas
+                    .FirstOrDefaultAsync(x => x.CategoryId == categoryId && x.Language == language && x.IsActive)
+                    ?? await _catalogContext.CategorySchemas
+                    .FirstOrDefaultAsync(x => x.CategoryId == categoryId && x.IsActive);
+
+                if (!string.IsNullOrWhiteSpace(categorySchema?.Schema))
+                {
+                    var formDataObject = JObject.Parse(formData);
+                    var productAttributes = new Dictionary<string, object>();
+
+                    foreach (var formDataProperty in formDataObject.Properties())
+                    {
+                        var propertyObject = (JObject)JObject.Parse(categorySchema.Schema)["properties"]?[formDataProperty.Name];
+
+                        if (propertyObject != null)
+                        {
+                            var value = CreateAttributeValue(formDataProperty, propertyObject, categorySchema.Schema);
+                            if (value != null)
+                            {
+                                productAttributes.Add(formDataProperty.Name, value);
+                            }
+                        }
+                    }
+
+                    document.ProductAttributes = productAttributes;
+                }
             }
+        }
+
+        private object CreateAttributeValue(JProperty formDataProperty, JObject propertyObject, string schema)
+        {
+            if (formDataProperty.Value.Type != JTokenType.Array)
+            {
+                if (Guid.TryParse(formDataProperty.Value.ToString(), out var id))
+                {
+                    var title = (JValue)JObject.Parse(schema).SelectToken($"$.definitions...anyOf[?(@.enum[0] == '{id}')].title");
+                    if (title != null)
+                    {
+                        return new
+                        {
+                            Name = propertyObject["title"]?.Value<string>(),
+                            Value = new { Id = id, Name = title.Value<string>() }
+                        };
+                    }
+                }
+                else
+                {
+                    return CreateSimpleAttributeValue(formDataProperty, propertyObject);
+                }
+            }
+            else
+            {
+                return CreateArrayAttributeValue((JArray)formDataProperty.Value, propertyObject, schema);
+            }
+
+            return null;
+        }
+
+        private object CreateSimpleAttributeValue(JProperty formDataProperty, JObject propertyObject)
+        {
+            var title = propertyObject["title"]?.Value<string>();
+            return formDataProperty.Value.Type switch
+            {
+                JTokenType.Boolean => new { Name = title, Value = Convert.ToBoolean(formDataProperty.Value) },
+                JTokenType.Float => new { Name = title, Value = (float)Convert.ToDouble(formDataProperty.Value) },
+                JTokenType.Integer => new { Name = title, Value = Convert.ToInt32(formDataProperty.Value) },
+                _ => new { Name = title, Value = Convert.ToString(formDataProperty.Value) }
+            };
+        }
+
+        private object CreateArrayAttributeValue(JArray valueIdsArray, JObject propertyObject, string schema)
+        {
+            return new
+            {
+                Name = propertyObject["title"]?.Value<string>(),
+                Value = valueIdsArray.Select(x => new
+                {
+                    Id = x,
+                    Name = ((JValue)JObject.Parse(schema).SelectTokens($"$.definitions...anyOf[?(@.enum[0] == '{x}')].title").FirstOrDefault())?.Value<string>()
+                })
+            };
         }
     }
 }
