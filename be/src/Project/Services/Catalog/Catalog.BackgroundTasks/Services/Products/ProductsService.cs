@@ -48,8 +48,11 @@ namespace Catalog.BackgroundTasks.Services.Products
         {
             if (sellerId.HasValue)
             {
+                int i = 1;
                 foreach (var productId in _context.Products.Where(x => x.Brand.SellerId == sellerId && x.Category.Id == categoryId).Select(x => x.Id).ToList())
                 {
+                    _logger.LogError($"Indexing product {i} - {productId}");
+
                     try
                     {
                         await _productIndexingRepository.IndexAsync(productId);
@@ -58,6 +61,8 @@ namespace Catalog.BackgroundTasks.Services.Products
                     {
                         _logger.LogError(exception, $"Couldn't index product: {productId}");
                     }
+
+                    i++;
                 }
             }
         }
