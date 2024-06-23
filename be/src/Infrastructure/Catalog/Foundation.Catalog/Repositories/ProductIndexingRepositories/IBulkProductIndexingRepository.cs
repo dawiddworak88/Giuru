@@ -6,6 +6,5 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
     public interface IBulkProductIndexingRepository
     {
         Task IndexAsync(Guid productId);
-        Task DeleteAsync(Guid sellerId);
     }
 }

@@ -31,17 +31,6 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task DeleteAsync(Guid sellerId)
-        {
-            var response = await _elasticClient.DeleteByQueryAsync<ProductSearchModel>(
-                q => q.Query(z => z.Term(p => p.SellerId, sellerId)));
-
-            if (!response.IsValid)
-            {
-                _logger.LogError($"Failed to delete products for sellerId {sellerId}: {response.DebugInformation}");
-            }
-        }
-
         public async Task IndexAsync(Guid productId)
         {
             var product = await _catalogContext.Products
@@ -109,6 +98,17 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                 CreatedDate = product.CreatedDate,
                 ProductAttributes = ExtractProductAttributes(product, productTranslations)
             };
+        }
+
+        private async Task DeleteAsync(Guid sellerId)
+        {
+            var response = await _elasticClient.DeleteByQueryAsync<ProductSearchModel>(
+                q => q.Query(z => z.Term(p => p.SellerId, sellerId)));
+
+            if (!response.IsValid)
+            {
+                _logger.LogError($"Failed to delete products for sellerId {sellerId}: {response.DebugInformation}");
+            }
         }
 
         private Dictionary<string, object> ExtractProductAttributes(Infrastructure.Products.Entities.Product product, Infrastructure.Products.Entities.ProductTranslation translation)
