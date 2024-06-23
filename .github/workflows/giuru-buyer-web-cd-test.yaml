@@ -96,8 +96,7 @@ jobs:
             echo "Push succeeded"
             break
           else
-            random_number=$((RANDOM % 10 + 1))
-            sleep $(random_number)
+            sleep $((RANDOM % 10 + 1))
             for i in {1..5}; do
               git pull
               if git push; then
