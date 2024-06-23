@@ -63,7 +63,8 @@ jobs:
         run: |
           git config --global user.name 'Test Deployment'
           git config --global user.email 'test@deployment.com'
-          git pull --ff-only
+          git config pull.ff true
+          git pull
           git add apps/download-center/overlays/test/deployment.yaml
           git commit -m "Updated image tag to ${{ github.run_number }} for Download-Center-Api service"
           if git push; then
@@ -72,7 +73,7 @@ jobs:
           else
             sleep $((RANDOM % 10 + 1))
             for i in {1..5}; do
-              git pull --ff-only
+              git pull
               if git push; then
                 echo "Push succeeded"
                 break
