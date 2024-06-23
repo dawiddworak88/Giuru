@@ -1,5 +1,5 @@
 ﻿using Foundation.Catalog.Infrastructure;
-using Foundation.Catalog.Repositories.Products.ProductIndexingRepositories;
+using Foundation.Catalog.Repositories.ProductIndexingRepositories;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -11,15 +11,18 @@ namespace Catalog.BackgroundTasks.Services.Products
     {
         private readonly CatalogContext _context;
         private readonly IProductIndexingRepository _productIndexingRepository;
+        private readonly IBulkProductIndexingRepository _bulkProductIndexingRepository;
         private readonly ILogger<ProductsService> _logger;
 
         public ProductsService(
             CatalogContext context,
             IProductIndexingRepository productIndexingRepository,
+            IBulkProductIndexingRepository bulkProductIndexingRepository,
             ILogger<ProductsService> logger)
         {
             _context = context;
             _productIndexingRepository = productIndexingRepository;
+            _bulkProductIndexingRepository = bulkProductIndexingRepository;
             _logger = logger;
         }
 
@@ -31,7 +34,7 @@ namespace Catalog.BackgroundTasks.Services.Products
                 {
                     try
                     {
-                        await _productIndexingRepository.IndexAsync(productId);
+                        await _bulkProductIndexingRepository.IndexAsync(productId);
                     }
                     catch (Exception exception)
                     {

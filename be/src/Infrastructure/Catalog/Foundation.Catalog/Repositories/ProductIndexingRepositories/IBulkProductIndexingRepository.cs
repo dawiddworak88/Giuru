@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using System;
 
 namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
 {
-    public interface IProductIndexingRepository
+    public interface IBulkProductIndexingRepository
     {
         Task IndexAsync(Guid productId);
         Task DeleteAsync(Guid sellerId);
