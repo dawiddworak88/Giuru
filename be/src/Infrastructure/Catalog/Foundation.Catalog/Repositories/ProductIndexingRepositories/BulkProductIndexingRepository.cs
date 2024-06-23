@@ -100,17 +100,6 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             };
         }
 
-        private async Task DeleteAsync(Guid sellerId)
-        {
-            var response = await _elasticClient.DeleteByQueryAsync<ProductSearchModel>(
-                q => q.Query(z => z.Term(p => p.SellerId, sellerId)));
-
-            if (!response.IsValid)
-            {
-                _logger.LogError($"Failed to delete products for sellerId {sellerId}: {response.DebugInformation}");
-            }
-        }
-
         private Dictionary<string, object> ExtractProductAttributes(Infrastructure.Products.Entities.Product product, Infrastructure.Products.Entities.ProductTranslation translation)
         {
             var productAttributes = new Dictionary<string, object>();
@@ -190,6 +179,17 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             var titlePath = $"$.definitions...anyOf[?(@.enum[0] == '{enumValue}')].title";
             var title = (string)schemaObject.SelectToken(titlePath);
             return new { Id = enumValue, Name = title ?? enumValue.ToString() };
+        }
+
+        private async Task DeleteAsync(Guid sellerId)
+        {
+            var response = await _elasticClient.DeleteByQueryAsync<ProductSearchModel>(
+                q => q.Query(z => z.Term(p => p.SellerId, sellerId)));
+
+            if (!response.IsValid)
+            {
+                _logger.LogError($"Failed to delete products for sellerId {sellerId}: {response.DebugInformation}");
+            }
         }
 
         private CompletionField CreateCompletionField(string input, string contextKey1, string contextValue1, string contextKey2, string contextValue2)
