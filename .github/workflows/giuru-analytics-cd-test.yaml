@@ -8,10 +8,6 @@ on:
     branches: [develop]
     types: [completed]
 
-concurrency:
-  group: cd-giuru-test
-  cancel-in-progress: false
-
 permissions:
   id-token: write
   contents: read
@@ -67,6 +63,23 @@ jobs:
         run: |
           git config --global user.name 'Test Deployment'
           git config --global user.email 'test@deployment.com'
+          git pull
           git add apps/analytics/overlays/test/deployment.yaml
           git commit -m "Updated image tag to ${{ github.run_number }} for Analytics-Api service"
-          git push
+          if git push; then
+            echo "Push succeeded"
+            break
+          else
+            random_number=$((RANDOM % 10 + 1))
+            sleep $(random_number)
+            for i in {1..5}; do
+              git pull
+              if git push; then
+                echo "Push succeeded"
+                break
+              else
+                random_number=$((RANDOM % 10 + 1))
+                sleep $((i * 2 + random_number))
+              fi
+            done
+          fi
