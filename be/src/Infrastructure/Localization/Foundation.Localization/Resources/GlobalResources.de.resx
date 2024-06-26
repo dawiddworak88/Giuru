@@ -789,4 +789,16 @@
   <data name="SettingsSavedSuccessfully" xml:space="preserve">
     <value>Einstellungen erfolgreich gespeichert</value>
   </data>
+  <data name="EltapTransportLongDeliveryText" xml:space="preserve">
+    <value>Wir liefern zu Ihnen innerhalb von</value>
+  </data>
+  <data name="EltapTransportShortDeliveryText" xml:space="preserve">
+    <value>Wir liefern zu Ihnen am</value>
+  </data>
+  <data name="OwnPickupLongDeliveryText" xml:space="preserve">
+    <value>Abholung möglich in</value>
+  </data>
+  <data name="OwnPickupShortDeliveryText" xml:space="preserve">
+    <value>Möglicher Abholtermin am</value>
+  </data>
 </root>

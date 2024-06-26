@@ -795,4 +795,16 @@
   <data name="SettingsSavedSuccessfully" xml:space="preserve">
     <value>Pomyślnie zapisano ustawienia</value>
   </data>
+  <data name="EltapTransportLongDeliveryText" xml:space="preserve">
+    <value>Dostarczymy do Ciebie do</value>
+  </data>
+  <data name="EltapTransportShortDeliveryText" xml:space="preserve">
+    <value>Dostarczymy do Ciebie</value>
+  </data>
+  <data name="OwnPickupLongDeliveryText" xml:space="preserve">
+    <value>Odbiur możliwy za</value>
+  </data>
+  <data name="OwnPickupShortDeliveryText" xml:space="preserve">
+    <value>Możliwy termin odbioru</value>
+  </data>
 </root>
