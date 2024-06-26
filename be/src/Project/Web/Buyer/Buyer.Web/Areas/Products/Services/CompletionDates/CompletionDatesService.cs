@@ -38,21 +38,21 @@ namespace Buyer.Web.Areas.Products.Services.CompletionDates
 
             var clientFieldValues = await GetClientFieldValuesAsync(token, language, clientId);
 
-            var transportId = GetParameterValue(clientFieldValues, CompletionDateConstants.Transport.Id);
-            var zoneId = GetParameterValue(clientFieldValues, CompletionDateConstants.Zone.Id);
-            var campaignId = GetParameterValue(clientFieldValues, CompletionDateConstants.Campaign.Id);
+            var transportId = GetParameterValue(clientFieldValues, ClientFieldsConstants.Transport.Id);
+            var zoneId = GetParameterValue(clientFieldValues, ClientFieldsConstants.Zone.Id);
+            var campaignId = GetParameterValue(clientFieldValues, ClientFieldsConstants.Campaign.Id);
 
             foreach (var product in products)
             {
-                var conditionId = CompletionDateConstants.Condition.StandardId;
+                var conditionId = ClientFieldsConstants.Condition.StandardId;
 
                 if (IsFastDeliveryEnable(product))
                 {
-                    conditionId = CompletionDateConstants.Condition.FastDeliveryId;
+                    conditionId = ClientFieldsConstants.Condition.FastDeliveryId;
                 }
                 else if (inStockProducts.Any(x => x.ProductId == product.Id))
                 {
-                    conditionId = CompletionDateConstants.Condition.IsStockId;
+                    conditionId = ClientFieldsConstants.Condition.IsStockId;
                 }
 
                 var completionDate = await _completionDatesRepository.GetAsync(
@@ -74,19 +74,19 @@ namespace Buyer.Web.Areas.Products.Services.CompletionDates
 
             var clientFieldValues = await GetClientFieldValuesAsync(token, language, clientId);
 
-            var transportId = GetParameterValue(clientFieldValues, CompletionDateConstants.Transport.Id);
-            var zoneId = GetParameterValue(clientFieldValues, CompletionDateConstants.Zone.Id);
-            var campaignId = GetParameterValue(clientFieldValues, CompletionDateConstants.Campaign.Id);
+            var transportId = GetParameterValue(clientFieldValues, ClientFieldsConstants.Transport.Id);
+            var zoneId = GetParameterValue(clientFieldValues, ClientFieldsConstants.Zone.Id);
+            var campaignId = GetParameterValue(clientFieldValues, ClientFieldsConstants.Campaign.Id);
 
-            var conditionId = CompletionDateConstants.Condition.StandardId;
+            var conditionId = ClientFieldsConstants.Condition.StandardId;
 
             if (IsFastDeliveryEnable(product))
             {
-                conditionId = CompletionDateConstants.Condition.FastDeliveryId;
+                conditionId = ClientFieldsConstants.Condition.FastDeliveryId;
             }
             else if (inStockProduct is not null)
             {
-                conditionId = CompletionDateConstants.Condition.IsStockId;
+                conditionId = ClientFieldsConstants.Condition.IsStockId;
             }
 
             var completionDate = await _completionDatesRepository.GetAsync(
@@ -106,7 +106,12 @@ namespace Buyer.Web.Areas.Products.Services.CompletionDates
         {
             if (clientFieldValues.Any(x => x.FieldDefinitionId == id))
             {
-                return Guid.Parse(clientFieldValues.FirstOrDefault(y => y.FieldDefinitionId == id)?.FieldValue);
+                var clientField = clientFieldValues.FirstOrDefault(y => y.FieldDefinitionId == id);
+
+                if (clientField.FieldValue is not null)
+                {
+                    return Guid.Parse(clientField.FieldValue);
+                }
             }
 
             return default;
