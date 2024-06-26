@@ -44,7 +44,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 MainNavigation = await _mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 Breadcrumbs = await _productBreadcrumbsModelBuilder.BuildModelAsync(componentModel),
                 ProductDetail = await _productDetailModelBuilder.BuildModelAsync(componentModel),
-                Footer = await _footerModelBuilder.BuildModelAsync(componentModel)
+                Footer = await _footerModelBuilder.BuildModelAsync(componentModel),
+                Locale = componentModel.Language
             };
 
             return viewModel;
