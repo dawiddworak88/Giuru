@@ -22,7 +22,7 @@ module.exports = {
         searchproductspage: ["./src/areas/Products/pages/SearchProductsPage/index.js", "./src/areas/Products/pages/SearchProductsPage/SearchProductsPage.scss"],
         availableproductspage: ["./src/areas/Products/pages/AvailableProductsPage/index.js", "./src/areas/Products/pages/AvailableProductsPage/AvailableProductsPage.scss"],
         productpage: ["./src/areas/Products/pages/ProductPage/index.js", "./src/areas/Products/pages/ProductPage/ProductPage.scss"],
-        slugPage: ["./src/areas/Content/pages/SlugPage/index.js", "./src/areas/Content/pages/SlugPage/SlugPage.scss"]
+        slugpage: ["./src/areas/Content/pages/SlugPage/index.js", "./src/areas/Content/pages/SlugPage/SlugPage.scss"]
     },
     output: {
         publicPath: path.resolve(__dirname, "../../../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),

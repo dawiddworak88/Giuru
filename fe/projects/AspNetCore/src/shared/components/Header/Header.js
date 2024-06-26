@@ -103,8 +103,6 @@ function Header(props) {
         setTotalBasketItems(state.totalBasketItems);
 
     }, [state])
-    
-    console.log(props);
 
     return (
         <header>

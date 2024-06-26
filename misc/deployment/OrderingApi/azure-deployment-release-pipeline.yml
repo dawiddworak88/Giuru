@@ -76,6 +76,7 @@ stages:
               --set openTelemetryCollectorUrl='$(openTelemetryCollectorUrl)' \
               --set orderingApi.connectionString="$escapedConnectionString" \
               --set orderingApi.actionSendGridCustomOrderTemplateId='$(actionSendGridCustomOrderTemplateId)' \
+              --set orderingApi.actionSendGridConfirmationOrderTemplateId='$(actionSendGridConfirmationOrderTemplateId)' \
               --set ingress.orderingapidomain='$(orderingApiDomain)' \
               $(k8sReleaseName) $(helmChartPath)
             displayName: Deploy to Kubernetes

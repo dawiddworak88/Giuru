@@ -107,7 +107,8 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             string shippingStreet,
             string shippingPhoneNumber,
             Guid? shippingCountryId,
-            string moreInfo)
+            string moreInfo,
+            bool hasApprovalToSendEmail)
         {
             var requestModel = new CheckoutBasketRequestModel
             {
@@ -134,7 +135,8 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 ShippingStreet = shippingStreet,
                 ShippingPhoneNumber = shippingPhoneNumber,
                 ShippingCountryId = shippingCountryId,
-                MoreInfo = moreInfo
+                MoreInfo = moreInfo,
+                HasApprovalToSendEmail = hasApprovalToSendEmail
             };
 
             var apiRequest = new ApiRequest<CheckoutBasketRequestModel>

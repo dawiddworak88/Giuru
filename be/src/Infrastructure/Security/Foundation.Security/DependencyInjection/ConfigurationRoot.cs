@@ -1,5 +1,6 @@
 ﻿using Foundation.Security.Definitions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
 namespace Foundation.Security.DependencyInjection
@@ -31,7 +32,7 @@ namespace Foundation.Security.DependencyInjection
 
             app.Use(async (context, next) =>
             {
-                context.Response.Headers.Add("Feature-Policy", "geolocation 'none';midi 'none';sync-xhr 'none';microphone 'none';camera 'none';magnetometer 'none';gyroscope 'none';fullscreen 'self';payment 'none';");
+                context.Response.Headers.Append("Feature-Policy", "geolocation 'none';midi 'none';sync-xhr 'none';microphone 'none';camera 'none';magnetometer 'none';gyroscope 'none';fullscreen 'self';payment 'none';");
                 await next.Invoke();
             });
         }

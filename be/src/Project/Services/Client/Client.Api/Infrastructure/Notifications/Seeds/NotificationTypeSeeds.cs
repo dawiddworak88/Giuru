@@ -3,6 +3,7 @@ using System.Linq;
 using System;
 using System.Linq.Dynamic.Core;
 using Foundation.GenericRepository.Extensions;
+using Client.Api.Definitions;
 
 namespace Client.Api.Infrastructure.Notifications.Seeds
 {
@@ -10,8 +11,9 @@ namespace Client.Api.Infrastructure.Notifications.Seeds
     {
         public static void SeedNotificationTypes(ClientContext context)
         {
-            SeedNotificationType(context, new Guid("98ca023b-cab0-4f7c-ac9d-2d5726197ad5"), "Approval sending marketing informations by SMS", "Zgoda na przesyłanie informacji marketingowych za pomocą SMS", "Einwilligung zum Erhalt von Marketinginformationen per SMS");
-            SeedNotificationType(context, new Guid("9fe78d41-aee2-4b9b-9432-45a612796985"), "Approval sending marketing informations by Email", "Zgoda na przesyłanie informacji marketingowych za pomocą Email", "Einwilligung zum Erhalt von Marketinginformationen per Email");
+            SeedNotificationType(context, NotificationApprovalConstants.MarketingInformationBySMSId, "Approval sending marketing informations by SMS", "Zgoda na przesyłanie informacji marketingowych za pomocą SMS", "Einwilligung zum Erhalt von Marketinginformationen per SMS");
+            SeedNotificationType(context, NotificationApprovalConstants.MarketingInformationByEmailId, "Approval sending marketing informations by Email", "Zgoda na przesyłanie informacji marketingowych za pomocą Email", "Einwilligung zum Erhalt von Marketinginformationen per Email");
+            SeedNotificationType(context, NotificationApprovalConstants.SendingOrderConfirmationId, "Approval for sending order confirmation emails", "Zgoda na wysyłanie Emaili potwierdzających złożenie zamówienia", "Einwilligung zur Zusendung von Bestellbestätigungs-E-Mails");
         }
         private static void SeedNotificationType(ClientContext context, Guid id, string englishName, string polishName, string germanName)
         {
