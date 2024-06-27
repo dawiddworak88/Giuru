@@ -162,7 +162,7 @@ function Catalog(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
-    
+
     return (
         <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
@@ -200,7 +200,9 @@ function Catalog(props) {
                                                     </div>
                                                 }
                                                 {item.completionDate > 0 &&
-                                                    <h5>{calculateFinalDeliveryDay(5)}</h5>
+                                                    <div className="delivery-text">
+                                                        {calculateFinalDeliveryDay(item.completionDate, props.shortDeliveryText, props.longDeliveryText, moment.locale())}
+                                                    </div>
                                                 }
                                                 {item.inStock &&
                                                     <div className="catalog-item__in-stock-details">

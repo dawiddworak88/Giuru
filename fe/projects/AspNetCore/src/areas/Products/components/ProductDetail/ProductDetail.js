@@ -248,7 +248,9 @@ function ProductDetail(props) {
                         <h1 className="title is-4 mt-1">{props.title}</h1>
                         <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
                         {props.completionDate > 0 &&
-                            <h2>{calculateFinalDeliveryDay(5)}</h2>
+                            <div className=".delivery-text mb-2">
+                                {calculateFinalDeliveryDay(props.completionDate, props.shortDeliveryText, props.longDeliveryText, moment.locale())}
+                            </div>
                         }
                         {props.outletTitle &&
                             <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>
