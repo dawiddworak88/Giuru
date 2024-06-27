@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import moment from "moment";
  
 export const permanentHolidays = [
   "01-01",
@@ -12,7 +12,7 @@ export const permanentHolidays = [
   "12-26",
 ];
  
-const currentYear = dayjs().year();
+const currentYear = moment().year();
  
 export const datesOfPermanentHolidays = [...permanentHolidays].map(
   (holiday) => {
