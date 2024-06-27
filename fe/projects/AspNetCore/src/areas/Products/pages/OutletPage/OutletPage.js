@@ -8,11 +8,14 @@ import MainNavigation from "../../../../shared/components/MainNavigation/MainNav
 import Catalog from "../../../../shared/components/Catalog/Catalog";
 import Footer from "../../../../shared/components/Footer/Footer";
 import NotificationBar from "../../../../shared/components/NotificationBar/NotificationBar";
+import LocaleHelper from "../../../../shared/helpers/globals/LocaleHelper";
 
 function OutletPage(props) {
   
+  LocaleHelper.setMomentLocale(props.locale);
+  
   return (
-    <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
+    <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
       <ToastContainer />
       <Store>
         <div className="search-products-page">
