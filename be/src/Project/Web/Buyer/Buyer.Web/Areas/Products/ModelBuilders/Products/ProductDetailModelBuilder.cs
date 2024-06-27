@@ -26,6 +26,8 @@ using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Repositories.Media;
 using Buyer.Web.Areas.Products.Services.CompletionDates;
 using Buyer.Web.Shared.Services.Settings;
+using Buyer.Web.Shared.Services.Clients;
+using System;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -45,6 +47,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IMediaItemsRepository _mediaItemsRepository;
         private readonly ICompletionDatesService _completionDatesService;
         private readonly ISettingsService _settingsService;
+        private readonly IClientsService _clientsService;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -60,7 +63,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             LinkGenerator linkGenerator,
             IMediaItemsRepository mediaItemsRepository,
             ICompletionDatesService completionDatesService,
-            ISettingsService settingsService)
+            ISettingsService settingsService,
+            IClientsService clientsService)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -76,6 +80,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _mediaItemsRepository = mediaItemsRepository;
             _completionDatesService = completionDatesService;
             _settingsService = settingsService;
+            _clientsService = clientsService;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -105,6 +110,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 ReadMoreText = _globalLocalizer.GetString("ReadMore"),
                 ReadLessText = _globalLocalizer.GetString("ReadLess")
             };
+
+            if (await _clientsService.IsEltapTransportEnableAsync(componentModel.Token, componentModel.Language, componentModel.SellerId) is false)
+            {
+                viewModel.LongDeliveryText = _globalLocalizer.GetString("OwnPickupLongDeliveryText");
+                viewModel.ShortDeliveryText = _globalLocalizer.GetString("OwnPickupShortDeliveryText");
+            }
+            else
+            {
+                viewModel.LongDeliveryText = _globalLocalizer.GetString("EltapTransportLongDeliveryText");
+                viewModel.ShortDeliveryText = _globalLocalizer.GetString("EltapTransportShortDeliveryText");
+            }
 
             var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
 

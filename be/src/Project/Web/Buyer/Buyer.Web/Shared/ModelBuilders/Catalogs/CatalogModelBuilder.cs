@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Shared.Services.Baskets;
+using Buyer.Web.Shared.Services.Clients;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
@@ -10,55 +11,70 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
 {
     public class CatalogModelBuilder<S, T> : ICatalogModelBuilder<S, T> where S: ComponentModelBase where T: CatalogViewModel, new()
     {
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
-        private readonly IStringLocalizer<InventoryResources> inventoryLocalizer;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IBasketService basketService;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<ProductResources> _productLocalizer;
+        private readonly IStringLocalizer<InventoryResources> _inventoryLocalizer;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IBasketService _basketService;
+        private readonly IClientsService _clientsService;
 
         public CatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             IStringLocalizer<InventoryResources> inventoryLocalizer,
             IBasketService basketService,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IClientsService clientsService)
         {
-            this.globalLocalizer = globalLocalizer;
-            this.productLocalizer = productLocalizer;
-            this.linkGenerator = linkGenerator;
-            this.basketService = basketService;
-            this.inventoryLocalizer = inventoryLocalizer;
+            _globalLocalizer = globalLocalizer;
+            _productLocalizer = productLocalizer;
+            _linkGenerator = linkGenerator;
+            _basketService = basketService;
+            _inventoryLocalizer = inventoryLocalizer;
+            _clientsService = clientsService;
         }
 
         public T BuildModel(S componentModel)
         {
             var viewModel = new T
             {
-                SkuLabel = this.productLocalizer.GetString("Sku"),
+                SkuLabel = _productLocalizer.GetString("Sku"),
                 SignInUrl = "#",
-                SignInToSeePricesLabel = this.globalLocalizer.GetString("SignInToSeePrices"),
-                ResultsLabel = this.globalLocalizer.GetString("Results"),
-                ByLabel = this.globalLocalizer.GetString("By"),
-                InStockLabel = this.globalLocalizer.GetString("InStock"),
-                InOutletLabel = this.globalLocalizer.GetString("InOutlet"),
-                BasketLabel = this.globalLocalizer.GetString("BasketLabel"),
-                PrimaryFabricLabel = this.globalLocalizer.GetString("PrimaryFabricLabel"),
-                NoResultsLabel = this.globalLocalizer.GetString("NoResults"),
-                GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
-                DisplayedRowsLabel = this.globalLocalizer["DisplayedRows"],
-                RowsPerPageLabel = this.globalLocalizer["RowsPerPage"],
+                SignInToSeePricesLabel = _globalLocalizer.GetString("SignInToSeePrices"),
+                ResultsLabel = _globalLocalizer.GetString("Results"),
+                ByLabel = _globalLocalizer.GetString("By"),
+                InStockLabel = _globalLocalizer.GetString("InStock"),
+                InOutletLabel = _globalLocalizer.GetString("InOutlet"),
+                BasketLabel = _globalLocalizer.GetString("BasketLabel"),
+                PrimaryFabricLabel = _globalLocalizer.GetString("PrimaryFabricLabel"),
+                NoResultsLabel = _globalLocalizer.GetString("NoResults"),
+                GeneralErrorMessage = _globalLocalizer["AnErrorOccurred"],
+                DisplayedRowsLabel = _globalLocalizer["DisplayedRows"],
+                RowsPerPageLabel = _globalLocalizer["RowsPerPage"],
                 IsLoggedIn = componentModel.IsAuthenticated,
                 BasketId = componentModel.BasketId,
-                SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct"),
-                QuantityErrorMessage = this.globalLocalizer.GetString("QuantityErrorMessage"),
-                ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products" }),
-                UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                ExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ExpectedDeliveryLabel")
+                SuccessfullyAddedProduct = _globalLocalizer.GetString("SuccessfullyAddedProduct"),
+                QuantityErrorMessage = _globalLocalizer.GetString("QuantityErrorMessage"),
+                ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products" }),
+                UpdateBasketUrl = _linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                ExpectedDeliveryLabel = _inventoryLocalizer.GetString("ExpectedDeliveryLabel"),
             };
+
+            if (_clientsService.IsEltapTransportEnableAsync(componentModel.Token, componentModel.Language, componentModel.SellerId).Result is false)
+            {
+                viewModel.LongDeliveryText = _globalLocalizer.GetString("OwnPickupLongDeliveryText");
+                viewModel.ShortDeliveryText = _globalLocalizer.GetString("OwnPickupShortDeliveryText");
+            }
+            else
+            {
+                viewModel.LongDeliveryText = _globalLocalizer.GetString("EltapTransportLongDeliveryText");
+                viewModel.ShortDeliveryText = _globalLocalizer.GetString("EltapTransportShortDeliveryText");
+            }
+
 
             if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
             {
-                var basketItems = this.basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language).Result;
+                var basketItems = _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language).Result;
 
                 if (basketItems is not null)
                 {
