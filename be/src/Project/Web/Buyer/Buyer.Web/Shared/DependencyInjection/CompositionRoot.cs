@@ -38,6 +38,7 @@ using Buyer.Web.Shared.ModelBuilders.NotificationBar;
 using Buyer.Web.Shared.ViewModels.NotificationBar;
 using Buyer.Web.Shared.Repositories.Settings;
 using Buyer.Web.Shared.Services.Settings;
+using Buyer.Web.Shared.Services.Clients;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -77,6 +78,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IFilesRepository, FilesRepository>();
             services.AddScoped<IMediaItemsRepository, MediaItemsRepository>();
             services.AddScoped<ISettingsService, SettingsService>();
+            services.AddScoped<IClientsService, ClientsService>();
 
             // Client
             services.AddScoped<ICatalogOrderModelBuilder, CatalogOrderModelBuilder>();
