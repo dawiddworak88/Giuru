@@ -57,7 +57,7 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
                 DataCenter = new LogzioDataCenter
                 {
                     SubDomain = hostingContext.Configuration["LogzIoDataCenterSubDomain"]
-                } 
+                }
             });
     }
 
@@ -140,7 +140,7 @@ var app = builder.Build();
 IdentityModelEventSource.ShowPII = true;
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
-{   
+{
     ForwardedHeaders = ForwardedHeaders.XForwardedProto
 });
 
@@ -177,18 +177,18 @@ app.UseCustomRouteRequestLocalizationProvider(app.Services.GetService<IOptionsMo
 app.UseSecurityHeaders(builder.Configuration);
 
 app.MapControllerRoute(
+    name: "localizedAreaRoute",
+    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
+
+app.MapControllerRoute(
     name: "localizedAreaSlugRoute",
-    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{slug?}",
+    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/Slug/{slug?}",
     defaults: new
     {
         area = "Content",
         controller = "Content",
         action = "Index"
     }).RequireAuthorization();
-
-app.MapControllerRoute(
-    name: "localizedAreaRoute",
-    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
 
 app.MapControllerRoute(
     name: "default",
