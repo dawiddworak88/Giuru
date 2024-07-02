@@ -42,7 +42,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly ICountriesRepository _countriesRepository;
         private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly IClientNotificationTypesRepository _clientNotificationTypesRepository;
-        private readonly IClientNotificationTypesApprovalsRepository _clientNotificationTypeApprovalRepository;
+        private readonly IClientNotificationTypeApprovalsRepository _clientNotificationTypeApprovalRepository;
         private readonly IClientFieldsRepository _clientFieldsRepository;
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
         private readonly ICurrenciesRepository _currenciesRepository;
@@ -61,7 +61,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IClientFieldValuesRepository clientFieldValuesRepository,
             LinkGenerator linkGenerator,
             IClientNotificationTypesRepository clientNotificationTypesRepository,
-            IClientNotificationTypesApprovalsRepository clientNotificationTypeApprovalRepository,
+            IClientNotificationTypeApprovalsRepository clientNotificationTypeApprovalRepository,
             ICurrenciesRepository currenciesRepository)
         {
             _clientsRepository = clientsRepository;

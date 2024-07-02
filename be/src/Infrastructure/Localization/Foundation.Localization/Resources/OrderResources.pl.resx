@@ -285,4 +285,31 @@
   <data name="CancelOrderItem" xml:space="preserve">
     <value>Anuluj pozycję zamówienia</value>
   </data>
+  <data name="oc_title" xml:space="preserve">
+    <value>POTWIERDZENIE ZŁOŻENIA ZAMÓWIENIA</value>
+  </data>
+  <data name="oc_orderedProducts" xml:space="preserve">
+    <value>Zamówione produkty:</value>
+  </data>
+  <data name="oc_name" xml:space="preserve">
+    <value>Nazwa</value>
+  </data>
+  <data name="oc_text" xml:space="preserve">
+    <value>Z przyejemością informujemy że Twoje zamówienie zostało potwierdzone.</value>
+  </data>
+  <data name="oc_outletQuantity" xml:space="preserve">
+    <value>Ilość z wyprzedaży</value>
+  </data>
+  <data name="oc_preheader" xml:space="preserve">
+    <value>Zamówienie Zatwierdzone: Sprawdź Szczegóły Transakcji</value>
+  </data>
+  <data name="oc_quantity" xml:space="preserve">
+    <value>Ilość</value>
+  </data>
+  <data name="oc_stockQuantity" xml:space="preserve">
+    <value>Ilość stanowa</value>
+  </data>
+  <data name="oc_subject" xml:space="preserve">
+    <value>Order Confirm</value>
+  </data>
 </root>

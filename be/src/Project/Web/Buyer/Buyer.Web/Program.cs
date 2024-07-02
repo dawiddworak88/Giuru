@@ -182,7 +182,7 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "localizedAreaSlugRoute",
-    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{slug?}",
+    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/Slug/{slug?}",
     defaults: new
     {
         area = "Content",

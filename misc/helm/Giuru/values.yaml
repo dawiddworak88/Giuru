@@ -90,6 +90,7 @@ basketApi:
 orderingApi:
   connectionString: "#{OrderingApi--ConnectionString}#"
   actionSendGridCustomOrderTemplateId: "#{OrderingApi--ActionSendGridCustomOrderTemplateId}#"
+  actionSendGridConfirmationOrderTemplateId: "#{OrderingApi--ActionSendGridConfirmationOrderTemplateId}#"
 contentApi:
   databaseClient: "#{ContentApi--DatabaseClient}#"
   databaseName: "#{ContentApi--DatabaseName}#"

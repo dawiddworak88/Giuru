@@ -1,4 +1,4 @@
-﻿using Foundation.Catalog.Repositories.Products.ProductIndexingRepositories;
+﻿using Foundation.Catalog.Repositories.ProductIndexingRepositories;
 using Foundation.Catalog.Repositories.ProductSearchRepositories;
 using Foundation.Catalog.SearchModels.Products;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +13,7 @@ namespace Foundation.Catalog.DependencyInjection
         public static void RegisterCatalogBaseDependencies(this IServiceCollection services)
         {
             services.AddScoped<IProductIndexingRepository, ProductIndexingRepository>();
+            services.AddScoped<IBulkProductIndexingRepository, BulkProductIndexingRepository>();
         }
 
         public static void RegisterCatalogRepositories(this IServiceCollection services)

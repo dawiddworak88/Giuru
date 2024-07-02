@@ -1,6 +1,6 @@
-﻿using Client.Api.ServicesModels.NotificationTypesApprovals;
+﻿using Client.Api.ServicesModels.Notification;
 using Client.Api.v1.RequestModels;
-using Client.Api.Validators.NotificationTypesApprovals;
+using Client.Api.Validators.NotificationsType;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System;
 using Foundation.Account.Definitions;
 using Client.Api.v1.ResponseModels;
-using Client.Api.Services.NotificationTypesApprovals;
+using Client.Api.Services.NotificationsTypesApprovals;
 
 namespace Client.Api.v1.Controllers
 {
@@ -19,12 +19,12 @@ namespace Client.Api.v1.Controllers
     [Route("api/v{veriosn:apiVersion}/[controller]")]
     [ApiController]
     [Authorize]
-    public class ClientNotificationTypesApprovalsController : ControllerBase
+    public class ClientNotificationTypeApprovalsController : ControllerBase
     {
-        private readonly IClientNotificationTypesApprovalsService _clientNotificationTypeApprovalService;
+        private readonly IClientNotificationTypeApprovalService _clientNotificationTypeApprovalService;
 
-        public ClientNotificationTypesApprovalsController(
-            IClientNotificationTypesApprovalsService clientNotificationTypeApprovalService)
+        public ClientNotificationTypeApprovalsController(
+            IClientNotificationTypeApprovalService clientNotificationTypeApprovalService)
         {
             _clientNotificationTypeApprovalService = clientNotificationTypeApprovalService;
         }
@@ -42,7 +42,7 @@ namespace Client.Api.v1.Controllers
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new GetClientNotificationTypesApprovalsServiceModel
+            var serviceModel = new GetClientNotificationTypeApprovalsServiceModel
             {
                 ClientId = id
             };
@@ -77,11 +77,11 @@ namespace Client.Api.v1.Controllers
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Save([FromBody] ClientNotificationTypesApprovalsRequestModel request)
+        public async Task<IActionResult> Save([FromBody] ClintNotificationTypeApprovalRequestModel request)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new SaveNotificationTypesApprovalsServiceModel
+            var serviceModel = new SaveNotificationTypeApprovalServiceModel
             {
                 ClientId = request.ClientId,
                 NotificationTypeIds = request.NotificationTypeIds,

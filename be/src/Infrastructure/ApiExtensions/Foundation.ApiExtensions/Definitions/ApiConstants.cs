@@ -38,7 +38,7 @@
             public static readonly string ClientsApiEndpoint = "/api/v1/clients";
             public static readonly string AddressesApiEndpoint = "/api/v1/clientaddresses";
             public static readonly string NotificationTypesApiEndpoint = "/api/v1/clientnotificationtypes";
-            public static readonly string NotificationTypesApiApprovalEndpoint = "/api/v1/clientnotificationtypesapprovals";
+            public static readonly string NotificationTypesApiApprovalEndpoint = "/api/v1/clientnotificationtypeapprovals";
             public static readonly string FieldsApiEndpoint = "/api/v1/clientfields";
             public static readonly string FieldOptionsApiEndpoint = "/api/v1/clientfieldoptions";
             public static readonly string FieldValuesApiEndpoint = "/api/v1/clientfieldvalues";
@@ -49,6 +49,7 @@
             public static readonly string OrganisationsApiEndpoint = "/api/v1/organisations";
             public static readonly string SellersApiEndpoint = "/api/v1/sellers";
             public static readonly string ClientByOrganisationApiEndpoint = "/api/v1/clients/organisation";
+            public static readonly string ClientBySellerApiEndpoint = "/api/v1/clients/seller";
             public static readonly string UsersApiEndpoint = "/api/v1/users";
             public static readonly string RolesApiEndpoint = "/api/v1/roles";
             public static readonly string TeamMembersEndpoint = "/api/v1/teammembers";

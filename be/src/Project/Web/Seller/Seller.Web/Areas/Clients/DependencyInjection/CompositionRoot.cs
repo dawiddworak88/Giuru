@@ -28,6 +28,8 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IClientAccountManagersRepository, ClientAccountManagersRepository>();
             services.AddScoped<IClientApplicationsRepository, ClientApplicationsRepository>();
             services.AddScoped<IClientAddressesRepository, ClientAddressesRepository>();
+            services.AddScoped<IClientNotificationTypesRepository, ClientNotificationTypesRepository>();
+            services.AddScoped<IClientNotificationTypeApprovalsRepository, ClientNotificationTypeApprovalsRepository>();
 
             services.AddScoped<IClientNotificationTypesRepository, ClientNotificationTypesRepository>();
             services.AddScoped<IClientNotificationTypesApprovalsRepository, ClientNotificationTypesApprovalsRepository>();

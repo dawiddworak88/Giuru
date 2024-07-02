@@ -347,8 +347,8 @@
   </data>
   <data name="NotificationTypeDeleteTypeApprovalConflict" xml:space="preserve">
     <value>Löschen Sie Kunden-Einwilligungen, die diesem Einwilligungstyp zugeordnet sind</value>
-  <data name="FieldDefinitionNotFound" xml:space="preserve">
   </data>
+  <data name="FieldDefinitionNotFound" xml:space="preserve">
     <value>Dynamische Felddefinition nicht gefunden</value>
   </data>
   <data name="FieldDefinitionSelectTypeConflict" xml:space="preserve">
