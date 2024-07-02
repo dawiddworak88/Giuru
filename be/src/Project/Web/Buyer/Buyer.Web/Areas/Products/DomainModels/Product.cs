@@ -18,6 +18,7 @@ namespace Buyer.Web.Areas.Products.DomainModels
         public Guid CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string Ean { get; set; }
+        public int CompletionDate { get; set; }
         public IEnumerable<Guid> ProductVariants { get; set; }
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<Guid> Videos { get; set; }

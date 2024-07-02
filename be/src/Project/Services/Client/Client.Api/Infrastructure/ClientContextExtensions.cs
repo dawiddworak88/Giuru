@@ -1,5 +1,5 @@
+using Client.Api.Infrastructure.Fields.Seeds;
 using Client.Api.Infrastructure.Notifications.Seeds;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System.Linq;
@@ -24,6 +24,7 @@ namespace Client.Api.Infrastructure
         public static void EnsureSeeded(this ClientContext context)
         {
             NotificationTypeSeeds.SeedNotificationTypes(context);
+            ClientFieldsSeeds.SeedClientFields(context);
         }
     }
 }

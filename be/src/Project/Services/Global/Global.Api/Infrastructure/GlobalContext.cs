@@ -1,5 +1,6 @@
 ﻿using Global.Api.Infrastructure.Entities.Countries;
 using Global.Api.Infrastructure.Entities.Currencies;
+using Global.Api.Infrastructure.Entities.Settings;
 using Microsoft.EntityFrameworkCore;
 
 namespace Global.Api.Infrastructure
@@ -19,5 +20,6 @@ namespace Global.Api.Infrastructure
         public DbSet<CountryTranslation> CountryTranslations { get; set; }
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<CurrencyTranslation> CurrenciesTranslations { get; set; }
+        public DbSet<Setting> Settings { get; set; }
     }
 }

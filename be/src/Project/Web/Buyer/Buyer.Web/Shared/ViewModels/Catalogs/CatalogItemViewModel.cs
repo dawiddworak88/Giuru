@@ -26,5 +26,6 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<SourceViewModel> Sources { get; set; }
         public string ProductAttributes { get; set; }
+        public int CompletionDate { get; set; }
     }
 }

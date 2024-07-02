@@ -52,7 +52,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
                 viewModel.PagedItems = await this.productsService.GetProductsAsync(
                     null,
                     componentModel.Id,
-                    null,
+                    componentModel.SellerId,
                     componentModel.Language,
                     componentModel.SearchTerm,
                     false,

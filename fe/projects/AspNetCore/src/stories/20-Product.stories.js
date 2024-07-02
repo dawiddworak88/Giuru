@@ -87,6 +87,9 @@ var productDetail = {
     basketUrl: "#",
     readMoreText: "See more",
     readLessText: "See less",
+    completionDate: 3,
+    shortDeliveryText: "We will deliver to you on",
+    longDeliveryText: "We will deliver to you within",
     sidebar: {
       lackInformation: "Lack of information",
       toBasketLabel: "View cart",
@@ -130,7 +133,8 @@ var productDetail = {
           }
         ]
       }
-    ]
+    ],
+    mediaItems: []
 };
 
 export const ProductPageStory = () => <ProductPage header={header} breadcrumbs={breadcrumbs} mainNavigation={mainNavigation} productDetail={productDetail} footer={footer} />

@@ -13,6 +13,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
 import Modal from "../Modal/Modal";
+import { calculateFinalDeliveryDay } from "../../helpers/globals/CompletionDateHelper";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -161,7 +162,7 @@ function Catalog(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
-    
+
     return (
         <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
@@ -196,6 +197,11 @@ function Catalog(props) {
                                                 {item.productAttributes &&
                                                     <div className="catalog-item__productAttributes">
                                                         <h3>{item.productAttributes}</h3>
+                                                    </div>
+                                                }
+                                                {item.completionDate > 0 &&
+                                                    <div className="delivery-text">
+                                                        {calculateFinalDeliveryDay(item.completionDate, props.shortDeliveryText, props.longDeliveryText, moment.locale())}
                                                     </div>
                                                 }
                                                 {item.inStock &&
