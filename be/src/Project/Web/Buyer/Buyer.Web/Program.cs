@@ -177,18 +177,18 @@ app.UseCustomRouteRequestLocalizationProvider(app.Services.GetService<IOptionsMo
 app.UseSecurityHeaders(builder.Configuration);
 
 app.MapControllerRoute(
+    name: "localizedAreaRoute",
+    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
+
+app.MapControllerRoute(
     name: "localizedAreaSlugRoute",
-    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{slug?}",
+    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/Slug/{slug?}",
     defaults: new
     {
         area = "Content",
         controller = "Content",
         action = "Index"
     }).RequireAuthorization();
-
-app.MapControllerRoute(
-    name: "localizedAreaRoute",
-    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
 
 app.MapControllerRoute(
     name: "default",
