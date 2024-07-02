@@ -40,12 +40,12 @@ namespace Buyer.Web.Shared.Repositories.Clients
 
             var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Client>(apiRequest);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
-            if (response.IsSuccessStatusCode && response.Data != null)
+            if (response.IsSuccessStatusCode && response.Data is not null)
             {
                 return response.Data;
             }
@@ -72,7 +72,7 @@ namespace Buyer.Web.Shared.Repositories.Clients
 
             var response = await _apiClientService.GetAsync<ApiRequest<PagedClientFieldValuesRequestModel>, PagedClientFieldValuesRequestModel, PagedResults<IEnumerable<ClientFieldValue>>>(apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            if (response.IsSuccessStatusCode && response.Data?.Data is not null)
             {
                 var fieldsValues = new List<ClientFieldValue>();
 
@@ -86,12 +86,12 @@ namespace Buyer.Web.Shared.Repositories.Clients
 
                     var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedClientFieldValuesRequestModel>, PagedClientFieldValuesRequestModel, PagedResults<IEnumerable<ClientFieldValue>>>(apiRequest);
 
-                    if (!nextPagesResponse.IsSuccessStatusCode)
+                    if (nextPagesResponse.IsSuccessStatusCode is false)
                     {
                         throw new CustomException(response.Message, (int)response.StatusCode);
                     }
 
-                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Count() > 0)
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data is not null && nextPagesResponse.Data.Data.Count() > 0)
                     {
                         fieldsValues.AddRange(nextPagesResponse.Data.Data);
                     }
