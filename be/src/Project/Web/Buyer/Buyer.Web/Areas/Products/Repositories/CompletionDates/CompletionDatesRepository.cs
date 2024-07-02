@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Products.ApiResponseModels;
+﻿using Buyer.Web.Areas.Products.ApiRequestModels;
+using Buyer.Web.Areas.Products.ApiResponseModels;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
@@ -7,6 +8,7 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Microsoft.Extensions.Options;
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.Repositories.CompletionDates
@@ -26,22 +28,26 @@ namespace Buyer.Web.Areas.Products.Repositories.CompletionDates
 
         public async Task<int> GetAsync(string token, string language, Guid transportId, Guid conditionId, Guid? zoneId, Guid? campaignId, DateTime currentDate)
         {
-            string queryParameters = $"?transportId={transportId}&conditionId={conditionId}&zoneId={zoneId}&campaignId={campaignId}&currentDate={currentDate}";
+            var requestModel = new CompletionDateRequestModel
+            {
+                TransportId = transportId,
+                ConditionId = conditionId,
+                ZoneId = zoneId,
+                CampaignId = campaignId,
+                CurrentDate = currentDate
+            };
 
-            var apiRequest = new ApiRequest<RequestModelBase>
+            var apiRequest = new ApiRequest<CompletionDateRequestModel>
             {
                 Language = language,
-                Data = new RequestModelBase(),
-                EndpointAddress = $"{_settings.Value.CompletionDatesUrl}{ApiConstants.Catalog.CompletionDatesEndpoint}{queryParameters}",
+                Data = requestModel,
+                EndpointAddress = $"{_settings.Value.CompletionDatesUrl}{ApiConstants.Catalog.CompletionDatesEndpoint}",
                 AccessToken = token
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, CompletionDateResponseModel>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<CompletionDateRequestModel>, CompletionDateRequestModel, CompletionDateResponseModel>(apiRequest);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
+            Console.WriteLine(JsonSerializer.Serialize(response));
 
             if (response.IsSuccessStatusCode)
             {
