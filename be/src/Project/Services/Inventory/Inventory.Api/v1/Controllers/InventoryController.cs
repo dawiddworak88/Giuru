@@ -99,7 +99,7 @@ namespace Inventory.Api.v1.Controllers
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
-            } 
+            }
             else
             {
                 var serviceModel = new GetInventoriesServiceModel
@@ -156,11 +156,11 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public IActionResult GetAvailableProductsInventories(
-            int pageIndex, 
+            int pageIndex,
             int itemsPerPage)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-            
+
             var serviceModel = new GetInventoriesServiceModel
             {
                 Language = CultureInfo.CurrentCulture.Name,
@@ -192,6 +192,46 @@ namespace Inventory.Api.v1.Controllers
             }
 
             return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("availableproductssuggestions")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<string>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetAvailableProductsInventorySuggestions(
+            string searchTerm, int suggestionsCount)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetInventorySuggestionsServiceModel
+            {
+                SearchTerm = searchTerm,
+                SuggestionsCount = suggestionsCount
+            };
+
+            var validatior = new GetInventorySuggestionsModelValidator();
+            var validationResult = await validatior.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var inventorySuggestions = _inventoriesService.GetInventorySuggestions(serviceModel);
+
+                var response = new List<InventorySuggestionResponseModel>();
+
+                foreach (var inventorySuggestion in inventorySuggestions.OrEmptyIfNull())
+                {
+                    response.Add(new InventorySuggestionResponseModel
+                    {
+                        Id = inventorySuggestion.Id,
+                        Name = inventorySuggestion.Name,
+                        Sku = inventorySuggestion.Sku
+                    });
+                }
+
+                return StatusCode((int)HttpStatusCode.OK, response);
+            }
+
+            return StatusCode((int)HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -410,8 +450,8 @@ namespace Inventory.Api.v1.Controllers
                         ProductSku = inventoryProduct.ProductSku,
                         RestockableInDays = inventoryProduct.RestockableInDays,
                         ExpectedDelivery = inventoryProduct.ExpectedDelivery,
-                        Details = inventoryProduct.Details.Select(item => new InventoryDetailsResponseModel 
-                        { 
+                        Details = inventoryProduct.Details.Select(item => new InventoryDetailsResponseModel
+                        {
                             Id = item.Id,
                             ProductId = item.ProductId,
                             ProductName = item.ProductName,
@@ -521,7 +561,7 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
-        {   
+        {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new DeleteInventoryServiceModel
             {

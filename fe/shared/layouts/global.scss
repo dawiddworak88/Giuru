@@ -60,7 +60,7 @@
 
     img {
         transition: 0.4s ease;
-      }
+    }
 
     &:hover img {
         transform: scale(1.08);
@@ -102,22 +102,11 @@
     font-family: inherit;
     width: 100%;
     border: 0;
-    border-bottom: 1px solid lightgrey;
     outline: 0;
-    font-size: 16px;
-    color: #212121;
-    padding: 7px 0 7px 0.5rem;
+    font-size: 1rem;
+    color: $blackbase;
     background: transparent;
     transition: border-color 0.2s;
-}
-
-.search__field:focus {
-    padding-bottom: 6px;
-    border-bottom: 2px solid darkgrey;
-}
-
-.search__field:hover {
-    border-bottom: 2px solid darkgrey;
 }
 
 .react-autosuggest__container {
@@ -143,22 +132,55 @@
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
-    
+
+.react-autosuggest__suggestions-container, .react-autosuggest__suggestions-container--open {
+    display: block;
+    position: absolute;
+    top: 2rem;
+    left: calc(-19px + -1.6rem);
+    width: calc(100% + 40px + 18rem);
+    margin-left: 1px;
+    background-color: $white;
+    border-radius: 0 0 4px 4px;
+    z-index: 3;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    background-clip: padding-box;
+}
+
+.blur {
+    background-color: $blackbase;
+    opacity: 0.5;
+    width: 110vw;
+    height: 200vh;
+    position: absolute;
+    z-index: 2;
+    top: 2rem;
+    left: -20rem;
+}
+
 .react-autosuggest__suggestions-container {
-    display: none;
+    padding: 1rem;
 }
 
 .react-autosuggest__suggestions-container--open {
-    display: block;
-    position: absolute;
-    top: 2.5rem;
-    width: 100%;
-    margin-left: 1px;
-    background-color: #fff;
-    border-radius: 0 0 4px 4px;
-    z-index: 2;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    background-clip: padding-box;
+    padding: 0.5rem;
+}
+
+@media only screen and (min-width: $widescreen) {
+    .blur {
+        left: -37rem;
+    }
+}
+
+@media only screen and (max-width: $desktop) {
+    .react-autosuggest__suggestions-container, .react-autosuggest__suggestions-container--open {
+        width: calc(100% + 24px + 8rem);
+        left: calc(-1rem + -5px);
+    }
+
+    .blur {
+        left: -3rem;
+    }
 }
 
 .react-autosuggest__suggestions-list {
@@ -169,11 +191,13 @@
 
 .react-autosuggest__suggestion {
     cursor: pointer;
-    padding: 10px 20px 10px 0.5rem;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 4px;
 }
 
 .react-autosuggest__suggestion--highlighted {
-    background-color: lightgray;
+    background-color: $desertstorm;
 }
 
 img {
@@ -183,4 +207,8 @@ img {
 a,
 a:hover {
     text-decoration: none;
+}
+
+.logo {
+    width: 12rem;
 }

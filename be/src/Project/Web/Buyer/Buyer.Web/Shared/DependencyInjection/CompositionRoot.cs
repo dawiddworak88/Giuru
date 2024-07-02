@@ -36,6 +36,12 @@ using Buyer.Web.Shared.ModelBuilders.OrderItemStatusChanges;
 using Buyer.Web.Shared.Repositories.GraphQl;
 using Buyer.Web.Shared.ModelBuilders.NotificationBar;
 using Buyer.Web.Shared.ViewModels.NotificationBar;
+using Buyer.Web.Shared.ViewModels.Headers.Search;
+using Buyer.Web.Shared.ModelBuilders.Headers.Search;
+using Buyer.Web.Shared.ViewModels.Headers.UserPopup;
+using Buyer.Web.Shared.ViewModels.Headers.SidebarMobile;
+using Buyer.Web.Shared.ModelBuilders.Headers.UserPopup;
+using Buyer.Web.Shared.ModelBuilders.Headers.SidebarMobile;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -60,6 +66,10 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel>, NotificationBarModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
+
+            services.AddScoped<IModelBuilder<SearchViewModel>, SearchModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SidebarMobileViewModel>, SidebarMobileModelBuilder>();
+            services.AddScoped<IComponentModelBuilder<ComponentModelBase, UserPopupViewModel>, UserPopupModelBuilder>();
 
             // Repositories
             services.AddScoped<IBrandRepository, BrandRepository>();

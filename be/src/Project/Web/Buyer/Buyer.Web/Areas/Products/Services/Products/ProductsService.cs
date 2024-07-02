@@ -15,15 +15,16 @@ using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Media.Services.MediaServices;
+using Buyer.Web.Areas.Products.ViewModels.Products;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
     public class ProductsService : IProductsService
     {
-        private readonly IProductsRepository productsRepository;
-        private readonly IMediaService mediaService;
-        private readonly IOptions<AppSettings> options;
-        private readonly LinkGenerator linkGenerator;
+        private readonly IProductsRepository _productsRepository;
+        private readonly IMediaService _mediaService;
+        private readonly IOptions<AppSettings> _options;
+        private readonly LinkGenerator _linkGenerator;
 
         public ProductsService(
             IProductsRepository productsRepository,
@@ -31,18 +32,18 @@ namespace Buyer.Web.Areas.Products.Services.Products
             IOptions<AppSettings> options,
             LinkGenerator linkGenerator)
         {
-            this.productsRepository = productsRepository;
-            this.mediaService = mediaService;
-            this.options = options;
-            this.linkGenerator = linkGenerator;
+            _productsRepository = productsRepository;
+            _mediaService = mediaService;
+            _options = options;
+            _linkGenerator = linkGenerator;
         }
 
         public async Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes)
         {
-            var attributesToDisplay = this.options.Value.ProductAttributes.ToEnumerableString();
+            var attributesToDisplay = _options.Value.ProductAttributes.ToEnumerableString();
 
             var attributes = new List<string>();
-            foreach(var productAttribute in attributesToDisplay.OrEmptyIfNull())
+            foreach (var productAttribute in attributesToDisplay.OrEmptyIfNull())
             {
                 var existingAttribute = productAttributes.FirstOrDefault(x => x.Key == productAttribute);
                 if (existingAttribute is not null)
@@ -59,8 +60,12 @@ namespace Buyer.Web.Areas.Products.Services.Products
         public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage, string token)
         {
             var catalogItemList = new List<CatalogItemViewModel>();
-            
-            var pagedProducts = await this.productsRepository.GetProductsAsync(ids, categoryId, sellerId, language, searchTerm, hasPrimaryProduct, pageIndex, itemsPerPage, token, nameof(Product.Name));
+            var pagedProducts = await _productsRepository.GetProductsAsync(ids, categoryId, sellerId, language, searchTerm, hasPrimaryProduct, pageIndex, itemsPerPage, token, nameof(Product.Name));
+
+            if (string.IsNullOrWhiteSpace(searchTerm) is false)
+            {
+                pagedProducts.Data = pagedProducts.Data.Where(x => x.Name.StartsWith(searchTerm));
+            }
 
             if (pagedProducts?.Data != null)
             {
@@ -71,12 +76,12 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         Id = product.Id,
                         Sku = product.Sku,
                         Title = product.Name,
-                        Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
-                        BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId }),
+                        Url = _linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
+                        BrandUrl = _linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId }),
                         BrandName = product.BrandName,
                         Images = product.Images,
                         InStock = false,
-                        ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes)
+                        ProductAttributes = await GetProductAttributesAsync(product.ProductAttributes)
                     };
 
                     if (product.Images != null)
@@ -84,18 +89,18 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         var imageGuid = product.Images.FirstOrDefault();
 
                         catalogItem.ImageAlt = product.Name;
-                        catalogItem.ImageUrl = this.mediaService.GetMediaUrl(imageGuid, ProductConstants.ProductsCatalogItemImageWidth);
+                        catalogItem.ImageUrl = _mediaService.GetMediaUrl(imageGuid, ProductConstants.ProductsCatalogItemImageWidth);
                         catalogItem.Sources = new List<SourceViewModel>
                         {
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 1024) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 352) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 256) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 768) },
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 256) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 768) },
 
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 1024) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 352) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 256) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 768) }
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 256) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 768) }
                         };
                     }
 
@@ -114,9 +119,27 @@ namespace Buyer.Web.Areas.Products.Services.Products
             };
         }
 
-        public async Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token)
+        public async Task<IEnumerable<ProductSuggestionViewModel>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token, string searchArea)
         {
-            return await this.productsRepository.GetProductSuggestionsAsync(searchTerm, size, language, token);
+            var products = await _productsRepository.GetProductsAsync(
+                null,
+                null,
+                null,
+                language,
+                searchTerm,
+                true,
+                PaginationConstants.DefaultPageIndex,
+                ProductConstants.ProductsCatalogPaginationPageSize,
+                token,
+                nameof(Product.Name));
+
+            return await Task.WhenAll(products?.Data?.Select(async x => new ProductSuggestionViewModel
+            {
+                Name = x.Name,
+                Attributes = await GetProductAttributesAsync(x.ProductAttributes),
+                Sku = x.Sku,
+                Url = _linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, x.Id }),
+            }));
         }
     }
 }

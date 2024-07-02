@@ -1,20 +1,29 @@
 .notification-bar {
     width: 100%;
-    background-color: $swamp;
-    padding: 0.8rem;
+    background-color: $primarymint;
+    padding: 0.4rem;
     color: $white;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+
+    &_icon {
+        font-size: large;
+    }
 
     &_list {
-        gap: 1rem;
+        gap: 32px;
     }
 
     &_item {
         height: 100%;
         gap: 0.4rem;
+        font-size: 0.75rem;
     }
 
     &_link {
         color: $white;
+        font-family: $family-primary;
 
         &:hover {
             color: $lightgrey;

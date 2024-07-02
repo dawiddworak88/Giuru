@@ -25,7 +25,6 @@
             public static readonly string ProductAttributesApiEndpoint = "/api/v1/productattributes";
             public static readonly string ProductAttributeItemsApiEndpoint = "/api/v1/productattributeitems";
             public static readonly string ProductsSearchIndexApiEndpoint = "/api/v1/productssearchindex";
-            public static readonly string ProductSuggestionsApiEndpoint = "/api/v1/productsuggestions";
             public static readonly string ProductFilesApiEndpoint = "/api/v1/products/files";
             public static readonly string ProductsSkusApiEndpoint = "/api/v1/products/skus";
         }
@@ -76,6 +75,7 @@
             public static readonly string WarehousesApiEndpoint = "/api/v1/warehouse";
             public static readonly string InventoryApiEndpoint = "/api/v1/inventory";
             public static readonly string AvailableProductsApiEndpoint = "/api/v1/inventory/availableproducts";
+            public static readonly string AvailableProductsSuggestionsApiEndpoint = "/api/v1/inventory/availableproductssuggestions";
         }
 
         public struct Outlet

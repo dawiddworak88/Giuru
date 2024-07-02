@@ -768,6 +768,27 @@
   <data name="InActive" xml:space="preserve">
     <value>Inaktiv</value>
   </data>
+  <data name="ChangeSearchTermText" xml:space="preserve">
+    <value>Leider haben wir das Gesuchte nicht gefunden. Bitte versuche es mit einer anderen Phrase.</value>
+  </data>
+  <data name="NoResultText" xml:space="preserve">
+    <value>Keine Ergebnisse für den gesuchten Begriff gefunden</value>
+  </data>
+  <data name="SearchAreaAll" xml:space="preserve">
+    <value>Alles</value>
+  </data>
+  <data name="SearchAreaStockLevel" xml:space="preserve">
+    <value>Lagerbestände</value>
+  </data>
+  <data name="ClearText" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="UserSearchHistoryText" xml:space="preserve">
+    <value>Dein Suchverlauf.</value>
+  </data>
+  <data name="SearchByNameOrSKU" xml:space="preserve">
+    <value>Suche nach einem Produkt nach Namen oder SKU.</value>
+  </data>
   <data name="BillingAddressTitle" xml:space="preserve">
     <value>Rechnungsadressen</value>
   </data>

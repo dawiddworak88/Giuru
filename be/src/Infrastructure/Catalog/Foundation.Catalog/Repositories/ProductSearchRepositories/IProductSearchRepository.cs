@@ -24,6 +24,5 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
         Task<ProductSearchModel> GetByIdAsync(Guid id, string language, Guid? organisationId);
         Task<ProductSearchModel> GetBySkuAsync(string sku, string language, Guid? organisationId);
         Task<int?> CountAllAsync();
-        IEnumerable<string> GetProductSuggestions(string searchTerm, int size, string language, Guid? organisationId);
     }
 }

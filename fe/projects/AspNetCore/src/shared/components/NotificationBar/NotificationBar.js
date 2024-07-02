@@ -12,7 +12,7 @@ const NotificationBar = (props) => {
             const IconTag = Icon[iconName];
 
             if (IconTag) {
-                return <IconTag />;
+                return <IconTag className="notification-bar_icon" />;
             }
         }
         
@@ -20,7 +20,7 @@ const NotificationBar = (props) => {
     };
 
     return (
-        <div className="notification-bar">
+        <div className="notification-bar is-flex">
             <div className="notification-bar_desktop">
                 <div className="notification-bar_list is-flex is-justify-content-center">
                     {props.items.map((item, index) => (

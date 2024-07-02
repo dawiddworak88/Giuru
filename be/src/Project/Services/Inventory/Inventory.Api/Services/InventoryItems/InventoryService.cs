@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Inventory.Api.Services.InventoryItems
@@ -473,6 +474,28 @@ namespace Inventory.Api.Services.InventoryItems
                 inventory.LastModifiedDate = DateTime.UtcNow;
 
                 await _context.SaveChangesAsync();
+            }
+        }
+
+        public IEnumerable<InventorySuggestionServiceModel> GetInventorySuggestions(GetInventorySuggestionsServiceModel model)
+        {
+            var inventoryItems = _context.Inventory.Where(x => x.IsActive)
+                    .Include(x => x.Product)
+                    .AsSingleQuery()
+                    .Select(y => new InventorySuggestionServiceModel
+                     {
+                         Id = y.ProductId,
+                         Name = y.Product.Name,
+                         Sku = y.Product.Sku
+                     });
+
+            if (string.IsNullOrEmpty(model.SearchTerm))
+            {
+                return inventoryItems.Take(model.SuggestionsCount);
+            }
+            else
+            {
+                return inventoryItems.Where(x => x.Name.StartsWith(model.SearchTerm)).Take(model.SuggestionsCount);
             }
         }
     }
