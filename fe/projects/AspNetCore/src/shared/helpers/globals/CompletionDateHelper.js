@@ -5,7 +5,7 @@ import {
   movableHolidays as datesOfMovableHolidays,
 } from "../../constants/HolidaysConstants";
 
-const SHIPMENT_ON_THE_SAME_DAY_BY_HOUR = 12;
+const SHIPMENT_ON_THE_SAME_DAY_BY_HOUR = 14;
 const MOVE_DATE_BY_1_DAY = 1;
 const MOVE_DATE_BY_2_DAYS = 2;
 const DAYJS_SATURDAY_INDEX = 6;
@@ -31,9 +31,6 @@ const holidaysDuringDeliveryTimeCount = (startTime, endTime) => {
 };
 
 export const calculateFinalDeliveryDay = (deliveryBusinessDays, shortDeliveryText, longDeliveryText, locale) => {
-  
-  console.log("locale", locale);
-
   const now = moment();
   const currentWeekDay = now.day();
   const orderWasPlacedBeforeNoon =

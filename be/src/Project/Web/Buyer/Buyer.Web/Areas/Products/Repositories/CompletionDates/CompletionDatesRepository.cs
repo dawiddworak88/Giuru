@@ -47,8 +47,6 @@ namespace Buyer.Web.Areas.Products.Repositories.CompletionDates
 
             var response = await _apiClientService.GetAsync<ApiRequest<CompletionDateRequestModel>, CompletionDateRequestModel, CompletionDateResponseModel>(apiRequest);
 
-            Console.WriteLine(JsonSerializer.Serialize(response));
-
             if (response.IsSuccessStatusCode)
             {
                 return response.Data.CompletionDate;
