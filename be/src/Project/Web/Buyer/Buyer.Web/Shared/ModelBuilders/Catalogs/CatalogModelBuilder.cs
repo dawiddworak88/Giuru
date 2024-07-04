@@ -1,5 +1,4 @@
 ﻿using Buyer.Web.Shared.Services.Baskets;
-using Buyer.Web.Shared.Services.Clients;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
@@ -16,22 +15,19 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
         private readonly IStringLocalizer<InventoryResources> _inventoryLocalizer;
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
-        private readonly IClientsService _clientsService;
 
         public CatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             IStringLocalizer<InventoryResources> inventoryLocalizer,
             IBasketService basketService,
-            LinkGenerator linkGenerator,
-            IClientsService clientsService)
+            LinkGenerator linkGenerator)
         {
             _globalLocalizer = globalLocalizer;
             _productLocalizer = productLocalizer;
             _linkGenerator = linkGenerator;
             _basketService = basketService;
             _inventoryLocalizer = inventoryLocalizer;
-            _clientsService = clientsService;
         }
 
         public T BuildModel(S componentModel)
@@ -59,18 +55,6 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 UpdateBasketUrl = _linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 ExpectedDeliveryLabel = _inventoryLocalizer.GetString("ExpectedDeliveryLabel"),
             };
-
-            if (_clientsService.IsEltapTransportEnableAsync(componentModel.Token, componentModel.Language, componentModel.SellerId).Result is false)
-            {
-                viewModel.LongDeliveryText = _globalLocalizer.GetString("OwnPickupLongDeliveryText");
-                viewModel.ShortDeliveryText = _globalLocalizer.GetString("OwnPickupShortDeliveryText");
-            }
-            else
-            {
-                viewModel.LongDeliveryText = _globalLocalizer.GetString("EltapTransportLongDeliveryText");
-                viewModel.ShortDeliveryText = _globalLocalizer.GetString("EltapTransportShortDeliveryText");
-            }
-
 
             if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
             {

@@ -25,9 +25,9 @@ using Foundation.Media.Services.MediaServices;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Repositories.Media;
 using Buyer.Web.Areas.Products.Services.CompletionDates;
-using Buyer.Web.Shared.Services.Settings;
-using Buyer.Web.Shared.Services.Clients;
-using System;
+using Microsoft.Extensions.Options;
+using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Areas.Products.Services.Products;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -37,6 +37,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> _sidebarModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> _modalModelBuilder;
         private readonly IProductsRepository _productsRepository;
+        private readonly IProductsService _productsService;
         private readonly IStringLocalizer<InventoryResources> _inventoryResources;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<OrderResources> _orderResources;
@@ -45,9 +46,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
         private readonly IMediaItemsRepository _mediaItemsRepository;
-        private readonly ICompletionDatesService _completionDatesService;
-        private readonly ISettingsService _settingsService;
-        private readonly IClientsService _clientsService;
+        private readonly IOptions<AppSettings> _options;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -62,9 +61,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IBasketService basketService,
             LinkGenerator linkGenerator,
             IMediaItemsRepository mediaItemsRepository,
-            ICompletionDatesService completionDatesService,
-            ISettingsService settingsService,
-            IClientsService clientsService)
+            IOptions<AppSettings> options,
+            IProductsService productsService)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -78,9 +76,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _orderResources = orderResources;
             _modalModelBuilder = modalModelBuilder;
             _mediaItemsRepository = mediaItemsRepository;
-            _completionDatesService = completionDatesService;
-            _settingsService = settingsService;
-            _clientsService = clientsService;
+            _options = options;
+            _productsService = productsService;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -111,26 +108,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 ReadLessText = _globalLocalizer.GetString("ReadLess")
             };
 
-            if (await _clientsService.IsEltapTransportEnableAsync(componentModel.Token, componentModel.Language, componentModel.SellerId) is false)
-            {
-                viewModel.LongDeliveryText = _globalLocalizer.GetString("OwnPickupLongDeliveryText");
-                viewModel.ShortDeliveryText = _globalLocalizer.GetString("OwnPickupShortDeliveryText");
-            }
-            else
-            {
-                viewModel.LongDeliveryText = _globalLocalizer.GetString("EltapTransportLongDeliveryText");
-                viewModel.ShortDeliveryText = _globalLocalizer.GetString("EltapTransportShortDeliveryText");
-            }
-
-            var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
+            var product = await _productsService.GetProductAsync(componentModel.Token, componentModel.Language, componentModel.Id, componentModel.SellerId);
 
             if (product != null)
             {
-                if (await _settingsService.IsExternalCompletionDatesEnable(componentModel.Token, componentModel.Language, componentModel.SellerId))
-                {
-                    await _completionDatesService.GetCompletionDatesAsync(componentModel.Token, componentModel.Language, product, componentModel.SellerId);
-                }
-
                 viewModel.Ean = product.Ean;
                 viewModel.ProductId = product.Id;
                 viewModel.Title = product.Name;
