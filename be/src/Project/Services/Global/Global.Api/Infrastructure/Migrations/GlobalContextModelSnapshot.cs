@@ -17,10 +17,7 @@ namespace Global.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
+                .HasAnnotation("ProductVersion", "6.0.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -47,7 +44,7 @@ namespace Global.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
                 });
 
             modelBuilder.Entity("Global.Api.Infrastructure.Entities.Countries.CountryTranslation", b =>
@@ -84,7 +81,7 @@ namespace Global.Api.Infrastructure.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("CountryTranslations");
+                    b.ToTable("CountryTranslations", (string)null);
                 });
 
             modelBuilder.Entity("Global.Api.Infrastructure.Entities.Currencies.Currency", b =>
@@ -115,7 +112,7 @@ namespace Global.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Currencies");
+                    b.ToTable("Currencies", (string)null);
                 });
 
             modelBuilder.Entity("Global.Api.Infrastructure.Entities.Currencies.CurrencyTranslation", b =>
@@ -151,41 +148,7 @@ namespace Global.Api.Infrastructure.Migrations
 
                     b.HasIndex("CurrencyId");
 
-                    b.ToTable("CurrenciesTranslations");
-                });
-
-            modelBuilder.Entity("Global.Api.Infrastructure.Entities.Settings.Setting", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Key")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<Guid>("SellerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Settings");
+                    b.ToTable("CurrenciesTranslations", (string)null);
                 });
 
             modelBuilder.Entity("Global.Api.Infrastructure.Entities.Countries.CountryTranslation", b =>

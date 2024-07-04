@@ -1,17 +1,13 @@
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import { Button, CircularProgress, NoSsr, FormControlLabel, Switch } from "@mui/material";
+import { Button } from "@mui/material";
 import { Context } from "../../../../shared/stores/Store";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
-import useForm from "../../../../shared/helpers/forms/useForm";
 
 function SettingsForm(props) {
     const [state, dispatch] = useContext(Context);
     const [reindexProductsDisable, setReindexProductsDisable] = useState(false);
-    const stateSchema = {
-        isExternalCompletionDates: { value: props.settings.externalCompletionDates === 'true' ? true : false }
-    }
 
     const handleReindexProductsClick = (e) => {
 
@@ -50,50 +46,6 @@ function SettingsForm(props) {
             });
     };
 
-    const onSubmitForm = (state) => {
-        
-        const payload = {
-            settings: {
-                externalCompletionDates: state.isExternalCompletionDates
-            }
-        }
-
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(payload)
-        }
-
-        fetch(props.saveUrl, requestOptions)
-            .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        toast.success(jsonResponse.message);
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
-    }
-
-    const {
-        values, setFieldValue, handleOnSubmit
-    } = useForm(stateSchema, { }, onSubmitForm);
-
-    const {
-        isExternalCompletionDates
-    } = values;
-
     return (
         <section className="section section-small-padding settings">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -104,32 +56,6 @@ function SettingsForm(props) {
                             {props.reindexProductsText}
                         </Button>
                     </div>
-                    <form className="is-modern-form" onSubmit={handleOnSubmit}>
-                            <div className="field">
-                                <NoSsr>
-                                    <FormControlLabel
-                                        control={
-                                            <Switch
-                                                onChange={(e) => 
-                                                    setFieldValue({name: "isExternalCompletionDates", value: !isExternalCompletionDates})
-                                                }
-                                                checked={isExternalCompletionDates}
-                                                id={"externalCompletionDates"}
-                                                name={"externalCompletionDates"}
-                                            />
-                                        }
-                                        label={props.externalCompletionDatesText} />
-                                </NoSsr>
-                            </div>
-                        <div className="field">
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary">
-                                {props.saveText}
-                            </Button>
-                        </div>
-                    </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}
                 </div>
             </div>

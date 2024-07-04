@@ -1,7 +1,6 @@
 ﻿using Global.Api.Infrastructure;
 using Global.Api.Services.Countries;
 using Global.Api.Services.Currencies;
-using Global.Api.Services.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +13,6 @@ namespace Global.Api.DependencyInjection
         {
             services.AddScoped<ICountriesService, CountriesService>();
             services.AddScoped<ICurrenciesService, CurrenciesService>();
-            services.AddScoped<ISettingsService, SettingsService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
