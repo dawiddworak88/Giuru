@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buyer.Web.Areas.Products.Repositories.CompletionDates;
-using Buyer.Web.Shared.Definitions.CompletionDate;
 using Buyer.Web.Shared.DomainModels.Clients;
-using Foundation.GenericRepository.Paginations;
+using Foundation.Extensions.ExtensionMethods;
+using Buyer.Web.Areas.Shared.Definitions.Products;
 
 namespace Buyer.Web.Areas.Products.Services.CompletionDates
 {
@@ -32,113 +32,57 @@ namespace Buyer.Web.Areas.Products.Services.CompletionDates
             _completionDatesRepository = completionDatesRepository;
         }
 
-        public async Task GetCompletionDatesAsync(string token, string language, List<Product> products, Guid? clientId)
+        public async Task<List<Product>> GetCompletionDatesAsync(string token, string language, Guid? clientId, List<Product> products)
         {
             var inStockProducts = await _inventoryRepository.GetAvailbleProductsInventoryByIds(token, language, products.Select(x => x.Id));
 
-            var clientFieldValues = await GetClientFieldValuesAsync(token, language, clientId);
-
-            var transportId = GetParameterValue(clientFieldValues, ClientFieldsConstants.Transport.Id);
-            var zoneId = GetParameterValue(clientFieldValues, ClientFieldsConstants.Zone.Id);
-            var campaignId = GetParameterValue(clientFieldValues, ClientFieldsConstants.Campaign.Id);
-
-            foreach (var product in products)
+            foreach (var product in products.OrEmptyIfNull())
             {
-                var conditionId = ClientFieldsConstants.Condition.StandardId;
-
-                if (IsFastDeliveryEnable(product))
+                if (inStockProducts.Any(x => x.ProductId == product.Id))
                 {
-                    conditionId = ClientFieldsConstants.Condition.FastDeliveryId;
-                }
-                else if (inStockProducts.Any(x => x.ProductId == product.Id))
-                {
-                    conditionId = ClientFieldsConstants.Condition.IsStockId;
+                    product.IsStock = true;
                 }
 
-                var completionDate = await _completionDatesRepository.GetAsync(
-                    token,
-                    language,
-                    transportId,
-                    conditionId,
-                    zoneId,
-                    campaignId,
-                    DateTime.Now);
-
-                product.CompletionDate = completionDate;
+                if (IsFastDeliveryEnabled(product))
+                {
+                    product.IsFastDelivery = true;
+                }
             }
-        }
-
-        public async Task GetCompletionDatesAsync(string token, string language, Product product, Guid? clientId)
-        {
-            var inStockProduct = _inventoryRepository.GetAvailbleProductsInventory(language, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token).Result.Data.FirstOrDefault(x => x.ProductId == product.Id);
 
             var clientFieldValues = await GetClientFieldValuesAsync(token, language, clientId);
 
-            var transportId = GetParameterValue(clientFieldValues, ClientFieldsConstants.Transport.Id);
-            var zoneId = GetParameterValue(clientFieldValues, ClientFieldsConstants.Zone.Id);
-            var campaignId = GetParameterValue(clientFieldValues, ClientFieldsConstants.Campaign.Id);
-
-            var conditionId = ClientFieldsConstants.Condition.StandardId;
-
-            if (IsFastDeliveryEnable(product))
-            {
-                conditionId = ClientFieldsConstants.Condition.FastDeliveryId;
-            }
-            else if (inStockProduct is not null)
-            {
-                conditionId = ClientFieldsConstants.Condition.IsStockId;
-            }
-
-            var completionDate = await _completionDatesRepository.GetAsync(
+            products = await _completionDatesRepository.PostAsync(
                 token,
                 language,
-                transportId,
-                conditionId,
-                zoneId,
-                campaignId,
+                products,
+                clientFieldValues,
                 DateTime.Now);
 
-            product.CompletionDate = completionDate;
-
-        }
-
-        private Guid GetParameterValue(List<ClientFieldValue> clientFieldValues, Guid id)
-        {
-            if (clientFieldValues.Any(x => x.FieldDefinitionId == id))
-            {
-                var clientField = clientFieldValues.FirstOrDefault(y => y.FieldDefinitionId == id);
-
-                if (clientField.FieldValue is not null)
-                {
-                    return Guid.Parse(clientField.FieldValue);
-                }
-            }
-
-            return default;
+            return products;
         }
 
         private async Task<List<ClientFieldValue>> GetClientFieldValuesAsync(string token, string language, Guid? id)
         {
             var client = await _clientsRepository.GetClientAsync(token, language, id);
 
-            return await _clientsRepository.GetClientFieldValuesAsync(token, language, client.Id);
+            if (client is not null)
+            {
+                return await _clientsRepository.GetClientFieldValuesAsync(token, language, client.Id);
+            }
+
+            return null;
         }
 
-        private bool IsFastDeliveryEnable(Product product)
+        private bool IsFastDeliveryEnabled(Product product)
         {
-            if (product.ProductAttributes.Any(x => x.Key == "fastDelivery") is false)
+            if (product.ProductAttributes.Any(x => x.Key == ProductConstants.Schema.FastDeliveryName) is false)
             {
                 return false;
             }
 
-            var fastDelivery = product.ProductAttributes.FirstOrDefault(x => x.Key == "fastDelivery");
+            var fastDelivery = product.ProductAttributes.FirstOrDefault(x => x.Key == ProductConstants.Schema.FastDeliveryName);
 
-            if (fastDelivery.Values.FirstOrDefault() == "true")
-            {
-                return true;
-            }
-
-            return false;
+            return Boolean.Parse(fastDelivery.Values.FirstOrDefault());
         }
     }
 }
