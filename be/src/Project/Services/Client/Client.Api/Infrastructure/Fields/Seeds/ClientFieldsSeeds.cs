@@ -1,4 +1,5 @@
-﻿using Foundation.GenericRepository.Extensions;
+﻿using Client.Api.Definitions;
+using Foundation.GenericRepository.Extensions;
 using System;
 using System.Linq;
 
@@ -8,20 +9,17 @@ namespace Client.Api.Infrastructure.Fields.Seeds
     {
         public static void SeedClientFields(ClientContext context)
         {
-            // zone
-            SeedClientFieldAsync(context, Guid.Parse("f9f50ca7-c54f-4f11-4a20-08dc74ab4b1a"), "select", false, Guid.Parse("549d513f-7c0b-4cd6-a412-facec9f4449e"), "Strefa", "Zone", "Zone");
-            SeedOptionaAsync(context, Guid.Parse("7123d71e-2b20-418e-f54f-08dc74ab4ff3"), Guid.Parse("549d513f-7c0b-4cd6-a412-facec9f4449e"), "Zone 1");
-            SeedOptionaAsync(context, Guid.Parse("c3cfcc71-7218-4949-f550-08dc74ab4ff3"), Guid.Parse("549d513f-7c0b-4cd6-a412-facec9f4449e"), "Zone 2");
+            SeedClientFieldAsync(context, FieldConstants.Zone.Id, FieldConstants.Type.Select, false, FieldConstants.Zone.OptionSetId, "Strefa", "Zone", "Zone");
+            SeedOptionsAsync(context, FieldConstants.Zone.ZoneOneId, FieldConstants.Zone.OptionSetId, "Zone 1");
+            SeedOptionsAsync(context, FieldConstants.Zone.ZoneTwoId, FieldConstants.Zone.OptionSetId, "Zone 2");
 
-            // transport
-             SeedClientFieldAsync(context, Guid.Parse("35968b7b-0329-4def-b450-08dc65e9a01d"), "select", false, Guid.Parse("23991c56-c48b-4e82-bb32-58a9588ac63b"), "Rodzja transportu", "Type of transport", "Art des Transports");
-            SeedOptionaAsync(context, Guid.Parse("15325239-0ba9-48b6-9d33-08dc65e9a5f8"), Guid.Parse("23991c56-c48b-4e82-bb32-58a9588ac63b"), "Own PickUp");
-            SeedOptionaAsync(context, Guid.Parse("0caf6403-7e80-4b66-9d32-08dc65e9a5f8"), Guid.Parse("23991c56-c48b-4e82-bb32-58a9588ac63b"), "ELTAP Transport");
+            SeedClientFieldAsync(context, FieldConstants.Transport.Id, FieldConstants.Type.Select, false, FieldConstants.Transport.OptionSetId, "Rodzja transportu", "Type of transport", "Art des Transports");
+            SeedOptionsAsync(context, FieldConstants.Transport.OwnPickUpId, FieldConstants.Transport.OptionSetId, "Own PickUp");
+            SeedOptionsAsync(context, FieldConstants.Transport.EltapTransportId, FieldConstants.Transport.OptionSetId, "ELTAP Transport");
 
-            // campaign
-            SeedClientFieldAsync(context, Guid.Parse("89f22cda-ccc1-4102-4a1f-08dc74ab4b1a"), "select", false, Guid.Parse("b6cd0c9b-4214-455f-b5f3-9f7408807088"), "Udział w kampaniach", "Participation in campaigns", "Teilnahme an Kampagnen");
-            SeedOptionaAsync(context, Guid.Parse("9b4db26a-7d9a-4ff7-f54d-08dc74ab4ff3"), Guid.Parse("b6cd0c9b-4214-455f-b5f3-9f7408807088"), "TTEW");
-            SeedOptionaAsync(context, Guid.Parse("53a23e25-3d43-41f4-f54c-08dc74ab4ff3"), Guid.Parse("b6cd0c9b-4214-455f-b5f3-9f7408807088"), "OTEW");
+            SeedClientFieldAsync(context, FieldConstants.Campaign.Id, FieldConstants.Type.Select, false, FieldConstants.Campaign.OptionSetId, "Udział w kampaniach", "Participation in campaigns", "Teilnahme an Kampagnen");
+            SeedOptionsAsync(context, FieldConstants.Campaign.TtewId, FieldConstants.Campaign.OptionSetId, "TTEW");
+            SeedOptionsAsync(context, FieldConstants.Campaign.OtewId, FieldConstants.Campaign.OptionSetId, "OTEW");
         }
 
         private static void SeedClientFieldAsync(
@@ -82,7 +80,7 @@ namespace Client.Api.Infrastructure.Fields.Seeds
             }
         }
 
-        private static void SeedOptionaAsync(
+        private static void SeedOptionsAsync(
             ClientContext context,
             Guid id,
             Guid optionsSetId,
