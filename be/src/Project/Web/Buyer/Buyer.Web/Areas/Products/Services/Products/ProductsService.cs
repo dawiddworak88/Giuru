@@ -15,18 +15,17 @@ using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Media.Services.MediaServices;
-using Buyer.Web.Shared.Services.Settings;
 using Buyer.Web.Areas.Products.Services.CompletionDates;
+using IdentityServer4.Extensions;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
     public class ProductsService : IProductsService
     {
-        private readonly IProductsRepository productsRepository;
-        private readonly IMediaService mediaService;
-        private readonly IOptions<AppSettings> options;
-        private readonly LinkGenerator linkGenerator;
-        private readonly ISettingsService _settingsService;
+        private readonly IProductsRepository _productsRepository;
+        private readonly IMediaService _mediaService;
+        private readonly IOptions<AppSettings> _options;
+        private readonly LinkGenerator _linkGenerator;
         private readonly ICompletionDatesService _completionDatesService;
 
         public ProductsService(
@@ -34,20 +33,35 @@ namespace Buyer.Web.Areas.Products.Services.Products
             IMediaService mediaService,
             IOptions<AppSettings> options,
             LinkGenerator linkGenerator,
-            ISettingsService settingsService,
             ICompletionDatesService completionDatesService)
         {
-            this.productsRepository = productsRepository;
-            this.mediaService = mediaService;
-            this.options = options;
-            this.linkGenerator = linkGenerator;
-            _settingsService = settingsService;
+            _productsRepository = productsRepository;
+            _mediaService = mediaService;
+            _options = options;
+            _linkGenerator = linkGenerator;
             _completionDatesService = completionDatesService;
+        }
+
+        public async Task<Product> GetProductAsync(string token, string language, Guid? productId, Guid? sellerId)
+        {
+            var product = await _productsRepository.GetProductAsync(productId, language, token);
+
+            if (product is not null)
+            {
+                if (_options.Value.CompletionDatesUrl.IsNullOrEmpty() is false)
+                {
+                    product = (await _completionDatesService.GetCompletionDatesAsync(token, language, sellerId, new List<Product> { product })).FirstOrDefault();
+                }
+
+                return product;
+            }
+
+            return default;
         }
 
         public async Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes)
         {
-            var attributesToDisplay = this.options.Value.ProductAttributes.ToEnumerableString();
+            var attributesToDisplay = _options.Value.ProductAttributes.ToEnumerableString();
 
             var attributes = new List<string>();
             foreach(var productAttribute in attributesToDisplay.OrEmptyIfNull())
@@ -68,13 +82,13 @@ namespace Buyer.Web.Areas.Products.Services.Products
         {
             var catalogItemList = new List<CatalogItemViewModel>();
             
-            var pagedProducts = await this.productsRepository.GetProductsAsync(ids, categoryId, sellerId, language, searchTerm, hasPrimaryProduct, pageIndex, itemsPerPage, token, nameof(Product.Name));
+            var pagedProducts = await _productsRepository.GetProductsAsync(ids, categoryId, sellerId, language, searchTerm, hasPrimaryProduct, pageIndex, itemsPerPage, token, nameof(Product.Name));
 
             if (pagedProducts?.Data != null)
             {
-                if (await _settingsService.IsExternalCompletionDatesEnable(token, language, sellerId))
+                if (_options.Value.CompletionDatesUrl.IsNullOrEmpty() is false)
                 {
-                    await _completionDatesService.GetCompletionDatesAsync(token, language, pagedProducts.Data.ToList(), sellerId);
+                    await _completionDatesService.GetCompletionDatesAsync(token, language, sellerId, pagedProducts.Data.ToList());
                 }
 
                 foreach (var product in pagedProducts.Data.OrEmptyIfNull())
@@ -85,12 +99,12 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         Sku = product.Sku,
                         Title = product.Name,
                         CompletionDate = product.CompletionDate,
-                        Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
-                        BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId }),
+                        Url = _linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
+                        BrandUrl = _linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId }),
                         BrandName = product.BrandName,
                         Images = product.Images,
                         InStock = false,
-                        ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes)
+                        ProductAttributes = await GetProductAttributesAsync(product.ProductAttributes)
                     };
 
                     if (product.Images != null)
@@ -98,18 +112,18 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         var imageGuid = product.Images.FirstOrDefault();
 
                         catalogItem.ImageAlt = product.Name;
-                        catalogItem.ImageUrl = this.mediaService.GetMediaUrl(imageGuid, ProductConstants.ProductsCatalogItemImageWidth);
+                        catalogItem.ImageUrl = _mediaService.GetMediaUrl(imageGuid, ProductConstants.ProductsCatalogItemImageWidth);
                         catalogItem.Sources = new List<SourceViewModel>
                         {
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 1024) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 352) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 256) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 768) },
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 256) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 768) },
 
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 1024) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 352) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 256) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 768) }
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 256) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = _mediaService.GetMediaUrl(imageGuid, 768) }
                         };
                     }
 
@@ -130,7 +144,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
         public async Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token)
         {
-            return await this.productsRepository.GetProductSuggestionsAsync(searchTerm, size, language, token);
+            return await _productsRepository.GetProductSuggestionsAsync(searchTerm, size, language, token);
         }
     }
 }
