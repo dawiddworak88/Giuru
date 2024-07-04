@@ -789,9 +789,6 @@
   <data name="DeliveryAddressTitle" xml:space="preserve">
     <value>Adres dostawy</value>
   </data>
-  <data name="ExternalCompletionDatesText" xml:space="preserve">
-    <value>Pobierz daty zakończenia z zewnętrznego serwisu</value>
-  </data>
   <data name="SettingsSavedSuccessfully" xml:space="preserve">
     <value>Pomyślnie zapisano ustawienia</value>
   </data>
@@ -800,11 +797,5 @@
   </data>
   <data name="EltapTransportShortDeliveryText" xml:space="preserve">
     <value>Dostarczymy do Ciebie</value>
-  </data>
-  <data name="OwnPickupLongDeliveryText" xml:space="preserve">
-    <value>Odbiur możliwy za</value>
-  </data>
-  <data name="OwnPickupShortDeliveryText" xml:space="preserve">
-    <value>Możliwy termin odbioru</value>
   </data>
 </root>

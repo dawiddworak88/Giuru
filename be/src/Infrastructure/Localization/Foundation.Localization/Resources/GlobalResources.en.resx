@@ -783,9 +783,6 @@
   <data name="DeliveryAddressTitle" xml:space="preserve">
     <value>Delivery address</value>
   </data>
-  <data name="ExternalCompletionDatesText" xml:space="preserve">
-    <value>Get completion date from external service</value>
-  </data>
   <data name="SettingsSavedSuccessfully" xml:space="preserve">
     <value>Settings saved successfully</value>
   </data>
@@ -794,11 +791,5 @@
   </data>
   <data name="EltapTransportShortDeliveryText" xml:space="preserve">
     <value>We will deliver to you on</value>
-  </data>
-  <data name="OwnPickupLongDeliveryText" xml:space="preserve">
-    <value>Pickup possible in</value>
-  </data>
-  <data name="OwnPickupShortDeliveryText" xml:space="preserve">
-    <value>Possible pickup date in</value>
   </data>
 </root>
