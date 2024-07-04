@@ -13,7 +13,6 @@ import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
 import Modal from "../Modal/Modal";
-import { calculateFinalDeliveryDay } from "../../helpers/globals/CompletionDateHelper";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -199,9 +198,9 @@ function Catalog(props) {
                                                         <h3>{item.productAttributes}</h3>
                                                     </div>
                                                 }
-                                                {item.completionDate > 0 &&
+                                                {item.completionDate &&
                                                     <div className="delivery-text">
-                                                        {calculateFinalDeliveryDay(item.completionDate, props.shortDeliveryText, props.longDeliveryText, moment.locale())}
+                                                        {item.completionDate}
                                                     </div>
                                                 }
                                                 {item.inStock &&
