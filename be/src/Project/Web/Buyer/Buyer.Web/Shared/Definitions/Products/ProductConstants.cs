@@ -9,5 +9,10 @@
         public static readonly int ProductsCatalogPaginationPageSize = 20;
         public static readonly int ProductsCatalogItemImageWidth = 710;
         public static readonly int ProductsCatalogItemImageHeight = 520;
+
+        public struct Schema
+        {
+            public static readonly string FastDeliveryName = "fastDelivery";
+        }
     }
 }
