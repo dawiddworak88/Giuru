@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Buyer.Web.Areas.Products.DomainModels;
+using Buyer.Web.Shared.DomainModels.Clients;
+using System;
+using System.Collections.Generic;
 
 namespace Buyer.Web.Areas.Products.ApiRequestModels
 {
     public class CompletionDateRequestModel
     {
-        public Guid TransportId { get; set; }
-        public Guid ConditionId { get; set; }
-        public Guid? ZoneId { get; set; }
-        public Guid? CampaignId { get; set; }
-        public DateTime CurrentDate { get; set; }
+        public List<Product> Products { get; set; }
+        public List<ClientFieldValue> ClientFields { get; set; }
+        public DateTime CurrentTime { get; set; }
     }
 }

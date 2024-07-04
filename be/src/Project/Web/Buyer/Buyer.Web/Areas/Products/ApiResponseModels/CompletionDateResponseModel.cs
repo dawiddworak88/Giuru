@@ -1,7 +1,10 @@
-﻿namespace Buyer.Web.Areas.Products.ApiResponseModels
+﻿using System.Collections.Generic;
+using Buyer.Web.Areas.Products.DomainModels;
+using Foundation.ApiExtensions.Models.Response;
+namespace Buyer.Web.Areas.Products.ApiResponseModels
 {
-    public class CompletionDateResponseModel
+    public class CompletionDateResponseModel : BaseResponseModel
     {
-        public int CompletionDate { get; set; }
+        public List<Product> Products { get; set; }
     }
 }
