@@ -12,13 +12,15 @@ namespace Buyer.Web.Areas.Products.DomainModels
         public string Description { get; set; }
         public bool IsNew { get; set; }
         public bool IsProtected { get; set; }
+        public bool IsStock { get; set; }
+        public bool IsFastDelivery { get; set; }
         public string FormData { get; set; }
         public Guid SellerId { get; set; }
         public string BrandName { get; set; }
         public Guid CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string Ean { get; set; }
-        public int CompletionDate { get; set; }
+        public string CompletionDate { get; set; }
         public IEnumerable<Guid> ProductVariants { get; set; }
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<Guid> Videos { get; set; }

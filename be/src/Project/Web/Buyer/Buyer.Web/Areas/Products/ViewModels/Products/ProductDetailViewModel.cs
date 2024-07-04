@@ -48,9 +48,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string OutletTitleLabel { get; set; }
         public string ReadMoreText { get; set; }
         public string ReadLessText { get; set; }
-        public int CompletionDate { get; set; }
-        public string ShortDeliveryText { get; set; }
-        public string LongDeliveryText { get; set; }
+        public string CompletionDate { get; set; }
         public SidebarViewModel Sidebar { get; set; }
         public ModalViewModel Modal { get; set; }
         public FilesViewModel Files { get; set; }
