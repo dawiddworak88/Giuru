@@ -1,14 +1,14 @@
 ﻿using Buyer.Web.Areas.Products.ApiRequestModels;
 using Buyer.Web.Areas.Products.ApiResponseModels;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.DomainModels.Clients;
+using Buyer.Web.Areas.Products.DomainModels;
 using Foundation.ApiExtensions.Communications;
-using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
-using Foundation.Extensions.Exceptions;
 using Microsoft.Extensions.Options;
 using System;
-using System.Text.Json;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.Repositories.CompletionDates
@@ -26,15 +26,13 @@ namespace Buyer.Web.Areas.Products.Repositories.CompletionDates
             _settings = settings;
         }
 
-        public async Task<int> GetAsync(string token, string language, Guid transportId, Guid conditionId, Guid? zoneId, Guid? campaignId, DateTime currentDate)
+        public async Task<List<Product>> PostAsync(string token, string language, List<Product> products, List<ClientFieldValue> clientFields, DateTime currentDate)
         {
             var requestModel = new CompletionDateRequestModel
             {
-                TransportId = transportId,
-                ConditionId = conditionId,
-                ZoneId = zoneId,
-                CampaignId = campaignId,
-                CurrentDate = currentDate
+                Products = products,
+                ClientFields = clientFields,
+                CurrentTime = currentDate
             };
 
             var apiRequest = new ApiRequest<CompletionDateRequestModel>
@@ -45,14 +43,14 @@ namespace Buyer.Web.Areas.Products.Repositories.CompletionDates
                 AccessToken = token
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<CompletionDateRequestModel>, CompletionDateRequestModel, CompletionDateResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<CompletionDateRequestModel>, CompletionDateRequestModel, CompletionDateResponseModel>(apiRequest);
 
             if (response.IsSuccessStatusCode)
             {
-                return response.Data.CompletionDate;
+                return response.Data.Products;
             }
 
-            return 0;
+            return null;
         }
     }
 }
