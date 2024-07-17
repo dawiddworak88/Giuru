@@ -9,27 +9,33 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
 {
     public class SetPasswordModelBuilder : IAsyncComponentModelBuilder<SetPasswordComponentModel, SetPasswordViewModel>
     {
-        private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
-        private readonly IAsyncComponentModelBuilder<SetPasswordFormComponentModel, SetPasswordFormViewModel> signPasswordFormModelBuilder;
-        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IModelBuilder<HeaderViewModel> _headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<SetPasswordFormComponentModel, SetPasswordFormViewModel> _signPasswordFormModelBuilder;
+        private readonly IModelBuilder<FooterViewModel> _footerModelBuilder;
 
         public SetPasswordModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<SetPasswordFormComponentModel, SetPasswordFormViewModel> signPasswordFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
-            this.headerModelBuilder = headerModelBuilder;
-            this.signPasswordFormModelBuilder = signPasswordFormModelBuilder;
-            this.footerModelBuilder = footerModelBuilder;
+            _headerModelBuilder = headerModelBuilder;
+            _signPasswordFormModelBuilder = signPasswordFormModelBuilder;
+            _footerModelBuilder = footerModelBuilder;
         }
 
         public async Task<SetPasswordViewModel> BuildModelAsync(SetPasswordComponentModel componentModel)
         {
             var viewModel = new SetPasswordViewModel
             {
-                Header = headerModelBuilder.BuildModel(),
-                SetPasswordForm = await this.signPasswordFormModelBuilder.BuildModelAsync(new SetPasswordFormComponentModel { Id = componentModel.Id, ReturnUrl = componentModel.ReturnUrl }),
-                Footer = footerModelBuilder.BuildModel()
+                Header = _headerModelBuilder.BuildModel(),
+                SetPasswordForm = await _signPasswordFormModelBuilder.BuildModelAsync(new SetPasswordFormComponentModel
+                {
+                    Id = componentModel.Id,
+                    ReturnUrl = componentModel.ReturnUrl,
+                    Language = componentModel.Language,
+                    Token = componentModel.Token
+                }),
+                Footer = _footerModelBuilder.BuildModel()
             };
 
             return viewModel;
