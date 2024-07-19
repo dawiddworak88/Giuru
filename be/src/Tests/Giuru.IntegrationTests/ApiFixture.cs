@@ -85,17 +85,6 @@ namespace Giuru.IntegrationTests
                 .Build();
 
             await _catalogContainer.StartAsync();
-
-            /*var sellerWebFactory = new WebApplicationFactory<Program>()
-                .WithWebHostBuilder(builder =>
-                {
-                    builder.UseSetting("ASPNETCORE_HTTP_PORTS", "8080");
-                    builder.UseSetting("ASPNETCORE_ENVIRONMENT", "Development");
-                    builder.UseSetting("RedisUrl", "localhost:9113,abortConnect=false");
-                    builder.UseSetting("EventBusConnection", _rabbitMqContainer.GetConnectionString());
-                    builder.UseSetting("EventBusRetryCount", "5");
-                    builder.UseSetting("EventBusRequestedHeartbeat", "60");
-                });*/
         }
 
         public async Task DisposeAsync()

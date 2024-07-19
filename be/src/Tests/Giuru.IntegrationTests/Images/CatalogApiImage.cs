@@ -1,11 +1,9 @@
 ﻿using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Images;
-using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Xunit.Abstractions;
 
 namespace Giuru.IntegrationTests.Images
 {
