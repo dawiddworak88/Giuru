@@ -17,7 +17,8 @@ namespace Giuru.IntegrationTests
         private RabbitMqContainer _rabbitMqContainer;
         private MsSqlContainer _msSqlContainer;
         private ElasticsearchContainer _elasticsearchContainer;
-        private IContainer _catalogContainer;
+        private IContainer _catalogApiContainer;
+        private IContainer _orderingApiContainer;
         private IContainer _sellerWebContainer;
 
         public async Task InitializeAsync()
@@ -36,7 +37,6 @@ namespace Giuru.IntegrationTests
             _msSqlContainer = new MsSqlBuilder()
                 .WithName("mssql")
                 .WithNetwork(_giuruNetwork)
-                //.WithNetworkAliases("sqldata")
                 .WithPassword("YourStrongPassword!")
                 .WithPortBinding(9111, 1433)
                 .WithExposedPort(9111)
@@ -61,13 +61,13 @@ namespace Giuru.IntegrationTests
 
             await _rabbitMqContainer.StartAsync();
 
-            var catalogImage = new CatalogApiImage();
+            var catalogApiImage = new CatalogApiImage();
 
-            await catalogImage.InitializeAsync();
+            await catalogApiImage.InitializeAsync();
 
-            _catalogContainer = new ContainerBuilder()
+            _catalogApiContainer = new ContainerBuilder()
                 .WithName("catalog-api")
-                .WithImage(catalogImage)
+                .WithImage(catalogApiImage)
                 .WithNetwork(_giuruNetwork)
                 .WithExposedPort(9101)
                 .WithPortBinding(9101, 8080)
@@ -84,7 +84,30 @@ namespace Giuru.IntegrationTests
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                 .Build();
 
-            await _catalogContainer.StartAsync();
+            await _catalogApiContainer.StartAsync();
+
+            var orderingApiImage = new OrderingApiImage();
+
+            await orderingApiImage.InitializeAsync();
+
+            _orderingApiContainer = new ContainerBuilder()
+                .WithName("ordering-api")
+                .WithImage(orderingApiImage)
+                .WithNetwork(_giuruNetwork)
+                .WithExposedPort(9102)
+                .WithPortBinding(9102, 8080)
+                .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
+                .WithEnvironment("RedisUrl", $"host.docker.internal:9113,abortConnect=false")
+                .WithEnvironment("ConnectionString", $"Server=host.docker.internal,9111;Database=OrderingDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
+                .WithEnvironment("EventBusConnection", _rabbitMqContainer.GetConnectionString())
+                .WithEnvironment("EventBusRetryCount", "5")
+                .WithEnvironment("EventBusRequestedHeartbeat", "60")
+                .WithEnvironment("SupportedCultures", "de,en,pl")
+                .WithEnvironment("DefaultCulture", "en")
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .Build();
+
+            await _orderingApiContainer.StartAsync();
         }
 
         public async Task DisposeAsync()
@@ -98,8 +121,11 @@ namespace Giuru.IntegrationTests
             await _elasticsearchContainer.StopAsync();
             await _elasticsearchContainer.DisposeAsync();
 
-            await _catalogContainer.StopAsync();
-            await _catalogContainer.DisposeAsync();
+            await _catalogApiContainer.StopAsync();
+            await _catalogApiContainer.DisposeAsync();
+
+            await _orderingApiContainer.StopAsync();
+            await _catalogApiContainer.DisposeAsync();
 
             await _rabbitMqContainer.StopAsync();
             await _rabbitMqContainer.DisposeAsync();
