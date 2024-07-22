@@ -75,40 +75,43 @@ function SetPasswordForm(props) {
         <section className="section is-flex-centered set-password">
             <div>
                 <form className="is-modern-form has-text-centered" onSubmit={handleOnSubmit} method="post">
-                    <div className="columns is-align-items-center ">
-                        <div className="column is-7">
+                    <div className="columns is-align-items-center container is-justify-content-space-between">
+                        <div className="column is-7 card p-6">
                             <div className="field">
                                 <h1 className="title">{props.marketingApprovalHeader}</h1>
                                 <p className="subtitle mb-2 mt-1">{props.marketingApprovalText}</p>
                             </div>
-                            {props.notificationTypes && props.notificationTypes.length > 0 &&
-                                props.notificationTypes.map((notificationType) => {
-                                    return (
-                                        <div className="field" key={notificationType.id}>
-                                            <NoSsr>
-                                                <FormControlLabel
-                                                    control={
-                                                        <Checkbox
-                                                            onChange={e => {
-                                                                notificationType.isApproved = !notificationType.isApproved;
-                                                                if (e.target.checked) {
-                                                                    setNotificationTypeIds(notificationTypeIds.concat(notificationType.id))
-                                                                }
-                                                                else {
-                                                                    setNotificationTypeIds(notificationTypeIds.filter(x => x !== notificationType.id));
-                                                                }
-                                                            }}
-                                                            checked={notificationType.isApproved}
-                                                            id={notificationType.name}
-                                                            name={notificationType.name}
-                                                            color="secondary" />
-                                                    }
-                                                    label={notificationType.name}
-                                                />
-                                            </NoSsr>
-                                        </div>
-                                    )
-                                })}
+                            {props.notificationTypes && props.notificationTypes.length > 0 && (
+                                <div className="is-flex is-justify-content-center is-align-content-center is-flex-wrap-wrap">
+                                    {props.notificationTypes.map((notificationType) => {
+                                        return (
+                                            <div className="notification-type" key={notificationType.id}>
+                                                <NoSsr>
+                                                    <FormControlLabel
+                                                        control={
+                                                            <Checkbox
+                                                                onChange={e => {
+                                                                    notificationType.isApproved = !notificationType.isApproved;
+                                                                    if (e.target.checked) {
+                                                                        setNotificationTypeIds(notificationTypeIds.concat(notificationType.id))
+                                                                    }
+                                                                    else {
+                                                                        setNotificationTypeIds(notificationTypeIds.filter(x => x !== notificationType.id));
+                                                                    }
+                                                                }}
+                                                                checked={notificationType.isApproved}
+                                                                id={notificationType.name}
+                                                                name={notificationType.name}
+                                                                color="secondary" />
+                                                        }
+                                                        label={notificationType.name}
+                                                    />
+                                                </NoSsr>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            )}
                         </div>
                         <div className="column is-4">
                             <input type="hidden" name="id" value={id} />
