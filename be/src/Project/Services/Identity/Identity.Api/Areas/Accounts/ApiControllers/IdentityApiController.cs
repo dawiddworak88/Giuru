@@ -125,8 +125,8 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                             var token = await _tokenService.GetTokenAsync(_options.Value.ApiEmail, _options.Value.ApiOrganisationId, _options.Value.ApiAppSecret);
 
                             var client = await _clientRepository.GetByOrganisationAsync(token, language, user.OrganisationId);
-
-                            if (client.Id.HasValue)
+                            
+                            if (client is not null && client.Id.HasValue)
                             {
                                 var clientApprovals = new ClientNotificationTypeApprovals
                                 {
@@ -138,12 +138,12 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                             }
                         }
 
-                        return StatusCode((int)HttpStatusCode.Redirect, new { Url = model.ReturnUrl });
+                        return StatusCode((int)HttpStatusCode.Redirect, new { Url = string.IsNullOrWhiteSpace(model.ReturnUrl) ? _options.Value.BuyerUrl : model.ReturnUrl });
                     }
                 }
                 catch (Exception ex)
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { EmailIsConfirmedLabel = _accountLocalizer.GetString("EmailIsConfirmed").Value, SignInLabel = _globalLocalizer.GetString("TrySignIn").Value, SignInUrl = _linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }) });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _accountLocalizer.GetString("EmailIsConfirmed").Value, SignInLabel = _globalLocalizer.GetString("TrySignIn").Value, SignInUrl = _linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }) });
                 }
             }
 
