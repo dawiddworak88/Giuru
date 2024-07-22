@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Globalization;
@@ -36,6 +37,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         private readonly IClientRepository _clientRepository;
         private readonly ITokenService _tokenService;
         private readonly IClientNotificationTypesRepository _clientNotificationTypeRepository;
+        private readonly ILogger<IdentityApiController> _logger;
 
         public IdentityApiController(
             IUserService userService,
@@ -46,7 +48,8 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             IUsersService usersService,
             IClientRepository clientRepository,
             ITokenService tokenService,
-            IClientNotificationTypesRepository clientNotificationTypeRepository)
+            IClientNotificationTypesRepository clientNotificationTypeRepository,
+            ILogger<IdentityApiController> logger)
         {
             _userService = userService;
             _usersService = usersService;
@@ -57,6 +60,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             _clientRepository = clientRepository;
             _tokenService = tokenService;
             _clientNotificationTypeRepository = clientNotificationTypeRepository;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -143,6 +147,8 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError(ex, "An error occurred while saving the new password.");
+
                     return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _accountLocalizer.GetString("EmailIsConfirmed").Value, SignInLabel = _globalLocalizer.GetString("TrySignIn").Value, SignInUrl = _linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }) });
                 }
             }
