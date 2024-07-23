@@ -26,13 +26,14 @@ namespace Buyer.Web.Areas.Products.Repositories.CompletionDates
             _settings = settings;
         }
 
-        public async Task<List<Product>> PostAsync(string token, string language, List<Product> products, List<ClientFieldValue> clientFields, DateTime currentDate)
+        public async Task<IEnumerable<Product>> PostAsync(string token, string language, IEnumerable<Product> products, List<ClientFieldValue> clientFields, DateTime currentDate)
         {
             var requestModel = new CompletionDateRequestModel
             {
                 Products = products,
                 ClientFields = clientFields,
-                CurrentTime = currentDate
+                CurrentDate = currentDate,
+                Language = language,
             };
 
             var apiRequest = new ApiRequest<CompletionDateRequestModel>
@@ -47,7 +48,7 @@ namespace Buyer.Web.Areas.Products.Repositories.CompletionDates
 
             if (response.IsSuccessStatusCode)
             {
-                return response.Data.Products;
+                return response.Data.Products; 
             }
 
             return null;

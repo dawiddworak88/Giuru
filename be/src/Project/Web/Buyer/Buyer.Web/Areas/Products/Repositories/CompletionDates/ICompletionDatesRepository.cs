@@ -8,6 +8,6 @@ namespace Buyer.Web.Areas.Products.Repositories.CompletionDates
 {
     public interface ICompletionDatesRepository
     {
-        Task<List<Product>> PostAsync(string token, string language, List<Product> products, List<ClientFieldValue> clientFields, DateTime currentDate);
+        Task<IEnumerable<Product>> PostAsync(string token, string language, IEnumerable<Product> products, List<ClientFieldValue> clientFields, DateTime currentDate);
     }
 }

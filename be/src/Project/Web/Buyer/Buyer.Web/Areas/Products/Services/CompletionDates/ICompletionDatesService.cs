@@ -7,6 +7,6 @@ namespace Buyer.Web.Areas.Products.Services.CompletionDates
 {
     public interface ICompletionDatesService
     {
-        Task<List<Product>> GetCompletionDatesAsync(string token, string language, Guid? clientId, List<Product> products);
+        Task<IEnumerable<Product>> GetCompletionDatesAsync(string token, string language, Guid? clientId, IEnumerable<Product> products);
     }
 }

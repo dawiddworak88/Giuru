@@ -61,6 +61,11 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
         public async Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes)
         {
+            if (productAttributes is null)
+            {
+                return default;
+            }
+
             var attributesToDisplay = _options.Value.ProductAttributes.ToEnumerableString();
 
             var attributes = new List<string>();
@@ -84,11 +89,11 @@ namespace Buyer.Web.Areas.Products.Services.Products
             
             var pagedProducts = await _productsRepository.GetProductsAsync(ids, categoryId, sellerId, language, searchTerm, hasPrimaryProduct, pageIndex, itemsPerPage, token, nameof(Product.Name));
 
-            if (pagedProducts?.Data != null)
+            if (pagedProducts?.Data is not null)
             {
                 if (_options.Value.CompletionDatesUrl.IsNullOrEmpty() is false)
                 {
-                    await _completionDatesService.GetCompletionDatesAsync(token, language, sellerId, pagedProducts.Data.ToList());
+                    pagedProducts.Data = await _completionDatesService.GetCompletionDatesAsync(token, language, sellerId, pagedProducts.Data);
                 }
 
                 foreach (var product in pagedProducts.Data.OrEmptyIfNull())
@@ -107,7 +112,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         ProductAttributes = await GetProductAttributesAsync(product.ProductAttributes)
                     };
 
-                    if (product.Images != null)
+                    if (product.Images is not null)
                     {
                         var imageGuid = product.Images.FirstOrDefault();
 

@@ -32,7 +32,7 @@ namespace Buyer.Web.Areas.Products.Services.CompletionDates
             _completionDatesRepository = completionDatesRepository;
         }
 
-        public async Task<List<Product>> GetCompletionDatesAsync(string token, string language, Guid? clientId, List<Product> products)
+        public async Task<IEnumerable<Product>> GetCompletionDatesAsync(string token, string language, Guid? clientId, IEnumerable<Product> products)
         {
             var inStockProducts = await _inventoryRepository.GetAvailbleProductsInventoryByIds(token, language, products.Select(x => x.Id));
 

@@ -7,8 +7,9 @@ namespace Buyer.Web.Areas.Products.ApiRequestModels
 {
     public class CompletionDateRequestModel
     {
-        public List<Product> Products { get; set; }
+        public IEnumerable<Product> Products { get; set; }
         public List<ClientFieldValue> ClientFields { get; set; }
-        public DateTime CurrentTime { get; set; }
+        public DateTime CurrentDate { get; set; }
+        public string Language { get; set; }
     }
 }
