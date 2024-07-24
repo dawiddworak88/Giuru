@@ -101,8 +101,6 @@ namespace Buyer.Web.Areas.Content.Repositories
 
                 contentPage.SharedComponents = sharedComponents;
 
-                Console.WriteLine(JsonConvert.SerializeObject(sharedComponents));
-
                 return contentPage;
 
             }
