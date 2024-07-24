@@ -4,5 +4,6 @@
     {
         public string Type { get; set; }
         public string VideoUrl { get; set; }
+        public string VideoType { get; set; }
     }
 }

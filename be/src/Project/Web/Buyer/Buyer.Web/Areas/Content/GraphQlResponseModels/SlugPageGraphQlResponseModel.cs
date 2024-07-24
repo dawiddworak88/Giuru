@@ -96,5 +96,8 @@ namespace Buyer.Web.Areas.Content.GraphQlResponseModels
 
         [JsonProperty("url")]
         public string Url { get; set; }
+
+        [JsonProperty("formats")]
+        public string VideoType { get; set; }
     }
 }

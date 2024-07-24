@@ -90,6 +90,7 @@ namespace Buyer.Web.Areas.Content.Repositories
                                 if (blocksVideo.Type == ContentConstants.InternalMediaServiceTypeName)
                                 {
                                     videoComponent.VideoUrl = blocksVideo.Video?.Data?.Attributes?.Url;
+                                    videoComponent.VideoType = blocksVideo.Video?.Data?.Attributes?.VideoType;
                                 }
 
                                 sharedComponents.Add(videoComponent);
@@ -149,6 +150,7 @@ namespace Buyer.Web.Areas.Content.Repositories
                                     attributes {{
                                       name
                                       url
+                                      formats
                                     }}
                                   }}
                                 }}

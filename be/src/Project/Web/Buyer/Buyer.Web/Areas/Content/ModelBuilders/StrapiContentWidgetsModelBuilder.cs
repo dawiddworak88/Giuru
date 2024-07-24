@@ -73,7 +73,8 @@ namespace Buyer.Web.Areas.Content.ModelBuilders
                         {
                             Typename = blocksVideo.Typename,
                             Type = blocksVideo.Type,
-                            VideoUrl = blocksVideo.VideoUrl
+                            VideoUrl = blocksVideo.VideoUrl,
+                            VideoType = blocksVideo.VideoType
                         };
 
                         widgets.Add(videoComponent);
