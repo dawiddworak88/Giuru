@@ -67,6 +67,17 @@ namespace Buyer.Web.Areas.Content.ModelBuilders
 
                         widgets.Add(contentComponent);
                     }
+                    else if (sharedComponent is BlocksVideoComponent blocksVideo)
+                    {
+                        var videoComponent = new StrapiVideoWidgetViewModel
+                        {
+                            Typename = blocksVideo.Typename,
+                            Type = blocksVideo.Type,
+                            VideoUrl = blocksVideo.VideoUrl
+                        };
+
+                        widgets.Add(videoComponent);
+                    }
                 }
 
                 viewModel.Widgets = widgets;

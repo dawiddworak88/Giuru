@@ -76,12 +76,32 @@ namespace Buyer.Web.Areas.Content.Repositories
                                 sharedComponents.Add(contentComponent);
                             }
                             break;
+                        case "ComponentBlocksVideo":
+                            if (sharedComponent is ComponentBlocksVideo blocksVideo)
+                            {
+                                var videoComponent = new BlocksVideoComponent
+                                {
+                                    Typename = blocksVideo.Typename,
+                                    Type = blocksVideo.Type,
+                                    VideoUrl = blocksVideo.VideoUrl,
+                                };
+
+                                if (blocksVideo.Type == "INTERNAL")
+                                {
+                                    videoComponent.VideoUrl = blocksVideo.Video?.Data?.Attributes?.Url;
+                                }
+
+                                sharedComponents.Add(videoComponent);
+                            }
+                            break;
                         default:
                             break;
                     }
                 }
 
                 contentPage.SharedComponents = sharedComponents;
+
+                Console.WriteLine(JsonConvert.SerializeObject(sharedComponents));
 
                 return contentPage;
 
@@ -121,6 +141,19 @@ namespace Buyer.Web.Areas.Content.Repositories
                                 navigation
                                 skus
                               }}
+                              ... on ComponentBlocksVideo {{
+                                id
+                                type
+                                videoUrl
+                                video {{
+                                  data {{
+                                    attributes {{
+                                      name
+                                      url
+                                    }}
+                                  }}
+                                }}
+                              }}
                             }}
                           }}
                         }}
@@ -155,7 +188,9 @@ namespace Buyer.Web.Areas.Content.Repositories
                     case "ComponentSharedContent":
                         result.Add(token.ToObject<ComponentSharedContent>(serializer));
                         break;
-                    // Add cases for other block types as needed
+                    case "ComponentBlocksVideo":
+                        result.Add(token.ToObject<ComponentBlocksVideo>(serializer));
+                        break;
                     default:
                         result.Add(block);
                         break;
