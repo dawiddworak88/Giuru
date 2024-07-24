@@ -10,18 +10,20 @@
       "type": "enumeration",
       "enum": [
         "EXTERNAL",
-        "ELTAP"
-      ]
+        "INTERNAL"
+      ],
+      "required": true
     },
     "videoUrl": {
       "type": "string"
     },
     "video": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "videos"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     }
   }
 }
