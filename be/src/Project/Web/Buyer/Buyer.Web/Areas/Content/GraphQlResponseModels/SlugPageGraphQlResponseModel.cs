@@ -64,4 +64,37 @@ namespace Buyer.Web.Areas.Content.GraphQlResponseModels
     {
         public IEnumerable<JObject> Content { get; set; }
     }
+
+    public class ComponentBlocksVideo : Block
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("videoUrl")]
+        public string VideoUrl { get; set; }
+
+        [JsonProperty("video")]
+        public ComponentBlocksInternalVideo Video { get; set; }
+    }
+
+    public class ComponentBlocksInternalVideo
+    {
+        [JsonProperty("data")]
+        public ComponentBlocksInternalVideoData Data { get; set; }
+    }
+
+    public class ComponentBlocksInternalVideoData
+    {
+        [JsonProperty("attributes")]
+        public ComponentBlocksInternalVideoAttributes Attributes { get; set; }
+    }
+
+    public class ComponentBlocksInternalVideoAttributes
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("url")]
+        public string Url { get; set; }
+    }
 }
