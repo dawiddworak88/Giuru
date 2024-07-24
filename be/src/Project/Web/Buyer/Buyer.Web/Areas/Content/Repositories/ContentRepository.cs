@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Content.DomainModel;
+﻿using Buyer.Web.Areas.Content.Definitions;
+using Buyer.Web.Areas.Content.DomainModel;
 using Buyer.Web.Areas.Content.GraphQlResponseModels;
 using Foundation.Extensions.ExtensionMethods;
 using GraphQL;
@@ -86,7 +87,7 @@ namespace Buyer.Web.Areas.Content.Repositories
                                     VideoUrl = blocksVideo.VideoUrl,
                                 };
 
-                                if (blocksVideo.Type == "INTERNAL")
+                                if (blocksVideo.Type == ContentConstants.InternalMediaServiceTypeName)
                                 {
                                     videoComponent.VideoUrl = blocksVideo.Video?.Data?.Attributes?.Url;
                                 }
