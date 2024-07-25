@@ -9,6 +9,6 @@ namespace Buyer.Web.Shared.Repositories.Clients
     public interface IClientsRepository
     {
         Task<Client> GetClientAsync(string token, string language, Guid? id);
-        Task<List<ClientFieldValue>> GetClientFieldValuesAsync(string token, string language, Guid? id);
+        Task<IEnumerable<ClientFieldValue>> GetClientFieldValuesAsync(string token, string language, Guid? id);
     }
 }

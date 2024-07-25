@@ -53,7 +53,7 @@ namespace Buyer.Web.Shared.Repositories.Clients
             return default;
         }
 
-        public async Task<List<ClientFieldValue>> GetClientFieldValuesAsync(string token, string language, Guid? id)
+        public async Task<IEnumerable<ClientFieldValue>> GetClientFieldValuesAsync(string token, string language, Guid? id)
         {
             var requestModel = new PagedClientFieldValuesRequestModel
             {
