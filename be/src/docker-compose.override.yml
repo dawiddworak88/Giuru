@@ -456,7 +456,6 @@ services:
       - AnalyticsUrl=http://analytics-api:8080
       - ContentGraphQlUrl=http://content-api:1337/graphql
       - DownloadCenterUrl=http://downloadcenter-api:8080
-      - GlobalUrl=http://global-api:8080
       - ContentGraphQlAuthorizationKey=${STRAPI_AUTHORIZATION_KEY}
       - MakeComplaintUrl=https://complaints.com
       - ProductAttributes=${PRODUCT_ATTRIBUTES}

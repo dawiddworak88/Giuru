@@ -11,7 +11,6 @@ namespace Buyer.Web.Shared.Configurations
         public string OrderUrl { get; set; }
         public string BasketUrl { get; set; }
         public string NewsUrl { get; set; }
-        public string GlobalUrl { get; set; }
         public string ContentGraphQlUrl { get; set; }
         public string MediaUrl { get; set; }
         public string AnalyticsUrl { get; set; }

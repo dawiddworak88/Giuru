@@ -20,8 +20,6 @@ namespace Global.Api.Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "6.0.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
             modelBuilder.Entity("Global.Api.Infrastructure.Entities.Countries.Country", b =>
                 {
                     b.Property<Guid>("Id")
@@ -44,7 +42,7 @@ namespace Global.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries", (string)null);
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("Global.Api.Infrastructure.Entities.Countries.CountryTranslation", b =>

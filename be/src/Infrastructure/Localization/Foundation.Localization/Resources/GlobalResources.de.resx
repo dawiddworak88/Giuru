@@ -783,9 +783,6 @@
   <data name="DeliveryAddressTitle" xml:space="preserve">
     <value>Lieferadresse</value>
   </data>
-  <data name="SettingsSavedSuccessfully" xml:space="preserve">
-    <value>Einstellungen erfolgreich gespeichert</value>
-  </data>
   <data name="EltapTransportLongDeliveryText" xml:space="preserve">
     <value>Wir liefern zu Ihnen innerhalb von</value>
   </data>

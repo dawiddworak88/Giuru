@@ -789,9 +789,6 @@
   <data name="DeliveryAddressTitle" xml:space="preserve">
     <value>Adres dostawy</value>
   </data>
-  <data name="SettingsSavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie zapisano ustawienia</value>
-  </data>
   <data name="EltapTransportLongDeliveryText" xml:space="preserve">
     <value>Dostarczymy do Ciebie do</value>
   </data>
