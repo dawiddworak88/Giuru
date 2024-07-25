@@ -26,10 +26,11 @@ namespace Buyer.Web.Areas.Products.Repositories.CompletionDates
             _settings = settings;
         }
 
-        public async Task<IEnumerable<Product>> PostAsync(string token, string language, IEnumerable<Product> products, List<ClientFieldValue> clientFields, DateTime currentDate)
+        public async Task<IEnumerable<Product>> PostAsync(string token, string language, IEnumerable<Product> products, IEnumerable<ClientFieldValue> clientFields, DateTime currentDate)
         {
             var requestModel = new CompletionDateRequestModel
             {
+                Product = null,
                 Products = products,
                 ClientFields = clientFields,
                 CurrentDate = currentDate,
@@ -44,11 +45,40 @@ namespace Buyer.Web.Areas.Products.Repositories.CompletionDates
                 AccessToken = token
             };
 
-            var response = await _apiClientService.PostAsync<ApiRequest<CompletionDateRequestModel>, CompletionDateRequestModel, CompletionDateResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<CompletionDateRequestModel>, CompletionDateRequestModel, CompletionDateRespopnseModel>(apiRequest);
 
             if (response.IsSuccessStatusCode)
             {
                 return response.Data.Products; 
+            }
+
+            return null;
+        }
+
+        public async Task<Product> PostAsync(string token, string language, Product product, IEnumerable<ClientFieldValue> clientFields, DateTime currentDate)
+        {
+            var requestModel = new CompletionDateRequestModel
+            {
+                Product = product,
+                Products = null,
+                ClientFields = clientFields,
+                CurrentDate = currentDate,
+                Language = language,
+            };
+
+            var apiRequest = new ApiRequest<CompletionDateRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                EndpointAddress = $"{_settings.Value.CompletionDatesUrl}{ApiConstants.Catalog.CompletionDatesEndpoint}",
+                AccessToken = token
+            };
+
+            var response = await _apiClientService.PostAsync<ApiRequest<CompletionDateRequestModel>, CompletionDateRequestModel, CompletionDateRespopnseModel>(apiRequest);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return response.Data.Product;
             }
 
             return null;

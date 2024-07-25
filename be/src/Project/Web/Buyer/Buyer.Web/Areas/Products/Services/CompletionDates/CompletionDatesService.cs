@@ -10,6 +10,7 @@ using Buyer.Web.Areas.Products.Repositories.CompletionDates;
 using Buyer.Web.Shared.DomainModels.Clients;
 using Foundation.Extensions.ExtensionMethods;
 using Buyer.Web.Areas.Shared.Definitions.Products;
+using Foundation.GenericRepository.Paginations;
 
 namespace Buyer.Web.Areas.Products.Services.CompletionDates
 {
@@ -32,20 +33,47 @@ namespace Buyer.Web.Areas.Products.Services.CompletionDates
             _completionDatesRepository = completionDatesRepository;
         }
 
+        public async Task<Product> GetCompletionDateAsync(string token, string language, Guid? clientId, Product product)
+        {
+            var productsOnStock = await _inventoryRepository.GetAvailbleProductsInventory(language, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token);
+
+            if (productsOnStock.Data.OrEmptyIfNull().Any(x => x.ProductId == product.Id))
+            {
+                product.IsStock = true;
+            }
+
+            if (IsFastDeliveryEnabled(product))
+            {
+                product.IsFastDelivery = true;
+            }
+
+            var clientFieldValues = await GetClientFieldValuesAsync(token, language, clientId);
+
+            product = await _completionDatesRepository.PostAsync(
+                token,
+                language,
+                product,
+                clientFieldValues,
+                DateTime.UtcNow);
+
+            return product;
+        }
+
         public async Task<IEnumerable<Product>> GetCompletionDatesAsync(string token, string language, Guid? clientId, IEnumerable<Product> products)
         {
-            var inStockProducts = await _inventoryRepository.GetAvailbleProductsInventoryByIds(token, language, products.Select(x => x.Id));
 
-            foreach (var product in products.OrEmptyIfNull())
+            var productsOnStock = await _inventoryRepository.GetAvailbleProductsInventoryByIds(token, language, products.Select(x => x.Id));
+
+            foreach (var item in products.OrEmptyIfNull())
             {
-                if (inStockProducts.Any(x => x.ProductId == product.Id))
+                if (productsOnStock.Any(x => x.ProductId == item.Id))
                 {
-                    product.IsStock = true;
+                    item.IsStock = true;
                 }
 
-                if (IsFastDeliveryEnabled(product))
+                if (IsFastDeliveryEnabled(item))
                 {
-                    product.IsFastDelivery = true;
+                    item.IsFastDelivery = true;
                 }
             }
 
@@ -56,12 +84,12 @@ namespace Buyer.Web.Areas.Products.Services.CompletionDates
                 language,
                 products,
                 clientFieldValues,
-                DateTime.Now);
+                DateTime.UtcNow);
 
             return products;
         }
 
-        private async Task<List<ClientFieldValue>> GetClientFieldValuesAsync(string token, string language, Guid? id)
+        private async Task<IEnumerable<ClientFieldValue>> GetClientFieldValuesAsync(string token, string language, Guid? id)
         {
             var client = await _clientsRepository.GetClientAsync(token, language, id);
 
@@ -70,7 +98,7 @@ namespace Buyer.Web.Areas.Products.Services.CompletionDates
                 return await _clientsRepository.GetClientFieldValuesAsync(token, language, client.Id);
             }
 
-            return null;
+            return default;
         }
 
         private bool IsFastDeliveryEnabled(Product product)
@@ -82,7 +110,12 @@ namespace Buyer.Web.Areas.Products.Services.CompletionDates
 
             var fastDelivery = product.ProductAttributes.FirstOrDefault(x => x.Key == ProductConstants.Schema.FastDeliveryName);
 
-            return Boolean.Parse(fastDelivery.Values.FirstOrDefault());
+            if (fastDelivery.Values is not null)
+            {
+                return Boolean.Parse(fastDelivery.Values.FirstOrDefault());
+            }
+
+            return false;
         }
     }
 }
