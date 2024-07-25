@@ -48,9 +48,9 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
             if (product is not null)
             {
-                if (_options.Value.CompletionDatesUrl.IsNullOrEmpty() is false)
+                if (String.IsNullOrWhiteSpace(_options.Value.CompletionDatesUrl) is false)
                 {
-                    product = (await _completionDatesService.GetCompletionDatesAsync(token, language, sellerId, new List<Product> { product })).FirstOrDefault();
+                    product = await _completionDatesService.GetCompletionDateAsync(token, language, sellerId, product);
                 }
 
                 return product;
@@ -91,7 +91,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
             if (pagedProducts?.Data is not null)
             {
-                if (_options.Value.CompletionDatesUrl.IsNullOrEmpty() is false)
+                if (String.IsNullOrWhiteSpace(_options.Value.CompletionDatesUrl) is false)
                 {
                     pagedProducts.Data = await _completionDatesService.GetCompletionDatesAsync(token, language, sellerId, pagedProducts.Data);
                 }
