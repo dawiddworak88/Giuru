@@ -19,6 +19,7 @@ namespace Giuru.IntegrationTests
         private ElasticsearchContainer _elasticsearchContainer;
         private IContainer _catalogApiContainer;
         private IContainer _orderingApiContainer;
+        private IContainer _basketApiContainer;
         private IContainer _sellerWebContainer;
 
         public async Task InitializeAsync()
@@ -108,6 +109,30 @@ namespace Giuru.IntegrationTests
                 .Build();
 
             await _orderingApiContainer.StartAsync();
+
+            var basketApiImage = new BasketApiImage();
+
+            await basketApiImage.InitializeAsync();
+
+            _basketApiContainer = new ContainerBuilder()
+                .WithName("basket-api")
+                .WithImage(basketApiImage)
+                .WithNetwork(_giuruNetwork)
+                .WithExposedPort(9103)
+                .WithPortBinding(9103, 8080)
+                .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
+                .WithEnvironment("RedisUrl", $"host.docker.internal:9113,abortConnect=false")
+                .WithEnvironment("ConnectionString", $"host.docker.internal:9113,abortConnect=false")
+                .WithEnvironment("EventBusConnection", _rabbitMqContainer.GetConnectionString())
+                .WithEnvironment("EventBusRetryCount", "5")
+                .WithEnvironment("EventBusRequestedHeartbeat", "60")
+                .WithEnvironment("SupportedCultures", "de,en,pl")
+                .WithEnvironment("DefaultCulture", "en")
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .Build();
+
+            await _basketApiContainer.StartAsync();
+
         }
 
         public async Task DisposeAsync()
@@ -125,7 +150,10 @@ namespace Giuru.IntegrationTests
             await _catalogApiContainer.DisposeAsync();
 
             await _orderingApiContainer.StopAsync();
-            await _catalogApiContainer.DisposeAsync();
+            await _orderingApiContainer.DisposeAsync();
+
+            await _basketApiContainer.StopAsync();
+            await _basketApiContainer.DisposeAsync();
 
             await _rabbitMqContainer.StopAsync();
             await _rabbitMqContainer.DisposeAsync();
