@@ -12,11 +12,9 @@ namespace Client.Api.Infrastructure.Fields.Seeds
             SeedClientFieldAsync(context, FieldConstants.Zone.Id, FieldConstants.Type.Select, false, FieldConstants.Zone.OptionSetId, "Strefa", "Zone", "Zone");
             SeedOptionsAsync(context, FieldConstants.Zone.ZoneOneId, FieldConstants.Zone.OptionSetId, "Zone 1");
             SeedOptionsAsync(context, FieldConstants.Zone.ZoneTwoId, FieldConstants.Zone.OptionSetId, "Zone 2");
-
             SeedClientFieldAsync(context, FieldConstants.Transport.Id, FieldConstants.Type.Select, false, FieldConstants.Transport.OptionSetId, "Rodzja transportu", "Type of transport", "Art des Transports");
             SeedOptionsAsync(context, FieldConstants.Transport.OwnPickUpId, FieldConstants.Transport.OptionSetId, "Own PickUp");
             SeedOptionsAsync(context, FieldConstants.Transport.EltapTransportId, FieldConstants.Transport.OptionSetId, "ELTAP Transport");
-
             SeedClientFieldAsync(context, FieldConstants.Campaign.Id, FieldConstants.Type.Select, false, FieldConstants.Campaign.OptionSetId, "Udział w kampaniach", "Participation in campaigns", "Teilnahme an Kampagnen");
             SeedOptionsAsync(context, FieldConstants.Campaign.TtewId, FieldConstants.Campaign.OptionSetId, "TTEW");
             SeedOptionsAsync(context, FieldConstants.Campaign.OtewId, FieldConstants.Campaign.OptionSetId, "OTEW");
@@ -41,21 +39,18 @@ namespace Client.Api.Infrastructure.Fields.Seeds
                     IsActive = isRequired,
                     OptionSetId = optionsSetId,
                 };
-
                 var plFieldDefinitionTranslation = new FieldDefinitionTranslation
                 {
                     FieldDefinitionId = id,
                     Language = "pl",
                     FieldName = filedNamePl
                 };
-
                 var enFieldDefinitionTranslation = new FieldDefinitionTranslation
                 {
                     FieldDefinitionId = id,
                     Language = "en",
                     FieldName = filedNameEn
                 };
-
                 var deFieldDefinitionTranslation = new FieldDefinitionTranslation
                 {
                     FieldDefinitionId = id,
@@ -64,7 +59,6 @@ namespace Client.Api.Infrastructure.Fields.Seeds
                 };
 
                 context.FieldDefinitions.Add(fieldDefinition.FillCommonProperties());
-
                 context.FieldDefinitionTranslations.Add(plFieldDefinitionTranslation.FillCommonProperties());
                 context.FieldDefinitionTranslations.Add(enFieldDefinitionTranslation.FillCommonProperties());
                 context.FieldDefinitionTranslations.Add(deFieldDefinitionTranslation.FillCommonProperties());
@@ -75,7 +69,6 @@ namespace Client.Api.Infrastructure.Fields.Seeds
                 };
 
                 context.FieldOptionSets.Add(optionsSet.FillCommonProperties());
-
                 context.SaveChanges();
             }
         }
@@ -93,7 +86,6 @@ namespace Client.Api.Infrastructure.Fields.Seeds
                     Id = id,
                     OptionSetId = optionsSetId
                 };
-
                 var fieldOptionsTranslation = new OptionTranslation
                 {
                     OptionId = id,
@@ -103,7 +95,6 @@ namespace Client.Api.Infrastructure.Fields.Seeds
 
                 context.FieldOptions.Add(fieldOption.FillCommonProperties());
                 context.FieldOptionTranslations.Add(fieldOptionsTranslation.FillCommonProperties());
-
                 context.SaveChanges();
             }
         }
