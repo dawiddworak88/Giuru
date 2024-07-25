@@ -18,6 +18,7 @@ namespace Giuru.IntegrationTests
         private MsSqlContainer _msSqlContainer;
         private ElasticsearchContainer _elasticsearchContainer;
         private IContainer _catalogApiContainer;
+        private IContainer _catalogBackgroundTasksContainer;
         private IContainer _orderingApiContainer;
         private IContainer _basketApiContainer;
         private IContainer _sellerWebContainer;
@@ -29,6 +30,7 @@ namespace Giuru.IntegrationTests
             _redisContainer = new RedisBuilder()
                 .WithName("redis")
                 .WithNetwork(_giuruNetwork)
+                .WithNetworkAliases("redis")
                 .WithPortBinding(9113, 1433)
                 .WithExposedPort(9113)
                 .Build();
@@ -39,6 +41,7 @@ namespace Giuru.IntegrationTests
                 .WithName("mssql")
                 .WithNetwork(_giuruNetwork)
                 .WithPassword("YourStrongPassword!")
+                .WithNetworkAliases("sqldata")
                 .WithPortBinding(9111, 1433)
                 .WithExposedPort(9111)
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
@@ -58,6 +61,10 @@ namespace Giuru.IntegrationTests
             _rabbitMqContainer = new RabbitMqBuilder()
                 .WithName("rabbitmq")
                 .WithNetwork(_giuruNetwork)
+                .WithNetworkAliases("rabbitmq")
+                .WithPortBinding(9000, 5672)
+                .WithExposedPort(9000)
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5672))
                 .Build();
 
             await _rabbitMqContainer.StartAsync();
@@ -73,11 +80,11 @@ namespace Giuru.IntegrationTests
                 .WithExposedPort(9101)
                 .WithPortBinding(9101, 8080)
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
-                .WithEnvironment("RedisUrl", $"host.docker.internal:9113,abortConnect=false")
-                .WithEnvironment("ConnectionString", $"Server=host.docker.internal,9111;Database=CatalogDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
+                .WithEnvironment("RedisUrl", "redis")
+                .WithEnvironment("ConnectionString", $"Server=sqldata;Database=CatalogDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
                 .WithEnvironment("ElasticsearchUrl", _elasticsearchContainer.GetConnectionString())
                 .WithEnvironment("ElasticsearchIndex", "catalog")
-                .WithEnvironment("EventBusConnection", _rabbitMqContainer.GetConnectionString())
+                .WithEnvironment("EventBusConnection", "amqp://rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
@@ -86,6 +93,31 @@ namespace Giuru.IntegrationTests
                 .Build();
 
             await _catalogApiContainer.StartAsync();
+
+            var catalogBackgroundTasksImage = new CatalogBackgroundTasksImage();
+
+            await catalogBackgroundTasksImage.InitializeAsync();
+
+            _catalogBackgroundTasksContainer = new ContainerBuilder()
+                .WithName("catalog-background-tasks")
+                .WithImage(catalogBackgroundTasksImage)
+                .WithNetwork(_giuruNetwork)
+                .WithExposedPort(9104)
+                .WithPortBinding(9104, 8080)
+                .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
+                .WithEnvironment("RedisUrl", "redis")
+                .WithEnvironment("ConnectionString", $"Server=sqldata;Database=CatalogDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
+                .WithEnvironment("ElasticsearchUrl", _elasticsearchContainer.GetConnectionString())
+                .WithEnvironment("ElasticsearchIndex", "catalog")
+                .WithEnvironment("EventBusConnection", "amqp://rabbitmq")
+                .WithEnvironment("EventBusRetryCount", "5")
+                .WithEnvironment("EventBusRequestedHeartbeat", "60")
+                .WithEnvironment("SupportedCultures", "de,en,pl")
+                .WithEnvironment("DefaultCulture", "en")
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .Build();
+
+            await _catalogBackgroundTasksContainer.StartAsync();
 
             var orderingApiImage = new OrderingApiImage();
 
@@ -98,9 +130,9 @@ namespace Giuru.IntegrationTests
                 .WithExposedPort(9102)
                 .WithPortBinding(9102, 8080)
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
-                .WithEnvironment("RedisUrl", $"host.docker.internal:9113,abortConnect=false")
-                .WithEnvironment("ConnectionString", $"Server=host.docker.internal,9111;Database=OrderingDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
-                .WithEnvironment("EventBusConnection", _rabbitMqContainer.GetConnectionString())
+                .WithEnvironment("RedisUrl", "redis")
+                .WithEnvironment("ConnectionString", $"Server=sqldata;Database=OrderingDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
+                .WithEnvironment("EventBusConnection", "amqp://rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
@@ -121,9 +153,9 @@ namespace Giuru.IntegrationTests
                 .WithExposedPort(9103)
                 .WithPortBinding(9103, 8080)
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
-                .WithEnvironment("RedisUrl", $"host.docker.internal:9113,abortConnect=false")
-                .WithEnvironment("ConnectionString", $"host.docker.internal:9113,abortConnect=false")
-                .WithEnvironment("EventBusConnection", _rabbitMqContainer.GetConnectionString())
+                .WithEnvironment("RedisUrl", "redis")
+                .WithEnvironment("ConnectionString", "redis")
+                .WithEnvironment("EventBusConnection", "amqp://rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
@@ -148,6 +180,9 @@ namespace Giuru.IntegrationTests
 
             await _catalogApiContainer.StopAsync();
             await _catalogApiContainer.DisposeAsync();
+
+            await _catalogBackgroundTasksContainer.StopAsync();
+            await _catalogBackgroundTasksContainer.DisposeAsync();
 
             await _orderingApiContainer.StopAsync();
             await _orderingApiContainer.DisposeAsync();
