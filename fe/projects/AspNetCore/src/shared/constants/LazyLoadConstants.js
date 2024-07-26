@@ -10,4 +10,8 @@ export default class LazyLoadConstants {
     static contentGridOffset() {
         return 500;
     }
+
+    static videoOffset() {
+        return 300;
+    }
 }

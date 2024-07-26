@@ -1,6 +1,7 @@
 import React from "react"
 import BlockRendererClient from "../BlockRendererClient/BlockRendererClient"
 import CarouselGrid from "../CarouselGrid/CarouselGrid";
+import { Video } from "../Video/Video";
 
 /** Component to transform data from CMS to UI component */
 export const StrapiContent = (props) => {
@@ -11,6 +12,8 @@ export const StrapiContent = (props) => {
                 return <BlockRendererClient content={JSON.parse(widget.content)} />;
             case "ComponentSharedSlider":
                 return <CarouselGrid {...widget.slider} />;
+            case "ComponentBlocksVideo":
+                return <Video {...widget} />
             default:
                 return null
         }
