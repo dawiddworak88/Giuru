@@ -312,4 +312,7 @@
   <data name="oc_subject" xml:space="preserve">
     <value>Order Confirm</value>
   </data>
+  <data name="FromStockLabel" xml:space="preserve">
+    <value>Z magazynu</value>
+  </data>
 </root>
