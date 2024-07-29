@@ -36,6 +36,7 @@ function NewOrderForm(props) {
     const [attachments, setAttachments] = useState([]);
     const [deliveryAddressId, setDeliveryAddressId] = useState(props.defaultDeliveryAddressId ? props.defaultDeliveryAddressId : null);
     const [billingAddressId, setBillingAddressId] = useState(props.defaultBillingAddressId ? props.defaultBillingAddressId : null);
+    const [isFromStock, setIsFromStock] = useState(false);
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -90,7 +91,8 @@ function NewOrderForm(props) {
             imageId: product.images ? product.images[0] : null,
             quantity: quantity,
             externalReference,
-            moreInfo
+            moreInfo,
+            isFromStock
         };
 
         const basket = {
@@ -321,7 +323,7 @@ function NewOrderForm(props) {
     }
 
     const disabledActionButtons = orderItems.length === 0 ? !customOrder ? true : false : false;
-    
+
     return (
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -419,6 +421,18 @@ function NewOrderForm(props) {
                                         e.preventDefault();
                                         setMoreInfo(e.target.value);
                                     }} />
+                            </div>
+                            <div className="column is-2 is-flex is-align-items-flex-end">
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox 
+                                            checked={isFromStock}
+                                            onChange={() => setIsFromStock(!isFromStock)}
+                                        />
+                                    }
+                                    label={props.fromStockLabel}
+                                />
+                                
                             </div>
                             <div className="column is-1 is-flex is-align-items-flex-end">
                                 <Button type="button" variant="contained" color="primary" onClick={handleAddOrderItemClick} disabled={state.isLoading || quantity < 1 || product === null}>
