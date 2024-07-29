@@ -48,6 +48,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 NameLabel = _orderLocalizer.GetString("NameLabel"),
                 OrderItemsLabel = _orderLocalizer.GetString("OrderItemsLabel"),
                 QuantityLabel = _orderLocalizer.GetString("QuantityLabel"),
+                StockQuantityLabel = _orderLocalizer.GetString("StockQuantityLabel"),
                 OutletQuantityLabel = _orderLocalizer.GetString("OutletQuantityLabel"),
                 ExternalReferenceLabel = _orderLocalizer.GetString("ExternalReferenceLabel"),
                 SkuLabel = _orderLocalizer.GetString("SkuLabel"),
@@ -73,7 +74,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 GetClientAddressesUrl = _linkGenerator.GetPathByAction("Get", "ClientAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
-                DefaultItemsPerPage = Constants.DefaultItemsPerPage
+                DefaultItemsPerPage = Constants.DefaultItemsPerPage,
+                FromStockLabel = _orderLocalizer.GetString("FromStockLabel")
             };
 
             var clients = await _clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);
