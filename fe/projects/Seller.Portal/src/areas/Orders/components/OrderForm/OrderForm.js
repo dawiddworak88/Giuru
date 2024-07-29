@@ -8,7 +8,9 @@ import { Context } from "../../../../shared/stores/Store";
 import { Delete, AddShoppingCartRounded } from "@mui/icons-material"
 import {
     Fab, Table, TableBody, TableCell, TableContainer, Autocomplete, 
-    TableHead, TableRow, Paper, TextField, Button, CircularProgress
+    TableHead, TableRow, Paper, TextField, Button, CircularProgress,
+    Checkbox,
+    FormControlLabel
 } from "@mui/material";
 import moment from "moment";
 import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
@@ -35,6 +37,7 @@ function OrderForm(props) {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
     const [disableSaveButton, setDisableSaveButton] = useState(false);
+    const [isFromStock, setIsFromStock] = useState(false);
 
     const onSuggestionsFetchRequested = (args) => {
 
@@ -95,11 +98,11 @@ function OrderForm(props) {
             imageId: product.images ? product.images[0] : null,
             quantity,
             externalReference,
-            moreInfo
+            moreInfo,
+            isFromStock
         };
 
         const basket = {
-
             id: basketId,
             items: [...orderItems, orderItem]
         };
@@ -493,6 +496,15 @@ function OrderForm(props) {
                                         setMoreInfo(e.target.value);
                                     }} />
                             </div>
+                            <div className="column is-2 is-flex is-align-items-flex-end">
+                                <FormControlLabel
+                                    control={<Checkbox 
+                                        checked={isFromStock}
+                                        onChange={() => setIsFromStock(!isFromStock)}
+                                    />}
+                                    label={props.fromStockLabel}
+                                />
+                            </div>
                             <div className="column is-1 is-flex is-align-items-flex-end">
                                 <Button type="button" variant="contained" color="primary" onClick={handleAddOrderItemClick} disabled={state.isLoading || quantity < 1 || product === null}>
                                     {props.addText}
@@ -512,6 +524,8 @@ function OrderForm(props) {
                                                         <TableCell>{props.skuLabel}</TableCell>
                                                         <TableCell>{props.nameLabel}</TableCell>
                                                         <TableCell>{props.quantityLabel}</TableCell>
+                                                        <TableCell>{props.stockQuantityLabel}</TableCell>
+                                                        <TableCell>{props.outletQuantityLabel}</TableCell>
                                                         <TableCell>{props.externalReferenceLabel}</TableCell>
                                                         <TableCell>{props.deliveryFromLabel}</TableCell>
                                                         <TableCell>{props.deliveryToLabel}</TableCell>
@@ -530,6 +544,8 @@ function OrderForm(props) {
                                                             <TableCell>{item.sku}</TableCell>
                                                             <TableCell>{item.name}</TableCell>
                                                             <TableCell>{item.quantity}</TableCell>
+                                                            <TableCell>{item.stockQuantity}</TableCell>
+                                                            <TableCell>{item.outletQuantity}</TableCell>
                                                             <TableCell>{item.externalReference}</TableCell>
                                                             <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                             <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
