@@ -60,6 +60,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 QuantityLabel = _orderLocalizer.GetString("QuantityLabel"),
                 StockQuantityLabel = _orderLocalizer.GetString("StockQuantityLabel"),
                 OutletQuantityLabel = _orderLocalizer.GetString("OutletQuantityLabel"),
+                FromStockLabel = _orderLocalizer.GetString("FromStockLabel"),
                 ExternalReferenceLabel = _orderLocalizer.GetString("ExternalReferenceLabel"),
                 SkuLabel = _orderLocalizer.GetString("SkuLabel"),
                 GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),

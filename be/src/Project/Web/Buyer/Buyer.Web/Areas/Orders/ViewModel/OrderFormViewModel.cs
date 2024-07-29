@@ -27,6 +27,7 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string OrderItemsLabel { get; set; }
         public string ChangeDeliveryFromLabel { get; set; }
         public string ChangeDeliveryToLabel { get; set; }
+        public string FromStockLabel { get; set; }
         public string AddText { get; set; }
         public string OkLabel { get; set; }
         public string CancelLabel { get; set; }
