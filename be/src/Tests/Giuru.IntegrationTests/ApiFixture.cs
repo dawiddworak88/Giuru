@@ -21,7 +21,8 @@ namespace Giuru.IntegrationTests
         private IContainer _catalogBackgroundTasksContainer;
         private IContainer _orderingApiContainer;
         private IContainer _basketApiContainer;
-        private IContainer _sellerWebContainer;
+        //private IContainer _clientApiContainer;
+        //private IContainer _sellerWebContainer;
 
         public async Task InitializeAsync()
         {
@@ -31,8 +32,9 @@ namespace Giuru.IntegrationTests
                 .WithName("redis")
                 .WithNetwork(_giuruNetwork)
                 .WithNetworkAliases("redis")
-                .WithPortBinding(9113, 1433)
+                .WithPortBinding(9113, 6379)
                 .WithExposedPort(9113)
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(6379))
                 .Build();
 
             await _redisContainer.StartAsync();
@@ -64,6 +66,8 @@ namespace Giuru.IntegrationTests
                 .WithNetworkAliases("rabbitmq")
                 .WithPortBinding(9000, 5672)
                 .WithExposedPort(9000)
+                .WithUsername("testy")
+                .WithPassword("YourStrongPassword!")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5672))
                 .Build();
 
@@ -84,7 +88,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("ConnectionString", $"Server=sqldata;Database=CatalogDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
                 .WithEnvironment("ElasticsearchUrl", _elasticsearchContainer.GetConnectionString())
                 .WithEnvironment("ElasticsearchIndex", "catalog")
-                .WithEnvironment("EventBusConnection", "amqp://rabbitmq")
+                .WithEnvironment("EventBusConnection", "amqp://testy:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
@@ -109,7 +113,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("ConnectionString", $"Server=sqldata;Database=CatalogDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
                 .WithEnvironment("ElasticsearchUrl", _elasticsearchContainer.GetConnectionString())
                 .WithEnvironment("ElasticsearchIndex", "catalog")
-                .WithEnvironment("EventBusConnection", "amqp://rabbitmq")
+                .WithEnvironment("EventBusConnection", "amqp://testy:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
