@@ -14,5 +14,6 @@ namespace Seller.Web.Areas.Orders.ApiRequestModels
         public double OutletQuantity { get; set; }
         public string ExternalReference { get; set; }
         public string MoreInfo { get; set; }
+        public bool IsFromStock { get; set; }
     }
 }
