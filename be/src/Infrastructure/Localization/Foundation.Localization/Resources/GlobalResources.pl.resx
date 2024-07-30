@@ -793,7 +793,7 @@
     <value>Twoja historia wyszukiwania.</value>
   </data>
   <data name="SearchByNameOrSKU" xml:space="preserve">
-    <value>Wyszukaj produkt za nazwą albo SKU.</value>
+    <value>Wyszukaj produkt po nazwie albo SKU...</value>
   </data>
   <data name="BillingAddressTitle" xml:space="preserve">
     <value>Adres bilingowy</value>
