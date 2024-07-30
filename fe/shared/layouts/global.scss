@@ -138,11 +138,14 @@
     position: absolute;
     top: 2rem;
     left: calc(-19px + -1.6rem);
-    width: calc(100% + 40px + 18rem);
+    width: calc(100% + 40px + 19rem);
+    max-height: 15rem;
+    overflow: auto;
+    overflow-x: hidden;
     margin-left: 1px;
     background-color: $white;
     border-radius: 0 0 4px 4px;
-    z-index: 3;
+    z-index: 4;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     background-clip: padding-box;
 }
@@ -153,7 +156,7 @@
     width: 110vw;
     height: 200vh;
     position: absolute;
-    z-index: 2;
+    z-index: 3;
     top: 2rem;
     left: -20rem;
 }
@@ -180,6 +183,12 @@
 
     .blur {
         left: -3rem;
+    }
+}
+
+@media only screen and (min-width: $tablet) {
+    .blur {
+        left: -27rem;
     }
 }
 
