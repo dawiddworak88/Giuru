@@ -52,7 +52,7 @@ namespace Buyer.Web.Areas.Products.Repositories.CompletionDates
                 return response.Data.Products; 
             }
 
-            return null;
+            return default;
         }
 
         public async Task<Product> PostAsync(string token, string language, Product product, IEnumerable<ClientFieldValue> clientFields, DateTime currentDate)
@@ -81,7 +81,7 @@ namespace Buyer.Web.Areas.Products.Repositories.CompletionDates
                 return response.Data.Product;
             }
 
-            return null;
+            return default;
         }
     }
 }
