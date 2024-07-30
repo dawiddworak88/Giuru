@@ -16,7 +16,6 @@ using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Media.Services.MediaServices;
 using Buyer.Web.Areas.Products.Services.CompletionDates;
-using IdentityServer4.Extensions;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -48,7 +47,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
             if (product is not null)
             {
-                if (String.IsNullOrWhiteSpace(_options.Value.CompletionDatesUrl) is false)
+                if (string.IsNullOrWhiteSpace(_options.Value.CompletionDatesUrl) is false)
                 {
                     product = await _completionDatesService.GetCompletionDateAsync(token, language, sellerId, product);
                 }
@@ -91,7 +90,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
             if (pagedProducts?.Data is not null)
             {
-                if (String.IsNullOrWhiteSpace(_options.Value.CompletionDatesUrl) is false)
+                if (string.IsNullOrWhiteSpace(_options.Value.CompletionDatesUrl) is false)
                 {
                     pagedProducts.Data = await _completionDatesService.GetCompletionDatesAsync(token, language, sellerId, pagedProducts.Data);
                 }
