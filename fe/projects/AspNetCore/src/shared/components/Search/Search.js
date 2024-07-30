@@ -75,13 +75,13 @@ const Search = (props) => {
 
     const onSuggestionSelected = (event, { suggestion }) => {
         NavigationHelper.redirect(suggestion.url);;
-        updateSearchHistory(suggestion.name);
+        updateSearchHistory(suggestion);
         setSearchTerm('');
     };
 
-    const onSidebarSuggestionSelected = (name, url) => {
+    const onSidebarSuggestionSelected = (suggestion, url) => {
         NavigationHelper.redirect(url);
-        updateSearchHistory(name);
+        updateSearchHistory(suggestion);
         setOpen(false);
     };
 
@@ -90,6 +90,7 @@ const Search = (props) => {
     };
 
     const updateSearchHistory = (suggestion) => {
+        console.log("suggestion", suggestion)
         const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
         if (!searchHistory.includes(suggestion)) {
             localStorage.setItem('searchHistory', JSON.stringify([...searchHistory, suggestion]));
@@ -317,7 +318,7 @@ const Search = (props) => {
                         </div>
                     </div>
             </div>
-            <Drawer open={open} PaperProps={{ sx: { width: '100%' } }} className="lol">
+            <Drawer open={open} PaperProps={{ sx: { width: '100%' } }}>
                 <div className="sidebar">
                     <div className="sidebar__header is-flex">
                         <div className="sidebar__header__back">
