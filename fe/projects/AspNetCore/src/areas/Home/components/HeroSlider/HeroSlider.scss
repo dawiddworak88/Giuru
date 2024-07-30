@@ -3,6 +3,11 @@
     width: 100%;
     padding-bottom: 3rem;
 
+    .carousel-root {
+        position: relative;
+        z-index: 0;
+    }
+
     .carousel {
         background-color: $white;
     }
