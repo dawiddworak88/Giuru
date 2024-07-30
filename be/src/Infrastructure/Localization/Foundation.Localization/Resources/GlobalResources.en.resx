@@ -783,10 +783,4 @@
   <data name="DeliveryAddressTitle" xml:space="preserve">
     <value>Delivery address</value>
   </data>
-  <data name="EltapTransportLongDeliveryText" xml:space="preserve">
-    <value>We will deliver to you within</value>
-  </data>
-  <data name="EltapTransportShortDeliveryText" xml:space="preserve">
-    <value>We will deliver to you on</value>
-  </data>
 </root>

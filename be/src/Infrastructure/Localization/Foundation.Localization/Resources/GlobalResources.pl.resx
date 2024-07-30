@@ -789,10 +789,4 @@
   <data name="DeliveryAddressTitle" xml:space="preserve">
     <value>Adres dostawy</value>
   </data>
-  <data name="EltapTransportLongDeliveryText" xml:space="preserve">
-    <value>Dostarczymy do Ciebie do</value>
-  </data>
-  <data name="EltapTransportShortDeliveryText" xml:space="preserve">
-    <value>Dostarczymy do Ciebie</value>
-  </data>
 </root>
