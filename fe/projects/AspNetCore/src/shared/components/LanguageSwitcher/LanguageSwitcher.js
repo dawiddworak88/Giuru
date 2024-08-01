@@ -7,9 +7,11 @@ import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 
 function LanguageSwitcher(props) {
     const [anchor, setAnchor] = useState(null);
+    const [overlay, setOverlay] = useState(false);
 
     const handleClick = (event) => {
         setAnchor(anchor ? null : event.currentTarget);
+        setOverlay(!overlay);
     };
 
     const open = Boolean(anchor);
@@ -38,6 +40,9 @@ function LanguageSwitcher(props) {
                     <ArrowShowLessIcon /> : <ArrowShowMoreIcon />
                 }
             </Button>
+            {overlay &&
+                <div className="popup-overlay" onClick={handleClick}></div>
+            }
             <BasePopup id={id} open={open} anchor={anchor} className="switcher">
                 <div className="switcher__body">
                     {props.availableLanguages && props.availableLanguages.length > 0 && props.availableLanguages.map((language, index) =>

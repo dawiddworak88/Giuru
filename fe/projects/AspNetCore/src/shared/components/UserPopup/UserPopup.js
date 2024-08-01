@@ -8,9 +8,11 @@ import PropTypes from "prop-types";
 
 const UserPopup = (props) => {
     const [anchor, setAnchor] = useState(null);
+    const [overlay, setOverlay] = useState(false)
 
     const handleClick = (event) => {
         setAnchor(anchor ? null : event.currentTarget);
+        setOverlay(!overlay);
     };
 
     const open = Boolean(anchor);
@@ -32,6 +34,9 @@ const UserPopup = (props) => {
                     <ArrowShowLessIcon /> : <ArrowShowMoreIcon />
                 }
             </Button>
+            {overlay &&
+                <div className="popup-overlay" onClick={handleClick}></div>
+            }
             <BasePopup id={id} open={open} anchor={anchor} className="popup">
                 <div className="popup__body">
                     {props.isLoggedIn ? (
