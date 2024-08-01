@@ -1,4 +1,5 @@
 .notification-bar {
+    position: relative;
     width: 100%;
     background-color: $primarymint;
     padding: 0.4rem;
@@ -6,6 +7,7 @@
     height: 40px;
     align-items: center;
     justify-content: center;
+    z-index: 50;
 
     &_icon {
         font-size: large;
@@ -24,6 +26,7 @@
     &_link {
         color: $white;
         font-family: $family-primary;
+        padding-top: 0.05rem;
 
         &:hover {
             color: $lightgrey;
