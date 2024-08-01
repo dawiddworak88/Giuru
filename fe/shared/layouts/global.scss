@@ -134,7 +134,6 @@
 }
 
 .react-autosuggest__suggestions-container, .react-autosuggest__suggestions-container--open {
-    display: block;
     position: absolute;
     top: 2rem;
     left: calc(-19px + -1.6rem);
@@ -145,20 +144,19 @@
     margin-left: 1px;
     background-color: $white;
     border-radius: 0 0 4px 4px;
-    z-index: 4;
+    z-index: 40;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     background-clip: padding-box;
 }
 
-.blur {
-    background-color: $blackbase;
-    opacity: 0.5;
-    width: 110vw;
-    height: 200vh;
-    position: absolute;
-    z-index: 3;
-    top: 2rem;
-    left: -20rem;
+.overlay {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: -10;
 }
 
 .react-autosuggest__suggestions-container {
@@ -169,26 +167,10 @@
     padding: 0.5rem;
 }
 
-@media only screen and (min-width: $widescreen) {
-    .blur {
-        left: -37rem;
-    }
-}
-
 @media only screen and (max-width: $desktop) {
     .react-autosuggest__suggestions-container, .react-autosuggest__suggestions-container--open {
         width: calc(100% + 24px + 8rem);
         left: calc(-1rem + -5px);
-    }
-
-    .blur {
-        left: -3rem;
-    }
-}
-
-@media only screen and (min-width: $tablet) {
-    .blur {
-        left: -27rem;
     }
 }
 
@@ -209,6 +191,15 @@
     background-color: $desertstorm;
 }
 
+.popup-overlay {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 20;
+}
+
 img {
     object-fit: cover;
 }
@@ -216,6 +207,11 @@ img {
 a,
 a:hover {
     text-decoration: none;
+}
+
+header {
+    position: relative;
+    z-index: 45;
 }
 
 .logo {
