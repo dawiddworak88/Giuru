@@ -1,7 +1,9 @@
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using DotNet.Testcontainers.Networks;
+using Giuru.IntegrationTests.HttpClients;
 using Giuru.IntegrationTests.Images;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Testcontainers.Elasticsearch;
 using Testcontainers.MsSql;
@@ -22,6 +24,8 @@ namespace Giuru.IntegrationTests
         private IContainer _orderingApiContainer;
         private IContainer _basketApiContainer;
         private IContainer _clientApiContainer;
+
+        public RestClient _restClient { get; private set; }
 
         public async Task InitializeAsync()
         {
@@ -188,6 +192,8 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                 .Build();
+
+            _restClient = new RestClient(new HttpClient());
         }
 
         public async Task DisposeAsync()
