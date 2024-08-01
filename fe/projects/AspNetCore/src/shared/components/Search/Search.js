@@ -90,7 +90,6 @@ const Search = (props) => {
     };
 
     const updateSearchHistory = (suggestion) => {
-        console.log("suggestion", suggestion)
         const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
         if (!searchHistory.includes(suggestion)) {
             localStorage.setItem('searchHistory', JSON.stringify([...searchHistory, suggestion]));
@@ -202,7 +201,6 @@ const Search = (props) => {
                             <div>
                                 {searchTerm && searchTerm.length > 0 ?
                                     <div className="relative">
-                                        <div className="blur"></div>
                                         <div {...containerProps}>
                                             {children ? children :
                                                 <div>
@@ -210,14 +208,15 @@ const Search = (props) => {
                                                 </div>
                                             }
                                         </div>
+                                        <div className="overlay"></div>
                                     </div> :
                                     <div>
                                         {searchHistory && searchHistory.length > 0 &&
                                             <div className="relative">
-                                                <div className="blur"></div>
                                                 <div {...containerProps}>
                                                     {renderSearchHistory()}
                                                 </div>
+                                                <div className="overlay"></div>
                                             </div>
                                         }
                                     </div>
