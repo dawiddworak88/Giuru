@@ -156,7 +156,6 @@
     bottom: 0;
     top: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: -10;
 }
 
 .react-autosuggest__suggestions-container {
@@ -189,15 +188,6 @@
 
 .react-autosuggest__suggestion--highlighted {
     background-color: $desertstorm;
-}
-
-.popup-overlay {
-    position: fixed;
-    right: 0;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 20;
 }
 
 img {
