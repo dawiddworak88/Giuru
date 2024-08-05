@@ -193,6 +193,7 @@ const Search = (props) => {
     }
 
     function renderSuggestionsContainer({ containerProps, children, query }) {
+        {props.overlayDisplaying(false)}
         return (
             <div>
                 {!open &&
@@ -201,6 +202,7 @@ const Search = (props) => {
                             <div>
                                 {searchTerm && searchTerm.length > 0 ?
                                     <div className="relative">
+                                        {props.overlayDisplaying(true)}
                                         <div {...containerProps}>
                                             {children ? children :
                                                 <div>
@@ -208,15 +210,14 @@ const Search = (props) => {
                                                 </div>
                                             }
                                         </div>
-                                        <div className="overlay"></div>
                                     </div> :
                                     <div>
                                         {searchHistory && searchHistory.length > 0 &&
                                             <div className="relative">
+                                                {props.overlayDisplaying(true)}
                                                 <div {...containerProps}>
                                                     {renderSearchHistory()}
                                                 </div>
-                                                <div className="overlay"></div>
                                             </div>
                                         }
                                     </div>
@@ -268,54 +269,54 @@ const Search = (props) => {
     return (
         <div className="search">
             <div className="is-flex">
-                    {searchInput()}
-                    <div className="search__area">
-                        <div className="search__area__desktop">
-                            <FormControl fullWidth>
-                                <Select
-                                    className="search__area__select"
-                                    value={searchArea}
-                                    onChange={(e) => { setSearchArea(e.target.value) }}
-                                    displayEmpty
-                                    IconComponent={props => <ArrowShowMoreCategoryIcon {...props} />}
-                                    sx={{
-                                        boxShadow: 'none',
-                                        borderRadius: 0,
-                                        '.MuiOutlinedInput-notchedOutline': { border: 0 },
-                                        '.MuiSelect-select': { p: '0.5rem 0.5rem 0.5rem 1.5rem', textAlign: 'center' },
-                                        '.MuiSelect-iconOpen': { right: '16px' }
-                                    }}
-                                >
-                                    {props.searchAreas && props.searchAreas.length > 0 && props.searchAreas.map((area, index) =>
-                                        <MenuItem key={index} value={area.value}>
-                                            <div className="is-flex pt-2">
-                                                <div className="pr-2">
-                                                    <CategoryIcon />
-                                                </div>
-                                                <div className="search__area__select__text">
-                                                    {area.name}
-                                                </div>
-                                            </div>
-                                        </MenuItem>
-                                    )}
-                                </Select>
-                            </FormControl>
-                        </div>
-                        <div className="search__area__mobile">
-                            <Button
-                                disableRipple
-                                onClick={() => setOpen(true)}
-                                sx={{ pt: '0.9rem', pl: '0.8rem' }}
+                {searchInput()}
+                <div className="search__area">
+                    <div className="search__area__desktop">
+                        <FormControl fullWidth>
+                            <Select
+                                className="search__area__select"
+                                value={searchArea}
+                                onChange={(e) => { setSearchArea(e.target.value) }}
+                                displayEmpty
+                                IconComponent={props => <ArrowShowMoreCategoryIcon {...props} />}
+                                sx={{
+                                    boxShadow: 'none',
+                                    borderRadius: 0,
+                                    '.MuiOutlinedInput-notchedOutline': { border: 0 },
+                                    '.MuiSelect-select': { p: '0.5rem 0.5rem 0.5rem 1.5rem', textAlign: 'center' },
+                                    '.MuiSelect-iconOpen': { right: '16px' }
+                                }}
                             >
-                                <div className="pr-2">
-                                    <CategoryIcon />
-                                </div>
-                                <div>
-                                    <ArrowShowMoreCategoryIcon />
-                                </div>
-                            </Button>
-                        </div>
+                                {props.searchAreas && props.searchAreas.length > 0 && props.searchAreas.map((area, index) =>
+                                    <MenuItem key={index} value={area.value}>
+                                        <div className="is-flex pt-2">
+                                            <div className="pr-2">
+                                                <CategoryIcon />
+                                            </div>
+                                            <div className="search__area__select__text">
+                                                {area.name}
+                                            </div>
+                                        </div>
+                                    </MenuItem>
+                                )}
+                            </Select>
+                        </FormControl>
                     </div>
+                    <div className="search__area__mobile">
+                        <Button
+                            disableRipple
+                            onClick={() => setOpen(true)}
+                            sx={{ pt: '0.9rem', pl: '0.8rem' }}
+                        >
+                            <div className="pr-2">
+                                <CategoryIcon />
+                            </div>
+                            <div>
+                                <ArrowShowMoreCategoryIcon />
+                            </div>
+                        </Button>
+                    </div>
+                </div>
             </div>
             <Drawer open={open} PaperProps={{ sx: { width: '100%' } }}>
                 <div className="sidebar">
