@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import LanguageSwitcher from "../../../shared/components/LanguageSwitcher/LanguageSwitcher";
 import { Context } from "../../stores/Store";
@@ -9,8 +9,8 @@ import Search from "../Search/Search";
 
 function Header(props) {
     const [state, dispatch] = useContext(Context);
-    
     const [totalBasketItems, setTotalBasketItems] = useState(props.totalBasketItems ? props.totalBasketItems : 0);
+    const overlayRef = useRef(null);
 
     useEffect(() => {
         const totalItems = state.totalBasketItems;
@@ -22,6 +22,19 @@ function Header(props) {
 
     }, [state])
 
+    const overlayDisplaying = (isDisplay) => {
+        if (overlayRef.current) {
+            if (isDisplay) {
+                overlayRef.current.classList.add('show');
+                document.body.classList.add("no-scroll");
+            }
+            else {
+                overlayRef.current.classList.remove('show');
+                document.body.classList.remove("no-scroll");
+            }
+        }
+      };  
+
     return (
         <header>
             <nav className="navbar p-4 px-4 is-align-items-center header">
@@ -31,7 +44,7 @@ function Header(props) {
                     </a>
                 </div>
                 <div className="navbar__search">
-                    <Search {...props.search}/>
+                    <Search {...props.search} overlayDisplaying={overlayDisplaying} />
                 </div>
                 <div className="navbar__actions is-flex">
                     <div className="navbar__actions__language">
@@ -50,6 +63,7 @@ function Header(props) {
                         <SidebarMobile {...props.sidebarMobile} />
                     </div>
                 </div>
+                <div ref={overlayRef} className="overlay"></div>
             </nav>
         </header>
     );
