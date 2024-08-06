@@ -43,6 +43,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     inventories.Data.Select(x => x.ProductId),
                     null,
                     null,
+                    null,
                     CultureInfo.CurrentUICulture.Name,
                     null,
                     false,

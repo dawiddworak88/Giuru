@@ -39,7 +39,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var products = await _productsService.GetProductsAsync(null, null, null, language, searchTerm, true, pageIndex, itemsPerPage, token);
+            var products = await _productsService.GetProductsAsync(null, null, null, null, language, searchTerm, true, pageIndex, itemsPerPage, token);
             
             if (products.Data is not null)
             {

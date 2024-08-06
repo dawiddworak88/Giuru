@@ -40,7 +40,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             if (outletItems?.Data is not null && outletItems.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
-                    outletItems.Data.Select(x => x.ProductId), null, null, language, null, false, pageIndex, itemsPerPage, token);
+                    outletItems.Data.Select(x => x.ProductId), null, null, null, language, null, false, pageIndex, itemsPerPage, token);
 
                 if (products is not null)
                 {
