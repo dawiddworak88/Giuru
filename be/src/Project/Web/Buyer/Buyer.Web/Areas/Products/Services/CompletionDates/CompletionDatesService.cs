@@ -33,7 +33,7 @@ namespace Buyer.Web.Areas.Products.Services.CompletionDates
             _completionDatesRepository = completionDatesRepository;
         }
 
-        public async Task<Product> GetCompletionDateAsync(string token, string language, Guid? clientId, Product product)
+        public async Task<Product> GetCompletionDateAsync(string token, string language, string userEmail, Product product)
         {
             var productsOnStock = await _inventoryRepository.GetAvailbleProductsInventory(language, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token);
 
@@ -47,21 +47,25 @@ namespace Buyer.Web.Areas.Products.Services.CompletionDates
                 product.IsFastDelivery = true;
             }
 
-            var clientFieldValues = await GetClientFieldValuesAsync(token, language, clientId);
+            var clientFieldValues = await GetClientFieldValuesAsync(token, language, userEmail);
 
-            product = await _completionDatesRepository.PostAsync(
+            var productCompetionDate = await _completionDatesRepository.PostAsync(
                 token,
                 language,
                 product,
                 clientFieldValues,
                 DateTime.UtcNow);
 
+            if (productCompetionDate is not null)
+            {
+                product = productCompetionDate;
+            }
+
             return product;
         }
 
-        public async Task<IEnumerable<Product>> GetCompletionDatesAsync(string token, string language, Guid? clientId, IEnumerable<Product> products)
+        public async Task<IEnumerable<Product>> GetCompletionDatesAsync(string token, string language, string userEmail, IEnumerable<Product> products)
         {
-
             var productsOnStock = await _inventoryRepository.GetAvailbleProductsInventoryByIds(token, language, products.Select(x => x.Id));
 
             foreach (var item in products.OrEmptyIfNull())
@@ -77,25 +81,33 @@ namespace Buyer.Web.Areas.Products.Services.CompletionDates
                 }
             }
 
-            var clientFieldValues = await GetClientFieldValuesAsync(token, language, clientId);
+            var clientFieldValues = await GetClientFieldValuesAsync(token, language, userEmail);
 
-            products = await _completionDatesRepository.PostAsync(
+            var productsCompletionDates = await _completionDatesRepository.PostAsync(
                 token,
                 language,
                 products,
                 clientFieldValues,
                 DateTime.UtcNow);
 
+            if (productsCompletionDates is not null)
+            {
+                products = productsCompletionDates;
+            }
+
             return products;
         }
 
-        private async Task<IEnumerable<ClientFieldValue>> GetClientFieldValuesAsync(string token, string language, Guid? id)
+        private async Task<IEnumerable<ClientFieldValue>> GetClientFieldValuesAsync(string token, string language, string userEmail)
         {
-            var client = await _clientsRepository.GetClientAsync(token, language, id);
-
-            if (client is not null)
+            if (userEmail is not null)
             {
-                return await _clientsRepository.GetClientFieldValuesAsync(token, language, client.Id);
+                var client = await _clientsRepository.GetClientByEmailAsync(token, language, userEmail);
+
+                if (client is not null)
+                {
+                    return await _clientsRepository.GetClientFieldValuesAsync(token, language, client.Id);
+                }
             }
 
             return default;

@@ -16,6 +16,7 @@ using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Media.Services.MediaServices;
 using Buyer.Web.Areas.Products.Services.CompletionDates;
+using Buyer.Web.Areas.Products.ComponentModels;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -41,7 +42,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
             _completionDatesService = completionDatesService;
         }
 
-        public async Task<Product> GetProductAsync(string token, string language, Guid? productId, Guid? sellerId)
+        public async Task<Product> GetProductAsync(string token, string language, Guid? productId, string userEmail)
         {
             var product = await _productsRepository.GetProductAsync(productId, language, token);
 
@@ -49,7 +50,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
             {
                 if (string.IsNullOrWhiteSpace(_options.Value.CompletionDatesUrl) is false)
                 {
-                    product = await _completionDatesService.GetCompletionDateAsync(token, language, sellerId, product);
+                    product = await _completionDatesService.GetCompletionDateAsync(token, language, userEmail, product);
                 }
 
                 return product;
@@ -82,7 +83,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
             return string.Join(", ", attributes.OrEmptyIfNull());
         }
 
-        public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage, string token)
+        public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string userEmail, string language, string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage, string token)
         {
             var catalogItemList = new List<CatalogItemViewModel>();
             
@@ -92,7 +93,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
             {
                 if (string.IsNullOrWhiteSpace(_options.Value.CompletionDatesUrl) is false)
                 {
-                    pagedProducts.Data = await _completionDatesService.GetCompletionDatesAsync(token, language, sellerId, pagedProducts.Data);
+                    pagedProducts.Data = await _completionDatesService.GetCompletionDatesAsync(token, language, userEmail, pagedProducts.Data);
                 }
 
                 foreach (var product in pagedProducts.Data.OrEmptyIfNull())
