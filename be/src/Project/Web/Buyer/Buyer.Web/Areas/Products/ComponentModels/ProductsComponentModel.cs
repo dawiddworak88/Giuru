@@ -2,9 +2,8 @@
 
 namespace Buyer.Web.Areas.Products.ComponentModels
 {
-    public class SearchProductsComponentModel : ComponentModelBase
+    public class ProductsComponentModel : ComponentModelBase
     {
-        public string SearchTerm { get; set; }
         public string UserEmail { get; set; }
     }
 }
