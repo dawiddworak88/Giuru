@@ -16,10 +16,11 @@ using Buyer.Web.Areas.Products.ViewModels;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Buyer.Web.Shared.ViewModels.Modals;
+using Buyer.Web.Areas.Products.ComponentModels;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders
 {
-    public class OutletCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OutletPageCatalogViewModel>
+    public class OutletCatalogModelBuilder : IAsyncComponentModelBuilder<ProductsComponentModel, OutletPageCatalogViewModel>
     {
         private readonly IStringLocalizer globalLocalizer;
         private readonly ICatalogModelBuilder<ComponentModelBase, OutletPageCatalogViewModel> outletCatalogModelBuilder;
@@ -45,7 +46,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             this.modalModelBuilder = modalModelBuilder;
         }
 
-        public async Task<OutletPageCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<OutletPageCatalogViewModel> BuildModelAsync(ProductsComponentModel componentModel)
         {
             var viewModel = this.outletCatalogModelBuilder.BuildModel(componentModel);
 
@@ -63,7 +64,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             if (outletItems?.Data is not null && outletItems.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
-                    outletItems.Data.Select(x => x.ProductId), null, componentModel.SellerId, componentModel.Language, null, false, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);
+                    outletItems.Data.Select(x => x.ProductId), null, componentModel.SellerId, componentModel.UserEmail, componentModel.Language, null, false, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);
 
                 if (products is not null)
                 {

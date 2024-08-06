@@ -6,15 +6,16 @@ using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
 using Buyer.Web.Shared.ViewModels.NotificationBar;
 using System.Threading.Tasks;
+using Buyer.Web.Areas.Products.ComponentModels;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
-    public class ProductPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel>
+    public class ProductPageModelBuilder : IAsyncComponentModelBuilder<ProductsComponentModel, ProductPageViewModel>
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> _headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> _mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductBreadcrumbsViewModel> _productBreadcrumbsModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel> _productDetailModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ProductsComponentModel, ProductDetailViewModel> _productDetailModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> _footerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> _notificationBarModelBuilder;
 
@@ -22,7 +23,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ProductBreadcrumbsViewModel> productBreadcrumbsModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel> productDetailModelBuilder,
+            IAsyncComponentModelBuilder<ProductsComponentModel, ProductDetailViewModel> productDetailModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> notificationBarModelBuilder)
         {
@@ -34,7 +35,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _notificationBarModelBuilder = notificationBarModelBuilder;
         }
 
-        public async Task<ProductPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<ProductPageViewModel> BuildModelAsync(ProductsComponentModel componentModel)
         {
 
             var viewModel = new ProductPageViewModel

@@ -7,16 +7,16 @@ using Foundation.PageContent.Components.MainNavigations.ViewModels;
 using Foundation.PageContent.Components.Metadatas.ViewModels;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.ViewModels.NotificationBar;
-using Buyer.Web.Shared.ModelBuilders.NotificationBar;
+using Buyer.Web.Areas.Products.ComponentModels;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
-    public class AvailableProductsPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, AvailableProductsPageViewModel>
+    public class AvailableProductsPageModelBuilder : IAsyncComponentModelBuilder<ProductsComponentModel, AvailableProductsPageViewModel>
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> _seoModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> _headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> _mainNavigationModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel> _searchProductsCatalogModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ProductsComponentModel, AvailableProductsCatalogViewModel> _availbeProductsCatalogModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> _footerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> _notificationBarModelBuilder;
 
@@ -24,19 +24,19 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel> seoModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel> searchProductsCatalogModelBuilder,
+            IAsyncComponentModelBuilder<ProductsComponentModel, AvailableProductsCatalogViewModel> availbeProductsCatalogModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel> footerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel> notificationBarModelBuilder)
         {
             _seoModelBuilder = seoModelBuilder;
             _headerModelBuilder = headerModelBuilder;
             _mainNavigationModelBuilder = mainNavigationModelBuilder;
-            _searchProductsCatalogModelBuilder = searchProductsCatalogModelBuilder;
+            _availbeProductsCatalogModelBuilder = availbeProductsCatalogModelBuilder;
             _footerModelBuilder = footerModelBuilder;
             _notificationBarModelBuilder = notificationBarModelBuilder;
         }
 
-        public async Task<AvailableProductsPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<AvailableProductsPageViewModel> BuildModelAsync(ProductsComponentModel componentModel)
         {
             var viewModel = new AvailableProductsPageViewModel
             {
@@ -44,7 +44,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                 NotificationBar = await _notificationBarModelBuilder.BuildModelAsync(componentModel),
                 Header = await _headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await _mainNavigationModelBuilder.BuildModelAsync(componentModel),
-                Catalog = await _searchProductsCatalogModelBuilder.BuildModelAsync(componentModel),
+                Catalog = await _availbeProductsCatalogModelBuilder.BuildModelAsync(componentModel),
                 Footer = await _footerModelBuilder.BuildModelAsync(componentModel),
                 Locale = componentModel.Language
             };

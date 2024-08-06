@@ -24,14 +24,14 @@ using Foundation.PageContent.Definitions;
 using Foundation.Media.Services.MediaServices;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Repositories.Media;
-using Buyer.Web.Areas.Products.Services.CompletionDates;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Areas.Products.ComponentModels;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
-    public class ProductDetailModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel>
+    public class ProductDetailModelBuilder : IAsyncComponentModelBuilder<ProductsComponentModel, ProductDetailViewModel>
     {
         private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> _filesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> _sidebarModelBuilder;
@@ -80,7 +80,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _productsService = productsService;
         }
 
-        public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<ProductDetailViewModel> BuildModelAsync(ProductsComponentModel componentModel)
         {
             var viewModel = new ProductDetailViewModel
             {
@@ -108,7 +108,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 ReadLessText = _globalLocalizer.GetString("ReadLess")
             };
 
-            var product = await _productsService.GetProductAsync(componentModel.Token, componentModel.Language, componentModel.Id, componentModel.SellerId);
+            var product = await _productsService.GetProductAsync(componentModel.Token, componentModel.Language, componentModel.Id, componentModel.UserEmail);
 
             if (product != null)
             {

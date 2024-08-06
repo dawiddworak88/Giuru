@@ -15,17 +15,18 @@ using Buyer.Web.Shared.ViewModels.Catalogs;
 using System.Collections.Generic;
 using Buyer.Web.Areas.Products.Definitions;
 using Buyer.Web.Shared.ViewModels.Modals;
+using Buyer.Web.Areas.Products.ComponentModels;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
-    public class AvailableProductsCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel>
+    public class AvailableProductsCatalogModelBuilder : IAsyncComponentModelBuilder<ProductsComponentModel, AvailableProductsCatalogViewModel>
     {
-        private readonly IStringLocalizer globalLocalizer;
-        private readonly ICatalogModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel> availableProductsCatalogModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder;
-        private readonly IProductsService productsService;
-        private readonly IInventoryRepository inventoryRepository;
-        private readonly LinkGenerator linkGenerator;
+        private readonly IStringLocalizer _globalLocalizer;
+        private readonly ICatalogModelBuilder<ProductsComponentModel, AvailableProductsCatalogViewModel> _availableProductsCatalogModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> _modalModelBuilder;
+        private readonly IProductsService _productsService;
+        private readonly IInventoryRepository _inventoryRepository;
+        private readonly LinkGenerator _linkGenerator;
 
         public AvailableProductsCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -35,33 +36,33 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             IInventoryRepository inventoryRepository,
             LinkGenerator linkGenerator)
         {
-            this.globalLocalizer = globalLocalizer;
-            this.availableProductsCatalogModelBuilder = availableProductsCatalogModelBuilder;
-            this.productsService = productsService;
-            this.inventoryRepository = inventoryRepository;
-            this.linkGenerator = linkGenerator;
-            this.modalModelBuilder = modalModelBuilder;
+            _globalLocalizer = globalLocalizer;
+            _availableProductsCatalogModelBuilder = availableProductsCatalogModelBuilder;
+            _productsService = productsService;
+            _inventoryRepository = inventoryRepository;
+            _linkGenerator = linkGenerator;
+            _modalModelBuilder = modalModelBuilder;
         }
 
-        public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(ProductsComponentModel componentModel)
         {
-            var viewModel = this.availableProductsCatalogModelBuilder.BuildModel(componentModel);
+            var viewModel = _availableProductsCatalogModelBuilder.BuildModel(componentModel);
 
             viewModel.ShowAddToCartButton = true;
-            viewModel.SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct");
-            viewModel.Title = this.globalLocalizer.GetString("AvailableProducts");
-            viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "AvailableProductsApi", new { Area = "Products" });
+            viewModel.SuccessfullyAddedProduct = _globalLocalizer.GetString("SuccessfullyAddedProduct");
+            viewModel.Title = _globalLocalizer.GetString("AvailableProducts");
+            viewModel.ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "AvailableProductsApi", new { Area = "Products" });
             viewModel.ItemsPerPage = AvailableProductsConstants.Pagination.ItemsPerPage;
-            viewModel.Modal = await this.modalModelBuilder.BuildModelAsync(componentModel);
+            viewModel.Modal = await _modalModelBuilder.BuildModelAsync(componentModel);
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
 
-            var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
+            var inventories = await _inventoryRepository.GetAvailbleProductsInventory(
                 componentModel.Language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token);
 
             if (inventories?.Data is not null && inventories.Data.Any())
             {
-                var products = await this.productsService.GetProductsAsync(
-                    inventories.Data.Select(x => x.ProductId), null, componentModel.SellerId, componentModel.Language,
+                var products = await _productsService.GetProductsAsync(
+                    inventories.Data.Select(x => x.ProductId), null, componentModel.SellerId, componentModel.UserEmail, componentModel.Language,
                     null, false, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token);
 
                 if (products is not null)

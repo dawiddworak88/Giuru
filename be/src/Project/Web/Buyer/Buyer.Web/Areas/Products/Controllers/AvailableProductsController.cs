@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Products.ViewModels.AvailableProducts;
+﻿using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.ViewModels.AvailableProducts;
 using Buyer.Web.Shared.Definitions.Basket;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Definitions;
@@ -19,29 +20,30 @@ namespace Buyer.Web.Areas.Products.Controllers
     [Area("Products")]
     public class AvailableProductsController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, AvailableProductsPageViewModel> availableProductsPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ProductsComponentModel, AvailableProductsPageViewModel> _availableProductsPageModelBuilder;
 
-        public AvailableProductsController(IAsyncComponentModelBuilder<ComponentModelBase, AvailableProductsPageViewModel> availableProductsPageModelBuilder)
+        public AvailableProductsController(IAsyncComponentModelBuilder<ProductsComponentModel, AvailableProductsPageViewModel> availableProductsPageModelBuilder)
         {
-            this.availableProductsPageModelBuilder = availableProductsPageModelBuilder;
+            _availableProductsPageModelBuilder = availableProductsPageModelBuilder;
         }
 
         public async Task<IActionResult> Index()
         {
-            var componentModel = new ComponentModelBase
+            var componentModel = new ProductsComponentModel
             { 
                 ContentPageKey = "availableProductsPage",
                 Language = CultureInfo.CurrentUICulture.Name,
-                IsAuthenticated = this.User.Identity.IsAuthenticated,
-                Name = this.User.Identity.Name,
+                IsAuthenticated = User.Identity.IsAuthenticated,
+                Name = User.Identity.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName]),
-                SellerId = GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
+                BasketId = string.IsNullOrWhiteSpace(Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(Request.Cookies[BasketConstants.BasketCookieName]),
+                SellerId = GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
+                UserEmail = User.FindFirstValue(ClaimTypes.Email)
             };
 
-            var viewModel = await this.availableProductsPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _availableProductsPageModelBuilder.BuildModelAsync(componentModel);
 
-            return this.View(viewModel);
+            return View(viewModel);
         }
     }
 }
