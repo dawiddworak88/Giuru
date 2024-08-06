@@ -12,6 +12,8 @@ using Foundation.GenericRepository.Paginations;
 using Buyer.Web.Shared.ApiRequestModels.Clients;
 using System.Collections.Generic;
 using System.Linq;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using System.Text.Json;
 
 namespace Buyer.Web.Shared.Repositories.Clients
 {
@@ -36,6 +38,31 @@ namespace Buyer.Web.Shared.Repositories.Clients
                 Data = new RequestModelBase(),
                 AccessToken = token,
                 EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Identity.ClientBySellerApiEndpoint}/{id}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Client>(apiRequest);
+
+            if (response.IsSuccessStatusCode is false)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data is not null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
+
+        public async Task<Client> GetClientByEmailAsync(string token, string language, string userEmail)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.ClientsByEmailApiEndpoint}/{userEmail}"
             };
 
             var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Client>(apiRequest);
