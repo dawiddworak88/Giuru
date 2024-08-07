@@ -36,7 +36,7 @@ function NewOrderForm(props) {
     const [attachments, setAttachments] = useState([]);
     const [deliveryAddressId, setDeliveryAddressId] = useState(props.defaultDeliveryAddressId ? props.defaultDeliveryAddressId : null);
     const [billingAddressId, setBillingAddressId] = useState(props.defaultBillingAddressId ? props.defaultBillingAddressId : null);
-    const [isFromStock, setIsFromStock] = useState(false);
+    const [isStock, setIsStock] = useState(false);
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -59,9 +59,10 @@ function NewOrderForm(props) {
                     AuthenticationHelper.HandleResponse(response);
 
                     return response.json().then(jsonResponse => {
+                        console.log("jsonResponse", jsonResponse);
                         if (response.ok) {
                             setSuggestions(() => []);
-                            setSuggestions(() => jsonResponse.data);
+                            setSuggestions(() => jsonResponse);
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -74,6 +75,7 @@ function NewOrderForm(props) {
     };
 
     const onSuggestionSelected = (event, { suggestion }) => {
+        setIsStock(suggestion.stockQuantity > 0)
         setProduct(suggestion);
     };
 
@@ -89,11 +91,23 @@ function NewOrderForm(props) {
             sku: product.sku,
             name: product.name,
             imageId: product.images ? product.images[0] : null,
-            quantity: quantity,
             externalReference,
             moreInfo,
-            isFromStock
         };
+
+        if (isStock) {
+            if (quantity > product.stockQuantity) {
+                orderItem.quantity = quantity - product.stockQuantity;
+                orderItem.stockQuantity = product.stockQuantity;
+            }
+            else {
+                orderItem.stockQuantity = quantity;
+            }
+
+        }
+        else {
+            orderItem.quantity = quantity;
+        }
 
         const basket = {
             id: basketId,
@@ -122,6 +136,7 @@ function NewOrderForm(props) {
                             setSearchTerm("");
                             setExternalReference("");
                             setQuantity(1);
+                            setIsStock(false);
                             setOrderItems(jsonResponse.items);
                         }
                         else {
@@ -426,8 +441,8 @@ function NewOrderForm(props) {
                                 <FormControlLabel
                                     control={
                                         <Checkbox 
-                                            checked={isFromStock}
-                                            onChange={() => setIsFromStock(!isFromStock)}
+                                            checked={isStock}
+                                            onChange={() => setIsStock(!isStock)}
                                         />
                                     }
                                     label={props.fromStockLabel}
