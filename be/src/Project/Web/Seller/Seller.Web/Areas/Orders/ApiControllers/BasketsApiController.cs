@@ -10,7 +10,6 @@ using Seller.Web.Areas.Orders.ApiResponseModels;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
-using Seller.Web.Areas.Orders.Services.BasketItems;
 using System.Globalization;
 using System.Linq;
 using System.Net;

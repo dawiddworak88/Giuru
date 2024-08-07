@@ -10,7 +10,6 @@ using Seller.Web.Areas.Orders.Services.OrderFiles;
 using Seller.Web.Areas.Orders.ModelBuilders;
 using Seller.Web.Areas.Orders.Repositories.ClientNotificationTypeApproval;
 using Seller.Web.Areas.Orders.ComponetModels;
-using Seller.Web.Areas.Orders.Services.BasketItems;
 
 namespace Seller.Web.Areas.Orders.DependencyInjection
 {
