@@ -39,8 +39,6 @@ function OrderForm(props) {
     const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [isStock, setIsStock] = useState(false);
 
-    console.log("product", product);
-
     const onSuggestionsFetchRequested = (args) => {
 
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -109,7 +107,7 @@ function OrderForm(props) {
                 orderItem.stockQuantity = product.stockQuantity;
             }
             else {
-                orderItem.stockQuantity = product.stockQuantity;
+                orderItem.stockQuantity = quantity;
             }
 
         }
@@ -146,6 +144,7 @@ function OrderForm(props) {
                             setSearchTerm("");
                             setExternalReference("");
                             setQuantity(1);
+                            setIsStock(false);
                             setOrderItems(jsonResponse.items);
                         }
                         else {

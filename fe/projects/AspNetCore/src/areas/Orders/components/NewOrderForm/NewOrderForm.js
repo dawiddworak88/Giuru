@@ -59,7 +59,6 @@ function NewOrderForm(props) {
                     AuthenticationHelper.HandleResponse(response);
 
                     return response.json().then(jsonResponse => {
-                        console.log("jsonResponse", jsonResponse);
                         if (response.ok) {
                             setSuggestions(() => []);
                             setSuggestions(() => jsonResponse);
