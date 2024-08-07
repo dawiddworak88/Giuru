@@ -37,7 +37,9 @@ function OrderForm(props) {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
     const [disableSaveButton, setDisableSaveButton] = useState(false);
-    const [isFromStock, setIsFromStock] = useState(false);
+    const [isStock, setIsStock] = useState(false);
+
+    console.log("product", product);
 
     const onSuggestionsFetchRequested = (args) => {
 
@@ -67,7 +69,7 @@ function OrderForm(props) {
                         if (response.ok) {
                             setId(jsonResponse.id);
                             setSuggestions(() => []);
-                            setSuggestions(() => jsonResponse.data);
+                            setSuggestions(() => jsonResponse);
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -80,6 +82,7 @@ function OrderForm(props) {
     };
 
     const onSuggestionSelected = (event, { suggestion }) => {
+        setIsStock(suggestion.stockQuantity > 0)
         setProduct(suggestion);
     };
 
@@ -96,11 +99,23 @@ function OrderForm(props) {
             sku: product.sku,
             name: product.name,
             imageId: product.images ? product.images[0] : null,
-            quantity,
             externalReference,
-            moreInfo,
-            isFromStock
+            moreInfo
         };
+
+        if (isStock) {
+            if (quantity > product.stockQuantity) {
+                orderItem.quantity = quantity - product.stockQuantity;
+                orderItem.stockQuantity = product.stockQuantity;
+            }
+            else {
+                orderItem.stockQuantity = product.stockQuantity;
+            }
+
+        }
+        else {
+            orderItem.quantity = quantity;
+        }
 
         const basket = {
             id: basketId,
@@ -499,8 +514,8 @@ function OrderForm(props) {
                             <div className="column is-2 is-flex is-align-items-flex-end">
                                 <FormControlLabel
                                     control={<Checkbox 
-                                        checked={isFromStock}
-                                        onChange={() => setIsFromStock(!isFromStock)}
+                                        checked={isStock}
+                                        onChange={() => setIsStock(!isStock)}
                                     />}
                                     label={props.fromStockLabel}
                                 />
