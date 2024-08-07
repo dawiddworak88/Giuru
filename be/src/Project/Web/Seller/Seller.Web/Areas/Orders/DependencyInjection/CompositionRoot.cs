@@ -21,7 +21,6 @@ namespace Seller.Web.Areas.Orders.DependencyInjection
             services.AddScoped<IOrdersRepository, OrdersRepository>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IOrderFileService, OrderFileService>();
-            services.AddScoped<IBasketItemsService, BasketItemsService>();
             services.AddScoped<IClientNotificationTypeApprovalRepository, ClientNotificationTypeApprovalRepository>();
             services.AddScoped<IAsyncComponentModelBuilder<OrdersPageComponentModel, CatalogViewModel<Order>>, OrdersPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<OrdersPageComponentModel, OrdersPageViewModel>, OrdersPageModelBuilder>();

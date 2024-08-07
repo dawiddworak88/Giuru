@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Seller.Web.Areas.Orders.ApiRequestModels;
 using Seller.Web.Areas.Orders.ApiResponseModels;
+using Seller.Web.Areas.Orders.Definitions;
+using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
 using Seller.Web.Areas.Orders.Services.BasketItems;
 using System.Globalization;
@@ -22,18 +24,15 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IBasketRepository _basketRepository;
         private readonly LinkGenerator _linkGenerator;
         private readonly IMediaService _mediaService;
-        private readonly IBasketItemsService _basketItemsService;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
             LinkGenerator linkGenerator,
-            IMediaService mediaService,
-            IBasketItemsService basketItemsService)
+            IMediaService mediaService)
         {
             _basketRepository = basketRepository;
             _linkGenerator = linkGenerator;
             _mediaService = mediaService;
-            _basketItemsService = basketItemsService;
         }
 
         [HttpPost]
@@ -42,9 +41,19 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var basketItems = await _basketItemsService.GetBasketItemsAsync(token, language, model.Items);
-
-            var basket = await _basketRepository.SaveAsync(token, language, model.Id, basketItems);
+            var basket = await _basketRepository.SaveAsync(token, language, model.Id,
+                model.Items.OrEmptyIfNull().Select(x => new BasketItem
+                {
+                    ProductId = x.ProductId,
+                    ProductSku = x.Sku,
+                    ProductName = x.Name,
+                    PictureUrl = !string.IsNullOrWhiteSpace(x.ImageSrc) ? x.ImageSrc : (x.ImageId.HasValue ? _mediaService.GetMediaUrl(x.ImageId.Value, OrdersConstants.Basket.BasketProductImageMaxWidth) : null),
+                    Quantity = x.Quantity,
+                    StockQuantity = x.StockQuantity,
+                    OutletQuantity = x.OutletQuantity,
+                    ExternalReference = x.ExternalReference,
+                    MoreInfo = x.MoreInfo
+                }));
 
             var basketResponseModel = new BasketResponseModel
             {
