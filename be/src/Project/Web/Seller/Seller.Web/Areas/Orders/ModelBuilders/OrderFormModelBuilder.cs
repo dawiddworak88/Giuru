@@ -43,7 +43,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 AddText = _orderLocalizer.GetString("AddOrderItem"),
                 NoOrderItemsLabel = _orderLocalizer.GetString("NoOrderItemsLabel"),
                 SearchPlaceholderLabel = _orderLocalizer.GetString("EnterSkuOrName"),
-                GetSuggestionsUrl = _linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                GetSuggestionsUrl = _linkGenerator.GetPathByAction("GetProductOrderSuggestion", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 MoreInfoLabel = _orderLocalizer.GetString("MoreInfoLabel"),
                 NameLabel = _orderLocalizer.GetString("NameLabel"),
                 OrderItemsLabel = _orderLocalizer.GetString("OrderItemsLabel"),
