@@ -32,20 +32,17 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly LinkGenerator _linkGenerator;
         private readonly IMediaService _mediaService;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
-        private readonly IBasketItemsService _basketItemsService;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
             LinkGenerator linkGenerator,
             IMediaService mediaService,
-            IStringLocalizer<OrderResources> orderLocalizer,
-            IBasketItemsService basketItemsService)
+            IStringLocalizer<OrderResources> orderLocalizer)
         {
             _basketRepository = basketRepository;
             _linkGenerator = linkGenerator;
             _mediaService = mediaService;
             _orderLocalizer = orderLocalizer;
-            _basketItemsService = basketItemsService;
         }
 
         [HttpPost]
@@ -64,11 +61,20 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 };
                 Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
             }
-
-            var items = await _basketItemsService.GetBasketItemsAsync(token, language, model.Items);
-
             var id = Guid.Parse(reqCookie);
-            var basket = await _basketRepository.SaveAsync(token, language, id, items);
+            var basket = await _basketRepository.SaveAsync(token, language, id,
+                model.Items.OrEmptyIfNull().Select(x => new BasketItem
+                {
+                    ProductId = x.ProductId,
+                    ProductSku = x.Sku,
+                    ProductName = x.Name,
+                    PictureUrl = !string.IsNullOrWhiteSpace(x.ImageSrc) ? x.ImageSrc : (x.ImageId.HasValue ? _mediaService.GetMediaUrl(x.ImageId.Value, OrdersConstants.Basket.BasketProductImageMaxWidth) : null),
+                    Quantity = x.Quantity,
+                    StockQuantity = x.StockQuantity,
+                    OutletQuantity = x.OutletQuantity,
+                    ExternalReference = x.ExternalReference,
+                    MoreInfo = x.MoreInfo
+                }));
 
             var basketResponseModel = new BasketResponseModel
             {
