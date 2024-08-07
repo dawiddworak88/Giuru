@@ -9,8 +9,7 @@ import { Delete, AddShoppingCartRounded } from "@mui/icons-material"
 import {
     Fab, Table, TableBody, TableCell, TableContainer, Autocomplete, 
     TableHead, TableRow, Paper, TextField, Button, CircularProgress,
-    Checkbox,
-    FormControlLabel
+    Checkbox, FormControlLabel
 } from "@mui/material";
 import moment from "moment";
 import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
