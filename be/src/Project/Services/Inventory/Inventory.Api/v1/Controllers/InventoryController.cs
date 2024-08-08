@@ -199,7 +199,8 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<string>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetAvailableProductsInventorySuggestions(
-            string searchTerm, int suggestionsCount)
+            string searchTerm,
+            int suggestionsCount)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -216,17 +217,12 @@ namespace Inventory.Api.v1.Controllers
             {
                 var inventorySuggestions = _inventoriesService.GetInventorySuggestions(serviceModel);
 
-                var response = new List<InventorySuggestionResponseModel>();
-
-                foreach (var inventorySuggestion in inventorySuggestions.OrEmptyIfNull())
+                var response = inventorySuggestions.OrEmptyIfNull().Select(x => new InventorySuggestionResponseModel
                 {
-                    response.Add(new InventorySuggestionResponseModel
-                    {
-                        Id = inventorySuggestion.Id,
-                        Name = inventorySuggestion.Name,
-                        Sku = inventorySuggestion.Sku
-                    });
-                }
+                    Id = x.Id,
+                    Name = x.Name,
+                    Sku = x.Sku
+                });
 
                 return StatusCode((int)HttpStatusCode.OK, response);
             }
