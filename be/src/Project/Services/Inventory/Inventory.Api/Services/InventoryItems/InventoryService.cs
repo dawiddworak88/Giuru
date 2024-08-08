@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Net;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Inventory.Api.Services.InventoryItems
@@ -250,7 +249,8 @@ namespace Inventory.Api.Services.InventoryItems
                 inventoryProducts = inventoryProducts.Take(Constants.MaxItemsPerPageLimit);
 
                 pagedResults = inventoryProducts.PagedIndex(new Pagination(inventoryProducts.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
-            } else
+            }
+            else
             {
                 pagedResults = inventoryProducts.PagedIndex(new Pagination(inventoryProducts.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
@@ -332,7 +332,7 @@ namespace Inventory.Api.Services.InventoryItems
                 return inventorySum;
             }
 
-            return default;                
+            return default;
         }
 
         public async Task<InventorySumServiceModel> GetInventoryByProductSku(GetInventoryByProductSkuServiceModel model)
@@ -483,20 +483,18 @@ namespace Inventory.Api.Services.InventoryItems
                     .Include(x => x.Product)
                     .AsSingleQuery()
                     .Select(y => new InventorySuggestionServiceModel
-                     {
-                         Id = y.ProductId,
-                         Name = y.Product.Name,
-                         Sku = y.Product.Sku
-                     });
+                    {
+                        Id = y.ProductId,
+                        Name = y.Product.Name,
+                        Sku = y.Product.Sku
+                    });
 
-            if (string.IsNullOrEmpty(model.SearchTerm))
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                return inventoryItems.Take(model.SuggestionsCount);
+                inventoryItems = inventoryItems.Where(x => x.Name.StartsWith(model.SearchTerm)).Take(model.SuggestionsCount);
             }
-            else
-            {
-                return inventoryItems.Where(x => x.Name.StartsWith(model.SearchTerm)).Take(model.SuggestionsCount);
-            }
+
+            return inventoryItems.Take(model.SuggestionsCount);
         }
     }
 }
