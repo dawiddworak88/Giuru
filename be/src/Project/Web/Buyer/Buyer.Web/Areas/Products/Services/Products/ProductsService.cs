@@ -62,11 +62,6 @@ namespace Buyer.Web.Areas.Products.Services.Products
             var catalogItemList = new List<CatalogItemViewModel>();
             var pagedProducts = await _productsRepository.GetProductsAsync(ids, categoryId, sellerId, language, searchTerm, hasPrimaryProduct, pageIndex, itemsPerPage, token, nameof(Product.Name));
 
-            if (string.IsNullOrWhiteSpace(searchTerm) is false)
-            {
-                pagedProducts.Data = pagedProducts.Data.Where(x => x.Name.StartsWith(searchTerm));
-            }
-
             if (pagedProducts?.Data != null)
             {
                 foreach (var product in pagedProducts.Data.OrEmptyIfNull())
