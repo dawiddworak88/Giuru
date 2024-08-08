@@ -214,5 +214,7 @@ header {
 }
 
 .no-scroll {
-    position: fixed;
+    position: relative;
+    overflow: hidden;
+    height: 100vh;
 };
