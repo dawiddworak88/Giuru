@@ -10,7 +10,15 @@ const UserPopup = (props) => {
     const [anchor, setAnchor] = useState(null);
 
     const handleClick = (event) => {
-        setAnchor(anchor ? null : event.currentTarget);
+        var popupStates = props.getPopupsState()
+
+        if (!popupStates.languageSwitcher) {
+            setAnchor(anchor ? null : event.currentTarget);
+            props.popupToggle({
+                ...popupStates,
+                userPopup: !popupStates.userPopup,
+            });
+        }
     };
 
     const open = Boolean(anchor);

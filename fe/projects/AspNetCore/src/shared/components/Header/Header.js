@@ -10,6 +10,7 @@ import Search from "../Search/Search";
 function Header(props) {
     const [state, dispatch] = useContext(Context);
     const [totalBasketItems, setTotalBasketItems] = useState(props.totalBasketItems ? props.totalBasketItems : 0);
+    const [popupsState, setPopupsState] = useState({languageSwitcher: false, userPopup: false});
     const overlayRef = useRef(null);
 
     useEffect(() => {
@@ -33,7 +34,11 @@ function Header(props) {
                 document.body.classList.remove("no-scroll");
             }
         }
-      };  
+    };
+
+    const popupToggle = (popupsState) => setPopupsState(popupsState);
+
+    const getPopupsState = () => popupsState;
 
     return (
         <header>
@@ -48,10 +53,10 @@ function Header(props) {
                 </div>
                 <div className="navbar__actions is-flex">
                     <div className="navbar__actions__language">
-                        <LanguageSwitcher {...props.languageSwitcher} />
+                        <LanguageSwitcher {...props.languageSwitcher} popupToggle={popupToggle} getPopupsState={getPopupsState} />
                     </div>
                     <div className="navbar__actions__userpopup">
-                        <UserPopup {...props.userPopup} />
+                        <UserPopup {...props.userPopup} popupToggle={popupToggle} getPopupsState={getPopupsState} />
                     </div>
                     <div className="navbar__actions__cart">
                         <a href={props.basketUrl} title={props.goToCartLabel} aria-label={props.goToCartLabel}>
