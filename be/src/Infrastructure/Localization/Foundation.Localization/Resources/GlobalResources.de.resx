@@ -787,7 +787,7 @@
     <value>Dein Suchverlauf.</value>
   </data>
   <data name="SearchByNameOrSKU" xml:space="preserve">
-    <value>Suche nach einem Produkt nach Namen oder SKU.</value>
+    <value>Suche nach einem Produkt nach Namen oder SKU...</value>
   </data>
   <data name="BillingAddressTitle" xml:space="preserve">
     <value>Rechnungsadressen</value>

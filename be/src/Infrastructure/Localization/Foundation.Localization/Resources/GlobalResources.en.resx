@@ -787,7 +787,7 @@
     <value>Your search history.</value>
   </data>
   <data name="SearchByNameOrSKU" xml:space="preserve">
-    <value>Search for a product by name or SKU.</value>
+    <value>Search for a product by name or SKU...</value>
   </data>
   <data name="BillingAddressTitle" xml:space="preserve">
     <value>Billing address</value>
