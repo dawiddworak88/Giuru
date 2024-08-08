@@ -8,7 +8,7 @@
     justify-content: center;
 
     &_icon {
-        font-size: 1.2rem;
+        //font-size: 1.2rem;
     }
 
     &_list {
@@ -25,6 +25,8 @@
         color: $white;
         font-family: $family-primary;
         padding-top: 0.05rem;
+        display: flex;
+        align-items: center;
 
         &:hover {
             color: $lightgrey;
