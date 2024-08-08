@@ -30,6 +30,7 @@ function LanguageSwitcher(props) {
                 type="button"
                 onClick={handleClick}
                 disableRipple
+                sx={{color: "#171717"}}
             >
                 <span className="pr-2 switcher__button__text">
                     {props.selectedLanguageText}
