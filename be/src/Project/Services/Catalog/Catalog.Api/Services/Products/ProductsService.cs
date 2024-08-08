@@ -13,7 +13,6 @@ using System;
 using Foundation.GenericRepository.Extensions;
 using Foundation.Catalog.Infrastructure;
 using Foundation.Catalog.Infrastructure.Products.Entities;
-using Foundation.Catalog.Repositories.Products.ProductIndexingRepositories;
 using Foundation.Catalog.SearchModels.Products;
 using Foundation.EventBus.Abstractions;
 using Catalog.Api.IntegrationEvents;
@@ -21,6 +20,7 @@ using Newtonsoft.Json.Linq;
 using Foundation.Catalog.Repositories.ProductSearchRepositories;
 using System.Diagnostics;
 using Foundation.GenericRepository.Definitions;
+using Foundation.Catalog.Repositories.ProductIndexingRepositories;
 
 namespace Catalog.Api.Services.Products
 {

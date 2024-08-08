@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
+namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
 {
     public interface IProductIndexingRepository
     {

@@ -4,12 +4,8 @@ run-name: ${{ github.actor }} is deploying Seller-Web to Production 🚀
 on:
   workflow_run:
     workflows: ["Seller-Web Continuous Integration"]
-    branches: [main, release/*]
+    branches: [main]
     types: [completed]
-
-concurrency:
-  group: cd-giuru-prod
-  cancel-in-progress: false
 
 permissions:
   id-token: write
@@ -34,7 +30,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "20.11.1"
+          node-version: "20.14"
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
@@ -91,7 +87,24 @@ jobs:
         run: |
           git config --global user.name 'Production Deployment'
           git config --global user.email 'production@deployment.com'
+          git config pull.ff true
+          git pull
           git add apps/seller-web/overlays/production/deployment.yaml
           git add apps/seller-web-react-ssr/overlays/production/deployment.yaml
           git commit -m "Updated image tag to ${{ github.run_number }} for Seller-Web"
-          git push
+          if git push; then
+            echo "Push succeeded"
+            break
+          else
+            sleep $((RANDOM % 10 + 1))
+            for i in {1..5}; do
+              git pull
+              if git push; then
+                echo "Push succeeded"
+                break
+              else
+                random_number=$((RANDOM % 10 + 1))
+                sleep $((i * 2 + random_number))
+              fi
+            done
+          fi
