@@ -252,7 +252,10 @@ const Search = (props) => {
                     {searchTerm.length > 0 &&
                         <Button
                             className="search__text__remove__button"
-                            onClick={() => setSearchTerm("")}
+                            onClick={() => {
+                                setSearchTerm("");
+                                setSuggestions([]);
+                            }}
                             sx={{
                                 p: 0,
                                 minWidth: '24px'
@@ -276,7 +279,10 @@ const Search = (props) => {
                             <Select
                                 className="search__area__select"
                                 value={searchArea}
-                                onChange={(e) => { setSearchArea(e.target.value) }}
+                                onChange={(e) => { 
+                                    setSearchArea(e.target.value);
+                                    setSuggestions([]);
+                                }}
                                 displayEmpty
                                 IconComponent={props => <ArrowShowMoreCategoryIcon {...props} />}
                                 sx={{
