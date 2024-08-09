@@ -74,7 +74,6 @@ const Search = (props) => {
     }
 
     const onSuggestionSelected = (event, { suggestion }) => {
-        console.log(suggestion.url)
         NavigationHelper.redirect(suggestion.url);
         updateSearchHistory(suggestion);
         setSearchTerm('');
@@ -91,9 +90,8 @@ const Search = (props) => {
     };
 
     const updateSearchHistory = (suggestion) => {
-        console.log(suggestion);
         const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
-        if (!searchHistory.some(x => x.name === suggestion.name)) {
+        if (!searchHistory.includes(suggestion)) {
             localStorage.setItem('searchHistory', JSON.stringify([...searchHistory, suggestion]));
         }
     };
@@ -104,7 +102,6 @@ const Search = (props) => {
     }
 
     const renderSuggestion = (suggestion) => {
-        console.log(suggestion);
         return (
             <div className="suggestion">
                 <div className="is-flex is-align-items-center">
@@ -120,7 +117,6 @@ const Search = (props) => {
     };
 
     const renderSearchHistorySidebar = (suggestion) => {
-        console.log(suggestion)
         return (
             <Button
                 className="sidebar__suggestions__item"
