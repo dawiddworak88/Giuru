@@ -331,11 +331,6 @@ namespace Catalog.Api.Services.Products
         public async Task<PagedResults<IEnumerable<ProductServiceModel>>> GetByIdsAsync(GetProductsByIdsServiceModel model)
         {
             var searchResults = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Ids, model.OrderBy);
-            
-            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
-            {
-                searchResults.Data = searchResults.Data.Where(x => x.Name.StartsWith(model.SearchTerm));
-            }
 
             return await this.MapToPageResultsAsync(searchResults, model.Language, model.OrganisationId);
         }
