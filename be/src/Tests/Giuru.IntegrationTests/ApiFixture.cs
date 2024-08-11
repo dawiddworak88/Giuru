@@ -19,6 +19,7 @@ namespace Giuru.IntegrationTests
         private RabbitMqContainer _rabbitMqContainer;
         private MsSqlContainer _msSqlContainer;
         private ElasticsearchContainer _elasticsearchContainer;
+        private IContainer _mockAuthContainer;
         private IContainer _catalogApiContainer;
         private IContainer _catalogBackgroundTasksContainer;
         private IContainer _orderingApiContainer;
@@ -76,6 +77,26 @@ namespace Giuru.IntegrationTests
 
             await _rabbitMqContainer.StartAsync();
 
+            var mockAuthImage = new MockAuthImage();
+
+            _mockAuthContainer = new ContainerBuilder()
+                .WithName("mock-auth")
+                .WithImage(mockAuthImage)
+                .WithNetwork(_giuruNetwork)
+                .WithExposedPort(9105)
+                .WithPortBinding(9105, 8080)
+                .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
+                .WithEnvironment("EmailClaim", "seller@user.com")
+                .WithEnvironment("RolesClaim", "Seller")
+                .WithEnvironment("OrganisationClaim", "09affcc9-1665-45d6-919f-3d2026106ba1")
+                .WithEnvironment("ExpiresInMinutes", "86400")
+                .WithEnvironment("Issuer", null)
+                .WithEnvironment("Audience", "all")
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .Build();
+
+            await _mockAuthContainer.StartAsync();
+
             var catalogApiImage = new CatalogApiImage();
 
             await catalogApiImage.InitializeAsync();
@@ -94,6 +115,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
+                .WithEnvironment("IdentityUrl", "http://localhost:9105")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
@@ -206,6 +228,9 @@ namespace Giuru.IntegrationTests
 
             await _elasticsearchContainer.StopAsync();
             await _elasticsearchContainer.DisposeAsync();
+
+            await _mockAuthContainer.StopAsync();
+            await _mockAuthContainer.DisposeAsync();
 
             await _catalogApiContainer.StopAsync();
             await _catalogApiContainer.DisposeAsync();
