@@ -50,7 +50,9 @@ namespace Buyer.Web.Areas.Products.Services.Products
             {
                 if (string.IsNullOrWhiteSpace(_options.Value.CompletionDatesUrl) is false)
                 {
-                    product = await _completionDatesService.GetCompletionDateAsync(token, language, userEmail, product);
+                    var productCompletionDate = await _completionDatesService.GetCompletionDateAsync(token, language, userEmail, product);
+
+                    product.CompletionDate = productCompletionDate.CompletionDate;
                 }
 
                 return product;
@@ -93,7 +95,12 @@ namespace Buyer.Web.Areas.Products.Services.Products
             {
                 if (string.IsNullOrWhiteSpace(_options.Value.CompletionDatesUrl) is false)
                 {
-                    pagedProducts.Data = await _completionDatesService.GetCompletionDatesAsync(token, language, userEmail, pagedProducts.Data);
+                    var productsCompletionDate = await _completionDatesService.GetCompletionDatesAsync(token, language, userEmail, pagedProducts.Data);
+
+                    foreach (var product in pagedProducts.Data.OrEmptyIfNull())
+                    {
+                        product.CompletionDate = productsCompletionDate.FirstOrDefault(x => x.Id == product.Id)?.CompletionDate;
+                    }
                 }
 
                 foreach (var product in pagedProducts.Data.OrEmptyIfNull())
