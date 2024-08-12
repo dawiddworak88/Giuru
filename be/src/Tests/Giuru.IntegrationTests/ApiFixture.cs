@@ -3,6 +3,7 @@ using DotNet.Testcontainers.Containers;
 using DotNet.Testcontainers.Networks;
 using Giuru.IntegrationTests.HttpClients;
 using Giuru.IntegrationTests.Images;
+using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Testcontainers.Elasticsearch;
@@ -26,7 +27,7 @@ namespace Giuru.IntegrationTests
         private IContainer _basketApiContainer;
         private IContainer _clientApiContainer;
 
-        public RestClient _restClient { get; private set; }
+        public RestClient RestClient { get; private set; }
 
         public async Task InitializeAsync()
         {
@@ -78,6 +79,8 @@ namespace Giuru.IntegrationTests
             await _rabbitMqContainer.StartAsync();
 
             var mockAuthImage = new MockAuthImage();
+
+            await mockAuthImage.InitializeAsync();
 
             _mockAuthContainer = new ContainerBuilder()
                 .WithName("mock-auth")
@@ -215,7 +218,15 @@ namespace Giuru.IntegrationTests
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                 .Build();
 
-            _restClient = new RestClient(new HttpClient());
+/*            var sellerWebFactory = new WebApplicationFactory<Program>()
+                .WithWebHostBuilder(builder =>
+                {
+                    builder.UseSetting("ASPNETCORE_ENVIRONMENT", "Development");
+                    builder.UseSetting("RedisUrl", "redis");
+                })
+                .CreateClient();*/
+
+            RestClient = new RestClient(new HttpClient());
         }
 
         public async Task DisposeAsync()
