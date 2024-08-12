@@ -79,19 +79,19 @@ const Search = (props) => {
         setSearchTerm('');
     };
 
-    const onSidebarSuggestionSelected = (suggestion, url) => {
-        NavigationHelper.redirect(url);
+    const onSidebarSuggestionSelected = (suggestion) => {
+        NavigationHelper.redirect(suggestion.url);
         updateSearchHistory(suggestion);
         setOpen(false);
     };
 
     const getSuggestionValue = (suggestion) => {
-        return suggestion;
+        return `${suggestion.name ? suggestion.name : ""}${suggestion.attributes ? ` ${suggestion.attributes}` : ""}${suggestion.sku ? ` (${suggestion.sku})` : ""}`;
     };
 
     const updateSearchHistory = (suggestion) => {
         const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
-        if (!searchHistory.includes(suggestion)) {
+        if (!searchHistory.some(x => x.name === suggestion.name)) {
             localStorage.setItem('searchHistory', JSON.stringify([...searchHistory, suggestion]));
         }
     };
@@ -109,7 +109,7 @@ const Search = (props) => {
                         <SearchIcon />
                     </div>
                     <div className="suggestion__text">
-                        {suggestion.name ? suggestion.name : suggestion} {suggestion.attributes ? suggestion.attributes : ""} ({suggestion.sku ? suggestion.sku : ""})
+                        {suggestion.name ? suggestion.name : suggestion} {suggestion.attributes ? suggestion.attributes : ""} {suggestion.sku ? `(${suggestion.sku})` : ""}
                     </div>
                 </div>
             </div>
@@ -279,7 +279,7 @@ const Search = (props) => {
                             <Select
                                 className="search__area__select"
                                 value={searchArea}
-                                onChange={(e) => { 
+                                onChange={(e) => {
                                     setSearchArea(e.target.value);
                                     setSuggestions([]);
                                 }}
@@ -360,7 +360,7 @@ const Search = (props) => {
                                 className="sidebar__suggestions__item"
                                 sx={{ width: '100%', justifyContent: 'left', color: '#171717' }}
                                 disableRipple
-                                onClick={() => onSidebarSuggestionSelected(suggestion.name, suggestion.url)}
+                                onClick={() => onSidebarSuggestionSelected(suggestion)}
                             >
                                 {renderSuggestion(suggestion)}
                             </Button>
