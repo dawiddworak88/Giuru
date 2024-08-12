@@ -91,7 +91,7 @@ const Search = (props) => {
 
     const updateSearchHistory = (suggestion) => {
         const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
-        if (!searchHistory.some(x => x.name === suggestion.name)) {
+        if (!searchHistory.some(x => x.sku === suggestion.sku)) {
             localStorage.setItem('searchHistory', JSON.stringify([...searchHistory, suggestion]));
         }
     };
