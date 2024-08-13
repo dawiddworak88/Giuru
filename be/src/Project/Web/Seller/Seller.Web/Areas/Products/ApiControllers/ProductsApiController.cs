@@ -26,16 +26,13 @@ namespace Seller.Web.Areas.Clients.ApiControllers
     {
         private readonly IProductsRepository _productsRepository;
         private readonly IStringLocalizer _productLocalizer;
-        private readonly IInventoryRepository _inventoryRepository;
 
         public ProductsApiController(
             IProductsRepository productsRepository,
-            IStringLocalizer<ProductResources> productLocalizer,
-            IInventoryRepository inventoryRepository)
+            IStringLocalizer<ProductResources> productLocalizer)
         {
             _productsRepository = productsRepository;
             _productLocalizer = productLocalizer;
-            _inventoryRepository = inventoryRepository;
         }
 
         [HttpGet]
@@ -56,59 +53,6 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 null);
 
             return StatusCode((int)HttpStatusCode.OK, products);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetProductOrderSuggestion(
-            string searchTerm,
-            bool? hasPrimaryProduct,
-            int pageIndex,
-            int itemsPerPage)
-        {
-            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
-            var language = CultureInfo.CurrentUICulture.Name;
-
-            var products = await _productsRepository.GetProductsAsync(
-                token,
-                language,
-                searchTerm,
-                hasPrimaryProduct,
-                GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
-                pageIndex,
-                itemsPerPage,
-                null);
-
-            var onStockProducts = await _inventoryRepository.GetInventoryProductsAsync(
-                token,
-                language,
-                searchTerm,
-                pageIndex,
-                itemsPerPage,
-                null);
-
-            List<ProductOrderSuggestionResponseModel> suggestions = new List<ProductOrderSuggestionResponseModel>();
-
-            foreach (var product in products.Data.OrEmptyIfNull())
-            {
-                var suggestion = new ProductOrderSuggestionResponseModel
-                {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Sku = product.Sku,
-                    Images = product.Images,
-                };
-
-                var onStockProduct = onStockProducts?.Data.FirstOrDefault(x => x.ProductId == product.Id);
-
-                if (onStockProduct is not null)
-                {
-                    suggestion.StockQuantity = onStockProduct.AvailableQuantity;
-                }
-
-                suggestions.Add(suggestion);
-            }
-
-            return StatusCode((int)HttpStatusCode.OK, suggestions);
         }
 
         [HttpPost]
