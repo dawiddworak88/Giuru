@@ -166,9 +166,6 @@ function OrderForm(props) {
         className: "search__field",
         value: searchTerm,
         onChange: (_, { newValue, method }) => {
-            if (!newValue.length > 0) {
-                setIsStock(false);
-            }
             setSearchTerm(newValue);
         }
     };
@@ -511,7 +508,7 @@ function OrderForm(props) {
                                         setMoreInfo(e.target.value);
                                     }} />
                             </div>
-                            {isStock && searchTerm.length > 0 &&
+                            {product != null && product.stockQuantity > 0 &&
                                 <div className="column is-2 is-flex is-align-items-flex-end">
                                 <FormControlLabel
                                     control={<Checkbox 
