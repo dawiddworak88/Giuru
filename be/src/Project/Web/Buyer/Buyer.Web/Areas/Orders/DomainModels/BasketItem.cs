@@ -14,6 +14,5 @@ namespace Buyer.Web.Areas.Orders.DomainModels
         public double OutletQuantity { get; set; }
         public string ExternalReference { get; set; }
         public string MoreInfo { get; set; }
-        public bool IsFromStock { get; set; }
     }
 }
