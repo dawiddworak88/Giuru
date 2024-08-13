@@ -5,6 +5,7 @@ using Giuru.IntegrationTests.HttpClients;
 using Giuru.IntegrationTests.Images;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Testcontainers.Elasticsearch;
 using Testcontainers.MsSql;
@@ -25,7 +26,7 @@ namespace Giuru.IntegrationTests
         private IContainer _catalogBackgroundTasksContainer;
         private IContainer _orderingApiContainer;
         private IContainer _basketApiContainer;
-        private IContainer _clientApiContainer;
+        public IContainer _clientApiContainer;
 
         public RestClient RestClient { get; private set; }
 
@@ -93,14 +94,15 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("RolesClaim", "Seller")
                 .WithEnvironment("OrganisationClaim", "09affcc9-1665-45d6-919f-3d2026106ba1")
                 .WithEnvironment("ExpiresInMinutes", "86400")
-                .WithEnvironment("Issuer", null)
+                .WithEnvironment("Issuer", "null")
                 .WithEnvironment("Audience", "all")
+                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                 .Build();
 
             await _mockAuthContainer.StartAsync();
 
-            var catalogApiImage = new CatalogApiImage();
+            /*var catalogApiImage = new CatalogApiImage();
 
             await catalogApiImage.InitializeAsync();
 
@@ -118,7 +120,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
-                .WithEnvironment("IdentityUrl", "http://localhost:9105")
+                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
@@ -144,6 +146,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
+                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
@@ -167,6 +170,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
+                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
@@ -190,12 +194,13 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
+                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                 .Build();
 
-            await _basketApiContainer.StartAsync();
+            await _basketApiContainer.StartAsync();*/
 
             var clientApiImage = new ClientApiImage();
 
@@ -205,28 +210,40 @@ namespace Giuru.IntegrationTests
                 .WithName("client-api")
                 .WithImage(clientApiImage)
                 .WithNetwork(_giuruNetwork)
-                .WithExposedPort(9104)
-                .WithPortBinding(9104, 8080)
+                .WithExposedPort(9106)
+                .WithPortBinding(9106, 8080)
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
                 .WithEnvironment("RedisUrl", "redis")
                 .WithEnvironment("ConnectionString", "Server=sqldata;Database=ClientDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
+                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                 .Build();
 
-/*            var sellerWebFactory = new WebApplicationFactory<Program>()
-                .WithWebHostBuilder(builder =>
-                {
-                    builder.UseSetting("ASPNETCORE_ENVIRONMENT", "Development");
-                    builder.UseSetting("RedisUrl", "redis");
-                })
-                .CreateClient();*/
+            await _clientApiContainer.StartAsync();
 
-            RestClient = new RestClient(new HttpClient());
+            /*            var sellerWebFactory = new WebApplicationFactory<Program>()
+                            .WithWebHostBuilder(builder =>
+                            {
+                                builder.UseSetting("ASPNETCORE_ENVIRONMENT", "Development");
+                                builder.UseSetting("RedisUrl", "redis");
+                            })
+                            .CreateClient();*/
+
+            var tokenClient = new TokenClient(new HttpClient());
+            var token = await tokenClient.GetTokenAsync($"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}/api/token");
+
+            var httpClient = new HttpClient();
+
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            RestClient = new RestClient(httpClient);
         }
 
         public async Task DisposeAsync()
@@ -243,7 +260,7 @@ namespace Giuru.IntegrationTests
             await _mockAuthContainer.StopAsync();
             await _mockAuthContainer.DisposeAsync();
 
-            await _catalogApiContainer.StopAsync();
+ /*           await _catalogApiContainer.StopAsync();
             await _catalogApiContainer.DisposeAsync();
 
             await _catalogBackgroundTasksContainer.StopAsync();
@@ -253,7 +270,7 @@ namespace Giuru.IntegrationTests
             await _orderingApiContainer.DisposeAsync();
 
             await _basketApiContainer.StopAsync();
-            await _basketApiContainer.DisposeAsync();
+            await _basketApiContainer.DisposeAsync();*/
 
             await _rabbitMqContainer.StopAsync();
             await _rabbitMqContainer.DisposeAsync();

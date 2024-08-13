@@ -1,14 +1,23 @@
-using Giuru.MockAuth.Definitions;
-using IdentityModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using IdentityServer4;
+using Giuru.MockAuth.Configurations;
 using System.Security.Claims;
-
+using Giuru.MockAuth.Definitions;
+using IdentityModel;
+using System.IdentityModel.Tokens.Jwt;
+using System;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
+
+builder.Services.AddIdentityServer()
+    .AddInMemoryApiResources(IdentityServerConfig.Apis)
+    .AddInMemoryClients(IdentityServerConfig.GetClients())
+    .AddDeveloperSigningCredential();
 
 var app = builder.Build();
 
@@ -32,5 +41,11 @@ app.MapGet("/api/token", () =>
         token = new JwtSecurityTokenHandler().WriteToken(token)
     };
 });
+
+app.UseAuthorization();
+
+app.UseIdentityServer();
+
+app.UseStaticFiles();
 
 app.Run();

@@ -22,7 +22,7 @@ namespace Giuru.IntegrationTests.HttpClients
             _client = client;
         } 
 
-        public async Task<T> PostAsync<S, T>(string requestUrl, S request) where S : class
+        public async Task<RestClientResponse<T>> PostAsync<S, T>(string requestUrl, S request) where S : class
         {
             var response = await _client.PostAsync(
                     requestUrl,
@@ -32,7 +32,32 @@ namespace Giuru.IntegrationTests.HttpClients
 
             var result = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<T>(result);
+            var apiResponse = new RestClientResponse<T>
+            {
+                IsSuccessStatusCode = response.IsSuccessStatusCode,
+                StatusCode = response.StatusCode
+            };
+
+            if (string.IsNullOrWhiteSpace(result) is false)
+            {
+                apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
+            }
+
+            return apiResponse;
+        }
+
+        public async Task<T> GetAsync<T>(string requestUrl)
+        {
+            var response = await _client.GetAsync(requestUrl);
+
+            var result = await response.Content.ReadAsStringAsync();
+
+            if (string.IsNullOrWhiteSpace(result) is false)
+            {
+                return JsonConvert.DeserializeObject<T>(result);
+            }
+
+            return default;
         }
 
         public async Task<T> GetAsync<S, T>(string requestUrl, S request) where S : class
