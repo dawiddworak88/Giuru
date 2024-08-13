@@ -51,7 +51,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
 
             var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, PagedResults<IEnumerable<InventorySumResponseModel>>> (apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            if (response.IsSuccessStatusCode && response.Data?.Data is not null)
             {
                 return new PagedResults<IEnumerable<InventorySum>>(response.Data.Total, response.Data.PageSize)
                 {
@@ -90,7 +90,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
 
             var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<InventorySum>>>(apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            if (response.IsSuccessStatusCode && response.Data?.Data is not null)
             {
                 var availableProducts = new List<InventorySum>();
 
@@ -109,7 +109,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
                         throw new CustomException(response.Message, (int)response.StatusCode);
                     }
 
-                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Any())
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data is not null && nextPagesResponse.Data.Data.Any())
                     {
                         availableProducts.AddRange(nextPagesResponse.Data.Data);
                     }
@@ -144,7 +144,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
 
             var response = await _apiClientService.GetAsync<ApiRequest<AvaibleProductsInventorySuggesrtionsRequestModel>, AvaibleProductsInventorySuggesrtionsRequestModel, IEnumerable<InventorySuggestion>>(apiRequest);
 
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode && response.Data is not null)
             {
                 return response.Data;
             }
