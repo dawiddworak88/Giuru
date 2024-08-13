@@ -1,11 +1,12 @@
-﻿namespace Buyer.Web.Shared.Definitions.Header
+﻿
+namespace Buyer.Web.Shared.Definitions.Header
 {
-    public static class SearchConstants
+    public struct SearchConstants
     {
-        public static class SearchArea
+        public struct SearchArea
         {
-            public static string All = "all";
-            public static string StockLevel = "stock";
+            public const string All = "all";
+            public const string StockLevel = "stock";
         }
     }
 }
