@@ -13,7 +13,7 @@ import NavigationHelper from "../../helpers/globals/NavigationHelper";
 import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
 import { Context } from "../../stores/Store";
 import PropTypes from "prop-types";
-import ColorConstants from "../../../../../../shared/constants/ColorConstants";
+import ColorConstants from "../../constants/ColorConstants";
 
 const Search = (props) => {
     const [suggestions, setSuggestions] = useState([]);

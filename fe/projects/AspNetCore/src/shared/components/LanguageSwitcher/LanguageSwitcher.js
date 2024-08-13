@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import ArrowShowMoreIcon from "../../Icons/ArrowShowMore";
 import ArrowShowLessIcon from "../../Icons/ArrowShowLess";
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
-import ColorConstants from "../../../../../../shared/constants/ColorConstants";
+import ColorConstants from "../../constants/ColorConstants";
 
 function LanguageSwitcher(props) {
     const [anchor, setAnchor] = useState(null);
