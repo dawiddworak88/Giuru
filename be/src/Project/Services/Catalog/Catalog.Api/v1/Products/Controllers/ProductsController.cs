@@ -184,7 +184,6 @@ namespace Catalog.Api.v1.Products.Controllers
                     PageIndex = pageIndex,
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
-                    SearchTerm = searchTerm,
                     Language = CultureInfo.CurrentCulture.Name
                 };
 

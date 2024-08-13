@@ -11,6 +11,5 @@ namespace Catalog.Api.ServicesModels.Products
         public int? PageIndex { get; set; }
         public int? ItemsPerPage { get; set; }
         public string OrderBy { get; set; }
-        public string SearchTerm { get; set; }
     }
 }
