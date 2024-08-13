@@ -6,9 +6,9 @@ using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Seller.Web.Areas.Inventory.Repositories.Inventories;
+using Seller.Web.Areas.Orders.ApiResponseModels;
 using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Orders;
-using Seller.Web.Areas.Products.ApiResponseModels;
 using Seller.Web.Areas.Shared.Repositories.Products;
 using System.Collections.Generic;
 using System.Globalization;
@@ -80,11 +80,11 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 itemsPerPage,
                 null);
 
-            var suggestions = new List<ProductOrderSuggestionResponseModel>();
+            var suggestions = new List<OrderSuggestionResponseModel>();
 
             foreach (var product in products.Data.OrEmptyIfNull())
             {
-                var suggestion = new ProductOrderSuggestionResponseModel
+                var suggestion = new OrderSuggestionResponseModel
                 {
                     Id = product.Id,
                     Name = product.Name,
