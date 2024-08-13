@@ -91,7 +91,7 @@ function NewOrderForm(props) {
             name: product.name,
             imageId: product.images ? product.images[0] : null,
             externalReference,
-            moreInfo,
+            moreInfo
         };
 
         if (isStock) {
