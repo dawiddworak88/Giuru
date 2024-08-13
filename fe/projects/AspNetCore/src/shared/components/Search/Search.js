@@ -13,6 +13,7 @@ import NavigationHelper from "../../helpers/globals/NavigationHelper";
 import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
 import { Context } from "../../stores/Store";
 import PropTypes from "prop-types";
+import ColorConstants from "../../../../../../shared/constants/ColorConstants";
 
 const Search = (props) => {
     const [suggestions, setSuggestions] = useState([]);
@@ -358,7 +359,7 @@ const Search = (props) => {
                             <Button
                                 key={index}
                                 className="sidebar__suggestions__item"
-                                sx={{ width: '100%', justifyContent: 'left', color: '#171717' }}
+                                sx={{ width: '100%', justifyContent: 'left', color: ColorConstants.blackbase() }}
                                 disableRipple
                                 onClick={() => onSidebarSuggestionSelected(suggestion)}
                             >

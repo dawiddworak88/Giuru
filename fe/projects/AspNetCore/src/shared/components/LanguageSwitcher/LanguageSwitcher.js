@@ -4,6 +4,7 @@ import { Button } from "@mui/material";
 import ArrowShowMoreIcon from "../../Icons/ArrowShowMore";
 import ArrowShowLessIcon from "../../Icons/ArrowShowLess";
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
+import ColorConstants from "../../../../../../shared/constants/ColorConstants";
 
 function LanguageSwitcher(props) {
     const [anchor, setAnchor] = useState(null);
@@ -38,7 +39,7 @@ function LanguageSwitcher(props) {
                 type="button"
                 onClick={handleClick}
                 disableRipple
-                sx={{color: "#171717"}}
+                sx={{color: ColorConstants.blackbase()}}
             >
                 <span className="pr-2 switcher__button__text">
                     {props.selectedLanguageText}
