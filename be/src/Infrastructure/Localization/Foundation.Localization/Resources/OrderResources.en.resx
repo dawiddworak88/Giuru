@@ -313,6 +313,6 @@
     <value>Order Confirm</value>
   </data>
   <data name="FromStockLabel" xml:space="preserve">
-    <value>From the warehouse</value>
+    <value>From stock</value>
   </data>
 </root>
