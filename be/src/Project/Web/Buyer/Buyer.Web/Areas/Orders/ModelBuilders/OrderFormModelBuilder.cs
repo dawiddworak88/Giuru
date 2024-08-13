@@ -50,7 +50,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 Title = _orderLocalizer.GetString("Order"),
                 AddText = _orderLocalizer.GetString("AddOrderItem"),
                 SearchPlaceholderLabel = _orderLocalizer.GetString("EnterSkuOrName"),
-                GetSuggestionsUrl = _linkGenerator.GetPathByAction("GetProductOrderSuggestion", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                GetSuggestionsUrl = _linkGenerator.GetPathByAction("GetSuggestions", "OrdersApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 OrLabel = _globalLocalizer.GetString("Or"),
                 DropFilesLabel = _globalLocalizer.GetString("DropFile"),
                 DropOrSelectFilesLabel = _orderLocalizer.GetString("DropOrSelectOrderFile"),

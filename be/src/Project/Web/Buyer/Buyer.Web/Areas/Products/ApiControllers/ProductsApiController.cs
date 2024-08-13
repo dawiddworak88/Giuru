@@ -84,49 +84,6 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProductOrderSuggestion(string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage)
-        {
-            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
-            var language = CultureInfo.CurrentUICulture.Name;
-
-            var products = await _productsRepository.GetProductsAsync(
-                token,
-                language,
-                searchTerm,
-                hasPrimaryProduct,
-                GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
-                pageIndex,
-                itemsPerPage,
-                null);
-
-            var onStockProducts = await _inventoryRepository.GetAvailbleProductsInventory(language, pageIndex, itemsPerPage, token);
-
-            List<ProductOrderSuggestionResponseModel> suggestions = new List<ProductOrderSuggestionResponseModel>();
-
-            foreach (var product in products.Data.OrEmptyIfNull())
-            {
-                var suggestion = new ProductOrderSuggestionResponseModel
-                {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Sku = product.Sku,
-                    Images = product.Images,
-                };
-
-                var onStockProduct = onStockProducts?.Data.FirstOrDefault(x => x.ProductId == product.Id);
-
-                if (onStockProduct is not null)
-                {
-                    suggestion.StockQuantity = onStockProduct.AvailableQuantity ?? 0;
-                }
-
-                suggestions.Add(suggestion);
-            }
-
-            return StatusCode((int)HttpStatusCode.OK, suggestions);
-        }
-
-        [HttpGet]
         public async Task<IActionResult> GetSuggestion(string searchTerm, Guid? brandId, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage, string orderBy)
         {
             var language = CultureInfo.CurrentUICulture.Name;
