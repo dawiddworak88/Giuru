@@ -166,7 +166,9 @@ function OrderForm(props) {
         className: "search__field",
         value: searchTerm,
         onChange: (_, { newValue, method }) => {
-
+            if (!newValue.length > 0) {
+                setIsStock(false);
+            }
             setSearchTerm(newValue);
         }
     };
@@ -509,7 +511,8 @@ function OrderForm(props) {
                                         setMoreInfo(e.target.value);
                                     }} />
                             </div>
-                            <div className="column is-2 is-flex is-align-items-flex-end">
+                            {isStock && searchTerm.length > 0 &&
+                                <div className="column is-2 is-flex is-align-items-flex-end">
                                 <FormControlLabel
                                     control={<Checkbox 
                                         checked={isStock}
@@ -518,6 +521,7 @@ function OrderForm(props) {
                                     label={props.fromStockLabel}
                                 />
                             </div>
+                            }
                             <div className="column is-1 is-flex is-align-items-flex-end">
                                 <Button type="button" variant="contained" color="primary" onClick={handleAddOrderItemClick} disabled={state.isLoading || quantity < 1 || product === null}>
                                     {props.addText}
