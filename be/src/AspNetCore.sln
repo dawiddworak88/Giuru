@@ -156,9 +156,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Telemetry", "Inf
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DB1364D3-4EB4-4AB5-A944-94DB0D275246}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Giuru.IntegrationTests", "Tests\Giuru.IntegrationTests\Giuru.IntegrationTests.csproj", "{C7E7B54F-E597-42F4-B42B-E8B46C858B68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Giuru.IntegrationTests", "Tests\Giuru.IntegrationTests\Giuru.IntegrationTests.csproj", "{C7E7B54F-E597-42F4-B42B-E8B46C858B68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Giuru.MockAuth", "Tests\Giuru.MockAuth\Giuru.MockAuth.csproj", "{322CB026-7326-4B69-9286-B34892BA6995}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Giuru.MockAuth", "Tests\Giuru.MockAuth\Giuru.MockAuth.csproj", "{322CB026-7326-4B69-9286-B34892BA6995}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

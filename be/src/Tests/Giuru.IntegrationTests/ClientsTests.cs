@@ -1,5 +1,6 @@
 ﻿using Client.Api.v1.RequestModels;
 using Client.Api.v1.ResponseModels;
+using Foundation.ApiExtensions.Models.Response;
 using Giuru.IntegrationTests.Definitions;
 using System;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace Giuru.IntegrationTests
         {
             var endpointUrl = $"http://{_apiFixture._clientApiContainer.Hostname}:{_apiFixture._clientApiContainer.GetMappedPublicPort(8080)}{ApiEndpoints.ClientsApiEndpoint}";
 
-            var createResult = await _apiFixture.RestClient.PostAsync<ClientRequestModel, Test>(endpointUrl, new ClientRequestModel
+            var createResult = await _apiFixture.RestClient.PostAsync<ClientRequestModel, BaseResponseModel>(endpointUrl, new ClientRequestModel
             {
                 Name = Clients.Name,
                 Email = Clients.Email,
@@ -32,7 +33,7 @@ namespace Giuru.IntegrationTests
             Assert.NotNull(createResult);
             Assert.NotEqual(Guid.Empty, createResult.Data?.Id);
 
-            var updateResult = await _apiFixture.RestClient.PostAsync<ClientRequestModel, Test>(endpointUrl, new ClientRequestModel
+            var updateResult = await _apiFixture.RestClient.PostAsync<ClientRequestModel, BaseResponseModel>(endpointUrl, new ClientRequestModel
             {
                 Id = createResult.Data?.Id,
                 Name = Clients.UpdatedName,
@@ -49,11 +50,6 @@ namespace Giuru.IntegrationTests
             Assert.NotNull(getResult);
             Assert.Equal(updateResult.Data?.Id, getResult.Id);
             Assert.Equal(Clients.UpdatedName, getResult.Name);
-        }
-
-        public class Test
-        {
-            public Guid Id { get; set; }
         }
     }
 }

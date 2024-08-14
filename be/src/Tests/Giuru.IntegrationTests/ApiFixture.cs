@@ -104,7 +104,7 @@ namespace Giuru.IntegrationTests
 
             await _mockAuthContainer.StartAsync();
 
-            /*var catalogApiImage = new CatalogApiImage();
+            var catalogApiImage = new CatalogApiImage();
 
             await catalogApiImage.InitializeAsync();
 
@@ -123,6 +123,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
                 .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
+                .WithEnvironment("Brands", "4a8f8442-43b0-4223-83bb-978d5e81acc7&ELTAP&09affcc9-1665-45d6-919f-3d2026106ba1")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
@@ -156,6 +157,7 @@ namespace Giuru.IntegrationTests
 
             await _catalogBackgroundTasksContainer.StartAsync();
 
+            /*
             var orderingApiImage = new OrderingApiImage();
 
             await orderingApiImage.InitializeAsync();
@@ -262,11 +264,13 @@ namespace Giuru.IntegrationTests
             await _mockAuthContainer.StopAsync();
             await _mockAuthContainer.DisposeAsync();
 
- /*           await _catalogApiContainer.StopAsync();
+            await _catalogApiContainer.StopAsync();
             await _catalogApiContainer.DisposeAsync();
 
             await _catalogBackgroundTasksContainer.StopAsync();
             await _catalogBackgroundTasksContainer.DisposeAsync();
+
+            /*           
 
             await _orderingApiContainer.StopAsync();
             await _orderingApiContainer.DisposeAsync();
