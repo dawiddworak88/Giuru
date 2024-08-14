@@ -44,7 +44,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             if (products.Data is not null)
             {
                 var outletItems = await _outletRepository.GetOutletProductsByIdsAsync(token, language, products.Data.Select(x => x.Id));
-                var inventoryItems = await _inventoryRepository.GetAvailbleProductsInventoryByIds(token, language, products.Data.Select(x => x.Id));
+                var inventoryItems = await _inventoryRepository.GetAvailableProductsInventoryByIds(token, language, products.Data.Select(x => x.Id));
 
                 foreach (var product in products.Data.OrEmptyIfNull())
                 {

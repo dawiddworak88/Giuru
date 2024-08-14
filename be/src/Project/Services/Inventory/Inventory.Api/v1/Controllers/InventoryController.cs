@@ -210,8 +210,8 @@ namespace Inventory.Api.v1.Controllers
                 SuggestionsCount = suggestionsCount
             };
 
-            var validatior = new GetInventorySuggestionsModelValidator();
-            var validationResult = await validatior.ValidateAsync(serviceModel);
+            var validator = new GetInventorySuggestionsModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {

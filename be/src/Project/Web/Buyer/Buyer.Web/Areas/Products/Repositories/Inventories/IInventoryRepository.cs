@@ -8,12 +8,12 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
 {
     public interface IInventoryRepository
     {
-        Task<PagedResults<IEnumerable<InventorySum>>> GetAvailbleProductsInventory(
+        Task<PagedResults<IEnumerable<InventorySum>>> GetAvailableProductsInventory(
             string language,
             int pageIndex,
             int itemsPerPage,
             string token);
-        Task<IEnumerable<InventorySum>> GetAvailbleProductsInventoryByIds(string token, string language, IEnumerable<Guid> ids);
-        Task<IEnumerable<InventorySuggestion>> GetAvailbleProductsInventorySuggestions(string token, string language, string searchTerm, int size);
+        Task<IEnumerable<InventorySum>> GetAvailableProductsInventoryByIds(string token, string language, IEnumerable<Guid> ids);
+        Task<IEnumerable<InventorySuggestion>> GetAvailableProductsInventorySuggestions(string token, string language, string searchTerm, int size);
     }
 }

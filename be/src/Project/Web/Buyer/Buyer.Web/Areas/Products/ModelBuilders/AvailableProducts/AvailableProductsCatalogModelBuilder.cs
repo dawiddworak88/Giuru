@@ -55,7 +55,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             viewModel.Modal = await this.modalModelBuilder.BuildModelAsync(componentModel);
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
 
-            var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
+            var inventories = await this.inventoryRepository.GetAvailableProductsInventory(
                 componentModel.Language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token);
 
             if (inventories?.Data is not null && inventories.Data.Any())

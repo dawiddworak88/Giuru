@@ -21,7 +21,7 @@ namespace Buyer.Web.Areas.Products.Services.Inventory
 
         public async Task<IEnumerable<ProductSuggestionViewModel>> GetInventoryProductSuggestionsAsync(string searchTerm, int size, string language, string token, string searchArea)
         {
-            var suggestions = await _inventoryRepository.GetAvailbleProductsInventorySuggestions(token, language, searchTerm, size);
+            var suggestions = await _inventoryRepository.GetAvailableProductsInventorySuggestions(token, language, searchTerm, size);
 
             return suggestions.Select(x => new ProductSuggestionViewModel
             {

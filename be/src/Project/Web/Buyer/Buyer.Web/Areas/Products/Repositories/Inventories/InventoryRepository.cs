@@ -29,7 +29,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
             _settings = settings;
         }
 
-        public async Task<PagedResults<IEnumerable<InventorySum>>> GetAvailbleProductsInventory(
+        public async Task<PagedResults<IEnumerable<InventorySum>>> GetAvailableProductsInventory(
             string language,
             int pageIndex, 
             int itemsPerPage,
@@ -71,7 +71,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
             return default;
         }
 
-        public async Task<IEnumerable<InventorySum>> GetAvailbleProductsInventoryByIds(string token, string language, IEnumerable<Guid> ids)
+        public async Task<IEnumerable<InventorySum>> GetAvailableProductsInventoryByIds(string token, string language, IEnumerable<Guid> ids)
         {
             var requestModel = new PagedRequestModelBase
             {
@@ -126,15 +126,15 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
             return default;
         }
 
-        public async Task<IEnumerable<InventorySuggestion>> GetAvailbleProductsInventorySuggestions(string token, string language, string searchTerm, int suggestionsCount)
+        public async Task<IEnumerable<InventorySuggestion>> GetAvailableProductsInventorySuggestions(string token, string language, string searchTerm, int suggestionsCount)
         {
-            var requestModel = new AvaibleProductsInventorySuggesrtionsRequestModel
+            var requestModel = new AvailableProductsInventorySuggestionsRequestModel
             {
                 SearchTerm = searchTerm,
                 SuggestionsCount = suggestionsCount
             };
 
-            var apiRequest = new ApiRequest<AvaibleProductsInventorySuggesrtionsRequestModel>
+            var apiRequest = new ApiRequest<AvailableProductsInventorySuggestionsRequestModel>
             {
                 Language = language,
                 Data = requestModel,
@@ -142,7 +142,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
                 EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Inventory.AvailableProductsSuggestionsApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<AvaibleProductsInventorySuggesrtionsRequestModel>, AvaibleProductsInventorySuggesrtionsRequestModel, IEnumerable<InventorySuggestion>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<AvailableProductsInventorySuggestionsRequestModel>, AvailableProductsInventorySuggestionsRequestModel, IEnumerable<InventorySuggestion>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data is not null)
             {
