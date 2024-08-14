@@ -34,7 +34,7 @@ namespace Giuru.IntegrationTests.HttpClients
 
         private class TokenResponse
         {
-            [JsonProperty("token")]
+            [JsonProperty("Token")]
             public string AccessToken { get; set; }
         }
     }

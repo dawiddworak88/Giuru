@@ -4,6 +4,7 @@ using DotNet.Testcontainers.Networks;
 using Giuru.IntegrationTests.HttpClients;
 using Giuru.IntegrationTests.Images;
 using Microsoft.AspNetCore.Mvc.Testing;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -97,6 +98,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("Issuer", "null")
                 .WithEnvironment("Audience", "all")
                 .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
+                .WithBindMount(Path.Combine(CommonDirectoryPath.GetProjectDirectory().DirectoryPath, "../Giuru.MockAuth/tempkey.jwk"), "/app/tempkey.jwk")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                 .Build();
 
