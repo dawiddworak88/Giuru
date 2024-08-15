@@ -62,8 +62,6 @@ namespace Giuru.IntegrationTests
                 .WithName("elasticsearch")
                 .WithNetwork(_giuruNetwork)
                 .WithNetworkAliases("elasticsearch")
-                //.WithPortBinding(9100, 9200)
-                //.WithExposedPort(9100)
                 .WithPassword("YourStrongPassword!")
                 .WithEnvironment("xpack.security.http.ssl.enabled", "false")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(9200))
@@ -101,7 +99,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("ExpiresInMinutes", "86400")
                 .WithEnvironment("Issuer", "null")
                 .WithEnvironment("Audience", "all")
-                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
+                .WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
                 .WithBindMount(Path.Combine(CommonDirectoryPath.GetProjectDirectory().DirectoryPath, "../Giuru.MockAuth/tempkey.jwk"), "/app/tempkey.jwk")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                 .Build();
@@ -122,12 +120,11 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("RedisUrl", "redis")
                 .WithEnvironment("ConnectionString", $"Server=sqldata;Database=CatalogDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
                 .WithEnvironment("ElasticsearchUrl", "http://elastic:YourStrongPassword!@elasticsearch:9200")
-                //.WithEnvironment("ElasticsearchUrl", "http://elasticsearch:9200")
                 .WithEnvironment("ElasticsearchIndex", "catalog")
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
-                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
+                .WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
                 .WithEnvironment("Brands", "4a8f8442-43b0-4223-83bb-978d5e81acc7&ELTAP&09affcc9-1665-45d6-919f-3d2026106ba1")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
@@ -150,12 +147,11 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("RedisUrl", "redis")
                 .WithEnvironment("ConnectionString", $"Server=sqldata;Database=CatalogDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
                 .WithEnvironment("ElasticsearchUrl", "http://elastic:YourStrongPassword!@elasticsearch:9200")
-                //.WithEnvironment("ElasticsearchUrl", "http://elasticsearch:9200")
                 .WithEnvironment("ElasticsearchIndex", "catalog")
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
-                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
+                .WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
@@ -235,14 +231,6 @@ namespace Giuru.IntegrationTests
                 .Build();
 
             await _clientApiContainer.StartAsync();
-
-            /*            var sellerWebFactory = new WebApplicationFactory<Program>()
-                            .WithWebHostBuilder(builder =>
-                            {
-                                builder.UseSetting("ASPNETCORE_ENVIRONMENT", "Development");
-                                builder.UseSetting("RedisUrl", "redis");
-                            })
-                            .CreateClient();*/
 
             var tokenClient = new TokenClient(new HttpClient());
             var token = await tokenClient.GetTokenAsync($"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}/api/token");
