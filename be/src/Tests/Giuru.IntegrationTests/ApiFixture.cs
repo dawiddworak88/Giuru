@@ -55,14 +55,18 @@ namespace Giuru.IntegrationTests
                 .WithExposedPort(9111)
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
                 .Build();
-
+             
             await _msSqlContainer.StartAsync();
 
             _elasticsearchContainer = new ElasticsearchBuilder()
                 .WithName("elasticsearch")
                 .WithNetwork(_giuruNetwork)
-                .WithPortBinding(9100, 9200)
-                .WithExposedPort(9100)
+                .WithNetworkAliases("elasticsearch")
+                //.WithPortBinding(9100, 9200)
+                //.WithExposedPort(9100)
+                .WithPassword("YourStrongPassword!")
+                .WithEnvironment("xpack.security.http.ssl.enabled", "false")
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(9200))
                 .Build();
 
             await _elasticsearchContainer.StartAsync();
@@ -117,7 +121,8 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
                 .WithEnvironment("RedisUrl", "redis")
                 .WithEnvironment("ConnectionString", $"Server=sqldata;Database=CatalogDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
-                .WithEnvironment("ElasticsearchUrl", _elasticsearchContainer.GetConnectionString())
+                .WithEnvironment("ElasticsearchUrl", "http://elastic:YourStrongPassword!@elasticsearch:9200")
+                //.WithEnvironment("ElasticsearchUrl", "http://elasticsearch:9200")
                 .WithEnvironment("ElasticsearchIndex", "catalog")
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
@@ -144,7 +149,8 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
                 .WithEnvironment("RedisUrl", "redis")
                 .WithEnvironment("ConnectionString", $"Server=sqldata;Database=CatalogDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
-                .WithEnvironment("ElasticsearchUrl", _elasticsearchContainer.GetConnectionString())
+                .WithEnvironment("ElasticsearchUrl", "http://elastic:YourStrongPassword!@elasticsearch:9200")
+                //.WithEnvironment("ElasticsearchUrl", "http://elasticsearch:9200")
                 .WithEnvironment("ElasticsearchIndex", "catalog")
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
