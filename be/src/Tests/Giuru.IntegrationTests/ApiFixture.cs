@@ -99,7 +99,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("ExpiresInMinutes", "86400")
                 .WithEnvironment("Issuer", "null")
                 .WithEnvironment("Audience", "all")
-                .WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
+                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
                 .WithBindMount(Path.Combine(CommonDirectoryPath.GetProjectDirectory().DirectoryPath, "../Giuru.MockAuth/tempkey.jwk"), "/app/tempkey.jwk")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                 .Build();

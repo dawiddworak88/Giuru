@@ -25,6 +25,7 @@ namespace Giuru.IntegrationTests
             var createResult = await _apiFixture.RestClient.PostAsync<ProductRequestModel, BaseResponseModel>(endpointUrl, new ProductRequestModel
             {
                 Name = Products.Lamica.Name,
+                Sku = Products.Lamica.Sku,
                 CategoryId = Products.Lamica.CategoryId,
                 IsPublished = Products.Lamica.IsPublished,
                 Ean = Products.Lamica.Ean
