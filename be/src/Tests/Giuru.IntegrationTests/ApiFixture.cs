@@ -159,7 +159,6 @@ namespace Giuru.IntegrationTests
 
             await _catalogBackgroundTasksContainer.StartAsync();
 
-            /*
             var orderingApiImage = new OrderingApiImage();
 
             await orderingApiImage.InitializeAsync();
@@ -176,7 +175,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
-                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
+                .WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
@@ -200,13 +199,13 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
-                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
+                .WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                 .Build();
 
-            await _basketApiContainer.StartAsync();*/
+            await _basketApiContainer.StartAsync();
 
             var clientApiImage = new ClientApiImage();
 
@@ -224,7 +223,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
-                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
+                .WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
@@ -264,13 +263,11 @@ namespace Giuru.IntegrationTests
             await _catalogBackgroundTasksContainer.StopAsync();
             await _catalogBackgroundTasksContainer.DisposeAsync();
 
-            /*           
-
             await _orderingApiContainer.StopAsync();
             await _orderingApiContainer.DisposeAsync();
 
             await _basketApiContainer.StopAsync();
-            await _basketApiContainer.DisposeAsync();*/
+            await _basketApiContainer.DisposeAsync();
 
             await _rabbitMqContainer.StopAsync();
             await _rabbitMqContainer.DisposeAsync();
