@@ -61,7 +61,7 @@ function Header(props) {
                     <div className="navbar__actions__cart">
                         <a href={props.basketUrl} title={props.goToCartLabel} aria-label={props.goToCartLabel}>
                             <ShoppingCartIcon />
-                            <span className="navbar__actions__cart__count">{totalBasketItems}</span>
+                            <span className="navbar__actions__cart__count">{totalBasketItems == null ? 0 : totalBasketItems}</span>
                         </a>
                     </div>
                     <div className="navbar__actions__sidebar">
