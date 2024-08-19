@@ -107,7 +107,7 @@ function NewOrderForm(props) {
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
+                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(parseInt(orderItem.quantity) + state.totalBasketItems) })
 
                 AuthenticationHelper.HandleResponse(response);
 
