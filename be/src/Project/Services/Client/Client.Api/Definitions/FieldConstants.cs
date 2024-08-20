@@ -12,7 +12,7 @@ namespace Client.Api.Definitions
         public struct Transport
         {
             public static readonly Guid Id = Guid.Parse("35968b7b-0329-4def-b450-08dc65e9a01d");
-            public static readonly Guid EltapTransportId = Guid.Parse("0caf6403-7e80-4b66-9d32-08dc65e9a5f8");
+            public static readonly Guid CompanyTransportId = Guid.Parse("0caf6403-7e80-4b66-9d32-08dc65e9a5f8");
             public static readonly Guid OwnPickUpId = Guid.Parse("15325239-0ba9-48b6-9d33-08dc65e9a5f8");
             public static readonly Guid OptionSetId = Guid.Parse("549d513f-7c0b-4cd6-a412-facec9f4449e");
         }

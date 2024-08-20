@@ -14,7 +14,7 @@ namespace Client.Api.Infrastructure.Fields.Seeds
             SeedOptionsAsync(context, FieldConstants.Zone.ZoneTwoId, FieldConstants.Zone.OptionSetId, "Zone 2");
             SeedClientFieldAsync(context, FieldConstants.Transport.Id, FieldConstants.Type.Select, false, FieldConstants.Transport.OptionSetId, "Rodzja transportu", "Type of transport", "Art des Transports");
             SeedOptionsAsync(context, FieldConstants.Transport.OwnPickUpId, FieldConstants.Transport.OptionSetId, "Own PickUp");
-            SeedOptionsAsync(context, FieldConstants.Transport.EltapTransportId, FieldConstants.Transport.OptionSetId, "ELTAP Transport");
+            SeedOptionsAsync(context, FieldConstants.Transport.CompanyTransportId, FieldConstants.Transport.OptionSetId, "ELTAP Transport");
             SeedClientFieldAsync(context, FieldConstants.Campaign.Id, FieldConstants.Type.Select, false, FieldConstants.Campaign.OptionSetId, "Udział w kampaniach", "Participation in campaigns", "Teilnahme an Kampagnen");
             SeedOptionsAsync(context, FieldConstants.Campaign.TtewId, FieldConstants.Campaign.OptionSetId, "TTEW");
             SeedOptionsAsync(context, FieldConstants.Campaign.OtewId, FieldConstants.Campaign.OptionSetId, "OTEW");
