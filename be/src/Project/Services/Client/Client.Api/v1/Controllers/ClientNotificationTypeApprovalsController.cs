@@ -32,7 +32,7 @@ namespace Client.Api.v1.Controllers
         /// <summary>
         /// Get list of notification types by client id.
         /// </summary>
-        /// <param name="id">client id.</param>
+        /// <param name="id">The client id.</param>
         /// <returns>The list of notification types.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]

@@ -1,7 +1,7 @@
 ﻿using Buyer.Web.Areas.Orders.ApiRequestModels;
 using Buyer.Web.Areas.Orders.Definitions;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
-using Buyer.Web.Areas.Orders.Repositories.NotificationTypeApproval;
+using Buyer.Web.Areas.Orders.Repositories.ClientNotificationTypeApprovals;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Repositories.Clients;
 using Foundation.ApiExtensions.Controllers;
@@ -26,13 +26,13 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IBasketRepository _basketRepository;
         private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
-        private readonly IClientNotificationTypeApproval _clientNotificationTypeRepository;
+        private readonly IClientNotificationTypeApprovalRepository _clientNotificationTypeRepository;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
             IClientAddressesRepository clientAddressesRepository,
             IStringLocalizer<OrderResources> orderLocalizer,
-            IClientNotificationTypeApproval clientNotificationTypeRepository)
+            IClientNotificationTypeApprovalRepository clientNotificationTypeRepository)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
@@ -72,7 +72,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 deliveryAddressesIds.Add(model.BillingAddressId.Value);
             }
 
-            var clientApprovlas = await _clientNotificationTypeRepository.GetAsync(token, language, model.ClientId);
+            var clientApprovals = await _clientNotificationTypeRepository.GetAsync(token, language, model.ClientId);
 
             var clientAddresses = await _clientAddressesRepository.GetAsync(token, language, deliveryAddressesIds);
 
@@ -86,7 +86,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 clientAddresses?.FirstOrDefault(x => x.Id == model.ShippingAddressId),
                 model.MoreInfo,
                 model.HasCustomOrder,
-                clientApprovlas.Any(x => x.NotificationTypeId == ClientNotificationTypeConstants.ApprovalToSendOrderConfirmationEmailsId),
+                clientApprovals.Any(x => x.NotificationTypeId == ClientNotificationTypeConstants.ApprovalToSendOrderConfirmationEmailsId),
                 model.Attachments?.Select(x => x.Id));
 
             return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
