@@ -491,7 +491,7 @@ namespace Inventory.Api.Services.InventoryItems
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                inventoryItems = inventoryItems.Where(x => x.Name.StartsWith(model.SearchTerm));
+                inventoryItems = inventoryItems.Where(x => x.Name.StartsWith(model.SearchTerm) || x.Sku.StartsWith(model.SearchTerm));
             }
 
             return inventoryItems.Take(model.SuggestionsCount);
