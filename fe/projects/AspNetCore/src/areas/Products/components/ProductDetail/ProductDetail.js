@@ -54,6 +54,7 @@ function ProductDetail(props) {
             sku: product.sku,
             name: product.title,
             imageId: product.images ? product.images[0].id : null,
+            imageSrc: product.mediaItems ? product.mediaItems[0].mediaSrc : null,
             quantity: quantity,
             stockQuantity: stockQuantity,
             outletQuantity: outletQuantity,
