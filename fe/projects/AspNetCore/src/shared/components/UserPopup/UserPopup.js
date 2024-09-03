@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import UserIcon from "../../Icons/User";
 import ArrowShowMoreIcon from "../../Icons/ArrowShowMore";
 import ArrowShowLessIcon from "../../Icons/ArrowShowLess";
@@ -10,18 +10,11 @@ const UserPopup = (props) => {
     const [anchor, setAnchor] = useState(null);
 
     const handleClick = (event) => {
-        var popupStates = props.getPopupsState()
-
-        if (!popupStates.languageSwitcher) {
-            setAnchor(anchor ? null : event.currentTarget);
-            props.popupToggle({
-                ...popupStates,
-                userPopup: !popupStates.userPopup,
-            });
-        }
+        setAnchor(anchor ? null : event.currentTarget);
+        props.toggle(open);
     };
 
-    const open = Boolean(anchor);
+    const open = props.isOpen;
     const id = open ? 'simple-popup' : undefined;
 
     return (
@@ -46,7 +39,7 @@ const UserPopup = (props) => {
                         props.signOutLink &&
                         <div>
                             <div className="popup__body__welcome-text">{props.welcomeText}, {props.name}!</div>
-                            {props.actions && props.actions.length > 0 && props.actions.map((action, index) => 
+                            {props.actions && props.actions.length > 0 && props.actions.map((action, index) =>
                                 <a key={index} href={action.url} className="popup__body__button">{action.text}</a>
                             )}
                             <a href={props.signOutLink.url} className="popup__body__button sign-in-out-button">{props.signOutLink.text}</a>

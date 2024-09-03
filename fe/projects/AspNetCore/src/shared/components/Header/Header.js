@@ -10,7 +10,8 @@ import Search from "../Search/Search";
 function Header(props) {
     const [state, dispatch] = useContext(Context);
     const [totalBasketItems, setTotalBasketItems] = useState(props.totalBasketItems ? props.totalBasketItems : 0);
-    const [popupsState, setPopupsState] = useState({languageSwitcher: false, userPopup: false});
+    const [isUserPopupOpen, setIsUserPopupOpen] = useState(false);
+    const [isLanguageSwitechOpen, setIsLanguageSwitechOpen] = useState(false);
     const overlayRef = useRef(null);
 
     useEffect(() => {
@@ -36,9 +37,15 @@ function Header(props) {
         }
     };
 
-    const popupToggle = (popupsState) => setPopupsState(popupsState);
+    const userPopupOnClick = (state) => {
+        setIsUserPopupOpen(!state)
+        setIsLanguageSwitechOpen(false)
+    };
 
-    const getPopupsState = () => popupsState;
+    const languageSwitcherOnClick = (state) => {
+        setIsLanguageSwitechOpen(!state)
+        setIsUserPopupOpen(false)
+    };
 
     return (
         <header>
@@ -53,10 +60,10 @@ function Header(props) {
                 </div>
                 <div className="navbar__actions is-flex">
                     <div className="navbar__actions__language">
-                        <LanguageSwitcher {...props.languageSwitcher} popupToggle={popupToggle} getPopupsState={getPopupsState} />
+                        <LanguageSwitcher {...props.languageSwitcher} isOpen={isLanguageSwitechOpen} toggle={languageSwitcherOnClick}/>
                     </div>
                     <div className="navbar__actions__userpopup">
-                        <UserPopup {...props.userPopup} popupToggle={popupToggle} getPopupsState={getPopupsState} />
+                        <UserPopup {...props.userPopup} isOpen={isUserPopupOpen} toggle={userPopupOnClick} />
                     </div>
                     <div className="navbar__actions__cart">
                         <a href={props.basketUrl} title={props.goToCartLabel} aria-label={props.goToCartLabel}>

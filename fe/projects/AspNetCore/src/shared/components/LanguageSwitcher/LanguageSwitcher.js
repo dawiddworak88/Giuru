@@ -10,22 +10,15 @@ function LanguageSwitcher(props) {
     const [anchor, setAnchor] = useState(null);
 
     const handleClick = (event) => {
-        var popupStates = props.getPopupsState()
-
-        if (!popupStates.userPopup) {
-            setAnchor(anchor ? null : event.currentTarget);
-            props.popupToggle({
-                ...popupStates,
-                languageSwitcher: !popupStates.languageSwitcher,
-            });
-        }
+        setAnchor(anchor ? null : event.currentTarget);
+        props.toggle(open);
     };
 
-    const open = Boolean(anchor);
+    const open = props.isOpen;
     const id = open ? 'simple-popup' : undefined;
 
     function handleLanguageChange(href) {
-        
+
         if (typeof window !== "undefined" && href) {
             window.location.href = href;
         }
@@ -39,7 +32,7 @@ function LanguageSwitcher(props) {
                 type="button"
                 onClick={handleClick}
                 disableRipple
-                sx={{color: ColorConstants.blackbase()}}
+                sx={{ color: ColorConstants.blackbase() }}
             >
                 <span className="pr-2 switcher__button__text">
                     {props.selectedLanguageText}
