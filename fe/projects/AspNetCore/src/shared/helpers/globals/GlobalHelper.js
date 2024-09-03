@@ -8,7 +8,7 @@ export default class GlobalHelper {
     var themeDefinition = {
       typography: {
         body1: {
-          fontFamily: "'Nunito', sans-serif"
+          fontFamily: "'Nunito Sans', sans-serif"
         },
         button: {
           textTransform: "none"
