@@ -44,7 +44,7 @@ namespace Catalog.Api.Services.Categories
                 .Include(x => x.Images)
                 .Include(x => x.Translations)
                 .Include(x => x.ParentCategory)
-                .Include(x => x.ParentCategory.Translations)          
+                .Include(x => x.ParentCategory.Translations)
                 .AsSingleQuery();
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
@@ -377,6 +377,27 @@ namespace Catalog.Api.Services.Categories
                 LastModifiedDate = categorySchema.LastModifiedDate,
                 CreatedDate = categorySchema.CreatedDate
             };
+        }
+
+        public IEnumerable<CategorySchemasServiceModel> GetAllCategorySchemas()
+        {
+            var categorySchema = _context.Categories
+                .Include(x => x.Schemas)
+                .AsSingleQuery();
+
+            return categorySchema.OrEmptyIfNull().Select(x => new CategorySchemasServiceModel
+            {
+                Id = x.Id,
+                Schemas = x.Schemas.Select(y => new CategorySchemaServiceModel
+                {
+                    Id = y.Id,
+                    Schema = y.Schema,
+                    UiSchema = y.UiSchema,
+                    Language = y.Language
+                }),
+                LastModifiedDate = x.LastModifiedDate,
+                CreatedDate = x.CreatedDate
+            });
         }
 
         private void TriggerCategoryProductsIndexRebuild(RebuildCategoryProductsIndexServiceModel model)

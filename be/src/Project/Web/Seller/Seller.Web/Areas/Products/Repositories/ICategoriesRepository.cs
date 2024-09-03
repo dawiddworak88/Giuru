@@ -13,6 +13,7 @@ namespace Seller.Web.Areas.Products.Repositories
         Task DeleteAsync(string token, string language, Guid? id);
         Task<Category> GetCategoryAsync(string token, string language, Guid? id);
         Task<CategorySchemas> GetCategorySchemasAsync(string token, string language, Guid? categoryId);
+        Task<IEnumerable<CategorySchemas>> GetAllSchemasAsync(string token, string language);
         Task SaveAsync(string token, string language, Guid? id, CategorySchema categorySchema);
     }
 }

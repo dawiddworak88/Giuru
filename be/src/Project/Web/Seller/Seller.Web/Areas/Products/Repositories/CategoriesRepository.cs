@@ -13,6 +13,7 @@ using Seller.Web.Shared.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Categories.Repositories
@@ -249,6 +250,26 @@ namespace Seller.Web.Areas.Categories.Repositories
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
+        }
+
+        public async Task<IEnumerable<CategorySchemas>> GetAllSchemasAsync(string token, string language)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemasApiEndpoint}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<CategorySchemas>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data is not null)
+            {
+                return response.Data;
+            }
+
+            return default;
         }
     }
 }
