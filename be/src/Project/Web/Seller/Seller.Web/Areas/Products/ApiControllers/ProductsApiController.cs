@@ -48,7 +48,10 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 itemsPerPage,
                 null);
 
-            return this.StatusCode((int)HttpStatusCode.OK, products);
+            foreach (var product in products.Data)
+                product.Name = $"{product.Name} ({product.Sku})";
+
+            return this.StatusCode((int)HttpStatusCode.OK, products.Data);
         }
 
         [HttpPost]
