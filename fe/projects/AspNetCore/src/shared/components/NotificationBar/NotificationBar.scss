@@ -22,7 +22,8 @@
         padding-top: 0.05rem;
         display: flex;
         align-items: center;
-
+        font-weight: 400;
+        
         &:hover {
             color: $lightgrey;
         }
