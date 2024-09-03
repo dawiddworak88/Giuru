@@ -291,4 +291,7 @@
   <data name="ToDefinition" xml:space="preserve">
     <value>Przejdź do definicji</value>
   </data>
+  <data name="ProductAttributeIsInUse" xml:space="preserve">
+    <value>Atrybut jest używany w karcie produktu.</value>
+  </data>
 </root>
