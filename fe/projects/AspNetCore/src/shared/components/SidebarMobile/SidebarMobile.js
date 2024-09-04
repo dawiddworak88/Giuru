@@ -54,6 +54,7 @@ const SidebarMobile = (props) => {
                             </a>
                         }
                     </div>
+                    <div className="sidebar-mobile__bottom-space"></div>
                     <div className="sidebar-mobile__language is-flex">
                         {props.languageSwitcher.availableLanguages && props.languageSwitcher.availableLanguages.map((language, index) =>
                             <div key={index}>
