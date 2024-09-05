@@ -104,7 +104,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
             if (primaryProducts != null)
             {
-                viewModel.PrimaryProducts = primaryProducts.Data.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
+                viewModel.PrimaryProducts = primaryProducts.Data.Select(x => new ListItemViewModel { Id = x.Id, Name = $"{x.Name} ({x.Sku})" });
             }
 
             if (componentModel.Id.HasValue)
@@ -141,7 +141,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                         if (primaryProduct is not null)
                         {
-                            viewModel.PrimaryProduct = new ListItemViewModel { Id = primaryProduct.Id, Name = primaryProduct.Name };
+                            viewModel.PrimaryProduct = new ListItemViewModel { Id = primaryProduct.Id, Name = $"{primaryProduct.Name} ({primaryProduct.Sku})" };
                         }
                     }
 
@@ -158,7 +158,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                         foreach (var mediaItem in imageMediaItems)
                         {
-                            images.Add(new FileViewModel 
+                            images.Add(new FileViewModel
                             {
                                 Id = mediaItem.Id,
                                 Url = _mediaService.GetMediaUrl(mediaItem.Id, Constants.PreviewMaxWidth),
