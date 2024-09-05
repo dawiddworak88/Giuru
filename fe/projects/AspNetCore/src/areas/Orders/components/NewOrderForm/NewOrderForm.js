@@ -436,7 +436,7 @@ function NewOrderForm(props) {
                                     setMoreInfo(e.target.value);
                                 }} />
                         </div>
-                        {product != null && product.stockQuantity > 0 &&
+                        {product && product.stockQuantity > 0 &&
                             <div className="column is-2 is-flex is-align-items-flex-end">
                                 <FormControlLabel
                                     control={
