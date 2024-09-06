@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Products.Services.Inventory
+namespace Buyer.Web.Areas.Products.Services.Inventories
 {
     public class InventoryService : IInventoryService
     {
@@ -19,9 +19,9 @@ namespace Buyer.Web.Areas.Products.Services.Inventory
             _linkGenerator = linkGenerator;
         }
 
-        public async Task<IEnumerable<ProductSuggestionViewModel>> GetInventoryProductSuggestionsAsync(string searchTerm, int size, string language, string token, string searchArea)
+        public async Task<IEnumerable<ProductSuggestionViewModel>> GetInventoryProductSuggestionsAsync(string searchTerm, int size, string language, string token)
         {
-            var suggestions = await _inventoryRepository.GetAvailableProductsInventorySuggestions(token, language, searchTerm, size);
+            var suggestions = await _inventoryRepository.GetAvailableInventoryProductsSuggestions(token, language, searchTerm, size);
 
             return suggestions.Select(x => new ProductSuggestionViewModel
             {
