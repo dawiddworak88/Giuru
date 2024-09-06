@@ -31,7 +31,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         [HttpGet]
         public async Task<IActionResult> Get(int pageIndex, int itemsPerPage)
         {
-            var inventories = await this.inventoryRepository.GetAvailableProductsInventory(
+            var inventories = await this.inventoryRepository.GetAvailableInventoryProducts(
                 CultureInfo.CurrentUICulture.Name,
                 pageIndex,
                 itemsPerPage,

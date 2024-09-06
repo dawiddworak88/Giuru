@@ -29,7 +29,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
             _settings = settings;
         }
 
-        public async Task<PagedResults<IEnumerable<InventorySum>>> GetAvailableProductsInventory(
+        public async Task<PagedResults<IEnumerable<InventorySum>>> GetAvailableInventoryProducts(
             string language,
             int pageIndex, 
             int itemsPerPage,
@@ -71,7 +71,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
             return default;
         }
 
-        public async Task<IEnumerable<InventorySum>> GetAvailableProductsInventoryByIds(string token, string language, IEnumerable<Guid> ids)
+        public async Task<IEnumerable<InventorySum>> GetAvailableInventoryProductsByIds(string token, string language, IEnumerable<Guid> ids)
         {
             var requestModel = new PagedRequestModelBase
             {
@@ -126,7 +126,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
             return default;
         }
 
-        public async Task<IEnumerable<InventorySuggestion>> GetAvailableProductsInventorySuggestions(string token, string language, string searchTerm, int suggestionsCount)
+        public async Task<IEnumerable<InventorySuggestion>> GetAvailableInventoryProductsSuggestions(string token, string language, string searchTerm, int suggestionsCount)
         {
             var requestModel = new AvailableProductsInventorySuggestionsRequestModel
             {

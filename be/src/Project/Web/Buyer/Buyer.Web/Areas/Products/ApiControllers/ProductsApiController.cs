@@ -110,7 +110,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 var productVariants = await _productsRepository.GetProductsAsync(
                     product.ProductVariants, null, null, language, null, false, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, $"{nameof(Product.Name)} ASC");
 
-                var availableProducts = await _inventoryRepository.GetAvailableProductsInventoryByIds(token, language, productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
+                var availableProducts = await _inventoryRepository.GetAvailableInventoryProductsByIds(token, language, productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
 
                 var availableOutletProducts = await _outletRepository.GetOutletProductsByIdsAsync(token, language, productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
 
