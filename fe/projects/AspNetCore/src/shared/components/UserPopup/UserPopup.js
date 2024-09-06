@@ -5,6 +5,7 @@ import ArrowShowMoreIcon from "../../Icons/ArrowShowMore";
 import ArrowShowLessIcon from "../../Icons/ArrowShowLess";
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import PropTypes from "prop-types";
+import ColorConstants from "../../constants/ColorConstants";
 
 const UserPopup = (props) => {
     const [anchor, setAnchor] = useState(null);
@@ -23,6 +24,11 @@ const UserPopup = (props) => {
                 type="button"
                 onClick={handleClick}
                 disableRipple
+                sx={{
+                    '&:hover': {
+                      backgroundColor: ColorConstants.white(),
+                    },
+                  }}
             >
                 <span className="pr-2">
                     <UserIcon />
