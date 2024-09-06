@@ -1,8 +1,6 @@
 ﻿using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
-using System;
 using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.Services.SearchSuggestions.ProductsSearchSuggestions
@@ -23,8 +21,6 @@ namespace Buyer.Web.Areas.Products.Services.SearchSuggestions.ProductsSearchSugg
                 size,
                 language,
                 token);
-
-            Console.WriteLine(JsonSerializer.Serialize(suggestions));
 
             return suggestions;
         }
