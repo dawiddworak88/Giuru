@@ -14,15 +14,15 @@ function Header(props) {
     const [isLanguageSwitechOpen, setIsLanguageSwitechOpen] = useState(false);
     const overlayRef = useRef(null);
 
-    useEffect(() => {
-        const totalItems = state.totalBasketItems;
-        if (totalItems != null && totalItems < props.totalBasketItems) {
-            state.totalBasketItems = props.totalBasketItems;
+    const updateTotalBasketItems = (newTotal) => {
+        if (newTotal != null && newTotal > props.totalBasketItems) {
+            setTotalBasketItems(newTotal);
         }
+    }
 
-        setTotalBasketItems(state.totalBasketItems);
-
-    }, [state])
+    if (state.totalBasketItems !== totalBasketItems) {
+        updateTotalBasketItems(state.totalBasketItems);
+    }
 
     const overlayDisplaying = (isDisplay) => {
         if (overlayRef.current) {
