@@ -1,5 +1,6 @@
-﻿using Buyer.Web.Areas.Products.Services.Inventory;
+﻿using Buyer.Web.Areas.Products.Services.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Areas.Products.Services.SearchSuggestions;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Definitions.Header;
 using Foundation.ApiExtensions.Controllers;
@@ -16,40 +17,24 @@ namespace Buyer.Web.Areas.Products.ApiControllers
     [Area("Products")]
     public class SearchSuggestionsApiController : BaseApiController
     {
-        private readonly IProductsService _productsService;
-        private readonly IInventoryService _inventoryService;
+        private readonly ISearchSuggestionsService _searchSuggestionsService;
 
-        public SearchSuggestionsApiController(
-            IProductsService productsService,
-            IInventoryService inventoryService)
+        public SearchSuggestionsApiController(ISearchSuggestionsService searchSuggestionsService)
         {
-            _productsService = productsService;
-            _inventoryService = inventoryService;
+            _searchSuggestionsService = searchSuggestionsService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(string searchTerm, int size, string searchArea)
         {
-            IEnumerable<ProductSuggestionViewModel> suggestions;
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
 
-            if (searchArea == SearchConstants.SearchArea.StockLevel)
-            {
-                suggestions = await _inventoryService.GetInventoryProductSuggestionsAsync(
-                    searchTerm,
-                    size,
-                    CultureInfo.CurrentUICulture.Name,
-                    await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                    searchArea);
-            }
-            else
-            {
-                suggestions = await _productsService.GetProductSuggestionsAsync(
-                    searchTerm,
-                    size,
-                    CultureInfo.CurrentUICulture.Name,
-                    await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                    searchArea);
-            }
+            var suggestions = await _searchSuggestionsService.GetSuggestionsAsync(
+                token,
+                CultureInfo.CurrentUICulture.Name,
+                searchTerm,
+                size,
+                searchArea);
 
             return StatusCode((int)HttpStatusCode.OK, suggestions);
         }

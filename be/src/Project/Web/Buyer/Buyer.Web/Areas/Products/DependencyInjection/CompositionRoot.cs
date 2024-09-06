@@ -8,8 +8,11 @@ using Buyer.Web.Areas.Products.Repositories.Categories;
 using Buyer.Web.Areas.Products.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
-using Buyer.Web.Areas.Products.Services.Inventory;
+using Buyer.Web.Areas.Products.Services.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Areas.Products.Services.SearchSuggestions;
+using Buyer.Web.Areas.Products.Services.SearchSuggestions.ProductsSearchSuggestions;
+using Buyer.Web.Areas.Products.Services.SearchSuggestions.StockLevelsSearchSuggetions;
 using Buyer.Web.Areas.Products.ViewModels;
 using Buyer.Web.Areas.Products.ViewModels.AvailableProducts;
 using Buyer.Web.Areas.Products.ViewModels.Categories;
@@ -32,6 +35,9 @@ namespace Buyer.Web.Areas.Products.DependencyInjection
 
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<IProductsSearchSuggestionsService, ProductsSearchSuggestionsService>();
+            services.AddScoped<IStockLevelsSearchSuggestionsService, StockLevelsSearchSuggestionsService>();
+            services.AddScoped<ISearchSuggestionsService, SearchSuggestionsService>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, AvailableProductsPageViewModel>, AvailableProductsPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel>, AvailableProductsCatalogModelBuilder>();
