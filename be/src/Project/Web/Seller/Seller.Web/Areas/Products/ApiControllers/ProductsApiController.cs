@@ -53,7 +53,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 product.Name = $"{product.Name} ({product.Sku})";
             }
 
-            return this.StatusCode((int)HttpStatusCode.OK, products.Data);
+            return this.StatusCode((int)HttpStatusCode.OK, products);
         }
 
         [HttpPost]
