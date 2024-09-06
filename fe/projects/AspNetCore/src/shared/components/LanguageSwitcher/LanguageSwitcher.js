@@ -15,7 +15,6 @@ function LanguageSwitcher(props) {
     };
 
     const open = props.isOpen;
-    const id = open ? 'simple-popup' : undefined;
 
     function handleLanguageChange(href) {
 
@@ -28,7 +27,6 @@ function LanguageSwitcher(props) {
         <div>
             <Button
                 className="switcher__button"
-                aria-describedby={id}
                 type="button"
                 onClick={handleClick}
                 disableRipple
@@ -41,7 +39,7 @@ function LanguageSwitcher(props) {
                     <ArrowShowLessIcon /> : <ArrowShowMoreIcon />
                 }
             </Button>
-            <BasePopup id={id} open={open} anchor={anchor} className="switcher">
+            <BasePopup open={open} anchor={anchor} className="switcher">
                 <div className="switcher__body">
                     {props.availableLanguages && props.availableLanguages.length > 0 && props.availableLanguages.map((language, index) =>
                         <a key={index} href={language.url} className="switcher__body__button" onClick={() => handleLanguageChange(language.url)}>{language.text}</a>
