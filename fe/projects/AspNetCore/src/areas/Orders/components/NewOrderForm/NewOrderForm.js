@@ -172,6 +172,7 @@ function NewOrderForm(props) {
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems - (entityToDelete.quantity + entityToDelete.stockQuantity + entityToDelete.outletQuantity) });
                 
                 AuthenticationHelper.HandleResponse(response);
                 
@@ -300,7 +301,7 @@ function NewOrderForm(props) {
         fetch(url, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: null });
+                dispatch({ type: "SET_TOTAL_BASKET", payload: 0 });
                 
                 AuthenticationHelper.HandleResponse(response);
                 
