@@ -137,7 +137,7 @@
     position: absolute;
     top: 2rem;
     left: -3rem;
-    width: calc(100% + 40px + 18rem);
+    width: calc(100% + 20rem);
     max-height: 15rem;
     overflow: auto;
     overflow-x: hidden;
@@ -173,7 +173,7 @@
 
 @media only screen and (max-width: $desktop) {
     .react-autosuggest__suggestions-container, .react-autosuggest__suggestions-container--open {
-        width: calc(100% + 24px + 7rem);
+        width: calc(100% + 8.2rem);
         left: -1.2rem;
     }
 }
