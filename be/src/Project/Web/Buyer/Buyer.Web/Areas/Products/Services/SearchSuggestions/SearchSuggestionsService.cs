@@ -1,7 +1,5 @@
-﻿using Buyer.Web.Areas.Products.Services.SearchSuggestions.ProductsSearchSuggestions;
-using Buyer.Web.Areas.Products.Services.SearchSuggestions.StockLevelsSearchSuggetions;
+﻿using Buyer.Web.Areas.Products.Services.SearchSuggestions.BaseSearchSuggestions;
 using Buyer.Web.Areas.Products.ViewModels.Products;
-using Buyer.Web.Shared.Definitions.Header;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,35 +7,16 @@ namespace Buyer.Web.Areas.Products.Services.SearchSuggestions
 {
     public class SearchSuggestionsService : ISearchSuggestionsService
     {
-        private readonly IProductsSearchSuggestionsService _productsSearchSugestionsService;
-        private readonly IStockLevelsSearchSuggestionsService _stockLevelsSearchSuggestionsService;
+        private IBaseSearchSuggestionsService _searchSuggestionsService;
 
-        public SearchSuggestionsService(
-            IProductsSearchSuggestionsService productsSearchSugestionsService,
-            IStockLevelsSearchSuggestionsService stockLevelsSearchSuggestionsService)
+        public async Task<IEnumerable<ProductSuggestionViewModel>> GetSuggestionsAsync(string token, string language, string searchTerm, int size)
         {
-            _productsSearchSugestionsService = productsSearchSugestionsService;
-            _stockLevelsSearchSuggestionsService = stockLevelsSearchSuggestionsService;
+            return await _searchSuggestionsService.GetSuggestionsAsync(token, language, searchTerm, size);
         }
 
-        public async Task<IEnumerable<ProductSuggestionViewModel>> GetSuggestionsAsync(string token, string language, string searchTerm, int size, string searchArea)
+        public void SetSearchingArea(IBaseSearchSuggestionsService searchSuggestionsService)
         {
-            if (searchArea == SearchConstants.SearchArea.StockLevel)
-            {
-                return await _stockLevelsSearchSuggestionsService.GetSuggestionsAsync(
-                    token,
-                    language,
-                    searchTerm,
-                    size);
-            }
-            else
-            {
-                return await _productsSearchSugestionsService.GetSuggestionsAsync(
-                    token,
-                    language,
-                    searchTerm,
-                    size);
-            }
+            _searchSuggestionsService = searchSuggestionsService;
         }
     }
 }
