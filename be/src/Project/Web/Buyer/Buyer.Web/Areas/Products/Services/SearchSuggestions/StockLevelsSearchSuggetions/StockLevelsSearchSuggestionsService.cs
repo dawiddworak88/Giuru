@@ -1,11 +1,12 @@
 ﻿using Buyer.Web.Areas.Products.Services.Inventories;
+using Buyer.Web.Areas.Products.Services.SearchSuggestions.BaseSearchSuggestions;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.Services.SearchSuggestions.StockLevelsSearchSuggetions
 {
-    public class StockLevelsSearchSuggestionsService : IStockLevelsSearchSuggestionsService
+    public class StockLevelsSearchSuggestionsService : IBaseSearchSuggestionsService
     {
         private readonly IInventoryService _inventoryService;
 

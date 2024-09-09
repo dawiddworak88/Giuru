@@ -1,11 +1,12 @@
 ﻿using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Areas.Products.Services.SearchSuggestions.BaseSearchSuggestions;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.Services.SearchSuggestions.ProductsSearchSuggestions
 {
-    public class ProductsSearchSuggestionsService : IProductsSearchSuggestionsService
+    public class ProductsSearchSuggestionsService : IBaseSearchSuggestionsService
     {
         private readonly IProductsService _productsService;
 

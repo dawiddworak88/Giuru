@@ -35,8 +35,8 @@ namespace Buyer.Web.Areas.Products.DependencyInjection
 
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IInventoryService, InventoryService>();
-            services.AddScoped<IProductsSearchSuggestionsService, ProductsSearchSuggestionsService>();
-            services.AddScoped<IStockLevelsSearchSuggestionsService, StockLevelsSearchSuggestionsService>();
+            services.AddScoped<ProductsSearchSuggestionsService>();
+            services.AddScoped<StockLevelsSearchSuggestionsService>();
             services.AddScoped<ISearchSuggestionsService, SearchSuggestionsService>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, AvailableProductsPageViewModel>, AvailableProductsPageModelBuilder>();

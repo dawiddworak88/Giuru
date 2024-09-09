@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Products.Services.SearchSuggestions.StockLevelsSearchSuggetions
+namespace Buyer.Web.Areas.Products.Services.SearchSuggestions.BaseSearchSuggestions
 {
-    public interface IStockLevelsSearchSuggestionsService
+    public interface IBaseSearchSuggestionsService
     {
         Task<IEnumerable<ProductSuggestionViewModel>> GetSuggestionsAsync(string token, string language, string searchTerm, int size);
     }
