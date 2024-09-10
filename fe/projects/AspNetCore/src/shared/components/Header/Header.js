@@ -15,11 +15,7 @@ function Header(props) {
     const overlayRef = useRef(null);
 
     const updateTotalBasketItems = (newTotal) => {
-        
-        if (newTotal === 0) {
-            setTotalBasketItems(newTotal);
-        }
-        else if (newTotal != null && newTotal !== props.totalBasketItems) {
+        if (newTotal != null && (newTotal === 0 || newTotal !== props.totalBasketItems)) {
             setTotalBasketItems(newTotal);
         }
     }
