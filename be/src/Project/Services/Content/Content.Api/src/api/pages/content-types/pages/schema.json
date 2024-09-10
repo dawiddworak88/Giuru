@@ -54,7 +54,8 @@
       "type": "dynamiczone",
       "components": [
         "shared.content",
-        "shared.slider"
+        "shared.slider",
+        "blocks.video"
       ]
     }
   }

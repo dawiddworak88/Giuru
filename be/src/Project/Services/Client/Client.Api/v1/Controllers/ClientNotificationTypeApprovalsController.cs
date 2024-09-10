@@ -12,6 +12,9 @@ using System;
 using Foundation.Account.Definitions;
 using Client.Api.v1.ResponseModels;
 using Client.Api.Services.NotificationsTypesApprovals;
+using Foundation.Extensions.Helpers;
+using System.Globalization;
+using System.Security.Claims;
 
 namespace Client.Api.v1.Controllers
 {
@@ -44,7 +47,10 @@ namespace Client.Api.v1.Controllers
 
             var serviceModel = new GetClientNotificationTypeApprovalsServiceModel
             {
-                ClientId = id
+                ClientId = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new GetClientNotificationTypeApprovalsModelValidator();
@@ -85,6 +91,9 @@ namespace Client.Api.v1.Controllers
             {
                 ClientId = request.ClientId,
                 NotificationTypeIds = request.NotificationTypeIds,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new SaveClientNotificationTypeApprovalModelValidator();

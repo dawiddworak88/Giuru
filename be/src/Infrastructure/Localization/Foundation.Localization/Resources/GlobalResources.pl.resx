@@ -789,4 +789,10 @@
   <data name="DeliveryAddressTitle" xml:space="preserve">
     <value>Adres dostawy</value>
   </data>
+  <data name="SeeLessText" xml:space="preserve">
+    <value>Zobacz mniej</value>
+  </data>
+  <data name="SeeMoreText" xml:space="preserve">
+    <value>Zobacz więcej</value>
+  </data>
 </root>

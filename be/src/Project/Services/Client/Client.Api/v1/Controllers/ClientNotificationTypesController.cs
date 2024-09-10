@@ -82,7 +82,9 @@ namespace Client.Api.v1.Controllers
                             Data = notificationTypes.OrEmptyIfNull().Select(x => new ClientNotificationTypeResponseModel
                             {
                                 Id = x.Id,
-                                Name = x.Name
+                                Name = x.Name,
+                                LastModifiedDate = x.LastModifiedDate,
+                                CreatedDate = x.CreatedDate
                             })
                         };
 
@@ -138,9 +140,14 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetAsync(Guid? id)
         {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
             var serviceModel = new GetClientNotificationTypeServiceModel
             {
-                Id = id
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new GetClientNotificationTypeModelValidator();
@@ -188,7 +195,7 @@ namespace Client.Api.v1.Controllers
                     Name = request.Name,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = request.Id,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
                 var validator = new UpdateClientNotificationTypeModelValidator();
@@ -210,7 +217,7 @@ namespace Client.Api.v1.Controllers
                     Name = request.Name,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = request.Id,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
                 var validator = new CreateClientNotificationTypeModelValidator();
@@ -244,7 +251,10 @@ namespace Client.Api.v1.Controllers
 
             var serviceModel = new DeleteClientNotificationTypeServiceModel
             {
-                Id = id
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new DeleteClientNotaficationTypeModelValidator();

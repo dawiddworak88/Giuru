@@ -105,7 +105,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 EanLabel = _globalLocalizer.GetString("Ean"),
                 OutletTitleLabel = _globalLocalizer.GetString("Discount"),
                 ReadMoreText = _globalLocalizer.GetString("ReadMore"),
-                ReadLessText = _globalLocalizer.GetString("ReadLess")
+                ReadLessText = _globalLocalizer.GetString("ReadLess"),
+                SeeMoreText = _globalLocalizer.GetString("SeeMoreText"),
+                SeeLessText = _globalLocalizer.GetString("SeeLessText")
             };
 
             var product = await _productsService.GetProductAsync(componentModel.Token, componentModel.Language, componentModel.Id, componentModel.UserEmail);

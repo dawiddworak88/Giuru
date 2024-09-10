@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Content.DomainModel;
+﻿using Buyer.Web.Areas.Content.Definitions;
+using Buyer.Web.Areas.Content.DomainModel;
 using Buyer.Web.Areas.Content.GraphQlResponseModels;
 using Foundation.Extensions.ExtensionMethods;
 using GraphQL;
@@ -76,6 +77,25 @@ namespace Buyer.Web.Areas.Content.Repositories
                                 sharedComponents.Add(contentComponent);
                             }
                             break;
+                        case "ComponentBlocksVideo":
+                            if (sharedComponent is ComponentBlocksVideo blocksVideo)
+                            {
+                                var videoComponent = new BlocksVideoComponent
+                                {
+                                    Typename = blocksVideo.Typename,
+                                    Type = blocksVideo.Type,
+                                    VideoUrl = blocksVideo.VideoUrl,
+                                };
+
+                                if (blocksVideo.Type == ContentConstants.InternalMediaServiceTypeName)
+                                {
+                                    videoComponent.VideoUrl = blocksVideo.Video?.Data?.Attributes?.Url;
+                                    videoComponent.VideoType = blocksVideo.Video?.Data?.Attributes?.VideoType;
+                                }
+
+                                sharedComponents.Add(videoComponent);
+                            }
+                            break;
                         default:
                             break;
                     }
@@ -121,6 +141,20 @@ namespace Buyer.Web.Areas.Content.Repositories
                                 navigation
                                 skus
                               }}
+                              ... on ComponentBlocksVideo {{
+                                id
+                                type
+                                videoUrl
+                                video {{
+                                  data {{
+                                    attributes {{
+                                      name
+                                      url
+                                      formats
+                                    }}
+                                  }}
+                                }}
+                              }}
                             }}
                           }}
                         }}
@@ -155,7 +189,9 @@ namespace Buyer.Web.Areas.Content.Repositories
                     case "ComponentSharedContent":
                         result.Add(token.ToObject<ComponentSharedContent>(serializer));
                         break;
-                    // Add cases for other block types as needed
+                    case "ComponentBlocksVideo":
+                        result.Add(token.ToObject<ComponentBlocksVideo>(serializer));
+                        break;
                     default:
                         result.Add(block);
                         break;

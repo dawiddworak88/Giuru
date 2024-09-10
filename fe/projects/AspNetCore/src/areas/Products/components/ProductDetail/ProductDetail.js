@@ -195,7 +195,7 @@ function ProductDetail(props) {
                                                 variant="outlined"
                                                 onClick={handleShowMoreImages}
                                                 color="inherit">
-                                                {props.readLessText}
+                                                {props.seeLessText}
                                             </Button>
                                         </div>
                                     ) : (
@@ -204,7 +204,7 @@ function ProductDetail(props) {
                                                 variant="outlined"
                                                 onClick={handleShowMoreImages}
                                                 color="inherit">
-                                                {props.readMoreText}
+                                                {props.seeMoreText}
                                             </Button>
                                         </div>
                                     )}
