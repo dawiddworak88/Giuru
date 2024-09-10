@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Shared.Definitions.Products;
-using Buyer.Web.Areas.Products.Repositories.Products;
+﻿using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.ComponentModels.Files;
 using Buyer.Web.Shared.ViewModels.Files;
@@ -25,15 +24,20 @@ using Foundation.PageContent.Definitions;
 using Foundation.Media.Services.MediaServices;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Repositories.Media;
+using Microsoft.Extensions.Options;
+using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Areas.Products.ComponentModels;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
-    public class ProductDetailModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel>
+    public class ProductDetailModelBuilder : IAsyncComponentModelBuilder<ProductsComponentModel, ProductDetailViewModel>
     {
         private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> _filesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> _sidebarModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> _modalModelBuilder;
         private readonly IProductsRepository _productsRepository;
+        private readonly IProductsService _productsService;
         private readonly IStringLocalizer<InventoryResources> _inventoryResources;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<OrderResources> _orderResources;
@@ -42,6 +46,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
         private readonly IMediaItemsRepository _mediaItemsRepository;
+        private readonly IOptions<AppSettings> _options;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -55,7 +60,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IMediaService mediaService,
             IBasketService basketService,
             LinkGenerator linkGenerator,
-            IMediaItemsRepository mediaItemsRepository)
+            IMediaItemsRepository mediaItemsRepository,
+            IOptions<AppSettings> options,
+            IProductsService productsService)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -69,9 +76,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _orderResources = orderResources;
             _modalModelBuilder = modalModelBuilder;
             _mediaItemsRepository = mediaItemsRepository;
+            _options = options;
+            _productsService = productsService;
         }
 
-        public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<ProductDetailViewModel> BuildModelAsync(ProductsComponentModel componentModel)
         {
             var viewModel = new ProductDetailViewModel
             {
@@ -101,7 +110,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 SeeLessText = _globalLocalizer.GetString("SeeLessText")
             };
 
-            var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
+            var product = await _productsService.GetProductAsync(componentModel.Token, componentModel.Language, componentModel.Id, componentModel.UserEmail);
 
             if (product != null)
             {
@@ -109,6 +118,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 viewModel.ProductId = product.Id;
                 viewModel.Title = product.Name;
                 viewModel.BrandName = product.BrandName;
+                viewModel.CompletionDate = product.CompletionDate;
                 viewModel.BrandUrl = _linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId });
                 viewModel.Description = product.Description;
                 viewModel.Sku = product.Sku;
@@ -126,7 +136,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 foreach (var mediaItemId in product.Images.OrEmptyIfNull())
                 {
-                    var mediaItem = imagesMediaItems.FirstOrDefault(x =>  x.Id == mediaItemId);
+                    var mediaItem = imagesMediaItems.FirstOrDefault(x => x.Id == mediaItemId);
 
                     if (mediaItem is not null)
                     {
@@ -146,7 +156,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                         mediaItems.Add(mediaItemViewModel);
                     }
-                }                
+                }
 
                 viewModel.MediaItems = mediaItems;
 

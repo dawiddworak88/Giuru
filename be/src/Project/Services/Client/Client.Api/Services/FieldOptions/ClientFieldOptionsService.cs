@@ -38,7 +38,7 @@ namespace Client.Api.Services.FieldOptions
             {
                 throw new CustomException(_clientLocalizer.GetString("FieldDefinitionNotFound"), (int)HttpStatusCode.NoContent);
             }
-            else if (fieldDefinition.FieldType != FieldTypesConstants.SelectFieldType)
+            else if (fieldDefinition.FieldType != FieldConstants.Type.Select)
             {
                 throw new CustomException(_clientLocalizer.GetString("FieldDefinitionSelectTypeConflict"), (int)HttpStatusCode.Conflict);
             }

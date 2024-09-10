@@ -28,6 +28,7 @@
             public static readonly string ProductSuggestionsApiEndpoint = "/api/v1/productsuggestions";
             public static readonly string ProductFilesApiEndpoint = "/api/v1/products/files";
             public static readonly string ProductsSkusApiEndpoint = "/api/v1/products/skus";
+            public static readonly string CompletionDatesEndpoint = "/api/v1/completiondates";
         }
 
         public struct Client
@@ -37,6 +38,7 @@
             public static readonly string ApplicationsApiEndpoint = "/api/v1/clientsapplications";
             public static readonly string ManagersApiEndpoint = "/api/v1/clientaccountmanagers";
             public static readonly string ClientsApiEndpoint = "/api/v1/clients";
+            public static readonly string ClientsByEmailApiEndpoint = "/api/v1/clients/email";
             public static readonly string AddressesApiEndpoint = "/api/v1/clientaddresses";
             public static readonly string NotificationTypesApiEndpoint = "/api/v1/clientnotificationtypes";
             public static readonly string NotificationTypesApiApprovalEndpoint = "/api/v1/clientnotificationtypeapprovals";

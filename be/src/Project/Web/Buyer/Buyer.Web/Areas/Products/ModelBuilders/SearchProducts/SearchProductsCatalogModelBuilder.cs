@@ -70,6 +70,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 null,
                 null,
                 null,
+                null,
                 componentModel.Language,
                 componentModel.SearchTerm,
                 true,

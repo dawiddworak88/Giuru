@@ -1,12 +1,11 @@
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import { Button, CircularProgress } from "@mui/material";
+import { Button } from "@mui/material";
 import { Context } from "../../../../shared/stores/Store";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 
 function SettingsForm(props) {
-
     const [state, dispatch] = useContext(Context);
     const [reindexProductsDisable, setReindexProductsDisable] = useState(false);
 
@@ -15,7 +14,7 @@ function SettingsForm(props) {
         e.preventDefault();
 
         setReindexProductsDisable(true);
-        
+
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const requestOptions = {
@@ -52,7 +51,7 @@ function SettingsForm(props) {
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
-                    <div>
+                    <div className="field">
                         <Button type="button" onClick={handleReindexProductsClick} variant="contained" color="primary" disabled={state.isLoadingc || reindexProductsDisable}>
                             {props.reindexProductsText}
                         </Button>

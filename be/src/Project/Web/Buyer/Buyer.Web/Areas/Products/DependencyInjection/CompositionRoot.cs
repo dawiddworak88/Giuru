@@ -6,9 +6,11 @@ using Buyer.Web.Areas.Products.ModelBuilders.Products;
 using Buyer.Web.Areas.Products.ModelBuilders.SearchProducts;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Categories;
+using Buyer.Web.Areas.Products.Repositories.CompletionDates;
 using Buyer.Web.Areas.Products.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
+using Buyer.Web.Areas.Products.Services.CompletionDates;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels;
 using Buyer.Web.Areas.Products.ViewModels.AvailableProducts;
@@ -30,21 +32,23 @@ namespace Buyer.Web.Areas.Products.DependencyInjection
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddScoped<IOutletRepository, OutletRepository>();
+            services.AddScoped<ICompletionDatesRepository, CompletionDatesRepository>();
 
             services.AddScoped<IProductsService, ProductsService>();
+            services.AddScoped<ICompletionDatesService, CompletionDatesService>();
 
             services.AddScoped<IAsyncComponentModelBuilder<SearchProductsComponentModel, SearchProductsPageViewModel>, SearchProductsPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel>, SearchProductsCatalogModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, AvailableProductsPageViewModel>, AvailableProductsPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel>, AvailableProductsCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ProductsComponentModel, AvailableProductsPageViewModel>, AvailableProductsPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ProductsComponentModel, AvailableProductsCatalogViewModel>, AvailableProductsCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<SearchProductsComponentModel, CategoryPageViewModel>, CategoryPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel>, CategoryCatalogModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel>, ProductPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel>, ProductDetailModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ProductsComponentModel, ProductPageViewModel>, ProductPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ProductsComponentModel, ProductDetailViewModel>, ProductDetailModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CategoryBreadcrumbsViewModel>, CategoryBreadcrumbsModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductBreadcrumbsViewModel>, ProductBreadcrumbsModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OutletPageViewModel>, OutletPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OutletPageCatalogViewModel>, OutletCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ProductsComponentModel, OutletPageViewModel>, OutletPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ProductsComponentModel, OutletPageCatalogViewModel>, OutletCatalogModelBuilder>();
         }
     }
 }

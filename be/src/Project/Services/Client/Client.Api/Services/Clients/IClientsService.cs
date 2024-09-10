@@ -15,5 +15,6 @@ namespace Client.Api.Services.Clients
         Task<ClientServiceModel> CreateAsync(CreateClientServiceModel serviceModel);
         PagedResults<IEnumerable<ClientServiceModel>> GetByIds(GetClientsByIdsServiceModel model);
         Task<ClientServiceModel> GetBySellerIdAsync(GetClientBySellerIdServiceModel model);
+        Task<ClientServiceModel> GetByEmailAsync(GetClientByEmailServiceModel model);
     }
 }

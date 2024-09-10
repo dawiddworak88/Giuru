@@ -1,5 +1,4 @@
 ﻿using Client.Api.Infrastructure;
-using Client.Api.Infrastructure.Clients.Entities;
 using Client.Api.Infrastructure.Groups.Entities;
 using Client.Api.Infrastructure.Managers.Entities;
 using Client.Api.ServicesModels.Clients;
@@ -355,6 +354,49 @@ namespace Client.Api.Services.Clients
                           };
 
             return await clients.FirstOrDefaultAsync();
+        }
+
+        public async Task<ClientServiceModel> GetByEmailAsync(GetClientByEmailServiceModel model)
+        {
+            var existingClient = await _context.Clients.FirstOrDefaultAsync(x => x.SellerId == model.OrganisationId.Value && x.Email == model.Email && x.IsActive);
+
+            if (existingClient is null)
+            {
+                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
+            }
+
+            var client = new ClientServiceModel
+            {
+                Id = existingClient.Id,
+                Name = existingClient.Name,
+                Email = existingClient.Email,
+                CountryId = existingClient.CountryId,
+                PreferedCurrencyId = existingClient.CurrencyId,
+                OrganisationId = existingClient.OrganisationId,
+                CommunicationLanguage = existingClient.Language,
+                PhoneNumber = existingClient.PhoneNumber,
+                IsDisabled = existingClient.IsDisabled,
+                DefaultDeliveryAddressId = existingClient.DefaultDeliveryAddressId,
+                DefaultBillingAddressId = existingClient.DefaultBillingAddressId,
+                LastModifiedDate = existingClient.LastModifiedDate,
+                CreatedDate = existingClient.CreatedDate
+            };
+
+            var clientGroups = _context.ClientsGroups.Where(x => x.ClientId == existingClient.Id && x.IsActive).Select(x => x.GroupId);
+
+            if (clientGroups is not null)
+            {
+                client.ClientGroupIds = clientGroups;
+            }
+
+            var clientManagers = _context.ClientsAccountManagers.Where(x => x.ClientId == existingClient.Id && x.IsActive).Select(x => x.ClientManagerId);
+
+            if (clientManagers is not null)
+            {
+                client.ClientManagerIds = clientManagers;
+            }
+
+            return client;
         }
     }
 }

@@ -69,6 +69,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 null,
                 categoryId,
                 brandId,
+                null,
                 CultureInfo.CurrentUICulture.Name,
                 searchTerm,
                 false,

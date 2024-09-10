@@ -20,8 +20,6 @@ namespace Global.Api.Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "6.0.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
             modelBuilder.Entity("Global.Api.Infrastructure.Entities.Countries.Country", b =>
                 {
                     b.Property<Guid>("Id")
@@ -81,7 +79,7 @@ namespace Global.Api.Infrastructure.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("CountryTranslations");
+                    b.ToTable("CountryTranslations", (string)null);
                 });
 
             modelBuilder.Entity("Global.Api.Infrastructure.Entities.Currencies.Currency", b =>
@@ -112,7 +110,7 @@ namespace Global.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Currencies");
+                    b.ToTable("Currencies", (string)null);
                 });
 
             modelBuilder.Entity("Global.Api.Infrastructure.Entities.Currencies.CurrencyTranslation", b =>
@@ -148,7 +146,7 @@ namespace Global.Api.Infrastructure.Migrations
 
                     b.HasIndex("CurrencyId");
 
-                    b.ToTable("CurrenciesTranslations");
+                    b.ToTable("CurrenciesTranslations", (string)null);
                 });
 
             modelBuilder.Entity("Global.Api.Infrastructure.Entities.Countries.CountryTranslation", b =>

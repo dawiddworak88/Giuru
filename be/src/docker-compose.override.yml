@@ -447,6 +447,7 @@ services:
       - CatalogUrl=http://catalog-api:8080
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - CompletionDatesUrl=http://host.docker.internal:5000
       - InventoryUrl=http://inventory-api:8080
       - OrderUrl=http://ordering-api:8080
       - BasketUrl=http://basket-api:8080
