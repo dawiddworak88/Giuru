@@ -1,6 +1,10 @@
 .popup {
     z-index: 1;
 
+    &__button {
+        font-family: $family-primary;
+    }
+
     &__body {
         min-width: 13rem;
         background-color: $white;
