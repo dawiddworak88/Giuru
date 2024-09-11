@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Autosuggest from "react-autosuggest";
 import { toast } from "react-toastify";
 import { Button, FormControl, MenuItem, Select, Drawer, Tabs, Tab } from "@mui/material";
@@ -18,11 +18,17 @@ import ColorConstants from "../../constants/ColorConstants";
 const Search = (props) => {
     const [suggestions, setSuggestions] = useState([]);
     const [searchHistory, setSearchHistory] = useState([]);
-    const [searchArea, setSearchArea] = useState(HeaderConstants.searchAreaAllValue);
+    const [searchArea, setSearchArea] = useState(HeaderConstants.searchAreaAll());
     const [searchTerm, setSearchTerm] = useState(props.searchTerm ? props.searchTerm : "");
     const [state, dispatch] = useContext(Context);
     const [open, setOpen] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setSearchArea(localStorage.getItem("searchArea"))
+        }
+    }, []);
 
     const onSuggestionsFetchRequested = (args) => {
         setSearchTerm(args.value);
@@ -100,6 +106,10 @@ const Search = (props) => {
     const clearSearchHistory = () => {
         localStorage.removeItem('searchHistory');
         setSearchHistory([]);
+    }
+
+    const saveSearchArea = (newSearchArea) => {
+        localStorage.setItem('searchArea', newSearchArea);
     }
 
     const renderSuggestion = (suggestion) => {
@@ -283,6 +293,7 @@ const Search = (props) => {
                                 onChange={(e) => {
                                     setSearchArea(e.target.value);
                                     setSuggestions([]);
+                                    saveSearchArea(e.target.value);
                                 }}
                                 displayEmpty
                                 IconComponent={props => <ArrowShowMoreCategoryIcon {...props} />}
