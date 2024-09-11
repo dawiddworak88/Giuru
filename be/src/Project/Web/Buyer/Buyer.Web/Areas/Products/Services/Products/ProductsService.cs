@@ -116,7 +116,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
         public async Task<IEnumerable<ProductSuggestionViewModel>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token)
         {
-            var products = await _productsRepository.GetProductsAsync(
+            var products = await GetProductsAsync(
                 null,
                 null,
                 null,
@@ -125,16 +125,15 @@ namespace Buyer.Web.Areas.Products.Services.Products
                 true,
                 PaginationConstants.DefaultPageIndex,
                 ProductConstants.ProductsCatalogPaginationPageSize,
-                token,
-                nameof(Product.Name));
+                token);
 
-            return await Task.WhenAll(products?.Data?.Select(async x => new ProductSuggestionViewModel
+            return products?.Data?.Select( x => new ProductSuggestionViewModel
             {
-                Name = x.Name,
-                Attributes = await GetProductAttributesAsync(x.ProductAttributes),
+                Name = x.Title,
+                Attributes = x.ProductAttributes,
                 Sku = x.Sku,
                 Url = _linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, x.Id }),
-            }));
+            });
         }
     }
 }
