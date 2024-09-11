@@ -8,7 +8,7 @@ export default class HeaderConstants {
         return 7;
     }
 
-    static searchAreaAllValue() {
+    static searchAreaAll() {
         return 'all';
     }
 }
