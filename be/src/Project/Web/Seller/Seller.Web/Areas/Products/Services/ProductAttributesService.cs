@@ -29,9 +29,9 @@ namespace Seller.Web.Areas.Products.Services
 
         public async Task DeleteAsync(string token, string language, Guid? id)
         {
-            var categoriesSchema = await _categoriesRepository.GetAllSchemasAsync(token, language);
+            var categorySchemas = await _categoriesRepository.GetAllSchemasAsync(token, language);
 
-            if (IsAttributeImplementInCategorySchema(id, categoriesSchema))
+            if (IsAttributeImplementInCategorySchema(id, categorySchemas))
             {
                 throw new CustomException(_productLocalizer.GetString("ProductAttributeIsInUse"), (int)HttpStatusCode.Conflict);
             }
@@ -44,15 +44,13 @@ namespace Seller.Web.Areas.Products.Services
             }
         }
 
-        private bool IsAttributeImplementInCategorySchema(Guid? id, IEnumerable<CategorySchemas> categoriesSchema)
+        private bool IsAttributeImplementInCategorySchema(Guid? id, IEnumerable<CategorySchemas> categoriesSchemas)
         {
-            var attributeId = id.ToString();
-
-            foreach (var categorySchemas in categoriesSchema.OrEmptyIfNull())
+            foreach (var categorySchemas in categoriesSchemas.OrEmptyIfNull())
             {
                 foreach (var categorySchema in categorySchemas.Schemas.OrEmptyIfNull())
                 {
-                    if (categorySchema.Schema.Contains(attributeId))
+                    if (categorySchema.Schema.Contains(id.ToString()))
                     {
                         return true;
                     }

@@ -361,7 +361,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [Route("CategorySchemas")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<CategorySchemasResponseModel>))]
-        public async Task<IActionResult> GetAllSchemas()
+        public IActionResult GetAllCategorySchemas()
         {
             var categorySchemas = _categoryService.GetAllCategorySchemas();
 
