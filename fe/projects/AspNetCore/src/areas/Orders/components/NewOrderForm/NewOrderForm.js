@@ -95,14 +95,27 @@ function NewOrderForm(props) {
         };
 
         if (isStock) {
-            if (quantity > product.stockQuantity) {
-                orderItem.quantity = quantity - product.stockQuantity;
-                orderItem.stockQuantity = product.stockQuantity;
+            if (orderItems.some(x => x.sku === product.sku)) {
+                var items = orderItems.filter(x => x.sku === product.sku)
+                var itemsStockQuantity = items.reduce((sum, item) => sum + item.stockQuantity, 0);
+
+                if (itemsStockQuantity >= product.stockQuantity) {
+                    orderItem.quantity = quantity;
+                }
+                else {
+                    orderItem.quantity = quantity - (product.stockQuantity - itemsStockQuantity);
+                    orderItem.stockQuantity = product.stockQuantity - quantity;
+                }
             }
             else {
-                orderItem.stockQuantity = quantity;
+                if (quantity > product.stockQuantity) {
+                    orderItem.quantity = quantity - product.stockQuantity;
+                    orderItem.stockQuantity = product.stockQuantity;
+                }
+                else {
+                    orderItem.stockQuantity = quantity;
+                }
             }
-
         }
         else {
             orderItem.quantity = quantity;
