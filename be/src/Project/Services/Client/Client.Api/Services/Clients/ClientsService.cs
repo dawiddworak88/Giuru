@@ -332,29 +332,5 @@ namespace Client.Api.Services.Clients
 
             return await clients.FirstOrDefaultAsync();
         }
-
-        public async Task<ClientServiceModel> GetBySellerIdAsync(GetClientBySellerIdServiceModel model)
-        {
-            var clients = from c in _context.Clients
-                          where c.SellerId == model.Id.Value && c.IsActive
-                          select new ClientServiceModel
-                          {
-                              Id = c.Id,
-                              Name = c.Name,
-                              Email = c.Email,
-                              CountryId = c.CountryId,
-                              OrganisationId = c.OrganisationId,
-                              PreferedCurrencyId = c.CurrencyId,
-                              CommunicationLanguage = c.Language,
-                              PhoneNumber = c.PhoneNumber,
-                              IsDisabled = c.IsDisabled,
-                              DefaultDeliveryAddressId = c.DefaultDeliveryAddressId,
-                              DefaultBillingAddressId = c.DefaultBillingAddressId,
-                              LastModifiedDate = c.LastModifiedDate,
-                              CreatedDate = c.CreatedDate
-                          };
-
-            return await clients.FirstOrDefaultAsync();
-        }
     }
 }
