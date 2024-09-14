@@ -18,7 +18,7 @@ function CategoryForm(props) {
         files: { value: props.files ? props.files : [] },
         schemas: { value: props.schemas ? props.schemas : null},         
         uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : null }
-    };    
+    };
 
     const stateValidatorSchema = {
         name: {
