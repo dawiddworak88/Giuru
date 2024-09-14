@@ -2,7 +2,6 @@
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
-using Identity.Api.Areas.Accounts.Models;
 using Identity.Api.Areas.Accounts.Repositories.ClientNotificationTypes;
 using Identity.Api.Areas.Accounts.Repositories.Clients;
 using Identity.Api.Areas.Accounts.Services.UserServices;
@@ -19,7 +18,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -123,24 +121,6 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                     if (user is not null)
                     {
                         await _userService.SignInAsync(user.Email, model.Password, null, null);
-
-                        if (model.ClientApprovals.Any())
-                        {
-                            var token = await _tokenService.GetTokenAsync(_options.Value.ApiEmail, _options.Value.ApiOrganisationId, _options.Value.ApiAppSecret);
-
-                            var client = await _clientRepository.GetByOrganisationAsync(token, language, user.OrganisationId);
-                            
-                            if (client is not null && client.Id.HasValue)
-                            {
-                                var clientApprovals = new ClientNotificationTypeApprovals
-                                {
-                                    ClientId = client.Id.Value,
-                                    ClientApprovals = model.ClientApprovals
-                                };
-
-                                await _clientNotificationTypeRepository.SaveAsync(token, language, clientApprovals);
-                            }
-                        }
 
                         return StatusCode((int)HttpStatusCode.Redirect, new { Url = string.IsNullOrWhiteSpace(model.ReturnUrl) ? _options.Value.BuyerUrl : model.ReturnUrl });
                     }

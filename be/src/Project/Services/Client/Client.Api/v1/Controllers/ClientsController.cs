@@ -221,18 +221,17 @@ namespace Client.Api.v1.Controllers
         /// </summary>
         /// <returns>The client.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [Route("organisation/{id}")]
+        [Route("organisation")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetByOrganisation(Guid? id)
+        public async Task<IActionResult> GetByOrganisation()
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-
             var serviceModel = new GetClientByOrganisationServiceModel
             {
-                Id = id
+                Id = GuidHelper.ParseNullable(sellerClaim?.Value),
             };
 
             var validator = new GetClientByOrganisationModelValidator();
@@ -253,62 +252,6 @@ namespace Client.Api.v1.Controllers
                         CountryId = client.CountryId,
                         PreferedCurrencyId = client.PreferedCurrencyId,
                         PhoneNumber = client.PhoneNumber,
-                        OrganisationId = client.OrganisationId,
-                        IsDisabled = client.IsDisabled,
-                        ClientGroupIds = client.ClientGroupIds,
-                        ClientManagerIds = client.ClientManagerIds,
-                        DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
-                        DefaultBillingAddressId = client.DefaultBillingAddressId,
-                        LastModifiedDate = client.LastModifiedDate,
-                        CreatedDate = client.CreatedDate
-                    };
-
-                    return StatusCode((int)HttpStatusCode.OK, response);
-                }
-                else
-                {
-                    return StatusCode((int)HttpStatusCode.NoContent);
-                }
-
-            }
-
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
-        }
-
-        [HttpGet, MapToApiVersion("1.0")]
-        [Route("seller/{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetBySellerId(Guid? id)
-        {
-            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-
-            var serviceModel = new GetClientBySellerIdServiceModel
-            {
-                Id = id
-            };
-
-            var validator = new GetClientBySellerIdModelValiodator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
-
-            if (validationResult.IsValid)
-            {
-                var client = await _clientsService.GetBySellerIdAsync(serviceModel);
-
-                if (client is not null)
-                {
-                    var response = new ClientResponseModel
-                    {
-                        Id = client.Id,
-                        Email = client.Email,
-                        Name = client.Name,
-                        CommunicationLanguage = client.CommunicationLanguage,
-                        CountryId = client.CountryId,
-                        PreferedCurrencyId = client.PreferedCurrencyId,
-                        PhoneNumber = client.PhoneNumber,
-                        OrganisationId = client.OrganisationId,
                         IsDisabled = client.IsDisabled,
                         ClientGroupIds = client.ClientGroupIds,
                         ClientManagerIds = client.ClientManagerIds,
