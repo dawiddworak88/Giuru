@@ -22,14 +22,14 @@ namespace Identity.Api.Areas.Accounts.Repositories.Clients
             _settings = settings;
         }
 
-        public async Task<Client> GetByOrganisationAsync(string token, string language, Guid? id)
+        public async Task<Client> GetByOrganisationAsync(string token, string language)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Identity.ClientByOrganisationApiEndpoint}/{id}"
+                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Identity.ClientByOrganisationApiEndpoint}"
             };
 
             var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Client>(apiRequest);

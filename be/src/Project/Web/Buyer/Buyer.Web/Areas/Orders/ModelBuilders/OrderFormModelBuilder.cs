@@ -105,7 +105,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 
             if (componentModel.SellerId.HasValue)
             {
-                var client = await _clientsRepository.GetClientAsync(componentModel.Token, componentModel.Language, componentModel.SellerId);
+                var client = await _clientsRepository.GetClientAsync(componentModel.Token, componentModel.Language);
 
                 if (client is not null)
                 {

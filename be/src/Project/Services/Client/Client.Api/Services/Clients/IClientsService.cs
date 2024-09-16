@@ -14,6 +14,5 @@ namespace Client.Api.Services.Clients
         Task<ClientServiceModel> UpdateAsync(UpdateClientServiceModel serviceModel);
         Task<ClientServiceModel> CreateAsync(CreateClientServiceModel serviceModel);
         PagedResults<IEnumerable<ClientServiceModel>> GetByIds(GetClientsByIdsServiceModel model);
-        Task<ClientServiceModel> GetBySellerIdAsync(GetClientBySellerIdServiceModel model);
     }
 }
