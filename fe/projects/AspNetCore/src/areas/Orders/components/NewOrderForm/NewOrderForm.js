@@ -103,8 +103,13 @@ function NewOrderForm(props) {
                     orderItem.quantity = quantity;
                 }
                 else {
-                    orderItem.quantity = quantity - (product.stockQuantity - itemsStockQuantity);
-                    orderItem.stockQuantity = product.stockQuantity - quantity;
+                    if (itemsStockQuantity + quantity >= product.stockQuantity) {
+                        orderItem.quantity = quantity - (product.stockQuantity - itemsStockQuantity);
+                        orderItem.stockQuantity = quantity - orderItem.quantity;
+                    }
+                    else {
+                        orderItem.stockQuantity = quantity;
+                    }   
                 }
             }
             else {
