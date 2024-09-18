@@ -2,6 +2,7 @@
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Localization;
 using Microsoft.Extensions.Localization;
+using Newtonsoft.Json.Linq;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
 using System;
@@ -50,7 +51,9 @@ namespace Seller.Web.Areas.Products.Services
             {
                 foreach (var categorySchema in categorySchemas.Schemas.OrEmptyIfNull())
                 {
-                    if (categorySchema.Schema.Contains(id.ToString()))
+                    var jsonObject = JObject.Parse(categorySchema.Schema);
+
+                    if (jsonObject.ContainsKey(id.ToString()))
                     {
                         return true;
                     }
