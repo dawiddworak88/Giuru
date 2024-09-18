@@ -7,6 +7,7 @@ using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -51,11 +52,21 @@ namespace Seller.Web.Areas.Products.Services
             {
                 foreach (var categorySchema in categorySchemas.Schemas.OrEmptyIfNull())
                 {
-                    var jsonObject = JObject.Parse(categorySchema.Schema);
+                    var schemaProperties = JObject.Parse(categorySchema.Schema)["properties"];
 
-                    if (jsonObject.ContainsKey(id.ToString()))
+                    foreach (var property in schemaProperties)
                     {
-                        return true;
+                        var refValue = property.FirstOrDefault()[$"$ref"];
+
+                        if (refValue is not null)
+                        {
+                            var values = refValue.ToString().Split("/");
+
+                            if (values.Any(x => x == id.ToString()))
+                            {
+                                return true;
+                            }
+                        }
                     }
                 }
             }
