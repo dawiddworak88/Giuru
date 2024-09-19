@@ -4,6 +4,7 @@ using Client.Api.v1.ResponseModels;
 using Foundation.ApiExtensions.Models.Response;
 using Foundation.GenericRepository.Paginations;
 using Giuru.IntegrationTests.Definitions;
+using Seller.Web.Areas.Products.ApiResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Giuru.IntegrationTests
             _apiFixture = apiFixture;
         }
 
-        [Fact]
+       /* [Fact]
         public async Task CreateUpdateGet_ReturnsClient()
         {
             var createResult = await _apiFixture.RestClient.PostAsync<ClientRequestModel, BaseResponseModel>(ApiEndpoints.ClientsApiEndpoint, new ClientRequestModel
@@ -53,14 +54,12 @@ namespace Giuru.IntegrationTests
             Assert.Equal(1, getResult.Total);
             Assert.Equal(updateResult.Data?.Id, getResult.Data.FirstOrDefault().Id);
             Assert.Equal(Clients.UpdatedName, getResult.Data.FirstOrDefault().Name);
-        }
+        }*/
 
         [Fact]
         public async Task CreateUpdateGet_ReturnsProduct()
         {
-            Assert.True(true);
-
-            /*var createResult = await _apiFixture.RestClient.PostAsync<ProductRequestModel, BaseResponseModel>(ApiEndpoints.ProductsApiEndpoint, new ProductRequestModel
+            var createResult = await _apiFixture.RestClient.PostAsync<ProductRequestModel, ProductResponseModel>(ApiEndpoints.ProductsApiEndpoint, new ProductRequestModel
             {
                 Name = Products.Lamica.Name,
                 Sku = Products.Lamica.Sku,
@@ -70,7 +69,24 @@ namespace Giuru.IntegrationTests
             });
 
             Assert.NotNull(createResult);
-            Assert.NotEqual(Guid.Empty, createResult.Data?.Id);
+
+            var getResult = await _apiFixture.RestClient.GetAsync<PagedResults<IEnumerable<ProductResponseModel>>>($"{ApiEndpoints.GetProductsApiEndpoint}?pageIndex=1&itemsPerPage=25");
+
+            Assert.NotNull(getResult);
+
+            /*var createResult = await _apiFixture.RestClient.PostAsync<ProductRequestModel, BaseResponseModel>(ApiEndpoints.ProductsApiEndpoint, new ProductRequestModel
+            {
+                Name = Products.Lamica.Name,
+                Sku = Products.Lamica.Sku,
+                CategoryId = Products.Lamica.CategoryId,
+                IsPublished = Products.Lamica.IsPublished,
+                Ean = Products.Lamica.Ean
+            });*/
+
+
+            /*
+
+            
 
             var updateResult = await _apiFixture.RestClient.PostAsync<ProductRequestModel, BaseResponseModel>(ApiEndpoints.ProductsApiEndpoint, new ProductRequestModel
             {

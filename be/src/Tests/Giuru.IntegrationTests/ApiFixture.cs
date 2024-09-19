@@ -29,9 +29,10 @@ namespace Giuru.IntegrationTests
         private ElasticsearchContainer _elasticsearchContainer;
         private IContainer _mockAuthContainer;
         private IContainer _clientApiContainer;
+        private IContainer _catalogApiContainer;
+        private IContainer _catalogBackgroundTasksContainer;
         /*        
-                private IContainer _catalogApiContainer;
-                private IContainer _catalogBackgroundTasksContainer;
+                
                 private IContainer _orderingApiContainer;
                 private IContainer _basketApiContainer;
                 */
@@ -138,42 +139,7 @@ namespace Giuru.IntegrationTests
 
             await _clientApiContainer.StartAsync();
 
-            var tokenClient = new TokenClient(new HttpClient());
-            var token = await tokenClient.GetTokenAsync($"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}/api/token");
-
-            var sellerWebFactpry = new WebApplicationFactory<Program>()
-                .WithWebHostBuilder(builder =>
-                {
-                    builder.UseSetting("ASPNETCORE_HTTP_PORTS", "8080");
-                    builder.UseSetting("ASPNETCORE_ENVIRONMENT", "Development");
-                    builder.UseSetting("RedisUrl", "redis,abortConnect=false");
-                    builder.UseSetting("ClientId", "663bba90-0036-4a58-8516-39faa8baba87");
-                    builder.UseSetting("ClientSecret", "c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9");
-                    builder.UseSetting("ClientUrl", $"http://{_clientApiContainer.Hostname}:{_clientApiContainer.GetMappedPublicPort(8080)}");
-                    //builder.UseSetting("CatalogUrl", $"http://{_catalogApiContainer.Hostname}:{_catalogApiContainer.GetMappedPublicPort(8080)}");
-                    builder.UseSetting("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}");
-                    builder.UseSetting("SupportedCultures", "de,en,pl");
-                    builder.UseSetting("DefaultCulture", "en");
-
-                    builder.ConfigureServices(services =>
-                    {
-                        var serviceProvider = services.BuildServiceProvider();
-                        var mockAuthHandler = serviceProvider.GetRequiredService<MockAuthenticationHandler>();
-
-                        mockAuthHandler.MockAuthToken = token;
-                    });
-                })
-                .CreateClient();
-
-            sellerWebFactpry.DefaultRequestHeaders.Accept.Clear();
-            sellerWebFactpry.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            sellerWebFactpry.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            RestClient = new RestClient(sellerWebFactpry);
-
-            /*            */
-
-            /*var catalogApiImage = new CatalogApiImage();
+            var catalogApiImage = new CatalogApiImage();
 
             await catalogApiImage.InitializeAsync();
 
@@ -191,7 +157,8 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
-                .WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
+                //.WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
+                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
                 .WithEnvironment("Brands", "4a8f8442-43b0-4223-83bb-978d5e81acc7&ELTAP&09affcc9-1665-45d6-919f-3d2026106ba1")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
@@ -218,13 +185,51 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
-                .WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
+                //.WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
+                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                 .Build();
 
-            await _catalogBackgroundTasksContainer.StartAsync();*/
+            await _catalogBackgroundTasksContainer.StartAsync();
+
+            var tokenClient = new TokenClient(new HttpClient());
+            var token = await tokenClient.GetTokenAsync($"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}/api/token");
+
+            var sellerWebFactpry = new WebApplicationFactory<Program>()
+                .WithWebHostBuilder(builder =>
+                {
+                    builder.UseSetting("ASPNETCORE_HTTP_PORTS", "8080");
+                    builder.UseSetting("ASPNETCORE_ENVIRONMENT", "Development");
+                    builder.UseSetting("RedisUrl", "redis,abortConnect=false");
+                    builder.UseSetting("ClientId", "663bba90-0036-4a58-8516-39faa8baba87");
+                    builder.UseSetting("ClientSecret", "c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9");
+                    builder.UseSetting("ClientUrl", $"http://{_clientApiContainer.Hostname}:{_clientApiContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("CatalogUrl", $"http://{_catalogApiContainer.Hostname}:{_catalogApiContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("SupportedCultures", "de,en,pl");
+                    builder.UseSetting("DefaultCulture", "en");
+
+                    builder.ConfigureServices(services =>
+                    {
+                        var serviceProvider = services.BuildServiceProvider();
+                        var mockAuthHandler = serviceProvider.GetRequiredService<MockAuthenticationHandler>();
+
+                        mockAuthHandler.MockAuthToken = token;
+                    });
+                })
+                .CreateClient();
+
+            sellerWebFactpry.DefaultRequestHeaders.Accept.Clear();
+            sellerWebFactpry.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            sellerWebFactpry.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            RestClient = new RestClient(sellerWebFactpry);
+
+            /*            */
+
+            /**/
 
             /*var orderingApiImage = new OrderingApiImage();
 
@@ -292,11 +297,11 @@ namespace Giuru.IntegrationTests
             await _clientApiContainer.StopAsync();
             await _clientApiContainer.DisposeAsync();
 
-            /*            await _catalogApiContainer.StopAsync();
-                        await _catalogApiContainer.DisposeAsync();
+            await _catalogApiContainer.StopAsync();
+            await _catalogApiContainer.DisposeAsync();
 
-                        await _catalogBackgroundTasksContainer.StopAsync();
-                        await _catalogBackgroundTasksContainer.DisposeAsync();*/
+            await _catalogBackgroundTasksContainer.StopAsync();
+            await _catalogBackgroundTasksContainer.DisposeAsync();
 
             /* await _orderingApiContainer.StopAsync();
              await _orderingApiContainer.DisposeAsync();
