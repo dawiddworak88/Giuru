@@ -28,7 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Project\Services\Catalog\Catalog.Api\Catalog.Api.csproj" />
     <ProjectReference Include="..\..\Project\Services\Client\Client.Api\Client.Api.csproj" />
-    <ProjectReference Include="..\..\Project\Web\Seller\Seller.Web\Seller.Web.csproj" />
+    <ProjectReference Include="..\..\Project\Web\Seller\Seller.Web\Seller.Web.csproj"/>
   </ItemGroup>
 
   <ItemGroup>

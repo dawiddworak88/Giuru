@@ -1,15 +1,8 @@
-﻿using Foundation.ApiExtensions.Communications;
-using Foundation.ApiExtensions.Definitions;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using System.Linq;
-using System.Web;
-using Microsoft.AspNetCore.Http;
 
 namespace Giuru.IntegrationTests.HttpClients
 {

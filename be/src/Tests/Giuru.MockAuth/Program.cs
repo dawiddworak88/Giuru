@@ -2,15 +2,18 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Giuru.MockAuth.Configurations;
+using Elastic.CommonSchema;
+using Microsoft.AspNetCore.Authentication;
+using Foundation.Account.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddIdentityServer(options =>
-{
-    options.IssuerUri = "null";
-})
+    {
+        options.IssuerUri = "null";
+    })
     .AddInMemoryApiResources(IdentityServerConfig.Apis)
     .AddInMemoryClients(IdentityServerConfig.GetClients())
     .AddDeveloperSigningCredential();
@@ -24,6 +27,14 @@ builder.Services.AddAuthentication()
         options.RequireHttpsMetadata = false;
         options.ApiName = "all";
     });
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = "MockAuth";
+    options.DefaultChallengeScheme = "MockAuth";
+})
+    .AddScheme<AuthenticationSchemeOptions, MockAuthenticationHandler>("MockAuth", options => { });
+
 
 var app = builder.Build();
 

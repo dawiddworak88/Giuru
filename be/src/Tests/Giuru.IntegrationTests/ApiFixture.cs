@@ -1,10 +1,15 @@
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using DotNet.Testcontainers.Networks;
+using Foundation.Account.Handlers;
 using Giuru.IntegrationTests.HttpClients;
 using Giuru.IntegrationTests.Images;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -23,11 +28,13 @@ namespace Giuru.IntegrationTests
         private MsSqlContainer _msSqlContainer;
         private ElasticsearchContainer _elasticsearchContainer;
         private IContainer _mockAuthContainer;
-        private IContainer _catalogApiContainer;
-        private IContainer _catalogBackgroundTasksContainer;
-        private IContainer _orderingApiContainer;
-        private IContainer _basketApiContainer;
-        public IContainer _clientApiContainer;
+        private IContainer _clientApiContainer;
+        /*        
+                private IContainer _catalogApiContainer;
+                private IContainer _catalogBackgroundTasksContainer;
+                private IContainer _orderingApiContainer;
+                private IContainer _basketApiContainer;
+                */
 
         public RestClient RestClient { get; private set; }
 
@@ -106,7 +113,67 @@ namespace Giuru.IntegrationTests
 
             await _mockAuthContainer.StartAsync();
 
-            var catalogApiImage = new CatalogApiImage();
+            var clientApiImage = new ClientApiImage();
+
+            await clientApiImage.InitializeAsync();
+
+            _clientApiContainer = new ContainerBuilder()
+                .WithName("client-api")
+                .WithImage(clientApiImage)
+                .WithNetwork(_giuruNetwork)
+                .WithExposedPort(9106)
+                .WithPortBinding(9106, 8080)
+                .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
+                .WithEnvironment("RedisUrl", "redis")
+                .WithEnvironment("ConnectionString", "Server=sqldata;Database=ClientDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
+                .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
+                .WithEnvironment("EventBusRetryCount", "5")
+                .WithEnvironment("EventBusRequestedHeartbeat", "60")
+                //.WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
+                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
+                .WithEnvironment("SupportedCultures", "de,en,pl")
+                .WithEnvironment("DefaultCulture", "en")
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .Build();
+
+            await _clientApiContainer.StartAsync();
+
+            var tokenClient = new TokenClient(new HttpClient());
+            var token = await tokenClient.GetTokenAsync($"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}/api/token");
+
+            var sellerWebFactpry = new WebApplicationFactory<Program>()
+                .WithWebHostBuilder(builder =>
+                {
+                    builder.UseSetting("ASPNETCORE_HTTP_PORTS", "8080");
+                    builder.UseSetting("ASPNETCORE_ENVIRONMENT", "Development");
+                    builder.UseSetting("RedisUrl", "redis,abortConnect=false");
+                    builder.UseSetting("ClientId", "663bba90-0036-4a58-8516-39faa8baba87");
+                    builder.UseSetting("ClientSecret", "c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9");
+                    builder.UseSetting("ClientUrl", $"http://{_clientApiContainer.Hostname}:{_clientApiContainer.GetMappedPublicPort(8080)}");
+                    //builder.UseSetting("CatalogUrl", $"http://{_catalogApiContainer.Hostname}:{_catalogApiContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("SupportedCultures", "de,en,pl");
+                    builder.UseSetting("DefaultCulture", "en");
+
+                    builder.ConfigureServices(services =>
+                    {
+                        var serviceProvider = services.BuildServiceProvider();
+                        var mockAuthHandler = serviceProvider.GetRequiredService<MockAuthenticationHandler>();
+
+                        mockAuthHandler.MockAuthToken = token;
+                    });
+                })
+                .CreateClient();
+
+            sellerWebFactpry.DefaultRequestHeaders.Accept.Clear();
+            sellerWebFactpry.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            sellerWebFactpry.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            RestClient = new RestClient(sellerWebFactpry);
+
+            /*            */
+
+            /*var catalogApiImage = new CatalogApiImage();
 
             await catalogApiImage.InitializeAsync();
 
@@ -157,9 +224,9 @@ namespace Giuru.IntegrationTests
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                 .Build();
 
-            await _catalogBackgroundTasksContainer.StartAsync();
+            await _catalogBackgroundTasksContainer.StartAsync();*/
 
-            var orderingApiImage = new OrderingApiImage();
+            /*var orderingApiImage = new OrderingApiImage();
 
             await orderingApiImage.InitializeAsync();
 
@@ -205,42 +272,7 @@ namespace Giuru.IntegrationTests
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                 .Build();
 
-            await _basketApiContainer.StartAsync();
-
-            var clientApiImage = new ClientApiImage();
-
-            await clientApiImage.InitializeAsync();
-
-            _clientApiContainer = new ContainerBuilder()
-                .WithName("client-api")
-                .WithImage(clientApiImage)
-                .WithNetwork(_giuruNetwork)
-                .WithExposedPort(9106)
-                .WithPortBinding(9106, 8080)
-                .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
-                .WithEnvironment("RedisUrl", "redis")
-                .WithEnvironment("ConnectionString", "Server=sqldata;Database=ClientDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
-                .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
-                .WithEnvironment("EventBusRetryCount", "5")
-                .WithEnvironment("EventBusRequestedHeartbeat", "60")
-                .WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
-                .WithEnvironment("SupportedCultures", "de,en,pl")
-                .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
-                .Build();
-
-            await _clientApiContainer.StartAsync();
-
-            var tokenClient = new TokenClient(new HttpClient());
-            var token = await tokenClient.GetTokenAsync($"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}/api/token");
-
-            var httpClient = new HttpClient();
-
-            httpClient.DefaultRequestHeaders.Accept.Clear();
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            RestClient = new RestClient(httpClient);
+            await _basketApiContainer.StartAsync();*/
         }
 
         public async Task DisposeAsync()
@@ -257,23 +289,23 @@ namespace Giuru.IntegrationTests
             await _mockAuthContainer.StopAsync();
             await _mockAuthContainer.DisposeAsync();
 
-            await _catalogApiContainer.StopAsync();
-            await _catalogApiContainer.DisposeAsync();
+            await _clientApiContainer.StopAsync();
+            await _clientApiContainer.DisposeAsync();
 
-            await _catalogBackgroundTasksContainer.StopAsync();
-            await _catalogBackgroundTasksContainer.DisposeAsync();
+            /*            await _catalogApiContainer.StopAsync();
+                        await _catalogApiContainer.DisposeAsync();
 
-            await _orderingApiContainer.StopAsync();
-            await _orderingApiContainer.DisposeAsync();
+                        await _catalogBackgroundTasksContainer.StopAsync();
+                        await _catalogBackgroundTasksContainer.DisposeAsync();*/
 
-            await _basketApiContainer.StopAsync();
-            await _basketApiContainer.DisposeAsync();
+            /* await _orderingApiContainer.StopAsync();
+             await _orderingApiContainer.DisposeAsync();
+
+             await _basketApiContainer.StopAsync();
+             await _basketApiContainer.DisposeAsync();*/
 
             await _rabbitMqContainer.StopAsync();
             await _rabbitMqContainer.DisposeAsync();
-
-            await _clientApiContainer.StopAsync();
-            await _clientApiContainer.DisposeAsync();
 
             await _giuruNetwork.DisposeAsync();
         }

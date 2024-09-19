@@ -2,7 +2,8 @@
 {
     public struct ApiEndpoints
     {
-        public const string ClientsApiEndpoint = "/api/v1/clients";
-        public const string ProductsApiEndpoint = "/api/v1/products";
+        public const string ClientsApiEndpoint = "en/Clients/ClientsApi";
+        public const string GetClientsApiEndpoint = "en/Clients/ClientsApi/Get";
+        public const string ProductsApiEndpoint = "en/Products/ProductsApi";
     }
 }

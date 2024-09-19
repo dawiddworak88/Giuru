@@ -36,4 +36,8 @@
 	  <PackageReference Include="Serilog.Sinks.Logz.Io" Version="7.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Account\Foundation.Account\Foundation.Account.csproj" />
+  </ItemGroup>
+
 </Project>
