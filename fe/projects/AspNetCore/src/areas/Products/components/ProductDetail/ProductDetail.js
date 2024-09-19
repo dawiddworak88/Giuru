@@ -161,12 +161,12 @@ function ProductDetail(props) {
                                         <div className="product-detail__desktop-gallery__desktop-product-image" onClick={() => handleImageModal(index)}>
                                             <LazyLoad offset={LazyLoadConstants.defaultOffset()} key={index}>
                                                 {mediaItem.mimeType.startsWith("image") ? (
-                                                        <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
-                                                    ) : (
-                                                        <video autoPlay loop muted playsInline preload='auto'>
-                                                            <source src={mediaItem.mediaSrc} type={mediaItem.mimeType}  />
-                                                        </video>
-                                                    )}
+                                                    <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
+                                                ) : (
+                                                    <video autoPlay loop muted playsInline preload='auto'>
+                                                        <source src={mediaItem.mediaSrc} type={mediaItem.mimeType} />
+                                                    </video>
+                                                )}
                                             </LazyLoad>
                                         </div>
                                     ))
@@ -178,14 +178,14 @@ function ProductDetail(props) {
                                                     <ResponsiveImage sources={props.mediaItems[0].sources} imageSrc={props.mediaItems[0].mediaSrc} imageAlt={props.mediaItems[0].mediaAlt} imageTitle={props.title} />
                                                 ) : (
                                                     <video autoPlay loop muted playsInline preload='auto'>
-                                                        <source src={props.mediaItems[0].mediaSrc} type={props.mediaItems[0].mimeType}  />
+                                                        <source src={props.mediaItems[0].mediaSrc} type={props.mediaItems[0].mimeType} />
                                                     </video>
                                                 )}
                                             </LazyLoad>
                                         </div>
                                     )
                                 )}
-                               
+
                             </div>
                             {props.mediaItems && props.mediaItems.length > 6 &&
                                 <div className="product-detail__more-product-images">
@@ -227,7 +227,7 @@ function ProductDetail(props) {
                                                         <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
                                                     ) : (
                                                         <video autoPlay loop muted playsInline preload='auto'>
-                                                            <source src={mediaItem.mediaSrc} type={mediaItem.mimeType}  />
+                                                            <source src={mediaItem.mediaSrc} type={mediaItem.mimeType} />
                                                         </video>
                                                     )}
                                                 </LazyLoad>
@@ -297,11 +297,12 @@ function ProductDetail(props) {
                                             <div className="product-detail__product-information-list">
                                                 <dl>
                                                     {props.features.map((item, index) =>
-                                                        <Fragment key={item.key}>
-                                                            <dt>{item.key}</dt>
-                                                            <dd>{item.value}</dd>
-                                                        </Fragment>
-                                                    )}
+                                                        item.value && item.value.trim() !== '' && (
+                                                            <Fragment key={item.key}>
+                                                                <dt>{item.key}</dt>
+                                                                <dd>{item.value}</dd>
+                                                            </Fragment>
+                                                    ))}
                                                 </dl>
                                             </div>
                                         </div>
