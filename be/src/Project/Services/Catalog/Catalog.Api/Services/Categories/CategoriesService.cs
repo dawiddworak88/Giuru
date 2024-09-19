@@ -379,27 +379,6 @@ namespace Catalog.Api.Services.Categories
             };
         }
 
-        public IEnumerable<CategorySchemasServiceModel> GetAllCategorySchemas()
-        {
-            var categorySchemas = _context.Categories
-                .Include(x => x.Schemas)
-                .AsSingleQuery();
-
-            return categorySchemas.OrEmptyIfNull().Select(x => new CategorySchemasServiceModel
-            {
-                Id = x.Id,
-                Schemas = x.Schemas.Select(y => new CategorySchemaServiceModel
-                {
-                    Id = y.Id,
-                    Schema = y.Schema,
-                    UiSchema = y.UiSchema,
-                    Language = y.Language
-                }),
-                LastModifiedDate = x.LastModifiedDate,
-                CreatedDate = x.CreatedDate
-            });
-        }
-
         private void TriggerCategoryProductsIndexRebuild(RebuildCategoryProductsIndexServiceModel model)
         {
             using var source = new ActivitySource(GetType().Name);

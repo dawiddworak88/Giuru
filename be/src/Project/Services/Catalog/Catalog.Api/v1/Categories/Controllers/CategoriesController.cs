@@ -355,34 +355,6 @@ namespace Catalog.Api.v1.Categories.Controllers
         }
 
         /// <summary>
-        /// Gets list of category schemas.
-        /// </summary>
-        /// <returns>The list of category schemas.</returns>
-        [HttpGet, MapToApiVersion("1.0")]
-        [Route("CategorySchemas")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<CategorySchemasResponseModel>))]
-        public IActionResult GetAllCategorySchemas()
-        {
-            var categorySchemas = _categoryService.GetAllCategorySchemas();
-
-            var response = categorySchemas.OrEmptyIfNull().Select(x => new CategorySchemasResponseModel
-            {
-                Id = x.Id,
-                Schemas = x.Schemas.Select(x => new CategorySchemaResponseModel
-                {
-                    Id = x.Id,
-                    Schema = x.Schema,
-                    UiSchema = x.UiSchema,
-                    Language = x.Language
-                }),
-                LastModifiedDate = x.LastModifiedDate,
-                CreatedDate = x.CreatedDate
-            });
-
-            return StatusCode((int)HttpStatusCode.OK, response);
-        }
-
-        /// <summary>
         /// Gets schemas by category id.
         /// </summary>
         /// <param name="categoryId">The category id.</param>
