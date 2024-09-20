@@ -42,10 +42,10 @@ namespace Buyer.Web.Areas.Orders.Repositories.ClientNotificationTypeApproval
                 return response.Data;
             }
 
-            if (!response.IsSuccessStatusCode)
+           /* if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
-            }
+            }*/
 
             return default;
         }

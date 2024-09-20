@@ -210,6 +210,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
                 //.WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
                 .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
+                .WithEnvironment("SendGridApiKey", "SIMPLE_SENDGRID_API_KEY")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
@@ -284,6 +285,7 @@ namespace Giuru.IntegrationTests
                     builder.UseSetting("ClientId", "663bba90-0036-4a58-8516-39faa8baba87");
                     builder.UseSetting("ClientSecret", "c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9");
                     builder.UseSetting("OrderUrl", $"http://{_orderingApiContainer.Hostname}:{_orderingApiContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("ClientUrl", $"http://{_clientApiContainer.Hostname}:{_clientApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("BasketUrl", $"http://{_basketApiContainer.Hostname}:{_basketApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("SupportedCultures", "de,en,pl");

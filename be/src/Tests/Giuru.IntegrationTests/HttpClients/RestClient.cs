@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,26 +18,34 @@ namespace Giuru.IntegrationTests.HttpClients
 
         public async Task<RestClientResponse<T>> PostAsync<S, T>(string requestUrl, S request) where S : class
         {
-            var response = await _client.PostAsync(
+            try
+            {
+                var response = await _client.PostAsync(
                     requestUrl,
                     new StringContent(JsonConvert.SerializeObject(request, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }),
                     Encoding.UTF8,
                     "application/json"));
 
-            var result = await response.Content.ReadAsStringAsync();
+                var result = await response.Content.ReadAsStringAsync();
 
-            var apiResponse = new RestClientResponse<T>
-            {
-                IsSuccessStatusCode = response.IsSuccessStatusCode,
-                StatusCode = response.StatusCode
-            };
+                var apiResponse = new RestClientResponse<T>
+                {
+                    IsSuccessStatusCode = response.IsSuccessStatusCode,
+                    StatusCode = response.StatusCode
+                };
 
-            if (string.IsNullOrWhiteSpace(result) is false)
-            {
-                apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
+                if (string.IsNullOrWhiteSpace(result) is false)
+                {
+                    apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
+                }
+
+                return apiResponse;
             }
-
-            return apiResponse;
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return default;
+            }
         }
 
         public async Task<T> GetAsync<T>(string requestUrl)

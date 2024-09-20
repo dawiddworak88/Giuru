@@ -258,14 +258,21 @@ namespace Buyer.Web.Areas.Orders.Repositories
                 EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.OrdersApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Order>>>(apiRequest);
-
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            try
             {
-                return new PagedResults<IEnumerable<Order>>(response.Data.Total, response.Data.PageSize)
+                var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Order>>>(apiRequest);
+
+                if (response.IsSuccessStatusCode && response.Data?.Data != null)
                 {
-                    Data = response.Data.Data
-                };
+                    return new PagedResults<IEnumerable<Order>>(response.Data.Total, response.Data.PageSize)
+                    {
+                        Data = response.Data.Data
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
 
             return default;
