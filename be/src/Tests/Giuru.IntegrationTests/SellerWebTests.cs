@@ -22,7 +22,7 @@ namespace Giuru.IntegrationTests
             _apiFixture = apiFixture;
         }
 
-       /* [Fact]
+        [Fact]
         public async Task CreateUpdateGet_ReturnsClient()
         {
             var createResult = await _apiFixture.RestClient.PostAsync<ClientRequestModel, BaseResponseModel>(ApiEndpoints.ClientsApiEndpoint, new ClientRequestModel
@@ -54,7 +54,7 @@ namespace Giuru.IntegrationTests
             Assert.Equal(1, getResult.Total);
             Assert.Equal(updateResult.Data?.Id, getResult.Data.FirstOrDefault().Id);
             Assert.Equal(Clients.UpdatedName, getResult.Data.FirstOrDefault().Name);
-        }*/
+        }
 
         [Fact]
         public async Task CreateUpdateGet_ReturnsProduct()
@@ -69,24 +69,7 @@ namespace Giuru.IntegrationTests
             });
 
             Assert.NotNull(createResult);
-
-            var getResult = await _apiFixture.RestClient.GetAsync<PagedResults<IEnumerable<ProductResponseModel>>>($"{ApiEndpoints.GetProductsApiEndpoint}?pageIndex=1&itemsPerPage=25");
-
-            Assert.NotNull(getResult);
-
-            /*var createResult = await _apiFixture.RestClient.PostAsync<ProductRequestModel, BaseResponseModel>(ApiEndpoints.ProductsApiEndpoint, new ProductRequestModel
-            {
-                Name = Products.Lamica.Name,
-                Sku = Products.Lamica.Sku,
-                CategoryId = Products.Lamica.CategoryId,
-                IsPublished = Products.Lamica.IsPublished,
-                Ean = Products.Lamica.Ean
-            });*/
-
-
-            /*
-
-            
+            Assert.NotEqual(Guid.Empty, createResult.Data?.Id);
 
             var updateResult = await _apiFixture.RestClient.PostAsync<ProductRequestModel, BaseResponseModel>(ApiEndpoints.ProductsApiEndpoint, new ProductRequestModel
             {
@@ -98,12 +81,13 @@ namespace Giuru.IntegrationTests
             });
 
             Assert.NotNull(updateResult);
-            Assert.Equal(createResult.Data?.Id, updateResult.Data?.Id);*/
+            Assert.Equal(createResult.Data?.Id, updateResult.Data?.Id);
 
-            /*var getResult = await _apiFixture.RestClient.GetAsync<ProductResponseModel>($"{endpointUrl}/{updateResult.Data?.Id}");
+
+            var getResult = await _apiFixture.RestClient.GetAsync<PagedResults<IEnumerable<ProductResponseModel>>>($"{ApiEndpoints.GetProductsApiEndpoint}?pageIndex=1&itemsPerPage=25");
 
             Assert.NotNull(getResult);
-            Assert.Null(getResult.Description);
+            /*Assert.Null(getResult.Data.FirstOrDefault().des);
             Assert.Equal(updateResult.Data?.Id, getResult.Id);
             Assert.Equal(Products.Lamica.UpdatedName, getResult.Name);*/
         }

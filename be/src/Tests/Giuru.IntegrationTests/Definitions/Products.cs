@@ -6,6 +6,7 @@ namespace Giuru.IntegrationTests.Definitions
     {
         public struct Lamica
         {
+            public static readonly Guid Id = Guid.Parse("9cccc453-8475-4ef8-a00d-2743dcd72964");
             public const string Name = "Lamica";
             public const string Sku = "LAM_01";
             public const string UpdatedName = "Lamica 180x200";
