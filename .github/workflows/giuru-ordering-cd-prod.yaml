@@ -1,0 +1,71 @@
+name: Ordering-Api Production Deployment
+run-name: ${{ github.actor }} is deploying Ordering-Api to Production 🚀
+
+on:
+  workflow_run:
+    workflows: ["Ordering-Api Continuous Integration"]
+    branches: [main, release/*]
+    types: [completed]
+
+concurrency:
+  group: cd-giuru-prod
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  Build-and-Deploy-Docker-Images:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Display Workflow Details
+        run: |
+          echo "The job was automatically triggered by a ${{ github.event_name }} event."
+          echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+          echo "The name of your branch is ${{ github.event.workflow_run.head_branch }} and your repository is ${{ github.repository }}."
+
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3.0.0
+
+      - name: Docker Login
+        uses: docker/login-action@v3.0.0
+        with:
+          registry: ${{ secrets.ACR_PROD_NAME }}
+          username: ${{ secrets.ACR_PROD_LOGIN }}
+          password: ${{ secrets.ACR_PROD_PASSWORD }}
+
+      - name: Build and push Ordering-Api Docker Image
+        uses: docker/build-push-action@v5.0.0
+        with:
+          file: ./be/src/Project/Services/Ordering/Ordering.Api/Dockerfile
+          context: ./be/src
+          push: true
+          tags: ${{ secrets.ACR_PROD_NAME }}/ordering-api:latest, ${{ secrets.ACR_PROD_NAME }}/ordering-api:${{ github.run_number }}
+
+      - name: Checkout GitOps Repo
+        uses: actions/checkout@v2
+        with:
+          repository: "Team-Eltap/giuru-gitops"
+          token: ${{ secrets.GIT_REPOSITORY_TOKEN }}
+
+      - name: Install yq (YAML Processor)
+        run: sudo snap install yq
+
+      - name: Update the image tag in Ordering-Api Container deployment.yaml
+        run: |
+          yq eval '(.spec.template.spec.containers[] | select(.name == "ordering-api-container").image) = "b2beltapv2prodacr.azurecr.io/ordering-api:${{ github.run_number }}"' apps/ordering/overlays/production/deployment.yaml -i
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name 'Production Deployment'
+          git config --global user.email 'production@deployment.com'
+          git add apps/ordering/overlays/production/deployment.yaml
+          git commit -m "Updated image tag to ${{ github.run_number }} for Ordering-Api service"
+          git push
