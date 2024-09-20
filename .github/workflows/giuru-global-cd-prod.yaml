@@ -4,12 +4,8 @@ run-name: ${{ github.actor }} is deploying Global-Api to Production 🚀
 on:
   workflow_run:
     workflows: ["Global-Api Continuous Integration"]
-    branches: [main, release/*]
+    branches: [main]
     types: [completed]
-
-concurrency:
-  group: cd-giuru-prod
-  cancel-in-progress: false
 
 permissions:
   id-token: write
@@ -60,12 +56,29 @@ jobs:
 
       - name: Update the image tag in Global-Api Container deployment.yaml
         run: |
-          yq eval '(.spec.template.spec.containers[] | select(.name == "global-api-container").image) = "b2beltapv2prodacr.azurecr.io/global-api:${{ github.run_number }}"' apps/global/overlays/production/deployment.yaml -i
+          yq eval '(.spec.template.spec.containers[] | select(.name == "global-api-container").image) = "${{ secrets.ACR_PROD_NAME }}/global-api:${{ github.run_number }}"' apps/global/overlays/production/deployment.yaml -i
 
       - name: Commit and Push changes
         run: |
           git config --global user.name 'Production Deployment'
           git config --global user.email 'production@deployment.com'
+          git config pull.ff true
+          git pull
           git add apps/global/overlays/production/deployment.yaml
           git commit -m "Updated image tag to ${{ github.run_number }} for Global-Api service"
-          git push
+          if git push; then
+            echo "Push succeeded"
+            break
+          else
+            sleep $((RANDOM % 10 + 1))
+            for i in {1..5}; do
+              git pull
+              if git push; then
+                echo "Push succeeded"
+                break
+              else
+                random_number=$((RANDOM % 10 + 1))
+                sleep $((i * 2 + random_number))
+              fi
+            done
+          fi
