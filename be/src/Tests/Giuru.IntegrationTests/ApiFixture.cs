@@ -272,7 +272,7 @@ namespace Giuru.IntegrationTests
             sellerWebFactpry.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             sellerWebFactpry.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            RestClient = new RestClient(sellerWebFactpry);
+            SellerWebClient = new RestClient(sellerWebFactpry);
 
             var buyerWebFactpry = new WebApplicationFactory<ProgramTest>()
                 .WithWebHostBuilder(builder =>

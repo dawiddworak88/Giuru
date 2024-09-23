@@ -16,36 +16,22 @@ namespace Giuru.IntegrationTests.HttpClients
             _client = client;
         } 
 
-        public async Task<RestClientResponse<T>> PostAsync<S, T>(string requestUrl, S request) where S : class
+        public async Task<T> PostAsync<S, T>(string requestUrl, S request) where S : class
         {
-            try
-            {
-                var response = await _client.PostAsync(
+            var response = await _client.PostAsync(
                     requestUrl,
                     new StringContent(JsonConvert.SerializeObject(request, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }),
                     Encoding.UTF8,
                     "application/json"));
 
-                var result = await response.Content.ReadAsStringAsync();
+            var result = await response.Content.ReadAsStringAsync();
 
-                var apiResponse = new RestClientResponse<T>
-                {
-                    IsSuccessStatusCode = response.IsSuccessStatusCode,
-                    StatusCode = response.StatusCode
-                };
-
-                if (string.IsNullOrWhiteSpace(result) is false)
-                {
-                    apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
-                }
-
-                return apiResponse;
-            }
-            catch (Exception ex)
+            if (string.IsNullOrWhiteSpace(result) is false)
             {
-                Console.WriteLine(ex);
-                return default;
+                return JsonConvert.DeserializeObject<T>(result);
             }
+
+            return default;
         }
 
         public async Task<T> GetAsync<T>(string requestUrl)
