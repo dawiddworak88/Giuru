@@ -6,10 +6,8 @@ using Giuru.IntegrationTests.HttpClients;
 using Giuru.IntegrationTests.Images;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -34,7 +32,7 @@ namespace Giuru.IntegrationTests
         private IContainer _orderingApiContainer;
         private IContainer _basketApiContainer;
 
-        public RestClient RestClient { get; private set; }
+        public RestClient SellerWebClient { get; private set; }
         public RestClient BuyerWebClient { get; private set; }
 
         public async Task InitializeAsync()

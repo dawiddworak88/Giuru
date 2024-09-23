@@ -4,8 +4,6 @@ using Buyer.Web.Areas.Orders.DomainModels;
 using Foundation.ApiExtensions.Models.Response;
 using Foundation.GenericRepository.Paginations;
 using Giuru.IntegrationTests.Definitions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

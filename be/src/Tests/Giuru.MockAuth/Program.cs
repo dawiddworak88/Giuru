@@ -26,15 +26,15 @@ builder.Services.AddAuthentication()
         options.Authority = builder.Configuration.GetValue<string>("IdentityUrl");
         options.RequireHttpsMetadata = false;
         options.ApiName = "all";
-    });
+    }); 
 
-builder.Services.AddAuthentication(options =>
+/*builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = "MockAuth";
     options.DefaultChallengeScheme = "MockAuth";
 })
     .AddScheme<AuthenticationSchemeOptions, MockAuthenticationHandler>("MockAuth", options => { });
-
+*/
 
 var app = builder.Build();
 
