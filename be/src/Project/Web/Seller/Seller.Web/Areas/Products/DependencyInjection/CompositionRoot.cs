@@ -12,7 +12,6 @@ using Seller.Web.Areas.ProductAttributes.Repositories;
 using Seller.Web.Areas.ProductAttributeItems.ModelBuilders;
 using Seller.Web.Areas.Products.ComponentModels;
 using Seller.Web.Areas.Products.ModelBuilders;
-using Seller.Web.Areas.Products.Services;
 
 namespace Seller.Web.Areas.Products.DependencyInjection
 {
@@ -23,8 +22,6 @@ namespace Seller.Web.Areas.Products.DependencyInjection
             services.AddScoped<IProductAttributesRepository, ProductAttributesRepository>();
             services.AddScoped<IProductAttributeItemsRepository, ProductAttributeItemsRepository>();
             services.AddScoped<ICategoriesRepository, CategoriesRepository>();
-
-            services.AddScoped<IProductAttributesService, ProductAttributesService>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CategoriesPageViewModel>, CategoriesPageModelBuilder> ();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CategoryPageViewModel>, CategoryPageModelBuilder>();
