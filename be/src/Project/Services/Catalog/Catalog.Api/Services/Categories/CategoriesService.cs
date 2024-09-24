@@ -379,6 +379,20 @@ namespace Catalog.Api.Services.Categories
             };
         }
 
+        public async Task<bool> CategoriesSchemasImplementAttributeAsync(CategoriesSchemasImplementAttributeServiceModel model)
+        {
+            var query = $@"
+                SELECT TOP 1 *
+                FROM CategorySchemas
+                CROSS APPLY OPENJSON([Schema], '$.properties') AS properties
+                WHERE JSON_VALUE(properties.value, '$.""$ref""') = '#/definitions/{model.AttributeId}'
+            ";
+
+            var categoriesSchemas = _context.CategorySchemas.FromSqlRaw(query);
+
+            return await categoriesSchemas.AnyAsync();
+        }
+
         private void TriggerCategoryProductsIndexRebuild(RebuildCategoryProductsIndexServiceModel model)
         {
             using var source = new ActivitySource(GetType().Name);

@@ -407,5 +407,38 @@ namespace Catalog.Api.v1.Categories.Controllers
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
+
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("CategorySchemas/ImplementAttribute/{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategoriesSchemasImplementAttributeResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> CategoriesSchemasImplementAttribute(Guid? id)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var serviceModel = new CategoriesSchemasImplementAttributeServiceModel
+            {
+                AttributeId = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var modelValidator = new CategoriesSchemasImplementAttributeModelValidator();
+            var validationResult = await modelValidator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var result = await _categoryService.CategoriesSchemasImplementAttributeAsync(serviceModel);
+
+                var response = new CategoriesSchemasImplementAttributeResponseModel
+                {
+                    Result = result
+                };
+
+                return StatusCode((int)HttpStatusCode.OK, response);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
     }
 }
