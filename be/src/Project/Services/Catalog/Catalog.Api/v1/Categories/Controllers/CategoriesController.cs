@@ -408,6 +408,11 @@ namespace Catalog.Api.v1.Categories.Controllers
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
+        /// <summary>
+        /// Gets information on whether the attribute is in use.
+        /// </summary>
+        /// <param name="id">The attribute id.</param>
+        /// <returns>The result of the check. (true or false)</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("CategorySchemas/ImplementAttribute/{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategoriesSchemasImplementAttributeResponseModel))]
