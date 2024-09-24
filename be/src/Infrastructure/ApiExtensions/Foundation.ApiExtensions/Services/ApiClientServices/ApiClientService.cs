@@ -147,28 +147,22 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 
                 var queryString = string.Join("&", properties.ToArray());
 
-                try
+                var response = await client.GetAsync(request.EndpointAddress + "?" + queryString);
+
+                var apiResponse = new ApiResponse<T>
                 {
-                    var response = await client.GetAsync(request.EndpointAddress + "?" + queryString);
+                    IsSuccessStatusCode = response.IsSuccessStatusCode,
+                    StatusCode = response.StatusCode
+                };
 
-                    var apiResponse = new ApiResponse<T>
-                    {
-                        IsSuccessStatusCode = response.IsSuccessStatusCode,
-                        StatusCode = response.StatusCode
-                    };
+                var result = await response.Content.ReadAsStringAsync();
 
-                    var result = await response.Content.ReadAsStringAsync();
-
-                    if (!string.IsNullOrWhiteSpace(result))
-                    {
-                        apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
-                    }
-
-                    return apiResponse;
+                if (!string.IsNullOrWhiteSpace(result))
+                {
+                    apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
                 }
-                catch (Exception ex) {
-                    return default;
-                }
+
+                return apiResponse;
             }
         }
 

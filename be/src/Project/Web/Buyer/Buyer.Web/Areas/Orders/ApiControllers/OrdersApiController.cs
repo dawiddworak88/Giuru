@@ -28,18 +28,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            try
-            {
-                var orders = await this.ordersRepository.GetOrdersAsync(token, language, searchTerm, pageIndex, itemsPerPage, $"{nameof(Order.CreatedDate)} desc");
+            var orders = await this.ordersRepository.GetOrdersAsync(token, language, searchTerm, pageIndex, itemsPerPage, $"{nameof(Order.CreatedDate)} desc");
 
-                return this.StatusCode((int)HttpStatusCode.OK, orders);
-
-            }
-            catch (Exception ex)
-            {
-                return this.StatusCode((int)HttpStatusCode.BadRequest, ex);
-            }
-
+            return this.StatusCode((int)HttpStatusCode.OK, orders);
         }
     }
 }

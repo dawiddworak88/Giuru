@@ -1,12 +1,7 @@
-﻿using IdentityModel;
-using IdentityServer4;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Giuru.MockAuth.Controllers
 {
@@ -15,14 +10,10 @@ namespace Giuru.MockAuth.Controllers
     [ApiController]
     public class OrganisationsController : ControllerBase
     {
-
-        public OrganisationsController()
-        {
-            
-        }
+        public OrganisationsController(){}
 
         [HttpPost]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return StatusCode((int)HttpStatusCode.Created, new
             {

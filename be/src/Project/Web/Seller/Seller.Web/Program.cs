@@ -134,8 +134,6 @@ builder.Services.ConfigureSettings(builder.Configuration);
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("SellerOnly", policy => policy.RequireRole(AccountConstants.Roles.Seller));
-    options.AddPolicy("YourPolicy", policy =>
-                policy.RequireAuthenticatedUser());
 });
 
 builder.Services.AddOpenTelemetryTracing(
@@ -199,11 +197,11 @@ app.UseSecurityHeaders(builder.Configuration);
 
 app.MapControllerRoute(
     name: "localizedAreaRoute",
-    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization("YourPolicy");
+    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization("SellerOnly");
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization("YourPolicy");
+    pattern: "{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization("SellerOnly");
 
 app.MapHealthChecks("/hc", new HealthCheckOptions
 {

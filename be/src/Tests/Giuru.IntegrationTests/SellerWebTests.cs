@@ -49,7 +49,7 @@ namespace Giuru.IntegrationTests
             Assert.NotNull(updatedResult);
             Assert.Equal(createResult.Id, updatedResult.Id);
 
-            var getResults = await _apiFixture.SellerWebClient.GetAsync<PagedResults<IEnumerable<ClientResponseModel>>>($"{ApiEndpoints.GetClientsApiEndpoint}?pageIndex=1&itemsPerPage=25");
+            var getResults = await _apiFixture.SellerWebClient.GetAsync<PagedResults<IEnumerable<ClientResponseModel>>>($"{ApiEndpoints.GetClientsApiEndpoint}?pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}");
 
             Assert.NotNull(getResults.Data);
             Assert.Equal(1, getResults.Total);
