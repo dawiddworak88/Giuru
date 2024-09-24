@@ -1,7 +1,9 @@
-﻿using IdentityModel;
+﻿using Giuru.MockAuth.Definitions;
+using IdentityModel;
 using IdentityServer4;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Net;
 using System.Security.Claims;
@@ -15,10 +17,14 @@ namespace Giuru.MockAuth.Controllers
     public class TokenController : ControllerBase
     {
         private readonly IdentityServerTools _identityServerTools;
+        private readonly IConfiguration _configuration;
 
-        public TokenController(IdentityServerTools identityServerTools)
+        public TokenController(
+            IdentityServerTools identityServerTools,
+            IConfiguration configuration)
         {
             _identityServerTools = identityServerTools;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -26,15 +32,15 @@ namespace Giuru.MockAuth.Controllers
         {
             var claims = new HashSet<Claim>(new ClaimComparer())
             {
-                new Claim(ClaimTypes.Email, "test@test.pl"),
-                new Claim(JwtClaimTypes.Audience, "all"),
-                new Claim(JwtClaimTypes.Role, "Seller"),
-                new Claim("OrganisationId", "09affcc9-1665-45d6-919f-3d2026106ba1")
+                new Claim(ClaimTypes.Email, _configuration.GetValue<string>("EmailClaim")),
+                new Claim(JwtClaimTypes.Audience, _configuration.GetValue<string>("Audience")),
+                new Claim(JwtClaimTypes.Role, _configuration.GetValue<string>("RolesClaim")),
+                new Claim(AuthConstants.OrganisationClaim, _configuration.GetValue<string>("OrganisationId"))
             };
 
             return StatusCode((int)HttpStatusCode.OK, new
             {
-                Token = await _identityServerTools.IssueJwtAsync(86400, claims)
+                Token = await _identityServerTools.IssueJwtAsync(_configuration.GetValue<int>("ExpiresInMinutes"), claims)
             });
         }
     }

@@ -1,12 +1,9 @@
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using DotNet.Testcontainers.Networks;
-using Foundation.Account.Handlers;
 using Giuru.IntegrationTests.HttpClients;
 using Giuru.IntegrationTests.Images;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -99,11 +96,10 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
                 .WithEnvironment("EmailClaim", "seller@user.com")
                 .WithEnvironment("RolesClaim", "Seller")
-                .WithEnvironment("OrganisationClaim", "09affcc9-1665-45d6-919f-3d2026106ba1")
+                .WithEnvironment("OrganisationId", "09affcc9-1665-45d6-919f-3d2026106ba1")
                 .WithEnvironment("ExpiresInMinutes", "86400")
                 .WithEnvironment("Issuer", "null")
                 .WithEnvironment("Audience", "all")
-                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
                 .WithBindMount(Path.Combine(CommonDirectoryPath.GetProjectDirectory().DirectoryPath, "../Giuru.MockAuth/tempkey.jwk"), "/app/tempkey.jwk")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
                 .Build();
@@ -126,8 +122,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
-                //.WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
-                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
+                .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
@@ -153,8 +148,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
-                //.WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
-                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
+                .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("Brands", "4a8f8442-43b0-4223-83bb-978d5e81acc7&ELTAP&09affcc9-1665-45d6-919f-3d2026106ba1")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
@@ -181,8 +175,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
-                //.WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
-                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
+                .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
@@ -206,8 +199,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
-                //.WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
-                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
+                .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SendGridApiKey", "SIMPLE_SENDGRID_API_KEY")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
@@ -232,8 +224,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
-                //.WithEnvironment("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}")
-                .WithEnvironment("IdentityUrl", "http://host.docker.internal:9105")
+                .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))

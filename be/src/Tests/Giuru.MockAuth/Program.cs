@@ -9,21 +9,13 @@ builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddIdentityServer(options =>
     {
-        options.IssuerUri = "null";
+        options.IssuerUri = builder.Configuration.GetValue<string>("Issuer");
     })
     .AddInMemoryApiResources(IdentityServerConfig.Apis)
     .AddInMemoryClients(IdentityServerConfig.GetClients())
     .AddDeveloperSigningCredential();
 
 builder.Services.AddControllers();
-
-builder.Services.AddAuthentication()
-    .AddIdentityServerAuthentication("IsToken", options =>
-    {
-        options.Authority = builder.Configuration.GetValue<string>("IdentityUrl");
-        options.RequireHttpsMetadata = false;
-        options.ApiName = "all";
-    });
 
 var app = builder.Build();
 

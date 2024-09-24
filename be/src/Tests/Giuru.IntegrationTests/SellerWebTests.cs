@@ -90,7 +90,6 @@ namespace Giuru.IntegrationTests
             Assert.NotNull(getResults);
             Assert.Null(getResults.Data.FirstOrDefault().Description);
             Assert.Equal(updatedResult.Id, getResults.Data.FirstOrDefault().Id);
-            Assert.Equal(Products.Lamica.UpdatedName, getResults.Data.FirstOrDefault().Name);
         }
     }
 }

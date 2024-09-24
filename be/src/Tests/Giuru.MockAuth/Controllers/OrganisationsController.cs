@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Net;
 
@@ -10,14 +11,19 @@ namespace Giuru.MockAuth.Controllers
     [ApiController]
     public class OrganisationsController : ControllerBase
     {
-        public OrganisationsController(){}
+        private readonly IConfiguration _configuration;
+
+        public OrganisationsController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         [HttpPost]
         public IActionResult Create()
         {
             return StatusCode((int)HttpStatusCode.Created, new
             {
-                Id = Guid.Parse("09affcc9-1665-45d6-919f-3d2026106ba1")
+                Id = Guid.Parse(_configuration.GetValue<string>("OrganisationId"))
             });
         }
     }

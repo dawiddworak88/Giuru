@@ -2,6 +2,6 @@
 {
     public struct AuthConstants
     {
-        public const string OrganisationIdClaim = "OrganisationId";
+        public const string OrganisationClaim = "OrganisationId";
     }
 }
