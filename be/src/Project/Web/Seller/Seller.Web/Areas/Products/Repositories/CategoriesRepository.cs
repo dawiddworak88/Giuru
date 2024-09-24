@@ -7,6 +7,7 @@ using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Products.ApiRequestModels;
+using Seller.Web.Areas.Products.ApiResponseModels;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Shared.Configurations;
@@ -249,6 +250,31 @@ namespace Seller.Web.Areas.Categories.Repositories
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
+        }
+
+        public async Task<bool> CategoriesSchemasImplementAttibuteAsync(string token, string language, Guid? attributeId)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemasApiEndpoint}/ImplementAttribute/{attributeId}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, CategoriesSchemasImplementAttributeResponseModel>(apiRequest);
+
+            if (response.IsSuccessStatusCode is false)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data is not null)
+            {
+                return response.Data.Result;
+            }
+
+            return default;
         }
     }
 }

@@ -14,5 +14,6 @@ namespace Seller.Web.Areas.Products.Repositories
         Task<Category> GetCategoryAsync(string token, string language, Guid? id);
         Task<CategorySchemas> GetCategorySchemasAsync(string token, string language, Guid? categoryId);
         Task SaveAsync(string token, string language, Guid? id, CategorySchema categorySchema);
+        Task<bool> CategoriesSchemasImplementAttibuteAsync(string token, string language, Guid? attributeId);
     }
 }

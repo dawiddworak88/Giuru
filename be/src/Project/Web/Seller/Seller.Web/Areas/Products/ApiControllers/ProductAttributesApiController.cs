@@ -1,5 +1,6 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Exceptions;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,6 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
-using Seller.Web.Areas.Products.Services;
 using System;
 using System.Globalization;
 using System.Net;
@@ -21,18 +21,15 @@ namespace Seller.Web.Areas.Products.ApiControllers
         private readonly IProductAttributesRepository _productAttributesRepository;
         private readonly IStringLocalizer _productLocalizer;
         private readonly ICategoriesRepository _categoriesRepository;
-        private readonly IProductAttributesService _productAttributesService;
 
         public ProductAttributesApiController(
             IProductAttributesRepository productAttributesRepository,
             IStringLocalizer<ProductResources> productLocalizer,
-            ICategoriesRepository categoriesRepository,
-            IProductAttributesService productAttributesService)
+            ICategoriesRepository categoriesRepository)
         {
             _productAttributesRepository = productAttributesRepository;
             _productLocalizer = productLocalizer;
             _categoriesRepository = categoriesRepository;
-            _productAttributesService = productAttributesService;
         }
 
         [HttpGet]
@@ -67,10 +64,19 @@ namespace Seller.Web.Areas.Products.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await _productAttributesService.DeleteAsync(
-                token,
-                language,
-                id);
+            var IsAttributeInUse = await _categoriesRepository.CategoriesSchemasImplementAttibuteAsync(token, language, id);
+
+            if (IsAttributeInUse)
+            {
+                throw new CustomException(_productLocalizer.GetString("ProductAttributeIsInUse"), (int)HttpStatusCode.Conflict);
+            }
+            else
+            {
+                await _productAttributesRepository.DeleteAsync(
+                    token,
+                    language,
+                    id);
+            }
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = _productLocalizer.GetString("ProductAttributeDeletedSuccessfully").Value });
         }
