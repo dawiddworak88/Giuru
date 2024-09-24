@@ -21,7 +21,7 @@ namespace Giuru.IntegrationTests
         private RedisContainer _redisContainer;
         private RabbitMqContainer _rabbitMqContainer;
         private MsSqlContainer _msSqlContainer;
-        private ElasticsearchContainer _elasticsearchContainer;
+        private IContainer _elasticsearchContainer;
         private IContainer _mockAuthContainer;
         private IContainer _clientApiContainer;
         private IContainer _catalogApiContainer;
@@ -59,11 +59,13 @@ namespace Giuru.IntegrationTests
              
             await _msSqlContainer.StartAsync();
 
-            _elasticsearchContainer = new ElasticsearchBuilder()
+            _elasticsearchContainer = new ContainerBuilder()
                 .WithName("elasticsearch")
                 .WithNetwork(_giuruNetwork)
                 .WithNetworkAliases("elasticsearch")
-                .WithPassword("YourStrongPassword!")
+                .WithImage("docker.elastic.co/elasticsearch/elasticsearch:7.9.1")
+                .WithEnvironment("discovery.type", "single-node")
+                .WithEnvironment("xpack.security.enabled", "false")
                 .WithEnvironment("xpack.security.http.ssl.enabled", "false")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(9200))
                 .Build();
@@ -143,7 +145,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
                 .WithEnvironment("RedisUrl", "redis")
                 .WithEnvironment("ConnectionString", $"Server=sqldata;Database=CatalogDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
-                .WithEnvironment("ElasticsearchUrl", "http://elastic:YourStrongPassword!@elasticsearch:9200")
+                .WithEnvironment("ElasticsearchUrl", "http://elasticsearch:9200")
                 .WithEnvironment("ElasticsearchIndex", "catalog")
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")
@@ -170,7 +172,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
                 .WithEnvironment("RedisUrl", "redis")
                 .WithEnvironment("ConnectionString", $"Server=sqldata;Database=CatalogDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
-                .WithEnvironment("ElasticsearchUrl", "http://elastic:YourStrongPassword!@elasticsearch:9200")
+                .WithEnvironment("ElasticsearchUrl", "http://elasticsearch:9200")
                 .WithEnvironment("ElasticsearchIndex", "catalog")
                 .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
                 .WithEnvironment("EventBusRetryCount", "5")

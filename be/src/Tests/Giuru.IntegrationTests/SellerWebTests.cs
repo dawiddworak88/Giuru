@@ -85,7 +85,22 @@ namespace Giuru.IntegrationTests
             Assert.NotNull(updatedResult);
             Assert.Equal(createResult.Id, updatedResult.Id);
 
-            var getResults = await _apiFixture.SellerWebClient.GetAsync<PagedResults<IEnumerable<Product>>>($"{ApiEndpoints.GetProductsApiEndpoint}?pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}");
+            int timeoutInSeconds = 30;
+            int elapsedSeconds = 0;
+            PagedResults<IEnumerable<Product>> getResults = null;
+
+            while (elapsedSeconds < timeoutInSeconds)
+            {
+                getResults = await _apiFixture.SellerWebClient.GetAsync<PagedResults<IEnumerable<Product>>>($"{ApiEndpoints.GetProductsApiEndpoint}?pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}");
+
+                if (getResults.Data.FirstOrDefault() != null)
+                {
+                    break;
+                }
+
+                await Task.Delay(1000);
+                elapsedSeconds++;
+            }
 
             Assert.NotNull(getResults);
             Assert.Null(getResults.Data.FirstOrDefault().Description);
