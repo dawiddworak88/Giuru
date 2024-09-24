@@ -56,9 +56,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         public async Task<IActionResult> Index([FromBody] SaveProductRequestModel model)
         {
      
-            try
-            {
-                var productId = await _productsRepository.SaveAsync(
+            var productId = await _productsRepository.SaveAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 model.Id,
@@ -75,12 +73,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 model.FulfillmentTime,
                 model.FormData);
 
-                return StatusCode((int)HttpStatusCode.OK, new { Id = productId, Message = _productLocalizer.GetString("ProductSavedSuccessfully").Value });
-            }
-            catch (Exception ex)
-            {
-                return default;
-            }
+            return StatusCode((int)HttpStatusCode.OK, new { Id = productId, Message = _productLocalizer.GetString("ProductSavedSuccessfully").Value });
         }
 
         [HttpDelete]

@@ -38,8 +38,6 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Seller.Web.Areas.Global.DependencyInjection;
 using Foundation.Telemetry.DependencyInjection;
 using Seller.Web.Areas.Dashboard.DependencyInjection;
-using Microsoft.AspNetCore.Authentication;
-using Foundation.Account.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,13 +70,13 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
 });
 
-/*builder.Services.AddDataProtection().UseCryptographicAlgorithms(
+builder.Services.AddDataProtection().UseCryptographicAlgorithms(
     new AuthenticatedEncryptorConfiguration
     {
         EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
         ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
     }).PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(builder.Configuration["RedisUrl"]), $"{Assembly.GetExecutingAssembly().GetName().Name}-DataProtection-Keys");
-*/
+
 builder.Services.AddRazorPages();
 
 builder.Services.AddLocalization();
@@ -92,18 +90,14 @@ builder.Services.AddControllersWithViews(options =>
 
 builder.Services.RegisterFoundationMediaDependencies();
 
-//builder.Services.RegisterClientAccountDependencies(builder.Configuration, builder.Environment);
-
-builder.Services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
-                {
-                    options.Authority = builder.Configuration.GetValue<string>("IdentityUrl");
-                    options.RequireHttpsMetadata = false;
-
-                    options.Audience = AccountConstants.Audiences.All;
-                })
-                .AddScheme<AuthenticationSchemeOptions, MockAuthenticationHandler>("MockAuth", options => { });
-
+if (builder.Configuration.GetValue<bool>("IntegrationTestsEnabled"))
+{
+    builder.Services.RegisterApiAccountDependencies(builder.Configuration);
+}
+else
+{
+    builder.Services.RegisterClientAccountDependencies(builder.Configuration, builder.Environment);
+}
 
 builder.Services.RegisterApiExtensionsDependencies();
 
@@ -224,4 +218,4 @@ app.MapHealthChecks("/liveness", new HealthCheckOptions
 
 app.Run();
 
-public partial class Program { }
+public partial class SellerWebProgram { }

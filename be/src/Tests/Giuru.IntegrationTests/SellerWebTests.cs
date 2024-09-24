@@ -1,5 +1,4 @@
 ﻿using Catalog.Api.v1.Products.RequestModels;
-using Catalog.Api.v1.Products.ResultModels;
 using Client.Api.v1.RequestModels;
 using Client.Api.v1.ResponseModels;
 using Foundation.ApiExtensions.Models.Response;
@@ -90,7 +89,7 @@ namespace Giuru.IntegrationTests
 
             Assert.NotNull(getResults);
             Assert.Null(getResults.Data.FirstOrDefault().Description);
-            Assert.Equal(updatedResult.Id, getResults?.Data.FirstOrDefault().Id);
+            Assert.Equal(updatedResult.Id, getResults.Data.FirstOrDefault().Id);
             Assert.Equal(Products.Lamica.UpdatedName, getResults.Data.FirstOrDefault().Name);
         }
     }

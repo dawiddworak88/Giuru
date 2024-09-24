@@ -32,7 +32,6 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationM
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Foundation.Telemetry.DependencyInjection;
 using Buyer.Web.Areas.Dashboard.DependencyInjection;
-using Foundation.Account.Definitions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,15 +91,14 @@ builder.Services.AddControllersWithViews(options =>
 
 builder.Services.RegisterFoundationMediaDependencies();
 
-/*builder.Services.RegisterClientAccountDependencies(builder.Configuration, builder.Environment);*/
-builder.Services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
-                {
-                    options.Authority = builder.Configuration.GetValue<string>("IdentityUrl");
-                    options.RequireHttpsMetadata = false;
-
-                    options.Audience = AccountConstants.Audiences.All;
-                });
+if (builder.Configuration.GetValue<bool>("IntegrationTestsEnabled"))
+{
+    builder.Services.RegisterApiAccountDependencies(builder.Configuration);
+}
+else
+{
+    builder.Services.RegisterClientAccountDependencies(builder.Configuration, builder.Environment);
+}
 
 builder.Services.RegisterLocalizationDependencies();
 
@@ -216,4 +214,4 @@ app.MapHealthChecks("/liveness", new HealthCheckOptions
 
 app.Run();
 
-public partial class ProgramTest { }
+public partial class BuyerWebProgram { }

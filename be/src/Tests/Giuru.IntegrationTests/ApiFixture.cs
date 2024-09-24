@@ -244,7 +244,7 @@ namespace Giuru.IntegrationTests
             var tokenClient = new TokenClient(new HttpClient());
             var token = await tokenClient.GetTokenAsync($"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}/api/token");
 
-            var sellerWebFactpry = new WebApplicationFactory<Program>()
+            var sellerWebFactpry = new WebApplicationFactory<SellerWebProgram>()
                 .WithWebHostBuilder(builder =>
                 {
                     builder.UseSetting("ASPNETCORE_HTTP_PORTS", "8080");
@@ -255,16 +255,9 @@ namespace Giuru.IntegrationTests
                     builder.UseSetting("ClientUrl", $"http://{_clientApiContainer.Hostname}:{_clientApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("CatalogUrl", $"http://{_catalogApiContainer.Hostname}:{_catalogApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("IntegrationTestsEnabled", "true");
                     builder.UseSetting("SupportedCultures", "de,en,pl");
                     builder.UseSetting("DefaultCulture", "en");
-
-                    builder.ConfigureServices(services =>
-                    {
-                        var serviceProvider = services.BuildServiceProvider();
-                        var mockAuthHandler = serviceProvider.GetRequiredService<MockAuthenticationHandler>();
-
-                        mockAuthHandler.MockAuthToken = token;
-                    });
                 })
                 .CreateClient();
 
@@ -274,7 +267,7 @@ namespace Giuru.IntegrationTests
 
             SellerWebClient = new RestClient(sellerWebFactpry);
 
-            var buyerWebFactpry = new WebApplicationFactory<ProgramTest>()
+            var buyerWebFactpry = new WebApplicationFactory<BuyerWebProgram>()
                 .WithWebHostBuilder(builder =>
                 {
                     builder.UseSetting("ASPNETCORE_HTTP_PORTS", "8080");
@@ -286,16 +279,9 @@ namespace Giuru.IntegrationTests
                     builder.UseSetting("ClientUrl", $"http://{_clientApiContainer.Hostname}:{_clientApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("BasketUrl", $"http://{_basketApiContainer.Hostname}:{_basketApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("IntegrationTestsEnabled", "true");
                     builder.UseSetting("SupportedCultures", "de,en,pl");
                     builder.UseSetting("DefaultCulture", "en");
-
-                    /*builder.ConfigureServices(services =>
-                    {
-                        var serviceProvider = services.BuildServiceProvider();
-                        var mockAuthHandler = serviceProvider.GetRequiredService<MockAuthenticationHandler>();
-
-                        mockAuthHandler.MockAuthToken = token;
-                    });*/
                 })
                 .CreateClient();
 
