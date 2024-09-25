@@ -259,7 +259,7 @@ namespace Seller.Web.Areas.Categories.Repositories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemasApiEndpoint}/ImplementAttribute/{attributeId}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemasAttributeInUseApiEndpoint}/{attributeId}"
             };
 
             var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, CategoriesSchemasImplementAttributeResponseModel>(apiRequest);

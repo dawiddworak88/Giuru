@@ -21,6 +21,7 @@
         {
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
             public static readonly string CategorySchemasApiEndpoint = "/api/v1/categories/categoryschemas";
+            public static readonly string CategorySchemasAttributeInUseApiEndpoint = "/api/v1/categories/categoryschemas/attributeinuse";
             public static readonly string ProductsApiEndpoint = "/api/v1/products";
             public static readonly string ProductAttributesApiEndpoint = "/api/v1/productattributes";
             public static readonly string ProductAttributeItemsApiEndpoint = "/api/v1/productattributeitems";

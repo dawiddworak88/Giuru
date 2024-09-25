@@ -414,7 +414,7 @@ namespace Catalog.Api.v1.Categories.Controllers
         /// <param name="id">The attribute id.</param>
         /// <returns>The result of the check. (true or false)</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [Route("CategorySchemas/ImplementAttribute/{id}")]
+        [Route("CategorySchemas/AttributeInUse/{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategoriesSchemasImplementAttributeResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> CategoriesSchemasImplementAttribute(Guid? id)
