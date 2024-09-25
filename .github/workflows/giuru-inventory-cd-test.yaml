@@ -7,6 +7,14 @@ on:
     workflows: ["Inventory-Api Continuous Integration"]
     branches: [develop]
     types: [completed]
+  push:
+    paths:
+      - 'be/src/Infrastructure/**'
+      - 'be/src/Project/Services/Inventory/Inventory.Api/**'
+  pull_request:
+    paths:
+      - 'be/src/Infrastructure/**'
+      - 'be/src/Project/Services/Inventory/Inventory.Api/**'
 
 permissions:
   id-token: write
