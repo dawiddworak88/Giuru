@@ -92,7 +92,14 @@ builder.Services.AddControllersWithViews(options =>
 
 builder.Services.RegisterFoundationMediaDependencies();
 
-builder.Services.RegisterClientAccountDependencies(builder.Configuration, builder.Environment);
+if (builder.Configuration.GetValue<bool>("IntegrationTestsEnabled"))
+{
+    builder.Services.RegisterApiAccountDependencies(builder.Configuration);
+}
+else
+{
+    builder.Services.RegisterClientAccountDependencies(builder.Configuration, builder.Environment);
+}
 
 builder.Services.RegisterLocalizationDependencies();
 
@@ -207,3 +214,5 @@ app.MapHealthChecks("/liveness", new HealthCheckOptions
 });
 
 app.Run();
+
+public partial class BuyerWebProgram { }
