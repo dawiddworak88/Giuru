@@ -16,6 +16,8 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System;
+using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Orders.ApiControllers
 {
@@ -61,7 +63,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 language,
                 searchTerm,
                 hasPrimaryProduct,
-                GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
+                null,
                 pageIndex,
                 itemsPerPage,
                 null);
