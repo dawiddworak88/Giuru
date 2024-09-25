@@ -58,7 +58,7 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
                 DataCenter = new LogzioDataCenter
                 {
                     SubDomain = hostingContext.Configuration["LogzIoDataCenterSubDomain"]
-                } 
+                }
             });
     }
 
@@ -141,7 +141,7 @@ var app = builder.Build();
 IdentityModelEventSource.ShowPII = true;
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
-{   
+{
     ForwardedHeaders = ForwardedHeaders.XForwardedProto
 });
 

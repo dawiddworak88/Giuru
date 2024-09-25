@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Products.DomainModels;
+﻿using Buyer.Web.Areas.Products.ApiResponseModels;
+using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
@@ -6,9 +7,11 @@ using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.DomainModels.Media;
 using Buyer.Web.Shared.Repositories.Media;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.Helpers;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.Media.Services.MediaServices;
@@ -25,6 +28,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.ApiControllers

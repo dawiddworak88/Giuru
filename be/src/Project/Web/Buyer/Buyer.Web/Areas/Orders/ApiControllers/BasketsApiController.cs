@@ -27,10 +27,10 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
     [Authorize]
     public class BasketsApiController : BaseApiController
     {
-        private readonly IBasketRepository basketRepository;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IMediaService mediaService;
-        private readonly IStringLocalizer<OrderResources> orderLocalizer;
+        private readonly IBasketRepository _basketRepository;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IMediaService _mediaService;
+        private readonly IStringLocalizer<OrderResources> _orderLocalizer;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
@@ -38,10 +38,10 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IMediaService mediaService,
             IStringLocalizer<OrderResources> orderLocalizer)
         {
-            this.basketRepository = basketRepository;
-            this.linkGenerator = linkGenerator;
-            this.mediaService = mediaService;
-            this.orderLocalizer = orderLocalizer;
+            _basketRepository = basketRepository;
+            _linkGenerator = linkGenerator;
+            _mediaService = mediaService;
+            _orderLocalizer = orderLocalizer;
         }
 
         [HttpPost]
@@ -50,7 +50,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var reqCookie = this.Request.Cookies[BasketConstants.BasketCookieName];
+            var reqCookie = Request.Cookies[BasketConstants.BasketCookieName];
             if (reqCookie is null)
             {
                 reqCookie = Guid.NewGuid().ToString();
@@ -58,17 +58,16 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 {
                     MaxAge = TimeSpan.FromDays(BasketConstants.BasketCookieMaxAge)
                 };
-                this.Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
+                Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
             }
-
             var id = Guid.Parse(reqCookie);
-            var basket = await this.basketRepository.SaveAsync(token, language, id,
+            var basket = await _basketRepository.SaveAsync(token, language, id,
                 model.Items.OrEmptyIfNull().Select(x => new BasketItem
                 {
                     ProductId = x.ProductId,
                     ProductSku = x.Sku,
                     ProductName = x.Name,
-                    PictureUrl = !string.IsNullOrWhiteSpace(x.ImageSrc) ? x.ImageSrc : (x.ImageId.HasValue ? this.mediaService.GetMediaUrl(x.ImageId.Value, OrdersConstants.Basket.BasketProductImageMaxWidth) : null),
+                    PictureUrl = !string.IsNullOrWhiteSpace(x.ImageSrc) ? x.ImageSrc : (x.ImageId.HasValue ? _mediaService.GetMediaUrl(x.ImageId.Value, OrdersConstants.Basket.BasketProductImageMaxWidth) : null),
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
@@ -87,7 +86,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 basketResponseModel.Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                 {
                     ProductId = x.ProductId,
-                    ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = language, Id = x.ProductId }),
+                    ProductUrl = _linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = language, Id = x.ProductId }),
                     Name = x.ProductName,
                     Sku = x.ProductSku,
                     Quantity = x.Quantity,
@@ -100,7 +99,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 });
             }
 
-            return this.StatusCode((int)HttpStatusCode.OK, basketResponseModel);
+            return StatusCode((int)HttpStatusCode.OK, basketResponseModel);
         }
 
         [HttpDelete]
@@ -109,11 +108,11 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await this.basketRepository.DeleteAsync(token, language, id);
+            await _basketRepository.DeleteAsync(token, language, id);
 
-            this.Response.Cookies.Delete(BasketConstants.BasketCookieName);
+            Response.Cookies.Delete(BasketConstants.BasketCookieName);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.orderLocalizer.GetString("BasketDeletedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Message = _orderLocalizer.GetString("BasketDeletedSuccessfully").Value });
         }
     }
 }

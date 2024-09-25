@@ -14,6 +14,10 @@ using System.Security.Claims;
 using Foundation.Account.Definitions;
 using Foundation.Extensions.Helpers;
 using Seller.Web.Areas.Shared.Repositories.Products;
+using Seller.Web.Areas.Inventory.Repositories.Inventories;
+using System.Collections.Generic;
+using Seller.Web.Areas.Products.ApiResponseModels;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
@@ -43,7 +47,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 CultureInfo.CurrentUICulture.Name,
                 searchTerm,
                 hasPrimaryProduct,
-                GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
+                GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
                 pageIndex,
                 itemsPerPage,
                 null);
@@ -53,7 +57,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 product.Name = $"{product.Name} ({product.Sku})";
             }
 
-            return this.StatusCode((int)HttpStatusCode.OK, products);
+            return StatusCode((int)HttpStatusCode.OK, products);
         }
 
         [HttpPost]
