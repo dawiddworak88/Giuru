@@ -459,28 +459,14 @@ namespace Catalog.Api.Services.ProductAttributes
               @"SELECT ct.CategoryId, ct.Name, ct.Language
               FROM CategorySchemas cs
               INNER JOIN CategoryTranslations ct ON cs.CategoryId = ct.CategoryId
+              INNER JOIN Categories c ON c.Id = ct.CategoryId
               CROSS APPLY OPENJSON([Schema], '$.properties') AS properties
-              WHERE JSON_VALUE(properties.value, '$.""$ref""') = @AttributeRef",
+              WHERE c.IsActive AND ISJSON(cs.[Schema]) > 0 AND JSON_VALUE(properties.value, '$.""$ref""') = @AttributeRef",
                     new SqlParameter("@AttributeRef", attributeRef))
                 .AsNoTracking()
                 .ToList();
 
-            if (categories.Any())
-            {
-                var categoryNames = categories
-                    .GroupBy(c => c.CategoryId)
-                    .Select(group =>
-                    {
-                        var localizedCategory = group.FirstOrDefault(c => c.Language == language);
-                        var categoryName = localizedCategory?.Name ?? group.First().Name;
-                        var languages = string.Join(",", group.Select(c => c.Language).Distinct());
-                        return $"{categoryName} ({languages})";
-                    });
-
-                var message = $"{_productLocalizer.GetString("ProductAttributeInUseByCategories")} {string.Join(", ", categoryNames)}";
-
-                throw new CustomException(message, (int)HttpStatusCode.Conflict);
-            }
+            HandleCategorySchemaReferences(language, "ProductAttributeInUseByCategories", categories);
         }
 
         private void AssertCategorySchemaReference(ProductAttributeItem existingProductAttributeItem, string language)
@@ -503,20 +489,26 @@ namespace Catalog.Api.Services.ProductAttributes
 
             string query = $@"
                 SELECT ct.CategoryId, ct.Name, ct.Language
-                FROM CategorySchema cs
+                FROM CategorySchemas cs
                 INNER JOIN CategoryTranslations ct ON cs.CategoryId = ct.CategoryId
+                INNER JOIN Categories c ON c.Id = ct.CategoryId
                 CROSS APPLY OPENJSON(cs.[Schema], '$.definitions') AS def
-                WHERE def.[key] = @attributeId
+                WHERE ISJSON(cs.[Schema]) > 0 AND def.[key] = @attributeId
                   AND EXISTS (
                     SELECT 1
                     FROM OPENJSON(def.[value], '$.anyOf') AS anyOfItems
-                    CROSS APPLY OPENJSON(anyOfItems.[value], '$.enum') AS enumValues
-                    WHERE enumValues.[value] IN ({inClause})
-                )
-                ";
+                    WHERE JSON_VALUE(anyOfItems.[value], '$.title') IN ({inClause}))";
 
             var categories = _context.Database.SqlQueryRaw<LocalizedCategorySchema>(query, parameters.ToArray()).ToList();
 
+            HandleCategorySchemaReferences(language, "ProductAttributeInUseByCategories", categories);
+        }
+
+        private void HandleCategorySchemaReferences(
+            string language,
+            string localizationKey,
+            IEnumerable<LocalizedCategorySchema> categories)
+        {
             if (categories.Any())
             {
                 var categoryNames = categories
@@ -525,11 +517,11 @@ namespace Catalog.Api.Services.ProductAttributes
                     {
                         var localizedCategory = group.FirstOrDefault(c => c.Language == language);
                         var categoryName = localizedCategory?.Name ?? group.First().Name;
-                        var languages = string.Join(",", group.Select(c => c.Language).Distinct());
+                        var languages = string.Join(", ", group.Select(c => c.Language).Distinct());
                         return $"{categoryName} ({languages})";
                     });
 
-                var message = $"{_productLocalizer.GetString("ProductAttributeItemInUseByCategories")} {string.Join(", ", categoryNames)}";
+                var message = $"{_productLocalizer.GetString(localizationKey)} {string.Join(", ", categoryNames)}";
 
                 throw new CustomException(message, (int)HttpStatusCode.Conflict);
             }
