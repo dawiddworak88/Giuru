@@ -9,6 +9,7 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
@@ -16,29 +17,30 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Catalog.Api.Services.ProductAttributes
 {
     public class ProductAttributesService : IProductAttributesService
     {
-        private readonly IEventBus eventBus;
-        private readonly CatalogContext context;
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
+        private readonly IEventBus _eventBus;
+        private readonly CatalogContext _context;
+        private readonly IStringLocalizer<ProductResources> _productLocalizer;
 
         public ProductAttributesService(
             IEventBus eventBus,
             CatalogContext context,
             IStringLocalizer<ProductResources> productLocalizer)
         {
-            this.eventBus = eventBus;
-            this.context = context;
-            this.productLocalizer = productLocalizer;
+            _eventBus = eventBus;
+            _context = context;
+            _productLocalizer = productLocalizer;
         }
 
         public async Task<PagedResults<IEnumerable<ProductAttributeServiceModel>>> GetAsync(GetProductAttributesServiceModel model)
         {
-            var productAttributes = this.context.ProductAttributes.Where(x => x.IsActive);
+            var productAttributes = _context.ProductAttributes.Where(x => x.IsActive);
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
@@ -99,7 +101,7 @@ namespace Catalog.Api.Services.ProductAttributes
                 SellerId = model.OrganisationId.Value
             };
 
-            this.context.ProductAttributes.Add(productAttribute.FillCommonProperties());
+            _context.ProductAttributes.Add(productAttribute.FillCommonProperties());
 
             var productAttributeTranslation = new ProductAttributeTranslation
             {
@@ -108,16 +110,16 @@ namespace Catalog.Api.Services.ProductAttributes
                 Language = model.Language
             };
 
-            this.context.ProductAttributeTranslations.Add(productAttributeTranslation.FillCommonProperties());
+            _context.ProductAttributeTranslations.Add(productAttributeTranslation.FillCommonProperties());
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            await this.RebuildCategorySchemasAsync(
+            RebuildCategorySchemas(
                 model.OrganisationId.Value,
                 model.Language,
                 model.Username);
 
-            return await this.GetProductAttributeByIdAsync(new GetProductAttributeByIdServiceModel
+            return await GetProductAttributeByIdAsync(new GetProductAttributeByIdServiceModel
             { 
                 Id = productAttribute.Id,
                 Language = model.Language,
@@ -128,11 +130,11 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<ProductAttributeItemServiceModel> CreateProductAttributeItemAsync(CreateUpdateProductAttributeItemServiceModel model)
         {
-            var existingProductItemAttribute = this.context.ProductAttributeItems.FirstOrDefault(x => x.ProductAttributeItemTranslations.Any(y => y.Name == model.Name) && x.ProductAttributeId == model.ProductAttributeId && x.SellerId == model.OrganisationId && x.IsActive);
+            var existingProductItemAttribute = _context.ProductAttributeItems.FirstOrDefault(x => x.ProductAttributeItemTranslations.Any(y => y.Name == model.Name) && x.ProductAttributeId == model.ProductAttributeId && x.SellerId == model.OrganisationId && x.IsActive);
 
             if (existingProductItemAttribute != null)
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductAttributeItemConflict"), (int)HttpStatusCode.Conflict);
+                throw new CustomException(_productLocalizer.GetString("ProductAttributeItemConflict"), (int)HttpStatusCode.Conflict);
             }
 
             var productAttributeItem = new ProductAttributeItem
@@ -142,7 +144,7 @@ namespace Catalog.Api.Services.ProductAttributes
                 SellerId = model.OrganisationId.Value
             };
 
-            this.context.ProductAttributeItems.Add(productAttributeItem.FillCommonProperties());
+            _context.ProductAttributeItems.Add(productAttributeItem.FillCommonProperties());
 
             var productAttributeItemTranslation = new ProductAttributeItemTranslation
             {
@@ -151,16 +153,16 @@ namespace Catalog.Api.Services.ProductAttributes
                 Language = model.Language
             };
 
-            this.context.ProductAttributeItemTranslations.Add(productAttributeItemTranslation.FillCommonProperties());
+            _context.ProductAttributeItemTranslations.Add(productAttributeItemTranslation.FillCommonProperties());
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            await this.RebuildCategorySchemasAsync(
+            RebuildCategorySchemas(
                 model.OrganisationId.Value,
                 model.Language,
                 model.Username);
 
-            return await this.GetProductAttributeItemByIdAsync(new GetProductAttributeItemByIdServiceModel
+            return await GetProductAttributeItemByIdAsync(new GetProductAttributeItemByIdServiceModel
             { 
                 Id = productAttributeItem.Id,
                 Language = model.Language,
@@ -171,23 +173,25 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task DeleteProductAttributeAsync(DeleteProductAttributeServiceModel model)
         {
-            var existingProductAttribute = this.context.ProductAttributes.FirstOrDefault(x => x.Id == model.Id.Value && x.SellerId == model.OrganisationId && x.IsActive);
+            var existingProductAttribute = _context.ProductAttributes.FirstOrDefault(x => x.Id == model.Id.Value && x.SellerId == model.OrganisationId && x.IsActive);
 
             if (existingProductAttribute == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductAttributeNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_productLocalizer.GetString("ProductAttributeNotFound"), (int)HttpStatusCode.NoContent);
             }
 
             if (existingProductAttribute.ProductAttributeItems.Any(x => x.IsActive))
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductAttributeNotEmpty"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_productLocalizer.GetString("ProductAttributeNotEmpty"), (int)HttpStatusCode.Conflict);
             }
+
+            AssertCategorySchemaReference(existingProductAttribute, model.Language);
 
             existingProductAttribute.IsActive = false;
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            await this.RebuildCategorySchemasAsync(
+            RebuildCategorySchemas(
                 model.OrganisationId.Value,
                 model.Language,
                 model.Username);
@@ -195,18 +199,20 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task DeleteProductAttributeItemAsync(DeleteProductAttributeItemServiceModel model)
         {
-            var existingProductAttributeItem = this.context.ProductAttributeItems.FirstOrDefault(x => x.Id == model.Id && x.SellerId == model.OrganisationId && x.IsActive);
+            var existingProductAttributeItem = _context.ProductAttributeItems.FirstOrDefault(x => x.Id == model.Id && x.SellerId == model.OrganisationId && x.IsActive);
 
             if (existingProductAttributeItem == null)
             {
-                throw new CustomException(this.productLocalizer.GetString("ProductAttributeItemNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_productLocalizer.GetString("ProductAttributeItemNotFound"), (int)HttpStatusCode.NoContent);
             }
+
+            AssertCategorySchemaReference(existingProductAttributeItem, model.Language);
 
             existingProductAttributeItem.IsActive = false;
 
-            await this.context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            await this.RebuildCategorySchemasAsync(
+            RebuildCategorySchemas(
                 model.OrganisationId.Value,
                 model.Language,
                 model.Username);
@@ -214,7 +220,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<ProductAttributeServiceModel> GetProductAttributeByIdAsync(GetProductAttributeByIdServiceModel model)
         {
-            var productAttribute = await this.context.ProductAttributes.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId && x.IsActive);
+            var productAttribute = await _context.ProductAttributes.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId && x.IsActive);
 
             if (productAttribute != null)
             {
@@ -235,7 +241,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
                 productAttributeServiceModel.Name = productAttributeTranslations?.Name;
 
-                var productAttributeItems = await this.context.ProductAttributeItems.Where(x => x.ProductAttributeId == productAttribute.Id && x.IsActive).ToListAsync();
+                var productAttributeItems = await _context.ProductAttributeItems.Where(x => x.ProductAttributeId == productAttribute.Id && x.IsActive).ToListAsync();
 
                 if (productAttributeItems != null)
                 {
@@ -252,11 +258,11 @@ namespace Catalog.Api.Services.ProductAttributes
                             CreatedDate = productAttributeItem.CreatedDate
                         };
 
-                        var productAttributeItemTranslations = await this.context.ProductAttributeItemTranslations.FirstOrDefaultAsync(x => x.ProductAttributeItemId == productAttributeItem.Id && x.Language == model.Language && x.IsActive);
+                        var productAttributeItemTranslations = await _context.ProductAttributeItemTranslations.FirstOrDefaultAsync(x => x.ProductAttributeItemId == productAttributeItem.Id && x.Language == model.Language && x.IsActive);
 
                         if (productAttributeItemTranslations == null)
                         {
-                            productAttributeItemTranslations = await this.context.ProductAttributeItemTranslations.FirstOrDefaultAsync(x => x.ProductAttributeItemId == productAttributeItem.Id && x.IsActive);
+                            productAttributeItemTranslations = await _context.ProductAttributeItemTranslations.FirstOrDefaultAsync(x => x.ProductAttributeItemId == productAttributeItem.Id && x.IsActive);
                         }
 
                         productAttributeItemServiceModel.Name = productAttributeItemTranslations?.Name;
@@ -275,7 +281,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<ProductAttributeItemServiceModel> GetProductAttributeItemByIdAsync(GetProductAttributeItemByIdServiceModel model)
         {
-            var productAttributeItem = await this.context.ProductAttributeItems.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId && x.IsActive);
+            var productAttributeItem = await _context.ProductAttributeItems.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId && x.IsActive);
 
             if (productAttributeItem != null)
             {
@@ -288,11 +294,11 @@ namespace Catalog.Api.Services.ProductAttributes
                     CreatedDate = productAttributeItem.CreatedDate
                 };
 
-                var productAttributeTranslations = this.context.ProductAttributeItemTranslations.FirstOrDefault(x => x.ProductAttributeItemId ==productAttributeItem.Id && x.Language == model.Language && x.IsActive);
+                var productAttributeTranslations = _context.ProductAttributeItemTranslations.FirstOrDefault(x => x.ProductAttributeItemId ==productAttributeItem.Id && x.Language == model.Language && x.IsActive);
 
                 if (productAttributeTranslations == null)
                 {
-                    productAttributeTranslations = this.context.ProductAttributeItemTranslations.FirstOrDefault(x => x.ProductAttributeItemId == productAttributeItem.Id && x.IsActive);
+                    productAttributeTranslations = _context.ProductAttributeItemTranslations.FirstOrDefault(x => x.ProductAttributeItemId == productAttributeItem.Id && x.IsActive);
                 }
 
                 productAttributeItemServiceModel.Name = productAttributeTranslations?.Name;
@@ -305,7 +311,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<ProductAttributeServiceModel> UpdateProductAttributeAsync(CreateUpdateProductAttributeServiceModel model)
         {
-            var productAttribute = await this.context.ProductAttributes.FirstOrDefaultAsync(x => x.Id == model.Id.Value && x.SellerId == model.OrganisationId.Value && x.IsActive);
+            var productAttribute = await _context.ProductAttributes.FirstOrDefaultAsync(x => x.Id == model.Id.Value && x.SellerId == model.OrganisationId.Value && x.IsActive);
 
             if (productAttribute != null)
             {
@@ -326,18 +332,18 @@ namespace Catalog.Api.Services.ProductAttributes
                         Name = model.Name
                     };
 
-                    this.context.ProductAttributeTranslations.Add(newProductAttributeTranslation.FillCommonProperties());
+                    _context.ProductAttributeTranslations.Add(newProductAttributeTranslation.FillCommonProperties());
                 }
 
-                await this.context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
 
-            await this.RebuildCategorySchemasAsync(
+            RebuildCategorySchemas(
                 model.OrganisationId.Value,
                 model.Language,
                 model.Username);
 
-            return await this.GetProductAttributeByIdAsync(new GetProductAttributeByIdServiceModel 
+            return await GetProductAttributeByIdAsync(new GetProductAttributeByIdServiceModel 
             {
                 Id = model.Id,
                 OrganisationId = model.OrganisationId,
@@ -348,7 +354,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<ProductAttributeItemServiceModel> UpdateProductAttributeItemAsync(CreateUpdateProductAttributeItemServiceModel model)
         {
-            var productAttributeItem = await this.context.ProductAttributeItems.FirstOrDefaultAsync(x => x.Id == model.Id.Value && x.SellerId == model.OrganisationId.Value && x.IsActive);
+            var productAttributeItem = await _context.ProductAttributeItems.FirstOrDefaultAsync(x => x.Id == model.Id.Value && x.SellerId == model.OrganisationId.Value && x.IsActive);
 
             if (productAttributeItem != null)
             {
@@ -369,18 +375,18 @@ namespace Catalog.Api.Services.ProductAttributes
                         Name = model.Name
                     };
 
-                    this.context.ProductAttributeItemTranslations.Add(newProductAttributeItemTranslation.FillCommonProperties());
+                    _context.ProductAttributeItemTranslations.Add(newProductAttributeItemTranslation.FillCommonProperties());
                 }
 
-                await this.context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
 
-            await this.RebuildCategorySchemasAsync(
+            RebuildCategorySchemas(
                 model.OrganisationId.Value,
                 model.Language,
                 model.Username);
 
-            return await this.GetProductAttributeItemByIdAsync(new GetProductAttributeItemByIdServiceModel
+            return await GetProductAttributeItemByIdAsync(new GetProductAttributeItemByIdServiceModel
             {
                 Id = model.Id,
                 OrganisationId = model.OrganisationId,
@@ -391,7 +397,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<PagedResults<IEnumerable<ProductAttributeItemServiceModel>>> GetProductAttributeItemsAsync(GetProductAttributeItemsServiceModel model)
         {
-            var productAttributesItems = this.context.ProductAttributeItems.Where(x => x.ProductAttributeId == model.ProductAttributeId && x.IsActive);
+            var productAttributesItems = _context.ProductAttributeItems.Where(x => x.ProductAttributeId == model.ProductAttributeId && x.IsActive);
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
@@ -428,11 +434,11 @@ namespace Catalog.Api.Services.ProductAttributes
                     CreatedDate = pagedProductAttributeItem.CreatedDate
                 };
 
-                var productAttributeItemTranslations = this.context.ProductAttributeItemTranslations.FirstOrDefault(x => x.ProductAttributeItemId == pagedProductAttributeItem.Id &&  x.Language == model.Language && x.IsActive);
+                var productAttributeItemTranslations = _context.ProductAttributeItemTranslations.FirstOrDefault(x => x.ProductAttributeItemId == pagedProductAttributeItem.Id &&  x.Language == model.Language && x.IsActive);
 
                 if (productAttributeItemTranslations == null)
                 {
-                    productAttributeItemTranslations = this.context.ProductAttributeItemTranslations.FirstOrDefault(x => x.ProductAttributeItemId == pagedProductAttributeItem.Id && x.IsActive);
+                    productAttributeItemTranslations = _context.ProductAttributeItemTranslations.FirstOrDefault(x => x.ProductAttributeItemId == pagedProductAttributeItem.Id && x.IsActive);
                 }
 
                 productAttributeItemServiceModel.Name = productAttributeItemTranslations?.Name;
@@ -445,12 +451,96 @@ namespace Catalog.Api.Services.ProductAttributes
             return pagedProductAttributeItemServiceModels;
         }
 
-        private async Task RebuildCategorySchemasAsync(
+        private void AssertCategorySchemaReference(ProductAttribute existingProductAttribute, string language)
+        {
+            var attributeRef = $"#/definitions/{existingProductAttribute.Id}";
+
+            var categories = _context.Database.SqlQueryRaw<LocalizedCategorySchema>(
+              @"SELECT ct.CategoryId, ct.Name, ct.Language
+              FROM CategorySchemas cs
+              INNER JOIN CategoryTranslations ct ON cs.CategoryId = ct.CategoryId
+              CROSS APPLY OPENJSON([Schema], '$.properties') AS properties
+              WHERE JSON_VALUE(properties.value, '$.""$ref""') = @AttributeRef",
+                    new SqlParameter("@AttributeRef", attributeRef))
+                .AsNoTracking()
+                .ToList();
+
+            if (categories.Any())
+            {
+                var categoryNames = categories
+                    .GroupBy(c => c.CategoryId)
+                    .Select(group =>
+                    {
+                        var localizedCategory = group.FirstOrDefault(c => c.Language == language);
+                        var categoryName = localizedCategory?.Name ?? group.First().Name;
+                        var languages = string.Join(",", group.Select(c => c.Language).Distinct());
+                        return $"{categoryName} ({languages})";
+                    });
+
+                var message = $"{_productLocalizer.GetString("ProductAttributeInUseByCategories")} {string.Join(", ", categoryNames)}";
+
+                throw new CustomException(message, (int)HttpStatusCode.Conflict);
+            }
+        }
+
+        private void AssertCategorySchemaReference(ProductAttributeItem existingProductAttributeItem, string language)
+        {
+            var valuesList = existingProductAttributeItem.ProductAttributeItemTranslations
+                .Where(x => x.IsActive)
+                .Select(x => x.Name).ToList();
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter("@attributeId", existingProductAttributeItem.ProductAttributeId)
+            };
+
+            for (int i = 0; i < valuesList.Count; i++)
+            {
+                parameters.Add(new SqlParameter($"@value{i}", valuesList[i]));
+            }
+
+            string inClause = string.Join(", ", valuesList.Select((v, i) => $"@value{i}"));
+
+            string query = $@"
+                SELECT ct.CategoryId, ct.Name, ct.Language
+                FROM CategorySchema cs
+                INNER JOIN CategoryTranslations ct ON cs.CategoryId = ct.CategoryId
+                CROSS APPLY OPENJSON(cs.[Schema], '$.definitions') AS def
+                WHERE def.[key] = @attributeId
+                  AND EXISTS (
+                    SELECT 1
+                    FROM OPENJSON(def.[value], '$.anyOf') AS anyOfItems
+                    CROSS APPLY OPENJSON(anyOfItems.[value], '$.enum') AS enumValues
+                    WHERE enumValues.[value] IN ({inClause})
+                )
+                ";
+
+            var categories = _context.Database.SqlQueryRaw<LocalizedCategorySchema>(query, parameters.ToArray()).ToList();
+
+            if (categories.Any())
+            {
+                var categoryNames = categories
+                    .GroupBy(c => c.CategoryId)
+                    .Select(group =>
+                    {
+                        var localizedCategory = group.FirstOrDefault(c => c.Language == language);
+                        var categoryName = localizedCategory?.Name ?? group.First().Name;
+                        var languages = string.Join(",", group.Select(c => c.Language).Distinct());
+                        return $"{categoryName} ({languages})";
+                    });
+
+                var message = $"{_productLocalizer.GetString("ProductAttributeItemInUseByCategories")} {string.Join(", ", categoryNames)}";
+
+                throw new CustomException(message, (int)HttpStatusCode.Conflict);
+            }
+        }
+
+        private void RebuildCategorySchemas(
             Guid? organisationId,
             string language,
             string username)
         {
-            using var source = new ActivitySource(this.GetType().Name);
+            using var source = new ActivitySource(GetType().Name);
             
             var message = new RebuildCategorySchemasIntegrationEvent
             {
@@ -460,7 +550,14 @@ namespace Catalog.Api.Services.ProductAttributes
             };
 
             using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
-            this.eventBus.Publish(message);
+            _eventBus.Publish(message);
+        }
+
+        public class LocalizedCategorySchema
+        {
+            public Guid CategoryId { get; set; }
+            public string Name { get; set; }
+            public string Language { get; set; }
         }
     }
 }

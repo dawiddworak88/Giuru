@@ -291,4 +291,10 @@
   <data name="ToDefinition" xml:space="preserve">
     <value>Gehen Sie zur Definition</value>
   </data>
+  <data name="ProductAttributeInUseByCategories" xml:space="preserve">
+    <value>Bitte zuerst das Attribut von Produktkarten der folenden Kategorien entfernen: </value>
+  </data>
+  <data name="ProductAttributeItemInUseByCategories" xml:space="preserve">
+    <value>Bitte zuerst den Attributwert von Produktkarten der folenden Kategorien entfernen: </value>
+  </data>
 </root>
