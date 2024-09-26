@@ -458,7 +458,7 @@ namespace Catalog.Api.Services.ProductAttributes
             var categories = _context.Database.SqlQueryRaw<LocalizedCategorySchema>(
               @"SELECT ct.CategoryId, ct.Name, ct.Language
               FROM CategorySchemas cs
-              INNER JOIN CategoryTranslations ct ON cs.CategoryId = ct.CategoryId
+              INNER JOIN CategoryTranslations ct ON cs.CategoryId = ct.CategoryId AND cs.Language = ct.Language
               CROSS APPLY OPENJSON([Schema], '$.properties') AS properties
               WHERE JSON_VALUE(properties.value, '$.""$ref""') = @AttributeRef",
                     new SqlParameter("@AttributeRef", attributeRef))
@@ -503,15 +503,14 @@ namespace Catalog.Api.Services.ProductAttributes
 
             string query = $@"
                 SELECT ct.CategoryId, ct.Name, ct.Language
-                FROM CategorySchema cs
-                INNER JOIN CategoryTranslations ct ON cs.CategoryId = ct.CategoryId
+                FROM CategorySchemas cs
+                INNER JOIN CategoryTranslations ct ON cs.CategoryId = ct.CategoryId AND cs.Language = ct.Language
                 CROSS APPLY OPENJSON(cs.[Schema], '$.definitions') AS def
                 WHERE def.[key] = @attributeId
                   AND EXISTS (
                     SELECT 1
                     FROM OPENJSON(def.[value], '$.anyOf') AS anyOfItems
-                    CROSS APPLY OPENJSON(anyOfItems.[value], '$.enum') AS enumValues
-                    WHERE enumValues.[value] IN ({inClause})
+                    WHERE JSON_VALUE(anyOfItems.[value], '$.title') IN ({inClause})
                 )
                 ";
 
