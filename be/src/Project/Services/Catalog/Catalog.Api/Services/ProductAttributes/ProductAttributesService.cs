@@ -485,7 +485,7 @@ namespace Catalog.Api.Services.ProductAttributes
                 parameters.Add(new SqlParameter($"@value{i}", valuesList[i]));
             }
 
-            string inClause = string.Join(", ", valuesList.Select((v, i) => $"@value{i}"));
+            string inClause = string.Join(", ", valuesList.Select((_, i) => $"@value{i}"));
 
             string query = $@"
                 SELECT ct.CategoryId, ct.Name, ct.Language
