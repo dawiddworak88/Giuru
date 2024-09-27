@@ -8,7 +8,6 @@ using Buyer.Web.Areas.Products.Repositories.Categories;
 using Buyer.Web.Areas.Products.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
-using Buyer.Web.Areas.Products.Services.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.Services.SearchSuggestions;
 using Buyer.Web.Areas.Products.Services.SearchSuggestions.ProductsSearchSuggestions;
@@ -34,7 +33,6 @@ namespace Buyer.Web.Areas.Products.DependencyInjection
             services.AddScoped<IOutletRepository, OutletRepository>();
 
             services.AddScoped<IProductsService, ProductsService>();
-            services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<ProductsSearchSuggestionsService>();
             services.AddScoped<StockLevelsSearchSuggestionsService>();
             services.AddScoped<ISearchSuggestionsService, SearchSuggestionsService>();
