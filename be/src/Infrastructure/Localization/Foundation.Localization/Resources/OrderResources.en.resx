@@ -231,7 +231,7 @@
   <data name="Orders" xml:space="preserve">
     <value>Orders</value>
   </data>
-  <data name="OrderStatus" xml:space="preserve">
+  <data name="Orderstatus" xml:space="preserve">
     <value>Order status:</value>
   </data>
   <data name="ExpectedDateOfProductOnStock" xml:space="preserve">
@@ -291,25 +291,46 @@
   <data name="oc_orderedProducts" xml:space="preserve">
     <value>Ordered products:</value>
   </data>
-  <data name="oc_name" xml:space="preserve">
+  <data name="sh_nameLabel" xml:space="preserve">
     <value>Name</value>
   </data>
   <data name="oc_text" xml:space="preserve">
     <value>We are pleased to inform you that your order has been confirmed.</value>
   </data>
-  <data name="oc_outletQuantity" xml:space="preserve">
+  <data name="sh_outletQuantityLabel" xml:space="preserve">
     <value>Outlet quantity</value>
   </data>
   <data name="oc_preheader" xml:space="preserve">
     <value>Order Approved: Check Transaction Details</value>
   </data>
-  <data name="oc_quantity" xml:space="preserve">
+  <data name="sh_quantityLabel" xml:space="preserve">
     <value>Quantity</value>
   </data>
-  <data name="oc_stockQuantity" xml:space="preserve">
+  <data name="sh_stockQuantityLabel" xml:space="preserve">
     <value>Stock quantity</value>
   </data>
   <data name="oc_subject" xml:space="preserve">
     <value>Order Confirm</value>
+  </data>
+  <data name="co_clientNameLabel" xml:space="preserve">
+    <value>Client name</value>
+  </data>
+  <data name="co_subject" xml:space="preserve">
+    <value>The order has been canceled</value>
+  </data>
+  <data name="co_preheader" xml:space="preserve">
+    <value>One of the clients canceled the order.</value>
+  </data>
+  <data name="co_clientIdLabel" xml:space="preserve">
+    <value>Client Id</value>
+  </data>
+  <data name="co_orderIdLabel" xml:space="preserve">
+    <value>Order id</value>
+  </data>
+  <data name="co_orderLinkLabel" xml:space="preserve">
+    <value>Order link</value>
+  </data>
+  <data name="co_cancelOrderItemsLabel" xml:space="preserve">
+    <value>Canceled order items</value>
   </data>
 </root>
