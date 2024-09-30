@@ -1,4 +1,5 @@
 using Buyer.Web.Areas.Orders.ComponentModels;
+using Buyer.Web.Areas.Orders.Definitions;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.ViewModel;
@@ -88,9 +89,9 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 {
                     viewModel.Id = order.Id;
                     viewModel.OrderStatusId = order.OrderStatusId;
+                    viewModel.CanCancelOrder = order.OrderStatusId.Equals(OrdersConstants.OrderStatuses.NewId);
                     viewModel.CustomOrder = order.MoreInfo;
                     viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
-                    viewModel.CanCancelOrder = false;
                     viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                     {
                         Id = x.Id,
