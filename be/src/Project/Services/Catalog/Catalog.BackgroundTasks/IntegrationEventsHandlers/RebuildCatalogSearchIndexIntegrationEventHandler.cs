@@ -1,6 +1,7 @@
 ﻿using Catalog.BackgroundTasks.IntegrationEvents;
 using Catalog.BackgroundTasks.Services.Products;
 using Foundation.EventBus.Abstractions;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -9,11 +10,14 @@ namespace Catalog.BackgroundTasks.IntegrationEventsHandlers
     public class RebuildCatalogSearchIndexIntegrationEventHandler : IIntegrationEventHandler<RebuildCatalogSearchIndexIntegrationEvent>
     {
         private readonly IProductsService productsService;
+        private readonly ILogger _logger;
 
         public RebuildCatalogSearchIndexIntegrationEventHandler(
-            IProductsService productsService)
+            IProductsService productsService,
+            ILogger<RebuildCatalogSearchIndexIntegrationEventHandler> logger)
         {
             this.productsService = productsService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -31,7 +35,13 @@ namespace Catalog.BackgroundTasks.IntegrationEventsHandlers
 
             if (@event.OrganisationId.HasValue)
             {
-                // await this.productsService.IndexAllAsync(@event.OrganisationId);
+                _logger.LogError($"Rebuild index organisation id is {@event.OrganisationId.Value}");
+
+                await this.productsService.IndexAllAsync(@event.OrganisationId);
+            }
+            else
+            {
+                _logger.LogError($"Organisation id by rebuild product index is missing.");
             }
         }
     }

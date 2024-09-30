@@ -1,5 +1,5 @@
 ﻿using Foundation.Catalog.Infrastructure;
-using Foundation.Catalog.Repositories.Products.ProductIndexingRepositories;
+using Foundation.Catalog.Repositories.ProductIndexingRepositories;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -11,15 +11,18 @@ namespace Catalog.BackgroundTasks.Services.Products
     {
         private readonly CatalogContext _context;
         private readonly IProductIndexingRepository _productIndexingRepository;
+        private readonly IBulkProductIndexingRepository _bulkProductIndexingRepository;
         private readonly ILogger<ProductsService> _logger;
 
         public ProductsService(
             CatalogContext context,
             IProductIndexingRepository productIndexingRepository,
+            IBulkProductIndexingRepository bulkProductIndexingRepository,
             ILogger<ProductsService> logger)
         {
             _context = context;
             _productIndexingRepository = productIndexingRepository;
+            _bulkProductIndexingRepository = bulkProductIndexingRepository;
             _logger = logger;
         }
 
@@ -31,7 +34,7 @@ namespace Catalog.BackgroundTasks.Services.Products
                 {
                     try
                     {
-                        await _productIndexingRepository.IndexAsync(productId);
+                        await _bulkProductIndexingRepository.IndexAsync(productId);
                     }
                     catch (Exception exception)
                     {
@@ -45,8 +48,11 @@ namespace Catalog.BackgroundTasks.Services.Products
         {
             if (sellerId.HasValue)
             {
+                int i = 1;
                 foreach (var productId in _context.Products.Where(x => x.Brand.SellerId == sellerId && x.Category.Id == categoryId).Select(x => x.Id).ToList())
                 {
+                    _logger.LogError($"Indexing product {i} - {productId}");
+
                     try
                     {
                         await _productIndexingRepository.IndexAsync(productId);
@@ -55,6 +61,8 @@ namespace Catalog.BackgroundTasks.Services.Products
                     {
                         _logger.LogError(exception, $"Couldn't index product: {productId}");
                     }
+
+                    i++;
                 }
             }
         }

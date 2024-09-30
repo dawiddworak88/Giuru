@@ -36,6 +36,7 @@ namespace Ordering.Api.IntegrationEvents
         public string MoreInfo { get; set; }
         public BasketEventModel Basket { get; set; }
         public bool HasCustomOrder { get; set; }
+        public bool HasApprovalToSendEmail { get; set; }
         public IEnumerable<Guid> Attachments { get; set; }
     }
 }

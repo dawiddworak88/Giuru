@@ -438,6 +438,8 @@ spec:
           value: {{ .Values.sendGridApiKey }}
         - name: ActionSendGridCustomOrderTemplateId
           value: {{ .Values.orderingApi.actionSendGridCustomOrderTemplateId }}
+        - name: ActionSendGridConfirmationOrderTemplateId
+          value: {{ .Values.orderingApi.actionSendGridConfirmationOrderTemplateId }}
         - name: MediaUrl
           value: {{ .Values.mediaUrl }}
         - name: LogzIoToken
@@ -530,6 +532,8 @@ spec:
           value: {{ .Values.identityUrl }}
         - name: BuyerUrl
           value: {{ .Values.buyerUrl }}
+        - name: ClientUrl
+          value: {{ .Values.clientUrl }}
         - name: Clients
           value: {{ .Values.identityApi.clients }}
         - name: SellerClientId
@@ -582,6 +586,12 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: ApiOrganisationId
+          value: {{ .Values.identityApi.apiOrganisationId }}
+        - name: ApiEmail
+          value:  {{ .Values.identityApi.apiEmail }}
+        - name: ApiAppSecret
+          value: {{ .Values.identityApi.apiAppSecret }}
         ports:
         - containerPort: 8080
 ---

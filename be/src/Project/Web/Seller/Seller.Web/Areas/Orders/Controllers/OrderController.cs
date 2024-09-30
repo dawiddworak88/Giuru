@@ -6,6 +6,7 @@ using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Seller.Web.Areas.Orders.ComponetModels;
 using Seller.Web.Areas.Orders.ViewModel;
 using System;
 using System.Globalization;
@@ -18,48 +19,49 @@ namespace Seller.Web.Areas.Orders.Controllers
     [Area("Orders")]
     public class OrderController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, EditOrderPageViewModel> editOrderPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> _orderPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<OrdersPageComponentModel, EditOrderPageViewModel> _editOrderPageModelBuilder;
 
         public OrderController(
             IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, EditOrderPageViewModel> editOrderPageModelBuilder)
+            IAsyncComponentModelBuilder<OrdersPageComponentModel, EditOrderPageViewModel> editOrderPageModelBuilder)
         {
-            this.orderPageModelBuilder = orderPageModelBuilder;
-            this.editOrderPageModelBuilder = editOrderPageModelBuilder;
+            _orderPageModelBuilder = orderPageModelBuilder;
+            _editOrderPageModelBuilder = editOrderPageModelBuilder;
         }
 
         public async Task<IActionResult> Index()
         {
             var componentModel = new ComponentModelBase
             {
-                IsAuthenticated = this.User.Identity.IsAuthenticated,
-                Name = this.User.Identity.Name,
+                IsAuthenticated = User.Identity.IsAuthenticated,
+                Name = User.Identity.Name,
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
+                SellerId = GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
             };
 
-            var viewModel = await this.orderPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _orderPageModelBuilder.BuildModelAsync(componentModel);
 
-            return this.View(viewModel);
+            return View(viewModel);
         }
 
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid? id, string searchTerm)
         {
-            var componentModel = new ComponentModelBase
+            var componentModel = new OrdersPageComponentModel
             {
                 Id = id,
-                IsAuthenticated = this.User.Identity.IsAuthenticated,
-                Name = this.User.Identity.Name,
+                IsAuthenticated = User.Identity.IsAuthenticated,
+                Name = User.Identity.Name,
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
+                SellerId = GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
+                SearchTerm = searchTerm
             };
 
-            var viewModel = await this.editOrderPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _editOrderPageModelBuilder.BuildModelAsync(componentModel);
 
-            return this.View(viewModel);
+            return View(viewModel);
         }
     }
 }

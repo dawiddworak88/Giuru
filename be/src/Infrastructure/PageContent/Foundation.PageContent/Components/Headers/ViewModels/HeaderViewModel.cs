@@ -11,6 +11,8 @@ namespace Foundation.PageContent.Components.Headers.ViewModels
         public LinkViewModel SignOutLink { get; set; }
         public string DrawerBackLabel { get; set; }
         public string DrawerBackIcon { get; set; }
+        public string SearchLabel { get; set; }
+        public string SearchPlaceholderLabel { get; set; }
         public LogoViewModel Logo { get; set; }
         public IEnumerable<DrawerMenuViewModel> DrawerMenuCategories { get; set; }
         public LanguageSwitcherViewModel LanguageSwitcher { get; set; }

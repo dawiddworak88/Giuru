@@ -7,6 +7,7 @@ using Foundation.Extensions.Exceptions;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.DomainModels.Clients;
+using System;
 
 namespace Buyer.Web.Shared.Repositories.Clients
 {
