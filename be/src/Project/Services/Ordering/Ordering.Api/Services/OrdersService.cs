@@ -8,6 +8,7 @@ using Foundation.Localization;
 using Foundation.Mailing.Models;
 using Foundation.Mailing.Services;
 using Foundation.Media.Services.MediaServices;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -42,6 +43,7 @@ namespace Ordering.Api.Services
         private readonly IOptions<AppSettings> _configuration;
         private readonly IMediaService _mediaService;
         private readonly ILogger _logger;
+        private readonly LinkGenerator _linkGenerator;
 
         public OrdersService(
             OrderingContext context,
@@ -52,7 +54,8 @@ namespace Ordering.Api.Services
             IOptionsMonitor<AppSettings> orderingOptions,
             IOptions<AppSettings> configuration,
             IMediaService mediaService,
-            ILogger<OrdersService> logger)
+            ILogger<OrdersService> logger,
+            LinkGenerator linkGenerator)
         {
             _context = context;
             _eventBus = eventBus;
@@ -63,6 +66,7 @@ namespace Ordering.Api.Services
             _orderingOptions = orderingOptions;
             _mediaService = mediaService;
             _logger = logger;
+            _linkGenerator = linkGenerator;
         }
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel serviceModel)
@@ -208,10 +212,10 @@ namespace Ordering.Api.Services
                         oc_title = _orderLocalizer.GetString("oc_title").Value,
                         oc_text = _orderLocalizer.GetString("oc_text").Value,
                         oc_orderedProducts = _orderLocalizer.GetString("oc_orderedProducts").Value,
-                        oc_name = _orderLocalizer.GetString("oc_name").Value,
-                        oc_quantity = _orderLocalizer.GetString("oc_quantity").Value,
-                        oc_stockQuantity = _orderLocalizer.GetString("oc_stockQuantity").Value,
-                        oc_outletQuantity = _orderLocalizer.GetString("oc_outletQuantity").Value,
+                        oc_name = _orderLocalizer.GetString("sh_nameLabel").Value,
+                        oc_quantity = _orderLocalizer.GetString("sh_quantityLabel").Value,
+                        oc_stockQuantity = _orderLocalizer.GetString("sh_stockQuantityLabel").Value,
+                        oc_outletQuantity = _orderLocalizer.GetString("sh_outletQuantityLabel").Value,
                         oc_products = serviceModel.Items.OrEmptyIfNull().Select(x => new
                         {
                             pictureUrl = x.PictureUrl,
@@ -607,6 +611,42 @@ namespace Ordering.Api.Services
 
                     orderItem.LastOrderItemStatusChangeId = newOrderItemStatusChange.Id;
                 }
+
+                await _mailingService.SendTemplateAsync(new TemplateEmail
+                {
+                    RecipientEmailAddress = _configuration.Value.SenderEmail,
+                    RecipientName = _configuration.Value.SenderName,
+                    SenderEmailAddress = _configuration.Value.SenderEmail,
+                    SenderName = _configuration.Value.SenderEmail,
+                    TemplateId = _configuration.Value.ActionSendGridCancleOrderTemplateId,
+                    DynamicTemplateData = new
+                    {
+                        co_subject = _orderLocalizer.GetString("co_subject").Value,
+                        co_preheader = _orderLocalizer.GetString("co_preheader").Value,
+                        co_clientName = order.ClientName,
+                        co_clientNameLabel = _orderLocalizer.GetString("co_clientNameLabel").Value,
+                        co_clientId = order.ClientId,
+                        co_clientIdLabel = _orderLocalizer.GetString("co_clientIdLabel").Value,
+                        co_orderId = order.Id,
+                        co_orderIdLabel = _orderLocalizer.GetString("co_orderIdLabel").Value,
+                        co_orderLink = _linkGenerator.GetPathByAction("Edit", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }) + $"/{order.Id}",
+                        co_orderLinkLabel = _orderLocalizer.GetString("co_orderLinkLabel").Value,
+                        co_cancelDate = DateTime.UtcNow.ToString(),
+                        co_cancelOrderItemsLabel = _orderLocalizer.GetString("co_cancelOrderItemsLabel").Value,
+                        co_name = _orderLocalizer.GetString("sh_nameLabel").Value,
+                        co_quantity = _orderLocalizer.GetString("sh_quantityLabel").Value,
+                        co_stockQuantity = _orderLocalizer.GetString("sh_stockQuantityLabel").Value,
+                        co_outletQuantity = _orderLocalizer.GetString("sh_outletQuantityLabel").Value,
+                        co_products = order.OrderItems.OrEmptyIfNull().Select(x => new
+                        {
+                            pictureUrl = x.PictureUrl,
+                            name = $"{x.ProductName} ({x.ProductSku})",
+                            quantity = x.Quantity,
+                            stockQuantity = x.StockQuantity,
+                            outletQuantity = x.OutletQuantity
+                        })
+                    }
+                });
             }
 
             await _context.SaveChangesAsync();
