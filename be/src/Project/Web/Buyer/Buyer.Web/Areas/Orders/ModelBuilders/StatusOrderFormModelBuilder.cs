@@ -89,7 +89,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 {
                     viewModel.Id = order.Id;
                     viewModel.OrderStatusId = order.OrderStatusId;
-                    viewModel.CanCancelOrder = order.OrderStatusId.Equals(OrdersConstants.OrderStatuses.NewId);
                     viewModel.CustomOrder = order.MoreInfo;
                     viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
                     viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
@@ -111,6 +110,15 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         ImageAlt = x.ProductName,
                         ImageSrc = x.PictureUrl
                     });
+
+                    if (order.OrderItems.Any(x => x.OrderItemStatusId.Equals(OrdersConstants.OrderStatuses.NewId) is false) && order.OrderStatusId.Equals(OrdersConstants.OrderStatuses.NewId))
+                    {
+                        viewModel.CanCancelOrder = false;
+                    }
+                    else
+                    {
+                        viewModel.CanCancelOrder = true;
+                    }
                 }
 
                 if (order.ShippingAddressId.HasValue)
