@@ -88,6 +88,11 @@ function OrderForm(props) {
         return "(" + suggestion.sku + ")" + " " + suggestion.name;
     };
 
+    const getProductStockQuantity = () => {
+        var items = orderItems.filter(x => x.sku === product.sku)
+        return items.reduce((sum, item) => sum + item.stockQuantity, 0);
+    }
+
     const handleAddOrderItemClick = () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
@@ -101,34 +106,26 @@ function OrderForm(props) {
         };
 
         if (isStock) {
+            const itemsStockQuantity = getProductStockQuantity();
+        
             if (orderItems.some(x => x.sku === product.sku)) {
-                var items = orderItems.filter(x => x.sku === product.sku)
-                var itemsStockQuantity = items.reduce((sum, item) => sum + item.stockQuantity, 0);
-
                 if (itemsStockQuantity >= product.stockQuantity) {
                     orderItem.quantity = quantity;
+                } else if (itemsStockQuantity + parseFloat(quantity) >= product.stockQuantity) {
+                    orderItem.quantity = quantity - (product.stockQuantity - itemsStockQuantity);
+                    orderItem.stockQuantity = quantity - orderItem.quantity;
+                } else {
+                    orderItem.stockQuantity = quantity;
                 }
-                else {
-                    if (itemsStockQuantity + quantity >= product.stockQuantity) {
-                        orderItem.quantity = quantity - (product.stockQuantity - itemsStockQuantity);
-                        orderItem.stockQuantity = quantity - orderItem.quantity;
-                    }
-                    else {
-                        orderItem.stockQuantity = quantity;
-                    }   
-                }
-            }
-            else {
+            } else {
                 if (quantity > product.stockQuantity) {
                     orderItem.quantity = quantity - product.stockQuantity;
                     orderItem.stockQuantity = product.stockQuantity;
-                }
-                else {
+                } else {
                     orderItem.stockQuantity = quantity;
                 }
             }
-        }
-        else {
+        } else {
             orderItem.quantity = quantity;
         }
 
@@ -526,7 +523,7 @@ function OrderForm(props) {
                                         setMoreInfo(e.target.value);
                                     }} />
                             </div>
-                            {product && product.stockQuantity > 0 &&
+                            {product && product.stockQuantity > getProductStockQuantity() &&
                                 <div className="column is-2 is-flex is-align-items-flex-end">
                                 <FormControlLabel
                                     control={<Checkbox 
