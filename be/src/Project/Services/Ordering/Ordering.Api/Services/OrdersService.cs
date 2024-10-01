@@ -617,7 +617,7 @@ namespace Ordering.Api.Services
                     RecipientEmailAddress = _configuration.Value.SenderEmail,
                     RecipientName = _configuration.Value.SenderName,
                     SenderEmailAddress = _configuration.Value.SenderEmail,
-                    SenderName = _configuration.Value.SenderEmail,
+                    SenderName = _configuration.Value.SenderName,
                     TemplateId = _configuration.Value.ActionSendGridCancleOrderTemplateId,
                     DynamicTemplateData = new
                     {
@@ -625,13 +625,9 @@ namespace Ordering.Api.Services
                         co_preheader = _orderLocalizer.GetString("co_preheader").Value,
                         co_clientName = order.ClientName,
                         co_clientNameLabel = _orderLocalizer.GetString("co_clientNameLabel").Value,
-                        co_clientId = order.ClientId,
-                        co_clientIdLabel = _orderLocalizer.GetString("co_clientIdLabel").Value,
-                        co_orderId = order.Id,
-                        co_orderIdLabel = _orderLocalizer.GetString("co_orderIdLabel").Value,
+                        co_buyerUrl = _configuration.Value.BuyerUrl,
                         co_orderLink = _linkGenerator.GetPathByAction("Edit", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }) + $"/{order.Id}",
                         co_orderLinkLabel = _orderLocalizer.GetString("co_orderLinkLabel").Value,
-                        co_cancelDate = DateTime.UtcNow.ToString(),
                         co_cancelOrderItemsLabel = _orderLocalizer.GetString("co_cancelOrderItemsLabel").Value,
                         co_name = _orderLocalizer.GetString("sh_nameLabel").Value,
                         co_quantity = _orderLocalizer.GetString("sh_quantityLabel").Value,
