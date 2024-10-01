@@ -231,7 +231,7 @@
   <data name="Orders" xml:space="preserve">
     <value>Zamówienia</value>
   </data>
-  <data name="Orderstatus" xml:space="preserve">
+  <data name="OrderStatus" xml:space="preserve">
     <value>Status zamówienia:</value>
   </data>
   <data name="ExpectedDateOfProductOnStock" xml:space="preserve">
@@ -320,12 +320,6 @@
   </data>
   <data name="co_preheader" xml:space="preserve">
     <value>Jeden z klientów anulował zamówienie.</value>
-  </data>
-  <data name="co_clientIdLabel" xml:space="preserve">
-    <value>Id klienta</value>
-  </data>
-  <data name="co_orderIdLabel" xml:space="preserve">
-    <value>Id zamówienia</value>
   </data>
   <data name="co_orderLinkLabel" xml:space="preserve">
     <value>Link do zamówienia</value>
