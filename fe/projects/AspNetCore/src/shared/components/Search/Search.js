@@ -23,6 +23,7 @@ const Search = (props) => {
     const [state, dispatch] = useContext(Context);
     const [open, setOpen] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
+    const [selectedSuggestion, setSelectedSuggestion] = useState(null);
 
     useEffect(() => {
         if (typeof window !== "undefined" && localStorage.getItem("searchArea")) {
@@ -95,6 +96,7 @@ const Search = (props) => {
     };
 
     const getSuggestionValue = (suggestion) => {
+        setSelectedSuggestion(suggestion);
         return `${suggestion.name ? suggestion.name : ""}${suggestion.attributes ? ` ${suggestion.attributes}` : ""}${suggestion.sku ? ` (${suggestion.sku})` : ""}`;
     };
 
@@ -143,12 +145,12 @@ const Search = (props) => {
     }
 
     const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
+        if (selectedSuggestion == null && event.key === 'Enter') {
             event.preventDefault();
             var suggestion = suggestions.find(x => x.url != null || x.url != undefined);
-            onSuggestionSelected(event, { suggestion: suggestion});
+            onSuggestionSelected(event, { suggestion: suggestion });
         }
-      };
+    };
 
     const searchInputProps = {
         placeholder: props.searchPlaceholderLabel,
@@ -156,6 +158,9 @@ const Search = (props) => {
         className: "search__field",
         onChange: (_, { newValue, method }) => {
             setSearchTerm(newValue)
+            if (newValue.length < 3) {
+                setSelectedSuggestion(null);
+            }
         },
         onFocus: () => {
             setIsFocused(true);
@@ -277,6 +282,7 @@ const Search = (props) => {
                             onClick={() => {
                                 setSearchTerm("");
                                 setSuggestions([]);
+                                setSelectedSuggestion(null);
                             }}
                             sx={{
                                 p: 0,
@@ -304,6 +310,7 @@ const Search = (props) => {
                                 onChange={(e) => {
                                     setSearchArea(e.target.value);
                                     setSuggestions([]);
+                                    setSelectedSuggestion(null);
                                     saveSearchArea(e.target.value);
                                 }}
                                 displayEmpty
