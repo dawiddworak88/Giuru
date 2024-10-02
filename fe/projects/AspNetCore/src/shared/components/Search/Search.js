@@ -25,7 +25,7 @@ const Search = (props) => {
     const [isFocused, setIsFocused] = useState(false);
 
     useEffect(() => {
-        if (typeof window !== "undefined") {
+        if (typeof window !== "undefined" && localStorage.getItem("searchArea")) {
             setSearchArea(localStorage.getItem("searchArea"))
         }
     }, []);
@@ -81,8 +81,10 @@ const Search = (props) => {
     }
 
     const onSuggestionSelected = (event, { suggestion }) => {
-        NavigationHelper.redirect(suggestion.url);
-        updateSearchHistory(suggestion);
+        if (suggestion != null || suggestion != undefined) {
+            NavigationHelper.redirect(suggestion.url);
+            updateSearchHistory(suggestion);
+        }
         setSearchTerm('');
     };
 
@@ -140,6 +142,14 @@ const Search = (props) => {
         )
     }
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            var suggestion = suggestions.find(x => x.url != null || x.url != undefined);
+            onSuggestionSelected(event, { suggestion: suggestion});
+        }
+      };
+
     const searchInputProps = {
         placeholder: props.searchPlaceholderLabel,
         value: searchTerm,
@@ -155,7 +165,8 @@ const Search = (props) => {
             setTimeout(() => {
                 setIsFocused(false)
             }, 100)
-        }
+        },
+        onKeyDown: handleKeyDown
     };
 
     const noResultInformation = (query) => {
@@ -204,7 +215,7 @@ const Search = (props) => {
     }
 
     function renderSuggestionsContainer({ containerProps, children, query }) {
-        {props.overlayDisplaying(false)}
+        props.overlayDisplaying(false);
         return (
             <div>
                 {!open &&
