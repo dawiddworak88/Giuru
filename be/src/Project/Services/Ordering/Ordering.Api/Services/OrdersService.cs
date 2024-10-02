@@ -618,7 +618,7 @@ namespace Ordering.Api.Services
                     RecipientName = _configuration.Value.SenderName,
                     SenderEmailAddress = _configuration.Value.SenderEmail,
                     SenderName = _configuration.Value.SenderName,
-                    TemplateId = _configuration.Value.ActionSendGridCancleOrderTemplateId,
+                    TemplateId = _configuration.Value.ActionSendGridCancelOrderTemplateId,
                     DynamicTemplateData = new
                     {
                         co_subject = _orderLocalizer.GetString("co_subject").Value,
