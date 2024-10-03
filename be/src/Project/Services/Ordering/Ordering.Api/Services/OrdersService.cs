@@ -8,7 +8,6 @@ using Foundation.Localization;
 using Foundation.Mailing.Models;
 using Foundation.Mailing.Services;
 using Foundation.Media.Services.MediaServices;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -43,7 +42,6 @@ namespace Ordering.Api.Services
         private readonly IOptions<AppSettings> _configuration;
         private readonly IMediaService _mediaService;
         private readonly ILogger _logger;
-        private readonly LinkGenerator _linkGenerator;
 
         public OrdersService(
             OrderingContext context,
@@ -54,8 +52,7 @@ namespace Ordering.Api.Services
             IOptionsMonitor<AppSettings> orderingOptions,
             IOptions<AppSettings> configuration,
             IMediaService mediaService,
-            ILogger<OrdersService> logger,
-            LinkGenerator linkGenerator)
+            ILogger<OrdersService> logger)
         {
             _context = context;
             _eventBus = eventBus;
@@ -66,7 +63,6 @@ namespace Ordering.Api.Services
             _orderingOptions = orderingOptions;
             _mediaService = mediaService;
             _logger = logger;
-            _linkGenerator = linkGenerator;
         }
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel serviceModel)
@@ -626,7 +622,7 @@ namespace Ordering.Api.Services
                         co_clientName = order.ClientName,
                         co_clientNameLabel = _orderLocalizer.GetString("co_clientNameLabel").Value,
                         co_buyerUrl = _configuration.Value.BuyerUrl,
-                        co_orderLink = _linkGenerator.GetPathByAction("Edit", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }) + $"/{order.Id}",
+                        co_orderLink = $"{CultureInfo.CurrentCulture.Name}/Orders/Order/Status/{order.Id}",
                         co_orderLinkLabel = _orderLocalizer.GetString("co_orderLinkLabel").Value,
                         co_cancelOrderItemsLabel = _orderLocalizer.GetString("co_cancelOrderItemsLabel").Value,
                         co_name = _orderLocalizer.GetString("sh_nameLabel").Value,
