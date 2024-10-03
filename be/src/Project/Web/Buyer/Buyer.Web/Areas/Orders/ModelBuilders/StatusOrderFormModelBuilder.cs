@@ -12,6 +12,7 @@ using Foundation.Localization;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -111,13 +112,13 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         ImageSrc = x.PictureUrl
                     });
 
-                    if (order.OrderItems.Any(x => x.OrderItemStatusId.Equals(OrdersConstants.OrderStatuses.NewId) is false) && order.OrderStatusId.Equals(OrdersConstants.OrderStatuses.NewId))
+                    if (order.OrderItems.Any(x => x.OrderItemStatusId.Equals(OrdersConstants.OrderStatuses.NewId) is false) is false && order.OrderStatusId.Equals(OrdersConstants.OrderStatuses.NewId))
                     {
-                        viewModel.CanCancelOrder = false;
+                        viewModel.CanCancelOrder = true;
                     }
                     else
                     {
-                        viewModel.CanCancelOrder = true;
+                        viewModel.CanCancelOrder = false;
                     }
                 }
 
