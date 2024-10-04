@@ -101,7 +101,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                     {
                         await _userService.SignInAsync(user.Email, model.Password, model.ReturnUrl, null);
 
-                        return StatusCode((int)HttpStatusCode.Redirect, new { Url = _options.Value.BuyerUrl });
+                        return StatusCode((int)HttpStatusCode.OK, new { Url = _options.Value.BuyerUrl });
                     }
                 }
                 catch (Exception ex)
