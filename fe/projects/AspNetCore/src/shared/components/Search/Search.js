@@ -108,7 +108,7 @@ const Search = (props) => {
     };
 
     const clearSearchHistory = () => {
-        localStorage.removeItem('searchHistory');
+        localStorage.setItem('searchHistory', JSON.stringify([]));
         setSearchHistory([]);
     }
 
