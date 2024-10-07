@@ -8,6 +8,7 @@
         public string ActionSendGridCustomOrderTemplateId { get; set; }
         public string ActionSendGridConfirmationOrderTemplateId { get; set; }
         public string ActionSendGridCancelOrderTemplateId { get; set; }
+        public string ActionSendGridCancelOrderItemTemplateId { get; set; }
         public string SenderEmail { get; set; }
         public string SenderName { get; set; }
     }
