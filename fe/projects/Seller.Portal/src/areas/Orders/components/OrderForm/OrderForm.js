@@ -82,7 +82,7 @@ function OrderForm(props) {
 
     const getProductSuggestionValue = (suggestion) => {
 
-        return "(" + suggestion.sku + ")" + " " + suggestion.name;
+        return suggestion.name;
     };
 
     const handleAddOrderItemClick = () => {
