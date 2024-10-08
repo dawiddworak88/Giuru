@@ -8,8 +8,6 @@ using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using Newtonsoft.Json;
-using System;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
