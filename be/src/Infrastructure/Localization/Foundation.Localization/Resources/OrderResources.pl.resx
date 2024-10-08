@@ -337,7 +337,7 @@
     <value>Anulowano pozycję zamówienia</value>
   </data>
   <data name="coi_preheader" xml:space="preserve">
-    <value>Jedenz klientów anulował pozycję w zamówieniu</value>
+    <value>Jeden z klientów anulował pozycję w zamówieniu</value>
   </data>
   <data name="coi_cancelOrderItemLabel" xml:space="preserve">
     <value>Anulowany produkt</value>
