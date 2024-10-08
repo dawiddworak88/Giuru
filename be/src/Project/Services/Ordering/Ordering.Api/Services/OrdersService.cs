@@ -620,10 +620,10 @@ namespace Ordering.Api.Services
                         co_subject = _orderLocalizer.GetString("co_subject").Value,
                         co_preheader = _orderLocalizer.GetString("co_preheader").Value,
                         co_clientName = order.ClientName,
-                        co_clientNameLabel = _orderLocalizer.GetString("co_clientNameLabel").Value,
+                        co_clientNameLabel = _orderLocalizer.GetString("sh_clientNameLabel").Value,
                         co_buyerUrl = _configuration.Value.BuyerUrl,
                         co_orderLink = $"{CultureInfo.CurrentCulture.Name}/Orders/Order/Status/{order.Id}",
-                        co_orderLinkLabel = _orderLocalizer.GetString("co_orderLinkLabel").Value,
+                        co_orderLinkLabel = _orderLocalizer.GetString("sh_orderLinkLabel").Value,
                         co_cancelOrderItemsLabel = _orderLocalizer.GetString("co_cancelOrderItemsLabel").Value,
                         co_name = _orderLocalizer.GetString("sh_nameLabel").Value,
                         co_quantity = _orderLocalizer.GetString("sh_quantityLabel").Value,
@@ -785,6 +785,40 @@ namespace Ordering.Api.Services
                 };
 
                 await _context.OrderItemStatusChangesCommentTranslations.AddAsync(orderItemStatusChangeTranslation.FillCommonProperties());
+            }
+
+            if (model.OrderItemStatusId.Equals(OrderStatusesConstants.CanceledId))
+            {
+                var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id.Equals(orderItem.OrderId) && x.IsActive);
+
+                await _mailingService.SendTemplateAsync(new TemplateEmail
+                {
+                    RecipientEmailAddress = _configuration.Value.SenderEmail,
+                    RecipientName = _configuration.Value.SenderName,
+                    SenderEmailAddress = _configuration.Value.SenderEmail,
+                    SenderName = _configuration.Value.SenderName,
+                    TemplateId = _configuration.Value.ActionSendGridCancelOrderItemTemplateId,
+                    DynamicTemplateData = new
+                    {
+                        coi_subject = _orderLocalizer.GetString("coi_subject").Value,
+                        coi_preheader = _orderLocalizer.GetString("coi_preheader").Value,
+                        coi_clientNameLabel = _orderLocalizer.GetString("sh_clientNameLabel").Value,
+                        coi_clientName = order.ClientName,
+                        coi_buyerUrl = _configuration.Value.BuyerUrl,
+                        coi_orderItemLink = $"{CultureInfo.CurrentCulture.Name}/Orders/OrderItem/Edit/{orderItem.Id}",
+                        coi_orderItemLinkLabel = _orderLocalizer.GetString("sh_orderLinkLabel").Value,
+                        coi_cancelOrderItemLabel = _orderLocalizer.GetString("coi_cancelOrderItemLabel").Value,
+                        coi_name = _orderLocalizer.GetString("sh_nameLabel").Value,
+                        coi_quantity = _orderLocalizer.GetString("sh_quantityLabel").Value,
+                        coi_stockQuantity = _orderLocalizer.GetString("sh_stockQuantityLabel").Value,
+                        coi_outletQuantity = _orderLocalizer.GetString("sh_outletQuantityLabel").Value,
+                        coi_productName = orderItem.ProductName,
+                        coi_productPictureUrl = orderItem.PictureUrl,
+                        coi_productQuantity = orderItem.Quantity,
+                        coi_productStockQuantity = orderItem.StockQuantity,
+                        coi_productOutletQuantity = orderItem.OutletQuantity
+                    }
+                });
             }
 
             orderItem.LastOrderItemStatusChangeId = orderItemStatusChange.Id;
