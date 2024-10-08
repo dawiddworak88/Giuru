@@ -327,4 +327,13 @@
   <data name="co_cancelOrderItemsLabel" xml:space="preserve">
     <value>Canceled order items</value>
   </data>
+  <data name="coi_subject" xml:space="preserve">
+    <value>The order item has been canceled</value>
+  </data>
+  <data name="coi_preheader" xml:space="preserve">
+    <value>One of the customers canceled an item in the order</value>
+  </data>
+  <data name="coi_cancelOrderItemLabel" xml:space="preserve">
+    <value>Canceled product</value>
+  </data>
 </root>

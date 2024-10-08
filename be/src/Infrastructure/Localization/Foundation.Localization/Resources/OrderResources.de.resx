@@ -327,4 +327,13 @@
   <data name="co_cancelOrderItemsLabel" xml:space="preserve">
     <value>Stornierte Bestellpositionen</value>
   </data>
+  <data name="coi_subject" xml:space="preserve">
+    <value>Die Bestellposition wurde storniert</value>
+  </data>
+  <data name="coi_preheader" xml:space="preserve">
+    <value>Einer der Kunden hat einen Artikel in der Bestellung storniert</value>
+  </data>
+  <data name="coi_cancelOrderItemLabel" xml:space="preserve">
+    <value>Storniertes Produkt</value>
+  </data>
 </root>

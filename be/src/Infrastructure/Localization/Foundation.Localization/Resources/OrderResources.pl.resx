@@ -327,4 +327,19 @@
   <data name="co_cancelOrderItemsLabel" xml:space="preserve">
     <value>Abulowane pozycje zamówienia</value>
   </data>
+  <data name="sh_clientNameLabel" xml:space="preserve">
+    <value>Nazwa klienta</value>
+  </data>
+  <data name="sh_orderLinkLabel" xml:space="preserve">
+    <value>Link do zamówienia</value>
+  </data>
+  <data name="coi_subject" xml:space="preserve">
+    <value>Anulowano pozycję zamówienia</value>
+  </data>
+  <data name="coi_preheader" xml:space="preserve">
+    <value>Jedenz klientów anulował pozycję w zamówieniu</value>
+  </data>
+  <data name="coi_cancelOrderItemLabel" xml:space="preserve">
+    <value>Anulowany produkt</value>
+  </data>
 </root>
