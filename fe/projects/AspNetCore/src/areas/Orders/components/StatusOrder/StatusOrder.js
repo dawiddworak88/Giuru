@@ -117,7 +117,7 @@ function StatusOrder(props) {
                                             <TableCell></TableCell>
                                             <TableCell>{props.skuLabel}</TableCell>
                                             <TableCell>{props.nameLabel}</TableCell>
-                                            <TableCell></TableCell>
+                                            <TableCell>{props.fabricsLabel}</TableCell>
                                             <TableCell>{props.quantityLabel}</TableCell>
                                             <TableCell>{props.stockQuantityLabel}</TableCell>
                                             <TableCell>{props.outletQuantityLabel}</TableCell>
