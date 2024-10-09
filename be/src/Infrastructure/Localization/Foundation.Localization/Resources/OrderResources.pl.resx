@@ -295,7 +295,7 @@
     <value>Nazwa</value>
   </data>
   <data name="oc_text" xml:space="preserve">
-    <value>Z przyejemością informujemy że Twoje zamówienie zostało potwierdzone.</value>
+    <value>Z przyjemnością informujemy że Twoje zamówienie zostało potwierdzone.</value>
   </data>
   <data name="sh_outletQuantityLabel" xml:space="preserve">
     <value>Ilość z wyprzedaży</value>
@@ -325,7 +325,7 @@
     <value>Link do zamówienia</value>
   </data>
   <data name="co_cancelOrderItemsLabel" xml:space="preserve">
-    <value>Abulowane pozycje zamówienia</value>
+    <value>Anulowane pozycje zamówienia</value>
   </data>
   <data name="sh_clientNameLabel" xml:space="preserve">
     <value>Nazwa klienta</value>
