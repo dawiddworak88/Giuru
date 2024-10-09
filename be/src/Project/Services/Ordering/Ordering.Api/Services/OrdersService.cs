@@ -118,7 +118,7 @@ namespace Ordering.Api.Services
                     ExternalReference = basketItem.ExternalReference,
                     MoreInfo = basketItem.MoreInfo
                 };
-             
+
                 _context.OrderItems.Add(orderItem.FillCommonProperties());
 
                 var orderItemStatusChange = new OrderItemStatusChange
@@ -173,7 +173,7 @@ namespace Ordering.Api.Services
             await _context.SaveChangesAsync();
 
             var message = new OrderStartedIntegrationEvent
-            { 
+            {
                 BasketId = serviceModel.BasketId,
                 ClientId = serviceModel.ClientId,
                 OrderItems = serviceModel.Items.OrEmptyIfNull().Select(x => new OrderItemStartedEventModel
@@ -522,13 +522,13 @@ namespace Ordering.Api.Services
         public async Task<PagedResults<IEnumerable<OrderFileServiceModel>>> GetOrderFilesAsync(GetOrderFilesServiceModel model)
         {
             var orderFiles = from f in _context.OrderAttachments
-                                              where f.OrderId == model.Id && f.IsActive
-                                              select new OrderFileServiceModel
-                                              {
-                                                  Id = f.MediaId,
-                                                  LastModifiedDate = f.LastModifiedDate,
-                                                  CreatedDate = f.CreatedDate
-                                              };
+                             where f.OrderId == model.Id && f.IsActive
+                             select new OrderFileServiceModel
+                             {
+                                 Id = f.MediaId,
+                                 LastModifiedDate = f.LastModifiedDate,
+                                 CreatedDate = f.CreatedDate
+                             };
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -607,7 +607,12 @@ namespace Ordering.Api.Services
 
                     orderItem.LastOrderItemStatusChangeId = newOrderItemStatusChange.Id;
                 }
+            }
 
+            await _context.SaveChangesAsync();
+
+            if (serviceModel.OrderStatusId == OrderStatusesConstants.CanceledId)
+            {
                 await _mailingService.SendTemplateAsync(new TemplateEmail
                 {
                     RecipientEmailAddress = _configuration.Value.SenderEmail,
@@ -641,9 +646,8 @@ namespace Ordering.Api.Services
                 });
             }
 
-            await _context.SaveChangesAsync();
-
-            return await GetAsync(new GetOrderServiceModel {  
+            return await GetAsync(new GetOrderServiceModel
+            {
                 Id = serviceModel.OrderId,
                 OrganisationId = serviceModel.OrganisationId,
                 Username = serviceModel.Username,
@@ -787,6 +791,11 @@ namespace Ordering.Api.Services
                 await _context.OrderItemStatusChangesCommentTranslations.AddAsync(orderItemStatusChangeTranslation.FillCommonProperties());
             }
 
+            orderItem.LastOrderItemStatusChangeId = orderItemStatusChange.Id;
+            orderItem.LastModifiedDate = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
             if (model.OrderItemStatusId.Equals(OrderStatusesConstants.CanceledId))
             {
                 var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id.Equals(orderItem.OrderId) && x.IsActive);
@@ -821,10 +830,6 @@ namespace Ordering.Api.Services
                 });
             }
 
-            orderItem.LastOrderItemStatusChangeId = orderItemStatusChange.Id;
-            orderItem.LastModifiedDate = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
             await MapStatusesToOrderStatusId(orderItem.OrderId);
         }
 
