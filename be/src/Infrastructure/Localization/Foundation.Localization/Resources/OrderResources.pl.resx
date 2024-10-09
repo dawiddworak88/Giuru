@@ -166,7 +166,7 @@
     <value>Numer własny klienta:</value>
   </data>
   <data name="FabricsLabel" xml:space="preserve">
-    <value>Tkaniny</value>
+    <value>Tkaniny:</value>
   </data>
   <data name="GoToDetails" xml:space="preserve">
     <value>Przejdź do szczegółów</value>
