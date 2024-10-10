@@ -41,7 +41,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             var orderStatusId = await this.ordersRepository.SaveOrderStatusAsync(token, language, model.OrderId, OrdersConstants.OrderStatuses.CancelId);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { OrderStatusId = orderStatusId, Message = this.orderLocalizer.GetString("SuccessfullyCanceledOrder").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { OrderStatusId = orderStatusId, Message = this.orderLocalizer.GetString("SuccessfullyCancelledOrder").Value });
         }
 
         [HttpPost]
@@ -55,7 +55,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             var orderItemStatusChanges = await this.ordersRepository.GetOrderItemStatusesAsync(token, language, request.Id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { OrderItemStatus = cancelStatusId, StatusChanges = orderItemStatusChanges.StatusChanges, Message = this.orderLocalizer.GetString("SuccessfullyCanceledOrder").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { OrderItemStatus = cancelStatusId, StatusChanges = orderItemStatusChanges.StatusChanges, Message = this.orderLocalizer.GetString("SuccessfullyCancelledOrder").Value });
         }
 
         [HttpPost]

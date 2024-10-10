@@ -19,7 +19,8 @@ const OrderItemForm = (props) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const requestPayload = {
-            id: props.id
+            id: props.id,
+            orderItemStatusId: props.orderItemStatusId
         }
 
         const requestOptions = {

@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Orders.Repositories;
+﻿using Buyer.Web.Areas.Orders.Definitions;
+using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.ViewModel;
 using Buyer.Web.Shared.ViewModels.OrderItemStatusChanges;
 using Foundation.Extensions.ModelBuilders;
@@ -73,7 +74,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.OrderUrl = _linkGenerator.GetPathByAction("Status", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, id = orderItem.OrderId });
                     viewModel.ExternalReference = orderItem.ExternalReference;
                     viewModel.MoreInfo = orderItem.MoreInfo;
-                    viewModel.CanCancelOrderItem = false;
+                    viewModel.CanCancelOrderItem = orderItem.OrderItemStatusId.Equals(OrdersConstants.OrderStatuses.NewId);
                 }
 
                 if (orderItem.LastOrderItemStatusChangeId is not null)

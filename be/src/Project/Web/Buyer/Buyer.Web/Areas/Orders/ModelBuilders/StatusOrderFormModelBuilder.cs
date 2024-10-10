@@ -1,4 +1,5 @@
 using Buyer.Web.Areas.Orders.ComponentModels;
+using Buyer.Web.Areas.Orders.Definitions;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.ViewModel;
@@ -11,6 +12,7 @@ using Foundation.Localization;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -90,7 +92,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.OrderStatusId = order.OrderStatusId;
                     viewModel.CustomOrder = order.MoreInfo;
                     viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
-                    viewModel.CanCancelOrder = false;
+                    viewModel.CanCancelOrder = order.OrderItems.All(x => x.OrderItemStatusId.Equals(OrdersConstants.OrderStatuses.NewId) || x.OrderItemStatusId.Equals(OrdersConstants.OrderStatuses.CancelId)) && order.OrderStatusId.Equals(OrdersConstants.OrderStatuses.NewId);
                     viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                     {
                         Id = x.Id,
