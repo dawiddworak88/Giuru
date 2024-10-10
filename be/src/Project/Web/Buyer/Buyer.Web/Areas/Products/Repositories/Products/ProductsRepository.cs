@@ -219,32 +219,6 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             return default;
         }
 
-        public async Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token)
-        {
-            var productRequestModel = new ProductSuggestionsRequestModel
-            {
-                SearchTerm = searchTerm,
-                Size = size
-            };
-
-            var apiRequest = new ApiRequest<ProductSuggestionsRequestModel>
-            {
-                Language = language,
-                Data = productRequestModel,
-                AccessToken = token,
-                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductSuggestionsApiEndpoint}"
-            };
-
-            var response = await _apiClientService.GetAsync<ApiRequest<ProductSuggestionsRequestModel>, ProductSuggestionsRequestModel, IEnumerable<string>>(apiRequest);
-
-            if (response.IsSuccessStatusCode && response.Data is not null)
-            {
-                return response.Data;
-            }
-
-            return Enumerable.Empty<string>();
-        }
-
         public async Task<PagedResults<IEnumerable<ProductFile>>> GetProductFilesAsync(string token, string language, Guid? id, int pageIndex, int itemsPerPage, string searchTerm, string orderBy)
         {
             var requestModel = new PagedRequestModelBase

@@ -1,0 +1,62 @@
+.sidebar-mobile {
+
+    &__menu {
+        font-size: 14px;
+
+        &__header {
+            padding: 1rem;
+
+            &__logo {
+                width: 8rem;
+            }
+        }
+
+        &__links {
+
+            &__button {
+                color: $link;
+                border-bottom: 1px solid $natuaralgrey200;
+                padding: 2rem;
+                display: block;
+
+                &:active {
+                    background-color: $desertstorm;
+                }
+            }
+        }
+    }
+
+    &__language {
+        position: fixed;
+        bottom: 0;
+        background-color: $white;
+        width: 100%;
+
+        &__button {
+            display: flex;
+            margin-bottom: 1rem;
+            margin-left: 1rem;
+            border-bottom: 2px solid $white;
+        }
+    }
+
+    &__bottom-space {
+        height: 2.5rem;
+    }
+}
+
+.selected {
+    color: $swamp;
+    border-bottom: 2px solid $swamp;
+}
+
+.MuiTabs-indicator {
+    display: none;
+}
+
+@media only screen and (max-width: $tablet) {
+
+    .MuiDrawer-paper {
+        width: 100% !important;
+    }
+}

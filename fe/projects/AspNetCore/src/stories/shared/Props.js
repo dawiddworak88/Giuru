@@ -2,7 +2,7 @@ export var header = {
   logo: {
     targetUrl: "/",
     logoAltLabel: "Logo",
-    logoUrl: "https://media.eltap.com/api/v1/files/85b14b09-856d-4fd0-8af4-7c077953b214?o=true"
+    logoUrl: "https://media.eltap.com/api/v1/files/54f48c59-5ebb-4d48-63c2-08db23358558"
   },
   languageSwitcher: {
     availableLanguages: [
@@ -19,22 +19,88 @@ export var header = {
         text: "PL"
       }
     ],
-    selectedLanguageUrl: "/en"
+    selectedLanguageUrl: "/en",
+    selectedLanguageText: "EN"
   },
-  searchTerm: "",
-  searchUrl: "#",
-  searchLabel: "Search",
-  searchPlaceholderLabel: "Search",
-  signOutLink: {
-    url: "#",
-    text: "Sign in"
+  userPopup: {
+    signOutLink: {
+      url: "#",
+      text: "Logout"
+    },
+    signInLink: {
+      url: "#",
+      text: "Sign In",
+    },
+    actions: [
+      {
+        url: "#",
+        text: "My orders"
+      },
+      {
+        url: "#",
+        text: "Place order"
+      }
+    ],
+    welcomeText: "Hi",
+    name: "PIGU",
+    isLoggedIn: true,
   },
-  signInLink: {
-    url: "#",
-    text: "Logout",
+  sidebarMobile: {
+    logo: {
+      targetUrl: "/",
+      logoAltLabel: "Logo",
+      logoUrl: "https://media.eltap.com/api/v1/files/54f48c59-5ebb-4d48-63c2-08db23358558"
+    },
+    links: [
+      { url: "#", text: "Categories" },
+      { url: "#", text: "Sell" }
+    ],
+    isLoggedIn: true,
+    signOutLink: {
+      url: "#",
+      text: "Logout"
+    },
+    signInLink: {
+      url: "#",
+      text: "Sign In",
+    },
+    languageSwitcher: {
+      availableLanguages: [
+        {
+          url: "/en",
+          text: "EN"
+        },
+        {
+          url: "/de",
+          text: "DE"
+        },
+        {
+          url: "/pl",
+          text: "PL"
+        }
+      ],
+      selectedLanguageUrl: "/en",
+      selectedLanguageText: "EN"
+    }
   },
-  welcomeText: "Hi",
-  name: "PIGU",
+  search: {
+    searchTerm: "",
+    searchUrl: "#",
+    searchLabel: "Search",
+    searchPlaceholderLabel: "Search for a product by name or SKU...",
+    noResultText: "No results found for the searched phrase",
+    changeSearchTermText: "Unfortunately, we couldn't find what you're looking for. Please try entering a different phrase",
+    userSearchHistoryText: "Your search history.",
+    clearText: "Clear",
+    searchAreas: [
+      {
+        value: 'all', name: 'All' 
+      },
+      {
+        value: 'stock', name: 'Stock levels'
+      }
+    ]
+  }
 };
 
 export var breadcrumbs = {

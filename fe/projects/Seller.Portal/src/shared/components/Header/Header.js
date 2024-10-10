@@ -95,7 +95,7 @@ function Header(props) {
                     }
                     {props.logo &&
                         <a href={props.logo.targetUrl}>
-                            <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} />
+                            <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} className="logo"/>
                         </a>
                     }
                     <div role="button" onClick={() => setIsActive(!isActive)} className={isActive ? "navbar-burger is-active" : "navbar-burger"} aria-label="menu" aria-expanded="false">

@@ -1,55 +1,33 @@
 .main-nav {
-    background-color: $swamp;
-    height: 4rem;
-    position: relative;
-    
-
-    &__mobile {
-        display: none;
-        position: absolute;
-        top: 1.2rem;
-        right: 1rem;
-
-        svg {
-            fill:white;
-            height: 2rem;
-            width: 2rem;
-        }
-    }
+    background-color: $white;
+    height: 64px;
+    border-top: 1px solid $lightgrey;
+    border-bottom: 1px solid $lightgrey;
 
     &__links-container {
         height: 100%;
         display: flex;
         justify-content: center;
-        align-items: center;
-        animation: all 300ms ease-in-out;
+        font-weight: 600;
 
         a {
-            color: white;
-            padding: 1rem;
+            color: $link;
+            font-size: 0.85rem;
+            padding: 1rem 0;
+            border-bottom: 3px solid $white;
+            border-top: 3px solid $white;
+            margin-right: 48px;
+            
+            &:hover {
+                color: $swamp;
+                border-bottom-color: $swamp;
+            }
         }
     }
 }
 
 @media only screen and (max-width: $desktop) {
     .main-nav {
-        &__mobile {
-            display: block;
-        }
-
-        &__links-container {
-            z-index: 10;
-            position: absolute;
-            display: none;
-            flex-direction: column;
-            margin-top: 4rem;
-            height: auto;
-            width: 100%;
-            background: $primary;
-
-            &.active {
-                display: flex;
-            }
-        }
+        display: none;
     }
 }

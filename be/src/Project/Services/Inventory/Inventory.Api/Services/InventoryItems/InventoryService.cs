@@ -249,7 +249,8 @@ namespace Inventory.Api.Services.InventoryItems
                 inventoryProducts = inventoryProducts.Take(Constants.MaxItemsPerPageLimit);
 
                 pagedResults = inventoryProducts.PagedIndex(new Pagination(inventoryProducts.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
-            } else
+            }
+            else
             {
                 pagedResults = inventoryProducts.PagedIndex(new Pagination(inventoryProducts.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
@@ -331,7 +332,7 @@ namespace Inventory.Api.Services.InventoryItems
                 return inventorySum;
             }
 
-            return default;                
+            return default;
         }
 
         public async Task<InventorySumServiceModel> GetInventoryByProductSku(GetInventoryByProductSkuServiceModel model)
@@ -474,6 +475,26 @@ namespace Inventory.Api.Services.InventoryItems
 
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public IEnumerable<InventorySuggestionServiceModel> GetInventorySuggestions(GetInventorySuggestionsServiceModel model)
+        {
+            var inventoryItems = _context.Inventory.Where(x => x.IsActive)
+                    .Include(x => x.Product)
+                    .AsSingleQuery()
+                    .Select(y => new InventorySuggestionServiceModel
+                    {
+                        Id = y.ProductId,
+                        Name = y.Product.Name,
+                        Sku = y.Product.Sku
+                    });
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                inventoryItems = inventoryItems.Where(x => x.Name.StartsWith(model.SearchTerm) || x.Sku.StartsWith(model.SearchTerm));
+            }
+
+            return inventoryItems.Take(model.SuggestionsCount);
         }
     }
 }

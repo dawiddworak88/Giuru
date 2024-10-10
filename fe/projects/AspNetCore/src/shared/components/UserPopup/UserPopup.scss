@@ -1,0 +1,42 @@
+.popup {
+    z-index: 1;
+
+    &__button {
+        font-family: $family-primary;
+    }
+
+    &__body {
+        min-width: 13rem;
+        background-color: $white;
+        border-radius: 4px;
+        padding: 1rem;
+        margin: 8px;
+        -webkit-box-shadow: $box-shadow;
+        -moz-box-shadow: $box-shadow;
+        box-shadow: $box-shadow;
+
+        &__welcome-text {
+            color: $blackbase;
+            font-weight: 700;
+            padding-bottom: 1rem;
+        }
+
+        &__button {
+            display: block;
+            font-size: 14px;
+            color: $blackbase;
+            width: 100%;
+            padding: 0.75rem 0.5rem;
+            border-radius: 4px;
+
+            &:hover {
+                background-color: $desertstorm;
+            }
+        }
+    }
+}
+
+.sign-in-out-button {
+    border-top: 1px solid $natuaralgrey200;
+    border-radius: 0px 0px 4px 4px;
+}

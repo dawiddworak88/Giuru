@@ -1,164 +1,81 @@
-import React, { useState, useContext, useEffect } from "react";
-import { toast } from "react-toastify";
-import Autosuggest from "react-autosuggest";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import { Button } from "@mui/material";
 import LanguageSwitcher from "../../../shared/components/LanguageSwitcher/LanguageSwitcher";
-import HeaderConstants from "./HeaderConstants";
-import QueryStringSerializer from "../../../shared/helpers/serializers/QueryStringSerializer";
-import NavigationHelper from "../../../shared/helpers/globals/NavigationHelper";
 import { Context } from "../../stores/Store";
-import { ShoppingCart } from '@mui/icons-material';
-import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
+import ShoppingCartIcon from "../../Icons/ShoppingCart";
+import UserPopup from "../UserPopup/UserPopup";
+import SidebarMobile from "../SidebarMobile/SidebarMobile"
+import Search from "../Search/Search";
 
 function Header(props) {
     const [state, dispatch] = useContext(Context);
-    const [searchTerm, setSearchTerm] = useState(props.searchTerm ? props.searchTerm : "");
-    const [suggestions, setSuggestions] = useState([]);
     const [totalBasketItems, setTotalBasketItems] = useState(props.totalBasketItems ? props.totalBasketItems : 0);
+    const [isUserPopupOpen, setIsUserPopupOpen] = useState(false);
+    const [isLanguageSwitechOpen, setIsLanguageSwitechOpen] = useState(false);
+    const overlayRef = useRef(null);
 
-    const getSuggestionValue = (suggestion) => {
-        return suggestion;
-    };
+    const updateTotalBasketItems = (newTotal) => {
+        if (newTotal != null && (newTotal === 0 || newTotal !== props.totalBasketItems)) {
+            setTotalBasketItems(newTotal);
+        }
+    }
 
-    const renderSuggestion = (suggestion) => {
-        return (
-            <div className="suggestion">
-                {suggestion}
-            </div>
-        );
-    };
+    if (state.totalBasketItems !== totalBasketItems) {
+        updateTotalBasketItems(state.totalBasketItems);
+    }
 
-    const onSuggestionsFetchRequested = (args) => {
-        setSearchTerm(args.value);
-
-        if (args.value && args.value.length >= HeaderConstants.minSearchTermLength()) {
-        
-            dispatch({ type: "SET_IS_LOADING", payload: true });
-
-            const searchParameters = {
-
-                searchTerm: args.value,
-                size: HeaderConstants.searchSuggenstionsSize()
-            };
-
-            const requestOptions = {
-                method: "GET",
-                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
-            };
-
-            const url = props.getSuggestionsUrl + "?" + QueryStringSerializer.serialize(searchParameters);
-
-            return fetch(url, requestOptions)
-            .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-
-                    if (response.ok) {
-
-                        setSuggestions(() => []);
-                        setSuggestions(() => jsonResponse);
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
+    const overlayDisplaying = (isDisplay) => {
+        if (overlayRef.current) {
+            if (isDisplay) {
+                overlayRef.current.classList.add('show');
+                document.body.classList.add("no-scroll");
+            }
+            else {
+                overlayRef.current.classList.remove('show');
+                document.body.classList.remove("no-scroll");
+            }
         }
     };
 
-    const onSuggestionSelected = (event, { suggestion }) => {
-        NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(suggestion));
+    const userPopupOnClick = (state) => {
+        setIsUserPopupOpen(!state)
+        setIsLanguageSwitechOpen(false)
     };
 
-    const onSearchSubmit = (e) => {
-        e.preventDefault();
-
-        if (searchTerm && searchTerm.length >= HeaderConstants.minSearchTermLength()) {
-            NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(searchTerm));
-        }
+    const languageSwitcherOnClick = (state) => {
+        setIsLanguageSwitechOpen(!state)
+        setIsUserPopupOpen(false)
     };
-
-    const searchInputProps = {
-        placeholder: props.searchPlaceholderLabel,
-        className: "search__field",
-        value: searchTerm,
-        onChange: (_, { newValue, method }) => {
-            setSearchTerm(newValue);
-        }
-    };
-
-    useEffect(() => {
-        const totalItems = state.totalBasketItems;
-        if (totalItems != null && totalItems < props.totalBasketItems){
-            state.totalBasketItems = props.totalBasketItems;
-        }
-
-        setTotalBasketItems(state.totalBasketItems);
-
-    }, [state])
 
     return (
         <header>
-            <nav className="is-flex is-justify-content-space-between p-3 px-4 is-align-items-center header">
-                <div className="navbar-brand is-align-items-center">
-                    <a className="navbar-logo" href={props.logo.targetUrl}>
-                        <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} />
+            <nav className="navbar p-4 px-4 is-align-items-center header">
+                <div className="navbar__start is-flex">
+                    <a href={props.logo.targetUrl}>
+                        <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} className="navbar__start__logo" />
                     </a>
-                    <div className="navbar-start">
-                        <form action={props.searchUrl} method="get" role="search" onSubmit={onSearchSubmit}>
-                            <div className="field is-flex is-flex-centered search">
-                                <Autosuggest
-                                    suggestions={suggestions}
-                                    onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                                    onSuggestionsClearRequested={() => setSuggestions([])}
-                                    getSuggestionValue={getSuggestionValue}
-                                    onSuggestionSelected={onSuggestionSelected}
-                                    renderSuggestion={renderSuggestion}
-                                    inputProps={searchInputProps} 
-                                />
-                                <Button type="submit" variant="contained" color="secondary" className="search-button ml-2">
-                                    {props.searchLabel}
-                                </Button>
-                            </div>
-                        </form>
+                </div>
+                <div className="navbar__search">
+                    <Search {...props.search} overlayDisplaying={overlayDisplaying} />
+                </div>
+                <div className="navbar__actions is-flex">
+                    <div className="navbar__actions__language">
+                        <LanguageSwitcher {...props.languageSwitcher} isOpen={isLanguageSwitechOpen} toggle={languageSwitcherOnClick}/>
+                    </div>
+                    <div className="navbar__actions__userpopup">
+                        <UserPopup {...props.userPopup} isOpen={isUserPopupOpen} toggle={userPopupOnClick} />
+                    </div>
+                    <div className="navbar__actions__cart">
+                        <a href={props.basketUrl} title={props.goToCartLabel} aria-label={props.goToCartLabel}>
+                            <ShoppingCartIcon />
+                            <span className="navbar__actions__cart__count">{totalBasketItems == null ? 0 : totalBasketItems}</span>
+                        </a>
+                    </div>
+                    <div className="navbar__actions__sidebar">
+                        <SidebarMobile {...props.sidebarMobile} />
                     </div>
                 </div>
-                <div className="navbar-container">
-                    <div className="navbar-end is-flex is-align-items-center">
-                        {props.isLoggedIn ? (
-                            props.signOutLink &&
-                                <div className="navbar-item">
-                                    <span className="welcome-text">{props.welcomeText} {props.name}, </span>
-                                    <a href={props.signOutLink.url} className="button is-text">{props.signOutLink.text}</a>
-                                </div>
-                        ) : (
-                            props.signInLink &&
-                                <div className="navbar-item">
-                                    <a className="button is-text" href={props.signInLink.url}>
-                                        {props.signInLink.text}
-                                    </a>
-                                </div>
-                        )}
-                        <div className="navbar-item">
-                            <LanguageSwitcher {...props.languageSwitcher} />
-                        </div>
-                        <div className="navbar-item">
-                            <a href={props.basketUrl} className="button is-text" title={props.goToCartLabel} aria-label={props.goToCartLabel}>
-                                <ShoppingCart />
-                                {totalBasketItems > 0 &&
-                                    <span className="count">{totalBasketItems}</span>
-                                }
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                <div ref={overlayRef} className="overlay"></div>
             </nav>
         </header>
     );
@@ -166,14 +83,7 @@ function Header(props) {
 
 Header.propTypes = {
     logo: PropTypes.object.isRequired,
-    searchPlaceholderLabel: PropTypes.string.isRequired,
-    searchLabel: PropTypes.string.isRequired,
-    searchUrl: PropTypes.string.isRequired,
-    searchTerm: PropTypes.string.isRequired,
-    getSuggestionsUrl: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
-    isLoggedIn: PropTypes.bool,
-    signOutLink: PropTypes.object
 };
 
 export default Header;

@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Products.DomainModels;
+﻿using Buyer.Web.Areas.Products.ApiRequestModels;
+using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
@@ -28,7 +29,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
             _settings = settings;
         }
 
-        public async Task<PagedResults<IEnumerable<InventorySum>>> GetAvailbleProductsInventory(
+        public async Task<PagedResults<IEnumerable<InventorySum>>> GetAvailableInventoryProducts(
             string language,
             int pageIndex, 
             int itemsPerPage,
@@ -50,7 +51,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
 
             var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, PagedResults<IEnumerable<InventorySumResponseModel>>> (apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            if (response.IsSuccessStatusCode && response.Data?.Data is not null)
             {
                 return new PagedResults<IEnumerable<InventorySum>>(response.Data.Total, response.Data.PageSize)
                 {
@@ -70,7 +71,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
             return default;
         }
 
-        public async Task<IEnumerable<InventorySum>> GetAvailbleProductsInventoryByIds(string token, string language, IEnumerable<Guid> ids)
+        public async Task<IEnumerable<InventorySum>> GetAvailableInventoryProductsByIds(string token, string language, IEnumerable<Guid> ids)
         {
             var requestModel = new PagedRequestModelBase
             {
@@ -89,7 +90,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
 
             var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<InventorySum>>>(apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            if (response.IsSuccessStatusCode && response.Data?.Data is not null)
             {
                 var availableProducts = new List<InventorySum>();
 
@@ -108,7 +109,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
                         throw new CustomException(response.Message, (int)response.StatusCode);
                     }
 
-                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Any())
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data is not null && nextPagesResponse.Data.Data.Any())
                     {
                         availableProducts.AddRange(nextPagesResponse.Data.Data);
                     }
@@ -120,6 +121,32 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
+        }
+
+        public async Task<IEnumerable<InventorySuggestion>> GetAvailableInventoryProductsSuggestions(string token, string language, string searchTerm, int suggestionsCount)
+        {
+            var requestModel = new AvailableProductsInventorySuggestionsRequestModel
+            {
+                SearchTerm = searchTerm,
+                SuggestionsCount = suggestionsCount
+            };
+
+            var apiRequest = new ApiRequest<AvailableProductsInventorySuggestionsRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Inventory.AvailableProductsSuggestionsApiEndpoint}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<AvailableProductsInventorySuggestionsRequestModel>, AvailableProductsInventorySuggestionsRequestModel, IEnumerable<InventorySuggestion>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data is not null)
+            {
+                return response.Data;
             }
 
             return default;

@@ -774,6 +774,27 @@
   <data name="InActive" xml:space="preserve">
     <value>Nieaktywny</value>
   </data>
+  <data name="ChangeSearchTermText" xml:space="preserve">
+    <value>Niestety nie znaleźliśmy tego czego szukasz, spróbuj wpisać inną frazę.</value>
+  </data>
+  <data name="NoResultText" xml:space="preserve">
+    <value>Brak wyników dla wyszukiwanej frazy</value>
+  </data>
+  <data name="SearchAreaAll" xml:space="preserve">
+    <value>Wszystko</value>
+  </data>
+  <data name="SearchAreaStockLevel" xml:space="preserve">
+    <value>Stany magazynowe</value>
+  </data>
+  <data name="ClearText" xml:space="preserve">
+    <value>Wyczyść</value>
+  </data>
+  <data name="UserSearchHistoryText" xml:space="preserve">
+    <value>Twoja historia wyszukiwania.</value>
+  </data>
+  <data name="SearchByNameOrSKU" xml:space="preserve">
+    <value>Wyszukaj produkt po nazwie albo SKU...</value>
+  </data>
   <data name="BillingAddressTitle" xml:space="preserve">
     <value>Adres bilingowy</value>
   </data>
