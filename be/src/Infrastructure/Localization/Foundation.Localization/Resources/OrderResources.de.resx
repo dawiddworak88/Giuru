@@ -264,7 +264,7 @@
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
   </data>
-  <data name="SuccessfullyCanceledOrder" xml:space="preserve">
+  <data name="SuccessfullyCancelledOrder" xml:space="preserve">
     <value>Bestellung erfolgreich storniert.</value>
   </data>
   <data name="StockQuantityLabel" xml:space="preserve">
@@ -335,5 +335,11 @@
   </data>
   <data name="coi_cancelOrderItemLabel" xml:space="preserve">
     <value>Storniertes Produkt</value>
+  </data>
+  <data name="sh_clientNameLabel" xml:space="preserve">
+    <value>Kundenname</value>
+  </data>
+  <data name="sh_orderLinkLabel" xml:space="preserve">
+    <value>Bestelllink</value>
   </data>
 </root>
