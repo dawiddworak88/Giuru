@@ -153,21 +153,24 @@ namespace Ordering.Api.Services
                 Thread.CurrentThread.CurrentCulture = new CultureInfo(serviceModel.Language);
                 Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 
-                await _mailingService.SendTemplateAsync(new TemplateEmail
+                if (CanSend(_configuration.Value.SenderEmail, _configuration.Value.SenderName, _orderingOptions.CurrentValue.ActionSendGridCustomOrderTemplateId))
                 {
-                    RecipientEmailAddress = _configuration.Value.SenderEmail,
-                    RecipientName = _configuration.Value.SenderName,
-                    SenderEmailAddress = _configuration.Value.SenderEmail,
-                    SenderName = _configuration.Value.SenderName,
-                    TemplateId = _orderingOptions.CurrentValue.ActionSendGridCustomOrderTemplateId,
-                    DynamicTemplateData = new
+                    await _mailingService.SendTemplateAsync(new TemplateEmail
                     {
-                        attachmentsLabel = _globalLocalizer.GetString("AttachedAttachments").Value,
-                        attachments = attachments,
-                        subject = _orderLocalizer.GetString("CustomOrderSubject").Value + " " + serviceModel.ClientName + " (" + order.Id + ")",
-                        text = serviceModel.MoreInfo
-                    }
-                });
+                        RecipientEmailAddress = _configuration.Value.SenderEmail,
+                        RecipientName = _configuration.Value.SenderName,
+                        SenderEmailAddress = _configuration.Value.SenderEmail,
+                        SenderName = _configuration.Value.SenderName,
+                        TemplateId = _orderingOptions.CurrentValue.ActionSendGridCustomOrderTemplateId,
+                        DynamicTemplateData = new
+                        {
+                            attachmentsLabel = _globalLocalizer.GetString("AttachedAttachments").Value,
+                            attachments = attachments,
+                            subject = _orderLocalizer.GetString("CustomOrderSubject").Value + " " + serviceModel.ClientName + " (" + order.Id + ")",
+                            text = serviceModel.MoreInfo
+                        }
+                    });
+                }
             }
 
             await _context.SaveChangesAsync();
@@ -189,7 +192,7 @@ namespace Ordering.Api.Services
             using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
             _eventBus.Publish(message);
 
-            if (serviceModel.HasApprovalToSendEmail)
+            if (serviceModel.HasApprovalToSendEmail && CanSend(serviceModel.Username, serviceModel.ClientName, _configuration.Value.SenderEmail, _configuration.Value.SenderName, _configuration.Value.ActionSendGridConfirmationOrderTemplateId))
             {
                 Thread.CurrentThread.CurrentCulture = new CultureInfo(serviceModel.Language);
                 Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
@@ -611,7 +614,7 @@ namespace Ordering.Api.Services
 
             await _context.SaveChangesAsync();
 
-            if (serviceModel.OrderStatusId == OrderStatusesConstants.CanceledId)
+            if (serviceModel.OrderStatusId == OrderStatusesConstants.CanceledId && CanSend(_configuration.Value.SenderEmail, _configuration.Value.SenderName, _configuration.Value.ActionSendGridCancelOrderTemplateId))
             {
                 await _mailingService.SendTemplateAsync(new TemplateEmail
                 {
@@ -796,7 +799,7 @@ namespace Ordering.Api.Services
 
             await _context.SaveChangesAsync();
 
-            if (model.OrderItemStatusId.Equals(OrderStatusesConstants.CanceledId))
+            if (model.OrderItemStatusId.Equals(OrderStatusesConstants.CanceledId) && CanSend(_configuration.Value.SenderEmail, _configuration.Value.SenderName, _configuration.Value.ActionSendGridCancelOrderItemTemplateId))
             {
                 var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id.Equals(orderItem.OrderId) && x.IsActive);
 
@@ -985,6 +988,11 @@ namespace Ordering.Api.Services
 
                 await _context.SaveChangesAsync();
             }
+        }
+
+        private bool CanSend(params string[] values)
+        {   
+            return values.Any(string.IsNullOrWhiteSpace);
         }
     }
 }
