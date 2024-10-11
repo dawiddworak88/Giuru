@@ -265,7 +265,7 @@
     <value>SKU:</value>
   </data>
   <data name="SuccessfullyCancelledOrder" xml:space="preserve">
-    <value>Successfully canceled order.</value>
+    <value>Successfully cancelled order.</value>
   </data>
   <data name="StockQuantityLabel" xml:space="preserve">
     <value>Stock quantity:</value>
@@ -316,10 +316,10 @@
     <value>Client name</value>
   </data>
   <data name="co_subject" xml:space="preserve">
-    <value>The order has been canceled</value>
+    <value>The order has been cancelled</value>
   </data>
   <data name="co_preheader" xml:space="preserve">
-    <value>One of the clients canceled the order.</value>
+    <value>One of the clients cancelled the order.</value>
   </data>
   <data name="co_orderLinkLabel" xml:space="preserve">
     <value>Order link</value>
@@ -328,7 +328,7 @@
     <value>Canceled order items</value>
   </data>
   <data name="coi_subject" xml:space="preserve">
-    <value>The order item has been canceled</value>
+    <value>The order item has been cancelled</value>
   </data>
   <data name="coi_preheader" xml:space="preserve">
     <value>One of the customers canceled an item in the order</value>
