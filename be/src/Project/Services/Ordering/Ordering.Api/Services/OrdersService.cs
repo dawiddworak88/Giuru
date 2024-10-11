@@ -618,8 +618,8 @@ namespace Ordering.Api.Services
             {
                 await _mailingService.SendTemplateAsync(new TemplateEmail
                 {
-                    RecipientEmailAddress = _configuration.Value.SenderEmail,
-                    RecipientName = _configuration.Value.SenderName,
+                    RecipientEmailAddress = "piotr.zaranek@eltap.com",//_configuration.Value.SenderEmail,
+                    RecipientName = "Piotr",//_configuration.Value.SenderName,
                     SenderEmailAddress = _configuration.Value.SenderEmail,
                     SenderName = _configuration.Value.SenderName,
                     TemplateId = _configuration.Value.ActionSendGridCancelOrderTemplateId,
@@ -805,8 +805,8 @@ namespace Ordering.Api.Services
 
                 await _mailingService.SendTemplateAsync(new TemplateEmail
                 {
-                    RecipientEmailAddress = _configuration.Value.SenderEmail,
-                    RecipientName = _configuration.Value.SenderName,
+                    RecipientEmailAddress = "piotr.zaranek@eltap.com",//_configuration.Value.SenderEmail,
+                    RecipientName = "Piotr",//_configuration.Value.SenderName,
                     SenderEmailAddress = _configuration.Value.SenderEmail,
                     SenderName = _configuration.Value.SenderName,
                     TemplateId = _configuration.Value.ActionSendGridCancelOrderItemTemplateId,
