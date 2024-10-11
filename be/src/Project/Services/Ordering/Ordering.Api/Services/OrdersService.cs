@@ -118,7 +118,7 @@ namespace Ordering.Api.Services
                     ExternalReference = basketItem.ExternalReference,
                     MoreInfo = basketItem.MoreInfo
                 };
-             
+
                 _context.OrderItems.Add(orderItem.FillCommonProperties());
 
                 var orderItemStatusChange = new OrderItemStatusChange
@@ -153,27 +153,30 @@ namespace Ordering.Api.Services
                 Thread.CurrentThread.CurrentCulture = new CultureInfo(serviceModel.Language);
                 Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 
-                await _mailingService.SendTemplateAsync(new TemplateEmail
+                if (CanSend(_configuration.Value.SenderEmail, _configuration.Value.SenderName, _orderingOptions.CurrentValue.ActionSendGridCustomOrderTemplateId))
                 {
-                    RecipientEmailAddress = _configuration.Value.SenderEmail,
-                    RecipientName = _configuration.Value.SenderName,
-                    SenderEmailAddress = _configuration.Value.SenderEmail,
-                    SenderName = _configuration.Value.SenderName,
-                    TemplateId = _orderingOptions.CurrentValue.ActionSendGridCustomOrderTemplateId,
-                    DynamicTemplateData = new
+                    await _mailingService.SendTemplateAsync(new TemplateEmail
                     {
-                        attachmentsLabel = _globalLocalizer.GetString("AttachedAttachments").Value,
-                        attachments = attachments,
-                        subject = _orderLocalizer.GetString("CustomOrderSubject").Value + " " + serviceModel.ClientName + " (" + order.Id + ")",
-                        text = serviceModel.MoreInfo
-                    }
-                });
+                        RecipientEmailAddress = _configuration.Value.SenderEmail,
+                        RecipientName = _configuration.Value.SenderName,
+                        SenderEmailAddress = _configuration.Value.SenderEmail,
+                        SenderName = _configuration.Value.SenderName,
+                        TemplateId = _orderingOptions.CurrentValue.ActionSendGridCustomOrderTemplateId,
+                        DynamicTemplateData = new
+                        {
+                            attachmentsLabel = _globalLocalizer.GetString("AttachedAttachments").Value,
+                            attachments = attachments,
+                            subject = _orderLocalizer.GetString("CustomOrderSubject").Value + " " + serviceModel.ClientName + " (" + order.Id + ")",
+                            text = serviceModel.MoreInfo
+                        }
+                    });
+                }
             }
 
             await _context.SaveChangesAsync();
 
             var message = new OrderStartedIntegrationEvent
-            { 
+            {
                 BasketId = serviceModel.BasketId,
                 ClientId = serviceModel.ClientId,
                 OrderItems = serviceModel.Items.OrEmptyIfNull().Select(x => new OrderItemStartedEventModel
@@ -189,7 +192,7 @@ namespace Ordering.Api.Services
             using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
             _eventBus.Publish(message);
 
-            if (serviceModel.HasApprovalToSendEmail)
+            if (serviceModel.HasApprovalToSendEmail && CanSend(serviceModel.Username, serviceModel.ClientName, _configuration.Value.SenderEmail, _configuration.Value.SenderName, _configuration.Value.ActionSendGridConfirmationOrderTemplateId))
             {
                 Thread.CurrentThread.CurrentCulture = new CultureInfo(serviceModel.Language);
                 Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
@@ -208,10 +211,10 @@ namespace Ordering.Api.Services
                         oc_title = _orderLocalizer.GetString("oc_title").Value,
                         oc_text = _orderLocalizer.GetString("oc_text").Value,
                         oc_orderedProducts = _orderLocalizer.GetString("oc_orderedProducts").Value,
-                        oc_name = _orderLocalizer.GetString("oc_name").Value,
-                        oc_quantity = _orderLocalizer.GetString("oc_quantity").Value,
-                        oc_stockQuantity = _orderLocalizer.GetString("oc_stockQuantity").Value,
-                        oc_outletQuantity = _orderLocalizer.GetString("oc_outletQuantity").Value,
+                        oc_name = _orderLocalizer.GetString("sh_nameLabel").Value,
+                        oc_quantity = _orderLocalizer.GetString("sh_quantityLabel").Value,
+                        oc_stockQuantity = _orderLocalizer.GetString("sh_stockQuantityLabel").Value,
+                        oc_outletQuantity = _orderLocalizer.GetString("sh_outletQuantityLabel").Value,
                         oc_products = serviceModel.Items.OrEmptyIfNull().Select(x => new
                         {
                             pictureUrl = x.PictureUrl,
@@ -522,13 +525,13 @@ namespace Ordering.Api.Services
         public async Task<PagedResults<IEnumerable<OrderFileServiceModel>>> GetOrderFilesAsync(GetOrderFilesServiceModel model)
         {
             var orderFiles = from f in _context.OrderAttachments
-                                              where f.OrderId == model.Id && f.IsActive
-                                              select new OrderFileServiceModel
-                                              {
-                                                  Id = f.MediaId,
-                                                  LastModifiedDate = f.LastModifiedDate,
-                                                  CreatedDate = f.CreatedDate
-                                              };
+                             where f.OrderId == model.Id && f.IsActive
+                             select new OrderFileServiceModel
+                             {
+                                 Id = f.MediaId,
+                                 LastModifiedDate = f.LastModifiedDate,
+                                 CreatedDate = f.CreatedDate
+                             };
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -611,7 +614,43 @@ namespace Ordering.Api.Services
 
             await _context.SaveChangesAsync();
 
-            return await GetAsync(new GetOrderServiceModel {  
+            if (serviceModel.OrderStatusId == OrderStatusesConstants.CanceledId && CanSend(_configuration.Value.SenderEmail, _configuration.Value.SenderName, _configuration.Value.ActionSendGridCancelOrderTemplateId))
+            {
+                await _mailingService.SendTemplateAsync(new TemplateEmail
+                {
+                    RecipientEmailAddress = _configuration.Value.SenderEmail,
+                    RecipientName = _configuration.Value.SenderName,
+                    SenderEmailAddress = _configuration.Value.SenderEmail,
+                    SenderName = _configuration.Value.SenderName,
+                    TemplateId = _configuration.Value.ActionSendGridCancelOrderTemplateId,
+                    DynamicTemplateData = new
+                    {
+                        co_subject = _orderLocalizer.GetString("co_subject").Value,
+                        co_preheader = _orderLocalizer.GetString("co_preheader").Value,
+                        co_clientName = order.ClientName,
+                        co_clientNameLabel = _orderLocalizer.GetString("sh_clientNameLabel").Value,
+                        co_buyerUrl = _configuration.Value.BuyerUrl,
+                        co_orderLink = $"{CultureInfo.CurrentCulture.Name}/{OrderCancelationConstants.OrderDetailsUrl}/{order.Id}",
+                        co_orderLinkLabel = _orderLocalizer.GetString("sh_orderLinkLabel").Value,
+                        co_cancelOrderItemsLabel = _orderLocalizer.GetString("co_cancelOrderItemsLabel").Value,
+                        co_name = _orderLocalizer.GetString("sh_nameLabel").Value,
+                        co_quantity = _orderLocalizer.GetString("sh_quantityLabel").Value,
+                        co_stockQuantity = _orderLocalizer.GetString("sh_stockQuantityLabel").Value,
+                        co_outletQuantity = _orderLocalizer.GetString("sh_outletQuantityLabel").Value,
+                        co_products = order.OrderItems.OrEmptyIfNull().Select(x => new
+                        {
+                            pictureUrl = x.PictureUrl,
+                            name = $"{x.ProductName} ({x.ProductSku})",
+                            quantity = x.Quantity,
+                            stockQuantity = x.StockQuantity,
+                            outletQuantity = x.OutletQuantity
+                        })
+                    }
+                });
+            }
+
+            return await GetAsync(new GetOrderServiceModel
+            {
                 Id = serviceModel.OrderId,
                 OrganisationId = serviceModel.OrganisationId,
                 Username = serviceModel.Username,
@@ -759,6 +798,41 @@ namespace Ordering.Api.Services
             orderItem.LastModifiedDate = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
+
+            if (model.OrderItemStatusId.Equals(OrderStatusesConstants.CanceledId) && CanSend(_configuration.Value.SenderEmail, _configuration.Value.SenderName, _configuration.Value.ActionSendGridCancelOrderItemTemplateId))
+            {
+                var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id.Equals(orderItem.OrderId) && x.IsActive);
+
+                await _mailingService.SendTemplateAsync(new TemplateEmail
+                {
+                    RecipientEmailAddress = _configuration.Value.SenderEmail,
+                    RecipientName = _configuration.Value.SenderName,
+                    SenderEmailAddress = _configuration.Value.SenderEmail,
+                    SenderName = _configuration.Value.SenderName,
+                    TemplateId = _configuration.Value.ActionSendGridCancelOrderItemTemplateId,
+                    DynamicTemplateData = new
+                    {
+                        coi_subject = _orderLocalizer.GetString("coi_subject").Value,
+                        coi_preheader = _orderLocalizer.GetString("coi_preheader").Value,
+                        coi_clientNameLabel = _orderLocalizer.GetString("sh_clientNameLabel").Value,
+                        coi_clientName = order.ClientName,
+                        coi_buyerUrl = _configuration.Value.BuyerUrl,
+                        coi_orderItemLink = $"{CultureInfo.CurrentCulture.Name}/{OrderCancelationConstants.OrderItemDetailsUrl}/{orderItem.Id}",
+                        coi_orderItemLinkLabel = _orderLocalizer.GetString("sh_orderLinkLabel").Value,
+                        coi_cancelOrderItemLabel = _orderLocalizer.GetString("coi_cancelOrderItemLabel").Value,
+                        coi_name = _orderLocalizer.GetString("sh_nameLabel").Value,
+                        coi_quantity = _orderLocalizer.GetString("sh_quantityLabel").Value,
+                        coi_stockQuantity = _orderLocalizer.GetString("sh_stockQuantityLabel").Value,
+                        coi_outletQuantity = _orderLocalizer.GetString("sh_outletQuantityLabel").Value,
+                        coi_productName = orderItem.ProductName,
+                        coi_productPictureUrl = orderItem.PictureUrl,
+                        coi_productQuantity = orderItem.Quantity,
+                        coi_productStockQuantity = orderItem.StockQuantity,
+                        coi_productOutletQuantity = orderItem.OutletQuantity
+                    }
+                });
+            }
+
             await MapStatusesToOrderStatusId(orderItem.OrderId);
         }
 
@@ -914,6 +988,11 @@ namespace Ordering.Api.Services
 
                 await _context.SaveChangesAsync();
             }
+        }
+
+        private bool CanSend(params string[] values)
+        {
+            return values.Any(string.IsNullOrWhiteSpace);
         }
     }
 }
