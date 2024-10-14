@@ -992,7 +992,7 @@ namespace Ordering.Api.Services
 
         private bool CanSend(params string[] values)
         {
-            return values.Any(string.IsNullOrWhiteSpace);
+            return values.Any(string.IsNullOrWhiteSpace) is false;
         }
     }
 }
