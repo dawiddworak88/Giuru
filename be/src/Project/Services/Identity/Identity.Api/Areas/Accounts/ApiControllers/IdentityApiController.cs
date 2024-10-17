@@ -2,8 +2,6 @@
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
-using Identity.Api.Areas.Accounts.Repositories.ClientNotificationTypes;
-using Identity.Api.Areas.Accounts.Repositories.Clients;
 using Identity.Api.Areas.Accounts.Services.UserServices;
 using Identity.Api.Areas.Accounts.Validators;
 using Identity.Api.Configurations;
@@ -32,9 +30,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         private readonly IStringLocalizer<AccountResources> _accountLocalizer;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly LinkGenerator _linkGenerator;
-        private readonly IClientRepository _clientRepository;
         private readonly ITokenService _tokenService;
-        private readonly IClientNotificationTypesRepository _clientNotificationTypeRepository;
         private readonly ILogger<IdentityApiController> _logger;
 
         public IdentityApiController(
@@ -44,9 +40,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             IStringLocalizer<GlobalResources> globalLocalizer,
             LinkGenerator linkGenerator,
             IUsersService usersService,
-            IClientRepository clientRepository,
             ITokenService tokenService,
-            IClientNotificationTypesRepository clientNotificationTypeRepository,
             ILogger<IdentityApiController> logger)
         {
             _userService = userService;
@@ -55,9 +49,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             _accountLocalizer = accountLocalizer;
             _globalLocalizer = globalLocalizer;
             _linkGenerator = linkGenerator;
-            _clientRepository = clientRepository;
             _tokenService = tokenService;
-            _clientNotificationTypeRepository = clientNotificationTypeRepository;
             _logger = logger;
         }
 
