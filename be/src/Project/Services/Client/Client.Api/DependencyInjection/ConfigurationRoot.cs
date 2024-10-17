@@ -22,7 +22,6 @@ namespace Client.Api.DependencyInjection
                 if (!dbContext.AllMigrationsApplied())
                 {
                     dbContext.Database.Migrate();
-                    dbContext.EnsureSeeded();
                 }
             }
         }
