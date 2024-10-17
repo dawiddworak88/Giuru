@@ -325,16 +325,16 @@
     <value>Order link</value>
   </data>
   <data name="co_cancelOrderItemsLabel" xml:space="preserve">
-    <value>Canceled order items</value>
+    <value>Cancelled order items</value>
   </data>
   <data name="coi_subject" xml:space="preserve">
     <value>The order item has been cancelled</value>
   </data>
   <data name="coi_preheader" xml:space="preserve">
-    <value>One of the customers canceled an item in the order</value>
+    <value>One of the customers cancelled an item in the order</value>
   </data>
   <data name="coi_cancelOrderItemLabel" xml:space="preserve">
-    <value>Canceled product</value>
+    <value>Cancelled product</value>
   </data>
   <data name="sh_clientNameLabel" xml:space="preserve">
     <value>Client name</value>
