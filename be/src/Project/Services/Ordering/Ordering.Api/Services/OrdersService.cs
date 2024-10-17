@@ -595,15 +595,15 @@ namespace Ordering.Api.Services
             order.OrderStatusId = newOrderStatus.Id;
             order.OrderStateId = newOrderStatus.OrderStateId;
 
-            if (serviceModel.OrderStatusId == OrderStatusesConstants.CanceledId)
+            if (serviceModel.OrderStatusId == OrderStatusesConstants.CancelledId)
             {
                 foreach (var orderItem in order.OrderItems.OrEmptyIfNull())
                 {
                     var newOrderItemStatusChange = new OrderItemStatusChange
                     {
                         OrderItemId = orderItem.Id,
-                        OrderItemStateId = OrderStatesConstants.CanceledId,
-                        OrderItemStatusId = OrderStatusesConstants.CanceledId
+                        OrderItemStateId = OrderStatesConstants.CancelledId,
+                        OrderItemStatusId = OrderStatusesConstants.CancelledId
                     };
 
                     _context.OrderItemStatusChanges.Add(newOrderItemStatusChange.FillCommonProperties());
@@ -614,7 +614,7 @@ namespace Ordering.Api.Services
 
             await _context.SaveChangesAsync();
 
-            if (serviceModel.OrderStatusId == OrderStatusesConstants.CanceledId && CanSend(_configuration.Value.SenderEmail, _configuration.Value.SenderName, _configuration.Value.ActionSendGridCancelOrderTemplateId))
+            if (serviceModel.OrderStatusId == OrderStatusesConstants.CancelledId && CanSend(_configuration.Value.SenderEmail, _configuration.Value.SenderName, _configuration.Value.ActionSendGridCancelOrderTemplateId))
             {
                 await _mailingService.SendTemplateAsync(new TemplateEmail
                 {
@@ -799,7 +799,7 @@ namespace Ordering.Api.Services
 
             await _context.SaveChangesAsync();
 
-            if (model.OrderItemStatusId.Equals(OrderStatusesConstants.CanceledId) && CanSend(_configuration.Value.SenderEmail, _configuration.Value.SenderName, _configuration.Value.ActionSendGridCancelOrderItemTemplateId))
+            if (model.OrderItemStatusId.Equals(OrderStatusesConstants.CancelledId) && CanSend(_configuration.Value.SenderEmail, _configuration.Value.SenderName, _configuration.Value.ActionSendGridCancelOrderItemTemplateId))
             {
                 var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id.Equals(orderItem.OrderId) && x.IsActive);
 
@@ -979,7 +979,7 @@ namespace Ordering.Api.Services
                     order.OrderStateId = lastOrderItemStatus.OrderItemStateId;
                     order.LastModifiedDate = DateTime.UtcNow;
                 }
-                else if (lastOrderItemStatus.OrderItemStatusId != OrderStatusesConstants.CanceledId && lastOrderItemStatus is not null)
+                else if (lastOrderItemStatus.OrderItemStatusId != OrderStatusesConstants.CancelledId && lastOrderItemStatus is not null)
                 {
                     order.OrderStatusId = OrderStatusesConstants.ProcessingId;
                     order.OrderStateId = OrderStatesConstants.ProcessingId;
