@@ -15,7 +15,6 @@ using Microsoft.Extensions.Options;
 using System.Globalization;
 using System.Threading.Tasks;
 using Identity.Api.Areas.Accounts.Models;
-using Identity.Api.Areas.Accounts.Repositories.ClientNotificationTypes;
 
 namespace Identity.Api.Areas.Accounts.ModelBuilders
 {
@@ -25,7 +24,6 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<AccountResources> _accountLocalizer;
         private readonly LinkGenerator _linkGenerator;
-        private readonly IClientNotificationTypesRepository _clientNotificationTypeRepository;
         private readonly ITokenService _tokenService;
         private readonly IOptions<AppSettings> _options;
 
@@ -34,7 +32,6 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             IStringLocalizer<AccountResources> accountLocalizer, 
             LinkGenerator linkGenerator,
             IUsersService usersService,
-            IClientNotificationTypesRepository clientNotificationTypeRepository,
             ITokenService tokenService,
             IOptions<AppSettings> options)
         {
@@ -42,7 +39,6 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             _accountLocalizer = accountLocalizer;
             _linkGenerator = linkGenerator;
             _usersService = usersService;
-            _clientNotificationTypeRepository = clientNotificationTypeRepository;
             _tokenService = tokenService;
             _options = options;
         }
@@ -84,13 +80,6 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             }
 
             var token = await _tokenService.GetTokenAsync(_options.Value.ApiEmail, _options.Value.ApiOrganisationId, _options.Value.ApiAppSecret);
-
-            var notificationTypes = await _clientNotificationTypeRepository.GetByIds(token, componentModel.Language, $"{ClientNotificationTypeConstants.SmsMarketingApprovalId},{ClientNotificationTypeConstants.EmailMarketingApprovalId}", null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientNotificationTypeApproval.CreatedDate)} desc");
-
-            if (notificationTypes is not null)
-            {
-                viewModel.NotificationTypes = notificationTypes;
-            }
             
             return viewModel;
         }
