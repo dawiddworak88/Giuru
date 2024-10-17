@@ -122,7 +122,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                     {
                         await _userService.SignInAsync(user.Email, model.Password, null, null);
 
-                        return StatusCode((int)HttpStatusCode.Redirect, new { Url = string.IsNullOrWhiteSpace(model.ReturnUrl) ? _options.Value.BuyerUrl : model.ReturnUrl });
+                        return StatusCode((int)HttpStatusCode.OK, new { Url = _options.Value.BuyerUrl });
                     }
                 }
                 catch (Exception ex)
