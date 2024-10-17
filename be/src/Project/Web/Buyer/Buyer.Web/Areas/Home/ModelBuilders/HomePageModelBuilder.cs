@@ -52,7 +52,6 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 
         public async Task<HomePageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-
             var viewModel = new HomePageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,

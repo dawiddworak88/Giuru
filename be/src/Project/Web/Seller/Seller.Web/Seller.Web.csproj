@@ -43,4 +43,7 @@
 		<Folder Include="Areas\Inventory\Views\Warehouse\" />
 		<Folder Include="wwwroot\" />
 	</ItemGroup>
+	<ItemGroup>
+		<InternalsVisibleTo Include="Giuru.IntegrationTests" />
+	</ItemGroup>
 </Project>

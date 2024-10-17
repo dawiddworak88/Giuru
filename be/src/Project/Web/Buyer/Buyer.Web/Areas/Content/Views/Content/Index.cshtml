@@ -1,0 +1,21 @@
+﻿<div id="root" asp-prerender-module="SlugPage" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    @if (string.IsNullOrWhiteSpace(((ContentPageViewModel)Model)?.StrapiContentWidgets?.Title) is false)
+    {
+        <title>@MetaTagsService.GenerateTitle($"{((ContentPageViewModel)Model)?.StrapiContentWidgets?.Title}", true)</title>
+    }
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/slugpage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/slugpage.js" asp-append-version="true"></script>
+}

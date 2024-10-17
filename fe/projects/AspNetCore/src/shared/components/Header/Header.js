@@ -103,7 +103,7 @@ function Header(props) {
         setTotalBasketItems(state.totalBasketItems);
 
     }, [state])
-    
+
     return (
         <header>
             <nav className="is-flex is-justify-content-space-between p-3 px-4 is-align-items-center header">
@@ -123,7 +123,7 @@ function Header(props) {
                                     renderSuggestion={renderSuggestion}
                                     inputProps={searchInputProps} 
                                 />
-                                <Button type="submit" variant="contained" color="secondary" className="search-button">
+                                <Button type="submit" variant="contained" color="secondary" className="search-button ml-2">
                                     {props.searchLabel}
                                 </Button>
                             </div>

@@ -42,6 +42,8 @@ spec:
           value: {{ .Values.mediaUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
+        - name: ClientUrl
+          value: {{ .Values.clientUrl }}
         - name: BuyerUrl
           value: {{ .Values.buyerUrl }}
         - name: ContentGraphQlUrl
@@ -76,6 +78,12 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: ApiOrganisationId
+          value: {{ .Values.apiOrganisationId }}
+        - name: ApiEmail
+          value:  {{ .Values.apiEmail }}
+        - name: ApiAppSecret
+          value: {{ .Values.apiAppSecret }}
         envFrom:
         - secretRef:
             name: b2b-identity-api-secrets

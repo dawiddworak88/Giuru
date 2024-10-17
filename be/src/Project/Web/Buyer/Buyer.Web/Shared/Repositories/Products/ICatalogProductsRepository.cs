@@ -18,5 +18,7 @@ namespace Buyer.Web.Shared.Repositories.Products
             int pageIndex,
             int itemsPerPage,
             string orderBy);
+
+        Task<IEnumerable<CatalogProduct>> GetProductsAsync(string token, string language, string skus);
     }
 }

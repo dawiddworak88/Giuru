@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_blocks_videos",
+  "info": {
+    "displayName": "Video",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "EXTERNAL",
+        "INTERNAL"
+      ],
+      "required": true
+    },
+    "videoUrl": {
+      "type": "string"
+    },
+    "video": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "videos"
+      ]
+    }
+  }
+}

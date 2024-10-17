@@ -24,6 +24,7 @@
         public static readonly string Content = "FileText";
         public static readonly string TrendingUp = "TrendingUp";
         public static readonly string Archive = "Archive";
+        public static readonly string Check = "Check";
         public static readonly string DollarSign = "DollarSign";
     }
 }

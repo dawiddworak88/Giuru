@@ -17,35 +17,45 @@ namespace Seller.Web.Areas.Clients.Repositories.Applications
 {
     public class ClientApplicationsRepository : IClientApplicationsRepository
     {
-        private readonly IApiClientService apiClientService;
-        private readonly IOptions<AppSettings> settings;
+        private readonly IApiClientService _apiClientService;
+        private readonly IOptions<AppSettings> _settings;
 
         public ClientApplicationsRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> settings)
         {
-            this.apiClientService = apiClientService;
-            this.settings = settings;
+            _apiClientService = apiClientService;
+            _settings = settings;
         }
 
         public async Task<Guid> SaveAsync(
-            string token, string language, Guid? id, string firstName, string lastName, string contactJobTitle, string email, string phoneNumber,
-            string companyName, string companyAddress, string companyCountry, string companyCity, string companyRegion, string companyPostalCode)
+            string token,
+            string language,
+            Guid? id,
+            string companyName,
+            string firstName,
+            string lastName,
+            string contactJobTitle,
+            string email,
+            string phoneNumber,
+            string communicationLanguage,
+            bool isDeliveryAddressEqualBillingAddress,
+            ClientApplicationAddressRequestModel billingAddress,
+            ClientApplicationAddressRequestModel deliveryAddress)
         {
             var requestModel = new ClientApplicationRequestModel
             {
                 Id = id,
+                CompanyName = companyName,
                 FirstName = firstName,
                 LastName = lastName,
                 ContactJobTitle = contactJobTitle,
                 Email = email,
                 PhoneNumber = phoneNumber,
-                CompanyName = companyName,
-                CompanyAddress = companyAddress,
-                CompanyCountry = companyCountry,
-                CompanyCity = companyCity,
-                CompanyRegion = companyRegion,
-                CompanyPostalCode = companyPostalCode
+                CommunicationLanguage = communicationLanguage,
+                IsDeliveryAddressEqualBillingAddress = isDeliveryAddressEqualBillingAddress,
+                BillingAddress = billingAddress,
+                DeliveryAddress = deliveryAddress
             };
 
             var apiRequest = new ApiRequest<ClientApplicationRequestModel>
@@ -53,10 +63,10 @@ namespace Seller.Web.Areas.Clients.Repositories.Applications
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.ApplicationsApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.ApplicationsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<ClientApplicationRequestModel>, ClientApplicationRequestModel, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<ClientApplicationRequestModel>, ClientApplicationRequestModel, BaseResponseModel>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Id != null)
             {
@@ -78,10 +88,10 @@ namespace Seller.Web.Areas.Clients.Repositories.Applications
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.ApplicationsApiEndpoint}/{id}"
+                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.ApplicationsApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ClientApplication>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ClientApplication>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -103,10 +113,10 @@ namespace Seller.Web.Areas.Clients.Repositories.Applications
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.ApplicationsApiEndpoint}/{id}"
+                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.ApplicationsApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode && response?.Data != null)
             {
@@ -129,10 +139,10 @@ namespace Seller.Web.Areas.Clients.Repositories.Applications
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.ApplicationsApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.ApplicationsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientApplication>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientApplication>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {

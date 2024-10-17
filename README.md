@@ -19,9 +19,11 @@ COMPOSE_PROJECT_NAME=GIURU
 GIURU_EXTERNAL_DNS_NAME_OR_IP=host.docker.internal
 SUPPORTED_CULTURES=en,de,pl
 DEFAULT_CULTURE=en
+IS_MARKETPLACE=False
 ORGANISATION_ID=[PUT_YOUR_ORGANISATION_ID]
 ELK_VERSION=7.9.1
 PRODUCT_ATTRIBUTES=[PUT_YOUR_DISPLAYING_ATTRIBUTES]
+STRAPI_AUTHORIZATION_KEY=[STRAPI_AUTHORIZATION_KEY]
 SENDER_EMAIL=[PUT_YOUR_APPLICATION_EMAIL]
 SENDER_NAME=[PUT_YOUR_EMAIL_SENDER_NAME]
 SENDGRID_API_KEY=[PUT_YOUR_SENDGRID_API_KEY_HERE_AND_NEVER_COMMIT]
@@ -31,18 +33,22 @@ SENDGRID_CUSTOM_ORDER_TEMPLATE_ID=[PUT_YOUR_SENGRID_CUSTOM_ORDER_TEMPLATE_ID_HER
 SENDGRID_CLIENT_APPLY_CONFIRMATION_TEMPLATE_ID=[PUT_YOUR_SENDGRID_CLIENT_APPLY_CONFIRMATION_TEMPLATE_ID_HERE_AND_NEVER_COMMIT]
 SENDGRID_CLIENT_APPLY_TEMPLATE_ID=[PUT_YOUR_SENDGRID_CLIENT_APPLY_TEMPLATE_ID_HERE_AND_NEVER_COMMIT]
 SENDGRID_TEAM_MEMBER_INVITATION_TEMPLATE_ID=[PUT_YOUR_SENDGRID_TEAM_MEMBER_INVITATION_TEMPLATE_ID_HERE_AND_NEVER_COMMIT]
+SENDGRID_CONFIRMATION_ORDER_TEMPLATE_ID=[PUT_YOUR_SENDGRID_CONFIRMATION_ORDER_TEMPLATE_ID_HERE_AND_NEVER_COMMIT]
 ```
 
 ### Quickstart
 
 1. Clone this repository
-2. Execute the following commands from the /fe folder to build fe:
+2. Execute the following commands for each project from the /fe/projects folder to build fe:
 
     npm install --legacy-peer-deps
 
     npm run build-fe
 
-3. Open Visual Studio, set the docker-compose project as a startup project and hit F5
+3. In Docker Desktop set option: "Add the *.docker.internal names to the host's /etc/hosts file (Requires password)"
+4. Open Visual Studio, set the docker-compose project as a startup project and hit F5
+5. Open web app in browser e.g. Seller Application: host.docker.internal:5104 (not localhost)
+6. Log in with seller@user.com and Gre@tPassw0rd
 
 
 ## Contributing

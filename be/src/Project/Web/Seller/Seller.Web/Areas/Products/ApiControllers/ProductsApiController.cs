@@ -14,6 +14,7 @@ using System.Security.Claims;
 using Foundation.Account.Definitions;
 using Foundation.Extensions.Helpers;
 using Seller.Web.Areas.Shared.Repositories.Products;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
@@ -48,6 +49,11 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 itemsPerPage,
                 null);
 
+            foreach (var product in products.Data)
+            {
+                product.Name = $"{product.Name} ({product.Sku})";
+            }
+
             return this.StatusCode((int)HttpStatusCode.OK, products);
         }
 
@@ -65,8 +71,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 model.IsPublished,
                 model.PrimaryProductId,
                 model.CategoryId,
-                model.Images.Select(x => x.Id),
-                model.Files.Select(x => x.Id),
+                model.Images.OrEmptyIfNull().Select(x => x.Id),
+                model.Files.OrEmptyIfNull().Select(x => x.Id),
                 model.Ean,
                 model.FulfillmentTime,
                 model.FormData);

@@ -15,6 +15,7 @@ defaultCulture: "en"
 orderingApi:
   connectionString: "#{OrderingApi--ConnectionString}#"
   actionSendGridCustomOrderTemplateId: "#{OrderingApi--ActionSendGridCustomOrderTemplateId}#"
+  actionSendGridConfirmationOrderTemplateId: "#{OrderingApi--ActionSendGridConfirmationOrderTemplateId}#"
   replicas: "1"
   readinessProbe:
     initialDelaySeconds: "15"

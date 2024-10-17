@@ -231,7 +231,7 @@
   <data name="Orders" xml:space="preserve">
     <value>Bestellungen</value>
   </data>
-  <data name="Orderstatus" xml:space="preserve">
+  <data name="OrderStatus" xml:space="preserve">
     <value>Bestellstatus:</value>
   </data>
   <data name="ExpectedDateOfProductOnStock" xml:space="preserve">
@@ -264,7 +264,7 @@
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
   </data>
-  <data name="SuccessfullyCanceledOrder" xml:space="preserve">
+  <data name="SuccessfullyCancelledOrder" xml:space="preserve">
     <value>Bestellung erfolgreich storniert.</value>
   </data>
   <data name="StockQuantityLabel" xml:space="preserve">
@@ -284,5 +284,62 @@
   </data>
   <data name="CancelOrderItem" xml:space="preserve">
     <value>Bestellposition stornieren</value>
+  </data>
+  <data name="oc_title" xml:space="preserve">
+    <value>BESTELLBESTÄTIGUNG</value>
+  </data>
+  <data name="oc_orderedProducts" xml:space="preserve">
+    <value>Bestellte Produkte</value>
+  </data>
+  <data name="sh_nameLabel" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="oc_text" xml:space="preserve">
+    <value>Wir freuen uns, Ihnen mitteilen zu können, dass Ihre Bestellung bestätigt wurde.</value>
+  </data>
+  <data name="sh_outletQuantityLabel" xml:space="preserve">
+    <value>Ausverkaufsbestand</value>
+  </data>
+  <data name="oc_preheader" xml:space="preserve">
+    <value>Bestellung genehmigt: Überprüfen Sie die Transaktionsdetails</value>
+  </data>
+  <data name="sh_quantityLabel" xml:space="preserve">
+    <value>Menge</value>
+  </data>
+  <data name="sh_stockQuantityLabel" xml:space="preserve">
+    <value>Bestandsmenge</value>
+  </data>
+  <data name="oc_subject" xml:space="preserve">
+    <value>Bestellbestätigung</value>
+  </data>
+  <data name="co_clientNameLabel" xml:space="preserve">
+    <value>Kundenname</value>
+  </data>
+  <data name="co_subject" xml:space="preserve">
+    <value>Die Bestellung wurde storniert</value>
+  </data>
+  <data name="co_preheader" xml:space="preserve">
+    <value>Einer der Kunden hat die Bestellung storniert.</value>
+  </data>
+  <data name="co_orderLinkLabel" xml:space="preserve">
+    <value>Bestelllink</value>
+  </data>
+  <data name="co_cancelOrderItemsLabel" xml:space="preserve">
+    <value>Stornierte Bestellpositionen</value>
+  </data>
+  <data name="coi_subject" xml:space="preserve">
+    <value>Die Bestellposition wurde storniert</value>
+  </data>
+  <data name="coi_preheader" xml:space="preserve">
+    <value>Einer der Kunden hat einen Artikel in der Bestellung storniert</value>
+  </data>
+  <data name="coi_cancelOrderItemLabel" xml:space="preserve">
+    <value>Storniertes Produkt</value>
+  </data>
+  <data name="sh_clientNameLabel" xml:space="preserve">
+    <value>Kundenname</value>
+  </data>
+  <data name="sh_orderLinkLabel" xml:space="preserve">
+    <value>Bestelllink</value>
   </data>
 </root>

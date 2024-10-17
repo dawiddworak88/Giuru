@@ -1,6 +1,7 @@
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
 using Buyer.Web.Shared.DependencyInjection;
+using Buyer.Web.Areas.Content.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,7 +40,8 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 {
     loggerConfiguration.MinimumLevel.Warning();
-    loggerConfiguration.Enrich.WithProperty("ApplicationContext", typeof(Program).Namespace);
+    loggerConfiguration.Enrich.WithProperty("ApplicationContext", Assembly.GetExecutingAssembly().GetName().Name);
+    loggerConfiguration.Enrich.WithProperty("Environment", builder.Environment.EnvironmentName);
     loggerConfiguration.Enrich.FromLogContext();
     loggerConfiguration.WriteTo.Console();
 
@@ -90,7 +92,14 @@ builder.Services.AddControllersWithViews(options =>
 
 builder.Services.RegisterFoundationMediaDependencies();
 
-builder.Services.RegisterClientAccountDependencies(builder.Configuration, builder.Environment);
+if (builder.Configuration.GetValue<bool>("IntegrationTestsEnabled"))
+{
+    builder.Services.RegisterApiAccountDependencies(builder.Configuration);
+}
+else
+{
+    builder.Services.RegisterClientAccountDependencies(builder.Configuration, builder.Environment);
+}
 
 builder.Services.RegisterLocalizationDependencies();
 
@@ -103,6 +112,8 @@ builder.Services.RegisterNewsDependencies();
 builder.Services.RegisterDownloadCenterDependencies();
 
 builder.Services.RegisterDashboardAreaDependencies();
+
+builder.Services.RegisterContentDependencies();
 
 builder.Services.RegisterGeneralDependencies();
 
@@ -178,7 +189,17 @@ app.MapControllerRoute(
     pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
 
 app.MapControllerRoute(
-    name: "defautl",
+    name: "localizedAreaSlugRoute",
+    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/Slug/{slug?}",
+    defaults: new
+    {
+        area = "Content",
+        controller = "Content",
+        action = "Index"
+    }).RequireAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
     pattern: "{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
 
 app.MapHealthChecks("/hc", new HealthCheckOptions
@@ -193,3 +214,5 @@ app.MapHealthChecks("/liveness", new HealthCheckOptions
 });
 
 app.Run();
+
+public partial class BuyerWebProgram { }

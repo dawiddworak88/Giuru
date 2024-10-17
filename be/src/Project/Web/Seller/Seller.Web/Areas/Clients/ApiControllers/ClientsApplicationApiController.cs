@@ -17,15 +17,15 @@ namespace Seller.Web.Areas.Clients.ApiControllers
     [Area("Clients")]
     public class ClientsApplicationApiController : BaseApiController
     {
-        private readonly IStringLocalizer<ClientResources> clientLocalizer;
-        private readonly IClientApplicationsRepository clientApplicationsRepository;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
+        private readonly IClientApplicationsRepository _clientApplicationsRepository;
 
         public ClientsApplicationApiController(
             IStringLocalizer<ClientResources> clientLocalizer,
             IClientApplicationsRepository clientApplicationsRepository)
         {
-            this.clientLocalizer = clientLocalizer;
-            this.clientApplicationsRepository = clientApplicationsRepository;
+            _clientLocalizer = clientLocalizer;
+            _clientApplicationsRepository = clientApplicationsRepository;
         }
 
         [HttpGet]
@@ -34,9 +34,9 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var groups = await this.clientApplicationsRepository.GetAsync(token, language, searchTerm, pageIndex, itemsPerPage, $"{nameof(ClientApplication.CreatedDate)} desc");
+            var groups = await _clientApplicationsRepository.GetAsync(token, language, searchTerm, pageIndex, itemsPerPage, $"{nameof(ClientApplication.CreatedDate)} desc");
 
-            return this.StatusCode((int)HttpStatusCode.OK, groups);
+            return StatusCode((int)HttpStatusCode.OK, groups);
         }
 
         [HttpDelete]
@@ -45,9 +45,9 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await this.clientApplicationsRepository.DeleteAsync(token, language, id);
+            await _clientApplicationsRepository.DeleteAsync(token, language, id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.clientLocalizer.GetString("ApplicationDeletedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Message = _clientLocalizer.GetString("ApplicationDeletedSuccessfully").Value });
         }
 
         [HttpPost]
@@ -56,11 +56,22 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var clientApplication = await this.clientApplicationsRepository.SaveAsync(
-                token, language, model.Id, model.FirstName, model.LastName, model.ContactJobTitle, model.Email, model.PhoneNumber,
-                model.CompanyName, model.CompanyAddress, model.CompanyCountry, model.CompanyCity, model.CompanyRegion, model.CompanyPostalCode);
+            var clientApplication = await _clientApplicationsRepository.SaveAsync(
+                token,
+                language,
+                model.Id,
+                model.CompanyName,
+                model.FirstName,
+                model.LastName,
+                model.ContactJobTitle,
+                model.Email,
+                model.PhoneNumber,
+                model.CommunicationLanguage,
+                model.IsDeliveryAddressEqualBillingAddress,
+                model.BillingAddress,
+                model.DeliveryAddress);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = clientApplication, Message = this.clientLocalizer.GetString("ClientApplicationSavedSuccessfully").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Id = clientApplication, Message = _clientLocalizer.GetString("ClientApplicationSavedSuccessfully").Value });
         }
     }
 }

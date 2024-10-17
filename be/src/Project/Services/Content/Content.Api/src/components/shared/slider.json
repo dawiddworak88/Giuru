@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_shared_sliders",
+  "info": {
+    "displayName": "Slider",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "navigation": {
+      "type": "boolean",
+      "default": false
+    },
+    "skus": {
+      "type": "string",
+      "regex": "^\\S*$",
+      "required": true
+    }
+  }
+}
