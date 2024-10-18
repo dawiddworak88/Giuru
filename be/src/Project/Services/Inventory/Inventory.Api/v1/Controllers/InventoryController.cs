@@ -156,8 +156,8 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public IActionResult GetAvailableProductsInventories(
-            int pageIndex, 
-            int itemsPerPage)
+            int? pageIndex, 
+            int? itemsPerPage)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             
