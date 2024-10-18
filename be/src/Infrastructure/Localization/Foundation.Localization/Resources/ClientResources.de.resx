@@ -318,36 +318,6 @@
   <data name="ExpressedOnLabel" xml:space="preserve">
     <value>Die Einwilligung wurde erteilt</value>
   </data>
-  <data name="NavigateToNotificationTypeText" xml:space="preserve">
-    <value>Zurück zu den Kunden-Einwilligungen</value>
-  </data>
-  <data name="NewNotificationType" xml:space="preserve">
-    <value>Einwilligung hinzufügen</value>
-  </data>
-  <data name="NoNotificationTypes" xml:space="preserve">
-    <value>Keine verfügbaren Kunden-Einwilligungen</value>
-  </data>
-  <data name="NotificationTypeNotFound" xml:space="preserve">
-    <value>Einwilligung nicht gefunden</value>
-  </data>
-  <data name="NotificationTypes" xml:space="preserve">
-    <value>Kunden-Einwilligungen</value>
-  </data>
-  <data name="EditClientNotificationType" xml:space="preserve">
-    <value>Einwilligungsart bearbeiten</value>
-  </data>
-  <data name="BackToNotificationType" xml:space="preserve">
-    <value>Zurück zu den Kunden-Einwilligungen</value>
-  </data>
-  <data name="NotificationTypeDeletedSuccessfully" xml:space="preserve">
-    <value>Kunden-Einwilligung erfolgreich gelöscht</value>
-  </data>
-  <data name="NotificationTypeSavedSuccessfully" xml:space="preserve">
-    <value>Einwilligung erfolgreich gespeichert</value>
-  </data>
-  <data name="NotificationTypeDeleteTypeApprovalConflict" xml:space="preserve">
-    <value>Löschen Sie Kunden-Einwilligungen, die diesem Einwilligungstyp zugeordnet sind</value>
-  </data>
   <data name="FieldDefinitionNotFound" xml:space="preserve">
     <value>Dynamische Felddefinition nicht gefunden</value>
   </data>

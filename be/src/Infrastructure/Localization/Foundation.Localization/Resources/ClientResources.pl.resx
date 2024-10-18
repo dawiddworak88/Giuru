@@ -318,36 +318,6 @@
   <data name="ExpressedOnLabel" xml:space="preserve">
     <value>Wyrażono zgodę</value>
   </data>
-  <data name="NavigateToNotificationTypeText" xml:space="preserve">
-    <value>Wróć do zgód klienta</value>
-  </data>
-  <data name="NewNotificationType" xml:space="preserve">
-    <value>Dodaj zgodę</value>
-  </data>
-  <data name="NoNotificationTypes" xml:space="preserve">
-    <value>Brak dostępnych zgód klienta</value>
-  </data>
-  <data name="NotificationTypeNotFound" xml:space="preserve">
-    <value>Zgoda nie został znaleziona</value>
-  </data>
-  <data name="NotificationTypes" xml:space="preserve">
-    <value>Zgody klientów</value>
-  </data>
-  <data name="EditClientNotificationType" xml:space="preserve">
-    <value>Edytuj typ zgody</value>
-  </data>
-  <data name="BackToNotificationType" xml:space="preserve">
-    <value>Powrót do zgód klienta</value>
-  </data>
-  <data name="NotificationTypeDeletedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie usunięto zgodę klientów</value>
-  </data>
-  <data name="NotificationTypeSavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie zapisano zgodę</value>
-  </data>
-  <data name="NotificationTypeDeleteTypeApprovalConflict" xml:space="preserve">
-    <value>Usuń zgody klientów przypisane do tego typu zgody</value>
-  </data>
   <data name="FieldDefinitionNotFound" xml:space="preserve">
     <value>Nie znaleziono definicji pola</value>
   </data>

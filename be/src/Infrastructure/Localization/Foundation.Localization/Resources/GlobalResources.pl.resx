@@ -732,9 +732,6 @@
   <data name="Street" xml:space="preserve">
     <value>Ulica</value>
   </data>
-  <data name="NotificationTypes" xml:space="preserve">
-    <value>Zgody klientów</value>
-  </data>
   <data name="Value" xml:space="preserve">
     <value>Wartość</value>
   </data>
