@@ -318,36 +318,6 @@
   <data name="ExpressedOnLabel" xml:space="preserve">
     <value>Consent has been given</value>
   </data>
-  <data name="NavigateToNotificationTypeText" xml:space="preserve">
-    <value>Back to clients approvals</value>
-  </data>
-  <data name="NewNotificationType" xml:space="preserve">
-    <value>Add approval</value>
-  </data>
-  <data name="NoNotificationTypes" xml:space="preserve">
-    <value>No clients approvals</value>
-  </data>
-  <data name="NotificationTypeNotFound" xml:space="preserve">
-    <value>Approval has not been found</value>
-  </data>
-  <data name="NotificationTypes" xml:space="preserve">
-    <value>Clients approvals</value>
-  </data>
-  <data name="EditClientNotificationType" xml:space="preserve">
-    <value>Edit approval type</value>
-  </data>
-  <data name="BackToNotificationType" xml:space="preserve">
-    <value>Return to customer approvals</value>
-  </data>
-  <data name="NotificationTypeDeletedSuccessfully" xml:space="preserve">
-    <value>Successfully deleted customer approval</value>
-  </data>
-  <data name="NotificationTypeSavedSuccessfully" xml:space="preserve">
-    <value>Approval successfully saved</value>
-  </data>
-  <data name="NotificationTypeDeleteTypeApprovalConflict" xml:space="preserve">
-    <value>Delete customer approvals assigned to this type of approval</value>
-  </data>
   <data name="FieldDefinitionNotFound" xml:space="preserve">
     <value>Dynamic field definition not found</value>
   </data>
