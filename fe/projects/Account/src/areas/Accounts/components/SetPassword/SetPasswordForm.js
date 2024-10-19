@@ -5,7 +5,6 @@ import { TextField, Button, CircularProgress } from "@mui/material";
 import useForm from "../../../../shared/helpers/forms/useForm";
 import PasswordValidator from "../../../../shared/helpers/validators/PasswordValidator";
 import { toast } from "react-toastify";
-import ResponseStatusConstants from "../../../../shared/constants/ResponseStatusConstants";
 import NavigationHelper from "../../../../shared/helpers/globals/NavigationHelper";
 import ToastHelper from "../../../../shared/helpers/globals/ToastHelper";
 
@@ -42,7 +41,7 @@ function SetPasswordForm(props) {
         fetch(props.submitUrl, requestOptions)
             .then(response => {
                 return response.json().then(jsonResponse => {
-                    if (response.status === ResponseStatusConstants.found()) {
+                    if (response.ok) {
                         toast.success(props.passwordSetSuccessMessage);
                         setTimeout(() => {
                             NavigationHelper.redirect(jsonResponse.url)
