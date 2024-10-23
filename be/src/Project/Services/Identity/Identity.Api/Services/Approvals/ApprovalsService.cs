@@ -136,6 +136,7 @@ namespace Identity.Api.Services.Approvals
                 {
                     Name = model.Name,
                     Language = model.Language,
+                    ApprovalId = approval.Id
                 };
 
                 await _context.ApprovalTranslations.AddAsync(newApprovalTranslation.FillCommonProperties());
