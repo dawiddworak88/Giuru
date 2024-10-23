@@ -1,8 +1,8 @@
 import React from "react";
 import { hydrateRoot } from "react-dom/client";
-import ClientNotificationTypePage from "./ClientNotificationTypePage";
+import ClientApprovalPage from "./ClientApprovalPage";
 import CssSsrRemovalHelper from "../../../../../../../shared/helpers/globals/CssSsrRemovalHelper";
 
 CssSsrRemovalHelper.remove();
 
-hydrateRoot(document.getElementById("root"), <ClientNotificationTypePage {...window.data} />)
+hydrateRoot(document.getElementById("root"), <ClientApprovalPage {...window.data} />)

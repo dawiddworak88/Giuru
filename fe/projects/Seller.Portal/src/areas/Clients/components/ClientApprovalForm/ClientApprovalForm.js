@@ -6,7 +6,7 @@ import useForm from "../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import { Button, InputLabel, TextField } from "@mui/material";
 
-const ClientNotificationTypeForm = (props) => {
+const ClientApprovalForm = (props) => {
     const [state, dispatch] = useContext(Context);
 
     const stateSchema = {
@@ -18,7 +18,7 @@ const ClientNotificationTypeForm = (props) => {
         name: {
             required: {
                 isRequired: true,
-                error: props.nameRequiredErrorMessage
+                error: props.fieldRequiredErrorMessage
             }
         }
     };
@@ -88,7 +88,7 @@ const ClientNotificationTypeForm = (props) => {
                                 disabled={state.isLoading || disable}>
                                     {props.saveText}
                             </Button>
-                            <a href={props.clientNotificationTypesUrl} className="ml-2 button is-text">{props.navigateToClientNotificationTypes}</a>
+                            <a href={props.clientApprovalsUrl} className="ml-2 button is-text">{props.navigateToClientApprovals}</a>
                         </div>
                     </form>
                 </div>
@@ -98,4 +98,4 @@ const ClientNotificationTypeForm = (props) => {
     );
 }
 
-export default ClientNotificationTypeForm;
+export default ClientApprovalForm;

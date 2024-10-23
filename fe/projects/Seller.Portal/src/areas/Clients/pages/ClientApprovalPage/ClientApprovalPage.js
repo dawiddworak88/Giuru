@@ -6,10 +6,10 @@ import Header from "../../../../shared/components/Header/Header";
 import Store from "../../../../shared/stores/Store";
 import Footer from "../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../shared/components/MenuTiles/MenuTiles";
-import ClientNotificationTypeForm from "../../components/ClientNotificationTypeForm/ClientNotificationTypeForm";
+import ClientApprovalForm from "../../components/ClientApprovalForm/ClientApprovalForm";
 import LocaleHelper from "../../../../shared/helpers/globals/LocaleHelper";
 
-const ClientNotificationTypePage = (props) => {
+const ClientApprovalPage = (props) => {
 
     LocaleHelper.setMomentLocale(props.locale);
 
@@ -19,11 +19,11 @@ const ClientNotificationTypePage = (props) => {
             <Store>
                 <Header {...props.header}></Header>
                 <MenuTiles {...props.menuTiles} />
-                <ClientNotificationTypeForm {...props.notificationTypeForm} />
+                <ClientApprovalForm {...props.clientApprovalForm} />
                 <Footer {...props.footer}></Footer>
             </Store>
         </ThemeProvider>
     )
 }
 
-export default ClientNotificationTypePage;
+export default ClientApprovalPage;

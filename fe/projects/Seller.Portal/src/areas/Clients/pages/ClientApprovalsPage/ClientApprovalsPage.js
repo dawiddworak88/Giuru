@@ -9,7 +9,7 @@ import MenuTiles from "../../../../shared/components/MenuTiles/MenuTiles";
 import Catalog from "../../../../shared/components/Catalog/Catalog";
 import Footer from "../../../../shared/components/Footer/Footer";
 
-const ClientNotificationTypesPage = (props) =>
+const ClientApprovalsPage = (props) =>
 {
     LocaleHelper.setMomentLocale(props.locale)
 
@@ -26,4 +26,4 @@ const ClientNotificationTypesPage = (props) =>
     );
 }
 
-export default ClientNotificationTypesPage;
+export default ClientApprovalsPage;
