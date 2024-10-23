@@ -24,7 +24,7 @@ namespace Identity.Api.v1.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize(AuthenticationSchemes = "IsToken")]
     public class ApprovalsController : ControllerBase
     {
         private readonly IApprovalsService _approvalsService;
