@@ -31,7 +31,7 @@ namespace Seller.Web.Areas.Orders.Repositories.ClientNotificationTypeApproval
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.NotificationTypesApiApprovalEndpoint}/{clientId}"
+                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Identity.ApprovalsEndpoint}/{clientId}"
             };
 
             var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<DomainModels.ClientNotificationTypeApproval>>(apiRequest);
