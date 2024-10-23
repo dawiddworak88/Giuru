@@ -798,4 +798,7 @@
   <data name="ApprovalNotFound" xml:space="preserve">
     <value>Nie znaleziono zgody</value>
   </data>
+  <data name="ClientApprovals" xml:space="preserve">
+    <value>Zgody</value>
+  </data>
 </root>

@@ -393,4 +393,19 @@
   <data name="PreferedCurrencyLabel" xml:space="preserve">
     <value>Prefered currency</value>
   </data>
+  <data name="EditClientApproval" xml:space="preserve">
+    <value>Edit Approval</value>
+  </data>
+  <data name="NavigateToClientApprovals" xml:space="preserve">
+    <value>Return to Approvals</value>
+  </data>
+  <data name="NewClientApproval" xml:space="preserve">
+    <value>New Approval</value>
+  </data>
+  <data name="ClientApprovalSavedSuccessfully" xml:space="preserve">
+    <value>Approval saved successfully</value>
+  </data>
+  <data name="ClientApprovalDeletedSuccessfully" xml:space="preserve">
+    <value>Approval deleted successfully</value>
+  </data>
 </root>

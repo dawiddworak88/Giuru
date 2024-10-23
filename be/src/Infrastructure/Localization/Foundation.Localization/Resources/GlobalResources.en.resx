@@ -792,4 +792,7 @@
   <data name="ApprovalNotFound" xml:space="preserve">
     <value>Approval not found</value>
   </data>
+  <data name="ClientApprovals" xml:space="preserve">
+    <value>Approvals</value>
+  </data>
 </root>
