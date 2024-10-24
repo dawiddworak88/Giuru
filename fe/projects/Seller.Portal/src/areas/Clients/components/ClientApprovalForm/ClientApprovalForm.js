@@ -92,10 +92,23 @@ const ClientApprovalForm = (props) => {
                         </div>
                     </form>
                 </div>
-
             </div>
         </section>
     );
+}
+
+ClientApprovalForm.propTypes = {
+    id: PropTypes.string,
+    saveUrl: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    idLabel: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    nameLabel: PropTypes.string.isRequired,
+    saveText: PropTypes.string.isRequired,
+    clientApprovalsUrl: PropTypes.string.isRequired,
+    navigateToClientApprovals: PropTypes.string.isRequired,
+    generalErrorMessage: PropTypes.string.isRequired,
+    fieldRequiredErrorMessage: PropTypes.string.isRequired
 }
 
 export default ClientApprovalForm;
