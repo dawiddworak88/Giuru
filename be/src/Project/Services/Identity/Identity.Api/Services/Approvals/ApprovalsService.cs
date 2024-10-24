@@ -19,8 +19,8 @@ namespace Identity.Api.Services.Approvals
 {
     public class ApprovalsService : IApprovalsService
     {
-        private IdentityContext _context;
-        private IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IdentityContext _context;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
 
         public ApprovalsService(
             IdentityContext context,
@@ -132,7 +132,7 @@ namespace Identity.Api.Services.Approvals
             }
             else
             {
-                var newApprovalTranslation = new ApprovalTranslation()
+                var newApprovalTranslation = new ApprovalTranslation
                 {
                     Name = model.Name,
                     Language = model.Language,
