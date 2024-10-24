@@ -8,6 +8,7 @@ using Identity.Api.Configurations;
 using Identity.Api.Infrastructure;
 using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.Repositories.AppSecrets;
+using Identity.Api.Services.Approvals;
 using Identity.Api.Services.Organisations;
 using Identity.Api.Services.Roles;
 using Identity.Api.Services.TeamMembers;
@@ -95,6 +96,7 @@ namespace Identity.Api.DependencyInjection
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IRolesService, RolesService>();
             services.AddScoped<ITeamMemberService, TeamMemberService>();
+            services.AddScoped<IApprovalsService, ApprovalsService>();
         }
     }
 }

@@ -786,4 +786,10 @@
   <data name="SeeMoreText" xml:space="preserve">
     <value>Mehr anzeigen</value>
   </data>
+  <data name="ApprovalNotFound" xml:space="preserve">
+    <value>Zustimmung nicht gefunden</value>
+  </data>
+  <data name="ClientApprovals" xml:space="preserve">
+    <value>Zustimmungen</value>
+  </data>
 </root>

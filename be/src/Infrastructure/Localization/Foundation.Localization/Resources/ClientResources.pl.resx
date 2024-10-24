@@ -363,4 +363,19 @@
   <data name="PreferedCurrencyLabel" xml:space="preserve">
     <value>Preferowana waluta</value>
   </data>
+  <data name="EditClientApproval" xml:space="preserve">
+    <value>Edytuj Zgodę</value>
+  </data>
+  <data name="NavigateToClientApprovals" xml:space="preserve">
+    <value>Powróć do zgód</value>
+  </data>
+  <data name="NewClientApproval" xml:space="preserve">
+    <value>Nowa zgoda</value>
+  </data>
+  <data name="ClientApprovalSavedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie zapisano zgodę</value>
+  </data>
+  <data name="ClientApprovalDeletedSuccessfully" xml:space="preserve">
+    <value>Pomyślanie usunięto zgodę</value>
+  </data>
 </root>

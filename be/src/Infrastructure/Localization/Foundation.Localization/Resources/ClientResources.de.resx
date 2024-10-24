@@ -363,4 +363,25 @@
   <data name="PreferedCurrencyLabel" xml:space="preserve">
     <value>Bevorzugte währung</value>
   </data>
+  <data name="ApprovalNotFound" xml:space="preserve">
+    <value>Zustimmung nicht gefunden</value>
+  </data>
+  <data name="ClientApprovals" xml:space="preserve">
+    <value>Zustimmungen</value>
+  </data>
+  <data name="EditClientApproval" xml:space="preserve">
+    <value>Zustimmung bearbeiten</value>
+  </data>
+  <data name="NavigateToClientApprovals" xml:space="preserve">
+    <value>Zurück zu den Zustimmungen</value>
+  </data>
+  <data name="NewClientApproval" xml:space="preserve">
+    <value>Neue Zustimmung</value>
+  </data>
+  <data name="ClientApprovalSavedSuccessfully" xml:space="preserve">
+    <value>Zustimmung erfolgreich gespeichert</value>
+  </data>
+  <data name="ClientApprovalDeletedSuccessfully" xml:space="preserve">
+    <value>Zustimmung erfolgreich gelöscht</value>
+  </data>
 </root>
