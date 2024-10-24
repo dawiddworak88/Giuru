@@ -58,9 +58,9 @@ namespace Identity.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    await _approvalsService.UpdateAsync(serviceModel);
+                    var approvalId = await _approvalsService.UpdateAsync(serviceModel);
 
-                    return StatusCode((int)HttpStatusCode.OK);
+                    return StatusCode((int)HttpStatusCode.OK, approvalId);
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)),(int)HttpStatusCode.BadRequest);
@@ -80,9 +80,9 @@ namespace Identity.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    await _approvalsService.CreateAsync(serviceModel);
+                    var approvalId = await _approvalsService.CreateAsync(serviceModel);
 
-                    return StatusCode((int)HttpStatusCode.OK);
+                    return StatusCode((int)HttpStatusCode.OK, approvalId);
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.BadRequest);

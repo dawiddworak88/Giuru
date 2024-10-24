@@ -9,6 +9,7 @@ using Identity.Api.Infrastructure.Approvals.Entities;
 using Identity.Api.ServicesModels.Approvals;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace Identity.Api.Services.Approvals
             _globalLocalizer = globalLocalizer;
         }
 
-        public async Task CreateAsync(CreateApprovalServiceModel model)
+        public async Task<Guid> CreateAsync(CreateApprovalServiceModel model)
         {
             var approval = new Approval();
 
@@ -45,6 +46,8 @@ namespace Identity.Api.Services.Approvals
 
             await _context.ApprovalTranslations.AddAsync(approvalTranslation.FillCommonProperties());
             await _context.SaveChangesAsync();
+
+            return approval.Id;
         }
 
         public async Task DeleteAsync(DeleteApprovalServiceModel model)
@@ -114,7 +117,7 @@ namespace Identity.Api.Services.Approvals
             };
         }
 
-        public async Task UpdateAsync(UpdateApprovalServiceModel model)
+        public async Task<Guid> UpdateAsync(UpdateApprovalServiceModel model)
         {
             var approval = await _context.Approvals.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
@@ -145,6 +148,8 @@ namespace Identity.Api.Services.Approvals
             approval.LastModifiedDate = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
+
+            return approval.Id;
         }
     }
 }
