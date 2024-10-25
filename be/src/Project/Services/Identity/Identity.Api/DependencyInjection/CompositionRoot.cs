@@ -13,6 +13,7 @@ using Identity.Api.Services.Organisations;
 using Identity.Api.Services.Roles;
 using Identity.Api.Services.TeamMembers;
 using Identity.Api.Services.Tokens;
+using Identity.Api.Services.UserApprovals;
 using Identity.Api.Services.Users;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
@@ -97,6 +98,7 @@ namespace Identity.Api.DependencyInjection
             services.AddScoped<IRolesService, RolesService>();
             services.AddScoped<ITeamMemberService, TeamMemberService>();
             services.AddScoped<IApprovalsService, ApprovalsService>();
+            services.AddScoped<IUserApprovalsService, UserApprovalsService>();
         }
     }
 }
