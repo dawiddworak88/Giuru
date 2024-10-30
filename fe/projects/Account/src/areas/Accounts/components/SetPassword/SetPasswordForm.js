@@ -11,7 +11,7 @@ import ToastHelper from "../../../../shared/helpers/globals/ToastHelper";
 function SetPasswordForm(props) {
     const [state, dispatch] = useContext(Context);
     const [approvalsId, setApprovalsId] = useState([]);
-    const [checkboxes, setCheckboxes] = useState(props.approvals.map((approval) => {
+    const [approvalCheckboxes, setApprovalCheckboxes] = useState(props.approvals.map((approval) => {
         return {id: approval.id, label: approval.name, checked: false}
     }))
 
@@ -74,7 +74,7 @@ function SetPasswordForm(props) {
     const { id, password } = values;
 
     const checkboxOnChangeHandler = (id) => {
-        setCheckboxes((prevCheckboxes) =>
+        setApprovalCheckboxes((prevCheckboxes) =>
         prevCheckboxes.map((checkbox) =>
             checkbox.id === id ? { ...checkbox, checked: !checkbox.checked } : checkbox 
         ));
@@ -97,9 +97,9 @@ function SetPasswordForm(props) {
                                 <h1 className="title">{props.marketingApprovalHeader}</h1>
                                 <p className="subtitle mb-2 mt-1">{props.marketingApprovalText}</p>
                             </div>
-                            {checkboxes && checkboxes.length > 0 && (
+                            {approvalCheckboxes && approvalCheckboxes.length > 0 && (
                                 <div className="is-flex is-justify-content-center is-align-content-center is-flex-wrap-wrap">
-                                    {checkboxes.map((checkbox) => {
+                                    {approvalCheckboxes.map((checkbox) => {
                                         return (
                                             <div className="checkbox" key={checkbox.id}>
                                                 <NoSsr>
