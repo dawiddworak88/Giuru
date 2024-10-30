@@ -121,7 +121,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                     {
                         await _userService.SignInAsync(user.Email, model.Password, null, null);
 
-                        if (model.ClientApprovals.Any())
+                        if (model.ClientApprovals is not null && model.ClientApprovals.Any())
                         {
                             var saveUserApprovalsServiceModel = new SaveUserApprovalsServiceModel
                             {
