@@ -133,6 +133,7 @@ namespace Identity.Api.v1.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK , Type = typeof(PagedResults<IEnumerable<ApprovalResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        [AllowAnonymous]
         public IActionResult GetAsync(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
