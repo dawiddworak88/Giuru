@@ -6,7 +6,9 @@ using Identity.Api.Areas.Accounts.Services.UserServices;
 using Identity.Api.Areas.Accounts.Validators;
 using Identity.Api.Configurations;
 using Identity.Api.Services.Tokens;
+using Identity.Api.Services.UserApprovals;
 using Identity.Api.Services.Users;
+using Identity.Api.ServicesModels.UserApprovals;
 using Identity.Api.ServicesModels.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -32,6 +35,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         private readonly LinkGenerator _linkGenerator;
         private readonly ITokenService _tokenService;
         private readonly ILogger<IdentityApiController> _logger;
+        private readonly IUserApprovalsService _userApprovalsService;
 
         public IdentityApiController(
             IUserService userService,
@@ -41,7 +45,8 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             LinkGenerator linkGenerator,
             IUsersService usersService,
             ITokenService tokenService,
-            ILogger<IdentityApiController> logger)
+            ILogger<IdentityApiController> logger,
+            IUserApprovalsService userApprovalsService)
         {
             _userService = userService;
             _usersService = usersService;
@@ -51,6 +56,8 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             _linkGenerator = linkGenerator;
             _tokenService = tokenService;
             _logger = logger;
+            _usersService = usersService;
+            _userApprovalsService = userApprovalsService;
         }
 
         [HttpGet]
@@ -113,6 +120,17 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                     if (user is not null)
                     {
                         await _userService.SignInAsync(user.Email, model.Password, null, null);
+
+                        if (model.ClientApprovals.Any())
+                        {
+                            var saveUserApprovalsServiceModel = new SaveUserApprovalsServiceModel
+                            {
+                                ApprvoalIds = model.ClientApprovals,
+                                UserId = Guid.Parse(user.Id)
+                            };
+
+                            await _userApprovalsService.SaveAsync(saveUserApprovalsServiceModel);
+                        }
 
                         return StatusCode((int)HttpStatusCode.OK, new { Url = _options.Value.BuyerUrl });
                     }
