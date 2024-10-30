@@ -27,6 +27,10 @@ namespace Identity.Api.v1.Controllers
             _userApprovalsService = userApprovalsService;
         }
 
+        /// <summary>
+        /// Creates user approvals.
+        /// </summary>
+        /// <param name="model">The model.</param>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -51,6 +55,11 @@ namespace Identity.Api.v1.Controllers
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.BadRequest);
         }
 
+        /// <summary>
+        /// Get list of user approvals by id.
+        /// </summary>
+        /// <param name="userId">The user id.</param>
+        /// <returns>The list of user approvals.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{userId}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<UserApprovalResponseModel>))]
