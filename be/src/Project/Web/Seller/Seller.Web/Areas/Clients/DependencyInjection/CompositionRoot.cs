@@ -14,7 +14,7 @@ using Seller.Web.Areas.Clients.Repositories.Fields;
 using Seller.Web.Areas.Clients.Repositories.FieldOptions;
 using Seller.Web.Areas.Clients.ComponentModels;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
-using Seller.Web.Areas.Clients.Repositories.ClientApprovals;
+using Seller.Web.Areas.Clients.Repositories.Approvals;
 
 namespace Seller.Web.Areas.Clients.DependencyInjection
 {
@@ -27,7 +27,7 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IClientAccountManagersRepository, ClientAccountManagersRepository>();
             services.AddScoped<IClientApplicationsRepository, ClientApplicationsRepository>();
             services.AddScoped<IClientAddressesRepository, ClientAddressesRepository>();
-            services.AddScoped<IClientApprovalsRepository, ClientApprovalsRepository>();
+            services.AddScoped<IApprovalsRepository, ApprovalsRepository>();
             
             services.AddScoped<IClientFieldsRepository, ClientFieldsRepository>();
             services.AddScoped<IClientFieldOptionsRepository, ClientFieldOptionsRepository>();
@@ -71,10 +71,10 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ClientFieldOptionComponentModel, ClientFieldOptionPageViewModel>, ClientFieldOptionPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ClientFieldOptionComponentModel, ClientFieldOptionFormViewModel>, ClientFieldOptionFormModelBuilder>();
 
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientApprovalsPageViewModel>, ClientApprovalsPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientApproval>>, ClientApprovalsPageCatalogModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientApprovalFormViewModel>, ClientApprovalFormModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientApprovalPageViewModel>, ClientApprovalPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ApprovalsPageViewModel>, ApprovalsPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Approval>>, ApprovalsPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ApprovalFormViewModel>, ApprovalFormModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ApprovalPageViewModel>, ApprovalPageModelBuilder>();
         }
     }
 }

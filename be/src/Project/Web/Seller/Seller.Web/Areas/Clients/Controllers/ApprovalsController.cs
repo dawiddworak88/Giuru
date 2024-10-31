@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 namespace Seller.Web.Areas.Clients.Controllers
 {
     [Area("Clients")]
-    public class ClientApprovalsController : Controller
+    public class ApprovalsController : Controller
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientApprovalsPageViewModel> _clientApprovalsPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ApprovalsPageViewModel> _approvalsPageModelBuilder;
 
-        public ClientApprovalsController(
-            IAsyncComponentModelBuilder<ComponentModelBase, ClientApprovalsPageViewModel> clientApprovalsPageModelBuilder)
+        public ApprovalsController(
+            IAsyncComponentModelBuilder<ComponentModelBase, ApprovalsPageViewModel> approvalsPageModelBuilder)
         {
-            _clientApprovalsPageModelBuilder = clientApprovalsPageModelBuilder;
+            _approvalsPageModelBuilder = approvalsPageModelBuilder;
         }
 
         public async Task<IActionResult> Index()
@@ -30,7 +30,7 @@ namespace Seller.Web.Areas.Clients.Controllers
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName)
             };
 
-            var viewModel = await _clientApprovalsPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await _approvalsPageModelBuilder.BuildModelAsync(componentModel);
 
             return View(viewModel);
         }

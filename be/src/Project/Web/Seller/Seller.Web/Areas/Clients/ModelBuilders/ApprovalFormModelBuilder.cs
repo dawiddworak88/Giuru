@@ -3,35 +3,35 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Seller.Web.Areas.Clients.Repositories.ClientApprovals;
+using Seller.Web.Areas.Clients.Repositories.Approvals;
 using Seller.Web.Areas.Clients.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
-    public class ClientApprovalFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientApprovalFormViewModel>
+    public class ApprovalFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ApprovalFormViewModel>
     {
-        private readonly IClientApprovalsRepository _clientApprovalsRepository;
+        private readonly IApprovalsRepository _approvalsRepository;
         private readonly LinkGenerator _linkGenerator;
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
 
-        public ClientApprovalFormModelBuilder(
-            IClientApprovalsRepository clientApprovalsRepository,
+        public ApprovalFormModelBuilder(
+            IApprovalsRepository approvalsRepository,
             LinkGenerator linkGenerator,
             IStringLocalizer<ClientResources> clientLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer)
         {
-            _clientApprovalsRepository = clientApprovalsRepository;
+            _approvalsRepository = approvalsRepository;
             _linkGenerator = linkGenerator;
             _clientLocalizer = clientLocalizer;
             _globalLocalizer = globalLocalizer;
         }
 
-        public async Task<ClientApprovalFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<ApprovalFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new ClientApprovalFormViewModel
+            var viewModel = new ApprovalFormViewModel
             {
                 Title = _clientLocalizer.GetString("EditClientApproval"),
                 SaveUrl = _linkGenerator.GetPathByAction("index", "ClientApprovalsApi", new { Area = "Clients", culture = CultureInfo.CurrentCulture.Name }),
@@ -46,7 +46,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             if (componentModel.Id.HasValue)
             {
-                var approval = await _clientApprovalsRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                var approval = await _approvalsRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
                 if (approval is not null)
                 {
