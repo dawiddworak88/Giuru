@@ -15,16 +15,14 @@ var setPasswordForm = {
   marketingApprovalText: "If you would like to receive information from us about the current offer, current campaigns, introduced functionalities or changes, as well as other activities conducted, please complete the marketing consents below. Consents may be withdrawn at any time, and the withdrawal of consent does not affect actions taken before the date of its withdrawal.",
   emailMarketingApprovalLabel: "I consent to receiving information electronically, to an e-mail address that I secure",
   smsMarketingApprovalLabel: "I consent to telephone contact for marketing purposes",
-  notificationTypes: [
+  approvals: [
     {
       id: 1,
-      isApproved: false,
-      name: "Email notifications"
+      name: "Email approval"
     },
     {
-      id: 1,
-      isApproved: false,
-      name: "SMS notifications"
+      id: 2,
+      name: "SMS approval"
     }
   ]
 };

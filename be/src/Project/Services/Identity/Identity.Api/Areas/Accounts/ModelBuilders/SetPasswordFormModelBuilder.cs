@@ -1,6 +1,5 @@
 ﻿using Feature.Account;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ComponentModels;
 using Identity.Api.Areas.Accounts.Definitions;
@@ -14,7 +13,10 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System.Globalization;
 using System.Threading.Tasks;
-using Identity.Api.Areas.Accounts.Models;
+using System.Linq;
+using Identity.Api.Services.Approvals;
+using Identity.Api.ServicesModels.Approvals;
+using Foundation.GenericRepository.Paginations;
 
 namespace Identity.Api.Areas.Accounts.ModelBuilders
 {
@@ -26,6 +28,7 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
         private readonly LinkGenerator _linkGenerator;
         private readonly ITokenService _tokenService;
         private readonly IOptions<AppSettings> _options;
+        private readonly IApprovalsService _approvalsService;
 
         public SetPasswordFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer, 
@@ -33,7 +36,8 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             LinkGenerator linkGenerator,
             IUsersService usersService,
             ITokenService tokenService,
-            IOptions<AppSettings> options)
+            IOptions<AppSettings> options,
+            IApprovalsService approvalsService)
         {
             _globalLocalizer = globalLocalizer;
             _accountLocalizer = accountLocalizer;
@@ -41,6 +45,7 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             _usersService = usersService;
             _tokenService = tokenService;
             _options = options;
+            _approvalsService = approvalsService;
         }
 
         public async Task<SetPasswordFormViewModel> BuildModelAsync(SetPasswordFormComponentModel componentModel)
@@ -62,6 +67,24 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 MarketingApprovalHeader = _accountLocalizer.GetString("MarketingApprovalHeader"),
                 MarketingApprovalText = _accountLocalizer.GetString("MarketingApprovalText")
             };
+
+            var getApprovalsServiceModel = new GetApprovalsServiceModel
+            {
+                SearchTerm = null,
+                PageIndex = PaginationConstants.DefaultPageIndex,
+                ItemsPerPage = PaginationConstants.DefaultPageSize,
+                OrderBy = null,
+                Language = CultureInfo.CurrentUICulture.Name,
+            };
+
+            var approvals = _approvalsService.Get(getApprovalsServiceModel);
+
+            viewModel.Approvals = approvals.Data.Where(x => x.Id == ApprovalsConstants.Marketing.InformationByEmail || x.Id == ApprovalsConstants.Marketing.InformationBySms)
+                .Select(x => new ApprovalViewModel 
+                { 
+                    Id = x.Id,
+                    Name = x.Name
+                });
 
             if (componentModel.Id.HasValue)
             {

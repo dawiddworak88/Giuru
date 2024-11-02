@@ -34,6 +34,10 @@ namespace Identity.Api.v1.Controllers
             _approvalsService = approvalsService;
         }
 
+        /// <summary>
+        /// Creates or updates approval.
+        /// </summary>
+        /// <param name="model">The model.</param>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
@@ -89,6 +93,11 @@ namespace Identity.Api.v1.Controllers
             }
         }
 
+        /// <summary>
+        /// Get approval by id.
+        /// </summary>
+        /// <param name="id">The approval id.</param>
+        /// <returns>The approval.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApprovalResponseModel))]
@@ -130,9 +139,18 @@ namespace Identity.Api.v1.Controllers
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.BadRequest);
         }
 
+        /// <summary>
+        /// Gets list of approvals.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
+        /// <returns>The list of approvals</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK , Type = typeof(PagedResults<IEnumerable<ApprovalResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        [AllowAnonymous]
         public IActionResult GetAsync(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
@@ -169,6 +187,10 @@ namespace Identity.Api.v1.Controllers
             return StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
+        /// <summary>
+        /// Delete approval by id.
+        /// </summary>
+        /// <param name="id">The approval id.</param>
         [HttpDelete, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]

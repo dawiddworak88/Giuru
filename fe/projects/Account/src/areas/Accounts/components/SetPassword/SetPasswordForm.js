@@ -10,7 +10,10 @@ import ToastHelper from "../../../../shared/helpers/globals/ToastHelper";
 
 function SetPasswordForm(props) {
     const [state, dispatch] = useContext(Context);
-    const [notificationTypeIds, setNotificationTypeIds] = useState([]);
+    const [approvalsId, setApprovalsId] = useState([]);
+    const [approvalCheckboxes, setApprovalCheckboxes] = useState(props.approvals.map((approval) => {
+        return {id: approval.id, label: approval.name, checked: false}
+    }))
 
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -36,7 +39,7 @@ function SetPasswordForm(props) {
 
         const payload = {
             ...state,
-            clientApprovals: notificationTypeIds
+            clientApprovals: approvalsId
         }
 
         const requestOptions = {
@@ -70,6 +73,20 @@ function SetPasswordForm(props) {
 
     const { id, password } = values;
 
+    const checkboxOnChangeHandler = (id) => {
+        setApprovalCheckboxes((prevCheckboxes) =>
+        prevCheckboxes.map((checkbox) =>
+            checkbox.id === id ? { ...checkbox, checked: !checkbox.checked } : checkbox 
+        ));
+
+        if (approvalsId.some((x) => x === id)) {
+            setApprovalsId(approvalsId.filter(x => x !== id))
+        }
+        else {
+            setApprovalsId(approvalsId.concat(id))
+        }
+    };
+
     return (
         <section className="section is-flex-centered set-password">
             <div>
@@ -80,30 +97,22 @@ function SetPasswordForm(props) {
                                 <h1 className="title">{props.marketingApprovalHeader}</h1>
                                 <p className="subtitle mb-2 mt-1">{props.marketingApprovalText}</p>
                             </div>
-                            {props.notificationTypes && props.notificationTypes.length > 0 && (
+                            {approvalCheckboxes && approvalCheckboxes.length > 0 && (
                                 <div className="is-flex is-justify-content-center is-align-content-center is-flex-wrap-wrap">
-                                    {props.notificationTypes.map((notificationType) => {
+                                    {approvalCheckboxes.map((checkbox) => {
                                         return (
-                                            <div className="notification-type" key={notificationType.id}>
+                                            <div className="checkbox" key={checkbox.id}>
                                                 <NoSsr>
                                                     <FormControlLabel
                                                         control={
                                                             <Checkbox
-                                                                onChange={e => {
-                                                                    notificationType.isApproved = !notificationType.isApproved;
-                                                                    if (e.target.checked) {
-                                                                        setNotificationTypeIds(notificationTypeIds.concat(notificationType.id))
-                                                                    }
-                                                                    else {
-                                                                        setNotificationTypeIds(notificationTypeIds.filter(x => x !== notificationType.id));
-                                                                    }
-                                                                }}
-                                                                checked={notificationType.isApproved}
-                                                                id={notificationType.name}
-                                                                name={notificationType.name}
+                                                                onChange={() => checkboxOnChangeHandler(checkbox.id)}
+                                                                checked={checkbox.checked}
+                                                                id={checkbox.label}
+                                                                name={checkbox.label}
                                                                 color="secondary" />
                                                         }
-                                                        label={notificationType.name}
+                                                        label={checkbox.label}
                                                     />
                                                 </NoSsr>
                                             </div>

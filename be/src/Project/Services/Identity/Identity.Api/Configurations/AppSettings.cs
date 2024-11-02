@@ -4,7 +4,6 @@ namespace Identity.Api.Configurations
 {
     public class AppSettings
     {
-        public string ClientUrl { get; set; }
         public string BuyerUrl { get; set; }
         public Guid SellerClientId { get; set; }
         public string Regulations { get; set; }
