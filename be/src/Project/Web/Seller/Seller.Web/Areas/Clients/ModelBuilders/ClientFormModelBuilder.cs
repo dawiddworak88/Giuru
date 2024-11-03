@@ -20,9 +20,12 @@ using Seller.Web.Areas.Global.Repositories;
 using Seller.Web.Areas.Global.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Foundation.GenericRepository.Definitions;
-using Foundation.Extensions.ExtensionMethods;
 using Seller.Web.Areas.Clients.Repositories.Fields;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
+using Seller.Web.Areas.Clients.Repositories.Approvals;
+using Foundation.Extensions.ExtensionMethods;
+using Seller.Web.Areas.Clients.Repositories.UserApprovals;
+using System;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -41,6 +44,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IClientFieldsRepository _clientFieldsRepository;
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
         private readonly ICurrenciesRepository _currenciesRepository;
+        private readonly IApprovalsRepository _clientApprovalsRepository;
+        private readonly IUserApprovalsRepository _userApprovalsRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -55,7 +60,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IClientFieldsRepository clientFieldsRepository,
             IClientFieldValuesRepository clientFieldValuesRepository,
             LinkGenerator linkGenerator,
-            ICurrenciesRepository currenciesRepository)
+            ICurrenciesRepository currenciesRepository,
+            IApprovalsRepository clientApprovalsRepository,
+            IUserApprovalsRepository userApprovalsRepository)
         {
             _clientsRepository = clientsRepository;
             _globalLocalizer = globalLocalizer;
@@ -70,6 +77,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _clientFieldsRepository = clientFieldsRepository;
             _clientFieldValuesRepository = clientFieldValuesRepository;
             _currenciesRepository = currenciesRepository;
+            _clientApprovalsRepository = clientApprovalsRepository;
+            _userApprovalsRepository = userApprovalsRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -146,6 +155,32 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     {
                         viewModel.HasAccount = true;
                     }
+
+                    var approvals = (await _clientApprovalsRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null))
+                       .Data.OrEmptyIfNull().Select(x => new ApprovalViewModel
+                       {
+                           Id = x.Id,
+                           Name = x.Name,
+                           ApprovalDate = null
+                       }).ToList();
+
+                    if (approvals.Any())
+                    {
+                        var userApprovals = await _userApprovalsRepository.GetAsync(componentModel.Token, componentModel.Language, Guid.Parse(user.Id));
+
+                        foreach (var approval in approvals)
+                        {
+                            var userApproval = userApprovals.FirstOrDefault(x => x.ApprovalId == approval.Id);
+                            
+                            if (userApproval is not null)
+                            {
+                                approval.IsApproved = true;
+                                approval.ApprovalDate = userApproval.CreatedDate;
+                            }
+                        }
+                    }
+
+                    viewModel.ClientApprovals = approvals;
                 }
             }
 
@@ -220,7 +255,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                             Value = y.Value
                         })
                     };
-                }); 
+                });
             }
 
             return viewModel;
