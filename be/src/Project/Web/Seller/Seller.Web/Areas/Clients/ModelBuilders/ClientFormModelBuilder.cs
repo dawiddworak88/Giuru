@@ -44,7 +44,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IClientFieldsRepository _clientFieldsRepository;
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
         private readonly ICurrenciesRepository _currenciesRepository;
-        private readonly IApprovalsRepository _clientApprovalsRepository;
+        private readonly IApprovalsRepository _approvalsRepository;
         private readonly IUserApprovalsRepository _userApprovalsRepository;
 
         public ClientFormModelBuilder(
@@ -61,7 +61,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IClientFieldValuesRepository clientFieldValuesRepository,
             LinkGenerator linkGenerator,
             ICurrenciesRepository currenciesRepository,
-            IApprovalsRepository clientApprovalsRepository,
+            IApprovalsRepository approvalsRepository,
             IUserApprovalsRepository userApprovalsRepository)
         {
             _clientsRepository = clientsRepository;
@@ -77,7 +77,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _clientFieldsRepository = clientFieldsRepository;
             _clientFieldValuesRepository = clientFieldValuesRepository;
             _currenciesRepository = currenciesRepository;
-            _clientApprovalsRepository = clientApprovalsRepository;
+            _approvalsRepository = approvalsRepository;
             _userApprovalsRepository = userApprovalsRepository;
         }
 
@@ -156,31 +156,35 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                         viewModel.HasAccount = true;
                     }
 
-                    var approvals = (await _clientApprovalsRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null))
-                       .Data.OrEmptyIfNull().Select(x => new ApprovalViewModel
-                       {
-                           Id = x.Id,
-                           Name = x.Name,
-                           ApprovalDate = null
-                       }).ToList();
-
-                    if (approvals.Any())
+                    var approvals = await _approvalsRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
+                       
+                    if (approvals is not null)
                     {
-                        var userApprovals = await _userApprovalsRepository.GetAsync(componentModel.Token, componentModel.Language, Guid.Parse(user.Id));
-
-                        foreach (var approval in approvals)
+                        var approvalsList = approvals.Data.OrEmptyIfNull().Select(x => new ApprovalViewModel
                         {
-                            var userApproval = userApprovals.FirstOrDefault(x => x.ApprovalId == approval.Id);
-                            
-                            if (userApproval is not null)
+                            Id = x.Id,
+                            Name = x.Name,
+                            ApprovalDate = null,
+                        }).ToList();
+
+                        if (approvalsList.Any())
+                        {
+                            var userApprovals = await _userApprovalsRepository.GetAsync(componentModel.Token, componentModel.Language, Guid.Parse(user.Id));
+
+                            foreach (var approval in approvalsList)
                             {
-                                approval.IsApproved = true;
-                                approval.ApprovalDate = userApproval.CreatedDate;
+                                var userApproval = userApprovals.FirstOrDefault(x => x.ApprovalId == approval.Id);
+
+                                if (userApproval is not null)
+                                {
+                                    approval.IsApproved = true;
+                                    approval.ApprovalDate = userApproval.CreatedDate;
+                                }
                             }
                         }
-                    }
 
-                    viewModel.ClientApprovals = approvals;
+                        viewModel.ClientApprovals = approvalsList;
+                    }
                 }
             }
 
