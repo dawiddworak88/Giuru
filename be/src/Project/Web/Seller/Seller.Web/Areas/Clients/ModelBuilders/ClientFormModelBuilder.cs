@@ -164,7 +164,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                         {
                             Id = x.Id,
                             Name = x.Name,
-                            ApprovalDate = null,
+                            ApprovalDate = null
                         }).ToList();
 
                         if (approvalsList.Any())
