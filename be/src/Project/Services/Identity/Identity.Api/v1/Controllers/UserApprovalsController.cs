@@ -11,6 +11,7 @@ using Identity.Api.Validators.UserApprovals;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using System.Linq;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Identity.Api.v1.Controllers
 {
@@ -69,17 +70,15 @@ namespace Identity.Api.v1.Controllers
             {
                 var userApprovals = _userApprovalsService.Get(serviceModel);
 
-                if (userApprovals.Any())
+                var response = userApprovals.OrEmptyIfNull().Select(x => new UserApprovalResponseModel
                 {
-                    var response = userApprovals.Select(x => new UserApprovalResponseModel
-                    {
-                        ApprovalId = x.ApprovalId,
-                        UserId = x.UserId,
-                        CreatedDate = x.CreatedDate,
-                    });
+                    ApprovalId = x.ApprovalId,
+                    UserId = x.UserId,
+                    CreatedDate = x.CreatedDate,
+                });
 
-                    return StatusCode((int)HttpStatusCode.OK, response);
-                }
+                return StatusCode((int)HttpStatusCode.OK, response);
+
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.BadRequest);
