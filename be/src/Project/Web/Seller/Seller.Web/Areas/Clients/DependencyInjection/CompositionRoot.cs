@@ -15,6 +15,7 @@ using Seller.Web.Areas.Clients.Repositories.FieldOptions;
 using Seller.Web.Areas.Clients.ComponentModels;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
 using Seller.Web.Areas.Clients.Repositories.Approvals;
+using Seller.Web.Areas.Clients.Repositories.UserApprovals;
 
 namespace Seller.Web.Areas.Clients.DependencyInjection
 {
@@ -28,6 +29,7 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IClientApplicationsRepository, ClientApplicationsRepository>();
             services.AddScoped<IClientAddressesRepository, ClientAddressesRepository>();
             services.AddScoped<IApprovalsRepository, ApprovalsRepository>();
+            services.AddScoped<IUserApprovalsRepository, UserApprovalsRepository>();
             
             services.AddScoped<IClientFieldsRepository, ClientFieldsRepository>();
             services.AddScoped<IClientFieldOptionsRepository, ClientFieldOptionsRepository>();
