@@ -59,5 +59,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public IEnumerable<ListItemViewModel> ClientAddresses { get; set; }
         public IEnumerable<ClientAccountManagerViewModel> ClientManagers { get; set; }
         public IEnumerable<ClientFieldViewModel> ClientFields { get; set; }
+        public IEnumerable<ApprovalViewModel> ClientApprovals { get; set; }
     }
 }

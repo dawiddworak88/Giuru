@@ -13,14 +13,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Clients.Repositories.ClientApprovals
+namespace Seller.Web.Areas.Clients.Repositories.Approvals
 {
-    public class ClientApprovalsRepository : IClientApprovalsRepository
+    public class ApprovalsRepository : IApprovalsRepository
     {
         private readonly IApiClientService _apiClientService;
         private readonly IOptions<AppSettings> _options;
 
-        public ClientApprovalsRepository(
+        public ApprovalsRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> options)
         {
@@ -46,7 +46,7 @@ namespace Seller.Web.Areas.Clients.Repositories.ClientApprovals
             }
         }
 
-        public async Task<PagedResults<IEnumerable<ClientApproval>>> GetAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<PagedResults<IEnumerable<Approval>>> GetAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var requestModel = new PagedRequestModelBase
             {
@@ -64,7 +64,7 @@ namespace Seller.Web.Areas.Clients.Repositories.ClientApprovals
                 EndpointAddress = $"{_options.Value.IdentityUrl}{ApiConstants.Identity.ApprovalsEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientApproval>>>(apiReqeust);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Approval>>>(apiReqeust);
 
             if (response.IsSuccessStatusCode is false)
             {
@@ -79,7 +79,7 @@ namespace Seller.Web.Areas.Clients.Repositories.ClientApprovals
             return default;
         }
 
-        public async Task<ClientApproval> GetAsync(string token, string language, Guid? id)
+        public async Task<Approval> GetAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
@@ -89,7 +89,7 @@ namespace Seller.Web.Areas.Clients.Repositories.ClientApprovals
                 EndpointAddress = $"{_options.Value.IdentityUrl}{ApiConstants.Identity.ApprovalsEndpoint}/{id}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ClientApproval>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Approval>(apiRequest);
 
             if (response.IsSuccessStatusCode is false)
             {
@@ -106,13 +106,13 @@ namespace Seller.Web.Areas.Clients.Repositories.ClientApprovals
 
         public async Task SaveAsync(string token, string language, Guid? id, string name)
         {
-            var requestModel = new ClientApprovalRequestModel
+            var requestModel = new ApprovalRequestModel
             {
                 Id = id,
                 Name = name,
             };
 
-            var apiRequest = new ApiRequest<ClientApprovalRequestModel>
+            var apiRequest = new ApiRequest<ApprovalRequestModel>
             {
                 Language = language,
                 Data = requestModel,
@@ -120,7 +120,7 @@ namespace Seller.Web.Areas.Clients.Repositories.ClientApprovals
                 EndpointAddress = $"{_options.Value.IdentityUrl}{ApiConstants.Identity.ApprovalsEndpoint}"
             };
 
-            var response = await _apiClientService.PostAsync<ApiRequest<ClientApprovalRequestModel>, ClientApprovalRequestModel, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<ApprovalRequestModel>, ApprovalRequestModel, BaseResponseModel>(apiRequest);
 
             if (response.IsSuccessStatusCode is false)
             {

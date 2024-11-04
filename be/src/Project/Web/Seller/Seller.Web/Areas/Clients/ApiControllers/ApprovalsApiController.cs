@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
-using Seller.Web.Areas.Clients.Repositories.ClientApprovals;
+using Seller.Web.Areas.Clients.Repositories.Approvals;
 using System;
 using System.Globalization;
 using System.Net;
@@ -17,29 +17,29 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 {
 
     [Area("Clients")]
-    public class ClientApprovalsApiController : BaseApiController
+    public class ApprovalsApiController : BaseApiController
     {
-        private readonly IClientApprovalsRepository _clientApprovalsRepository;
+        private readonly IApprovalsRepository _approvalsRepository;
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
 
-        public ClientApprovalsApiController(
-            IClientApprovalsRepository clientApprovalsRepository,
+        public ApprovalsApiController(
+            IApprovalsRepository approvalsRepository,
             IStringLocalizer<ClientResources> clientLocalizer)
         {
-            _clientApprovalsRepository = clientApprovalsRepository;
+            _approvalsRepository = approvalsRepository;
             _clientLocalizer = clientLocalizer;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var clientApprovals = await _clientApprovalsRepository.GetAsync(
+            var clientApprovals = await _approvalsRepository.GetAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentCulture.Name,
                 searchTerm,
                 pageIndex,
                 itemsPerPage,
-                $"{nameof(ClientApproval.CreatedDate)} desc");
+                $"{nameof(Approval.CreatedDate)} desc");
 
             return StatusCode((int)HttpStatusCode.OK, clientApprovals);
         }
@@ -50,7 +50,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentCulture.Name;
 
-            await _clientApprovalsRepository.SaveAsync(token, language, model.Id, model.Name);
+            await _approvalsRepository.SaveAsync(token, language, model.Id, model.Name);
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = _clientLocalizer.GetString("ClientApprovalSavedSuccessfully").Value });
         }
@@ -61,7 +61,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentCulture.Name;
 
-            await _clientApprovalsRepository.DeleteAsync(token, language, id);
+            await _approvalsRepository.DeleteAsync(token, language, id);
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = _clientLocalizer.GetString("ClientApprovalDeletedSuccessfully").Value });
         }

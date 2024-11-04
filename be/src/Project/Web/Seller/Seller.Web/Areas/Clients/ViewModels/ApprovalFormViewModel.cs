@@ -2,7 +2,7 @@
 
 namespace Seller.Web.Areas.Clients.ViewModels
 {
-    public class ClientApprovalFormViewModel
+    public class ApprovalFormViewModel
     {
         public Guid? Id { get; set; }
         public string Name { get; set; }

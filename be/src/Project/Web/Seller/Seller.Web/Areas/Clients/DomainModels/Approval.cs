@@ -2,7 +2,7 @@
 
 namespace Seller.Web.Areas.Clients.DomainModels
 {
-    public class ClientApproval
+    public class Approval
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

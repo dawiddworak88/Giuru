@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
-    public class ClientApprovalPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientApprovalPageViewModel>
+    public class ApprovalPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ApprovalPageViewModel>
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> _headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> _menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientApprovalFormViewModel> _clientApprovalFormModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ApprovalFormViewModel> _clientApprovalFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> _footerModelBuilder;
 
-        public ClientApprovalPageModelBuilder(
+        public ApprovalPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, ClientApprovalFormViewModel> clientApprovalFormModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, ApprovalFormViewModel> clientApprovalFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             _headerModelBuilder = headerModelBuilder;
@@ -28,9 +28,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _footerModelBuilder = footerModelBuilder;
         }
 
-        public async Task<ClientApprovalPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<ApprovalPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new ClientApprovalPageViewModel
+            var viewModel = new ApprovalPageViewModel
             {
                 Locale = CultureInfo.CurrentCulture.Name,
                 Header = await _headerModelBuilder.BuildModelAsync(componentModel),

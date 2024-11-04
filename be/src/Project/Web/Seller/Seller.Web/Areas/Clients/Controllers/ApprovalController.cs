@@ -14,14 +14,14 @@ using System.Threading.Tasks;
 namespace Seller.Web.Areas.Clients.Controllers
 {
     [Area("Clients")]
-    public class ClientApprovalController : Controller
+    public class ApprovalController : Controller
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientApprovalPageViewModel> _clientApprovalPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ApprovalPageViewModel> _approvalPageModelBuilder;
 
-        public ClientApprovalController(
-            IAsyncComponentModelBuilder<ComponentModelBase, ClientApprovalPageViewModel> clientApprovalPageModelBuilder)
+        public ApprovalController(
+            IAsyncComponentModelBuilder<ComponentModelBase, ApprovalPageViewModel> approvalPageModelBuilder)
         {
-            _clientApprovalPageModelBuilder = clientApprovalPageModelBuilder;
+            _approvalPageModelBuilder = approvalPageModelBuilder;
         }
 
         public async Task<IActionResult> Edit(Guid? id)
@@ -35,7 +35,7 @@ namespace Seller.Web.Areas.Clients.Controllers
                 SellerId = GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
             };
 
-            var viewModel = await _clientApprovalPageModelBuilder.BuildModelAsync(compopnentModel);
+            var viewModel = await _approvalPageModelBuilder.BuildModelAsync(compopnentModel);
 
             return View(viewModel);
         }
