@@ -34,9 +34,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             var viewModel = new ApprovalFormViewModel
             {
                 Title = _clientLocalizer.GetString("EditClientApproval"),
-                SaveUrl = _linkGenerator.GetPathByAction("index", "ClientApprovalsApi", new { Area = "Clients", culture = CultureInfo.CurrentCulture.Name }),
+                SaveUrl = _linkGenerator.GetPathByAction("index", "ApprovalsApi", new { Area = "Clients", culture = CultureInfo.CurrentCulture.Name }),
                 SaveText = _globalLocalizer.GetString("SaveText"),
-                ClientApprovalsUrl = _linkGenerator.GetPathByAction("Index", "ClientApprovals", new { Area = "Clients", culture = CultureInfo.CurrentCulture.Name }),
+                ClientApprovalsUrl = _linkGenerator.GetPathByAction("Index", "Approvals", new { Area = "Clients", culture = CultureInfo.CurrentCulture.Name }),
                 NavigateToClientApprovals = _clientLocalizer.GetString("NavigateToClientApprovals"),
                 IdLabel = _globalLocalizer.GetString("Id"),
                 NameLabel = _globalLocalizer.GetString("Name"),

@@ -152,7 +152,7 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         },
                         new DrawerMenuItemViewModel
                         {
-                            Icon = IconsConstants.Key,
+                            Icon = IconsConstants.Hexagon,
                             Title = _clientLocalizer.GetString("ClientFields"),
                             Url = _linkGenerator.GetPathByAction("Index", "ClientFields", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                         },
@@ -195,8 +195,8 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Check,
-                            Title = _globalLocalizer.GetString("NotificationTypes"),
-                            Url = _linkGenerator.GetPathByAction("Index", "ClientNotificationTypes", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                            Title = _globalLocalizer.GetString("ClientApprovals"),
+                            Url = _linkGenerator.GetPathByAction("Index", "Approvals", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                         }
                     }
                 },
