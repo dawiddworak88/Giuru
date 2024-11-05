@@ -45,11 +45,11 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             viewModel.DefaultItemsPerPage = PaginationConstants.DefaultPageIndex;
 
             viewModel.NewText = _clientLocalizer.GetString("NewClientApproval");
-            viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "ClientApproval", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "ClientApproval", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "Approval", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "Approval", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "ClientApprovalsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ClientApprovalsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "ApprovalsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ApprovalsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(Approval.CreatedDate)} desc";
 

@@ -140,7 +140,7 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                     {
                         Icon = IconsConstants.Check,
                         Title = _globalLocalizer.GetString("ClientApprovals"),
-                        Url = _linkGenerator.GetPathByAction("Index", "ClientApprovals", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                        Url = _linkGenerator.GetPathByAction("Index", "Approvals", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                     },
                     new MenuTileViewModel
                     {
