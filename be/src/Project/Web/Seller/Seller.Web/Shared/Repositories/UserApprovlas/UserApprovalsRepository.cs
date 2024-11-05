@@ -5,14 +5,14 @@ using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Microsoft.Extensions.Options;
-using Seller.Web.Areas.Clients.ApiRequestModels;
-using Seller.Web.Areas.Clients.DomainModels;
+using Seller.Web.Shared.ApiRequestModels;
 using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.DomainModels.UserApproval;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Clients.Repositories.UserApprovals
+namespace Seller.Web.Areas.Shared.Repositories.UserApprovals
 {
     public class UserApprovalsRepository : IUserApprovalsRepository
     {
