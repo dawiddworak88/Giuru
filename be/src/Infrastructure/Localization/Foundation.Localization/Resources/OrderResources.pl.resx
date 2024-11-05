@@ -310,7 +310,7 @@
     <value>Ilość stanowa</value>
   </data>
   <data name="oc_subject" xml:space="preserve">
-    <value>Order Confirm</value>
+    <value>Potwierdzenie zamówienia</value>
   </data>
   <data name="co_clientNameLabel" xml:space="preserve">
     <value>Nazwa klienta</value>
