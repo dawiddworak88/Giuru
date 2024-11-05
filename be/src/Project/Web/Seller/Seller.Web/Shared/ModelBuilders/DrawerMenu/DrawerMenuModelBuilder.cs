@@ -152,7 +152,7 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         },
                         new DrawerMenuItemViewModel
                         {
-                            Icon = IconsConstants.Key,
+                            Icon = IconsConstants.Hexagon,
                             Title = _clientLocalizer.GetString("ClientFields"),
                             Url = _linkGenerator.GetPathByAction("Index", "ClientFields", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                         },
