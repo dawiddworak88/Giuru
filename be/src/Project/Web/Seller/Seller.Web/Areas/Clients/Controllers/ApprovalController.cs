@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Seller.Web.Areas.Clients.ViewModels;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -32,6 +33,7 @@ namespace Seller.Web.Areas.Clients.Controllers
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 Name = User.Identity.Name,
                 IsAuthenticated = User.Identity.IsAuthenticated,
+                Language = CultureInfo.CurrentCulture.Name,
                 SellerId = GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
             };
 
