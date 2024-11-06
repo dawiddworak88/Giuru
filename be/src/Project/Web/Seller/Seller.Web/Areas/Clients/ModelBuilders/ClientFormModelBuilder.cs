@@ -159,30 +159,25 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
                         if (approvals is not null)
                         {
-                            var approvalsList = approvals.Data.OrEmptyIfNull().Select(x => new ApprovalViewModel
-                            {
-                                Id = x.Id,
-                                Name = x.Name,
-                                ApprovalDate = null
-                            }).ToList();
+                            var userApprovals = await _userApprovalsRepository.GetAsync(
+                                componentModel.Token,
+                                componentModel.Language,
+                                Guid.Parse(user.Id));
 
-                            if (approvalsList.Any())
+                            viewModel.ClientApprovals = approvals.Data.OrEmptyIfNull().Select(x =>
                             {
-                                var userApprovals = await _userApprovalsRepository.GetAsync(componentModel.Token, componentModel.Language, Guid.Parse(user.Id));
+                                var userApproval = userApprovals.FirstOrDefault(y => y.ApprovalId == x.Id);
 
-                                foreach (var approval in approvalsList)
+                                var isUserApprovalNotNull = userApproval is not null;
+
+                                return new ApprovalViewModel
                                 {
-                                    var userApproval = userApprovals.FirstOrDefault(x => x.ApprovalId == approval.Id);
-
-                                    if (userApproval is not null)
-                                    {
-                                        approval.IsApproved = true;
-                                        approval.ApprovalDate = userApproval.CreatedDate;
-                                    }
-                                }
-                            }
-
-                            viewModel.ClientApprovals = approvalsList;
+                                    Id = x.Id,
+                                    Name = x.Name,
+                                    ApprovalDate = isUserApprovalNotNull ? userApproval.CreatedDate : null,
+                                    IsApproved = isUserApprovalNotNull
+                                };
+                            });
                         }
                     }
                 }
