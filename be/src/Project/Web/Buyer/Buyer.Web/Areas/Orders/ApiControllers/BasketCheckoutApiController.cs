@@ -90,9 +90,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             var clientAddresses = await _clientAddressesRepository.GetAsync(token, language, deliveryAddressesIds);
 
-            Console.WriteLine(JsonConvert.SerializeObject(user));
-            Console.WriteLine(JsonConvert.SerializeObject(clientApprovlas));
-
             await _basketRepository.CheckoutBasketAsync(
                 token,
                 language,
