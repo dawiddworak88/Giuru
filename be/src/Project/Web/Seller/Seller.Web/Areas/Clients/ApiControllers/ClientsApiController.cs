@@ -9,7 +9,7 @@ using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
 using Seller.Web.Areas.Clients.Repositories.Groups;
-using Seller.Web.Areas.Clients.Repositories.UserApprovals;
+using Seller.Web.Areas.Shared.Repositories.UserApprovals;
 using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Identity;
 using Seller.Web.Shared.Repositories.Organisations;

@@ -39,6 +39,7 @@ namespace Basket.Api.Services
                 ClientId = checkoutBasketServiceModel.ClientId,
                 SellerId = checkoutBasketServiceModel.OrganisationId,
                 ClientName = checkoutBasketServiceModel.ClientName,
+                ClientEmail = checkoutBasketServiceModel.ClientEmail,
                 BillingAddressId = checkoutBasketServiceModel.BillingAddressId,
                 BillingCity = checkoutBasketServiceModel.BillingCity,
                 BillingCompany = checkoutBasketServiceModel.BillingCompany,

@@ -7,6 +7,7 @@ namespace Seller.Web.Areas.Orders.ApiRequestModels
         public Guid? BasketId { get; set; }
         public Guid? ClientId { get; set; }
         public string ClientName { get; set; }
+        public string ClientEmail { get; set; }
         public Guid? BillingAddressId { get; set; }
         public string BillingCompany { get; set; }
         public string BillingFirstName { get; set; }

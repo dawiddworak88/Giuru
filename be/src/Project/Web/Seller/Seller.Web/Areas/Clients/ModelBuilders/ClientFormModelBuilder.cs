@@ -24,8 +24,8 @@ using Seller.Web.Areas.Clients.Repositories.Fields;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
 using Seller.Web.Areas.Clients.Repositories.Approvals;
 using Foundation.Extensions.ExtensionMethods;
-using Seller.Web.Areas.Clients.Repositories.UserApprovals;
 using System;
+using Seller.Web.Areas.Shared.Repositories.UserApprovals;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -154,36 +154,28 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     if (user is not null)
                     {
                         viewModel.HasAccount = true;
-                    }
 
-                    var approvals = await _approvalsRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
-                       
-                    if (approvals is not null)
-                    {
-                        var approvalsList = approvals.Data.OrEmptyIfNull().Select(x => new ApprovalViewModel
+                        var approvals = await _approvalsRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
+
+                        if (approvals is not null)
                         {
-                            Id = x.Id,
-                            Name = x.Name,
-                            ApprovalDate = null
-                        }).ToList();
+                            var userApprovals = await _userApprovalsRepository.GetAsync(
+                                componentModel.Token,
+                                componentModel.Language,
+                                Guid.Parse(user.Id));
 
-                        if (approvalsList.Any())
-                        {
-                            var userApprovals = await _userApprovalsRepository.GetAsync(componentModel.Token, componentModel.Language, Guid.Parse(user.Id));
-
-                            foreach (var approval in approvalsList)
+                            viewModel.ClientApprovals = approvals.Data.OrEmptyIfNull().Select(x =>
                             {
-                                var userApproval = userApprovals.FirstOrDefault(x => x.ApprovalId == approval.Id);
-
-                                if (userApproval is not null)
+                                var userApproval = userApprovals.FirstOrDefault(y => y.ApprovalId == x.Id);
+                                return new ApprovalViewModel
                                 {
-                                    approval.IsApproved = true;
-                                    approval.ApprovalDate = userApproval.CreatedDate;
-                                }
-                            }
+                                    Id = x.Id,
+                                    Name = x.Name,
+                                    ApprovalDate = userApproval is not null ? userApproval.CreatedDate : null,
+                                    IsApproved = userApproval is not null
+                                };
+                            });
                         }
-
-                        viewModel.ClientApprovals = approvalsList;
                     }
                 }
             }
