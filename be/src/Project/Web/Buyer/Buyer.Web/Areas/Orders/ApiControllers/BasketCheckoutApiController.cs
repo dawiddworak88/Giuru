@@ -1,9 +1,11 @@
 ﻿using Buyer.Web.Areas.Orders.ApiRequestModels;
 using Buyer.Web.Areas.Orders.Definitions;
+using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
-using Buyer.Web.Areas.Orders.Repositories.NotificationTypeApproval;
+using Buyer.Web.Areas.Orders.Repositories.UserApprovals;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Repositories.Clients;
+using Buyer.Web.Shared.Repositories.Identity;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Localization;
@@ -11,11 +13,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Orders.ApiControllers
@@ -26,18 +30,21 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IBasketRepository _basketRepository;
         private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
-        private readonly IClientNotificationTypeApproval _clientNotificationTypeRepository;
+        private readonly IUserApprovalsRepository _userApprovalsRepository;
+        private readonly IIdentityRepository _identityRepository;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
             IClientAddressesRepository clientAddressesRepository,
             IStringLocalizer<OrderResources> orderLocalizer,
-            IClientNotificationTypeApproval clientNotificationTypeRepository)
+            IUserApprovalsRepository userApprovalsRepository,
+            IIdentityRepository identityRepository)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
             _clientAddressesRepository = clientAddressesRepository;
-            _clientNotificationTypeRepository = clientNotificationTypeRepository; 
+            _userApprovalsRepository = userApprovalsRepository;
+            _identityRepository = identityRepository;
         }
 
         [HttpPost]
@@ -72,21 +79,32 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 deliveryAddressesIds.Add(model.BillingAddressId.Value);
             }
 
-            var clientApprovlas = await _clientNotificationTypeRepository.GetAsync(token, language, model.ClientId);
+            var user = await _identityRepository.GetAsync(token, language, User.FindFirstValue(ClaimTypes.Email));
+
+            var clientApprovlas = Enumerable.Empty<UserApproval>();
+
+            if (user is not null)
+            {
+                clientApprovlas = await _userApprovalsRepository.GetAsync(token, language, Guid.Parse(user.Id));
+            }
 
             var clientAddresses = await _clientAddressesRepository.GetAsync(token, language, deliveryAddressesIds);
+
+            Console.WriteLine(JsonConvert.SerializeObject(user));
+            Console.WriteLine(JsonConvert.SerializeObject(clientApprovlas));
 
             await _basketRepository.CheckoutBasketAsync(
                 token,
                 language,
                 model.ClientId,
                 model.ClientName,
+                User.FindFirstValue(ClaimTypes.Email),
                 Guid.Parse(reqCookie),
                 clientAddresses?.FirstOrDefault(x => x.Id == model.BillingAddressId),
                 clientAddresses?.FirstOrDefault(x => x.Id == model.ShippingAddressId),
                 model.MoreInfo,
                 model.HasCustomOrder,
-                clientApprovlas.Any(x => x.NotificationTypeId == ClientNotificationTypeConstants.ApprovalToSendOrderConfirmationEmailsId),
+                clientApprovlas.Any(x => x.ApprovalId == ApprovalsConstants.ToSendOrderConfirmationEmails),
                 model.Attachments?.Select(x => x.Id));
 
             return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
