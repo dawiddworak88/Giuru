@@ -192,14 +192,14 @@ namespace Ordering.Api.Services
             using var activity = source.StartActivity($"{System.Reflection.MethodBase.GetCurrentMethod().Name} {message.GetType().Name}");
             _eventBus.Publish(message);
 
-            if (serviceModel.HasApprovalToSendEmail && CanSend(serviceModel.Username, serviceModel.ClientName, _configuration.Value.SenderEmail, _configuration.Value.SenderName, _configuration.Value.ActionSendGridConfirmationOrderTemplateId))
+            if (serviceModel.HasApprovalToSendEmail && CanSend(serviceModel.ClientEmail, serviceModel.ClientName, _configuration.Value.SenderEmail, _configuration.Value.SenderName, _configuration.Value.ActionSendGridConfirmationOrderTemplateId))
             {
                 Thread.CurrentThread.CurrentCulture = new CultureInfo(serviceModel.Language);
                 Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 
                 await _mailingService.SendTemplateAsync(new TemplateEmail
                 {
-                    RecipientEmailAddress = serviceModel.Username,
+                    RecipientEmailAddress = serviceModel.ClientEmail,
                     RecipientName = serviceModel.ClientName,
                     SenderEmailAddress = _configuration.Value.SenderEmail,
                     SenderName = _configuration.Value.SenderName,

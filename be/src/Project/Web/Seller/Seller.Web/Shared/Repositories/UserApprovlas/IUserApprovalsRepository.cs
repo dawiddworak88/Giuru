@@ -1,9 +1,9 @@
-﻿using Seller.Web.Areas.Clients.DomainModels;
+﻿using Seller.Web.Shared.DomainModels.UserApproval;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Clients.Repositories.UserApprovals
+namespace Seller.Web.Areas.Shared.Repositories.UserApprovals
 {
     public interface IUserApprovalsRepository
     {

@@ -86,6 +86,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             string language, 
             Guid? clientId, 
             string clientName, 
+            string clientEmail,
             Guid? basketId,
             Guid? billingAddressId,
             string billingCompany,
@@ -114,6 +115,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             {
                 ClientId = clientId,
                 ClientName = clientName,
+                ClientEmail = clientEmail,
                 BasketId = basketId,
                 BillingAddressId = billingAddressId,
                 BillingCompany = billingCompany,

@@ -183,6 +183,7 @@ namespace Basket.Api.v1.Controllers
                 IsSeller = isSellerClaim != null,
                 ClientId = request.ClientId,
                 ClientName = request.ClientName,
+                ClientEmail = request.ClientEmail,
                 BillingAddressId = request.BillingAddressId,
                 BillingCity = request.BillingCity,
                 BillingCompany = request.BillingCompany,
