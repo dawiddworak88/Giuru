@@ -16,6 +16,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             string language, 
             Guid? clientId, 
             string clientName, 
+            string clientEmail,
             Guid? basketId,
             ClientAddress billingAddress,
             ClientAddress shippingAddress,
