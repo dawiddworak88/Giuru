@@ -167,15 +167,12 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                             viewModel.ClientApprovals = approvals.Data.OrEmptyIfNull().Select(x =>
                             {
                                 var userApproval = userApprovals.FirstOrDefault(y => y.ApprovalId == x.Id);
-
-                                var isUserApprovalNotNull = userApproval is not null;
-
                                 return new ApprovalViewModel
                                 {
                                     Id = x.Id,
                                     Name = x.Name,
-                                    ApprovalDate = isUserApprovalNotNull ? userApproval.CreatedDate : null,
-                                    IsApproved = isUserApprovalNotNull
+                                    ApprovalDate = userApproval is not null ? userApproval.CreatedDate : null,
+                                    IsApproved = userApproval is not null
                                 };
                             });
                         }
