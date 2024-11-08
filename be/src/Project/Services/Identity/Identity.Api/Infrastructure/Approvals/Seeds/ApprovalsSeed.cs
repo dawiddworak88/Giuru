@@ -61,10 +61,10 @@ namespace Identity.Api.Infrastructure.Approvals.Seeds
                     Language = "de"
                 };
 
-                context.Add(approval.FillCommonProperties());
-                context.Add(enApprovalTranslation.FillCommonProperties());
-                context.Add(plApprovalTranslation.FillCommonProperties());
-                context.Add(deApprovalTranslation.FillCommonProperties());
+                context.Approvals.Add(approval.FillCommonProperties());
+                context.ApprovalTranslations.Add(enApprovalTranslation.FillCommonProperties());
+                context.ApprovalTranslations.Add(plApprovalTranslation.FillCommonProperties());
+                context.ApprovalTranslations.Add(deApprovalTranslation.FillCommonProperties());
 
                 context.SaveChanges();
             }
