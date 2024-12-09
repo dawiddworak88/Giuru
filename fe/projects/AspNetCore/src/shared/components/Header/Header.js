@@ -9,20 +9,9 @@ import Search from "../Search/Search";
 
 function Header(props) {
     const [state, dispatch] = useContext(Context);
-    const [totalBasketItems, setTotalBasketItems] = useState(props.totalBasketItems ? props.totalBasketItems : 0);
     const [isUserPopupOpen, setIsUserPopupOpen] = useState(false);
     const [isLanguageSwitechOpen, setIsLanguageSwitechOpen] = useState(false);
     const overlayRef = useRef(null);
-
-    const updateTotalBasketItems = (newTotal) => {
-        if (newTotal != null && (newTotal === 0 || newTotal !== props.totalBasketItems)) {
-            setTotalBasketItems(newTotal);
-        }
-    }
-
-    if (state.totalBasketItems !== totalBasketItems) {
-        updateTotalBasketItems(state.totalBasketItems);
-    }
 
     const overlayDisplaying = (isDisplay) => {
         if (overlayRef.current) {
@@ -68,7 +57,7 @@ function Header(props) {
                     <div className="navbar__actions__cart">
                         <a href={props.basketUrl} title={props.goToCartLabel} aria-label={props.goToCartLabel}>
                             <ShoppingCartIcon />
-                            <span className="navbar__actions__cart__count">{totalBasketItems == null ? 0 : totalBasketItems}</span>
+                            <span className="navbar__actions__cart__count">{props.totalBasketItems == null ? 0 : props.totalBasketItems}</span>
                         </a>
                     </div>
                     <div className="navbar__actions__sidebar">
