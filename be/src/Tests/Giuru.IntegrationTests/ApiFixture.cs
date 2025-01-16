@@ -48,6 +48,7 @@ namespace Giuru.IntegrationTests
 
             _msSqlContainer = new MsSqlBuilder()
                 .WithName("mssql")
+                .WithImage("mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04")
                 .WithNetwork(_giuruNetwork)
                 .WithPassword("YourStrongPassword!")
                 .WithNetworkAliases("sqldata")
