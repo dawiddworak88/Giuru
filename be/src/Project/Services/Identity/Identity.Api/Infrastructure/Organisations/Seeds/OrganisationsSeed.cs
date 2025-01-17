@@ -20,7 +20,7 @@ namespace Identity.Api.Infrastructure.Organisations.Seeds
                 {
                     var organisationConfiguration = organisation.Split("&");
 
-                    if (!context.Organisations.Any(x => x.Name == organisationConfiguration[OrganisationsSeedConstants.NameIndex]))
+                    if (!context.Organisations.Any(x => x.Name == organisationConfiguration[OrganisationsSeedConstants.NameIndex] || x.Id == Guid.Parse(organisationConfiguration[OrganisationsSeedConstants.IdIndex])))
                     {
                         var organisationEntity = new Organisation
                         {

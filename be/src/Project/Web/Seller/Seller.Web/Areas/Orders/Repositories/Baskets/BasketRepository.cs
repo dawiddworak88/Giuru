@@ -86,6 +86,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             string language, 
             Guid? clientId, 
             string clientName, 
+            string clientEmail,
             Guid? basketId,
             Guid? billingAddressId,
             string billingCompany,
@@ -107,12 +108,14 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             string shippingStreet,
             string shippingPhoneNumber,
             Guid? shippingCountryId,
-            string moreInfo)
+            string moreInfo,
+            bool hasApprovalToSendEmail)
         {
             var requestModel = new CheckoutBasketRequestModel
             {
                 ClientId = clientId,
                 ClientName = clientName,
+                ClientEmail = clientEmail,
                 BasketId = basketId,
                 BillingAddressId = billingAddressId,
                 BillingCompany = billingCompany,
@@ -134,7 +137,8 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 ShippingStreet = shippingStreet,
                 ShippingPhoneNumber = shippingPhoneNumber,
                 ShippingCountryId = shippingCountryId,
-                MoreInfo = moreInfo
+                MoreInfo = moreInfo,
+                HasApprovalToSendEmail = hasApprovalToSendEmail
             };
 
             var apiRequest = new ApiRequest<CheckoutBasketRequestModel>

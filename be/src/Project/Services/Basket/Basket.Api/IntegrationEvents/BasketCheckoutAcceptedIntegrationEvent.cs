@@ -10,6 +10,7 @@ namespace Basket.Api.IntegrationEvents
         public Guid? BasketId { get; set; }
         public Guid? ClientId { get; set; }
         public string ClientName { get; set; }
+        public string ClientEmail { get; set; }
         public Guid? SellerId { get; set; }
         public Guid? BillingAddressId { get; set; }
         public string BillingCompany { get; set; }
@@ -35,6 +36,7 @@ namespace Basket.Api.IntegrationEvents
         public string MoreInfo { get; set; }
         public BasketEventModel Basket { get; set; }
         public bool HasCustomOrder { get; set; }
+        public bool HasApprovalToSendEmail { get; set; }
         public IEnumerable<Guid> Attachments { get; set; }
     }
 }

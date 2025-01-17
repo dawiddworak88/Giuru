@@ -1,0 +1,21 @@
+@import "../../../../shared/layouts/index.scss";
+@import "../../../../shared/components/NotificationBar/NotificationBar.scss";
+@import "../../../../shared/components/Header/Header.scss";
+@import "../../../../shared/components/MainNavigation/MainNavigation.scss";
+@import "../../../../shared/components/CarouselGrid/CarouselGrid.scss";
+@import "../../../../shared/components/Footer/Footer.scss";
+@import "../../../../shared/components/StrapiContent/StrapiContent.scss";
+
+.carousel-grid {
+    background-color: $white;
+    padding: 0;
+
+    &__item {
+        padding: 0;
+    }
+
+    .card {
+        max-width: 300px;
+        margin: 1rem;
+    }
+}

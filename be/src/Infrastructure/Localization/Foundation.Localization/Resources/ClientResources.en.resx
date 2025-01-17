@@ -315,6 +315,9 @@
   <data name="NewClientAddress" xml:space="preserve">
     <value>Add address</value>
   </data>
+  <data name="ExpressedOnLabel" xml:space="preserve">
+    <value>Consent has been given</value>
+  </data>
   <data name="FieldDefinitionNotFound" xml:space="preserve">
     <value>Dynamic field definition not found</value>
   </data>
@@ -359,5 +362,20 @@
   </data>
   <data name="PreferedCurrencyLabel" xml:space="preserve">
     <value>Prefered currency</value>
+  </data>
+  <data name="EditClientApproval" xml:space="preserve">
+    <value>Edit Approval</value>
+  </data>
+  <data name="NavigateToClientApprovals" xml:space="preserve">
+    <value>Return to Approvals</value>
+  </data>
+  <data name="NewClientApproval" xml:space="preserve">
+    <value>New Approval</value>
+  </data>
+  <data name="ClientApprovalSavedSuccessfully" xml:space="preserve">
+    <value>Approval saved successfully</value>
+  </data>
+  <data name="ClientApprovalDeletedSuccessfully" xml:space="preserve">
+    <value>Approval deleted successfully</value>
   </data>
 </root>

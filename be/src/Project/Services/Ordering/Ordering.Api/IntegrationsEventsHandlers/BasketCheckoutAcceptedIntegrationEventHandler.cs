@@ -37,6 +37,7 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
             {
                 ClientId = @event.ClientId,
                 ClientName = @event.ClientName,
+                ClientEmail = @event.ClientEmail,
                 SellerId = @event.SellerId,
                 BasketId = @event.BasketId,
                 BillingAddressId = @event.BillingAddressId,
@@ -63,6 +64,7 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
                 MoreInfo = @event.MoreInfo,
                 IpAddress = @event.IpAddress,
                 HasCustomOrder = @event.HasCustomOrder,
+                HasApprovalToSendEmail = @event.HasApprovalToSendEmail,
                 Attachments = @event.Attachments,
                 Items = @event.Basket?.Items?.Select(x => new CheckoutBasketItemServiceModel
                 {

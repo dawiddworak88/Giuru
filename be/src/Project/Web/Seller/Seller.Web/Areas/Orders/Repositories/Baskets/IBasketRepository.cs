@@ -13,6 +13,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             string language,
             Guid? clientId,
             string clientName,
+            string clientEmailm,
             Guid? basketId,
             Guid? billingAddressId,
             string billingCompany,
@@ -34,6 +35,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             string shippingStreet,
             string shippingPhoneNumber,
             Guid? shippingCountryId,
-            string moreInfo);
+            string moreInfo,
+            bool hasApprovalToSendEmail);
     }
 }

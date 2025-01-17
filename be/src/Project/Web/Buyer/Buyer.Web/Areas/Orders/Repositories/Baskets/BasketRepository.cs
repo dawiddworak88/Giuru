@@ -2,6 +2,7 @@
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.DomainModels.Clients;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Models.Response;
@@ -86,62 +87,56 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
         public async Task CheckoutBasketAsync(
             string token, 
             string language, 
-            Guid? clientId, 
+            Guid? clientId,
             string clientName, 
+            string clientEmail,
             Guid? basketId,
-            Guid? billingAddressId,
-            string billingCompany,
-            string billingFirstName,
-            string billingLastName,
-            string billingRegion,
-            string billingPostCode,
-            string billingCity,
-            string billingStreet,
-            string billingPhoneNumber,
-            Guid? billingCountryId,
-            Guid? shippingAddressId,
-            string shippingCompany,
-            string shippingFirstName,
-            string shippingLastName,
-            string shippingRegion,
-            string shippingPostCode,
-            string shippingCity,
-            string shippingStreet,
-            string shippingPhoneNumber,
-            Guid? shippingCountryId, 
+            ClientAddress billingAddress,
+            ClientAddress shippingAddress,
             string moreInfo, 
-            bool hasCustomOrder, 
+            bool hasCustomOrder,
+            bool hasApprovalToSendEmail,
             IEnumerable<Guid> attachments)
         {
             var requestModel = new CheckoutBasketApiRequestModel
             {
                 ClientId = clientId,
                 ClientName = clientName,
+                ClientEmail = clientEmail,
                 BasketId = basketId,
-                BillingAddressId = billingAddressId,
-                BillingCompany = billingCompany,
-                BillingFirstName = billingFirstName,
-                BillingLastName = billingLastName,
-                BillingRegion = billingRegion,
-                BillingPostCode = billingPostCode,
-                BillingCity = billingCity,
-                BillingStreet = billingStreet,
-                BillingPhoneNumber = billingPhoneNumber,
-                BillingCountryId = billingCountryId,
-                ShippingAddressId = shippingAddressId,
-                ShippingCompany = shippingCompany,
-                ShippingFirstName = shippingFirstName,
-                ShippingLastName = shippingLastName,
-                ShippingRegion = shippingRegion,
-                ShippingPostCode = shippingPostCode,
-                ShippingCity = shippingCity,
-                ShippingStreet = shippingStreet,
-                ShippingPhoneNumber = shippingPhoneNumber,
-                ShippingCountryId = shippingCountryId,
                 MoreInfo = moreInfo,
                 HasCustomOrder = hasCustomOrder,
+                HasApprovalToSendEmail = hasApprovalToSendEmail,
                 Attachments = attachments
             };
+
+            if (billingAddress is not null)
+            {
+                requestModel.BillingAddressId = billingAddress.Id;
+                requestModel.BillingCompany = billingAddress.Company;
+                requestModel.BillingFirstName = billingAddress.FirstName;
+                requestModel.BillingLastName = billingAddress.LastName;
+                requestModel.BillingRegion = billingAddress.Region;
+                requestModel.BillingPostCode = billingAddress.PostCode;
+                requestModel.BillingCity = billingAddress.City;
+                requestModel.BillingStreet = billingAddress.Street;
+                requestModel.BillingPhoneNumber = billingAddress.PhoneNumber;
+                requestModel.BillingCountryId = billingAddress.CountryId;
+            }
+
+            if (shippingAddress is not null)
+            {
+                requestModel.ShippingAddressId = shippingAddress.Id;
+                requestModel.ShippingCompany = shippingAddress.Company;
+                requestModel.ShippingFirstName = shippingAddress.FirstName;
+                requestModel.ShippingLastName = shippingAddress.LastName;
+                requestModel.ShippingRegion = shippingAddress.Region;
+                requestModel.ShippingPostCode = shippingAddress.PostCode;
+                requestModel.ShippingCity = shippingAddress.City;
+                requestModel.ShippingStreet = shippingAddress.Street;
+                requestModel.ShippingPhoneNumber = shippingAddress.PhoneNumber;
+                requestModel.ShippingCountryId = shippingAddress.CountryId;
+            }
 
             var apiRequest = new ApiRequest<CheckoutBasketApiRequestModel>
             {

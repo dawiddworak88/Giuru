@@ -32,6 +32,7 @@ using StackExchange.Redis;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Foundation.Telemetry.DependencyInjection;
+using Foundation.ApiExtensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +41,8 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 {
     loggerConfiguration.MinimumLevel.Warning();
-    loggerConfiguration.Enrich.WithProperty("ApplicationContext", typeof(Program).Namespace);
+    loggerConfiguration.Enrich.WithProperty("ApplicationContext", Assembly.GetExecutingAssembly().GetName().Name);
+    loggerConfiguration.Enrich.WithProperty("Environment", builder.Environment.EnvironmentName);
     loggerConfiguration.Enrich.FromLogContext();
     loggerConfiguration.WriteTo.Console();
 
@@ -80,6 +82,8 @@ builder.Services.AddCultureRouteConstraint();
 builder.Services.AddControllersWithViews();
 
 builder.Services.RegisterLocalizationDependencies();
+
+builder.Services.RegisterApiExtensionsDependencies();
 
 builder.Services.RegisterFoundationMediaDependencies();
 

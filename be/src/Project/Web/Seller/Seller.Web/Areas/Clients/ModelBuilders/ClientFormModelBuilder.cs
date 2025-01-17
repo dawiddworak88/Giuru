@@ -22,6 +22,10 @@ using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Foundation.GenericRepository.Definitions;
 using Seller.Web.Areas.Clients.Repositories.Fields;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
+using Seller.Web.Areas.Clients.Repositories.Approvals;
+using Foundation.Extensions.ExtensionMethods;
+using System;
+using Seller.Web.Areas.Shared.Repositories.UserApprovals;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -40,6 +44,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IClientFieldsRepository _clientFieldsRepository;
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
         private readonly ICurrenciesRepository _currenciesRepository;
+        private readonly IApprovalsRepository _approvalsRepository;
+        private readonly IUserApprovalsRepository _userApprovalsRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -54,7 +60,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IClientFieldsRepository clientFieldsRepository,
             IClientFieldValuesRepository clientFieldValuesRepository,
             LinkGenerator linkGenerator,
-            ICurrenciesRepository currenciesRepository)
+            ICurrenciesRepository currenciesRepository,
+            IApprovalsRepository approvalsRepository,
+            IUserApprovalsRepository userApprovalsRepository)
         {
             _clientsRepository = clientsRepository;
             _globalLocalizer = globalLocalizer;
@@ -69,6 +77,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _clientFieldsRepository = clientFieldsRepository;
             _clientFieldValuesRepository = clientFieldValuesRepository;
             _currenciesRepository = currenciesRepository;
+            _approvalsRepository = approvalsRepository;
+            _userApprovalsRepository = userApprovalsRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -115,6 +125,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 PreferedCurrencyLabel = _clientLocalizer.GetString("PreferedCurrencyLabel"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
+                ExpressedOnLabel = _clientLocalizer.GetString("ExpressedOnLabel"),
                 ActiveLabel = _globalLocalizer.GetString("Active"),
                 InActiveLabel = _globalLocalizer.GetString("InActive")
             };
@@ -143,6 +154,28 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     if (user is not null)
                     {
                         viewModel.HasAccount = true;
+
+                        var approvals = await _approvalsRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
+
+                        if (approvals is not null)
+                        {
+                            var userApprovals = await _userApprovalsRepository.GetAsync(
+                                componentModel.Token,
+                                componentModel.Language,
+                                Guid.Parse(user.Id));
+
+                            viewModel.ClientApprovals = approvals.Data.OrEmptyIfNull().Select(x =>
+                            {
+                                var userApproval = userApprovals.FirstOrDefault(y => y.ApprovalId == x.Id);
+                                return new ApprovalViewModel
+                                {
+                                    Id = x.Id,
+                                    Name = x.Name,
+                                    ApprovalDate = userApproval is not null ? userApproval.CreatedDate : null,
+                                    IsApproved = userApproval is not null
+                                };
+                            });
+                        }
                     }
                 }
             }
@@ -179,7 +212,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             var currencies = await _currenciesRepository.GetAsync(componentModel.Token, componentModel.Language, $"{nameof(Country.Name)} asc");
 
-            if (currencies is not null) 
+            if (currencies is not null)
             {
                 viewModel.Currencies = currencies.Select(x => new ListItemViewModel { Id = x.Id, Name = x.CurrencyCode });
             }
@@ -218,7 +251,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                             Value = y.Value
                         })
                     };
-                }); 
+                });
             }
 
             return viewModel;

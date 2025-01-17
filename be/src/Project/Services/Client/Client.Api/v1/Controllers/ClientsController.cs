@@ -51,6 +51,7 @@ namespace Client.Api.v1.Controllers
         public IActionResult Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
             var clientIds = ids.ToEnumerableGuidIds();
 
             if (clientIds is not null)

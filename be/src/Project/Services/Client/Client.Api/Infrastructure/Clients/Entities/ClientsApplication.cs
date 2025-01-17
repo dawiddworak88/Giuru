@@ -1,10 +1,14 @@
 ﻿using Foundation.GenericRepository.Entities;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Client.Api.Infrastructure.Clients.Entities
 {
     public class ClientsApplication : Entity
     {
+        [Required]
+        public string CompanyName { get; set; }
+
         [Required]
         public string FirstName { get; set; }
 
@@ -21,21 +25,15 @@ namespace Client.Api.Infrastructure.Clients.Entities
         public string PhoneNumber { get; set; }
 
         [Required]
-        public string CompanyName { get; set; }
+        public string CommunicationLanguage { get; set; }
+        
+        [Required]
+        public bool IsDeliveryAddressEqualBillingAddress { get; set; }
 
         [Required]
-        public string CompanyAddress { get; set; }
+        public Guid BillingAddressId { get; set; }
 
         [Required]
-        public string CompanyCountry { get; set; }
-
-        [Required]
-        public string CompanyCity { get; set; }
-
-        [Required]
-        public string CompanyRegion { get; set; }
-
-        [Required]
-        public string CompanyPostalCode { get; set; }
+        public Guid DeliveryAddressId { get; set; }
     }
 }

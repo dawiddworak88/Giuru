@@ -46,7 +46,8 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 {
     loggerConfiguration.MinimumLevel.Warning();
-    loggerConfiguration.Enrich.WithProperty("ApplicationContext", typeof(Program).Namespace);
+    loggerConfiguration.Enrich.WithProperty("ApplicationContext", Assembly.GetExecutingAssembly().GetName().Name);
+    loggerConfiguration.Enrich.WithProperty("Environment", builder.Environment.EnvironmentName);
     loggerConfiguration.Enrich.FromLogContext();
     loggerConfiguration.WriteTo.Console();
 
@@ -90,7 +91,14 @@ builder.Services.AddControllersWithViews(options =>
 
 builder.Services.RegisterFoundationMediaDependencies();
 
-builder.Services.RegisterClientAccountDependencies(builder.Configuration, builder.Environment);
+if (builder.Configuration.GetValue<bool>("IntegrationTestsEnabled"))
+{
+    builder.Services.RegisterApiAccountDependencies(builder.Configuration);
+}
+else
+{
+    builder.Services.RegisterClientAccountDependencies(builder.Configuration, builder.Environment);
+}
 
 builder.Services.RegisterApiExtensionsDependencies();
 
@@ -202,9 +210,11 @@ app.MapHealthChecks("/hc", new HealthCheckOptions
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
-app.MapHealthChecks("/liveness", new HealthCheckOptions
+app.MapHealthChecks("/liveness", new HealthCheckOptions 
 {
     Predicate = r => r.Name.Contains("self")
 });
 
 app.Run();
+
+public partial class SellerWebProgram { }

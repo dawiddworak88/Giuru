@@ -1,0 +1,22 @@
+﻿<div id="root" asp-prerender-module="ClientApprovalPage" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    <title>@MetaTagsService.GenerateTitle(this.clientLocalizer.GetString("EditClientApproval"))</title>
+    @if (string.IsNullOrWhiteSpace(this.clientLocalizer.GetString("EditClientApproval")) is false)
+    {
+        <meta name="description" content="@this.clientLocalizer.GetString("EditClientApproval")" />
+    }
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/clientapprovalpage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/clientapprovalpage.js" asp-append-version="true"></script>
+}

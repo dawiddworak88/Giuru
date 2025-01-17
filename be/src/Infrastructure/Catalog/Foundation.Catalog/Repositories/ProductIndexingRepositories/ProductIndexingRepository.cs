@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
+namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
 {
     public class ProductIndexingRepository : IProductIndexingRepository
     {

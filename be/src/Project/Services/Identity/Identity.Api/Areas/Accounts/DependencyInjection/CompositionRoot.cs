@@ -1,5 +1,4 @@
-﻿using Foundation.ApiExtensions.Services.ApiClientServices;
-using Foundation.Extensions.ModelBuilders;
+﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Identity.Api.Areas.Accounts.ComponentModels;
@@ -26,7 +25,6 @@ namespace Identity.Api.Areas.Accounts.DependencyInjection
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
-            services.AddScoped<IApiClientService, ApiClientService>();
         }
     }
 }

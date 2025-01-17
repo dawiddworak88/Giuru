@@ -35,7 +35,7 @@ namespace Buyer.Web.Shared.Services.Baskets
                     var basketItems = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItem
                     {
                         ProductId = x.ProductId,
-                        ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
+                        ProductUrl = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
                         Name = x.ProductName,
                         Sku = x.ProductSku,
                         Quantity = x.Quantity,

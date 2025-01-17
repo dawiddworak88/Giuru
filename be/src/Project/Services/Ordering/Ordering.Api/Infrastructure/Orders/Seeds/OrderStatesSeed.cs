@@ -15,7 +15,7 @@ namespace Ordering.Api.Infrastructure.Orders.Seeds
             SeedOrderState(context, OrderStatesConstants.ProcessingId, "Processing");
             SeedOrderState(context, OrderStatesConstants.CompleteId, "Complete");
             SeedOrderState(context, OrderStatesConstants.ClosedId, "Closed");
-            SeedOrderState(context, OrderStatesConstants.CanceledId, "Canceled");
+            SeedOrderState(context, OrderStatesConstants.CancelledId, "Cancelled");
             SeedOrderState(context, OrderStatesConstants.OnHoldId, "On Hold");
             SeedOrderState(context, OrderStatesConstants.PaymentReviewId, "Payment Review");
         }

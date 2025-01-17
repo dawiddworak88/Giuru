@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Foundation.PageContent.Components.Languages.ViewModels;
+using System;
 using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Clients.ViewModels
@@ -8,6 +9,8 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public Guid? Id { get; set; }
         public string Title { get; set; }
         public string IdLabel { get; set; }
+        public string CompanyNameLabel { get; set; }
+        public string CompanyName { get; set; }
         public string FirstNameLabel { get; set; }
         public string FirstName { get; set; }
         public string LastNameLabel { get; set; }
@@ -18,18 +21,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string Email { get; set; }
         public string PhoneNumberLabel { get; set; }
         public string PhoneNumber { get; set; }
-        public string CompanyNameLabel { get; set; }
-        public string CompanyName { get; set; }
-        public string AddressLabel { get; set; }
-        public string CompanyAddress { get; set; }
-        public string CountryLabel { get; set; }
-        public string CompanyCountry { get; set; }
-        public string CityLabel { get; set; }
-        public string CompanyCity { get; set; }
-        public string PostalCodeLabel { get; set; }
-        public string CompanyPostalCode { get; set; }
-        public string RegionLabel { get; set; }
-        public string CompanyRegion { get; set; }
         public string SaveText { get; set; }
         public string SaveUrl { get; set; }
         public string BackToClientsApplicationsText { get; set; }
@@ -37,6 +28,22 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string FieldRequiredErrorMessage { get; set; }
         public string EmailFormatErrorMessage { get; set; }
         public string SelectJobTitle { get; set; }
+        public string LanguageLabel { get; set; }
+        public string CommunicationLanguage { get; set; }
+        public string AddressFullNameLabel { get; set; }
+        public string AddressPhoneNumberLabel { get; set; }
+        public string AddressStreetLabel { get; set; }
+        public string AddressRegionLabel { get; set; }
+        public string AddressPostalCodeLabel { get; set; }
+        public string AddressCityLabel { get; set; }
+        public string AddressCountryLabel { get; set; }
+        public string DeliveryAddressEqualBillingAddressText { get; set; }
+        public bool IsDeliveryAddressEqualBillingAddress { get; set; }
+        public string BillingAddressTitle { get; set; }
+        public ClientApplicationAddressViewModel BillingAddress { get; set; }
+        public string DeliveryAddressTitle { get; set; }
+        public ClientApplicationAddressViewModel DeliveryAddress { get; set; }
         public IEnumerable<ContactJobTitle> ContactJobTitles { get; set; }
+        public IEnumerable<LanguageViewModel> Languages { get; set; }
     }
 }

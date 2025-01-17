@@ -1,3 +1,4 @@
+using Buyer.Web.Areas.Orders.ComponentModels;
 using Buyer.Web.Areas.Orders.Definitions;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories;
@@ -8,7 +9,6 @@ using Buyer.Web.Shared.ViewModels.Files;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
-using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Orders.ModelBuilders
 {
-    public class StatusOrderFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, StatusOrderFormViewModel>
+    public class StatusOrderFormModelBuilder : IAsyncComponentModelBuilder<OrdersPageComponentModel, StatusOrderFormViewModel>
     {
         private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> _filesModelBuilder;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
@@ -44,7 +44,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             _clientLocalizer = clientLocalizer;
         }
 
-        public async Task<StatusOrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<StatusOrderFormViewModel> BuildModelAsync(OrdersPageComponentModel componentModel)
         {
             var viewModel = new StatusOrderFormViewModel
             {
@@ -68,7 +68,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 NoLabel = _globalLocalizer.GetString("No"),
                 CancelationConfirmationDialogLabel = _orderLocalizer.GetString("CancelationConfirmationDialog"),
                 AreYouSureToCancelOrderLabel = _orderLocalizer.GetString("AreYouSureToCancelOrder"),
-                OrdersUrl = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                OrdersUrl = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, searchTerm = componentModel.SearchTerm }),
                 NavigateToOrders = _orderLocalizer.GetString("NavigateToOrdersList"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
@@ -92,7 +92,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.OrderStatusId = order.OrderStatusId;
                     viewModel.CustomOrder = order.MoreInfo;
                     viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
-                    viewModel.CanCancelOrder = false;
+                    viewModel.CanCancelOrder = order.OrderItems.All(x => x.OrderItemStatusId.Equals(OrdersConstants.OrderStatuses.NewId) || x.OrderItemStatusId.Equals(OrdersConstants.OrderStatuses.CancelId)) && order.OrderStatusId.Equals(OrdersConstants.OrderStatuses.NewId);
                     viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                     {
                         Id = x.Id,

@@ -1,4 +1,5 @@
 ﻿using Client.Api.Infrastructure;
+using Client.Api.Infrastructure.Clients.Entities;
 using Client.Api.Infrastructure.Groups.Entities;
 using Client.Api.Infrastructure.Managers.Entities;
 using Client.Api.ServicesModels.Clients;
@@ -138,7 +139,7 @@ namespace Client.Api.Services.Clients
             {
                 client.ClientManagerIds = clientManagers;
             }
-            
+
             return client;
         }
 
@@ -318,6 +319,7 @@ namespace Client.Api.Services.Clients
                               Name = c.Name,
                               Email = c.Email,
                               CountryId = c.CountryId,
+                              OrganisationId = c.OrganisationId,
                               PreferedCurrencyId = c.CurrencyId,
                               CommunicationLanguage = c.Language,
                               PhoneNumber = c.PhoneNumber,

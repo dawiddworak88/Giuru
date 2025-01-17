@@ -17,10 +17,13 @@ namespace Client.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.16")
+                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Client.Api.Infrastructure.Clients.Entities.Address", b =>
                 {
@@ -79,7 +82,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Clients.Entities.Client", b =>
@@ -143,7 +146,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clients");
+                    b.ToTable("Clients", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Clients.Entities.ClientsApplication", b =>
@@ -152,27 +155,14 @@ namespace Client.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CompanyAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("BillingAddressId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CompanyCity")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CompanyCountry")
+                    b.Property<string>("CommunicationLanguage")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CompanyName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CompanyPostalCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CompanyRegion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -183,6 +173,9 @@ namespace Client.Api.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("DeliveryAddressId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -192,6 +185,9 @@ namespace Client.Api.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeliveryAddressEqualBillingAddress")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LastModifiedDate")
@@ -212,7 +208,53 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientsApplications");
+                    b.ToTable("ClientsApplications", (string)null);
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Clients.Entities.ClientsApplicationAddress", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Region")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<string>("Street")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClientsApplicationAddresses", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.ClientFieldValue", b =>
@@ -243,7 +285,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientFieldValues");
+                    b.ToTable("ClientFieldValues", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.ClientFieldValueTranslation", b =>
@@ -280,7 +322,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("ClientFieldValueId");
 
-                    b.ToTable("ClientFieldValueTranslations");
+                    b.ToTable("ClientFieldValueTranslations", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.FieldDefinition", b =>
@@ -315,7 +357,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FieldDefinitions");
+                    b.ToTable("FieldDefinitions", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.FieldDefinitionTranslation", b =>
@@ -352,7 +394,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("FieldDefinitionId");
 
-                    b.ToTable("FieldDefinitionTranslations");
+                    b.ToTable("FieldDefinitionTranslations", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.Option", b =>
@@ -382,7 +424,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("OptionSetId");
 
-                    b.ToTable("FieldOptions");
+                    b.ToTable("FieldOptions", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.OptionSet", b =>
@@ -407,7 +449,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FieldOptionSets");
+                    b.ToTable("FieldOptionSets", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.OptionTranslation", b =>
@@ -444,7 +486,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("OptionId");
 
-                    b.ToTable("FieldOptionTranslations");
+                    b.ToTable("FieldOptionTranslations", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroup", b =>
@@ -469,7 +511,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientGroups");
+                    b.ToTable("ClientGroups", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroupTranslation", b =>
@@ -507,7 +549,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("ClientGroupId");
 
-                    b.ToTable("ClientGroupTranslations");
+                    b.ToTable("ClientGroupTranslations", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientsGroup", b =>
@@ -538,7 +580,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientsGroups");
+                    b.ToTable("ClientsGroups", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientAccountManager", b =>
@@ -578,7 +620,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientAccountManagers");
+                    b.ToTable("ClientAccountManagers", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientsAccountManagers", b =>
@@ -609,7 +651,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientsAccountManagers");
+                    b.ToTable("ClientsAccountManagers", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Roles.Entities.ClientRole", b =>
@@ -638,7 +680,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientRoles");
+                    b.ToTable("ClientRoles", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Clients.Entities.Address", b =>

@@ -9,6 +9,7 @@ namespace Basket.Api.v1.RequestModels
         public Guid? BasketId { get; set; }
         public Guid? ClientId { get; set; } 
         public string ClientName { get; set; }
+        public string ClientEmail { get; set; }
         public Guid? BillingAddressId { get; set; }
         public string BillingCompany { get; set; }
         public string BillingFirstName { get; set; }
@@ -32,6 +33,7 @@ namespace Basket.Api.v1.RequestModels
         public string Reason { get; set; }
         public string MoreInfo { get; set; }
         public bool HasCustomOrder { get; set; }
+        public bool HasApprovalToSendEmail { get; set; }
         public IEnumerable<Guid> Attachments { get; set; }
     }
 }

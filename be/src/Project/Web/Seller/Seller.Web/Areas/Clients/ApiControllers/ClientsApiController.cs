@@ -5,11 +5,11 @@ using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using Newtonsoft.Json;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
 using Seller.Web.Areas.Clients.Repositories.Groups;
+using Seller.Web.Areas.Shared.Repositories.UserApprovals;
 using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Identity;
 using Seller.Web.Shared.Repositories.Organisations;
@@ -30,6 +30,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IClientGroupsRepository _clientGroupsRepository;
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
+        private readonly IUserApprovalsRepository _userApprovalsRepository;
 
         public ClientsApiController(
             IOrganisationsRepository organisationsRepository,
@@ -37,7 +38,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             IStringLocalizer<ClientResources> clientLocalizer,
             IIdentityRepository identityRepository,
             IClientGroupsRepository clientGroupsRepository,
-            IClientFieldValuesRepository clientFieldValuesRepository)
+            IClientFieldValuesRepository clientFieldValuesRepository,
+            IUserApprovalsRepository userApprovalsRepository)
         {
             _organisationsRepository = organisationsRepository;
             _clientsRepository = clientsRepository;
@@ -45,6 +47,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             _identityRepository = identityRepository;
             _clientGroupsRepository = clientGroupsRepository;
             _clientFieldValuesRepository = clientFieldValuesRepository;
+            _userApprovalsRepository = userApprovalsRepository;
         }
 
         [HttpGet]
@@ -105,6 +108,10 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                         await _identityRepository.AssignRolesAsync(token, language, model.Email, clientGroups.Select(x => x.Name));
                     }
                 }
+
+                var user = await _identityRepository.GetAsync(token, language, model.Email);
+
+                await _userApprovalsRepository.SaveAsync(token, language, model.ClientApprovalIds, Guid.Parse(user.Id));
             }
 
             return StatusCode((int)HttpStatusCode.OK, new { Id = clientId, Message = _clientLocalizer.GetString("ClientSavedSuccessfully").Value });

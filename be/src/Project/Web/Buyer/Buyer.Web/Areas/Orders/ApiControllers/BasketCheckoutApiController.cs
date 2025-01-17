@@ -1,7 +1,11 @@
 ﻿using Buyer.Web.Areas.Orders.ApiRequestModels;
+using Buyer.Web.Areas.Orders.Definitions;
+using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
+using Buyer.Web.Areas.Orders.Repositories.UserApprovals;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Repositories.Clients;
+using Buyer.Web.Shared.Repositories.Identity;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Localization;
@@ -9,11 +13,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Orders.ApiControllers
@@ -24,15 +30,21 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IBasketRepository _basketRepository;
         private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly IUserApprovalsRepository _userApprovalsRepository;
+        private readonly IIdentityRepository _identityRepository;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
             IClientAddressesRepository clientAddressesRepository,
-            IStringLocalizer<OrderResources> orderLocalizer)
+            IStringLocalizer<OrderResources> orderLocalizer,
+            IUserApprovalsRepository userApprovalsRepository,
+            IIdentityRepository identityRepository)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
             _clientAddressesRepository = clientAddressesRepository;
+            _userApprovalsRepository = userApprovalsRepository;
+            _identityRepository = identityRepository;
         }
 
         [HttpPost]
@@ -67,47 +79,32 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 deliveryAddressesIds.Add(model.BillingAddressId.Value);
             }
 
-            var deliveryAddresses = await _clientAddressesRepository.GetAsync(token, language, deliveryAddressesIds);
+            var user = await _identityRepository.GetAsync(token, language, User.FindFirstValue(ClaimTypes.Email));
 
-            if (deliveryAddresses is not null)
+            var clientApprovlas = Enumerable.Empty<UserApproval>();
+
+            if (user is not null)
             {
-                var billingAddress = deliveryAddresses.FirstOrDefault(x => x.Id == model.BillingAddressId);
-                var deliveryAddress = deliveryAddresses.FirstOrDefault(x => x.Id == model.ShippingAddressId);
+                clientApprovlas = await _userApprovalsRepository.GetAsync(token, language, Guid.Parse(user.Id));
+            }
 
-                await _basketRepository.CheckoutBasketAsync(
+            var clientAddresses = await _clientAddressesRepository.GetAsync(token, language, deliveryAddressesIds);
+
+            await _basketRepository.CheckoutBasketAsync(
                 token,
                 language,
                 model.ClientId,
                 model.ClientName,
+                User.FindFirstValue(ClaimTypes.Email),
                 Guid.Parse(reqCookie),
-                model.BillingAddressId,
-                billingAddress?.Company,
-                billingAddress?.FirstName, 
-                billingAddress?.LastName,
-                billingAddress?.Region,
-                billingAddress?.PostCode,
-                billingAddress?.City,
-                billingAddress?.Street,
-                billingAddress?.PhoneNumber,
-                billingAddress?.CountryId,
-                model.ShippingAddressId,
-                deliveryAddress?.Company,
-                deliveryAddress?.FirstName,
-                deliveryAddress?.LastName,
-                deliveryAddress?.Region,
-                deliveryAddress?.PostCode,
-                deliveryAddress?.City,
-                deliveryAddress?.Street,
-                deliveryAddress?.PhoneNumber,
-                deliveryAddress?.CountryId,
+                clientAddresses?.FirstOrDefault(x => x.Id == model.BillingAddressId),
+                clientAddresses?.FirstOrDefault(x => x.Id == model.ShippingAddressId),
                 model.MoreInfo,
                 model.HasCustomOrder,
+                clientApprovlas.Any(x => x.ApprovalId == ApprovalsConstants.ToSendOrderConfirmationEmails),
                 model.Attachments?.Select(x => x.Id));
 
-                return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
-            }
-
-            return StatusCode((int)HttpStatusCode.BadRequest);
+            return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
         }
     }
 }

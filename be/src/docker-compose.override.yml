@@ -249,6 +249,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - RedisUrl=redis
       - ServerSideRenderingEndpoint=http://account-web-react-ssr:3000
+      - ClientUrl=http://client-api:8080
       - CatalogUrl=http://catalog-api:8080
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -276,6 +277,9 @@ services:
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
+      - ApiOrganisationId=09affcc9-1665-45d6-919f-3d2026106ba1
+      - ApiEmail=seller@user.com
+      - ApiAppSecret=98daf0da-89ac-48db-8b9f-edc6383153ed
     ports:
       - "5105:8080"
 
@@ -308,6 +312,7 @@ services:
       - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - EventBusRequestedHeartbeat=60
@@ -318,7 +323,10 @@ services:
       - SendGridApiKey=${SENDGRID_API_KEY}
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - ActionSendGridCustomOrderTemplateId=${SENDGRID_CUSTOM_ORDER_TEMPLATE_ID}
-      - OrderStatuses=287ee71a-d87f-4563-833a-8e2771d1e5a5%26a73d4e41-1ff0-4eb5-929d-ed0aa1f52c2a%2610000%26New%26Erstellt%26Nowe%3B578480b3-15ef-492d-9f86-9827789c6804%2677e3aee6-6053-4d95-bbb5-fc2ebfa4f0de%2620000%26Processing%26In%20Bearbeitung%26W%20trakcie%20realizacji%3B3f48aaba-0ea5-4654-b753-4f3109f81bc5%26e071521b-682b-4a69-9070-be5782cbb223%2630000%26Complete%26Fertig%26Zrealizowane%3Bfc24e7e2-020b-4110-9415-7184ec837e71%26877d5f96-871f-406e-8d8b-d32bea48bf40%2640000%26Closed%26Abgeschlossen%26Zamkni%C4%99te%3B4fcdefc0-8181-490c-9378-fe96d234ccc9%265c192db0-af69-49b5-aebd-be1a02fc93ab%2650000%26Canceled%26Storniert%26Anulowane%3Be9fa4fc3-36c7-48ec-bf90-df9901867a38%26b2dc9bd0-444f-4e96-8708-715f7e416e18%2660000%26On%20Hold%26Gehalten%26Wstrzymane
+      - ActionSendGridConfirmationOrderTemplateId=${SENDGRID_CONFIRMATION_ORDER_TEMPLATE_ID}
+      - ActionSendGridCancelOrderTemplateId=${SENDGRID_CANCEL_ORDER_TEMPLATE_ID}
+      - ActionSendGridCancelOrderItemTemplateId=${SENDGRID_CANCEL_ORDER_ITEM_TEMPLATE_ID}
+      - OrderStatuses=287ee71a-d87f-4563-833a-8e2771d1e5a5%26a73d4e41-1ff0-4eb5-929d-ed0aa1f52c2a%2610000%26New%26Erstellt%26Nowe%3B578480b3-15ef-492d-9f86-9827789c6804%2677e3aee6-6053-4d95-bbb5-fc2ebfa4f0de%2620000%26Processing%26In%20Bearbeitung%26W%20trakcie%20realizacji%3B3f48aaba-0ea5-4654-b753-4f3109f81bc5%26e071521b-682b-4a69-9070-be5782cbb223%2630000%26Complete%26Fertig%26Zrealizowane%3Bfc24e7e2-020b-4110-9415-7184ec837e71%26877d5f96-871f-406e-8d8b-d32bea48bf40%2640000%26Closed%26Abgeschlossen%26Zamkni%C4%99te%3B4fcdefc0-8181-490c-9378-fe96d234ccc9%265c192db0-af69-49b5-aebd-be1a02fc93ab%2650000%26Cancelled%26Storniert%26Anulowane%3Be9fa4fc3-36c7-48ec-bf90-df9901867a38%26b2dc9bd0-444f-4e96-8708-715f7e416e18%2660000%26On%20Hold%26Gehalten%26Wstrzymane
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317

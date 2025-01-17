@@ -10,6 +10,7 @@ import {
 import useForm from "../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
+import moment from "moment";
 import ClientDynamicForm from "../ClientDynamicForm/ClientDynamicForm";
 
 function ClientForm(props) {
@@ -24,12 +25,13 @@ function ClientForm(props) {
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
         country: { value: props.countryId ? props.countries.find((item) => item.id === props.countryId) : null },
         preferedCurrency: { value: props.preferedCurrencyId ? props.currencies.find((item) => item.id === props.preferedCurrencyId) : null },
-        clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
-        clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
+        clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : [] },
+        clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : [] },
         hasAccount: { value: props.hasAccount ? props.hasAccount : false },
         isDisabled: { value: props.isDisabled ? props.isDisabled : false },
         deliveryAddress: { value: props.defaultDeliveryAddressId ? props.clientAddresses.find((item) => item.id === props.defaultDeliveryAddressId) : null },
-        billingAddress: { value: props.defaultBillingAddressId ? props.clientAddresses.find((item) => item.id === props.defaultBillingAddressId) : null }
+        billingAddress: { value: props.defaultBillingAddressId ? props.clientAddresses.find((item) => item.id === props.defaultBillingAddressId) : null },
+        clientApprovalIds: { value: props.clientApprovals ? props.clientApprovals.filter(x => x.isApproved).map(x => x.id) : [] }
     };
 
     const stateValidatorSchema = {
@@ -153,6 +155,23 @@ function ClientForm(props) {
             });
     };
 
+    const handleClientApprovalChange = (e, approval, clientApprovalIds) => {
+        const updatedIds = [...clientApprovalIds]; 
+
+        approval.isApproved = !approval.isApproved;
+
+        if (e.target.checked) {
+            updatedIds.push(approval.id);
+        } else {
+            const index = updatedIds.indexOf(approval.id);
+            if (index !== -1) {
+                updatedIds.splice(index, 1);
+            }
+        }
+
+        return setFieldValue({name: "clientApprovalIds", value: updatedIds})
+    }
+
     const {
         values, errors, dirty, disable,
         setFieldValue, handleOnChange, handleOnSubmit
@@ -161,7 +180,7 @@ function ClientForm(props) {
     const { 
         id, name, email, country, preferedCurrency, clientGroupIds, 
         communicationLanguage, phoneNumber, clientManagerIds,
-        deliveryAddress, billingAddress, isDisabled
+        deliveryAddress, billingAddress, isDisabled, clientApprovalIds
     } = values;
 
     return (
@@ -174,29 +193,29 @@ function ClientForm(props) {
                             <div className="field">
                                 <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
                             </div>
-                        }                      
+                        }
                         <div className="field">
-                            <TextField 
-                                id="name" 
-                                name="name" 
-                                label={props.nameLabel} 
+                            <TextField
+                                id="name"
+                                name="name"
+                                label={props.nameLabel}
                                 fullWidth={true}
-                                value={name} 
+                                value={name}
                                 variant="standard"
-                                onChange={handleOnChange} 
-                                helperText={dirty.name ? errors.name : ""} 
+                                onChange={handleOnChange}
+                                helperText={dirty.name ? errors.name : ""}
                                 error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
-                            <TextField 
-                                id="email" 
-                                name="email" 
-                                label={props.emailLabel} 
+                            <TextField
+                                id="email"
+                                name="email"
+                                label={props.emailLabel}
                                 fullWidth={true}
-                                value={email} 
-                                onChange={handleOnChange} 
+                                value={email}
+                                onChange={handleOnChange}
                                 variant="standard"
-                                helperText={dirty.email ? errors.email : ""} 
+                                helperText={dirty.email ? errors.email : ""}
                                 error={(errors.email.length > 0) && dirty.email}
                                 InputProps={{
                                     readOnly: props.email ? true : false,
@@ -211,15 +230,15 @@ function ClientForm(props) {
                                 value={country}
                                 variant="standard"
                                 onChange={(event, newValue) => {
-                                    setFieldValue({name: "country", value: newValue});
+                                    setFieldValue({ name: "country", value: newValue });
                                 }}
                                 autoComplete
                                 renderInput={(params) => (
-                                    <TextField 
-                                        {...params} 
-                                        label={props.countryLabel} 
+                                    <TextField
+                                        {...params}
+                                        label={props.countryLabel}
                                         variant="standard"
-                                        margin="normal"/>
+                                        margin="normal" />
                                 )} />
                         </div>
                         <div className="field">
@@ -294,15 +313,15 @@ function ClientForm(props) {
                                 value={deliveryAddress}
                                 variant="standard"
                                 onChange={(event, newValue) => {
-                                    setFieldValue({name: "deliveryAddress", value: newValue});
+                                    setFieldValue({ name: "deliveryAddress", value: newValue });
                                 }}
                                 autoComplete
                                 renderInput={(params) => (
-                                    <TextField 
-                                        {...params} 
-                                        label={props.deliveryAddressLabel} 
+                                    <TextField
+                                        {...params}
+                                        label={props.deliveryAddressLabel}
                                         variant="standard"
-                                        margin="normal"/>
+                                        margin="normal" />
                                 )} />
                         </div>
                         <div className="field">
@@ -315,15 +334,15 @@ function ClientForm(props) {
                                 value={billingAddress}
                                 variant="standard"
                                 onChange={(event, newValue) => {
-                                    setFieldValue({name: "billingAddress", value: newValue});
+                                    setFieldValue({ name: "billingAddress", value: newValue });
                                 }}
                                 autoComplete
                                 renderInput={(params) => (
-                                    <TextField 
-                                        {...params} 
-                                        label={props.billingAddressLabel} 
+                                    <TextField
+                                        {...params}
+                                        label={props.billingAddressLabel}
                                         variant="standard"
-                                        margin="normal"/>
+                                        margin="normal" />
                                 )} />
                         </div>
                         <div className="field">
@@ -349,12 +368,12 @@ function ClientForm(props) {
                             </FormControl>
                         </div>
                         <div className="field">
-                            <TextField 
-                                id="phoneNumber" 
-                                name="phoneNumber" 
-                                label={props.phoneNumberLabel} 
+                            <TextField
+                                id="phoneNumber"
+                                name="phoneNumber"
+                                label={props.phoneNumberLabel}
                                 fullWidth={true}
-                                value={phoneNumber} 
+                                value={phoneNumber}
                                 variant="standard"
                                 onChange={handleOnChange} />
                         </div>
@@ -382,20 +401,47 @@ function ClientForm(props) {
                                     label={isDisabled ? props.inActiveLabel : props.activeLabel} />
                             </NoSsr>
                         </div>
+                        {props.clientApprovals && props.clientApprovals.length > 0 &&
+                            props.clientApprovals.map((approval, index) => {
+                                return (
+                                    <div key={index} className="field">
+                                        <NoSsr>
+                                            <FormControlLabel
+                                                control={
+                                                    <Switch
+                                                        onChange={e => {
+                                                            handleClientApprovalChange(e, approval, clientApprovalIds)
+                                                        }}
+                                                        checked={approval.isApproved}
+                                                        id={approval.name}
+                                                        name={approval.name}
+                                                        color="secondary" />
+                                                }
+                                                label={approval.name} />
+                                        </NoSsr>
+                                        {approval.isApproved && approval.approvalDate &&
+                                            <p>
+                                                {props.expressedOnLabel}: {moment.utc(approval.approvalDate).local().format("L LT")}
+                                            </p>
+                                        }
+                                    </div>
+                                );
+                            })
+                        }
                         <div className="field client-form__field-row">
-                            <Button 
-                                type="submit" 
-                                variant="contained" 
-                                color="primary" 
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <Button 
+                            <Button
                                 className="ml-2 "
-                                type="button" 
-                                color="secondary" 
-                                variant="contained" 
-                                onClick={createAccount} 
+                                type="button"
+                                color="secondary"
+                                variant="contained"
+                                onClick={createAccount}
                                 disabled={state.isLoading || !canCreateAccount}>
                                 {props.hasAccount ? props.resetPasswordText : props.accountText}
                             </Button>

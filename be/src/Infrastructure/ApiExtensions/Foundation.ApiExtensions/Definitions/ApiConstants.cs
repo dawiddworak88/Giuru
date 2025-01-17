@@ -27,6 +27,7 @@
             public static readonly string ProductsSearchIndexApiEndpoint = "/api/v1/productssearchindex";
             public static readonly string ProductSuggestionsApiEndpoint = "/api/v1/productsuggestions";
             public static readonly string ProductFilesApiEndpoint = "/api/v1/products/files";
+            public static readonly string ProductsSkusApiEndpoint = "/api/v1/products/skus";
         }
 
         public struct Client
@@ -50,6 +51,8 @@
             public static readonly string UsersApiEndpoint = "/api/v1/users";
             public static readonly string RolesApiEndpoint = "/api/v1/roles";
             public static readonly string TeamMembersEndpoint = "/api/v1/teammembers";
+            public static readonly string ApprovalsEndpoint = "/api/v1/approvals";
+            public static readonly string UserApprovalsEndpoint = "/api/v1/userapprovals";
         }
 
         public struct DownloadCenter
