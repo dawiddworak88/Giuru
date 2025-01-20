@@ -1,6 +1,5 @@
 ﻿using Foundation.PageContent.Components.Languages.ViewModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
-using Seller.Web.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 
@@ -59,7 +58,7 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public IEnumerable<ListItemViewModel> Currencies { get; set; }
         public IEnumerable<ListItemViewModel> ClientAddresses { get; set; }
         public IEnumerable<ClientAccountManagerViewModel> ClientManagers { get; set; }
-        public IEnumerable<ClientNotificationTypeViewModel> ClientApprovals { get; set; }
         public IEnumerable<ClientFieldViewModel> ClientFields { get; set; }
+        public IEnumerable<ApprovalViewModel> ClientApprovals { get; set; }
     }
 }

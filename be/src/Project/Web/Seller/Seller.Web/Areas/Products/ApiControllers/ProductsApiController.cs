@@ -74,8 +74,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 model.IsPublished,
                 model.PrimaryProductId,
                 model.CategoryId,
-                model.Images.Select(x => x.Id),
-                model.Files.Select(x => x.Id),
+                model.Images.OrEmptyIfNull().Select(x => x.Id),
+                model.Files.OrEmptyIfNull().Select(x => x.Id),
                 model.Ean,
                 model.FulfillmentTime,
                 model.FormData);

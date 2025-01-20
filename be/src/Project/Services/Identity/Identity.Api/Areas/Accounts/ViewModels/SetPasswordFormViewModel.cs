@@ -1,5 +1,4 @@
-﻿using Identity.Api.Areas.Accounts.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Identity.Api.Areas.Accounts.ViewModels
@@ -20,6 +19,6 @@ namespace Identity.Api.Areas.Accounts.ViewModels
         public string PasswordSetSuccessMessage { get; set; }
         public string MarketingApprovalHeader { get; set; }
         public string MarketingApprovalText { get; set; }
-        public IEnumerable<ClientNotificationTypeApproval> NotificationTypes { get; set; }
+        public IEnumerable<ApprovalViewModel> Approvals { get; set; }
     }
 }

@@ -33,7 +33,7 @@ function Header(props) {
         setSearchTerm(args.value);
 
         if (args.value && args.value.length >= HeaderConstants.minSearchTermLength()) {
-        
+
             dispatch({ type: "SET_IS_LOADING", payload: true });
 
             const searchParameters = {
@@ -50,26 +50,26 @@ function Header(props) {
             const url = props.getSuggestionsUrl + "?" + QueryStringSerializer.serialize(searchParameters);
 
             return fetch(url, requestOptions)
-            .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
+                .then(function (response) {
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                AuthenticationHelper.HandleResponse(response);
+                    AuthenticationHelper.HandleResponse(response);
 
-                return response.json().then(jsonResponse => {
+                    return response.json().then(jsonResponse => {
 
-                    if (response.ok) {
+                        if (response.ok) {
 
-                        setSuggestions(() => []);
-                        setSuggestions(() => jsonResponse);
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
+                            setSuggestions(() => []);
+                            setSuggestions(() => jsonResponse);
+                        }
+                        else {
+                            toast.error(props.generalErrorMessage);
+                        }
+                    });
+                }).catch(() => {
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
+                    toast.error(props.generalErrorMessage);
                 });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
         }
     };
 
@@ -96,7 +96,7 @@ function Header(props) {
 
     useEffect(() => {
         const totalItems = state.totalBasketItems;
-        if (totalItems != null && totalItems < props.totalBasketItems){
+        if (totalItems != null && totalItems < props.totalBasketItems) {
             state.totalBasketItems = props.totalBasketItems;
         }
 
@@ -111,40 +111,42 @@ function Header(props) {
                     <a className="navbar-logo" href={props.logo.targetUrl}>
                         <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} />
                     </a>
-                    <div className="navbar-start">
-                        <form action={props.searchUrl} method="get" role="search" onSubmit={onSearchSubmit}>
-                            <div className="field is-flex is-flex-centered search">
-                                <Autosuggest
-                                    suggestions={suggestions}
-                                    onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                                    onSuggestionsClearRequested={() => setSuggestions([])}
-                                    getSuggestionValue={getSuggestionValue}
-                                    onSuggestionSelected={onSuggestionSelected}
-                                    renderSuggestion={renderSuggestion}
-                                    inputProps={searchInputProps} 
-                                />
-                                <Button type="submit" variant="contained" color="secondary" className="search-button ml-2">
-                                    {props.searchLabel}
-                                </Button>
-                            </div>
-                        </form>
-                    </div>
+                    {props.isLoggedIn &&
+                        <div className="navbar-start">
+                            <form action={props.searchUrl} method="get" role="search" onSubmit={onSearchSubmit}>
+                                <div className="field is-flex is-flex-centered search">
+                                    <Autosuggest
+                                        suggestions={suggestions}
+                                        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                                        onSuggestionsClearRequested={() => setSuggestions([])}
+                                        getSuggestionValue={getSuggestionValue}
+                                        onSuggestionSelected={onSuggestionSelected}
+                                        renderSuggestion={renderSuggestion}
+                                        inputProps={searchInputProps}
+                                    />
+                                    <Button type="submit" variant="contained" color="secondary" className="search-button ml-2">
+                                        {props.searchLabel}
+                                    </Button>
+                                </div>
+                            </form>
+                        </div>
+                    }
                 </div>
                 <div className="navbar-container">
                     <div className="navbar-end is-flex is-align-items-center">
                         {props.isLoggedIn ? (
                             props.signOutLink &&
-                                <div className="navbar-item">
-                                    <span className="welcome-text">{props.welcomeText} {props.name}, </span>
-                                    <a href={props.signOutLink.url} className="button is-text">{props.signOutLink.text}</a>
-                                </div>
+                            <div className="navbar-item">
+                                <span className="welcome-text">{props.welcomeText} {props.name}, </span>
+                                <a href={props.signOutLink.url} className="button is-text">{props.signOutLink.text}</a>
+                            </div>
                         ) : (
                             props.signInLink &&
-                                <div className="navbar-item">
-                                    <a className="button is-text" href={props.signInLink.url}>
-                                        {props.signInLink.text}
-                                    </a>
-                                </div>
+                            <div className="navbar-item">
+                                <a className="button is-text" href={props.signInLink.url}>
+                                    {props.signInLink.text}
+                                </a>
+                            </div>
                         )}
                         <div className="navbar-item">
                             <LanguageSwitcher {...props.languageSwitcher} />

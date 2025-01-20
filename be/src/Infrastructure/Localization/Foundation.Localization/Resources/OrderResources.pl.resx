@@ -264,7 +264,7 @@
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
   </data>
-  <data name="SuccessfullyCanceledOrder" xml:space="preserve">
+  <data name="SuccessfullyCancelledOrder" xml:space="preserve">
     <value>Pomyślnie anulowano zamówienie.</value>
   </data>
   <data name="StockQuantityLabel" xml:space="preserve">
@@ -291,26 +291,56 @@
   <data name="oc_orderedProducts" xml:space="preserve">
     <value>Zamówione produkty:</value>
   </data>
-  <data name="oc_name" xml:space="preserve">
+  <data name="sh_nameLabel" xml:space="preserve">
     <value>Nazwa</value>
   </data>
   <data name="oc_text" xml:space="preserve">
-    <value>Z przyejemością informujemy że Twoje zamówienie zostało potwierdzone.</value>
+    <value>Z przyjemnością informujemy że Twoje zamówienie zostało potwierdzone.</value>
   </data>
-  <data name="oc_outletQuantity" xml:space="preserve">
+  <data name="sh_outletQuantityLabel" xml:space="preserve">
     <value>Ilość z wyprzedaży</value>
   </data>
   <data name="oc_preheader" xml:space="preserve">
     <value>Zamówienie Zatwierdzone: Sprawdź Szczegóły Transakcji</value>
   </data>
-  <data name="oc_quantity" xml:space="preserve">
+  <data name="sh_quantityLabel" xml:space="preserve">
     <value>Ilość</value>
   </data>
-  <data name="oc_stockQuantity" xml:space="preserve">
+  <data name="sh_stockQuantityLabel" xml:space="preserve">
     <value>Ilość stanowa</value>
   </data>
   <data name="oc_subject" xml:space="preserve">
-    <value>Order Confirm</value>
+    <value>Potwierdzenie zamówienia</value>
+  </data>
+  <data name="co_clientNameLabel" xml:space="preserve">
+    <value>Nazwa klienta</value>
+  </data>
+  <data name="co_subject" xml:space="preserve">
+    <value>Anulowano zamówienie</value>
+  </data>
+  <data name="co_preheader" xml:space="preserve">
+    <value>Jeden z klientów anulował zamówienie.</value>
+  </data>
+  <data name="co_orderLinkLabel" xml:space="preserve">
+    <value>Link do zamówienia</value>
+  </data>
+  <data name="co_cancelOrderItemsLabel" xml:space="preserve">
+    <value>Anulowane pozycje zamówienia</value>
+  </data>
+  <data name="sh_clientNameLabel" xml:space="preserve">
+    <value>Nazwa klienta</value>
+  </data>
+  <data name="sh_orderLinkLabel" xml:space="preserve">
+    <value>Link do zamówienia</value>
+  </data>
+  <data name="coi_subject" xml:space="preserve">
+    <value>Anulowano pozycję zamówienia</value>
+  </data>
+  <data name="coi_preheader" xml:space="preserve">
+    <value>Jeden z klientów anulował pozycję w zamówieniu</value>
+  </data>
+  <data name="coi_cancelOrderItemLabel" xml:space="preserve">
+    <value>Anulowany produkt</value>
   </data>
   <data name="FromStockLabel" xml:space="preserve">
     <value>Z magazynu</value>

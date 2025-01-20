@@ -7,7 +7,11 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.ApiRequestModels;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
-using Seller.Web.Areas.Orders.Repositories.ClientNotificationTypeApproval;
+using Seller.Web.Areas.Shared.Repositories.UserApprovals;
+using Seller.Web.Shared.DomainModels.UserApproval;
+using Seller.Web.Shared.Repositories.Clients;
+using Seller.Web.Shared.Repositories.Identity;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -20,30 +24,50 @@ namespace Seller.Web.Areas.Orders.ApiControllers
     {
         private readonly IBasketRepository _basketRepository;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
-        private readonly IClientNotificationTypeApprovalRepository _notificationTypeApprovalRepository;
+        private readonly IUserApprovalsRepository _userApprovalsRepository;
+        private readonly IClientsRepository _clientsRepository;
+        private readonly IIdentityRepository _identityRepository;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
             IStringLocalizer<OrderResources> orderLocalizer,
-            IClientNotificationTypeApprovalRepository notificationTypeApprovalRepository)
+            IUserApprovalsRepository userApprovalsRepository,
+            IClientsRepository clientsRepository,
+            IIdentityRepository identityRepository)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
-            _notificationTypeApprovalRepository = notificationTypeApprovalRepository;
+            _userApprovalsRepository = userApprovalsRepository;
+            _clientsRepository = clientsRepository;
+            _identityRepository = identityRepository;
         }
 
         [HttpPost]
         public async Task<IActionResult> Checkout([FromBody] CheckoutBasketRequestModel model)
         {
-            var clientApprovals = await _notificationTypeApprovalRepository.GetAsync(
-                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName), 
-                CultureInfo.CurrentUICulture.Name, model.ClientId);
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            var userApprovals = Enumerable.Empty<UserApproval>();
+
+            var client = await _clientsRepository.GetClientAsync(token, language, model.ClientId);
+
+            if (client is not null)
+            {
+                var user = await _identityRepository.GetAsync(token, language, client.Email);
+
+                if (user is not null)
+                {
+                    userApprovals = await _userApprovalsRepository.GetAsync(token, language, Guid.Parse(user.Id));
+                }
+            }
 
             await _basketRepository.CheckoutBasketAsync(
-                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                CultureInfo.CurrentUICulture.Name,
+                token,
+                language,
                 model.ClientId,
                 model.ClientName,
+                client.Email,
                 model.BasketId,
                 model.BillingAddressId,
                 model.BillingCompany,
@@ -66,7 +90,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 model.ShippingPhoneNumber,
                 model.ShippingCountryId,
                 model.MoreInfo,
-                clientApprovals.Any(x => x.NotificationTypeId == ClientNotificationTypeConstants.ApprovalToSendOrderConfirmationEmailsId));
+                userApprovals.Any(x => x.ApprovalId == ApprovalsConstants.SendOrderConfirmationEmailId));
 
             return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
         }

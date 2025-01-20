@@ -2,13 +2,13 @@
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
-using Identity.Api.Areas.Accounts.Repositories.ClientNotificationTypes;
-using Identity.Api.Areas.Accounts.Repositories.Clients;
 using Identity.Api.Areas.Accounts.Services.UserServices;
 using Identity.Api.Areas.Accounts.Validators;
 using Identity.Api.Configurations;
 using Identity.Api.Services.Tokens;
+using Identity.Api.Services.UserApprovals;
 using Identity.Api.Services.Users;
+using Identity.Api.ServicesModels.UserApprovals;
 using Identity.Api.ServicesModels.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -32,10 +33,9 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         private readonly IStringLocalizer<AccountResources> _accountLocalizer;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly LinkGenerator _linkGenerator;
-        private readonly IClientRepository _clientRepository;
         private readonly ITokenService _tokenService;
-        private readonly IClientNotificationTypesRepository _clientNotificationTypeRepository;
         private readonly ILogger<IdentityApiController> _logger;
+        private readonly IUserApprovalsService _userApprovalsService;
 
         public IdentityApiController(
             IUserService userService,
@@ -44,10 +44,9 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             IStringLocalizer<GlobalResources> globalLocalizer,
             LinkGenerator linkGenerator,
             IUsersService usersService,
-            IClientRepository clientRepository,
             ITokenService tokenService,
-            IClientNotificationTypesRepository clientNotificationTypeRepository,
-            ILogger<IdentityApiController> logger)
+            ILogger<IdentityApiController> logger,
+            IUserApprovalsService userApprovalsService)
         {
             _userService = userService;
             _usersService = usersService;
@@ -55,10 +54,10 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             _accountLocalizer = accountLocalizer;
             _globalLocalizer = globalLocalizer;
             _linkGenerator = linkGenerator;
-            _clientRepository = clientRepository;
             _tokenService = tokenService;
-            _clientNotificationTypeRepository = clientNotificationTypeRepository;
             _logger = logger;
+            _usersService = usersService;
+            _userApprovalsService = userApprovalsService;
         }
 
         [HttpGet]
@@ -122,7 +121,18 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                     {
                         await _userService.SignInAsync(user.Email, model.Password, null, null);
 
-                        return StatusCode((int)HttpStatusCode.Redirect, new { Url = string.IsNullOrWhiteSpace(model.ReturnUrl) ? _options.Value.BuyerUrl : model.ReturnUrl });
+                        if (model.ClientApprovals is not null && model.ClientApprovals.Any())
+                        {
+                            var saveUserApprovalsServiceModel = new SaveUserApprovalsServiceModel
+                            {
+                                ApprvoalIds = model.ClientApprovals,
+                                UserId = Guid.Parse(user.Id)
+                            };
+
+                            await _userApprovalsService.SaveAsync(saveUserApprovalsServiceModel);
+                        }
+
+                        return StatusCode((int)HttpStatusCode.OK, new { Url = _options.Value.BuyerUrl });
                     }
                 }
                 catch (Exception ex)

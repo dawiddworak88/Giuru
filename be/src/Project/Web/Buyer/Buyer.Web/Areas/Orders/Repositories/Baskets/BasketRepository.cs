@@ -87,8 +87,9 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
         public async Task CheckoutBasketAsync(
             string token, 
             string language, 
-            Guid? clientId, 
+            Guid? clientId,
             string clientName, 
+            string clientEmail,
             Guid? basketId,
             ClientAddress billingAddress,
             ClientAddress shippingAddress,
@@ -101,6 +102,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             {
                 ClientId = clientId,
                 ClientName = clientName,
+                ClientEmail = clientEmail,
                 BasketId = basketId,
                 MoreInfo = moreInfo,
                 HasCustomOrder = hasCustomOrder,

@@ -82,7 +82,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Clients.Entities.Client", b =>
@@ -146,7 +146,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clients");
+                    b.ToTable("Clients", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Clients.Entities.ClientsApplication", b =>
@@ -208,7 +208,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientsApplications");
+                    b.ToTable("ClientsApplications", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Clients.Entities.ClientsApplicationAddress", b =>
@@ -254,7 +254,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientsApplicationAddresses");
+                    b.ToTable("ClientsApplicationAddresses", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.ClientFieldValue", b =>
@@ -285,7 +285,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientFieldValues");
+                    b.ToTable("ClientFieldValues", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.ClientFieldValueTranslation", b =>
@@ -322,7 +322,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("ClientFieldValueId");
 
-                    b.ToTable("ClientFieldValueTranslations");
+                    b.ToTable("ClientFieldValueTranslations", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.FieldDefinition", b =>
@@ -357,7 +357,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FieldDefinitions");
+                    b.ToTable("FieldDefinitions", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.FieldDefinitionTranslation", b =>
@@ -394,7 +394,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("FieldDefinitionId");
 
-                    b.ToTable("FieldDefinitionTranslations");
+                    b.ToTable("FieldDefinitionTranslations", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.Option", b =>
@@ -424,7 +424,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("OptionSetId");
 
-                    b.ToTable("FieldOptions");
+                    b.ToTable("FieldOptions", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.OptionSet", b =>
@@ -449,7 +449,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FieldOptionSets");
+                    b.ToTable("FieldOptionSets", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.OptionTranslation", b =>
@@ -486,7 +486,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("OptionId");
 
-                    b.ToTable("FieldOptionTranslations");
+                    b.ToTable("FieldOptionTranslations", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroup", b =>
@@ -511,7 +511,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientGroups");
+                    b.ToTable("ClientGroups", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroupTranslation", b =>
@@ -549,7 +549,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasIndex("ClientGroupId");
 
-                    b.ToTable("ClientGroupTranslations");
+                    b.ToTable("ClientGroupTranslations", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientsGroup", b =>
@@ -580,7 +580,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientsGroups");
+                    b.ToTable("ClientsGroups", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientAccountManager", b =>
@@ -620,7 +620,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientAccountManagers");
+                    b.ToTable("ClientAccountManagers", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientsAccountManagers", b =>
@@ -651,174 +651,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientsAccountManagers");
-                });
-
-            modelBuilder.Entity("Client.Api.Infrastructure.Notifications.Entities.ClientNotification", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateTimeSent")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ClientNotifications");
-                });
-
-            modelBuilder.Entity("Client.Api.Infrastructure.Notifications.Entities.ClientNotificationTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ClientNotificationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Language")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ClientNotificationsTranslations");
-                });
-
-            modelBuilder.Entity("Client.Api.Infrastructure.Notifications.Entities.ClientNotificationType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ClientNotificationTypes");
-                });
-
-            modelBuilder.Entity("Client.Api.Infrastructure.Notifications.Entities.ClientNotificationTypeApproval", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ApprovalDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ClientNotificationTypeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientNotificationTypeId")
-                        .IsUnique();
-
-                    b.ToTable("ClientNotificationTypeApprovals");
-                });
-
-            modelBuilder.Entity("Client.Api.Infrastructure.Notifications.Entities.ClientNotificationTypeTranslations", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ClientNotificationTypeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Language")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ClientNotificationTypeTranslations");
+                    b.ToTable("ClientsAccountManagers", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Roles.Entities.ClientRole", b =>
@@ -847,7 +680,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientRoles");
+                    b.ToTable("ClientRoles", (string)null);
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Clients.Entities.Address", b =>
@@ -908,17 +741,6 @@ namespace Client.Api.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Client.Api.Infrastructure.Notifications.Entities.ClientNotificationTypeApproval", b =>
-                {
-                    b.HasOne("Client.Api.Infrastructure.Notifications.Entities.ClientNotificationType", "ClientNotificationType")
-                        .WithOne("ClientNotificationTypeApproval")
-                        .HasForeignKey("Client.Api.Infrastructure.Notifications.Entities.ClientNotificationTypeApproval", "ClientNotificationTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ClientNotificationType");
-                });
-                
             modelBuilder.Entity("Client.Api.Infrastructure.Fields.ClientFieldValue", b =>
                 {
                     b.Navigation("Translation");
@@ -937,11 +759,6 @@ namespace Client.Api.Infrastructure.Migrations
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroup", b =>
                 {
                     b.Navigation("Translations");
-                });
-
-            modelBuilder.Entity("Client.Api.Infrastructure.Notifications.Entities.ClientNotificationType", b =>
-                {
-                    b.Navigation("ClientNotificationTypeApproval");
                 });
 #pragma warning restore 612, 618
         }

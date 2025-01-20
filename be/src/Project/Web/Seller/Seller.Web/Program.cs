@@ -91,7 +91,14 @@ builder.Services.AddControllersWithViews(options =>
 
 builder.Services.RegisterFoundationMediaDependencies();
 
-builder.Services.RegisterClientAccountDependencies(builder.Configuration, builder.Environment);
+if (builder.Configuration.GetValue<bool>("IntegrationTestsEnabled"))
+{
+    builder.Services.RegisterApiAccountDependencies(builder.Configuration);
+}
+else
+{
+    builder.Services.RegisterClientAccountDependencies(builder.Configuration, builder.Environment);
+}
 
 builder.Services.RegisterApiExtensionsDependencies();
 
@@ -203,9 +210,11 @@ app.MapHealthChecks("/hc", new HealthCheckOptions
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
-app.MapHealthChecks("/liveness", new HealthCheckOptions
+app.MapHealthChecks("/liveness", new HealthCheckOptions 
 {
     Predicate = r => r.Name.Contains("self")
 });
 
 app.Run();
+
+public partial class SellerWebProgram { }

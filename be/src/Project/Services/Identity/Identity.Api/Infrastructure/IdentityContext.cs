@@ -1,10 +1,9 @@
 ﻿using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.Infrastructure.Addresses.Entities;
+using Identity.Api.Infrastructure.Approvals.Entities;
 using Identity.Api.Infrastructure.Organisations.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Threading.Tasks;
 
 namespace Identity.Api.Infrastructure
 {
@@ -29,5 +28,8 @@ namespace Identity.Api.Infrastructure
         public DbSet<Address> Addresses { get; set; }
         public DbSet<OrganisationAddress> OrganisationAddreses { get; set; }
         public DbSet<OrganisationAppSecret> OrganisationAppSecrets { get; set; }
+        public DbSet<Approval> Approvals { get; set; }
+        public DbSet<ApprovalTranslation> ApprovalTranslations { get; set; }
+        public DbSet<UserApproval> UserApprovals { get; set; }
     }
 }

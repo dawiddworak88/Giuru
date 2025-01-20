@@ -726,9 +726,6 @@
   <data name="Street" xml:space="preserve">
     <value>Street</value>
   </data>
-  <data name="NotificationTypes" xml:space="preserve">
-    <value>Clients approvals</value>
-  </data>
   <data name="Value" xml:space="preserve">
     <value>Value</value>
   </data>
@@ -788,5 +785,11 @@
   </data>
   <data name="SeeMoreText" xml:space="preserve">
     <value>See more</value>
+  </data>
+  <data name="ApprovalNotFound" xml:space="preserve">
+    <value>Approval not found</value>
+  </data>
+  <data name="ClientApprovals" xml:space="preserve">
+    <value>Approvals</value>
   </data>
 </root>

@@ -37,6 +37,7 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
             {
                 ClientId = @event.ClientId,
                 ClientName = @event.ClientName,
+                ClientEmail = @event.ClientEmail,
                 SellerId = @event.SellerId,
                 BasketId = @event.BasketId,
                 BillingAddressId = @event.BillingAddressId,

@@ -36,6 +36,7 @@ using Buyer.Web.Shared.ModelBuilders.OrderItemStatusChanges;
 using Buyer.Web.Shared.Repositories.GraphQl;
 using Buyer.Web.Shared.ModelBuilders.NotificationBar;
 using Buyer.Web.Shared.ViewModels.NotificationBar;
+using Buyer.Web.Shared.Repositories.Identity;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -66,6 +67,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<ICatalogProductsRepository, CatalogProductsRepository>();
             services.AddScoped<IGraphQlRepository, GraphQlRepository>();
             services.AddScoped<IClientAddressesRepository, ClientAddressesRepository>();
+            services.AddScoped<IIdentityRepository, IdentityRepository>();
 
             // Services
             services.AddScoped<ICatalogService, CatalogService>();

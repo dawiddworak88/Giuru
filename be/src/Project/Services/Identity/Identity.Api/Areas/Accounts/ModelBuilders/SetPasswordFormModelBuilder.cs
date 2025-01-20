@@ -1,6 +1,5 @@
 ﻿using Feature.Account;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ComponentModels;
 using Identity.Api.Areas.Accounts.Definitions;
@@ -14,8 +13,10 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System.Globalization;
 using System.Threading.Tasks;
-using Identity.Api.Areas.Accounts.Models;
-using Identity.Api.Areas.Accounts.Repositories.ClientNotificationTypes;
+using System.Linq;
+using Identity.Api.Services.Approvals;
+using Identity.Api.ServicesModels.Approvals;
+using Foundation.GenericRepository.Paginations;
 
 namespace Identity.Api.Areas.Accounts.ModelBuilders
 {
@@ -25,26 +26,26 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<AccountResources> _accountLocalizer;
         private readonly LinkGenerator _linkGenerator;
-        private readonly IClientNotificationTypesRepository _clientNotificationTypeRepository;
         private readonly ITokenService _tokenService;
         private readonly IOptions<AppSettings> _options;
+        private readonly IApprovalsService _approvalsService;
 
         public SetPasswordFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer, 
             IStringLocalizer<AccountResources> accountLocalizer, 
             LinkGenerator linkGenerator,
             IUsersService usersService,
-            IClientNotificationTypesRepository clientNotificationTypeRepository,
             ITokenService tokenService,
-            IOptions<AppSettings> options)
+            IOptions<AppSettings> options,
+            IApprovalsService approvalsService)
         {
             _globalLocalizer = globalLocalizer;
             _accountLocalizer = accountLocalizer;
             _linkGenerator = linkGenerator;
             _usersService = usersService;
-            _clientNotificationTypeRepository = clientNotificationTypeRepository;
             _tokenService = tokenService;
             _options = options;
+            _approvalsService = approvalsService;
         }
 
         public async Task<SetPasswordFormViewModel> BuildModelAsync(SetPasswordFormComponentModel componentModel)
@@ -67,6 +68,24 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 MarketingApprovalText = _accountLocalizer.GetString("MarketingApprovalText")
             };
 
+            var getApprovalsServiceModel = new GetApprovalsServiceModel
+            {
+                SearchTerm = null,
+                PageIndex = PaginationConstants.DefaultPageIndex,
+                ItemsPerPage = PaginationConstants.DefaultPageSize,
+                OrderBy = null,
+                Language = CultureInfo.CurrentUICulture.Name,
+            };
+
+            var approvals = _approvalsService.Get(getApprovalsServiceModel);
+
+            viewModel.Approvals = approvals.Data.Where(x => x.Id == ApprovalsConstants.Marketing.InformationByEmail || x.Id == ApprovalsConstants.Marketing.InformationBySms)
+                .Select(x => new ApprovalViewModel 
+                { 
+                    Id = x.Id,
+                    Name = x.Name
+                });
+
             if (componentModel.Id.HasValue)
             {
                 var serviceModel = new GetUserServiceModel
@@ -84,13 +103,6 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             }
 
             var token = await _tokenService.GetTokenAsync(_options.Value.ApiEmail, _options.Value.ApiOrganisationId, _options.Value.ApiAppSecret);
-
-            var notificationTypes = await _clientNotificationTypeRepository.GetByIds(token, componentModel.Language, $"{ClientNotificationTypeConstants.SmsMarketingApprovalId},{ClientNotificationTypeConstants.EmailMarketingApprovalId}", null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientNotificationTypeApproval.CreatedDate)} desc");
-
-            if (notificationTypes is not null)
-            {
-                viewModel.NotificationTypes = notificationTypes;
-            }
             
             return viewModel;
         }

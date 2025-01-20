@@ -3,42 +3,51 @@ import "../areas/Products/pages/ProductPage/ProductPage.scss";
 import ProductPage from "../areas/Products/pages/ProductPage/ProductPage";
 import { header, breadcrumbs, mainNavigation, files, footer } from "./shared/Props";
 
-const images = [
+const mediaItems = [
   {
     imageSrc: "https://eltap.pl/upload/gallery/172/eridano-104080rgbjpg7311.jpg",
-    imageAlt: "Sectional"
+    imageAlt: "Sectional",
+    mimeType: "image"
   },
   {
     imageSrc: "https://eltap.pl/upload/gallery/65/zamowienie4berlin01soft11200000jpg3793.jpg",
-    imageAlt: "Sectional"
+    imageAlt: "Sectional",
+    mimeType: "image"
   },
   {
     imageSrc: "https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg",  
-    imageAlt: "Sectional"
+    imageAlt: "Sectional",
+    mimeType: "image"
   },
   {
     imageSrc: "https://eltap.pl/upload/gallery/172/eridano-104080rgbjpg7311.jpg",
-    imageAlt: "Sectional"
+    imageAlt: "Sectional",
+    mimeType: "image"
   },
   {
     imageSrc: "https://eltap.pl/upload/gallery/65/zamowienie4berlin01soft11200000jpg3793.jpg",
-    imageAlt: "Sectional"
+    imageAlt: "Sectional",
+    mimeType: "image"
   },
   {
     imageSrc: "https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg",  
-    imageAlt: "Sectional"
+    imageAlt: "Sectional",
+    mimeType: "image"
   },
   {
     imageSrc: "https://eltap.pl/upload/gallery/172/eridano-104080rgbjpg7311.jpg",
-    imageAlt: "Sectional"
+    imageAlt: "Sectional",
+    mimeType: "image"
   },
   {
     imageSrc: "https://eltap.pl/upload/gallery/65/zamowienie4berlin01soft11200000jpg3793.jpg",
-    imageAlt: "Sectional"
+    imageAlt: "Sectional",
+    mimeType: "image"
   },
   {
     imageSrc: "https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg",
-    imageAlt: "Sectional"
+    imageAlt: "Sectional",
+    mimeType: "image"
   }
 ];
 
@@ -63,7 +72,7 @@ function getFeatures(count) {
 var productDetail = {
     title: "Mounting Dream Tilt TV Wall Mount Bracket for Most 37-70 Inches TVs, TV Mount with VESA up to 600x400mm, Fits 16",
     isAuthenticated: true,
-    images,
+    mediaItems,
     signInUrl: "#",
     skuLabel: "SKU:",
     sku: "23829",
@@ -80,13 +89,15 @@ var productDetail = {
     expectedDelivery: new Date(),
     descriptionLabel: "Description:",
     description: "With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families. With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families. With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families.",
-    features: getFeatures(11),
+    features: getFeatures(4),
     files,
     basketLabel: "Add to cart",
     addedProduct: "Added",
     basketUrl: "#",
-    readMoreText: "See more",
-    readLessText: "See less",
+    readMoreText: "Read more",
+    readLessText: "Read less",
+    seeMoreText: "See more",
+    seeLessText: "See less",
     sidebar: {
       lackInformation: "Lack of information",
       toBasketLabel: "View cart",

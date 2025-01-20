@@ -264,8 +264,8 @@
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
   </data>
-  <data name="SuccessfullyCanceledOrder" xml:space="preserve">
-    <value>Successfully canceled order.</value>
+  <data name="SuccessfullyCancelledOrder" xml:space="preserve">
+    <value>Successfully cancelled order.</value>
   </data>
   <data name="StockQuantityLabel" xml:space="preserve">
     <value>Stock quantity:</value>
@@ -291,22 +291,22 @@
   <data name="oc_orderedProducts" xml:space="preserve">
     <value>Ordered products:</value>
   </data>
-  <data name="oc_name" xml:space="preserve">
+  <data name="sh_nameLabel" xml:space="preserve">
     <value>Name</value>
   </data>
   <data name="oc_text" xml:space="preserve">
     <value>We are pleased to inform you that your order has been confirmed.</value>
   </data>
-  <data name="oc_outletQuantity" xml:space="preserve">
+  <data name="sh_outletQuantityLabel" xml:space="preserve">
     <value>Outlet quantity</value>
   </data>
   <data name="oc_preheader" xml:space="preserve">
     <value>Order Approved: Check Transaction Details</value>
   </data>
-  <data name="oc_quantity" xml:space="preserve">
+  <data name="sh_quantityLabel" xml:space="preserve">
     <value>Quantity</value>
   </data>
-  <data name="oc_stockQuantity" xml:space="preserve">
+  <data name="sh_stockQuantityLabel" xml:space="preserve">
     <value>Stock quantity</value>
   </data>
   <data name="oc_subject" xml:space="preserve">
@@ -314,5 +314,35 @@
   </data>
   <data name="FromStockLabel" xml:space="preserve">
     <value>From stock</value>
+  </data>
+  <data name="co_clientNameLabel" xml:space="preserve">
+    <value>Client name</value>
+  </data>
+  <data name="co_subject" xml:space="preserve">
+    <value>The order has been cancelled</value>
+  </data>
+  <data name="co_preheader" xml:space="preserve">
+    <value>One of the clients cancelled the order.</value>
+  </data>
+  <data name="co_orderLinkLabel" xml:space="preserve">
+    <value>Order link</value>
+  </data>
+  <data name="co_cancelOrderItemsLabel" xml:space="preserve">
+    <value>Cancelled order items</value>
+  </data>
+  <data name="coi_subject" xml:space="preserve">
+    <value>The order item has been cancelled</value>
+  </data>
+  <data name="coi_preheader" xml:space="preserve">
+    <value>One of the customers cancelled an item in the order</value>
+  </data>
+  <data name="coi_cancelOrderItemLabel" xml:space="preserve">
+    <value>Cancelled product</value>
+  </data>
+  <data name="sh_clientNameLabel" xml:space="preserve">
+    <value>Client name</value>
+  </data>
+  <data name="sh_orderLinkLabel" xml:space="preserve">
+    <value>Order link</value>
   </data>
 </root>

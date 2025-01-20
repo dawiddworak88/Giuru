@@ -40,7 +40,7 @@ namespace Foundation.Account.DependencyInjection
         }
 
         public static void RegisterClientAccountDependencies(
-            this IServiceCollection services, 
+            this IServiceCollection services,
             IConfiguration configuration,
             IWebHostEnvironment environment)
         {
@@ -71,8 +71,8 @@ namespace Foundation.Account.DependencyInjection
                 options.ClientSecret = configuration["ClientSecret"];
                 options.ResponseType = "code";
 
-                options.TokenValidationParameters = new TokenValidationParameters 
-                { 
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
                     NameClaimType = ClaimTypes.Name,
                     RoleClaimType = JwtClaimTypes.Role
                 };
