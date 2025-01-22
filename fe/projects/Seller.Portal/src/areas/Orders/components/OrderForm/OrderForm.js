@@ -36,7 +36,6 @@ function OrderForm(props) {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
     const [disableSaveButton, setDisableSaveButton] = useState(false);
-    const [isStock, setIsStock] = useState(false);
 
     const onSuggestionsFetchRequested = (args) => {
 
@@ -66,7 +65,7 @@ function OrderForm(props) {
                         if (response.ok) {
                             setId(jsonResponse.id);
                             setSuggestions(() => []);
-                            setSuggestions(() => jsonResponse);
+                            setSuggestions(() => jsonResponse.data);
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -79,7 +78,6 @@ function OrderForm(props) {
     };
 
     const onSuggestionSelected = (event, { suggestion }) => {
-        setIsStock(suggestion.stockQuantity > 0)
         setProduct(suggestion);
     };
 
@@ -87,11 +85,6 @@ function OrderForm(props) {
 
         return "(" + suggestion.sku + ")" + " " + suggestion.name;
     };
-
-    const getProductStockQuantity = () => {
-        var items = orderItems.filter(x => x.sku === product.sku)
-        return items.reduce((sum, item) => sum + item.stockQuantity, 0);
-    }
 
     const handleAddOrderItemClick = () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -104,30 +97,6 @@ function OrderForm(props) {
             externalReference,
             moreInfo
         };
-
-        if (isStock) {
-            const itemsStockQuantity = getProductStockQuantity();
-        
-            if (orderItems.some(x => x.sku === product.sku)) {
-                if (itemsStockQuantity >= product.stockQuantity) {
-                    orderItem.quantity = quantity;
-                } else if (itemsStockQuantity + parseFloat(quantity) >= product.stockQuantity) {
-                    orderItem.quantity = quantity - (product.stockQuantity - itemsStockQuantity);
-                    orderItem.stockQuantity = quantity - orderItem.quantity;
-                } else {
-                    orderItem.stockQuantity = quantity;
-                }
-            } else {
-                if (quantity > product.stockQuantity) {
-                    orderItem.quantity = quantity - product.stockQuantity;
-                    orderItem.stockQuantity = product.stockQuantity;
-                } else {
-                    orderItem.stockQuantity = quantity;
-                }
-            }
-        } else {
-            orderItem.quantity = quantity;
-        }
 
         const basket = {
             id: basketId,
@@ -158,7 +127,6 @@ function OrderForm(props) {
                             setSearchTerm("");
                             setExternalReference("");
                             setQuantity(1);
-                            setIsStock(false);
                             setOrderItems(jsonResponse.items);
                         }
                         else {
@@ -523,17 +491,6 @@ function OrderForm(props) {
                                         setMoreInfo(e.target.value);
                                     }} />
                             </div>
-                            {product && product.stockQuantity > getProductStockQuantity() &&
-                                <div className="column is-2 is-flex is-align-items-flex-end">
-                                <FormControlLabel
-                                    control={<Checkbox 
-                                        checked={isStock}
-                                        onChange={() => setIsStock(!isStock)}
-                                    />}
-                                    label={props.fromStockLabel}
-                                />
-                            </div>
-                            }
                             <div className="column is-1 is-flex is-align-items-flex-end">
                                 <Button type="button" variant="contained" color="primary" onClick={handleAddOrderItemClick} disabled={state.isLoading || quantity < 1 || product === null}>
                                     {props.addText}
