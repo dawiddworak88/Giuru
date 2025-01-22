@@ -60,7 +60,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 QuantityLabel = _orderLocalizer.GetString("QuantityLabel"),
                 StockQuantityLabel = _orderLocalizer.GetString("StockQuantityLabel"),
                 OutletQuantityLabel = _orderLocalizer.GetString("OutletQuantityLabel"),
-                FromStockLabel = _orderLocalizer.GetString("FromStockLabel"),
                 ExternalReferenceLabel = _orderLocalizer.GetString("ExternalReferenceLabel"),
                 SkuLabel = _orderLocalizer.GetString("SkuLabel"),
                 GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
@@ -79,7 +78,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 ChangeDeliveryFromLabel = _orderLocalizer.GetString("ChangeDeliveryFrom"),
                 ChangeDeliveryToLabel = _orderLocalizer.GetString("ChangeDeliveryTo"),
                 OrdersUrl = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                SaveUrl = _linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 UploadOrderFileUrl = _linkGenerator.GetPathByAction("Index", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 ClearBasketText = _orderLocalizer.GetString("ClearBasketText"),
                 ClearBasketUrl = _linkGenerator.GetPathByAction("Delete", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
@@ -90,7 +88,9 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 DropOrSelectAttachmentsLabel = _globalLocalizer.GetString("DropOrSelectAttachments"),
                 SaveMediaUrl = _linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
-                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress")
+                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
+                MaximalLabel = _globalLocalizer.GetString("MaximalLabel"),
+                GetProductQuantitiesUrl = _linkGenerator.GetPathByAction("GetProductsQuantities", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             if (componentModel.BasketId.HasValue)

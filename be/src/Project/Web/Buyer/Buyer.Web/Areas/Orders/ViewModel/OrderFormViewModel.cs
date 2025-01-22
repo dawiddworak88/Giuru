@@ -27,7 +27,6 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string OrderItemsLabel { get; set; }
         public string ChangeDeliveryFromLabel { get; set; }
         public string ChangeDeliveryToLabel { get; set; }
-        public string FromStockLabel { get; set; }
         public string AddText { get; set; }
         public string OkLabel { get; set; }
         public string CancelLabel { get; set; }
@@ -53,8 +52,10 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string DropOrSelectAttachmentsLabel { get; set; }
         public string AttachmentsLabel { get; set; }
         public string SaveMediaUrl { get; set; }
+        public string GetProductQuantitiesUrl { get; set; }
         public string DeliveryAddressLabel { get; set; }
         public string BillingAddressLabel { get; set; }
+        public string MaximalLabel { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
         public Guid? DefaultBillingAddressId { get; set; }
         public IEnumerable<ListItemViewModel> ClientAddresses { get; set; }
