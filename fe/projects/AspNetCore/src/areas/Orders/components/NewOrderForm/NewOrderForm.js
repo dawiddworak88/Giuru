@@ -23,7 +23,11 @@ function NewOrderForm(props) {
     const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(0);
+    const [stockQuantity, setStockQuantity] = useState(0);
+    const [outletQuantity, setOutletQuantity] = useState(0);
+    const [maxStock, setMaxStock] = useState(0);
+    const [maxOutlet, setMaxOutlet] = useState(0);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
     const [orderItems, setOrderItems] = useState(props.basketItems ? props.basketItems : []);
@@ -72,8 +76,69 @@ function NewOrderForm(props) {
         }
     };
 
+    const setMaxStockOutletQuantity = (response, sku) => {
+        const items = orderItems.filter(item => item.sku === sku)
+
+        let maxStock = response.stockQuantity;
+        let maxOutlet = response.outletQuantity;
+
+        if (items.length > 0) {
+            maxStock = response.stockQuantity - items.reduce((sum, item) => sum + item.stockQuantity, 0);
+            maxOutlet = response.outletQuantity - items.reduce((sum, item) => sum + item.outletQuantity, 0);
+
+            setMaxStock(maxStock < 0 ? 0 : maxStock);
+            setMaxOutlet(maxOutlet < 0 ? 0 : maxOutlet);
+        }
+        else {
+            setMaxStock(maxStock);
+            setMaxOutlet(maxOutlet);
+        }
+
+        if (maxStock > 0) {
+            setStockQuantity(1);
+        }
+        else if (maxOutlet > 0) {
+            setOutletQuantity(1)
+        }
+        else {
+            setQuantity(1)
+        }
+    }
+
     const onSuggestionSelected = (event, { suggestion }) => {
         setProduct(suggestion);
+        setMaxStock(0);
+        setMaxOutlet(0);
+        setQuantity(0);
+        setStockQuantity(0);
+        setOutletQuantity(0);
+
+        const searchParameters = {
+            id: suggestion.id
+        };
+
+        const requestOptions = {
+            method: "GET",
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
+        }
+
+        const url = props.getProductQuantitiesUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+
+        fetch(url, requestOptions)
+            .then((response) => {
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setMaxStockOutletQuantity(jsonResponse, suggestion.sku);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                })
+            }).catch(() => {
+                toast.error(props.generalErrorMessage);
+            })
     };
 
     const getProductSuggestionValue = (suggestion) => {
@@ -88,6 +153,9 @@ function NewOrderForm(props) {
             sku: product.sku,
             name: product.name,
             imageId: product.images ? product.images[0] : null,
+            quantity: quantity,
+            stockQuantity: stockQuantity,
+            outletQuantity: outletQuantity,
             externalReference,
             moreInfo
         };
@@ -118,7 +186,11 @@ function NewOrderForm(props) {
                             setProduct(null);
                             setSearchTerm("");
                             setExternalReference("");
-                            setQuantity(1);
+                            setQuantity(0);
+                            setStockQuantity(0);
+                            setOutletQuantity(0);
+                            setMaxStock(0);
+                            setMaxOutlet(0);
                             setOrderItems(jsonResponse.items);
                         }
                         else {
@@ -397,10 +469,35 @@ function NewOrderForm(props) {
                             />
                         </div>
                         <div className="column is-1 is-flex is-align-items-flex-end">
-                            <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "1", step: "1" }} variant="standard"
-                                label={props.quantityLabel} fullWidth={true} value={quantity} onChange={(e) => {
+                            <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
+                                label={props.quantityLabel} fullWidth={true} disabled={product == null} value={quantity} onChange={(e) => {
                                     e.preventDefault();
                                     setQuantity(e.target.value);
+                                }}
+                            />
+                        </div>
+                        <div className="column is-2 is-flex is-align-items-flex-end">
+                            <TextField id="stockQuantity" name="stockQuantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
+                                label={props.stockQuantityLabel + " (" + props.maximalLabel + " " + maxStock + ")"}
+                                fullWidth={true} disabled={product == null || maxStock == 0} value={stockQuantity} onChange={(e) => {
+                                    e.preventDefault();
+                                    const value = e.target.value
+                                    if (value >= 0) {
+                                        setStockQuantity(value > maxStock ? maxStock : value);
+                                    }
+                                    else setStockQuantity(0);
+                                }}
+                            />
+                        </div>
+                        <div className="column is-2 is-flex is-align-items-flex-end">
+                            <TextField id="outletQuantity" name="outletQuantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
+                                label={props.outletQuantityLabel + " (" + props.maximalLabel + " " + maxOutlet + ")"}
+                                fullWidth={true} disabled={product == null || maxOutlet == 0} value={outletQuantity} onChange={(e) => {
+                                    e.preventDefault();
+                                    const value = e.target.value
+                                    if (value >= 0) {
+                                        setOutletQuantity(value > maxOutlet ? maxOutlet : value);
+                                    } else setOutletQuantity(0);
                                 }}
                             />
                         </div>
@@ -420,7 +517,9 @@ function NewOrderForm(props) {
                                 }} />
                         </div>
                         <div className="column is-1 is-flex is-align-items-flex-end">
-                            <Button type="button" variant="contained" color="primary" onClick={handleAddOrderItemClick} disabled={state.isLoading || quantity < 1 || product === null}>
+                            <Button type="button" variant="contained" color="primary" onClick={handleAddOrderItemClick}
+                                disabled={state.isLoading || !(quantity + stockQuantity + outletQuantity > 0 && product !== null)}
+                            >
                                 {props.addText}
                             </Button>
                         </div>
@@ -583,6 +682,8 @@ NewOrderForm.propTypes = {
     skuLabel: PropTypes.string.isRequired,
     nameLabel: PropTypes.string.isRequired,
     quantityLabel: PropTypes.string.isRequired,
+    stockQuantityLabel: PropTypes.string.isRequired,
+    outletQuantityLabel: PropTypes.string.isRequired,
     externalReferenceLabel: PropTypes.string.isRequired,
     moreInfoLabel: PropTypes.string.isRequired,
     getSuggestionsUrl: PropTypes.string.isRequired,
@@ -590,7 +691,6 @@ NewOrderForm.propTypes = {
     generalErrorMessage: PropTypes.string.isRequired,
     addText: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
-    saveUrl: PropTypes.string.isRequired,
     noOrderItemsLabel: PropTypes.string.isRequired,
     okLabel: PropTypes.string.isRequired,
     cancelLabel: PropTypes.string.isRequired,
