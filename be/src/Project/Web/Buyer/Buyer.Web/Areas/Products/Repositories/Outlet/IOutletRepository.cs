@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Outlet.DomainModels;
-using Buyer.Web.Areas.Products.DomainModels;
+﻿using Buyer.Web.Areas.Products.DomainModels;
 using Foundation.GenericRepository.Paginations;
 using System;
 using System.Collections.Generic;
@@ -11,5 +10,6 @@ namespace Buyer.Web.Areas.Products.Repositories
     {
         Task<PagedResults<IEnumerable<OutletSum>>> GetOutletProductsAsync(string language, int pageIndex, int itemsPerPage, string token);
         Task<IEnumerable<OutletSum>> GetOutletProductsByIdsAsync(string token, string language, IEnumerable<Guid> ids);
+        Task<OutletSum> GetOutletProductByProductIdAsync(string token, string language, Guid id);
     }
 }

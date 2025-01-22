@@ -27,6 +27,31 @@ namespace Buyer.Web.Areas.Products.Repositories
             _settings = settgins;
         }
 
+        public async Task<OutletSum> GetOutletProductByProductIdAsync(string token, string language, Guid id)
+        {
+            var apiRequst = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.ProductOutletApiEndpoint}/product/{id}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OutletSum>(apiRequst);
+
+            if (response.IsSuccessStatusCode is false)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data is not null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
+
         public async Task<PagedResults<IEnumerable<OutletSum>>> GetOutletProductsAsync(string language, int pageIndex, int itemsPerPage, string token)
         {
             var requestModel = new PagedRequestModelBase
