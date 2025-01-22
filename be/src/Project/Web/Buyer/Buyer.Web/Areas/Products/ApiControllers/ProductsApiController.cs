@@ -246,26 +246,30 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
             var responseModel = new ProductQuantitiesResponseModel();
 
-            var inventory = await _inventoryRepository.GetAvailbleProductsInventory(
+            var inventories = await _inventoryRepository.GetAvailbleProductsInventory(
                 language,
                 PaginationConstants.DefaultPageIndex,
                 PaginationConstants.DefaultPageSize,
                 token);
 
-            if (inventory.Data.Any(x => x.ProductId == id))
+            var inventory = inventories.Data.FirstOrDefault(x => x.ProductId == id);
+
+            if (inventory is not null)
             {
-                responseModel.StockQuantity = inventory.Data.First(x => x.ProductId == id).AvailableQuantity;
+                responseModel.StockQuantity = inventory.AvailableQuantity;
             }
 
-            var outlet = await _outletRepository.GetOutletProductsAsync(
+            var outlets = await _outletRepository.GetOutletProductsAsync(
                 language,
                 PaginationConstants.DefaultPageIndex,
                 PaginationConstants.DefaultPageSize,
                 token);
 
-            if (outlet.Data.Any(x => x.ProductId == id))
+            var outlet = outlets.Data.FirstOrDefault(x => x.ProductId == id);
+
+            if (outlet is not null)
             {
-                responseModel.OutletQuantity = outlet.Data.First(x => x.ProductId == id).AvailableQuantity;
+                responseModel.OutletQuantity = outlet.AvailableQuantity;
             }
 
             return StatusCode((int)HttpStatusCode.OK, responseModel);
