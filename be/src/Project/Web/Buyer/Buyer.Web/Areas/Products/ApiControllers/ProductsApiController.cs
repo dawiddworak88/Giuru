@@ -249,7 +249,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             var inventories = await _inventoryRepository.GetAvailbleProductsInventory(
                 language,
                 PaginationConstants.DefaultPageIndex,
-                PaginationConstants.DefaultPageSize,
+                1000,
                 token);
 
             var inventory = inventories.Data.FirstOrDefault(x => x.ProductId == id);
@@ -262,7 +262,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             var outlets = await _outletRepository.GetOutletProductsAsync(
                 language,
                 PaginationConstants.DefaultPageIndex,
-                PaginationConstants.DefaultPageSize,
+                1000,
                 token);
 
             var outlet = outlets.Data.FirstOrDefault(x => x.ProductId == id);
