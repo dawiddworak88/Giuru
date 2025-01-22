@@ -186,6 +186,7 @@ function NewOrderForm(props) {
                             setProduct(null);
                             setSearchTerm("");
                             setExternalReference("");
+                            setMoreInfo("");
                             setQuantity(0);
                             setStockQuantity(0);
                             setOutletQuantity(0);
