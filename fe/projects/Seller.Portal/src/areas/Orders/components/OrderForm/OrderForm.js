@@ -151,7 +151,7 @@ function OrderForm(props) {
 
     const getProductSuggestionValue = (suggestion) => {
 
-        return "(" + suggestion.sku + ")" + " " + suggestion.name;
+        return suggestion.name;
     };
 
     const handleAddOrderItemClick = () => {
@@ -197,6 +197,7 @@ function OrderForm(props) {
                             setProduct(null);
                             setSearchTerm("");
                             setExternalReference("");
+                            setMoreInfo("");
                             resetMaxAndQuantityValues();
                             setOrderItems(jsonResponse.items);
                         }
