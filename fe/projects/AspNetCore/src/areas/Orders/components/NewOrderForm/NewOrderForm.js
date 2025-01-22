@@ -105,13 +105,17 @@ function NewOrderForm(props) {
         }
     }
 
-    const onSuggestionSelected = (event, { suggestion }) => {
-        setProduct(suggestion);
-        setMaxStock(0);
-        setMaxOutlet(0);
+    const resetMaxAndQuantityValues = () => {
         setQuantity(0);
         setStockQuantity(0);
         setOutletQuantity(0);
+        setMaxStock(0);
+        setMaxOutlet(0);
+    }
+
+    const onSuggestionSelected = (event, { suggestion }) => {
+        setProduct(suggestion);
+        resetMaxAndQuantityValues();
 
         const searchParameters = {
             id: suggestion.id
@@ -187,11 +191,7 @@ function NewOrderForm(props) {
                             setSearchTerm("");
                             setExternalReference("");
                             setMoreInfo("");
-                            setQuantity(0);
-                            setStockQuantity(0);
-                            setOutletQuantity(0);
-                            setMaxStock(0);
-                            setMaxOutlet(0);
+                            resetMaxAndQuantityValues();
                             setOrderItems(jsonResponse.items);
                         }
                         else {
