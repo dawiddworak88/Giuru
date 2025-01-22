@@ -150,7 +150,6 @@ function OrderForm(props) {
     };
 
     const getProductSuggestionValue = (suggestion) => {
-
         return suggestion.name;
     };
 
