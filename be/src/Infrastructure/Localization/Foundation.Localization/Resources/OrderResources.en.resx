@@ -312,9 +312,6 @@
   <data name="oc_subject" xml:space="preserve">
     <value>Order Confirm</value>
   </data>
-  <data name="FromStockLabel" xml:space="preserve">
-    <value>From stock</value>
-  </data>
   <data name="co_clientNameLabel" xml:space="preserve">
     <value>Client name</value>
   </data>
