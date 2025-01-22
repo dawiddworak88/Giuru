@@ -109,30 +109,20 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
             var responseModel = new ProductQuantitiesResponseModel();
 
-            var inventories = await _inventoryRepository.GetInventoryProductsAsync(
+            var inventory = await _inventoryRepository.GetInventoryProductByProductIdAsync(
                 token,
                 language,
-                null,
-                PaginationConstants.DefaultPageIndex,
-                PaginationConstants.DefaultPageSize,
-                null);
-
-            var inventory = inventories.Data.FirstOrDefault(x => x.ProductId == id);
+                id);
 
             if (inventory is not null)
             {
                 responseModel.StockQuantity = inventory.AvailableQuantity;
             }
 
-            var outlets = await _outletRepository.GetAsync(
+            var outlet = await _outletRepository.GetOutletItemByProductIdAsync(
                 token,
                 language,
-                null,
-                PaginationConstants.DefaultPageIndex,
-                PaginationConstants.DefaultPageSize,
-                null);
-
-            var outlet = outlets.Data.FirstOrDefault(x => x.ProductId == id);
+                id);
 
             if (outlet is not null)
             {
