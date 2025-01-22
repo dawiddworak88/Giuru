@@ -7,11 +7,9 @@ using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.DomainModels.Media;
 using Buyer.Web.Shared.Repositories.Media;
-using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
-using Foundation.Extensions.Helpers;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.Media.Services.MediaServices;
@@ -238,6 +236,39 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             };
 
             return StatusCode((int)HttpStatusCode.OK, pagedFiles);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProductsQuantities(Guid id)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            var responseModel = new ProductQuantitiesResponseModel();
+
+            var inventory = await _inventoryRepository.GetAvailbleProductsInventory(
+                language,
+                PaginationConstants.DefaultPageIndex,
+                PaginationConstants.DefaultPageSize,
+                token);
+
+            if (inventory.Data.Any(x => x.ProductId == id))
+            {
+                responseModel.StockQuantity = inventory.Data.First(x => x.ProductId == id).AvailableQuantity;
+            }
+
+            var outlet = await _outletRepository.GetOutletProductsAsync(
+                language,
+                PaginationConstants.DefaultPageIndex,
+                PaginationConstants.DefaultPageSize,
+                token);
+
+            if (outlet.Data.Any(x => x.ProductId == id))
+            {
+                responseModel.OutletQuantity = outlet.Data.First(x => x.ProductId == id).AvailableQuantity;
+            }
+
+            return StatusCode((int)HttpStatusCode.OK, responseModel);
         }
     } 
 }
