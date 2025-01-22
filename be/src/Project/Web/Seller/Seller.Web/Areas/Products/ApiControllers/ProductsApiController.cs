@@ -15,9 +15,10 @@ using Foundation.Account.Definitions;
 using Foundation.Extensions.Helpers;
 using Seller.Web.Areas.Shared.Repositories.Products;
 using Seller.Web.Areas.Inventory.Repositories.Inventories;
-using System.Collections.Generic;
-using Seller.Web.Areas.Products.ApiResponseModels;
 using Foundation.Extensions.ExtensionMethods;
+using Seller.Web.Areas.Inventory.Repositories;
+using Seller.Web.Areas.Products.ApiResponseModels;
+using Foundation.GenericRepository.Paginations;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
@@ -26,13 +27,19 @@ namespace Seller.Web.Areas.Clients.ApiControllers
     {
         private readonly IProductsRepository _productsRepository;
         private readonly IStringLocalizer _productLocalizer;
+        private readonly IInventoryRepository _inventoryRepository;
+        private readonly IOutletRepository _outletRepository;
 
         public ProductsApiController(
             IProductsRepository productsRepository,
-            IStringLocalizer<ProductResources> productLocalizer)
+            IStringLocalizer<ProductResources> productLocalizer,
+            IInventoryRepository inventoryRepository,
+            IOutletRepository outletRepository)
         {
             _productsRepository = productsRepository;
             _productLocalizer = productLocalizer;
+            _inventoryRepository = inventoryRepository;
+            _outletRepository = outletRepository;
         }
 
         [HttpGet]
@@ -92,6 +99,47 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 id);
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = _productLocalizer.GetString("ProductDeletedSuccessfully").Value });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetQuantities(Guid id)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            var responseModel = new ProductQuantitiesResponseModel();
+
+            var inventories = await _inventoryRepository.GetInventoryProductsAsync(
+                token,
+                language,
+                null,
+                PaginationConstants.DefaultPageIndex,
+                PaginationConstants.DefaultPageSize,
+                null);
+
+            var inventory = inventories.Data.FirstOrDefault(x => x.ProductId == id);
+
+            if (inventory is not null)
+            {
+                responseModel.StockQuantity = inventory.AvailableQuantity;
+            }
+
+            var outlets = await _outletRepository.GetAsync(
+                token,
+                language,
+                null,
+                PaginationConstants.DefaultPageIndex,
+                PaginationConstants.DefaultPageSize,
+                null);
+
+            var outlet = outlets.Data.FirstOrDefault(x => x.ProductId == id);
+
+            if (outlet is not null)
+            {
+                responseModel.OutletQuantity = outlet.AvailableQuantity;
+            }
+
+            return StatusCode((int)HttpStatusCode.OK, responseModel);
         }
     }
 }
