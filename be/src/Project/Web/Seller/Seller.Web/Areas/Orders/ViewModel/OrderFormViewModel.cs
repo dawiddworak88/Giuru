@@ -44,7 +44,9 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string DropFilesLabel { get; set; }
         public string DeliveryAddressLabel { get; set; }
         public string BillingAddressLabel { get; set; }
+        public string MaximalLabel { get; set; }
         public string GetClientAddressesUrl { get; set; }
+        public string GetProductQuantitiesUrl { get; set; }
         public int DefaultItemsPerPage { get; set; }
     }
 }

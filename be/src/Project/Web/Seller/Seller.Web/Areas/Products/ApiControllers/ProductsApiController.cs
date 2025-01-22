@@ -102,7 +102,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetQuantities(Guid id)
+        public async Task<IActionResult> GetProductsQuantities(Guid id)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
