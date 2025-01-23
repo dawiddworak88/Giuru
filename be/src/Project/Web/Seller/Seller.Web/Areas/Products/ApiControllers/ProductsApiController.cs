@@ -18,7 +18,6 @@ using Seller.Web.Areas.Inventory.Repositories.Inventories;
 using Foundation.Extensions.ExtensionMethods;
 using Seller.Web.Areas.Inventory.Repositories;
 using Seller.Web.Areas.Products.ApiResponseModels;
-using Foundation.GenericRepository.Paginations;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
