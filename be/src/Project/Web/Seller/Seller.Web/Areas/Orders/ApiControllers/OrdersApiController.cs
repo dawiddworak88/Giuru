@@ -36,6 +36,6 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 $"{nameof(Order.CreatedDate)} desc");
 
             return StatusCode((int)HttpStatusCode.OK, orders);
-        }        
+        }
     }
 }
