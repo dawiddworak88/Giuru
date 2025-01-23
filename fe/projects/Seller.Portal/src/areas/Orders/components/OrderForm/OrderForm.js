@@ -161,9 +161,9 @@ function OrderForm(props) {
             sku: product.sku,
             name: product.name,
             imageId: product.images ? product.images[0] : null,
-            quantity: quantity,
-            stockQuantity: stockQuantity,
-            outletQuantity: outletQuantity,
+            quantity: quantity ? quantity : 0,
+            stockQuantity: stockQuantity ? stockQuantity : 0,
+            outletQuantity: outletQuantity ? outletQuantity : 0,
             externalReference,
             moreInfo
         };
