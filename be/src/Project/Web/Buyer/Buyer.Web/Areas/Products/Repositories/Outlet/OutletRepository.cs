@@ -29,7 +29,7 @@ namespace Buyer.Web.Areas.Products.Repositories
 
         public async Task<OutletSum> GetOutletProductByProductIdAsync(string token, string language, Guid id)
         {
-            var apiRequst = new ApiRequest<RequestModelBase>
+            var apiRequest = new ApiRequest<RequestModelBase>
             {
                 Language = language,
                 Data = new RequestModelBase(),
@@ -37,7 +37,7 @@ namespace Buyer.Web.Areas.Products.Repositories
                 EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletApiEndpoint}/product/{id}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OutletSum>(apiRequst);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OutletSum>(apiRequest);
 
             if (response.IsSuccessStatusCode is false)
             {
