@@ -35,7 +35,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Inventory.InventoryApiEndpoint}/product/{id}"
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Inventory.InventoryProductApiEndpoint}/{id}"
             };
 
             var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, InventorySum>(apiRequest);
