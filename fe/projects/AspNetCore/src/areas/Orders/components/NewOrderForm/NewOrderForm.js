@@ -79,20 +79,11 @@ function NewOrderForm(props) {
     const setMaxStockOutletQuantity = (response, sku) => {
         const items = orderItems.filter(item => item.sku === sku)
 
-        let maxStock = response.stockQuantity;
-        let maxOutlet = response.outletQuantity;
+        const totalStockUsed = items.reduce((sum, item) => sum + item.stockQuantity, 0);
+        const totalOutletUsed = items.reduce((sum, item) => sum + item.outletQuantity, 0);
 
-        if (items.length > 0) {
-            maxStock = response.stockQuantity - items.reduce((sum, item) => sum + item.stockQuantity, 0);
-            maxOutlet = response.outletQuantity - items.reduce((sum, item) => sum + item.outletQuantity, 0);
-
-            setMaxStock(maxStock < 0 ? 0 : maxStock);
-            setMaxOutlet(maxOutlet < 0 ? 0 : maxOutlet);
-        }
-        else {
-            setMaxStock(maxStock);
-            setMaxOutlet(maxOutlet);
-        }
+        setMaxStock(Math.max(0, response.stockQuantity - totalStockUsed ));
+        setMaxOutlet(Math.max(0, response.outletQuantity - totalOutletUsed));
 
         if (maxStock > 0) {
             setStockQuantity(1);
@@ -103,7 +94,7 @@ function NewOrderForm(props) {
         else {
             setQuantity(1)
         }
-    }
+    };
 
     const resetMaxAndQuantityValues = () => {
         setQuantity(0);
@@ -111,7 +102,7 @@ function NewOrderForm(props) {
         setOutletQuantity(0);
         setMaxStock(0);
         setMaxOutlet(0);
-    }
+    };
 
     const onSuggestionSelected = (event, { suggestion }) => {
         setProduct(suggestion);
