@@ -74,12 +74,14 @@
         {
             public static readonly string WarehousesApiEndpoint = "/api/v1/warehouse";
             public static readonly string InventoryApiEndpoint = "/api/v1/inventory";
+            public static readonly string InventoryProductApiEndpoint = "/api/v1/inventory/product";
             public static readonly string AvailableProductsApiEndpoint = "/api/v1/inventory/availableproducts";
         }
 
         public struct Outlet
         {
             public static readonly string OutletApiEndpoint = "/api/v1/outlet";
+            public static readonly string OutletProductApiEndpoint = "/api/v1/outlet/product";
             public static readonly string AvailableOutletProductsApiEndpoint = "/api/v1/outlet/availableproducts";
             public static readonly string ProductOutletApiEndpoint = "/api/v1/outlet/product";
         }
