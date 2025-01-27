@@ -214,3 +214,5 @@ app.MapHealthChecks("/liveness", new HealthCheckOptions
 });
 
 app.Run();
+
+public partial class BuyerWebProgram { }
