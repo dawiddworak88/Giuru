@@ -90,7 +90,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
                 MaximalLabel = _globalLocalizer.GetString("MaximalLabel"),
-                GetProductQuantitiesUrl = _linkGenerator.GetPathByAction("GetProductsQuantities", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                GetProductQuantitiesUrl = _linkGenerator.GetPathByAction("GetProductQuantities", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             if (componentModel.BasketId.HasValue)

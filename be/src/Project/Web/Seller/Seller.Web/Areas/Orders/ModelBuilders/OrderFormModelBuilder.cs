@@ -76,7 +76,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
                 DefaultItemsPerPage = Constants.DefaultItemsPerPage,
                 MaximalLabel = _globalLocalizer.GetString("MaximalLabel"),
-                GetProductQuantitiesUrl = _linkGenerator.GetPathByAction("GetProductsQuantities", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                GetProductQuantitiesUrl = _linkGenerator.GetPathByAction("GetProductQuantities", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var clients = await _clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);
