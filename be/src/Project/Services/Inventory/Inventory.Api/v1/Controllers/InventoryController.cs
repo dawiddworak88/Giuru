@@ -439,7 +439,6 @@ namespace Inventory.Api.v1.Controllers
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
-
         /// <summary>
         /// Gets a products inventories by products ids.
         /// </summary>
@@ -467,22 +466,19 @@ namespace Inventory.Api.v1.Controllers
             {
                 var inventories = _inventoriesService.GetInventoriesByProductsIds(serviceModel);
 
-                if (inventories is not null)
+                var response = inventories.Select(x => new InventorySumResponseModel
                 {
-                    var response = inventories.Select(x => new InventorySumResponseModel
-                    {
-                        ProductId = x.ProductId,
-                        AvailableQuantity = x.AvailableQuantity,
-                        Quantity = x.Quantity,
-                        Ean = x.ProductEan,
-                        ProductName = x.ProductName,
-                        ProductSku = x.ProductSku,
-                        RestockableInDays = x.RestockableInDays,
-                        ExpectedDelivery = x.ExpectedDelivery
-                    });
+                    ProductId = x.ProductId,
+                    AvailableQuantity = x.AvailableQuantity,
+                    Quantity = x.Quantity,
+                    Ean = x.ProductEan,
+                    ProductName = x.ProductName,
+                    ProductSku = x.ProductSku,
+                    RestockableInDays = x.RestockableInDays,
+                    ExpectedDelivery = x.ExpectedDelivery
+                });
 
-                    return StatusCode((int)HttpStatusCode.OK, response);
-                }
+                return StatusCode((int)HttpStatusCode.OK, response);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
