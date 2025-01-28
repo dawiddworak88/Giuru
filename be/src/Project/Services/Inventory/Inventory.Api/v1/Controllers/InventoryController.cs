@@ -18,7 +18,6 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Inventory.Api.v1.Controllers
@@ -467,8 +466,6 @@ namespace Inventory.Api.v1.Controllers
             if (validationResult.IsValid)
             {
                 var inventories = _inventoriesService.GetInventoriesByProductsIds(serviceModel);
-
-                Console.WriteLine(JsonSerializer.Serialize(inventories));
 
                 if (inventories is not null)
                 {
