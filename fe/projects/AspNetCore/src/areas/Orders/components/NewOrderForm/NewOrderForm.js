@@ -76,14 +76,9 @@ function NewOrderForm(props) {
         }
     };
 
-    const setMaxStockOutletQuantity = (response, sku) => {
-        const items = orderItems.filter(item => item.sku === sku)
-
-        const totalStockUsed = items.reduce((sum, item) => sum + item.stockQuantity, 0);
-        const totalOutletUsed = items.reduce((sum, item) => sum + item.outletQuantity, 0);
-
-        setMaxStock(Math.max(0, response.stockQuantity - totalStockUsed ));
-        setMaxOutlet(Math.max(0, response.outletQuantity - totalOutletUsed));
+    const setMaxStockOutletQuantity = (response) => {
+        setMaxStock(response.stockQuantity);
+        setMaxOutlet(response.outletQuantity);
 
         if (maxStock > 0) {
             setStockQuantity(1);
@@ -109,12 +104,13 @@ function NewOrderForm(props) {
         resetMaxAndQuantityValues();
 
         const searchParameters = {
-            id: suggestion.id
+            id: suggestion.id,
         };
 
         const requestOptions = {
-            method: "GET",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+            body: JSON.stringify(orderItems.filter(item => item.sku === suggestion.sku))
         }
 
         const url = props.getProductQuantitiesUrl + "?" + QueryStringSerializer.serialize(searchParameters);
@@ -125,7 +121,7 @@ function NewOrderForm(props) {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        setMaxStockOutletQuantity(jsonResponse, suggestion.sku);
+                        setMaxStockOutletQuantity(jsonResponse);
                     }
                     else {
                         toast.error(props.generalErrorMessage);

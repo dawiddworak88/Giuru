@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Products.ApiResponseModels;
+﻿using Buyer.Web.Areas.Orders.DomainModels;
+using Buyer.Web.Areas.Products.ApiResponseModels;
 using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
@@ -26,6 +27,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.ApiControllers
@@ -238,8 +240,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             return StatusCode((int)HttpStatusCode.OK, pagedFiles);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetProductQuantities(Guid id)
+        [HttpPost]
+        public async Task<IActionResult> GetProductQuantities(Guid id, [FromBody] List<BasketItem> items)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
@@ -253,7 +255,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
             if (inventory is not null)
             {
-                responseModel.StockQuantity = inventory.AvailableQuantity;
+                responseModel.StockQuantity = inventory.AvailableQuantity - items.Sum(x => x.StockQuantity);
             }
 
             var outlet = await _outletRepository.GetOutletProductByProductIdAsync(
@@ -263,7 +265,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
             if (outlet is not null)
             {
-                responseModel.OutletQuantity = outlet.AvailableQuantity;
+                responseModel.OutletQuantity = outlet.AvailableQuantity - items.Sum(x => x.OutletQuantity);
             }
 
             return StatusCode((int)HttpStatusCode.OK, responseModel);
