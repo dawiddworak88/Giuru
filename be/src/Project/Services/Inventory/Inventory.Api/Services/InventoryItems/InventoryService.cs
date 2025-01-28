@@ -4,7 +4,6 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
-using IdentityServer4.Services;
 using Inventory.Api.Infrastructure;
 using Inventory.Api.Infrastructure.Entities;
 using Inventory.Api.ServicesModels.InventoryServiceModels;

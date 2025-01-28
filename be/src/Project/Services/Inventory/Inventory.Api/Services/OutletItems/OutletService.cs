@@ -6,7 +6,6 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Inventory.Api.Infrastructure;
 using Inventory.Api.Infrastructure.Entities;
-using Inventory.Api.ServicesModels.InventoryServiceModels;
 using Inventory.Api.ServicesModels.OutletServiceModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
