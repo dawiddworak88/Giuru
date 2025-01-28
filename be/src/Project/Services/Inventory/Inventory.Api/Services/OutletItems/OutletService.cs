@@ -6,6 +6,7 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Inventory.Api.Infrastructure;
 using Inventory.Api.Infrastructure.Entities;
+using Inventory.Api.ServicesModels.InventoryServiceModels;
 using Inventory.Api.ServicesModels.OutletServiceModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -523,6 +524,26 @@ namespace Inventory.Api.Services.OutletItems
 
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public IEnumerable<OutletSumServiceModel> GetOutletsByProductsIds(GetOutletsByProductsIdsServiceModel model)
+        {
+            return from o in _context.Outlet
+                   join warehouse in _context.Warehouses on o.WarehouseId equals warehouse.Id
+                   join product in _context.Products on o.ProductId equals product.Id
+                   join ot in _context.OutletTranslations on o.Id equals ot.OutletItemId
+                   where model.Ids.Contains(o.ProductId) && product.IsActive && o.IsActive
+                   select new OutletSumServiceModel
+                   {
+                       ProductId = product.Id,
+                       ProductName = product.Name,
+                       ProductEan = product.Ean,
+                       ProductSku = product.Sku,
+                       Title = ot.Title,
+                       Description = ot.Description,
+                       Quantity = o.Quantity,
+                       AvailableQuantity = o.AvailableQuantity,
+                   };
         }
     }
 }
