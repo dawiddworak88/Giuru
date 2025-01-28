@@ -437,12 +437,17 @@ namespace Outlet.Api.v1.Controllers
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
+        /// <summary>
+        /// Gets a products outles by products ids.
+        /// </summary>
+        /// <param name="ids">The products ids.</param>
+        /// <returns>The list of products outles.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("product/ids/{ids}")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetOutlertsByProductsIds(string ids)
+        public async Task<IActionResult> GetOutletsByProductsIds(string ids)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
