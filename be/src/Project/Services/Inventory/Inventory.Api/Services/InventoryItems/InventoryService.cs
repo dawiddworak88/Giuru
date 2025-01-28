@@ -4,6 +4,7 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
+using IdentityServer4.Services;
 using Inventory.Api.Infrastructure;
 using Inventory.Api.Infrastructure.Entities;
 using Inventory.Api.ServicesModels.InventoryServiceModels;
@@ -331,7 +332,7 @@ namespace Inventory.Api.Services.InventoryItems
                 return inventorySum;
             }
 
-            return default;                
+            return default;
         }
 
         public async Task<InventorySumServiceModel> GetInventoryByProductSku(GetInventoryByProductSkuServiceModel model)
@@ -474,6 +475,24 @@ namespace Inventory.Api.Services.InventoryItems
 
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public IEnumerable<InventorySumServiceModel> GetInventoriesByProductsIds(GetInventoriesByProductsIdsServiceModel model)
+        {
+            return from i in _context.Inventory
+                   join warehouse in _context.Warehouses on i.WarehouseId equals warehouse.Id
+                   join product in _context.Products on i.ProductId equals product.Id
+                   where model.Ids.Contains(i.ProductId) && product.IsActive && i.IsActive
+                   select new InventorySumServiceModel
+                   {
+                       ProductId = product.Id,
+                       ProductName = product.Name,
+                       ProductEan = product.Ean,
+                       Quantity = i.Quantity,
+                       AvailableQuantity = i.AvailableQuantity,
+                       RestockableInDays = i.RestockableInDays,
+                       ExpectedDelivery = i.ExpectedDelivery,
+                   };
         }
     }
 }
