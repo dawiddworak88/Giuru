@@ -439,6 +439,50 @@ namespace Inventory.Api.v1.Controllers
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
+        /// <summary>
+        /// Gets a products inventories by products ids.
+        /// </summary>
+        /// <param name="ids">The products ids.</param>
+        /// <returns>The list of products inventories.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("product/ids/{ids}")]
+        [AllowAnonymous]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetInventoriesByProductsIds(string ids)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetInventoriesByProductsIdsServiceModel
+            {
+                Ids = ids.ToEnumerableGuidIds(),
+                Language = CultureInfo.CurrentCulture.Name
+            };
+
+            var validator = new GetInventoriesByProductsIdsModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var inventories = _inventoriesService.GetInventoriesByProductsIds(serviceModel);
+
+                var response = inventories.Select(x => new InventorySumResponseModel
+                {
+                    ProductId = x.ProductId,
+                    AvailableQuantity = x.AvailableQuantity,
+                    Quantity = x.Quantity,
+                    Ean = x.ProductEan,
+                    ProductName = x.ProductName,
+                    ProductSku = x.ProductSku,
+                    RestockableInDays = x.RestockableInDays,
+                    ExpectedDelivery = x.ExpectedDelivery
+                });
+
+                return StatusCode((int)HttpStatusCode.OK, response);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
 
         /// <summary>
         /// Gets a product inventory by product sku.

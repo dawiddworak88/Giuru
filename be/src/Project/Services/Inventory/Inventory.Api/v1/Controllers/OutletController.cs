@@ -437,6 +437,50 @@ namespace Outlet.Api.v1.Controllers
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
+        /// <summary>
+        /// Gets a products outles by products ids.
+        /// </summary>
+        /// <param name="ids">The products ids.</param>
+        /// <returns>The list of products outles.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("product/ids/{ids}")]
+        [AllowAnonymous]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetOutletsByProductsIds(string ids)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetOutletsByProductsIdsServiceModel
+            {
+                Ids = ids.ToEnumerableGuidIds(),
+                Language = CultureInfo.CurrentCulture.Name
+            };
+
+            var validator = new GetOutletsByProductsIdsModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var outlets = _outletsService.GetOutletsByProductsIds(serviceModel);
+
+                var response = outlets.Select(x => new OutletSumResponseModel
+                {
+                    ProductId = x.ProductId,
+                    AvailableQuantity = x.AvailableQuantity,
+                    Quantity = x.Quantity,
+                    ProductName = x.ProductName,
+                    ProductSku = x.ProductSku,
+                    Ean = x.ProductEan,
+                    Title = x.Title,
+                    Description = x.Description
+                });
+
+                return StatusCode((int)HttpStatusCode.OK, response);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
 
         /// <summary>
         /// Gets an outlet item by product sku.
