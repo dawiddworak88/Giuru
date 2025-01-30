@@ -1,6 +1,5 @@
 ﻿using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Shared.Configurations;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
