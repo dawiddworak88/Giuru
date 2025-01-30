@@ -30,8 +30,6 @@ function OrderForm(props) {
     const [quantity, setQuantity] = useState(0);
     const [stockQuantity, setStockQuantity] = useState(0);
     const [outletQuantity, setOutletQuantity] = useState(0);
-    const [maxStock, setMaxStock] = useState(0);
-    const [maxOutlet, setMaxOutlet] = useState(0);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
     const [orderItems, setOrderItems] = useState([]);
@@ -68,7 +66,7 @@ function OrderForm(props) {
                         if (response.ok) {
                             setId(jsonResponse.id);
                             setSuggestions(() => []);
-                            setSuggestions(() => jsonResponse.data);
+                            setSuggestions(() => jsonResponse);
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -80,73 +78,25 @@ function OrderForm(props) {
         }
     };
 
-    const setMaxStockOutletQuantity = (response, sku) => {
-        const items = orderItems.filter(item => item.sku === sku)
-
-        let maxStock = response.stockQuantity;
-        let maxOutlet = response.outletQuantity;
-
-        if (items.length > 0) {
-            maxStock = response.stockQuantity - items.reduce((sum, item) => sum + item.stockQuantity, 0);
-            maxOutlet = response.outletQuantity - items.reduce((sum, item) => sum + item.outletQuantity, 0);
-
-            setMaxStock(maxStock < 0 ? 0 : maxStock);
-            setMaxOutlet(maxOutlet < 0 ? 0 : maxOutlet);
-        }
-        else {
-            setMaxStock(maxStock);
-            setMaxOutlet(maxOutlet);
-        }
-
-        if (maxStock > 0) {
-            setStockQuantity(1);
-        }
-        else if (maxOutlet > 0) {
-            setOutletQuantity(1)
-        }
-        else {
-            setQuantity(1)
-        }
-    }
-
     const resetMaxAndQuantityValues = () => {
         setQuantity(0);
         setStockQuantity(0);
         setOutletQuantity(0);
-        setMaxStock(0);
-        setMaxOutlet(0);
     }
 
     const onSuggestionSelected = (event, { suggestion }) => {
-        setProduct(suggestion);
-        resetMaxAndQuantityValues();
+        var items = orderItems.filter(item => item.productId === suggestion.id);
 
-        const searchParameters = {
-            id: suggestion.id
-        };
-
-        const requestOptions = {
-            method: "GET",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
+        if (items.length > 0) {
+            suggestion.stockQuantity -= items.reduce((sum, item) => sum + item.stockQuantity, 0);
+            suggestion.outletQuantity -= items.reduce((sum, item) => sum + item.outletQuantity, 0); 
         }
 
-        const url = props.getProductQuantitiesUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+        setQuantity(suggestion.stockQuantity + suggestion.outletQuantity === 0 ? 1 : 0);
+        setStockQuantity(suggestion.stockQuantity > 0 ? 1 : 0);
+        setOutletQuantity(suggestion.outletQuantity > 0 && suggestion.stockQuantity === 0 ? 1 : 0);
 
-        fetch(url, requestOptions)
-            .then((response) => {
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setMaxStockOutletQuantity(jsonResponse, suggestion.sku);
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                })
-            }).catch(() => {
-                toast.error(props.generalErrorMessage);
-            })
+        setProduct(suggestion);
     };
 
     const getProductSuggestionValue = (suggestion) => {
@@ -548,12 +498,12 @@ function OrderForm(props) {
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
                             <TextField id="stockQuantity" name="stockQuantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
-                                label={props.stockQuantityLabel + " (" + props.maximalLabel + " " + maxStock + ")"}
-                                fullWidth={true} disabled={product == null || maxStock == 0} value={stockQuantity} onChange={(e) => {
+                                label={`${props.stockQuantityLabel} (${props.maximalLabel} ${product ? product.stockQuantity : 0})`}
+                                fullWidth={true} disabled={product == null || product.stockQuantity == 0} value={stockQuantity} onChange={(e) => {
                                     e.preventDefault();
                                     const value = e.target.value
                                     if (value >= 0) {
-                                        setStockQuantity(value > maxStock ? maxStock : value);
+                                        setStockQuantity(value > product.stockQuantity ? product.stockQuantity : value);
                                     }
                                     else setStockQuantity(0);
                                 }}
@@ -561,12 +511,12 @@ function OrderForm(props) {
                         </div>
                         <div className="column is-2 is-flex is-align-items-flex-end">
                             <TextField id="outletQuantity" name="outletQuantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
-                                label={props.outletQuantityLabel + " (" + props.maximalLabel + " " + maxOutlet + ")"}
-                                fullWidth={true} disabled={product == null || maxOutlet == 0} value={outletQuantity} onChange={(e) => {
+                                label={`${props.outletQuantityLabel} (${props.maximalLabel} ${product ? product.outletQuantity : 0})`}
+                                fullWidth={true} disabled={product == null || product.outletQuantity == 0} value={outletQuantity} onChange={(e) => {
                                     e.preventDefault();
                                     const value = e.target.value
                                     if (value >= 0) {
-                                        setOutletQuantity(value > maxOutlet ? maxOutlet : value);
+                                        setOutletQuantity(value > product.outletQuantity ? product.outletQuantity : value);
                                     } else setOutletQuantity(0);
                                 }}
                             />
