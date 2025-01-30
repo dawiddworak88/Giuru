@@ -101,34 +101,60 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProductQuantities(Guid id)
+        public async Task<IActionResult> GetProductsQuantities(string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var responseModel = new ProductQuantitiesResponseModel();
-
-            var inventory = await _inventoryRepository.GetInventoryProductByProductIdAsync(
+            var products = await _productsRepository.GetProductsAsync(
                 token,
                 language,
-                id);
+                searchTerm,
+                hasPrimaryProduct,
+                GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
+                pageIndex,
+                itemsPerPage,
+                null);
 
-            if (inventory is not null)
+            var response = products.Data.Select(x => new ProductQuantitiesResponseModel
             {
-                responseModel.StockQuantity = inventory.AvailableQuantity;
+                Id = x.Id,
+                Sku = x.Sku,
+                Name = x.Name,
+                Images = x.Images,
+            }).ToList();
+
+            if (response.Any())
+            {
+                var inventories = await _inventoryRepository.GetInventoryProductByProductIdsAsync(
+                    token,
+                    language,
+                    response.Select(x => x.Id));
+
+                var outlets = await _outletRepository.GetOutletProductsByProductsIdAsync(
+                    token,
+                    language,
+                    response.Select(x => x.Id));
+
+                foreach (var product in response)
+                {
+                    var productInventory = inventories.FirstOrDefault(x => x.ProductId == product.Id);
+
+                    if (productInventory is not null)
+                    {
+                        product.StockQuantity = productInventory.AvailableQuantity;
+                    }
+
+                    var productOutlet = outlets.FirstOrDefault(x => x.ProductId == product.Id);
+
+                    if (productOutlet is not null)
+                    {
+                        product.OutletQuantity = productOutlet.AvailableQuantity;
+                    }
+                }
             }
 
-            var outlet = await _outletRepository.GetOutletItemByProductIdAsync(
-                token,
-                language,
-                id);
-
-            if (outlet is not null)
-            {
-                responseModel.OutletQuantity = outlet.AvailableQuantity;
-            }
-
-            return StatusCode((int)HttpStatusCode.OK, responseModel);
+            return StatusCode((int)HttpStatusCode.OK, response);
         }
     }
 }
