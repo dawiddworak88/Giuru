@@ -81,6 +81,17 @@ function NewOrderForm(props) {
     };
 
     const onSuggestionSelected = (event, { suggestion }) => {
+        var items = orderItems.filter(item => item.productId === suggestion.id);
+
+        if (items.length > 0) {
+            suggestion.stockQuantity -= items.reduce((sum, item) => sum + item.stockQuantity, 0);
+            suggestion.outletQuantity -= items.reduce((sum, item) => sum + item.outletQuantity, 0); 
+        }
+
+        setQuantity(suggestion.stockQuantity + suggestion.outletQuantity === 0 ? 1 : 0);
+        setStockQuantity(suggestion.stockQuantity > 0 ? 1 : 0);
+        setOutletQuantity(suggestion.outletQuantity > 0 && suggestion.stockQuantity === 0 ? 1 : 0);
+        
         setProduct(suggestion);
     };
 
@@ -332,12 +343,6 @@ function NewOrderForm(props) {
     }
 
     const disabledActionButtons = orderItems.length === 0 ? !customOrder ? true : false : false;
-
-    useEffect(() => {
-        setQuantity(product ? (product.stockQuantity + product.outletQuantity) === 0 ? 1 : 0 : 0);
-        setStockQuantity(product ? (product.stockQuantity > 0 ? 1 : 0) : 0);
-        setOutletQuantity(product ? (product.outletQuantity > 0 && product.stockQuantity === 0 ? 1 : 0) : 0);
-    }, [product]);
 
     return (
         <section className="section order">
