@@ -52,7 +52,6 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string DropOrSelectAttachmentsLabel { get; set; }
         public string AttachmentsLabel { get; set; }
         public string SaveMediaUrl { get; set; }
-        public string GetProductQuantitiesUrl { get; set; }
         public string DeliveryAddressLabel { get; set; }
         public string BillingAddressLabel { get; set; }
         public string MaximalLabel { get; set; }

@@ -50,7 +50,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 Title = _orderLocalizer.GetString("Order"),
                 AddText = _orderLocalizer.GetString("AddOrderItem"),
                 SearchPlaceholderLabel = _orderLocalizer.GetString("EnterSkuOrName"),
-                GetSuggestionsUrl = _linkGenerator.GetPathByAction("GetSuggestion", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                GetSuggestionsUrl = _linkGenerator.GetPathByAction("GetProductsQuantities", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 OrLabel = _globalLocalizer.GetString("Or"),
                 DropFilesLabel = _globalLocalizer.GetString("DropFile"),
                 DropOrSelectFilesLabel = _orderLocalizer.GetString("DropOrSelectOrderFile"),
@@ -89,8 +89,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 SaveMediaUrl = _linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
-                MaximalLabel = _globalLocalizer.GetString("MaximalLabel"),
-                GetProductQuantitiesUrl = _linkGenerator.GetPathByAction("GetProductQuantities", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                MaximalLabel = _globalLocalizer.GetString("MaximalLabel")
             };
 
             if (componentModel.BasketId.HasValue)
