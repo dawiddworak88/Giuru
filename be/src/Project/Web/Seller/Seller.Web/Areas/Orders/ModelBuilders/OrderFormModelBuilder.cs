@@ -43,7 +43,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 AddText = _orderLocalizer.GetString("AddOrderItem"),
                 NoOrderItemsLabel = _orderLocalizer.GetString("NoOrderItemsLabel"),
                 SearchPlaceholderLabel = _orderLocalizer.GetString("EnterSkuOrName"),
-                GetSuggestionsUrl = _linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                GetSuggestionsUrl = _linkGenerator.GetPathByAction("GetProductsQuantities", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 MoreInfoLabel = _orderLocalizer.GetString("MoreInfoLabel"),
                 NameLabel = _orderLocalizer.GetString("NameLabel"),
                 OrderItemsLabel = _orderLocalizer.GetString("OrderItemsLabel"),
@@ -75,8 +75,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
                 DefaultItemsPerPage = Constants.DefaultItemsPerPage,
-                MaximalLabel = _globalLocalizer.GetString("MaximalLabel"),
-                GetProductQuantitiesUrl = _linkGenerator.GetPathByAction("GetProductQuantities", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                MaximalLabel = _globalLocalizer.GetString("MaximalLabel")
             };
 
             var clients = await _clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);
