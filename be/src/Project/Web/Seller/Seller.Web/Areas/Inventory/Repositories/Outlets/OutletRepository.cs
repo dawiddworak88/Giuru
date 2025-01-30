@@ -4,6 +4,7 @@ using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Inventory.ApiRequestModels;
@@ -148,17 +149,17 @@ namespace Seller.Web.Areas.Inventory.Repositories
             return default;
         }
 
-        public async Task<OutletItem> GetOutletItemByProductIdAsync(string token, string language, Guid? id)
+        public async Task<IEnumerable<OutletItem>> GetOutletProductsByProductsIdAsync(string token, string language, IEnumerable<Guid> ids)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletApiEndpoint}/product/{id}"
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletProductIdsApiEndpoint}/{ids.ToEndpointParameterString()}"
             };
 
-            var response = await _apiService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OutletItem>(apiRequest);
+            var response = await _apiService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<OutletItem>>(apiRequest);
             
             if (response.IsSuccessStatusCode is false)
             {
