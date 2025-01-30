@@ -81,7 +81,7 @@
         public struct Outlet
         {
             public static readonly string OutletApiEndpoint = "/api/v1/outlet";
-            public static readonly string OutletProductIdsApiEndpoint = "/api/v1/outlet/product";
+            public static readonly string OutletProductIdsApiEndpoint = "/api/v1/outlet/product/ids";
             public static readonly string AvailableOutletProductsApiEndpoint = "/api/v1/outlet/availableproducts";
             public static readonly string ProductOutletApiEndpoint = "/api/v1/outlet/product";
         }

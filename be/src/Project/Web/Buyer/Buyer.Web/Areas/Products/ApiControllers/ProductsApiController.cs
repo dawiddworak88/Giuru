@@ -271,7 +271,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     language,
                     response.Select(x => x.Id));
 
-                var outlets = await _outletRepository.GetOutletProductsByIdsAsync(
+                var outlets = await _outletRepository.GetOutletProductsByProductsIdAsync(
                     token,
                     language,
                     response.Select(x => x.Id));
