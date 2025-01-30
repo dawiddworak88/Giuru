@@ -12,6 +12,7 @@ using Foundation.ApiExtensions.Models.Request;
 using Seller.Web.Areas.Inventory.DomainModels;
 using Seller.Web.Areas.Inventory.ApiRequestModels;
 using Foundation.ApiExtensions.Models.Response;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Seller.Web.Areas.Inventory.Repositories.Inventories
 {
@@ -147,17 +148,17 @@ namespace Seller.Web.Areas.Inventory.Repositories.Inventories
             return default;
         }
 
-        public async Task<InventoryItem> GetInventoryProductByProductIdAsync(string token, string language, Guid id)
+        public async Task<IEnumerable<InventoryItem>> GetInventoryProductByProductIdsAsync(string token, string language, IEnumerable<Guid> ids)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Inventory.InventoryApiEndpoint}/product/{id}"
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Inventory.InventoryProductIdsApiEndpoint}/{ids.ToEndpointParameterString()}"
             };
 
-            var response = await _apiInventoryService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, InventoryItem>(apiRequest);
+            var response = await _apiInventoryService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<InventoryItem>>(apiRequest);
             
             if (response.IsSuccessStatusCode is false)
             {
