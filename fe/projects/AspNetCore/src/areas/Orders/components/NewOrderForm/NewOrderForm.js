@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState, Fragment, useEffect } from "react";
+import React, { useContext, useCallback, useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import { UploadCloud } from "react-feather";
 import { useDropzone } from "react-dropzone";
