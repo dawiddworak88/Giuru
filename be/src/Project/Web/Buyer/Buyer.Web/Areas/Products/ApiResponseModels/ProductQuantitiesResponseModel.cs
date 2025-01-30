@@ -1,8 +1,10 @@
-﻿namespace Buyer.Web.Areas.Products.ApiResponseModels
+﻿using Buyer.Web.Areas.Products.DomainModels;
+
+namespace Buyer.Web.Areas.Products.ApiResponseModels
 {
-    public class ProductQuantitiesResponseModel
+    public class ProductQuantitiesResponseModel : Product
     {
-        public double? StockQuantity { get; set; } = 0;
-        public double? OutletQuantity { get; set; } = 0;
+        public double StockQuantity { get; set; }
+        public double OutletQuantity { get; set; }
     }
 }
