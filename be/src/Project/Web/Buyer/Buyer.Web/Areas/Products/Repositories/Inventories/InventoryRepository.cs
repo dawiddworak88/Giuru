@@ -28,17 +28,17 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
             _settings = settings;
         }
 
-        public async Task<InventorySum> GetAvailbleProductByProductIdAsync(string token, string language, Guid id)
+        public async Task<IEnumerable<InventorySum>> GetAvailbleProductsByProductIdsAsync(string token, string language, IEnumerable<Guid> ids)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Inventory.InventoryProductApiEndpoint}/{id}"
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Inventory.InventoryProductIdsApiEndpoint}/{ids.ToEndpointParameterString()}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, InventorySum>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<InventorySum>>(apiRequest);
 
             if (response.IsSuccessStatusCode is false)
             {

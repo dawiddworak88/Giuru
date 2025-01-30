@@ -14,6 +14,6 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
             int itemsPerPage,
             string token);
         Task<IEnumerable<InventorySum>> GetAvailbleProductsInventoryByIds(string token, string language, IEnumerable<Guid> ids);
-        Task<InventorySum> GetAvailbleProductByProductIdAsync(string token, string language, Guid id);
+        Task<IEnumerable<InventorySum>> GetAvailbleProductsByProductIdsAsync(string token, string language, IEnumerable<Guid> ids);
     }
 }
