@@ -1,5 +1,6 @@
 ﻿using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Shared.Configurations;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
@@ -25,31 +26,6 @@ namespace Buyer.Web.Areas.Products.Repositories
         {
             _apiClientService = apiClientService;
             _settings = settgins;
-        }
-
-        public async Task<OutletSum> GetOutletProductByProductIdAsync(string token, string language, Guid id)
-        {
-            var apiRequest = new ApiRequest<RequestModelBase>
-            {
-                Language = language,
-                Data = new RequestModelBase(),
-                AccessToken = token,
-                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletProductApiEndpoint}/{id}"
-            };
-
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OutletSum>(apiRequest);
-
-            if (response.IsSuccessStatusCode is false)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            if (response.IsSuccessStatusCode && response.Data is not null)
-            {
-                return response.Data;
-            }
-
-            return default;
         }
 
         public async Task<PagedResults<IEnumerable<OutletSum>>> GetOutletProductsAsync(string language, int pageIndex, int itemsPerPage, string token)
@@ -131,6 +107,31 @@ namespace Buyer.Web.Areas.Products.Repositories
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
+        }
+
+        public async Task<IEnumerable<OutletSum>> GetOutletProductsByProductsIdAsync(string token, string language, IEnumerable<Guid> ids)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletProductIdsApiEndpoint}/{ids.ToEndpointParameterString()}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<OutletSum>>(apiRequest);
+
+            if (response.IsSuccessStatusCode is false)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data is not null)
+            {
+                return response.Data;
             }
 
             return default;

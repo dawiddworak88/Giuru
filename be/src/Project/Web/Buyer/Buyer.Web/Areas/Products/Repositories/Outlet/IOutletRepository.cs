@@ -10,6 +10,6 @@ namespace Buyer.Web.Areas.Products.Repositories
     {
         Task<PagedResults<IEnumerable<OutletSum>>> GetOutletProductsAsync(string language, int pageIndex, int itemsPerPage, string token);
         Task<IEnumerable<OutletSum>> GetOutletProductsByIdsAsync(string token, string language, IEnumerable<Guid> ids);
-        Task<OutletSum> GetOutletProductByProductIdAsync(string token, string language, Guid id);
+        Task<IEnumerable<OutletSum>> GetOutletProductsByProductsIdAsync(string token, string language, IEnumerable<Guid> ids);
     }
 }
