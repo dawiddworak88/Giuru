@@ -151,15 +151,20 @@ namespace Seller.Web.Areas.Inventory.Repositories
 
         public async Task<IEnumerable<OutletItem>> GetOutletProductsByProductsIdAsync(string token, string language, IEnumerable<Guid> ids)
         {
-            var apiRequest = new ApiRequest<RequestModelBase>
+            var requestModel = new PagedRequestModelBase
             {
-                Language = language,
-                Data = new RequestModelBase(),
-                AccessToken = token,
-                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletProductIdsApiEndpoint}/{ids.ToEndpointParameterString()}"
+                Ids = ids.ToEndpointParameterString(),
             };
 
-            var response = await _apiService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<OutletItem>>(apiRequest);
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletProductsApiEndpoint}"
+            };
+
+            var response = await _apiService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, IEnumerable<OutletItem>>(apiRequest);
             
             if (response.IsSuccessStatusCode is false)
             {

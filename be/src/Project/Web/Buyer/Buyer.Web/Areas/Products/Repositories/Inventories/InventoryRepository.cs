@@ -30,15 +30,20 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
 
         public async Task<IEnumerable<InventorySum>> GetAvailbleProductsByProductIdsAsync(string token, string language, IEnumerable<Guid> ids)
         {
-            var apiRequest = new ApiRequest<RequestModelBase>
+            var requestModel = new PagedRequestModelBase
             {
-                Language = language,
-                Data = new RequestModelBase(),
-                AccessToken = token,
-                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Inventory.InventoryProductIdsApiEndpoint}/{ids.ToEndpointParameterString()}"
+                Ids = ids.ToEndpointParameterString()
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<InventorySum>>(apiRequest);
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Inventory.InventoryProductsApiEndpoint}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, IEnumerable<InventorySum>>(apiRequest);
 
             if (response.IsSuccessStatusCode is false)
             {
