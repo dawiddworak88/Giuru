@@ -445,7 +445,7 @@ namespace Inventory.Api.v1.Controllers
         /// <param name="ids">The products ids.</param>
         /// <returns>The list of products inventories.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [Route("product/ids/{ids}")]
+        [Route("products")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
