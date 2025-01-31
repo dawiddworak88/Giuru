@@ -255,45 +255,30 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 itemsPerPage,
                 null);
 
-            var response = products.Data.Select(x => new ProductQuantitiesResponseModel
-            {
-                 Id = x.Id,
-                 Sku = x.Sku,
-                 Name = x.Name,
-                 Images = x.Images,
-            }).ToList();
-
             if (products.Data.Any())
             {
                 var inventories = await _inventoryRepository.GetAvailbleProductsByProductIdsAsync(
                     token,
                     language,
-                    response.Select(x => x.Id));
+                    products.Data.Select(x => x.Id));
 
                 var outlets = await _outletRepository.GetOutletProductsByProductsIdAsync(
                     token,
                     language,
-                    response.Select(x => x.Id));
+                    products.Data.Select(x => x.Id));
 
-                foreach (var product in response)
+                return StatusCode((int)HttpStatusCode.OK, products.Data.Select(x => new ProductQuantitiesResponseModel
                 {
-                    var productInventory = inventories.FirstOrDefault(x => x.ProductId == product.Id);
-
-                    if (productInventory is not null)
-                    {
-                        product.StockQuantity = productInventory.AvailableQuantity ?? 0;
-                    }
-
-                    var productOutlet = outlets.FirstOrDefault(x => x.ProductId == product.Id);
-
-                    if (productOutlet is not null)
-                    {
-                        product.OutletQuantity = productOutlet.AvailableQuantity ?? 0;
-                    }
-                }
+                    Id = x.Id,
+                    Sku = x.Sku,
+                    Name = x.Name,
+                    Images = x.Images,
+                    StockQuantity = inventories.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity ?? 0,
+                    OutletQuantity = outlets.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity ?? 0,
+                }));
             }
 
-            return StatusCode((int)HttpStatusCode.OK, response);
+            return StatusCode((int)HttpStatusCode.OK, products.Data);
         }
     } 
 }
