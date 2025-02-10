@@ -110,5 +110,35 @@ namespace Buyer.Web.Areas.Products.Repositories
 
             return default;
         }
+
+        public async Task<IEnumerable<OutletSum>> GetOutletProductsByProductsIdAsync(string token, string language, IEnumerable<Guid> ids)
+        {
+            var requestModel = new PagedRequestModelBase
+            {
+                Ids = ids.ToEndpointParameterString(),
+            };
+
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletProductsApiEndpoint}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, IEnumerable<OutletSum>>(apiRequest);
+
+            if (response.IsSuccessStatusCode is false)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data is not null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
     }
 }

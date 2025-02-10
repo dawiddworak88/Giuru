@@ -1,7 +1,5 @@
-﻿using Foundation.PageContent.Components.ListItems.ViewModels;
-using Seller.Web.Areas.Clients.ViewModels;
+﻿using Seller.Web.Areas.Clients.ViewModels;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Orders.ViewModel
@@ -44,6 +42,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string DropFilesLabel { get; set; }
         public string DeliveryAddressLabel { get; set; }
         public string BillingAddressLabel { get; set; }
+        public string MaximalLabel { get; set; }
         public string GetClientAddressesUrl { get; set; }
         public int DefaultItemsPerPage { get; set; }
     }
