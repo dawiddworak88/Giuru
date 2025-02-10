@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Products.DomainModels;
+﻿using Buyer.Web.Areas.Products.ApiResponseModels;
+using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
@@ -235,6 +236,48 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             };
 
             return StatusCode((int)HttpStatusCode.OK, pagedFiles);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProductsQuantities(string searchTerm, int pageIndex, bool? hasPrimaryProduct, int itemsPerPage)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            var products = await _productsRepository.GetProductsAsync(
+                token,
+                language,
+                searchTerm,
+                hasPrimaryProduct,
+                null,
+                pageIndex,
+                itemsPerPage,
+                null);
+
+            if (products.Data.Any())
+            {
+                var inventories = await _inventoryRepository.GetAvailbleProductsByProductIdsAsync(
+                    token,
+                    language,
+                    products.Data.Select(x => x.Id));
+
+                var outlets = await _outletRepository.GetOutletProductsByProductsIdAsync(
+                    token,
+                    language,
+                    products.Data.Select(x => x.Id));
+
+                return StatusCode((int)HttpStatusCode.OK, products.Data.Select(x => new ProductQuantitiesResponseModel
+                {
+                    Id = x.Id,
+                    Sku = x.Sku,
+                    Name = x.Name,
+                    Images = x.Images,
+                    StockQuantity = inventories.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity ?? 0,
+                    OutletQuantity = outlets.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity ?? 0,
+                }));
+            }
+
+            return StatusCode((int)HttpStatusCode.OK, products.Data);
         }
     } 
 }

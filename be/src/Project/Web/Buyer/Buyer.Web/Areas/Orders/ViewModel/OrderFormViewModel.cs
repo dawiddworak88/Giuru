@@ -54,6 +54,7 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string SaveMediaUrl { get; set; }
         public string DeliveryAddressLabel { get; set; }
         public string BillingAddressLabel { get; set; }
+        public string MaximalLabel { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
         public Guid? DefaultBillingAddressId { get; set; }
         public IEnumerable<ListItemViewModel> ClientAddresses { get; set; }

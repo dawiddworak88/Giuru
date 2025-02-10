@@ -14,7 +14,10 @@ using System.Security.Claims;
 using Foundation.Account.Definitions;
 using Foundation.Extensions.Helpers;
 using Seller.Web.Areas.Shared.Repositories.Products;
+using Seller.Web.Areas.Inventory.Repositories.Inventories;
 using Foundation.Extensions.ExtensionMethods;
+using Seller.Web.Areas.Inventory.Repositories;
+using Seller.Web.Areas.Products.ApiResponseModels;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
@@ -23,13 +26,19 @@ namespace Seller.Web.Areas.Clients.ApiControllers
     {
         private readonly IProductsRepository _productsRepository;
         private readonly IStringLocalizer _productLocalizer;
+        private readonly IInventoryRepository _inventoryRepository;
+        private readonly IOutletRepository _outletRepository;
 
         public ProductsApiController(
             IProductsRepository productsRepository,
-            IStringLocalizer<ProductResources> productLocalizer)
+            IStringLocalizer<ProductResources> productLocalizer,
+            IInventoryRepository inventoryRepository,
+            IOutletRepository outletRepository)
         {
             _productsRepository = productsRepository;
             _productLocalizer = productLocalizer;
+            _inventoryRepository = inventoryRepository;
+            _outletRepository = outletRepository;
         }
 
         [HttpGet]
@@ -44,7 +53,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 CultureInfo.CurrentUICulture.Name,
                 searchTerm,
                 hasPrimaryProduct,
-                GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
+                GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
                 pageIndex,
                 itemsPerPage,
                 null);
@@ -54,7 +63,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 product.Name = $"{product.Name} ({product.Sku})";
             }
 
-            return this.StatusCode((int)HttpStatusCode.OK, products);
+            return StatusCode((int)HttpStatusCode.OK, products);
         }
 
         [HttpPost]
@@ -89,6 +98,48 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 id);
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = _productLocalizer.GetString("ProductDeletedSuccessfully").Value });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProductsQuantities(string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            var products = await _productsRepository.GetProductsAsync(
+                token,
+                language,
+                searchTerm,
+                hasPrimaryProduct,
+                GuidHelper.ParseNullable((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
+                pageIndex,
+                itemsPerPage,
+                null);
+
+            if (products.Data.Any())
+            {
+                var inventories = await _inventoryRepository.GetInventoryProductByProductIdsAsync(
+                    token,
+                    language,
+                    products.Data.Select(x => x.Id));
+
+                var outlets = await _outletRepository.GetOutletProductsByProductsIdAsync(
+                    token,
+                    language,
+                    products.Data.Select(x => x.Id));
+
+                return StatusCode((int)HttpStatusCode.OK, products.Data.Select(x => new ProductQuantitiesResponseModel
+                {
+                    Id = x.Id,
+                    Sku = x.Sku,
+                    Name = x.Name,
+                    Images = x.Images,
+                    StockQuantity = inventories.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity ?? 0,
+                    OutletQuantity = outlets.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity ?? 0,
+                }));
+            }
+
+            return StatusCode((int)HttpStatusCode.OK, products.Data);
         }
     }
 }

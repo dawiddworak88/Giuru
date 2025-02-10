@@ -7,7 +7,7 @@ import Autosuggest from "react-autosuggest";
 import { Context } from "../../../../shared/stores/Store";
 import { Delete, AddShoppingCartRounded } from "@mui/icons-material"
 import {
-    Fab, Table, TableBody, TableCell, TableContainer, Autocomplete, 
+    Fab, Table, TableBody, TableCell, TableContainer, Autocomplete,
     TableHead, TableRow, Paper, TextField, Button, CircularProgress
 } from "@mui/material";
 import moment from "moment";
@@ -27,7 +27,9 @@ function OrderForm(props) {
     const [clientAddresses, setClientAddresses] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(0);
+    const [stockQuantity, setStockQuantity] = useState(0);
+    const [outletQuantity, setOutletQuantity] = useState(0);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
     const [orderItems, setOrderItems] = useState([]);
@@ -64,7 +66,7 @@ function OrderForm(props) {
                         if (response.ok) {
                             setId(jsonResponse.id);
                             setSuggestions(() => []);
-                            setSuggestions(() => jsonResponse.data);
+                            setSuggestions(() => jsonResponse);
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -76,12 +78,28 @@ function OrderForm(props) {
         }
     };
 
+    const resetMaxAndQuantityValues = () => {
+        setQuantity(0);
+        setStockQuantity(0);
+        setOutletQuantity(0);
+    }
+
     const onSuggestionSelected = (event, { suggestion }) => {
+        var items = orderItems.filter(item => item.productId === suggestion.id);
+
+        if (items.length > 0) {
+            suggestion.stockQuantity -= items.reduce((sum, item) => sum + item.stockQuantity, 0);
+            suggestion.outletQuantity -= items.reduce((sum, item) => sum + item.outletQuantity, 0); 
+        }
+
+        setQuantity(suggestion.stockQuantity + suggestion.outletQuantity === 0 ? 1 : 0);
+        setStockQuantity(suggestion.stockQuantity > 0 ? 1 : 0);
+        setOutletQuantity(suggestion.outletQuantity > 0 && suggestion.stockQuantity === 0 ? 1 : 0);
+
         setProduct(suggestion);
     };
 
     const getProductSuggestionValue = (suggestion) => {
-
         return "(" + suggestion.sku + ")" + " " + suggestion.name;
     };
 
@@ -93,13 +111,14 @@ function OrderForm(props) {
             sku: product.sku,
             name: product.name,
             imageId: product.images ? product.images[0] : null,
-            quantity,
+            quantity: quantity ? quantity : 0,
+            stockQuantity: stockQuantity ? stockQuantity : 0,
+            outletQuantity: outletQuantity ? outletQuantity : 0,
             externalReference,
             moreInfo
         };
 
         const basket = {
-
             id: basketId,
             items: [...orderItems, orderItem]
         };
@@ -127,7 +146,8 @@ function OrderForm(props) {
                             setProduct(null);
                             setSearchTerm("");
                             setExternalReference("");
-                            setQuantity(1);
+                            setMoreInfo("");
+                            resetMaxAndQuantityValues();
                             setOrderItems(jsonResponse.items);
                         }
                         else {
@@ -150,7 +170,6 @@ function OrderForm(props) {
         className: "search__field",
         value: searchTerm,
         onChange: (_, { newValue, method }) => {
-
             setSearchTerm(newValue);
         }
     };
@@ -291,9 +310,9 @@ function OrderForm(props) {
 
         const requestOptions = {
             method: "GET",
-            headers: { 
-                "Content-Type": "application/json", 
-                "X-Requested-With": "XMLHttpRequest" 
+            headers: {
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest"
             }
         };
 
@@ -317,7 +336,7 @@ function OrderForm(props) {
 
                         if (value.defaultBillingAddressId) {
                             const defaultBillingAddress = jsonResponse.data.find(x => x.id == value.defaultBillingAddressId);
-                            
+
                             setBillingAddress(defaultBillingAddress);
                         }
                     }
@@ -327,7 +346,7 @@ function OrderForm(props) {
                 toast.error(props.generalErrorMessage);
             });
     }
-    
+
     const onDrop = useCallback(acceptedFiles => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
@@ -464,20 +483,44 @@ function OrderForm(props) {
                                     renderSuggestion={(suggestion) => {
                                         return (
                                             <div className="suggestion">
-                                                { getProductSuggestionValue(suggestion)}
+                                                {getProductSuggestionValue(suggestion)}
                                             </div>
                                         );
                                     }}
                                     inputProps={searchInputProps} />
                             </div>
                             <div className="column is-1 is-flex is-align-items-flex-end">
-                                <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "1", step: "1" }} variant="standard"
-                                    label={props.quantityLabel} fullWidth={true} value={quantity} onChange={(e) => {
-
+                                <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
+                                    label={props.quantityLabel} fullWidth={true} disabled={product == null} value={quantity} onChange={(e) => {
                                         e.preventDefault();
                                         setQuantity(e.target.value);
                                     }} />
                             </div>
+                            <div className="column is-2 is-flex is-align-items-flex-end">
+                            <TextField id="stockQuantity" name="stockQuantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
+                                label={`${props.stockQuantityLabel} (${props.maximalLabel} ${product ? product.stockQuantity : 0})`}
+                                fullWidth={true} disabled={product == null || product.stockQuantity == 0} value={stockQuantity} onChange={(e) => {
+                                    e.preventDefault();
+                                    const value = e.target.value
+                                    if (value >= 0) {
+                                        setStockQuantity(value > product.stockQuantity ? product.stockQuantity : value);
+                                    }
+                                    else setStockQuantity(0);
+                                }}
+                            />
+                        </div>
+                        <div className="column is-2 is-flex is-align-items-flex-end">
+                            <TextField id="outletQuantity" name="outletQuantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
+                                label={`${props.outletQuantityLabel} (${props.maximalLabel} ${product ? product.outletQuantity : 0})`}
+                                fullWidth={true} disabled={product == null || product.outletQuantity == 0} value={outletQuantity} onChange={(e) => {
+                                    e.preventDefault();
+                                    const value = e.target.value
+                                    if (value >= 0) {
+                                        setOutletQuantity(value > product.outletQuantity ? product.outletQuantity : value);
+                                    } else setOutletQuantity(0);
+                                }}
+                            />
+                        </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
                                 <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel} variant="standard"
                                     fullWidth={true} value={externalReference} onChange={(e) => {
@@ -494,7 +537,8 @@ function OrderForm(props) {
                                     }} />
                             </div>
                             <div className="column is-1 is-flex is-align-items-flex-end">
-                                <Button type="button" variant="contained" color="primary" onClick={handleAddOrderItemClick} disabled={state.isLoading || quantity < 1 || product === null}>
+                                <Button type="button" variant="contained" color="primary" onClick={handleAddOrderItemClick}
+                                disabled={state.isLoading || !(quantity + stockQuantity + outletQuantity > 0 && product !== null)}>
                                     {props.addText}
                                 </Button>
                             </div>
@@ -512,6 +556,8 @@ function OrderForm(props) {
                                                         <TableCell>{props.skuLabel}</TableCell>
                                                         <TableCell>{props.nameLabel}</TableCell>
                                                         <TableCell>{props.quantityLabel}</TableCell>
+                                                        <TableCell>{props.stockQuantityLabel}</TableCell>
+                                                        <TableCell>{props.outletQuantityLabel}</TableCell>
                                                         <TableCell>{props.externalReferenceLabel}</TableCell>
                                                         <TableCell>{props.deliveryFromLabel}</TableCell>
                                                         <TableCell>{props.deliveryToLabel}</TableCell>
@@ -530,6 +576,8 @@ function OrderForm(props) {
                                                             <TableCell>{item.sku}</TableCell>
                                                             <TableCell>{item.name}</TableCell>
                                                             <TableCell>{item.quantity}</TableCell>
+                                                            <TableCell>{item.stockQuantity}</TableCell>
+                                                            <TableCell>{item.outletQuantity}</TableCell>
                                                             <TableCell>{item.externalReference}</TableCell>
                                                             <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                             <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
@@ -550,8 +598,8 @@ function OrderForm(props) {
                     </Fragment>
                 }
                 <div className="field">
-                    <Button 
-                        type="button" 
+                    <Button
+                        type="button"
                         variant="contained"
                         color="primary"
                         onClick={handlePlaceOrder}

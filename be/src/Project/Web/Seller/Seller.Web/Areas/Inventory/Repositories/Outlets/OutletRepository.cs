@@ -4,6 +4,7 @@ using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Inventory.ApiRequestModels;
@@ -17,15 +18,15 @@ namespace Seller.Web.Areas.Inventory.Repositories
 {
     public class OutletRepository : IOutletRepository
     {
-        private readonly IApiClientService apiService;
-        private readonly IOptions<AppSettings> settings;
+        private readonly IApiClientService _apiService;
+        private readonly IOptions<AppSettings> _settings;
 
         public OutletRepository(
             IApiClientService apiService,
             IOptions<AppSettings> settings)
         {
-            this.apiService = apiService;
-            this.settings = settings;
+            _apiService = apiService;
+            _settings = settings;
         }
 
         public async Task<PagedResults<IEnumerable<OutletItem>>> GetAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
@@ -43,11 +44,12 @@ namespace Seller.Web.Areas.Inventory.Repositories
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletApiEndpoint}"
             };
 
-            var response = await this.apiService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<OutletItem>>>(apiRequest);
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            var response = await _apiService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<OutletItem>>>(apiRequest);
+            
+            if (response.IsSuccessStatusCode && response.Data?.Data is not null)
             {
                 return new PagedResults<IEnumerable<OutletItem>>(response.Data.Total, response.Data.PageSize)
                 {
@@ -55,7 +57,7 @@ namespace Seller.Web.Areas.Inventory.Repositories
                 };
             }
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
@@ -70,11 +72,12 @@ namespace Seller.Web.Areas.Inventory.Repositories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletApiEndpoint}/{id}"
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletApiEndpoint}/{id}"
             };
 
-            var response = await this.apiService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
-            if (!response.IsSuccessStatusCode && response?.Data != null)
+            var response = await _apiService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+            
+            if (response.IsSuccessStatusCode is false && response?.Data is not null)
             {
                 throw new CustomException(response.Data.Message, (int)response.StatusCode);
             }
@@ -97,22 +100,23 @@ namespace Seller.Web.Areas.Inventory.Repositories
                 OrganisationId = organisationId,
                 Ean = ean
             };
+
             var apiRequest = new ApiRequest<SaveOutletRequestModel>
             {
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletApiEndpoint}"
             };
 
-            var response = await this.apiService.PostAsync<ApiRequest<SaveOutletRequestModel>, SaveOutletRequestModel, BaseResponseModel>(apiRequest);
+            var response = await _apiService.PostAsync<ApiRequest<SaveOutletRequestModel>, SaveOutletRequestModel, BaseResponseModel>(apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data?.Id != null)
+            if (response.IsSuccessStatusCode && response.Data?.Id is not null)
             {
                 return response.Data.Id.Value;
             }
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
@@ -127,16 +131,47 @@ namespace Seller.Web.Areas.Inventory.Repositories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletApiEndpoint}/{id}"
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletApiEndpoint}/{id}"
             };
 
-            var response = await this.apiService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OutletItem>(apiRequest);
-            if (!response.IsSuccessStatusCode)
+            var response = await _apiService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OutletItem>(apiRequest);
+            
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
-            if (response.IsSuccessStatusCode && response.Data != null)
+            if (response.IsSuccessStatusCode && response.Data is not null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
+
+        public async Task<IEnumerable<OutletItem>> GetOutletProductsByProductsIdAsync(string token, string language, IEnumerable<Guid> ids)
+        {
+            var requestModel = new PagedRequestModelBase
+            {
+                Ids = ids.ToEndpointParameterString(),
+            };
+
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletProductsApiEndpoint}"
+            };
+
+            var response = await _apiService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, IEnumerable<OutletItem>>(apiRequest);
+            
+            if (response.IsSuccessStatusCode is false)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data is not null)
             {
                 return response.Data;
             }

@@ -28,6 +28,36 @@ namespace Buyer.Web.Areas.Products.Repositories.Inventories
             _settings = settings;
         }
 
+        public async Task<IEnumerable<InventorySum>> GetAvailbleProductsByProductIdsAsync(string token, string language, IEnumerable<Guid> ids)
+        {
+            var requestModel = new PagedRequestModelBase
+            {
+                Ids = ids.ToEndpointParameterString()
+            };
+
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Inventory.InventoryProductsApiEndpoint}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, IEnumerable<InventorySum>>(apiRequest);
+
+            if (response.IsSuccessStatusCode is false)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data is not null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
+
         public async Task<PagedResults<IEnumerable<InventorySum>>> GetAvailbleProductsInventory(
             string language,
             int pageIndex, 

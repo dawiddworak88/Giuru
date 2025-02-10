@@ -20,18 +20,18 @@ namespace Seller.Web.Areas.Orders.ApiControllers
     [Area("Orders")]
     public class BasketsApiController : BaseApiController
     {
-        private readonly IBasketRepository basketRepository;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IMediaService mediaService;
+        private readonly IBasketRepository _basketRepository;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IMediaService _mediaService;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
             LinkGenerator linkGenerator,
             IMediaService mediaService)
         {
-            this.basketRepository = basketRepository;
-            this.linkGenerator = linkGenerator;
-            this.mediaService = mediaService;
+            _basketRepository = basketRepository;
+            _linkGenerator = linkGenerator;
+            _mediaService = mediaService;
         }
 
         [HttpPost]
@@ -40,13 +40,13 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var basket = await this.basketRepository.SaveAsync(token, language, model.Id,
+            var basket = await _basketRepository.SaveAsync(token, language, model.Id,
                 model.Items.OrEmptyIfNull().Select(x => new BasketItem
                 {
                     ProductId = x.ProductId,
                     ProductSku = x.Sku,
                     ProductName = x.Name,
-                    PictureUrl = !string.IsNullOrWhiteSpace(x.ImageSrc) ? x.ImageSrc : (x.ImageId.HasValue ? this.mediaService.GetMediaUrl(x.ImageId.Value, OrdersConstants.Basket.BasketProductImageMaxWidth) : null),
+                    PictureUrl = !string.IsNullOrWhiteSpace(x.ImageSrc) ? x.ImageSrc : (x.ImageId.HasValue ? _mediaService.GetMediaUrl(x.ImageId.Value, OrdersConstants.Basket.BasketProductImageMaxWidth) : null),
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
@@ -66,7 +66,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 basketResponseModel.Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                 {
                     ProductId = x.ProductId,
-                    ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = language, Id = x.ProductId }),
+                    ProductUrl = _linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = language, Id = x.ProductId }),
                     Name = x.ProductName,
                     Sku = x.ProductSku,
                     Quantity = x.Quantity,
@@ -79,7 +79,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 });
             }
 
-            return this.StatusCode((int)HttpStatusCode.OK, basketResponseModel);
+            return StatusCode((int)HttpStatusCode.OK, basketResponseModel);
         }
     }
 }

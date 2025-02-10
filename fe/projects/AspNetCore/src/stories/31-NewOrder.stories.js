@@ -5,6 +5,9 @@ import "../areas/Orders/pages/NewOrder/NewOrderPage.scss";
 const orderForm = {
     title: "Order",
     searchPlaceholderLabel: "Enter SKU or product name",
+    quantityLabel: "Quantity",
+    stockQuantityLabel: "Stock Quantity",
+    outletQuantityLabel: "Outlet Quantity",
     externalReferenceLabel: "External order number",
     moreInfoLabel: "More info",
     deliveryToLabel: "Delivery To",
@@ -17,7 +20,8 @@ const orderForm = {
     saveText: "Place order",
     searchLabel: "Search",
     dropOrSelectFilesLabel: "Drag and drop here, or click to select an order file",
-    noResultsLabel: "No results have been found"
+    noResultsLabel: "No results have been found",
+    maximalLabel: "max:"
 };
 
 export const NewOrderPageStory = () => <NewOrderPage header={header} mainNavigation={mainNavigation} footer={footer} newOrderForm={orderForm} />;

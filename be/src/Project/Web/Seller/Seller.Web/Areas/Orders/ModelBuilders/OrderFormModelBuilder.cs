@@ -43,11 +43,12 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 AddText = _orderLocalizer.GetString("AddOrderItem"),
                 NoOrderItemsLabel = _orderLocalizer.GetString("NoOrderItemsLabel"),
                 SearchPlaceholderLabel = _orderLocalizer.GetString("EnterSkuOrName"),
-                GetSuggestionsUrl = _linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                GetSuggestionsUrl = _linkGenerator.GetPathByAction("GetProductsQuantities", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 MoreInfoLabel = _orderLocalizer.GetString("MoreInfoLabel"),
                 NameLabel = _orderLocalizer.GetString("NameLabel"),
                 OrderItemsLabel = _orderLocalizer.GetString("OrderItemsLabel"),
                 QuantityLabel = _orderLocalizer.GetString("QuantityLabel"),
+                StockQuantityLabel = _orderLocalizer.GetString("StockQuantityLabel"),
                 OutletQuantityLabel = _orderLocalizer.GetString("OutletQuantityLabel"),
                 ExternalReferenceLabel = _orderLocalizer.GetString("ExternalReferenceLabel"),
                 SkuLabel = _orderLocalizer.GetString("SkuLabel"),
@@ -73,7 +74,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 GetClientAddressesUrl = _linkGenerator.GetPathByAction("Get", "ClientAddressesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
-                DefaultItemsPerPage = Constants.DefaultItemsPerPage
+                DefaultItemsPerPage = Constants.DefaultItemsPerPage,
+                MaximalLabel = _globalLocalizer.GetString("MaximalLabel")
             };
 
             var clients = await _clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);

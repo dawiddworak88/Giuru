@@ -7,8 +7,8 @@ import Autosuggest from "react-autosuggest";
 import { Context } from "../../../../shared/stores/Store";
 import { Delete, AddShoppingCartRounded } from "@mui/icons-material";
 import {
-    Fab, Table, TableBody, TableCell, TableContainer, FormControlLabel, 
-    Select, FormControl, InputLabel, MenuItem, TableHead, TableRow, Paper, 
+    Fab, Table, TableBody, TableCell, TableContainer, FormControlLabel,
+    Select, FormControl, InputLabel, MenuItem, TableHead, TableRow, Paper,
     TextField, Button, CircularProgress, Checkbox, NoSsr
 } from "@mui/material";
 import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
@@ -23,7 +23,9 @@ function NewOrderForm(props) {
     const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(0);
+    const [stockQuantity, setStockQuantity] = useState(0);
+    const [outletQuantity, setOutletQuantity] = useState(0);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
     const [orderItems, setOrderItems] = useState(props.basketItems ? props.basketItems : []);
@@ -60,7 +62,7 @@ function NewOrderForm(props) {
                     return response.json().then(jsonResponse => {
                         if (response.ok) {
                             setSuggestions(() => []);
-                            setSuggestions(() => jsonResponse.data);
+                            setSuggestions(() => jsonResponse);
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -72,7 +74,24 @@ function NewOrderForm(props) {
         }
     };
 
+    const resetMaxAndQuantityValues = () => {
+        setQuantity(0);
+        setStockQuantity(0);
+        setOutletQuantity(0);
+    };
+
     const onSuggestionSelected = (event, { suggestion }) => {
+        var items = orderItems.filter(item => item.productId === suggestion.id);
+
+        if (items.length > 0) {
+            suggestion.stockQuantity -= items.reduce((sum, item) => sum + item.stockQuantity, 0);
+            suggestion.outletQuantity -= items.reduce((sum, item) => sum + item.outletQuantity, 0); 
+        }
+
+        setQuantity(suggestion.stockQuantity + suggestion.outletQuantity === 0 ? 1 : 0);
+        setStockQuantity(suggestion.stockQuantity > 0 ? 1 : 0);
+        setOutletQuantity(suggestion.outletQuantity > 0 && suggestion.stockQuantity === 0 ? 1 : 0);
+        
         setProduct(suggestion);
     };
 
@@ -88,7 +107,9 @@ function NewOrderForm(props) {
             sku: product.sku,
             name: product.name,
             imageId: product.images ? product.images[0] : null,
-            quantity: quantity,
+            quantity: quantity ? quantity : 0,
+            stockQuantity: stockQuantity ? stockQuantity : 0,
+            outletQuantity: outletQuantity ? outletQuantity : 0,
             externalReference,
             moreInfo
         };
@@ -119,7 +140,8 @@ function NewOrderForm(props) {
                             setProduct(null);
                             setSearchTerm("");
                             setExternalReference("");
-                            setQuantity(1);
+                            setMoreInfo("");
+                            resetMaxAndQuantityValues();
                             setOrderItems(jsonResponse.items);
                         }
                         else {
@@ -172,14 +194,14 @@ function NewOrderForm(props) {
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                
+
                 AuthenticationHelper.HandleResponse(response);
-                
+
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         setBasketId(jsonResponse.id);
                         setOpenDeleteDialog(false);
-                        
+
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
                             setOrderItems(jsonResponse.items);
                         }
@@ -221,9 +243,9 @@ function NewOrderForm(props) {
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 dispatch({ type: "SET_TOTAL_BASKET", payload: null })
-                
+
                 AuthenticationHelper.HandleResponse(response);
-                
+
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
@@ -274,7 +296,7 @@ function NewOrderForm(props) {
                 });
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); 
+    }, []);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -301,9 +323,9 @@ function NewOrderForm(props) {
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 dispatch({ type: "SET_TOTAL_BASKET", payload: null });
-                
+
                 AuthenticationHelper.HandleResponse(response);
-                
+
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
@@ -321,7 +343,7 @@ function NewOrderForm(props) {
     }
 
     const disabledActionButtons = orderItems.length === 0 ? !customOrder ? true : false : false;
-    
+
     return (
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -366,135 +388,162 @@ function NewOrderForm(props) {
                     <div className="container">
                         <div className="dropzone__pond-container" {...getRootProps()}>
                             <input id={props.id} name={props.name} {...getInputProps()} />
-                                <div className={isDragActive ? "dropzone__pond dropzone--active" : "dropzone__pond"}>
-                                    <p>
-                                        <UploadCloud size={IconConstants.defaultSize()} />
-                                    </p>
-                                    <p>{isDragActive ? props.dropFilesLabel : props.dropOrSelectFilesLabel}</p>
-                                </div>
+                            <div className={isDragActive ? "dropzone__pond dropzone--active" : "dropzone__pond"}>
+                                <p>
+                                    <UploadCloud size={IconConstants.defaultSize()} />
+                                </p>
+                                <p>{isDragActive ? props.dropFilesLabel : props.dropOrSelectFilesLabel}</p>
                             </div>
                         </div>
-                        <div className="container mt-5 mb-5 has-text-centered">
-                            {props.orLabel}
+                    </div>
+                    <div className="container mt-5 mb-5 has-text-centered">
+                        {props.orLabel}
+                    </div>
+                    <div className="columns is-tablet is-justify-content-center">
+                        <div className="column is-2 is-flex is-align-items-flex-end">
+                            <Autosuggest
+                                suggestions={suggestions}
+                                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                                onSuggestionsClearRequested={() => setSuggestions([])}
+                                getSuggestionValue={(suggestion) => {
+                                    return getProductSuggestionValue(suggestion);
+                                }}
+                                onSuggestionSelected={onSuggestionSelected}
+                                renderSuggestion={(suggestion) => {
+                                    return (
+                                        <div className="suggestion">
+                                            {getProductSuggestionValue(suggestion)}
+                                        </div>
+                                    );
+                                }}
+                                inputProps={searchInputProps}
+                            />
                         </div>
-                        <div className="columns is-tablet is-justify-content-center">
-                            <div className="column is-2 is-flex is-align-items-flex-end">
-                                <Autosuggest
-                                    suggestions={suggestions}
-                                    onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                                    onSuggestionsClearRequested={() => setSuggestions([])}
-                                    getSuggestionValue={(suggestion) => {
-                                        return getProductSuggestionValue(suggestion);
-                                    }}
-                                    onSuggestionSelected={onSuggestionSelected}
-                                    renderSuggestion={(suggestion) => {
-                                        return (
-                                            <div className="suggestion">
-                                                { getProductSuggestionValue(suggestion)}
-                                            </div>
-                                        );
-                                    }}
-                                    inputProps={searchInputProps} 
-                                />
-                            </div>
-                            <div className="column is-1 is-flex is-align-items-flex-end">
-                                <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "1", step: "1" }} variant="standard"
-                                    label={props.quantityLabel} fullWidth={true} value={quantity} onChange={(e) => {
-                                        e.preventDefault();
-                                        setQuantity(e.target.value);
-                                    }} 
-                                />
-                            </div>
-                            <div className="column is-2 is-flex is-align-items-flex-end">
-                                <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel} variant="standard"
-                                    fullWidth={true} value={externalReference} onChange={(e) => {
-                                        e.preventDefault();
-                                        setExternalReference(e.target.value);
-                                    }} 
-                                />
-                            </div>
-                            <div className="column is-2 is-flex is-align-items-flex-end">
-                                <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel} variant="standard"
-                                    fullWidth={true} value={moreInfo} onChange={(e) => {
-                                        e.preventDefault();
-                                        setMoreInfo(e.target.value);
-                                    }} />
-                            </div>
-                            <div className="column is-1 is-flex is-align-items-flex-end">
-                                <Button type="button" variant="contained" color="primary" onClick={handleAddOrderItemClick} disabled={state.isLoading || quantity < 1 || product === null}>
-                                    {props.addText}
-                                </Button>
-                            </div>
+                        <div className="column is-1 is-flex is-align-items-flex-end">
+                            <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
+                                label={props.quantityLabel} fullWidth={true} disabled={product == null} value={quantity} onChange={(e) => {
+                                    e.preventDefault();
+                                    setQuantity(e.target.value);
+                                }}
+                            />
                         </div>
-                        <div className="order__items">
-                            {(orderItems && orderItems.length > 0) ? (
-                                <Fragment>
-                                    <div className="order__items-table">
-                                        <TableContainer component={Paper}>
-                                            <Table aria-label={props.orderItemsLabel}>
-                                                <TableHead>
-                                                    <TableRow>
-                                                        {!isOrdered &&
-                                                            <TableCell></TableCell>
-                                                        }
+                        <div className="column is-2 is-flex is-align-items-flex-end">
+                            <TextField id="stockQuantity" name="stockQuantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
+                                label={`${props.stockQuantityLabel} (${props.maximalLabel} ${product ? product.stockQuantity : 0})`}
+                                fullWidth={true} disabled={product == null || product.stockQuantity == 0} value={stockQuantity} onChange={(e) => {
+                                    e.preventDefault();
+                                    const value = e.target.value
+                                    if (value >= 0) {
+                                        setStockQuantity(value > product.stockQuantity ? product.stockQuantity : value);
+                                    }
+                                    else setStockQuantity(0);
+                                }}
+                            />
+                        </div>
+                        <div className="column is-2 is-flex is-align-items-flex-end">
+                            <TextField id="outletQuantity" name="outletQuantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
+                                label={`${props.outletQuantityLabel} (${props.maximalLabel} ${product ? product.outletQuantity : 0})`}
+                                fullWidth={true} disabled={product == null || product.outletQuantity == 0} value={outletQuantity} onChange={(e) => {
+                                    e.preventDefault();
+                                    const value = e.target.value
+                                    if (value >= 0) {
+                                        setOutletQuantity(value > product.outletQuantity ? product.outletQuantity : value);
+                                    } else setOutletQuantity(0);
+                                }}
+                            />
+                        </div>
+                        <div className="column is-2 is-flex is-align-items-flex-end">
+                            <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel} variant="standard"
+                                fullWidth={true} value={externalReference} onChange={(e) => {
+                                    e.preventDefault();
+                                    setExternalReference(e.target.value);
+                                }}
+                            />
+                        </div>
+                        <div className="column is-2 is-flex is-align-items-flex-end">
+                            <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel} variant="standard"
+                                fullWidth={true} value={moreInfo} onChange={(e) => {
+                                    e.preventDefault();
+                                    setMoreInfo(e.target.value);
+                                }} />
+                        </div>
+                        <div className="column is-1 is-flex is-align-items-flex-end">
+                            <Button type="button" variant="contained" color="primary" onClick={handleAddOrderItemClick}
+                                disabled={state.isLoading || !(quantity + stockQuantity + outletQuantity > 0 && product !== null)}
+                            >
+                                {props.addText}
+                            </Button>
+                        </div>
+                    </div>
+                    <div className="order__items">
+                        {(orderItems && orderItems.length > 0) ? (
+                            <Fragment>
+                                <div className="order__items-table">
+                                    <TableContainer component={Paper}>
+                                        <Table aria-label={props.orderItemsLabel}>
+                                            <TableHead>
+                                                <TableRow>
+                                                    {!isOrdered &&
                                                         <TableCell></TableCell>
-                                                        <TableCell>{props.skuLabel}</TableCell>
-                                                        <TableCell>{props.nameLabel}</TableCell>
-                                                        <TableCell>{props.quantityLabel}</TableCell>
-                                                        <TableCell>{props.stockQuantityLabel}</TableCell>
-                                                        <TableCell>{props.outletQuantityLabel}</TableCell>
-                                                        <TableCell>{props.externalReferenceLabel}</TableCell>
-                                                        <TableCell>{props.moreInfoLabel}</TableCell>
+                                                    }
+                                                    <TableCell></TableCell>
+                                                    <TableCell>{props.skuLabel}</TableCell>
+                                                    <TableCell>{props.nameLabel}</TableCell>
+                                                    <TableCell>{props.quantityLabel}</TableCell>
+                                                    <TableCell>{props.stockQuantityLabel}</TableCell>
+                                                    <TableCell>{props.outletQuantityLabel}</TableCell>
+                                                    <TableCell>{props.externalReferenceLabel}</TableCell>
+                                                    <TableCell>{props.moreInfoLabel}</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {orderItems.map((item, index) => (
+                                                    <TableRow key={index}>
+                                                        {!isOrdered &&
+                                                            <TableCell width="11%">
+                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
+                                                                    <Delete />
+                                                                </Fab>
+                                                            </TableCell>
+                                                        }
+                                                        <TableCell><a href={item.productUrl} rel="noreferrer" target="_blank"><img className="order__basket-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
+                                                        <TableCell>{item.sku}</TableCell>
+                                                        <TableCell>{item.name}</TableCell>
+                                                        <TableCell>{item.quantity}</TableCell>
+                                                        <TableCell>{item.stockQuantity}</TableCell>
+                                                        <TableCell>{item.outletQuantity}</TableCell>
+                                                        <TableCell>{item.externalReference}</TableCell>
+                                                        <TableCell>{item.moreInfo}</TableCell>
                                                     </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {orderItems.map((item, index) => (
-                                                        <TableRow key={index}>
-                                                            {!isOrdered &&
-                                                                <TableCell width="11%">
-                                                                    <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
-                                                                        <Delete />
-                                                                    </Fab>
-                                                                </TableCell>
-                                                            }
-                                                            <TableCell><a href={item.productUrl} rel="noreferrer" target="_blank"><img className="order__basket-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
-                                                            <TableCell>{item.sku}</TableCell>
-                                                            <TableCell>{item.name}</TableCell>
-                                                            <TableCell>{item.quantity}</TableCell>
-                                                            <TableCell>{item.stockQuantity}</TableCell>
-                                                            <TableCell>{item.outletQuantity}</TableCell>
-                                                            <TableCell>{item.externalReference}</TableCell>
-                                                            <TableCell>{item.moreInfo}</TableCell>
-                                                        </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
-                                        </TableContainer>
-                                    </div>
-                                </Fragment>
-                            ) : (
-                                <section className="section is-flex-centered has-text-centered is-flex-direction-column">
-                                    <AddShoppingCartRounded fontSize="large" className="m-2" />
-                                    <span className="is-title is-5">{props.noOrderItemsLabel}</span>
-                                </section>
-                            )}
-                        </div>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </div>
+                            </Fragment>
+                        ) : (
+                            <section className="section is-flex-centered has-text-centered is-flex-direction-column">
+                                <AddShoppingCartRounded fontSize="large" className="m-2" />
+                                <span className="is-title is-5">{props.noOrderItemsLabel}</span>
+                            </section>
+                        )}
+                    </div>
                 </Fragment>
                 <div className="field">
                     <NoSsr>
-                        <FormControlLabel 
+                        <FormControlLabel
                             control={
-                                <Checkbox 
+                                <Checkbox
                                     checked={hasCustomOrder}
                                     onChange={(e) => {
                                         setHasCustomOrder(e.target.checked);
                                     }}
-                                    disabled={isOrdered}/>
+                                    disabled={isOrdered} />
                             }
                             label={props.initCustomOrderLabel}
                         />
                     </NoSsr>
-                    {hasCustomOrder && 
+                    {hasCustomOrder &&
                         <Fragment>
                             <div className="order__items">
                                 <TextField
@@ -516,7 +565,7 @@ function NewOrderForm(props) {
                                 />
                             </div>
                             <div className="mt-3">
-                                <MediaCloud 
+                                <MediaCloud
                                     id="attachments"
                                     name="attachments"
                                     label={props.attachmentsLabel}
@@ -526,14 +575,14 @@ function NewOrderForm(props) {
                                     dropFilesLabel={props.dropFilesLabel}
                                     dropOrSelectFilesLabel={props.dropOrSelectAttachmentsLabel}
                                     files={attachments}
-                                    setFieldValue={({value}) => {
+                                    setFieldValue={({ value }) => {
                                         setAttachments(value);
                                     }}
                                     saveMediaUrl={props.saveMediaUrl}
                                     accept={{
                                         "image/*": [".png", ".jpg", ".webp"],
                                         "application/*": [".pdf", ".docx", ".doc", ".zip", ".xls", ".xlsx"]
-                                    }}/>
+                                    }} />
                             </div>
                         </Fragment>
                     }
@@ -547,15 +596,15 @@ function NewOrderForm(props) {
                                 color="primary"
                                 onClick={handlePlaceOrder}
                                 disabled={state.isLoading || disabledActionButtons}
-                                >
+                            >
                                 {props.saveText}
                             </Button>
-                            <Button 
-                                className="order__clear-button" 
-                                color="secondary" variant="contained" 
-                                onClick={clearBasket} 
+                            <Button
+                                className="order__clear-button"
+                                color="secondary" variant="contained"
+                                onClick={clearBasket}
                                 disabled={state.isLoading || disabledActionButtons}>
-                                    {props.clearBasketText}
+                                {props.clearBasketText}
                             </Button>
                         </>
                     )}
@@ -584,6 +633,8 @@ NewOrderForm.propTypes = {
     skuLabel: PropTypes.string.isRequired,
     nameLabel: PropTypes.string.isRequired,
     quantityLabel: PropTypes.string.isRequired,
+    stockQuantityLabel: PropTypes.string.isRequired,
+    outletQuantityLabel: PropTypes.string.isRequired,
     externalReferenceLabel: PropTypes.string.isRequired,
     moreInfoLabel: PropTypes.string.isRequired,
     getSuggestionsUrl: PropTypes.string.isRequired,
@@ -591,7 +642,6 @@ NewOrderForm.propTypes = {
     generalErrorMessage: PropTypes.string.isRequired,
     addText: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
-    saveUrl: PropTypes.string.isRequired,
     noOrderItemsLabel: PropTypes.string.isRequired,
     okLabel: PropTypes.string.isRequired,
     cancelLabel: PropTypes.string.isRequired,

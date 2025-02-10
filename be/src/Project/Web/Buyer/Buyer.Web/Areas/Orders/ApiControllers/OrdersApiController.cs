@@ -13,12 +13,12 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
     [Area("Orders")]
     public class OrdersApiController : BaseApiController
     {
-        private readonly IOrdersRepository ordersRepository;
+        private readonly IOrdersRepository _ordersRepository;
 
         public OrdersApiController(
             IOrdersRepository ordersRepository)
         {
-            this.ordersRepository = ordersRepository;
+            _ordersRepository = ordersRepository;
         }
 
         [HttpGet]
@@ -27,9 +27,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var orders = await this.ordersRepository.GetOrdersAsync(token, language, searchTerm, pageIndex, itemsPerPage, $"{nameof(Order.CreatedDate)} desc");
+            var orders = await _ordersRepository.GetOrdersAsync(token, language, searchTerm, pageIndex, itemsPerPage, $"{nameof(Order.CreatedDate)} desc");
 
-            return this.StatusCode((int)HttpStatusCode.OK, orders);
+            return StatusCode((int)HttpStatusCode.OK, orders);
         }
     }
 }

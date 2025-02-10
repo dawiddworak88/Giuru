@@ -50,7 +50,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 Title = _orderLocalizer.GetString("Order"),
                 AddText = _orderLocalizer.GetString("AddOrderItem"),
                 SearchPlaceholderLabel = _orderLocalizer.GetString("EnterSkuOrName"),
-                GetSuggestionsUrl = _linkGenerator.GetPathByAction("GetSuggestion", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                GetSuggestionsUrl = _linkGenerator.GetPathByAction("GetProductsQuantities", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 OrLabel = _globalLocalizer.GetString("Or"),
                 DropFilesLabel = _globalLocalizer.GetString("DropFile"),
                 DropOrSelectFilesLabel = _orderLocalizer.GetString("DropOrSelectOrderFile"),
@@ -78,7 +78,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 ChangeDeliveryFromLabel = _orderLocalizer.GetString("ChangeDeliveryFrom"),
                 ChangeDeliveryToLabel = _orderLocalizer.GetString("ChangeDeliveryTo"),
                 OrdersUrl = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                SaveUrl = _linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 UploadOrderFileUrl = _linkGenerator.GetPathByAction("Index", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 ClearBasketText = _orderLocalizer.GetString("ClearBasketText"),
                 ClearBasketUrl = _linkGenerator.GetPathByAction("Delete", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
@@ -89,7 +88,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 DropOrSelectAttachmentsLabel = _globalLocalizer.GetString("DropOrSelectAttachments"),
                 SaveMediaUrl = _linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
-                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress")
+                BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
+                MaximalLabel = _globalLocalizer.GetString("MaximalLabel")
             };
 
             if (componentModel.BasketId.HasValue)
