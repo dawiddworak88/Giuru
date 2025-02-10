@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Orders.DomainModels;
-using Buyer.Web.Areas.Products.ApiResponseModels;
+﻿using Buyer.Web.Areas.Products.ApiResponseModels;
 using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
