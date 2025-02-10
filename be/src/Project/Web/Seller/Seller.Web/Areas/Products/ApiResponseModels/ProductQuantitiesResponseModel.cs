@@ -1,9 +1,14 @@
-﻿using Seller.Web.Areas.Products.DomainModels;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Products.ApiResponseModels
 {
-    public class ProductQuantitiesResponseModel : Product
+    public class ProductQuantitiesResponseModel
     {
+        public Guid Id { get; set; }
+        public string Sku { get; set; }
+        public string Name { get; set; }
+        public IEnumerable<Guid> Images { get; set; }
         public double StockQuantity { get; set; }
         public double OutletQuantity { get; set; }
     }
