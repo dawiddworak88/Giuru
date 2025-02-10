@@ -438,10 +438,10 @@ namespace Outlet.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Gets a products outles by products ids.
+        /// Gets a products outlets by products ids.
         /// </summary>
         /// <param name="ids">The products ids.</param>
-        /// <returns>The list of products outles.</returns>
+        /// <returns>The list of products outlets.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("products")]
         [AllowAnonymous]
