@@ -135,9 +135,6 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="Cards" xml:space="preserve">
-    <value>Cards</value>
-  </data>
   <data name="Categories" xml:space="preserve">
     <value>Categories</value>
   </data>
@@ -435,11 +432,11 @@
   <data name="Catalog" xml:space="preserve">
     <value>Catalog</value>
   </data>
-  <data name="ErrorOccurred" xml:space="preserve">
-    <value>An error has occurred. Please contact an administrator.</value>
-  </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Unauthorized</value>
+  </data>
+  <data name="ErrorOccurred" xml:space="preserve">
+    <value>An error has occurred. Please contact an administrator.</value>
   </data>
   <data name="Outlet" xml:space="preserve">
     <value>Outlet</value>
@@ -462,14 +459,14 @@
   <data name="News" xml:space="preserve">
     <value>News</value>
   </data>
-  <data name="LoadingLabel" xml:space="preserve">
-    <value>Loading in progress</value>
-  </data>
   <data name="MakeComplaint" xml:space="preserve">
     <value>Make a complaint</value>
   </data>
   <data name="Id" xml:space="preserve">
     <value>Id:</value>
+  </data>
+  <data name="LoadingLabel" xml:space="preserve">
+    <value>Loading in progress</value>
   </data>
   <data name="PhoneNumberLabel" xml:space="preserve">
     <value>Phone number</value>
@@ -525,6 +522,9 @@
   <data name="CompanyName" xml:space="preserve">
     <value>Company name</value>
   </data>
+  <data name="ContactJobTitle" xml:space="preserve">
+    <value>Contact job title</value>
+  </data>
   <data name="Country" xml:space="preserve">
     <value>Country</value>
   </data>
@@ -533,9 +533,6 @@
   </data>
   <data name="Region" xml:space="preserve">
     <value>Region</value>
-  </data>
-  <data name="ContactJobTitle" xml:space="preserve">
-    <value>Contact job title</value>
   </data>
   <data name="AccountManager" xml:space="preserve">
     <value>Account Manager</value>
@@ -791,5 +788,11 @@
   </data>
   <data name="ClientApprovals" xml:space="preserve">
     <value>Approvals</value>
+  </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Cards</value>
+  </data>
+  <data name="PersonalDataAdministrator" xml:space="preserve">
+    <value>The administrator of the personal data provided in the form is EELTAP Spółka z ograniczoną odpowiedzialnością Sp. k. The principles of data processing and your related rights are described in the</value>
   </data>
 </root>
