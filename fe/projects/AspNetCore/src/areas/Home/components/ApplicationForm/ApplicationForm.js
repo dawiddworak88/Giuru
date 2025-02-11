@@ -572,6 +572,9 @@ const ApplicationForm = (props) => {
                                 <span>{props.acceptTermsText} <a href={props.regulationsUrl} className="is-underlined" target="_blank">{props.regulations}</a>  &amp; <a href={props.privacyPolicyUrl} className="is-underlined" target="_blank">{props.privacyPolicy}</a></span>
                             </NoSsr>
                         </div>
+                        <div className="field">
+                            {props.personalDataAdministratorText} <a href={props.privacyPolicyUrl} className="is-underlined" target="_blank">{props.privacyPolicy}</a>
+                        </div>
                         <div className="is-flex is-justify-content-center">
                             <Button
                                 type="submit"
