@@ -12,7 +12,7 @@ function SetPasswordForm(props) {
     const [state, dispatch] = useContext(Context);
     const [approvalsId, setApprovalsId] = useState([]);
     const [approvalCheckboxes, setApprovalCheckboxes] = useState(props.approvals.map((approval) => {
-        return {id: approval.id, label: approval.name, checked: false}
+        return {id: approval.id, label: approval.description, name: approval.name, checked: false}
     }))
 
     const stateSchema = {
@@ -95,26 +95,28 @@ function SetPasswordForm(props) {
                         <div className="column is-7 card p-6">
                             <div className="field">
                                 <h1 className="title">{props.marketingApprovalHeader}</h1>
-                                <p className="subtitle mb-2 mt-1">{props.marketingApprovalText}</p>
+                                <p className="subtitle">{props.marketingApprovalText}</p>
                             </div>
                             {approvalCheckboxes && approvalCheckboxes.length > 0 && (
-                                <div className="is-flex is-justify-content-center is-align-content-center is-flex-wrap-wrap">
+                                <div className="field">
                                     {approvalCheckboxes.map((checkbox) => {
                                         return (
-                                            <div className="checkbox mb-2" key={checkbox.id}>
+                                            <div className="is-flex mb-5" key={checkbox.id}>
                                                 <NoSsr>
                                                     <FormControlLabel
                                                         control={
                                                             <Checkbox
                                                                 onChange={() => checkboxOnChangeHandler(checkbox.id)}
                                                                 checked={checkbox.checked}
-                                                                id={checkbox.label}
-                                                                name={checkbox.label}
-                                                                color="secondary" />
+                                                                id={checkbox.id}
+                                                                name={checkbox.name}
+                                                                color="secondary"/>
                                                         }
-                                                        label={checkbox.label}
                                                     />
                                                 </NoSsr>
+                                                <div className="has-text-left">
+                                                    {checkbox.label}
+                                                </div>
                                             </div>
                                         )
                                     })}
