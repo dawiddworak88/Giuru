@@ -17,6 +17,7 @@ using System.Linq;
 using Identity.Api.Services.Approvals;
 using Identity.Api.ServicesModels.Approvals;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Security.Definitions;
 
 namespace Identity.Api.Areas.Accounts.ModelBuilders
 {
@@ -65,7 +66,10 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
                 PasswordSetSuccessMessage = _accountLocalizer.GetString("PasswordUpdated"),
                 MarketingApprovalHeader = _accountLocalizer.GetString("MarketingApprovalHeader"),
-                MarketingApprovalText = _accountLocalizer.GetString("MarketingApprovalText")
+                MarketingApprovalText = _accountLocalizer.GetString("MarketingApprovalText"),
+                PrivacyPolicy = _globalLocalizer.GetString("LowerPrivacyPolicy"),
+                PrivacyPolicyUrl = $"{SecurityConstants.PrivacyPolicyEndpoint}",
+                PersonalDataAdministratorText = _globalLocalizer.GetString("PersonalDataAdministrator")
             };
 
             var getApprovalsServiceModel = new GetApprovalsServiceModel
