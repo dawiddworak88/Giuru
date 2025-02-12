@@ -52,6 +52,7 @@ namespace Identity.Api.v1.Controllers
                 {
                     Id = model.Id.Value,
                     Name = model.Name,
+                    Description = model.Description,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -74,6 +75,7 @@ namespace Identity.Api.v1.Controllers
                 var serviceModel = new CreateApprovalServiceModel
                 {
                     Name = model.Name,
+                    Description = model.Description,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -128,6 +130,7 @@ namespace Identity.Api.v1.Controllers
                     {
                         Id = approval.Id,
                         Name = approval.Name,
+                        Description = approval.Description,
                         CreatedDate = approval.CreatedDate,
                         LastModifiedDate = approval.LastModifiedDate,
                     };
@@ -176,6 +179,7 @@ namespace Identity.Api.v1.Controllers
                     {
                         Id = x.Id,
                         Name = x.Name,
+                        Description = x.Description,
                         CreatedDate = x.CreatedDate,
                         LastModifiedDate = x.LastModifiedDate,
                     })

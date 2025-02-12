@@ -41,6 +41,7 @@ namespace Identity.Api.Services.Approvals
             {
                 ApprovalId = approval.Id,
                 Name = model.Name,
+                Description = model.Description,
                 Language = model.Language
             };
 
@@ -73,6 +74,7 @@ namespace Identity.Api.Services.Approvals
                 {
                     Id = x.Id,
                     Name = x.Translations.FirstOrDefault(t => t.ApprovalId == x.Id && t.Language == model.Language) != null ? x.Translations.FirstOrDefault(t => t.ApprovalId == x.Id && t.Language == model.Language).Name : x.Translations.FirstOrDefault(t => t.ApprovalId == x.Id).Name,
+                    Description = x.Translations.FirstOrDefault(t => t.ApprovalId == x.Id && t.Language == model.Language) != null ? x.Translations.FirstOrDefault(t => t.ApprovalId == x.Id && t.Language == model.Language).Description : x.Translations.FirstOrDefault(t => t.ApprovalId == x.Id).Description,
                     CreatedDate = x.CreatedDate,
                     LastModifiedDate = x.LastModifiedDate
                 });
@@ -113,6 +115,7 @@ namespace Identity.Api.Services.Approvals
             {
                 Id = approval.Id,
                 Name = approval.Translations.FirstOrDefault(t => t.ApprovalId == approval.Id && t.Language == model.Language) != null ? approval.Translations.FirstOrDefault(t => t.ApprovalId == approval.Id && t.Language == model.Language).Name : approval.Translations.FirstOrDefault(t => t.ApprovalId == approval.Id).Name,
+                Description = approval.Translations.FirstOrDefault(t => t.ApprovalId == approval.Id && t.Language == model.Language) != null ? approval.Translations.FirstOrDefault(t => t.ApprovalId == approval.Id && t.Language == model.Language).Description : approval.Translations.FirstOrDefault(t => t.ApprovalId == approval.Id).Description,
                 CreatedDate = approval.CreatedDate
             };
         }
@@ -131,6 +134,7 @@ namespace Identity.Api.Services.Approvals
             if (approvalTranslation is not null)
             {
                 approvalTranslation.Name = model.Name;
+                approvalTranslation.Description = model.Description;
                 approvalTranslation.LastModifiedDate = DateTime.UtcNow;
             }
             else
@@ -138,6 +142,7 @@ namespace Identity.Api.Services.Approvals
                 var newApprovalTranslation = new ApprovalTranslation
                 {
                     Name = model.Name,
+                    Description = model.Description,
                     Language = model.Language,
                     ApprovalId = approval.Id
                 };
