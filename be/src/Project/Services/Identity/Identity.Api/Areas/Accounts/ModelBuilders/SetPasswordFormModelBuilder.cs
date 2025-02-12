@@ -87,7 +87,8 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 .Select(x => new ApprovalViewModel 
                 { 
                     Id = x.Id,
-                    Name = x.Name
+                    Name = x.Name,
+                    Description = x.Description
                 });
 
             if (componentModel.Id.HasValue)
