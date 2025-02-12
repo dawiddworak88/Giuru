@@ -1,17 +1,24 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { PropTypes } from "prop-types";
 import { Context } from "../../../../shared/stores/Store";
 import useForm from "../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
-import { Button, InputLabel, TextField } from "@mui/material";
+import { Button, InputLabel, NoSsr, TextField } from "@mui/material";
+import { Editor } from "react-draft-wysiwyg";
+import { EditorState } from "draft-js";
+import { stateToMarkdown } from "draft-js-export-markdown";
+import { stateFromMarkdown } from "draft-js-import-markdown";
 
 const ClientApprovalForm = (props) => {
     const [state, dispatch] = useContext(Context);
+    const [convertedToRaw, setConvertedToRaw] = useState(props.description ? props.description : null);
+    const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
-        name: { value: props.name ? props.name : "", error: "" }
+        name: { value: props.name ? props.name : "", error: "" },
+        description: { value: props.description ? props.description : "", error: "" },
     }
 
     const stateValidatorSchema = {
@@ -20,16 +27,35 @@ const ClientApprovalForm = (props) => {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
             }
+        },
+        description: {
+            required: {
+                isRequired: true,
+                error: props.fieldRequiredErrorMessage
+            }
         }
     };
+
+    const handleEditorChange = (state) => {
+        setEditorState(state);
+
+        const convertedToMarkdown = stateToMarkdown(state.getCurrentContent());
+        setConvertedToRaw(convertedToMarkdown);
+    }
 
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        var approval = {
+            id,
+            name,
+            description: convertedToRaw
+        }
+
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(state)
+            body: JSON.stringify(approval)
         }
 
         fetch(props.saveUrl, requestOptions)
@@ -57,6 +83,16 @@ const ClientApprovalForm = (props) => {
 
     const { id, name } = values;
 
+    useEffect(() => {
+        if(typeof window !== "undefined") {
+            if (props.description) {
+                setEditorState(EditorState.createWithContent(
+                    stateFromMarkdown(props.description)
+                ));
+            }
+        }
+    }, []);
+
     return (
         <section className="section section-small-padding category">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -79,6 +115,18 @@ const ClientApprovalForm = (props) => {
                                 variant="standard"
                                 helperText={dirty.name ? errors.name : ""} 
                                 error={(errors.name.length > 0) && dirty.name} />
+                        </div>
+                        <div className="field">
+                            <InputLabel id="description-label">{props.descriptionLabel}</InputLabel>
+                            <NoSsr>
+                                <Editor 
+                                    editorState={editorState}
+                                    onEditorStateChange={handleEditorChange}
+                                    localization={{
+                                        locale: props.locale
+                                    }}
+                                />
+                            </NoSsr>
                         </div>
                         <div className="field">
                             <Button 
