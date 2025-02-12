@@ -101,7 +101,7 @@ function SetPasswordForm(props) {
                                 <div className="is-flex is-justify-content-center is-align-content-center is-flex-wrap-wrap">
                                     {approvalCheckboxes.map((checkbox) => {
                                         return (
-                                            <div className="checkbox" key={checkbox.id}>
+                                            <div className="checkbox mb-2" key={checkbox.id}>
                                                 <NoSsr>
                                                     <FormControlLabel
                                                         control={
@@ -120,6 +120,9 @@ function SetPasswordForm(props) {
                                     })}
                                 </div>
                             )}
+                            <div className="field">
+                                {props.personalDataAdministratorText} <a href={props.privacyPolicyUrl} className="is-underlined" target="_blank">{props.privacyPolicy}</a>
+                            </div>
                         </div>
                         <div className="column is-4">
                             <input type="hidden" name="id" value={id} />
