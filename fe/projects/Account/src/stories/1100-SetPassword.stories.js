@@ -20,12 +20,12 @@ var setPasswordForm = {
     {
       id: 1,
       name: "Consent to receiving marketing information via newsletter",
-      description: "NEWSLETTER - I want to receive information about news, promotions, products, or services of ELTAP Spółka z ograniczoną odpowiedzialnością Sp. k. under the terms specified in the privacy policy."
+      description: "**NEWSLETTER** - I want to receive information about news, promotions, products, or services of ELTAP Spółka z ograniczoną odpowiedzialnością Sp. k. under the terms specified in the privacy policy."
     },
     {
       id: 2,
       name: "Consent to receiving marketing information via phone",
-      description: "PHONE - I consent to being contacted by phone and receiving SMS messages for the purpose of marketing ELTAP Spółka z ograniczoną odpowiedzialnością Sp. k. products or services under the terms specified in the privacy policy."
+      description: "**PHONE** - I consent to being contacted by phone and receiving SMS messages for the purpose of marketing ELTAP Spółka z ograniczoną odpowiedzialnością Sp. k. products or services under the terms specified in the privacy policy."
     }
   ]
 };
