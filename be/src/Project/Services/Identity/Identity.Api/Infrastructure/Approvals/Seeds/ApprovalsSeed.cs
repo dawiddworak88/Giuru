@@ -34,7 +34,7 @@ namespace Identity.Api.Infrastructure.Approvals.Seeds
                 Guid.Parse("5A4C4388-E991-4FCD-9CDA-24F60898C922"),
                 "Consent to receiving confirmation emails regarding order placement",
                 "I consent to receiving confirmation emails regarding order placement.",
-                "Zgoda na wysyłanie maili potiwerdzających złożenie zamówienia",
+                "Zgoda na wysyłanie maili potwierdzających złożenie zamówienia",
                 "Wyrażam zgodę na wysyłanie maili potwierdzających złożenie zamówienia.",
                 "Einwilligung zum Erhalt von Bestätigungs-E-Mails über die Auftragserteilung",
                 "Ich stimme dem Erhalt von Bestätigungs-E-Mails über die Auftragserteilung zu.");
