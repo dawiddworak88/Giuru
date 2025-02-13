@@ -7,6 +7,7 @@ import PasswordValidator from "../../../../shared/helpers/validators/PasswordVal
 import { toast } from "react-toastify";
 import NavigationHelper from "../../../../shared/helpers/globals/NavigationHelper";
 import ToastHelper from "../../../../shared/helpers/globals/ToastHelper";
+import { marked } from "marked";
 
 function SetPasswordForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -115,7 +116,7 @@ function SetPasswordForm(props) {
                                                     />
                                                 </NoSsr>
                                                 <div className="has-text-left">
-                                                    {checkbox.label}
+                                                    <div dangerouslySetInnerHTML={{ __html: marked.parse(checkbox.label) }}></div>
                                                 </div>
                                             </div>
                                         )
