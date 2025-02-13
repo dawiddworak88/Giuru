@@ -27,12 +27,6 @@ const ClientApprovalForm = (props) => {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
             }
-        },
-        description: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
         }
     };
 
