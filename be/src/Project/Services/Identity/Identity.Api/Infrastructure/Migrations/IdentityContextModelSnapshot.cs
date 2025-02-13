@@ -18,7 +18,7 @@ namespace Identity.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.12")
+                .HasAnnotation("ProductVersion", "8.0.5")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -168,7 +168,7 @@ namespace Identity.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("Identity.Api.Infrastructure.Approvals.Entities.Approval", b =>
@@ -193,7 +193,7 @@ namespace Identity.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Approvals");
+                    b.ToTable("Approvals", (string)null);
                 });
 
             modelBuilder.Entity("Identity.Api.Infrastructure.Approvals.Entities.ApprovalTranslation", b =>
@@ -207,10 +207,6 @@ namespace Identity.Api.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -234,7 +230,7 @@ namespace Identity.Api.Infrastructure.Migrations
 
                     b.HasIndex("ApprovalId");
 
-                    b.ToTable("ApprovalTranslations");
+                    b.ToTable("ApprovalTranslations", (string)null);
                 });
 
             modelBuilder.Entity("Identity.Api.Infrastructure.Approvals.Entities.UserApproval", b =>
@@ -267,7 +263,7 @@ namespace Identity.Api.Infrastructure.Migrations
 
                     b.HasIndex("ApprovalId");
 
-                    b.ToTable("UserApprovals");
+                    b.ToTable("UserApprovals", (string)null);
                 });
 
             modelBuilder.Entity("Identity.Api.Infrastructure.Organisations.Entities.Connection", b =>
@@ -305,7 +301,7 @@ namespace Identity.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Connections");
+                    b.ToTable("Connections", (string)null);
                 });
 
             modelBuilder.Entity("Identity.Api.Infrastructure.Organisations.Entities.Organisation", b =>
@@ -353,7 +349,7 @@ namespace Identity.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Organisations");
+                    b.ToTable("Organisations", (string)null);
                 });
 
             modelBuilder.Entity("Identity.Api.Infrastructure.Organisations.Entities.OrganisationAddress", b =>
@@ -387,7 +383,7 @@ namespace Identity.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OrganisationAddreses");
+                    b.ToTable("OrganisationAddreses", (string)null);
                 });
 
             modelBuilder.Entity("Identity.Api.Infrastructure.Organisations.Entities.OrganisationAppSecret", b =>
@@ -421,7 +417,7 @@ namespace Identity.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OrganisationAppSecrets");
+                    b.ToTable("OrganisationAppSecrets", (string)null);
                 });
 
             modelBuilder.Entity("Identity.Api.Infrastructure.Organisations.Entities.OrganisationFile", b =>
@@ -455,7 +451,7 @@ namespace Identity.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OrganisationFiles");
+                    b.ToTable("OrganisationFiles", (string)null);
                 });
 
             modelBuilder.Entity("Identity.Api.Infrastructure.Organisations.Entities.OrganisationImage", b =>
@@ -489,7 +485,7 @@ namespace Identity.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OrganisationImages");
+                    b.ToTable("OrganisationImages", (string)null);
                 });
 
             modelBuilder.Entity("Identity.Api.Infrastructure.Organisations.Entities.OrganisationTranslation", b =>
@@ -523,7 +519,7 @@ namespace Identity.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OrganisationTranslations");
+                    b.ToTable("OrganisationTranslations", (string)null);
                 });
 
             modelBuilder.Entity("Identity.Api.Infrastructure.Organisations.Entities.OrganisationVideo", b =>
@@ -557,7 +553,7 @@ namespace Identity.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OrganisationVideos");
+                    b.ToTable("OrganisationVideos", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
