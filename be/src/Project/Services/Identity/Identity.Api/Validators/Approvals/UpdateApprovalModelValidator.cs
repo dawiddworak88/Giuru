@@ -10,7 +10,6 @@ namespace Identity.Api.Validators.Approvals
         {
             RuleFor(x => x.Id).NotNull().NotEmpty();
             RuleFor(x => x.Name).NotNull().NotEmpty();
-            RuleFor(x => x.Description).NotNull().NotEmpty();
         }
     }
 }
