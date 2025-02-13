@@ -8,7 +8,6 @@ namespace Identity.Api.Infrastructure.Approvals.Entities
     {
         [Required]
         public string Name { get; set; }
-        [Required]
         public string Description { get; set; }
         public Guid ApprovalId { get; set; }
     }
