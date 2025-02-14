@@ -24,7 +24,7 @@ namespace Identity.Api.Infrastructure.Approvals.Seeds
                 Guid.Parse("d34ec3d3-bb88-4de5-9391-d9d29609551a"),
                 "Consent to receiving marketing information via phone",
                 "PHONE - I consent to being contacted by phone and receiving SMS messages for the purpose of marketing ELTAP Spółka z ograniczoną odpowiedzialnością Sp. k. products or services under the terms specified in the privacy policy.",
-                "Zgodana wysyłanie informacji marketingowych za pomocą telefonu",
+                "Zgoda na wysyłanie informacji marketingowych za pomocą telefonu",
                 "TELEFON - Wyrażam zgodę na dzwonienie do mnie oraz wysyłanie wiadomości SMS w celu marketingu produktów lub usług ELTAP Spółka z ograniczoną odpowiedzialnością Sp. k. na zasadach określonych w polityce prywatności.",
                 "Einwilligung zum Erhalt von Marketinginformationen per Telefon",
                 "TELEFON – Ich stimme zu, dass ich für Marketingzwecke der Produkte oder Dienstleistungen von ELTAP Spółka z ograniczoną odpowiedzialnością Sp. k. gemäß den in den Datenschutz-Bestimmungen festgelegten Bedingungen angerufen und per SMS kontaktiert werde.");
