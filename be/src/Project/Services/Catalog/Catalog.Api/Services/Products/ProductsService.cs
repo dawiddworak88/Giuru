@@ -65,6 +65,11 @@ namespace Catalog.Api.Services.Products
                 throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
+            if (_context.Products.Any(x => x.Sku == model.Sku && x.IsActive))
+            {
+                throw new CustomException(_productLocalizer.GetString("ProductSkuConflict"), (int)HttpStatusCode.Conflict);
+            }
+
             var product = new Product
             {
                 IsNew = model.IsNew,
@@ -167,7 +172,12 @@ namespace Catalog.Api.Services.Products
             {
                 throw new CustomException(_productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NoContent);
             }
-            
+
+            if (_context.Products.Any(x => x.Sku == model.Sku && x.Id != model.Id && x.IsActive))
+            {
+                throw new CustomException(_productLocalizer.GetString("ProductSkuConflict"), (int)HttpStatusCode.Conflict);
+            }
+
             product.IsNew = model.IsNew;
             product.IsPublished = model.IsPublished;
             product.IsProtected = model.IsProtected;

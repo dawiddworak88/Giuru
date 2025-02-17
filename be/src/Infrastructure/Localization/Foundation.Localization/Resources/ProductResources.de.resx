@@ -297,4 +297,7 @@
   <data name="ProductAttributeItemInUseByCategories" xml:space="preserve">
     <value>Bitte zuerst den Attributwert von Produktkarten der folenden Kategorien entfernen: </value>
   </data>
+  <data name="ProductSkuConflict" xml:space="preserve">
+	  <value>Ein Produkt mit dieser SKU existiert bereits.</value>
+  </data>
 </root>

@@ -292,9 +292,12 @@
     <value>Przejdź do definicji</value>
   </data>
   <data name="ProductAttributeInUseByCategories" xml:space="preserve">
-	<value>Usuń najpierw atrybut z kart produktów następujących kategorii: </value>
+	  <value>Usuń najpierw atrybut z kart produktów następujących kategorii: </value>
   </data>
   <data name="ProductAttributeItemInUseByCategories" xml:space="preserve">
-	<value>Usuń najpierw wartość atrybutu z kart produktów następujących kategorii: </value>
+	  <value>Usuń najpierw wartość atrybutu z kart produktów następujących kategorii: </value>
+  </data>
+  <data name="ProductSkuConflict" xml:space="preserve">
+	  <value>Produkt o takim SKU już istnieje.</value>
   </data>
 </root>
