@@ -65,7 +65,7 @@ namespace Catalog.Api.Services.Products
                 throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            if (_context.Products.Any(x => x.Sku == model.Sku))
+            if (_context.Products.Any(x => x.Sku == model.Sku && x.IsActive))
             {
                 throw new CustomException(_productLocalizer.GetString("ProductSkuConflict"), (int)HttpStatusCode.Conflict);
             }
