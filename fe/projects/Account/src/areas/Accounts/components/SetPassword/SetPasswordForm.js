@@ -7,12 +7,13 @@ import PasswordValidator from "../../../../shared/helpers/validators/PasswordVal
 import { toast } from "react-toastify";
 import NavigationHelper from "../../../../shared/helpers/globals/NavigationHelper";
 import ToastHelper from "../../../../shared/helpers/globals/ToastHelper";
+import { marked } from "marked";
 
 function SetPasswordForm(props) {
     const [state, dispatch] = useContext(Context);
     const [approvalsId, setApprovalsId] = useState([]);
     const [approvalCheckboxes, setApprovalCheckboxes] = useState(props.approvals.map((approval) => {
-        return {id: approval.id, label: approval.name, checked: false}
+        return {id: approval.id, label: approval.description, name: approval.name, checked: false}
     }))
 
     const stateSchema = {
@@ -95,31 +96,36 @@ function SetPasswordForm(props) {
                         <div className="column is-7 card p-6">
                             <div className="field">
                                 <h1 className="title">{props.marketingApprovalHeader}</h1>
-                                <p className="subtitle mb-2 mt-1">{props.marketingApprovalText}</p>
+                                <p className="subtitle">{props.marketingApprovalText}</p>
                             </div>
                             {approvalCheckboxes && approvalCheckboxes.length > 0 && (
-                                <div className="is-flex is-justify-content-center is-align-content-center is-flex-wrap-wrap">
+                                <div className="field">
                                     {approvalCheckboxes.map((checkbox) => {
                                         return (
-                                            <div className="checkbox" key={checkbox.id}>
+                                            <div className="is-flex mb-5" key={checkbox.id}>
                                                 <NoSsr>
                                                     <FormControlLabel
                                                         control={
                                                             <Checkbox
                                                                 onChange={() => checkboxOnChangeHandler(checkbox.id)}
                                                                 checked={checkbox.checked}
-                                                                id={checkbox.label}
-                                                                name={checkbox.label}
-                                                                color="secondary" />
+                                                                id={checkbox.id}
+                                                                name={checkbox.name}
+                                                                color="secondary"/>
                                                         }
-                                                        label={checkbox.label}
                                                     />
                                                 </NoSsr>
+                                                <div className="has-text-left">
+                                                    <div dangerouslySetInnerHTML={{ __html: marked.parse(checkbox.label) }}></div>
+                                                </div>
                                             </div>
                                         )
                                     })}
                                 </div>
                             )}
+                            <div className="field">
+                                {props.personalDataAdministratorText} <a href={props.privacyPolicyUrl} className="is-underlined" target="_blank">{props.privacyPolicy}</a>
+                            </div>
                         </div>
                         <div className="column is-4">
                             <input type="hidden" name="id" value={id} />

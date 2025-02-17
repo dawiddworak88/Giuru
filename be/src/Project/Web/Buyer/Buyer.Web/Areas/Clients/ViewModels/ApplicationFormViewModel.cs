@@ -44,5 +44,6 @@ namespace Buyer.Web.Areas.Clients.ViewModels
         public string RegulationsUrl { get; set; }
         public string PrivacyPolicy { get; set; }
         public string Regulations { get; set; }
+        public string PersonalDataAdministratorText { get; set; }
     }
 }

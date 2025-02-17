@@ -75,7 +75,8 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
                 PrivacyPolicyUrl = $"{_options.Value.IdentityUrl}{SecurityConstants.PrivacyPolicyEndpoint}",
                 RegulationsUrl = $"{_options.Value.IdentityUrl}{SecurityConstants.RegulationsEndpoint}",
                 PrivacyPolicy = _globalLocalizer.GetString("LowerPrivacyPolicy"),
-                Regulations = _globalLocalizer.GetString("LowerRegulations")
+                Regulations = _globalLocalizer.GetString("LowerRegulations"),
+                PersonalDataAdministratorText = _globalLocalizer.GetString("PersonalDataAdministrator")
             };
 
             viewModel.ContactJobTitles = new List<ContactJobTitle>
