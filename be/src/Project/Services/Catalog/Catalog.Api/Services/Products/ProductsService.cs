@@ -173,7 +173,7 @@ namespace Catalog.Api.Services.Products
                 throw new CustomException(_productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NoContent);
             }
 
-            if (_context.Products.Any(x => x.Sku == model.Sku && x.Id != model.Id))
+            if (_context.Products.Any(x => x.Sku == model.Sku && x.Id != model.Id && x.IsActive))
             {
                 throw new CustomException(_productLocalizer.GetString("ProductSkuConflict"), (int)HttpStatusCode.Conflict);
             }
