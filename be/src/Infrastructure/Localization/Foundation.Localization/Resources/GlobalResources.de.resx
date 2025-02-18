@@ -792,7 +792,4 @@
   <data name="ClientApprovals" xml:space="preserve">
     <value>Zustimmungen</value>
   </data>
-  <data name="PersonalDataAdministrator" xml:space="preserve">
-    <value>Der Verantwortliche für die im Formular angegebenen personenbezogenen Daten ist die ELTAP Spółka z ograniczoną odpowiedzialnością Sp. k. Die Grundsätze der Datenverarbeitung sowie Ihre diesbezüglichen Rechte sind beschrieben in den</value>
-  </data>
 </root>

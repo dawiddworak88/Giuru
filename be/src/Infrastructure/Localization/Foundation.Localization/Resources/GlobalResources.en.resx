@@ -792,7 +792,4 @@
   <data name="Cards" xml:space="preserve">
     <value>Cards</value>
   </data>
-  <data name="PersonalDataAdministrator" xml:space="preserve">
-    <value>The administrator of the personal data provided in the form is ELTAP Spółka z ograniczoną odpowiedzialnością Sp. k. The principles of data processing and your related rights are described in the</value>
-  </data>
 </root>

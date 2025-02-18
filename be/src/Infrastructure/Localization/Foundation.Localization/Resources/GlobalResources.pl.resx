@@ -798,7 +798,4 @@
   <data name="Location" xml:space="preserve">
     <value>Lokalizacja</value>
   </data>
-  <data name="PersonalDataAdministrator" xml:space="preserve">
-    <value>Administratorem danych osobowych podanych w formularzu jest ELTAP Spółka z ograniczoną odpowiedzialnością Sp. k. Zasady przetwarzania danych oraz Twoje uprawnienia z tym związane opisane są w</value>
-  </data>
 </root>
