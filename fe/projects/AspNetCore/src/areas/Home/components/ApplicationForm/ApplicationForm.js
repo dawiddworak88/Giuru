@@ -10,6 +10,7 @@ import useForm from "../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../shared/helpers/validators/EmailValidator";
 import NavigationHelper from "../../../../shared/helpers/globals/NavigationHelper";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
+import { marked } from "marked";
 
 const ApplicationForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -573,7 +574,7 @@ const ApplicationForm = (props) => {
                             </NoSsr>
                         </div>
                         <div className="field">
-                            {props.personalDataAdministratorText} <a href={props.privacyPolicyUrl} className="is-underlined" target="_blank">{props.privacyPolicy}</a>
+                            <div dangerouslySetInnerHTML={{ __html: marked.parse(props.personalDataAdministratorText) }}></div>
                         </div>
                         <div className="is-flex is-justify-content-center">
                             <Button
