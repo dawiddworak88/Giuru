@@ -45,6 +45,22 @@
         }
       },
       "component": "blocks.main-navigation"
+    },
+    "personalDataAdministrator": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "richtext"
+    },
+    "marketingFormDescription": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "richtext"
     }
   }
 }
