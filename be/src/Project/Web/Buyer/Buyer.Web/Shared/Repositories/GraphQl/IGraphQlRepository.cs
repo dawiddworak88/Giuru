@@ -11,5 +11,6 @@ namespace Buyer.Web.Shared.Repositories.GraphQl
         Task<Footer> GetFooterAsync(string language, string fallbackLanguage);
         Task<IEnumerable<NotificationBarItem>> GetNotificationBar(string language, string fallbackLanguage);
         Task<IEnumerable<MainNavigationLink>> GetMainNavigationLinksAsync(string language, string fallbackLanguage);
+        Task<string> GetPersonalDataAdministrator(string language, string fallbackLanguage);
     }
 }
