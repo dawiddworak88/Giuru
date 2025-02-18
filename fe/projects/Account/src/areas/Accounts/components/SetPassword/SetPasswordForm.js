@@ -96,7 +96,7 @@ function SetPasswordForm(props) {
                         <div className="column is-7 card p-6">
                             <div className="field">
                                 <h1 className="title">{props.marketingApprovalHeader}</h1>
-                                <p className="subtitle">{props.marketingApprovalText}</p>
+                                <div className="subtitle" dangerouslySetInnerHTML={{ __html: marked.parse(props.marketingApprovalText ? props.marketingApprovalText : "") }}></div>
                             </div>
                             {approvalCheckboxes && approvalCheckboxes.length > 0 && (
                                 <div className="field">
@@ -116,7 +116,7 @@ function SetPasswordForm(props) {
                                                     />
                                                 </NoSsr>
                                                 <div className="has-text-left">
-                                                    <div dangerouslySetInnerHTML={{ __html: marked.parse(checkbox.label) }}></div>
+                                                    <div dangerouslySetInnerHTML={{ __html: marked.parse(checkbox.label ? checkbox.label : "") }}></div>
                                                 </div>
                                             </div>
                                         )
@@ -124,7 +124,7 @@ function SetPasswordForm(props) {
                                 </div>
                             )}
                             <div className="field">
-                                {props.personalDataAdministratorText} <a href={props.privacyPolicyUrl} className="is-underlined" target="_blank">{props.privacyPolicy}</a>
+                                <div dangerouslySetInnerHTML={{ __html: marked.parse(props.personalDataAdministratorText ? props.personalDataAdministratorText : "") }}></div>
                             </div>
                         </div>
                         <div className="column is-4">
