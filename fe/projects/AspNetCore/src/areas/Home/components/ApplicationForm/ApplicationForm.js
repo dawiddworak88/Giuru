@@ -573,9 +573,11 @@ const ApplicationForm = (props) => {
                                 <span>{props.acceptTermsText} <a href={props.regulationsUrl} className="is-underlined" target="_blank">{props.regulations}</a>  &amp; <a href={props.privacyPolicyUrl} className="is-underlined" target="_blank">{props.privacyPolicy}</a></span>
                             </NoSsr>
                         </div>
-                        <div className="field">
-                            <div dangerouslySetInnerHTML={{ __html: marked.parse(props.personalDataAdministratorText ? props.personalDataAdministratorText : "") }}></div>
-                        </div>
+                        {props.personalDataAdministratorText &&
+                            <div className="field">
+                                <div dangerouslySetInnerHTML={{ __html: marked.parse(props.personalDataAdministratorText) }}></div>
+                            </div>
+                        }
                         <div className="is-flex is-justify-content-center">
                             <Button
                                 type="submit"
