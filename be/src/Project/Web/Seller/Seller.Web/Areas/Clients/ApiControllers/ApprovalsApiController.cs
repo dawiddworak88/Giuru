@@ -33,7 +33,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         [HttpGet]
         public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var clientApprovals = await _approvalsRepository.GetAsync(
+            var approvals = await _approvalsRepository.GetAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentCulture.Name,
                 searchTerm,
@@ -41,16 +41,16 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 itemsPerPage,
                 $"{nameof(Approval.CreatedDate)} desc");
 
-            return StatusCode((int)HttpStatusCode.OK, clientApprovals);
+            return StatusCode((int)HttpStatusCode.OK, approvals);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index([FromBody] ClientRequestModel model)
+        public async Task<IActionResult> Index([FromBody] ApprovalRequestModel model)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentCulture.Name;
 
-            await _approvalsRepository.SaveAsync(token, language, model.Id, model.Name);
+            await _approvalsRepository.SaveAsync(token, language, model.Id, model.Name, model.Description);
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = _clientLocalizer.GetString("ClientApprovalSavedSuccessfully").Value });
         }

@@ -8,6 +8,7 @@ using Identity.Api.Configurations;
 using Identity.Api.Infrastructure;
 using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.Repositories.AppSecrets;
+using Identity.Api.Repositories.GraphQl;
 using Identity.Api.Services.Approvals;
 using Identity.Api.Services.Organisations;
 using Identity.Api.Services.Roles;
@@ -99,6 +100,7 @@ namespace Identity.Api.DependencyInjection
             services.AddScoped<ITeamMemberService, TeamMemberService>();
             services.AddScoped<IApprovalsService, ApprovalsService>();
             services.AddScoped<IUserApprovalsService, UserApprovalsService>();
+            services.AddScoped<IGraphQlRepository, GraphQlRepository>();
         }
     }
 }

@@ -104,12 +104,13 @@ namespace Seller.Web.Areas.Clients.Repositories.Approvals
             return default;
         }
 
-        public async Task SaveAsync(string token, string language, Guid? id, string name)
+        public async Task SaveAsync(string token, string language, Guid? id, string name, string description)
         {
             var requestModel = new ApprovalRequestModel
             {
                 Id = id,
                 Name = name,
+                Description = description
             };
 
             var apiRequest = new ApiRequest<ApprovalRequestModel>

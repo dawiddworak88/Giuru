@@ -5,5 +5,6 @@ namespace Seller.Web.Areas.Clients.ApiRequestModels
     public class ApprovalRequestModel : RequestModelBase
     {
         public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

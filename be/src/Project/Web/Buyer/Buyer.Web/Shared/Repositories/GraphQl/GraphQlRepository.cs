@@ -13,6 +13,7 @@ using Buyer.Web.Shared.GraphQlResponseModels.NotificationBar;
 using System.Collections.Generic;
 using Buyer.Web.Shared.DomainModels.GraphQl.MainNavigationLinks;
 using Buyer.Web.Shared.GraphQlResponseModels.MainNavigationLinks;
+using Buyer.Web.Shared.GraphQlResponseModels.PersonalDataAdministrator;
 
 namespace Buyer.Web.Shared.Repositories.GraphQl
 {
@@ -207,6 +208,50 @@ namespace Buyer.Web.Shared.Repositories.GraphQl
                                 isExternal
                               }}
                             }}
+                          }}
+                        }}
+                      }}
+                    }}"
+            };
+        }
+
+        public async Task<string> GetPersonalDataAdministrator(string language, string fallbackLanguage)
+        {
+            try
+            {
+                var response = await _graphQlClient.SendQueryAsync<JObject>(GetPersonalDataAdministratorQuer(language));
+
+                if (response.Errors.OrEmptyIfNull().Any() is false && response?.Data is not null)
+                {
+                    if (response.Data is null && string.IsNullOrEmpty(fallbackLanguage) is false)
+                    {
+                        response = await _graphQlClient.SendQueryAsync<JObject>(GetPersonalDataAdministratorQuer(fallbackLanguage));
+                    }
+
+                    var personalDataAdministrator = JsonConvert.DeserializeObject<PersonalDataAdministratorGraphQlResponseModel>(response.Data.ToString());
+
+                    return personalDataAdministrator?.Component?.Data?.Attributes?.PersonalDataAdministrator;
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Couldn't get PersonalDataAdministrator content in language ${language}");
+            }
+
+            return default;
+        }
+
+        private GraphQLRequest GetPersonalDataAdministratorQuer(string language)
+        {
+            return new GraphQLRequest
+            {
+                Query = $@"
+                    query GetPersonalDataAdministrator {{
+                      globalConfiguration(locale: ""{language}"") {{
+                        data {{
+                          id,
+                          attributes {{
+                            personalDataAdministrator
                           }}
                         }}
                       }}
