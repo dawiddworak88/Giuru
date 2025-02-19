@@ -13,7 +13,7 @@ function SetPasswordForm(props) {
     const [state, dispatch] = useContext(Context);
     const [approvalsId, setApprovalsId] = useState([]);
     const [approvalCheckboxes, setApprovalCheckboxes] = useState(props.approvals.map((approval) => {
-        return {id: approval.id, label: approval.description, name: approval.name, checked: false}
+        return { id: approval.id, label: approval.description, name: approval.name, checked: false }
     }))
 
     const stateSchema = {
@@ -76,9 +76,9 @@ function SetPasswordForm(props) {
 
     const checkboxOnChangeHandler = (id) => {
         setApprovalCheckboxes((prevCheckboxes) =>
-        prevCheckboxes.map((checkbox) =>
-            checkbox.id === id ? { ...checkbox, checked: !checkbox.checked } : checkbox 
-        ));
+            prevCheckboxes.map((checkbox) =>
+                checkbox.id === id ? { ...checkbox, checked: !checkbox.checked } : checkbox
+            ));
 
         if (approvalsId.some((x) => x === id)) {
             setApprovalsId(approvalsId.filter(x => x !== id))
@@ -94,38 +94,46 @@ function SetPasswordForm(props) {
                 <form className="is-modern-form has-text-centered" onSubmit={handleOnSubmit} method="post">
                     <div className="columns is-align-items-center container is-justify-content-space-between">
                         <div className="column is-7 card p-6">
-                            <div className="field">
-                                <h1 className="title">{props.marketingApprovalHeader}</h1>
-                                <div className="subtitle" dangerouslySetInnerHTML={{ __html: marked.parse(props.marketingApprovalText ? props.marketingApprovalText : "") }}></div>
-                            </div>
+                            {props.marketingApprovalText && props.marketingApprovalHeader &&
+                                <div className="field">
+                                    <h1 className="title">{props.marketingApprovalHeader}</h1>
+                                    <div className="subtitle" dangerouslySetInnerHTML={{ __html: marked.parse(props.marketingApprovalText) }}></div>
+                                </div>
+                            }
                             {approvalCheckboxes && approvalCheckboxes.length > 0 && (
                                 <div className="field">
                                     {approvalCheckboxes.map((checkbox) => {
                                         return (
-                                            <div className="is-flex mb-5" key={checkbox.id}>
-                                                <NoSsr>
-                                                    <FormControlLabel
-                                                        control={
-                                                            <Checkbox
-                                                                onChange={() => checkboxOnChangeHandler(checkbox.id)}
-                                                                checked={checkbox.checked}
-                                                                id={checkbox.id}
-                                                                name={checkbox.name}
-                                                                color="secondary"/>
-                                                        }
-                                                    />
-                                                </NoSsr>
-                                                <div className="has-text-left">
-                                                    <div dangerouslySetInnerHTML={{ __html: marked.parse(checkbox.label ? checkbox.label : "") }}></div>
-                                                </div>
+                                            <div key={checkbox.id}>
+                                                {checkbox.label &&
+                                                    <div className="is-flex mb-5">
+                                                        <NoSsr>
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox
+                                                                        onChange={() => checkboxOnChangeHandler(checkbox.id)}
+                                                                        checked={checkbox.checked}
+                                                                        id={checkbox.id}
+                                                                        name={checkbox.name}
+                                                                        color="secondary" />
+                                                                }
+                                                            />
+                                                        </NoSsr>
+                                                        <div className="has-text-left">
+                                                            <div dangerouslySetInnerHTML={{ __html: marked.parse(checkbox.label) }}></div>
+                                                        </div>
+                                                    </div>
+                                                }
                                             </div>
                                         )
                                     })}
                                 </div>
                             )}
-                            <div className="field">
-                                <div dangerouslySetInnerHTML={{ __html: marked.parse(props.personalDataAdministratorText ? props.personalDataAdministratorText : "") }}></div>
-                            </div>
+                            {props.personalDataAdministratorText &&
+                                <div className="field">
+                                    <div dangerouslySetInnerHTML={{ __html: marked.parse(props.personalDataAdministratorText) }}></div>
+                                </div>
+                            }
                         </div>
                         <div className="column is-4">
                             <input type="hidden" name="id" value={id} />
