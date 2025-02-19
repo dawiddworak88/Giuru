@@ -574,7 +574,7 @@ const ApplicationForm = (props) => {
                             </NoSsr>
                         </div>
                         <div className="field">
-                            <div dangerouslySetInnerHTML={{ __html: marked.parse(props.personalDataAdministratorText) }}></div>
+                            <div dangerouslySetInnerHTML={{ __html: marked.parse(props.personalDataAdministratorText ? props.personalDataAdministratorText : "") }}></div>
                         </div>
                         <div className="is-flex is-justify-content-center">
                             <Button
