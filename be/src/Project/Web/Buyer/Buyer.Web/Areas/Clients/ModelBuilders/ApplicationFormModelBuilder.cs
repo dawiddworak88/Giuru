@@ -1,5 +1,6 @@
 ﻿using Buyer.Web.Areas.Clients.ViewModels;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Definitions.GraphQl;
 using Buyer.Web.Shared.Repositories.GraphQl;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
@@ -82,7 +83,7 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
                 Regulations = _globalLocalizer.GetString("LowerRegulations"),
             };
 
-            viewModel.PersonalDataAdministratorText = await _graphQlRepository.GetPersonalDataAdministrator(componentModel.Language, _options.Value.DefaultCulture);
+            viewModel.PersonalDataAdministratorText = await _graphQlRepository.GetTextAsync(componentModel.Language, _options.Value.DefaultCulture, GraphQlConstants.PersonalDataAdministrator);
 
             viewModel.ContactJobTitles = new List<ContactJobTitle>
             {
