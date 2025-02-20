@@ -1,5 +1,7 @@
 ﻿using Buyer.Web.Areas.Clients.ViewModels;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Definitions.GraphQl;
+using Buyer.Web.Shared.Repositories.GraphQl;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.Localization.Definitions;
@@ -22,19 +24,22 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
         private readonly IOptions<AppSettings> _options;
         private readonly LinkGenerator _linkGenerator;
         private readonly IOptionsMonitor<LocalizationSettings> _localizationOptions;
+        private readonly IGraphQlRepository _graphQlRepository;
 
         public ApplicationFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<CookieConsentResources> cookieConsentLocalizer,
             IOptions<AppSettings> options,
             LinkGenerator linkGenerator,
-            IOptionsMonitor<LocalizationSettings> localizationOptions)
+            IOptionsMonitor<LocalizationSettings> localizationOptions,
+            IGraphQlRepository graphQlRepository)
         {
             _globalLocalizer = globalLocalizer;
             _linkGenerator = linkGenerator;
             _cookieConsentLocalizer = cookieConsentLocalizer;
             _options = options;
             _localizationOptions = localizationOptions;
+            _graphQlRepository = graphQlRepository;
         }
 
         public async Task<ApplicationFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -75,8 +80,10 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
                 PrivacyPolicyUrl = $"{_options.Value.IdentityUrl}{SecurityConstants.PrivacyPolicyEndpoint}",
                 RegulationsUrl = $"{_options.Value.IdentityUrl}{SecurityConstants.RegulationsEndpoint}",
                 PrivacyPolicy = _globalLocalizer.GetString("LowerPrivacyPolicy"),
-                Regulations = _globalLocalizer.GetString("LowerRegulations")
+                Regulations = _globalLocalizer.GetString("LowerRegulations"),
             };
+
+            viewModel.PersonalDataAdministratorText = await _graphQlRepository.GetTextAsync(componentModel.Language, _options.Value.DefaultCulture, GraphQlConstants.PersonalDataAdministrator);
 
             viewModel.ContactJobTitles = new List<ContactJobTitle>
             {
