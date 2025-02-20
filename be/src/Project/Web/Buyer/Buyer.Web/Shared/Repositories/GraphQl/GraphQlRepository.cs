@@ -234,7 +234,7 @@ namespace Buyer.Web.Shared.Repositories.GraphQl
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, $"Couldn't get PersonalDataAdministrator content in language ${language}");
+                _logger.LogError(exception, $"Couldn't get {attribute} content in language {language}");
             }
 
             return default;
