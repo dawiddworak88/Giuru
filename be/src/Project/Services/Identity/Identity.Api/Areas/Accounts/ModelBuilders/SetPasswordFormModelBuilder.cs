@@ -70,8 +70,6 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
                 PasswordSetSuccessMessage = _accountLocalizer.GetString("PasswordUpdated"),
                 MarketingApprovalHeader = _accountLocalizer.GetString("MarketingApprovalHeader"),
-                PrivacyPolicy = _globalLocalizer.GetString("LowerPrivacyPolicy"),
-                PrivacyPolicyUrl = $"{SecurityConstants.PrivacyPolicyEndpoint}",
                 PersonalDataAdministratorText = _globalLocalizer.GetString("PersonalDataAdministrator")
             };
 
