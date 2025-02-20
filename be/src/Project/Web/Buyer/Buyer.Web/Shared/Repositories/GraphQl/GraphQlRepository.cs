@@ -13,7 +13,6 @@ using Buyer.Web.Shared.GraphQlResponseModels.NotificationBar;
 using System.Collections.Generic;
 using Buyer.Web.Shared.DomainModels.GraphQl.MainNavigationLinks;
 using Buyer.Web.Shared.GraphQlResponseModels.MainNavigationLinks;
-using Buyer.Web.Shared.GraphQlResponseModels.PersonalDataAdministrator;
 
 namespace Buyer.Web.Shared.Repositories.GraphQl
 {
@@ -215,22 +214,22 @@ namespace Buyer.Web.Shared.Repositories.GraphQl
             };
         }
 
-        public async Task<string> GetPersonalDataAdministrator(string language, string fallbackLanguage)
+        public async Task<string> GetTextAsync(string language, string fallbackLanguage, string attribute)
         {
             try
             {
-                var response = await _graphQlClient.SendQueryAsync<JObject>(GetPersonalDataAdministratorQuer(language));
+                var response = await _graphQlClient.SendQueryAsync<JObject>(GetPersonalDataAdministratorQuer(language, attribute));
 
                 if (response.Errors.OrEmptyIfNull().Any() is false && response?.Data is not null)
                 {
                     if (response.Data is null && string.IsNullOrEmpty(fallbackLanguage) is false)
                     {
-                        response = await _graphQlClient.SendQueryAsync<JObject>(GetPersonalDataAdministratorQuer(fallbackLanguage));
+                        response = await _graphQlClient.SendQueryAsync<JObject>(GetPersonalDataAdministratorQuer(fallbackLanguage, attribute));
                     }
 
-                    var personalDataAdministrator = JsonConvert.DeserializeObject<PersonalDataAdministratorGraphQlResponseModel>(response.Data.ToString());
+                    var data = response.Data["globalConfiguration"]?["data"]?["attributes"]?[attribute]?.ToString();
 
-                    return personalDataAdministrator?.Component?.Data?.Attributes?.PersonalDataAdministrator;
+                    return data;
                 }
             }
             catch (Exception exception)
@@ -241,17 +240,17 @@ namespace Buyer.Web.Shared.Repositories.GraphQl
             return default;
         }
 
-        private GraphQLRequest GetPersonalDataAdministratorQuer(string language)
+        private GraphQLRequest GetPersonalDataAdministratorQuer(string language, string attribute)
         {
             return new GraphQLRequest
             {
                 Query = $@"
-                    query GetPersonalDataAdministrator {{
+                    query GetText {{
                       globalConfiguration(locale: ""{language}"") {{
                         data {{
                           id,
                           attributes {{
-                            personalDataAdministrator
+                            {attribute}
                           }}
                         }}
                       }}
