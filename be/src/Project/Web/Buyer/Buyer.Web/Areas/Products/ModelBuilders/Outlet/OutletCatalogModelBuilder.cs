@@ -16,6 +16,7 @@ using Buyer.Web.Areas.Products.ViewModels;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Buyer.Web.Shared.ViewModels.Modals;
+using Buyer.Web.Areas.Products.Repositories.Inventories;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders
 {
@@ -27,6 +28,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
         private readonly IProductsService productsService;
         private readonly LinkGenerator linkGenerator;
         private readonly IOutletRepository outletRepository;
+        private readonly IInventoryRepository inventoryRepository;
 
         public OutletCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -35,7 +37,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
             IProductsService productsService,
             IOutletRepository outletRepository,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IInventoryRepository inventoryRepository)
         {
             this.globalLocalizer = globalLocalizer;
             this.outletCatalogModelBuilder = outletCatalogModelBuilder;
@@ -43,6 +46,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             this.linkGenerator = linkGenerator;
             this.outletRepository = outletRepository;
             this.modalModelBuilder = modalModelBuilder;
+            this.inventoryRepository = inventoryRepository;
         }
 
         public async Task<OutletPageCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -60,6 +64,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             var outletItems = await this.outletRepository.GetOutletProductsAsync(
                 componentModel.Language, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);
 
+            var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
+                componentModel.Language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token);
+
             if (outletItems?.Data is not null && outletItems.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
@@ -69,12 +76,19 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                 {
                     foreach (var product in products.Data)
                     {
-                        var availableQuantity = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
+                        var availableOutletQuantity = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
 
-                        if (availableQuantity > 0)
+                        if (availableOutletQuantity > 0)
                         {
                             product.CanOrder = true;
-                            product.AvailableOutletQuantity = availableQuantity;
+                            product.AvailableOutletQuantity = availableOutletQuantity;
+                        }
+
+                        var availableStockQuantity = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
+
+                        if (availableStockQuantity > 0)
+                        {
+                            product.AvailableQuantity = availableStockQuantity;
                         }
 
                         product.InOutlet = true;
