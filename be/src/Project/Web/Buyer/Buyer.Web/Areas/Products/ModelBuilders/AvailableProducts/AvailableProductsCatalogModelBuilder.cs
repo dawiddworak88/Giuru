@@ -15,6 +15,7 @@ using Buyer.Web.Shared.ViewModels.Catalogs;
 using System.Collections.Generic;
 using Buyer.Web.Areas.Products.Definitions;
 using Buyer.Web.Shared.ViewModels.Modals;
+using Buyer.Web.Areas.Products.Repositories;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
@@ -26,6 +27,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
         private readonly IProductsService productsService;
         private readonly IInventoryRepository inventoryRepository;
         private readonly LinkGenerator linkGenerator;
+        private readonly IOutletRepository outletRepository;
 
         public AvailableProductsCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -33,7 +35,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
             IProductsService productsService,
             IInventoryRepository inventoryRepository,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IOutletRepository outletRepository)
         {
             this.globalLocalizer = globalLocalizer;
             this.availableProductsCatalogModelBuilder = availableProductsCatalogModelBuilder;
@@ -41,6 +44,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             this.inventoryRepository = inventoryRepository;
             this.linkGenerator = linkGenerator;
             this.modalModelBuilder = modalModelBuilder;
+            this.outletRepository = outletRepository;
         }
 
         public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -58,6 +62,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
                 componentModel.Language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token);
 
+            var outletItems = await this.outletRepository.GetOutletProductsAsync(
+                componentModel.Language, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);
+
             if (inventories?.Data is not null && inventories.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
@@ -68,12 +75,19 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                 {
                     foreach (var product in products.Data)
                     {
-                        var availableQuantity = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
+                        var availableStockQuantity = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
 
-                        if (availableQuantity > 0)
+                        if (availableStockQuantity > 0)
                         {
                             product.CanOrder = true;
-                            product.AvailableQuantity = availableQuantity;
+                            product.AvailableQuantity = availableStockQuantity;
+                        }
+
+                        var availableOutletQuantity = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
+
+                        if (availableOutletQuantity > 0)
+                        {
+                            product.AvailableOutletQuantity = availableOutletQuantity;
                         }
 
                         product.InStock = true;
