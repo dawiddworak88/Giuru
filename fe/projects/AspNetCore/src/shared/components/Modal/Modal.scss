@@ -3,7 +3,7 @@
 
     .quantity-input {
         text-align: center;
-        max-width: 12rem;
+        width: 16rem;
     }
 
     .MuiInputLabel-root {
@@ -16,11 +16,5 @@
 
     &__ean {
         font-size: 0.75rem;
-    }
-
-    @media only screen and (max-width: $tablet) {
-        .quantity-input {
-            max-width: 100%;
-        }
     }
 }
