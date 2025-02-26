@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import NavigationHelper from "../../../shared/helpers/globals/NavigationHelper";
 
 const Modal = (props) => {
-    const {isOpen, maxStockValue, maxOutletValue, handleOrder, handleClose, labels, product} = props;
+    const {isOpen, maxStockValue, maxOutletValue, stockQuantityInBasket, outletQuantityInBasket, handleOrder, handleClose, labels, product} = props;
     const [quantity, setQuantity] = useState(maxStockValue || maxOutletValue ? 0 : 1);
     const [stockQuantity, setStockQuantity] = useState(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 1 : maxStockValue && maxStockValue > 0 ? 1 : 0);
     const [outletQuantity, setOutletQuantity] = useState(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 0 : maxOutletValue && maxOutletValue > 0 ? 1 : 0);
@@ -33,6 +33,7 @@ const Modal = (props) => {
     
     const maxStock = maxStockValue ? maxStockValue : 0;
     const maxOutlet = maxOutletValue ? maxOutletValue : 0;
+
     return (
         <Dialog
             open={isOpen}
@@ -79,7 +80,7 @@ const Modal = (props) => {
                         name="stockQuantity" 
                         type="number" 
                         variant="standard"
-                        label={labels.stockQuantityLabel + " (" + labels.maximalLabel + " " + maxStock + ")"}
+                        label={`${labels.stockQuantityLabel} (${labels.maximalLabel} ${maxStock}) ${stockQuantityInBasket > 0 ? `(${labels.inBasket} ${stockQuantityInBasket})` : ""}`}
                         inputProps={{ 
                             min: 0, 
                             step: 1,
@@ -101,7 +102,7 @@ const Modal = (props) => {
                         name="outletQuantity" 
                         type="number" 
                         variant="standard"
-                        label={labels.outletQuantityLabel + " (" + labels.maximalLabel + " " + maxOutlet + ")"}
+                        label={`${labels.outletQuantityLabel} (${labels.maximalLabel} ${maxOutlet}) ${outletQuantityInBasket > 0 ? `(${labels.inBasket} ${outletQuantityInBasket})` : ""}`}
                         inputProps={{ 
                             min: 0, 
                             step: 1,
