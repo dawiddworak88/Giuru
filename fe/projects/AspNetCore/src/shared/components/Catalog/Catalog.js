@@ -24,7 +24,7 @@ function Catalog(props) {
     const [total, setTotal] = useState(props.pagedItems.total);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [productVariant, setProductVariant] = useState(null)
+    const [productVariant, setProductVariant] = useState(null);
 
     const toggleSidebar = (item) => {
         setProductVariant(item);
@@ -161,7 +161,20 @@ function Catalog(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
+
+    const calculateMaxQuantity = (quantityType, availableQuantity) => {
+        if (basketId) {
+            const orderItem = orderItems.filter(x => x.sku === productVariant.sku);
     
+            if (orderItem.length > 0) {
+                const actualQuantity = orderItem.reduce((sum, item) => sum + item[quantityType], 0);
+                return Math.max(availableQuantity - actualQuantity, 0);
+            }
+        }
+    
+        return availableQuantity;
+    };
+
     return (
         <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
@@ -279,8 +292,8 @@ function Catalog(props) {
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
                     handleClose={handleCloseModal}
-                    maxOutletValue={productVariant ? productVariant.availableOutletQuantity : null}
-                    maxStockValue={productVariant ? productVariant.availableQuantity : null}
+                    maxOutletValue={productVariant ? calculateMaxQuantity('outletQuantity', productVariant.availableOutletQuantity) : null}
+                    maxStockValue={productVariant ? calculateMaxQuantity('stockQuantity', productVariant.availableQuantity) : null}
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant}
                     labels={props.modal}
