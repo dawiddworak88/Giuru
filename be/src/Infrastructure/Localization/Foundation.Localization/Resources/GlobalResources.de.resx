@@ -447,6 +447,9 @@
   <data name="Basket" xml:space="preserve">
     <value>Korb</value>
   </data>
+  <data name="InBasket" xml:space="preserve">
+    <value>im Korb:</value>
+  </data>
   <data name="InOutlet" xml:space="preserve">
     <value>Im Auslauf:</value>
   </data>
