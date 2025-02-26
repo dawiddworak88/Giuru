@@ -73,7 +73,7 @@ function Catalog(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-                        
+
                         setItems(() => []);
                         setItems(() => jsonResponse.data);
                         setTotal(() => jsonResponse.total);
@@ -106,9 +106,9 @@ function Catalog(props) {
 
         const totalQuantity = quantity + stockQuantity + outletQuantity;
         const orderItem = {
-            productId: productVariant.id, 
-            sku: productVariant.subtitle ? productVariant.subtitle : productVariant.sku, 
-            name: productVariant.title, 
+            productId: productVariant.id,
+            sku: productVariant.subtitle ? productVariant.subtitle : productVariant.sku,
+            name: productVariant.title,
             imageId: productVariant.images ? productVariant.images[0].id ? productVariant.images[0].id : productVariant.images[0] : null,
             quantity: quantity,
             stockQuantity: stockQuantity,
@@ -128,7 +128,7 @@ function Catalog(props) {
             body: JSON.stringify(basket)
         };
 
-        if (totalQuantity <= 0){
+        if (totalQuantity <= 0) {
             return toast.error(props.quantityErrorMessage);
         }
 
@@ -164,16 +164,22 @@ function Catalog(props) {
 
     const calculateMaxQuantity = (quantityType, availableQuantity) => {
         if (basketId) {
-            const orderItem = orderItems.filter(x => x.sku === productVariant.sku);
-    
-            if (orderItem.length > 0) {
-                const actualQuantity = orderItem.reduce((sum, item) => sum + item[quantityType], 0);
-                return Math.max(availableQuantity - actualQuantity, 0);
-            }
+            const actualQuantity = getCurrentQuantity(quantityType);
+            return Math.max(availableQuantity - actualQuantity, 0);    
         }
-    
+
         return availableQuantity;
     };
+
+    const getCurrentQuantity = (quantityType) => {
+        const orderItem = orderItems.filter(x => x.sku === productVariant.sku);
+
+        if (orderItem.length > 0) {
+            return orderItem.reduce((sum, item) => sum + item[quantityType], 0);
+        }
+
+        return 0;
+    }
 
     return (
         <section className="catalog section">
@@ -227,7 +233,7 @@ function Catalog(props) {
                                                 }
                                                 {item.inOutlet &&
                                                     <div className="catalog-item__in-stock-details">
-                                                        {item.availableOutletQuantity > 0 && item.availableOutletQuantity && 
+                                                        {item.availableOutletQuantity > 0 && item.availableOutletQuantity &&
                                                             <div className="stock">
                                                                 {props.inOutletLabel} {item.availableOutletQuantity}
                                                             </div>
@@ -273,11 +279,11 @@ function Catalog(props) {
                     </div>
                 ) :
                 (
-                <section className="section is-flex-centered">
-                    <span className="is-title is-5">{props.noResultsLabel}</span>
-                </section>
-            )}
-            {props.sidebar &&  
+                    <section className="section is-flex-centered">
+                        <span className="is-title is-5">{props.noResultsLabel}</span>
+                    </section>
+                )}
+            {props.sidebar &&
                 <Sidebar
                     productId={productVariant ? productVariant.id : null}
                     isOpen={isSidebarOpen}
@@ -287,13 +293,15 @@ function Catalog(props) {
                     labels={props.sidebar}
                 />
             }
-            {props.modal && 
-                <Modal 
+            {props.modal &&
+                <Modal
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
                     handleClose={handleCloseModal}
                     maxOutletValue={productVariant ? calculateMaxQuantity('outletQuantity', productVariant.availableOutletQuantity) : null}
                     maxStockValue={productVariant ? calculateMaxQuantity('stockQuantity', productVariant.availableQuantity) : null}
+                    stockQuantityInBasket={productVariant ? getCurrentQuantity('stockQuantity') : 0}
+                    outletQuantityInBasket={productVariant ? getCurrentQuantity('outletQuantity') : 0}
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant}
                     labels={props.modal}
