@@ -250,6 +250,8 @@ function NewOrderForm(props) {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
                         setIsOrdered(true);
+                    } else {
+                        toast.error(jsonResponse.message);
                     }
                 });
             }).catch(() => {
