@@ -107,7 +107,7 @@ namespace Buyer.Web.Shared.Services.Baskets
 
                         if (outletProduct is not null && item.OutletQuantity > outletProduct.AvailableQuantity)
                         {
-                            throw new CustomException($"{this.orderLocalizer.GetString("OutletQuantityError").Value} {item.ProductName} ({item.ProductSku}) {this.globalLocalizer.GetString("InBasket")} {item.StockQuantity} {this.globalLocalizer.GetString("MaximalLabel")} {outletProduct.AvailableQuantity}", (int)HttpStatusCode.Conflict);
+                            throw new CustomException($"{this.orderLocalizer.GetString("OutletQuantityError").Value} {item.ProductName} ({item.ProductSku}) {this.globalLocalizer.GetString("InBasket")} {item.OutletQuantity} {this.globalLocalizer.GetString("MaximalLabel")} {outletProduct.AvailableQuantity}", (int)HttpStatusCode.Conflict);
                         }
                     }
                 }
