@@ -445,7 +445,7 @@
     <value>Koszyk</value>
   </data>
   <data name="InBasket" xml:space="preserve">
-    <value>W koszyku:</value>
+    <value>w koszyku:</value>
   </data>
   <data name="InOutlet" xml:space="preserve">
     <value>W wyprzedaży:</value>

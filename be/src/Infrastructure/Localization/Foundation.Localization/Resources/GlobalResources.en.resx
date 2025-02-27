@@ -445,7 +445,7 @@
     <value>Cart</value>
   </data>
   <data name="InBasket" xml:space="preserve">
-    <value>In the cart:</value>
+    <value>in the cart:</value>
   </data>
   <data name="InOutlet" xml:space="preserve">
     <value>In outlet:</value>
