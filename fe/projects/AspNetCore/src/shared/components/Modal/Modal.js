@@ -170,6 +170,8 @@ Modal.propTypes = {
     stockQuantityLabel: PropTypes.string,
     quantityLabel: PropTypes.string,
     maxStockValue: PropTypes.number,
+    stockQuantityInBasket: PropTypes.number,
+    outletQuantityInBasket: PropTypes.number,
     handleOrder: PropTypes.func,
     closeLabel: PropTypes.string,
     okLabel: PropTypes.string,
