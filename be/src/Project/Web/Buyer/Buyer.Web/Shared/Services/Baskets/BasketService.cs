@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Shared.Services.Baskets
@@ -88,9 +89,14 @@ namespace Buyer.Web.Shared.Services.Baskets
                     {
                         var inventoryProduct = inventoryProducts.FirstOrDefault(x => x.ProductId == item.ProductId);
 
-                        if (inventoryProduct is not null && item.StockQuantity > inventoryProduct.AvailableQuantity)
+                        if (inventoryProduct is not null)
                         {
-                            throw new CustomException($"{this.orderLocalizer.GetString("StockQuantityError").Value} {item.ProductName} ({item.ProductSku}) {this.globalLocalizer.GetString("InBasket")} {item.StockQuantity} {this.globalLocalizer.GetString("MaximalLabel")} {inventoryProduct.AvailableQuantity}", (int)HttpStatusCode.Conflict);
+                            var itemStockQuantity = stockItems.Where(x => x.ProductId == item.ProductId).Sum(x => x.StockQuantity);
+
+                            if (itemStockQuantity > inventoryProduct.AvailableQuantity)
+                            {
+                                throw new CustomException($"{this.orderLocalizer.GetString("StockQuantityError").Value} {item.ProductName} ({item.ProductSku}) {this.globalLocalizer.GetString("InBasket")} {itemStockQuantity} {this.globalLocalizer.GetString("MaximalLabel")} {inventoryProduct.AvailableQuantity}", (int)HttpStatusCode.Conflict);
+                            }
                         }
                     }
                 }
@@ -105,9 +111,14 @@ namespace Buyer.Web.Shared.Services.Baskets
                     {
                         var outletProduct = outletProducts.FirstOrDefault(x => x.ProductId == item.ProductId);
 
-                        if (outletProduct is not null && item.OutletQuantity > outletProduct.AvailableQuantity)
+                        if (outletProduct is not null)
                         {
-                            throw new CustomException($"{this.orderLocalizer.GetString("OutletQuantityError").Value} {item.ProductName} ({item.ProductSku}) {this.globalLocalizer.GetString("InBasket")} {item.OutletQuantity} {this.globalLocalizer.GetString("MaximalLabel")} {outletProduct.AvailableQuantity}", (int)HttpStatusCode.Conflict);
+                            var itemOutletQuantity = outletItems.Where(x => x.ProductId == item.ProductId).Sum(x => x.OutletQuantity);
+
+                            if (itemOutletQuantity > outletProduct.AvailableQuantity)
+                            {
+                                throw new CustomException($"{this.orderLocalizer.GetString("OutletQuantityError").Value} {item.ProductName} ({item.ProductSku}) {this.globalLocalizer.GetString("InBasket")} {itemOutletQuantity} {this.globalLocalizer.GetString("MaximalLabel")} {outletProduct.AvailableQuantity}", (int)HttpStatusCode.Conflict);
+                            }
                         }
                     }
                 }
