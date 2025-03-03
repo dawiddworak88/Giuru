@@ -34,8 +34,7 @@ namespace Giuru.IntegrationTests
                         ProductId = Products.Lamica.Id,
                         Sku = Products.Lamica.Sku,
                         Name = Products.Lamica.Name,
-                        Quantity = 2,
-                        StockQuantity = 1
+                        Quantity = 2
                     }
                 }
             });

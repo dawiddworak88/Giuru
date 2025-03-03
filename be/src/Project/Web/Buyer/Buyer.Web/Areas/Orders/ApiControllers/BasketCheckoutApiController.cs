@@ -6,6 +6,7 @@ using Buyer.Web.Areas.Orders.Repositories.UserApprovals;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Identity;
+using Buyer.Web.Shared.Services.Baskets;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Localization;
@@ -13,7 +14,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -28,6 +28,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
     public class BasketCheckoutApiController : BaseApiController
     {
         private readonly IBasketRepository _basketRepository;
+        private readonly IBasketService _basketService;
         private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
         private readonly IUserApprovalsRepository _userApprovalsRepository;
@@ -35,12 +36,14 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
+            IBasketService basketService,
             IClientAddressesRepository clientAddressesRepository,
             IStringLocalizer<OrderResources> orderLocalizer,
             IUserApprovalsRepository userApprovalsRepository,
             IIdentityRepository identityRepository)
         {
             _basketRepository = basketRepository;
+            _basketService = basketService;
             _orderLocalizer = orderLocalizer;
             _clientAddressesRepository = clientAddressesRepository;
             _userApprovalsRepository = userApprovalsRepository;
@@ -66,6 +69,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
                 Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
             }
+
+            await _basketService.ValidateStockOutletQuantitiesAsync(model.BasketId, token, language);
 
             var deliveryAddressesIds = new List<Guid>();
 

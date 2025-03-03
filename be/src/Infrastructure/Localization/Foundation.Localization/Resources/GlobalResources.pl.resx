@@ -444,6 +444,9 @@
   <data name="Basket" xml:space="preserve">
     <value>Koszyk</value>
   </data>
+  <data name="InBasket" xml:space="preserve">
+    <value>w koszyku:</value>
+  </data>
   <data name="InOutlet" xml:space="preserve">
     <value>W wyprzedaży:</value>
   </data>

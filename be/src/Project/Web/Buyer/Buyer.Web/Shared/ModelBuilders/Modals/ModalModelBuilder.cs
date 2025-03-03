@@ -46,7 +46,8 @@ namespace Buyer.Web.Shared.ModelBuilders.Modal
                 BasketLabel = this.globalLocalizer.GetString("Basket"),
                 BasketUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 SkuLabel = this.productLocalizer.GetString("Sku"),
-                EanLabel = this.globalLocalizer.GetString("Ean")
+                EanLabel = this.globalLocalizer.GetString("Ean"),
+                InBasket = this.globalLocalizer.GetString("InBasket")
             };
 
             return viewModel;
