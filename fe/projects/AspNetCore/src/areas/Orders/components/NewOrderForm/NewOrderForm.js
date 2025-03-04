@@ -494,6 +494,7 @@ function NewOrderForm(props) {
                                                     <TableCell>{props.quantityLabel}</TableCell>
                                                     <TableCell>{props.stockQuantityLabel}</TableCell>
                                                     <TableCell>{props.outletQuantityLabel}</TableCell>
+                                                    <TableCell className="has-text-weight-bold">{props.inTotalLabel}</TableCell>
                                                     <TableCell>{props.externalReferenceLabel}</TableCell>
                                                     <TableCell>{props.moreInfoLabel}</TableCell>
                                                 </TableRow>
@@ -514,6 +515,7 @@ function NewOrderForm(props) {
                                                         <TableCell>{item.quantity}</TableCell>
                                                         <TableCell>{item.stockQuantity}</TableCell>
                                                         <TableCell>{item.outletQuantity}</TableCell>
+                                                        <TableCell className="has-text-weight-bold">{item.quantity + item.stockQuantity + item.outletQuantity}</TableCell>
                                                         <TableCell>{item.externalReference}</TableCell>
                                                         <TableCell>{item.moreInfo}</TableCell>
                                                     </TableRow>
