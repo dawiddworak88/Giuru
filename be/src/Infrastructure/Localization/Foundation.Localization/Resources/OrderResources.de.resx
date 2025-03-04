@@ -348,4 +348,7 @@
   <data name="OutletQuantityError" xml:space="preserve">
     <value>Die Bestellung kann nicht aufgegeben werden, da die verfügbare Verkaufsmenge für das Produkt überschritten wurde:</value>
   </data>
+  <data name="InTotalLabel" xml:space="preserve">
+    <value>Insgesamt:</value>
+  </data>
 </root>
