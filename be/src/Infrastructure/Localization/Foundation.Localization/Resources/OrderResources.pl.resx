@@ -348,4 +348,7 @@
   <data name="OutletQuantityError" xml:space="preserve">
     <value>Nie można złożyć zamówienia ponieważ przekroczono dostępną ilość z wyprzedaży dla produktu:</value>
   </data>
+  <data name="InTotalLabel" xml:space="preserve">
+    <value>W sumie:</value>
+  </data>
 </root>
