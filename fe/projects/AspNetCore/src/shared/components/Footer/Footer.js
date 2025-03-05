@@ -9,15 +9,13 @@ const Footer = (props) => {
                 <div className="footer_copyright">{props.copyright}</div>
                 {props.links && props.links.length > 0 &&
                     <div className="footer_navigation">
-                        <ul className="footer_navigation_list">
+                        <div className="footer_navigation_list">
                             {props.links.map((navigationItem, index) => (
-                                <li className="footer_navigation_item" key={index}>
-                                    <a href={navigationItem.url} className="footer_navigation_link">
-                                        {navigationItem.text}
-                                    </a>
-                                </li>
+                                <a key={index} href={navigationItem.url} className="footer_navigation_link">
+                                    {navigationItem.text}
+                                </a>
                             ))}
-                        </ul>
+                        </div>
                     </div>
                 }
             </div>
