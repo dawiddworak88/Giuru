@@ -65,6 +65,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 CancelOrderStatusUrl = _linkGenerator.GetPathByAction("Cancel", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 OutletQuantityLabel = _orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = _orderLocalizer.GetString("StockQuantityLabel"),
+                InTotalLabel = _orderLocalizer.GetString("InTotalLabel"),
                 CustomOrderLabel = _globalLocalizer.GetString("CustomOrderLabel"),
                 UpdateOrderItemStatusUrl = _linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 OrdersUrl = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, searchTerm = componentModel.SearchTerm }),

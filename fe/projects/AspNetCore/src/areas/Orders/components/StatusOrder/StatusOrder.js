@@ -67,6 +67,10 @@ function StatusOrder(props) {
 
     const status = props.orderStatuses.find((item) => item.id === orderStatusId);
     
+    const GetTotalQuantities = (item) => {
+        return item.quantity + item.stockQuantity + item.outletQuantity;
+    }
+
     return (
         <section className="section status-order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -121,6 +125,7 @@ function StatusOrder(props) {
                                             <TableCell>{props.quantityLabel}</TableCell>
                                             <TableCell>{props.stockQuantityLabel}</TableCell>
                                             <TableCell>{props.outletQuantityLabel}</TableCell>
+                                            <TableCell className="has-text-weight-bold">{props.inTotalLabel}</TableCell>
                                             <TableCell>{props.orderStatusLabel}</TableCell>
                                             <TableCell>{props.expectedDateOfProductOnStockLabel}</TableCell>
                                             <TableCell>{props.externalReferenceLabel}</TableCell>
@@ -143,6 +148,7 @@ function StatusOrder(props) {
                                                     <TableCell>{item.quantity}</TableCell>
                                                     <TableCell>{item.stockQuantity}</TableCell>
                                                     <TableCell>{item.outletQuantity}</TableCell>
+                                                    <TableCell className="has-text-weight-bold">{GetTotalQuantities(item)}</TableCell>
                                                     <TableCell>{item.orderItemStatusName}</TableCell>
                                                     <TableCell>{item.expectedDateOfProductOnStock}</TableCell>
                                                     <TableCell>{item.externalReference}</TableCell>
