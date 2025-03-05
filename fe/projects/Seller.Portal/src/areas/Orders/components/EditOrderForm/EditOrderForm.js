@@ -53,6 +53,10 @@ function EditOrderForm(props) {
             });
     };
 
+    const GetTotalQuantities = (item) => {
+        return item.quantity + item.stockQuantity + item.outletQuantity;
+    }
+
     return (
         <section className="section section-small-padding edit-order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -139,6 +143,7 @@ function EditOrderForm(props) {
                                             <TableCell>{props.quantityLabel}</TableCell>
                                             <TableCell>{props.stockQuantityLabel}</TableCell>
                                             <TableCell>{props.outletQuantityLabel}</TableCell>
+                                            <TableCell className="has-text-weight-bold">{props.inTotalLabel}</TableCell>
                                             <TableCell>{props.orderStatusLabel}</TableCell>
                                             <TableCell>{props.expectedDateOfProductOnStockLabel}</TableCell>
                                             <TableCell>{props.externalReferenceLabel}</TableCell>
@@ -160,6 +165,7 @@ function EditOrderForm(props) {
                                                     <TableCell>{item.quantity}</TableCell>
                                                     <TableCell>{item.stockQuantity}</TableCell>
                                                     <TableCell>{item.outletQuantity}</TableCell>
+                                                    <TableCell className="has-text-weight-bold">{GetTotalQuantities(item)}</TableCell>
                                                     <TableCell>{item.orderItemStatusName}</TableCell>
                                                     <TableCell>{item.expectedDateOfProductOnStock}</TableCell>
                                                     <TableCell>{item.externalReference}</TableCell>
