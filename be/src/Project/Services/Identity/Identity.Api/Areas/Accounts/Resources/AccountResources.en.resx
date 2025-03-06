@@ -168,9 +168,6 @@
   <data name="MarketingApprovalHeader" xml:space="preserve">
     <value>Marketing form</value>
   </data>
-  <data name="MarketingApprovalText" xml:space="preserve">
-    <value>If you would like to receive information from us about the current offer, current campaigns, introduced functionalities or changes, as well as other activities, please complete the marketing consents below. Consents may be withdrawn at any time, and the withdrawal of consent does not affect actions taken before the date of its withdrawal.</value>
-  </data>
   <data name="nc_buttonLabel" xml:space="preserve">
     <value>Confirm and set a password</value>
   </data>

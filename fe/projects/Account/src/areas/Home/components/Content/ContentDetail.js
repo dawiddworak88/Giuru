@@ -27,7 +27,7 @@ const ContentDetail = (props) => {
                                             <Typography fontWeight={"bold"}>{accordion.title}</Typography>
                                         </AccordionSummary>
                                         <AccordionDetails>
-                                            <Typography>{accordion.description}</Typography>
+                                            <Typography><div dangerouslySetInnerHTML={{__html: marked.parse(accordion.description)}}></div></Typography>
                                         </AccordionDetails>
                                     </Accordion>
                                 </div>

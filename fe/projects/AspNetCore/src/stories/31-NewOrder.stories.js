@@ -5,9 +5,12 @@ import "../areas/Orders/pages/NewOrder/NewOrderPage.scss";
 const orderForm = {
     title: "Order",
     searchPlaceholderLabel: "Enter SKU or product name",
+    nameLabel: "Name:",
+    skuLabel: "SKU:",
     quantityLabel: "Quantity",
     stockQuantityLabel: "Stock Quantity",
     outletQuantityLabel: "Outlet Quantity",
+    inTotalLabel: "In total:",
     externalReferenceLabel: "External order number",
     moreInfoLabel: "More info",
     deliveryToLabel: "Delivery To",
@@ -21,7 +24,20 @@ const orderForm = {
     searchLabel: "Search",
     dropOrSelectFilesLabel: "Drag and drop here, or click to select an order file",
     noResultsLabel: "No results have been found",
-    maximalLabel: "max:"
+    maximalLabel: "max:",
+    basketItems: [
+        {
+            productUrl: "#",
+            imageSrc: "https://media-test.eltap.com/api/v1/files/8e3d57b4-f976-4c61-1b19-08dc11b07047",
+            imageAlt: "Image",
+            productId: '1',
+            sku: 'An_21',
+            name: 'Anton',
+            quantity: 1,
+            stockQuantity: 1,
+            outletQuantity: 1,
+        }
+    ]
 };
 
 export const NewOrderPageStory = () => <NewOrderPage header={header} mainNavigation={mainNavigation} footer={footer} newOrderForm={orderForm} />;

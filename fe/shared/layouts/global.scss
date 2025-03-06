@@ -1,5 +1,5 @@
 @media only screen and (max-width: $tablet) {
-    
+
     .navbar-brand {
         margin-top: 0.75rem;
     }
@@ -16,8 +16,8 @@
 
 .is-flex-centered {
     display: flex;
-	align-items: center;
-	justify-content: center;
+    align-items: center;
+    justify-content: center;
 }
 
 .section-small-padding {
@@ -25,6 +25,7 @@
 }
 
 .is-modern-form {
+
     .title,
     .subtitle {
         margin-bottom: 2.5rem;
@@ -60,7 +61,7 @@
 
     img {
         transition: 0.4s ease;
-      }
+    }
 
     &:hover img {
         transform: scale(1.08);
@@ -134,7 +135,7 @@
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
 }
-    
+
 .react-autosuggest__input--focused {
     outline: none;
 }
@@ -143,7 +144,7 @@
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
-    
+
 .react-autosuggest__suggestions-container {
     display: none;
 }
@@ -180,7 +181,6 @@ img {
     object-fit: cover;
 }
 
-a,
-a:hover {
+a, a:hover {
     text-decoration: none;
 }

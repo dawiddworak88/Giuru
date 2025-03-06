@@ -53,6 +53,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 NameLabel = _orderLocalizer.GetString("NameLabel"),
                 OrderItemsLabel = _orderLocalizer.GetString("OrderItemsLabel"),
                 QuantityLabel = _orderLocalizer.GetString("QuantityLabel"),
+                InTotalLabel = _orderLocalizer.GetString("InTotalLabel"),
                 ExternalReferenceLabel = _orderLocalizer.GetString("ExternalReferenceLabel"),
                 SkuLabel = _orderLocalizer.GetString("SkuLabel"),
                 OrderStatusLabel = _orderLocalizer.GetString("OrderStatus"),

@@ -3229,7 +3229,9 @@ CREATE TABLE public.global_configurations (
     published_at timestamp(6) without time zone,
     created_by_id integer,
     updated_by_id integer,
-    locale character varying(255)
+    locale character varying(255),
+    personal_data_administrator text,
+    marketing_form_description text
 );
 
 ALTER TABLE public.global_configurations OWNER TO postgres;

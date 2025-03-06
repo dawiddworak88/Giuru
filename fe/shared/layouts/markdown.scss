@@ -1,0 +1,35 @@
+ul, ol {
+    margin: 1em 0;
+    padding-left: 20px;
+}
+
+ul {
+    list-style-type: circle;
+}
+
+ol {
+    list-style-type: decimal;
+}
+
+li {
+    margin-bottom: 5px;
+    line-height: 1.6;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    all: revert;
+}

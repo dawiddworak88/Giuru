@@ -40,6 +40,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 NavigateToClientApprovals = _clientLocalizer.GetString("NavigateToClientApprovals"),
                 IdLabel = _globalLocalizer.GetString("Id"),
                 NameLabel = _globalLocalizer.GetString("Name"),
+                DescriptionLabel = _globalLocalizer.GetString("DescriptionLabel"),
                 GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
                 FieldRequiredErrorMessage = _globalLocalizer.GetString("FieldRequiredErrorMessage")
             };
@@ -52,6 +53,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     viewModel.Id = approval.Id;
                     viewModel.Name = approval.Name;
+                    viewModel.Description = approval.Description;
                 }
             }
 

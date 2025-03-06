@@ -17,6 +17,8 @@ using System.Linq;
 using Identity.Api.Services.Approvals;
 using Identity.Api.ServicesModels.Approvals;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Security.Definitions;
+using Identity.Api.Repositories.GraphQl;
 
 namespace Identity.Api.Areas.Accounts.ModelBuilders
 {
@@ -29,6 +31,7 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
         private readonly ITokenService _tokenService;
         private readonly IOptions<AppSettings> _options;
         private readonly IApprovalsService _approvalsService;
+        private readonly IGraphQlRepository _graphQlRepository; 
 
         public SetPasswordFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer, 
@@ -37,7 +40,8 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             IUsersService usersService,
             ITokenService tokenService,
             IOptions<AppSettings> options,
-            IApprovalsService approvalsService)
+            IApprovalsService approvalsService,
+            IGraphQlRepository graphQlRepository)
         {
             _globalLocalizer = globalLocalizer;
             _accountLocalizer = accountLocalizer;
@@ -46,6 +50,7 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             _tokenService = tokenService;
             _options = options;
             _approvalsService = approvalsService;
+            _graphQlRepository = graphQlRepository;
         }
 
         public async Task<SetPasswordFormViewModel> BuildModelAsync(SetPasswordFormComponentModel componentModel)
@@ -65,8 +70,11 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 GeneralErrorMessage = _globalLocalizer.GetString("AnErrorOccurred"),
                 PasswordSetSuccessMessage = _accountLocalizer.GetString("PasswordUpdated"),
                 MarketingApprovalHeader = _accountLocalizer.GetString("MarketingApprovalHeader"),
-                MarketingApprovalText = _accountLocalizer.GetString("MarketingApprovalText")
+                PersonalDataAdministratorText = _globalLocalizer.GetString("PersonalDataAdministrator")
             };
+
+            viewModel.PersonalDataAdministratorText = await _graphQlRepository.GetTextAsync(componentModel.Language, "en", GraphQlConstants.PersonalDataAdministrator);
+            viewModel.MarketingApprovalText = await _graphQlRepository.GetTextAsync(componentModel.Language, "en", GraphQlConstants.MarketingFormDescription);
 
             var getApprovalsServiceModel = new GetApprovalsServiceModel
             {
@@ -83,7 +91,8 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 .Select(x => new ApprovalViewModel 
                 { 
                     Id = x.Id,
-                    Name = x.Name
+                    Name = x.Name,
+                    Description = x.Description
                 });
 
             if (componentModel.Id.HasValue)

@@ -135,9 +135,6 @@
   <data name="Cancel" xml:space="preserve">
     <value>Anuluj</value>
   </data>
-  <data name="Cards" xml:space="preserve">
-    <value>Karty</value>
-  </data>
   <data name="Categories" xml:space="preserve">
     <value>Kategorie</value>
   </data>
@@ -189,8 +186,8 @@
   <data name="DisplayedRows" xml:space="preserve">
     <value>z</value>
   </data>
-  <data name="Download" xml:space="preserve">
-    <value>Pobierz</value>
+  <data name="DownloadCenter" xml:space="preserve">
+    <value>Centrum pobierania</value>
   </data>
   <data name="DropFile" xml:space="preserve">
     <value>Upuść plik tutaj...</value>
@@ -324,9 +321,6 @@
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Polityka prywatności</value>
   </data>
-  <data name="ProductAttribute" xml:space="preserve">
-    <value>Atrybut produktu</value>
-  </data>
   <data name="ProductAttributes" xml:space="preserve">
     <value>Atrybuty produktów</value>
   </data>
@@ -393,6 +387,9 @@
   <data name="Yes" xml:space="preserve">
     <value>Tak</value>
   </data>
+  <data name="ProductAttribute" xml:space="preserve">
+    <value>Atrybut produktu</value>
+  </data>
   <data name="ProductAttributeItem" xml:space="preserve">
     <value>Wartość atrybutu produktu</value>
   </data>
@@ -404,9 +401,6 @@
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Kopia</value>
-  </data>
-  <data name="Location" xml:space="preserve">
-    <value>Lokalizacja</value>
   </data>
   <data name="Inventory" xml:space="preserve">
     <value>Stany magazynowe</value>
@@ -438,17 +432,20 @@
   <data name="Catalog" xml:space="preserve">
     <value>Katalog</value>
   </data>
-  <data name="ErrorOccurred" xml:space="preserve">
-    <value>Wystąpił błąd. Prosimy o kontakt z administratorem.</value>
-  </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Nieautoryzowany</value>
+  </data>
+  <data name="ErrorOccurred" xml:space="preserve">
+    <value>Wystąpił błąd. Prosimy o kontakt z administratorem.</value>
   </data>
   <data name="Outlet" xml:space="preserve">
     <value>Wyprzedaż</value>
   </data>
   <data name="Basket" xml:space="preserve">
     <value>Koszyk</value>
+  </data>
+  <data name="InBasket" xml:space="preserve">
+    <value>w koszyku:</value>
   </data>
   <data name="InOutlet" xml:space="preserve">
     <value>W wyprzedaży:</value>
@@ -465,14 +462,14 @@
   <data name="News" xml:space="preserve">
     <value>Aktualności</value>
   </data>
-  <data name="LoadingLabel" xml:space="preserve">
-    <value>Trwa ładowanie</value>
-  </data>
   <data name="MakeComplaint" xml:space="preserve">
     <value>Zgłoś reklamację</value>
   </data>
   <data name="Id" xml:space="preserve">
     <value>Id:</value>
+  </data>
+  <data name="LoadingLabel" xml:space="preserve">
+    <value>Trwa ładowanie</value>
   </data>
   <data name="PhoneNumberLabel" xml:space="preserve">
     <value>Numer telefonu</value>
@@ -620,9 +617,6 @@
   </data>
   <data name="TeamMembers" xml:space="preserve">
     <value>Członkowie zespołu</value>
-  </data>
-  <data name="DownloadCenter" xml:space="preserve">
-    <value>Centrum pobierania</value>
   </data>
   <data name="DownloadCenterCategories" xml:space="preserve">
     <value>Kategorie centrum pobierania</value>
@@ -797,5 +791,14 @@
   </data>
   <data name="ClientApprovals" xml:space="preserve">
     <value>Zgody</value>
+  </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Karty</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Pobierz</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Lokalizacja</value>
   </data>
 </root>

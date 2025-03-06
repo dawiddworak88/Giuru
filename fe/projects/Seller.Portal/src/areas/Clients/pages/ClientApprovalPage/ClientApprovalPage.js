@@ -19,7 +19,7 @@ const ClientApprovalPage = (props) => {
             <Store>
                 <Header {...props.header}></Header>
                 <MenuTiles {...props.menuTiles} />
-                <ClientApprovalForm {...props.clientApprovalForm} />
+                <ClientApprovalForm {...props.clientApprovalForm} locale={props.locale} />
                 <Footer {...props.footer}></Footer>
             </Store>
         </ThemeProvider>

@@ -342,4 +342,13 @@
   <data name="sh_orderLinkLabel" xml:space="preserve">
     <value>Bestelllink</value>
   </data>
+  <data name="StockQuantityError" xml:space="preserve">
+    <value>Die Bestellung kann nicht aufgegeben werden, da der verfügbare Lagerbestand für das Produkt überschritten wurde:</value>
+  </data>
+  <data name="OutletQuantityError" xml:space="preserve">
+    <value>Die Bestellung kann nicht aufgegeben werden, da die verfügbare Verkaufsmenge für das Produkt überschritten wurde:</value>
+  </data>
+  <data name="InTotalLabel" xml:space="preserve">
+    <value>Insgesamt:</value>
+  </data>
 </root>

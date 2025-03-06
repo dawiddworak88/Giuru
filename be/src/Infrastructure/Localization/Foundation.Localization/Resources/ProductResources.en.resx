@@ -292,9 +292,12 @@
     <value>Go to definition</value>
   </data>
   <data name="ProductAttributeInUseByCategories" xml:space="preserve">
-	<value>Please remove this attribute from the product cards of the following categories first: </value>
+    <value>Please remove this attribute from the product cards of the following categories first: </value>
   </data>
   <data name="ProductAttributeInUseByCategories" xml:space="preserve">
-	<value>Please remove this attribute value from the product cards of the following categories first: </value>
+    <value>Please remove this attribute value from the product cards of the following categories first: </value>
+  </data>
+  <data name="ProductSkuConflict" xml:space="preserve">
+    <value>A product with this SKU already exists.</value>
   </data>
 </root>

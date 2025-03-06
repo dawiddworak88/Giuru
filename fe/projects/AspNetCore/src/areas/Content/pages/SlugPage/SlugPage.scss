@@ -5,6 +5,8 @@
 @import "../../../../shared/components/CarouselGrid/CarouselGrid.scss";
 @import "../../../../shared/components/Footer/Footer.scss";
 @import "../../../../shared/components/StrapiContent/StrapiContent.scss";
+@import "@splidejs/react-splide/css";
+@import "../../../../../../../shared/layouts/markdown.scss";
 
 .carousel-grid {
     background-color: $white;
