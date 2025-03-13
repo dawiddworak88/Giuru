@@ -14,5 +14,29 @@ namespace Giuru.IntegrationTests.Definitions
             public const bool IsPublished = true;
             public const string Ean = "6978494041189";
         }
+
+        public struct Anton
+        {
+            public const string Name = "Anton";
+            public const string Sku = "AN_01";
+            public const string UpdatedName = "Anton";
+            public static readonly Guid CategoryId = Guid.Parse("1b4a61fb-cdda-45b2-a4d6-92a27acdf833");
+            public const bool IsPublished = true;
+            public const string Ean = "6978494041191";
+            public const int Quantity = 2;
+            public const int AvailableQuantity = 2;
+        }
+
+        public struct Aga
+        {
+            public const string Name = "Aga";
+            public const string Sku = "AG_01";
+            public const string UpdatedName = "Aga";
+            public static readonly Guid CategoryId = Guid.Parse("1b4a61fb-cdda-45b2-a4d6-92a27acdf833");
+            public const bool IsPublished = true;
+            public const string Ean = "6978494041192";
+            public const int Quantity = 2;
+            public const int AvailableQuantity = 2;
+        }
     }
 }
