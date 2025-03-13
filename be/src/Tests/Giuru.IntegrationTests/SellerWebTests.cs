@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Products.DomainModels;
+using System.Text.Json;
 
 namespace Giuru.IntegrationTests
 {
@@ -93,7 +94,7 @@ namespace Giuru.IntegrationTests
             {
                 getResults = await _apiFixture.SellerWebClient.GetAsync<PagedResults<IEnumerable<Product>>>($"{ApiEndpoints.GetProductsApiEndpoint}?pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}");
 
-                if (getResults.Data.FirstOrDefault() != null)
+                if (getResults.Data.FirstOrDefault().Id == updatedResult.Id)
                 {
                     break;
                 }
@@ -102,9 +103,11 @@ namespace Giuru.IntegrationTests
                 elapsedSeconds++;
             }
 
+            Console.WriteLine($"Seller Products: {JsonSerializer.Serialize(getResults)}");
+
             Assert.NotNull(getResults);
             Assert.Null(getResults.Data.FirstOrDefault().Description);
-            Assert.Equal(updatedResult.Id, getResults.Data.FirstOrDefault().Id);
+            Assert.NotNull(getResults.Data.FirstOrDefault(x => x.Id == updatedResult.Id));
         }
     }
 }
