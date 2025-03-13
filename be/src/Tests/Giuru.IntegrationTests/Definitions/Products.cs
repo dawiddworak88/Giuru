@@ -23,8 +23,6 @@ namespace Giuru.IntegrationTests.Definitions
             public static readonly Guid CategoryId = Guid.Parse("1b4a61fb-cdda-45b2-a4d6-92a27acdf833");
             public const bool IsPublished = true;
             public const string Ean = "6978494041191";
-            public const int Quantity = 2;
-            public const int AvailableQuantity = 2;
         }
 
         public struct Aga
@@ -35,6 +33,10 @@ namespace Giuru.IntegrationTests.Definitions
             public static readonly Guid CategoryId = Guid.Parse("1b4a61fb-cdda-45b2-a4d6-92a27acdf833");
             public const bool IsPublished = true;
             public const string Ean = "6978494041192";
+        }
+
+        public struct Quantities
+        {
             public const int Quantity = 2;
             public const int AvailableQuantity = 2;
         }
