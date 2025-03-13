@@ -9,5 +9,9 @@
         public const string BasketApiEndpoint = "Orders/BasketsApi";
         public const string OrderCheckoutApiEndpoint = "Orders/BasketCheckoutApi/Checkout";
         public const string GetOrdersApiEndpoint = "Orders/OrdersApi/Get";
+        public const string InventoriesApiEndpoint = "Inventory/InventoriesApi";
+        public const string GetInventoriesApiEndpoint = "Inventory/InventoriesApi/Get";
+        public const string OutletsApiEndpoint = "Inventory/OutletsApi";
+        public const string GetOutletsApiEndpoint = "Inventory/OutletsApi/Get";
     }
 }
