@@ -27,6 +27,7 @@ namespace Giuru.IntegrationTests
         private IContainer _catalogBackgroundTasksContainer;
         private IContainer _orderingApiContainer;
         private IContainer _basketApiContainer;
+        private IContainer _inventoryApiContainer;
 
         public RestClient SellerWebClient { get; private set; }
         public RestClient BuyerWebClient { get; private set; }
@@ -56,7 +57,7 @@ namespace Giuru.IntegrationTests
                 .WithExposedPort(9111)
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
                 .Build();
-             
+
             await _msSqlContainer.StartAsync();
 
             _elasticsearchContainer = new ContainerBuilder()
@@ -234,6 +235,31 @@ namespace Giuru.IntegrationTests
 
             await _basketApiContainer.StartAsync();
 
+            var inventoryApiImage = new InventoryApiImage();
+
+            await inventoryApiImage.InitializeAsync();
+
+            _inventoryApiContainer = new ContainerBuilder()
+                .WithName("inventory-api")
+                .WithImage(inventoryApiImage)
+                .WithNetwork(_giuruNetwork)
+                .WithExposedPort(9107)
+                .WithPortBinding(9107, 8080)
+                .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
+                .WithEnvironment("RedisUrl", "redis")
+                .WithEnvironment("ConnectionString", $"Server=sqldata;Database=InventoryDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
+                .WithEnvironment("EventBusConnection", "amqp://RMQ_USER:YourStrongPassword!@rabbitmq")
+                .WithEnvironment("EventBusRetryCount", "5")
+                .WithEnvironment("EventBusRequestedHeartbeat", "60")
+                .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
+                .WithEnvironment("SendGridApiKey", "SIMPLE_SENDGRID_API_KEY")
+                .WithEnvironment("SupportedCultures", "de,en,pl")
+                .WithEnvironment("DefaultCulture", "en")
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .Build();
+
+            await _inventoryApiContainer.StartAsync();
+
             var tokenClient = new TokenClient(new HttpClient());
             var token = await tokenClient.GetTokenAsync($"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}/api/token");
 
@@ -247,6 +273,7 @@ namespace Giuru.IntegrationTests
                     builder.UseSetting("ClientSecret", "c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9");
                     builder.UseSetting("ClientUrl", $"http://{_clientApiContainer.Hostname}:{_clientApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("CatalogUrl", $"http://{_catalogApiContainer.Hostname}:{_catalogApiContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("InventoryUrl", $"http://{_inventoryApiContainer.Hostname}:{_inventoryApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("IntegrationTestsEnabled", "true");
                     builder.UseSetting("SupportedCultures", "de,en,pl");
@@ -270,6 +297,8 @@ namespace Giuru.IntegrationTests
                     builder.UseSetting("ClientSecret", "c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9");
                     builder.UseSetting("OrderUrl", $"http://{_orderingApiContainer.Hostname}:{_orderingApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("ClientUrl", $"http://{_clientApiContainer.Hostname}:{_clientApiContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("CatalogUrl", $"http://{_catalogApiContainer.Hostname}:{_catalogApiContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("InventoryUrl", $"http://{_inventoryApiContainer.Hostname}:{_inventoryApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("BasketUrl", $"http://{_basketApiContainer.Hostname}:{_basketApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("IntegrationTestsEnabled", "true");
@@ -318,6 +347,9 @@ namespace Giuru.IntegrationTests
 
             await _basketApiContainer.StopAsync();
             await _basketApiContainer.DisposeAsync();
+
+            await _inventoryApiContainer.StopAsync();
+            await _inventoryApiContainer.DisposeAsync();
         }
     }
 }
