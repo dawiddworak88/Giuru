@@ -16,6 +16,7 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ProductDetailModal from "../ProductDetailModal/ProductDetailModal";
+import Price from "../../../../shared/components/Price/Price";
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
@@ -261,6 +262,11 @@ function ProductDetail(props) {
                             <div className="product-detail__in-stock">
                                 {props.inOutletLabel} {props.availableOutletQuantity}
                             </div>
+                        }
+                        {props.price &&
+                            <Price 
+                                {...props.price}
+                            />
                         }
                         {props.isAuthenticated &&
                             <div className="product-detail__add-to-cart-button">
