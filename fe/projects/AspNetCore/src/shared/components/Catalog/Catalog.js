@@ -13,6 +13,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
 import Modal from "../Modal/Modal";
+import Price from "../Price/Price";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -240,7 +241,9 @@ function Catalog(props) {
                                                         }
                                                     </div>
                                                 }
-
+                                                {item.price && 
+                                                    <Price {...item.price} />
+                                                }
                                             </div>
                                             {props.isLoggedIn &&
                                                 <div className="catalog-item__add-to-cart-button-container">

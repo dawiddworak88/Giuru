@@ -8,6 +8,7 @@ import CarouselConstants from "../Carousel/CarouselConstants";
 import { CalendarToday } from "@mui/icons-material";
 import { Hash } from "react-feather";
 import moment from "moment";
+import Price from "../Price/Price";
 
 function CarouselGrid(props) {
     return (
@@ -35,6 +36,9 @@ function CarouselGrid(props) {
                                             <a href={carouselItem.url}>
                                                 {carouselItem.title &&
                                                     <p className="title is-5 has-text-centered">{carouselItem.title}</p>
+                                                }
+                                                {carouselItem.price &&
+                                                    <Price {...carouselItem.price} />
                                                 }
                                                 {(carouselItem.categoryName || carouselItem.createdDate) && 
                                                     <div className="carousel-grid__data">
