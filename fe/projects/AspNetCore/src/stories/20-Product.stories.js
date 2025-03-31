@@ -102,8 +102,8 @@ var productDetail = {
       current: 999.99,
       old: 1299.99,
       lowestPrice: 899.99,
-      currency: "zł",
-      lowPriceLabel: "Najniższa cena z 30 dni:"
+      currency: "eur",
+      lowestPriceLabel: "Lowest price in 30 days:"
     },
     sidebar: {
       lackInformation: "Lack of information",

@@ -3,7 +3,7 @@ const Price = ({
     old,
     lowestPrice,
     currency,
-    lowPriceLabel
+    lowestPriceLabel
 }) => (
     <div className="price">
         <div className="price__container">
@@ -12,8 +12,8 @@ const Price = ({
                 <span className="price__old">{old} {currency}</span>
             )}
         </div>
-        {lowestPrice && lowPriceLabel && (
-            <span className="price__lowest">{lowPriceLabel} {lowestPrice} {currency}</span>
+        {lowestPrice && lowestPriceLabel && (
+            <span className="price__lowest">{lowestPriceLabel} {lowestPrice} {currency}</span>
         )}
     </div>
 )
