@@ -460,6 +460,7 @@ services:
       - DownloadCenterUrl=http://downloadcenter-api:8080
       - ContentGraphQlAuthorizationKey=${STRAPI_AUTHORIZATION_KEY}
       - MakeComplaintUrl=https://complaints.com
+      - GrulaUrl=https://api.grula.net
       - ProductAttributes=${PRODUCT_ATTRIBUTES}
       - OrganisationId=${ORGANISATION_ID}
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317

@@ -120,6 +120,11 @@
             public static readonly string ChunkNumberContentName = "chunkNumber";
         }
 
+        public struct Grula
+        {
+            public static readonly string PriceApiEndpoint = "/api/v1/price";
+        }
+
         public struct Request
         {
             public const long RequestSizeLimit = 250_000_000;
