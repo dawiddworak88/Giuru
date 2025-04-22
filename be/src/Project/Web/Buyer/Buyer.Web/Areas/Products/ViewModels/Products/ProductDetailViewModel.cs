@@ -53,6 +53,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public SidebarViewModel Sidebar { get; set; }
         public ModalViewModel Modal { get; set; }
         public FilesViewModel Files { get; set; }
+        public ProductPriceViewModel Price { get; set; }
         public IEnumerable<BasketItem> OrderItems { get; set; }
         public IEnumerable<ProductMediaItemViewModel> MediaItems { get; set; }
         public IEnumerable<ProductFeatureViewModel> Features { get; set; }
