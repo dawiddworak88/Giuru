@@ -122,6 +122,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                 Name = productTranslations.Name,
                 NameSuggest = CreateCompletionField(productTranslations.Name, nameContexts),
                 PrimaryProductId = product.PrimaryProductId,
+                PrimaryProductSku = _catalogContext.Products.FirstOrDefault(x => x.Id == product.PrimaryProductId)?.Sku,
                 PrimaryProductIdHasValue = product.PrimaryProductId.HasValue,
                 Description = productTranslations.Description,
                 LastModifiedDate = product.LastModifiedDate,
