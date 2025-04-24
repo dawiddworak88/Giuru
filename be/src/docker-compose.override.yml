@@ -461,6 +461,7 @@ services:
       - ContentGraphQlAuthorizationKey=${STRAPI_AUTHORIZATION_KEY}
       - MakeComplaintUrl=https://complaints.com
       - GrulaUrl=https://api.grula.net
+      - GrulaAccessToken=${GRULA_ACCESS_TOKEN}
       - ProductAttributes=${PRODUCT_ATTRIBUTES}
       - OrganisationId=${ORGANISATION_ID}
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
