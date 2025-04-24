@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Giuru.IntegrationTests.Helpers
 {
-    public static class TestsHelper
+    public static class InventoryDataHelper
     {
         public static async Task<Guid?> CreateProductAndAddToStockAsync(ApiFixture apiFixture, ProductRequestModel product, string endpoint = null)
         {
@@ -24,9 +24,9 @@ namespace Giuru.IntegrationTests.Helpers
                 var addToStock = await apiFixture.SellerWebClient.PostAsync<InventoryRequestModel, BaseResponseModel>(endpoint, new InventoryRequestModel
                 {
                     ProductId = newProdct.Id,
-                    WarehouseId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
-                    AvailableQuantity = Products.Quantities.AvailableQuantity,
-                    Quantity = Products.Quantities.Quantity,
+                    WarehouseId = Inventories.WarehouseId,
+                    AvailableQuantity = Inventories.Quantities.AvailableQuantity,
+                    Quantity = Inventories.Quantities.Quantity,
                 });
 
                 Assert.NotNull(addToStock);
@@ -40,8 +40,8 @@ namespace Giuru.IntegrationTests.Helpers
             Func<Task<PagedResults<IEnumerable<T>>>> fetchData,
             Func<T, bool> condition)
         {
-            int timeoutInSeconds = Common.TimeoutInSeconds;
-            int elapsedSeconds = Common.ElapsedSeconds;
+            int timeoutInSeconds = LoopTiming.TimeoutInSeconds;
+            int elapsedSeconds = LoopTiming.ElapsedSeconds;
 
             while (elapsedSeconds < timeoutInSeconds)
             {
@@ -52,7 +52,7 @@ namespace Giuru.IntegrationTests.Helpers
                     return getResults;
                 }
 
-                await Task.Delay(1000);
+                await Task.Delay(LoopTiming.Delay);
                 elapsedSeconds++;
             }
 
