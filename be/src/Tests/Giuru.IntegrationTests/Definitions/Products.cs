@@ -34,11 +34,5 @@ namespace Giuru.IntegrationTests.Definitions
             public const bool IsPublished = true;
             public const string Ean = "6978494041192";
         }
-
-        public struct Quantities
-        {
-            public const int Quantity = 2;
-            public const int AvailableQuantity = 2;
-        }
     }
 }
