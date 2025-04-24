@@ -252,7 +252,6 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("EventBusRetryCount", "5")
                 .WithEnvironment("EventBusRequestedHeartbeat", "60")
                 .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
-                .WithEnvironment("SendGridApiKey", "SIMPLE_SENDGRID_API_KEY")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
