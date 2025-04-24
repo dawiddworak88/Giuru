@@ -27,7 +27,7 @@ namespace Giuru.IntegrationTests
         [Fact]
         public async Task CreateProducts_AddProductsToInventory_CheckoutOrder_Returns_Orders()
         {
-            var onStockProduct = await TestsHelper.CreateProductAndAddToStockAsync(_apiFixture, new ProductRequestModel
+            var onStockProduct = await InventoryDataHelper.CreateProductAndAddToStockAsync(_apiFixture, new ProductRequestModel
             {
                 Sku = Products.Anton.Sku,
                 Name = Products.Anton.Name,
@@ -37,7 +37,7 @@ namespace Giuru.IntegrationTests
             },
             ApiEndpoints.InventoriesApiEndpoint);
 
-            var onOutletProduct = await TestsHelper.CreateProductAndAddToStockAsync(_apiFixture, new ProductRequestModel
+            var onOutletProduct = await InventoryDataHelper.CreateProductAndAddToStockAsync(_apiFixture, new ProductRequestModel
             {
                 Sku = Products.Aga.Sku,
                 Name = Products.Aga.Name,
@@ -56,14 +56,14 @@ namespace Giuru.IntegrationTests
                         ProductId = onStockProduct,
                         Sku = Products.Anton.Sku,
                         Name = Products.Anton.Name,
-                        StockQuantity = Products.Quantities.AvailableQuantity
+                        StockQuantity = Inventories.Quantities.AvailableQuantity
                     },
                     new BasketItemRequestModel
                     {
                         ProductId = onOutletProduct,
                         Sku = Products.Aga.Sku,
                         Name = Products.Aga.Name,
-                        OutletQuantity = Products.Quantities.AvailableQuantity
+                        OutletQuantity = Inventories.Quantities.AvailableQuantity
                     }
                 }
             });
@@ -81,7 +81,7 @@ namespace Giuru.IntegrationTests
                 ClientName = Clients.Name
             });
 
-            var getResults = await TestsHelper.GetDataAsync(
+            var getResults = await InventoryDataHelper.GetDataAsync(
                 () => _apiFixture.BuyerWebClient.GetAsync<PagedResults<IEnumerable<Order>>>($"{ApiEndpoints.GetOrdersApiEndpoint}?pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}"),
                 x => x.OrderItems.Any(y => y.ProductId == onStockProduct || y.ProductId == onOutletProduct));
 
@@ -93,12 +93,12 @@ namespace Giuru.IntegrationTests
             var stockOrderItem = order.OrderItems.FirstOrDefault(x => x.ProductId == onStockProduct);
 
             Assert.NotNull(stockOrderItem);
-            Assert.Equal(Products.Quantities.AvailableQuantity, stockOrderItem.StockQuantity);
+            Assert.Equal(Inventories.Quantities.AvailableQuantity, stockOrderItem.StockQuantity);
 
             var outletOrderItem = order.OrderItems.FirstOrDefault(x => x.ProductId == onOutletProduct);
 
             Assert.NotNull(outletOrderItem);
-            Assert.Equal(Products.Quantities.AvailableQuantity, outletOrderItem.OutletQuantity);
+            Assert.Equal(Inventories.Quantities.AvailableQuantity, outletOrderItem.OutletQuantity);
         }
     }
 }

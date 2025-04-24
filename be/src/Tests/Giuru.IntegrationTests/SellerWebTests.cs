@@ -61,7 +61,7 @@ namespace Giuru.IntegrationTests
         [Fact]
         public async Task CreateUpdateProductAndGet_ReturnsProduct()
         {
-            var newProductId = await TestsHelper.CreateProductAndAddToStockAsync(_apiFixture, new ProductRequestModel
+            var newProductId = await InventoryDataHelper.CreateProductAndAddToStockAsync(_apiFixture, new ProductRequestModel
             {
                 Name = Products.Lamica.Name,
                 Sku = Products.Lamica.Sku,
@@ -70,7 +70,7 @@ namespace Giuru.IntegrationTests
                 Ean = Products.Lamica.Ean
             });
 
-            var updateProductId = await TestsHelper.CreateProductAndAddToStockAsync(_apiFixture, new ProductRequestModel
+            var updateProductId = await InventoryDataHelper.CreateProductAndAddToStockAsync(_apiFixture, new ProductRequestModel
             {
                 Id = newProductId,
                 Name = Products.Lamica.UpdatedName,
@@ -82,7 +82,7 @@ namespace Giuru.IntegrationTests
 
             Assert.Equal(newProductId, updateProductId);
 
-            var getResults = await TestsHelper.GetDataAsync(
+            var getResults = await InventoryDataHelper.GetDataAsync(
                 () => _apiFixture.SellerWebClient.GetAsync<PagedResults<IEnumerable<Product>>>($"{ApiEndpoints.GetProductsApiEndpoint}?pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}"),
                 x => x.Id == updateProductId);
 
