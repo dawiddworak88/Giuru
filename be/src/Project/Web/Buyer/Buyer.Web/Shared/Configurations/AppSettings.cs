@@ -17,6 +17,7 @@ namespace Buyer.Web.Shared.Configurations
         public string DownloadCenterUrl { get; set; }
         public string CdnUrl { get; set; }
         public string GrulaUrl { get; set; }
+        public string GrulaAccessToken { get; set; }
         public Guid? OrganisationId { get; set; }
         public string ProductAttributes { get; set; }
         public string GoogleTagManagerIdentifier { get; set; }

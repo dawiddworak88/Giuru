@@ -25,6 +25,12 @@ using Foundation.PageContent.Definitions;
 using Foundation.Media.Services.MediaServices;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Repositories.Media;
+using Buyer.Web.Shared.Services.Prices;
+using System;
+using Buyer.Web.Shared.DomainModels.Prices;
+using Microsoft.Extensions.Options;
+using Buyer.Web.Shared.Configurations;
+using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -42,6 +48,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
         private readonly IMediaItemsRepository _mediaItemsRepository;
+        private readonly IPriceService _priceRepository;
+        private readonly IOptions<AppSettings> _options;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -55,7 +63,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IMediaService mediaService,
             IBasketService basketService,
             LinkGenerator linkGenerator,
-            IMediaItemsRepository mediaItemsRepository)
+            IMediaItemsRepository mediaItemsRepository,
+            IPriceService priceRepository,
+            IOptions<AppSettings> options)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -69,6 +79,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _orderResources = orderResources;
             _modalModelBuilder = modalModelBuilder;
             _mediaItemsRepository = mediaItemsRepository;
+            _priceRepository = priceRepository;
+            _options = options;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -114,6 +126,25 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 viewModel.Sku = product.Sku;
                 viewModel.IsProductVariant = product.PrimaryProductId.HasValue;
                 viewModel.Features = product.ProductAttributes?.Select(x => new ProductFeatureViewModel { Key = x.Name, Value = string.Join(", ", x.Values.OrEmptyIfNull()) });
+
+                /*var price = await _priceRepository.GetPrice(
+                    componentModel.Token, 
+                    "PLN",
+                    DateTime.UtcNow,
+                    new PriceProduct
+                    {
+                        PrimarySku = product.PrimaryProductSku, 
+                        FabricsGroup = product.ProductAttributes.FirstOrDefault(x => x.Key == "priceGroup")?.Values?.FirstOrDefault()
+                    });
+
+                if (price is not null)
+                {
+                    viewModel.Price = new ProductPriceViewModel
+                    {
+                        Current = price.Amount,
+                        Currency = price.CurrencyThreeLetterCode,
+                    };
+                }*/
 
                 var imagesMediaItems = await _mediaItemsRepository.GetMediaItemsAsync(
                     componentModel.Token,
@@ -205,6 +236,21 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     if (productVariants != null)
                     {
                         var carouselItems = new List<CarouselGridCarouselItemViewModel>();
+
+                        if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                        {
+                            var prices = await _priceRepository.GetPrices(
+                                _options.Value.GrulaAccessToken,
+                                "PLN",
+                                DateTime.UtcNow,
+                                productVariants.Data.Select(x => new PriceProduct
+                                {
+                                    PrimarySku = x.PrimaryProductSku,
+                                    FabricsGroup = x.ProductAttributes?.FirstOrDefault(y => y.Key == "priceGroup")?.Values?.FirstOrDefault()
+                                }));
+
+                            Console.WriteLine(JsonConvert.SerializeObject(prices));
+                        }
 
                         foreach (var productVariant in productVariants.Data.OrEmptyIfNull())
                         {

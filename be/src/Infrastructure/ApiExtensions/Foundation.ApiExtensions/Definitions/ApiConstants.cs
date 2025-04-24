@@ -123,6 +123,7 @@
         public struct Grula
         {
             public static readonly string PriceApiEndpoint = "/api/v1/price";
+            public static readonly string PricesApiEndpoint = "/api/v1/prices";
         }
 
         public struct Request

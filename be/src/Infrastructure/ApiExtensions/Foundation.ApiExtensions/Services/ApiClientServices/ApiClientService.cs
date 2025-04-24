@@ -77,7 +77,7 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
             return default;
         }
 
-        public async Task<ApiResponse<T>> PostAsync<S, W, T>(S request) where S : ApiRequest<W> where T : BaseResponseModel
+        public async Task<ApiResponse<T>> PostAsync<S, W, T>(S request) where S : ApiRequest<W> where T : class
         {
             using (var client = new HttpClient())
             {

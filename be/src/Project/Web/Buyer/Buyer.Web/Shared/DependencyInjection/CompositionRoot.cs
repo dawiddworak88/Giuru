@@ -37,6 +37,7 @@ using Buyer.Web.Shared.Repositories.GraphQl;
 using Buyer.Web.Shared.ModelBuilders.NotificationBar;
 using Buyer.Web.Shared.ViewModels.NotificationBar;
 using Buyer.Web.Shared.Repositories.Identity;
+using Buyer.Web.Shared.Services.Prices;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -75,6 +76,8 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<INewsRepository, NewsRepository>();
             services.AddScoped<IFilesRepository, FilesRepository>();
             services.AddScoped<IMediaItemsRepository, MediaItemsRepository>();
+            
+            services.AddScoped<IPriceService, PriceService>();
 
             // Client
             services.AddScoped<ICatalogOrderModelBuilder, CatalogOrderModelBuilder>();
