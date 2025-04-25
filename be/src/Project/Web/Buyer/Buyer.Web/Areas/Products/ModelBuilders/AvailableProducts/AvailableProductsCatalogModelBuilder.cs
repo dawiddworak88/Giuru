@@ -16,6 +16,12 @@ using System.Collections.Generic;
 using Buyer.Web.Areas.Products.Definitions;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Areas.Products.Repositories;
+using Buyer.Web.Shared.DomainModels.Prices;
+using Microsoft.Extensions.Options;
+using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Services.Prices;
+using System;
+using Buyer.Web.Areas.Products.ViewModels.Products;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
@@ -28,6 +34,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
         private readonly IInventoryRepository inventoryRepository;
         private readonly LinkGenerator linkGenerator;
         private readonly IOutletRepository outletRepository;
+        private readonly IOptions<AppSettings> _options;
+        private readonly IPriceService _priceService;
 
         public AvailableProductsCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -36,7 +44,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             IProductsService productsService,
             IInventoryRepository inventoryRepository,
             LinkGenerator linkGenerator,
-            IOutletRepository outletRepository)
+            IOutletRepository outletRepository,
+            IOptions<AppSettings> options,
+            IPriceService priceService)
         {
             this.globalLocalizer = globalLocalizer;
             this.availableProductsCatalogModelBuilder = availableProductsCatalogModelBuilder;
@@ -45,6 +55,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             this.linkGenerator = linkGenerator;
             this.modalModelBuilder = modalModelBuilder;
             this.outletRepository = outletRepository;
+            _options = options;
+            _priceService = priceService;
         }
 
         public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -73,8 +85,30 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 
                 if (products is not null)
                 {
-                    foreach (var product in products.Data)
+                    var prices = Enumerable.Empty<Price>();
+
+                    if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                     {
+                        prices = await _priceService.GetPrices(
+                            _options.Value.GrulaAccessToken,
+                            "PLN",
+                            DateTime.UtcNow,
+                            products.Data.Select(x => new PriceProduct
+                            {
+                                PrimarySku = x.PrimaryProductSku,
+                                FabricsGroup = x.FabricsGroup
+                            }));
+                    }
+
+                    for (int i = 0; i < products.Data.Count(); i++)
+                    {
+                        var product = products.Data.ElementAtOrDefault(i);
+
+                        if (product is null)
+                        {
+                            continue;
+                        }
+
                         var availableStockQuantity = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
 
                         if (availableStockQuantity > 0)
@@ -92,6 +126,20 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 
                         product.InStock = true;
                         product.ExpectedDelivery = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
+
+                        if (prices.Any())
+                        {
+                            var price = prices.ElementAtOrDefault(i);
+
+                            if (price is not null)
+                            {
+                                product.Price = new ProductPriceViewModel
+                                {
+                                    Current = price.Amount,
+                                    Currency = price.CurrencyCode
+                                };
+                            }
+                        }
                     }
 
                     viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(inventories.Total, AvailableProductsConstants.Pagination.ItemsPerPage)

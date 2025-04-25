@@ -83,7 +83,7 @@ namespace Buyer.Web.Shared.Services.Prices
                 return new Price
                 {
                     Amount = response.Data.Amount.Amount,
-                    CurrencyThreeLetterCode = response.Data.Amount.CurrencyThreeLetterCode,
+                    CurrencyCode = response.Data.Amount.CurrencyThreeLetterCode,
                 };
             }
 
@@ -127,7 +127,7 @@ namespace Buyer.Web.Shared.Services.Prices
 
                 var priceRequest = new PriceRequestModel
                 {
-                    PriceDrivers = productPriceDrivers,
+                    PriceDrivers = productPriceDrivers.Distinct(),
                     CurrencyThreeLetterCode = currencyCode,
                     PricingDate = pricingDate
                 };
@@ -160,7 +160,7 @@ namespace Buyer.Web.Shared.Services.Prices
                         var price = new Price
                         {
                             Amount = priceResponse.Amount.Amount,
-                            CurrencyThreeLetterCode = priceResponse.Amount.CurrencyThreeLetterCode,
+                            CurrencyCode = priceResponse.Amount.CurrencyThreeLetterCode
                         };
 
                         prices.Add(price);

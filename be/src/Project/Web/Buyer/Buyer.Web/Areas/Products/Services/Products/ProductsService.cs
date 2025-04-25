@@ -69,6 +69,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                     var catalogItem = new CatalogItemViewModel
                     {
                         Id = product.Id,
+                        PrimaryProductSku = product.PrimaryProductSku,
                         Sku = product.Sku,
                         Title = product.Name,
                         Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
@@ -76,7 +77,8 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         BrandName = product.BrandName,
                         Images = product.Images,
                         InStock = false,
-                        ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes)
+                        ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes),
+                        FabricsGroup = product.ProductAttributes.FirstOrDefault(x => x.Key == "priceGroup")?.Values?.FirstOrDefault(),
                     };
 
                     if (product.Images != null)

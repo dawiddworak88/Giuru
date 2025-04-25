@@ -21,6 +21,13 @@ namespace Foundation.PageContent.Components.CarouselGrids.ViewModels
         public DateTime? CreatedDate { get; set; }
         public IEnumerable<SourceViewModel> Sources { get; set; }
         public string ProductAttributes { get; set; }
+        public PriceViewModel Price { get; set; }
         public IEnumerable<ImageVariantViewModel> Images { get; set; }
+    }
+
+    public class PriceViewModel
+    {
+        public decimal Current { get; set; }
+public string Currency { get; set; }
     }
 }

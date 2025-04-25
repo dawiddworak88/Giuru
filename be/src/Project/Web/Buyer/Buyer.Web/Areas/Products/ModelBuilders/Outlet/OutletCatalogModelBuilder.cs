@@ -17,6 +17,12 @@ using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
+using Microsoft.Extensions.Options;
+using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Services.Prices;
+using Buyer.Web.Shared.DomainModels.Prices;
+using System;
+using Buyer.Web.Areas.Products.ViewModels.Products;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders
 {
@@ -29,6 +35,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
         private readonly LinkGenerator linkGenerator;
         private readonly IOutletRepository outletRepository;
         private readonly IInventoryRepository inventoryRepository;
+        private readonly IOptions<AppSettings> _options;
+        private readonly IPriceService _priceService;
 
         public OutletCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -38,7 +46,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             IProductsService productsService,
             IOutletRepository outletRepository,
             LinkGenerator linkGenerator,
-            IInventoryRepository inventoryRepository)
+            IInventoryRepository inventoryRepository,
+            IOptions<AppSettings> options,
+            IPriceService priceService)
         {
             this.globalLocalizer = globalLocalizer;
             this.outletCatalogModelBuilder = outletCatalogModelBuilder;
@@ -47,6 +57,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             this.outletRepository = outletRepository;
             this.modalModelBuilder = modalModelBuilder;
             this.inventoryRepository = inventoryRepository;
+            _options = options;
+            _priceService = priceService;
         }
 
         public async Task<OutletPageCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -74,8 +86,30 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
 
                 if (products is not null)
                 {
-                    foreach (var product in products.Data)
+                    var prices = Enumerable.Empty<Price>();
+
+                    if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                     {
+                        prices = await _priceService.GetPrices(
+                            _options.Value.GrulaAccessToken,
+                            "PLN",
+                            DateTime.UtcNow,
+                            products.Data.Select(x => new PriceProduct
+                            {
+                                PrimarySku = x.PrimaryProductSku,
+                                FabricsGroup = x.FabricsGroup
+                            }));
+                    }
+
+                    for (int i = 0; i < products.Data.Count(); i++)
+                    {
+                        var product = products.Data.ElementAtOrDefault(i);
+
+                        if (product is null)
+                        {
+                            continue;
+                        }
+
                         var availableOutletQuantity = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
 
                         if (availableOutletQuantity > 0)
@@ -94,6 +128,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                         product.InOutlet = true;
                         product.OutletTitle = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Title;
                         product.OutletDescription = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Description;
+
+                        var price = prices.ElementAtOrDefault(i);
+
+                        if (price is not null)
+                        {
+                            product.Price = new ProductPriceViewModel
+                            {
+                                Currency = price.CurrencyCode,
+                                Current = price.Amount
+                            };
+                        }
                     }
                 }
 

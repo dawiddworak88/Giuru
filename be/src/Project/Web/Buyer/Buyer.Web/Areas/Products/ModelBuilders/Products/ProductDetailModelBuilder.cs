@@ -127,24 +127,28 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 viewModel.IsProductVariant = product.PrimaryProductId.HasValue;
                 viewModel.Features = product.ProductAttributes?.Select(x => new ProductFeatureViewModel { Key = x.Name, Value = string.Join(", ", x.Values.OrEmptyIfNull()) });
 
-                /*var price = await _priceRepository.GetPrice(
-                    componentModel.Token, 
-                    "PLN",
-                    DateTime.UtcNow,
-                    new PriceProduct
-                    {
-                        PrimarySku = product.PrimaryProductSku, 
-                        FabricsGroup = product.ProductAttributes.FirstOrDefault(x => x.Key == "priceGroup")?.Values?.FirstOrDefault()
-                    });
-
-                if (price is not null)
+                if (product.PrimaryProductId.HasValue &&
+                    string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                 {
-                    viewModel.Price = new ProductPriceViewModel
+                    var price = await _priceRepository.GetPrice(
+                        _options.Value.GrulaAccessToken,
+                        "PLN",
+                        DateTime.UtcNow,
+                        new PriceProduct
+                        {
+                            PrimarySku = product.PrimaryProductSku,
+                            FabricsGroup = product.ProductAttributes.FirstOrDefault(x => x.Key == "priceGroup")?.Values?.FirstOrDefault()
+                        });
+
+                    if (price is not null)
                     {
-                        Current = price.Amount,
-                        Currency = price.CurrencyThreeLetterCode,
-                    };
-                }*/
+                        viewModel.Price = new ProductPriceViewModel
+                        {
+                            Current = price.Amount,
+                            Currency = price.CurrencyCode,
+                        };
+                    }
+                }
 
                 var imagesMediaItems = await _mediaItemsRepository.GetMediaItemsAsync(
                     componentModel.Token,
@@ -237,23 +241,31 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     {
                         var carouselItems = new List<CarouselGridCarouselItemViewModel>();
 
+                        var prices = Enumerable.Empty<Price>();
+
                         if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                         {
-                            var prices = await _priceRepository.GetPrices(
-                                _options.Value.GrulaAccessToken,
-                                "PLN",
-                                DateTime.UtcNow,
-                                productVariants.Data.Select(x => new PriceProduct
-                                {
-                                    PrimarySku = x.PrimaryProductSku,
-                                    FabricsGroup = x.ProductAttributes?.FirstOrDefault(y => y.Key == "priceGroup")?.Values?.FirstOrDefault()
-                                }));
-
-                            Console.WriteLine(JsonConvert.SerializeObject(prices));
+                            prices = await _priceRepository.GetPrices(
+                               _options.Value.GrulaAccessToken,
+                               "PLN",
+                               DateTime.UtcNow,
+                               productVariants.Data.Select(x => new PriceProduct
+                               {
+                                   PrimarySku = x.PrimaryProductSku,
+                                   FabricsGroup = x.ProductAttributes?.FirstOrDefault(y => y.Key == "priceGroup")?.Values?.FirstOrDefault()
+                               }));
                         }
 
-                        foreach (var productVariant in productVariants.Data.OrEmptyIfNull())
+
+                        for (var i = 0; i < productVariants.Data.Count(); i++) 
                         {
+                            var productVariant = productVariants.Data.ElementAtOrDefault(i);
+
+                            if (productVariant is null)
+                            {
+                                continue;
+                            }  
+
                             var carouselItem = new CarouselGridCarouselItemViewModel
                             {
                                 Id = productVariant.Id,
@@ -262,6 +274,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 ImageAlt = productVariant.Name,
                                 Url = _linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id })
                             };
+
+                            var productVariantPrice = prices.ElementAtOrDefault(i);
+
+                            if (productVariantPrice is not null)
+                            {
+                                carouselItem.Price = new PriceViewModel
+                                {
+                                    Current = productVariantPrice.Amount,
+                                    Currency = productVariantPrice.CurrencyCode
+                                };
+                            }
 
                             if (productVariant.Images != null && productVariant.Images.Any())
                             {

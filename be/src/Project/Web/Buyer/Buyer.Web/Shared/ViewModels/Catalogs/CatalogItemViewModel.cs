@@ -1,4 +1,5 @@
-﻿using Foundation.PageContent.Components.Images;
+﻿using Buyer.Web.Areas.Products.ViewModels.Products;
+using Foundation.PageContent.Components.Images;
 using System;
 using System.Collections.Generic;
 
@@ -7,6 +8,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
     public class CatalogItemViewModel
     {
         public Guid Id { get; set; }
+        public string PrimaryProductSku { get; set; }
         public string Sku { get; set; }
         public string Url { get; set; }
         public string Title { get; set; }
@@ -25,6 +27,8 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string OutletDescription { get; set; }
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<SourceViewModel> Sources { get; set; }
+        public ProductPriceViewModel Price { get; set; }
         public string ProductAttributes { get; set; }
+        public string FabricsGroup { get; set; }
     }
 }
