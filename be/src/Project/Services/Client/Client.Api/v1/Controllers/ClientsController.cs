@@ -218,7 +218,7 @@ namespace Client.Api.v1.Controllers
 
 
         /// <summary>
-        /// Gets client by id.
+        /// Gets client by email.
         /// </summary>
         /// <param name="email">The client email.</param>
         /// <returns>The client.</returns>

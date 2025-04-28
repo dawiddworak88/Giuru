@@ -19,6 +19,12 @@ using Microsoft.Extensions.Localization;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Routing;
 using System.Globalization;
+using Buyer.Web.Shared.Services.Prices;
+using Microsoft.Extensions.Options;
+using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.DomainModels.Prices;
+using System;
+using Buyer.Web.Areas.Products.ViewModels.Products;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 {
@@ -32,6 +38,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         private readonly IOutletRepository _outletRepository;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly LinkGenerator _linkGenerator;
+        private readonly IOptions<AppSettings> _options;
+        private readonly IPriceService _priceService;
 
         public SearchProductsCatalogModelBuilder(
             ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> searchProductsCatalogModelBuilder,
@@ -41,7 +49,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             IProductsService productsService,
             IOutletRepository outletRepository,
             IInventoryRepository inventoryRepository,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IOptions<AppSettings> options,
+            IPriceService priceService
+            )
         {
             _searchProductsCatalogModelBuilder = searchProductsCatalogModelBuilder;
             _productsService = productsService;
@@ -51,6 +62,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             _inventoryRepository = inventoryRepository;
             _globalLocalizer = globalLocalizer;
             _linkGenerator = linkGenerator;
+            _options = options;
+            _priceService = priceService;
         }
 
         public async Task<SearchProductsCatalogViewModel> BuildModelAsync(SearchProductsComponentModel componentModel)
@@ -82,8 +95,30 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 var outletItems = await _outletRepository.GetOutletProductsByIdsAsync(componentModel.Token, componentModel.Language, products.Data.Select(x => x.Id));
                 var inventoryItems = await _inventoryRepository.GetAvailbleProductsInventoryByIds(componentModel.Token, componentModel.Language, products.Data.Select(x => x.Id));
 
-                foreach (var product in products.Data.OrEmptyIfNull())
+                var prices = Enumerable.Empty<Price>();
+
+                if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                 {
+                    prices = await _priceService.GetPrices(
+                        _options.Value.GrulaAccessToken,
+                        "PLN",
+                        DateTime.UtcNow,
+                        products.Data.Select(x => new PriceProduct
+                        {
+                            PrimarySku = x.PrimaryProductSku,
+                            FabricsGroup = x.FabricsGroup
+                        }));
+                }
+
+                for (int i = 0; i < products.Data.Count(); i++)
+                {
+                    var product = products.Data.ElementAtOrDefault(i);
+
+                    if (product is null)
+                    {
+                        continue;
+                    }
+
                     var outletItem = outletItems.FirstOrDefault(x => x.ProductSku == product.Sku);
 
                     if (outletItem is not null)
@@ -100,6 +135,20 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         product.InStock = true;
                         product.AvailableQuantity = inventoryItem.AvailableQuantity;
                         product.ExpectedDelivery = inventoryItem.ExpectedDelivery;
+                    }
+
+                    if (prices.Any())
+                    {
+                        var price = prices.ElementAtOrDefault(i);
+
+                        if (price is not null)
+                        {
+                            product.Price = new ProductPriceViewModel
+                            {
+                                Current = price.Amount,
+                                Currency = price.CurrencyCode
+                            };
+                        }
                     }
 
                     product.CanOrder = true;
