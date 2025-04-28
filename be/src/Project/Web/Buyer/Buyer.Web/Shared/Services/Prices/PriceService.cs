@@ -127,7 +127,7 @@ namespace Buyer.Web.Shared.Services.Prices
 
                 var priceRequest = new PriceRequestModel
                 {
-                    PriceDrivers = productPriceDrivers.Distinct(),
+                    PriceDrivers = productPriceDrivers,
                     CurrencyThreeLetterCode = currencyCode,
                     PricingDate = pricingDate
                 };

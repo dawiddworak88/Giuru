@@ -1,11 +1,17 @@
 ﻿using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Areas.Products.ViewModels.Products;
+using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.DomainModels.Prices;
+using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -19,13 +25,19 @@ namespace Buyer.Web.Areas.Products.ApiControllers
     {
         private readonly IProductsService productsService;
         private readonly IInventoryRepository inventoryRepository;
+        private readonly IOptions<AppSettings> _options;
+        private readonly IPriceService _priceService;
 
         public AvailableProductsApiController(
             IProductsService productsService,
-            IInventoryRepository inventoryRepository)
+            IInventoryRepository inventoryRepository,
+            IPriceService priceService,
+            IOptions<AppSettings> options)
         {
             this.productsService = productsService;
             this.inventoryRepository = inventoryRepository;
+            _options = options;
+            _priceService = priceService;
         }
 
         [HttpGet]
@@ -52,14 +64,50 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                 if (products is not null)
                 {
-                    foreach (var product in products.Data)
+                    var prices = Enumerable.Empty<Price>();
+
+                    if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                     {
+                        prices = await _priceService.GetPrices(
+                            _options.Value.GrulaAccessToken,
+                            "PLN",
+                            DateTime.UtcNow,
+                            products.Data.Select(x => new PriceProduct
+                            {
+                                PrimarySku = x.PrimaryProductSku,
+                                FabricsGroup = x.FabricsGroup
+                            }));
+                    }
+
+                    for (int i = 0; i < products.Data.Count(); i++)
+                    {
+                        var product = products.Data.ElementAtOrDefault(i);
+
+                        if (product is null)
+                        {
+                            continue;
+                        }
+
                         var availableQuantity = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
 
                         if (availableQuantity > 0)
                         {
                             product.CanOrder = true;
                             product.AvailableQuantity = availableQuantity;
+                        }
+
+                        if (prices.Any())
+                        {
+                            var price = prices.ElementAtOrDefault(i);
+
+                            if (price is not null)
+                            {
+                                product.Price = new ProductPriceViewModel
+                                {
+                                    Current = price.Amount,
+                                    Currency = price.CurrencyCode
+                                };
+                            }
                         }
 
                         product.InStock = true;
