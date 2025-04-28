@@ -216,6 +216,69 @@ namespace Client.Api.v1.Controllers
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
+
+        /// <summary>
+        /// Gets client by id.
+        /// </summary>
+        /// <param name="email">The client email.</param>
+        /// <returns>The client.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("{email}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetByEmail(string email)
+        {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetClientByEmailServiceModel
+            {
+                Email = email,
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new GetClientByEmailModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var client = await _clientsService.GetByEmailAsync(serviceModel);
+
+                if (client is not null)
+                {
+                    var response = new ClientResponseModel
+                    {
+                        Id = client.Id,
+                        Email = client.Email,
+                        Name = client.Name,
+                        CommunicationLanguage = client.CommunicationLanguage,
+                        CountryId = client.CountryId,
+                        PreferedCurrencyId = client.PreferedCurrencyId,
+                        OrganisationId = client.OrganisationId,
+                        PhoneNumber = client.PhoneNumber,
+                        IsDisabled = client.IsDisabled,
+                        ClientGroupIds = client.ClientGroupIds,
+                        ClientManagerIds = client.ClientManagerIds,
+                        DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
+                        DefaultBillingAddressId = client.DefaultBillingAddressId,
+                        LastModifiedDate = client.LastModifiedDate,
+                        CreatedDate = client.CreatedDate
+                    };
+
+                    return StatusCode((int)HttpStatusCode.OK, response);
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.NoContent);
+                }
+
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
         /// <summary>
         /// Gets client by id.
         /// </summary>
