@@ -105,29 +105,27 @@ namespace Buyer.Web.Shared.Services.Prices
             {
                 var productPriceDrivers = new List<PriceDriverRequestModel>();
 
-                if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
-                    string.IsNullOrWhiteSpace(product.FabricsGroup))
+                if (string.IsNullOrWhiteSpace(product.PrimarySku) is false)
                 {
-                    prices.Add(null);
+                    var productPriceDriver = new PriceDriverRequestModel
+                    {
+                        Name = PriceDriversConstants.ProductDriver,
+                        Value = product.PrimarySku
+                    };
 
-                    continue;
+                    productPriceDrivers.Add(productPriceDriver);
                 }
 
-                var productPriceDriver = new PriceDriverRequestModel
+                if (string.IsNullOrWhiteSpace(product.FabricsGroup) is false)
                 {
-                    Name = PriceDriversConstants.ProductDriver,
-                    Value = product.PrimarySku
-                };
+                    var fabricsPriceDriver = new PriceDriverRequestModel
+                    {
+                        Name = PriceDriversConstants.FabricsGroupDriver,
+                        Value = product.FabricsGroup
+                    };
 
-                productPriceDrivers.Add(productPriceDriver);
-
-                var fabricsPriceDriver = new PriceDriverRequestModel
-                {
-                    Name = PriceDriversConstants.FabricsGroupDriver,
-                    Value = product.FabricsGroup
-                };
-
-                productPriceDrivers.Add(fabricsPriceDriver);
+                    productPriceDrivers.Add(fabricsPriceDriver);
+                }
 
                 var priceRequest = new PriceRequestModel
                 {

@@ -74,8 +74,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         }));
                 }
 
-                Console.WriteLine("Prices: " + prices.Count() + " > " + JsonConvert.SerializeObject(prices.Select(x => x.Amount)));
-                Console.WriteLine("Products: " + products.Data.Count() + " > " + JsonConvert.SerializeObject(products.Data.Select(x => new { PrimaryProductSku = x.PrimaryProductSku, Sku = x.Sku })));
+                Console.WriteLine("Prices: " + prices.Count() + " > " + JsonConvert.SerializeObject(prices));
+                Console.WriteLine("Products: " + products.Data.Count() + " > " + JsonConvert.SerializeObject(products.Data));
 
                 for (int i = 0; i < products.Data.Count(); i++)
                 {
