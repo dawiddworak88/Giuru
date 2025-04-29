@@ -9,6 +9,7 @@ using Ordering.Api.Infrastructure;
 using Ordering.Api.IntegrationEvents;
 using Ordering.Api.Services;
 using Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers;
+using System;
 using System.Reflection;
 
 namespace Ordering.Api.DependencyInjection
@@ -24,7 +25,9 @@ namespace Ordering.Api.DependencyInjection
         {
             services.AddScoped<OrderingContext>();
 
-            services.AddDbContext<OrderingContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
+            services.AddDbContext<OrderingContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite())
+                .EnableSensitiveDataLogging()
+                .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information));
         }
 
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)
