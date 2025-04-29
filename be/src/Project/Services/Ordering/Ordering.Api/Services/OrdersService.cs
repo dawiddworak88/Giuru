@@ -849,7 +849,7 @@ namespace Ordering.Api.Services
 
             var orderItemIdSet = orderItems.Select(x => x.Id).ToHashSet();
 
-            var lastStatusChanges = _context.OrderItemStatusChanges
+            var lastOrderItemStatusChanges = _context.OrderItemStatusChanges
                                     .Where(x => x.IsActive && orderItemIdSet.Contains(x.OrderItemId))
                                     .GroupBy(x => x.OrderItemId)
                                     .Select(g => g.OrderByDescending(x => x.CreatedDate).FirstOrDefault())
@@ -858,7 +858,7 @@ namespace Ordering.Api.Services
                                     .Where(x => x != null)
                                     .ToDictionary(x => x.OrderItemId);
 
-            var statusChangeIds = lastStatusChanges.Values
+            var orderItemStatusChangeIds = lastStatusChanges.Values
                                                    .Where(x => x != null)
                                                    .Select(x => x.Id)
                                                    .ToHashSet();
