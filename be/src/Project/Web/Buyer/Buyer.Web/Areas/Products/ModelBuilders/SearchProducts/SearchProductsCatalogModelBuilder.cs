@@ -111,8 +111,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         }));
                 }
 
-                Console.WriteLine("Prices: " + prices.Count() + " > " + JsonConvert.SerializeObject(prices));
-                Console.WriteLine("Products: " + products.Data.Count() + " > " + JsonConvert.SerializeObject(products.Data));
+                Console.WriteLine("Prices: " + prices.Count() + " > " + JsonConvert.SerializeObject(prices.OrEmptyIfNull().Select(x => x.Amount)));
+                Console.WriteLine("Products: " + products.Data.Count() + " > " + JsonConvert.SerializeObject(products.Data.OrEmptyIfNull().Select(x => new { PrimarySku = x.PrimaryProductSku, Sku = x.Sku, FabricsGroup = x.FabricsGroup })));
 
                 for (int i = 0; i < products.Data.Count(); i++)
                 {

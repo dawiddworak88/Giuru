@@ -7,6 +7,7 @@ using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -142,7 +143,7 @@ namespace Buyer.Web.Shared.Services.Prices
                 PriceRequests = priceRequests,
             };
 
-            Console.WriteLine("PriceRequests: " + priceRequests.ToList());
+            Console.WriteLine("PriceRequests: " + JsonConvert.SerializeObject(priceRequests));
 
             var apiRequest = new ApiRequest<PricesRequestModel>
             {
@@ -155,7 +156,7 @@ namespace Buyer.Web.Shared.Services.Prices
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
-                Console.WriteLine("PriceResponse: " + response.Data.ToList());
+                Console.WriteLine("PriceResponse: " + JsonConvert.SerializeObject(response.Data));
 
                 foreach (var priceResponse in response.Data)
                 {
