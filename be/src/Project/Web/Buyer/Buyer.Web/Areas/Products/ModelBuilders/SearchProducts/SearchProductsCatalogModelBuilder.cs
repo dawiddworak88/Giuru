@@ -25,6 +25,7 @@ using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.DomainModels.Prices;
 using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
+using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 {
@@ -109,6 +110,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             FabricsGroup = x.FabricsGroup
                         }));
                 }
+
+                Console.WriteLine("Prices: " + prices.Count() + " > " + JsonConvert.SerializeObject(prices));
+                Console.WriteLine("Products: " + products.Data.Count() + " > " + JsonConvert.SerializeObject(products.Data));
 
                 for (int i = 0; i < products.Data.Count(); i++)
                 {

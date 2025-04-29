@@ -13,6 +13,7 @@ using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -72,6 +73,9 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             FabricsGroup = x.FabricsGroup
                         }));
                 }
+
+                Console.WriteLine("Prices: " + prices.Count() + " > " + JsonConvert.SerializeObject(prices));
+                Console.WriteLine("Products: " + products.Data.Count() + " > " + JsonConvert.SerializeObject(products.Data));
 
                 for (int i = 0; i < products.Data.Count(); i++)
                 {
