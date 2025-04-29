@@ -144,7 +144,7 @@ namespace Buyer.Web.Shared.Services.Prices
                 PriceRequests = priceRequests,
             };
 
-            Console.WriteLine("PriceRequests: " + priceRequests);
+            Console.WriteLine("PriceRequests: " + priceRequests.ToList());
 
             var apiRequest = new ApiRequest<PricesRequestModel>
             {
@@ -157,7 +157,7 @@ namespace Buyer.Web.Shared.Services.Prices
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
-                
+                Console.WriteLine("PriceResponse: " + response.Data.ToList());
 
                 foreach (var priceResponse in response.Data)
                 {
