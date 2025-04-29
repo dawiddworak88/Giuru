@@ -78,7 +78,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         Images = product.Images,
                         InStock = false,
                         ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes),
-                        FabricsGroup = product.ProductAttributes.FirstOrDefault(x => x.Key == "priceGroup")?.Values?.FirstOrDefault(),
+                        FabricsGroup = product.ProductAttributes.FirstOrDefault(x => x.Key == "priceGroup")?.Values?.FirstOrDefault() ?? product.ProductAttributes.FirstOrDefault(x => x.Key == "grupaCenowa")?.Values?.FirstOrDefault()
                     };
 
                     if (product.Images != null)

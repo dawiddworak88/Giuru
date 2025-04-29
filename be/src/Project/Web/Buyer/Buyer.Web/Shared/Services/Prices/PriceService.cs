@@ -7,7 +7,6 @@ using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -100,8 +99,6 @@ namespace Buyer.Web.Shared.Services.Prices
 
             var priceRequests = new List<PriceRequestModel>();
 
-            var prices = new List<Price>();
-
             foreach (var product in products)
             {
                 var productPriceDrivers = new List<PriceDriverRequestModel>();
@@ -143,8 +140,6 @@ namespace Buyer.Web.Shared.Services.Prices
                 PriceRequests = priceRequests,
             };
 
-            Console.WriteLine("PriceRequests: " + JsonConvert.SerializeObject(priceRequests));
-
             var apiRequest = new ApiRequest<PricesRequestModel>
             {
                 Data = requestModel,
@@ -156,7 +151,7 @@ namespace Buyer.Web.Shared.Services.Prices
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
-                Console.WriteLine("PriceResponse: " + JsonConvert.SerializeObject(response.Data));
+                var prices = new List<Price>();
 
                 foreach (var priceResponse in response.Data)
                 {
