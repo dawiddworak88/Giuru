@@ -99,31 +99,35 @@ namespace Buyer.Web.Shared.Services.Prices
 
             var priceRequests = new List<PriceRequestModel>();
 
+            var prices = new List<Price>();
+
             foreach (var product in products)
             {
                 var productPriceDrivers = new List<PriceDriverRequestModel>();
 
-                if (!string.IsNullOrWhiteSpace(product.PrimarySku))
+                if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
+                    string.IsNullOrWhiteSpace(product.FabricsGroup))
                 {
-                    var productPriceDriver = new PriceDriverRequestModel
-                    {
-                        Name = PriceDriversConstants.ProductDriver,
-                        Value = product.PrimarySku
-                    };
+                    prices.Add(null);
 
-                    productPriceDrivers.Add(productPriceDriver);
+                    continue;
                 }
 
-                if (!string.IsNullOrWhiteSpace(product.FabricsGroup))
+                var productPriceDriver = new PriceDriverRequestModel
                 {
-                    var fabricsPriceDriver = new PriceDriverRequestModel
-                    {
-                        Name = PriceDriversConstants.FabricsGroupDriver,
-                        Value = product.FabricsGroup
-                    };
+                    Name = PriceDriversConstants.ProductDriver,
+                    Value = product.PrimarySku
+                };
 
-                    productPriceDrivers.Add(fabricsPriceDriver);
-                }
+                productPriceDrivers.Add(productPriceDriver);
+
+                var fabricsPriceDriver = new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.FabricsGroupDriver,
+                    Value = product.FabricsGroup
+                };
+
+                productPriceDrivers.Add(fabricsPriceDriver);
 
                 var priceRequest = new PriceRequestModel
                 {
@@ -140,6 +144,8 @@ namespace Buyer.Web.Shared.Services.Prices
                 PriceRequests = priceRequests,
             };
 
+            Console.WriteLine("PriceRequests: " + priceRequests);
+
             var apiRequest = new ApiRequest<PricesRequestModel>
             {
                 Data = requestModel,
@@ -151,7 +157,7 @@ namespace Buyer.Web.Shared.Services.Prices
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
-                var prices = new List<Price>();
+                
 
                 foreach (var priceResponse in response.Data)
                 {
