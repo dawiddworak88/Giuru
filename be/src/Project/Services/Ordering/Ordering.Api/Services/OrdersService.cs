@@ -1049,6 +1049,7 @@ namespace Ordering.Api.Services
                     OrderStatusId = order.OrderStatusId,
                     OrderStatusName = orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == order.OrderStatusId && y.Language == language)?.Name ?? 
                         orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == order.OrderStatusId)?.Name,
+                    OrderItems = orderItemsModels,
                     LastModifiedDate = order.LastModifiedDate,
                     CreatedDate = order.CreatedDate
                 };
