@@ -25,9 +25,7 @@ namespace Ordering.Api.DependencyInjection
         {
             services.AddScoped<OrderingContext>();
 
-            services.AddDbContext<OrderingContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite())
-                .EnableSensitiveDataLogging()
-                .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information));
+            services.AddDbContext<OrderingContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
         }
 
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)
