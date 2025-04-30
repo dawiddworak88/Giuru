@@ -18,11 +18,46 @@ namespace Ordering.Api.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<OrderItemStatusChange>(entity =>
-            {
-                entity.HasIndex(e => new { e.IsActive, e.OrderItemId })
-                .IncludeProperties(e => new { e.CreatedDate, e.LastModifiedDate, e.OrderItemStateId, e.OrderItemStatusId, e.RowVersion });
+            builder.Entity<OrderItemStatusChange>()
+                .HasIndex(e => new { e.OrderItemId, e.CreatedDate })
+                .HasFilter("[IsActive] = 1")
+                .HasDatabaseName("IX_OISC_Active_OrderItemId_CreatedDate_desc")
+                .IncludeProperties(e => new {
+                e.Id,
+                e.LastModifiedDate,
+                e.OrderItemStateId,
+                e.OrderItemStatusId,
+                e.RowVersion
             });
+
+            builder.Entity<OrderItem>()
+                .HasIndex(e => e.OrderId)
+                .HasFilter("[IsActive] = 1")
+                .HasDatabaseName("IX_OI_Active_OrderId")
+                .IncludeProperties(e => new {
+                    e.Id,
+                    e.LastOrderItemStatusChangeId,
+                    e.ProductId,
+                    e.ProductSku,
+                    e.ProductName,
+                    e.PictureUrl,
+                    e.Quantity,
+                    e.StockQuantity,
+                    e.OutletQuantity,
+                    e.ExternalReference,
+                    e.MoreInfo,
+                    e.LastModifiedDate,
+                    e.CreatedDate
+                });
+
+            builder.Entity<OrderItemStatusChangeCommentTranslation>()
+                .HasIndex(e => e.OrderItemStatusChangeId)
+                .HasFilter("[IsActive] = 1")
+                .HasDatabaseName("IX_OISCCT_Active_StatusChangeId")
+                .IncludeProperties(e => new {
+                    e.OrderItemStatusChangeComment,
+                    e.Language
+                });
         }
 
         public DbSet<Order> Orders { get; set; }
