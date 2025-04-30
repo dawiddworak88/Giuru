@@ -25,7 +25,7 @@ namespace Ordering.Api.DependencyInjection
         {
             services.AddScoped<OrderingContext>();
 
-            services.AddDbContext<OrderingContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite().CommandTimeout(90))
+            services.AddDbContext<OrderingContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite().CommandTimeout(300))
                 .EnableSensitiveDataLogging()
                 .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information));
         }
