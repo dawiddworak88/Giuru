@@ -130,7 +130,7 @@ namespace Ordering.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var orders = _ordersService.Get(serviceModel);
+                    var orders = await _ordersService.GetAsync(serviceModel);
 
                     if (orders is not null)
                     {
@@ -217,7 +217,7 @@ namespace Ordering.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var orders =  _ordersService.Get(serviceModel);
+                    var orders =  await _ordersService.GetAsync(serviceModel);
 
                     if (orders is not null)
                     {

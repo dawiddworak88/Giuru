@@ -68,6 +68,7 @@ services:
 
   sqldata:
     image: mcr.microsoft.com/mssql/server:2022-CU15-GDR1-ubuntu-22.04
+    user: root
     restart: unless-stopped
 
   postgres:

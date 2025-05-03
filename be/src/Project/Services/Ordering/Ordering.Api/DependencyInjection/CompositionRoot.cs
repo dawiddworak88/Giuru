@@ -24,7 +24,11 @@ namespace Ordering.Api.DependencyInjection
         {
             services.AddScoped<OrderingContext>();
 
-            services.AddDbContext<OrderingContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
+            services.AddDbContext<OrderingContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt =>
+            {
+                opt.UseNetTopologySuite();
+                opt.CommandTimeout(600); // Temporary 10 minutes timeout for index creation
+            }));
         }
 
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)
