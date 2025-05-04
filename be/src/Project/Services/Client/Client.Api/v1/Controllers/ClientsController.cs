@@ -223,7 +223,7 @@ namespace Client.Api.v1.Controllers
         /// <param name="email">The client email.</param>
         /// <returns>The client.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [Route("{email}")]
+        [Route("email/{email}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]

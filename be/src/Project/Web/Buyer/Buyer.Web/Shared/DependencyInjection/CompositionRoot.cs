@@ -38,6 +38,8 @@ using Buyer.Web.Shared.ModelBuilders.NotificationBar;
 using Buyer.Web.Shared.ViewModels.NotificationBar;
 using Buyer.Web.Shared.Repositories.Identity;
 using Buyer.Web.Shared.Services.Prices;
+using Buyer.Web.Shared.Middlewares;
+using Buyer.Web.Shared.Repositories.Global;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -69,6 +71,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IGraphQlRepository, GraphQlRepository>();
             services.AddScoped<IClientAddressesRepository, ClientAddressesRepository>();
             services.AddScoped<IIdentityRepository, IdentityRepository>();
+            services.AddScoped<IGlobalRepository, GlobalRepository>();
 
             // Services
             services.AddScoped<ICatalogService, CatalogService>();
@@ -82,6 +85,9 @@ namespace Buyer.Web.Shared.DependencyInjection
             // Client
             services.AddScoped<ICatalogOrderModelBuilder, CatalogOrderModelBuilder>();
             services.AddScoped<IClientsRepository, ClientsRepository>();
+
+            //Middlewares
+            services.AddScoped<ClaimsEnrichmentMiddleware>();
         }
 
         public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)

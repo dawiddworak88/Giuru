@@ -48,5 +48,30 @@ namespace Buyer.Web.Shared.Repositories.Clients
 
             return default;
         }
+
+        public async Task<Client> GetClientByEmailAsync(string token, string language, string email)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.ClientsApiEndpoint}/email/{email}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Client>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
     }
 }

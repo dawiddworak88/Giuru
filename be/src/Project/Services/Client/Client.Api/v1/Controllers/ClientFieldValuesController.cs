@@ -74,6 +74,7 @@ namespace Client.Api.v1.Controllers
                     Data = clientFieldsValues.Data.OrEmptyIfNull().Select(x => new ClientFieldValueResponseModel
                     {
                         Id = x.Id,
+                        FieldName = x.FieldName,
                         FieldValue = x.FieldValue,
                         FieldDefinitionId = x.FieldDefinitionId,
                         LastModifiedDate = x.LastModifiedDate,

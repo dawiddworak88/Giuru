@@ -32,6 +32,7 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationM
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Foundation.Telemetry.DependencyInjection;
 using Buyer.Web.Areas.Dashboard.DependencyInjection;
+using Buyer.Web.Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -177,6 +178,8 @@ app.UseGeneralStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
+
+app.UseMiddleware<ClaimsEnrichmentMiddleware>();
 
 app.UseAuthorization();
 
