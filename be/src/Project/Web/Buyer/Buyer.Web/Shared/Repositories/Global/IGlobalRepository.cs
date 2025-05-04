@@ -7,5 +7,6 @@ namespace Buyer.Web.Shared.Repositories.Global
     public interface IGlobalRepository
     {
         Task<IEnumerable<Country>> GetCountriesAsync(string token, string language, string orderBy);
+        Task<IEnumerable<Currency>> GetCurrenciesAsync(string token, string language, string orderBy);
     }
 }

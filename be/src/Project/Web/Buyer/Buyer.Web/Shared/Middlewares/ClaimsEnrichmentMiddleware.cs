@@ -3,7 +3,6 @@ using Buyer.Web.Shared.Repositories.Global;
 using Foundation.ApiExtensions.Definitions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using System;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -80,6 +79,18 @@ namespace Buyer.Web.Shared.Middlewares
                         if (paletteLoading is not null)
                         {
                             claimsIdentity.AddClaim(new Claim("PaletteLoading", paletteLoading.FieldValue));
+                        }
+                    }
+
+                    var currencies = await _globalRepository.GetCurrenciesAsync(token, language, null);
+
+                    if (currencies.Any())
+                    {
+                        var currency = currencies.FirstOrDefault(x => x.Id == client.PreferedCurrencyId);
+
+                        if (currency is not null)
+                        {
+                            claimsIdentity.AddClaim(new Claim("Currency", currency.CurrencyCode));
                         }
                     }
                 }
