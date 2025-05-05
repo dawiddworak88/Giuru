@@ -8,6 +8,7 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.DomainModels.Clients;
 using System;
+using Newtonsoft.Json;
 
 namespace Buyer.Web.Shared.Repositories.Clients
 {
@@ -60,6 +61,8 @@ namespace Buyer.Web.Shared.Repositories.Clients
             };
 
             var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Client>(apiRequest);
+
+            Console.WriteLine("Client: {0}", JsonConvert.SerializeObject(response));
 
             if (!response.IsSuccessStatusCode)
             {
