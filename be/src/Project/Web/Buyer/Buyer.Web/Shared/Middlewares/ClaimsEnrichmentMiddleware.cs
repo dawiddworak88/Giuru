@@ -98,14 +98,14 @@ namespace Buyer.Web.Shared.Middlewares
 
             if (clientFieldValues.Any())
             {
-                var extraPackingField = clientFieldValues.FirstOrDefault(x => x.FieldName == "Extra Packing");
+                var extraPackingField = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.ExtraPackingClientFieldName);
 
                 if (extraPackingField is not null)
                 {
                     claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.ExtraPackingClaimType, extraPackingField.FieldValue));
                 }
 
-                var paletteLoading = clientFieldValues.FirstOrDefault(x => x.FieldName == "Palette Loading");
+                var paletteLoading = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.PaletteLoadingClientFieldName);
 
                 if (paletteLoading is not null)
                 {
