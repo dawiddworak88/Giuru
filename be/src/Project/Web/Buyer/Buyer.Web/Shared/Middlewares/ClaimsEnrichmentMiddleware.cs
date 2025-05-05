@@ -112,6 +112,8 @@ namespace Buyer.Web.Shared.Middlewares
                     claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.PaletteLoadingClaimType, paletteLoading.FieldValue));
                 }
             }
+
+            await next(context);
         }
     }
 }
