@@ -7,6 +7,7 @@ using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -139,6 +140,8 @@ namespace Buyer.Web.Shared.Services.Prices
             {
                 PriceRequests = priceRequests,
             };
+
+            Console.WriteLine("priceRequests: {0}", JsonConvert.SerializeObject(priceRequests));
 
             var apiRequest = new ApiRequest<PricesRequestModel>
             {
