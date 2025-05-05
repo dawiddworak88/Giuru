@@ -72,6 +72,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IClientAddressesRepository, ClientAddressesRepository>();
             services.AddScoped<IIdentityRepository, IdentityRepository>();
             services.AddScoped<IGlobalRepository, GlobalRepository>();
+            services.AddScoped<IClientFieldValuesRepository, ClientFieldValuesRepository>();
 
             // Services
             services.AddScoped<ICatalogService, CatalogService>();
