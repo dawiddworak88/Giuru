@@ -12,5 +12,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
         Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage, string token);
         Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token);
         Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes);
+        string GetSleepAreaSize(IEnumerable<ProductAttribute> attributes);
+        string GetFirstAvailableAttributeValue(IEnumerable<ProductAttribute> attributes, params string[] possibleKeys);
     }
 }

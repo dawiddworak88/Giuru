@@ -123,7 +123,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
             return await this.productsRepository.GetProductSuggestionsAsync(searchTerm, size, language, token);
         }
 
-        private string? GetFirstAvailableAttributeValue(IEnumerable<ProductAttribute> attributes, params string[] possibleKeys)
+        public string GetFirstAvailableAttributeValue(IEnumerable<ProductAttribute> attributes, params string[] possibleKeys)
         {
             foreach (var key in possibleKeys)
             {
@@ -138,7 +138,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
             return null;
         }
 
-        private string GetSleepAreaSize(IEnumerable<ProductAttribute> attributes)
+        public string GetSleepAreaSize(IEnumerable<ProductAttribute> attributes)
         {
             var sleepAreaWidthValue = GetFirstAvailableAttributeValue(attributes, "sleepAreaWidth", "szerokoscSpania");
             var sleepAreaDepthValue = GetFirstAvailableAttributeValue(attributes, "sleepAreaDepth", "glebokoscSpania");

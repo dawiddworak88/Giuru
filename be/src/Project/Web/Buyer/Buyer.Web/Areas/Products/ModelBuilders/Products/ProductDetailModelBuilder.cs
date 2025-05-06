@@ -32,6 +32,7 @@ using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
 using Newtonsoft.Json;
 using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.Services.Products;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -51,6 +52,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IMediaItemsRepository _mediaItemsRepository;
         private readonly IPriceService _priceRepository;
         private readonly IOptions<AppSettings> _options;
+        private readonly IProductsService _productsService;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -66,7 +68,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             LinkGenerator linkGenerator,
             IMediaItemsRepository mediaItemsRepository,
             IPriceService priceRepository,
-            IOptions<AppSettings> options)
+            IOptions<AppSettings> options,
+            IProductsService productsService)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -82,6 +85,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _mediaItemsRepository = mediaItemsRepository;
             _priceRepository = priceRepository;
             _options = options;
+            _productsService = productsService;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -137,7 +141,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         new PriceProduct
                         {
                             PrimarySku = product.PrimaryProductSku,
-                            FabricsGroup = product.ProductAttributes.FirstOrDefault(x => x.Key == "priceGroup")?.Values?.FirstOrDefault()
+                            FabricsGroup = product.ProductAttributes.FirstOrDefault(x => x.Key == "priceGroup")?.Values?.FirstOrDefault(),
+                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, "extraPacking"),
+                            SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes)
                         },
                         new PriceClient
                         {
