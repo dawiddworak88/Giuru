@@ -12,7 +12,6 @@ using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
-using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -20,7 +19,6 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -114,9 +112,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             CurrencyCode = componentModel.CurrencyCode
                         });
                 }
-
-                Console.WriteLine(JsonConvert.SerializeObject(prices.OrEmptyIfNull()));
-                Console.WriteLine(JsonConvert.SerializeObject(products.Data.OrEmptyIfNull().Select(x => new { PrimarySku = x.PrimaryProductSku, Sku = x.Sku, Group = x.FabricsGroup })));
 
                 for (int i = 0; i < products.Data.Count(); i++)
                 {

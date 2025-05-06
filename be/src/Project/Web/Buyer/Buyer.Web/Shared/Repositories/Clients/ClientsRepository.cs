@@ -7,8 +7,6 @@ using Foundation.Extensions.Exceptions;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.DomainModels.Clients;
-using System;
-using Newtonsoft.Json;
 
 namespace Buyer.Web.Shared.Repositories.Clients
 {
@@ -57,17 +55,10 @@ namespace Buyer.Web.Shared.Repositories.Clients
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.ClientsApiEndpoint}/email/{email}"
+                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.ClientsByEmailApiEndpoint}/{email}"
             };
 
             var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Client>(apiRequest);
-
-            Console.WriteLine("Client: {0}", JsonConvert.SerializeObject(response));
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {

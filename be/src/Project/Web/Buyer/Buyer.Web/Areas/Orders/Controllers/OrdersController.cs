@@ -14,8 +14,6 @@ using Microsoft.AspNetCore.Authorization;
 using Buyer.Web.Shared.Definitions.Basket;
 using System;
 using Buyer.Web.Areas.Orders.ComponentModels;
-using Newtonsoft.Json;
-using Foundation.Extensions.ExtensionMethods;
 
 namespace Buyer.Web.Areas.Orders.Controllers
 {
@@ -43,9 +41,6 @@ namespace Buyer.Web.Areas.Orders.Controllers
                 BasketId = string.IsNullOrWhiteSpace(Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(Request.Cookies[BasketConstants.BasketCookieName]),
                 SearchTerm = searchTerm
             };
-
-            Console.WriteLine($"ZipCode: {User.FindFirst("ZipCode")}");
-            //Fix null reference in Console.WriteLine 
 
             var viewModel = await _ordersPageModelBuilder.BuildModelAsync(componentModel);
 
