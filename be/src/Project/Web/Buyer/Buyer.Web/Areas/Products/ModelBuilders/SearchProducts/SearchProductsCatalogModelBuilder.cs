@@ -1,31 +1,31 @@
 ﻿using Buyer.Web.Areas.Products.ComponentModels;
-using Buyer.Web.Areas.Shared.Definitions.Products;
-using Buyer.Web.Areas.Products.Services.Products;
-using Buyer.Web.Areas.Products.ViewModels.SearchProducts;
-using Buyer.Web.Shared.ModelBuilders.Catalogs;
-using Foundation.Extensions.ModelBuilders;
-using Foundation.GenericRepository.Paginations;
-using System.Threading.Tasks;
-using Buyer.Web.Shared.ViewModels.Sidebar;
-using Foundation.PageContent.ComponentModels;
-using Buyer.Web.Shared.ViewModels.Modals;
-using Foundation.Extensions.ExtensionMethods;
-using System.Collections.Generic;
-using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Areas.Products.Repositories;
-using System.Linq;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
-using Microsoft.Extensions.Localization;
-using Foundation.Localization;
-using Microsoft.AspNetCore.Routing;
-using System.Globalization;
-using Buyer.Web.Shared.Services.Prices;
-using Microsoft.Extensions.Options;
+using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Areas.Products.ViewModels.Products;
+using Buyer.Web.Areas.Products.ViewModels.SearchProducts;
+using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.DomainModels.Prices;
-using System;
-using Buyer.Web.Areas.Products.ViewModels.Products;
+using Buyer.Web.Shared.ModelBuilders.Catalogs;
+using Buyer.Web.Shared.Services.Prices;
+using Buyer.Web.Shared.ViewModels.Catalogs;
+using Buyer.Web.Shared.ViewModels.Modals;
+using Buyer.Web.Shared.ViewModels.Sidebar;
+using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.ModelBuilders;
+using Foundation.GenericRepository.Paginations;
+using Foundation.Localization;
+using Foundation.PageContent.ComponentModels;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 {
@@ -102,13 +102,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 {
                     prices = await _priceService.GetPrices(
                         _options.Value.GrulaAccessToken,
-                        "PLN",
                         DateTime.UtcNow,
                         products.Data.Select(x => new PriceProduct
                         {
                             PrimarySku = x.PrimaryProductSku,
                             FabricsGroup = x.FabricsGroup
-                        }));
+                        }),
+                        new PriceClient
+                        {
+                            Name = componentModel.Name,
+                            CurrencyCode = componentModel.CurrencyCode
+                        });
                 }
 
                 Console.WriteLine(JsonConvert.SerializeObject(prices.OrEmptyIfNull()));

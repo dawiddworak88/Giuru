@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Products.ViewModels;
+﻿using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.ViewModels;
 using Buyer.Web.Shared.Definitions.Basket;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
@@ -15,24 +16,25 @@ namespace Buyer.Web.Areas.Products.Controllers
     [Area("Products")]
     public class OutletController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OutletPageViewModel> outletPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<PriceComponentModel, OutletPageViewModel> outletPageModelBuilder;
 
         public OutletController(
-            IAsyncComponentModelBuilder<ComponentModelBase, OutletPageViewModel> outletPageModelBuilder)
+            IAsyncComponentModelBuilder<PriceComponentModel, OutletPageViewModel> outletPageModelBuilder)
         {
             this.outletPageModelBuilder = outletPageModelBuilder;
         }
 
         public async Task<IActionResult> Index()
         {
-            var componentModel = new ComponentModelBase
+            var componentModel = new PriceComponentModel
             {
                 ContentPageKey = "outletPage",
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name,
-                BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName])
+                BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName]),
+                CurrencyCode = this.User.FindFirst("Currency")?.Value ?? "EUR"
             };
 
             var viewModel = await this.outletPageModelBuilder.BuildModelAsync(componentModel);

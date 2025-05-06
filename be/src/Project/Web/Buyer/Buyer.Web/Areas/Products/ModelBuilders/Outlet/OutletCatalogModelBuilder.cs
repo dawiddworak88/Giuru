@@ -23,13 +23,14 @@ using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.DomainModels.Prices;
 using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
+using Buyer.Web.Areas.Products.ComponentModels;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders
 {
-    public class OutletCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OutletPageCatalogViewModel>
+    public class OutletCatalogModelBuilder : IAsyncComponentModelBuilder<PriceComponentModel, OutletPageCatalogViewModel>
     {
         private readonly IStringLocalizer globalLocalizer;
-        private readonly ICatalogModelBuilder<ComponentModelBase, OutletPageCatalogViewModel> outletCatalogModelBuilder;
+        private readonly ICatalogModelBuilder<PriceComponentModel, OutletPageCatalogViewModel> outletCatalogModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder;
         private readonly IProductsService productsService;
         private readonly LinkGenerator linkGenerator;
@@ -61,7 +62,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             _priceService = priceService;
         }
 
-        public async Task<OutletPageCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<OutletPageCatalogViewModel> BuildModelAsync(PriceComponentModel componentModel)
         {
             var viewModel = this.outletCatalogModelBuilder.BuildModel(componentModel);
 
@@ -92,13 +93,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                     {
                         prices = await _priceService.GetPrices(
                             _options.Value.GrulaAccessToken,
-                            "PLN",
                             DateTime.UtcNow,
                             products.Data.Select(x => new PriceProduct
                             {
                                 PrimarySku = x.PrimaryProductSku,
                                 FabricsGroup = x.FabricsGroup
-                            }));
+                            }),
+                            new PriceClient
+                            {
+                                Name = componentModel.Name,
+                                CurrencyCode = componentModel.CurrencyCode
+                            });
                     }
 
                     for (int i = 0; i < products.Data.Count(); i++)

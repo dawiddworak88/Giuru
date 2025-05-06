@@ -9,14 +9,14 @@ namespace Buyer.Web.Shared.Services.Prices
     {
         Task<Price> GetPrice(
             string token,
-            string currencyCode,
             DateTime pricingDate,
-            PriceProduct product);
+            PriceProduct product,
+            PriceClient client);
 
         Task<IEnumerable<Price>> GetPrices(
             string token,
-            string currencyCode,
             DateTime pricingDate,
-            IEnumerable<PriceProduct> products);
+            IEnumerable<PriceProduct> products,
+            PriceClient client);
     }
 }

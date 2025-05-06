@@ -30,9 +30,9 @@ namespace Buyer.Web.Shared.Services.Prices
 
         public async Task<Price> GetPrice(
             string token,
-            string currencyCode,
             DateTime pricingDate,
-            PriceProduct product)
+            PriceProduct product,
+            PriceClient client)
         {
             if (product is null)
             {
@@ -63,10 +63,24 @@ namespace Buyer.Web.Shared.Services.Prices
                 priceDrivers.Add(fabricsPriceDriver);
             }
 
+            if (client is not null)
+            {
+                if (!string.IsNullOrWhiteSpace(client.Name))
+                {
+                    var clientPriceDriver = new PriceDriverRequestModel
+                    {
+                        Name = PriceDriversConstants.ClientDriver,
+                        Value = client.Name
+                    };
+
+                    priceDrivers.Add(clientPriceDriver);
+                }
+            }
+
             var requestModel = new PriceRequestModel
             {
                 PriceDrivers = priceDrivers,
-                CurrencyThreeLetterCode = currencyCode,
+                CurrencyThreeLetterCode = client.CurrencyCode,
                 PricingDate = pricingDate
             };
 
@@ -91,7 +105,11 @@ namespace Buyer.Web.Shared.Services.Prices
             return default;
         }
 
-        public async Task<IEnumerable<Price>> GetPrices(string token, string currencyCode, DateTime pricingDate, IEnumerable<PriceProduct> products)
+        public async Task<IEnumerable<Price>> GetPrices(
+            string token, 
+            DateTime pricingDate, 
+            IEnumerable<PriceProduct> products,
+            PriceClient client)
         {
             if (!products.Any())
             {
@@ -126,10 +144,24 @@ namespace Buyer.Web.Shared.Services.Prices
                     productPriceDrivers.Add(fabricsPriceDriver);
                 }
 
+                if(client is not null)
+                {
+                    if (string.IsNullOrWhiteSpace(client.Name) is false)
+                    {
+                        var clientPriceDriver = new PriceDriverRequestModel
+                        {
+                            Name = PriceDriversConstants.ClientDriver,
+                            Value = client.Name
+                        };
+
+                        productPriceDrivers.Add(clientPriceDriver);
+                    }
+                }
+
                 var priceRequest = new PriceRequestModel
                 {
                     PriceDrivers = productPriceDrivers,
-                    CurrencyThreeLetterCode = currencyCode,
+                    CurrencyThreeLetterCode = client.CurrencyCode,
                     PricingDate = pricingDate
                 };
 

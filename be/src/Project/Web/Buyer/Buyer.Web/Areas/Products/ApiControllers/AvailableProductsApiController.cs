@@ -70,13 +70,17 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     {
                         prices = await _priceService.GetPrices(
                             _options.Value.GrulaAccessToken,
-                            "PLN",
                             DateTime.UtcNow,
                             products.Data.Select(x => new PriceProduct
                             {
                                 PrimarySku = x.PrimaryProductSku,
                                 FabricsGroup = x.FabricsGroup
-                            }));
+                            }),
+                            new PriceClient
+                            {
+                                Name = User.Identity?.Name,
+                                CurrencyCode = User.FindFirst("Currency")?.Value ?? "EUR"
+                            });
                     }
 
                     for (int i = 0; i < products.Data.Count(); i++)

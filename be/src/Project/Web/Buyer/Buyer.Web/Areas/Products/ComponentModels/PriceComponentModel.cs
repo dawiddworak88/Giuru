@@ -2,8 +2,8 @@
 
 namespace Buyer.Web.Areas.Products.ComponentModels
 {
-    public class SearchProductsComponentModel : PriceComponentModel
+    public class PriceComponentModel : ComponentModelBase
     {
-        public string SearchTerm { get; set; }
+        public string CurrencyCode { get; set; }
     }
 }

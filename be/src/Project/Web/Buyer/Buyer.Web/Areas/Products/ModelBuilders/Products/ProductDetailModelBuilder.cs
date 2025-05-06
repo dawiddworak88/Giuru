@@ -31,10 +31,11 @@ using Buyer.Web.Shared.DomainModels.Prices;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
 using Newtonsoft.Json;
+using Buyer.Web.Areas.Products.ComponentModels;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
-    public class ProductDetailModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel>
+    public class ProductDetailModelBuilder : IAsyncComponentModelBuilder<PriceComponentModel, ProductDetailViewModel>
     {
         private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> _filesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> _sidebarModelBuilder;
@@ -83,7 +84,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _options = options;
         }
 
-        public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<ProductDetailViewModel> BuildModelAsync(PriceComponentModel componentModel)
         {
             var viewModel = new ProductDetailViewModel
             {
@@ -132,12 +133,16 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 {
                     var price = await _priceRepository.GetPrice(
                         _options.Value.GrulaAccessToken,
-                        "PLN",
                         DateTime.UtcNow,
                         new PriceProduct
                         {
                             PrimarySku = product.PrimaryProductSku,
                             FabricsGroup = product.ProductAttributes.FirstOrDefault(x => x.Key == "priceGroup")?.Values?.FirstOrDefault()
+                        },
+                        new PriceClient
+                        {
+                            Name = componentModel.Name,
+                            CurrencyCode = componentModel.CurrencyCode
                         });
 
                     if (price is not null)
@@ -247,13 +252,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         {
                             prices = await _priceRepository.GetPrices(
                                _options.Value.GrulaAccessToken,
-                               "PLN",
                                DateTime.UtcNow,
                                productVariants.Data.Select(x => new PriceProduct
                                {
                                    PrimarySku = x.PrimaryProductSku,
                                    FabricsGroup = x.ProductAttributes?.FirstOrDefault(y => y.Key == "priceGroup")?.Values?.FirstOrDefault()
-                               }));
+                               }),
+                               new PriceClient
+                               {
+                                   Name = componentModel.Name,
+                                   CurrencyCode = componentModel.CurrencyCode
+                               });
                         }
 
 

@@ -22,10 +22,11 @@ using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Services.Prices;
 using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
+using Buyer.Web.Areas.Products.ComponentModels;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
-    public class AvailableProductsCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel>
+    public class AvailableProductsCatalogModelBuilder : IAsyncComponentModelBuilder<PriceComponentModel, AvailableProductsCatalogViewModel>
     {
         private readonly IStringLocalizer globalLocalizer;
         private readonly ICatalogModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel> availableProductsCatalogModelBuilder;
@@ -59,7 +60,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             _priceService = priceService;
         }
 
-        public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(PriceComponentModel componentModel)
         {
             var viewModel = this.availableProductsCatalogModelBuilder.BuildModel(componentModel);
 
@@ -91,13 +92,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                     {
                         prices = await _priceService.GetPrices(
                             _options.Value.GrulaAccessToken,
-                            "PLN",
                             DateTime.UtcNow,
                             products.Data.Select(x => new PriceProduct
                             {
                                 PrimarySku = x.PrimaryProductSku,
                                 FabricsGroup = x.FabricsGroup
-                            }));
+                            }),
+                            new PriceClient
+                            {
+                                Name = componentModel.Name,
+                                CurrencyCode = componentModel.CurrencyCode
+                            });
                     }
 
                     for (int i = 0; i < products.Data.Count(); i++)
