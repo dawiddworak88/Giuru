@@ -75,7 +75,9 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             products.Data.Select(x => new PriceProduct
                             {
                                 PrimarySku = x.PrimaryProductSku,
-                                FabricsGroup = x.FabricsGroup
+                                FabricsGroup = x.FabricsGroup,
+                                ExtraPacking = x.ExtraPacking,
+                                SleepAreaSize = x.SleepAreaSize
                             }),
                             new PriceClient
                             {

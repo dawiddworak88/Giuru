@@ -1,5 +1,4 @@
 ﻿using Buyer.Web.Areas.Products.Repositories;
-using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
@@ -67,7 +66,9 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             products.Data.Select(x => new PriceProduct
                             {
                                 PrimarySku = x.PrimaryProductSku,
-                                FabricsGroup = x.FabricsGroup
+                                FabricsGroup = x.FabricsGroup,
+                                ExtraPacking = x.ExtraPacking,
+                                SleepAreaSize = x.SleepAreaSize
                             }),
                             new PriceClient
                             {

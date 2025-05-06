@@ -9,7 +9,6 @@ using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
-using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -69,7 +68,9 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         products.Data.Select(x => new PriceProduct
                         {
                             PrimarySku = x.PrimaryProductSku,
-                            FabricsGroup = x.FabricsGroup
+                            FabricsGroup = x.FabricsGroup,
+                            ExtraPacking = x.ExtraPacking,
+                            SleepAreaSize = x.SleepAreaSize
                         }),
                         new PriceClient
                         {
