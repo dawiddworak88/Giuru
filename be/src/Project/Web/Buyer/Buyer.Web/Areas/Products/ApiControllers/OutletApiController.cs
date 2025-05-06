@@ -3,6 +3,7 @@ using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.DomainModels.Prices;
 using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
@@ -70,8 +71,12 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             }),
                             new PriceClient
                             {
-                                Name = this.User.Identity?.Name,
-                                CurrencyCode = this.User.FindFirst("Currency")?.Value ?? "EUR"
+                                Name = User.Identity?.Name,
+                                CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
+                                ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
+                                PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
+                                Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
+                                DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
                             });
                     }
 

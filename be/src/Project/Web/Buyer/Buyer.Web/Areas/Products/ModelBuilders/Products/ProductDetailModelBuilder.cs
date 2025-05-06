@@ -142,7 +142,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         new PriceClient
                         {
                             Name = componentModel.Name,
-                            CurrencyCode = componentModel.CurrencyCode
+                            CurrencyCode = componentModel.CurrencyCode,
+                            ExtraPacking = componentModel.ExtraPacking,
+                            PaletteLoading = componentModel.PaletteLoading,
+                            Country = componentModel.Country,
+                            DeliveryZipCode = componentModel.DeliveryZipCode
                         });
 
                     if (price is not null)

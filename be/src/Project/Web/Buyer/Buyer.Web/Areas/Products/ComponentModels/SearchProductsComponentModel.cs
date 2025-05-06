@@ -1,6 +1,4 @@
-﻿using Foundation.PageContent.ComponentModels;
-
-namespace Buyer.Web.Areas.Products.ComponentModels
+﻿namespace Buyer.Web.Areas.Products.ComponentModels
 {
     public class SearchProductsComponentModel : PriceComponentModel
     {

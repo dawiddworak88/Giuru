@@ -42,7 +42,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
             var attributesToDisplay = this.options.Value.ProductAttributes.ToEnumerableString();
 
             var attributes = new List<string>();
-            foreach(var productAttribute in attributesToDisplay.OrEmptyIfNull())
+            foreach (var productAttribute in attributesToDisplay.OrEmptyIfNull())
             {
                 var existingAttribute = productAttributes.FirstOrDefault(x => x.Key == productAttribute);
                 if (existingAttribute is not null)
@@ -59,7 +59,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
         public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage, string token)
         {
             var catalogItemList = new List<CatalogItemViewModel>();
-            
+
             var pagedProducts = await this.productsRepository.GetProductsAsync(ids, categoryId, sellerId, language, searchTerm, hasPrimaryProduct, pageIndex, itemsPerPage, token, nameof(Product.Name));
 
             if (pagedProducts?.Data != null)
@@ -78,7 +78,9 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         Images = product.Images,
                         InStock = false,
                         ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes),
-                        FabricsGroup = product.ProductAttributes.FirstOrDefault(x => x.Key == "priceGroup")?.Values?.FirstOrDefault() ?? product.ProductAttributes.FirstOrDefault(x => x.Key == "grupaCenowa")?.Values?.FirstOrDefault()
+                        SleepAreaSize = GetSleepAreaSize(product.ProductAttributes),
+                        FabricsGroup = GetFirstAvailableAttributeValue(product.ProductAttributes, "priceGroup", "grupaCenowa"),
+                        ExtraPacking = GetFirstAvailableAttributeValue(product.ProductAttributes, "extraPacking"),
                     };
 
                     if (product.Images != null)
@@ -120,5 +122,37 @@ namespace Buyer.Web.Areas.Products.Services.Products
         {
             return await this.productsRepository.GetProductSuggestionsAsync(searchTerm, size, language, token);
         }
+
+        private string? GetFirstAvailableAttributeValue(IEnumerable<ProductAttribute> attributes, params string[] possibleKeys)
+        {
+            foreach (var key in possibleKeys)
+            {
+                var value = attributes.FirstOrDefault(x => x.Key == key)?.Values?.FirstOrDefault();
+
+                if (string.IsNullOrWhiteSpace(value) is false)
+                {
+                    return value;
+                }
+            }
+
+            return null;
+        }
+
+        private string GetSleepAreaSize(IEnumerable<ProductAttribute> attributes)
+        {
+            var sleepAreaWidthValue = GetFirstAvailableAttributeValue(attributes, "sleepAreaWidth", "szerokoscSpania");
+            var sleepAreaDepthValue = GetFirstAvailableAttributeValue(attributes, "sleepAreaDepth", "glebokoscSpania");
+
+            if (string.IsNullOrWhiteSpace(sleepAreaWidthValue) ||
+                string.IsNullOrWhiteSpace(sleepAreaDepthValue))
+            {
+                return default;
+            }
+
+            var size = $"{sleepAreaWidthValue}x{sleepAreaDepthValue}".Trim();
+
+            return size;
+        }
+
     }
 }

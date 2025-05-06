@@ -104,12 +104,18 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         products.Data.Select(x => new PriceProduct
                         {
                             PrimarySku = x.PrimaryProductSku,
-                            FabricsGroup = x.FabricsGroup
+                            FabricsGroup = x.FabricsGroup,
+                            SleepAreaSize = x.SleepAreaSize,
+                            ExtraPacking = x.ExtraPacking
                         }),
                         new PriceClient
                         {
                             Name = componentModel.Name,
-                            CurrencyCode = componentModel.CurrencyCode
+                            CurrencyCode = componentModel.CurrencyCode,
+                            ExtraPacking = componentModel.ExtraPacking,
+                            PaletteLoading = componentModel.PaletteLoading,
+                            Country = componentModel.Country,
+                            DeliveryZipCode = componentModel.DeliveryZipCode
                         });
                 }
 

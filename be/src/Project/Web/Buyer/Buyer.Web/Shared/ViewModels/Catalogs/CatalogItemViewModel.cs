@@ -29,6 +29,8 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public IEnumerable<SourceViewModel> Sources { get; set; }
         public ProductPriceViewModel Price { get; set; }
         public string ProductAttributes { get; set; }
+        public string SleepAreaSize { get; set; }
         public string FabricsGroup { get; set; }
+        public string ExtraPacking { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Areas.Products.ViewModels.Categories;
 using Buyer.Web.Shared.Definitions.Basket;
+using Buyer.Web.Shared.Definitions.Middlewares;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
@@ -33,7 +34,12 @@ namespace Buyer.Web.Areas.Products.Controllers
                 Name = this.User.Identity.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName]),
-                ContentPageKey = "categoryPage"
+                ContentPageKey = "categoryPage",
+                CurrencyCode = this.User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
+                ExtraPacking = this.User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
+                PaletteLoading = this.User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
+                Country = this.User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
+                DeliveryZipCode = this.User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
             };
 
             var viewModel = await this.categoryPageModelBuilder.BuildModelAsync(componentModel);

@@ -62,9 +62,20 @@ namespace Buyer.Web.Shared.Services.Prices
                 priceDrivers.Add(fabricsPriceDriver);
             }
 
+            if (!string.IsNullOrWhiteSpace(product.ExtraPacking))
+            {
+                var extraPackingPriceDriver = new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.ProductExtraPackingDriver,
+                    Value = product.ExtraPacking
+                };
+
+                priceDrivers.Add(extraPackingPriceDriver);
+            }
+
             if (client is not null)
             {
-                if (!string.IsNullOrWhiteSpace(client.Name))
+                if (string.IsNullOrWhiteSpace(client.Name) is false)
                 {
                     var clientPriceDriver = new PriceDriverRequestModel
                     {
@@ -73,6 +84,50 @@ namespace Buyer.Web.Shared.Services.Prices
                     };
 
                     priceDrivers.Add(clientPriceDriver);
+                }
+
+                if (string.IsNullOrWhiteSpace(client.ExtraPacking) is false)
+                {
+                    var extraPackingPriceDriver = new PriceDriverRequestModel
+                    {
+                        Name = PriceDriversConstants.ClientExtraPackingDriver,
+                        Value = client.ExtraPacking
+                    };
+
+                    priceDrivers.Add(extraPackingPriceDriver);
+                }
+
+                if (string.IsNullOrWhiteSpace(client.PaletteLoading) is false)
+                {
+                    var paletteLoadingPriceDriver = new PriceDriverRequestModel
+                    {
+                        Name = PriceDriversConstants.PaletteLoadingDriver,
+                        Value = client.PaletteLoading
+                    };
+
+                    priceDrivers.Add(paletteLoadingPriceDriver);
+                }
+
+                if (string.IsNullOrWhiteSpace(client.Country) is false)
+                {
+                    var countryPriceDriver = new PriceDriverRequestModel
+                    {
+                        Name = PriceDriversConstants.ClientCountryDriver,
+                        Value = client.Country
+                    };
+
+                    priceDrivers.Add(countryPriceDriver);
+                }
+
+                if (string.IsNullOrWhiteSpace(client.DeliveryZipCode) is false)
+                {
+                    var deliveryZipCodePriceDriver = new PriceDriverRequestModel
+                    {
+                        Name = PriceDriversConstants.DeliveryAddressDriver,
+                        Value = client.DeliveryZipCode
+                    };
+
+                    priceDrivers.Add(deliveryZipCodePriceDriver);
                 }
             }
 
@@ -119,7 +174,7 @@ namespace Buyer.Web.Shared.Services.Prices
 
             foreach (var product in products)
             {
-                var productPriceDrivers = new List<PriceDriverRequestModel>();
+                var priceDrivers = new List<PriceDriverRequestModel>();
 
                 if (string.IsNullOrWhiteSpace(product.PrimarySku) is false)
                 {
@@ -129,7 +184,7 @@ namespace Buyer.Web.Shared.Services.Prices
                         Value = product.PrimarySku
                     };
 
-                    productPriceDrivers.Add(productPriceDriver);
+                    priceDrivers.Add(productPriceDriver);
                 }
 
                 if (string.IsNullOrWhiteSpace(product.FabricsGroup) is false)
@@ -140,7 +195,29 @@ namespace Buyer.Web.Shared.Services.Prices
                         Value = product.FabricsGroup
                     };
 
-                    productPriceDrivers.Add(fabricsPriceDriver);
+                    priceDrivers.Add(fabricsPriceDriver);
+                }
+
+                if (string.IsNullOrWhiteSpace(product.SleepAreaSize) is false)
+                {
+                    var sleepAreaSizePriceDriver = new PriceDriverRequestModel
+                    {
+                        Name = PriceDriversConstants.SleepAreaDriver,
+                        Value = product.SleepAreaSize
+                    };
+
+                    priceDrivers.Add(sleepAreaSizePriceDriver);
+                }
+
+                if (string.IsNullOrWhiteSpace(product.ExtraPacking) is false)
+                {
+                    var extraPackingPriceDriver = new PriceDriverRequestModel
+                    {
+                        Name = PriceDriversConstants.ProductExtraPackingDriver,
+                        Value = product.ExtraPacking
+                    };
+
+                    priceDrivers.Add(extraPackingPriceDriver);
                 }
 
                 if(client is not null)
@@ -153,13 +230,57 @@ namespace Buyer.Web.Shared.Services.Prices
                             Value = client.Name
                         };
 
-                        productPriceDrivers.Add(clientPriceDriver);
+                        priceDrivers.Add(clientPriceDriver);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(client.ExtraPacking) is false)
+                    {
+                        var extraPackingPriceDriver = new PriceDriverRequestModel
+                        {
+                            Name = PriceDriversConstants.ClientExtraPackingDriver,
+                            Value = client.ExtraPacking
+                        };
+
+                        priceDrivers.Add(extraPackingPriceDriver);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(client.PaletteLoading) is false)
+                    {
+                        var paletteLoadingPriceDriver = new PriceDriverRequestModel
+                        {
+                            Name = PriceDriversConstants.PaletteLoadingDriver,
+                            Value = client.PaletteLoading
+                        };
+
+                        priceDrivers.Add(paletteLoadingPriceDriver);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(client.Country) is false)
+                    {
+                        var countryPriceDriver = new PriceDriverRequestModel
+                        {
+                            Name = PriceDriversConstants.ClientCountryDriver,
+                            Value = client.Country
+                        };
+
+                        priceDrivers.Add(countryPriceDriver);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(client.DeliveryZipCode) is false)
+                    {
+                        var deliveryZipCodePriceDriver = new PriceDriverRequestModel
+                        {
+                            Name = PriceDriversConstants.DeliveryAddressDriver,
+                            Value = client.DeliveryZipCode
+                        };
+
+                        priceDrivers.Add(deliveryZipCodePriceDriver);
                     }
                 }
 
                 var priceRequest = new PriceRequestModel
                 {
-                    PriceDrivers = productPriceDrivers,
+                    PriceDrivers = priceDrivers,
                     CurrencyThreeLetterCode = client.CurrencyCode,
                     PricingDate = pricingDate
                 };
