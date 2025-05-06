@@ -38,31 +38,27 @@ namespace Buyer.Web.Shared.Services.Prices
                 return default;
             }
 
-            var priceDrivers = new List<PriceDriverRequestModel>();
-
-            if (!string.IsNullOrWhiteSpace(product.PrimarySku))
+            if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
+                string.IsNullOrWhiteSpace(product.FabricsGroup))
             {
-                var productPriceDriver = new PriceDriverRequestModel
+                return default;
+            }
+
+            var priceDrivers = new List<PriceDriverRequestModel>
+            {
+                new PriceDriverRequestModel
                 {
                     Name = PriceDriversConstants.ProductDriver,
                     Value = product.PrimarySku
-                };
-
-                priceDrivers.Add(productPriceDriver);
-            }
-
-            if (!string.IsNullOrWhiteSpace(product.FabricsGroup))
-            {
-                var fabricsPriceDriver = new PriceDriverRequestModel
+                },
+                new PriceDriverRequestModel
                 {
                     Name = PriceDriversConstants.FabricsGroupDriver,
                     Value = product.FabricsGroup
-                };
+                }
+            };
 
-                priceDrivers.Add(fabricsPriceDriver);
-            }
-
-            if (!string.IsNullOrWhiteSpace(product.ExtraPacking))
+            if (string.IsNullOrWhiteSpace(product.ExtraPacking) is false)
             {
                 var extraPackingPriceDriver = new PriceDriverRequestModel
                 {
@@ -71,6 +67,17 @@ namespace Buyer.Web.Shared.Services.Prices
                 };
 
                 priceDrivers.Add(extraPackingPriceDriver);
+            }
+
+            if (string.IsNullOrWhiteSpace(product.SleepAreaSize) is false)
+            {
+                var sleepAreaSizePriceDriver = new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.SleepAreaDriver,
+                    Value = product.SleepAreaSize
+                };
+
+                priceDrivers.Add(sleepAreaSizePriceDriver);
             }
 
             if (client is not null)
@@ -171,32 +178,30 @@ namespace Buyer.Web.Shared.Services.Prices
             }
 
             var priceRequests = new List<PriceRequestModel>();
+            var prices = new List<Price>();
 
             foreach (var product in products)
             {
-                var priceDrivers = new List<PriceDriverRequestModel>();
-
-                if (string.IsNullOrWhiteSpace(product.PrimarySku) is false)
+                if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
+                    string.IsNullOrWhiteSpace(product.FabricsGroup))
                 {
-                    var productPriceDriver = new PriceDriverRequestModel
+                    prices.Add(null);
+                    continue;
+                }
+
+                var priceDrivers = new List<PriceDriverRequestModel>
+                {
+                    new PriceDriverRequestModel
                     {
                         Name = PriceDriversConstants.ProductDriver,
                         Value = product.PrimarySku
-                    };
-
-                    priceDrivers.Add(productPriceDriver);
-                }
-
-                if (string.IsNullOrWhiteSpace(product.FabricsGroup) is false)
-                {
-                    var fabricsPriceDriver = new PriceDriverRequestModel
+                    },
+                    new PriceDriverRequestModel
                     {
                         Name = PriceDriversConstants.FabricsGroupDriver,
                         Value = product.FabricsGroup
-                    };
-
-                    priceDrivers.Add(fabricsPriceDriver);
-                }
+                    }
+                };
 
                 if (string.IsNullOrWhiteSpace(product.SleepAreaSize) is false)
                 {
@@ -304,7 +309,7 @@ namespace Buyer.Web.Shared.Services.Prices
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
-                var prices = new List<Price>();
+                
 
                 foreach (var priceResponse in response.Data)
                 {
