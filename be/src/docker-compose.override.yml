@@ -463,6 +463,7 @@ services:
       - MakeComplaintUrl=https://complaints.com
       - GrulaUrl=https://api.grula.net
       - GrulaAccessToken=${GRULA_ACCESS_TOKEN}
+      - GrulaEnvironmentId=${GRULA_ENVIRONMENT_ID}
       - ProductAttributes=${PRODUCT_ATTRIBUTES}
       - OrganisationId=${ORGANISATION_ID}
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317

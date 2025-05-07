@@ -290,6 +290,7 @@ namespace Buyer.Web.Shared.Services.Prices
 
             var requestModel = new PricesRequestModel
             {
+                EnvironmentId = _options.Value.GrulaEnvironmentId,
                 PriceRequests = priceRequests,
             };
 
