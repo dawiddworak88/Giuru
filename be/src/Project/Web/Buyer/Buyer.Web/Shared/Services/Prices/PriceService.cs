@@ -7,6 +7,7 @@ using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -300,6 +301,8 @@ namespace Buyer.Web.Shared.Services.Prices
                 AccessToken = token,
                 EndpointAddress = $"{_options.Value.GrulaUrl}{ApiConstants.Grula.PricesApiEndpoint}"
             };
+
+            Console.WriteLine(JsonConvert.SerializeObject(requestModel));
 
             var response = await _apiClientService.PostAsync<ApiRequest<PricesRequestModel>, PricesRequestModel, IEnumerable<PriceResponseModel>>(apiRequest);
 
