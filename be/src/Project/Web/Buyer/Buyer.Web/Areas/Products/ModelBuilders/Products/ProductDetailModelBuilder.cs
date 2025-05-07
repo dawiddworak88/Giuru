@@ -159,7 +159,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     {
                         viewModel.Price = new ProductPriceViewModel
                         {
-                            Current = price.Amount,
+                            Current = price.CurrentPrice,
                             Currency = price.CurrencyCode,
                         };
                     }
@@ -300,7 +300,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             {
                                 carouselItem.Price = new PriceViewModel
                                 {
-                                    Current = productVariantPrice.Amount,
+                                    Current = productVariantPrice.CurrentPrice,
                                     Currency = productVariantPrice.CurrencyCode
                                 };
                             }

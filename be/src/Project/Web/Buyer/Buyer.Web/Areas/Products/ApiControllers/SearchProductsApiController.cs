@@ -118,7 +118,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         {
                             product.Price = new ProductPriceViewModel
                             {
-                                Current = price.Amount,
+                                Current = price.CurrentPrice,
                                 Currency = price.CurrencyCode
                             };
                         }

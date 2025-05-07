@@ -33,33 +33,35 @@ namespace Buyer.Web.Shared.Services.Prices
             PriceProduct product,
             PriceClient client)
         {
-            if (product is null)
+            if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
+                string.IsNullOrWhiteSpace(product.FabricsGroup))
             {
-                return default;
+                return null;
             }
 
-            var priceDrivers = new List<PriceDriverRequestModel>();
-
-            if (!string.IsNullOrWhiteSpace(product.PrimarySku))
+            var priceDrivers = new List<PriceDriverRequestModel>
             {
-                var productPriceDriver = new PriceDriverRequestModel
+                new PriceDriverRequestModel
                 {
                     Name = PriceDriversConstants.ProductDriver,
                     Value = product.PrimarySku
-                };
-
-                priceDrivers.Add(productPriceDriver);
-            }
-
-            if (!string.IsNullOrWhiteSpace(product.FabricsGroup))
-            {
-                var fabricsPriceDriver = new PriceDriverRequestModel
+                },
+                new PriceDriverRequestModel
                 {
                     Name = PriceDriversConstants.FabricsGroupDriver,
                     Value = product.FabricsGroup
+                }
+            };
+
+            if (!string.IsNullOrWhiteSpace(product.SleepAreaSize))
+            {
+                var sleepAreaSizePriceDriver = new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.SleepAreaDriver,
+                    Value = product.SleepAreaSize
                 };
 
-                priceDrivers.Add(fabricsPriceDriver);
+                priceDrivers.Add(sleepAreaSizePriceDriver);
             }
 
             if (!string.IsNullOrWhiteSpace(product.ExtraPacking))
@@ -149,9 +151,14 @@ namespace Buyer.Web.Shared.Services.Prices
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
+                if (response.Data.Amount is null)
+                {
+                    return null;
+                }   
+
                 return new Price
                 {
-                    Amount = response.Data.Amount.Amount,
+                    CurrentPrice = response.Data.Amount.Amount,
                     CurrencyCode = response.Data.Amount.CurrencyThreeLetterCode,
                 };
             }
@@ -165,38 +172,31 @@ namespace Buyer.Web.Shared.Services.Prices
             IEnumerable<PriceProduct> products,
             PriceClient client)
         {
-            if (!products.Any())
-            {
-                return default;
-            }
-
             var priceRequests = new List<PriceRequestModel>();
+            var prices = new List<Price>();
 
             foreach (var product in products)
             {
-                var priceDrivers = new List<PriceDriverRequestModel>();
-
-                if (string.IsNullOrWhiteSpace(product.PrimarySku) is false)
+                if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
+                    string.IsNullOrWhiteSpace(product.FabricsGroup))
                 {
-                    var productPriceDriver = new PriceDriverRequestModel
+                    prices.Add(null);
+                    continue;
+                }
+
+                var priceDrivers = new List<PriceDriverRequestModel>
+                {
+                    new PriceDriverRequestModel
                     {
                         Name = PriceDriversConstants.ProductDriver,
                         Value = product.PrimarySku
-                    };
-
-                    priceDrivers.Add(productPriceDriver);
-                }
-
-                if (string.IsNullOrWhiteSpace(product.FabricsGroup) is false)
-                {
-                    var fabricsPriceDriver = new PriceDriverRequestModel
+                    },
+                    new PriceDriverRequestModel
                     {
                         Name = PriceDriversConstants.FabricsGroupDriver,
                         Value = product.FabricsGroup
-                    };
-
-                    priceDrivers.Add(fabricsPriceDriver);
-                }
+                    }
+                };
 
                 if (string.IsNullOrWhiteSpace(product.SleepAreaSize) is false)
                 {
@@ -281,7 +281,7 @@ namespace Buyer.Web.Shared.Services.Prices
                 var priceRequest = new PriceRequestModel
                 {
                     PriceDrivers = priceDrivers,
-                    CurrencyThreeLetterCode = client.CurrencyCode,
+                    CurrencyThreeLetterCode = client?.CurrencyCode,
                     PricingDate = pricingDate
                 };
 
@@ -304,15 +304,13 @@ namespace Buyer.Web.Shared.Services.Prices
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
-                var prices = new List<Price>();
-
                 foreach (var priceResponse in response.Data)
                 {
-                    if (priceResponse != null)
+                    if (priceResponse is not null)
                     {
                         var price = new Price
                         {
-                            Amount = priceResponse.Amount.Amount,
+                            CurrentPrice = priceResponse.Amount.Amount,
                             CurrencyCode = priceResponse.Amount.CurrencyThreeLetterCode
                         };
 

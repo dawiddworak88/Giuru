@@ -146,7 +146,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                             {
                                 product.Price = new ProductPriceViewModel
                                 {
-                                    Current = price.Amount,
+                                    Current = price.CurrentPrice,
                                     Currency = price.CurrencyCode
                                 };
                             }
