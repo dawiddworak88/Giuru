@@ -27,7 +27,7 @@ namespace Giuru.IntegrationTests
         [Fact]
         public async Task CreateProducts_AddProductsToInventory_CheckoutOrder_Returns_Orders()
         {
-            var onStockProduct = await InventoryDataHelper.CreateProductAndAddToStockAsync(_apiFixture, new ProductRequestModel
+            var onStockProduct = await InventoryHelper.CreateProductAndAddToStockAsync(_apiFixture, new ProductRequestModel
             {
                 Sku = Products.Anton.Sku,
                 Name = Products.Anton.Name,
@@ -37,7 +37,7 @@ namespace Giuru.IntegrationTests
             },
             ApiEndpoints.InventoriesApiEndpoint);
 
-            var onOutletProduct = await InventoryDataHelper.CreateProductAndAddToStockAsync(_apiFixture, new ProductRequestModel
+            var onOutletProduct = await InventoryHelper.CreateProductAndAddToStockAsync(_apiFixture, new ProductRequestModel
             {
                 Sku = Products.Aga.Sku,
                 Name = Products.Aga.Name,
@@ -81,7 +81,7 @@ namespace Giuru.IntegrationTests
                 ClientName = Clients.Name
             });
 
-            var getResults = await InventoryDataHelper.GetDataAsync(
+            var getResults = await DataHelper.GetDataAsync(
                 () => _apiFixture.BuyerWebClient.GetAsync<PagedResults<IEnumerable<Order>>>($"{ApiEndpoints.GetOrdersApiEndpoint}?pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}"),
                 x => x.OrderItems.Any(y => y.ProductId == onStockProduct || y.ProductId == onOutletProduct));
 
