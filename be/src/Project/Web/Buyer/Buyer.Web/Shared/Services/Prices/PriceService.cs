@@ -134,8 +134,9 @@ namespace Buyer.Web.Shared.Services.Prices
                 }
             }
 
-            var requestModel = new PriceRequestModel
+            var requestModel = new GetPriceRequestModel
             {
+                EnvironmentId = _options.Value.GrulaEnvironmentId,
                 PriceDrivers = priceDrivers,
                 CurrencyThreeLetterCode = client.CurrencyCode,
                 PricingDate = pricingDate
@@ -282,20 +283,20 @@ namespace Buyer.Web.Shared.Services.Prices
                 var priceRequest = new PriceRequestModel
                 {
                     PriceDrivers = priceDrivers,
-                    CurrencyThreeLetterCode = client?.CurrencyCode,
+                    CurrencyThreeLetterCode = client?.CurrencyCode, //Add default currency to env
                     PricingDate = pricingDate
                 };
 
                 priceRequests.Add(priceRequest);
             }
 
-            var requestModel = new PricesRequestModel
+            var requestModel = new GetPricesRequestModel
             {
                 EnvironmentId = _options.Value.GrulaEnvironmentId,
                 PriceRequests = priceRequests,
             };
 
-            var apiRequest = new ApiRequest<PricesRequestModel>
+            var apiRequest = new ApiRequest<GetPricesRequestModel>
             {
                 Data = requestModel,
                 AccessToken = token,
@@ -304,7 +305,7 @@ namespace Buyer.Web.Shared.Services.Prices
 
             Console.WriteLine(JsonConvert.SerializeObject(requestModel));
 
-            var response = await _apiClientService.PostAsync<ApiRequest<PricesRequestModel>, PricesRequestModel, IEnumerable<PriceResponseModel>>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<GetPricesRequestModel>, GetPricesRequestModel, IEnumerable<PriceResponseModel>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
