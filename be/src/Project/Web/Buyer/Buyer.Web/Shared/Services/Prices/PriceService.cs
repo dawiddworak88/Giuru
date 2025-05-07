@@ -142,6 +142,8 @@ namespace Buyer.Web.Shared.Services.Prices
                 PricingDate = pricingDate
             };
 
+            Console.WriteLine(JsonConvert.SerializeObject(requestModel));
+
             var apiRequest = new ApiRequest<PriceRequestModel>
             {
                 Data = requestModel,
