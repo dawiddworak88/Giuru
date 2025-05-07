@@ -307,7 +307,8 @@ namespace Buyer.Web.Shared.Services.Prices
             {
                 foreach (var priceResponse in response.Data)
                 {
-                    if (priceResponse is not null)
+                    if (priceResponse is not null &&
+                        priceResponse.Amount is not null)
                     {
                         var price = new Price
                         {
