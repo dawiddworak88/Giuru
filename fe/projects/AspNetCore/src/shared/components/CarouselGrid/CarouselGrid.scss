@@ -4,6 +4,14 @@
     background-color: $grey;
     padding-top: 0;
 
+    .price {
+        padding-bottom: 0.5rem;;
+    }
+
+    .price__container {
+        justify-content: center;
+    }
+
     &__item {
         background-color: white;
         margin-top: 2rem;
@@ -17,12 +25,6 @@
     .card {
         max-width: 280px;
         margin: 2rem;
-
-        &__content {
-            .price {
-                margin-bottom: 0.5rem;;
-            }
-        }
     }
 
     &__data {

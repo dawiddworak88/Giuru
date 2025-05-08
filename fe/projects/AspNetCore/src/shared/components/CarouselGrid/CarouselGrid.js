@@ -37,9 +37,6 @@ function CarouselGrid(props) {
                                                 {carouselItem.title &&
                                                     <p className="title is-5 has-text-centered">{carouselItem.title}</p>
                                                 }
-                                                {carouselItem.price &&
-                                                    <Price {...carouselItem.price} />
-                                                }
                                                 {(carouselItem.categoryName || carouselItem.createdDate) && 
                                                     <div className="carousel-grid__data">
                                                         {carouselItem.categoryName &&
@@ -60,6 +57,9 @@ function CarouselGrid(props) {
                                                     <p className="subtitle is-6 has-text-centered">{carouselItem.subtitle}</p>
                                                 }
                                             </a>
+                                            {carouselItem.price &&
+                                                    <Price {...carouselItem.price} />
+                                                }
                                         </div>
                                     </div>
                                     )}
