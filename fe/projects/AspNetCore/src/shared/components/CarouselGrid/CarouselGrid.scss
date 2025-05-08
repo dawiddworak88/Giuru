@@ -17,6 +17,12 @@
     .card {
         max-width: 280px;
         margin: 2rem;
+
+        &__content {
+            .price {
+                margin-bottom: 0.5rem;;
+            }
+        }
     }
 
     &__data {
