@@ -1,5 +1,10 @@
 import React from 'react';
 
+const currencyMapping = {
+    PLN: "zł",
+    EUR: "€",
+};
+
 const Price = ({
     current,
     old,
@@ -9,7 +14,7 @@ const Price = ({
 }) => (
     <div className="price">
         <div className="price__container">
-            <h3 className="price__current">{new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(current)} {currency}</h3>
+            <h3 className="price__current">{parseFloat(current).toFixed(2)} {currencyMapping[currency]}</h3>
             {old && (
                 <span className="price__old">{old} {currency}</span>
             )}
