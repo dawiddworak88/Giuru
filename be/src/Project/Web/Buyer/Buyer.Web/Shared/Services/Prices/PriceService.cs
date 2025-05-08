@@ -136,7 +136,7 @@ namespace Buyer.Web.Shared.Services.Prices
             {
                 EnvironmentId = _options.Value.GrulaEnvironmentId,
                 PriceDrivers = priceDrivers,
-                CurrencyThreeLetterCode = client.CurrencyCode,
+                CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
                 PricingDate = pricingDate
             };
 
@@ -281,7 +281,7 @@ namespace Buyer.Web.Shared.Services.Prices
                 var priceRequest = new PriceRequestModel
                 {
                     PriceDrivers = priceDrivers,
-                    CurrencyThreeLetterCode = client?.CurrencyCode, //Add default currency to env
+                    CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
                     PricingDate = pricingDate
                 };
 
