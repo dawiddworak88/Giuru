@@ -7,10 +7,8 @@ using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Shared.Services.Prices
@@ -141,8 +139,6 @@ namespace Buyer.Web.Shared.Services.Prices
                 CurrencyThreeLetterCode = client.CurrencyCode,
                 PricingDate = pricingDate
             };
-
-            Console.WriteLine(JsonConvert.SerializeObject(requestModel));
 
             var apiRequest = new ApiRequest<PriceRequestModel>
             {
@@ -304,8 +300,6 @@ namespace Buyer.Web.Shared.Services.Prices
                 AccessToken = token,
                 EndpointAddress = $"{_options.Value.GrulaUrl}{ApiConstants.Grula.PricesApiEndpoint}"
             };
-
-            Console.WriteLine(JsonConvert.SerializeObject(requestModel));
 
             var response = await _apiClientService.PostAsync<ApiRequest<GetPricesRequestModel>, GetPricesRequestModel, IEnumerable<PriceResponseModel>>(apiRequest);
 
