@@ -146,13 +146,13 @@ const Sidebar = (props) => {
                                                                 {labels.expectedDeliveryLabel} {moment(carouselItem.expectedDelivery).format("DD/MM/YYYY")}
                                                             </div>
                                                         }
-                                                        {carouselItem.price &&
-                                                            <Price {...carouselItem.price} />
-                                                        }
                                                     </div>
                                                     <div className="productAttributes">
                                                         <p>{carouselItem.productAttributes}</p>
                                                     </div>
+                                                    {carouselItem.price &&
+                                                        <Price {...carouselItem.price} />
+                                                    }
                                                 </div>
                                             </div>
                                             <div className="sidebar-item__buttons">
