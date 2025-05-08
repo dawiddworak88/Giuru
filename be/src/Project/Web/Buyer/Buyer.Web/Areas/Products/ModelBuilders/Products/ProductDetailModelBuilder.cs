@@ -275,7 +275,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                });
                         }
 
-
                         for (var i = 0; i < productVariants.Data.Count(); i++) 
                         {
                             var productVariant = productVariants.Data.ElementAtOrDefault(i);

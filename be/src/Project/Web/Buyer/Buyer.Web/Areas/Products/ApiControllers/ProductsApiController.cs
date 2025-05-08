@@ -4,9 +4,14 @@ using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Areas.Products.ViewModels.Products;
+using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Files;
+using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.DomainModels.Media;
+using Buyer.Web.Shared.DomainModels.Prices;
 using Buyer.Web.Shared.Repositories.Media;
+using Buyer.Web.Shared.Services.Prices;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
@@ -21,6 +26,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -41,6 +47,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IMediaItemsRepository _mediaRepository;
         private readonly IMediaService _mediaService;
         private readonly LinkGenerator _linkGenerator;
+        private readonly IOptions<AppSettings> _options;
+        private readonly IPriceService _priceService;
 
         public ProductsApiController(
             IProductsService productsService,
@@ -50,6 +58,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IMediaService mediaService,
             IInventoryRepository inventoryRepository,
             IOutletRepository outletRepository,
+            IOptions<AppSettings> options,
+            IPriceService priceService,
             LinkGenerator linkGenerator)
         {
             _productsService = productsService;
@@ -61,6 +71,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             _inventoryRepository = inventoryRepository;
             _outletRepository = outletRepository;
             _mediaRepository = mediaRepository;
+            _options = options;
+            _priceService = priceService;
         }
 
         [HttpGet]
@@ -109,16 +121,63 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
 
                 var productVariants = await _productsRepository.GetProductsAsync(
-                    product.ProductVariants, null, null, language, null, false, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, $"{nameof(Product.Name)} ASC");
+                    product.ProductVariants, 
+                    null, 
+                    null, 
+                    language, 
+                    null, 
+                    false, 
+                    PaginationConstants.DefaultPageIndex, 
+                    PaginationConstants.DefaultPageSize, 
+                    token, 
+                    $"{nameof(Product.Name)} ASC");
 
-                var availableProducts = await _inventoryRepository.GetAvailbleProductsInventoryByIds(token, language, productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
+                var availableProducts = await _inventoryRepository.GetAvailbleProductsInventoryByIds(
+                    token, 
+                    language, 
+                    productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
 
-                var availableOutletProducts = await _outletRepository.GetOutletProductsByIdsAsync(token, language, productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
+                var availableOutletProducts = await _outletRepository.GetOutletProductsByIdsAsync(
+                    token, 
+                    language, 
+                    productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
 
                 var carouselItems = new List<CarouselGridCarouselItemViewModel>();
 
-                foreach (var productVariant in productVariants.Data.OrEmptyIfNull())
+                var prices = Enumerable.Empty<Price>();
+
+                if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                 {
+                    prices = await _priceService.GetPrices(
+                        _options.Value.GrulaAccessToken,
+                        DateTime.UtcNow,
+                        productVariants.Data.Select(x => new PriceProduct
+                        {
+                            PrimarySku = x.PrimaryProductSku,
+                            FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, "priceGroup", "grupaCenowa"),
+                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, "extraPacking"),
+                            SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes)
+                        }),
+                        new PriceClient
+                        {
+                            Name = User.Identity?.Name,
+                            CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
+                            ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
+                            PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
+                            Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
+                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
+                        });
+                }
+
+                for (int i = 0; i < productVariants.Data.Count(); i++)
+                {
+                    var productVariant = productVariants.Data.ElementAtOrDefault(i);
+
+                    if (productVariant is null)
+                    {
+                        continue;
+                    }
+
                     var carouselItem = new CarouselGridCarouselItemViewModel
                     {
                         Id = productVariant.Id,
@@ -175,6 +234,20 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     {
                         carouselItem.AvailableOutletQuantity = availableOutletProduct.AvailableQuantity;
                         carouselItem.OutletTitle = availableOutletProduct.Title;
+                    }
+
+                    if (prices.Any())
+                    {
+                        var price = prices.ElementAtOrDefault(i);
+
+                        if (price is not null)
+                        {
+                            carouselItem.Price = new PriceViewModel
+                            {
+                                Current = price.CurrentPrice,
+                                Currency = price.CurrencyCode
+                            };
+                        }
                     }
 
                     carouselItems.Add(carouselItem);

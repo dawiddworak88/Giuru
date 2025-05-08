@@ -10,6 +10,7 @@ import { Context } from "../../../shared/stores/Store";
 import ResponsiveImage from "../../../shared/components/Picture/ResponsiveImage";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
+import Price from "../Price/Price";
 
 const Sidebar = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -144,6 +145,9 @@ const Sidebar = (props) => {
                                                             <div className="expected-delivery">
                                                                 {labels.expectedDeliveryLabel} {moment(carouselItem.expectedDelivery).format("DD/MM/YYYY")}
                                                             </div>
+                                                        }
+                                                        {carouselItem.price &&
+                                                            <Price {...carouselItem.price} />
                                                         }
                                                     </div>
                                                     <div className="productAttributes">
