@@ -76,7 +76,7 @@ builder.Services.AddDataProtection().UseCryptographicAlgorithms(
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration["RedisUrl"];
-    options.InstanceName = $"{Assembly.GetExecutingAssembly().GetName().Name}-";
+    options.InstanceName = $"{Assembly.GetExecutingAssembly().GetName().Name}-Cache";
 });
 
 builder.Services.AddRazorPages();
