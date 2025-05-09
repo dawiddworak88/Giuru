@@ -48,7 +48,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
         private readonly IMediaItemsRepository _mediaItemsRepository;
-        private readonly IPriceService _priceRepository;
+        private readonly IPriceService _priceService;
         private readonly IOptions<AppSettings> _options;
         private readonly IProductsService _productsService;
 
@@ -65,7 +65,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IBasketService basketService,
             LinkGenerator linkGenerator,
             IMediaItemsRepository mediaItemsRepository,
-            IPriceService priceRepository,
+            IPriceService priceService,
             IOptions<AppSettings> options,
             IProductsService productsService)
         {
@@ -81,7 +81,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _orderResources = orderResources;
             _modalModelBuilder = modalModelBuilder;
             _mediaItemsRepository = mediaItemsRepository;
-            _priceRepository = priceRepository;
+            _priceService = priceService;
             _options = options;
             _productsService = productsService;
         }
@@ -133,7 +133,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 if (product.PrimaryProductId.HasValue &&
                     string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                 {
-                    var price = await _priceRepository.GetPrice(
+                    var price = await _priceService.GetPrice(
                         _options.Value.GrulaAccessToken,
                         DateTime.UtcNow,
                         new PriceProduct
@@ -258,7 +258,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                         if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                         {
-                            prices = await _priceRepository.GetPrices(
+                            prices = await _priceService.GetPrices(
                                _options.Value.GrulaAccessToken,
                                DateTime.UtcNow,
                                productVariants.Data.Select(x => new PriceProduct
