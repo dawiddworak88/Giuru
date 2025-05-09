@@ -38,99 +38,7 @@ namespace Buyer.Web.Shared.Services.Prices
                 return null;
             }
 
-            var priceDrivers = new List<PriceDriverRequestModel>
-            {
-                new PriceDriverRequestModel
-                {
-                    Name = PriceDriversConstants.ProductDriver,
-                    Value = product.PrimarySku
-                },
-                new PriceDriverRequestModel
-                {
-                    Name = PriceDriversConstants.FabricsGroupDriver,
-                    Value = product.FabricsGroup
-                }
-            };
-
-            if (!string.IsNullOrWhiteSpace(product.SleepAreaSize))
-            {
-                var sleepAreaSizePriceDriver = new PriceDriverRequestModel
-                {
-                    Name = PriceDriversConstants.SleepAreaDriver,
-                    Value = product.SleepAreaSize
-                };
-
-                priceDrivers.Add(sleepAreaSizePriceDriver);
-            }
-
-            if (!string.IsNullOrWhiteSpace(product.ExtraPacking))
-            {
-                var extraPackingPriceDriver = new PriceDriverRequestModel
-                {
-                    Name = PriceDriversConstants.ProductExtraPackingDriver,
-                    Value = product.ExtraPacking
-                };
-
-                priceDrivers.Add(extraPackingPriceDriver);
-            }
-
-            if (client is not null)
-            {
-                if (string.IsNullOrWhiteSpace(client.Name) is false)
-                {
-                    var clientPriceDriver = new PriceDriverRequestModel
-                    {
-                        Name = PriceDriversConstants.ClientDriver,
-                        Value = client.Name
-                    };
-
-                    priceDrivers.Add(clientPriceDriver);
-                }
-
-                if (string.IsNullOrWhiteSpace(client.ExtraPacking) is false)
-                {
-                    var extraPackingPriceDriver = new PriceDriverRequestModel
-                    {
-                        Name = PriceDriversConstants.ClientExtraPackingDriver,
-                        Value = client.ExtraPacking
-                    };
-
-                    priceDrivers.Add(extraPackingPriceDriver);
-                }
-
-                if (string.IsNullOrWhiteSpace(client.PaletteLoading) is false)
-                {
-                    var paletteLoadingPriceDriver = new PriceDriverRequestModel
-                    {
-                        Name = PriceDriversConstants.PaletteLoadingDriver,
-                        Value = client.PaletteLoading
-                    };
-
-                    priceDrivers.Add(paletteLoadingPriceDriver);
-                }
-
-                if (string.IsNullOrWhiteSpace(client.Country) is false)
-                {
-                    var countryPriceDriver = new PriceDriverRequestModel
-                    {
-                        Name = PriceDriversConstants.ClientCountryDriver,
-                        Value = client.Country
-                    };
-
-                    priceDrivers.Add(countryPriceDriver);
-                }
-
-                if (string.IsNullOrWhiteSpace(client.DeliveryZipCode) is false)
-                {
-                    var deliveryZipCodePriceDriver = new PriceDriverRequestModel
-                    {
-                        Name = PriceDriversConstants.DeliveryAddressDriver,
-                        Value = client.DeliveryZipCode
-                    };
-
-                    priceDrivers.Add(deliveryZipCodePriceDriver);
-                }
-            }
+            var priceDrivers = CreatePriceDrivers(product, client);
 
             var requestModel = new GetPriceRequestModel
             {
@@ -154,7 +62,7 @@ namespace Buyer.Web.Shared.Services.Prices
                 if (response.Data.Amount is null)
                 {
                     return null;
-                }   
+                }
 
                 return new Price
                 {
@@ -167,8 +75,8 @@ namespace Buyer.Web.Shared.Services.Prices
         }
 
         public async Task<IEnumerable<Price>> GetPrices(
-            string token, 
-            DateTime pricingDate, 
+            string token,
+            DateTime pricingDate,
             IEnumerable<PriceProduct> products,
             PriceClient client)
         {
@@ -184,99 +92,7 @@ namespace Buyer.Web.Shared.Services.Prices
                     continue;
                 }
 
-                var priceDrivers = new List<PriceDriverRequestModel>
-                {
-                    new PriceDriverRequestModel
-                    {
-                        Name = PriceDriversConstants.ProductDriver,
-                        Value = product.PrimarySku
-                    },
-                    new PriceDriverRequestModel
-                    {
-                        Name = PriceDriversConstants.FabricsGroupDriver,
-                        Value = product.FabricsGroup
-                    }
-                };
-
-                if (string.IsNullOrWhiteSpace(product.SleepAreaSize) is false)
-                {
-                    var sleepAreaSizePriceDriver = new PriceDriverRequestModel
-                    {
-                        Name = PriceDriversConstants.SleepAreaDriver,
-                        Value = product.SleepAreaSize
-                    };
-
-                    priceDrivers.Add(sleepAreaSizePriceDriver);
-                }
-
-                if (string.IsNullOrWhiteSpace(product.ExtraPacking) is false)
-                {
-                    var extraPackingPriceDriver = new PriceDriverRequestModel
-                    {
-                        Name = PriceDriversConstants.ProductExtraPackingDriver,
-                        Value = product.ExtraPacking
-                    };
-
-                    priceDrivers.Add(extraPackingPriceDriver);
-                }
-
-                if(client is not null)
-                {
-                    if (string.IsNullOrWhiteSpace(client.Name) is false)
-                    {
-                        var clientPriceDriver = new PriceDriverRequestModel
-                        {
-                            Name = PriceDriversConstants.ClientDriver,
-                            Value = client.Name
-                        };
-
-                        priceDrivers.Add(clientPriceDriver);
-                    }
-
-                    if (string.IsNullOrWhiteSpace(client.ExtraPacking) is false)
-                    {
-                        var extraPackingPriceDriver = new PriceDriverRequestModel
-                        {
-                            Name = PriceDriversConstants.ClientExtraPackingDriver,
-                            Value = client.ExtraPacking
-                        };
-
-                        priceDrivers.Add(extraPackingPriceDriver);
-                    }
-
-                    if (string.IsNullOrWhiteSpace(client.PaletteLoading) is false)
-                    {
-                        var paletteLoadingPriceDriver = new PriceDriverRequestModel
-                        {
-                            Name = PriceDriversConstants.PaletteLoadingDriver,
-                            Value = client.PaletteLoading
-                        };
-
-                        priceDrivers.Add(paletteLoadingPriceDriver);
-                    }
-
-                    if (string.IsNullOrWhiteSpace(client.Country) is false)
-                    {
-                        var countryPriceDriver = new PriceDriverRequestModel
-                        {
-                            Name = PriceDriversConstants.ClientCountryDriver,
-                            Value = client.Country
-                        };
-
-                        priceDrivers.Add(countryPriceDriver);
-                    }
-
-                    if (string.IsNullOrWhiteSpace(client.DeliveryZipCode) is false)
-                    {
-                        var deliveryZipCodePriceDriver = new PriceDriverRequestModel
-                        {
-                            Name = PriceDriversConstants.DeliveryAddressDriver,
-                            Value = client.DeliveryZipCode
-                        };
-
-                        priceDrivers.Add(deliveryZipCodePriceDriver);
-                    }
-                }
+                var priceDrivers = CreatePriceDrivers(product, client);
 
                 var priceRequest = new PriceRequestModel
                 {
@@ -328,6 +144,91 @@ namespace Buyer.Web.Shared.Services.Prices
             }
 
             return default;
+        }
+
+        private List<PriceDriverRequestModel> CreatePriceDrivers(PriceProduct product, PriceClient client)
+        {
+            var priceDrivers = new List<PriceDriverRequestModel>
+            {
+                new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.ProductDriver,
+                    Value = product.PrimarySku
+                },
+                new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.FabricsGroupDriver,
+                    Value = product.FabricsGroup
+                }
+            };
+
+            if (!string.IsNullOrWhiteSpace(product.SleepAreaSize))
+            {
+                priceDrivers.Add(new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.SleepAreaDriver,
+                    Value = product.SleepAreaSize
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(product.ExtraPacking))
+            {
+                priceDrivers.Add(new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.ProductExtraPackingDriver,
+                    Value = product.ExtraPacking
+                });
+            }
+
+            if (client is not null)
+            {
+                if (!string.IsNullOrWhiteSpace(client.Name))
+                {
+                    priceDrivers.Add(new PriceDriverRequestModel
+                    {
+                        Name = PriceDriversConstants.ClientDriver,
+                        Value = client.Name
+                    });
+                }
+
+                if (!string.IsNullOrWhiteSpace(client.ExtraPacking))
+                {
+                    priceDrivers.Add(new PriceDriverRequestModel
+                    {
+                        Name = PriceDriversConstants.ClientExtraPackingDriver,
+                        Value = client.ExtraPacking
+                    });
+                }
+
+                if (!string.IsNullOrWhiteSpace(client.PaletteLoading))
+                {
+                    priceDrivers.Add(new PriceDriverRequestModel
+                    {
+                        Name = PriceDriversConstants.PaletteLoadingDriver,
+                        Value = client.PaletteLoading
+                    });
+                }
+
+                if (!string.IsNullOrWhiteSpace(client.Country))
+                {
+                    priceDrivers.Add(new PriceDriverRequestModel
+                    {
+                        Name = PriceDriversConstants.ClientCountryDriver,
+                        Value = client.Country
+                    });
+                }
+
+                if (!string.IsNullOrWhiteSpace(client.DeliveryZipCode))
+                {
+                    priceDrivers.Add(new PriceDriverRequestModel
+                    {
+                        Name = PriceDriversConstants.DeliveryAddressDriver,
+                        Value = client.DeliveryZipCode
+                    });
+                }
+            }
+
+            return priceDrivers;
         }
     }
 }
