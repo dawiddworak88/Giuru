@@ -5,7 +5,11 @@ using Buyer.Web.Shared.Repositories.Global;
 using Foundation.ApiExtensions.Definitions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -19,23 +23,28 @@ namespace Buyer.Web.Shared.Middlewares
         private readonly IGlobalRepository _globalRepository;
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
         private readonly IOptions<AppSettings> _options;
+        private readonly IDistributedCache _cache;
 
         public ClaimsEnrichmentMiddleware(
             IClientsRepository clientsRepository,
             IClientAddressesRepository clientAddressesRepository,
             IGlobalRepository globalRepository,
             IClientFieldValuesRepository clientFieldValuesRepository,
-            IOptions<AppSettings> options)
+            IOptions<AppSettings> options,
+            IDistributedCache cache)
         {
             _clientsRepository = clientsRepository;
             _clientAddressesRepository = clientAddressesRepository;
             _globalRepository = globalRepository;
             _clientFieldValuesRepository = clientFieldValuesRepository;
             _options = options;
+            _cache = cache;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
+            var stopwatch = Stopwatch.StartNew();
+
             if (context.User.Identity?.IsAuthenticated is false)
             {
                 await next(context);
@@ -50,9 +59,33 @@ namespace Buyer.Web.Shared.Middlewares
                 return;
             }
 
-            var token = await context.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var cacheKey = $"{ClaimsEnrichmentConstants.CacheKey}_{email}";
+            var cachedClaims = await _cache.GetStringAsync(cacheKey);
+
             var claimsIdentity = (ClaimsIdentity)context.User.Identity;
 
+            if (!string.IsNullOrWhiteSpace(cachedClaims))
+            {
+                var claims = cachedClaims
+                    .Split('|')
+                    .Select(x => x.Split(':'))
+                    .ToDictionary(x => x[0], x => x[1]);
+
+                foreach (var claim in claims)
+                {
+                    claimsIdentity.AddClaim(new Claim(claim.Key, claim.Value));
+                }
+
+                stopwatch.Stop();
+                Console.WriteLine($"[ClaimsEnrichment] Cache HIT - Time: {stopwatch.ElapsedMilliseconds} ms");
+
+                await next(context);
+                return;
+            }
+
+            var innerStopwatch = Stopwatch.StartNew();
+
+            var token = await context.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var client = await _clientsRepository.GetClientByEmailAsync(token, _options.Value.DefaultCulture, email);
 
             if (client is null)
@@ -60,6 +93,8 @@ namespace Buyer.Web.Shared.Middlewares
                 await next(context);
                 return;
             }
+
+            var claimsToCache = new List<Claim>();
 
             if (client.PreferedCurrencyId.HasValue)
             {
@@ -71,7 +106,10 @@ namespace Buyer.Web.Shared.Middlewares
 
                     if (currency is not null)
                     {
-                        claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.CurrencyClaimType, currency.CurrencyCode));
+                        var currencyClaim = new Claim(ClaimsEnrichmentConstants.CurrencyClaimType, currency.CurrencyCode);
+                        
+                        claimsIdentity.AddClaim(currencyClaim);
+                        claimsToCache.Add(currencyClaim);
                     }
                 }
             }
@@ -88,8 +126,14 @@ namespace Buyer.Web.Shared.Middlewares
 
                     if (country != null)
                     {
-                        claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.ZipCodeClaimType, $"{address.PostCode} ({address.City}, {country.Name})"));
-                        claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.CountryClaimType, country.Name));
+                        var zipClaim = new Claim(ClaimsEnrichmentConstants.ZipCodeClaimType, $"{address.PostCode} ({address.City}, {country.Name})");
+                        var countryClaim = new Claim(ClaimsEnrichmentConstants.CountryClaimType, country.Name);
+
+                        claimsIdentity.AddClaim(zipClaim);
+                        claimsIdentity.AddClaim(countryClaim);
+
+                        claimsToCache.Add(zipClaim);
+                        claimsToCache.Add(countryClaim);
                     }
                 }
             }
@@ -102,16 +146,32 @@ namespace Buyer.Web.Shared.Middlewares
 
                 if (extraPackingField is not null)
                 {
-                    claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.ExtraPackingClaimType, extraPackingField.FieldValue));
+                    var extraPackingClaim = new Claim(ClaimsEnrichmentConstants.ExtraPackingClaimType, extraPackingField.FieldValue);
+
+                    claimsIdentity.AddClaim(extraPackingClaim);
+                    claimsToCache.Add(extraPackingClaim);
                 }
 
                 var paletteLoading = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.PaletteLoadingClientFieldName);
 
                 if (paletteLoading is not null)
                 {
-                    claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.PaletteLoadingClaimType, paletteLoading.FieldValue));
+                    var paletteLoadingClaim = new Claim(ClaimsEnrichmentConstants.PaletteLoadingClaimType, paletteLoading.FieldValue);
+
+                    claimsIdentity.AddClaim(paletteLoadingClaim);
+                    claimsToCache.Add(paletteLoadingClaim);
                 }
             }
+
+            innerStopwatch.Stop();
+            Console.WriteLine($"[ClaimsEnrichment] Cache MISS - Time: {innerStopwatch.ElapsedMilliseconds} ms");
+
+            var claimsToCacheString = string.Join("|", claimsToCache.Select(x => $"{x.Type}:{x.Value}"));
+
+            await _cache.SetStringAsync(cacheKey, claimsToCacheString, new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30)
+            });
 
             await next(context);
         }

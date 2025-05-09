@@ -10,5 +10,7 @@
 
         public static readonly string ExtraPackingClientFieldName = "Extra Packing";
         public static readonly string PaletteLoadingClientFieldName = "Palette Loading";
+
+        public static readonly string CacheKey = "claims";
     }
 }
