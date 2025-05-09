@@ -242,7 +242,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                         if (price is not null)
                         {
-                            carouselItem.Price = new PriceViewModel
+                            carouselItem.Price = new CarouselGridPriceViewModel
                             {
                                 Current = price.CurrentPrice,
                                 Currency = price.CurrencyCode

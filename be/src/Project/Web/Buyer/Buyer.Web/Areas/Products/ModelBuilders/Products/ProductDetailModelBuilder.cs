@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Shared.Definitions.Products;
-using Buyer.Web.Areas.Products.Repositories.Products;
+﻿using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.ComponentModels.Files;
 using Buyer.Web.Shared.ViewModels.Files;
@@ -30,7 +29,6 @@ using System;
 using Buyer.Web.Shared.DomainModels.Prices;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
-using Newtonsoft.Json;
 using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Areas.Products.Services.Products;
 
@@ -297,7 +295,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                             if (productVariantPrice is not null)
                             {
-                                carouselItem.Price = new PriceViewModel
+                                carouselItem.Price = new CarouselGridPriceViewModel
                                 {
                                     Current = productVariantPrice.CurrentPrice,
                                     Currency = productVariantPrice.CurrencyCode
