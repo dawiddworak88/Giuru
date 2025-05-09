@@ -79,8 +79,8 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         InStock = false,
                         ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes),
                         SleepAreaSize = GetSleepAreaSize(product.ProductAttributes),
-                        FabricsGroup = GetFirstAvailableAttributeValue(product.ProductAttributes, "priceGroup", "grupaCenowa"),
-                        ExtraPacking = GetFirstAvailableAttributeValue(product.ProductAttributes, "extraPacking"),
+                        FabricsGroup = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePriceGroupAttributeKeys),
+                        ExtraPacking = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleExtraPackingAttributeKeys)
                     };
 
                     if (product.Images != null)
@@ -125,7 +125,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
         public string GetFirstAvailableAttributeValue(IEnumerable<ProductAttribute> attributes, params string[] possibleKeys)
         {
-            foreach (var key in possibleKeys)
+            foreach (var key in possibleKeys.OrEmptyIfNull())
             {
                 var value = attributes.FirstOrDefault(x => x.Key == key)?.Values?.FirstOrDefault();
 
@@ -140,8 +140,8 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
         public string GetSleepAreaSize(IEnumerable<ProductAttribute> attributes)
         {
-            var sleepAreaWidthValue = GetFirstAvailableAttributeValue(attributes, "sleepAreaWidth", "szerokoscSpania");
-            var sleepAreaDepthValue = GetFirstAvailableAttributeValue(attributes, "sleepAreaDepth", "glebokoscSpania");
+            var sleepAreaWidthValue = GetFirstAvailableAttributeValue(attributes, this.options.Value.PossibleSleepAreaWidthAttributeKeys);
+            var sleepAreaDepthValue = GetFirstAvailableAttributeValue(attributes, this.options.Value.PossibleSleepAreaDepthAttributeKeys);
 
             if (string.IsNullOrWhiteSpace(sleepAreaWidthValue) ||
                 string.IsNullOrWhiteSpace(sleepAreaDepthValue))

@@ -139,8 +139,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         new PriceProduct
                         {
                             PrimarySku = product.PrimaryProductSku,
-                            FabricsGroup = product.ProductAttributes.FirstOrDefault(x => x.Key == "priceGroup")?.Values?.FirstOrDefault(),
-                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, "extraPacking"),
+                            FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
                             SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes)
                         },
                         new PriceClient
@@ -263,13 +263,19 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                DateTime.UtcNow,
                                productVariants.Data.Select(x => new PriceProduct
                                {
-                                   PrimarySku = x.PrimaryProductSku,
-                                   FabricsGroup = x.ProductAttributes?.FirstOrDefault(y => y.Key == "priceGroup")?.Values?.FirstOrDefault()
+                                   PrimarySku = product.PrimaryProductSku,
+                                   FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                                   ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
+                                   SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes)
                                }),
                                new PriceClient
                                {
                                    Name = componentModel.Name,
-                                   CurrencyCode = componentModel.CurrencyCode
+                                   CurrencyCode = componentModel.CurrencyCode,
+                                   ExtraPacking = componentModel.ExtraPacking,
+                                   PaletteLoading = componentModel.PaletteLoading,
+                                   Country = componentModel.Country,
+                                   DeliveryZipCode = componentModel.DeliveryZipCode
                                });
                         }
 

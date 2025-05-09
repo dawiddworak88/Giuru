@@ -154,8 +154,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         productVariants.Data.Select(x => new PriceProduct
                         {
                             PrimarySku = x.PrimaryProductSku,
-                            FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, "priceGroup", "grupaCenowa"),
-                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, "extraPacking"),
+                            FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
                             SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes)
                         }),
                         new PriceClient
