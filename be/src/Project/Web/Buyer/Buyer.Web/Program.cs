@@ -71,7 +71,7 @@ builder.Services.AddDataProtection().UseCryptographicAlgorithms(
     {
         EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
         ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
-    }).PersistKeysToStackExchangeRedis(, $"{Assembly.GetExecutingAssembly().GetName().Name}-DataProtection-Keys");
+    }).PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(builder.Configuration["RedisUrl"]), $"{Assembly.GetExecutingAssembly().GetName().Name}-DataProtection-Keys");
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
