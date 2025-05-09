@@ -43,8 +43,6 @@ namespace Buyer.Web.Shared.Middlewares
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            var stopwatch = Stopwatch.StartNew();
-
             if (context.User.Identity?.IsAuthenticated is false)
             {
                 await next(context);
@@ -59,7 +57,7 @@ namespace Buyer.Web.Shared.Middlewares
                 return;
             }
 
-            var cacheKey = $"{ClaimsEnrichmentConstants.CacheKey}_{email}";
+            var cacheKey = $"{ClaimsEnrichmentConstants.CacheKey}-{email}";
             var cachedClaims = await _cache.GetStringAsync(cacheKey);
 
             var claimsIdentity = (ClaimsIdentity)context.User.Identity;
@@ -75,9 +73,6 @@ namespace Buyer.Web.Shared.Middlewares
                 {
                     claimsIdentity.AddClaim(new Claim(claim.Key, claim.Value));
                 }
-
-                stopwatch.Stop();
-                Console.WriteLine($"[ClaimsEnrichment] Cache HIT - Time: {stopwatch.ElapsedMilliseconds} ms");
 
                 await next(context);
                 return;
@@ -162,9 +157,6 @@ namespace Buyer.Web.Shared.Middlewares
                     claimsToCache.Add(paletteLoadingClaim);
                 }
             }
-
-            innerStopwatch.Stop();
-            Console.WriteLine($"[ClaimsEnrichment] Cache MISS - Time: {innerStopwatch.ElapsedMilliseconds} ms");
 
             var claimsToCacheString = string.Join("|", claimsToCache.Select(x => $"{x.Type}:{x.Value}"));
 
