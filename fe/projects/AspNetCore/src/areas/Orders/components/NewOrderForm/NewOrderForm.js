@@ -110,6 +110,8 @@ function NewOrderForm(props) {
             quantity: quantity ? quantity : 0,
             stockQuantity: stockQuantity ? stockQuantity : 0,
             outletQuantity: outletQuantity ? outletQuantity : 0,
+            price: product.price,
+            currency: product.currency,
             externalReference,
             moreInfo
         };
@@ -501,6 +503,8 @@ function NewOrderForm(props) {
                                                     <TableCell className="has-text-weight-bold">{props.inTotalLabel}</TableCell>
                                                     <TableCell>{props.externalReferenceLabel}</TableCell>
                                                     <TableCell>{props.moreInfoLabel}</TableCell>
+                                                    <TableCell>{props.priceLabel}</TableCell>
+                                                    <TableCell>{props.currencyLabel}</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
@@ -522,6 +526,8 @@ function NewOrderForm(props) {
                                                         <TableCell className="has-text-weight-bold">{getTotalQuantities(item)}</TableCell>
                                                         <TableCell>{item.externalReference}</TableCell>
                                                         <TableCell>{item.moreInfo}</TableCell>
+                                                        <TableCell>{item.price}</TableCell>
+                                                        <TableCell>{item.currency}</TableCell>
                                                     </TableRow>
                                                 ))}
                                             </TableBody>
