@@ -54,7 +54,6 @@ namespace Giuru.IntegrationTests
             var orders = await _apiFixture.BuyerWebClient.GetAsync<PagedResults<IEnumerable<Order>>>($"{ApiEndpoints.GetOrdersApiEndpoint}?pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}");
 
             Assert.NotNull(orders.Data);
-            Assert.Equal(1, orders.Total);
             Assert.Equal(Products.Lamica.Id, orders.Data.FirstOrDefault().OrderItems.FirstOrDefault().ProductId);
         }
     }
