@@ -123,9 +123,11 @@ namespace Buyer.Web.Areas.Products.Services.Products
             return await this.productsRepository.GetProductSuggestionsAsync(searchTerm, size, language, token);
         }
 
-        public string GetFirstAvailableAttributeValue(IEnumerable<ProductAttribute> attributes, params string[] possibleKeys)
+        public string GetFirstAvailableAttributeValue(IEnumerable<ProductAttribute> attributes, string possibleKeys)
         {
-            foreach (var key in possibleKeys.OrEmptyIfNull())
+            var keys = possibleKeys.ToEnumerableString();
+
+            foreach (var key in keys.OrEmptyIfNull())
             {
                 var value = attributes.FirstOrDefault(x => x.Key == key)?.Values?.FirstOrDefault();
 

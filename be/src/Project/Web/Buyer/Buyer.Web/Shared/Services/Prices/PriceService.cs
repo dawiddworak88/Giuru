@@ -7,7 +7,6 @@ using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -101,7 +100,7 @@ namespace Buyer.Web.Shared.Services.Prices
 
                 var priceRequest = new PriceRequestModel
                 {
-                    PriceDrivers = CreatePriceDrivers(product, client).ToList(),
+                    PriceDrivers = CreatePriceDrivers(product, client),
                     CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
                     PricingDate = pricingDate
                 };
@@ -114,8 +113,6 @@ namespace Buyer.Web.Shared.Services.Prices
                 EnvironmentId = _options.Value.GrulaEnvironmentId,
                 PriceRequests = priceRequests,
             };
-
-            Console.WriteLine(JsonConvert.SerializeObject(requestModel));
 
             var apiRequest = new ApiRequest<GetPricesRequestModel>
             {
