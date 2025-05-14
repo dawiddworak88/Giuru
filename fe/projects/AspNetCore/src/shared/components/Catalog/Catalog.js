@@ -116,7 +116,7 @@ function Catalog(props) {
             outletQuantity: outletQuantity,
             unitPrice: productVariant.price ? productVariant.price.current : null,
             price: productVariant.price ? productVariant.price.current * totalQuantity : null,
-            curreny: productVariant.price ? productVariant.price.currency : null,
+            currency: productVariant.price ? productVariant.price.currency : null,
             externalReference: item.externalReference,
             moreInfo: item.moreInfo
         };
