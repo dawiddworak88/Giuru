@@ -101,7 +101,7 @@ namespace Buyer.Web.Shared.Services.Prices
 
                 var priceRequest = new PriceRequestModel
                 {
-                    PriceDrivers = CreatePriceDrivers(product, client),
+                    PriceDrivers = CreatePriceDrivers(product, client).ToList(),
                     CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
                     PricingDate = pricingDate
                 };
