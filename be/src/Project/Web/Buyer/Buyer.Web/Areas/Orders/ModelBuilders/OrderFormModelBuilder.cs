@@ -91,9 +91,9 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
                 MaximalLabel = _globalLocalizer.GetString("MaximalLabel"),
-                UnitPriceLabel = _globalLocalizer.GetString("UnitPriceLabel"),
-                PriceLabel = _globalLocalizer.GetString("PriceLabel"),
-                CurrencyLabel = _globalLocalizer.GetString("CurrencyLabel"),
+                UnitPriceLabel = _globalLocalizer.GetString("UnitPrice"),
+                PriceLabel = _globalLocalizer.GetString("Price"),
+                CurrencyLabel = _globalLocalizer.GetString("Currency"),
             };
 
             if (componentModel.BasketId.HasValue)
