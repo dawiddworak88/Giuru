@@ -90,7 +90,10 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 SaveMediaUrl = _linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
-                MaximalLabel = _globalLocalizer.GetString("MaximalLabel")
+                MaximalLabel = _globalLocalizer.GetString("MaximalLabel"),
+                UnitPriceLabel = _globalLocalizer.GetString("UnitPriceLabel"),
+                PriceLabel = _globalLocalizer.GetString("PriceLabel"),
+                CurrencyLabel = _globalLocalizer.GetString("CurrencyLabel"),
             };
 
             if (componentModel.BasketId.HasValue)

@@ -801,4 +801,10 @@
   <data name="Location" xml:space="preserve">
     <value>Lokalizacja</value>
   </data>
+  <data name="Price" xml:space="preserve">
+    <value>Cena</value>
+  </data>
+  <data name="UnitPrice" xml:space="preserve">
+    <value>Cena jednostkowa</value>
+  </data>
 </root>

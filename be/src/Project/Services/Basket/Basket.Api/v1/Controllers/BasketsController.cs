@@ -18,7 +18,6 @@ using System.Threading.Tasks;
 using Basket.Api.ServicesModels;
 using Basket.Api.v1.ResponseModels;
 using IdentityModel;
-using Newtonsoft.Json;
 
 namespace Basket.Api.v1.Controllers
 {
@@ -61,6 +60,9 @@ namespace Basket.Api.v1.Controllers
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
+                    UnitPrice = x.UnitPrice,
+                    Price = x.Price,
+                    Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo
                 }),
@@ -90,6 +92,9 @@ namespace Basket.Api.v1.Controllers
                             Quantity = x.Quantity,
                             StockQuantity = x.StockQuantity,
                             OutletQuantity = x.OutletQuantity,
+                            UnitPrice = x.UnitPrice,
+                            Price = x.Price,
+                            Currency = x.Currency,
                             ExternalReference = x.ExternalReference,
                             MoreInfo = x.MoreInfo
                         })
@@ -175,6 +180,9 @@ namespace Basket.Api.v1.Controllers
                             Quantity = x.Quantity,
                             StockQuantity = x.StockQuantity,
                             OutletQuantity = x.OutletQuantity,
+                            UnitPrice = x.UnitPrice,
+                            Price = x.Price,
+                            Currency = x.Currency,
                             ExternalReference = x.ExternalReference,
                             MoreInfo = x.MoreInfo
                         })

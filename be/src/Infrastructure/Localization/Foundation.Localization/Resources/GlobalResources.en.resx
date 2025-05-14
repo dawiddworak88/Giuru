@@ -795,4 +795,10 @@
   <data name="Cards" xml:space="preserve">
     <value>Cards</value>
   </data>
+  <data name="Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="UnitPrice" xml:space="preserve">
+    <value>Unit price</value>
+  </data>
 </root>

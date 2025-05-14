@@ -503,6 +503,7 @@ function NewOrderForm(props) {
                                                     <TableCell className="has-text-weight-bold">{props.inTotalLabel}</TableCell>
                                                     <TableCell>{props.externalReferenceLabel}</TableCell>
                                                     <TableCell>{props.moreInfoLabel}</TableCell>
+                                                    <TableCell>{props.unitPriceLabel}</TableCell>
                                                     <TableCell>{props.priceLabel}</TableCell>
                                                     <TableCell>{props.currencyLabel}</TableCell>
                                                 </TableRow>
