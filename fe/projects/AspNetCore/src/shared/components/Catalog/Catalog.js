@@ -13,6 +13,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
 import Modal from "../Modal/Modal";
+import { addGoogleAnalyticsEventToDataLayer } from "../../helpers/globals/GoogleEventToDataLayerHelper";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -147,6 +148,17 @@ function Catalog(props) {
                             toast.success(props.successfullyAddedProduct)
                             setOrderItems(jsonResponse.items);
                             setIsModalOpen(false);
+
+                            addGoogleAnalyticsEventToDataLayer(
+                                "en", //Add langauge to dataLayer
+                                "add_to_cart",
+                                jsonResponse.items.map((item) => ({
+                                    variantId: item.productId,
+                                    productName: item.name,
+                                    price: 0,
+                                    quantity: totalQuantity
+                                }))
+                            );
                         }
                         else {
                             setOrderItems([]);
