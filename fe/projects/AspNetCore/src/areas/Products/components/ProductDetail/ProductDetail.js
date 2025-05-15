@@ -155,7 +155,7 @@ function ProductDetail(props) {
                 name: props.title,
                 sku: props.sku,
                 price: 0,
-                quantity: totalQuantity
+                quantity: 1
             }
         ]);
     }, []);
