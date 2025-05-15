@@ -94,6 +94,16 @@ function ProductDetail(props) {
                             toast.success(props.successfullyAddedProduct)
                             setOrderItems(jsonResponse.items);
                             setIsModalOpen(false);
+
+                            addGoogleAnalyticsEventToDataLayer("add_to_cart", [
+                                {
+                                    id: orderItem.productId,
+                                    name: orderItem.name,
+                                    sku: orderItem.sku,
+                                    price: 0,
+                                    quantity: totalQuantity
+                                }
+                            ]);
                         }
                         else {
                             setOrderItems([]);
@@ -137,6 +147,18 @@ function ProductDetail(props) {
             setIsSidebarOpen(true)
         }
     }, [canActiveModal, isModalOpen, isSidebarOpen]);
+
+    useEffect(() => {
+        addGoogleAnalyticsEventToDataLayer("view_item", [
+            {
+                id: props.productId,
+                name: props.title,
+                sku: props.sku,
+                price: 0,
+                quantity: totalQuantity
+            }
+        ]);
+    }, []);
 
     const handleShowMoreImages = () => {
         if (showMoreImages) {
