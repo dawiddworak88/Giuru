@@ -1,24 +1,4 @@
-const generateItemId = (item, language) => {
-    let name = "B2B_";
-
-    if (language) {
-        name += `${language}_`;
-    }
-
-    if (item.primaryProductId) {
-        name += `${item.primaryProductId}_`;
-    }
-
-    if (item.variantId) {
-        name += `${item.variantId}`;
-    }
-
-    return name;
-}
-    
-
 export const addGoogleAnalyticsEventToDataLayer = (
-    language,
     event,
     items
 ) => {
@@ -32,11 +12,11 @@ export const addGoogleAnalyticsEventToDataLayer = (
                 currency: '',
                 value: 0,
                 items: items.map((item) => ({
-                    item_id: generateItemId(item, language),
-                    item_name: item.productName,
+                    item_id: item.id,
+                    item_name: item.name,
                     item_brand: '',
                     item_category: '',
-                    item_variant: item.productName,
+                    item_variant: item.sku,
                     price: item.price,
                     quantity: item.quantity,
                 }))

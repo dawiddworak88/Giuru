@@ -149,16 +149,15 @@ function Catalog(props) {
                             setOrderItems(jsonResponse.items);
                             setIsModalOpen(false);
 
-                            addGoogleAnalyticsEventToDataLayer(
-                                "en", //Add langauge to dataLayer
-                                "add_to_cart",
-                                jsonResponse.items.map((item) => ({
-                                    variantId: item.productId,
-                                    productName: item.name,
+                            addGoogleAnalyticsEventToDataLayer("add_to_cart", [
+                                {
+                                    id: orderItem.productId,
+                                    name: orderItem.name,
+                                    sku: orderItem.sku,
                                     price: 0,
                                     quantity: totalQuantity
-                                }))
-                            );
+                                }
+                            ]);
                         }
                         else {
                             setOrderItems([]);
