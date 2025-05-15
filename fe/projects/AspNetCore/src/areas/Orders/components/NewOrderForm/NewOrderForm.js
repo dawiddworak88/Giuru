@@ -127,7 +127,6 @@ function NewOrderForm(props) {
             moreInfo
         };
 
-        const totalQuantity = parseInt(orderItem.quantity) + parseInt(orderItem.stockQuantity) + parseInt(orderItem.outletQuantity);
         const basket = {
             id: basketId,
             items: [...orderItems, orderItem]
@@ -164,7 +163,7 @@ function NewOrderForm(props) {
                                     name: orderItem.name,
                                     sku: orderItem.sku,
                                     price: 0,
-                                    quantity: totalQuantity
+                                    quantity: getTotalQuantities(orderItem)
                                 }
                             ]);
                         }
