@@ -56,7 +56,7 @@ const DownloadCenterFiles = (props) => {
         setSelectedFiles([]);
     }
 
-    const handleDownloadFiles = checkedFiles => {
+    const handleDownloadFiles = async checkedFiles => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         let filesToDownload = files;
@@ -70,21 +70,51 @@ const DownloadCenterFiles = (props) => {
             const filename = `${props.filesLabel}-${moment().local().toISOString()}`;
             const folder = zip.folder(`${filename}`);
 
-            for(let i = 0; i < filesToDownload.length; i++) {
-                const blobPromise = fetch(filesToDownload[i].url).then((r) => {
-                    if (r.status === ResponseStatusConstants.ok()) {
-                        return r.blob();
-                    }
+            try {
+                // Fetch all blobs with error handling
+                const blobResults = await Promise.all(
+                    filesToDownload.map(async (file) => {
+                        try {
+                            const r = await fetch(file.url);
+                            if (r.status === ResponseStatusConstants.ok()) {
+                                const blob = await r.blob();
+                                return { file, blob };
+                            } else {
+                                return { file, error: r.statusText };
+                            }
+                        } catch (err) {
+                            return { file, error: err.message };
+                        }
+                    })
+                );
 
-                    return Promise.reject(new Error(r.statusText));
+                let anyError = false;
+                blobResults.forEach(({ file, blob, error }) => {
+                    if (blob) {
+                        folder.file(file.filename, blob);
+                    } else {
+                        anyError = true;
+                    }
                 });
 
-                folder.file(filesToDownload[i].filename, blobPromise);
-            }
+                if (folder && Object.keys(folder.files).length === 0) {
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
+                    toast.error("Nie udało się pobrać żadnego pliku do archiwum ZIP.");
+                    return;
+                }
 
-            zip.generateAsync({ type: "blob" })
-                .then((blob) => saveAs(blob, `${filename}.zip`))
-                .then(() => dispatch({ type: "SET_IS_LOADING", payload: false }));
+                zip.generateAsync({ type: "blob" })
+                    .then(blob => saveAs(blob, `${filename}.zip`))
+                    .then(() => {
+                        dispatch({ type: "SET_IS_LOADING", payload: false });
+                        if (anyError) {
+                            toast.warn("Niektóre pliki nie zostały pobrane i nie znalazły się w archiwum ZIP.");
+                        }
+                    });
+            } catch (error) {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            }
         }
     }
 
