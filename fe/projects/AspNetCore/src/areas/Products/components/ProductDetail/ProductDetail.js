@@ -16,6 +16,7 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ProductDetailModal from "../ProductDetailModal/ProductDetailModal";
+import { addGoogleAnalyticsEventToDataLayer } from "../../../../shared/helpers/globals/GoogleEventToDataLayerHelper";
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
