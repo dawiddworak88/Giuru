@@ -71,16 +71,15 @@ const DownloadCenterFiles = (props) => {
             const folder = zip.folder(`${filename}`);
 
             try {
-                // Fetch all blobs with error handling
                 const blobResults = await Promise.all(
                     filesToDownload.map(async (file) => {
                         try {
-                            const r = await fetch(file.url);
-                            if (r.status === ResponseStatusConstants.ok()) {
-                                const blob = await r.blob();
+                            const response = await fetch(file.url);
+                            if (response.status === ResponseStatusConstants.ok()) {
+                                const blob = await response.blob();
                                 return { file, blob };
                             } else {
-                                return { file, error: r.statusText };
+                                return { file, error: response.statusText };
                             }
                         } catch (err) {
                             return { file, error: err.message };
@@ -88,18 +87,18 @@ const DownloadCenterFiles = (props) => {
                     })
                 );
 
-                let anyError = false;
+                let hasAnyError = false;
                 blobResults.forEach(({ file, blob, error }) => {
                     if (blob) {
                         folder.file(file.filename, blob);
                     } else {
-                        anyError = true;
+                        hasAnyError = true;
                     }
                 });
 
                 if (folder && Object.keys(folder.files).length === 0) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
-                    toast.error("Nie udało się pobrać żadnego pliku do archiwum ZIP.");
+                    toast.error(props.noFilesDownloadedMessage);  
                     return;
                 }
 
@@ -107,8 +106,8 @@ const DownloadCenterFiles = (props) => {
                     .then(blob => saveAs(blob, `${filename}.zip`))
                     .then(() => {
                         dispatch({ type: "SET_IS_LOADING", payload: false });
-                        if (anyError) {
-                            toast.warn("Niektóre pliki nie zostały pobrane i nie znalazły się w archiwum ZIP.");
+                        if (hasAnyError) {
+                            toast.warn(props.someFilesNotDownloadedMessage);
                         }
                     });
             } catch (error) {
