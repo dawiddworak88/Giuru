@@ -114,6 +114,9 @@ function Catalog(props) {
             quantity: quantity,
             stockQuantity: stockQuantity,
             outletQuantity: outletQuantity,
+            unitPrice: productVariant.price ? productVariant.price.current : null,
+            price: productVariant.price ? productVariant.price.current * totalQuantity : null,
+            currency: productVariant.price ? productVariant.price.currency : null,
             externalReference: item.externalReference,
             moreInfo: item.moreInfo
         };

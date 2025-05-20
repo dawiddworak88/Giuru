@@ -13,6 +13,6 @@ namespace Buyer.Web.Areas.Products.Services.Products
         Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token);
         Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes);
         string GetSleepAreaSize(IEnumerable<ProductAttribute> attributes);
-        string GetFirstAvailableAttributeValue(IEnumerable<ProductAttribute> attributes, params string[] possibleKeys);
+        string GetFirstAvailableAttributeValue(IEnumerable<ProductAttribute> attributes, string possibleKeys);
     }
 }

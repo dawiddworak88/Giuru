@@ -40,12 +40,10 @@ namespace Buyer.Web.Shared.Services.Prices
                 return null;
             }
 
-            var priceDrivers = CreatePriceDrivers(product, client);
-
             var requestModel = new GetPriceRequestModel
             {
                 EnvironmentId = _options.Value.GrulaEnvironmentId,
-                PriceDrivers = priceDrivers,
+                PriceDrivers = CreatePriceDrivers(product, client),
                 CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
                 PricingDate = pricingDate
             };
@@ -57,20 +55,27 @@ namespace Buyer.Web.Shared.Services.Prices
                 EndpointAddress = $"{_options.Value.GrulaUrl}{ApiConstants.Grula.PriceApiEndpoint}"
             };
 
-            var response = await _apiClientService.PostAsync<ApiRequest<PriceRequestModel>, PriceRequestModel, PriceResponseModel>(apiRequest);
-
-            if (response.IsSuccessStatusCode && response.Data != null)
+            try
             {
-                if (response.Data.Amount is null)
-                {
-                    return null;
-                }
+                var response = await _apiClientService.PostAsync<ApiRequest<PriceRequestModel>, PriceRequestModel, PriceResponseModel>(apiRequest);
 
-                return new Price
+                if (response.IsSuccessStatusCode && response.Data != null)
                 {
-                    CurrentPrice = response.Data.Amount.Amount,
-                    CurrencyCode = response.Data.Amount.CurrencyThreeLetterCode,
-                };
+                    if (response.Data.Amount is null)
+                    {
+                        return null;
+                    }
+
+                    return new Price
+                    {
+                        CurrentPrice = response.Data.Amount.Amount,
+                        CurrencyCode = response.Data.Amount.CurrencyThreeLetterCode,
+                    };
+                }
+            }
+            catch
+            {
+                return default;
             }
 
             return default;
@@ -95,11 +100,9 @@ namespace Buyer.Web.Shared.Services.Prices
                     continue;
                 }
 
-                var priceDrivers = CreatePriceDrivers(product, client);
-
                 var priceRequest = new PriceRequestModel
                 {
-                    PriceDrivers = priceDrivers,
+                    PriceDrivers = CreatePriceDrivers(product, client),
                     CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
                     PricingDate = pricingDate
                 };
@@ -120,30 +123,37 @@ namespace Buyer.Web.Shared.Services.Prices
                 EndpointAddress = $"{_options.Value.GrulaUrl}{ApiConstants.Grula.PricesApiEndpoint}"
             };
 
-            var response = await _apiClientService.PostAsync<ApiRequest<GetPricesRequestModel>, GetPricesRequestModel, IEnumerable<PriceResponseModel>>(apiRequest);
-
-            if (response.IsSuccessStatusCode && response.Data != null)
+            try
             {
-                foreach (var priceResponse in response.Data)
+                var response = await _apiClientService.PostAsync<ApiRequest<GetPricesRequestModel>, GetPricesRequestModel, IEnumerable<PriceResponseModel>>(apiRequest);
+
+                if (response.IsSuccessStatusCode && response.Data != null)
                 {
-                    if (priceResponse is not null &&
-                        priceResponse.Amount is not null)
+                    foreach (var priceResponse in response.Data)
                     {
-                        var price = new Price
+                        if (priceResponse is not null &&
+                            priceResponse.Amount is not null)
                         {
-                            CurrentPrice = priceResponse.Amount.Amount,
-                            CurrencyCode = priceResponse.Amount.CurrencyThreeLetterCode
-                        };
+                            var price = new Price
+                            {
+                                CurrentPrice = priceResponse.Amount.Amount,
+                                CurrencyCode = priceResponse.Amount.CurrencyThreeLetterCode
+                            };
 
-                        prices.Add(price);
+                            prices.Add(price);
+                        }
+                        else
+                        {
+                            prices.Add(null);
+                        }
                     }
-                    else
-                    {
-                        prices.Add(null);
-                    }
+
+                    return prices;
                 }
-
-                return prices;
+            }
+            catch
+            {
+                return Enumerable.Empty<Price>();
             }
 
             return default;

@@ -102,6 +102,8 @@ function NewOrderForm(props) {
     const handleAddOrderItemClick = () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        const totalQuantity = parseInt(quantity) + parseInt(stockQuantity) + parseInt(outletQuantity);
+
         const orderItem = {
             productId: product.id,
             sku: product.sku,
@@ -110,6 +112,9 @@ function NewOrderForm(props) {
             quantity: quantity ? quantity : 0,
             stockQuantity: stockQuantity ? stockQuantity : 0,
             outletQuantity: outletQuantity ? outletQuantity : 0,
+            unitPrice: product.price,
+            price: product.price * totalQuantity,
+            currency: product.currency,
             externalReference,
             moreInfo
         };
@@ -501,6 +506,9 @@ function NewOrderForm(props) {
                                                     <TableCell className="has-text-weight-bold">{props.inTotalLabel}</TableCell>
                                                     <TableCell>{props.externalReferenceLabel}</TableCell>
                                                     <TableCell>{props.moreInfoLabel}</TableCell>
+                                                    <TableCell>{props.unitPriceLabel}</TableCell>
+                                                    <TableCell>{props.priceLabel}</TableCell>
+                                                    <TableCell>{props.currencyLabel}</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
@@ -522,6 +530,9 @@ function NewOrderForm(props) {
                                                         <TableCell className="has-text-weight-bold">{getTotalQuantities(item)}</TableCell>
                                                         <TableCell>{item.externalReference}</TableCell>
                                                         <TableCell>{item.moreInfo}</TableCell>
+                                                        <TableCell>{item.unitPrice}</TableCell>
+                                                        <TableCell>{item.price}</TableCell>
+                                                        <TableCell>{item.currency}</TableCell>
                                                     </TableRow>
                                                 ))}
                                             </TableBody>

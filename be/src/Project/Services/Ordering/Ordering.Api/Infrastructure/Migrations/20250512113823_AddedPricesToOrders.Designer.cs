@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ordering.Api.Infrastructure;
 
@@ -11,9 +12,11 @@ using Ordering.Api.Infrastructure;
 namespace Ordering.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(OrderingContext))]
-    partial class OrderingContextModelSnapshot : ModelSnapshot
+    [Migration("20250512113823_AddedPricesToOrders")]
+    partial class AddedPricesToOrders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,7 +68,7 @@ namespace Ordering.Api.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ClientName")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -140,12 +143,6 @@ namespace Ordering.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IsActive", "ClientName");
-
-                    b.HasIndex("IsActive", "SellerId", "CreatedDate");
-
-                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("IsActive", "SellerId", "CreatedDate"), new[] { "ClientName", "OrderStatusId", "OrderStateId" });
-
                     b.ToTable("Orders");
                 });
 
@@ -179,10 +176,6 @@ namespace Ordering.Api.Infrastructure.Migrations
                         .HasColumnType("rowversion");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId", "IsActive");
-
-                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("OrderId", "IsActive"), new[] { "MediaId" });
 
                     b.ToTable("OrderAttachments");
                 });
@@ -295,9 +288,7 @@ namespace Ordering.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId", "IsActive");
-
-                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("OrderId", "IsActive"), new[] { "ProductId", "ExternalReference", "LastOrderItemStatusChangeId" });
+                    b.HasIndex("OrderId");
 
                     b.ToTable("OrderItems");
                 });
@@ -353,7 +344,7 @@ namespace Ordering.Api.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Language")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
@@ -374,10 +365,6 @@ namespace Ordering.Api.Infrastructure.Migrations
 
                     b.HasIndex("OrderItemStatusChangeId")
                         .IsUnique();
-
-                    b.HasIndex("OrderItemStatusChangeId", "Language", "IsActive");
-
-                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("OrderItemStatusChangeId", "Language", "IsActive"), new[] { "OrderItemStatusChangeComment" });
 
                     b.ToTable("OrderItemStatusChangesCommentTranslations");
                 });
@@ -454,7 +441,7 @@ namespace Ordering.Api.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Language")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
@@ -472,9 +459,7 @@ namespace Ordering.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderStatusId", "Language", "IsActive");
-
-                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("OrderStatusId", "Language", "IsActive"), new[] { "Name" });
+                    b.HasIndex("OrderStatusId");
 
                     b.ToTable("OrderStatusTranslations");
                 });

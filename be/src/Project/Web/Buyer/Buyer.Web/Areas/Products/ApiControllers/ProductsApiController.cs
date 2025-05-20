@@ -155,7 +155,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         {
                             PrimarySku = x.PrimaryProductSku,
                             FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
+                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
                             SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes)
                         }),
                         new PriceClient
@@ -329,6 +329,31 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
             if (products.Data.Any())
             {
+                var prices = Enumerable.Empty<Price>();
+
+                if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                {
+                    prices = await _priceService.GetPrices(
+                        _options.Value.GrulaAccessToken,
+                        DateTime.UtcNow,
+                        products.Data.Select(x => new PriceProduct
+                        {
+                            PrimarySku = x.PrimaryProductSku,
+                            FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
+                            SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes)
+                        }),
+                        new PriceClient
+                        {
+                            Name = User.Identity?.Name,
+                            CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
+                            ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
+                            PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
+                            Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
+                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
+                        });
+                }
+
                 var inventories = await _inventoryRepository.GetAvailbleProductsByProductIdsAsync(
                     token,
                     language,
@@ -339,18 +364,45 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     language,
                     products.Data.Select(x => x.Id));
 
-                return StatusCode((int)HttpStatusCode.OK, products.Data.Select(x => new ProductQuantitiesResponseModel
+                var productsQuantities = new List<ProductQuantitiesResponseModel>();
+
+                for (int i = 0; i < products.Data.Count(); i++)
                 {
-                    Id = x.Id,
-                    Sku = x.Sku,
-                    Name = x.Name,
-                    Images = x.Images,
-                    StockQuantity = inventories.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity ?? 0,
-                    OutletQuantity = outlets.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity ?? 0,
-                }));
+                    var product = products.Data.ElementAtOrDefault(i);
+
+                    if (product is null)
+                    {
+                        continue;
+                    }
+
+                    var productQuantity = new ProductQuantitiesResponseModel
+                    {
+                        Id = product.Id,
+                        Sku = product.Sku,
+                        Name = product.Name,
+                        Images = product.Images,
+                        StockQuantity = inventories.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
+                        OutletQuantity = outlets.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
+                    };
+
+                    if (prices.Any())
+                    {
+                        var price = prices.ElementAtOrDefault(i);
+
+                        if (price is not null)
+                        {
+                            productQuantity.Price = price.CurrentPrice;
+                            productQuantity.Currency = price.CurrencyCode;
+                        }
+                    }
+
+                    productsQuantities.Add(productQuantity);
+                }
+
+                return StatusCode((int)HttpStatusCode.OK, productsQuantities);
             }
 
-            return StatusCode((int)HttpStatusCode.OK, products.Data);
+            return StatusCode((int)HttpStatusCode.OK, Enumerable.Empty<ProductQuantitiesResponseModel>());
         }
     } 
 }
