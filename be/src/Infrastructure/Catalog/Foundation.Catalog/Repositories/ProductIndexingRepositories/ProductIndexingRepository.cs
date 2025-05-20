@@ -149,14 +149,16 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                             {
                                 var formDataObject = JObject.Parse(productTranslations.FormData);
 
-                                var formDataProperties = formDataObject.Children();
+                                var categorySchemaObject = JObject.Parse(categorySchema.Schema);
+                                var formDataProperties = categorySchemaObject["properties"]
+                                    .Children<JProperty>()
+                                    .Select(p => formDataObject.Property(p.Name))
+                                    .Where(p => p != null);
 
                                 var productAttributes = new Dictionary<string, object>();
 
                                 foreach (JProperty formDataProperty in formDataProperties)
                                 {
-                                    var categorySchemaObject = JObject.Parse(categorySchema.Schema);
-
                                     if (categorySchemaObject != null)
                                     {
                                         string key = formDataProperty.Name;
