@@ -91,6 +91,11 @@ namespace Buyer.Web.Shared.Middlewares
 
             var claimsToCache = new List<Claim>();
 
+            var clientIdClaim = new Claim(ClaimsEnrichmentConstants.ClientIdClaimType, client.Id.ToString());
+
+            claimsIdentity.AddClaim(clientIdClaim);
+            claimsToCache.Add(clientIdClaim);
+
             if (client.PreferedCurrencyId.HasValue)
             {
                 var currencies = await _globalRepository.GetCurrenciesAsync(token, _options.Value.DefaultCulture, null);
