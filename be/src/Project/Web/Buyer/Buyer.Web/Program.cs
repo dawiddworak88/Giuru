@@ -73,11 +73,18 @@ builder.Services.AddDataProtection().UseCryptographicAlgorithms(
         ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
     }).PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(builder.Configuration["RedisUrl"]), $"{Assembly.GetExecutingAssembly().GetName().Name}-DataProtection-Keys");
 
-builder.Services.AddStackExchangeRedisCache(options =>
+if (builder.Configuration.GetValue<bool>("IntegrationTestsEnabled"))
 {
-    options.Configuration = builder.Configuration["RedisUrl"];
-    options.InstanceName = $"{Assembly.GetExecutingAssembly().GetName().Name}-Cache";
-});
+    builder.Services.AddDistributedMemoryCache();
+}
+else
+{
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = builder.Configuration["RedisUrl"];
+        options.InstanceName = $"{Assembly.GetExecutingAssembly().GetName().Name}-Cache";
+    });
+}
 
 builder.Services.AddRazorPages();
 

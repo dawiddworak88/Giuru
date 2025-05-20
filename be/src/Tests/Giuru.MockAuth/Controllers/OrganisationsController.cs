@@ -26,5 +26,11 @@ namespace Giuru.MockAuth.Controllers
                 Id = Guid.Parse(_configuration.GetValue<string>("OrganisationId"))
             });
         }
+
+        [HttpGet("{email}")]
+        public IActionResult Get()
+        {
+            return StatusCode((int)HttpStatusCode.NoContent);
+        }
     }
 }
