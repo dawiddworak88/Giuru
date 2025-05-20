@@ -24,6 +24,7 @@ namespace Buyer.Web.Shared.Configurations
         public string ProductAttributes { get; set; }
         public string GoogleTagManagerIdentifier { get; set; }
         public string MakeComplaintUrl { get; set; }
+        public string EnablePricesForClients { get; set; }
         public string PossibleExtraPackingAttributeKeys { get; set; }
         public string PossiblePriceGroupAttributeKeys { get; set; }
         public string PossibleSleepAreaWidthAttributeKeys { get; set; }
