@@ -9,6 +9,7 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Shared.Services.Prices
@@ -33,7 +34,8 @@ namespace Buyer.Web.Shared.Services.Prices
             PriceClient client)
         {
             if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
-                string.IsNullOrWhiteSpace(product.FabricsGroup))
+                string.IsNullOrWhiteSpace(product.FabricsGroup) ||
+                !CanSeePrice(client?.Id))
             {
                 return null;
             }
@@ -86,7 +88,8 @@ namespace Buyer.Web.Shared.Services.Prices
             foreach (var product in products)
             {
                 if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
-                    string.IsNullOrWhiteSpace(product.FabricsGroup))
+                    string.IsNullOrWhiteSpace(product.FabricsGroup) ||
+                    !CanSeePrice(client?.Id))
                 {
                     prices.Add(null);
                     continue;
@@ -145,6 +148,20 @@ namespace Buyer.Web.Shared.Services.Prices
 
             return default;
         }
+
+        private bool CanSeePrice(Guid? priceClientId)
+        {
+            if (!priceClientId.HasValue || 
+                string.IsNullOrWhiteSpace(_options.Value.EnablePricesForClients))
+            {
+                return false;
+            }
+
+            var allowedClients = _options.Value.EnablePricesForClients.Split('&');
+            
+            return allowedClients.Contains(priceClientId.ToString());
+        }
+
 
         private List<PriceDriverRequestModel> CreatePriceDrivers(PriceProduct product, PriceClient client)
         {

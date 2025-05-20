@@ -103,6 +103,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                             }),
                             new PriceClient
                             {
+                                Id = componentModel.ClientId,
                                 Name = componentModel.Name,
                                 CurrencyCode = componentModel.CurrencyCode,
                                 ExtraPacking = componentModel.ExtraPacking,

@@ -2,6 +2,7 @@
 {
     public static class ClaimsEnrichmentConstants
     {
+        public static readonly string ClientIdClaimType = "ClientId";
         public static readonly string PaletteLoadingClaimType = "PaletteLoading";
         public static readonly string ExtraPackingClaimType = "ExtraPacking";
         public static readonly string CountryClaimType = "Country";
