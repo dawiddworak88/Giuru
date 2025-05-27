@@ -10,6 +10,7 @@
         public const string ClientCountryDriver = "Client Country";
         public const string ClientExtraPackingDriver = "Client Extra Packing";
         public const string PaletteLoadingDriver = "Palette Loading";
+        public const string PaletteSizeDriver = "Palette Size";
         public const string DeliveryAddressDriver = "Delivery Address";
     }
 }

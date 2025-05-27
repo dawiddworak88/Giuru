@@ -207,6 +207,15 @@ namespace Buyer.Web.Shared.Services.Prices
                 });
             }
 
+            if (!string.IsNullOrWhiteSpace(product.PaletteSize))
+            {
+                priceDrivers.Add(new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.PaletteSizeDriver,
+                    Value = product.PaletteSize
+                });
+            }
+
             if (client is not null)
             {
                 if (!string.IsNullOrWhiteSpace(client.Name))

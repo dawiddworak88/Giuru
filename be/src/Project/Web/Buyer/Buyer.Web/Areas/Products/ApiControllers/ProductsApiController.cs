@@ -156,7 +156,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             PrimarySku = x.PrimaryProductSku,
                             FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                             ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
-                            SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes)
+                            SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
+                            PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys)
                         }),
                         new PriceClient
                         {
@@ -165,7 +166,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                             PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
                             Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
+                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
                         });
                 }
 
@@ -341,7 +342,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             PrimarySku = x.PrimaryProductSku,
                             FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                             ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
-                            SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes)
+                            SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
+                            PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys)
                         }),
                         new PriceClient
                         {
@@ -350,7 +352,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                             PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
                             Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
+                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
                         });
                 }
 

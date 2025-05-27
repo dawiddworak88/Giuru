@@ -29,6 +29,7 @@ namespace Buyer.Web.Shared.Configurations
         public string PossiblePriceGroupAttributeKeys { get; set; }
         public string PossibleSleepAreaWidthAttributeKeys { get; set; }
         public string PossibleSleepAreaDepthAttributeKeys { get; set; }
+        public string PossiblePaletteSizeAttributeKeys { get; set; }
         public string DefaultCulture { get; set; }
         public string DefaultCurrency { get; set; }
     }

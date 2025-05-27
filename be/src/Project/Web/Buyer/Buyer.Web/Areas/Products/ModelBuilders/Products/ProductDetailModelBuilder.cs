@@ -141,7 +141,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             PrimarySku = product.PrimaryProductSku,
                             FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                             ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
-                            SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes)
+                            SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
+                            PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys)
                         },
                         new PriceClient
                         {
@@ -268,7 +269,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                    PrimarySku = product.PrimaryProductSku,
                                    FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                                    ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
-                                   SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes)
+                                   SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
+                                   PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys)
                                }),
                                new PriceClient
                                {
