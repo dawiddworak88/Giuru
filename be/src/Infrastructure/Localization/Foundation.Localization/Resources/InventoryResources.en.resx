@@ -166,7 +166,7 @@
     <value>Back to inventory</value>
   </data>
   <data name="NavigateToOutletListText" xml:space="preserve">
-    <value>Zurück zum Ausgang</value>
+    <value>Return to outlet</value>
   </data>
   <data name="NavigateToWarehouseListText" xml:space="preserve">
     <value>Back to warehouses</value>
