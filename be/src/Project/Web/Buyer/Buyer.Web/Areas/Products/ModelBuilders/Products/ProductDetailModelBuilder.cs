@@ -265,7 +265,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                DateTime.UtcNow,
                                productVariants.Data.Select(x => new PriceProduct
                                {
-                                   PrimarySku = product.PrimaryProductSku,
+                                   PrimarySku = x.PrimaryProductSku,
                                    FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                                    ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
                                    SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
