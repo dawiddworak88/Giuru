@@ -161,8 +161,12 @@ namespace Buyer.Web.Shared.Services.Prices
 
         private bool CanSeePrice(Guid? priceClientId)
         {
-            if (!priceClientId.HasValue || 
-                string.IsNullOrWhiteSpace(_options.Value.EnablePricesForClients))
+            if (string.IsNullOrWhiteSpace(_options.Value.EnablePricesForClients))
+            {
+                return true;
+            }
+
+            if (!priceClientId.HasValue)
             {
                 return false;
             }

@@ -112,8 +112,8 @@ function NewOrderForm(props) {
             quantity: quantity ? quantity : 0,
             stockQuantity: stockQuantity ? stockQuantity : 0,
             outletQuantity: outletQuantity ? outletQuantity : 0,
-            unitPrice: product.price,
-            price: product.price * totalQuantity,
+            unitPrice: parseFloat(product.price).toFixed(2),
+            price: parseFloat(product.price * totalQuantity).toFixed(2),
             currency: product.currency,
             externalReference,
             moreInfo
