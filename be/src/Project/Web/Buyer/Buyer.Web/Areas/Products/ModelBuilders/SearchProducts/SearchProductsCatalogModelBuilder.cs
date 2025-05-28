@@ -106,7 +106,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             PrimarySku = x.PrimaryProductSku,
                             FabricsGroup = x.FabricsGroup,
                             SleepAreaSize = x.SleepAreaSize,
-                            ExtraPacking = x.ExtraPacking
+                            ExtraPacking = x.ExtraPacking,
+                            PaletteSize = x.PaletteSize
                         }),
                         new PriceClient
                         {
