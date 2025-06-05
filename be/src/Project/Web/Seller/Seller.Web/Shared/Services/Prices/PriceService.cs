@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Shared.Services
+namespace Seller.Web.Shared.Services.Prices
 {
     public class PriceService : IPriceService
     {
@@ -28,9 +28,9 @@ namespace Seller.Web.Shared.Services
         }
 
         public async Task<IEnumerable<Price>> GetPrices(
-            string token, 
-            DateTime pricingDate, 
-            IEnumerable<PriceProduct> products, 
+            string token,
+            DateTime pricingDate,
+            IEnumerable<PriceProduct> products,
             PriceClient client)
         {
             var priceRequests = new List<PriceRequestModel>();

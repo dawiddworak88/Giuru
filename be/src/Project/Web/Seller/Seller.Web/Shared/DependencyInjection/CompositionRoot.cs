@@ -23,6 +23,8 @@ using Foundation.PageContent.ComponentModels;
 using Seller.Web.Shared.ModelBuilders.OrderItemStatusChanges;
 using Seller.Web.Shared.ModelBuilders.Dialogs;
 using Seller.Web.Areas.Shared.Repositories.UserApprovals;
+using Seller.Web.Shared.Services.Prices;
+using Seller.Web.Shared.Services.Products;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -36,6 +38,9 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IIdentityRepository, IdentityRepository>();
             services.AddScoped<IUserApprovalsRepository, UserApprovalsRepository>();
+
+            services.AddScoped<IPriceService, PriceService>();
+            services.AddScoped<IProductsService, ProductsService>();
 
             services.AddScoped<IModelBuilder<MenuTilesViewModel>, MenuTilesModelBuilder>();
             services.AddScoped<IModelBuilder<IEnumerable<DrawerMenuViewModel>>, DrawerMenuModelBuilder>();

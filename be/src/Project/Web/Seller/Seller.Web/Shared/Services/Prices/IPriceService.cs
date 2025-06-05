@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Shared.Services
+namespace Seller.Web.Shared.Services.Prices
 {
     public interface IPriceService
     {
