@@ -14,6 +14,9 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public double Quantity { get; set; }
         public double StockQuantity { get; set; }
         public double OutletQuantity { get; set; }
+        public decimal? UnitPrice { get; set; }
+        public decimal? Price { get; set; }
+        public string Currency { get; set; }
         public string ExternalReference { get; set; }
         public string OrderItemStatusName { get; set; }
         public string ExpectedDateOfProductOnStock { get; set; }

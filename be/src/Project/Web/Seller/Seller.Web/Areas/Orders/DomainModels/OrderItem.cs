@@ -15,6 +15,9 @@ namespace Seller.Web.Areas.Orders.DomainModels
         public double OutletQuantity { get; set; }
         public string ExternalReference { get; set; }
         public string MoreInfo { get; set; }
+        public decimal? UnitPrice { get; set; }
+        public decimal? Price { get; set; }
+        public string Currency { get; set; }
         public Guid? OrderItemStatusId { get; set; }
         public Guid? LastOrderItemStatusChangeId { get; set; }
         public string OrderItemStatusName { get; set; }
