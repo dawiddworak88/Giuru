@@ -112,6 +112,7 @@ namespace Buyer.Web.Shared.Services.Prices
             }
 
             Console.WriteLine(JsonConvert.SerializeObject(priceRequests));
+            Console.WriteLine($"CanSee Price? {CanSeePrice(client?.Id)}");
 
             var requestModel = new GetPricesRequestModel
             {
