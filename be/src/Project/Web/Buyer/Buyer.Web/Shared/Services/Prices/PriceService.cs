@@ -88,14 +88,19 @@ namespace Buyer.Web.Shared.Services.Prices
             IEnumerable<PriceProduct> products,
             PriceClient client)
         {
+            if (!CanSeePrice(client?.Id)) {
+                Console.WriteLine("Nie moge");
+
+                return Enumerable.Empty<Price>(); 
+            }
+
             var priceRequests = new List<PriceRequestModel>();
             var prices = new List<Price>();
 
             foreach (var product in products)
             {
                 if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
-                    string.IsNullOrWhiteSpace(product.FabricsGroup) ||
-                    !CanSeePrice(client?.Id))
+                    string.IsNullOrWhiteSpace(product.FabricsGroup))
                 {
                     prices.Add(null);
                     continue;
@@ -112,7 +117,6 @@ namespace Buyer.Web.Shared.Services.Prices
             }
 
             Console.WriteLine(JsonConvert.SerializeObject(priceRequests));
-            Console.WriteLine($"CanSee Price? {CanSeePrice(client?.Id)}");
 
             var requestModel = new GetPricesRequestModel
             {
