@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,7 +25,7 @@ namespace Buyer.Web.Shared.Middlewares
         private readonly IGlobalRepository _globalRepository;
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
         private readonly IOptions<AppSettings> _options;
-        private readonly IDistributedCache _cache;
+        private readonly IDatabase _cache;
 
         public ClaimsEnrichmentMiddleware(
             IClientsRepository clientsRepository,
@@ -31,7 +33,7 @@ namespace Buyer.Web.Shared.Middlewares
             IGlobalRepository globalRepository,
             IClientFieldValuesRepository clientFieldValuesRepository,
             IOptions<AppSettings> options,
-            IDistributedCache cache)
+            IDatabase cache)
         {
             _clientsRepository = clientsRepository;
             _clientAddressesRepository = clientAddressesRepository;
@@ -58,16 +60,13 @@ namespace Buyer.Web.Shared.Middlewares
             }
 
             var cacheKey = $"{ClaimsEnrichmentConstants.CacheKey}-{email}";
-            var cachedClaims = await _cache.GetStringAsync(cacheKey);
+            var cachedClaims = await _cache.StringGetAsync(cacheKey);
 
             var claimsIdentity = (ClaimsIdentity)context.User.Identity;
 
-            if (!string.IsNullOrWhiteSpace(cachedClaims))
+            if (!cachedClaims.IsNullOrEmpty)
             {
-                var claims = cachedClaims
-                    .Split('|')
-                    .Select(x => x.Split(':'))
-                    .ToDictionary(x => x[0], x => x[1]);
+                var claims = JsonConvert.DeserializeObject<IEnumerable<Test>>(cachedClaims);
 
                 foreach (var claim in claims)
                 {
@@ -78,8 +77,6 @@ namespace Buyer.Web.Shared.Middlewares
                 return;
             }
 
-            var innerStopwatch = Stopwatch.StartNew();
-
             var token = await context.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var client = await _clientsRepository.GetClientByEmailAsync(token, _options.Value.DefaultCulture, email);
 
@@ -89,12 +86,16 @@ namespace Buyer.Web.Shared.Middlewares
                 return;
             }
 
-            var claimsToCache = new List<Claim>();
+            var claimsToCache = new List<Test>()
+            {
+                new Test
+                {
+                    Key = ClaimsEnrichmentConstants.ClientIdClaimType,
+                    Value = client.Id.ToString()
+                }
+            };
 
-            var clientIdClaim = new Claim(ClaimsEnrichmentConstants.ClientIdClaimType, client.Id.ToString());
-
-            claimsIdentity.AddClaim(clientIdClaim);
-            claimsToCache.Add(clientIdClaim);
+            /*claimsIdentity.AddClaim(clientIdClaim);
 
             if (client.PreferedCurrencyId.HasValue)
             {
@@ -161,16 +162,19 @@ namespace Buyer.Web.Shared.Middlewares
                     claimsIdentity.AddClaim(paletteLoadingClaim);
                     claimsToCache.Add(paletteLoadingClaim);
                 }
-            }
+            }*/
 
-            var claimsToCacheString = string.Join("|", claimsToCache.Select(x => $"{x.Type}:{x.Value}"));
+            var claimsToCaches = JsonConvert.SerializeObject(claimsToCache);
 
-            await _cache.SetStringAsync(cacheKey, claimsToCacheString, new DistributedCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30)
-            });
+            await _cache.StringSetAsync(cacheKey, claimsToCaches, TimeSpan.FromMinutes(30));
 
             await next(context);
+        }
+
+        private class Test
+        {
+            public string Key { get; set; }
+            public string Value { get; set; }
         }
     }
 }
