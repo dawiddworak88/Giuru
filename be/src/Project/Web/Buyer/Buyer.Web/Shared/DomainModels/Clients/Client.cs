@@ -11,6 +11,7 @@ namespace Buyer.Web.Shared.DomainModels.Clients
         public string CommunicationLanguage { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
         public Guid? DefaultBillingAddressId { get; set; }
+        public Guid? CountryId { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }
