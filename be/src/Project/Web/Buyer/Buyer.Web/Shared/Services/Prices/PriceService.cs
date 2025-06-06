@@ -89,8 +89,6 @@ namespace Buyer.Web.Shared.Services.Prices
             PriceClient client)
         {
             if (!CanSeePrice(client?.Id)) {
-                Console.WriteLine("Nie moge");
-
                 return Enumerable.Empty<Price>(); 
             }
 
@@ -115,8 +113,6 @@ namespace Buyer.Web.Shared.Services.Prices
 
                 priceRequests.Add(priceRequest);
             }
-
-            Console.WriteLine(JsonConvert.SerializeObject(priceRequests));
 
             var requestModel = new GetPricesRequestModel
             {
