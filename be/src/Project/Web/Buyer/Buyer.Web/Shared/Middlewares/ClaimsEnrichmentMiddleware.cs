@@ -84,6 +84,8 @@ namespace Buyer.Web.Shared.Middlewares
             var token = await context.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var client = await _clientsRepository.GetClientByEmailAsync(token, _options.Value.DefaultCulture, email);
 
+            Console.WriteLine($"Client: {client?.Id} - {client?.Email}");
+
             if (client is null)
             {
                 await next(context);
