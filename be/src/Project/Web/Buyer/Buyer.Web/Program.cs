@@ -73,7 +73,7 @@ builder.Services.AddDataProtection().UseCryptographicAlgorithms(
         ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
     }).PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(builder.Configuration["RedisUrl"]), $"{Assembly.GetExecutingAssembly().GetName().Name}-DataProtection-Keys");
 
-if (builder.Configuration.GetValue<bool>("IntegrationTestsEnabled"))
+if (builder.Configuration.GetValue<bool>("IntegrationTestsEnabled") is true)
 {
     builder.Services.AddDistributedMemoryCache();
 }
