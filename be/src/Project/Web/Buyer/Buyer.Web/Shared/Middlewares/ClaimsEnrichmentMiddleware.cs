@@ -63,6 +63,9 @@ namespace Buyer.Web.Shared.Middlewares
             var cacheKey = $"{ClaimsEnrichmentConstants.CacheKey}-{email}";
             var cachedClaims = await _cache.GetStringAsync(cacheKey);
 
+            Console.WriteLine($"Cache key: {cacheKey}");
+            Console.WriteLine(cachedClaims);
+
             var claimsIdentity = (ClaimsIdentity)context.User.Identity;
 
             if (!string.IsNullOrWhiteSpace(cachedClaims))
@@ -198,8 +201,6 @@ namespace Buyer.Web.Shared.Middlewares
                     claimsToCache.Add(paletteLoadingClaim);
                 }
             }
-
-            Console.WriteLine(JsonConvert.SerializeObject(claimsToCache));
 
             await _cache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(claimsToCache), new DistributedCacheEntryOptions
             {
