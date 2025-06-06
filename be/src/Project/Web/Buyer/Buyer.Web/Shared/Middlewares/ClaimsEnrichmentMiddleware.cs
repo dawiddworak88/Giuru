@@ -199,6 +199,8 @@ namespace Buyer.Web.Shared.Middlewares
                 }
             }
 
+            Console.WriteLine(JsonConvert.SerializeObject(claimsToCache));
+
             await _cache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(claimsToCache), new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30)
