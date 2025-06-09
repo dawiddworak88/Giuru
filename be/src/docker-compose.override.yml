@@ -426,6 +426,9 @@ services:
       - DownloadCenterUrl=http://downloadcenter-api:8080
       - GlobalUrl=http://global-api:8080
       - AnalyticsUrl=http://analytics-api:8080
+      - GrulaUrl=https://api.grula.net
+      - GrulaAccessToken=${GRULA_ACCESS_TOKEN}
+      - GrulaEnvironmentId=${GRULA_ENVIRONMENT_ID}
       - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105

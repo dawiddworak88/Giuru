@@ -1,19 +1,19 @@
-﻿using Buyer.Web.Shared.ApiRequestModels.Price;
-using Buyer.Web.Shared.ApiResponseModels;
-using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Definitions.Prices;
-using Buyer.Web.Shared.DomainModels.Prices;
-using Foundation.ApiExtensions.Communications;
+﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Seller.Web.Shared.ApiRequestModels;
+using Seller.Web.Shared.ApiResponseModels;
+using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.Definitions;
+using Seller.Web.Shared.DomainModels.Prices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Shared.Services.Prices
+namespace Seller.Web.Shared.Services.Prices
 {
     public class PriceService : IPriceService
     {
@@ -31,72 +31,12 @@ namespace Buyer.Web.Shared.Services.Prices
             _logger = logger;
         }
 
-        public async Task<Price> GetPrice(
-            string token,
-            DateTime pricingDate,
-            PriceProduct product,
-            PriceClient client)
-        {
-            if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
-                string.IsNullOrWhiteSpace(product.FabricsGroup) ||
-                !CanSeePrice(client?.Id))
-            {
-                return null;
-            }
-
-            var requestModel = new GetPriceRequestModel
-            {
-                EnvironmentId = _options.Value.GrulaEnvironmentId,
-                PriceDrivers = CreatePriceDrivers(product, client),
-                CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
-                PricingDate = pricingDate
-            };
-
-            var apiRequest = new ApiRequest<PriceRequestModel>
-            {
-                Data = requestModel,
-                AccessToken = token,
-                EndpointAddress = $"{_options.Value.GrulaUrl}{ApiConstants.Grula.PriceApiEndpoint}"
-            };
-
-            try
-            {
-                var response = await _apiClientService.PostAsync<ApiRequest<PriceRequestModel>, PriceRequestModel, PriceResponseModel>(apiRequest);
-
-                if (response.IsSuccessStatusCode && response.Data != null)
-                {
-                    if (response.Data.Amount is null)
-                    {
-                        return null;
-                    }
-
-                    return new Price
-                    {
-                        CurrentPrice = response.Data.Amount.Amount,
-                        CurrencyCode = response.Data.Amount.CurrencyThreeLetterCode,
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error while fetching price for product {product?.PrimarySku} for client {client?.Id} from the Grula API.");
-
-                return default;
-            }
-
-            return default;
-        }
-
         public async Task<IEnumerable<Price>> GetPrices(
             string token,
             DateTime pricingDate,
             IEnumerable<PriceProduct> products,
             PriceClient client)
         {
-            if (!CanSeePrice(client?.Id)) {
-                return Enumerable.Empty<Price>(); 
-            }
-
             var priceRequests = new List<PriceRequestModel>();
             var prices = new List<Price>();
 
@@ -169,24 +109,6 @@ namespace Buyer.Web.Shared.Services.Prices
 
             return default;
         }
-
-        private bool CanSeePrice(Guid? priceClientId)
-        {
-            if (string.IsNullOrWhiteSpace(_options.Value.EnablePricesForClients))
-            {
-                return true;
-            }
-
-            if (!priceClientId.HasValue)
-            {
-                return false;
-            }
-
-            var allowedClients = _options.Value.EnablePricesForClients.Split('&');
-            
-            return allowedClients.Contains(priceClientId.ToString());
-        }
-
 
         private List<PriceDriverRequestModel> CreatePriceDrivers(PriceProduct product, PriceClient client)
         {

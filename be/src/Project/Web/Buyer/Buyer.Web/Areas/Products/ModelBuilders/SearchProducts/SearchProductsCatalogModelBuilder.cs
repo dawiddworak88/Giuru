@@ -111,7 +111,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         }),
                         new PriceClient
                         {
-
                             Id = componentModel.ClientId,
                             Name = componentModel.Name,
                             CurrencyCode = componentModel.CurrencyCode,

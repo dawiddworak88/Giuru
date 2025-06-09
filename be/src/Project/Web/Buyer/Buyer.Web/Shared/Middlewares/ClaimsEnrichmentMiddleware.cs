@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -64,10 +64,7 @@ namespace Buyer.Web.Shared.Middlewares
 
             if (!string.IsNullOrWhiteSpace(cachedClaims))
             {
-                var claims = cachedClaims
-                    .Split('|')
-                    .Select(x => x.Split(':'))
-                    .ToDictionary(x => x[0], x => x[1]);
+                var claims = JsonConvert.DeserializeObject<IEnumerable<CachedClaim>>(cachedClaims);
 
                 foreach (var claim in claims)
                 {
@@ -78,8 +75,6 @@ namespace Buyer.Web.Shared.Middlewares
                 return;
             }
 
-            var innerStopwatch = Stopwatch.StartNew();
-
             var token = await context.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var client = await _clientsRepository.GetClientByEmailAsync(token, _options.Value.DefaultCulture, email);
 
@@ -89,12 +84,14 @@ namespace Buyer.Web.Shared.Middlewares
                 return;
             }
 
-            var claimsToCache = new List<Claim>();
-
-            var clientIdClaim = new Claim(ClaimsEnrichmentConstants.ClientIdClaimType, client.Id.ToString());
-
-            claimsIdentity.AddClaim(clientIdClaim);
-            claimsToCache.Add(clientIdClaim);
+            var claimsToCache = new List<CachedClaim>()
+            {
+                new CachedClaim
+                {
+                    Key = ClaimsEnrichmentConstants.ClientIdClaimType,
+                    Value = client.Id.ToString()
+                }
+            };
 
             if (client.PreferedCurrencyId.HasValue)
             {
@@ -106,33 +103,59 @@ namespace Buyer.Web.Shared.Middlewares
 
                     if (currency is not null)
                     {
-                        var currencyClaim = new Claim(ClaimsEnrichmentConstants.CurrencyClaimType, currency.CurrencyCode);
-                        
-                        claimsIdentity.AddClaim(currencyClaim);
+                        claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.CurrencyClaimType, currency.CurrencyCode));
+
+                        var currencyClaim = new CachedClaim
+                        {
+                            Key = ClaimsEnrichmentConstants.CurrencyClaimType,
+                            Value = currency.CurrencyCode
+                        };
+
                         claimsToCache.Add(currencyClaim);
                     }
                 }
             }
 
-            var address = await _clientAddressesRepository.GetAsync(token, _options.Value.DefaultCulture, client.DefaultDeliveryAddressId);
+            var countries = await _globalRepository.GetCountriesAsync(token, _options.Value.DefaultCulture, null);
 
-            if (address is not null)
+            if (countries is not null)
             {
-                var countries = await _globalRepository.GetCountriesAsync(token, _options.Value.DefaultCulture, null);
+                var clientDeliveryAddress = await _clientAddressesRepository.GetAsync(token, _options.Value.DefaultCulture, client.DefaultDeliveryAddressId);
 
-                if (countries.Any())
+                if (clientDeliveryAddress is not null)
                 {
-                    var country = countries.FirstOrDefault(c => c.Id == address.CountryId);
+                    var deliveryCountry = countries.FirstOrDefault(c => c.Id == clientDeliveryAddress.CountryId);
 
-                    if (country != null)
+                    if (deliveryCountry is not null)
                     {
-                        var zipClaim = new Claim(ClaimsEnrichmentConstants.ZipCodeClaimType, $"{address.PostCode} ({address.City}, {country.Name})");
-                        var countryClaim = new Claim(ClaimsEnrichmentConstants.CountryClaimType, country.Name);
+                        var deliveryAddress = $"{clientDeliveryAddress.PostCode} ({clientDeliveryAddress.City}, {deliveryCountry.Name})";
 
-                        claimsIdentity.AddClaim(zipClaim);
-                        claimsIdentity.AddClaim(countryClaim);
+                        claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.ZipCodeClaimType, deliveryAddress));
 
-                        claimsToCache.Add(zipClaim);
+                        var deliveryZipCodeClaim = new CachedClaim
+                        {
+                            Key = ClaimsEnrichmentConstants.ZipCodeClaimType,
+                            Value = deliveryAddress
+                        };
+
+                        claimsToCache.Add(deliveryZipCodeClaim);
+                    }
+                }
+
+                if (client.CountryId.HasValue)
+                {
+                    var clientCountry = countries.FirstOrDefault(c => c.Id == client.CountryId);
+
+                    if (clientCountry is not null)
+                    {
+                        claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.CountryClaimType, clientCountry.Name));
+
+                        var countryClaim = new CachedClaim
+                        {
+                            Key = ClaimsEnrichmentConstants.CountryClaimType,
+                            Value = clientCountry.Name
+                        };
+
                         claimsToCache.Add(countryClaim);
                     }
                 }
@@ -146,9 +169,14 @@ namespace Buyer.Web.Shared.Middlewares
 
                 if (extraPackingField is not null)
                 {
-                    var extraPackingClaim = new Claim(ClaimsEnrichmentConstants.ExtraPackingClaimType, extraPackingField.FieldValue);
+                    claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.ExtraPackingClaimType, extraPackingField.FieldValue));
 
-                    claimsIdentity.AddClaim(extraPackingClaim);
+                    var extraPackingClaim = new CachedClaim
+                    {
+                        Key = ClaimsEnrichmentConstants.ExtraPackingClaimType,
+                        Value = extraPackingField.FieldValue
+                    };
+
                     claimsToCache.Add(extraPackingClaim);
                 }
 
@@ -156,21 +184,30 @@ namespace Buyer.Web.Shared.Middlewares
 
                 if (paletteLoading is not null)
                 {
-                    var paletteLoadingClaim = new Claim(ClaimsEnrichmentConstants.PaletteLoadingClaimType, paletteLoading.FieldValue);
+                    claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.PaletteLoadingClaimType, paletteLoading.FieldValue));
 
-                    claimsIdentity.AddClaim(paletteLoadingClaim);
+                    var paletteLoadingClaim = new CachedClaim
+                    {
+                        Key = ClaimsEnrichmentConstants.PaletteLoadingClaimType,
+                        Value = paletteLoading.FieldValue
+                    };
+
                     claimsToCache.Add(paletteLoadingClaim);
                 }
             }
 
-            var claimsToCacheString = string.Join("|", claimsToCache.Select(x => $"{x.Type}:{x.Value}"));
-
-            await _cache.SetStringAsync(cacheKey, claimsToCacheString, new DistributedCacheEntryOptions
+            await _cache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(claimsToCache), new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30)
             });
 
             await next(context);
+        }
+
+        private class CachedClaim
+        {
+            public string Key { get; set; }
+            public string Value { get; set; }
         }
     }
 }
