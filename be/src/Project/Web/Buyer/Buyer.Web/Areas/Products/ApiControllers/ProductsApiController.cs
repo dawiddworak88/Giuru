@@ -157,7 +157,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                             ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
                             SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
-                            PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys)
+                            PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                            IsOutlet = (availableOutletProducts.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                         }),
                         new PriceClient
                         {
@@ -331,6 +332,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
             if (products.Data.Any())
             {
+                var outletItems = await _outletRepository.GetOutletProductsByProductsIdAsync(token, language, products.Data.Select(x => x.Id));
+
                 var prices = Enumerable.Empty<Price>();
 
                 if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
@@ -344,7 +347,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                             ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
                             SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
-                            PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys)
+                            PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                            IsOutlet = (outletItems.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                         }),
                         new PriceClient
                         {

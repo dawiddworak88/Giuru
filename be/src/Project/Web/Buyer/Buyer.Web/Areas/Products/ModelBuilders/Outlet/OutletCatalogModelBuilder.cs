@@ -24,6 +24,7 @@ using Buyer.Web.Shared.DomainModels.Prices;
 using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ComponentModels;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders
 {
@@ -100,7 +101,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 FabricsGroup = x.FabricsGroup,
                                 SleepAreaSize = x.SleepAreaSize,
                                 ExtraPacking = x.ExtraPacking,
-                                PaletteSize = x.PaletteSize
+                                PaletteSize = x.PaletteSize,
+                                IsOutlet = (outletItems.Data.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                             }),
                             new PriceClient
                             {

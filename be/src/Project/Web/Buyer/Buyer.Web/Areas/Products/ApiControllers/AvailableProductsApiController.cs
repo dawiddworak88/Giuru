@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Products.Repositories.Inventories;
+﻿using Buyer.Web.Areas.Products.Repositories;
+using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
@@ -8,6 +9,7 @@ using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -28,17 +30,20 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IInventoryRepository inventoryRepository;
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
+        private readonly IOutletRepository _outletRepository;
 
         public AvailableProductsApiController(
             IProductsService productsService,
             IInventoryRepository inventoryRepository,
             IPriceService priceService,
-            IOptions<AppSettings> options)
+            IOptions<AppSettings> options,
+            IOutletRepository outletRepository)
         {
             this.productsService = productsService;
             this.inventoryRepository = inventoryRepository;
             _options = options;
             _priceService = priceService;
+            _outletRepository = outletRepository;
         }
 
         [HttpGet]
@@ -63,6 +68,11 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     itemsPerPage,
                     await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName));
 
+                var outletItems = await _outletRepository.GetOutletProductsByProductsIdAsync(
+                        await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                        CultureInfo.CurrentUICulture.Name,
+                        inventories.Data.Select(x => x.ProductId));
+
                 if (products is not null)
                 {
                     var prices = Enumerable.Empty<Price>();
@@ -78,7 +88,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                                 FabricsGroup = x.FabricsGroup,
                                 ExtraPacking = x.ExtraPacking,
                                 SleepAreaSize = x.SleepAreaSize,
-                                PaletteSize = x.PaletteSize
+                                PaletteSize = x.PaletteSize,
+                                IsOutlet = (outletItems.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                             }),
                             new PriceClient
                             {

@@ -153,6 +153,15 @@ namespace Seller.Web.Shared.Services.Prices
                 });
             }
 
+            if (!string.IsNullOrWhiteSpace(product.IsOutlet))
+            {
+                priceDrivers.Add(new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.OutletDriver,
+                    Value = product.IsOutlet
+                });
+            }
+
             if (client is not null)
             {
                 if (!string.IsNullOrWhiteSpace(client.Name))

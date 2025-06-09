@@ -8,6 +8,7 @@ using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -69,7 +70,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                                 FabricsGroup = x.FabricsGroup,
                                 ExtraPacking = x.ExtraPacking,
                                 SleepAreaSize = x.SleepAreaSize,
-                                PaletteSize = x.PaletteSize
+                                PaletteSize = x.PaletteSize,
+                                IsOutlet = (outletItems.Data.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                             }),
                             new PriceClient
                             {
