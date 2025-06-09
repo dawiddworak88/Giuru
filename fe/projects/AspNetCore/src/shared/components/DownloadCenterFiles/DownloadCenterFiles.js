@@ -56,7 +56,7 @@ const DownloadCenterFiles = (props) => {
         setSelectedFiles([]);
     }
 
-    const handleDownloadFiles = checkedFiles => {
+    const handleDownloadFiles = async checkedFiles => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         let filesToDownload = files;
@@ -70,21 +70,50 @@ const DownloadCenterFiles = (props) => {
             const filename = `${props.filesLabel}-${moment().local().toISOString()}`;
             const folder = zip.folder(`${filename}`);
 
-            for(let i = 0; i < filesToDownload.length; i++) {
-                const blobPromise = fetch(filesToDownload[i].url).then((r) => {
-                    if (r.status === ResponseStatusConstants.ok()) {
-                        return r.blob();
-                    }
+            try {
+                const blobResults = await Promise.all(
+                    filesToDownload.map(async (file) => {
+                        try {
+                            const response = await fetch(file.url);
+                            if (response.status === ResponseStatusConstants.ok()) {
+                                const blob = await response.blob();
+                                return { file, blob };
+                            } else {
+                                return { file, error: response.statusText };
+                            }
+                        } catch (err) {
+                            return { file, error: err.message };
+                        }
+                    })
+                );
 
-                    return Promise.reject(new Error(r.statusText));
+                let hasAnyError = false;
+                blobResults.forEach(({ file, blob, error }) => {
+                    if (blob) {
+                        folder.file(file.filename, blob);
+                    } else {
+                        hasAnyError = true;
+                    }
                 });
 
-                folder.file(filesToDownload[i].filename, blobPromise);
-            }
+                if (folder && Object.keys(folder.files).length === 0) {
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
+                    toast.error(props.noFilesDownloadedMessage);  
+                    return;
+                }
 
-            zip.generateAsync({ type: "blob" })
-                .then((blob) => saveAs(blob, `${filename}.zip`))
-                .then(() => dispatch({ type: "SET_IS_LOADING", payload: false }));
+                zip.generateAsync({ type: "blob" })
+                    .then(blob => saveAs(blob, `${filename}.zip`))
+                    .then(() => {
+                        dispatch({ type: "SET_IS_LOADING", payload: false });
+                        if (hasAnyError) {
+                            toast.warn(props.someFilesNotDownloadedMessage);
+                        }
+                    });
+            } catch (error) {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            }
         }
     }
 
