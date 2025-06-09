@@ -25,6 +25,7 @@ using Seller.Web.Shared.ModelBuilders.Dialogs;
 using Seller.Web.Areas.Shared.Repositories.UserApprovals;
 using Seller.Web.Shared.Services.Prices;
 using Seller.Web.Shared.Services.Products;
+using Foundation.Extensions.Services.Claims;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -51,6 +52,8 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel>, OrderItemStatusChangesModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, QRCodeDialogViewModel>, QRCodeDialogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel>, HeaderModelBuilder>();
+
+            services.AddScoped<IClaimsCacheInvalidatorService, ClaimsCacheInvalidatorService>();
         }
     }
 }
