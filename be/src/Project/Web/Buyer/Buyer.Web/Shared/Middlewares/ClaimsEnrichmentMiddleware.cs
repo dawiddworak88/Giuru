@@ -204,9 +204,6 @@ namespace Buyer.Web.Shared.Middlewares
             await next(context);
         }
 
-        //Change this class name to something more meaningful if needed
-        // This class is used to serialize claims for caching purposes.
-
         private class CachedClaim
         {
             public string Key { get; set; }
