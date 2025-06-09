@@ -26,10 +26,10 @@ using Seller.Web.Areas.Global.Repositories;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
 using Seller.Web.Areas.Global.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
-using System.Text.RegularExpressions;
 using Seller.Web.Shared.Services.Prices;
 using Seller.Web.Shared.Services.Products;
 using System.Collections.Generic;
+using Seller.Web.Shared.Definitions;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
@@ -173,11 +173,16 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
                 if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                 {
-                    var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture, clientId);
-
                     var countries = await _countriesRepository.GetAsync(token, _options.Value.DefaultCulture, $"{nameof(Country.CreatedDate)} desc");
 
-                    var clientCountryName = countries.FirstOrDefault(c => c.Id == client?.CountryId)?.Name;
+                    var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture, clientId);
+
+                    string clientCountryName = null;
+
+                    if (client.CountryId.HasValue)
+                    {
+                        clientCountryName = countries.FirstOrDefault(c => c.Id == client.CountryId)?.Name;
+                    }
 
                     string deliveryZipCode = null;
 
@@ -215,8 +220,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                         {
                             Name = client?.Name,
                             CurrencyCode = currency?.CurrencyCode,
-                            ExtraPacking = clientFieldValues.FirstOrDefault(x => x.FieldName == "Extra Packing")?.FieldValue,
-                            PaletteLoading = clientFieldValues.FirstOrDefault(x => x.FieldName == "Palette Loading")?.FieldValue,
+                            ExtraPacking = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.ExtraPackingClientFieldName)?.FieldValue,
+                            PaletteLoading = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.PaletteLoadingClientFieldName)?.FieldValue,
                             Country = clientCountryName,
                             DeliveryZipCode = deliveryZipCode
                         });
