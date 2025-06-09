@@ -183,7 +183,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
                     if (client.DefaultDeliveryAddressId.HasValue)
                     {
-                        var clientAddress = await _clientAddressesRepository.GetAsync(token, _options.Value.DefaultCulture, clientId);
+                        var clientAddress = await _clientAddressesRepository.GetAsync(token, _options.Value.DefaultCulture, client.DefaultDeliveryAddressId);
 
                         if (clientAddress is not null)
                         {
