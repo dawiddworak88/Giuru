@@ -82,7 +82,6 @@ else
     builder.Services.AddStackExchangeRedisCache(options =>
     {
         options.Configuration = builder.Configuration["RedisUrl"];
-        options.InstanceName = $"{Assembly.GetExecutingAssembly().GetName().Name}-Cache";
     });
 }
 

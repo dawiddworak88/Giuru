@@ -64,7 +64,7 @@ namespace Buyer.Web.Shared.Middlewares
 
             if (!string.IsNullOrWhiteSpace(cachedClaims))
             {
-                var claims = JsonConvert.DeserializeObject<IEnumerable<Test>>(cachedClaims);
+                var claims = JsonConvert.DeserializeObject<IEnumerable<CachedClaim>>(cachedClaims);
 
                 foreach (var claim in claims)
                 {
@@ -84,9 +84,9 @@ namespace Buyer.Web.Shared.Middlewares
                 return;
             }
 
-            var claimsToCache = new List<Test>()
+            var claimsToCache = new List<CachedClaim>()
             {
-                new Test
+                new CachedClaim
                 {
                     Key = ClaimsEnrichmentConstants.ClientIdClaimType,
                     Value = client.Id.ToString()
@@ -105,7 +105,7 @@ namespace Buyer.Web.Shared.Middlewares
                     {
                         claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.CurrencyClaimType, currency.CurrencyCode));
 
-                        var currencyClaim = new Test
+                        var currencyClaim = new CachedClaim
                         {
                             Key = ClaimsEnrichmentConstants.CurrencyClaimType,
                             Value = currency.CurrencyCode
@@ -132,7 +132,7 @@ namespace Buyer.Web.Shared.Middlewares
 
                         claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.ZipCodeClaimType, deliveryAddress));
 
-                        var deliveryZipCodeClaim = new Test
+                        var deliveryZipCodeClaim = new CachedClaim
                         {
                             Key = ClaimsEnrichmentConstants.ZipCodeClaimType,
                             Value = deliveryAddress
@@ -150,7 +150,7 @@ namespace Buyer.Web.Shared.Middlewares
                     {
                         claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.CountryClaimType, clientCountry.Name));
 
-                        var countryClaim = new Test
+                        var countryClaim = new CachedClaim
                         {
                             Key = ClaimsEnrichmentConstants.CountryClaimType,
                             Value = clientCountry.Name
@@ -171,7 +171,7 @@ namespace Buyer.Web.Shared.Middlewares
                 {
                     claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.ExtraPackingClaimType, extraPackingField.FieldValue));
 
-                    var extraPackingClaim = new Test
+                    var extraPackingClaim = new CachedClaim
                     {
                         Key = ClaimsEnrichmentConstants.ExtraPackingClaimType,
                         Value = extraPackingField.FieldValue
@@ -186,7 +186,7 @@ namespace Buyer.Web.Shared.Middlewares
                 {
                     claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.PaletteLoadingClaimType, paletteLoading.FieldValue));
 
-                    var paletteLoadingClaim = new Test
+                    var paletteLoadingClaim = new CachedClaim
                     {
                         Key = ClaimsEnrichmentConstants.PaletteLoadingClaimType,
                         Value = paletteLoading.FieldValue
@@ -204,7 +204,10 @@ namespace Buyer.Web.Shared.Middlewares
             await next(context);
         }
 
-        private class Test
+        //Change this class name to something more meaningful if needed
+        // This class is used to serialize claims for caching purposes.
+
+        private class CachedClaim
         {
             public string Key { get; set; }
             public string Value { get; set; }
