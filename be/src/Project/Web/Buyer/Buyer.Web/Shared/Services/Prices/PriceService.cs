@@ -6,6 +6,7 @@ using Buyer.Web.Shared.DomainModels.Prices;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
@@ -19,13 +20,16 @@ namespace Buyer.Web.Shared.Services.Prices
     {
         private readonly IApiClientService _apiClientService;
         private readonly IOptions<AppSettings> _options;
+        private readonly ILogger<PriceService> _logger;
 
         public PriceService(
             IApiClientService apiClientService,
-            IOptions<AppSettings> options)
+            IOptions<AppSettings> options
+            ILogger<PriceService> logger)
         {
             _apiClientService = apiClientService;
             _options = options;
+            _logger = logger;
         }
 
         public async Task<Price> GetPrice(
@@ -74,8 +78,10 @@ namespace Buyer.Web.Shared.Services.Prices
                     };
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error while fetching price for product {product?.PrimarySku} for client {client?.Id} from the Grula API.");
+
                 return default;
             }
 
@@ -155,8 +161,10 @@ namespace Buyer.Web.Shared.Services.Prices
                     return prices;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error while fetching prices from the Grula API.");
+
                 return Enumerable.Empty<Price>();
             }
 
