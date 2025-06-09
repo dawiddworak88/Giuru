@@ -69,8 +69,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         {
             var viewModel = _searchProductsCatalogModelBuilder.BuildModel(componentModel);
 
-            Console.WriteLine(componentModel.ClientId);
-
             viewModel.Title = componentModel.SearchTerm;
             viewModel.Sidebar = await _sidebarModelBuilder.BuildModelAsync(componentModel);
             viewModel.Modal = await _modalModelBuilder.BuildModelAsync(componentModel);

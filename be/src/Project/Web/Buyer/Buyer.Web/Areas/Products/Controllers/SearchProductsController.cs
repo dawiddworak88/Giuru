@@ -25,10 +25,6 @@ namespace Buyer.Web.Areas.Products.Controllers
 
         public async Task<IActionResult> Index(string searchTerm)
         {
-            Console.WriteLine("SearchProductsController");
-            Console.WriteLine(this.User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value);
-
-
             var componentModel = new SearchProductsComponentModel
             {
                 ContentPageKey = "searchProductsPage",

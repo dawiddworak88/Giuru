@@ -1,6 +1,5 @@
 ﻿using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Middlewares;
-using Buyer.Web.Shared.DomainModels.Global;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Global;
 using Foundation.ApiExtensions.Definitions;
@@ -9,10 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -63,9 +60,6 @@ namespace Buyer.Web.Shared.Middlewares
             var cacheKey = $"{ClaimsEnrichmentConstants.CacheKey}-{email}";
             var cachedClaims = await _cache.GetStringAsync(cacheKey);
 
-            Console.WriteLine($"Cache key: {cacheKey}");
-            Console.WriteLine(cachedClaims);
-
             var claimsIdentity = (ClaimsIdentity)context.User.Identity;
 
             if (!string.IsNullOrWhiteSpace(cachedClaims))
@@ -83,8 +77,6 @@ namespace Buyer.Web.Shared.Middlewares
 
             var token = await context.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var client = await _clientsRepository.GetClientByEmailAsync(token, _options.Value.DefaultCulture, email);
-
-            Console.WriteLine($"Client: {client?.Id} - {client?.Email}");
 
             if (client is null)
             {
