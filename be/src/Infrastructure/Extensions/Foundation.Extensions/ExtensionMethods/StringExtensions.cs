@@ -35,5 +35,20 @@ namespace Foundation.Extensions.ExtensionMethods
             }
             return str;
         }
+
+        public static string ToYesOrNo(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return string.Empty;
+            }
+
+            if (bool.TryParse(value, out bool result))
+            {
+                return result ? "Yes" : "No";
+            }
+
+            return "No";
+        }   
     }
 }
