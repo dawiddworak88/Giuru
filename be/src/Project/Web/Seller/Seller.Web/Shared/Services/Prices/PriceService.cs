@@ -55,6 +55,8 @@ namespace Seller.Web.Shared.Services.Prices
                 priceRequests.Add(priceRequest);
             }
 
+            Console.WriteLine($"Price requests: {priceRequests}");
+
             var requestModel = new GetPricesRequestModel
             {
                 EnvironmentId = _options.Value.GrulaEnvironmentId,
