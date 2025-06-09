@@ -44,6 +44,9 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string DeliveryAddressLabel { get; set; }
         public string BillingAddressLabel { get; set; }
         public string MaximalLabel { get; set; }
+        public string UnitPriceLabel { get; set; }
+        public string PriceLabel { get; set; }
+        public string CurrencyLabel { get; set; }
         public string GetClientAddressesUrl { get; set; }
         public int DefaultItemsPerPage { get; set; }
     }

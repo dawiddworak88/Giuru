@@ -93,7 +93,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 MaximalLabel = _globalLocalizer.GetString("MaximalLabel"),
                 UnitPriceLabel = _globalLocalizer.GetString("UnitPrice"),
                 PriceLabel = _globalLocalizer.GetString("Price"),
-                CurrencyLabel = _globalLocalizer.GetString("Currency"),
+                CurrencyLabel = _globalLocalizer.GetString("Currency")
             };
 
             if (componentModel.BasketId.HasValue)
