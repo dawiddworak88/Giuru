@@ -7,5 +7,6 @@
         public string SleepAreaSize { get; set; }
         public string ExtraPacking { get; set; }
         public string PaletteSize { get; set; }
+        public string IsOutlet { get; set; }
     }
 }

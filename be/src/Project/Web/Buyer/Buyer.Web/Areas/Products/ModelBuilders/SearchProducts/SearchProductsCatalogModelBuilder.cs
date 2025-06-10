@@ -12,6 +12,7 @@ using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -107,7 +108,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             FabricsGroup = x.FabricsGroup,
                             SleepAreaSize = x.SleepAreaSize,
                             ExtraPacking = x.ExtraPacking,
-                            PaletteSize = x.PaletteSize
+                            PaletteSize = x.PaletteSize,
+                            IsOutlet = (outletItems.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                         }),
                         new PriceClient
                         {

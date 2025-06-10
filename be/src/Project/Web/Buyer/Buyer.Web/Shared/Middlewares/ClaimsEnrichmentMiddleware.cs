@@ -3,6 +3,7 @@ using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Global;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.ExtensionMethods;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
@@ -169,12 +170,12 @@ namespace Buyer.Web.Shared.Middlewares
 
                 if (extraPackingField is not null)
                 {
-                    claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.ExtraPackingClaimType, extraPackingField.FieldValue));
+                    claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.ExtraPackingClaimType, extraPackingField.FieldValue.ToYesOrNo()));
 
                     var extraPackingClaim = new CachedClaim
                     {
                         Key = ClaimsEnrichmentConstants.ExtraPackingClaimType,
-                        Value = extraPackingField.FieldValue
+                        Value = extraPackingField.FieldValue.ToYesOrNo()
                     };
 
                     claimsToCache.Add(extraPackingClaim);
@@ -184,12 +185,12 @@ namespace Buyer.Web.Shared.Middlewares
 
                 if (paletteLoading is not null)
                 {
-                    claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.PaletteLoadingClaimType, paletteLoading.FieldValue));
+                    claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.PaletteLoadingClaimType, paletteLoading.FieldValue.ToYesOrNo()));
 
                     var paletteLoadingClaim = new CachedClaim
                     {
                         Key = ClaimsEnrichmentConstants.PaletteLoadingClaimType,
-                        Value = paletteLoading.FieldValue
+                        Value = paletteLoading.FieldValue.ToYesOrNo()
                     };
 
                     claimsToCache.Add(paletteLoadingClaim);

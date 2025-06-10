@@ -31,6 +31,7 @@ using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Areas.Products.Repositories;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -40,6 +41,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> _sidebarModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> _modalModelBuilder;
         private readonly IProductsRepository _productsRepository;
+        private readonly IOutletRepository _outletRepository;
         private readonly IStringLocalizer<InventoryResources> _inventoryResources;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<OrderResources> _orderResources;
@@ -57,6 +59,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
             IProductsRepository productsRepository,
+            IOutletRepository outletRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             IStringLocalizer<InventoryResources> inventoryResources,
@@ -73,6 +76,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _productsRepository = productsRepository;
             _globalLocalizer = globalLocalizer;
             _productLocalizer = productLocalizer;
+            _outletRepository = outletRepository;
             _mediaService = mediaService;
             _sidebarModelBuilder = sidebarModelBuilder;
             _inventoryResources = inventoryResources;
@@ -130,6 +134,16 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 viewModel.IsProductVariant = product.PrimaryProductId.HasValue;
                 viewModel.Features = product.ProductAttributes?.Select(x => new ProductFeatureViewModel { Key = x.Name, Value = string.Join(", ", x.Values.OrEmptyIfNull()) });
 
+                var outlet = await _productsRepository.GetProductOutletAsync(componentModel.Id);
+
+                if (outlet is not null && outlet.AvailableQuantity.HasValue && outlet.AvailableQuantity.Value > 0)
+                {
+                    viewModel.InOutlet = true;
+                    viewModel.OutletTitle = outlet.Title;
+                    viewModel.AvailableOutletQuantity = outlet.AvailableQuantity;
+                    viewModel.ExpectedOutletDelivery = outlet.ExpectedDelivery;
+                }
+
                 if (product.PrimaryProductId.HasValue &&
                     string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                 {
@@ -142,7 +156,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                             ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
                             SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
-                            PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys)
+                            PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                            IsOutlet = (outlet?.AvailableQuantity > 0).ToYesOrNo()
                         },
                         new PriceClient
                         {
@@ -229,16 +244,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     viewModel.RestockableInDaysLabel = _inventoryResources.GetString("RestockableInDaysLabel");
                 }
 
-                var outlet = await _productsRepository.GetProductOutletAsync(componentModel.Id);
-
-                if (outlet is not null && outlet.AvailableQuantity.HasValue && outlet.AvailableQuantity.Value > 0)
-                {
-                    viewModel.InOutlet = true;
-                    viewModel.OutletTitle = outlet.Title;
-                    viewModel.AvailableOutletQuantity = outlet.AvailableQuantity;
-                    viewModel.ExpectedOutletDelivery = outlet.ExpectedDelivery;
-                }
-
                 if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
                 {
                     var basketItems = await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
@@ -254,6 +259,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                     if (productVariants != null)
                     {
+                        var outletProductVariants = await _outletRepository.GetOutletProductsByProductsIdAsync(componentModel.Token, componentModel.Language, productVariants.Data.Select(x => x.Id));
+
                         var carouselItems = new List<CarouselGridCarouselItemViewModel>();
 
                         var prices = Enumerable.Empty<Price>();
@@ -269,7 +276,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                    FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                                    ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
                                    SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
-                                   PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys)
+                                   PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                                   IsOutlet = (outletProductVariants.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                                }),
                                new PriceClient
                                {

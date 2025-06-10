@@ -12,5 +12,6 @@
         public const string PaletteLoadingDriver = "Palette Loading";
         public const string PaletteSizeDriver = "Palette Size";
         public const string DeliveryAddressDriver = "Delivery Address";
+        public const string OutletDriver = "Outlet";
     }
 }

@@ -23,6 +23,7 @@ using Buyer.Web.Shared.Services.Prices;
 using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ComponentModels;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
@@ -99,7 +100,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                                 FabricsGroup = x.FabricsGroup,
                                 SleepAreaSize = x.SleepAreaSize,
                                 ExtraPacking = x.ExtraPacking,
-                                PaletteSize = x.PaletteSize
+                                PaletteSize = x.PaletteSize,
+                                IsOutlet = outletItems.Data.Any(y => y.ProductId == x.Id).ToYesOrNo()
                             }),
                             new PriceClient
                             {
