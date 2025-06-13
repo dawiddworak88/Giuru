@@ -316,6 +316,7 @@ services:
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - EventBusRequestedHeartbeat=60
+      - MaxAllowedOrderQuantity=1000
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
       - SenderEmail=${SENDER_EMAIL}
@@ -416,6 +417,7 @@ services:
       - ClientId=663bba90-0036-4a58-8516-39faa8baba87
       - ClientSecret=c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9
       - RedisUrl=redis
+      - MaxAllowedOrderQuantity=1000
       - CatalogUrl=http://catalog-api:8080
       - BasketUrl=http://basket-api:8080
       - ClientUrl=http://client-api:8080
@@ -450,6 +452,7 @@ services:
       - CatalogUrl=http://catalog-api:8080
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - MaxAllowedOrderQuantity=1000
       - InventoryUrl=http://inventory-api:8080
       - OrderUrl=http://ordering-api:8080
       - BasketUrl=http://basket-api:8080
