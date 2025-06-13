@@ -795,4 +795,7 @@
   <data name="ClientApprovals" xml:space="preserve">
     <value>Zustimmungen</value>
   </data>
+  <data name="MaxAllowedOrderQuantity" xml:space="preserve">
+    <value>Erlaubte Mengengrenze überschritten</value>
+  </data>
 </root>

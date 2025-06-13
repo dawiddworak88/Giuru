@@ -795,4 +795,7 @@
   <data name="Cards" xml:space="preserve">
     <value>Cards</value>
   </data>
+  <data name="MaxAllowedOrderQuantity" xml:space="preserve">
+    <value>Allowed quantity limit exceeded.</value>
+  </data>
 </root>
