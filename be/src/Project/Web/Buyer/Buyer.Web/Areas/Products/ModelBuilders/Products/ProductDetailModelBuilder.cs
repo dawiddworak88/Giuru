@@ -25,6 +25,8 @@ using Foundation.PageContent.Definitions;
 using Foundation.Media.Services.MediaServices;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Repositories.Media;
+using Microsoft.Extensions.Options;
+using Buyer.Web.Shared.Configurations;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -42,6 +44,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
         private readonly IMediaItemsRepository _mediaItemsRepository;
+        private readonly IOptions<AppSettings> _options;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -55,7 +58,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IMediaService mediaService,
             IBasketService basketService,
             LinkGenerator linkGenerator,
-            IMediaItemsRepository mediaItemsRepository)
+            IMediaItemsRepository mediaItemsRepository,
+            IOptions<AppSettings> options)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -69,6 +73,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _orderResources = orderResources;
             _modalModelBuilder = modalModelBuilder;
             _mediaItemsRepository = mediaItemsRepository;
+            _options = options;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -98,7 +103,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 ReadMoreText = _globalLocalizer.GetString("ReadMore"),
                 ReadLessText = _globalLocalizer.GetString("ReadLess"),
                 SeeMoreText = _globalLocalizer.GetString("SeeMoreText"),
-                SeeLessText = _globalLocalizer.GetString("SeeLessText")
+                SeeLessText = _globalLocalizer.GetString("SeeLessText"),
+                MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
+                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity")
             };
 
             var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);

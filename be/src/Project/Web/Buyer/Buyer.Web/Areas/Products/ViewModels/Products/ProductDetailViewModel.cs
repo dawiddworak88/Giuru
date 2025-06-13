@@ -50,6 +50,8 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string ReadLessText { get; set; }
         public string SeeMoreText { get; set; }
         public string SeeLessText { get; set; }
+        public int MaxAllowedOrderQuantity { get; set; }
+        public string MaxAllowedOrderQuantityErrorMessage { get; set; }
         public SidebarViewModel Sidebar { get; set; }
         public ModalViewModel Modal { get; set; }
         public FilesViewModel Files { get; set; }
