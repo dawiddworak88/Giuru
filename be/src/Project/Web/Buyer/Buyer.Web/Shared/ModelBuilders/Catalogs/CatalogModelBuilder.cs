@@ -32,6 +32,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
             this.linkGenerator = linkGenerator;
             this.basketService = basketService;
             this.inventoryLocalizer = inventoryLocalizer;
+            this.options = options;
         }
 
         public T BuildModel(S componentModel)
