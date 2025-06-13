@@ -102,6 +102,15 @@ function NewOrderForm(props) {
     const handleAddOrderItemClick = () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        const totalQuantity = parseInt(quantity) + parseInt(stockQuantity) + parseInt(outletQuantity);
+
+        if (props.maxAllowedOrderQuantity && 
+           (totalQuantity > props.maxAllowedOrderQuantity)) {
+                toast.error(props.maxAllowedOrderQuantityErrorMessage);
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                return;
+        };
+
         const orderItem = {
             productId: product.id,
             sku: product.sku,

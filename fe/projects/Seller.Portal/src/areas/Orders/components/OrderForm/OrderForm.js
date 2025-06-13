@@ -118,6 +118,15 @@ function OrderForm(props) {
             moreInfo
         };
 
+        const totalQuantity = parseInt(quantity) + parseInt(stockQuantity) + parseInt(outletQuantity);
+
+        if (props.maxAllowedOrderQuantity && 
+           (totalQuantity > props.maxAllowedOrderQuantity)) {
+                toast.error(props.maxAllowedOrderQuantityErrorMessage);
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                return;
+        };
+
         const basket = {
             id: basketId,
             items: [...orderItems, orderItem]

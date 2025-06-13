@@ -105,6 +105,14 @@ function Catalog(props) {
         const outletQuantity = parseInt(item.outletQuantity);
 
         const totalQuantity = quantity + stockQuantity + outletQuantity;
+
+        if (props.maxAllowedOrderQuantity && 
+           (totalQuantity > props.maxAllowedOrderQuantity)) {
+                toast.error(props.maxAllowedOrderQuantityErrorMessage);
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                return;
+        };
+        
         const orderItem = {
             productId: productVariant.id,
             sku: productVariant.subtitle ? productVariant.subtitle : productVariant.sku,
