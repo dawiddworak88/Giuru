@@ -56,7 +56,7 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string DeliveryAddressLabel { get; set; }
         public string BillingAddressLabel { get; set; }
         public string MaximalLabel { get; set; }
-        public int MaxAllowedOrderQuantity { get; set; }
+        public int? MaxAllowedOrderQuantity { get; set; }
         public string MaxAllowedOrderQuantityErrorMessage { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
         public Guid? DefaultBillingAddressId { get; set; }

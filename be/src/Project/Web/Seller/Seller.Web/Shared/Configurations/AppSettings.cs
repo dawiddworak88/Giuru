@@ -17,6 +17,6 @@
         public string GlobalUrl { get; set; }
         public string ContentUrl { get; set; }
         public string AnalyticsUrl { get; set; }
-        public int MaxAllowedOrderQuantity { get; set; }
+        public int? MaxAllowedOrderQuantity { get; set; }
     }
 }

@@ -298,6 +298,7 @@ services:
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - EventBusRequestedHeartbeat=60
+      - MaxAllowedOrderQuantity=1000
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
@@ -316,7 +317,6 @@ services:
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - EventBusRequestedHeartbeat=60
-      - MaxAllowedOrderQuantity=1000
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
       - SenderEmail=${SENDER_EMAIL}
