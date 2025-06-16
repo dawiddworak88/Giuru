@@ -1,0 +1,135 @@
+.filters-collector {
+    font-family: Nunito Sans;
+    width: 100%;
+    padding-bottom: 1.5rem;
+
+    &__total {
+        min-width: fit-content;
+        color: $black-300;
+        font-weight: 400;
+        height: 1.5rem;
+    }
+
+    &__total-mobile {
+        display: none;
+        width: 100%;
+        text-align: center;
+        font-family: Nunito Sans;
+        padding-bottom: 1rem;
+    }
+
+    &__filtres {
+        width: 70%;
+
+        &__select {
+            height: 2.5rem;
+            background-color: $desertstorm;
+
+            &__item {
+
+                &__checkbox {
+                    height: 1.5rem;
+                }
+            }
+        }
+
+        &__button {
+            height: 2.5rem !important;
+            background-color: $desertstorm !important;
+            color: $black-base !important;
+            font-family: Nunito Sans !important;
+        }
+    }
+
+    &__sort {
+        min-width: fit-content;
+        align-items: center;
+        margin-left: auto;
+
+        &__text {
+            font-size: 0.9rem;
+        }
+
+        &__select {
+            color: $primary500 !important;
+            height: 2rem;
+        }
+    }
+
+    &__sidebar {
+        
+    }
+}
+
+.active-filtres {
+
+    &__item {
+        height: 2.25rem !important;
+        background-color: $primary500 !important;
+        color: $white !important;
+        border-radius: 4px !important;
+    }
+
+    &__button {
+        height: 2.25rem !important;
+        border-radius: 0.25rem !important;
+        border: 1px solid $grey-300 !important;
+        background: $black-100 !important;
+        color: $black-base !important;
+        font-family: Nunito Sans !important;
+    }
+}
+
+.MuiMenuItem-root {
+    &:hover {
+        background-color: $white !important;
+    }
+}
+
+.Mui-selected {
+    color: $primary !important;
+    background-color: $white !important;
+
+    &:hover {
+        background-color: $white !important;
+    }
+}
+
+.MuiOutlinedInput-notchedOutline {
+    border: 0 !important;
+    border-style: none !important;
+}
+
+.MuiPaper-root {
+    margin-top: 1.5rem;
+    border-radius: 8px !important;
+}
+
+.MuiChip-label {
+    padding-right: 1rem !important;
+    font-family: Nunito Sans;
+    font-weight: 700;
+}
+
+@media only screen and (max-width: $desktop) {
+    .filters-collector {
+
+        &__filtres__select {
+            display: none !important;
+        }
+    }
+}
+
+@media only screen and (max-width: $tablet) {
+    .filters-collector {
+        padding-bottom: 0.75rem;
+
+        &__total {
+            display: none;
+        }
+
+        &__total-mobile {
+            display: block;
+        }
+    }
+}
