@@ -13,6 +13,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
 import Modal from "../Modal/Modal";
+import FilterCollector from "../Filters/FilterCollector";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -188,7 +189,13 @@ function Catalog(props) {
                 (
                     <div>
                         {total &&
-                            <p className="subtitle is-6">{total} {props.resultsLabel}</p>
+                            <div>
+                                <FilterCollector
+                                    {...props.filterCollector}
+                                    total={total}
+                                    resultsLabel={props.resultsLabel}
+                                />
+                            </div>
                         }
                         <div className="columns is-tablet is-multiline">
                             {items.map((item, index) => {
