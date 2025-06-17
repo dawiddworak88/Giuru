@@ -384,7 +384,9 @@ ProductDetail.propTypes = {
     addedProduct: PropTypes.string,
     eanLabel: PropTypes.string.isRequired,
     readLessText: PropTypes.string.isRequired,
-    readMoreText: PropTypes.string.isRequired
+    readMoreText: PropTypes.string.isRequired,
+    maxAllowedOrderQuantity: PropTypes.number,
+    maxAllowedOrderQuantityErrorMessage: PropTypes.string
 };
 
 export default ProductDetail;

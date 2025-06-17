@@ -339,7 +339,9 @@ Catalog.propTypes = {
     availableQuantity: PropTypes.number,
     showAddToCartButton: PropTypes.bool,
     items: PropTypes.array,
-    sidebar: PropTypes.object
+    sidebar: PropTypes.object,
+    maxAllowedOrderQuantity: PropTypes.number,
+    maxAllowedOrderQuantityErrorMessage: PropTypes.string
 };
 
 export default Catalog;
