@@ -1,41 +1,47 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Button, Checkbox, Chip, Drawer, ListItemText, MenuItem, Select, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, Chip, Drawer, ListItemText, MenuItem, Select, Typography } from "@mui/material";
 import Arrow from "../../Icons/Arrow";
 import { CheckBox, CheckBoxChecked } from "../../Icons/CheckBox";
-import Close from "../../Icons/Close";
+import Remove from "../../Icons/Remove";
 import Filtres from "../../Icons/Filtres";
+import { Close } from "@mui/icons-material";
 
 function FilterCollector(props) {
     const [sortValue, setSortValue] = useState(props.sortItems && props.sortItems.length > 0 ? props.sortItems[0].key : 0)
     const [filters, setFilters] = useState([])
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
-    const handleOnFiltersChange = (event) => {
+    const handleOnSelectFiltersChange = (event) => {
         const {
             target: { value }
         } = event
 
         const newItem = value[value.length - 1]
-        const exists = isFilterSelected(newItem.key, newItem.value)
 
-        if (exists) {
-            setFilters(filters.filter(x => !(x.value === newItem.value && x.key === newItem.key)))
-        } else {
-            setFilters(value)
-        }
+        updateFiltres(newItem.key, newItem.value, newItem.label)
     }
 
+    const handleOnSidebarFilterSet = (key, value, label) => updateFiltres(key, value, label)
+
+    const updateFiltres = (key, value, label) => {
+        if (isFilterSelected(key, value)) {
+            setFilters(filters.filter(x => !(x.value === value && x.key === key)))
+        } else {
+            setFilters(filters.concat({ key, value, label}))
+        }
+    }
+    
+    const isFilterSelected = (key, value) => {
+        return filters.find(x => x.key === key && x.value === value) ? true : false
+    }
+    
     const handleOnDeleteFilter = (indexToRemove) => {
         setFilters(filters.filter((_, index) => index !== indexToRemove))
     }
 
     const handleOnClickClearFiltres = () => {
-        setFilters([]);
-    }
-
-    const isFilterSelected = (key, value) => {
-        return filters.find(x => x.key === key && x.value === value) ? true : false
+        setFilters([])
     }
 
     const handleOnSortChange = (value) => {
@@ -58,7 +64,7 @@ function FilterCollector(props) {
                                 key={index}
                                 multiple displayEmpty
                                 value={filters}
-                                onChange={handleOnFiltersChange}
+                                onChange={handleOnSelectFiltersChange}
                                 MenuProps={{
                                     PaperProps: {
                                         sx: {
@@ -81,10 +87,9 @@ function FilterCollector(props) {
                                         className="filters-collector__filtres__select__item pt-0 pr-4 pb-5 pl-0"
                                         value={{key: item.key, value: variant.value, label: variant.label }}
                                         key={index}
-                                        disableRipple>
+                                    >
                                         <Checkbox
                                             className="filters-collector__filtres__select__item__checkbox"
-                                            disableRipple disableFocusRipple
                                             checked={isFilterSelected(item.key, variant.value)}
                                             icon={<CheckBox />}
                                             checkedIcon={<CheckBoxChecked />} />
@@ -96,14 +101,11 @@ function FilterCollector(props) {
                         <Button
                             className="filters-collector__filtres__button px-4 py-1"
                             onClick={() => setSidebarOpen(true)}
-                            disableRipple
-                            disableFocusRipple
-                            disableTouchRipple
+                            endIcon={<Filtres />}
                         >
-                            <Typography fontWeight={700} className="pr-2">
+                            <Typography fontWeight={700}>
                                 {props.allFiltresLabel}
                             </Typography>
-                            <Filtres />
                         </Button>
                     </div>
                 }
@@ -121,7 +123,6 @@ function FilterCollector(props) {
                                     className="py-2 px-5"
                                     key={index}
                                     value={item.key}
-                                    disableRipple
                                 >
                                     {item.label}    
                                 </MenuItem>
@@ -142,25 +143,74 @@ function FilterCollector(props) {
                         key={index}
                         label={item.label}
                         onDelete={() => handleOnDeleteFilter(index)}
-                        deleteIcon={<Close />} />
+                        deleteIcon={<Remove />} />
                 ))}
                 {filters.length > 1 && 
                     <Button
-                        className="active-filtres__button px-3 py-1 mb-3 has-text-weight-bold"
+                        className="active-filtres__button button-clear px-3 py-1 mb-3 has-text-weight-bold"
                         onClick={handleOnClickClearFiltres}
-                        disableRipple
-                        disableTouchRipple
-                        disableFocusRipple
                     >{props.clearAllFiltresLabel}</Button>
                 }
             </div>
             <Drawer
-                className="filters-collector__sidebar"
                 anchor="right"
                 open={sidebarOpen}
                 onClose={() => setSidebarOpen(false)}
             >
-                <p>To jest sidebar z filtrami</p>
+                <div className="sidebar is-flex is-flex-direction-column">
+                    <div className="is-flex is-justify-content-space-between">
+                        <Typography fontWeight={700} fontSize={20}>
+                            {props.filtresLabel}
+                        </Typography>
+                        <Button
+                            className="sidebar__header__button"
+                            onClick={() => setSidebarOpen(false)}
+                        >
+                            <Close />
+                        </Button>
+                    </div>
+                    <div className="sidebar__filtres">
+                        {props.filterItems && props.filterItems.length > 0 && props.filterItems.map((item, index) => (
+                            <Accordion key={index} className="sidebar__filtres__filter">
+                                <AccordionSummary
+                                    className="lol"
+                                    expandIcon={<Arrow />}
+                                >
+                                    {item.label}
+                                </AccordionSummary>
+                                {item.variants.map((variant, index) => (
+                                    <AccordionDetails key={index} className="sidebar__filtres__filter__item is-flex is-align-items-center">
+                                        <Checkbox
+                                            className="sidebar__filtres__filter__item__checkbox"
+                                            checked={isFilterSelected(item.key, variant.value)}
+                                            icon={<CheckBox />}
+                                            checkedIcon={<CheckBoxChecked />}
+                                            onClick={() => handleOnSidebarFilterSet(item.key, variant.value, variant.label) } />
+                                        <Typography>{variant.label}</Typography>
+                                    </AccordionDetails>
+                                ))}
+                            </Accordion>
+                        ))}
+                    </div>
+                    <div className="sidebar__fotter is-flex is-justify-content-space-between">
+                        <Button
+                            className="sidebar__fotter__button button-clear py-3"
+                            onClick={handleOnClickClearFiltres}
+                        >
+                            <Typography fontWeight={700}>
+                                {props.clearAllFiltresLabel}
+                            </Typography>
+                        </Button>
+                        <Button
+                            className="sidebar__fotter__button py-3"
+                            onClick={() => setSidebarOpen(false)}
+                        >
+                            <Typography fontWeight={700}>
+                                {props.seeResultLabel}
+                            </Typography>
+                        </Button>
+                    </div>
+                </div>
             </Drawer>
         </div>
     )
@@ -174,7 +224,8 @@ FilterCollector.propTypes = {
     filterItems: PropTypes.array,
     allFiltresLabel: PropTypes.string,
     clearAllFiltresLabel: PropTypes.string,
-    filtresLabel: PropTypes.string
+    filtresLabel: PropTypes.string,
+    seeResultLabel: PropTypes.string
 }
 
 export default FilterCollector;

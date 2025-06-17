@@ -1,5 +1,4 @@
 .filters-collector {
-    font-family: Nunito Sans;
     width: 100%;
     padding-bottom: 1.5rem;
 
@@ -14,7 +13,6 @@
         display: none;
         width: 100%;
         text-align: center;
-        font-family: Nunito Sans;
         padding-bottom: 1rem;
     }
 
@@ -37,7 +35,6 @@
             height: 2.5rem !important;
             background-color: $desertstorm !important;
             color: $black-base !important;
-            font-family: Nunito Sans !important;
         }
     }
 
@@ -55,10 +52,6 @@
             height: 2rem;
         }
     }
-
-    &__sidebar {
-        
-    }
 }
 
 .active-filtres {
@@ -72,12 +65,62 @@
 
     &__button {
         height: 2.25rem !important;
-        border-radius: 0.25rem !important;
+    }
+}
+
+.sidebar {
+    min-width: 462px;
+    padding: 1.5rem;
+    min-height: 100vh;
+
+    &__header__button {
+        color: $black-base !important;
+
+        &:hover {
+            background-color: $white !important;
+        }
+    }
+
+    &__filtres {
+        padding: 2rem 0;
+
+        &__filter {
+            box-shadow: none !important;
+            font-weight: 700;
+            border-bottom: 1px solid $grey-300;
+            border-radius: 0 !important;
+            margin-bottom: 0 !important;
+
+            &__item {
+                padding: 0 0 1.5rem 0 !important;
+
+                &__checkbox {
+                    height: 1.5rem;
+                }
+            }
+        }
+    }
+
+    &__fotter {
+        margin-top: auto;
+
+        &__button {
+            width: 49%;
+            background-color: $primary500 !important;
+            color: $white !important;
+        }
+    }
+}
+
+.lol {
+    border-radius: 0 !important;
+}
+
+.button-clear {
+    border-radius: 0.25rem !important;
         border: 1px solid $grey-300 !important;
         background: $black-100 !important;
         color: $black-base !important;
-        font-family: Nunito Sans !important;
-    }
 }
 
 .MuiMenuItem-root {
@@ -98,11 +141,6 @@
 .MuiOutlinedInput-notchedOutline {
     border: 0 !important;
     border-style: none !important;
-}
-
-.MuiPaper-root {
-    margin-top: 1.5rem;
-    border-radius: 8px !important;
 }
 
 .MuiChip-label {
@@ -131,5 +169,9 @@
         &__total-mobile {
             display: block;
         }
+    }
+
+    .sidebar {
+        min-width: 100vw;
     }
 }
