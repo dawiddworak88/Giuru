@@ -54,6 +54,7 @@ var catalog = {
     allFiltresLabel: "All filtres",
     sortLabel: "Sort by:",
     clearAllFiltresLabel: "Clear all",
+    seeResultLabel: "See results",
     filtresLabel: "Filtres",
     sortItems: [
       {
