@@ -1,6 +1,6 @@
 import React from "react";
 
-const Close = React.forwardRef(function Close(props, ref) {
+const Remove = React.forwardRef(function Close(props, ref) {
     return (
         <svg
             {...props}
@@ -18,7 +18,7 @@ const Close = React.forwardRef(function Close(props, ref) {
                 fill="white"
             />
         </svg>
-    );
-});
+    )
+})
 
-export default Close;
+export default Remove
