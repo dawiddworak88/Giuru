@@ -29,5 +29,6 @@ namespace Seller.Web.Shared.Configurations
         public string PossiblePaletteSizeAttributeKeys { get; set; }
         public string DefaultCulture { get; set; }
         public string DefaultCurrency { get; set; }
+        public int? MaxAllowedOrderQuantity { get; set; }
     }
 }

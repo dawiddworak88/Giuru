@@ -801,4 +801,13 @@
   <data name="UnitPrice" xml:space="preserve">
     <value>Unit price</value>
   </data>
+  <data name="MaxAllowedOrderQuantity" xml:space="preserve">
+    <value>Allowed quantity limit exceeded.</value>
+  </data>
+  <data name="NoFilesDownloadedError" xml:space="preserve">
+    <value>Es konnte keine Datei heruntergeladen werden.</value>
+  </data>
+  <data name="SomeFilesNotDownloadedError" xml:space="preserve">
+    <value>Einige Dateien wurden nicht heruntergeladen.</value>
+  </data>
 </root>

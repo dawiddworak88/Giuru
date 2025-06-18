@@ -160,7 +160,7 @@
     <value>Wprowadź SKU</value>
   </data>
   <data name="FulfillmentTimeLabel" xml:space="preserve">
-    <value>Dni do realizcji:</value>
+    <value>Dni do realizacji:</value>
   </data>
   <data name="IsNew" xml:space="preserve">
     <value>Nowy</value>

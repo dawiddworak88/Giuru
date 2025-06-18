@@ -117,7 +117,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 ReadMoreText = _globalLocalizer.GetString("ReadMore"),
                 ReadLessText = _globalLocalizer.GetString("ReadLess"),
                 SeeMoreText = _globalLocalizer.GetString("SeeMoreText"),
-                SeeLessText = _globalLocalizer.GetString("SeeLessText")
+                SeeLessText = _globalLocalizer.GetString("SeeLessText"),
+                MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
+                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity")
             };
 
             var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);

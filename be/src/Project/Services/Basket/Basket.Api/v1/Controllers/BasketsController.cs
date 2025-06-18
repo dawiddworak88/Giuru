@@ -18,6 +18,9 @@ using System.Threading.Tasks;
 using Basket.Api.ServicesModels;
 using Basket.Api.v1.ResponseModels;
 using IdentityModel;
+using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
+using Basket.Api.Configurations;
 
 namespace Basket.Api.v1.Controllers
 {
@@ -28,10 +31,14 @@ namespace Basket.Api.v1.Controllers
     public class BasketsController : BaseApiController
     {
         private readonly IBasketService _basketService;
+        private readonly IOptions<AppSettings> _options;
 
-        public BasketsController(IBasketService basketService)
+        public BasketsController(
+            IBasketService basketService,
+            IOptions<AppSettings> options)
         {
             _basketService = basketService;
+            _options = options;
         }
 
         /// <summary>
@@ -71,7 +78,7 @@ namespace Basket.Api.v1.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new UpdateBasketModelValidator();
+            var validator = new UpdateBasketModelValidator(_options.Value.MaxAllowedOrderQuantity);
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)

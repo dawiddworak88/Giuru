@@ -104,6 +104,13 @@ function NewOrderForm(props) {
 
         const totalQuantity = parseInt(quantity) + parseInt(stockQuantity) + parseInt(outletQuantity);
 
+        if (props.maxAllowedOrderQuantity && 
+           (totalQuantity > props.maxAllowedOrderQuantity)) {
+                toast.error(props.maxAllowedOrderQuantityErrorMessage);
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                return;
+        };
+
         const orderItem = {
             productId: product.id,
             sku: product.sku,
@@ -677,7 +684,9 @@ NewOrderForm.propTypes = {
     dropOrSelectFilesLabel: PropTypes.string.isRequired,
     dropFilesLabel: PropTypes.string.isRequired,
     initCustomOrderLabel: PropTypes.string.isRequired,
-    customOrderLabel: PropTypes.string.isRequired
+    customOrderLabel: PropTypes.string.isRequired,
+    maxAllowedOrderQuantity: PropTypes.number,
+    maxAllowedOrderQuantityErrorMessage: PropTypes.string
 };
 
 export default NewOrderForm;

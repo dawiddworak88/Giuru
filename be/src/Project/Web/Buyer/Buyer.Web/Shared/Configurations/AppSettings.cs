@@ -21,6 +21,7 @@ namespace Buyer.Web.Shared.Configurations
         public string GrulaAccessToken { get; set; }
         public Guid? GrulaEnvironmentId { get; set; }
         public Guid? OrganisationId { get; set; }
+        public int? MaxAllowedOrderQuantity { get; set; }
         public string ProductAttributes { get; set; }
         public string GoogleTagManagerIdentifier { get; set; }
         public string MakeComplaintUrl { get; set; }
