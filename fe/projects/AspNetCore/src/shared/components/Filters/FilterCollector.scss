@@ -112,15 +112,20 @@
     }
 }
 
-.lol {
-    border-radius: 0 !important;
-}
-
 .button-clear {
     border-radius: 0.25rem !important;
         border: 1px solid $grey-300 !important;
         background: $black-100 !important;
         color: $black-base !important;
+
+        &:disabled {
+            background-color: $grey-200 !important;
+            color: $grey-300 !important;
+        }
+}
+
+.MuiSelect-select {
+    padding: 0.5rem 1.5rem 0.5rem 0 !important;
 }
 
 .MuiMenuItem-root {
