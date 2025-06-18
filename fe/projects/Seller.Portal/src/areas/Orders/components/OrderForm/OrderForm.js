@@ -124,8 +124,6 @@ function OrderForm(props) {
             moreInfo
         };
 
-        const totalQuantity = parseInt(quantity) + parseInt(stockQuantity) + parseInt(outletQuantity);
-
         if (props.maxAllowedOrderQuantity && 
            (totalQuantity > props.maxAllowedOrderQuantity)) {
                 toast.error(props.maxAllowedOrderQuantityErrorMessage);
