@@ -4,12 +4,14 @@ using Foundation.Localization;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Orders.ComponetModels;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.ComponentModels.Files;
+using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
@@ -27,6 +29,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly LinkGenerator _linkGenerator;
         private readonly IOrdersRepository _ordersRepository;
+        private readonly IOptions<AppSettings> _options;
 
         public EditOrderFormModelBuilder
         (
@@ -35,7 +38,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             IStringLocalizer<OrderResources> orderLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
             LinkGenerator linkGenerator,
-            IOrdersRepository ordersRepository)
+            IOrdersRepository ordersRepository,
+            IOptions<AppSettings> options)
         {
             _globalLocalizer = globalLocalizer;
             _orderLocalizer = orderLocalizer;
@@ -43,6 +47,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             _ordersRepository = ordersRepository;
             _filesModelBuilder = filesModelBuilder;
             _clientLocalizer = clientLocalizer;
+            _options = options;
         }
 
         public async Task<EditOrderFormViewModel> BuildModelAsync(OrdersPageComponentModel componentModel)
@@ -72,7 +77,9 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 NavigateToOrders = _orderLocalizer.GetString("NavigateToOrdersList"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
-                ExpectedDateOfProductOnStockLabel = _orderLocalizer.GetString("ExpectedDateOfProductOnStock")
+                ExpectedDateOfProductOnStockLabel = _orderLocalizer.GetString("ExpectedDateOfProductOnStock"),
+                MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
+                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity")
             };
 
             var orderStatuses = await _ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);

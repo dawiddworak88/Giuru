@@ -49,6 +49,14 @@ function ProductDetail(props) {
         const outletQuantity = parseInt(item.outletQuantity);
 
         const totalQuantity = quantity + stockQuantity + outletQuantity;
+
+        if (props.maxAllowedOrderQuantity && 
+           (totalQuantity > props.maxAllowedOrderQuantity)) {
+                toast.error(props.maxAllowedOrderQuantityErrorMessage);
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                return;
+        };
+
         const orderItem = {
             productId: product.productId,
             sku: product.sku,
@@ -376,7 +384,9 @@ ProductDetail.propTypes = {
     addedProduct: PropTypes.string,
     eanLabel: PropTypes.string.isRequired,
     readLessText: PropTypes.string.isRequired,
-    readMoreText: PropTypes.string.isRequired
+    readMoreText: PropTypes.string.isRequired,
+    maxAllowedOrderQuantity: PropTypes.number,
+    maxAllowedOrderQuantityErrorMessage: PropTypes.string
 };
 
 export default ProductDetail;

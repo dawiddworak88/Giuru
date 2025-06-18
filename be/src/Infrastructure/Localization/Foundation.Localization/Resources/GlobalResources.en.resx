@@ -795,6 +795,9 @@
   <data name="Cards" xml:space="preserve">
     <value>Cards</value>
   </data>
+  <data name="MaxAllowedOrderQuantity" xml:space="preserve">
+    <value>Allowed quantity limit exceeded.</value>
+  </data>
   <data name="NoFilesDownloadedError" xml:space="preserve">
     <value>Es konnte keine Datei heruntergeladen werden.</value>
   </data>
