@@ -59,7 +59,9 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                         SearchApiUrl = componentModel.SearchApiUrl,
                         DefaultPageSize = FilesConstants.DefaultPageSize,
-                        NoResultsLabel = this.globalLocalizer.GetString("NoResultsLabel")
+                        NoResultsLabel = this.globalLocalizer.GetString("NoResultsLabel"),
+                        NoFilesDownloadedMessage = this.globalLocalizer.GetString("NoFilesDownloadedError"),
+                        SomeFilesNotDownloadedMessage = this.globalLocalizer.GetString("SomeFilesNotDownloadedError")
                     };
 
                     var fileViewModels = new List<FileViewModel>();
