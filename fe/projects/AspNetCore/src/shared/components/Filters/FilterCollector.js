@@ -173,7 +173,6 @@ function FilterCollector(props) {
                         {props.filterItems && props.filterItems.length > 0 && props.filterItems.map((item, index) => (
                             <Accordion key={index} className="sidebar__filtres__filter">
                                 <AccordionSummary
-                                    className="lol"
                                     expandIcon={<Arrow />}
                                 >
                                     {item.label}
@@ -196,6 +195,7 @@ function FilterCollector(props) {
                         <Button
                             className="sidebar__fotter__button button-clear py-3"
                             onClick={handleOnClickClearFiltres}
+                            disabled={!filters.length > 0}
                         >
                             <Typography fontWeight={700}>
                                 {props.clearAllFiltresLabel}
