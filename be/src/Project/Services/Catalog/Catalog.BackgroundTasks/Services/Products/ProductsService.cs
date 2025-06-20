@@ -1,7 +1,9 @@
 ﻿using Foundation.Catalog.Infrastructure;
 using Foundation.Catalog.Repositories.ProductIndexingRepositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,43 +30,62 @@ namespace Catalog.BackgroundTasks.Services.Products
 
         public async Task IndexAllAsync(Guid? sellerId)
         {
-            if (sellerId.HasValue)
+            if (!sellerId.HasValue)
+                return;
+
+            _logger.LogInformation("Starting bulk indexing for seller: {SellerId}", sellerId);
+
+            try
             {
-                foreach (var productId in _context.Products.Where(x => x.Brand.SellerId == sellerId).Select(x => x.Id).ToList())
-                {
-                    try
-                    {
-                        await _bulkProductIndexingRepository.IndexAsync(productId);
-                    }
-                    catch (Exception exception)
-                    {
-                        _logger.LogError(exception, $"Couldn't index product: {productId}");
-                    }
-                }
+                var productIds = await GetProductIdsAsync(sellerId.Value);
+                await _bulkProductIndexingRepository.IndexBatchAsync(productIds);
+                
+                _logger.LogInformation("Completed bulk indexing for seller: {SellerId}", sellerId);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Failed to index products for seller: {SellerId}", sellerId);
+                throw;
             }
         }
 
         public async Task IndexCategoryProducts(Guid? categoryId, Guid? sellerId)
         {
-            if (sellerId.HasValue)
+            if (!sellerId.HasValue || !categoryId.HasValue)
+                return;
+
+            _logger.LogInformation("Starting bulk indexing for category: {CategoryId}, seller: {SellerId}", categoryId, sellerId);
+
+            try
             {
-                int i = 1;
-                foreach (var productId in _context.Products.Where(x => x.Brand.SellerId == sellerId && x.Category.Id == categoryId).Select(x => x.Id).ToList())
-                {
-                    _logger.LogError($"Indexing product {i} - {productId}");
-
-                    try
-                    {
-                        await _productIndexingRepository.IndexAsync(productId);
-                    }
-                    catch (Exception exception)
-                    {
-                        _logger.LogError(exception, $"Couldn't index product: {productId}");
-                    }
-
-                    i++;
-                }
+                var productIds = await GetCategoryProductIdsAsync(categoryId.Value, sellerId.Value);
+                await _bulkProductIndexingRepository.IndexBatchAsync(productIds);
+                
+                _logger.LogInformation("Completed bulk indexing for category: {CategoryId}, seller: {SellerId}", categoryId, sellerId);
             }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Failed to index products for category: {CategoryId}, seller: {SellerId}", categoryId, sellerId);
+                throw;
+            }
+        }
+
+        private async Task<List<Guid>> GetProductIdsAsync(Guid sellerId)
+        {
+            return await _context.Products
+                .AsNoTracking()
+                .Where(x => x.Brand.SellerId == sellerId)
+                .Select(x => x.Id)
+                .ToListAsync();
+        }
+
+        private async Task<List<Guid>> GetCategoryProductIdsAsync(Guid categoryId, Guid sellerId)
+        {
+            return await _context.Products
+                .AsNoTracking()
+                .Where(x => x.Brand.SellerId == sellerId && x.CategoryId == categoryId)
+                .Select(x => x.Id)
+                .ToListAsync();
         }
     }
 }
