@@ -431,6 +431,11 @@ services:
       - GrulaUrl=https://api.grula.net
       - GrulaAccessToken=${GRULA_ACCESS_TOKEN}
       - GrulaEnvironmentId=${GRULA_ENVIRONMENT_ID}
+      - PossibleExtraPackingAttributeKeys=extraPacking
+      - PossiblePaletteSizeAttributeKeys=palletDimensions,PalletDimensions
+      - PossiblPriceGroupAttributeKeys=priceGroup,grupaCenowa,preisGruppe
+      - PossibleSleepAreaDepthAttributeKeys=sleepAreaDepth
+      - PossibleSleepAreaWidthAttributeKeys=sleepAreaWidth
       - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -472,6 +477,11 @@ services:
       - GrulaEnvironmentId=${GRULA_ENVIRONMENT_ID}
       - ProductAttributes=${PRODUCT_ATTRIBUTES}
       - OrganisationId=${ORGANISATION_ID}
+      - PossibleExtraPackingAttributeKeys=extraPacking
+      - PossiblePaletteSizeAttributeKeys=palletDimensions,PalletDimensions
+      - PossiblPriceGroupAttributeKeys=priceGroup,grupaCenowa,preisGruppe
+      - PossibleSleepAreaDepthAttributeKeys=sleepAreaDepth
+      - PossibleSleepAreaWidthAttributeKeys=sleepAreaWidth
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
