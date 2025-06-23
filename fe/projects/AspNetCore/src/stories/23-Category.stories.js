@@ -58,8 +58,8 @@ var catalog = {
     filtresLabel: "Filtres",
     sortItems: [
       {
-        label: "Defautl",
-        key: "defautl"
+        label: "Default",
+        key: "default"
       },
       {
         label: "Price: Low to High",
@@ -78,11 +78,11 @@ var catalog = {
         key: "new"
       }
     ],
-    filterItems: [
+    filterInputs: [
       {
         label: "Price",
         key: "price",
-        variants: [
+        items: [
           {
             label: "0-999 EUR",
             value: 1
@@ -108,7 +108,7 @@ var catalog = {
       {
         label: "Fabric",
         key: "fabric",
-        variants: [
+        items: [
           {
             label: "Aspen 20",
             value: 1
