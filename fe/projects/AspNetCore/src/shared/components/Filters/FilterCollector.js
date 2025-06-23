@@ -97,7 +97,7 @@ function FilterCollector(props) {
                             endIcon={<Filtres />}
                         >
                             <Typography fontWeight={700}>
-                                {props.allFiltresLabel}
+                                {props.allFiltersLabel}
                             </Typography>
                         </Button>
                     </div>
@@ -142,7 +142,7 @@ function FilterCollector(props) {
                     <Button
                         className="active-filtres__button button-clear px-3 py-1 mb-3 has-text-weight-bold"
                         onClick={handleOnClickClearFiltres}
-                    >{props.clearAllFiltresLabel}</Button>
+                    >{props.clearAllFiltersLabel}</Button>
                 }
             </div>
             <Drawer
@@ -153,7 +153,7 @@ function FilterCollector(props) {
                 <div className="sidebar is-flex is-flex-direction-column">
                     <div className="is-flex is-justify-content-space-between">
                         <Typography fontWeight={700} fontSize={20}>
-                            {props.filtresLabel}
+                            {props.filtersLabel}
                         </Typography>
                         <Button
                             className="sidebar__header__button"
@@ -191,7 +191,7 @@ function FilterCollector(props) {
                             disabled={!props.filters.length > 0}
                         >
                             <Typography fontWeight={700}>
-                                {props.clearAllFiltresLabel}
+                                {props.clearAllFiltersLabel}
                             </Typography>
                         </Button>
                         <Button
@@ -215,8 +215,8 @@ FilterCollector.propTypes = {
     total: PropTypes.number,
     resultsLabel: PropTypes.string,
     filterInputs: PropTypes.array,
-    allFiltresLabel: PropTypes.string,
-    clearAllFiltresLabel: PropTypes.string,
+    allFiltersLabel: PropTypes.string,
+    clearAllFiltersLabel: PropTypes.string,
     filtresLabel: PropTypes.string,
     seeResultLabel: PropTypes.string
 }
