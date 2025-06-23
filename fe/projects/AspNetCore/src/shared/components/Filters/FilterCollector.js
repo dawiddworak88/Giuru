@@ -8,8 +8,6 @@ import Filtres from "../../Icons/Filtres";
 import { Close } from "@mui/icons-material";
 
 function FilterCollector(props) {
-    const [sortValue, setSortValue] = useState(props.sortItems && props.sortItems.length > 0 ? props.sortItems[0].key : 0)
-    const [filters, setFilters] = useState([])
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     const handleOnSelectFiltersChange = (event) => {
@@ -26,27 +24,22 @@ function FilterCollector(props) {
 
     const updateFiltres = (key, value, label) => {
         if (isFilterSelected(key, value)) {
-            setFilters(filters.filter(x => !(x.value === value && x.key === key)))
+            props.setFilters(props.filters.filter(x => !(x.value === value && x.key === key)))
         } else {
-            setFilters(filters.concat({ key, value, label}))
+            props.setFilters(props.filters.concat({ key, value, label}))
         }
     }
     
     const isFilterSelected = (key, value) => {
-        return filters.find(x => x.key === key && x.value === value) ? true : false
+        return props.filters.find(x => x.key === key && x.value === value) ? true : false
     }
     
     const handleOnDeleteFilter = (indexToRemove) => {
-        setFilters(filters.filter((_, index) => index !== indexToRemove))
+        props.setFilters(props.filters.filter((_, index) => index !== indexToRemove))
     }
 
     const handleOnClickClearFiltres = () => {
-        setFilters([])
-    }
-
-    const handleOnSortChange = (value) => {
-        setSortValue(value)
-        // fetch sorted items
+        props.setFilters([])
     }
 
     return (
@@ -57,13 +50,13 @@ function FilterCollector(props) {
                         <p>{props.total} {props.resultsLabel}</p>
                     </div>
                 }
-                {props.filterItems && props.filterItems.length > 0 &&
+                {props.filterInputs && props.filterInputs.length > 0 &&
                     <div className="filters-collector__filtres">
-                        {props.filterItems.map((item, index) => (
+                        {props.filterInputs.map((item, index) => (
                             <Select
                                 key={index}
                                 multiple displayEmpty
-                                value={filters}
+                                value={props.filters}
                                 onChange={handleOnSelectFiltersChange}
                                 MenuProps={{
                                     PaperProps: {
@@ -82,7 +75,7 @@ function FilterCollector(props) {
                                 IconComponent={(props) => <Arrow {...props}/>}
                                 className="filters-collector__filtres__select mr-3 py-0 px-2"
                             >
-                                {item.variants.map((variant, index) => (
+                                {item.items.map((variant, index) => (
                                     <MenuItem
                                         className="filters-collector__filtres__select__item pt-0 pr-4 pb-5 pl-0"
                                         value={{key: item.key, value: variant.value, label: variant.label }}
@@ -111,12 +104,12 @@ function FilterCollector(props) {
                 }
                 {props.sortItems && props.sortItems.length > 0 &&
                     <div className="is-flex filters-collector__sort">
-                        <div className="filters-collector__sort__text has-text-weight-bold">{props.sortLabel}</div>
+                        <div className="filters-collector__sort__text has-text-weight-bold mr-3">{props.sortLabel}</div>
                         <Select
                             className="filters-collector__sort__select"
                             IconComponent={(props) => <Arrow {...props}/>}
-                            value={sortValue}
-                            onChange={(e) => handleOnSortChange(e.target.value)}
+                            value={props.sorting}
+                            onChange={(e) => props.setSorting(e.target.value)}
                         >
                             {props.sortItems.map((item, index) => (
                                 <MenuItem
@@ -137,7 +130,7 @@ function FilterCollector(props) {
                 </div>
             }
             <div className="active-filtres">
-                {filters.map((item, index) => (
+                {props.filters.map((item, index) => (
                     <Chip
                         className="active-filtres__item pr-3 mr-3 mb-3"
                         key={index}
@@ -145,7 +138,7 @@ function FilterCollector(props) {
                         onDelete={() => handleOnDeleteFilter(index)}
                         deleteIcon={<Remove />} />
                 ))}
-                {filters.length > 1 && 
+                {props.filters.length > 1 && 
                     <Button
                         className="active-filtres__button button-clear px-3 py-1 mb-3 has-text-weight-bold"
                         onClick={handleOnClickClearFiltres}
@@ -170,14 +163,14 @@ function FilterCollector(props) {
                         </Button>
                     </div>
                     <div className="sidebar__filtres">
-                        {props.filterItems && props.filterItems.length > 0 && props.filterItems.map((item, index) => (
+                        {props.filterInputs && props.filterInputs.length > 0 && props.filterInputs.map((item, index) => (
                             <Accordion key={index} className="sidebar__filtres__filter">
                                 <AccordionSummary
                                     expandIcon={<Arrow />}
                                 >
                                     {item.label}
                                 </AccordionSummary>
-                                {item.variants.map((variant, index) => (
+                                {item.items.map((variant, index) => (
                                     <AccordionDetails key={index} className="sidebar__filtres__filter__item is-flex is-align-items-center">
                                         <Checkbox
                                             className="sidebar__filtres__filter__item__checkbox"
@@ -195,7 +188,7 @@ function FilterCollector(props) {
                         <Button
                             className="sidebar__fotter__button button-clear py-3"
                             onClick={handleOnClickClearFiltres}
-                            disabled={!filters.length > 0}
+                            disabled={!props.filters.length > 0}
                         >
                             <Typography fontWeight={700}>
                                 {props.clearAllFiltresLabel}
@@ -221,7 +214,7 @@ FilterCollector.propTypes = {
     sortItems: PropTypes.array,
     total: PropTypes.number,
     resultsLabel: PropTypes.string,
-    filterItems: PropTypes.array,
+    filterInputs: PropTypes.array,
     allFiltresLabel: PropTypes.string,
     clearAllFiltresLabel: PropTypes.string,
     filtresLabel: PropTypes.string,

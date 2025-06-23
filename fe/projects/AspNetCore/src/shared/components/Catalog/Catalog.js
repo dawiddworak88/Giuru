@@ -14,6 +14,7 @@ import AuthenticationHelper from "../../../shared/helpers/globals/Authentication
 import moment from "moment";
 import Modal from "../Modal/Modal";
 import FilterCollector from "../Filters/FilterCollector";
+import SortingConstants from "../../constants/SortingConstants";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -26,6 +27,8 @@ function Catalog(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null);
+    const [sorting, setSorting] = useState(props.filterCollector && props.filterCollector.sortItems.length > 0 ? SortingConstants.defaultKey() : "");
+    const [filtres , setFilters] = useState([]);
 
     const toggleSidebar = (item) => {
         setProductVariant(item);
@@ -182,6 +185,16 @@ function Catalog(props) {
         return 0;
     }
 
+    const handleSetSorting = (value) => {
+        setSorting(value)
+        // featching a sorted data
+    }
+
+    const handleFilterChange = (value) => {
+        setFilters(value)
+        // featching a filtred data
+    }
+
     return (
         <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
@@ -194,6 +207,10 @@ function Catalog(props) {
                                     {...props.filterCollector}
                                     total={total}
                                     resultsLabel={props.resultsLabel}
+                                    filters={filtres}
+                                    setFilters={handleFilterChange}
+                                    sorting={sorting}
+                                    setSorting={handleSetSorting}
                                 />
                             </div>
                         }
