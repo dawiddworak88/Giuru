@@ -1,3 +1,5 @@
+import React from "react"
+
 const Arrow = (props) => {
     return (
         <svg width="13" height="15" viewBox="0 0 13 7" fill="none" xmlns="http://www.w3.org/2000/svg" className={`material-icons ${props.className}`}>
