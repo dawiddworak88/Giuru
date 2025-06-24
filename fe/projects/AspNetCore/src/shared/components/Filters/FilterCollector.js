@@ -97,7 +97,7 @@ function FilterCollector(props) {
                             endIcon={<Filtres />}
                         >
                             <Typography fontWeight={700}>
-                                {props.allFiltersLabel}
+                                {props.allFilters}
                             </Typography>
                         </Button>
                     </div>
@@ -142,7 +142,7 @@ function FilterCollector(props) {
                     <Button
                         className="active-filtres__button button-clear px-3 py-1 mb-3 has-text-weight-bold"
                         onClick={handleOnClickClearFiltres}
-                    >{props.clearAllFiltersLabel}</Button>
+                    >{props.clearAllFilters}</Button>
                 }
             </div>
             <Drawer
@@ -191,7 +191,7 @@ function FilterCollector(props) {
                             disabled={!props.filters.length > 0}
                         >
                             <Typography fontWeight={700}>
-                                {props.clearAllFiltersLabel}
+                                {props.clearAllFilters}
                             </Typography>
                         </Button>
                         <Button
@@ -199,7 +199,7 @@ function FilterCollector(props) {
                             onClick={() => setSidebarOpen(false)}
                         >
                             <Typography fontWeight={700}>
-                                {props.seeResultLabel}
+                                {props.seeResult}
                             </Typography>
                         </Button>
                     </div>

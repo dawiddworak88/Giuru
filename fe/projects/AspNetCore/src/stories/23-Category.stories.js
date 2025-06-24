@@ -51,10 +51,10 @@ var catalog = {
     basketUrl: "#"
   },
   filterCollector: {
-    allFiltersLabel: "All filtres",
+    allFilters: "All filtres",
     sortLabel: "Sort by:",
-    clearAllFiltersLabel: "Clear all",
-    seeResultLabel: "See results",
+    clearAllFilters: "Clear all",
+    seeResult: "See results",
     filtersLabel: "Filtres",
     sortItems: [
       {
