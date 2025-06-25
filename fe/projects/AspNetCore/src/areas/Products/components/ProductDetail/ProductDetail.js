@@ -16,6 +16,7 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ProductDetailModal from "../ProductDetailModal/ProductDetailModal";
+import { addGoogleAnalyticsEventToDataLayer } from "../../../../shared/helpers/globals/GoogleEventToDataLayerHelper";
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
@@ -102,6 +103,16 @@ function ProductDetail(props) {
                             toast.success(props.successfullyAddedProduct)
                             setOrderItems(jsonResponse.items);
                             setIsModalOpen(false);
+
+                            addGoogleAnalyticsEventToDataLayer("add_to_cart", [
+                                {
+                                    id: orderItem.productId,
+                                    name: orderItem.name,
+                                    sku: orderItem.sku,
+                                    price: 0,
+                                    quantity: totalQuantity
+                                }
+                            ]);
                         }
                         else {
                             setOrderItems([]);
@@ -145,6 +156,18 @@ function ProductDetail(props) {
             setIsSidebarOpen(true)
         }
     }, [canActiveModal, isModalOpen, isSidebarOpen]);
+
+    useEffect(() => {
+        addGoogleAnalyticsEventToDataLayer("view_item", [
+            {
+                id: props.productId,
+                name: props.title,
+                sku: props.sku,
+                price: 0,
+                quantity: 1
+            }
+        ]);
+    }, []);
 
     const handleShowMoreImages = () => {
         if (showMoreImages) {

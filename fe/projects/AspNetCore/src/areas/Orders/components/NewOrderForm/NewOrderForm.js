@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState, Fragment } from "react";
+import React, { useContext, useCallback, useState, Fragment, useEffect } from "react";
 import { toast } from "react-toastify";
 import { UploadCloud } from "react-feather";
 import { useDropzone } from "react-dropzone";
@@ -17,6 +17,7 @@ import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog
 import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
+import { addGoogleAnalyticsEventToDataLayer } from "../../../../shared/helpers/globals/GoogleEventToDataLayerHelper";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -73,6 +74,18 @@ function NewOrderForm(props) {
                 });
         }
     };
+
+    useEffect(() => {
+        addGoogleAnalyticsEventToDataLayer("view_cart", 
+            orderItems.map((item) => ({
+                id: item.productId,
+                name: item.name,
+                sku: item.sku,
+                price: 0,
+                quantity: getTotalQuantities(item)
+            }))
+        );
+    }, [])
 
     const resetMaxAndQuantityValues = () => {
         setQuantity(0);
@@ -152,6 +165,16 @@ function NewOrderForm(props) {
                             setMoreInfo("");
                             resetMaxAndQuantityValues();
                             setOrderItems(jsonResponse.items);
+
+                            addGoogleAnalyticsEventToDataLayer("add_to_cart", [
+                                {
+                                    id: orderItem.productId,
+                                    name: orderItem.name,
+                                    sku: orderItem.sku,
+                                    price: 0,
+                                    quantity: getTotalQuantities(orderItem)
+                                }
+                            ]);
                         }
                         else {
                             setOrderItems([]);
@@ -259,6 +282,16 @@ function NewOrderForm(props) {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
                         setIsOrdered(true);
+
+                        addGoogleAnalyticsEventToDataLayer("purchase", 
+                            orderItems.map((item) => ({
+                                id: item.productId,
+                                name: item.name,
+                                sku: item.sku,
+                                price: 0,
+                                quantity: getTotalQuantities(item)
+                            }))
+                        );
                     } else {
                         toast.error(jsonResponse.message);
                     }
@@ -340,6 +373,17 @@ function NewOrderForm(props) {
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
+
+                        addGoogleAnalyticsEventToDataLayer("remove_from_cart", 
+                            orderItems.map((item) => ({
+                                id: item.productId,
+                                name: item.name,
+                                sku: item.sku,
+                                price: 0,
+                                quantity: getTotalQuantities(item)
+                            }))
+                        );
+
                         setOrderItems([]);
                         setBasketId(null);
                     }
