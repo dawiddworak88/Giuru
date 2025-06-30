@@ -4,7 +4,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, Chip, 
 import Arrow from "../../Icons/Arrow";
 import { CheckBox, CheckBoxChecked } from "../../Icons/CheckBox";
 import Remove from "../../Icons/Remove";
-import Filtres from "../../Icons/Filtres";
+import Filters from "../../Icons/Filters";
 import { Close } from "@mui/icons-material";
 
 function FilterCollector(props) {
@@ -17,12 +17,12 @@ function FilterCollector(props) {
 
         const newItem = value[value.length - 1]
 
-        updateFiltres(newItem.key, newItem.value, newItem.label)
+        updateFilters(newItem.key, newItem.value, newItem.label)
     }
 
-    const handleOnSidebarFilterSet = (key, value, label) => updateFiltres(key, value, label)
+    const handleOnSidebarFilterSet = (key, value, label) => updateFilters(key, value, label)
 
-    const updateFiltres = (key, value, label) => {
+    const updateFilters = (key, value, label) => {
         if (isFilterSelected(key, value)) {
             props.setFilters(props.filters.filter(x => !(x.value === value && x.key === key)))
         } else {
@@ -38,7 +38,7 @@ function FilterCollector(props) {
         props.setFilters(props.filters.filter((_, index) => index !== indexToRemove))
     }
 
-    const handleOnClickClearFiltres = () => {
+    const handleOnClickClearFilters = () => {
         props.setFilters([])
     }
 
@@ -51,7 +51,7 @@ function FilterCollector(props) {
                     </div>
                 }
                 {props.filterInputs && props.filterInputs.length > 0 &&
-                    <div className="filters-collector__filtres">
+                    <div className="filters-collector__filters">
                         {props.filterInputs.map((item, index) => (
                             <Select
                                 key={index}
@@ -73,16 +73,16 @@ function FilterCollector(props) {
                                     );
                                 }}
                                 IconComponent={(props) => <Arrow {...props}/>}
-                                className="filters-collector__filtres__select mr-3 py-0 px-2"
+                                className="filters-collector__filters__select mr-3 py-0 px-2"
                             >
                                 {item.items.map((variant, index) => (
                                     <MenuItem
-                                        className="filters-collector__filtres__select__item pt-0 pr-4 pb-5 pl-0"
+                                        className="filters-collector__filters__select__item pt-0 pr-4 pb-5 pl-0"
                                         value={{key: item.key, value: variant.value, label: variant.label }}
                                         key={index}
                                     >
                                         <Checkbox
-                                            className="filters-collector__filtres__select__item__checkbox"
+                                            className="filters-collector__filters__select__item__checkbox"
                                             checked={isFilterSelected(item.key, variant.value)}
                                             icon={<CheckBox />}
                                             checkedIcon={<CheckBoxChecked />} />
@@ -92,9 +92,9 @@ function FilterCollector(props) {
                             </Select>
                         ))}
                         <Button
-                            className="filters-collector__filtres__button px-4 py-1"
+                            className="filters-collector__filters__button px-4 py-1"
                             onClick={() => setSidebarOpen(true)}
-                            endIcon={<Filtres />}
+                            endIcon={<Filters />}
                         >
                             <Typography fontWeight={700}>
                                 {props.allFilters}
@@ -129,10 +129,10 @@ function FilterCollector(props) {
                     <p>{props.total} {props.resultsLabel}</p>
                 </div>
             }
-            <div className="active-filtres">
+            <div className="active-filters">
                 {props.filters.map((item, index) => (
                     <Chip
-                        className="active-filtres__item pr-3 mr-3 mb-3"
+                        className="active-filters__item pr-3 mr-3 mb-3"
                         key={index}
                         label={item.label}
                         onDelete={() => handleOnDeleteFilter(index)}
@@ -140,8 +140,8 @@ function FilterCollector(props) {
                 ))}
                 {props.filters.length > 1 && 
                     <Button
-                        className="active-filtres__button button-clear px-3 py-1 mb-3 has-text-weight-bold"
-                        onClick={handleOnClickClearFiltres}
+                        className="active-filters__button button-clear px-3 py-1 mb-3 has-text-weight-bold"
+                        onClick={handleOnClickClearFilters}
                     >{props.clearAllFilters}</Button>
                 }
             </div>
@@ -162,18 +162,18 @@ function FilterCollector(props) {
                             <Close />
                         </Button>
                     </div>
-                    <div className="sidebar__filtres">
+                    <div className="sidebar__filters">
                         {props.filterInputs && props.filterInputs.length > 0 && props.filterInputs.map((item, index) => (
-                            <Accordion key={index} className="sidebar__filtres__filter">
+                            <Accordion key={index} className="sidebar__filters__filter">
                                 <AccordionSummary
                                     expandIcon={<Arrow />}
                                 >
                                     {item.label}
                                 </AccordionSummary>
                                 {item.items.map((variant, index) => (
-                                    <AccordionDetails key={index} className="sidebar__filtres__filter__item is-flex is-align-items-center">
+                                    <AccordionDetails key={index} className="sidebar__filters__filter__item is-flex is-align-items-center">
                                         <Checkbox
-                                            className="sidebar__filtres__filter__item__checkbox"
+                                            className="sidebar__filters__filter__item__checkbox"
                                             checked={isFilterSelected(item.key, variant.value)}
                                             icon={<CheckBox />}
                                             checkedIcon={<CheckBoxChecked />}
@@ -187,7 +187,7 @@ function FilterCollector(props) {
                     <div className="sidebar__fotter is-flex is-justify-content-space-between">
                         <Button
                             className="sidebar__fotter__button button-clear py-3"
-                            onClick={handleOnClickClearFiltres}
+                            onClick={handleOnClickClearFilters}
                             disabled={!props.filters.length > 0}
                         >
                             <Typography fontWeight={700}>
@@ -217,7 +217,7 @@ FilterCollector.propTypes = {
     filterInputs: PropTypes.array,
     allFiltersLabel: PropTypes.string,
     clearAllFiltersLabel: PropTypes.string,
-    filtresLabel: PropTypes.string,
+    filtersLabel: PropTypes.string,
     seeResultLabel: PropTypes.string
 }
 

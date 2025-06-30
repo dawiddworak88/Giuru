@@ -16,7 +16,7 @@
         padding-bottom: 1rem;
     }
 
-    &__filtres {
+    &__filters {
         width: 70%;
 
         &__select {
@@ -54,7 +54,7 @@
     }
 }
 
-.active-filtres {
+.active-filters {
 
     &__item {
         height: 2.25rem !important;
@@ -81,7 +81,7 @@
         }
     }
 
-    &__filtres {
+    &__filters {
         padding: 2rem 0;
 
         &__filter {
@@ -157,7 +157,7 @@
 @media only screen and (max-width: $desktop) {
     .filters-collector {
 
-        &__filtres__select {
+        &__filters__select {
             display: none !important;
         }
     }

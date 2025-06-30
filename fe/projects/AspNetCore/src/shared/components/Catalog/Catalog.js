@@ -28,7 +28,7 @@ function Catalog(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null);
     const [sorting, setSorting] = useState(props.filterCollector && props.filterCollector.sortItems.length > 0 ? SortingConstants.defaultKey() : "");
-    const [filtres , setFilters] = useState([]);
+    const [filters , setFilters] = useState([]);
 
     const toggleSidebar = (item) => {
         setProductVariant(item);
@@ -207,7 +207,7 @@ function Catalog(props) {
                                     {...props.filterCollector}
                                     total={total}
                                     resultsLabel={props.resultsLabel}
-                                    filters={filtres}
+                                    filters={filters}
                                     setFilters={handleFilterChange}
                                     sorting={sorting}
                                     setSorting={handleSetSorting}
