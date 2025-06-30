@@ -238,6 +238,87 @@ namespace Catalog.Api.v1.Products.Controllers
             }
         }
 
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("filter")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<ProductResponseModel>>))]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        [AllowAnonymous]
+        public async Task<IActionResult> Get(
+            string ids,
+            Guid? categoryId,
+            Guid? sellerId,
+            bool? hasPrimaryProduct,
+            string searchTerm,
+            int? pageIndex,
+            int? itemsPerPage,
+            string filters,
+            string sort)
+        {
+            var productIds = ids.ToEnumerableGuidIds();
+
+            if (productIds is not null)
+            {
+                var serviceModel = new GetProductsByIdsServiceModel
+                {
+                    Ids = productIds,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Filters = filters,
+                    Sort = sort
+                };
+
+                var validator = new GetProductsByIdsModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var products = await _productService.GetByIdsAsync(serviceModel);
+
+                    if (products is not null)
+                    {
+                        var response = new PagedResults<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
+                        {
+                            Data = products.Data.OrEmptyIfNull().Select(x => MapProductServiceModelToProductResponseModel(x))
+                        };
+
+                        return StatusCode((int)HttpStatusCode.OK, response);
+                    }
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
+            else
+            {
+                var serviceModel = new GetProductsServiceModel
+                {
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    SearchTerm = searchTerm,
+                    CategoryId = categoryId,
+                    OrganisationId = sellerId,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    HasPrimaryProduct = hasPrimaryProduct,
+                    Filters = filters,
+                    Sort = sort
+                };
+
+                var products = await _productService.GetAsync(serviceModel);
+
+                if (products is not null)
+                {
+                    var response = new PagedResults<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
+                    {
+                        Data = products.Data.OrEmptyIfNull().Select(x => MapProductServiceModelToProductResponseModel(x))
+                    };
+
+                    return StatusCode((int)HttpStatusCode.OK, response);
+                }
+
+                return StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            }
+        }
+
         /// <summary>
         /// Saves the product. Performs create if id is null and update otherwise.
         /// </summary>
