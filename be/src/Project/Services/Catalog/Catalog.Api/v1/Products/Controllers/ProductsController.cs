@@ -239,7 +239,7 @@ namespace Catalog.Api.v1.Products.Controllers
         }
 
         [HttpGet, MapToApiVersion("1.0")]
-        [Route("filter")]
+        [Route("filtered")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<ProductResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         [AllowAnonymous]
