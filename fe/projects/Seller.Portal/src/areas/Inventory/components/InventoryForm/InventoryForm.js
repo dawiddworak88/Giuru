@@ -125,7 +125,7 @@ const InventoryForm = (props) => {
     }
 
     const {
-        values, errors, dirty, disable, setFieldValue,
+        values, errors, dirty, setFieldValue,
         handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
@@ -263,7 +263,7 @@ const InventoryForm = (props) => {
                                 type="submit" 
                                 variant="contained"
                                 color="primary"
-                                disabled={state.isLoading || disable || !product}>
+                                disabled={state.isLoading || (quantity <= -1) || (availableQuantity <= -1) || !product}>
                                 {props.saveText}
                             </Button>
                             <a href={props.inventoryUrl} className="ml-2 button is-text">{props.navigateToInventoryListText}</a>
