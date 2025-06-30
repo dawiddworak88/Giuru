@@ -29,7 +29,9 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             string searchTerm, 
             int? pageIndex, 
             int? itemsPerPage,
-            string orderBy)
+            string orderBy,
+            string filters,
+            string sort)
         {
             var query = Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
@@ -53,9 +55,16 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 query = query && Query<ProductSearchModel>.Term(t => t.PrimaryProductIdHasValue, hasPrimaryProduct.Value);
             }
 
-            if (isNew.HasValue)
+            if (sort == SortingConstants.Newest)
             {
-                query = query && Query<ProductSearchModel>.Term(t => t.IsNew, isNew.Value);
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsNew).Value(true));
+            }
+            else
+            {
+                if (isNew.HasValue)
+                {
+                    query = query && Query<ProductSearchModel>.Term(t => t.IsNew, isNew.Value);
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -74,7 +83,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 itemsPerPage = Constants.MaxItemsPerPageLimit;
             }
 
-            var response = await _elasticClient.SearchAsync<ProductSearchModel>(s => s.TrackTotalHits().From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(s => s.TrackTotalHits().From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(q => query).Sort(s => Sorting<ProductSearchModel>(sort, orderBy)));
 
             if (response.IsValid)
             {
@@ -137,7 +146,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? organisationId, IEnumerable<Guid> ids, string orderBy)
+        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? organisationId, IEnumerable<Guid> ids, string orderBy, string filters, string sort)
         {
             var query = Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
@@ -151,6 +160,11 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsPublished).Value(true));
             }
 
+            if (sort == SortingConstants.Newest)
+            {
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsNew).Value(true));
+            }
+
             var idsQuery = Query<ProductSearchModel>.MatchNone();
 
             foreach (var id in ids)
@@ -160,7 +174,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
             query = query && idsQuery;
 
-            var response = await _elasticClient.SearchAsync<ProductSearchModel>(q => q.From(ProductSearchConstants.Pagination.BeginningPage).Size(ProductSearchConstants.Pagination.ProductsMaxSize).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(q => q.From(ProductSearchConstants.Pagination.BeginningPage).Size(ProductSearchConstants.Pagination.ProductsMaxSize).Query(q => query).Sort(s => Sorting<ProductSearchModel>(sort, orderBy)));
 
             if (response.IsValid && response.Hits.Any())
             {
@@ -282,6 +296,21 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 select option.Text;
 
             return nameSuggestions.Distinct().Take(size);
+        }
+
+        private SortDescriptor<T> Sorting<T>(string sort, string orderBy) where T : ProductSearchModel
+        {
+            if (string.IsNullOrEmpty(orderBy) is false)
+            {
+                return orderBy.ToElasticSortList<T>();
+            }
+
+            if (sort == SortingConstants.Name)
+            {
+                return new SortDescriptor<T>().Field(f => f.Name.Suffix("keyword"), SortOrder.Ascending);
+            }
+
+            return new SortDescriptor<T>();
         }
     }
 }
