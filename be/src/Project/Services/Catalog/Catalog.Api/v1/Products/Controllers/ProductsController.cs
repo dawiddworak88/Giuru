@@ -238,6 +238,19 @@ namespace Catalog.Api.v1.Products.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns products by search term. Returns all products (paginated) if search term is empty.
+        /// </summary>
+        /// <param name="ids">The list of product ids.</param>
+        /// <param name="categoryId">The category id.</param>
+        /// <param name="sellerId">The brand id.</param>
+        /// <param name="hasPrimaryProduct">Set to null to get all products including product variants. Set to false to get primary products only. Set to true to get product variants only.</param>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The number of items per page.</param>
+        /// <param name="filters">The filtres in json format.</param>
+        /// <param name="sort">The sort key.</param>
+        /// <returns></returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("filtered")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<ProductResponseModel>>))]
