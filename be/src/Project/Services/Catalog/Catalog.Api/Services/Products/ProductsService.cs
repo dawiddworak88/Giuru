@@ -333,14 +333,16 @@ namespace Catalog.Api.Services.Products
                 model.SearchTerm,
                 model.PageIndex, 
                 model.ItemsPerPage,
-                model.OrderBy);
+                model.OrderBy,
+                model.Filters,
+                model.Sort);
 
             return await this.MapToPageResultsAsync(searchResults, model.Language, model.OrganisationId);
         }
 
         public async Task<PagedResults<IEnumerable<ProductServiceModel>>> GetByIdsAsync(GetProductsByIdsServiceModel model)
         {
-            var searchResults = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Ids, model.OrderBy);
+            var searchResults = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Ids, model.OrderBy, model.Filters, model.Sort);
             
             return await this.MapToPageResultsAsync(searchResults, model.Language, model.OrganisationId);
         }
