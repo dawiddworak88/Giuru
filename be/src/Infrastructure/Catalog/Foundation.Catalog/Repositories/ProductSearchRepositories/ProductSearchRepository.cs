@@ -300,7 +300,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
         private SortDescriptor<T> Sorting<T>(string sort, string orderBy) where T : ProductSearchModel
         {
-            if (string.IsNullOrEmpty(orderBy) is false)
+            if (string.IsNullOrWhiteSpace(orderBy) is false)
             {
                 return orderBy.ToElasticSortList<T>();
             }
