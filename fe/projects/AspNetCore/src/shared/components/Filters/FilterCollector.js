@@ -45,7 +45,7 @@ function FilterCollector(props) {
     return (
         <div>
             <div className="filters-collector is-flex is-align-items-center">
-                {props.total &&
+                {props.total !== 0 &&
                     <div className="filters-collector__total pr-5">
                         <p>{props.total} {props.resultsLabel}</p>
                     </div>
@@ -124,7 +124,7 @@ function FilterCollector(props) {
                     </div>
                 }
             </div>
-            {props.total &&
+            {props.total !== 0 &&
                 <div className="filters-collector__total-mobile">
                     <p>{props.total} {props.resultsLabel}</p>
                 </div>
