@@ -33,6 +33,7 @@ var catalog = {
   title: "Sofas",
   resultsLabel: "results",
   noResultsLabel: "There are no results.",
+  noFilteredResultsLabel: "Sorry, we couldn't find what you were looking for. Try selecting different parameters.",
   skuLabel: "SKU:",
   byLabel: "by",
   inStockLabel: "In Stock",
