@@ -1,6 +1,7 @@
 ﻿using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Shared.Definitions.Filters;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
@@ -34,12 +35,12 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string filters, string sort)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var products = await _productsService.GetProductsAsync(null, null, null, language, searchTerm, true, pageIndex, itemsPerPage, token);
+            var products = await _productsService.GetProductsAsync(null, null, null, language, searchTerm, true, pageIndex, itemsPerPage, token, filters, sort);
             
             if (products.Data is not null)
             {
