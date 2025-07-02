@@ -798,4 +798,13 @@
   <data name="ClientApprovals" xml:space="preserve">
     <value>Zustimmungen</value>
   </data>
+  <data name="MaxAllowedOrderQuantity" xml:space="preserve">
+    <value>Erlaubte Mengengrenze überschritten</value>
+  </data>
+  <data name="NoFilesDownloadedError" xml:space="preserve">
+    <value>Couldn't download any file.</value>
+  </data>
+  <data name="SomeFilesNotDownloadedError" xml:space="preserve">
+    <value>Some files weren't downloaded.</value>
+  </data>
 </root>

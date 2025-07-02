@@ -1,9 +1,11 @@
-﻿using Buyer.Web.Shared.Services.Baskets;
+﻿using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Services.Baskets;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using System.Globalization;
 
 namespace Buyer.Web.Shared.ModelBuilders.Catalogs
@@ -15,19 +17,22 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
         private readonly IStringLocalizer<InventoryResources> _inventoryLocalizer;
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
+        private readonly IOptions<AppSettings> _options;
 
         public CatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             IStringLocalizer<InventoryResources> inventoryLocalizer,
             IBasketService basketService,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IOptions<AppSettings> options)
         {
             _globalLocalizer = globalLocalizer;
             _productLocalizer = productLocalizer;
             _linkGenerator = linkGenerator;
             _basketService = basketService;
             _inventoryLocalizer = inventoryLocalizer;
+            _options = options;
         }
 
         public T BuildModel(S componentModel)
@@ -54,7 +59,9 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 QuantityErrorMessage = _globalLocalizer.GetString("QuantityErrorMessage"),
                 ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products" }),
                 UpdateBasketUrl = _linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                ExpectedDeliveryLabel = _inventoryLocalizer.GetString("ExpectedDeliveryLabel")
+                ExpectedDeliveryLabel = _inventoryLocalizer.GetString("ExpectedDeliveryLabel"),
+                MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
+                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity")
             };
 
             if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)

@@ -804,4 +804,13 @@
   <data name="Location" xml:space="preserve">
     <value>Lokalizacja</value>
   </data>
+  <data name="MaxAllowedOrderQuantity" xml:space="preserve">
+    <value>Przekroczono limit dozwolonej ilości.</value>
+  </data>
+  <data name="NoFilesDownloadedError" xml:space="preserve">
+    <value>Nie udało się pobrać żadnego pliku.</value>
+  </data>
+  <data name="SomeFilesNotDownloadedError" xml:space="preserve">
+    <value>Niektóre pliki nie zostały pobrane.</value>
+  </data>
 </root>
