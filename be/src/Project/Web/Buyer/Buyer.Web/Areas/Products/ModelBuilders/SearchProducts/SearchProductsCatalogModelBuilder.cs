@@ -1,24 +1,26 @@
 ﻿using Buyer.Web.Areas.Products.ComponentModels;
-using Buyer.Web.Areas.Shared.Definitions.Products;
+using Buyer.Web.Areas.Products.Repositories;
+using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.SearchProducts;
+using Buyer.Web.Areas.Shared.Definitions.Products;
+using Buyer.Web.Shared.Definitions.Filters;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
+using Buyer.Web.Shared.ViewModels.Catalogs;
+using Buyer.Web.Shared.ViewModels.Filters;
+using Buyer.Web.Shared.ViewModels.Modals;
+using Buyer.Web.Shared.ViewModels.Sidebar;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
-using System.Threading.Tasks;
-using Buyer.Web.Shared.ViewModels.Sidebar;
-using Foundation.PageContent.ComponentModels;
-using Buyer.Web.Shared.ViewModels.Modals;
-using Foundation.Extensions.ExtensionMethods;
-using System.Collections.Generic;
-using Buyer.Web.Shared.ViewModels.Catalogs;
-using Buyer.Web.Areas.Products.Repositories;
-using System.Linq;
-using Buyer.Web.Areas.Products.Repositories.Inventories;
-using Microsoft.Extensions.Localization;
 using Foundation.Localization;
+using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Localization;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 {
@@ -28,6 +30,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> _sidebarModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> _modalModelBuilder;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<ProductResources> _productLocalizer;
         private readonly IProductsService _productsService;
         private readonly IOutletRepository _outletRepository;
         private readonly IInventoryRepository _inventoryRepository;
@@ -41,7 +44,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             IProductsService productsService,
             IOutletRepository outletRepository,
             IInventoryRepository inventoryRepository,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IStringLocalizer<ProductResources> productLocalizer)
         {
             _searchProductsCatalogModelBuilder = searchProductsCatalogModelBuilder;
             _productsService = productsService;
@@ -50,6 +54,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             _outletRepository = outletRepository;
             _inventoryRepository = inventoryRepository;
             _globalLocalizer = globalLocalizer;
+            _productLocalizer = productLocalizer;
             _linkGenerator = linkGenerator;
         }
 
@@ -65,6 +70,21 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             viewModel.ItemsPerPage = ProductConstants.ProductsCatalogPaginationPageSize;
             viewModel.SearchTerm = componentModel.SearchTerm;
             viewModel.ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "SearchProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.FilterCollector = new FiltersCollectorViewModel
+            {
+                AllFilters = _productLocalizer.GetString("AllFilters"),
+                SortLabel = _productLocalizer.GetString("SortLabel"),
+                ClearAllFilters = _productLocalizer.GetString("ClearAllFilters"),
+                SeeResult = _productLocalizer.GetString("SeeResult"),
+                FiltersLabel = _productLocalizer.GetString("FiltersLabel"),
+                SortItems = new List<SortItemViewModel>
+                    {
+                        new SortItemViewModel { Label = _productLocalizer.GetString("SortDefault"), Key = SortingConstants.Default },
+                        new SortItemViewModel { Label = _productLocalizer.GetString("SortNewest"), Key = SortingConstants.Newest },
+                        new SortItemViewModel { Label = _productLocalizer.GetString("SortName"), Key = SortingConstants.Name }
+                    }
+            };
+
 
             var products = await _productsService.GetProductsAsync(
                 null,
@@ -75,7 +95,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 true,
                 PaginationConstants.DefaultPageIndex,
                 ProductConstants.ProductsCatalogPaginationPageSize,
-                componentModel.Token);
+                componentModel.Token,
+                null,
+                SortingConstants.Default);
 
             if (products.Data is not null)
             {
