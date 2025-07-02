@@ -33,6 +33,7 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationM
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Foundation.Telemetry.DependencyInjection;
 using Foundation.ApiExtensions.DependencyInjection;
+using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -212,6 +213,13 @@ app.MapHealthChecks("/hc", new HealthCheckOptions
 app.MapHealthChecks("/liveness", new HealthCheckOptions
 {
     Predicate = r => r.Name.Contains("self")
+});
+
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"Scheme: {context.Request.Scheme}");
+    Console.WriteLine($"Headers: {string.Join(", ", context.Request.Headers.Select(h => $"{h.Key}: {h.Value}"))}");
+    await next();
 });
 
 app.Run();

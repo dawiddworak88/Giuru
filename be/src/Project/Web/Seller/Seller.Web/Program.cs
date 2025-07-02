@@ -39,6 +39,8 @@ using Seller.Web.Areas.Global.DependencyInjection;
 using Foundation.Telemetry.DependencyInjection;
 using Seller.Web.Areas.Dashboard.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Linq;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -219,6 +221,13 @@ app.MapHealthChecks("/hc", new HealthCheckOptions
 app.MapHealthChecks("/liveness", new HealthCheckOptions 
 {
     Predicate = r => r.Name.Contains("self")
+});
+
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"Scheme: {context.Request.Scheme}");
+    Console.WriteLine($"Headers: {string.Join(", ", context.Request.Headers.Select(h => $"{h.Key}: {h.Value}"))}");
+    await next();
 });
 
 app.Run();
