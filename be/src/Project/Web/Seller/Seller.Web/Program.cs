@@ -162,7 +162,7 @@ IdentityModelEventSource.ShowPII = true;
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
-    ForwardedHeaders = ForwardedHeaders.XForwardedProto
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
 if (!app.Environment.IsDevelopment())
