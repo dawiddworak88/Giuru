@@ -1,6 +1,7 @@
 ﻿using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Shared.Definitions.Filters;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
@@ -40,7 +41,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             if (outletItems?.Data is not null && outletItems.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
-                    outletItems.Data.Select(x => x.ProductId), null, null, language, null, false, pageIndex, itemsPerPage, token);
+                    outletItems.Data.Select(x => x.ProductId), null, null, language, null, false, pageIndex, itemsPerPage, token, null, SortingConstants.Default);
 
                 if (products is not null)
                 {
