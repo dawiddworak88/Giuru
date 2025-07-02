@@ -1,12 +1,9 @@
-﻿using Buyer.Web.Shared.Definitions.Filters;
-using Buyer.Web.Shared.Services.Baskets;
+﻿using Buyer.Web.Shared.Services.Baskets;
 using Buyer.Web.Shared.ViewModels.Catalogs;
-using Buyer.Web.Shared.ViewModels.Filters;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace Buyer.Web.Shared.ModelBuilders.Catalogs
@@ -57,21 +54,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 QuantityErrorMessage = _globalLocalizer.GetString("QuantityErrorMessage"),
                 ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products" }),
                 UpdateBasketUrl = _linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                ExpectedDeliveryLabel = _inventoryLocalizer.GetString("ExpectedDeliveryLabel"),
-                FilterCollector = new FiltersCollectorViewModel
-                {
-                    AllFilters = _productLocalizer.GetString("AllFilters"),
-                    SortLabel = _productLocalizer.GetString("SortLabel"),
-                    ClearAllFilters = _productLocalizer.GetString("ClearAllFilters"),
-                    SeeResult = _productLocalizer.GetString("SeeResult"),
-                    FiltersLabel = _productLocalizer.GetString("FiltersLabel"),
-                    SortItems = new List<SortItemViewModel>
-                    {
-                        new SortItemViewModel { Label = _productLocalizer.GetString("SortDefault"), Key = SortingConstants.Default },
-                        new SortItemViewModel { Label = _productLocalizer.GetString("SortNewest"), Key = SortingConstants.Newest },
-                        new SortItemViewModel { Label = _productLocalizer.GetString("SortName"), Key = SortingConstants.Name }
-                    }
-                }
+                ExpectedDeliveryLabel = _inventoryLocalizer.GetString("ExpectedDeliveryLabel")
             };
 
             if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
