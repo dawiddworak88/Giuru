@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using Buyer.Web.Areas.Products.Definitions;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Areas.Products.Repositories;
+using Buyer.Web.Shared.Definitions.Filters;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
@@ -69,7 +70,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             {
                 var products = await this.productsService.GetProductsAsync(
                     inventories.Data.Select(x => x.ProductId), null, null, componentModel.Language,
-                    null, false, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token);
+                    null, false, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token, null, SortingConstants.Default);
 
                 if (products is not null)
                 {
