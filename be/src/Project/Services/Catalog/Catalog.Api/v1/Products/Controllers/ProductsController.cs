@@ -239,7 +239,7 @@ namespace Catalog.Api.v1.Products.Controllers
         }
 
         /// <summary>
-        /// Returns products by search term. Returns all products (paginated) if search term is empty.
+        /// Returns products by search term and/or filters. If the search term is empty, returns all products (paginated and sorted).
         /// </summary>
         /// <param name="ids">The list of product ids.</param>
         /// <param name="categoryId">The category id.</param>
