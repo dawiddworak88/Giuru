@@ -85,7 +85,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                     }
             };
 
-
             var products = await _productsService.GetProductsAsync(
                 null,
                 null,
