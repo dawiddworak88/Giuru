@@ -118,7 +118,8 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             int pageIndex, 
             int itemsPerPage, 
             string token,
-            string orderBy)
+            string filters,
+            string sort)
         {
             var productsRequestModel = new ProductsRequestModel
             {
@@ -129,7 +130,8 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 HasPrimaryProduct = hasPrimaryProduct,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
-                OrderBy = orderBy
+                Filters = filters,
+                Sort = sort
             };
 
             var apiRequest = new ApiRequest<ProductsRequestModel>
@@ -137,7 +139,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 Language = language,
                 Data = productsRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.FilteredProductsApiEndpoint}"
             };
 
             var response = await _apiClientService.GetAsync<ApiRequest<ProductsRequestModel>, ProductsRequestModel, PagedResults<IEnumerable<ProductResponseModel>>>(apiRequest);
