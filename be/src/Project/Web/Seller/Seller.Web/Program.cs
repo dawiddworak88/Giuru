@@ -38,6 +38,7 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Seller.Web.Areas.Global.DependencyInjection;
 using Foundation.Telemetry.DependencyInjection;
 using Seller.Web.Areas.Dashboard.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -163,6 +164,11 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedProto
 });
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseGeneralException();
 
