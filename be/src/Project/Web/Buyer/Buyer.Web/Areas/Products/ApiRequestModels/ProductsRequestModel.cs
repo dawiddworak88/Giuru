@@ -12,6 +12,7 @@ namespace Buyer.Web.Areas.Products.ApiRequestModels
         public bool? HasPrimaryProduct { get; set; }
         public int PageIndex { get; set; }
         public int ItemsPerPage { get; set; }
-        public string OrderBy { get; set; }
+        public string Filters { get; set; }
+        public string Sort { get; set; }
     }
 }
