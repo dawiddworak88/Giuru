@@ -225,8 +225,12 @@ app.MapHealthChecks("/liveness", new HealthCheckOptions
 
 app.Use(async (context, next) =>
 {
-    Console.WriteLine($"Scheme: {context.Request.Scheme}");
-    Console.WriteLine($"Headers: {string.Join(", ", context.Request.Headers.Select(h => $"{h.Key}: {h.Value}"))}");
+    if (context.Request.Path.StartsWithSegments("/signin-oidc"))
+    {
+        var xfp = context.Request.Headers["X-Forwarded-Proto"].ToString();
+        var scheme = context.Request.Scheme;
+        Console.WriteLine($"[Logowanie] X-Forwarded-Proto: {xfp}, Request.Scheme: {scheme}");
+    }
     await next();
 });
 
