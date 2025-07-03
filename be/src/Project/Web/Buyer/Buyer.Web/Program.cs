@@ -147,10 +147,7 @@ var app = builder.Build();
 
 IdentityModelEventSource.ShowPII = true;
 
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{   
-    ForwardedHeaders = ForwardedHeaders.XForwardedProto
-});
+app.UseForwardedHeaders();
 
 app.UseGeneralException();
 
