@@ -88,6 +88,11 @@ namespace Foundation.Account.DependencyInjection
 
                 options.Events.OnRedirectToIdentityProvider = context =>
                 {
+                    var xForwardedProto = context.HttpContext.Request.Headers["X-Forwarded-Proto"].ToString();
+
+                    Console.WriteLine($"[OnRedirectToIdentityProvider] X-Forwarded-Proto: {xForwardedProto}");
+                    Console.WriteLine($"[OnRedirectToIdentityProvider] Request.Scheme: {context.Request.Scheme}");
+
                     if (string.Equals(context.Request.Query["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal) ||
                         string.Equals(context.Request.Headers["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal))
                     {
