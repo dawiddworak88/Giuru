@@ -15,7 +15,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string Title { get; set; }
         public string ResultsLabel { get; set; }
         public string NoResultsLabel { get; set; }
-        public string noFilteredResultsLabel { get; set; }
+        public string NoFilteredResultsLabel { get; set; }
         public string SkuLabel { get; set; }
         public string ByLabel { get; set; }
         public string InStockLabel { get; set; }
