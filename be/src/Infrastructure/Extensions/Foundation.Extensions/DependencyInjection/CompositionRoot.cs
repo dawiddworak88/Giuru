@@ -26,10 +26,9 @@ namespace Foundation.Extensions.DependencyInjection
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.ForwardedHeaders =
-                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-                options.KnownNetworks.Clear(); // loopback by default, clear it for K8s
-                options.KnownProxies.Add(IPAddress.Parse("20.223.248.47"));
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
             });
         }
     }

@@ -217,12 +217,4 @@ app.MapHealthChecks("/liveness", new HealthCheckOptions
     Predicate = r => r.Name.Contains("self")
 });
 
-app.Use(async (context, next) =>
-{
-    var xfp = context.Request.Headers["X-Forwarded-Proto"].ToString();
-    var scheme = context.Request.Scheme;
-    Console.WriteLine($"[Logowanie] X-Forwarded-Proto: {xfp}, Request.Scheme: {scheme}");
-    await next();
-});
-
 app.Run();
