@@ -89,6 +89,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                                 ExtraPacking = x.ExtraPacking,
                                 SleepAreaSize = x.SleepAreaSize,
                                 PaletteSize = x.PaletteSize,
+                                Size = x.Size,
                                 IsOutlet = (outletItems.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                             }),
                             new PriceClient

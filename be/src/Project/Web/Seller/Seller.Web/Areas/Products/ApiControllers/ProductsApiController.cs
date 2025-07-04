@@ -215,6 +215,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                             ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
                             SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
                             PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                            Size = _productsService.GetSize(x.ProductAttributes),
                             IsOutlet = (outlets.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                         }),
                         new PriceClient

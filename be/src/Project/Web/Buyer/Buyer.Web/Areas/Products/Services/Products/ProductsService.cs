@@ -81,7 +81,8 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         SleepAreaSize = GetSleepAreaSize(product.ProductAttributes),
                         FabricsGroup = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePriceGroupAttributeKeys),
                         ExtraPacking = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleExtraPackingAttributeKeys),
-                        PaletteSize = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePaletteSizeAttributeKeys)
+                        PaletteSize = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePaletteSizeAttributeKeys),
+                        Size = GetSize(product.ProductAttributes)
                     };
 
                     if (product.Images != null)
@@ -157,5 +158,20 @@ namespace Buyer.Web.Areas.Products.Services.Products
             return size;
         }
 
+        public string GetSize(IEnumerable<ProductAttribute> attributes)
+        {
+            var widthValue = GetFirstAvailableAttributeValue(attributes, this.options.Value.PossibleWidthAttributeKeys);
+            var depthValue = GetFirstAvailableAttributeValue(attributes, this.options.Value.PossibleDepthAttributeKeys);
+
+            if (string.IsNullOrWhiteSpace(widthValue) ||
+                string.IsNullOrWhiteSpace(depthValue))
+            {
+                return default;
+            }
+
+            var size = $"{widthValue}x{depthValue}".Trim();
+
+            return size;
+        }
     }
 }

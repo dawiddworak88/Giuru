@@ -159,6 +159,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
                             SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
                             PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                            Size = _productsService.GetSize(product.ProductAttributes),
                             IsOutlet = (outlet?.AvailableQuantity > 0).ToYesOrNo()
                         },
                         new PriceClient
@@ -279,6 +280,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                    ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
                                    SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
                                    PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                                   Size = _productsService.GetSize(x.ProductAttributes),
                                    IsOutlet = (outletProductVariants.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                                }),
                                new PriceClient

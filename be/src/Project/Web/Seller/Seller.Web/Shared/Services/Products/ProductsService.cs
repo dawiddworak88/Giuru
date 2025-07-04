@@ -33,6 +33,22 @@ namespace Seller.Web.Shared.Services.Products
             return null;
         }
 
+        public string GetSize(IEnumerable<ReadProductAttribute> attributes)
+        {
+            var widthValue = GetFirstAvailableAttributeValue(attributes, _options.Value.PossibleWidthAttributeKeys);
+            var depthValue = GetFirstAvailableAttributeValue(attributes, _options.Value.PossibleDepthAttributeKeys);
+
+            if (string.IsNullOrWhiteSpace(widthValue) ||
+                string.IsNullOrWhiteSpace(depthValue))
+            {
+                return default;
+            }
+
+            var size = $"{widthValue}x{depthValue}".Trim();
+
+            return size;
+        }
+
         public string GetSleepAreaSize(IEnumerable<ReadProductAttribute> attributes)
         {
             var sleepAreaWidthValue = GetFirstAvailableAttributeValue(attributes, _options.Value.PossibleSleepAreaWidthAttributeKeys);

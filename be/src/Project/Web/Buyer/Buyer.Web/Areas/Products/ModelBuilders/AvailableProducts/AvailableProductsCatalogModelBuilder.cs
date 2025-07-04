@@ -101,6 +101,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                                 SleepAreaSize = x.SleepAreaSize,
                                 ExtraPacking = x.ExtraPacking,
                                 PaletteSize = x.PaletteSize,
+                                Size = x.Size,
                                 IsOutlet = (outletItems.Data.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                             }),
                             new PriceClient
