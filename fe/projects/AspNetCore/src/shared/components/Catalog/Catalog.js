@@ -50,8 +50,7 @@ function Catalog(props) {
             brandId: props.brandId,
             pageIndex: newPage + 1,
             itemsPerPage,
-            orderBy: props.orderBy,
-            sort: sorting
+            orderBy: sorting
         };
 
         if (props.searchTerm != null) {
@@ -173,7 +172,7 @@ function Catalog(props) {
             brandId: props.brandId,
             pageIndex: page + 1,
             itemsPerPage,
-            sort: value
+            orderBy: value
         };
 
         if (props.searchTerm != null) {
