@@ -71,7 +71,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             if (outletItems?.Data is not null && outletItems.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
-                    outletItems.Data.Select(x => x.ProductId), null, null, componentModel.Language, null, false, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token, null, SortingConstants.Default);
+                    outletItems.Data.Select(x => x.ProductId), null, null, componentModel.Language, null, false, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token, SortingConstants.Default);
 
                 if (products is not null)
                 {

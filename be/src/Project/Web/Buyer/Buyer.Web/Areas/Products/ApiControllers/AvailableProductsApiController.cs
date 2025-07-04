@@ -50,7 +50,6 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     pageIndex,
                     itemsPerPage,
                     await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                    null,
                     SortingConstants.Default);
 
                 if (products is not null)

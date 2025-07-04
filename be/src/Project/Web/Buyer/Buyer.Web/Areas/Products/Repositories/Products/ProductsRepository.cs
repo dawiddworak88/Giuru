@@ -118,8 +118,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             int pageIndex, 
             int itemsPerPage, 
             string token,
-            string filters,
-            string sort)
+            string orderBy)
         {
             var productsRequestModel = new ProductsRequestModel
             {
@@ -130,8 +129,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 HasPrimaryProduct = hasPrimaryProduct,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
-                Filters = filters,
-                Sort = sort
+                OrderBy = orderBy
             };
 
             var apiRequest = new ApiRequest<ProductsRequestModel>

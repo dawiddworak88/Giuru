@@ -15,7 +15,6 @@ using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Media.Services.MediaServices;
-using Buyer.Web.Shared.Definitions.Filters;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -57,11 +56,11 @@ namespace Buyer.Web.Areas.Products.Services.Products
             return string.Join(", ", attributes.OrEmptyIfNull());
         }
 
-        public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage, string token, string filters, string sort)
+        public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage, string token, string orderBy)
         {
             var catalogItemList = new List<CatalogItemViewModel>();
             
-            var pagedProducts = await this.productsRepository.GetProductsAsync(ids, categoryId, sellerId, language, searchTerm, hasPrimaryProduct, pageIndex, itemsPerPage, token, filters, sort);
+            var pagedProducts = await this.productsRepository.GetProductsAsync(ids, categoryId, sellerId, language, searchTerm, hasPrimaryProduct, pageIndex, itemsPerPage, token, orderBy);
 
             if (pagedProducts?.Data != null)
             {

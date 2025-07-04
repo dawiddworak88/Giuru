@@ -65,7 +65,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage, string filters, string sort)
+        public async Task<IActionResult> Get(Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var products = await _productsService.GetProductsAsync(
                 null,
@@ -77,8 +77,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 pageIndex,
                 itemsPerPage,
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                filters,
-                sort);
+                orderBy);
 
             return StatusCode((int)HttpStatusCode.OK, products);
         }
@@ -112,7 +111,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
 
                 var productVariants = await _productsRepository.GetProductsAsync(
-                    product.ProductVariants, null, null, language, null, false, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, null, SortingConstants.Default);
+                    product.ProductVariants, null, null, language, null, false, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, SortingConstants.Default);
 
                 var availableProducts = await _inventoryRepository.GetAvailbleProductsInventoryByIds(token, language, productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
 

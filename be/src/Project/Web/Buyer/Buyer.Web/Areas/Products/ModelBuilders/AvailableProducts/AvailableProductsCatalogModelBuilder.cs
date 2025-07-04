@@ -70,7 +70,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             {
                 var products = await this.productsService.GetProductsAsync(
                     inventories.Data.Select(x => x.ProductId), null, null, componentModel.Language,
-                    null, false, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token, null, SortingConstants.Default);
+                    null, false, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token, SortingConstants.Default);
 
                 if (products is not null)
                 {

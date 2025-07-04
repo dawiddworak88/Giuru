@@ -67,7 +67,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
                     PaginationConstants.DefaultPageIndex,
                     ProductConstants.ProductsCatalogPaginationPageSize,
                     componentModel.Token,
-                    null,
                     SortingConstants.Default);
                 viewModel.FilterCollector = new FiltersCollectorViewModel
                 {

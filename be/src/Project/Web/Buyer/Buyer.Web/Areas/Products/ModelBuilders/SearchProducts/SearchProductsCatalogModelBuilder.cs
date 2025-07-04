@@ -95,7 +95,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 PaginationConstants.DefaultPageIndex,
                 ProductConstants.ProductsCatalogPaginationPageSize,
                 componentModel.Token,
-                null,
                 SortingConstants.Default);
 
             if (products.Data is not null)
