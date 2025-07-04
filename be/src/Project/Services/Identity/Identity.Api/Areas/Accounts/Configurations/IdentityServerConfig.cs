@@ -64,11 +64,11 @@ namespace Identity.Api.Areas.Accounts.Configurations
                         RedirectUris = 
                         { 
                             $"{AccountConstants.Schemes.HttpsScheme}://{clientParameters[2]}/signin-oidc",
-                            $"{AccountConstants.Schemes.HttpScheme}://{clientParameters[2]}/signin-oidc",
+                            $"{AccountConstants.Schemes.HttpScheme}://{clientParameters[2]}/signin-oidc"
                         },
                         PostLogoutRedirectUris = {
                             $"{AccountConstants.Schemes.HttpsScheme}://{clientParameters[2]}/signout-callback-oidc",
-                            $"{AccountConstants.Schemes.HttpScheme}://{clientParameters[2]}/signout-callback-oidc",
+                            $"{AccountConstants.Schemes.HttpScheme}://{clientParameters[2]}/signout-callback-oidc"
                         },
                         AllowedScopes = new List<string>
                         {
