@@ -23,6 +23,9 @@ using Foundation.PageContent.ComponentModels;
 using Seller.Web.Shared.ModelBuilders.OrderItemStatusChanges;
 using Seller.Web.Shared.ModelBuilders.Dialogs;
 using Seller.Web.Areas.Shared.Repositories.UserApprovals;
+using Seller.Web.Shared.Services.Prices;
+using Seller.Web.Shared.Services.Products;
+using Foundation.Extensions.Services.Claims;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -37,6 +40,9 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IIdentityRepository, IdentityRepository>();
             services.AddScoped<IUserApprovalsRepository, UserApprovalsRepository>();
 
+            services.AddScoped<IPriceService, PriceService>();
+            services.AddScoped<IProductsService, ProductsService>();
+
             services.AddScoped<IModelBuilder<MenuTilesViewModel>, MenuTilesModelBuilder>();
             services.AddScoped<IModelBuilder<IEnumerable<DrawerMenuViewModel>>, DrawerMenuModelBuilder>();
             services.AddScoped<ICatalogModelBuilder, CatalogModelBuilder>();
@@ -46,6 +52,8 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel>, OrderItemStatusChangesModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, QRCodeDialogViewModel>, QRCodeDialogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel>, HeaderModelBuilder>();
+
+            services.AddScoped<IClaimsCacheInvalidatorService, ClaimsCacheInvalidatorService>();
         }
     }
 }

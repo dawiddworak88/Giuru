@@ -1,5 +1,6 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Services.Claims;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
+using Seller.Web.Shared.Repositories.Clients;
 using System;
 using System.Globalization;
 using System.Net;
@@ -19,13 +21,19 @@ namespace Seller.Web.Areas.Clients.ApiControllers
     {
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IClientAddressesRepository _deliveryAddressesRepository;
+        private readonly IClaimsCacheInvalidatorService _cacheInvalidatorService;
+        private readonly IClientsRepository _clientsRepository;
 
         public ClientAddressesApi(
             IStringLocalizer<ClientResources> clientLocalizer,
-            IClientAddressesRepository deliveryAddressesRepository)
+            IClientAddressesRepository deliveryAddressesRepository,
+            IClaimsCacheInvalidatorService cacheInvalidatorService,
+            IClientsRepository clientsRepository)
         {
             _clientLocalizer = clientLocalizer;
             _deliveryAddressesRepository = deliveryAddressesRepository;
+            _cacheInvalidatorService = cacheInvalidatorService;
+            _clientsRepository = clientsRepository;
         }
 
         [HttpPost]
@@ -33,6 +41,13 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
+
+            var client = await _clientsRepository.GetClientAsync(token, language, model.ClientId);
+
+            if (client is not null)
+            {
+                await _cacheInvalidatorService.InvalidateAsync(client.Email);
+            }
 
             var clientAddressId = await _deliveryAddressesRepository.SaveAsync(token, language, model.Id, model.Company, model.FirstName, model.LastName, model.PhoneNumber, model.Street, model.Region, model.PostCode, model.City, model.ClientId, model.CountryId);
 

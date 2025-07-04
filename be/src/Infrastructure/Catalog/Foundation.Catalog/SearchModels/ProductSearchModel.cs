@@ -21,6 +21,7 @@ namespace Foundation.Catalog.SearchModels.Products
         public string BrandName { get; set; }
         public CompletionField BrandNameSuggest { get; set; }
         public Guid? PrimaryProductId { get; set; }
+        public string PrimaryProductSku { get; set; }
         public bool PrimaryProductIdHasValue { get; set; }
         public bool IsNew { get; set; }
         public bool IsPublished { get; set; }

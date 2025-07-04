@@ -76,7 +76,10 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
                 DefaultItemsPerPage = Constants.DefaultItemsPerPage,
-                MaximalLabel = _globalLocalizer.GetString("MaximalLabel")
+                MaximalLabel = _globalLocalizer.GetString("MaximalLabel"),
+                UnitPriceLabel = _globalLocalizer.GetString("UnitPrice"),
+                PriceLabel = _globalLocalizer.GetString("Price"),
+                CurrencyLabel = _globalLocalizer.GetString("Currency")
             };
 
             var clients = await _clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);

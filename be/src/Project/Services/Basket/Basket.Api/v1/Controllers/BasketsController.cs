@@ -67,6 +67,9 @@ namespace Basket.Api.v1.Controllers
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
+                    UnitPrice = x.UnitPrice,
+                    Price = x.Price,
+                    Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo
                 }),
@@ -96,6 +99,9 @@ namespace Basket.Api.v1.Controllers
                             Quantity = x.Quantity,
                             StockQuantity = x.StockQuantity,
                             OutletQuantity = x.OutletQuantity,
+                            UnitPrice = x.UnitPrice,
+                            Price = x.Price,
+                            Currency = x.Currency,
                             ExternalReference = x.ExternalReference,
                             MoreInfo = x.MoreInfo
                         })
@@ -181,6 +187,9 @@ namespace Basket.Api.v1.Controllers
                             Quantity = x.Quantity,
                             StockQuantity = x.StockQuantity,
                             OutletQuantity = x.OutletQuantity,
+                            UnitPrice = x.UnitPrice,
+                            Price = x.Price,
+                            Currency = x.Currency,
                             ExternalReference = x.ExternalReference,
                             MoreInfo = x.MoreInfo
                         })

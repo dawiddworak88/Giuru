@@ -70,6 +70,9 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Currency")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ExternalReference")
                         .HasColumnType("nvarchar(max)");
 
@@ -90,6 +93,9 @@ namespace Ordering.Api.Infrastructure.Migrations
 
                     b.Property<Guid>("OrderStatusId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Reason")
                         .HasColumnType("nvarchar(max)");
@@ -232,6 +238,9 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Currency")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ExternalReference")
                         .HasColumnType("nvarchar(max)");
 
@@ -256,6 +265,9 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<string>("PictureUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
@@ -277,6 +289,9 @@ namespace Ordering.Api.Infrastructure.Migrations
 
                     b.Property<double>("StockQuantity")
                         .HasColumnType("float");
+
+                    b.Property<decimal?>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 

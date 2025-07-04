@@ -35,16 +35,16 @@ namespace Buyer.Web.Areas.Products.DependencyInjection
 
             services.AddScoped<IAsyncComponentModelBuilder<SearchProductsComponentModel, SearchProductsPageViewModel>, SearchProductsPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel>, SearchProductsCatalogModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, AvailableProductsPageViewModel>, AvailableProductsPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel>, AvailableProductsCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<PriceComponentModel, AvailableProductsPageViewModel>, AvailableProductsPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<PriceComponentModel, AvailableProductsCatalogViewModel>, AvailableProductsCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<SearchProductsComponentModel, CategoryPageViewModel>, CategoryPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel>, CategoryCatalogModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel>, ProductPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel>, ProductDetailModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<PriceComponentModel, ProductPageViewModel>, ProductPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<PriceComponentModel, ProductDetailViewModel>, ProductDetailModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CategoryBreadcrumbsViewModel>, CategoryBreadcrumbsModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductBreadcrumbsViewModel>, ProductBreadcrumbsModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OutletPageViewModel>, OutletPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OutletPageCatalogViewModel>, OutletCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<PriceComponentModel, OutletPageViewModel>, OutletPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<PriceComponentModel, OutletPageCatalogViewModel>, OutletCatalogModelBuilder>();
         }
     }
 }

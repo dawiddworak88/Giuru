@@ -795,6 +795,12 @@
   <data name="ClientApprovals" xml:space="preserve">
     <value>Zustimmungen</value>
   </data>
+  <data name="Price" xml:space="preserve">
+    <value>Preis</value>
+  </data>
+  <data name="UnitPrice" xml:space="preserve">
+    <value>Stückpreis</value>
+  </data>
   <data name="MaxAllowedOrderQuantity" xml:space="preserve">
     <value>Erlaubte Mengengrenze überschritten</value>
   </data>

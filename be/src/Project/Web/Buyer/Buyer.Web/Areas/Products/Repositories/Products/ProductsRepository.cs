@@ -290,6 +290,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 {
                     Id = productResponse.Id.Value,
                     PrimaryProductId = productResponse.PrimaryProductId,
+                    PrimaryProductSku = productResponse.PrimaryProductSku,
                     Sku = productResponse.Sku,
                     Name = productResponse.Name,
                     Description = productResponse.Description,

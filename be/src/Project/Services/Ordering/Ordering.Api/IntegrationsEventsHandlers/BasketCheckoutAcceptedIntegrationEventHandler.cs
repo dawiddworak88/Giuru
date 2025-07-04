@@ -75,6 +75,9 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
+                    UnitPrice = x.UnitPrice,
+                    Price = x.Price,
+                    Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo
                 }),

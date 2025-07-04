@@ -332,5 +332,34 @@ namespace Client.Api.Services.Clients
 
             return await clients.FirstOrDefaultAsync();
         }
+
+        public Task<ClientServiceModel> GetByEmailAsync(GetClientByEmailServiceModel model)
+        {
+            var client = from c in _context.Clients
+                         where c.Email == model.Email && c.IsActive
+                         select new ClientServiceModel
+                         {
+                             Id = c.Id,
+                             Name = c.Name,
+                             Email = c.Email,
+                             CountryId = c.CountryId,
+                             OrganisationId = c.OrganisationId,
+                             PreferedCurrencyId = c.CurrencyId,
+                             CommunicationLanguage = c.Language,
+                             PhoneNumber = c.PhoneNumber,
+                             IsDisabled = c.IsDisabled,
+                             DefaultDeliveryAddressId = c.DefaultDeliveryAddressId,
+                             DefaultBillingAddressId = c.DefaultBillingAddressId,
+                             LastModifiedDate = c.LastModifiedDate,
+                             CreatedDate = c.CreatedDate
+                         };
+
+            if (client is null)
+            {
+                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
+            }
+
+            return client.FirstOrDefaultAsync();
+        }
     }
 }

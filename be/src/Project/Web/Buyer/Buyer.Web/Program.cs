@@ -32,6 +32,7 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationM
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Foundation.Telemetry.DependencyInjection;
 using Buyer.Web.Areas.Dashboard.DependencyInjection;
+using Buyer.Web.Shared.Middlewares;
 using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,6 +73,18 @@ builder.Services.AddDataProtection().UseCryptographicAlgorithms(
         EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
         ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
     }).PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(builder.Configuration["RedisUrl"]), $"{Assembly.GetExecutingAssembly().GetName().Name}-DataProtection-Keys");
+
+if (builder.Configuration.GetValue<bool>("IntegrationTestsEnabled") is true)
+{
+    builder.Services.AddDistributedMemoryCache();
+}
+else
+{
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = builder.Configuration["RedisUrl"];
+    });
+}
 
 builder.Services.AddRazorPages();
 
@@ -180,6 +193,8 @@ app.UseGeneralStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
+
+app.UseMiddleware<ClaimsEnrichmentMiddleware>();
 
 app.UseAuthorization();
 

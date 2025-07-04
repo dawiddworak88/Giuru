@@ -43,6 +43,7 @@ function OrderForm(props) {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
 
             const searchParameters = {
+                clientId: client ? client.id : null,
                 searchTerm: args.value,
                 pageIndex: 1,
                 hasPrimaryProduct: true,
@@ -106,6 +107,8 @@ function OrderForm(props) {
     const handleAddOrderItemClick = () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        const totalQuantity = parseInt(quantity) + parseInt(stockQuantity) + parseInt(outletQuantity);
+
         const orderItem = {
             productId: product.id,
             sku: product.sku,
@@ -114,11 +117,12 @@ function OrderForm(props) {
             quantity: quantity ? quantity : 0,
             stockQuantity: stockQuantity ? stockQuantity : 0,
             outletQuantity: outletQuantity ? outletQuantity : 0,
+            unitPrice: product.price ? parseFloat(product.price).toFixed(2) : null,
+            price: product.price ? parseFloat(product.price * totalQuantity).toFixed(2) : null,
+            currency: product.currency,
             externalReference,
             moreInfo
         };
-
-        const totalQuantity = parseInt(quantity) + parseInt(stockQuantity) + parseInt(outletQuantity);
 
         if (props.maxAllowedOrderQuantity && 
            (totalQuantity > props.maxAllowedOrderQuantity)) {
@@ -240,7 +244,6 @@ function OrderForm(props) {
     };
 
     const handlePlaceOrder = () => {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         var order = {
@@ -576,6 +579,9 @@ function OrderForm(props) {
                                                         <TableCell>{props.deliveryFromLabel}</TableCell>
                                                         <TableCell>{props.deliveryToLabel}</TableCell>
                                                         <TableCell>{props.moreInfoLabel}</TableCell>
+                                                        <TableCell>{props.unitPriceLabel}</TableCell>
+                                                        <TableCell>{props.priceLabel}</TableCell>
+                                                        <TableCell>{props.currencyLabel}</TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
@@ -597,6 +603,9 @@ function OrderForm(props) {
                                                             <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                             <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
                                                             <TableCell>{item.moreInfo}</TableCell>
+                                                            <TableCell>{item.unitPrice}</TableCell>
+                                                            <TableCell>{item.price}</TableCell>
+                                                            <TableCell>{item.currency}</TableCell>
                                                         </TableRow>
                                                     ))}
                                                 </TableBody>

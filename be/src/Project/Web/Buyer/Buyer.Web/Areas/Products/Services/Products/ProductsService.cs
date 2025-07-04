@@ -42,7 +42,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
             var attributesToDisplay = this.options.Value.ProductAttributes.ToEnumerableString();
 
             var attributes = new List<string>();
-            foreach(var productAttribute in attributesToDisplay.OrEmptyIfNull())
+            foreach (var productAttribute in attributesToDisplay.OrEmptyIfNull())
             {
                 var existingAttribute = productAttributes.FirstOrDefault(x => x.Key == productAttribute);
                 if (existingAttribute is not null)
@@ -59,7 +59,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
         public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage, string token)
         {
             var catalogItemList = new List<CatalogItemViewModel>();
-            
+
             var pagedProducts = await this.productsRepository.GetProductsAsync(ids, categoryId, sellerId, language, searchTerm, hasPrimaryProduct, pageIndex, itemsPerPage, token, nameof(Product.Name));
 
             if (pagedProducts?.Data != null)
@@ -69,6 +69,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                     var catalogItem = new CatalogItemViewModel
                     {
                         Id = product.Id,
+                        PrimaryProductSku = product.PrimaryProductSku,
                         Sku = product.Sku,
                         Title = product.Name,
                         Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
@@ -76,7 +77,11 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         BrandName = product.BrandName,
                         Images = product.Images,
                         InStock = false,
-                        ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes)
+                        ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes),
+                        SleepAreaSize = GetSleepAreaSize(product.ProductAttributes),
+                        FabricsGroup = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePriceGroupAttributeKeys),
+                        ExtraPacking = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleExtraPackingAttributeKeys),
+                        PaletteSize = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePaletteSizeAttributeKeys)
                     };
 
                     if (product.Images != null)
@@ -118,5 +123,39 @@ namespace Buyer.Web.Areas.Products.Services.Products
         {
             return await this.productsRepository.GetProductSuggestionsAsync(searchTerm, size, language, token);
         }
+
+        public string GetFirstAvailableAttributeValue(IEnumerable<ProductAttribute> attributes, string possibleKeys)
+        {
+            var keys = possibleKeys.ToEnumerableString();
+
+            foreach (var key in keys.OrEmptyIfNull())
+            {
+                var value = attributes.FirstOrDefault(x => x.Key == key)?.Values?.FirstOrDefault();
+
+                if (string.IsNullOrWhiteSpace(value) is false)
+                {
+                    return value;
+                }
+            }
+
+            return null;
+        }
+
+        public string GetSleepAreaSize(IEnumerable<ProductAttribute> attributes)
+        {
+            var sleepAreaWidthValue = GetFirstAvailableAttributeValue(attributes, this.options.Value.PossibleSleepAreaWidthAttributeKeys);
+            var sleepAreaDepthValue = GetFirstAvailableAttributeValue(attributes, this.options.Value.PossibleSleepAreaDepthAttributeKeys);
+
+            if (string.IsNullOrWhiteSpace(sleepAreaWidthValue) ||
+                string.IsNullOrWhiteSpace(sleepAreaDepthValue))
+            {
+                return default;
+            }
+
+            var size = $"{sleepAreaWidthValue}x{sleepAreaDepthValue}".Trim();
+
+            return size;
+        }
+
     }
 }

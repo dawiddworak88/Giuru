@@ -67,6 +67,10 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
 
         public string IpAddress { get; set; }
 
+        public decimal? Price { get; set; }
+
+        public string Currency { get; set; }
+
         public virtual IEnumerable<OrderItem> OrderItems { get; set; }
     }
 }

@@ -16,6 +16,7 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ProductDetailModal from "../ProductDetailModal/ProductDetailModal";
+import Price from "../../../../shared/components/Price/Price";
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
@@ -41,6 +42,7 @@ function ProductDetail(props) {
                 sku: productVariant.subtitle,
                 title: productVariant.title,
                 images: productVariant.images,
+                price: productVariant.price
             }
         }
 
@@ -66,6 +68,9 @@ function ProductDetail(props) {
             stockQuantity: stockQuantity,
             outletQuantity: outletQuantity,
             externalReference: item.externalReference,
+            unitPrice: product.price ? parseFloat(product.price.current).toFixed(2) : null,
+            price: product.price ? parseFloat(product.price.current * totalQuantity).toFixed(2) : null,
+            currency: product.price ? product.price.currency : null,
             deliveryFrom: moment(item.deliveryFrom).startOf("day"),
             deliveryTo: moment(item.deliveryTo).startOf("day"),
             moreInfo: item.moreInfo
@@ -269,6 +274,11 @@ function ProductDetail(props) {
                             <div className="product-detail__in-stock">
                                 {props.inOutletLabel} {props.availableOutletQuantity}
                             </div>
+                        }
+                        {props.price &&
+                            <Price 
+                                {...props.price}
+                            />
                         }
                         {props.isAuthenticated &&
                             <div className="product-detail__add-to-cart-button">

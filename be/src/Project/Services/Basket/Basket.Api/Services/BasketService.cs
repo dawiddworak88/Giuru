@@ -83,6 +83,9 @@ namespace Basket.Api.Services
                         Quantity = x.Quantity,
                         StockQuantity = x.StockQuantity,
                         OutletQuantity = x.OutletQuantity,
+                        UnitPrice = x.UnitPrice,
+                        Price = x.Price,
+                        Currency = x.Currency,
                         ExternalReference = x.ExternalReference,
                         DeliveryFrom = x.DeliveryFrom,
                         DeliveryTo = x.DeliveryTo,
@@ -169,6 +172,9 @@ namespace Basket.Api.Services
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
+                    UnitPrice = x.UnitPrice,
+                    Price = x.Price,
+                    Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo
                 })
@@ -191,6 +197,9 @@ namespace Basket.Api.Services
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
+                    UnitPrice = x.UnitPrice,
+                    Price = x.Price,
+                    Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo
                 })
@@ -210,6 +219,9 @@ namespace Basket.Api.Services
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
+                    UnitPrice = x.UnitPrice,
+                    Price = x.Price,
+                    Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo
                 })
