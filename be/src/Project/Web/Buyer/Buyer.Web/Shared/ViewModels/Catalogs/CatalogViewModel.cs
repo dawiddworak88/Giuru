@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Shared.DomainModels.Baskets;
+using Buyer.Web.Shared.ViewModels.Filters;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Foundation.GenericRepository.Paginations;
@@ -14,6 +15,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string Title { get; set; }
         public string ResultsLabel { get; set; }
         public string NoResultsLabel { get; set; }
+        public string NoFilteredResultsLabel { get; set; }
         public string SkuLabel { get; set; }
         public string ByLabel { get; set; }
         public string InStockLabel { get; set; }
@@ -34,6 +36,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string ProductsApiUrl { get; set; }
         public string UpdateBasketUrl { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
+        public FiltersCollectorViewModel FilterCollector { get; set; }
         public int? MaxAllowedOrderQuantity { get; set; }
         public string MaxAllowedOrderQuantityErrorMessage { get; set; }
         public SidebarViewModel Sidebar { get; set; }

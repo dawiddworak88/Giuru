@@ -5,6 +5,7 @@ using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.Definitions.Files;
+using Buyer.Web.Shared.Definitions.Filters;
 using Buyer.Web.Shared.DomainModels.Media;
 using Buyer.Web.Shared.Repositories.Media;
 using Foundation.ApiExtensions.Controllers;
@@ -64,7 +65,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var products = await _productsService.GetProductsAsync(
                 null,
@@ -75,7 +76,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 false,
                 pageIndex,
                 itemsPerPage,
-                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName));
+                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                orderBy);
 
             return StatusCode((int)HttpStatusCode.OK, products);
         }
@@ -109,7 +111,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
 
                 var productVariants = await _productsRepository.GetProductsAsync(
-                    product.ProductVariants, null, null, language, null, false, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, $"{nameof(Product.Name)} ASC");
+                    product.ProductVariants, null, null, language, null, false, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, SortingConstants.Default);
 
                 var availableProducts = await _inventoryRepository.GetAvailbleProductsInventoryByIds(token, language, productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
 

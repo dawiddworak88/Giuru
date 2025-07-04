@@ -13,7 +13,7 @@ function getItems(length) {
       id: (i + 1),
       sku: (i + 271829),
       title: "Mounting Dream Tilt TV Wall Mount Bracket for Most 37-70 Inches TVs, TV Mount with VESA up to 600x400mm, Fits 16",
-      imageUrl: "https://eltap.pl/upload/gallery/190/cay02jpg163.jpg",
+      imageUrl: "https://media-test.eltap.com/api/v1/files/3d6baf66-d543-4c81-1a86-08dc52e27976",
       imageAlt: "Alessia",
       inStock: true,
       brandName: "eltap",
@@ -33,6 +33,7 @@ var catalog = {
   title: "Sofas",
   resultsLabel: "results",
   noResultsLabel: "There are no results.",
+  noFilteredResultsLabel: "Sorry, we couldn't find what you were looking for. Try selecting different parameters.",
   skuLabel: "SKU:",
   byLabel: "by",
   inStockLabel: "In Stock",
@@ -46,9 +47,92 @@ var catalog = {
   generalErrorMessage: "An Error Occurred",
   productsApiUrl: "#",
   id: "11",
-  pagedItems: getItems(100),
+  pagedItems: getItems(5),
   sidebar: {
     basketUrl: "#"
+  },
+  filterCollector: {
+    allFilters: "All filters",
+    sortLabel: "Sort by:",
+    clearAllFilters: "Clear all",
+    seeResult: "See results",
+    filtersLabel: "Filters",
+    sortItems: [
+      {
+        label: "Default",
+        key: "default"
+      },
+      {
+        label: "Price: Low to High",
+        key: "priceAsc"
+      },
+      {
+        label: "Price: High to Low",
+        key: "priceDsc"
+      },
+      {
+        label: "Name",
+        key: "name"
+      },
+      {
+        label: "Newest",
+        key: "new"
+      }
+    ],
+    filterInputs: [
+      {
+        label: "Price",
+        key: "price",
+        items: [
+          {
+            label: "0-999 EUR",
+            value: 1
+          },
+          {
+            label: "1000-1999 EUR",
+            value: 2
+          },
+          {
+            label: "2000-2999 EUR",
+            value: 3
+          },
+          {
+            label: "3000-3999 EUR",
+            value: 4
+          },
+          {
+            label: "more 4000 EUR",
+            value: 5
+          },
+        ]
+      },
+      {
+        label: "Fabric",
+        key: "fabric",
+        items: [
+          {
+            label: "Aspen 20",
+            value: 1
+          },
+          {
+            label: "Aspen 05",
+            value: 2
+          },
+          {
+            label: "Manhattan 20",
+            value: 3
+          },
+          {
+            label: "Touch 24",
+            value: 4
+          },
+          {
+            label: "Amore 45",
+            value: 5
+          },
+        ]
+      }
+    ]
   }
 };
  

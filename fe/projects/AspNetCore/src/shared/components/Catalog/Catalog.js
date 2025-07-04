@@ -13,6 +13,8 @@ import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
 import Modal from "../Modal/Modal";
+import FilterCollector from "../Filters/FilterCollector";
+import SortingConstants from "../../constants/SortingConstants";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -25,6 +27,8 @@ function Catalog(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null);
+    const [sorting, setSorting] = useState(props.filterCollector && props.filterCollector.sortItems.length > 0 ? SortingConstants.defaultKey() : "");
+    const [filters, setFilters] = useState([]);
 
     const toggleSidebar = (item) => {
         setProductVariant(item);
@@ -46,7 +50,7 @@ function Catalog(props) {
             brandId: props.brandId,
             pageIndex: newPage + 1,
             itemsPerPage,
-            orderBy: props.orderBy
+            orderBy: sorting
         };
 
         if (props.searchTerm != null) {
@@ -56,36 +60,7 @@ function Catalog(props) {
             }
         }
 
-        const requestOptions = {
-            method: "GET",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
-        };
-
-        const url = props.productsApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
-
-        return fetch(url, requestOptions)
-            .then(function (response) {
-
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-
-                    if (response.ok) {
-
-                        setItems(() => []);
-                        setItems(() => jsonResponse.data);
-                        setTotal(() => jsonResponse.total);
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
+        fetchData(searchParameters);
     };
 
     const handleModal = (item) => {
@@ -173,7 +148,7 @@ function Catalog(props) {
     const calculateMaxQuantity = (quantityType, availableQuantity) => {
         if (basketId) {
             const actualQuantity = getCurrentQuantity(quantityType);
-            return Math.max(availableQuantity - actualQuantity, 0);    
+            return Math.max(availableQuantity - actualQuantity, 0);
         }
 
         return availableQuantity;
@@ -189,15 +164,87 @@ function Catalog(props) {
         return 0;
     }
 
+    const handleSetSorting = (value) => {
+        setSorting(value)
+        
+        let searchParameters = {
+            categoryId: props.categoryId,
+            brandId: props.brandId,
+            pageIndex: page + 1,
+            itemsPerPage,
+            orderBy: value
+        };
+
+        if (props.searchTerm != null) {
+            searchParameters = {
+                ...searchParameters,
+                searchTerm: props.searchTerm
+            }
+        }
+
+        fetchData(searchParameters);
+    }
+
+    const handleFilterChange = (value) => {
+        setFilters(value)
+        // featching a filtred data
+    }
+
+    const fetchData = (searchParameters) => {
+        const requestOptions = {
+            method: "GET",
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
+        };
+
+        const url = props.productsApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+
+        return fetch(url, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+
+                    if (response.ok) {
+
+                        setItems(() => []);
+                        setItems(() => jsonResponse.data);
+                        setTotal(() => jsonResponse.total);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    }
+
     return (
         <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
-            {items && items.length > 0 ?
-                (
+            {items && items.length === 0 && filters.length > 0 &&
+                <p className="pb-5">    
+                    {props.noFilteredResultsLabel}
+                </p>
+            }
+            <div>
+                <div>
+                    <FilterCollector
+                        {...props.filterCollector}
+                        total={total}
+                        resultsLabel={props.resultsLabel}
+                        filters={filters}
+                        setFilters={handleFilterChange}
+                        sorting={sorting}
+                        setSorting={handleSetSorting}
+                    />
+                </div>
+                {items && items.length > 0 ? (
                     <div>
-                        {total &&
-                            <p className="subtitle is-6">{total} {props.resultsLabel}</p>
-                        }
                         <div className="columns is-tablet is-multiline">
                             {items.map((item, index) => {
                                 return (
@@ -285,12 +332,12 @@ function Catalog(props) {
                             />
                         </div>
                     </div>
-                ) :
-                (
+                ) : (
                     <section className="section is-flex-centered">
                         <span className="is-title is-5">{props.noResultsLabel}</span>
                     </section>
                 )}
+            </div>
             {props.sidebar &&
                 <Sidebar
                     productId={productVariant ? productVariant.id : null}
@@ -322,6 +369,7 @@ function Catalog(props) {
 Catalog.propTypes = {
     title: PropTypes.string.isRequired,
     noResultsLabel: PropTypes.string.isRequired,
+    noFilteredResultsLabel: PropTypes.string.isRequired,
     resultsLabel: PropTypes.string.isRequired,
     skuLabel: PropTypes.string.isRequired,
     byLabel: PropTypes.string.isRequired,

@@ -1,5 +1,6 @@
 ﻿using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Shared.Definitions.Filters;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
@@ -48,7 +49,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     false,
                     pageIndex,
                     itemsPerPage,
-                    await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName));
+                    await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                    SortingConstants.Default);
 
                 if (products is not null)
                 {

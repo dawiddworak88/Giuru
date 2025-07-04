@@ -53,9 +53,16 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 query = query && Query<ProductSearchModel>.Term(t => t.PrimaryProductIdHasValue, hasPrimaryProduct.Value);
             }
 
-            if (isNew.HasValue)
+            if (orderBy == SortingConstants.Newest)
             {
-                query = query && Query<ProductSearchModel>.Term(t => t.IsNew, isNew.Value);
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsNew).Value(true));
+            }
+            else
+            {
+                if (isNew.HasValue)
+                {
+                    query = query && Query<ProductSearchModel>.Term(t => t.IsNew, isNew.Value);
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -74,7 +81,22 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 itemsPerPage = Constants.MaxItemsPerPageLimit;
             }
 
-            var response = await _elasticClient.SearchAsync<ProductSearchModel>(s => s.TrackTotalHits().From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(q =>
+            {
+                q.TrackTotalHits()
+                .From((pageIndex - 1) * itemsPerPage)
+                .Size(itemsPerPage)
+                .Query(q => query);
+
+                var sorting = Sorting<ProductSearchModel>(orderBy);
+
+                if (sorting is not null)
+                {
+                    q.Sort(s => sorting);
+                }
+
+                return q;
+            });
 
             if (response.IsValid)
             {
@@ -151,6 +173,11 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsPublished).Value(true));
             }
 
+            if (orderBy == SortingConstants.Newest)
+            {
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsNew).Value(true));
+            }
+
             var idsQuery = Query<ProductSearchModel>.MatchNone();
 
             foreach (var id in ids)
@@ -160,7 +187,21 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
             query = query && idsQuery;
 
-            var response = await _elasticClient.SearchAsync<ProductSearchModel>(q => q.From(ProductSearchConstants.Pagination.BeginningPage).Size(ProductSearchConstants.Pagination.ProductsMaxSize).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(q =>
+            {
+                q.From(ProductSearchConstants.Pagination.BeginningPage)
+                .Size(ProductSearchConstants.Pagination.ProductsMaxSize)
+                .Query(q => query);
+
+                var sorting = Sorting<ProductSearchModel>(orderBy);
+
+                if (sorting is not null)
+                {
+                    q.Sort(s => sorting);
+                }
+
+                return q;
+            });
 
             if (response.IsValid && response.Hits.Any())
             {
@@ -282,6 +323,26 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 select option.Text;
 
             return nameSuggestions.Distinct().Take(size);
+        }
+
+        private SortDescriptor<T> Sorting<T>(string orderBy) where T : ProductSearchModel
+        {
+            if (orderBy == SortingConstants.Newest || orderBy == SortingConstants.Default)
+            {
+                return null;
+            }
+
+            if (orderBy == SortingConstants.Name)
+            {
+                return new SortDescriptor<T>().Field(f => f.Name.Suffix("keyword"), SortOrder.Ascending);
+            }
+
+            if (string.IsNullOrWhiteSpace(orderBy) is false)
+            {
+                return orderBy.ToElasticSortList<T>();
+            }
+
+            return null;
         }
     }
 }

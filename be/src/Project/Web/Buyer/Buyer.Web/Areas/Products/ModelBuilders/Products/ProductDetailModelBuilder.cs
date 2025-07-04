@@ -25,6 +25,7 @@ using Foundation.PageContent.Definitions;
 using Foundation.Media.Services.MediaServices;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Repositories.Media;
+using Buyer.Web.Shared.Definitions.Filters;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
 
@@ -207,7 +208,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 if (product.ProductVariants is not null)
                 {
-                    var productVariants = await _productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, false, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, nameof(Product.CreatedDate));
+                    var productVariants = await _productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, false, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, SortingConstants.Default);
 
                     if (productVariants != null)
                     {
