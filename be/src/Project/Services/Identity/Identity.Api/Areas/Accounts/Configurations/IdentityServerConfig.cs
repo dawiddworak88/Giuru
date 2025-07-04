@@ -68,7 +68,7 @@ namespace Identity.Api.Areas.Accounts.Configurations
                         },
                         PostLogoutRedirectUris = {
                             $"{AccountConstants.Schemes.HttpsScheme}://{clientParameters[2]}/signout-callback-oidc",
-                            $"{AccountConstants.Schemes.HttpScheme}://{clientParameters[2]}/signout-callback-oidc"                        
+                            $"{AccountConstants.Schemes.HttpScheme}://{clientParameters[2]}/signout-callback-oidc"
                         },
                         AllowedScopes = new List<string>
                         {
