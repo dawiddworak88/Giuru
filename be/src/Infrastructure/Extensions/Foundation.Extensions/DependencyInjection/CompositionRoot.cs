@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO.Compression;
+using System.Net;
 
 namespace Foundation.Extensions.DependencyInjection
 {
@@ -28,7 +29,7 @@ namespace Foundation.Extensions.DependencyInjection
                 options.ForwardedHeaders =
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
                 options.KnownNetworks.Clear(); // loopback by default, clear it for K8s
-               /* options.KnownProxies.Clear();*/
+                options.KnownProxies.Add(IPAddress.Parse("20.223.248.47"));
             });
         }
     }
