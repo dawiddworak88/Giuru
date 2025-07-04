@@ -90,6 +90,11 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                                 SleepAreaSize = x.SleepAreaSize,
                                 PaletteSize = x.PaletteSize,
                                 Size = x.Size,
+                                PointsOfLight = x.PointsOfLight,
+                                LampshadeType = x.LampshadeType,
+                                LampshadeSize = x.LampshadeSize,
+                                LinearLight = x.LinearLight,
+                                Mirror = x.Mirror,
                                 IsOutlet = (outletItems.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                             }),
                             new PriceClient

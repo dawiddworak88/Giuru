@@ -33,6 +33,12 @@ namespace Buyer.Web.Shared.Configurations
         public string PossibleDepthAttributeKeys { get; set; }
         public string PossibleWidthAttributeKeys { get; set; }
         public string PossiblePaletteSizeAttributeKeys { get; set; }
+        public string PossiblePointsOfLightAttributeKeys { get; set; }
+        public string PossibleLampshadeTypeAttributeKeys { get; set; }
+        public string PossibleLampshadeSizeAttributeKeys { get; set; }
+        public string PossibleLinearLightAttributeKeys { get; set; }
+        public string PossibleMirrorAttributeKeys { get; set; }
+        public string PossibleShapeAttributeKeys { get; set; }
         public string DefaultCulture { get; set; }
         public string DefaultCurrency { get; set; }
     }

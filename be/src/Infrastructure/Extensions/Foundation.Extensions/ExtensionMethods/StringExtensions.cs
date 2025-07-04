@@ -40,15 +40,23 @@ namespace Foundation.Extensions.ExtensionMethods
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                return string.Empty;
+                return "No";
             }
 
-            if (bool.TryParse(value, out bool result))
+            var yesNoDictionary = new Dictionary<string, string>
             {
-                return result ? "Yes" : "No";
+                { "yes", "Yes" },
+                { "true", "Yes" },
+                { "tak", "Yes" },
+                { "ja", "Yes" }
+            };
+
+            if (yesNoDictionary.TryGetValue(value.ToLowerInvariant().Trim(), out string mappedValue))
+            {
+                return mappedValue;
             }
 
             return "No";
-        }   
+        }
     }
 }

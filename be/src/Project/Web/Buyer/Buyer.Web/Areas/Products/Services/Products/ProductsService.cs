@@ -82,7 +82,13 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         FabricsGroup = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePriceGroupAttributeKeys),
                         ExtraPacking = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleExtraPackingAttributeKeys),
                         PaletteSize = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePaletteSizeAttributeKeys),
-                        Size = GetSize(product.ProductAttributes)
+                        Size = GetSize(product.ProductAttributes),
+                        PointsOfLight = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePointsOfLightAttributeKeys),
+                        LampshadeType = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLampshadeTypeAttributeKeys),
+                        LampshadeSize = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLampshadeSizeAttributeKeys),
+                        LinearLight = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                        Mirror = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                        Shape = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleShapeAttributeKeys)
                     };
 
                     if (product.Images != null)

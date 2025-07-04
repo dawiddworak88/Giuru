@@ -103,6 +103,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 ExtraPacking = x.ExtraPacking,
                                 PaletteSize = x.PaletteSize,
                                 Size = x.Size,
+                                PointsOfLight = x.PointsOfLight,
+                                LampshadeType = x.LampshadeType,
+                                LampshadeSize = x.LampshadeSize,
+                                LinearLight = x.LinearLight,
+                                Mirror = x.Mirror,
                                 IsOutlet = (outletItems.Data.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                             }),
                             new PriceClient

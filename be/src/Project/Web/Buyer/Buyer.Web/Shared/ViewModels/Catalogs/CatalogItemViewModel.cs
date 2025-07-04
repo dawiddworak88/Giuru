@@ -34,5 +34,11 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string FabricsGroup { get; set; }
         public string ExtraPacking { get; set; }
         public string PaletteSize { get; set; }
+        public string PointsOfLight { get; set; }
+        public string LampshadeType { get; set; }
+        public string LampshadeSize { get; set; }
+        public string LinearLight { get; set; }
+        public string Mirror { get; set; }
+        public string Shape { get; set; }
     }
 }
