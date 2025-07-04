@@ -248,8 +248,7 @@ namespace Catalog.Api.v1.Products.Controllers
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The number of items per page.</param>
-        /// <param name="filters">The filtres in json format.</param>
-        /// <param name="sort">The sort key.</param>
+        /// <param name="orderBy">The optional order by.</param>
         /// <returns></returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("filtered")]
@@ -264,8 +263,7 @@ namespace Catalog.Api.v1.Products.Controllers
             string searchTerm,
             int? pageIndex,
             int? itemsPerPage,
-            string filters,
-            string sort)
+            string orderBy)
         {
             var productIds = ids.ToEnumerableGuidIds();
 
@@ -277,8 +275,7 @@ namespace Catalog.Api.v1.Products.Controllers
                     PageIndex = pageIndex,
                     ItemsPerPage = itemsPerPage,
                     Language = CultureInfo.CurrentCulture.Name,
-                    Filters = filters,
-                    Sort = sort
+                    OrderBy = orderBy
                 };
 
                 var validator = new GetProductsByIdsModelValidator();
@@ -312,8 +309,7 @@ namespace Catalog.Api.v1.Products.Controllers
                     OrganisationId = sellerId,
                     Language = CultureInfo.CurrentCulture.Name,
                     HasPrimaryProduct = hasPrimaryProduct,
-                    Filters = filters,
-                    Sort = sort
+                    OrderBy = orderBy
                 };
 
                 var products = await _productService.GetAsync(serviceModel);

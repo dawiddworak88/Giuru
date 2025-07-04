@@ -8,7 +8,5 @@ namespace Catalog.Api.ServicesModels.Products
         public Guid? CategoryId { get; set; }
         public bool? HasPrimaryProduct { get; set; }
         public bool? IsNew { get; set; }
-        public string Filters { get; set; }
-        public string Sort { get; set; }
     }
 }

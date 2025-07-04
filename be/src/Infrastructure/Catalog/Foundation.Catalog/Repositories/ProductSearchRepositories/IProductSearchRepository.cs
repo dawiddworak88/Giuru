@@ -17,10 +17,8 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             string searchTerm,
             int? pageIndex, 
             int? itemsPerPage,
-            string orderBy,
-            string filters,
-            string sort);
-        Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? organisationId, IEnumerable<Guid> ids, string orderBy, string filters, string sort);
+            string orderBy);
+        Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? organisationId, IEnumerable<Guid> ids, string orderBy);
         Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? organisationId, IEnumerable<string> skus, string orderBy);
         Task<PagedResults<IEnumerable<ProductSearchModel>>> GetProductVariantsAsync(Guid id, string language, Guid? organisationId);
         Task<ProductSearchModel> GetByIdAsync(Guid id, string language, Guid? organisationId);
