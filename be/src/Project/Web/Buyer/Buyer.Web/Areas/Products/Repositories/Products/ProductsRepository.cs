@@ -137,7 +137,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 Language = language,
                 Data = productsRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.FilteredProductsApiEndpoint}"
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
             };
 
             var response = await _apiClientService.GetAsync<ApiRequest<ProductsRequestModel>, ProductsRequestModel, PagedResults<IEnumerable<ProductResponseModel>>>(apiRequest);
