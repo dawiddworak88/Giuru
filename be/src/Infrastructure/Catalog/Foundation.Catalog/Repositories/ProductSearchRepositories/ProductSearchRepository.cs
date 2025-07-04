@@ -81,7 +81,22 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 itemsPerPage = Constants.MaxItemsPerPageLimit;
             }
 
-            var response = await _elasticClient.SearchAsync<ProductSearchModel>(s => s.TrackTotalHits().From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(q => query).Sort(s => Sorting<ProductSearchModel>(orderBy)));
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(q =>
+            {
+                q.TrackTotalHits()
+                .From((pageIndex - 1) * itemsPerPage)
+                .Size(itemsPerPage)
+                .Query(q => query);
+
+                var sorting = Sorting<ProductSearchModel>(orderBy);
+
+                if (sorting is not null)
+                {
+                    q.Sort(s => sorting);
+                }
+
+                return q;
+            });
 
             if (response.IsValid)
             {
@@ -172,7 +187,21 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
             query = query && idsQuery;
 
-            var response = await _elasticClient.SearchAsync<ProductSearchModel>(q => q.From(ProductSearchConstants.Pagination.BeginningPage).Size(ProductSearchConstants.Pagination.ProductsMaxSize).Query(q => query).Sort(s => Sorting<ProductSearchModel>(orderBy)));
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(q =>
+            {
+                q.From(ProductSearchConstants.Pagination.BeginningPage)
+                .Size(ProductSearchConstants.Pagination.ProductsMaxSize)
+                .Query(q => query);
+
+                var sorting = Sorting<ProductSearchModel>(orderBy);
+
+                if (sorting is not null)
+                {
+                    q.Sort(s => sorting);
+                }
+
+                return q;
+            });
 
             if (response.IsValid && response.Hits.Any())
             {
@@ -300,7 +329,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
         {
             if (orderBy == SortingConstants.Newest || orderBy == SortingConstants.Default)
             {
-                return new SortDescriptor<T>();
+                return null;
             }
 
             if (orderBy == SortingConstants.Name)
@@ -313,7 +342,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 return orderBy.ToElasticSortList<T>();
             }
 
-            return new SortDescriptor<T>();
+            return null;
         }
     }
 }
