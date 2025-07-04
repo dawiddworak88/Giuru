@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO.Compression;
+using System.Net;
 
 namespace Foundation.Extensions.DependencyInjection
 {
@@ -25,8 +26,9 @@ namespace Foundation.Extensions.DependencyInjection
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.ForwardedHeaders =
-                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
             });
         }
     }

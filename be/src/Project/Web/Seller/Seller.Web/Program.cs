@@ -38,6 +38,9 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Seller.Web.Areas.Global.DependencyInjection;
 using Foundation.Telemetry.DependencyInjection;
 using Seller.Web.Areas.Dashboard.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Linq;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -171,10 +174,12 @@ var app = builder.Build();
 
 IdentityModelEventSource.ShowPII = true;
 
-app.UseForwardedHeaders(new ForwardedHeadersOptions
+app.UseForwardedHeaders();
+
+if (!app.Environment.IsDevelopment())
 {
-    ForwardedHeaders = ForwardedHeaders.XForwardedProto
-});
+    app.UseHttpsRedirection();
+}
 
 app.UseGeneralException();
 
