@@ -1,6 +1,6 @@
-﻿namespace Buyer.Web.Areas.Products.Definitions
+﻿namespace Seller.Web.Shared.Definitions
 {
-    public static class ProductConstants
+    public static class ProductColorsConstants
     {
         public static readonly string ProductColorCacheKey = "Catalog.Api-Colors-Cache";
     }

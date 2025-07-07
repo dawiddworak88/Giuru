@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.DomainModels.Products;
+using System.Linq;
 
 namespace Seller.Web.Shared.Repositories.ProductAttributeItems
 {

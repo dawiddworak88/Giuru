@@ -34,7 +34,7 @@ namespace Buyer.Web.Areas.Products.Services.ProductColors
                 return color;
             }
 
-            var result = await _cache.HashGetAsync(ProductConstants.ProductColorCacheKey, color.Trim().ToLower());
+            var result = await _cache.HashGetAsync(ProductColorConstants.ColorCacheKey, color.Trim().ToLower());
 
             if (result.HasValue)
             {
@@ -73,7 +73,7 @@ namespace Buyer.Web.Areas.Products.Services.ProductColors
 
         private async Task InitializeAsync()
         {
-            if (await _cache.KeyExistsAsync(ProductConstants.ProductColorCacheKey))
+            if (await _cache.KeyExistsAsync(ProductColorConstants.ColorCacheKey))
             {
                 return;
             }
@@ -95,7 +95,7 @@ namespace Buyer.Web.Areas.Products.Services.ProductColors
                 hashEntries.Add(new HashEntry(color.English.ToLower(), color.English));
             }
 
-            await _cache.HashSetAsync(ProductConstants.ProductColorCacheKey, hashEntries.ToArray());
+            await _cache.HashSetAsync(ProductColorConstants.ColorCacheKey, hashEntries.ToArray());
         }
 
         private class ColorTranslation
