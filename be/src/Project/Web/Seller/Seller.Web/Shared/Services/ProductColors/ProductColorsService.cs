@@ -16,11 +16,11 @@ namespace Seller.Web.Shared.Services.ProductColors
         private readonly IOptions<AppSettings> _options;
 
         public ProductColorsService(
-            IDatabase cache,
+            ConnectionMultiplexer redis,
             IProductAttributeItemsRepository productAttributeItemsRepository,
             IOptions<AppSettings> options)
         {
-            _cache = cache;
+            _cache = redis.GetDatabase();
             _productAttributeItemsRepository = productAttributeItemsRepository;
             _options = options;
         }
