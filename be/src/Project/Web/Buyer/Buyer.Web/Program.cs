@@ -85,6 +85,15 @@ else
     });
 }
 
+builder.Services.AddSingleton(sp =>
+{
+    var configuration = ConfigurationOptions.Parse(builder.Configuration["RedisUrl"], true);
+
+    configuration.ResolveDns = true;
+
+    return ConnectionMultiplexer.Connect(configuration);
+});
+
 builder.Services.AddRazorPages();
 
 builder.Services.AddLocalization();

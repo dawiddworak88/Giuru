@@ -112,6 +112,15 @@ else
     builder.Services.RegisterClientAccountDependencies(builder.Configuration, builder.Environment);
 }
 
+builder.Services.AddSingleton(sp =>
+{
+    var configuration = ConfigurationOptions.Parse(builder.Configuration["RedisUrl"], true);
+
+    configuration.ResolveDns = true;
+
+    return ConnectionMultiplexer.Connect(configuration);
+});
+
 builder.Services.RegisterApiExtensionsDependencies();
 
 builder.Services.RegisterLocalizationDependencies();
