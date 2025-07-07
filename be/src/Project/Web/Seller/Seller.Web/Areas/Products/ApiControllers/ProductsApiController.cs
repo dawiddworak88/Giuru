@@ -30,6 +30,7 @@ using Seller.Web.Shared.Services.Prices;
 using Seller.Web.Shared.Services.Products;
 using System.Collections.Generic;
 using Seller.Web.Shared.Definitions;
+using Seller.Web.Shared.Services.ProductColors;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
@@ -47,6 +48,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly ICurrenciesRepository _currenciesRepository;
         private readonly IProductsService _productsService;
+        private readonly IProductColorsService _productColorsService;
         private readonly IOptions<AppSettings> _options;
 
         public ProductsApiController(
@@ -61,6 +63,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             IClientAddressesRepository clientAddressesRepository,
             ICurrenciesRepository currenciesRepository,
             IProductsService productsService,
+            IProductColorsService productColorsService,
             IOptions<AppSettings> options)
         {
             _productsRepository = productsRepository;
@@ -75,6 +78,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             _clientAddressesRepository = clientAddressesRepository;
             _currenciesRepository = currenciesRepository;
             _productsService = productsService;
+            _productColorsService = productColorsService;
         }
 
         [HttpGet]
@@ -205,25 +209,29 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
                     var currency = await _currenciesRepository.GetAsync(token, _options.Value.DefaultCulture, client?.PreferedCurrencyId);
 
+                    var priceProducts = products.Data.Select(async x => new PriceProduct
+                    {
+                        PrimarySku = x.PrimaryProductSku,
+                        FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                        ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
+                        SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
+                        PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                        Size = _productsService.GetSize(x.ProductAttributes),
+                        IsOutlet = (outlets.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo(),
+                        PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
+                        LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
+                        LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
+                        LinearLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                        Mirror = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                        Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
+                        PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
+                        SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                    });
+
                     prices = await _priceService.GetPrices(
                         _options.Value.GrulaAccessToken,
                         DateTime.UtcNow,
-                        products.Data.Select(x => new PriceProduct
-                        {
-                            PrimarySku = x.PrimaryProductSku,
-                            FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
-                            SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
-                            PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
-                            Size = _productsService.GetSize(x.ProductAttributes),
-                            IsOutlet = (outlets.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo(),
-                            PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
-                            LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
-                            LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
-                            LinearLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
-                            Mirror = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
-                            Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys)
-                        }),
+                        await Task.WhenAll(priceProducts),
                         new PriceClient
                         {
                             Name = client?.Name,

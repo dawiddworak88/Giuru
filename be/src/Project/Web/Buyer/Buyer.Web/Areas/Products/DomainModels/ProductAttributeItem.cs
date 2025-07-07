@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Seller.Web.Areas.Products.DomainModels
+namespace Buyer.Web.Areas.Products.DomainModels
 {
     public class ProductAttributeItem
     {

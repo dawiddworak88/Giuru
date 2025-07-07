@@ -40,5 +40,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string LinearLight { get; set; }
         public string Mirror { get; set; }
         public string Shape { get; set; }
+        public string PrimaryColor { get; set; }
+        public string SecondaryColor { get; set; }
     }
 }

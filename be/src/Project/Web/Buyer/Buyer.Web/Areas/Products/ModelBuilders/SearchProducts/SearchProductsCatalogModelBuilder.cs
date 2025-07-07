@@ -116,6 +116,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             LinearLight = x.LinearLight,
                             Mirror = x.Mirror,
                             Shape = x.Shape,
+                            PrimaryColor = x.PrimaryColor,
+                            SecondaryColor = x.SecondaryColor,
                             IsOutlet = (outletItems.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                         }),
                         new PriceClient
@@ -147,7 +149,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         product.AvailableOutletQuantity = outletItem.AvailableQuantity;
                         product.OutletTitle = outletItem.Title;
                     }
-
+                    
                     var inventoryItem = inventoryItems.FirstOrDefault(x => x.ProductSku == product.Sku);
 
                     if (inventoryItem is not null)

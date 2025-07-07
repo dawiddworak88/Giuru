@@ -1,5 +1,5 @@
 ﻿using Foundation.GenericRepository.Paginations;
-using Seller.Web.Areas.Products.DomainModels;
+using Seller.Web.Shared.DomainModels.Products;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

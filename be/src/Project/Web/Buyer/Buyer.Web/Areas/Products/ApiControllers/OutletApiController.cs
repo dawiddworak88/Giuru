@@ -78,6 +78,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                                 LinearLight = x.LinearLight,
                                 Mirror = x.Mirror,
                                 Shape = x.Shape,
+                                PrimaryColor = x.PrimaryColor,
+                                SecondaryColor = x.SecondaryColor,
                                 IsOutlet = (outletItems.Data.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                             }),
                             new PriceClient

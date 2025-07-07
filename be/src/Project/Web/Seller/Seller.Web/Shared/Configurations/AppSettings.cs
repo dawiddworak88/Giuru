@@ -35,6 +35,9 @@ namespace Seller.Web.Shared.Configurations
         public string PossibleLinearLightAttributeKeys { get; set; }
         public string PossibleMirrorAttributeKeys { get; set; }
         public string PossibleShapeAttributeKeys { get; set; }
+        public string PossiblePrimaryColorAttributeKeys { get; set; }
+        public string PossibleSecondaryColorAttributeKeys { get; set; }
+        public Guid? ProductColorAttributeId { get; set; }
         public string DefaultCulture { get; set; }
         public string DefaultCurrency { get; set; }
         public int? MaxAllowedOrderQuantity { get; set; }
