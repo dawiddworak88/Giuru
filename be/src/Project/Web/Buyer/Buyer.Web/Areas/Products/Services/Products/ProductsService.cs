@@ -94,7 +94,8 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         Mirror = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
                         Shape = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleShapeAttributeKeys),
                         PrimaryColor = await this.productColorsService.ToEnglishAsync(GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePrimaryColorAttributeKeys)),
-                        SecondaryColor = await this.productColorsService.ToEnglishAsync(GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleSecondaryColorAttributeKeys))
+                        SecondaryColor = await this.productColorsService.ToEnglishAsync(GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleSecondaryColorAttributeKeys)),
+                        ShelfType = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleShelfTypeAttributeKeys)
                     };
 
                     if (product.Images != null)

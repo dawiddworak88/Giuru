@@ -111,6 +111,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 Shape = x.Shape,
                                 PrimaryColor = x.PrimaryColor,
                                 SecondaryColor = x.SecondaryColor,
+                                ShelfType = x.ShelfType,
                                 IsOutlet = (outletItems.Data.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                             }),
                             new PriceClient

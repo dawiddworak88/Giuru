@@ -16,6 +16,7 @@
         public string LinearLight { get; set; }
         public string PrimaryColor { get; set; }
         public string SecondaryColor { get; set; }
+        public string ShelfType { get; set; }
         public string IsOutlet { get; set; }
     }
 }

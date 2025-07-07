@@ -321,6 +321,15 @@ namespace Buyer.Web.Shared.Services.Prices
                 });
             }
 
+            if (!string.IsNullOrWhiteSpace(product.ShelfType))
+            {
+                priceDrivers.Add(new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.ShelfTypeDriver,
+                    Value = product.ShelfType
+                });
+            }
+
             if (client is not null)
             {
                 if (!string.IsNullOrWhiteSpace(client.Name))

@@ -42,5 +42,6 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string Shape { get; set; }
         public string PrimaryColor { get; set; }
         public string SecondaryColor { get; set; }
+        public string ShelfType { get; set; }
     }
 }
