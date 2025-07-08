@@ -123,7 +123,7 @@ const OutletForm = (props) => {
     }
 
     const {
-        values, errors, dirty, disable, setFieldValue,
+        values, errors, dirty, setFieldValue,
         handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
@@ -250,7 +250,7 @@ const OutletForm = (props) => {
                                 type="subbmit" 
                                 variant="contained"
                                 color="primary"
-                                disabled={state.isLoading || disable || !product}>
+                                disabled={state.isLoading || (quantity <= -1) || (availableQuantity <= -1) || !product}>
                                 {props.saveText}
                             </Button>
                             <a href={props.outletUrl} className="ml-2 button is-text">{props.navigateToOutletListText}</a>
