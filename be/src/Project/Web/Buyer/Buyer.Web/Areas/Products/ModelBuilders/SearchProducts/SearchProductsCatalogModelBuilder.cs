@@ -109,6 +109,16 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             SleepAreaSize = x.SleepAreaSize,
                             ExtraPacking = x.ExtraPacking,
                             PaletteSize = x.PaletteSize,
+                            Size = x.Size,
+                            PointsOfLight = x.PointsOfLight,
+                            LampshadeType = x.LampshadeType,
+                            LampshadeSize = x.LampshadeSize,
+                            LinearLight = x.LinearLight,
+                            Mirror = x.Mirror,
+                            Shape = x.Shape,
+                            PrimaryColor = x.PrimaryColor,
+                            SecondaryColor = x.SecondaryColor,
+                            ShelfType = x.ShelfType,
                             IsOutlet = (outletItems.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                         }),
                         new PriceClient
@@ -140,7 +150,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         product.AvailableOutletQuantity = outletItem.AvailableQuantity;
                         product.OutletTitle = outletItem.Title;
                     }
-
+                    
                     var inventoryItem = inventoryItems.FirstOrDefault(x => x.ProductSku == product.Sku);
 
                     if (inventoryItem is not null)

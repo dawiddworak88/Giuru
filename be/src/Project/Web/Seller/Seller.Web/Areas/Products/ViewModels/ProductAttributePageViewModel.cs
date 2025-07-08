@@ -1,4 +1,4 @@
-﻿using Seller.Web.Areas.Products.DomainModels;
+﻿using Seller.Web.Shared.DomainModels.Products;
 using Seller.Web.Shared.ViewModels;
 using System;
 

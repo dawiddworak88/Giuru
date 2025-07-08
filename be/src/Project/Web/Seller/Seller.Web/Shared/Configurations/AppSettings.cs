@@ -26,7 +26,19 @@ namespace Seller.Web.Shared.Configurations
         public string PossiblePriceGroupAttributeKeys { get; set; }
         public string PossibleSleepAreaWidthAttributeKeys { get; set; }
         public string PossibleSleepAreaDepthAttributeKeys { get; set; }
+        public string PossibleDepthAttributeKeys { get; set; }
+        public string PossibleWidthAttributeKeys { get; set; }
         public string PossiblePaletteSizeAttributeKeys { get; set; }
+        public string PossiblePointsOfLightAttributeKeys { get; set; }
+        public string PossibleLampshadeTypeAttributeKeys { get; set; }
+        public string PossibleLampshadeSizeAttributeKeys { get; set; }
+        public string PossibleLinearLightAttributeKeys { get; set; }
+        public string PossibleMirrorAttributeKeys { get; set; }
+        public string PossibleShapeAttributeKeys { get; set; }
+        public string PossiblePrimaryColorAttributeKeys { get; set; }
+        public string PossibleSecondaryColorAttributeKeys { get; set; }
+        public string PossibleShelfTypeAttributeKeys { get; set; }
+        public Guid? ProductColorAttributeId { get; set; }
         public string DefaultCulture { get; set; }
         public string DefaultCurrency { get; set; }
         public int? MaxAllowedOrderQuantity { get; set; }

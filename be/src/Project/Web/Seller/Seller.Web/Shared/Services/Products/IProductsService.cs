@@ -7,5 +7,6 @@ namespace Seller.Web.Shared.Services.Products
     {
         string GetFirstAvailableAttributeValue(IEnumerable<ReadProductAttribute> attributes, string possibleKeys);
         string GetSleepAreaSize(IEnumerable<ReadProductAttribute> attributes);
+        string GetSize(IEnumerable<ReadProductAttribute> attributes);
     }
 }

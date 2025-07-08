@@ -8,7 +8,9 @@ using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Categories;
 using Buyer.Web.Areas.Products.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
+using Buyer.Web.Areas.Products.Repositories.ProductAttributeItems;
 using Buyer.Web.Areas.Products.Repositories.Products;
+using Buyer.Web.Areas.Products.Services.ProductColors;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels;
 using Buyer.Web.Areas.Products.ViewModels.AvailableProducts;
@@ -30,8 +32,10 @@ namespace Buyer.Web.Areas.Products.DependencyInjection
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddScoped<IOutletRepository, OutletRepository>();
+            services.AddScoped<IProductAttributeItemsRepository, ProductAttributeItemsRepository>();
 
             services.AddScoped<IProductsService, ProductsService>();
+            services.AddScoped<IProductColorsService, ProductColorsService>();
 
             services.AddScoped<IAsyncComponentModelBuilder<SearchProductsComponentModel, SearchProductsPageViewModel>, SearchProductsPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel>, SearchProductsCatalogModelBuilder>();

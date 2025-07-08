@@ -4,9 +4,12 @@ using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Products.ApiRequestModels;
-using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
+using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.DomainModels.Products;
+using Seller.Web.Shared.Services.ProductColors;
 using System;
 using System.Globalization;
 using System.Net;
@@ -19,13 +22,19 @@ namespace Seller.Web.Areas.Products.ApiControllers
     {
         private readonly IProductAttributeItemsRepository productAttributeItemsRepository;
         private readonly IStringLocalizer productLocalizer;
+        private readonly IProductColorsService productColorsService;
+        private readonly IOptions<AppSettings> options;
 
         public ProductAttributeItemsApiController(
             IProductAttributeItemsRepository productAttributeItemsRepository,
-            IStringLocalizer<ProductResources> productLocalizer)
+            IStringLocalizer<ProductResources> productLocalizer,
+            IProductColorsService productColorsService,
+            IOptions<AppSettings> options)
         {
             this.productAttributeItemsRepository = productAttributeItemsRepository;
             this.productLocalizer = productLocalizer;
+            this.productColorsService = productColorsService;
+            this.options = options;
         }
 
         [HttpGet]
@@ -53,6 +62,11 @@ namespace Seller.Web.Areas.Products.ApiControllers
                 model.Id,
                 model.ProductAttributeId,
                 model.Name);
+
+            if (productAttributeId == this.options.Value.ProductColorAttributeId)
+            {
+                await this.productColorsService.InvalidateAsync();
+            }
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Id = productAttributeId, Message = this.productLocalizer.GetString("ProductAttributeItemSavedSuccessfully").Value });
         }

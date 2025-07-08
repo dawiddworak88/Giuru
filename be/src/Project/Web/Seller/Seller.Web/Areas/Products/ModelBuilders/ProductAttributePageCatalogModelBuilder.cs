@@ -9,9 +9,9 @@ using Foundation.PageContent.ComponentModels;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
 using Foundation.Extensions.ExtensionMethods;
-using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
 using Foundation.GenericRepository.Definitions;
+using Seller.Web.Shared.DomainModels.Products;
 
 namespace Seller.Web.Areas.ProductAttributeItems.ModelBuilders
 {

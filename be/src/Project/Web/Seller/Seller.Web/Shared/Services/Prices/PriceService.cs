@@ -162,6 +162,96 @@ namespace Seller.Web.Shared.Services.Prices
                 });
             }
 
+            if (!string.IsNullOrWhiteSpace(product.Mirror))
+            {
+                priceDrivers.Add(new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.MirrorDriver,
+                    Value = product.Mirror
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(product.Size))
+            {
+                priceDrivers.Add(new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.SizeDriver,
+                    Value = product.Size
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(product.Shape))
+            {
+                priceDrivers.Add(new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.ShapeDriver,
+                    Value = product.Shape
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(product.PointsOfLight))
+            {
+                priceDrivers.Add(new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.PointsOfLightDriver,
+                    Value = product.PointsOfLight
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(product.LampshadeType))
+            {
+                priceDrivers.Add(new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.LampshadeTypeDriver,
+                    Value = product.LampshadeType
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(product.LampshadeSize))
+            {
+                priceDrivers.Add(new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.LampshadeSizeDriver,
+                    Value = product.LampshadeSize
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(product.LinearLight))
+            {
+                priceDrivers.Add(new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.LinearLightDriver,
+                    Value = product.LinearLight
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(product.PrimaryColor))
+            {
+                priceDrivers.Add(new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.PrimaryColorDriver,
+                    Value = product.PrimaryColor
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(product.SecondaryColor))
+            {
+                priceDrivers.Add(new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.SecondaryColorDriver,
+                    Value = product.SecondaryColor
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(product.ShelfType))
+            {
+                priceDrivers.Add(new PriceDriverRequestModel
+                {
+                    Name = PriceDriversConstants.ShelfTypeDriver,
+                    Value = product.ShelfType
+                });
+            }
+
             if (client is not null)
             {
                 if (!string.IsNullOrWhiteSpace(client.Name))

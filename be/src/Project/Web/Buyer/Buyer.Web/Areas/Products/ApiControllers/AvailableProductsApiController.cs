@@ -89,6 +89,16 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                                 ExtraPacking = x.ExtraPacking,
                                 SleepAreaSize = x.SleepAreaSize,
                                 PaletteSize = x.PaletteSize,
+                                Size = x.Size,
+                                PointsOfLight = x.PointsOfLight,
+                                LampshadeType = x.LampshadeType,
+                                LampshadeSize = x.LampshadeSize,
+                                LinearLight = x.LinearLight,
+                                Mirror = x.Mirror,
+                                Shape = x.Shape,
+                                PrimaryColor = x.PrimaryColor,
+                                SecondaryColor = x.SecondaryColor,
+                                ShelfType = x.ShelfType,
                                 IsOutlet = (outletItems.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                             }),
                             new PriceClient

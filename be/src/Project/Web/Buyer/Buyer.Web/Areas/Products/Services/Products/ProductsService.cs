@@ -15,6 +15,7 @@ using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Media.Services.MediaServices;
+using Buyer.Web.Areas.Products.Services.ProductColors;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -24,17 +25,20 @@ namespace Buyer.Web.Areas.Products.Services.Products
         private readonly IMediaService mediaService;
         private readonly IOptions<AppSettings> options;
         private readonly LinkGenerator linkGenerator;
+        private readonly IProductColorsService productColorsService;
 
         public ProductsService(
             IProductsRepository productsRepository,
             IMediaService mediaService,
             IOptions<AppSettings> options,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IProductColorsService productColorsService)
         {
             this.productsRepository = productsRepository;
             this.mediaService = mediaService;
             this.options = options;
             this.linkGenerator = linkGenerator;
+            this.productColorsService = productColorsService;
         }
 
         public async Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes)
@@ -81,7 +85,17 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         SleepAreaSize = GetSleepAreaSize(product.ProductAttributes),
                         FabricsGroup = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePriceGroupAttributeKeys),
                         ExtraPacking = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleExtraPackingAttributeKeys),
-                        PaletteSize = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePaletteSizeAttributeKeys)
+                        PaletteSize = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePaletteSizeAttributeKeys),
+                        Size = GetSize(product.ProductAttributes),
+                        PointsOfLight = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePointsOfLightAttributeKeys),
+                        LampshadeType = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLampshadeTypeAttributeKeys),
+                        LampshadeSize = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLampshadeSizeAttributeKeys),
+                        LinearLight = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                        Mirror = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                        Shape = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleShapeAttributeKeys),
+                        PrimaryColor = await this.productColorsService.ToEnglishAsync(GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePrimaryColorAttributeKeys)),
+                        SecondaryColor = await this.productColorsService.ToEnglishAsync(GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleSecondaryColorAttributeKeys)),
+                        ShelfType = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleShelfTypeAttributeKeys)
                     };
 
                     if (product.Images != null)
@@ -157,5 +171,20 @@ namespace Buyer.Web.Areas.Products.Services.Products
             return size;
         }
 
+        public string GetSize(IEnumerable<ProductAttribute> attributes)
+        {
+            var widthValue = GetFirstAvailableAttributeValue(attributes, this.options.Value.PossibleWidthAttributeKeys);
+            var depthValue = GetFirstAvailableAttributeValue(attributes, this.options.Value.PossibleDepthAttributeKeys);
+
+            if (string.IsNullOrWhiteSpace(widthValue) ||
+                string.IsNullOrWhiteSpace(depthValue))
+            {
+                return default;
+            }
+
+            var size = $"{widthValue}x{depthValue}".Trim();
+
+            return size;
+        }
     }
 }

@@ -26,6 +26,8 @@ using Seller.Web.Areas.Shared.Repositories.UserApprovals;
 using Seller.Web.Shared.Services.Prices;
 using Seller.Web.Shared.Services.Products;
 using Foundation.Extensions.Services.Claims;
+using Seller.Web.Shared.Services.ProductColors;
+using Seller.Web.Shared.Repositories.ProductAttributeItems;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -39,9 +41,11 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IIdentityRepository, IdentityRepository>();
             services.AddScoped<IUserApprovalsRepository, UserApprovalsRepository>();
+            services.AddScoped<IProductAttributeItemsRepository, ProductAttributeItemsRepository>();
 
             services.AddScoped<IPriceService, PriceService>();
             services.AddScoped<IProductsService, ProductsService>();
+            services.AddScoped<IProductColorsService, ProductColorsService>();
 
             services.AddScoped<IModelBuilder<MenuTilesViewModel>, MenuTilesModelBuilder>();
             services.AddScoped<IModelBuilder<IEnumerable<DrawerMenuViewModel>>, DrawerMenuModelBuilder>();
