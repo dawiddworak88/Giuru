@@ -28,7 +28,6 @@ function Catalog(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null);
     const [sorting, setSorting] = useState(props.filterCollector && props.filterCollector.sortItems.length > 0 ? SortingConstants.defaultKey() : "");
-    const [filters, setFilters] = useState([]);
 
     const toggleSidebar = (item) => {
         setProductVariant(item);
@@ -185,11 +184,6 @@ function Catalog(props) {
         fetchData(searchParameters);
     }
 
-    const handleFilterChange = (value) => {
-        setFilters(value)
-        // featching a filtred data
-    }
-
     const fetchData = (searchParameters) => {
         const requestOptions = {
             method: "GET",
@@ -237,8 +231,7 @@ function Catalog(props) {
                         {...props.filterCollector}
                         total={total}
                         resultsLabel={props.resultsLabel}
-                        filters={filters}
-                        setFilters={handleFilterChange}
+                        filters={[]}
                         sorting={sorting}
                         setSorting={handleSetSorting}
                     />
