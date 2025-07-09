@@ -220,7 +220,7 @@ function Catalog(props) {
     return (
         <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
-            {items && items.length === 0 && filters.length > 0 &&
+            {items && items.length === 0 &&
                 <p className="pb-5">    
                     {props.noFilteredResultsLabel}
                 </p>
