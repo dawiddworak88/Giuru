@@ -173,7 +173,7 @@ function ProductDetail(props) {
                                 ) : (
                                     props.mediaItems.length == 1 && (
                                         <div className="product-detail__desktop-gallery__desktop-product-image__single" onClick={() => handleImageModal(index)}>
-                                            <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
+                                            <LazyLoad offset={LazyLoadConstants.defaultOffset()} key={index}>
                                                 {props.mediaItems[0].mimeType.startsWith("image") ? (
                                                     <ResponsiveImage sources={props.mediaItems[0].sources} imageSrc={props.mediaItems[0].mediaSrc} imageAlt={props.mediaItems[0].mediaAlt} imageTitle={props.title} />
                                                 ) : (
