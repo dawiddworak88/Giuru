@@ -279,9 +279,6 @@
   <data name="NoResultsLabel" xml:space="preserve">
     <value>Keine Ergebnisse.</value>
   </data>
-  <data name="NoFilteredResults" xml:space="preserve">
-    <value>Leider konnten wir nicht finden, wonach Sie suchen. Versuchen Sie, andere Filter auszuwählen.</value>
-  </data>
   <data name="Novelties" xml:space="preserve">
     <value>News</value>
   </data>

@@ -276,9 +276,6 @@
   <data name="NoResultsLabel" xml:space="preserve">
     <value>Brak wyników.</value>
   </data>
-  <data name="NoFilteredResults" xml:space="preserve">
-    <value>Niestety nie znaleźliśmy tego, czego szukasz. Spróbuj wybrać inne parametry.</value>
-  </data>
   <data name="Novelties" xml:space="preserve">
     <value>Nowości</value>
   </data>

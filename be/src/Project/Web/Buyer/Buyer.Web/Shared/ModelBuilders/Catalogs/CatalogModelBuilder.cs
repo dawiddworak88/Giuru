@@ -49,7 +49,6 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 BasketLabel = _globalLocalizer.GetString("BasketLabel"),
                 PrimaryFabricLabel = _globalLocalizer.GetString("PrimaryFabricLabel"),
                 NoResultsLabel = _globalLocalizer.GetString("NoResults"),
-                NoFilteredResultsLabel = _globalLocalizer.GetString("NoFilteredResults"),
                 GeneralErrorMessage = _globalLocalizer["AnErrorOccurred"],
                 DisplayedRowsLabel = _globalLocalizer["DisplayedRows"],
                 RowsPerPageLabel = _globalLocalizer["RowsPerPage"],
