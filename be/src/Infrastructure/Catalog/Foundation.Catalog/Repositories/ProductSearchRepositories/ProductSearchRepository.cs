@@ -53,18 +53,11 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 query = query && Query<ProductSearchModel>.Term(t => t.PrimaryProductIdHasValue, hasPrimaryProduct.Value);
             }
 
-            if (orderBy == SortingConstants.Newest)
+            if (isNew.HasValue)
             {
-                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsNew).Value(true));
+                query = query && Query<ProductSearchModel>.Term(t => t.IsNew, isNew.Value);
             }
-            else
-            {
-                if (isNew.HasValue)
-                {
-                    query = query && Query<ProductSearchModel>.Term(t => t.IsNew, isNew.Value);
-                }
-            }
-
+            
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 query = query && 
@@ -156,11 +149,6 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             else
             {
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsPublished).Value(true));
-            }
-
-            if (orderBy == SortingConstants.Newest)
-            {
-                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsNew).Value(true));
             }
 
             var idsQuery = Query<ProductSearchModel>.MatchNone();
@@ -298,9 +286,19 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
         private SortDescriptor<T> Sorting<T>(string orderBy) where T : ProductSearchModel
         {
-            if (string.IsNullOrWhiteSpace(orderBy) || orderBy == SortingConstants.Newest || orderBy == SortingConstants.Default || orderBy == SortingConstants.Name)
+            if (string.IsNullOrWhiteSpace(orderBy) || orderBy == SortingConstants.Name)
             {
                 return new SortDescriptor<T>().Field(f => f.Name.Suffix("keyword"), SortOrder.Ascending);
+            }
+
+            if (orderBy == SortingConstants.Default)
+            {
+                return new SortDescriptor<T>().Field(f => f.Name.Suffix("keyword"), SortOrder.Descending);
+            }
+
+            if (orderBy == SortingConstants.Newest)
+            {
+                return new SortDescriptor<T>().Field(f => f.CreatedDate, SortOrder.Descending);
             }
 
             return orderBy.ToElasticSortList<T>();
