@@ -1,6 +1,7 @@
 ﻿using Foundation.GenericRepository.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Analytics.Api.Infrastructure.Entities.SalesAnalytics
 {
@@ -25,5 +26,11 @@ namespace Analytics.Api.Infrastructure.Entities.SalesAnalytics
 
         [Required]
         public bool IsOutlet { get; set; }
+
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal? Price { get; set; }
+
+        [Column(TypeName = "nvarchar(3)")]
+        public string? Currency { get; set; }
     }
 }
