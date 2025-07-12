@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Foundation.ApiExtensions.Communications
 {
@@ -8,5 +9,7 @@ namespace Foundation.ApiExtensions.Communications
         public HttpStatusCode StatusCode { get; set; }
         public bool IsSuccessStatusCode { get; set; }
         public string Message { get; set; }
+        public ProblemDetails Problem { get; set; }
+        public string RawError { get; set; }
     }
 }

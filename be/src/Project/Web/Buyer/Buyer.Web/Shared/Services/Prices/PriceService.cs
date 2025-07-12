@@ -76,6 +76,17 @@ namespace Buyer.Web.Shared.Services.Prices
                         CurrencyCode = response.Data.Amount.CurrencyThreeLetterCode,
                     };
                 }
+                else
+                {
+                    if (response.Problem is not null)
+                    {
+                        _logger.LogError("Grula Price API returned {StatusCode}: {Title} - {Detail}", (int)response.StatusCode, response.Problem.Title, response.Problem.Detail);
+                    }
+                    else
+                    {
+                        _logger.LogError("Grula Price API returned {StatusCode}: {Error}", (int)response.StatusCode, response.RawError ?? "No body");
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -158,6 +169,17 @@ namespace Buyer.Web.Shared.Services.Prices
                     }
 
                     return prices;
+                }
+                else
+                {
+                    if (response.Problem != null)
+                    {
+                        _logger.LogError("Grula Prices API returned {StatusCode}: {Title} - {Detail}", (int)response.StatusCode, response.Problem.Title, response.Problem.Detail);
+                    }
+                    else
+                    {
+                        _logger.LogError("Grula Prices API returned {StatusCode}: {Error}", (int)response.StatusCode, response.RawError ?? "No body");
+                    }
                 }
             }
             catch (Exception ex)

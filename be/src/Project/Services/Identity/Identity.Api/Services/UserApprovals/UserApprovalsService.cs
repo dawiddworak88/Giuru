@@ -44,7 +44,7 @@ namespace Identity.Api.Services.UserApprovals
                 _context.UserApprovals.Remove(userApproval);
             }
 
-            foreach (var approvalId in model.ApprvoalIds)
+            foreach (var approvalId in model.ApprvoalIds.OrEmptyIfNull())
             {
                 var userApproval = new UserApproval
                 {

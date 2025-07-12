@@ -3,6 +3,7 @@ using Foundation.ApiExtensions.Definitions;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Shared.Definitions;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -64,9 +65,23 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 
                         var result = await response.Content.ReadAsStringAsync();
 
-                        if (!string.IsNullOrWhiteSpace(result))
+                        if (response.IsSuccessStatusCode)
                         {
-                            apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
+                            if (!string.IsNullOrWhiteSpace(result))
+                            {
+                                apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
+                            }
+                        }
+                        else
+                        {
+                            try
+                            {
+                                apiResponse.Problem = JsonConvert.DeserializeObject<ProblemDetails>(result);
+                            }
+                            catch
+                            {
+                                apiResponse.RawError = result;
+                            }
                         }
 
                         return apiResponse;
@@ -110,9 +125,23 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 
                 var result = await response.Content.ReadAsStringAsync();
 
-                if (!string.IsNullOrWhiteSpace(result))
+                if (response.IsSuccessStatusCode)
                 {
-                    apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
+                    if (!string.IsNullOrWhiteSpace(result))
+                    {
+                        apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        apiResponse.Problem = JsonConvert.DeserializeObject<ProblemDetails>(result);
+                    }
+                    catch
+                    {
+                        apiResponse.RawError = result;
+                    }
                 }
 
                 return apiResponse;
@@ -157,9 +186,23 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 
                 var result = await response.Content.ReadAsStringAsync();
 
-                if (!string.IsNullOrWhiteSpace(result))
+                if (response.IsSuccessStatusCode)
                 {
-                    apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
+                    if (!string.IsNullOrWhiteSpace(result))
+                    {
+                        apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        apiResponse.Problem = JsonConvert.DeserializeObject<ProblemDetails>(result);
+                    }
+                    catch
+                    {
+                        apiResponse.RawError = result;
+                    }
                 }
 
                 return apiResponse;
@@ -201,9 +244,23 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 
                 var result = await response.Content.ReadAsStringAsync();
 
-                if (!string.IsNullOrWhiteSpace(result))
+                if (response.IsSuccessStatusCode)
                 {
-                    apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
+                    if (!string.IsNullOrWhiteSpace(result))
+                    {
+                        apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        apiResponse.Problem = JsonConvert.DeserializeObject<ProblemDetails>(result);
+                    }
+                    catch
+                    {
+                        apiResponse.RawError = result;
+                    }
                 }
 
                 return apiResponse;
