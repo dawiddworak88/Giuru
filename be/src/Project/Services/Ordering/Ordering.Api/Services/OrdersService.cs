@@ -187,7 +187,9 @@ namespace Ordering.Api.Services
                     Id = x.ProductId,
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
-                    OutletQuantity = x.OutletQuantity
+                    OutletQuantity = x.OutletQuantity,
+                    Price = x.Price,
+                    Currency = x.Currency
                 }),
                 CreatedDate = order.CreatedDate
             };

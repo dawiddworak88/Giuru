@@ -1,6 +1,7 @@
 ﻿using Foundation.GenericRepository.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ordering.Api.Infrastructure.Orders.Entities
 {
@@ -35,10 +36,13 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
 
         public string MoreInfo { get; set; }
 
+        [Column(TypeName = "decimal(18,4)")]
         public decimal? UnitPrice { get; set; }
 
+        [Column(TypeName = "decimal(18,4)")]
         public decimal? Price { get; set; }
 
-        public string Currency { get; set; }
+        [Column(TypeName = "nvarchar(3)")]
+        public string? Currency { get; set; }
     }
 }

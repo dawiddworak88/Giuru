@@ -189,7 +189,7 @@ namespace Buyer.Web.Shared.Services.Prices
                 return Enumerable.Empty<Price>();
             }
 
-            return default;
+            return Enumerable.Empty<Price>();
         }
 
         private bool CanSeePrice(Guid? priceClientId)
