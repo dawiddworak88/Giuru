@@ -154,6 +154,36 @@ const OrderItemForm = (props) => {
                             }}
                         />
                     </div>
+                    {props.unitPrice &&
+                        <div className="field">
+                            <TextField 
+                                id="unitPrice" 
+                                name="unitPrice" 
+                                label={props.unitPriceLabel} 
+                                fullWidth={true}
+                                value={props.unitPrice}
+                                variant="standard"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </div>
+                    }
+                    {props.price &&
+                        <div className="field">
+                            <TextField 
+                                id="price" 
+                                name="price" 
+                                label={props.priceLabel} 
+                                fullWidth={true}
+                                value={props.price}
+                                variant="standard"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </div>
+                    }
                     <div className="field">
                         {props.canCancelOrderItem && !canceledOrderItem &&
                             <Button 
