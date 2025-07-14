@@ -148,6 +148,9 @@ function EditOrderForm(props) {
                                             <TableCell>{props.expectedDateOfProductOnStockLabel}</TableCell>
                                             <TableCell>{props.externalReferenceLabel}</TableCell>
                                             <TableCell>{props.moreInfoLabel}</TableCell>
+                                            <TableCell>{props.unitPriceLabel}</TableCell>
+                                            <TableCell>{props.priceLabel}</TableCell>
+                                            <TableCell>{props.currencyLabel}</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -170,6 +173,9 @@ function EditOrderForm(props) {
                                                     <TableCell>{item.expectedDateOfProductOnStock}</TableCell>
                                                     <TableCell>{item.externalReference}</TableCell>
                                                     <TableCell>{item.moreInfo}</TableCell>
+                                                    <TableCell>{item.unitPrice}</TableCell>
+                                                    <TableCell>{item.price}</TableCell>
+                                                    <TableCell>{item.currency}</TableCell>
                                                 </TableRow>
                                             )
                                         })}
