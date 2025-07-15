@@ -8,8 +8,6 @@ namespace Foundation.Catalog.SearchModels.Products
     [ElasticsearchType(RelationName = "product")]
     public class ProductSearchModel : SearchModelBase
     {
-        [PropertyName("_id")]
-        public string DocId { get; set; }
         public Guid ProductId { get; set; }
         public string Sku { get; set; }
         public string Name { get; set; }

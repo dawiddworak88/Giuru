@@ -103,7 +103,7 @@ namespace Catalog.BackgroundTasks.Services.Products
 
             foreach (var supportedCulture in supportedCultures)
             {
-                var product = await _productSearchRepository.GetByIdAsync(productId, supportedCulture, organisationId);
+                /*var product = await _productSearchRepository.GetByIdAsync(productId, supportedCulture, organisationId);
 
                 if (product == null)
                 {
@@ -117,9 +117,12 @@ namespace Catalog.BackgroundTasks.Services.Products
                     continue;
                 }
 
-                Console.WriteLine($"Updated product document {product.DocId}");
+                Console.WriteLine($"Updated product document {product.DocId}");*/
+                var docId = $"{productId}_{supportedCulture}";
 
-                await _productIndexingRepository.UpdateStockAvailableQuantity(product.DocId, quantity);
+                Console.WriteLine($"Updating available quantity for product: {docId}, Quantity: {quantity}");
+
+                await _productIndexingRepository.UpdateStockAvailableQuantity("", quantity);
             }
         }
     }
