@@ -3,6 +3,7 @@ using Catalog.BackgroundTasks.IntegrationEventsHandlers;
 using Catalog.BackgroundTasks.Services.CategorySchemas;
 using Catalog.BackgroundTasks.Services.Products;
 using Foundation.Catalog.Infrastructure;
+using Foundation.Catalog.Repositories.ProductSearchRepositories;
 using Foundation.EventBus;
 using Foundation.EventBus.Abstractions;
 using Foundation.EventBusRabbitMq;
@@ -24,6 +25,7 @@ namespace Catalog.BackgroundTasks.DependencyInjection
         {
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<ICategorySchemaService, CategorySchemaService>();
+            services.AddScoped<IProductSearchRepository, ProductSearchRepository>();
         }
 
         public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
