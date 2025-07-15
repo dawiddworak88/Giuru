@@ -453,6 +453,7 @@ namespace Catalog.Api.v1.Products.Controllers
                 IsPublished = product.IsPublished,
                 Name = product.Name,
                 PrimaryProductId = product.PrimaryProductId,
+                PrimaryProductSku = product.PrimaryProductSku,
                 ProductVariants = product.ProductVariants,
                 SellerId = product.SellerId,
                 Sku = product.Sku,

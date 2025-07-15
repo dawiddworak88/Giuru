@@ -34,6 +34,10 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string ExternalReference { get; set; }
         public string MoreInfoLabel { get; set; }
         public string MoreInfo { get; set; }
+        public string UnitPriceLabel { get; set; }
+        public string UnitPrice { get; set; }
+        public string PriceLabel { get; set; }
+        public string Price { get; set; }
         public string CancelOrderItemLabel { get; set; }
         public bool CanCancelOrderItem { get; set; }
         public string CancelOrderItemStatusUrl { get; set; }

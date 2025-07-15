@@ -98,12 +98,18 @@ var productDetail = {
     readLessText: "Read less",
     seeMoreText: "See more",
     seeLessText: "See less",
+    price: {
+      current: 999.99,
+      old: 1299.99,
+      lowestPrice: 899.99,
+      currency: "eur",
+      lowestPriceLabel: "Lowest price in 30 days:"
+    },
     sidebar: {
       lackInformation: "Lack of information",
       toBasketLabel: "View cart",
       notFound: "No variants",
-      sidebarTitle: "Add the selected product variant to the cart",
-
+      sidebarTitle: "Add the selected product variant to the cart"
     },
     modal: {
       title: "Anton",

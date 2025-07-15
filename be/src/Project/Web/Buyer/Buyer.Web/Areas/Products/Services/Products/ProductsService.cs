@@ -15,6 +15,7 @@ using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Media.Services.MediaServices;
+using Buyer.Web.Areas.Products.Services.ProductColors;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -24,17 +25,20 @@ namespace Buyer.Web.Areas.Products.Services.Products
         private readonly IMediaService mediaService;
         private readonly IOptions<AppSettings> options;
         private readonly LinkGenerator linkGenerator;
+        private readonly IProductColorsService productColorsService;
 
         public ProductsService(
             IProductsRepository productsRepository,
             IMediaService mediaService,
             IOptions<AppSettings> options,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IProductColorsService productColorsService)
         {
             this.productsRepository = productsRepository;
             this.mediaService = mediaService;
             this.options = options;
             this.linkGenerator = linkGenerator;
+            this.productColorsService = productColorsService;
         }
 
         public async Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes)
@@ -42,7 +46,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
             var attributesToDisplay = this.options.Value.ProductAttributes.ToEnumerableString();
 
             var attributes = new List<string>();
-            foreach(var productAttribute in attributesToDisplay.OrEmptyIfNull())
+            foreach (var productAttribute in attributesToDisplay.OrEmptyIfNull())
             {
                 var existingAttribute = productAttributes.FirstOrDefault(x => x.Key == productAttribute);
                 if (existingAttribute is not null)
@@ -69,6 +73,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                     var catalogItem = new CatalogItemViewModel
                     {
                         Id = product.Id,
+                        PrimaryProductSku = product.PrimaryProductSku,
                         Sku = product.Sku,
                         Title = product.Name,
                         Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
@@ -76,7 +81,21 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         BrandName = product.BrandName,
                         Images = product.Images,
                         InStock = false,
-                        ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes)
+                        ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes),
+                        SleepAreaSize = GetSleepAreaSize(product.ProductAttributes),
+                        FabricsGroup = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePriceGroupAttributeKeys),
+                        ExtraPacking = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleExtraPackingAttributeKeys),
+                        PaletteSize = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePaletteSizeAttributeKeys),
+                        Size = GetSize(product.ProductAttributes),
+                        PointsOfLight = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePointsOfLightAttributeKeys),
+                        LampshadeType = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLampshadeTypeAttributeKeys),
+                        LampshadeSize = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLampshadeSizeAttributeKeys),
+                        LinearLight = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                        Mirror = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                        Shape = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleShapeAttributeKeys),
+                        PrimaryColor = await this.productColorsService.ToEnglishAsync(GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePrimaryColorAttributeKeys)),
+                        SecondaryColor = await this.productColorsService.ToEnglishAsync(GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleSecondaryColorAttributeKeys)),
+                        ShelfType = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleShelfTypeAttributeKeys)
                     };
 
                     if (product.Images != null)
@@ -117,6 +136,55 @@ namespace Buyer.Web.Areas.Products.Services.Products
         public async Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token)
         {
             return await this.productsRepository.GetProductSuggestionsAsync(searchTerm, size, language, token);
+        }
+
+        public string GetFirstAvailableAttributeValue(IEnumerable<ProductAttribute> attributes, string possibleKeys)
+        {
+            var keys = possibleKeys.ToEnumerableString();
+
+            foreach (var key in keys.OrEmptyIfNull())
+            {
+                var value = attributes.FirstOrDefault(x => x.Key == key)?.Values?.FirstOrDefault();
+
+                if (string.IsNullOrWhiteSpace(value) is false)
+                {
+                    return value;
+                }
+            }
+
+            return null;
+        }
+
+        public string GetSleepAreaSize(IEnumerable<ProductAttribute> attributes)
+        {
+            var sleepAreaWidthValue = GetFirstAvailableAttributeValue(attributes, this.options.Value.PossibleSleepAreaWidthAttributeKeys);
+            var sleepAreaDepthValue = GetFirstAvailableAttributeValue(attributes, this.options.Value.PossibleSleepAreaDepthAttributeKeys);
+
+            if (string.IsNullOrWhiteSpace(sleepAreaWidthValue) ||
+                string.IsNullOrWhiteSpace(sleepAreaDepthValue))
+            {
+                return default;
+            }
+
+            var size = $"{sleepAreaWidthValue}x{sleepAreaDepthValue}".Trim();
+
+            return size;
+        }
+
+        public string GetSize(IEnumerable<ProductAttribute> attributes)
+        {
+            var widthValue = GetFirstAvailableAttributeValue(attributes, this.options.Value.PossibleWidthAttributeKeys);
+            var depthValue = GetFirstAvailableAttributeValue(attributes, this.options.Value.PossibleDepthAttributeKeys);
+
+            if (string.IsNullOrWhiteSpace(widthValue) ||
+                string.IsNullOrWhiteSpace(depthValue))
+            {
+                return default;
+            }
+
+            var size = $"{widthValue}x{depthValue}".Trim();
+
+            return size;
         }
     }
 }

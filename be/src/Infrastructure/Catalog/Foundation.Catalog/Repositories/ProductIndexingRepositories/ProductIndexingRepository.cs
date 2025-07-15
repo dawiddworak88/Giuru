@@ -134,7 +134,14 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                             Description = productTranslations.Description,
                             LastModifiedDate = product.LastModifiedDate,
                             CreatedDate = product.CreatedDate
+
+                            
                         };
+
+                        if (product.PrimaryProductId.HasValue)
+                        {
+                            document.PrimaryProductSku = _catalogContext.Products.FirstOrDefault(x => x.Id == product.PrimaryProductId).Sku;
+                        }
 
                         if (!string.IsNullOrWhiteSpace(productTranslations.FormData))
                         {

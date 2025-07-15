@@ -15,6 +15,7 @@ import moment from "moment";
 import Modal from "../Modal/Modal";
 import FilterCollector from "../Filters/FilterCollector";
 import SortingConstants from "../../constants/SortingConstants";
+import Price from "../Price/Price";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -95,6 +96,9 @@ function Catalog(props) {
             quantity: quantity,
             stockQuantity: stockQuantity,
             outletQuantity: outletQuantity,
+            unitPrice: productVariant.price ? parseFloat(productVariant.price.current).toFixed(2) : null,
+            price: productVariant.price ? parseFloat(productVariant.price.current * totalQuantity).toFixed(2) : null,
+            currency: productVariant.price ? productVariant.price.currency : null,
             externalReference: item.externalReference,
             moreInfo: item.moreInfo
         };
@@ -283,7 +287,9 @@ function Catalog(props) {
                                                         }
                                                     </div>
                                                 }
-
+                                                {item.price && 
+                                                    <Price {...item.price} />
+                                                }
                                             </div>
                                             {props.isLoggedIn &&
                                                 <div className="catalog-item__add-to-cart-button-container">

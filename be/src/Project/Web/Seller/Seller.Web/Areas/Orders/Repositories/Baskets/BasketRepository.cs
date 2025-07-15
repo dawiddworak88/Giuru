@@ -44,7 +44,10 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
-                    MoreInfo = x.MoreInfo
+                    MoreInfo = x.MoreInfo,
+                    UnitPrice = x.UnitPrice,
+                    Price = x.Price,
+                    Currency = x.Currency
                 })
             };
 
@@ -73,7 +76,10 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                         StockQuantity = x.StockQuantity,
                         OutletQuantity = x.OutletQuantity,
                         ExternalReference = x.ExternalReference,
-                        MoreInfo = x.MoreInfo
+                        MoreInfo = x.MoreInfo,
+                        UnitPrice = x.UnitPrice,
+                        Price = x.Price,
+                        Currency = x.Currency
                     })
                 };
             }

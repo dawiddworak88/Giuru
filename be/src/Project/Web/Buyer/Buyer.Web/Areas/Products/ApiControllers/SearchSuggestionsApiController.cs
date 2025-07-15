@@ -3,7 +3,6 @@ using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;

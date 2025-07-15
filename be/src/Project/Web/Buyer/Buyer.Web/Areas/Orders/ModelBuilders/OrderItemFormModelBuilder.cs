@@ -52,7 +52,9 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 ExternalReferenceLabel = _orderLocalizer.GetString("ExternalReferenceLabel"),
                 MoreInfoLabel = _orderLocalizer.GetString("MoreInfoLabel"),
                 CancelOrderItemLabel = _orderLocalizer.GetString("CancelOrderItem"),
-                CancelOrderItemStatusUrl = _linkGenerator.GetPathByAction("CancelOrderItem", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                CancelOrderItemStatusUrl = _linkGenerator.GetPathByAction("CancelOrderItem", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                UnitPriceLabel = _globalLocalizer.GetString("UnitPrice"),
+                PriceLabel = _globalLocalizer.GetString("Price")
             };
 
             if (componentModel.Id.HasValue)
@@ -75,6 +77,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.ExternalReference = orderItem.ExternalReference;
                     viewModel.MoreInfo = orderItem.MoreInfo;
                     viewModel.CanCancelOrderItem = orderItem.OrderItemStatusId.Equals(OrdersConstants.OrderStatuses.NewId);
+                    viewModel.UnitPrice = $"{orderItem.UnitPrice} {orderItem.Currency}";
+                    viewModel.Price = $"{orderItem.Price} {orderItem.Currency}";
                 }
 
                 if (orderItem.LastOrderItemStatusChangeId is not null)

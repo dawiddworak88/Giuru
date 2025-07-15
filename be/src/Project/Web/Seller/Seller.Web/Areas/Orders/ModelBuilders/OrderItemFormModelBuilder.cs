@@ -57,7 +57,9 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 ExternalReferenceLabel = this.orderLocalizer.GetString("ExternalReferenceLabel"),
                 MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
                 CancelOrderItemLabel = this.orderLocalizer.GetString("CancelOrder"),
-                CancelOrderItemStatusUrl = this.linkGenerator.GetPathByAction("CancelOrderItem", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                CancelOrderItemStatusUrl = this.linkGenerator.GetPathByAction("CancelOrderItem", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                UnitPriceLabel = this.globalLocalizer.GetString("UnitPrice"),
+                PriceLabel = this.globalLocalizer.GetString("Price")
             };
 
             if (componentModel.Id.HasValue)
@@ -85,6 +87,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     viewModel.OrderUrl = this.linkGenerator.GetPathByAction("Edit", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, id = orderItem.OrderId });
                     viewModel.ExternalReference = orderItem.ExternalReference;
                     viewModel.MoreInfo = orderItem.MoreInfo;
+                    viewModel.UnitPrice = $"{orderItem.UnitPrice} {orderItem.Currency}";
+                    viewModel.Price = $"{orderItem.Price} {orderItem.Currency}";
                     viewModel.ExpectedDateOfProductOnStock = orderItem.OrderItemStatusChangeComment;
 
                     if (orderItem.OrderItemStatusId == OrdersConstants.OrderStatuses.NewId || 

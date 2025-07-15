@@ -2,12 +2,18 @@
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ViewModels.SearchProducts;
 using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Shared.Definitions.Filters;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Filters;
+using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.DomainModels.Prices;
+using Buyer.Web.Shared.ModelBuilders.Catalogs;
+using Buyer.Web.Shared.Services.Prices;
+using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Foundation.Extensions.ExtensionMethods;
@@ -17,6 +23,8 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -35,6 +43,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         private readonly IOutletRepository _outletRepository;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly LinkGenerator _linkGenerator;
+        private readonly IOptions<AppSettings> _options;
+        private readonly IPriceService _priceService;
 
         public SearchProductsCatalogModelBuilder(
             ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> searchProductsCatalogModelBuilder,
@@ -45,7 +55,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             IOutletRepository outletRepository,
             IInventoryRepository inventoryRepository,
             LinkGenerator linkGenerator,
-            IStringLocalizer<ProductResources> productLocalizer)
+            IStringLocalizer<ProductResources> productLocalizer,
+            IOptions<AppSettings> options,
+            IPriceService priceService
+        )
         {
             _searchProductsCatalogModelBuilder = searchProductsCatalogModelBuilder;
             _productsService = productsService;
@@ -56,6 +69,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             _globalLocalizer = globalLocalizer;
             _productLocalizer = productLocalizer;
             _linkGenerator = linkGenerator;
+            _options = options;
+            _priceService = priceService;
         }
 
         public async Task<SearchProductsCatalogViewModel> BuildModelAsync(SearchProductsComponentModel componentModel)
@@ -102,8 +117,53 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 var outletItems = await _outletRepository.GetOutletProductsByIdsAsync(componentModel.Token, componentModel.Language, products.Data.Select(x => x.Id));
                 var inventoryItems = await _inventoryRepository.GetAvailbleProductsInventoryByIds(componentModel.Token, componentModel.Language, products.Data.Select(x => x.Id));
 
-                foreach (var product in products.Data.OrEmptyIfNull())
+                var prices = Enumerable.Empty<Price>();
+
+                if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                 {
+                    prices = await _priceService.GetPrices(
+                        _options.Value.GrulaAccessToken,
+                        DateTime.UtcNow,
+                        products.Data.Select(x => new PriceProduct
+                        {
+                            PrimarySku = x.PrimaryProductSku,
+                            FabricsGroup = x.FabricsGroup,
+                            SleepAreaSize = x.SleepAreaSize,
+                            ExtraPacking = x.ExtraPacking,
+                            PaletteSize = x.PaletteSize,
+                            Size = x.Size,
+                            PointsOfLight = x.PointsOfLight,
+                            LampshadeType = x.LampshadeType,
+                            LampshadeSize = x.LampshadeSize,
+                            LinearLight = x.LinearLight,
+                            Mirror = x.Mirror,
+                            Shape = x.Shape,
+                            PrimaryColor = x.PrimaryColor,
+                            SecondaryColor = x.SecondaryColor,
+                            ShelfType = x.ShelfType,
+                            IsOutlet = (outletItems.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
+                        }),
+                        new PriceClient
+                        {
+                            Id = componentModel.ClientId,
+                            Name = componentModel.Name,
+                            CurrencyCode = componentModel.CurrencyCode,
+                            ExtraPacking = componentModel.ExtraPacking,
+                            PaletteLoading = componentModel.PaletteLoading,
+                            Country = componentModel.Country,
+                            DeliveryZipCode = componentModel.DeliveryZipCode
+                        });
+                }
+
+                for (int i = 0; i < products.Data.Count(); i++)
+                {
+                    var product = products.Data.ElementAtOrDefault(i);
+
+                    if (product is null)
+                    {
+                        continue;
+                    }
+
                     var outletItem = outletItems.FirstOrDefault(x => x.ProductSku == product.Sku);
 
                     if (outletItem is not null)
@@ -112,7 +172,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         product.AvailableOutletQuantity = outletItem.AvailableQuantity;
                         product.OutletTitle = outletItem.Title;
                     }
-
+                    
                     var inventoryItem = inventoryItems.FirstOrDefault(x => x.ProductSku == product.Sku);
 
                     if (inventoryItem is not null)
@@ -120,6 +180,20 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         product.InStock = true;
                         product.AvailableQuantity = inventoryItem.AvailableQuantity;
                         product.ExpectedDelivery = inventoryItem.ExpectedDelivery;
+                    }
+
+                    if (prices.Any())
+                    {
+                        var price = prices.ElementAtOrDefault(i);
+
+                        if (price is not null)
+                        {
+                            product.Price = new ProductPriceViewModel
+                            {
+                                Current = price.CurrentPrice,
+                                Currency = price.CurrencyCode
+                            };
+                        }
                     }
 
                     product.CanOrder = true;

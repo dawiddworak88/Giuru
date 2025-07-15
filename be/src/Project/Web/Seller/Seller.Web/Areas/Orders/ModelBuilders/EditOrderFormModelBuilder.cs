@@ -78,6 +78,9 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
                 ExpectedDateOfProductOnStockLabel = _orderLocalizer.GetString("ExpectedDateOfProductOnStock"),
+                UnitPriceLabel = _globalLocalizer.GetString("UnitPrice"),
+                PriceLabel = _globalLocalizer.GetString("Price"),
+                CurrencyLabel = _globalLocalizer.GetString("Currency"),
                 MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
                 MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity")
             };
@@ -113,6 +116,9 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                         OutletQuantity = x.OutletQuantity,
                         ExternalReference = x.ExternalReference,
                         MoreInfo = x.MoreInfo,
+                        UnitPrice = x.UnitPrice,
+                        Price = x.Price,
+                        Currency = x.Currency,
                         OrderItemStatusId = x.OrderItemStatusId,
                         OrderItemStatusName = x.OrderItemStatusName,
                         ExpectedDateOfProductOnStock = x.OrderItemStatusChangeComment,

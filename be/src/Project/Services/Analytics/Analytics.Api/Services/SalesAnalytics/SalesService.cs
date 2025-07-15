@@ -131,17 +131,17 @@ namespace Analytics.Api.Services.SalesAnalytics
 
                     for (int i = 0; i < product.Quantity; i++)
                     {
-                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension?.Id, false, false);
+                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension?.Id, false, false, product.Price, product.Currency);
                     }
 
                     for (int i = 0; i < product.StockQuantity; i++)
                     {
-                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension?.Id, true, false);
+                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension?.Id, true, false, product.Price, product.Currency);
                     }
 
                     for (int i = 0; i < product.OutletQuantity; i++)
                     {
-                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension?.Id, false, true);
+                        await this.CreateSalesFact(clientDimension.Id, productDimension.Id, timeDimension.Id, locationDimension?.Id, false, true, product.Price, product.Currency);
                     }
                 }
 
@@ -151,7 +151,7 @@ namespace Analytics.Api.Services.SalesAnalytics
 
         private async Task CreateSalesFact(
             Guid clientDimensionId, Guid productDimensionId, Guid timeDimensionId, 
-            Guid? locationDimensionId, bool isStock, bool isOutlet)
+            Guid? locationDimensionId, bool isStock, bool isOutlet, decimal? price, string? currency)
         {
             var salesFact = new SalesFact
             {
@@ -161,7 +161,9 @@ namespace Analytics.Api.Services.SalesAnalytics
                 LocationDimensionId = locationDimensionId,
                 IsOutlet = isStock,
                 IsStock = isOutlet,
-                Quantity = 1
+                Quantity = 1,
+                Price = price,
+                Currency = currency
             };
 
             await _context.SalesFacts.AddAsync(salesFact.FillCommonProperties());

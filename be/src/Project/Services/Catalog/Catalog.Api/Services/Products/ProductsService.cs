@@ -487,6 +487,7 @@ namespace Catalog.Api.Services.Products
             {
                 Id = searchResultItem.ProductId,
                 PrimaryProductId = searchResultItem.PrimaryProductId,
+                PrimaryProductSku = searchResultItem.PrimaryProductSku,
                 Images = searchResultItem.Images,
                 Files = searchResultItem.Files,
                 Videos = searchResultItem.Videos,

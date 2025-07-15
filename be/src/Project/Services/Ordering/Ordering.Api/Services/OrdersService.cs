@@ -115,6 +115,9 @@ namespace Ordering.Api.Services
                     Quantity = basketItem.Quantity,
                     StockQuantity = basketItem.StockQuantity,
                     OutletQuantity = basketItem.OutletQuantity,
+                    UnitPrice = basketItem.UnitPrice,
+                    Price = basketItem.Price,
+                    Currency = basketItem.Currency,
                     ExternalReference = basketItem.ExternalReference,
                     MoreInfo = basketItem.MoreInfo
                 };
@@ -184,7 +187,9 @@ namespace Ordering.Api.Services
                     Id = x.ProductId,
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
-                    OutletQuantity = x.OutletQuantity
+                    OutletQuantity = x.OutletQuantity,
+                    Price = x.Price,
+                    Currency = x.Currency
                 }),
                 CreatedDate = order.CreatedDate
             };
@@ -352,6 +357,9 @@ namespace Ordering.Api.Services
                     Quantity = orderItem.Quantity,
                     StockQuantity = orderItem.StockQuantity,
                     OutletQuantity = orderItem.OutletQuantity,
+                    UnitPrice = orderItem.UnitPrice,
+                    Price = orderItem.Price,
+                    Currency = orderItem.Currency,
                     ExternalReference = orderItem.ExternalReference,
                     MoreInfo = orderItem.MoreInfo,
                     LastOrderItemStatusChangeId = orderItem.LastOrderItemStatusChangeId,
@@ -413,6 +421,9 @@ namespace Ordering.Api.Services
                 Quantity = existingOrderItem.Quantity,
                 StockQuantity = existingOrderItem.StockQuantity,
                 OutletQuantity = existingOrderItem.OutletQuantity,
+                UnitPrice = existingOrderItem.UnitPrice,
+                Price = existingOrderItem.Price,
+                Currency = existingOrderItem.Currency,
                 ExternalReference = existingOrderItem.ExternalReference,
                 LastOrderItemStatusChangeId = existingOrderItem.LastOrderItemStatusChangeId,
                 MoreInfo = existingOrderItem.MoreInfo,
@@ -707,7 +718,10 @@ namespace Ordering.Api.Services
                             name = $"{x.ProductName} ({x.ProductSku})",
                             quantity = x.Quantity,
                             stockQuantity = x.StockQuantity,
-                            outletQuantity = x.OutletQuantity
+                            outletQuantity = x.OutletQuantity,
+                            unitPrice = x.UnitPrice,
+                            price = x.Price,
+                            currency = x.Currency
                         })
                     }
                 });
@@ -964,6 +978,9 @@ namespace Ordering.Api.Services
                             Quantity = item.Quantity,
                             StockQuantity = item.StockQuantity,
                             OutletQuantity = item.OutletQuantity,
+                            UnitPrice = item.UnitPrice,
+                            Price = item.Price,
+                            Currency = item.Currency,
                             ExternalReference = item.ExternalReference,
                             MoreInfo = item.MoreInfo,
                             LastOrderItemStatusChangeId = item.LastOrderItemStatusChangeId,

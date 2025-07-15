@@ -232,6 +232,9 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Currency")
+                        .HasColumnType("nvarchar(3)");
+
                     b.Property<string>("ExternalReference")
                         .HasColumnType("nvarchar(max)");
 
@@ -256,6 +259,9 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<string>("PictureUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,4)");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
@@ -277,6 +283,9 @@ namespace Ordering.Api.Infrastructure.Migrations
 
                     b.Property<double>("StockQuantity")
                         .HasColumnType("float");
+
+                    b.Property<decimal?>("UnitPrice")
+                        .HasColumnType("decimal(18,4)");
 
                     b.HasKey("Id");
 
