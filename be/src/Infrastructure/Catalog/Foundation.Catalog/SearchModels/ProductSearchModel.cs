@@ -8,6 +8,7 @@ namespace Foundation.Catalog.SearchModels.Products
     [ElasticsearchType(RelationName = "product")]
     public class ProductSearchModel : SearchModelBase
     {
+        public string DocId { get; set; }
         public Guid ProductId { get; set; }
         public string Sku { get; set; }
         public string Name { get; set; }
@@ -28,6 +29,8 @@ namespace Foundation.Catalog.SearchModels.Products
         public bool IsProtected { get; set; }
         public string Ean { get; set; }
         public int? FulfillmentTime { get; set; }
+        public double? StockAvailableQuantity { get; set; }
+        public double? OutletAvailableQuantity { get; set; }
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<Guid> Videos { get; set; }
         public IEnumerable<Guid> Files { get; set; }

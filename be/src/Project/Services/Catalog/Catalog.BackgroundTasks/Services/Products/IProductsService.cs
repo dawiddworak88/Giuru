@@ -7,5 +7,6 @@ namespace Catalog.BackgroundTasks.Services.Products
     {
         Task IndexAllAsync(Guid? sellerId);
         Task IndexCategoryProducts(Guid? categoryId, Guid? sellerId);
+        Task UpdateStockAvailableQuantityAsync(Guid? organisationId, Guid productId, double quantity);
     }
 }

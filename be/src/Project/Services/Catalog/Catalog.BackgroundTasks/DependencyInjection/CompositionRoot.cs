@@ -6,6 +6,7 @@ using Foundation.Catalog.Infrastructure;
 using Foundation.EventBus;
 using Foundation.EventBus.Abstractions;
 using Foundation.EventBusRabbitMq;
+using Foundation.Localization.Definitions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,11 @@ namespace Catalog.BackgroundTasks.DependencyInjection
         {
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<ICategorySchemaService, CategorySchemaService>();
+        }
+
+        public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<LocalizationSettings>(configuration);
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
@@ -50,6 +56,7 @@ namespace Catalog.BackgroundTasks.DependencyInjection
             services.AddScoped<IIntegrationEventHandler<RebuildCatalogSearchIndexIntegrationEvent>, RebuildCatalogSearchIndexIntegrationEventHandler>();
             services.AddScoped<IIntegrationEventHandler<RebuildCategorySchemasIntegrationEvent>, RebuildCategorySchemasIntegrationEventHandler>();
             services.AddScoped<IIntegrationEventHandler<RebuildCategoryProductsIntegrationEvent>, RebuildCategoryProductsIntegrationEventHandler>();
+            services.AddScoped<IIntegrationEventHandler<InventoryProductsAvailableQuantityUpdateIntegrationEvent>, InventoryProductsAvailableQuantityUpdateIntegrationEventHandler>();
 
             services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
             {

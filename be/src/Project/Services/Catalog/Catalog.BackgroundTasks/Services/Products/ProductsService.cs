@@ -1,7 +1,10 @@
 ﻿using Foundation.Catalog.Infrastructure;
 using Foundation.Catalog.Repositories.ProductIndexingRepositories;
+using Foundation.Catalog.Repositories.ProductSearchRepositories;
+using Foundation.Localization.Definitions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,18 +17,24 @@ namespace Catalog.BackgroundTasks.Services.Products
         private readonly CatalogContext _context;
         private readonly IProductIndexingRepository _productIndexingRepository;
         private readonly IBulkProductIndexingRepository _bulkProductIndexingRepository;
+        private readonly IProductSearchRepository _productSearchRepository;
         private readonly ILogger<ProductsService> _logger;
+        private readonly IOptionsMonitor<LocalizationSettings> _localizationSettings;
 
         public ProductsService(
             CatalogContext context,
             IProductIndexingRepository productIndexingRepository,
             IBulkProductIndexingRepository bulkProductIndexingRepository,
-            ILogger<ProductsService> logger)
+            IProductSearchRepository productSearchRepository,
+            ILogger<ProductsService> logger,
+            IOptionsMonitor<LocalizationSettings> localizationSettings)
         {
             _context = context;
             _productIndexingRepository = productIndexingRepository;
             _bulkProductIndexingRepository = bulkProductIndexingRepository;
+            _productSearchRepository = productSearchRepository;
             _logger = logger;
+            _localizationSettings = localizationSettings;
         }
 
         public async Task IndexAllAsync(Guid? sellerId)
@@ -86,6 +95,32 @@ namespace Catalog.BackgroundTasks.Services.Products
                 .Where(x => x.Brand.SellerId == sellerId && x.CategoryId == categoryId)
                 .Select(x => x.Id)
                 .ToListAsync();
+        }
+
+        public async Task UpdateStockAvailableQuantityAsync(Guid? organisationId, Guid productId, double quantity)
+        {
+            var supportedCultures = _localizationSettings.CurrentValue.SupportedCultures.Split(",");
+
+            foreach (var supportedCulture in supportedCultures)
+            {
+                var product = await _productSearchRepository.GetByIdAsync(productId, supportedCulture, organisationId);
+
+                if (product == null)
+                {
+                    _logger.LogWarning("Product with ID {ProductId} not found for culture {Culture} and organisation {OrganisationId}", productId, supportedCulture, organisationId);
+                    continue;
+                }
+
+                if (product.StockAvailableQuantity == quantity)
+                {
+                    _logger.LogInformation("No update needed for product {ProductId} in culture {Culture} and organisation {OrganisationId}", productId, supportedCulture, organisationId);
+                    continue;
+                }
+
+                Console.WriteLine($"Updated product document {product.DocId}");
+
+                await _productIndexingRepository.UpdateStockAvailableQuantity(product.DocId, quantity);
+            }
         }
     }
 }

@@ -278,5 +278,15 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                 }
             }
         }
+
+        public async Task UpdateOutletAvailableQuantity(string docId, double availableQuantity)
+        {
+            await _elasticClient.UpdateAsync<ProductSearchModel, object>(docId, u => u.Doc(new { OutletAvailableQuantity = availableQuantity }));
+        }
+
+        public async Task UpdateStockAvailableQuantity(string docId, double availableQuantity)
+        {
+            await _elasticClient.UpdateAsync<ProductSearchModel, object>(docId, u => u.Doc(new { StockAvailableQuantity = availableQuantity }));
+        }
     }
 }
