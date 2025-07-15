@@ -119,6 +119,9 @@ function NewOrderForm(props) {
             quantity: quantity ? quantity : 0,
             stockQuantity: stockQuantity ? stockQuantity : 0,
             outletQuantity: outletQuantity ? outletQuantity : 0,
+            unitPrice: parseFloat(product.price).toFixed(2),
+            price: parseFloat(product.price * totalQuantity).toFixed(2),
+            currency: product.currency,
             externalReference,
             moreInfo
         };
@@ -510,6 +513,9 @@ function NewOrderForm(props) {
                                                     <TableCell className="has-text-weight-bold">{props.inTotalLabel}</TableCell>
                                                     <TableCell>{props.externalReferenceLabel}</TableCell>
                                                     <TableCell>{props.moreInfoLabel}</TableCell>
+                                                    <TableCell>{props.unitPriceLabel}</TableCell>
+                                                    <TableCell>{props.priceLabel}</TableCell>
+                                                    <TableCell>{props.currencyLabel}</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
@@ -531,6 +537,9 @@ function NewOrderForm(props) {
                                                         <TableCell className="has-text-weight-bold">{getTotalQuantities(item)}</TableCell>
                                                         <TableCell>{item.externalReference}</TableCell>
                                                         <TableCell>{item.moreInfo}</TableCell>
+                                                        <TableCell>{item.unitPrice}</TableCell>
+                                                        <TableCell>{item.price}</TableCell>
+                                                        <TableCell>{item.currency}</TableCell>
                                                     </TableRow>
                                                 ))}
                                             </TableBody>

@@ -14,5 +14,6 @@ namespace Client.Api.Infrastructure.Fields
         public Guid FieldDefinitionId { get; set; }
 
         public virtual IEnumerable<ClientFieldValueTranslation> Translation { get; set; }
+        public virtual FieldDefinition FieldDefinition { get; set; }
     }
 }

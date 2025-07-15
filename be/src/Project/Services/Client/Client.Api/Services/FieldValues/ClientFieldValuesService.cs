@@ -114,8 +114,10 @@ namespace Client.Api.Services.FieldValues
 
         public PagedResults<IEnumerable<ClientFieldValueServiceModel>> Get(GetClientFieldValuesServiceModel model)
         {
-            var fieldValues = _context.ClientFieldValues.
-                Include(x => x.Translation)
+            var fieldValues = _context.ClientFieldValues
+                .Include(x => x.FieldDefinition)
+                .ThenInclude(x => x.FieldDefinitionTranslations)
+                .Include(x => x.Translation)
                 .Where(x => x.IsActive).AsSingleQuery();
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
@@ -148,6 +150,7 @@ namespace Client.Api.Services.FieldValues
                 Data = pagedResults.Data.OrEmptyIfNull().Select(x => new ClientFieldValueServiceModel
                 {
                     Id = x.Id,
+                    FieldName = x.FieldDefinition?.FieldDefinitionTranslations?.FirstOrDefault(y => y.Language == model.Language && y.IsActive)?.FieldName ?? x.FieldDefinition?.FieldDefinitionTranslations?.FirstOrDefault(y => y.IsActive)?.FieldName,
                     FieldValue = x.Translation?.FirstOrDefault(x => x.Language == model.Language && x.IsActive)?.FieldValue ?? x.Translation?.FirstOrDefault(x => x.IsActive)?.FieldValue,
                     FieldDefinitionId = x.FieldDefinitionId,
                     LastModifiedDate = x.LastModifiedDate,

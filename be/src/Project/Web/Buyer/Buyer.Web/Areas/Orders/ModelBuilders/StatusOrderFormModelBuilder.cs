@@ -12,7 +12,6 @@ using Foundation.Localization;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -73,7 +72,10 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 NavigateToOrders = _orderLocalizer.GetString("NavigateToOrdersList"),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
-                ExpectedDateOfProductOnStockLabel = _orderLocalizer.GetString("ExpectedDateOfProductOnStock")
+                ExpectedDateOfProductOnStockLabel = _orderLocalizer.GetString("ExpectedDateOfProductOnStock"),
+                UnitPriceLabel = _globalLocalizer.GetString("UnitPrice"),
+                PriceLabel = _globalLocalizer.GetString("Price"),
+                CurrencyLabel = _globalLocalizer.GetString("Currency")
             };
 
             var orderStatuses = await _ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -104,6 +106,9 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         Quantity = x.Quantity,
                         StockQuantity = x.StockQuantity,
                         OutletQuantity = x.OutletQuantity,
+                        UnitPrice = x.UnitPrice,
+                        Price = x.Price,
+                        Currency = x.Currency,
                         ExternalReference = x.ExternalReference,
                         MoreInfo = x.MoreInfo,
                         OrderItemStatusId = x.OrderItemStatusId,

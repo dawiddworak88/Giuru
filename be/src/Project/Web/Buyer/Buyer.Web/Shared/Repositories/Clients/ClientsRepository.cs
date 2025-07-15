@@ -7,7 +7,6 @@ using Foundation.Extensions.Exceptions;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.DomainModels.Clients;
-using System;
 
 namespace Buyer.Web.Shared.Repositories.Clients
 {
@@ -40,6 +39,26 @@ namespace Buyer.Web.Shared.Repositories.Clients
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
+
+        public async Task<Client> GetClientByEmailAsync(string token, string language, string email)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.ClientsByEmailApiEndpoint}/{email}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Client>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {

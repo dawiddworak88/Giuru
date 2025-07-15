@@ -8,6 +8,7 @@ namespace Catalog.Api.v1.Products.ResultModels
     public class ProductResponseModel : BaseResponseModel
     {
         public Guid? PrimaryProductId { get; set; }
+        public string PrimaryProductSku { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsNew { get; set; }

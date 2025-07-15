@@ -35,5 +35,28 @@ namespace Foundation.Extensions.ExtensionMethods
             }
             return str;
         }
+
+        public static string ToYesOrNo(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return "No";
+            }
+
+            var yesNoDictionary = new Dictionary<string, string>
+            {
+                { "yes", "Yes" },
+                { "true", "Yes" },
+                { "tak", "Yes" },
+                { "ja", "Yes" }
+            };
+
+            if (yesNoDictionary.TryGetValue(value.ToLowerInvariant().Trim(), out string mappedValue))
+            {
+                return mappedValue;
+            }
+
+            return "No";
+        }
     }
 }

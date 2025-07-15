@@ -12,6 +12,7 @@ using Seller.Web.Areas.ProductAttributes.Repositories;
 using Seller.Web.Areas.ProductAttributeItems.ModelBuilders;
 using Seller.Web.Areas.Products.ComponentModels;
 using Seller.Web.Areas.Products.ModelBuilders;
+using Seller.Web.Shared.DomainModels.Products;
 
 namespace Seller.Web.Areas.Products.DependencyInjection
 {

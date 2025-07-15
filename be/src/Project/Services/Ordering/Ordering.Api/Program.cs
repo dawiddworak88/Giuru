@@ -27,38 +27,58 @@ using StackExchange.Redis;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Foundation.Telemetry.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
 
-builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+if (!builder.Environment.IsDevelopment())
 {
-    loggerConfiguration.MinimumLevel.Warning();
-    loggerConfiguration.Enrich.WithProperty("ApplicationContext", Assembly.GetExecutingAssembly().GetName().Name);
-    loggerConfiguration.Enrich.WithProperty("Environment", builder.Environment.EnvironmentName);
-    loggerConfiguration.Enrich.FromLogContext();
-    loggerConfiguration.WriteTo.Console();
-
-    loggerConfiguration.AddOpenTelemetrySerilogLogs(hostingContext.Configuration["OpenTelemetryLogsCollectorUrl"]);
-
-    if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoToken"])
-        && !string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoType"])
-        && !string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoDataCenterSubDomain"]))
+    builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     {
-        loggerConfiguration.WriteTo.LogzIo(hostingContext.Configuration["LogzIoToken"],
-            hostingContext.Configuration["LogzIoType"],
-            new LogzioOptions
-            {
-                DataCenter = new LogzioDataCenter
-                {
-                    SubDomain = hostingContext.Configuration["LogzIoDataCenterSubDomain"]
-                }
-            });
-    }
+        loggerConfiguration.MinimumLevel.Warning();
+        loggerConfiguration.Enrich.WithProperty("ApplicationContext", Assembly.GetExecutingAssembly().GetName().Name);
+        loggerConfiguration.Enrich.WithProperty("Environment", builder.Environment.EnvironmentName);
+        loggerConfiguration.Enrich.FromLogContext();
+        loggerConfiguration.WriteTo.Console();
 
-    loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
-});
+        loggerConfiguration.AddOpenTelemetrySerilogLogs(hostingContext.Configuration["OpenTelemetryLogsCollectorUrl"]);
+
+        if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoToken"])
+            && !string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoType"])
+            && !string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoDataCenterSubDomain"]))
+        {
+            loggerConfiguration.WriteTo.LogzIo(hostingContext.Configuration["LogzIoToken"],
+                hostingContext.Configuration["LogzIoType"],
+                new LogzioOptions
+                {
+                    DataCenter = new LogzioDataCenter
+                    {
+                        SubDomain = hostingContext.Configuration["LogzIoDataCenterSubDomain"]
+                    }
+                });
+        }
+
+        loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
+    });
+
+    builder.Services.AddOpenTelemetryTracing(
+        builder.Configuration["OpenTelemetryTracingCollectorUrl"],
+        Assembly.GetExecutingAssembly().GetName().Name,
+        false,
+        false,
+        true,
+        false,
+        true,
+        new[] { "/hc", "/liveness" });
+
+    builder.Services.AddOpenTelemetryMetrics(
+        builder.Configuration["OpenTelemetryMetricsCollectorUrl"],
+        Assembly.GetExecutingAssembly().GetName().Name,
+        true,
+        true);
+}
 
 builder.Services.AddDataProtection().UseCryptographicAlgorithms(
     new AuthenticatedEncryptorConfiguration
@@ -104,22 +124,6 @@ builder.Services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
 
     return new DefaultRabbitMQPersistentConnection(factory, logger, int.Parse(builder.Configuration["EventBusRetryCount"]));
 });
-
-builder.Services.AddOpenTelemetryTracing(
-    builder.Configuration["OpenTelemetryTracingCollectorUrl"],
-    Assembly.GetExecutingAssembly().GetName().Name,
-    false,
-    false,
-    true,
-    false,
-    true,
-    new[] { "/hc", "/liveness" });
-
-builder.Services.AddOpenTelemetryMetrics(
-    builder.Configuration["OpenTelemetryMetricsCollectorUrl"],
-    Assembly.GetExecutingAssembly().GetName().Name,
-    true,
-    true);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
 

@@ -1,3 +1,5 @@
+@import "../Price/Price.scss";
+
 .sidebar-list {
     width: 450px;
     padding: 0 !important;
@@ -105,6 +107,10 @@
         display: flex;
         max-width: 15.625rem;
         flex-direction: column;
+
+        .price {
+            margin-top: 0.5rem;
+        }
 
         a {
             display: inline-grid;

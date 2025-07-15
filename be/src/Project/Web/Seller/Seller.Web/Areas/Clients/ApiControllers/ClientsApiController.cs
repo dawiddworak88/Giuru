@@ -1,6 +1,7 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.Services.Claims;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly IClientGroupsRepository _clientGroupsRepository;
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
         private readonly IUserApprovalsRepository _userApprovalsRepository;
+        private readonly IClaimsCacheInvalidatorService _cacheInvalidatorService;
 
         public ClientsApiController(
             IOrganisationsRepository organisationsRepository,
@@ -39,7 +41,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             IIdentityRepository identityRepository,
             IClientGroupsRepository clientGroupsRepository,
             IClientFieldValuesRepository clientFieldValuesRepository,
-            IUserApprovalsRepository userApprovalsRepository)
+            IUserApprovalsRepository userApprovalsRepository,
+            IClaimsCacheInvalidatorService cacheInvalidatorService)
         {
             _organisationsRepository = organisationsRepository;
             _clientsRepository = clientsRepository;
@@ -48,6 +51,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             _clientGroupsRepository = clientGroupsRepository;
             _clientFieldValuesRepository = clientFieldValuesRepository;
             _userApprovalsRepository = userApprovalsRepository;
+            _cacheInvalidatorService = cacheInvalidatorService;
         }
 
         [HttpGet]
@@ -113,6 +117,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
                 await _userApprovalsRepository.SaveAsync(token, language, model.ClientApprovalIds, Guid.Parse(user.Id));
             }
+
+            await _cacheInvalidatorService.InvalidateAsync(model.Email);
 
             return StatusCode((int)HttpStatusCode.OK, new { Id = clientId, Message = _clientLocalizer.GetString("ClientSavedSuccessfully").Value });
         }

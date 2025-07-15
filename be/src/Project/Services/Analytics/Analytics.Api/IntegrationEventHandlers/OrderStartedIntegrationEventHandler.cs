@@ -41,7 +41,9 @@ namespace Analytics.Api.IntegrationEventHandlers
                     Id = orderItem.Id,
                     Quantity = orderItem.Quantity,
                     StockQuantity = orderItem.StockQuantity,
-                    OutletQuantity = orderItem.OutletQuantity
+                    OutletQuantity = orderItem.OutletQuantity,
+                    Price = orderItem.Price,
+                    Currency = orderItem.Currency
                 };
 
                 products.Add(product);
