@@ -1,8 +1,8 @@
 ﻿using Catalog.BackgroundTasks.IntegrationEvents;
 using Catalog.BackgroundTasks.Services.Products;
+using Catalog.BackgroundTasks.ServicesModels;
 using Foundation.EventBus.Abstractions;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,9 +35,12 @@ namespace Catalog.BackgroundTasks.IntegrationEventsHandlers
 
             foreach (var product in @event.Products)
             {
-                Console.WriteLine($"Updating available quantity for product: {product.Id}, Quantity: {product.AvailableQuantity}");
-
-                await _productsService.UpdateStockAvailableQuantityAsync(null, product.Id, product.AvailableQuantity);
+                await _productsService.BatchUpdateStockAvailableQuantitiesAsync(
+                    @event.Products.Select(x => new AvailableQuantityServiceModel 
+                    { 
+                        ProductSku = x.ProductSku,
+                        AvailableQuantity = x.AvailableQuantity
+                    }));
             }
         }
     }

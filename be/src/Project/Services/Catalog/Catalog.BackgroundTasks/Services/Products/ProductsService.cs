@@ -1,4 +1,5 @@
-﻿using Foundation.Catalog.Infrastructure;
+﻿using Catalog.BackgroundTasks.ServicesModels;
+using Foundation.Catalog.Infrastructure;
 using Foundation.Catalog.Repositories.ProductIndexingRepositories;
 using Foundation.Catalog.Repositories.ProductSearchRepositories;
 using Foundation.Localization.Definitions;
@@ -97,32 +98,36 @@ namespace Catalog.BackgroundTasks.Services.Products
                 .ToListAsync();
         }
 
-        public async Task UpdateStockAvailableQuantityAsync(Guid? organisationId, Guid productId, double quantity)
+        public async Task BatchUpdateStockAvailableQuantitiesAsync(IEnumerable<AvailableQuantityServiceModel> availableQuantities)
         {
+            var skus = availableQuantities?.Select(x => x.ProductSku).Distinct().ToList();
+
+            var products = await _productSearchRepository.GetAsync(_localizationSettings.CurrentValue.DefaultCulture, null, skus, null);
+
             var supportedCultures = _localizationSettings.CurrentValue.SupportedCultures.Split(",");
 
-            foreach (var supportedCulture in supportedCultures)
+            foreach (var availableProduct in availableQuantities)
             {
-                /*var product = await _productSearchRepository.GetByIdAsync(productId, supportedCulture, organisationId);
+                var product = products.Data.FirstOrDefault(x => x.Sku == availableProduct.ProductSku);
 
-                if (product == null)
+                if (product is null)
                 {
-                    _logger.LogWarning("Product with ID {ProductId} not found for culture {Culture} and organisation {OrganisationId}", productId, supportedCulture, organisationId);
+                    _logger.LogError($"Product with SKU {availableProduct.ProductSku} not found in search index");
                     continue;
                 }
 
-                if (product.StockAvailableQuantity == quantity)
+                if (product.StockAvailableQuantity == availableProduct.AvailableQuantity)
                 {
-                    _logger.LogInformation("No update needed for product {ProductId} in culture {Culture} and organisation {OrganisationId}", productId, supportedCulture, organisationId);
+                    _logger.LogError($"Product with SKU {availableProduct.ProductSku} has the same stock available quantity, skipping update");
                     continue;
                 }
 
-                Console.WriteLine($"Updated product document {product.DocId}");*/
-                var docId = $"{productId}_{supportedCulture}";
+                foreach (var supportedCulture in supportedCultures)
+                {
+                    var docId = $"{product.ProductId}_{supportedCulture}";
 
-                Console.WriteLine($"Updating available quantity for product: {docId}, Quantity: {quantity}");
-
-                await _productIndexingRepository.UpdateStockAvailableQuantity("", quantity);
+                    await _productIndexingRepository.UpdateStockAvailableQuantity(docId, availableProduct.AvailableQuantity);
+                }
             }
         }
     }

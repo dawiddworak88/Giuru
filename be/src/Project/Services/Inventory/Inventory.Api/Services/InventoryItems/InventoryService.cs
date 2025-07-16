@@ -68,7 +68,7 @@ namespace Inventory.Api.Services.InventoryItems
                 {
                     new ProductAvailableQuantityUpdateEventModel
                     {
-                        Id = product.Id,
+                        ProductSku = product.Sku,
                         AvailableQuantity = serviceModel.AvailableQuantity
                     }
                 }
@@ -121,7 +121,7 @@ namespace Inventory.Api.Services.InventoryItems
                     {
                         new ProductAvailableQuantityUpdateEventModel
                         {
-                            Id = product.Id,
+                            ProductSku = product.Sku,
                             AvailableQuantity = serviceModel.AvailableQuantity
                         }
                     }
@@ -160,7 +160,7 @@ namespace Inventory.Api.Services.InventoryItems
 
                     productsAvailableQuantityUpdates.Add(new ProductAvailableQuantityUpdateEventModel
                     {
-                        Id = inventoryProduct.ProductId,
+                        ProductSku = product.Sku,
                         AvailableQuantity = item.AvailableQuantity
                     });
                 }
@@ -199,7 +199,7 @@ namespace Inventory.Api.Services.InventoryItems
 
                         productsAvailableQuantityUpdates.Add(new ProductAvailableQuantityUpdateEventModel
                         {
-                            Id = product.Id,
+                            ProductSku = product.Sku,
                             AvailableQuantity = item.AvailableQuantity
                         });
                     }
@@ -540,7 +540,7 @@ namespace Inventory.Api.Services.InventoryItems
                     {
                         new ProductAvailableQuantityUpdateEventModel
                         {
-                            Id = productId.Value,
+                            ProductSku = inventory.Product?.Sku,
                             AvailableQuantity = productQuantity
                         }
                     }

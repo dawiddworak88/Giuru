@@ -4,7 +4,7 @@ namespace Catalog.BackgroundTasks.IntegrationEventModels
 {
     public class ProductAvailableQuantityUpdateEventModel
     {
-        public Guid Id { get; set; }
+        public string ProductSku { get; set; }
         public double AvailableQuantity { get; set; }
     }
 }

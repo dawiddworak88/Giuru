@@ -7,6 +7,7 @@ using Nest;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -281,12 +282,26 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
 
         public async Task UpdateOutletAvailableQuantity(string docId, double availableQuantity)
         {
-            await _elasticClient.UpdateAsync<ProductSearchModel, object>(docId, u => u.Index("catalog").Doc(new { OutletAvailableQuantity = availableQuantity }));
+            try
+            {
+                await _elasticClient.UpdateAsync<ProductSearchModel, object>(docId, u => u.Doc(new { OutletAvailableQuantity = availableQuantity }));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Failed to update outlet available quantity for document ID {docId}");
+            }
         }
 
         public async Task UpdateStockAvailableQuantity(string docId, double availableQuantity)
         {
-            await _elasticClient.UpdateAsync<ProductSearchModel, object>(docId, u => u.Index("catalog").Doc(new { StockAvailableQuantity = availableQuantity }));
+            try
+            {
+                await _elasticClient.UpdateAsync<ProductSearchModel, object>(docId, u => u.Doc(new { StockAvailableQuantity = availableQuantity }));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Failed to update stock available quantity for document ID {docId}");
+            }
         }
     }
 }
