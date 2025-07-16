@@ -46,7 +46,7 @@ namespace Catalog.BackgroundTasks.DependencyInjection
             var defaultIndex = configuration["ElasticsearchIndex"];
 
             var settings = new ConnectionSettings(new Uri(url))
-                .DefaultIndex(defaultIndex).DefaultDisableIdInference();
+                .DefaultIndex(defaultIndex).DefaultDisableIdInference().EnableDebugMode();
 
             var client = new ElasticClient(settings);
 
