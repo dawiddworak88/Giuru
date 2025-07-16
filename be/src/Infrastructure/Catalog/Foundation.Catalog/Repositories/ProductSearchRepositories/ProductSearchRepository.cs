@@ -196,7 +196,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
             query = query && skusQuery;
 
-            var response = await _elasticClient.SearchAsync<ProductSearchModel>(q => q.From(ProductSearchConstants.Pagination.BeginningPage).Size(ProductSearchConstants.Pagination.ProductsMaxSize).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(q => q.From(ProductSearchConstants.Pagination.BeginningPage).Size(ProductSearchConstants.Pagination.ProductsMaxSize).Query(q => query).Sort(s => Sorting<ProductSearchModel>(orderBy)));
 
             if (response.IsValid && response.Hits.Any())
             {
