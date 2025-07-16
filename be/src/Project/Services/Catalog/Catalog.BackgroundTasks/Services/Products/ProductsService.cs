@@ -130,5 +130,38 @@ namespace Catalog.BackgroundTasks.Services.Products
                 }
             }
         }
+
+        public async Task BatchUpdateOutletAvailableQuantitiesAsync(IEnumerable<AvailableQuantityServiceModel> availableQuantities)
+        {
+            var skus = availableQuantities?.Select(x => x.ProductSku).Distinct().ToList();
+
+            var products = await _productSearchRepository.GetAsync(_localizationSettings.CurrentValue.DefaultCulture, null, skus, null);
+
+            var supportedCultures = _localizationSettings.CurrentValue.SupportedCultures.Split(",");
+
+            foreach (var availableProduct in availableQuantities)
+            {
+                var product = products.Data.FirstOrDefault(x => x.Sku == availableProduct.ProductSku);
+
+                if (product is null)
+                {
+                    _logger.LogError($"Product with SKU {availableProduct.ProductSku} not found in search index");
+                    continue;
+                }
+
+                if (product.OutletAvailableQuantity == availableProduct.AvailableQuantity)
+                {
+                    _logger.LogError($"Product with SKU {availableProduct.ProductSku} has the same outlet available quantity, skipping update");
+                    continue;
+                }
+
+                foreach (var supportedCulture in supportedCultures)
+                {
+                    var docId = $"{product.ProductId}_{supportedCulture}";
+
+                    await _productIndexingRepository.UpdateOutletAvailableQuantity(docId, availableProduct.AvailableQuantity);
+                }
+            }
+        }
     }
 }

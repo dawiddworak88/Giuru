@@ -76,8 +76,6 @@ namespace Inventory.Api.Services.InventoryItems
 
             _eventBus.Publish(productAvailableQuantityUpdateMessage);
 
-            Console.WriteLine($"Inventory updated for product {product.Id} with available quantity {serviceModel.AvailableQuantity}");
-
             return await this.GetAsync(new GetInventoryServiceModel { Id = inventory.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 

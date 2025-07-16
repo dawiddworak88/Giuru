@@ -1,4 +1,5 @@
-﻿using Foundation.Extensions.Exceptions;
+﻿using Foundation.EventBus.Abstractions;
+using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
@@ -6,6 +7,8 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Inventory.Api.Infrastructure;
 using Inventory.Api.Infrastructure.Entities;
+using Inventory.Api.IntegrationEvents;
+using Inventory.Api.IntegrationEventsModels;
 using Inventory.Api.ServicesModels.OutletServiceModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -22,13 +25,16 @@ namespace Inventory.Api.Services.OutletItems
     {
         private readonly InventoryContext _context;
         private readonly IStringLocalizer _inventoryLocalizer;
+        private readonly IEventBus _eventBus;
 
         public OutletService(
             InventoryContext context,
-            IStringLocalizer<InventoryResources> inventoryLocalizer)
+            IStringLocalizer<InventoryResources> inventoryLocalizer,
+            IEventBus eventBus)
         {
             _context = context;
             _inventoryLocalizer = inventoryLocalizer;
+            _eventBus = eventBus;
         }
 
         public async Task<OutletServiceModel> UpdateAsync(UpdateOutletServiceModel model)
@@ -75,6 +81,20 @@ namespace Inventory.Api.Services.OutletItems
 
             await _context.SaveChangesAsync();
 
+            var productAvailableQuantityUpdateMessage = new OutletProductsAvailableQuantityUpdateIntegrationEvent
+            {
+                Products = new List<ProductAvailableQuantityUpdateEventModel>
+                {
+                    new ProductAvailableQuantityUpdateEventModel
+                    {
+                        ProductSku = product.Sku,
+                        AvailableQuantity = model.AvailableQuantity
+                    }
+                }
+            };
+
+            _eventBus.Publish(productAvailableQuantityUpdateMessage);
+
             return await this.GetAsync(new GetOutletServiceModel { Id = outlet.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
@@ -118,11 +138,27 @@ namespace Inventory.Api.Services.OutletItems
 
             await _context.SaveChangesAsync();
 
+            var productAvailableQuantityUpdateMessage = new OutletProductsAvailableQuantityUpdateIntegrationEvent
+            {
+                Products = new List<ProductAvailableQuantityUpdateEventModel>
+                {
+                    new ProductAvailableQuantityUpdateEventModel
+                    {
+                        ProductSku = outletProduct.Sku,
+                        AvailableQuantity = model.AvailableQuantity
+                    }
+                }
+            };
+
+            _eventBus.Publish(productAvailableQuantityUpdateMessage);
+
             return await this.GetAsync(new GetOutletServiceModel { Id = outletItem.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
         public async Task SyncProductsOutlet(UpdateOutletProductsServiceModel model)
         {
+            var productsAvailableQuantityUpdates = new List<ProductAvailableQuantityUpdateEventModel>();
+
             foreach (var item in model.OutletItems.OrEmptyIfNull())
             {
                 var outletProduct = await _context.Outlet.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.WarehouseId == item.WarehouseId && x.IsActive);
@@ -163,6 +199,12 @@ namespace Inventory.Api.Services.OutletItems
                     outletProduct.Quantity = item.Quantity;
                     outletProduct.AvailableQuantity = item.AvailableQuantity;
                     outletProduct.LastModifiedDate = DateTime.UtcNow;
+
+                    productsAvailableQuantityUpdates.Add(new ProductAvailableQuantityUpdateEventModel
+                    {
+                        ProductSku = item.ProductSku,
+                        AvailableQuantity = item.AvailableQuantity
+                    });
                 }
                 else
                 {
@@ -205,10 +247,23 @@ namespace Inventory.Api.Services.OutletItems
                         };
 
                         _context.OutletTranslations.Add(outletItemTranslation.FillCommonProperties());
+
+                        productsAvailableQuantityUpdates.Add(new ProductAvailableQuantityUpdateEventModel
+                        {
+                            ProductSku = item.ProductSku,
+                            AvailableQuantity = item.AvailableQuantity
+                        });
                     }
                 }
 
                 await _context.SaveChangesAsync();
+
+                var productsAvailableQuantityUpdateMessage = new OutletProductsAvailableQuantityUpdateIntegrationEvent
+                {
+                    Products = productsAvailableQuantityUpdates
+                };
+
+                _eventBus.Publish(productsAvailableQuantityUpdateMessage);
             }
         }
 
@@ -522,6 +577,18 @@ namespace Inventory.Api.Services.OutletItems
                 outlet.LastModifiedDate = DateTime.UtcNow;
 
                 await _context.SaveChangesAsync();
+
+                var productAvailableQuantityUpdateMessage = new OutletProductsAvailableQuantityUpdateIntegrationEvent
+                {
+                    Products = new List<ProductAvailableQuantityUpdateEventModel>
+                    {
+                        new ProductAvailableQuantityUpdateEventModel
+                        {
+                            ProductSku = outlet.Product?.Sku,
+                            AvailableQuantity = productQuantity
+                        }
+                    }
+                };
             }
         }
 

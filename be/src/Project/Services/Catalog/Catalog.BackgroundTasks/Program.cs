@@ -121,6 +121,7 @@ eventBus.Subscribe<RebuildCatalogSearchIndexIntegrationEvent, IIntegrationEventH
 eventBus.Subscribe<RebuildCategorySchemasIntegrationEvent, IIntegrationEventHandler<RebuildCategorySchemasIntegrationEvent>>();
 eventBus.Subscribe<RebuildCategoryProductsIntegrationEvent, IIntegrationEventHandler<RebuildCategoryProductsIntegrationEvent>>();
 eventBus.Subscribe<InventoryProductsAvailableQuantityUpdateIntegrationEvent, IIntegrationEventHandler<InventoryProductsAvailableQuantityUpdateIntegrationEvent>>();
+eventBus.Subscribe<OutletProductsAvailableQuantityUpdateIntegrationEvent, IIntegrationEventHandler<OutletProductsAvailableQuantityUpdateIntegrationEvent>>();
 
 app.MapControllers();
 
