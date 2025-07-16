@@ -71,6 +71,8 @@ namespace Catalog.BackgroundTasks.DependencyInjection
 
             var client = new ElasticClient(settings);
 
+            var ping = client.Ping();
+
             services.AddSingleton<IElasticClient>(client);
         }
 
