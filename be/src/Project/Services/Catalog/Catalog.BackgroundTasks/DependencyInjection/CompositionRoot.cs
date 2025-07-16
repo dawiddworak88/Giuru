@@ -16,6 +16,7 @@ using Nest;
 using RabbitMQ.Client;
 using System;
 using System.Reflection;
+using System.Text;
 
 namespace Catalog.BackgroundTasks.DependencyInjection
 {
@@ -46,7 +47,27 @@ namespace Catalog.BackgroundTasks.DependencyInjection
             var defaultIndex = configuration["ElasticsearchIndex"];
 
             var settings = new ConnectionSettings(new Uri(url))
-                .DefaultIndex(defaultIndex).DefaultDisableIdInference().EnableDebugMode();
+                .DefaultIndex(defaultIndex).DefaultDisableIdInference().EnableDebugMode() // włącza logowanie debugowe
+    .PrettyJson()      // czytelniejszy JSON
+    .OnRequestCompleted(details =>
+    {
+        Console.WriteLine("\n✅ REQUEST:");
+        if (details.RequestBodyInBytes != null)
+        {
+            Console.WriteLine(Encoding.UTF8.GetString(details.RequestBodyInBytes));
+        }
+
+        Console.WriteLine($"\n➡️ METHOD: {details.HttpMethod}");
+        Console.WriteLine($"➡️ URI: {details.Uri}");
+
+        Console.WriteLine("\n📥 RESPONSE:");
+        if (details.ResponseBodyInBytes != null)
+        {
+            Console.WriteLine(Encoding.UTF8.GetString(details.ResponseBodyInBytes));
+        }
+
+        Console.WriteLine($"\n✅ STATUS: {details.HttpStatusCode}");
+    });
 
             var client = new ElasticClient(settings);
 
