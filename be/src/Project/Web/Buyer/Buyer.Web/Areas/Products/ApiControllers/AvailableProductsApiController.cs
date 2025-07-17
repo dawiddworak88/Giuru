@@ -48,7 +48,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(int pageIndex, int itemsPerPage, string orderBy)
         {
             var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
                 CultureInfo.CurrentUICulture.Name,
@@ -68,7 +68,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     pageIndex,
                     itemsPerPage,
                     await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                    SortingConstants.Default);
+                    orderBy);
 
                 var outletItems = await _outletRepository.GetOutletProductsByProductsIdAsync(
                         await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
