@@ -189,7 +189,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
 
                 viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(outletItems.Total, OutletConstants.Catalog.DefaultItemsPerPage)
                 {
-                    Data = products.Data.OrderBy(x => x.Title)
+                    Data = products.Data
                 };
             }
 

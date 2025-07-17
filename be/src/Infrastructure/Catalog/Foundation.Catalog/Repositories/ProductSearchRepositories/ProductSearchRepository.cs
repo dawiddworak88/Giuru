@@ -293,7 +293,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
             if (orderBy == SortingConstants.Default)
             {
-                return new SortDescriptor<T>().Field(f => f.Name.Suffix("keyword"), SortOrder.Descending);
+                return new SortDescriptor<T>().Field(f => f.Name.Suffix("keyword"), SortOrder.Ascending);
             }
 
             if (orderBy == SortingConstants.Newest)
