@@ -3,6 +3,7 @@ using Foundation.ApiExtensions.Definitions;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Shared.Definitions;
+using Foundation.Extensions.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -57,34 +58,7 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 
                         var response = await client.PostAsync(request.EndpointAddress, content);
 
-                        var apiResponse = new ApiResponse<T>
-                        {
-                            IsSuccessStatusCode = response.IsSuccessStatusCode,
-                            StatusCode = response.StatusCode
-                        };
-
-                        var result = await response.Content.ReadAsStringAsync();
-
-                        if (response.IsSuccessStatusCode)
-                        {
-                            if (!string.IsNullOrWhiteSpace(result))
-                            {
-                                apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
-                            }
-                        }
-                        else
-                        {
-                            try
-                            {
-                                apiResponse.Problem = JsonConvert.DeserializeObject<ProblemDetails>(result);
-                            }
-                            catch
-                            {
-                                apiResponse.RawError = result;
-                            }
-                        }
-
-                        return apiResponse;
+                        return await HandleApiResponseAsync<T>(response);
                     }
                 }
             }
@@ -117,34 +91,7 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
                     Encoding.UTF8,
                     "application/json"));
 
-                var apiResponse = new ApiResponse<T>
-                {
-                    IsSuccessStatusCode = response.IsSuccessStatusCode,
-                    StatusCode = response.StatusCode
-                };
-
-                var result = await response.Content.ReadAsStringAsync();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    if (!string.IsNullOrWhiteSpace(result))
-                    {
-                        apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        apiResponse.Problem = JsonConvert.DeserializeObject<ProblemDetails>(result);
-                    }
-                    catch
-                    {
-                        apiResponse.RawError = result;
-                    }
-                }
-
-                return apiResponse;
+                return await HandleApiResponseAsync<T>(response);
             }
         }
 
@@ -186,26 +133,7 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 
                 var result = await response.Content.ReadAsStringAsync();
 
-                if (response.IsSuccessStatusCode)
-                {
-                    if (!string.IsNullOrWhiteSpace(result))
-                    {
-                        apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        apiResponse.Problem = JsonConvert.DeserializeObject<ProblemDetails>(result);
-                    }
-                    catch
-                    {
-                        apiResponse.RawError = result;
-                    }
-                }
-
-                return apiResponse;
+                return await HandleApiResponseAsync<T>(response);
             }
         }
 
@@ -236,35 +164,57 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 
                 var response = await client.DeleteAsync(request.EndpointAddress + "?" + queryString);
 
-                var apiResponse = new ApiResponse<T>
-                {
-                    IsSuccessStatusCode = response.IsSuccessStatusCode,
-                    StatusCode = response.StatusCode
-                };
+                return await HandleApiResponseAsync<T>(response);
+            }
+        }
 
-                var result = await response.Content.ReadAsStringAsync();
+        private async Task<ApiResponse<T>> HandleApiResponseAsync<T>(HttpResponseMessage response)
+        {
+            var apiResponse = new ApiResponse<T>
+            {
+                IsSuccessStatusCode = response.IsSuccessStatusCode,
+                StatusCode = response.StatusCode
+            };
 
-                if (response.IsSuccessStatusCode)
+            var result = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                if (!string.IsNullOrWhiteSpace(result))
                 {
-                    if (!string.IsNullOrWhiteSpace(result))
+                    apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
+                }
+            }
+            else
+            {
+                try
+                {
+                    var customException = JsonConvert.DeserializeObject<CustomException>(result);
+
+                    if (customException != null)
                     {
-                        apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
+                        apiResponse.Message = customException.Message;
                     }
                 }
-                else
+                catch
                 {
                     try
                     {
-                        apiResponse.Problem = JsonConvert.DeserializeObject<ProblemDetails>(result);
+                        var problemDetails = JsonConvert.DeserializeObject<ProblemDetails>(result);
+
+                        if (problemDetails != null)
+                        {
+                            apiResponse.Problem = problemDetails;
+                        }
                     }
                     catch
                     {
                         apiResponse.RawError = result;
                     }
                 }
-
-                return apiResponse;
             }
+
+            return apiResponse;
         }
     }
 }

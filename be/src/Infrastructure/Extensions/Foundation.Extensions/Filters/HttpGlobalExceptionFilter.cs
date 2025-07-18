@@ -3,49 +3,42 @@ using Foundation.Extensions.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Hosting;
 
 namespace Foundation.Extensions.Filters
 {
     public class HttpGlobalExceptionFilter : IExceptionFilter
     {
-        private readonly IWebHostEnvironment env;
-
-        private HttpGlobalExceptionFilter()
-        { }
+        private readonly IWebHostEnvironment _env;
 
         public HttpGlobalExceptionFilter(IWebHostEnvironment env)
         {
-            this.env = env;
+            _env = env;
         }
 
         public void OnException(ExceptionContext context)
         {
-            if (context.Exception.GetType() == typeof(CustomException))
+            if (context.Exception is CustomException ex)
             {
+                context.HttpContext.Response.StatusCode = ex.StatusCode;
+
                 var response = new ErrorResponse
                 {
-                    Message = context.Exception.Message
+                    Message = ex.Message
                 };
 
-                if (this.env.EnvironmentName == EnvironmentConstants.DevelopmentEnvironmentName)
+                if (_env.IsDevelopment())
                 {
-                    response.DeveloperMessage = context.Exception;
+                    response.DeveloperMessage = ex;
                 }
 
-                if (((int?)context.Exception.Data[FilterConstants.StatusCodeKeyName]).HasValue)
+                if (ex.StatusCode != FilterConstants.NoContentStatusCode ||
+                    ex.StatusCode != FilterConstants.UnauthorizedStatusCode)
                 {
-                    var statusCodeValue = ((int?)context.Exception.Data[FilterConstants.StatusCodeKeyName]).Value;
-
-                    if (statusCodeValue == FilterConstants.NoContentStatusCode)
-                    {
-                        context.HttpContext.Response.StatusCode = statusCodeValue;
-                    }
-                    else
-                    {
-                        context.Result = new ObjectResult(response);
-                        context.HttpContext.Response.StatusCode = statusCodeValue;
-                    }
+                    context.Result = new ObjectResult(response);
                 }
+
+                context.ExceptionHandled = true;
             }
         }
 
