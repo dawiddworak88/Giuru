@@ -32,7 +32,6 @@ namespace Foundation.Account.DependencyInjection
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
-                    options.TokenValidationParameters.ValidIssuer = configuration.GetValue<string>("IdentityUrl");
                     options.Authority = configuration.GetValue<string>("IdentityUrl");
                     options.RequireHttpsMetadata = false;
 
