@@ -1,7 +1,6 @@
 ﻿using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
-using Buyer.Web.Shared.Definitions.Filters;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Middlewares;
@@ -150,7 +149,10 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         product.ExpectedDelivery = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
                     }
 
-                    return this.StatusCode((int)HttpStatusCode.OK, new PagedResults<IEnumerable<CatalogItemViewModel>>(inventories.Total, itemsPerPage) { Data = products.Data.OrderByDescending(x => x.AvailableQuantity) });
+                    return this.StatusCode((int)HttpStatusCode.OK, new PagedResults<IEnumerable<CatalogItemViewModel>>(inventories.Total, itemsPerPage)
+                    {
+                        Data = products.Data
+                    });
                 }
             }
 
