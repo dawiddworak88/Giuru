@@ -39,7 +39,7 @@ namespace Identity.Api.DependencyInjection
 
             var builder = services.AddIdentityServer(options => {
 
-                options.IssuerUri = configuration.GetValue<string>("IdentityUrl");
+                options.IssuerUri = "null";
                 options.UserInteraction.LoginUrl = "/Accounts/SignIn";
                 options.UserInteraction.LogoutUrl = "/Accounts/SignOut";
                 options.Events.RaiseErrorEvents = true;
