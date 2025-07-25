@@ -9,6 +9,7 @@ using Inventory.Api.Infrastructure.Entities;
 using Inventory.Api.ServicesModels.OutletServiceModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +23,16 @@ namespace Inventory.Api.Services.OutletItems
     {
         private readonly InventoryContext _context;
         private readonly IStringLocalizer _inventoryLocalizer;
+        private readonly ILogger<OutletService> _logger;
 
         public OutletService(
             InventoryContext context,
-            IStringLocalizer<InventoryResources> inventoryLocalizer)
+            IStringLocalizer<InventoryResources> inventoryLocalizer,
+            ILogger<OutletService> logger)
         {
             _context = context;
             _inventoryLocalizer = inventoryLocalizer;
+            _logger = logger;
         }
 
         public async Task<OutletServiceModel> UpdateAsync(UpdateOutletServiceModel model)
@@ -123,6 +127,8 @@ namespace Inventory.Api.Services.OutletItems
 
         public async Task SyncProductsOutlet(UpdateOutletProductsServiceModel model)
         {
+            _logger.LogWarning($"Received outlet products for organisation {model.OrganisationId} with {model.InventoryItems.Count()} items");
+
             foreach (var item in model.OutletItems.OrEmptyIfNull())
             {
                 var outletProduct = await _context.Outlet.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.WarehouseId == item.WarehouseId && x.IsActive);
