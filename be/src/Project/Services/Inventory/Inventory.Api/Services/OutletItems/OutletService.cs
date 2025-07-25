@@ -127,7 +127,7 @@ namespace Inventory.Api.Services.OutletItems
 
         public async Task SyncProductsOutlet(UpdateOutletProductsServiceModel model)
         {
-            _logger.LogWarning($"Received outlet products for organisation {model.OrganisationId} with {model.InventoryItems.Count()} items");
+            _logger.LogWarning($"Received outlet products for organisation {model.OrganisationId} with {model.OutletItems.Count()} items");
 
             foreach (var item in model.OutletItems.OrEmptyIfNull())
             {
