@@ -504,6 +504,8 @@ namespace Catalog.Api.Services.Products
                 Name = searchResultItem.Name,
                 Description = searchResultItem.Description,
                 FormData = searchResultItem.FormData,
+                StockAvailableQuantity = searchResultItem.StockAvailableQuantity,
+                OutletAvailableQuantity = searchResultItem.OutletAvailableQuantity,
                 ProductAttributes = productAttributes,
                 LastModifiedDate = searchResultItem.LastModifiedDate,
                 CreatedDate = searchResultItem.CreatedDate

@@ -1,7 +1,11 @@
-﻿using Foundation.Catalog.Infrastructure;
+﻿using Catalog.BackgroundTasks.ServicesModels;
+using Foundation.Catalog.Infrastructure;
 using Foundation.Catalog.Repositories.ProductIndexingRepositories;
+using Foundation.Catalog.Repositories.ProductSearchRepositories;
+using Foundation.Localization.Definitions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,18 +18,24 @@ namespace Catalog.BackgroundTasks.Services.Products
         private readonly CatalogContext _context;
         private readonly IProductIndexingRepository _productIndexingRepository;
         private readonly IBulkProductIndexingRepository _bulkProductIndexingRepository;
+        private readonly IProductSearchRepository _productSearchRepository;
         private readonly ILogger<ProductsService> _logger;
+        private readonly IOptionsMonitor<LocalizationSettings> _localizationSettings;
 
         public ProductsService(
             CatalogContext context,
             IProductIndexingRepository productIndexingRepository,
             IBulkProductIndexingRepository bulkProductIndexingRepository,
-            ILogger<ProductsService> logger)
+            IProductSearchRepository productSearchRepository,
+            ILogger<ProductsService> logger,
+            IOptionsMonitor<LocalizationSettings> localizationSettings)
         {
             _context = context;
             _productIndexingRepository = productIndexingRepository;
             _bulkProductIndexingRepository = bulkProductIndexingRepository;
+            _productSearchRepository = productSearchRepository;
             _logger = logger;
+            _localizationSettings = localizationSettings;
         }
 
         public async Task IndexAllAsync(Guid? sellerId)
@@ -86,6 +96,72 @@ namespace Catalog.BackgroundTasks.Services.Products
                 .Where(x => x.Brand.SellerId == sellerId && x.CategoryId == categoryId)
                 .Select(x => x.Id)
                 .ToListAsync();
+        }
+
+        public async Task BatchUpdateStockAvailableQuantitiesAsync(IEnumerable<AvailableQuantityServiceModel> availableQuantities)
+        {
+            var skus = availableQuantities?.Select(x => x.ProductSku).Distinct().ToList();
+
+            var products = await _productSearchRepository.GetAsync(_localizationSettings.CurrentValue.DefaultCulture, null, skus, null);
+
+            var supportedCultures = _localizationSettings.CurrentValue.SupportedCultures.Split(",");
+
+            foreach (var availableProduct in availableQuantities)
+            {
+                var product = products.Data.FirstOrDefault(x => x.Sku == availableProduct.ProductSku);
+
+                if (product is null)
+                {
+                    _logger.LogError($"Product with SKU {availableProduct.ProductSku} not found in search index");
+                    continue;
+                }
+
+                if (product.StockAvailableQuantity == availableProduct.AvailableQuantity)
+                {
+                    _logger.LogError($"Product with SKU {availableProduct.ProductSku} has the same stock available quantity, skipping update");
+                    continue;
+                }
+
+                foreach (var supportedCulture in supportedCultures)
+                {
+                    var docId = $"{product.ProductId}_{supportedCulture}";
+
+                    await _productIndexingRepository.UpdateStockAvailableQuantity(docId, availableProduct.AvailableQuantity);
+                }
+            }
+        }
+
+        public async Task BatchUpdateOutletAvailableQuantitiesAsync(IEnumerable<AvailableQuantityServiceModel> availableQuantities)
+        {
+            var skus = availableQuantities?.Select(x => x.ProductSku).Distinct().ToList();
+
+            var products = await _productSearchRepository.GetAsync(_localizationSettings.CurrentValue.DefaultCulture, null, skus, null);
+
+            var supportedCultures = _localizationSettings.CurrentValue.SupportedCultures.Split(",");
+
+            foreach (var availableProduct in availableQuantities)
+            {
+                var product = products.Data.FirstOrDefault(x => x.Sku == availableProduct.ProductSku);
+
+                if (product is null)
+                {
+                    _logger.LogError($"Product with SKU {availableProduct.ProductSku} not found in search index");
+                    continue;
+                }
+
+                if (product.OutletAvailableQuantity == availableProduct.AvailableQuantity)
+                {
+                    _logger.LogError($"Product with SKU {availableProduct.ProductSku} has the same outlet available quantity, skipping update");
+                    continue;
+                }
+
+                foreach (var supportedCulture in supportedCultures)
+                {
+                    var docId = $"{product.ProductId}_{supportedCulture}";
+
+                    await _productIndexingRepository.UpdateOutletAvailableQuantity(docId, availableProduct.AvailableQuantity);
+                }
+            }
         }
     }
 }

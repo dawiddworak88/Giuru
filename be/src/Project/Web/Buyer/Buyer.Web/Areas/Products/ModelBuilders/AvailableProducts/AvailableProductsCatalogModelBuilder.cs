@@ -25,6 +25,7 @@ using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ComponentModels;
 using Foundation.Extensions.ExtensionMethods;
+using Buyer.Web.Shared.ViewModels.Filters;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
@@ -39,6 +40,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
         private readonly IOutletRepository outletRepository;
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
+        private readonly IStringLocalizer<ProductResources> _productLocalizer;
 
         public AvailableProductsCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -49,7 +51,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             LinkGenerator linkGenerator,
             IOutletRepository outletRepository,
             IOptions<AppSettings> options,
-            IPriceService priceService)
+            IPriceService priceService,
+            IStringLocalizer<ProductResources> productLocalizer)
         {
             this.globalLocalizer = globalLocalizer;
             this.availableProductsCatalogModelBuilder = availableProductsCatalogModelBuilder;
@@ -60,6 +63,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             this.outletRepository = outletRepository;
             _options = options;
             _priceService = priceService;
+            _productLocalizer = productLocalizer;
         }
 
         public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -168,9 +172,24 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                         }
                     }
 
+                    viewModel.FilterCollector = new FiltersCollectorViewModel
+                    {
+                        AllFilters = _productLocalizer.GetString("AllFilters"),
+                        SortLabel = _productLocalizer.GetString("SortLabel"),
+                        ClearAllFilters = _productLocalizer.GetString("ClearAllFilters"),
+                        SeeResult = _productLocalizer.GetString("SeeResult"),
+                        FiltersLabel = _productLocalizer.GetString("FiltersLabel"),
+                        SortItems = new List<SortItemViewModel>
+                        {
+                            new SortItemViewModel { Label = _productLocalizer.GetString("SortDefault"), Key = SortingConstants.Default },
+                            new SortItemViewModel { Label = _productLocalizer.GetString("SortNewest"), Key = SortingConstants.Newest },
+                            new SortItemViewModel { Label = _productLocalizer.GetString("SortName"), Key = SortingConstants.Name }
+                        }
+                    };
+
                     viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(inventories.Total, AvailableProductsConstants.Pagination.ItemsPerPage)
                     {
-                        Data = products.Data.OrderBy(x => x.Title)
+                        Data = products.Data
                     };
                 }
             }

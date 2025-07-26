@@ -3,9 +3,11 @@ using Catalog.BackgroundTasks.IntegrationEventsHandlers;
 using Catalog.BackgroundTasks.Services.CategorySchemas;
 using Catalog.BackgroundTasks.Services.Products;
 using Foundation.Catalog.Infrastructure;
+using Foundation.Catalog.Repositories.ProductSearchRepositories;
 using Foundation.EventBus;
 using Foundation.EventBus.Abstractions;
 using Foundation.EventBusRabbitMq;
+using Foundation.Localization.Definitions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +25,12 @@ namespace Catalog.BackgroundTasks.DependencyInjection
         {
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<ICategorySchemaService, CategorySchemaService>();
+            services.AddScoped<IProductSearchRepository, ProductSearchRepository>();
+        }
+
+        public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<LocalizationSettings>(configuration);
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
@@ -38,7 +46,8 @@ namespace Catalog.BackgroundTasks.DependencyInjection
             var defaultIndex = configuration["ElasticsearchIndex"];
 
             var settings = new ConnectionSettings(new Uri(url))
-                .DefaultIndex(defaultIndex).DefaultDisableIdInference();
+                .DefaultIndex(defaultIndex)
+                .DefaultDisableIdInference();
 
             var client = new ElasticClient(settings);
 
@@ -50,6 +59,8 @@ namespace Catalog.BackgroundTasks.DependencyInjection
             services.AddScoped<IIntegrationEventHandler<RebuildCatalogSearchIndexIntegrationEvent>, RebuildCatalogSearchIndexIntegrationEventHandler>();
             services.AddScoped<IIntegrationEventHandler<RebuildCategorySchemasIntegrationEvent>, RebuildCategorySchemasIntegrationEventHandler>();
             services.AddScoped<IIntegrationEventHandler<RebuildCategoryProductsIntegrationEvent>, RebuildCategoryProductsIntegrationEventHandler>();
+            services.AddScoped<IIntegrationEventHandler<InventoryProductsAvailableQuantityUpdateIntegrationEvent>, InventoryProductsAvailableQuantityUpdateIntegrationEventHandler>();
+            services.AddScoped<IIntegrationEventHandler<OutletProductsAvailableQuantityUpdateIntegrationEvent>, OutletProductsAvailableQuantityUpdateIntegrationEventHandler>();
 
             services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
             {
