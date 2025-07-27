@@ -9,6 +9,7 @@ using Inventory.Api.Infrastructure.Entities;
 using Inventory.Api.ServicesModels.InventoryServiceModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +23,16 @@ namespace Inventory.Api.Services.InventoryItems
     {
         private readonly InventoryContext _context;
         private readonly IStringLocalizer _inventoryLocalizer;
+        private readonly ILogger<InventoryService> _logger;
 
         public InventoryService(
             InventoryContext context,
-            IStringLocalizer<InventoryResources> inventoryLocalizer)
+            IStringLocalizer<InventoryResources> inventoryLocalizer,
+            ILogger<InventoryService> logger)
         {
             _context = context;
             _inventoryLocalizer = inventoryLocalizer;
+            _logger = logger;
         }
 
         public async Task<InventoryServiceModel> UpdateAsync(UpdateInventoryServiceModel serviceModel)
@@ -96,6 +100,8 @@ namespace Inventory.Api.Services.InventoryItems
 
         public async Task SyncProductsInventories(UpdateProductsInventoryServiceModel model)
         {
+            _logger.LogWarning($"Received inventory products for organisation {model.OrganisationId} with {model.InventoryItems.Count()} items");
+
             foreach (var item in model.InventoryItems.OrEmptyIfNull())
             {
                 var inventoryProduct = await _context.Inventory.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.WarehouseId == item.WarehouseId && x.IsActive);
