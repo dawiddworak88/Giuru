@@ -55,7 +55,7 @@ namespace Seller.Web.Shared.Services.Prices
                 priceRequests.Add(priceRequest);
             }
 
-            var priceRequestModel = new GetPricesByPriceDriversQuery
+            var priceQuery = new GetPricesByPriceDriversQuery
             {
                 EnvironmentId = _options.Value.GrulaEnvironmentId.Value,
                 PriceRequests = priceRequests,
@@ -63,7 +63,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             try
             {
-                var grulaPrices = await _grulaApiClient.GetPricesByPriceDriversAsync(priceRequestModel);
+                var grulaPrices = await _grulaApiClient.GetPricesByPriceDriversAsync(priceQuery);
 
                 foreach (var grulaPrice in grulaPrices)
                 {
