@@ -1,10 +1,6 @@
-﻿using Foundation.ApiExtensions.Communications;
-using Foundation.ApiExtensions.Services.ApiClientServices;
-using Foundation.ApiExtensions.Shared.Definitions;
+﻿using Grula.PricingIntelligencePlatform.Sdk;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Seller.Web.Shared.ApiRequestModels;
-using Seller.Web.Shared.ApiResponseModels;
 using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.DomainModels.Prices;
@@ -17,16 +13,16 @@ namespace Seller.Web.Shared.Services.Prices
 {
     public class PriceService : IPriceService
     {
-        private readonly IApiClientService _apiClientService;
+        private readonly GrulaApiClient _grulaApiClient;
         private readonly IOptions<AppSettings> _options;
         private readonly ILogger<PriceService> _logger;
 
         public PriceService(
-            IApiClientService apiClientService,
+            GrulaApiClient grulaApiClient,
             IOptions<AppSettings> options,
             ILogger<PriceService> logger)
         {
-            _apiClientService = apiClientService;
+            _grulaApiClient = grulaApiClient;
             _options = options;
             _logger = logger;
         }
@@ -37,7 +33,7 @@ namespace Seller.Web.Shared.Services.Prices
             IEnumerable<PriceProduct> products,
             PriceClient client)
         {
-            var priceRequests = new List<PriceRequestModel>();
+            var priceRequests = new List<PriceRequest>();
             var prices = new List<Price>();
 
             foreach (var product in products)
@@ -49,7 +45,7 @@ namespace Seller.Web.Shared.Services.Prices
                     continue;
                 }
 
-                var priceRequest = new PriceRequestModel
+                var priceRequest = new PriceRequest
                 {
                     PriceDrivers = CreatePriceDrivers(product, client),
                     CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
@@ -59,46 +55,36 @@ namespace Seller.Web.Shared.Services.Prices
                 priceRequests.Add(priceRequest);
             }
 
-            var requestModel = new GetPricesRequestModel
+            var priceRequestModel = new GetPricesByPriceDriversQuery
             {
-                EnvironmentId = _options.Value.GrulaEnvironmentId,
+                EnvironmentId = _options.Value.GrulaEnvironmentId.Value,
                 PriceRequests = priceRequests,
-            };
-
-            var apiRequest = new ApiRequest<GetPricesRequestModel>
-            {
-                Data = requestModel,
-                AccessToken = token,
-                EndpointAddress = $"{_options.Value.GrulaUrl}{ApiConstants.Grula.PricesApiEndpoint}"
             };
 
             try
             {
-                var response = await _apiClientService.PostAsync<ApiRequest<GetPricesRequestModel>, GetPricesRequestModel, IEnumerable<PriceResponseModel>>(apiRequest);
+                var grulaPrices = await _grulaApiClient.GetPricesByPriceDriversAsync(priceRequestModel);
 
-                if (response.IsSuccessStatusCode && response.Data != null)
+                foreach (var grulaPrice in grulaPrices)
                 {
-                    foreach (var priceResponse in response.Data)
+                    if (grulaPrice?.Amount is not null)
                     {
-                        if (priceResponse is not null &&
-                            priceResponse.Amount is not null)
+                        var price = new Price
                         {
-                            var price = new Price
-                            {
-                                CurrentPrice = priceResponse.Amount.Amount,
-                                CurrencyCode = priceResponse.Amount.CurrencyThreeLetterCode
-                            };
+                            CurrentPrice = (decimal)grulaPrice.Amount.Amount,
+                            CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode
+                        };
 
-                            prices.Add(price);
-                        }
-                        else
-                        {
-                            prices.Add(null);
-                        }
+                        prices.Add(price);
                     }
-
-                    return prices;
+                    else
+                    {
+                        prices.Add(null);
+                    }
                 }
+
+                return prices;
+
             }
             catch (Exception ex)
             {
@@ -106,20 +92,18 @@ namespace Seller.Web.Shared.Services.Prices
 
                 return Enumerable.Empty<Price>();
             }
-
-            return default;
         }
 
-        private List<PriceDriverRequestModel> CreatePriceDrivers(PriceProduct product, PriceClient client)
+        private List<PriceDriver> CreatePriceDrivers(PriceProduct product, PriceClient client)
         {
-            var priceDrivers = new List<PriceDriverRequestModel>
+            var priceDrivers = new List<PriceDriver>
             {
-                new PriceDriverRequestModel
+                new PriceDriver
                 {
                     Name = PriceDriversConstants.ProductDriver,
                     Value = product.PrimarySku
                 },
-                new PriceDriverRequestModel
+                new PriceDriver
                 {
                     Name = PriceDriversConstants.FabricsGroupDriver,
                     Value = product.FabricsGroup
@@ -128,7 +112,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (!string.IsNullOrWhiteSpace(product.SleepAreaSize))
             {
-                priceDrivers.Add(new PriceDriverRequestModel
+                priceDrivers.Add(new PriceDriver
                 {
                     Name = PriceDriversConstants.SleepAreaDriver,
                     Value = product.SleepAreaSize
@@ -137,7 +121,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (!string.IsNullOrWhiteSpace(product.ExtraPacking))
             {
-                priceDrivers.Add(new PriceDriverRequestModel
+                priceDrivers.Add(new PriceDriver
                 {
                     Name = PriceDriversConstants.ProductExtraPackingDriver,
                     Value = product.ExtraPacking
@@ -146,7 +130,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (!string.IsNullOrWhiteSpace(product.PaletteSize))
             {
-                priceDrivers.Add(new PriceDriverRequestModel
+                priceDrivers.Add(new PriceDriver
                 {
                     Name = PriceDriversConstants.PaletteSizeDriver,
                     Value = product.PaletteSize
@@ -155,7 +139,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (!string.IsNullOrWhiteSpace(product.IsOutlet))
             {
-                priceDrivers.Add(new PriceDriverRequestModel
+                priceDrivers.Add(new PriceDriver
                 {
                     Name = PriceDriversConstants.OutletDriver,
                     Value = product.IsOutlet
@@ -164,7 +148,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (!string.IsNullOrWhiteSpace(product.Mirror))
             {
-                priceDrivers.Add(new PriceDriverRequestModel
+                priceDrivers.Add(new PriceDriver
                 {
                     Name = PriceDriversConstants.MirrorDriver,
                     Value = product.Mirror
@@ -173,7 +157,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (!string.IsNullOrWhiteSpace(product.Size))
             {
-                priceDrivers.Add(new PriceDriverRequestModel
+                priceDrivers.Add(new PriceDriver
                 {
                     Name = PriceDriversConstants.SizeDriver,
                     Value = product.Size
@@ -182,7 +166,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (!string.IsNullOrWhiteSpace(product.Shape))
             {
-                priceDrivers.Add(new PriceDriverRequestModel
+                priceDrivers.Add(new PriceDriver
                 {
                     Name = PriceDriversConstants.ShapeDriver,
                     Value = product.Shape
@@ -191,7 +175,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (!string.IsNullOrWhiteSpace(product.PointsOfLight))
             {
-                priceDrivers.Add(new PriceDriverRequestModel
+                priceDrivers.Add(new PriceDriver
                 {
                     Name = PriceDriversConstants.PointsOfLightDriver,
                     Value = product.PointsOfLight
@@ -200,7 +184,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (!string.IsNullOrWhiteSpace(product.LampshadeType))
             {
-                priceDrivers.Add(new PriceDriverRequestModel
+                priceDrivers.Add(new PriceDriver
                 {
                     Name = PriceDriversConstants.LampshadeTypeDriver,
                     Value = product.LampshadeType
@@ -209,7 +193,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (!string.IsNullOrWhiteSpace(product.LampshadeSize))
             {
-                priceDrivers.Add(new PriceDriverRequestModel
+                priceDrivers.Add(new PriceDriver
                 {
                     Name = PriceDriversConstants.LampshadeSizeDriver,
                     Value = product.LampshadeSize
@@ -218,7 +202,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (!string.IsNullOrWhiteSpace(product.LinearLight))
             {
-                priceDrivers.Add(new PriceDriverRequestModel
+                priceDrivers.Add(new PriceDriver
                 {
                     Name = PriceDriversConstants.LinearLightDriver,
                     Value = product.LinearLight
@@ -227,7 +211,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (!string.IsNullOrWhiteSpace(product.PrimaryColor))
             {
-                priceDrivers.Add(new PriceDriverRequestModel
+                priceDrivers.Add(new PriceDriver
                 {
                     Name = PriceDriversConstants.PrimaryColorDriver,
                     Value = product.PrimaryColor
@@ -236,7 +220,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (!string.IsNullOrWhiteSpace(product.SecondaryColor))
             {
-                priceDrivers.Add(new PriceDriverRequestModel
+                priceDrivers.Add(new PriceDriver
                 {
                     Name = PriceDriversConstants.SecondaryColorDriver,
                     Value = product.SecondaryColor
@@ -245,7 +229,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (!string.IsNullOrWhiteSpace(product.ShelfType))
             {
-                priceDrivers.Add(new PriceDriverRequestModel
+                priceDrivers.Add(new PriceDriver
                 {
                     Name = PriceDriversConstants.ShelfTypeDriver,
                     Value = product.ShelfType
@@ -256,7 +240,7 @@ namespace Seller.Web.Shared.Services.Prices
             {
                 if (!string.IsNullOrWhiteSpace(client.Name))
                 {
-                    priceDrivers.Add(new PriceDriverRequestModel
+                    priceDrivers.Add(new PriceDriver
                     {
                         Name = PriceDriversConstants.ClientDriver,
                         Value = client.Name
@@ -265,7 +249,7 @@ namespace Seller.Web.Shared.Services.Prices
 
                 if (!string.IsNullOrWhiteSpace(client.ExtraPacking))
                 {
-                    priceDrivers.Add(new PriceDriverRequestModel
+                    priceDrivers.Add(new PriceDriver
                     {
                         Name = PriceDriversConstants.ClientExtraPackingDriver,
                         Value = client.ExtraPacking
@@ -274,7 +258,7 @@ namespace Seller.Web.Shared.Services.Prices
 
                 if (!string.IsNullOrWhiteSpace(client.PaletteLoading))
                 {
-                    priceDrivers.Add(new PriceDriverRequestModel
+                    priceDrivers.Add(new PriceDriver
                     {
                         Name = PriceDriversConstants.PaletteLoadingDriver,
                         Value = client.PaletteLoading
@@ -283,7 +267,7 @@ namespace Seller.Web.Shared.Services.Prices
 
                 if (!string.IsNullOrWhiteSpace(client.Country))
                 {
-                    priceDrivers.Add(new PriceDriverRequestModel
+                    priceDrivers.Add(new PriceDriver
                     {
                         Name = PriceDriversConstants.ClientCountryDriver,
                         Value = client.Country
@@ -292,7 +276,7 @@ namespace Seller.Web.Shared.Services.Prices
 
                 if (!string.IsNullOrWhiteSpace(client.DeliveryZipCode))
                 {
-                    priceDrivers.Add(new PriceDriverRequestModel
+                    priceDrivers.Add(new PriceDriver
                     {
                         Name = PriceDriversConstants.DeliveryAddressDriver,
                         Value = client.DeliveryZipCode

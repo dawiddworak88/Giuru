@@ -28,12 +28,15 @@ using Seller.Web.Shared.Services.Products;
 using Foundation.Extensions.Services.Claims;
 using Seller.Web.Shared.Services.ProductColors;
 using Seller.Web.Shared.Repositories.ProductAttributeItems;
+using System.Net.Http.Headers;
+using Grula.PricingIntelligencePlatform.Sdk;
+using Microsoft.Extensions.Configuration;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
     public static class CompositionRoot
     {
-        public static void RegisterDependencies(this IServiceCollection services)
+        public static void RegisterDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IMediaItemsRepository, MediaItemsRepository>();
             services.AddScoped<IOrganisationsRepository, OrganisationsRepository>();
@@ -58,6 +61,15 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel>, HeaderModelBuilder>();
 
             services.AddScoped<IClaimsCacheInvalidatorService, ClaimsCacheInvalidatorService>();
+
+            //Grula HttpClient
+            services.AddHttpClient("GrulaApi")
+                .AddTypedClient(httpClient =>
+                {
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", configuration["GrulaAccessToken"]);
+
+                    return new GrulaApiClient(configuration["GrulaUrl"], httpClient);
+                });
         }
     }
 }
