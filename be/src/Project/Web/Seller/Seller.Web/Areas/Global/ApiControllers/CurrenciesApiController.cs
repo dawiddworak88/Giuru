@@ -42,6 +42,9 @@ namespace Seller.Web.Areas.Global.ApiControllers
             await _currenciesRepository.SaveAsync(token, language, model.Id, model.CurrencyCode, model.Symbol, model.Name);
 
             await _cacheService.InvalidateAsync(GlobalConstants.CurrenciesCacheKey);
+            await _cacheService.GetOrSetAsync(
+                GlobalConstants.CurrenciesCacheKey,
+                () => _currenciesRepository.GetAsync(token, language, $"{nameof(Currency.Name)} asc"));
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = _globalLocalizer.GetString("CurrencySavedSuccessfully").Value });
         }

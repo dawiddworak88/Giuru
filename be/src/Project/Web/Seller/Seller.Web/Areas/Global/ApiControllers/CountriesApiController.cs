@@ -42,6 +42,9 @@ namespace Seller.Web.Areas.Global.ApiControllers
             await this.countriesRepository.SaveAsync(token, language, model.Id, model.Name);
 
             await this.cacheService.InvalidateAsync(GlobalConstants.CountriesCacheKey);
+            await this.cacheService.GetOrSetAsync(
+                GlobalConstants.CountriesCacheKey, 
+                () => countriesRepository.GetAsync(token, language, $"{nameof(Country.Name)} asc"));
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = clientLocalizer.GetString("CountrySavedSuccessfully").Value });
         }
