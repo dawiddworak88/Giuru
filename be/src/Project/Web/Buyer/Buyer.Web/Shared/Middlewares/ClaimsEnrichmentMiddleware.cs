@@ -1,9 +1,9 @@
 ﻿using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Definitions.Global;
 using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Global;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Services.Cache;
 using Microsoft.AspNetCore.Authentication;
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ClaimsEnrichmentConstants = Buyer.Web.Shared.Definitions.Middlewares.ClaimsEnrichmentConstants;
 
 namespace Buyer.Web.Shared.Middlewares
 {
@@ -102,7 +103,7 @@ namespace Buyer.Web.Shared.Middlewares
             if (client.PreferedCurrencyId.HasValue)
             {
                 var currencies = await _cacheService.GetOrSetAsync(
-                    GlobalConstants.CurrenciesCacheKey,
+                    CacheKeysConstants.CurrenciesCacheKey,
                     () => _globalRepository.GetCurrenciesAsync(token, _options.Value.DefaultCulture, null));
 
                 if (currencies.Any())
@@ -125,7 +126,7 @@ namespace Buyer.Web.Shared.Middlewares
             }
 
             var countries = await _cacheService.GetOrSetAsync(
-                GlobalConstants.CountriesCacheKey, 
+                CacheKeysConstants.CountriesCacheKey, 
                 () => _globalRepository.GetCountriesAsync(token, _options.Value.DefaultCulture, null));
 
             if (countries is not null)

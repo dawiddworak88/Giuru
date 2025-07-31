@@ -38,7 +38,7 @@ namespace Foundation.Extensions.Services.Cache
                 var serializedData = JsonConvert.SerializeObject(data);
 
 
-                await _cache.StringSetAsync(cacheKey, serializedData, cacheDuration ?? null);
+                await _cache.StringSetAsync(cacheKey, serializedData, cacheDuration);
             }
 
             return data;
@@ -49,6 +49,18 @@ namespace Foundation.Extensions.Services.Cache
             if (await _cache.KeyExistsAsync(cacheKey))
             {
                 await _cache.KeyDeleteAsync(cacheKey);
+            }
+        }
+
+        public async Task UpdateOrSetAsync<T>(string cacheKey, Func<Task<IEnumerable<T>>> fetchDataFunc, TimeSpan? cacheDuration = null) where T : class
+        {
+            var data = await fetchDataFunc();
+
+            if (data is not null && data.Any())
+            {
+                var serializedData = JsonConvert.SerializeObject(data);
+
+                await _cache.StringSetAsync(cacheKey, serializedData, cacheDuration);
             }
         }
     }

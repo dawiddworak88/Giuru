@@ -1,4 +1,5 @@
 ﻿using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Services.Cache;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Global.ApiRequestModels;
-using Seller.Web.Areas.Global.Definitions;
 using Seller.Web.Areas.Global.DomainModels;
 using Seller.Web.Areas.Global.Repositories;
 using System;
@@ -41,9 +41,8 @@ namespace Seller.Web.Areas.Global.ApiControllers
 
             await _currenciesRepository.SaveAsync(token, language, model.Id, model.CurrencyCode, model.Symbol, model.Name);
 
-            await _cacheService.InvalidateAsync(GlobalConstants.CurrenciesCacheKey);
-            await _cacheService.GetOrSetAsync(
-                GlobalConstants.CurrenciesCacheKey,
+            await _cacheService.UpdateOrSetAsync(
+                CacheKeysConstants.CurrenciesCacheKey,
                 () => _currenciesRepository.GetAsync(token, language, $"{nameof(Currency.Name)} asc"));
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = _globalLocalizer.GetString("CurrencySavedSuccessfully").Value });

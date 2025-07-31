@@ -12,7 +12,7 @@ using Seller.Web.Areas.Global.ApiRequestModels;
 using Seller.Web.Areas.Global.DomainModels;
 using Seller.Web.Areas.Global.Repositories;
 using Foundation.Extensions.Services.Cache;
-using Seller.Web.Areas.Global.Definitions;
+using Foundation.Extensions.Definitions;
 
 namespace Seller.Web.Areas.Global.ApiControllers
 {
@@ -41,9 +41,8 @@ namespace Seller.Web.Areas.Global.ApiControllers
 
             await this.countriesRepository.SaveAsync(token, language, model.Id, model.Name);
 
-            await this.cacheService.InvalidateAsync(GlobalConstants.CountriesCacheKey);
-            await this.cacheService.GetOrSetAsync(
-                GlobalConstants.CountriesCacheKey, 
+            await this.cacheService.UpdateOrSetAsync(
+                CacheKeysConstants.CountriesCacheKey, 
                 () => countriesRepository.GetAsync(token, language, $"{nameof(Country.Name)} asc"));
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = clientLocalizer.GetString("CountrySavedSuccessfully").Value });
