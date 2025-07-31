@@ -40,6 +40,7 @@ using Buyer.Web.Shared.Repositories.Identity;
 using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.Middlewares;
 using Buyer.Web.Shared.Repositories.Global;
+using Foundation.Extensions.Services.Cache;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -80,6 +81,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<INewsRepository, NewsRepository>();
             services.AddScoped<IFilesRepository, FilesRepository>();
             services.AddScoped<IMediaItemsRepository, MediaItemsRepository>();
+            services.AddScoped<ICacheService, CacheService>();
             
             services.AddScoped<IPriceService, PriceService>();
 
