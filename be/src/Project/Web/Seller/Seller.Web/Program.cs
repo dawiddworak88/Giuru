@@ -130,7 +130,7 @@ builder.Services.RegisterLocalizationDependencies();
 
 builder.Services.RegisterGeneralDependencies();
 
-builder.Services.RegisterDependencies();
+builder.Services.RegisterDependencies(builder.Configuration);
 
 builder.Services.RegisterOrdersAreaDependencies();
 
