@@ -11,6 +11,8 @@ using System;
 using Seller.Web.Areas.Global.ApiRequestModels;
 using Seller.Web.Areas.Global.DomainModels;
 using Seller.Web.Areas.Global.Repositories;
+using Foundation.Extensions.Services.Cache;
+using Seller.Web.Areas.Global.Definitions;
 
 namespace Seller.Web.Areas.Global.ApiControllers
 {
@@ -19,13 +21,16 @@ namespace Seller.Web.Areas.Global.ApiControllers
     {
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
         private readonly ICountriesRepository countriesRepository;
+        private readonly ICacheService cacheService;
 
         public CountriesApiController(
             IStringLocalizer<ClientResources> clientLocalizer,
-            ICountriesRepository countriesRepository)
+            ICountriesRepository countriesRepository,
+            ICacheService cacheService)
         {
             this.clientLocalizer = clientLocalizer;
             this.countriesRepository = countriesRepository;
+            this.cacheService = cacheService;
         }
 
         [HttpPost]
@@ -35,6 +40,8 @@ namespace Seller.Web.Areas.Global.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             await this.countriesRepository.SaveAsync(token, language, model.Id, model.Name);
+
+            await this.cacheService.InvalidateAsync(GlobalConstants.CountriesCacheKey);
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = clientLocalizer.GetString("CountrySavedSuccessfully").Value });
         }

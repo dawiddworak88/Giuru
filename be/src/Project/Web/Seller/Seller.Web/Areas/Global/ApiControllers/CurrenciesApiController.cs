@@ -1,10 +1,12 @@
 ﻿using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Services.Cache;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Global.ApiRequestModels;
+using Seller.Web.Areas.Global.Definitions;
 using Seller.Web.Areas.Global.DomainModels;
 using Seller.Web.Areas.Global.Repositories;
 using System;
@@ -19,13 +21,16 @@ namespace Seller.Web.Areas.Global.ApiControllers
     {
         private readonly ICurrenciesRepository _currenciesRepository;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly ICacheService _cacheService;
 
         public CurrenciesApiController(
             ICurrenciesRepository currenciesRepository, 
-            IStringLocalizer<GlobalResources> globalLocalizer)
+            IStringLocalizer<GlobalResources> globalLocalizer,
+            ICacheService cacheService)
         {
             _currenciesRepository = currenciesRepository;
             _globalLocalizer = globalLocalizer;
+            _cacheService = cacheService;
         }
 
         [HttpPost]
@@ -35,6 +40,8 @@ namespace Seller.Web.Areas.Global.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             await _currenciesRepository.SaveAsync(token, language, model.Id, model.CurrencyCode, model.Symbol, model.Name);
+
+            await _cacheService.InvalidateAsync(GlobalConstants.CurrenciesCacheKey);
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = _globalLocalizer.GetString("CurrencySavedSuccessfully").Value });
         }

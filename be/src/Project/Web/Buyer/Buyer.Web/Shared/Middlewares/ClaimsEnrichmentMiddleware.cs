@@ -1,9 +1,11 @@
 ﻿using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Definitions.Global;
 using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Global;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.Services.Cache;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
@@ -25,6 +27,7 @@ namespace Buyer.Web.Shared.Middlewares
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
         private readonly IOptions<AppSettings> _options;
         private readonly IDistributedCache _cache;
+        private readonly ICacheService _cacheService;
 
         public ClaimsEnrichmentMiddleware(
             IClientsRepository clientsRepository,
@@ -32,7 +35,8 @@ namespace Buyer.Web.Shared.Middlewares
             IGlobalRepository globalRepository,
             IClientFieldValuesRepository clientFieldValuesRepository,
             IOptions<AppSettings> options,
-            IDistributedCache cache)
+            IDistributedCache cache,
+            ICacheService cacheService)
         {
             _clientsRepository = clientsRepository;
             _clientAddressesRepository = clientAddressesRepository;
@@ -40,6 +44,7 @@ namespace Buyer.Web.Shared.Middlewares
             _clientFieldValuesRepository = clientFieldValuesRepository;
             _options = options;
             _cache = cache;
+            _cacheService = cacheService;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -96,7 +101,9 @@ namespace Buyer.Web.Shared.Middlewares
 
             if (client.PreferedCurrencyId.HasValue)
             {
-                var currencies = await _globalRepository.GetCurrenciesAsync(token, _options.Value.DefaultCulture, null);
+                var currencies = await _cacheService.GetOrSetAsync(
+                    GlobalConstants.CurrenciesCacheKey,
+                    () => _globalRepository.GetCurrenciesAsync(token, _options.Value.DefaultCulture, null));
 
                 if (currencies.Any())
                 {
@@ -117,7 +124,9 @@ namespace Buyer.Web.Shared.Middlewares
                 }
             }
 
-            var countries = await _globalRepository.GetCountriesAsync(token, _options.Value.DefaultCulture, null);
+            var countries = await _cacheService.GetOrSetAsync(
+                GlobalConstants.CountriesCacheKey, 
+                () => _globalRepository.GetCountriesAsync(token, _options.Value.DefaultCulture, null));
 
             if (countries is not null)
             {

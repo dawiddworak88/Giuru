@@ -28,6 +28,7 @@ using Seller.Web.Shared.Services.Products;
 using Foundation.Extensions.Services.Claims;
 using Seller.Web.Shared.Services.ProductColors;
 using Seller.Web.Shared.Repositories.ProductAttributeItems;
+using Foundation.Extensions.Services.Cache;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -58,6 +59,7 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel>, HeaderModelBuilder>();
 
             services.AddScoped<IClaimsCacheInvalidatorService, ClaimsCacheInvalidatorService>();
+            services.AddScoped<ICacheService, CacheService>();
         }
     }
 }
