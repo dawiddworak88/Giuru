@@ -31,6 +31,7 @@ using Seller.Web.Shared.Repositories.ProductAttributeItems;
 using System.Net.Http.Headers;
 using Grula.PricingIntelligencePlatform.Sdk;
 using Microsoft.Extensions.Configuration;
+using Foundation.Extensions.Services.Cache;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -70,6 +71,7 @@ namespace Seller.Web.Shared.DependencyInjection
 
                     return new GrulaApiClient(configuration["GrulaUrl"], httpClient);
                 });
+            services.AddScoped<ICacheService, CacheService>();
         }
     }
 }
