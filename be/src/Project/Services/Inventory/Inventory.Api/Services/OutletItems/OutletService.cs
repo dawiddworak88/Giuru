@@ -27,6 +27,7 @@ namespace Inventory.Api.Services.OutletItems
         private readonly InventoryContext _context;
         private readonly IStringLocalizer _inventoryLocalizer;
         private readonly ILogger<OutletService> _logger;
+        private readonly IEventBus _eventBus;
 
         public OutletService(
             InventoryContext context,
