@@ -2,13 +2,16 @@
 using Foundation.Catalog.Infrastructure;
 using Foundation.Catalog.Repositories.ProductIndexingRepositories;
 using Foundation.Catalog.Repositories.ProductSearchRepositories;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Localization.Definitions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Catalog.BackgroundTasks.Services.Products
@@ -100,11 +103,15 @@ namespace Catalog.BackgroundTasks.Services.Products
 
         public async Task BatchUpdateStockAvailableQuantitiesAsync(IEnumerable<AvailableQuantityServiceModel> availableQuantities)
         {
-            var skus = availableQuantities?.Select(x => x.ProductSku).Distinct().ToList();
-
-            var products = await _productSearchRepository.GetAsync(_localizationSettings.CurrentValue.DefaultCulture, null, skus, null);
+            var products = await _productSearchRepository.GetAsync(
+                _localizationSettings.CurrentValue.DefaultCulture, 
+                null, 
+                availableQuantities.OrEmptyIfNull().Select(x => x.ProductSku), 
+                null);
 
             var supportedCultures = _localizationSettings.CurrentValue.SupportedCultures.Split(",");
+
+            var updatesByCulture = new Dictionary<string, List<(string docId, double availableQuantity)>>();
 
             foreach (var availableProduct in availableQuantities)
             {
@@ -112,13 +119,13 @@ namespace Catalog.BackgroundTasks.Services.Products
 
                 if (product is null)
                 {
-                    _logger.LogError($"Product with SKU {availableProduct.ProductSku} not found in search index");
+                    _logger.LogError($"Product with Sku {availableProduct.ProductSku} not found in search index");
                     continue;
                 }
 
                 if (product.StockAvailableQuantity == availableProduct.AvailableQuantity)
                 {
-                    _logger.LogError($"Product with SKU {availableProduct.ProductSku} has the same stock available quantity, skipping update");
+                    _logger.LogWarning($"Product with Sku {availableProduct.ProductSku} has the same stock available quantity, skipping update");
                     continue;
                 }
 
@@ -126,18 +133,43 @@ namespace Catalog.BackgroundTasks.Services.Products
                 {
                     var docId = $"{product.ProductId}_{supportedCulture}";
 
-                    await _productIndexingRepository.UpdateStockAvailableQuantity(docId, availableProduct.AvailableQuantity);
+                    if (!updatesByCulture.ContainsKey(supportedCulture))
+                    {
+                        updatesByCulture[supportedCulture] = new List<(string docId, double availableQuantity)>();
+                    }
+
+                    updatesByCulture[supportedCulture].Add((docId, availableProduct.AvailableQuantity));
                 }
+            }
+
+            foreach (var (culture, updates) in updatesByCulture)
+            {
+                var retryPolicy = Policy
+                    .Handle<Exception>()
+                    .WaitAndRetryAsync(3, attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
+                        (ex, ts, attempt, ctx) =>
+                        {
+                            _logger.LogWarning(ex, $"Retry {attempt} for bulk update on culture {culture}");
+                        });
+
+                await retryPolicy.ExecuteAsync(async () =>
+                {
+                    await _productIndexingRepository.BulkUpdateStockAvailableQuantity(updates);
+                });
             }
         }
 
         public async Task BatchUpdateOutletAvailableQuantitiesAsync(IEnumerable<AvailableQuantityServiceModel> availableQuantities)
         {
-            var skus = availableQuantities?.Select(x => x.ProductSku).Distinct().ToList();
-
-            var products = await _productSearchRepository.GetAsync(_localizationSettings.CurrentValue.DefaultCulture, null, skus, null);
+            var products = await _productSearchRepository.GetAsync(
+                _localizationSettings.CurrentValue.DefaultCulture,
+                null,
+                availableQuantities.OrEmptyIfNull().Select(x => x.ProductSku),
+                null);
 
             var supportedCultures = _localizationSettings.CurrentValue.SupportedCultures.Split(",");
+
+            var updatesByCulture = new Dictionary<string, List<(string docId, double availableQuantity)>>();
 
             foreach (var availableProduct in availableQuantities)
             {
@@ -145,13 +177,13 @@ namespace Catalog.BackgroundTasks.Services.Products
 
                 if (product is null)
                 {
-                    _logger.LogError($"Product with SKU {availableProduct.ProductSku} not found in search index");
+                    _logger.LogError($"Product with Sku {availableProduct.ProductSku} not found in search index");
                     continue;
                 }
 
                 if (product.OutletAvailableQuantity == availableProduct.AvailableQuantity)
                 {
-                    _logger.LogError($"Product with SKU {availableProduct.ProductSku} has the same outlet available quantity, skipping update");
+                    _logger.LogWarning($"Product with Sku {availableProduct.ProductSku} has the same outlet available quantity, skipping update");
                     continue;
                 }
 
@@ -159,8 +191,29 @@ namespace Catalog.BackgroundTasks.Services.Products
                 {
                     var docId = $"{product.ProductId}_{supportedCulture}";
 
-                    await _productIndexingRepository.UpdateOutletAvailableQuantity(docId, availableProduct.AvailableQuantity);
+                    if (!updatesByCulture.ContainsKey(supportedCulture))
+                    {
+                        updatesByCulture[supportedCulture] = new List<(string docId, double availableQuantity)>();
+                    }
+
+                    updatesByCulture[supportedCulture].Add((docId, availableProduct.AvailableQuantity));
                 }
+            }
+
+            foreach (var (culture, updates) in updatesByCulture)
+            {
+                var retryPolicy = Policy
+                    .Handle<Exception>()
+                    .WaitAndRetryAsync(3, attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
+                        (ex, ts, attempt, ctx) =>
+                        {
+                            _logger.LogWarning(ex, $"Retry {attempt} for bulk update on culture {culture}");
+                        });
+
+                await retryPolicy.ExecuteAsync(async () =>
+                {
+                    await _productIndexingRepository.BulkUpdateOutletAvailableQuantity(updates);
+                });
             }
         }
     }

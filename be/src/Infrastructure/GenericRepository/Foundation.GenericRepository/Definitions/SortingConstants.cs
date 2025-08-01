@@ -1,4 +1,4 @@
-﻿namespace Buyer.Web.Shared.Definitions.Filters
+﻿namespace Foundation.GenericRepository.Definitions
 {
     public static class SortingConstants
     {

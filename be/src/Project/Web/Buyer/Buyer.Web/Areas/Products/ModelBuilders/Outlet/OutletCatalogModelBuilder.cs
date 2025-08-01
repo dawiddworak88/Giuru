@@ -17,7 +17,6 @@ using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
-using Buyer.Web.Shared.Definitions.Filters;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Services.Prices;
@@ -27,6 +26,7 @@ using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ComponentModels;
 using Foundation.Extensions.ExtensionMethods;
 using Buyer.Web.Shared.ViewModels.Filters;
+using Foundation.GenericRepository.Definitions;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders
 {

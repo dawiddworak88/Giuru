@@ -5,7 +5,6 @@ using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ViewModels.SearchProducts;
 using Buyer.Web.Areas.Shared.Definitions.Products;
-using Buyer.Web.Shared.Definitions.Filters;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Filters;
@@ -29,6 +28,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Foundation.GenericRepository.Definitions;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 {

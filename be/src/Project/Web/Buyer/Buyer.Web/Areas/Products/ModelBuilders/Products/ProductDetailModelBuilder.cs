@@ -24,7 +24,6 @@ using Foundation.PageContent.Definitions;
 using Foundation.Media.Services.MediaServices;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Repositories.Media;
-using Buyer.Web.Shared.Definitions.Filters;
 using Buyer.Web.Shared.Services.Prices;
 using System;
 using Buyer.Web.Shared.DomainModels.Prices;
@@ -34,6 +33,7 @@ using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Services.ProductColors;
+using Foundation.GenericRepository.Definitions;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {

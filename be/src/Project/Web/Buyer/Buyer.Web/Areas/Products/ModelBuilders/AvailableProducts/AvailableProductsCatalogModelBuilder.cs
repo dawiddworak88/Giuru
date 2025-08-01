@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using Buyer.Web.Areas.Products.Definitions;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Areas.Products.Repositories;
-using Buyer.Web.Shared.Definitions.Filters;
 using Buyer.Web.Shared.DomainModels.Prices;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
@@ -26,6 +25,7 @@ using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ComponentModels;
 using Foundation.Extensions.ExtensionMethods;
 using Buyer.Web.Shared.ViewModels.Filters;
+using Foundation.GenericRepository.Definitions;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {

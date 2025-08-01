@@ -280,27 +280,49 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             }
         }
 
-        public async Task UpdateOutletAvailableQuantity(string docId, double availableQuantity)
+        public async Task BulkUpdateStockAvailableQuantity(IEnumerable<(string docId, double availableQuantity)> updates)
         {
-            try
+            var bulkDescriptor = new BulkDescriptor();
+
+            foreach (var (docId, availableQuantity) in updates)
             {
-                await _elasticClient.UpdateAsync<ProductSearchModel, object>(docId, u => u.Doc(new { OutletAvailableQuantity = availableQuantity }));
+                bulkDescriptor.Update<ProductSearchModel, object>(u => u
+                    .Id(docId)
+                    .Doc(new { StockAvailableQuantity = availableQuantity })
+                );
             }
-            catch (Exception ex)
+
+            var response = await _elasticClient.BulkAsync(bulkDescriptor);
+
+            if (response.Errors)
             {
-                _logger.LogError(ex, $"Failed to update outlet available quantity for document ID {docId}");
+                foreach (var item in response.ItemsWithErrors)
+                {
+                    _logger.LogError($"Failed to update document Id: {item.Id}: {item.Error?.Reason}");
+                }
             }
         }
 
-        public async Task UpdateStockAvailableQuantity(string docId, double availableQuantity)
+        public async Task BulkUpdateOutletAvailableQuantity(IEnumerable<(string docId, double availableQuantity)> updates)
         {
-            try
+            var bulkDescriptor = new BulkDescriptor();
+
+            foreach (var (docId, availableQuantity) in updates)
             {
-                await _elasticClient.UpdateAsync<ProductSearchModel, object>(docId, u => u.Doc(new { StockAvailableQuantity = availableQuantity }));
+                bulkDescriptor.Update<ProductSearchModel, object>(u => u
+                    .Id(docId)
+                    .Doc(new { OutletAvailableQuantity = availableQuantity })
+                );
             }
-            catch (Exception ex)
+
+            var response = await _elasticClient.BulkAsync(bulkDescriptor);
+
+            if (response.Errors)
             {
-                _logger.LogError(ex, $"Failed to update stock available quantity for document ID {docId}");
+                foreach (var item in response.ItemsWithErrors)
+                {
+                    _logger.LogError($"Failed to update document Id: {item.Id}: {item.Error?.Reason}");
+                }
             }
         }
     }

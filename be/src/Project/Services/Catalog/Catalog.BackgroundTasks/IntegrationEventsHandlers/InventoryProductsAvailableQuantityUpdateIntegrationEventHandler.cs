@@ -29,19 +29,16 @@ namespace Catalog.BackgroundTasks.IntegrationEventsHandlers
             
             if (@event.Products == null || !@event.Products.Any())
             {
-                _logger.LogError("No products available for quantity update at InventoryProductsAvailableQuantityUpdateIntegrationEvent");
+                _logger.LogWarning("No products available for quantity update at InventoryProductsAvailableQuantityUpdateIntegrationEvent");
                 return;
             }
 
-            foreach (var product in @event.Products)
-            {
-                await _productsService.BatchUpdateStockAvailableQuantitiesAsync(
-                    @event.Products.Select(x => new AvailableQuantityServiceModel 
-                    { 
+            await _productsService.BatchUpdateStockAvailableQuantitiesAsync(
+                    @event.Products.Select(x => new AvailableQuantityServiceModel
+                    {
                         ProductSku = x.ProductSku,
                         AvailableQuantity = x.AvailableQuantity
                     }));
-            }
         }
     }
 }

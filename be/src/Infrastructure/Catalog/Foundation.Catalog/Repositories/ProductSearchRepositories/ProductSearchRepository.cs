@@ -286,12 +286,9 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
         private SortDescriptor<T> Sorting<T>(string orderBy) where T : ProductSearchModel
         {
-            if (string.IsNullOrWhiteSpace(orderBy) || orderBy == SortingConstants.Name)
-            {
-                return new SortDescriptor<T>().Field(f => f.Name.Suffix("keyword"), SortOrder.Ascending);
-            }
-
-            if (orderBy == SortingConstants.Default)
+            if (string.IsNullOrWhiteSpace(orderBy) || 
+                orderBy == SortingConstants.Name ||
+                orderBy == SortingConstants.Default)
             {
                 return new SortDescriptor<T>().Field(f => f.Name.Suffix("keyword"), SortOrder.Ascending);
             }
