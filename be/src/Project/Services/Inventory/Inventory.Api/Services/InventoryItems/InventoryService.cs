@@ -12,6 +12,7 @@ using Inventory.Api.IntegrationEventsModels;
 using Inventory.Api.ServicesModels.InventoryServiceModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,15 +27,18 @@ namespace Inventory.Api.Services.InventoryItems
         private readonly InventoryContext _context;
         private readonly IStringLocalizer _inventoryLocalizer;
         private readonly IEventBus _eventBus;
+        private readonly ILogger<InventoryService> _logger;
 
         public InventoryService(
             InventoryContext context,
             IStringLocalizer<InventoryResources> inventoryLocalizer,
-            IEventBus eventBus)
+            IEventBus eventBus,
+            ILogger<InventoryService> logger)
         {
             _context = context;
             _inventoryLocalizer = inventoryLocalizer;
             _eventBus = eventBus;
+            _logger = logger;
         }
 
         public async Task<InventoryServiceModel> UpdateAsync(UpdateInventoryServiceModel serviceModel)
@@ -133,6 +137,8 @@ namespace Inventory.Api.Services.InventoryItems
 
         public async Task SyncProductsInventories(UpdateProductsInventoryServiceModel model)
         {
+            _logger.LogWarning($"Received inventory products for organisation {model.OrganisationId} with {model.InventoryItems.Count()} items");
+
             var productsAvailableQuantityUpdates = new List<ProductAvailableQuantityUpdateEventModel>();
 
             foreach (var item in model.InventoryItems.OrEmptyIfNull())
@@ -204,13 +210,16 @@ namespace Inventory.Api.Services.InventoryItems
                 }
 
                 await _context.SaveChangesAsync();
+            }
 
-                var productsAvailableQuantityUpdateMessage = new InventoryProductsAvailableQuantityUpdateIntegrationEvent
+            if (productsAvailableQuantityUpdates.Any())
+            {
+                var productAvailableQuantityUpdateMessage = new InventoryProductsAvailableQuantityUpdateIntegrationEvent
                 {
                     Products = productsAvailableQuantityUpdates
                 };
 
-                _eventBus.Publish(productsAvailableQuantityUpdateMessage);
+                _eventBus.Publish(productAvailableQuantityUpdateMessage);
             }
         }
 

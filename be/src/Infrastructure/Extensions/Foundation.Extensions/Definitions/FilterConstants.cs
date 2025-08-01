@@ -4,5 +4,6 @@
     {
         public static readonly string StatusCodeKeyName = "StatusCode";
         public static readonly int NoContentStatusCode = 204;
+        public static readonly int UnauthorizedStatusCode = 401;
     }
 }

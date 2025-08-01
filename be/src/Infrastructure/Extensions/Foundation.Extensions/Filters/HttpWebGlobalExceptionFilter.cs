@@ -3,48 +3,49 @@ using Foundation.Extensions.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Net;
+using Microsoft.Extensions.Hosting;
 
 namespace Foundation.Extensions.Filters
 {
     public class HttpWebGlobalExceptionFilter : IExceptionFilter
     {
-        private readonly IWebHostEnvironment env;
+        private readonly IWebHostEnvironment _env;
 
         public HttpWebGlobalExceptionFilter(IWebHostEnvironment env)
         {
-            this.env = env;
+            _env = env;
         }
 
         public void OnException(ExceptionContext context)
         {
-            if (context.Exception.GetType() == typeof(CustomException))
+            if (context.Exception is CustomException ex)
             {
-                var response = new ErrorResponse
-                {
-                    Message = context.Exception.Message
-                };
+                context.HttpContext.Response.StatusCode = ex.StatusCode;
+                context.HttpContext.Response.ContentType = "application/json";
 
-                if (this.env.EnvironmentName == EnvironmentConstants.DevelopmentEnvironmentName)
+                if (ex.StatusCode == FilterConstants.UnauthorizedStatusCode)
                 {
-                    response.DeveloperMessage = context.Exception;
+                    context.Result = new RedirectResult("/Accounts/Account/SignOutNow");
                 }
-
-                var statusCode = (int?)context.Exception.Data[FilterConstants.StatusCodeKeyName];
-
-                if (((int?)context.Exception.Data[FilterConstants.StatusCodeKeyName]).HasValue)
+                else
                 {
-                    if (statusCode.Value == (int)HttpStatusCode.Unauthorized)
+                    var response = new ErrorResponse
                     {
-                        context.Result = new RedirectResult("/Accounts/Account/SignOutNow");
-                        context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        Message = ex.Message
+                    };
+
+                    if (_env.IsDevelopment())
+                    {
+                        response.DeveloperMessage = ex;
                     }
-                    else
+
+                    if (ex.StatusCode != FilterConstants.NoContentStatusCode)
                     {
                         context.Result = new ObjectResult(response);
-                        context.HttpContext.Response.StatusCode = statusCode.Value;
                     }
                 }
+
+                context.ExceptionHandled = true;
             }
         }
 

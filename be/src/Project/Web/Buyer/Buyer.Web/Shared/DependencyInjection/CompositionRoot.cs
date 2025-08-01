@@ -40,6 +40,9 @@ using Buyer.Web.Shared.Repositories.Identity;
 using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.Middlewares;
 using Buyer.Web.Shared.Repositories.Global;
+using Grula.PricingIntelligencePlatform.Sdk;
+using System.Net.Http.Headers;
+using Foundation.Extensions.Services.Cache;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -80,6 +83,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<INewsRepository, NewsRepository>();
             services.AddScoped<IFilesRepository, FilesRepository>();
             services.AddScoped<IMediaItemsRepository, MediaItemsRepository>();
+            services.AddScoped<ICacheService, CacheService>();
             
             services.AddScoped<IPriceService, PriceService>();
 
@@ -89,6 +93,15 @@ namespace Buyer.Web.Shared.DependencyInjection
 
             //Middlewares
             services.AddScoped<ClaimsEnrichmentMiddleware>();
+
+            //Grula HttpClient
+            services.AddHttpClient("GrulaApi")
+                .AddTypedClient(httpClient =>
+                {
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", configuration["GrulaAccessToken"]);
+
+                    return new GrulaApiClient(configuration["GrulaUrl"], httpClient);
+                });
         }
 
         public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
