@@ -126,6 +126,8 @@ function NewOrderForm(props) {
             moreInfo
         };
 
+        console.log("Adding order item: ", orderItem);
+
         const basket = {
             id: basketId,
             items: [...orderItems, orderItem]
@@ -137,37 +139,37 @@ function NewOrderForm(props) {
             body: JSON.stringify(basket)
         };
 
-        fetch(props.updateBasketUrl, requestOptions)
-            .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
+        // fetch(props.updateBasketUrl, requestOptions)
+        //     .then(function (response) {
+        //         dispatch({ type: "SET_IS_LOADING", payload: false });
+        //         dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
 
-                AuthenticationHelper.HandleResponse(response);
+        //         AuthenticationHelper.HandleResponse(response);
 
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setBasketId(jsonResponse.id);
+        //         return response.json().then(jsonResponse => {
+        //             if (response.ok) {
+        //                 setBasketId(jsonResponse.id);
 
-                        if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            setProduct(null);
-                            setSearchTerm("");
-                            setExternalReference("");
-                            setMoreInfo("");
-                            resetMaxAndQuantityValues();
-                            setOrderItems(jsonResponse.items);
-                        }
-                        else {
-                            setOrderItems([]);
-                        }
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
+        //                 if (jsonResponse.items && jsonResponse.items.length > 0) {
+        //                     setProduct(null);
+        //                     setSearchTerm("");
+        //                     setExternalReference("");
+        //                     setMoreInfo("");
+        //                     resetMaxAndQuantityValues();
+        //                     setOrderItems(jsonResponse.items);
+        //                 }
+        //                 else {
+        //                     setOrderItems([]);
+        //                 }
+        //             }
+        //             else {
+        //                 toast.error(props.generalErrorMessage);
+        //             }
+        //         });
+        //     }).catch(() => {
+        //         dispatch({ type: "SET_IS_LOADING", payload: false });
+        //         toast.error(props.generalErrorMessage);
+        //     });
     };
 
     const searchInputProps = {
@@ -445,7 +447,7 @@ function NewOrderForm(props) {
                                 }}
                             />
                         </div>
-                        <div className="column is-2 is-flex is-align-items-flex-end">
+                        {/* <div className="column is-2 is-flex is-align-items-flex-end">
                             <TextField id="stockQuantity" name="stockQuantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
                                 label={`${props.stockQuantityLabel} (${props.maximalLabel} ${product ? product.stockQuantity : 0})`}
                                 fullWidth={true} disabled={product == null || product.stockQuantity == 0} value={stockQuantity} onChange={(e) => {
@@ -469,7 +471,7 @@ function NewOrderForm(props) {
                                     } else setOutletQuantity(0);
                                 }}
                             />
-                        </div>
+                        </div> */}
                         <div className="column is-2 is-flex is-align-items-flex-end">
                             <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel} variant="standard"
                                 fullWidth={true} value={externalReference} onChange={(e) => {
