@@ -88,23 +88,22 @@ function NewOrderForm(props) {
         return `(${suggestion.sku}) ${suggestion.name}`;
     };
 
-    const getProductPrice = (sku, pendingQuantity) => {
-        const queryParameters = {
-            sku
-        }
+    const getProductPrice = async (sku, pendingQuantity) => {
+        const queryParameters = { sku };
+
         const url = props.getProductPriceUrl + "?" + QueryStringSerializer.serialize(queryParameters);
 
-        const response = fetch(url, {
+        const response = await fetch(url, {
             method: "GET",
-            headers: { 
-                "Content-Type": "application/json", 
-                "X-Requested-With": "XMLHttpRequest" 
+            headers: {
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest"
             }
         });
 
         AuthenticationHelper.HandleResponse(response);
 
-        const jsonResponse = response.json();
+        const jsonResponse = await response.json();
 
         if (response.ok) {
             const unitPrice = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice).toFixed(2) : null;
@@ -112,11 +111,12 @@ function NewOrderForm(props) {
 
             return { unitPrice, price };
         }
-    }
+        else {
+            return { unitPrice: null, price: null }
+        }
+    };
 
-    const addToCart = (pendingQuantity, isOutletProduct) => {
-        console.log("Adding to cart: ", pendingQuantity, isOutletProduct);
-
+    const addToCart = async (pendingQuantity, isOutletProduct) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         let orderItem = {
@@ -134,10 +134,10 @@ function NewOrderForm(props) {
             orderItem.stockQuantity = 0;
             orderItem.outletQuantity = pendingQuantity;
 
-            getProductPrice(product.sku, pendingQuantity).then(({ unitPrice, price }) => {
-                orderItem.unitPrice = unitPrice;
-                orderItem.price = price;
-            });
+            const { unitPrice, price } = await getProductPrice(product.sku, pendingQuantity);
+
+            orderItem.unitPrice = unitPrice;
+            orderItem.price = price;
         }
         else {
             if (product.stockQuantity > 0) {
@@ -163,55 +163,55 @@ function NewOrderForm(props) {
         setOrderItems(prevItems => {
             const updatedItems = [...prevItems, orderItem];
 
-        const basket = {
-            id: basketId,
-            items: updatedItems
-        };
+            const basket = {
+                id: basketId,
+                items: updatedItems
+            };
 
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(basket)
-        };
+            const requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+                body: JSON.stringify(basket)
+            };
 
-        fetch(props.updateBasketUrl, requestOptions)
-            .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
+            fetch(props.updateBasketUrl, requestOptions)
+                .then(function (response) {
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
+                    dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
 
-                AuthenticationHelper.HandleResponse(response);
+                    AuthenticationHelper.HandleResponse(response);
 
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setBasketId(jsonResponse.id);
+                    return response.json().then(jsonResponse => {
+                        if (response.ok) {
+                            setBasketId(jsonResponse.id);
 
-                        if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            setProduct(null);
-                            setSearchTerm("");
-                            setExternalReference("");
-                            setMoreInfo("");
-                            setOrderItems(jsonResponse.items);
-                            setQuantity(1);
-                            setProductFromOutlet(false);
+                            if (jsonResponse.items && jsonResponse.items.length > 0) {
+                                setProduct(null);
+                                setSearchTerm("");
+                                setExternalReference("");
+                                setMoreInfo("");
+                                setOrderItems(jsonResponse.items);
+                                setQuantity(1);
+                                setProductFromOutlet(false);
+                            }
+                            else {
+                                setOrderItems([]);
+                            }
                         }
                         else {
-                            setOrderItems([]);
+                            toast.error(props.generalErrorMessage);
                         }
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
+                    });
+                }).catch(() => {
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
+                    toast.error(props.generalErrorMessage);
                 });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
         
             return updatedItems;
         })
     }
 
-    const handleAddOrderItemClick = () => {
+    const handleAddOrderItemClick = async () => {
         if (props.maxAllowedOrderQuantity && 
            (quantity > props.maxAllowedOrderQuantity)) {
                 toast.error(props.maxAllowedOrderQuantityErrorMessage);
@@ -219,21 +219,20 @@ function NewOrderForm(props) {
         };
 
         if (productFromOutlet &&
-            product.stockQuantity == 0 && 
-            product.outletQuantity > 0) 
+            product.stockQuantity == 0 &&
+            product.outletQuantity > 0)
         {
-                
             const quantityWithRegularPrice = parseInt(quantity - product.outletQuantity);
 
             if (quantityWithRegularPrice > 0) {
-                addToCart(quantityWithRegularPrice, false);
+                await addToCart(quantityWithRegularPrice, false);
             }
 
-            addToCart(quantity, true);
+            await addToCart(quantity, true);
             return;
         }
 
-        addToCart(quantity, false);
+        await addToCart(quantity, false);
     };
 
     const searchInputProps = {
