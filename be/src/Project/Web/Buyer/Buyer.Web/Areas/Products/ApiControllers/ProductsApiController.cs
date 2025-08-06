@@ -440,5 +440,64 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
             return StatusCode((int)HttpStatusCode.OK, Enumerable.Empty<ProductQuantitiesResponseModel>());
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPrice(string productSku)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            var product = await _productsRepository.GetProductAsync(productSku, language, token);
+
+            if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+            {
+                var outletItem = await _outletRepository.GetOutletProductBySkuAsync(token, language, productSku);
+
+                var price = await _priceService.GetPrice(
+                    _options.Value.GrulaAccessToken,
+                    DateTime.UtcNow,
+                    new PriceProduct
+                    {
+                        PrimarySku = product.PrimaryProductSku,
+                        FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                        ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
+                        SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
+                        PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                        Size = _productsService.GetSize(product.ProductAttributes),
+                        PointsOfLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
+                        LampshadeType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
+                        LampshadeSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
+                        LinearLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                        Mirror = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                        Shape = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
+                        PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
+                        SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                        ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
+                        IsOutlet = (outletItem?.AvailableQuantity > 0).ToYesOrNo()
+                    },
+                    new PriceClient
+                    {
+                        Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
+                        Name = User.Identity?.Name,
+                        CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
+                        ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
+                        PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
+                        Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
+                        DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
+                    });
+
+                if (price is not null)
+                {
+                    return StatusCode((int)HttpStatusCode.OK, new PriceResponseModel
+                    {
+                        CurrencyCode = price.CurrencyCode,
+                        CurrentPrice = price.CurrentPrice
+                    });
+                }
+
+            }
+
+            return StatusCode((int)HttpStatusCode.OK);
+        }
     } 
 }

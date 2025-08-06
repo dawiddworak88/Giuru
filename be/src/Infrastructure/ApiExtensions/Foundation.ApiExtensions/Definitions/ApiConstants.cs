@@ -85,6 +85,7 @@
             public static readonly string OutletProductsApiEndpoint = "/api/v1/outlet/products";
             public static readonly string AvailableOutletProductsApiEndpoint = "/api/v1/outlet/availableproducts";
             public static readonly string ProductOutletApiEndpoint = "/api/v1/outlet/product";
+            public static readonly string ProdductOutletBySkuApiEndpoint = "/api/v1/outlet/product/sku";
         }
 
         public struct Media

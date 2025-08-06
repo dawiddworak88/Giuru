@@ -23,9 +23,8 @@ function NewOrderForm(props) {
     const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
-    const [quantity, setQuantity] = useState(0);
-    const [stockQuantity, setStockQuantity] = useState(0);
-    const [outletQuantity, setOutletQuantity] = useState(0);
+    const [quantity, setQuantity] = useState(1);
+    const [productFromOutlet, setProductFromOutlet] = useState(false);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
     const [orderItems, setOrderItems] = useState(props.basketItems ? props.basketItems : []);
@@ -74,12 +73,6 @@ function NewOrderForm(props) {
         }
     };
 
-    const resetMaxAndQuantityValues = () => {
-        setQuantity(0);
-        setStockQuantity(0);
-        setOutletQuantity(0);
-    };
-
     const onSuggestionSelected = (event, { suggestion }) => {
         var items = orderItems.filter(item => item.productId === suggestion.id);
 
@@ -88,10 +81,6 @@ function NewOrderForm(props) {
             suggestion.outletQuantity -= items.reduce((sum, item) => sum + item.outletQuantity, 0); 
         }
 
-        setQuantity(suggestion.stockQuantity + suggestion.outletQuantity === 0 ? 1 : 0);
-        setStockQuantity(suggestion.stockQuantity > 0 ? 1 : 0);
-        setOutletQuantity(suggestion.outletQuantity > 0 && suggestion.stockQuantity === 0 ? 1 : 0);
-        
         setProduct(suggestion);
     };
 
@@ -99,38 +88,75 @@ function NewOrderForm(props) {
         return `(${suggestion.sku}) ${suggestion.name}`;
     };
 
-    const handleAddOrderItemClick = () => {
+    // Helper function to fetch product price and update orderItem
+    async function fetchAndSetProductPrice(url, orderItem, pendingQuantity) {
+        try {
+            const response = await fetch(url, {
+                method: "GET",
+                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
+            });
+            AuthenticationHelper.HandleResponse(response);
+            const jsonResponse = await response.json();
+            if (response.ok) {
+                orderItem.unitPrice = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice).toFixed(2) : null;
+                orderItem.price = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice * pendingQuantity).toFixed(2) : null;
+            }
+        } catch (error) {
+            // Optionally handle error here
+        }
+    }
+
+    const addToCart = (pendingQuantity, isOutletProduct) => {
+        console.log("Adding to cart: ", pendingQuantity, isOutletProduct);
+
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        const totalQuantity = parseInt(quantity) + parseInt(stockQuantity) + parseInt(outletQuantity);
-
-        if (props.maxAllowedOrderQuantity && 
-           (totalQuantity > props.maxAllowedOrderQuantity)) {
-                toast.error(props.maxAllowedOrderQuantityErrorMessage);
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                return;
-        };
-
-        const orderItem = {
+        let orderItem = {
             productId: product.id,
             sku: product.sku,
             name: product.name,
             imageId: product.images ? product.images[0] : null,
-            quantity: quantity ? quantity : 0,
-            stockQuantity: stockQuantity ? stockQuantity : 0,
-            outletQuantity: outletQuantity ? outletQuantity : 0,
-            unitPrice: parseFloat(product.price).toFixed(2),
-            price: parseFloat(product.price * totalQuantity).toFixed(2),
             currency: product.currency,
             externalReference,
             moreInfo
         };
 
-        console.log("Adding order item: ", orderItem);
+        if (isOutletProduct) {
+            orderItem.quantity = 0;
+            orderItem.stockQuantity = 0;
+            orderItem.outletQuantity = pendingQuantity;
+
+            const url = props.getPriceUrl + "?productSku" + product.sku;
+
+            fetchAndSetProductPrice(url, orderItem, pendingQuantity);
+        }
+        else {
+            if (product.stockQuantity > 0) {
+                if (quantity > product.stockQuantity) {
+                    orderItem.quantity = quantity - product.stockQuantity;
+                    orderItem.stockQuantity = product.stockQuantity; 
+                }
+                else {
+                    orderItem.stockQuantity = quantity;
+                    orderItem.quantity = 0;
+                }
+            }
+            else {
+                orderItem.quantity = pendingQuantity;
+                orderItem.stockQuantity = 0;
+            }
+
+            orderItem.outletQuantity = 0;
+            orderItem.unitPrice = product.price ? parseFloat(product.price).toFixed(2) : null;
+            orderItem.price = product.price ? parseFloat(product.price * quantity).toFixed(2) : null;
+        }
+
+        setOrderItems(prevItems => {
+            const updatedItems = [...prevItems, orderItem];
 
         const basket = {
             id: basketId,
-            items: [...orderItems, orderItem]
+            items: updatedItems
         };
 
         const requestOptions = {
@@ -139,37 +165,66 @@ function NewOrderForm(props) {
             body: JSON.stringify(basket)
         };
 
-        // fetch(props.updateBasketUrl, requestOptions)
-        //     .then(function (response) {
-        //         dispatch({ type: "SET_IS_LOADING", payload: false });
-        //         dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
+        fetch(props.updateBasketUrl, requestOptions)
+            .then(function (response) {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
 
-        //         AuthenticationHelper.HandleResponse(response);
+                AuthenticationHelper.HandleResponse(response);
 
-        //         return response.json().then(jsonResponse => {
-        //             if (response.ok) {
-        //                 setBasketId(jsonResponse.id);
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setBasketId(jsonResponse.id);
 
-        //                 if (jsonResponse.items && jsonResponse.items.length > 0) {
-        //                     setProduct(null);
-        //                     setSearchTerm("");
-        //                     setExternalReference("");
-        //                     setMoreInfo("");
-        //                     resetMaxAndQuantityValues();
-        //                     setOrderItems(jsonResponse.items);
-        //                 }
-        //                 else {
-        //                     setOrderItems([]);
-        //                 }
-        //             }
-        //             else {
-        //                 toast.error(props.generalErrorMessage);
-        //             }
-        //         });
-        //     }).catch(() => {
-        //         dispatch({ type: "SET_IS_LOADING", payload: false });
-        //         toast.error(props.generalErrorMessage);
-        //     });
+                        if (jsonResponse.items && jsonResponse.items.length > 0) {
+                            setProduct(null);
+                            setSearchTerm("");
+                            setExternalReference("");
+                            setMoreInfo("");
+                            setOrderItems(jsonResponse.items);
+                            setQuantity(1);
+                            setProductFromOutlet(false);
+                        }
+                        else {
+                            setOrderItems([]);
+                        }
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+        
+            return updatedItems;
+        })
+    }
+
+    const handleAddOrderItemClick = () => {
+        if (props.maxAllowedOrderQuantity && 
+           (quantity > props.maxAllowedOrderQuantity)) {
+                toast.error(props.maxAllowedOrderQuantityErrorMessage);
+                return;
+        };
+
+        if (productFromOutlet &&
+            product.stockQuantity == 0 && 
+            product.outletQuantity > 0) 
+        {
+                
+            const quantityWithRegularPrice = parseInt(quantity - product.outletQuantity);
+
+            if (quantityWithRegularPrice > 0) {
+                addToCart(quantityWithRegularPrice, false);
+            }
+
+            addToCart(product.outletQuantity, true);
+            return;
+        }
+
+        addToCart(quantity, false);
     };
 
     const searchInputProps = {
@@ -440,38 +495,28 @@ function NewOrderForm(props) {
                             />
                         </div>
                         <div className="column is-1 is-flex is-align-items-flex-end">
-                            <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
+                            <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "1", step: "1" }} variant="standard"
                                 label={props.quantityLabel} fullWidth={true} disabled={product == null} value={quantity} onChange={(e) => {
                                     e.preventDefault();
                                     setQuantity(e.target.value);
                                 }}
                             />
                         </div>
-                        {/* <div className="column is-2 is-flex is-align-items-flex-end">
-                            <TextField id="stockQuantity" name="stockQuantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
-                                label={`${props.stockQuantityLabel} (${props.maximalLabel} ${product ? product.stockQuantity : 0})`}
-                                fullWidth={true} disabled={product == null || product.stockQuantity == 0} value={stockQuantity} onChange={(e) => {
-                                    e.preventDefault();
-                                    const value = e.target.value
-                                    if (value >= 0) {
-                                        setStockQuantity(value > product.stockQuantity ? product.stockQuantity : value);
-                                    }
-                                    else setStockQuantity(0);
-                                }}
-                            />
-                        </div>
-                        <div className="column is-2 is-flex is-align-items-flex-end">
-                            <TextField id="outletQuantity" name="outletQuantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
-                                label={`${props.outletQuantityLabel} (${props.maximalLabel} ${product ? product.outletQuantity : 0})`}
-                                fullWidth={true} disabled={product == null || product.outletQuantity == 0} value={outletQuantity} onChange={(e) => {
-                                    e.preventDefault();
-                                    const value = e.target.value
-                                    if (value >= 0) {
-                                        setOutletQuantity(value > product.outletQuantity ? product.outletQuantity : value);
-                                    } else setOutletQuantity(0);
-                                }}
-                            />
-                        </div> */}
+                        {product != null && product.outletQuantity > 0 &&
+                            <div className="column is-2 is-flex is-align-items-flex-end pb-2">
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={productFromOutlet}
+                                                onChange={(e) => {
+                                                    setProductFromOutlet(e.target.checked);
+                                                }} />
+                                        }
+                                        label={"Product from outlet"}
+                                        disabled={product.stockQuantity > 0}
+                                    />
+                            </div>    
+                        }   
                         <div className="column is-2 is-flex is-align-items-flex-end">
                             <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel} variant="standard"
                                 fullWidth={true} value={externalReference} onChange={(e) => {
@@ -489,7 +534,7 @@ function NewOrderForm(props) {
                         </div>
                         <div className="column is-1 is-flex is-align-items-flex-end">
                             <Button type="button" variant="contained" color="primary" onClick={handleAddOrderItemClick}
-                                disabled={state.isLoading || !(quantity + stockQuantity + outletQuantity > 0 && product !== null)}
+                                disabled={state.isLoading || !(quantity > 0 && product !== null)}
                             >
                                 {props.addText}
                             </Button>
@@ -667,7 +712,6 @@ NewOrderForm.propTypes = {
     moreInfoLabel: PropTypes.string.isRequired,
     getSuggestionsUrl: PropTypes.string.isRequired,
     orderItemsLabel: PropTypes.string.isRequired,
-    generalErrorMessage: PropTypes.string.isRequired,
     addText: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     noOrderItemsLabel: PropTypes.string.isRequired,
