@@ -108,11 +108,9 @@ function NewOrderForm(props) {
         if (response.ok) {
             const unitPrice = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice).toFixed(2) : null;
             const price = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice * pendingQuantity).toFixed(2) : null;
+            const currency = jsonResponse.currency ? jsonResponse.currency : null;
 
-            return { unitPrice, price };
-        }
-        else {
-            return { unitPrice: null, price: null }
+            return { unitPrice, price, currency};
         }
     };
 
@@ -124,7 +122,6 @@ function NewOrderForm(props) {
             sku: product.sku,
             name: product.name,
             imageId: product.images ? product.images[0] : null,
-            currency: product.currency,
             externalReference,
             moreInfo
         };
@@ -134,10 +131,11 @@ function NewOrderForm(props) {
             orderItem.stockQuantity = 0;
             orderItem.outletQuantity = pendingQuantity;
 
-            const { unitPrice, price } = await getProductPrice(product.sku, pendingQuantity);
+            const { unitPrice, price, currency } = await getProductPrice(product.sku, pendingQuantity);
 
             orderItem.unitPrice = unitPrice;
             orderItem.price = price;
+            orderItem.currency = currency;
         }
         else {
             if (product.stockQuantity > 0) {
@@ -158,6 +156,7 @@ function NewOrderForm(props) {
             orderItem.outletQuantity = 0;
             orderItem.unitPrice = product.price ? parseFloat(product.price).toFixed(2) : null;
             orderItem.price = product.price ? parseFloat(product.price * quantity).toFixed(2) : null;
+            orderItem.currency = product.currency
         }
 
         setOrderItems(prevItems => {
