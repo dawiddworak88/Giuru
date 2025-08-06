@@ -148,15 +148,13 @@ function NewOrderForm(props) {
                     orderItem.quantity = 0;
                 }
             }
-            else {
-                orderItem.quantity = pendingQuantity;
-                orderItem.stockQuantity = 0;
-            }
-
+   
+            orderItem.quantity = pendingQuantity;
+            orderItem.stockQuantity = 0;
             orderItem.outletQuantity = 0;
             orderItem.unitPrice = product.price ? parseFloat(product.price).toFixed(2) : null;
-            orderItem.price = product.price ? parseFloat(product.price * quantity).toFixed(2) : null;
-            orderItem.currency = product.currency
+            orderItem.price = product.price ? parseFloat(product.price * pendingQuantity).toFixed(2) : null;
+            orderItem.currency = product.currency;
         }
 
         setOrderItems(prevItems => {
@@ -217,17 +215,16 @@ function NewOrderForm(props) {
                 return;
         };
 
-        if (productFromOutlet &&
-            product.stockQuantity == 0 &&
-            product.outletQuantity > 0)
-        {
+        if (productFromOutlet && product.outletQuantity > 0) {
             const quantityWithRegularPrice = parseInt(quantity - product.outletQuantity);
 
             if (quantityWithRegularPrice > 0) {
                 await addToCart(quantityWithRegularPrice, false);
             }
 
-            await addToCart(quantity, true);
+            const outletQuantity = Math.min(product.outletQuantity, quantity);
+
+            await addToCart(outletQuantity, true);
             return;
         }
 

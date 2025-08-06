@@ -8,12 +8,14 @@ const Modal = (props) => {
     const [quantity, setQuantity] = useState(1);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
+    const [isOutletOrder, setIsOutletOrder] = useState(!product.inStock && product.inOutlet);
 
     const handleAddItemToBasket = () => {
         const payload = {
             quantity,
             externalReference,
-            moreInfo
+            moreInfo,
+            isOutletOrder
         }
 
         handleOrder(payload)
@@ -57,13 +59,28 @@ const Modal = (props) => {
                         value={quantity}
                         onChange={(e) => {
                             const value = e.target.value;
-                            if (value >= 0){
+                            if (value >= 1){
                                 setQuantity(value)
                             }
-                            else setQuantity(0)
+                            else setQuantity(1)
                         }}
                     />
                 </div>
+                {product.availableOutletQuantity > 0 &&
+                    <div className="field">
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={isOutletOrder}
+                                    onChange={(e) => {
+                                        setIsOutletOrder(e.target.checked);
+                                    }} />
+                            }
+                            label={"Product from outlet"}
+                            disabled={product.inStock && !product.inOutlet}
+                        />
+                    </div> 
+                }
                 <div className="field">
                     <TextField 
                         id="externalReference" 
