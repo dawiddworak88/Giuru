@@ -6,6 +6,7 @@ using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.ProductColors;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
+using Buyer.Web.Areas.Products.ApiResponseModels;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Definitions.Middlewares;
