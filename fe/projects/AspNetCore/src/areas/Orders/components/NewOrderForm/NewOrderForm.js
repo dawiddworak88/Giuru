@@ -126,7 +126,7 @@ function NewOrderForm(props) {
             orderItem.stockQuantity = 0;
             orderItem.outletQuantity = pendingQuantity;
 
-            const url = props.getPriceUrl + "?productSku" + product.sku;
+            const url = props.getProductPriceUrl + "?productSku=" + product.sku;
 
             fetchAndSetProductPrice(url, orderItem, pendingQuantity);
         }
@@ -732,7 +732,8 @@ NewOrderForm.propTypes = {
     initCustomOrderLabel: PropTypes.string.isRequired,
     customOrderLabel: PropTypes.string.isRequired,
     maxAllowedOrderQuantity: PropTypes.number,
-    maxAllowedOrderQuantityErrorMessage: PropTypes.string
+    maxAllowedOrderQuantityErrorMessage: PropTypes.string,
+    getProductPriceUrl: PropTypes.string.isRequired
 };
 
 export default NewOrderForm;
