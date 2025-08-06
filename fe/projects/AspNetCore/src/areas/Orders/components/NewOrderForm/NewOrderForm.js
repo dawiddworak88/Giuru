@@ -88,23 +88,29 @@ function NewOrderForm(props) {
         return `(${suggestion.sku}) ${suggestion.name}`;
     };
 
-    // Helper function to fetch product price and return values
-    async function fetchAndSetProductPrice(url, pendingQuantity) {
-        try {
-            const response = await fetch(url, {
-                method: "GET",
-                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
-            });
-            AuthenticationHelper.HandleResponse(response);
-            const jsonResponse = await response.json();
-            if (response.ok) {
-                const unitPrice = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice).toFixed(2) : null;
-                const price = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice * pendingQuantity).toFixed(2) : null;
-                return { unitPrice, price };
+    const getProductPrice = (sku, pendingQuantity) => {
+        const queryParameters = {
+            sku
+        }
+        const url = props.getProductPriceUrl + "?" + QueryStringSerializer.serialize(queryParameters);
+
+        const response = fetch(url, {
+            method: "GET",
+            headers: { 
+                "Content-Type": "application/json", 
+                "X-Requested-With": "XMLHttpRequest" 
             }
-            return { unitPrice: null, price: null };
-        } catch (error) {
-            return { unitPrice: null, price: null };
+        });
+
+        AuthenticationHelper.HandleResponse(response);
+
+        const jsonResponse = response.json();
+
+        if (response.ok) {
+            const unitPrice = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice).toFixed(2) : null;
+            const price = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice * pendingQuantity).toFixed(2) : null;
+
+            return { unitPrice, price };
         }
     }
 
@@ -128,9 +134,7 @@ function NewOrderForm(props) {
             orderItem.stockQuantity = 0;
             orderItem.outletQuantity = pendingQuantity;
 
-            const url = props.getProductPriceUrl + "?sku=" + product.sku;
-
-            fetchAndSetProductPrice(url, pendingQuantity).then(({ unitPrice, price }) => {
+            getProductPrice(product.sku, pendingQuantity).then(({ unitPrice, price }) => {
                 orderItem.unitPrice = unitPrice;
                 orderItem.price = price;
             });

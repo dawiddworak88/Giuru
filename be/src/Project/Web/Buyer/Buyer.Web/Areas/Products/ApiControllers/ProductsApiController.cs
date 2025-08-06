@@ -353,8 +353,6 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
             if (products.Data.Any())
             {
-                var outletItems = await _outletRepository.GetOutletProductsByProductsIdAsync(token, language, products.Data.Select(x => x.Id));
-
                 var prices = Enumerable.Empty<Price>();
 
                 if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
@@ -367,7 +365,6 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
                         PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
                         Size = _productsService.GetSize(x.ProductAttributes),
-                        IsOutlet = (outletItems.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo(),
                         PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
                         LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
                         LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
