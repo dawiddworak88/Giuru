@@ -4,18 +4,14 @@ import PropTypes from "prop-types";
 import NavigationHelper from "../../../shared/helpers/globals/NavigationHelper";
 
 const Modal = (props) => {
-    const {isOpen, maxStockValue, maxOutletValue, stockQuantityInBasket, outletQuantityInBasket, handleOrder, handleClose, labels, product} = props;
-    const [quantity, setQuantity] = useState(maxStockValue || maxOutletValue ? 0 : 1);
-    const [stockQuantity, setStockQuantity] = useState(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 1 : maxStockValue && maxStockValue > 0 ? 1 : 0);
-    const [outletQuantity, setOutletQuantity] = useState(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 0 : maxOutletValue && maxOutletValue > 0 ? 1 : 0);
+    const {isOpen, handleOrder, handleClose, labels, product} = props;
+    const [quantity, setQuantity] = useState(1);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
 
     const handleAddItemToBasket = () => {
         const payload = {
             quantity,
-            stockQuantity,
-            outletQuantity,
             externalReference,
             moreInfo
         }
@@ -24,16 +20,10 @@ const Modal = (props) => {
     }
 
     useEffect(() => {
-        setQuantity(maxStockValue || maxOutletValue ? 0 : 1);
-        setStockQuantity(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 1 : maxStockValue && maxStockValue > 0 ? 1 : 0);
-        setOutletQuantity(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 0 : maxOutletValue && maxOutletValue > 0 ? 1 : 0);
         setExternalReference("");
         setMoreInfo("")
     }, [isOpen])
     
-    const maxStock = maxStockValue ? maxStockValue : 0;
-    const maxOutlet = maxOutletValue ? maxOutletValue : 0;
-
     return (
         <Dialog
             open={isOpen}
@@ -60,7 +50,7 @@ const Modal = (props) => {
                         variant="standard"
                         label={labels.quantityLabel}
                         inputProps={{ 
-                            min: 0, 
+                            min: 1, 
                             step: 1,
                             className: "quantity-input"
                         }}
@@ -71,50 +61,6 @@ const Modal = (props) => {
                                 setQuantity(value)
                             }
                             else setQuantity(0)
-                        }}
-                    />
-                </div>
-                <div className="field">
-                    <TextField 
-                        id="stockQuantity" 
-                        name="stockQuantity" 
-                        type="number" 
-                        variant="standard"
-                        label={`${labels.stockQuantityLabel} (${labels.maximalLabel} ${maxStock}) ${stockQuantityInBasket > 0 ? `(${labels.inBasket} ${stockQuantityInBasket})` : ""}`}
-                        inputProps={{ 
-                            min: 0, 
-                            step: 1,
-                            className: "quantity-input"
-                        }}
-                        value={stockQuantity}
-                        onChange={(e) => {
-                            const value = e.target.value;
-                            if (value >= 0){
-                                setStockQuantity(value > maxStock ? maxStock : value);
-                            }
-                            else setStockQuantity(0)
-                        }}
-                    />
-                </div>
-                <div className="field">
-                    <TextField 
-                        id="outletQuantity" 
-                        name="outletQuantity" 
-                        type="number" 
-                        variant="standard"
-                        label={`${labels.outletQuantityLabel} (${labels.maximalLabel} ${maxOutlet}) ${outletQuantityInBasket > 0 ? `(${labels.inBasket} ${outletQuantityInBasket})` : ""}`}
-                        inputProps={{ 
-                            min: 0, 
-                            step: 1,
-                            className: "quantity-input"
-                        }}
-                        value={outletQuantity}
-                        onChange={(e) => {
-                            const value = e.target.value;
-                            if (value >= 0){
-                                setOutletQuantity(value > maxOutlet ? maxOutlet : value);
-                            }
-                            else setOutletQuantity(0)
                         }}
                     />
                 </div>
@@ -164,14 +110,7 @@ Modal.propTypes = {
     addText: PropTypes.string,
     cancelLabel: PropTypes.string,
     moreInfoLabel: PropTypes.string,
-    maxOutletValue: PropTypes.number,
     externalReferenceLabel: PropTypes.string,
-    outletQuantityLabel: PropTypes.string,
-    stockQuantityLabel: PropTypes.string,
-    quantityLabel: PropTypes.string,
-    maxStockValue: PropTypes.number,
-    stockQuantityInBasket: PropTypes.number,
-    outletQuantityInBasket: PropTypes.number,
     handleOrder: PropTypes.func,
     closeLabel: PropTypes.string,
     okLabel: PropTypes.string,

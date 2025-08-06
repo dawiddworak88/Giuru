@@ -28,11 +28,15 @@ function Catalog(props) {
     const [productVariant, setProductVariant] = useState(null);
 
     const toggleSidebar = (item) => {
+        console.log("toggleSidebar", item);
+
         setProductVariant(item);
         setIsSidebarOpen(true)
     }
 
     const toggleModal = (item) => {
+        console.log("toggleModal", item);
+
         setProductVariant(item);
         setIsModalOpen(true)
     }
@@ -102,76 +106,73 @@ function Catalog(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const quantity = parseInt(item.quantity);
-        const stockQuantity = parseInt(item.stockQuantity);
-        const outletQuantity = parseInt(item.outletQuantity);
-
-        const totalQuantity = quantity + stockQuantity + outletQuantity;
 
         if (props.maxAllowedOrderQuantity && 
-           (totalQuantity > props.maxAllowedOrderQuantity)) {
+           (quantity > props.maxAllowedOrderQuantity)) {
                 toast.error(props.maxAllowedOrderQuantityErrorMessage);
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 return;
         };
+
         
-        const orderItem = {
-            productId: productVariant.id,
-            sku: productVariant.subtitle ? productVariant.subtitle : productVariant.sku,
-            name: productVariant.title,
-            imageId: productVariant.images ? productVariant.images[0].id ? productVariant.images[0].id : productVariant.images[0] : null,
-            quantity: quantity,
-            stockQuantity: stockQuantity,
-            outletQuantity: outletQuantity,
-            unitPrice: productVariant.price ? parseFloat(productVariant.price.current).toFixed(2) : null,
-            price: productVariant.price ? parseFloat(productVariant.price.current * totalQuantity).toFixed(2) : null,
-            currency: productVariant.price ? productVariant.price.currency : null,
-            externalReference: item.externalReference,
-            moreInfo: item.moreInfo
-        };
 
-        const basket = {
-            id: basketId,
-            items: [...orderItems, orderItem]
-        };
+        
+        // const orderItem = {
+        //     productId: productVariant.id,
+        //     sku: productVariant.subtitle ? productVariant.subtitle : productVariant.sku,
+        //     name: productVariant.title,
+        //     imageId: productVariant.images ? productVariant.images[0].id ? productVariant.images[0].id : productVariant.images[0] : null,
+        //     quantity: quantity,
+        //     unitPrice: productVariant.price ? parseFloat(productVariant.price.current).toFixed(2) : null,
+        //     price: productVariant.price ? parseFloat(productVariant.price.current * totalQuantity).toFixed(2) : null,
+        //     currency: productVariant.price ? productVariant.price.currency : null,
+        //     externalReference: item.externalReference,
+        //     moreInfo: item.moreInfo
+        // };
 
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(basket)
-        };
+        // const basket = {
+        //     id: basketId,
+        //     items: [...orderItems, orderItem]
+        // };
 
-        if (totalQuantity <= 0) {
-            return toast.error(props.quantityErrorMessage);
-        }
+        // const requestOptions = {
+        //     method: "POST",
+        //     headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+        //     body: JSON.stringify(basket)
+        // };
 
-        fetch(props.updateBasketUrl, requestOptions)
-            .then((response) => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(totalQuantity + state.totalBasketItems) })
+        // if (totalQuantity <= 0) {
+        //     return toast.error(props.quantityErrorMessage);
+        // }
 
-                AuthenticationHelper.HandleResponse(response);
+        // fetch(props.updateBasketUrl, requestOptions)
+        //     .then((response) => {
+        //         dispatch({ type: "SET_IS_LOADING", payload: false });
+        //         dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(totalQuantity + state.totalBasketItems) })
 
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setBasketId(jsonResponse.id);
+        //         AuthenticationHelper.HandleResponse(response);
 
-                        if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            toast.success(props.successfullyAddedProduct)
-                            setOrderItems(jsonResponse.items);
-                            setIsModalOpen(false);
-                        }
-                        else {
-                            setOrderItems([]);
-                        }
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
+        //         return response.json().then(jsonResponse => {
+        //             if (response.ok) {
+        //                 setBasketId(jsonResponse.id);
+
+        //                 if (jsonResponse.items && jsonResponse.items.length > 0) {
+        //                     toast.success(props.successfullyAddedProduct)
+        //                     setOrderItems(jsonResponse.items);
+        //                     setIsModalOpen(false);
+        //                 }
+        //                 else {
+        //                     setOrderItems([]);
+        //                 }
+        //             }
+        //             else {
+        //                 toast.error(props.generalErrorMessage);
+        //             }
+        //         });
+        //     }).catch(() => {
+        //         dispatch({ type: "SET_IS_LOADING", payload: false });
+        //         toast.error(props.generalErrorMessage);
+        //     });
     };
 
     const calculateMaxQuantity = (quantityType, availableQuantity) => {
@@ -312,10 +313,6 @@ function Catalog(props) {
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
                     handleClose={handleCloseModal}
-                    maxOutletValue={productVariant ? calculateMaxQuantity('outletQuantity', productVariant.availableOutletQuantity) : null}
-                    maxStockValue={productVariant ? calculateMaxQuantity('stockQuantity', productVariant.availableQuantity) : null}
-                    stockQuantityInBasket={productVariant ? getCurrentQuantity('stockQuantity') : 0}
-                    outletQuantityInBasket={productVariant ? getCurrentQuantity('outletQuantity') : 0}
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant}
                     labels={props.modal}
