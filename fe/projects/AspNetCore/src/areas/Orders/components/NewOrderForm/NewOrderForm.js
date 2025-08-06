@@ -88,8 +88,8 @@ function NewOrderForm(props) {
         return `(${suggestion.sku}) ${suggestion.name}`;
     };
 
-    // Helper function to fetch product price and update orderItem
-    async function fetchAndSetProductPrice(url, orderItem, pendingQuantity) {
+    // Helper function to fetch product price and return values
+    async function fetchAndSetProductPrice(url, pendingQuantity) {
         try {
             const response = await fetch(url, {
                 method: "GET",
@@ -98,11 +98,13 @@ function NewOrderForm(props) {
             AuthenticationHelper.HandleResponse(response);
             const jsonResponse = await response.json();
             if (response.ok) {
-                orderItem.unitPrice = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice).toFixed(2) : null;
-                orderItem.price = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice * pendingQuantity).toFixed(2) : null;
+                const unitPrice = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice).toFixed(2) : null;
+                const price = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice * pendingQuantity).toFixed(2) : null;
+                return { unitPrice, price };
             }
+            return { unitPrice: null, price: null };
         } catch (error) {
-            // Optionally handle error here
+            return { unitPrice: null, price: null };
         }
     }
 
@@ -126,9 +128,12 @@ function NewOrderForm(props) {
             orderItem.stockQuantity = 0;
             orderItem.outletQuantity = pendingQuantity;
 
-            const url = props.getProductPriceUrl + "?productSku=" + product.sku;
+            const url = props.getProductPriceUrl + "?sku=" + product.sku;
 
-            fetchAndSetProductPrice(url, orderItem, pendingQuantity);
+            fetchAndSetProductPrice(url, pendingQuantity).then(({ unitPrice, price }) => {
+                orderItem.unitPrice = unitPrice;
+                orderItem.price = price;
+            });
         }
         else {
             if (product.stockQuantity > 0) {
@@ -220,7 +225,7 @@ function NewOrderForm(props) {
                 addToCart(quantityWithRegularPrice, false);
             }
 
-            addToCart(product.outletQuantity, true);
+            addToCart(quantity, true);
             return;
         }
 

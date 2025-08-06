@@ -35,6 +35,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Buyer.Web.Areas.Products.ApiControllers
 {
@@ -52,6 +53,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
         private readonly IProductColorsService _productColorsService;
+        private readonly ILogger<ProductsApiController> _logger;
 
         public ProductsApiController(
             IProductsService productsService,
@@ -64,7 +66,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IOptions<AppSettings> options,
             IPriceService priceService,
             LinkGenerator linkGenerator,
-            IProductColorsService productColorsService)
+            IProductColorsService productColorsService,
+            ILogger<ProductsApiController> logger)
         {
             _productsService = productsService;
             _productsRepository = productsRepository;
@@ -78,6 +81,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             _options = options;
             _priceService = priceService;
             _productColorsService = productColorsService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -443,18 +447,20 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPrice(string productSku)
+        public async Task<IActionResult> GetPrice(string sku)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var product = await _productsRepository.GetProductAsync(productSku, language, token);
+            var product = await _productsRepository.GetProductAsync(sku, language, token);
 
             if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
             {
-                var outletItem = await _outletRepository.GetOutletProductBySkuAsync(token, language, productSku);
+                var outletItem = await _outletRepository.GetOutletProductBySkuAsync(token, language, sku);
 
-                var price = await _priceService.GetPrice(
+                try
+                {
+                    var price = await _priceService.GetPrice(
                     _options.Value.GrulaAccessToken,
                     DateTime.UtcNow,
                     new PriceProduct
@@ -487,15 +493,19 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
                     });
 
-                if (price is not null)
-                {
-                    return StatusCode((int)HttpStatusCode.OK, new PriceResponseModel
+                    if (price is not null)
                     {
-                        CurrencyCode = price.CurrencyCode,
-                        CurrentPrice = price.CurrentPrice
-                    });
+                        return StatusCode((int)HttpStatusCode.OK, new PriceResponseModel
+                        {
+                            CurrencyCode = price.CurrencyCode,
+                            CurrentPrice = price.CurrentPrice
+                        });
+                    }
                 }
-
+                catch
+                {
+                    return StatusCode((int)HttpStatusCode.OK);
+                }
             }
 
             return StatusCode((int)HttpStatusCode.OK);

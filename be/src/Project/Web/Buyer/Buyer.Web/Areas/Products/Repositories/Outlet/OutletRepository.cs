@@ -31,6 +31,7 @@ namespace Buyer.Web.Areas.Products.Repositories
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
+                Data = new RequestModelBase(),
                 Language = language,
                 AccessToken = token,
                 EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.ProdductOutletBySkuApiEndpoint}/{sku}"
