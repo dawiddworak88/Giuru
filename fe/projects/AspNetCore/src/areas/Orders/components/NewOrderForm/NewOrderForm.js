@@ -17,6 +17,7 @@ import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog
 import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
+import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -88,32 +89,6 @@ function NewOrderForm(props) {
         return `(${suggestion.sku}) ${suggestion.name}`;
     };
 
-    const getProductPrice = async (sku, pendingQuantity) => {
-        const queryParameters = { sku };
-
-        const url = props.getProductPriceUrl + "?" + QueryStringSerializer.serialize(queryParameters);
-
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest"
-            }
-        });
-
-        AuthenticationHelper.HandleResponse(response);
-
-        const jsonResponse = await response.json();
-
-        if (response.ok) {
-            const unitPrice = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice).toFixed(2) : null;
-            const price = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice * pendingQuantity).toFixed(2) : null;
-            const currency = jsonResponse.currency ? jsonResponse.currency : null;
-
-            return { unitPrice, price, currency};
-        }
-    };
-
     const addToCart = async (pendingQuantity, isOutletProduct) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
@@ -131,7 +106,7 @@ function NewOrderForm(props) {
             orderItem.stockQuantity = 0;
             orderItem.outletQuantity = pendingQuantity;
 
-            const { unitPrice, price, currency } = await getProductPrice(product.sku, pendingQuantity);
+            const { unitPrice, price, currency } = await ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, product.sku, pendingQuantity);
 
             orderItem.unitPrice = unitPrice;
             orderItem.price = price;

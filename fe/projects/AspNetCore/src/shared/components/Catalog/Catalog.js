@@ -14,6 +14,7 @@ import AuthenticationHelper from "../../../shared/helpers/globals/Authentication
 import moment from "moment";
 import Modal from "../Modal/Modal";
 import Price from "../Price/Price";
+import ProductPricesHelper from "../../helpers/prices/ProductPricesHelper";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -116,6 +117,12 @@ function Catalog(props) {
             orderItem.quantity = 0;
             orderItem.stockQuantity = 0;
             orderItem.outletQuantity = pendingQuantity;
+
+            const { unitPrice, price, currency } = await ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, product.sku, pendingQuantity);
+
+            orderItem.unitPrice = unitPrice;
+            orderItem.price = price;
+            orderItem.currency = currency;
         }
         else {
             if (productVariant.availableQuantity > 0) {
