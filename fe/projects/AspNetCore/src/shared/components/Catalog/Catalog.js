@@ -117,12 +117,6 @@ function Catalog(props) {
             orderItem.quantity = 0;
             orderItem.stockQuantity = 0;
             orderItem.outletQuantity = pendingQuantity;
-
-            const { unitPrice, price, currency } = await ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, product.sku, pendingQuantity);
-
-            orderItem.unitPrice = unitPrice;
-            orderItem.price = price;
-            orderItem.currency = currency;
         }
         else {
             if (productVariant.availableQuantity > 0) {
@@ -139,10 +133,11 @@ function Catalog(props) {
             orderItem.quantity = pendingQuantity;
             orderItem.stockQuantity = 0;
             orderItem.outletQuantity = 0;
-            orderItem.unitPrice = productVariant.price ? parseFloat(productVariant.price).toFixed(2) : null;
-            orderItem.price = productVariant.price ? parseFloat(productVariant.price * pendingQuantity).toFixed(2) : null;
-            orderItem.currency = productVariant.currency;
         }
+
+        orderItem.unitPrice = productVariant.price ? parseFloat(productVariant.price).toFixed(2) : null;
+        orderItem.price = productVariant.price ? parseFloat(productVariant.price * pendingQuantity).toFixed(2) : null;
+        orderItem.currency = productVariant.currency;
 
         setOrderItems(prevItems => {
             const updatedItems = [...prevItems, orderItem];
@@ -207,6 +202,8 @@ function Catalog(props) {
             await addToCart(outletQuantity, true, item);
             return;
         }
+
+        await addToCart(quantity, false, item);
     };
 
     const calculateMaxQuantity = (quantityType, availableQuantity) => {
