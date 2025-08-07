@@ -71,14 +71,14 @@ const Modal = (props) => {
                         }}
                     />
                 </div>
-                {product && product.availableOutletQuantity > 0 &&
+                {product && product.inOutlet &&
                     <div className="field">
                         <FormControlLabel
                             control={
                                 <Checkbox
                                     checked={isOutletOrder}
                                     onChange={(e) => {
-                                        if (product.inOutlet && product.canOrder) {
+                                        if (product.inOutlet && !product.inStock) {
                                             setIsOutletOrder(true)
                                         } else {
                                             setIsOutletOrder(e.target.checked);
@@ -86,7 +86,7 @@ const Modal = (props) => {
                                     }} />
                             }
                             label={"Product from outlet"}
-                            disabled={(product.inStock && !product.inOutlet) || (product.inOutlet && product.canOrder)}
+                            disabled={product.inOutlet && product.canOrder && !product.inStock}
                         />
                     </div> 
                 }
