@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import NavigationHelper from "../../../shared/helpers/globals/NavigationHelper";
 
 const Modal = (props) => {
-    const {isOpen, handleOrder, handleClose, labels, product} = props;
+    const {isOpen, handleOrder, handleClose, labels, product, maxOutletValue, outletQuantityInBasket} = props;
     const [quantity, setQuantity] = useState(1);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
@@ -28,6 +28,8 @@ const Modal = (props) => {
         setExternalReference("");
         setMoreInfo("")
     }, [isOpen])
+
+    const maxOutlet = maxOutletValue ? maxOutletValue : 0;
     
     return (
         <Dialog
@@ -53,7 +55,7 @@ const Modal = (props) => {
                         name="quantity" 
                         type="number"
                         variant="standard"
-                        label={labels.quantityLabel}
+                        label={isOutletOrder ? `${labels.quantityLabel} (${labels.maximalLabel} ${maxOutlet}) ${outletQuantityInBasket > 0 ? `(${labels.inBasket} ${outletQuantityInBasket})` : ""}` : labels.quantityLabel}
                         inputProps={{ 
                             min: 1, 
                             step: 1,
@@ -63,7 +65,7 @@ const Modal = (props) => {
                         onChange={(e) => {
                             const value = e.target.value;
                             if (value >= 1){
-                                setQuantity(value)
+                                setQuantity(isOutletOrder && value > maxOutlet ? maxOutlet : value);
                             }
                             else setQuantity(1)
                         }}
@@ -131,6 +133,9 @@ Modal.propTypes = {
     cancelLabel: PropTypes.string,
     moreInfoLabel: PropTypes.string,
     externalReferenceLabel: PropTypes.string,
+    quantityLabel: PropTypes.string,
+    outletQuantityInBasket: PropTypes.number,
+    maxOutletValue: PropTypes.number,
     handleOrder: PropTypes.func,
     closeLabel: PropTypes.string,
     okLabel: PropTypes.string,

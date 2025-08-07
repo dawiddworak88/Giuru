@@ -202,18 +202,31 @@ function Catalog(props) {
         };
 
         if (item.isOutletOrder && productVariant.availableOutletQuantity > 0) {
-            const quantityWithRegularPrice = parseInt(quantity - productVariant.availableOutletQuantity);
-
-            if (quantityWithRegularPrice > 0) {
-                await addToCart(quantityWithRegularPrice, false, item);
-            }
-
             const outletQuantity = Math.min(productVariant.availableOutletQuantity, quantity);
 
             await addToCart(outletQuantity, true, item);
             return;
         }
     };
+
+    const calculateMaxQuantity = (quantityType, availableQuantity) => {
+        if (basketId) {
+            const actualQuantity = getCurrentQuantity(quantityType);
+            return Math.max(availableQuantity - actualQuantity, 0);    
+        }
+
+        return availableQuantity;
+    };
+
+    const getCurrentQuantity = (quantityType) => {
+        const orderItem = orderItems.filter(x => x.sku === productVariant.sku);
+
+        if (orderItem.length > 0) {
+            return orderItem.reduce((sum, item) => sum + item[quantityType], 0);
+        }
+
+        return 0;
+    }
 
     return (
         <section className="catalog section">
@@ -333,6 +346,8 @@ function Catalog(props) {
                 <Modal
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
+                    maxOutletValue={productVariant ? calculateMaxQuantity('outletQuantity', productVariant.availableOutletQuantity) : null}
+                    outletQuantityInBasket={productVariant ? getCurrentQuantity('outletQuantity') : 0}
                     handleClose={handleCloseModal}
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant}
