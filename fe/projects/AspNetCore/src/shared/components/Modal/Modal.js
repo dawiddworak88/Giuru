@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import { 
+    TextField, Button, Dialog, DialogTitle, DialogContent, 
+    DialogActions, FormControlLabel, Checkbox 
+} from "@mui/material";
 import PropTypes from "prop-types";
 import NavigationHelper from "../../../shared/helpers/globals/NavigationHelper";
 
