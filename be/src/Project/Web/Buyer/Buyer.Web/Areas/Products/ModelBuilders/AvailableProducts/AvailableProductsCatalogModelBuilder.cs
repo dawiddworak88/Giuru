@@ -153,11 +153,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                         if (availableOutletQuantity > 0)
                         {
                             product.AvailableOutletQuantity = availableOutletQuantity;
-                            product.IsOutlet = true;
+                            product.InStock = true;
                         }
                         else
                         {
-                            product.IsOutlet = false;
+                            product.InOutlet = false;
                         }
 
                         if (prices.Any())
