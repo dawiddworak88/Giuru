@@ -141,7 +141,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                         {
                             product.AvailableOutletQuantity = availableOutletQuantity;
                             product.CanOrder = true;
-                            product.InOutlet = true
+                            product.InOutlet = true;
                         }
                         else
                         {
