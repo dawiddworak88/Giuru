@@ -8,7 +8,7 @@ const Modal = (props) => {
     const [quantity, setQuantity] = useState(1);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
-    const [isOutletOrder, setIsOutletOrder] = useState(!product.inStock && product.inOutlet);
+    const [isOutletOrder, setIsOutletOrder] = useState(product ? product.inOutlet && product.canOrder : false);
 
     const handleAddItemToBasket = () => {
         const payload = {
