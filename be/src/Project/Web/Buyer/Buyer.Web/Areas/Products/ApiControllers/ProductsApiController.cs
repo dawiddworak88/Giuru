@@ -248,6 +248,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                     if (availableProduct is not null)
                     {
+                        carouselItem.InStock = true;
                         carouselItem.AvailableQuantity = availableProduct.AvailableQuantity;
                         carouselItem.ExpectedDelivery = availableProduct.ExpectedDelivery;
                     }
@@ -256,6 +257,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                     if (availableOutletProduct is not null)
                     {
+                        carouselItem.InOutlet = true;
                         carouselItem.AvailableOutletQuantity = availableOutletProduct.AvailableQuantity;
                         carouselItem.OutletTitle = availableOutletProduct.Title;
                     }

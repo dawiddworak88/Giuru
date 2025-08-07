@@ -8,10 +8,10 @@ import NavigationHelper from "../../../shared/helpers/globals/NavigationHelper";
 
 const Modal = (props) => {
     const {isOpen, handleOrder, handleClose, labels, product, maxOutletValue, outletQuantityInBasket} = props;
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(maxOutletValue == 0 ? 0 : 1);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
-    const [isOutletOrder, setIsOutletOrder] = useState(product ? product.inOutlet && product.canOrder : false);
+    const [isOutletOrder, setIsOutletOrder] = useState(false);
 
     const handleAddItemToBasket = () => {
         const payload = {
@@ -27,6 +27,7 @@ const Modal = (props) => {
     useEffect(() => {
         setExternalReference("");
         setMoreInfo("")
+        setIsOutletOrder(product ? product.inOutlet && !product.inStock : false);
     }, [isOpen])
 
     const maxOutlet = maxOutletValue ? maxOutletValue : 0;
@@ -55,16 +56,16 @@ const Modal = (props) => {
                         name="quantity" 
                         type="number"
                         variant="standard"
-                        label={isOutletOrder ? `${labels.quantityLabel} (${labels.maximalLabel} ${maxOutlet}) ${outletQuantityInBasket > 0 ? `(${labels.inBasket} ${outletQuantityInBasket})` : ""}` : labels.quantityLabel}
+                        label={isOutletOrder ? `${labels.quantityLabel} ${maxOutlet > 0 ? `(${labels.maximalLabel} ${maxOutlet})` : ""} ${outletQuantityInBasket > 0 ? `(${labels.inBasket} ${outletQuantityInBasket})` : ""}` : labels.quantityLabel}
                         inputProps={{ 
-                            min: 1, 
+                            min: 0, 
                             step: 1,
                             className: "quantity-input"
                         }}
                         value={quantity}
                         onChange={(e) => {
                             const value = e.target.value;
-                            if (value >= 1){
+                            if (value >= 0){
                                 setQuantity(isOutletOrder && value > maxOutlet ? maxOutlet : value);
                             }
                             else setQuantity(1)
@@ -86,7 +87,7 @@ const Modal = (props) => {
                                     }} />
                             }
                             label={"Product from outlet"}
-                            disabled={product.inOutlet && product.canOrder && !product.inStock}
+                            disabled={product.inOutlet && !product.inStock}
                         />
                     </div> 
                 }
@@ -120,6 +121,7 @@ const Modal = (props) => {
             <DialogActions>
                 <Button type="text" onClick={() => NavigationHelper.redirect(labels.basketUrl)}>{labels.basketLabel}</Button>
                 <Button 
+                    disabled={(isOutletOrder && maxOutlet == 0) || quantity <= 0}
                     type="text" 
                     variant="contained" 
                     color="primary" 

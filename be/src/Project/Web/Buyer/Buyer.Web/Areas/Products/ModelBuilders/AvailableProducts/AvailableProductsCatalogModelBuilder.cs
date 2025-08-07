@@ -143,21 +143,13 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                             product.InStock = true;
                             product.ExpectedDelivery = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
                         }
-                        else
-                        {
-                            product.InStock = false;
-                        }
 
                         var availableOutletQuantity = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
 
                         if (availableOutletQuantity > 0)
                         {
                             product.AvailableOutletQuantity = availableOutletQuantity;
-                            product.InStock = true;
-                        }
-                        else
-                        {
-                            product.InOutlet = false;
+                            product.InOutlet = true;
                         }
 
                         if (prices.Any())

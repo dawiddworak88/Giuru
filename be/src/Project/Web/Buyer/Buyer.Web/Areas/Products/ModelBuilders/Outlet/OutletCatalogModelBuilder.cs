@@ -143,10 +143,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                             product.CanOrder = true;
                             product.InOutlet = true;
                         }
-                        else
-                        {
-                            product.InOutlet = false;
-                        }
 
                         product.OutletTitle = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Title;
                         product.OutletDescription = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Description;
@@ -157,10 +153,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                         {
                             product.AvailableQuantity = availableStockQuantity;
                             product.InStock = true;
-                        }
-                        else
-                        {
-                            product.InStock = false;
                         }
 
                         var price = prices.ElementAtOrDefault(i);

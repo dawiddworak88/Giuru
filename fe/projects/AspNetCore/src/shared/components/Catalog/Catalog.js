@@ -97,6 +97,8 @@ function Catalog(props) {
     const handleModal = (item) => {
         setIsModalOpen(true)
         setProductVariant(item);
+
+        console.log("handleModal", item);
     }
 
     const handleCloseModal = () => {
@@ -108,7 +110,7 @@ function Catalog(props) {
             productId: productVariant.id,
             sku: productVariant.subtitle ? productVariant.subtitle : productVariant.sku,
             name: productVariant.title,
-            imageId: productVariant.images ? productVariant.images[0].id ? productVariant.images[0].id : productVariant.images[0] : null,
+            imageId: productVariant.images && productVariant.images.length > 0 ? productVariant.images[0].id ? productVariant.images[0].id : productVariant.images[0] : null,
             externalReference: item.externalReference,
             moreInfo: item.moreInfo
         };
@@ -138,6 +140,8 @@ function Catalog(props) {
         orderItem.unitPrice = productVariant.price ? parseFloat(productVariant.price).toFixed(2) : null;
         orderItem.price = productVariant.price ? parseFloat(productVariant.price * pendingQuantity).toFixed(2) : null;
         orderItem.currency = productVariant.currency;
+
+        console.log("addToCart", orderItem);
 
         setOrderItems(prevItems => {
             const updatedItems = [...prevItems, orderItem];
@@ -209,6 +213,7 @@ function Catalog(props) {
     const calculateMaxQuantity = (quantityType, availableQuantity) => {
         if (basketId) {
             const actualQuantity = getCurrentQuantity(quantityType);
+
             return Math.max(availableQuantity - actualQuantity, 0);    
         }
 
@@ -216,6 +221,9 @@ function Catalog(props) {
     };
 
     const getCurrentQuantity = (quantityType) => {
+        if (!orderItems || orderItems.length === 0) {
+            return 0;
+        }
         const orderItem = orderItems.filter(x => x.sku === productVariant.sku);
 
         if (orderItem.length > 0) {
