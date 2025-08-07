@@ -66,7 +66,7 @@ const Modal = (props) => {
                         }}
                     />
                 </div>
-                {product.availableOutletQuantity > 0 &&
+                {product && product.availableOutletQuantity > 0 &&
                     <div className="field">
                         <FormControlLabel
                             control={
