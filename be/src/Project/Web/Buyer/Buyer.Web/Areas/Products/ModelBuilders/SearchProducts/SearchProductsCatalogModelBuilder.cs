@@ -150,6 +150,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         product.AvailableOutletQuantity = outletItem.AvailableQuantity;
                         product.OutletTitle = outletItem.Title;
                     }
+                    else
+                    {
+                        product.InOutlet = false;
+                    }
                     
                     var inventoryItem = inventoryItems.FirstOrDefault(x => x.ProductSku == product.Sku);
 
@@ -158,6 +162,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         product.InStock = true;
                         product.AvailableQuantity = inventoryItem.AvailableQuantity;
                         product.ExpectedDelivery = inventoryItem.ExpectedDelivery;
+                    }
+                    else
+                    {
+                        product.InStock = false;
                     }
 
                     if (prices.Any())

@@ -139,20 +139,29 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
 
                         if (availableOutletQuantity > 0)
                         {
-                            product.CanOrder = true;
                             product.AvailableOutletQuantity = availableOutletQuantity;
+                            product.CanOrder = true;
+                            product.InOutlet = true
                         }
+                        else
+                        {
+                            product.InOutlet = false;
+                        }
+
+                        product.OutletTitle = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Title;
+                        product.OutletDescription = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Description;
 
                         var availableStockQuantity = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
 
                         if (availableStockQuantity > 0)
                         {
                             product.AvailableQuantity = availableStockQuantity;
+                            product.InStock = true;
                         }
-
-                        product.InOutlet = true;
-                        product.OutletTitle = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Title;
-                        product.OutletDescription = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Description;
+                        else
+                        {
+                            product.InStock = false;
+                        }
 
                         var price = prices.ElementAtOrDefault(i);
 
