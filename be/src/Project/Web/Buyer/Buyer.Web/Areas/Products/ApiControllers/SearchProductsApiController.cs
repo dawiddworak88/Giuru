@@ -81,9 +81,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             Mirror = x.Mirror,
                             Shape = x.Shape,
                             PrimaryColor = x.PrimaryColor,
-                            SecondaryColor = x.SecondaryColor,
-                            IsOutlet = ((inventoryItems.FirstOrDefault(i => i.ProductId == x.Id)?.AvailableQuantity ?? 0) <= 0 && (outletItems.FirstOrDefault(o => o.ProductId == x.Id)?.AvailableQuantity ?? 0) > 0).ToYesOrNo()
-                }),
+                            SecondaryColor = x.SecondaryColor
+                        }),
                         new PriceClient
                         {
                             Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
