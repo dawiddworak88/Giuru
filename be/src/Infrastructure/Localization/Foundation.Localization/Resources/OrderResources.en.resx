@@ -351,4 +351,7 @@
   <data name="InTotalLabel" xml:space="preserve">
     <value>In total:</value>
   </data>
+  <data name="OutletProductLabel" xml:space="preserve">
+    <value>Product from Outlet</value>
+  </data>
 </root>
