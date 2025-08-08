@@ -17,7 +17,6 @@ import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog
 import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
-import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -25,7 +24,6 @@ function NewOrderForm(props) {
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
-    const [productFromOutlet, setProductFromOutlet] = useState(false);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
     const [orderItems, setOrderItems] = useState(props.basketItems ? props.basketItems : []);
@@ -89,100 +87,6 @@ function NewOrderForm(props) {
         return `(${suggestion.sku}) ${suggestion.name}`;
     };
 
-    const addToCart = async (pendingQuantity, isOutletProduct) => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        let orderItem = {
-            productId: product.id,
-            sku: product.sku,
-            name: product.name,
-            imageId: product.images ? product.images[0] : null,
-            externalReference,
-            moreInfo
-        };
-
-        if (isOutletProduct) {
-            orderItem.quantity = 0;
-            orderItem.stockQuantity = 0;
-            orderItem.outletQuantity = pendingQuantity;
-
-            const { unitPrice, price, currency } = await ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, product.sku, pendingQuantity);
-
-            orderItem.unitPrice = unitPrice;
-            orderItem.price = price;
-            orderItem.currency = currency;
-        }
-        else {
-            if (product.stockQuantity > 0) {
-                if (quantity > product.stockQuantity) {
-                    orderItem.quantity = quantity - product.stockQuantity;
-                    orderItem.stockQuantity = product.stockQuantity; 
-                }
-                else {
-                    orderItem.stockQuantity = quantity;
-                    orderItem.quantity = 0;
-                }
-            }
-   
-            orderItem.quantity = pendingQuantity;
-            orderItem.stockQuantity = 0;
-            orderItem.outletQuantity = 0;
-            orderItem.unitPrice = product.price ? parseFloat(product.price).toFixed(2) : null;
-            orderItem.price = product.price ? parseFloat(product.price * pendingQuantity).toFixed(2) : null;
-            orderItem.currency = product.currency;
-        }
-
-        setOrderItems(prevItems => {
-            const updatedItems = [...prevItems, orderItem];
-
-            const basket = {
-                id: basketId,
-                items: updatedItems
-            };
-
-            const requestOptions = {
-                method: "POST",
-                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-                body: JSON.stringify(basket)
-            };
-
-            fetch(props.updateBasketUrl, requestOptions)
-                .then(function (response) {
-                    dispatch({ type: "SET_IS_LOADING", payload: false });
-                    dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
-
-                    AuthenticationHelper.HandleResponse(response);
-
-                    return response.json().then(jsonResponse => {
-                        if (response.ok) {
-                            setBasketId(jsonResponse.id);
-
-                            if (jsonResponse.items && jsonResponse.items.length > 0) {
-                                setProduct(null);
-                                setSearchTerm("");
-                                setExternalReference("");
-                                setMoreInfo("");
-                                setOrderItems(jsonResponse.items);
-                                setQuantity(1);
-                                setProductFromOutlet(false);
-                            }
-                            else {
-                                setOrderItems([]);
-                            }
-                        }
-                        else {
-                            toast.error(props.generalErrorMessage);
-                        }
-                    });
-                }).catch(() => {
-                    dispatch({ type: "SET_IS_LOADING", payload: false });
-                    toast.error(props.generalErrorMessage);
-                });
-        
-            return updatedItems;
-        })
-    }
-
     const handleAddOrderItemClick = async () => {
         if (props.maxAllowedOrderQuantity && 
            (quantity > props.maxAllowedOrderQuantity)) {
@@ -190,20 +94,77 @@ function NewOrderForm(props) {
                 return;
         };
 
-        if (productFromOutlet && product.outletQuantity > 0) {
-            const quantityWithRegularPrice = parseInt(quantity - product.outletQuantity);
+        let orderItem = {
+            productId: product.id,
+            sku: product.sku,
+            name: product.name,
+            imageId: product.images ? product.images[0] : null,
+            quantity: quantity,
+            stockQuantity: 0,
+            outletQuantity: 0,
+            externalReference,
+            moreInfo,
+            unitPrice:  product.price ? parseFloat(product.price).toFixed(2) : null,
+            price: product.price ? parseFloat(product.price * quantity).toFixed(2) : null,
+            currency: product.currency
+        };
 
-            if (quantityWithRegularPrice > 0) {
-                await addToCart(quantityWithRegularPrice, false);
+        if (product.stockQuantity > 0) {
+            if (quantity > product.stockQuantity) {
+                orderItem.quantity = quantity - product.stockQuantity;
+                orderItem.stockQuantity = product.stockQuantity; 
             }
-
-            const outletQuantity = Math.min(product.outletQuantity, quantity);
-
-            await addToCart(outletQuantity, true);
-            return;
+            else {
+                orderItem.stockQuantity = quantity;
+                orderItem.quantity = 0;
+            }
         }
 
-        await addToCart(quantity, false);
+        const basket = {
+            id: basketId,
+            items: [...orderItems, orderItem]
+        };
+
+        const requestOptions = {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json", 
+                "X-Requested-With": "XMLHttpRequest" 
+            },
+            body: JSON.stringify(basket)
+        };
+
+        await fetch(props.updateBasketUrl, requestOptions)
+            .then(function (response) {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(quantity + state.totalBasketItems) })
+
+                AuthenticationHelper.HandleResponse(response);
+                
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setBasketId(jsonResponse.id);
+
+                        if (jsonResponse.items && jsonResponse.items.length > 0) {
+                            setProduct(null);
+                            setSearchTerm("");
+                            setExternalReference("");
+                            setMoreInfo("");
+                            setOrderItems(jsonResponse.items);
+                            setQuantity(1);
+                        }
+                        else {
+                            setOrderItems([]);
+                        }
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
     };
 
     const searchInputProps = {
@@ -481,21 +442,6 @@ function NewOrderForm(props) {
                                 }}
                             />
                         </div>
-                        {product != null && product.outletQuantity > 0 &&
-                            <div className="column is-2 is-flex is-align-items-flex-end pb-2">
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={productFromOutlet}
-                                                onChange={(e) => {
-                                                    setProductFromOutlet(e.target.checked);
-                                                }} />
-                                        }
-                                        label={"Product from outlet"}
-                                        disabled={product.stockQuantity > 0}
-                                    />
-                            </div>    
-                        }   
                         <div className="column is-2 is-flex is-align-items-flex-end">
                             <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel} variant="standard"
                                 fullWidth={true} value={externalReference} onChange={(e) => {

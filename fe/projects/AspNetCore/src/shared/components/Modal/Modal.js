@@ -8,7 +8,7 @@ import NavigationHelper from "../../../shared/helpers/globals/NavigationHelper";
 
 const Modal = (props) => {
     const {isOpen, handleOrder, handleClose, labels, product, maxOutletValue, outletQuantityInBasket} = props;
-    const [quantity, setQuantity] = useState(maxOutletValue == 0 ? 0 : 1);
+    const [quantity, setQuantity] = useState(1);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
     const [isOutletOrder, setIsOutletOrder] = useState(false);
@@ -28,6 +28,7 @@ const Modal = (props) => {
         setExternalReference("");
         setMoreInfo("")
         setIsOutletOrder(product ? product.inOutlet && !product.inStock : false);
+        setQuantity(isOutletOrder && maxOutletValue == 0 ? 0 : 1);
     }, [isOpen])
 
     const maxOutlet = maxOutletValue ? maxOutletValue : 0;

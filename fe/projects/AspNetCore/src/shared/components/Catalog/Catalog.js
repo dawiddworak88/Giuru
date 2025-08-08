@@ -14,7 +14,7 @@ import AuthenticationHelper from "../../../shared/helpers/globals/Authentication
 import moment from "moment";
 import Modal from "../Modal/Modal";
 import Price from "../Price/Price";
-import ProductPricesHelper from "../../helpers/prices/ProductPricesHelper";
+import QuantityCalculationHelper from "../../helpers/globals/QuantityCalculationHelper";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -29,15 +29,11 @@ function Catalog(props) {
     const [productVariant, setProductVariant] = useState(null);
 
     const toggleSidebar = (item) => {
-        console.log("toggleSidebar", item);
-
         setProductVariant(item);
         setIsSidebarOpen(true)
     }
 
     const toggleModal = (item) => {
-        console.log("toggleModal", item);
-
         setProductVariant(item);
         setIsModalOpen(true)
     }
@@ -97,8 +93,6 @@ function Catalog(props) {
     const handleModal = (item) => {
         setIsModalOpen(true)
         setProductVariant(item);
-
-        console.log("handleModal", item);
     }
 
     const handleCloseModal = () => {
@@ -110,6 +104,9 @@ function Catalog(props) {
             productId: productVariant.id,
             sku: productVariant.subtitle ? productVariant.subtitle : productVariant.sku,
             name: productVariant.title,
+            quantity: pendingQuantity,
+            stockQuantity: 0,
+            outletQuantity: 0,
             imageId: productVariant.images && productVariant.images.length > 0 ? productVariant.images[0].id ? productVariant.images[0].id : productVariant.images[0] : null,
             externalReference: item.externalReference,
             moreInfo: item.moreInfo
@@ -122,26 +119,22 @@ function Catalog(props) {
         }
         else {
             if (productVariant.availableQuantity > 0) {
-                if (item.quantity > productVariant.availableQuantity) {
-                    orderItem.quantity = item.quantity - productVariant.availableQuantity;
-                    orderItem.stockQuantity = productVariant.availableQuantity; 
+                const currentAvailableStockQuantity = QuantityCalculationHelper.calculateMaxQuantity(orderItems, 'stockQuantity', productVariant.availableQuantity, productVariant.subtitle ? productVariant.subtitle : productVariant.sku);
+
+                if (pendingQuantity > currentAvailableStockQuantity) {
+                    orderItem.quantity = pendingQuantity - currentAvailableStockQuantity;
+                    orderItem.stockQuantity = currentAvailableStockQuantity; 
                 }
                 else {
-                    orderItem.stockQuantity = item.quantity;
+                    orderItem.stockQuantity = pendingQuantity;
                     orderItem.quantity = 0;
                 }
             }
-
-            orderItem.quantity = pendingQuantity;
-            orderItem.stockQuantity = 0;
-            orderItem.outletQuantity = 0;
         }
 
         orderItem.unitPrice = productVariant.price ? parseFloat(productVariant.price).toFixed(2) : null;
         orderItem.price = productVariant.price ? parseFloat(productVariant.price * pendingQuantity).toFixed(2) : null;
         orderItem.currency = productVariant.currency;
-
-        console.log("addToCart", orderItem);
 
         setOrderItems(prevItems => {
             const updatedItems = [...prevItems, orderItem];
@@ -209,29 +202,6 @@ function Catalog(props) {
 
         await addToCart(quantity, false, item);
     };
-
-    const calculateMaxQuantity = (quantityType, availableQuantity) => {
-        if (basketId) {
-            const actualQuantity = getCurrentQuantity(quantityType);
-
-            return Math.max(availableQuantity - actualQuantity, 0);    
-        }
-
-        return availableQuantity;
-    };
-
-    const getCurrentQuantity = (quantityType) => {
-        if (!orderItems || orderItems.length === 0) {
-            return 0;
-        }
-        const orderItem = orderItems.filter(x => x.sku === productVariant.sku);
-
-        if (orderItem.length > 0) {
-            return orderItem.reduce((sum, item) => sum + item[quantityType], 0);
-        }
-
-        return 0;
-    }
 
     return (
         <section className="catalog section">
@@ -351,8 +321,8 @@ function Catalog(props) {
                 <Modal
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
-                    maxOutletValue={productVariant ? calculateMaxQuantity('outletQuantity', productVariant.availableOutletQuantity) : null}
-                    outletQuantityInBasket={productVariant ? getCurrentQuantity('outletQuantity') : 0}
+                    maxOutletValue={productVariant ? QuantityCalculationHelper.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle ? productVariant.subtitle : productVariant.sku) : null}
+                    outletQuantityInBasket={productVariant ? QuantityCalculationHelper.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle ? productVariant.subtitle : productVariant.sku) : 0}
                     handleClose={handleCloseModal}
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant}
