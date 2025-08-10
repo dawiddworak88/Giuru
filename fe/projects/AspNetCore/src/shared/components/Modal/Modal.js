@@ -84,6 +84,10 @@ const Modal = (props) => {
                                             setIsOutletOrder(true)
                                         } else {
                                             setIsOutletOrder(e.target.checked);
+
+                                            if (e.target.checked && (quantity > maxOutlet)) {
+                                                setQuantity(maxOutlet);
+                                            }
                                         }
                                     }} />
                             }

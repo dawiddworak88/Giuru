@@ -101,7 +101,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 CurrencyLabel = _globalLocalizer.GetString("Currency"),
                 MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
                 MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity"),
-                GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                OutletProductLabel = _orderLocalizer.GetString("OutletProductLabel")
             };
 
             if (componentModel.BasketId.HasValue)

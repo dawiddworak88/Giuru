@@ -123,7 +123,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 SeeMoreText = _globalLocalizer.GetString("SeeMoreText"),
                 SeeLessText = _globalLocalizer.GetString("SeeLessText"),
                 MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
-                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity")
+                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity"),
+                GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);

@@ -17,6 +17,8 @@ import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog
 import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
+import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
+import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -24,6 +26,7 @@ function NewOrderForm(props) {
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
+    const [productFromOutlet, setProductFromOutlet] = useState(false);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
     const [orderItems, setOrderItems] = useState(props.basketItems ? props.basketItems : []);
@@ -104,12 +107,24 @@ function NewOrderForm(props) {
             outletQuantity: 0,
             externalReference,
             moreInfo,
-            unitPrice:  product.price ? parseFloat(product.price).toFixed(2) : null,
+            unitPrice: product.price ? product.price : null,
             price: product.price ? parseFloat(product.price * quantity).toFixed(2) : null,
             currency: product.currency
         };
 
-        if (product.stockQuantity > 0) {
+        if (productFromOutlet) {
+            orderItem.outletQuantity = quantity;
+            orderItem.stockQuantity = 0;
+            orderItem.quantity = 0;
+
+            const outletPrice = await ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, product.sku);
+
+            if (outletPrice) {
+                orderItem.unitPrice = outletPrice.price
+                orderItem.price = parseFloat(outletPrice.price * quantity).toFixed(2);
+                orderItem.currency = outletPrice.currency;
+            }
+        } else if (product.stockQuantity > 0) {
             if (quantity > product.stockQuantity) {
                 orderItem.quantity = quantity - product.stockQuantity;
                 orderItem.stockQuantity = product.stockQuantity; 
@@ -150,7 +165,8 @@ function NewOrderForm(props) {
                             setSearchTerm("");
                             setExternalReference("");
                             setMoreInfo("");
-                            setOrderItems(jsonResponse.items);
+                            setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
+                            setProductFromOutlet(false);
                             setQuantity(1);
                         }
                         else {
@@ -212,7 +228,7 @@ function NewOrderForm(props) {
                         setOpenDeleteDialog(false);
 
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            setOrderItems(jsonResponse.items);
+                            setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
                         }
                         else {
                             setOrderItems([]);
@@ -295,7 +311,7 @@ function NewOrderForm(props) {
                     return response.json().then((jsonResponse) => {
                         if (response.ok) {
                             setBasketId(jsonResponse.id)
-                            setOrderItems([...orderItems, ...jsonResponse.items]);
+                            setOrderItems(OrderItemsGrouper.groupOrderItems([...orderItems, ...jsonResponse.items]));
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -353,11 +369,12 @@ function NewOrderForm(props) {
             });
     }
 
-    const disabledActionButtons = orderItems.length === 0 ? !customOrder ? true : false : false;
-
     const getTotalQuantities = (item) => {
         return item.quantity + item.stockQuantity + item.outletQuantity;
     }
+
+    const disabledActionButtons = orderItems.length === 0 ? !customOrder ? true : false : false;
+    const maxOutlet = product ? product.outletQuantity : 0;
 
     return (
         <section className="section order">
@@ -435,13 +452,46 @@ function NewOrderForm(props) {
                             />
                         </div>
                         <div className="column is-1 is-flex is-align-items-flex-end">
-                            <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "1", step: "1" }} variant="standard"
-                                label={props.quantityLabel} fullWidth={true} disabled={product == null} value={quantity} onChange={(e) => {
-                                    e.preventDefault();
-                                    setQuantity(e.target.value);
+                            <TextField 
+                                id="quantity" 
+                                name="quantity" 
+                                type="number" 
+                                inputProps={{ 
+                                    min: "1", 
+                                    step: "1" 
+                                }} 
+                                variant="standard"
+                                label={productFromOutlet ? `${props.quantityLabel} ${maxOutlet > 0 ? `(${props.maximalLabel} ${maxOutlet})` : ""}` : props.quantityLabel} 
+                                fullWidth={true} 
+                                disabled={product == null} 
+                                value={quantity} 
+                                onChange={(e) => {
+                                    const value = e.target.value;
+
+                                    if (value >= 1){
+                                        setQuantity(productFromOutlet && value > maxOutlet ? maxOutlet : value);
+                                    }
+                                    else setQuantity(1)
                                 }}
                             />
                         </div>
+                        <div className="column is-2 is-flex is-align-items-flex-end pb-2">
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={productFromOutlet}
+                                        onChange={(e) => {
+                                            setProductFromOutlet(e.target.checked);
+
+                                            if (e.target.checked && (quantity > maxOutlet)) {
+                                                setQuantity(maxOutlet);
+                                            }
+                                        }} />
+                                }
+                                label={props.outletProductLabel}
+                                disabled={!product || product.outletQuantity == 0}
+                            />
+                        </div>    
                         <div className="column is-2 is-flex is-align-items-flex-end">
                             <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel} variant="standard"
                                 fullWidth={true} value={externalReference} onChange={(e) => {
@@ -658,7 +708,8 @@ NewOrderForm.propTypes = {
     customOrderLabel: PropTypes.string.isRequired,
     maxAllowedOrderQuantity: PropTypes.number,
     maxAllowedOrderQuantityErrorMessage: PropTypes.string,
-    getProductPriceUrl: PropTypes.string.isRequired
+    getProductPriceUrl: PropTypes.string.isRequired,
+    outletProductLabel: PropTypes.string.isRequired,
 };
 
 export default NewOrderForm;

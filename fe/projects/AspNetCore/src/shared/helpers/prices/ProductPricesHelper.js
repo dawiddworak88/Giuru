@@ -2,7 +2,11 @@ import AuthenticationHelper from "../globals/AuthenticationHelper";
 import QueryStringSerializer from "../serializers/QueryStringSerializer";
 
 export default class ProductPricesHelper {
-    static getPriceByProductSku = async (controllerUrl, sku, quantity) => {
+    static getPriceByProductSku = async (controllerUrl, sku) => {
+        if (!controllerUrl || !sku) {
+            return null;
+        }
+
         const queryParameters = { sku };
 
         const url = controllerUrl + "?" + QueryStringSerializer.serialize(queryParameters);
@@ -17,14 +21,21 @@ export default class ProductPricesHelper {
 
         AuthenticationHelper.HandleResponse(response);
 
-        const jsonResponse = await response.json();
+        let jsonResponse = null;
 
-        if (response.ok) {
-            const unitPrice = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice).toFixed(2) : null;
-            const price = jsonResponse.currentPrice ? parseFloat(jsonResponse.currentPrice * quantity).toFixed(2) : null;
-            const currency = jsonResponse.currency ? jsonResponse.currency : null;
-
-            return { unitPrice, price, currency};
+        try {
+            jsonResponse = await response.json();
+        } catch (e) {
+            return null;
         }
+
+        if (response.ok && jsonResponse) {
+            const price = jsonResponse.currentPrice;
+            const currency = jsonResponse.currency;
+
+            return { price, currency };
+        }
+
+        return null;
     }
 }

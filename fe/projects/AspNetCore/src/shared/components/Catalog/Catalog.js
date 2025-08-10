@@ -15,6 +15,8 @@ import moment from "moment";
 import Modal from "../Modal/Modal";
 import Price from "../Price/Price";
 import QuantityCalculationHelper from "../../helpers/globals/QuantityCalculationHelper";
+import ProductPricesHelper from "../../helpers/prices/ProductPricesHelper";
+import OrderItemsGrouper from "../../helpers/orders/OrderItemsGroupHelper";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -99,88 +101,6 @@ function Catalog(props) {
         setIsModalOpen(false);
     }
 
-    const addToCart = async (pendingQuantity, isOutletProduct, item) => {
-        let orderItem = {
-            productId: productVariant.id,
-            sku: productVariant.subtitle ? productVariant.subtitle : productVariant.sku,
-            name: productVariant.title,
-            quantity: pendingQuantity,
-            stockQuantity: 0,
-            outletQuantity: 0,
-            imageId: productVariant.images && productVariant.images.length > 0 ? productVariant.images[0].id ? productVariant.images[0].id : productVariant.images[0] : null,
-            externalReference: item.externalReference,
-            moreInfo: item.moreInfo
-        };
-
-        if (isOutletProduct){
-            orderItem.quantity = 0;
-            orderItem.stockQuantity = 0;
-            orderItem.outletQuantity = pendingQuantity;
-        }
-        else {
-            if (productVariant.availableQuantity > 0) {
-                const currentAvailableStockQuantity = QuantityCalculationHelper.calculateMaxQuantity(orderItems, 'stockQuantity', productVariant.availableQuantity, productVariant.subtitle ? productVariant.subtitle : productVariant.sku);
-
-                if (pendingQuantity > currentAvailableStockQuantity) {
-                    orderItem.quantity = pendingQuantity - currentAvailableStockQuantity;
-                    orderItem.stockQuantity = currentAvailableStockQuantity; 
-                }
-                else {
-                    orderItem.stockQuantity = pendingQuantity;
-                    orderItem.quantity = 0;
-                }
-            }
-        }
-
-        orderItem.unitPrice = productVariant.price ? parseFloat(productVariant.price).toFixed(2) : null;
-        orderItem.price = productVariant.price ? parseFloat(productVariant.price * pendingQuantity).toFixed(2) : null;
-        orderItem.currency = productVariant.currency;
-
-        setOrderItems(prevItems => {
-            const updatedItems = [...prevItems, orderItem];
-
-            const basket = {
-                id: basketId,
-                items: updatedItems
-            };
-
-            const requestOptions = {
-                method: "POST",
-                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-                body: JSON.stringify(basket)
-            };
-
-            fetch(props.updateBasketUrl, requestOptions)
-                .then((response) => {
-                    dispatch({ type: "SET_IS_LOADING", payload: false });
-                    dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(item.quantity + state.totalBasketItems) })
-
-                    AuthenticationHelper.HandleResponse(response);
-
-                    return response.json().then(jsonResponse => {
-                        if (response.ok) {
-                            setBasketId(jsonResponse.id);
-
-                            if (jsonResponse.items && jsonResponse.items.length > 0) {
-                                toast.success(props.successfullyAddedProduct)
-                                setOrderItems(jsonResponse.items);
-                                setIsModalOpen(false);
-                            }
-                            else {
-                                setOrderItems([]);
-                            }
-                        }
-                        else {
-                            toast.error(props.generalErrorMessage);
-                        }
-                    });
-                }).catch(() => {
-                    dispatch({ type: "SET_IS_LOADING", payload: false });
-                    toast.error(props.generalErrorMessage);
-                });
-        })
-    }
-
     const handleAddOrderItemClick = async (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
@@ -193,14 +113,89 @@ function Catalog(props) {
                 return;
         };
 
-        if (item.isOutletOrder && productVariant.availableOutletQuantity > 0) {
-            const outletQuantity = Math.min(productVariant.availableOutletQuantity, quantity);
+        let orderItem = {
+            productId: productVariant.id,
+            sku: productVariant.subtitle ? productVariant.subtitle : productVariant.sku,
+            name: productVariant.title,
+            quantity: quantity,
+            stockQuantity: 0,
+            outletQuantity: 0,
+            imageId: productVariant.images && productVariant.images.length > 0 ? productVariant.images[0].id ? productVariant.images[0].id : productVariant.images[0] : null,
+            externalReference: item.externalReference,
+            moreInfo: item.moreInfo,
+            unitPrice: product.price ? product.price : null,
+            price: product.price ? parseFloat(product.price * quantity).toFixed(2) : null,
+            currency: product.currency
+        };
 
-            await addToCart(outletQuantity, true, item);
-            return;
+        if (item.isOutletOrder){
+            orderItem.quantity = 0;
+            orderItem.stockQuantity = 0;
+            orderItem.outletQuantity = quantity;
+
+            const outletPrice = await ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, productVariant.subtitle ? productVariant.subtitle : productVariant.sku);
+
+            if (outletPrice) {
+                orderItem.unitPrice = outletPrice.price;
+                orderItem.price = parseFloat(outletPrice.price * quantity).toFixed(2);
+                orderItem.currency = outletPrice.currency;
+            }
         }
+        else if (productVariant.availableQuantity > 0) {
+            const currentAvailableStockQuantity = QuantityCalculationHelper.calculateMaxQuantity(orderItems, 'stockQuantity', productVariant.availableQuantity, productVariant.subtitle ? productVariant.subtitle : productVariant.sku);
 
-        await addToCart(quantity, false, item);
+            if (quantity > currentAvailableStockQuantity) {
+                orderItem.quantity = quantity - currentAvailableStockQuantity;
+                orderItem.stockQuantity = currentAvailableStockQuantity; 
+            }
+            else {
+                orderItem.stockQuantity = quantity;
+                orderItem.quantity = 0;
+            }
+        }
+        
+        const basket = {
+            id: basketId,
+            items: [...orderItems, orderItem]
+        };
+
+        const requestOptions = {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json", 
+                "X-Requested-With": "XMLHttpRequest" 
+            },
+            body: JSON.stringify(basket)
+        };
+
+        await fetch(props.updateBasketUrl, requestOptions)
+            .then((response) => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(quantity + state.totalBasketItems) })
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setBasketId(jsonResponse.id);
+
+                    if (jsonResponse.items && jsonResponse.items.length > 0) {
+                        toast.success(props.successfullyAddedProduct)
+                        setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
+                        setIsModalOpen(false);
+                    }
+                    else {
+                        setOrderItems([]);
+                    }
+                }
+                else {
+                    toast.error(props.generalErrorMessage);
+                }
+            });
+        }).catch(() => {
+            dispatch({ type: "SET_IS_LOADING", payload: false });
+            toast.error(props.generalErrorMessage);
+        });
     };
 
     return (
@@ -355,7 +350,8 @@ Catalog.propTypes = {
     items: PropTypes.array,
     sidebar: PropTypes.object,
     maxAllowedOrderQuantity: PropTypes.number,
-    maxAllowedOrderQuantityErrorMessage: PropTypes.string
+    maxAllowedOrderQuantityErrorMessage: PropTypes.string,
+    getProductPriceUrl: PropTypes.string
 };
 
 export default Catalog;

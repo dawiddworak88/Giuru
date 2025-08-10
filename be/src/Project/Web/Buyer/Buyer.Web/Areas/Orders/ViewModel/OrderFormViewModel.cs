@@ -65,5 +65,6 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public Guid? DefaultBillingAddressId { get; set; }
         public IEnumerable<ListItemViewModel> ClientAddresses { get; set; }
         public string GetProductPriceUrl { get; set; }
+        public string OutletProductLabel { get; set; }
     }
 }
