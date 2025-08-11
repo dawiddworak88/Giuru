@@ -14,9 +14,9 @@ import AuthenticationHelper from "../../../shared/helpers/globals/Authentication
 import moment from "moment";
 import Modal from "../Modal/Modal";
 import Price from "../Price/Price";
-import QuantityCalculationHelper from "../../../../../../shared/helpers/globals/QuantityCalculationHelper";
+import QuantityCalculationHelper from "../..//helpers/globals/QuantityCalculationHelper";
 import ProductPricesHelper from "../../helpers/prices/ProductPricesHelper";
-import OrderItemsGrouper from "../../../../../../shared/helpers/orders/OrderItemsGroupHelper";
+import OrderItemsGrouper from "../../helpers/orders/OrderItemsGroupHelper";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);

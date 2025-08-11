@@ -18,7 +18,7 @@ import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog
 import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
-import OrderItemsGrouper from "../../../../../../../shared/helpers/orders/OrderItemsGroupHelper"
+import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper"
 
 function OrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -526,7 +526,7 @@ function OrderForm(props) {
                                     name="quantity" 
                                     type="number" 
                                     inputProps={{ 
-                                        min: "0", 
+                                        min: "1", 
                                         step: "1" 
                                     }} 
                                     variant="standard"
@@ -535,8 +535,14 @@ function OrderForm(props) {
                                     disabled={product == null} 
                                     value={quantity} 
                                     onChange={(e) => {
-                                        setQuantity(e.target.value);
-                                    }} />
+                                        const value = e.target.value;
+
+                                        if (value >= 1){
+                                            setQuantity(productFromOutlet && value > maxOutlet ? maxOutlet : value);
+                                        }
+                                        else setQuantity(1)
+                                    }}
+                                />
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end pb-2">
                                 <FormControlLabel

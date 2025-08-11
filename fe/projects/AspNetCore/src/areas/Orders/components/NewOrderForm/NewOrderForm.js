@@ -18,7 +18,7 @@ import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
 import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
-import OrderItemsGrouper from "../../../../../../../shared/helpers/orders/OrderItemsGroupHelper";
+import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
