@@ -3,7 +3,7 @@ import QueryStringSerializer from "../serializers/QueryStringSerializer";
 
 export default class ProductPricesHelper {
     static getPriceByProductSku = async (controllerUrl, clientId, sku) => {
-        if (!controllerUrl || !sku) {
+        if (!controllerUrl || !clientId || !sku) {
             return null;
         }
 
