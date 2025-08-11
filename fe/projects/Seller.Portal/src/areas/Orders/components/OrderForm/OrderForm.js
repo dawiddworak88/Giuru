@@ -28,7 +28,7 @@ function OrderForm(props) {
     const [clientAddresses, setClientAddresses] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
-    const [quantity, setQuantity] = useState(0);
+    const [quantity, setQuantity] = useState(1);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
     const [orderItems, setOrderItems] = useState([]);
@@ -106,7 +106,7 @@ function OrderForm(props) {
             stockQuantity: 0,
             outletQuantity: 0,
             unitPrice: product.price ? parseFloat(product.price).toFixed(2) : null,
-            price: product.price ? parseFloat(product.price * totalQuantity).toFixed(2) : null,
+            price: product.price ? parseFloat(product.price * quantity).toFixed(2) : null,
             currency: product.currency,
             externalReference,
             moreInfo
