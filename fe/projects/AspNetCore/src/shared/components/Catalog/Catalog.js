@@ -123,9 +123,9 @@ function Catalog(props) {
             imageId: productVariant.images && productVariant.images.length > 0 ? productVariant.images[0].id ? productVariant.images[0].id : productVariant.images[0] : null,
             externalReference: item.externalReference,
             moreInfo: item.moreInfo,
-            unitPrice: product.price ? product.price : null,
-            price: product.price ? parseFloat(product.price * quantity).toFixed(2) : null,
-            currency: product.currency
+            unitPrice: productVariant.price ? productVariant.price.current : null,
+            price: productVariant.price ? parseFloat(productVariant.price.current * quantity).toFixed(2) : null,
+            currency: productVariant.price ? productVariant.price.currency : null
         };
 
         if (item.isOutletOrder){
