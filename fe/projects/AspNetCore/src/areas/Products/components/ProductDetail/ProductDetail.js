@@ -118,12 +118,14 @@ function ProductDetail(props) {
             currency: priceInfo.currency
         }
 
+        const productSku = productVariant ? productVariant.subtitle : props.sku;
+
         if (item.isOutletOrder) {
             orderItem.quantity = 0;
             orderItem.stockQuantity = 0;
             orderItem.outletQuantity = quantity;
 
-            const outletPrice = await ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, productVariant ? productVariant.subtitle : props.sku);
+            const outletPrice = await ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, productSku);
 
             if (outletPrice) {
                 orderItem.unitPrice = outletPrice.price
@@ -135,7 +137,7 @@ function ProductDetail(props) {
             const availableQuantity = productVariant ? productVariant.availableQuantity : props.availableQuantity;
 
             if (availableQuantity > 0) {
-                const currentAvailableStockQuantity = QuantityCalculationHelper.calculateMaxQuantity(orderItems, 'stockQuantity', availableQuantity, productVariant ? productVariant.subtitle : props.sku);
+                const currentAvailableStockQuantity = QuantityCalculationHelper.calculateMaxQuantity(orderItems, 'stockQuantity', availableQuantity, productSku);
 
                 if (quantity > currentAvailableStockQuantity) {
                     orderItem.quantity = pendingQuantity - currentAvailableStockQuantity;
