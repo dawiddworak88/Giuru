@@ -17,8 +17,8 @@ import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ProductDetailModal from "../ProductDetailModal/ProductDetailModal";
 import Price from "../../../../shared/components/Price/Price";
-import QuantityCalculationHelper from "../../../../shared/helpers/globals/QuantityCalculationHelper";
-import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper";
+import QuantityCalculationHelper from "../../../../../../../shared/helpers/globals/QuantityCalculationHelper";
+import OrderItemsGrouper from "../../../../../../../shared/helpers/orders/OrderItemsGroupHelper";
 import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
 
 function ProductDetail(props) {

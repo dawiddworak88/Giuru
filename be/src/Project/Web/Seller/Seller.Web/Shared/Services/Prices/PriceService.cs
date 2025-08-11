@@ -27,8 +27,49 @@ namespace Seller.Web.Shared.Services.Prices
             _logger = logger;
         }
 
+        public async Task<Price> GetPrice(
+            DateTime pricingDate,
+            PriceProduct product,
+            PriceClient client)
+        {
+            if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
+                string.IsNullOrWhiteSpace(product.FabricsGroup))
+            {
+                return null;
+            }
+
+            var priceQuery = new GetPriceByPriceDriversQuery
+            {
+                EnvironmentId = _options.Value.GrulaEnvironmentId.Value,
+                PriceDrivers = CreatePriceDrivers(product, client),
+                CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
+                PricingDate = pricingDate
+            };
+
+            try
+            {
+                var grulaPrice = await _grulaApiClient.GetPriceByPriceDriversAsync(priceQuery);
+
+                if (grulaPrice?.Amount is not null)
+                {
+                    return new Price
+                    {
+                        CurrentPrice = (decimal)grulaPrice.Amount.Amount,
+                        CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode,
+                    };
+                }
+
+                return default;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error while fetching price for product {product?.PrimarySku} for client {client?.Name} from the Grula API.");
+
+                return default;
+            }
+        }
+
         public async Task<IEnumerable<Price>> GetPrices(
-            string token,
             DateTime pricingDate,
             IEnumerable<PriceProduct> products,
             PriceClient client)

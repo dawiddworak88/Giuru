@@ -17,6 +17,8 @@ import OrderFormConstants from "../../../../shared/constants/OrderFormConstants"
 import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
 import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
+import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
+import OrderItemsGrouper from "../../../../../../../shared/helpers/orders/OrderItemsGroupHelper"
 
 function OrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -94,7 +96,7 @@ function OrderForm(props) {
         return "(" + suggestion.sku + ")" + " " + suggestion.name;
     };
 
-    const handleAddOrderItemClick = () => {
+    const handleAddOrderItemClick = async () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const orderItem = {
@@ -117,13 +119,13 @@ function OrderForm(props) {
             orderItem.stockQuantity = 0;
             orderItem.quantity = 0;
 
-            // const outletPrice = await ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, product.sku);
+            const outletPrice = await  ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, client.id, product.sku);
 
-            // if (outletPrice) {
-            //     orderItem.unitPrice = outletPrice.price
-            //     orderItem.price = parseFloat(outletPrice.price * quantity).toFixed(2);
-            //     orderItem.currency = outletPrice.currency;
-            // }
+            if (outletPrice) {
+                orderItem.unitPrice = outletPrice.price
+                orderItem.price = parseFloat(outletPrice.price * quantity).toFixed(2);
+                orderItem.currency = outletPrice.currency;
+            }
         } else if (product.stockQuantity > 0) {
             if (quantity > product.stockQuantity) {
                 orderItem.quantity = quantity - product.stockQuantity;
@@ -171,7 +173,7 @@ function OrderForm(props) {
                             setSearchTerm("");
                             setExternalReference("");
                             setMoreInfo("");
-                            setOrderItems(jsonResponse.items);
+                            setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
                             setQuantity(1);
                             setProductFromOutlet(false);
                         }
@@ -237,7 +239,7 @@ function OrderForm(props) {
 
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
 
-                            setOrderItems(jsonResponse.items);
+                            setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
                         }
                         else {
 
@@ -395,7 +397,7 @@ function OrderForm(props) {
                             dispatch({ type: "SET_IS_LOADING", payload: false });
 
                             setBasketId(jsonResponse.id);
-                            setOrderItems([...orderItems, ...jsonResponse.items]);
+                            setOrderItems(OrderItemsGrouper.groupOrderItems([...orderItems, ...jsonResponse.items]));
                         }
                         else {
                             toast.error(props.generalErrorMessage);
