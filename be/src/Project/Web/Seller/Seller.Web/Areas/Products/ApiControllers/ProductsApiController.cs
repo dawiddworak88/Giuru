@@ -31,7 +31,6 @@ using Seller.Web.Shared.Services.Products;
 using System.Collections.Generic;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.Services.ProductColors;
-using static Pipelines.Sockets.Unofficial.SocketConnection;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
