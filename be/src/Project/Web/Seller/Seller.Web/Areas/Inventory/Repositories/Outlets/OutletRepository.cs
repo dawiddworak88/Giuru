@@ -186,7 +186,7 @@ namespace Seller.Web.Areas.Inventory.Repositories
                 Data = new RequestModelBase(),
                 Language = language,
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.ProdductOutletBySkuApiEndpoint}/{sku}"
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.ProductOutletBySkuApiEndpoint}/{sku}"
             };
 
             var response = await _apiService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OutletItem>(apiRequest);
