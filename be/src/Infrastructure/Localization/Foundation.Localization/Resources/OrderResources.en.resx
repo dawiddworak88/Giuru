@@ -346,7 +346,7 @@
     <value>The order cannot be placed because the available stock quantity has been exceeded for the product:</value>
   </data>
   <data name="OutletQuantityError" xml:space="preserve">
-    <value>The order cannot be placed because the available outlet quantity has been exceeded for the product::</value>
+    <value>The order cannot be placed because the available outlet quantity has been exceeded for the product:</value>
   </data>
   <data name="InTotalLabel" xml:space="preserve">
     <value>In total:</value>

@@ -34,7 +34,7 @@ namespace Buyer.Web.Areas.Products.Repositories
                 Data = new RequestModelBase(),
                 Language = language,
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.ProdductOutletBySkuApiEndpoint}/{sku}"
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.ProductOutletBySkuApiEndpoint}/{sku}"
             };
 
             var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OutletSum>(apiRequest);
