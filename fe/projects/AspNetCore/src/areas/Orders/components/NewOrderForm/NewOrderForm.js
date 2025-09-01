@@ -19,6 +19,7 @@ import AuthenticationHelper from "../../../../shared/helpers/globals/Authenticat
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
 import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
 import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper";
+import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -39,6 +40,14 @@ function NewOrderForm(props) {
     const [attachments, setAttachments] = useState([]);
     const [deliveryAddressId, setDeliveryAddressId] = useState(props.defaultDeliveryAddressId ? props.defaultDeliveryAddressId : null);
     const [billingAddressId, setBillingAddressId] = useState(props.defaultBillingAddressId ? props.defaultBillingAddressId : null);
+    const { addOrderItemToBasket } = useOrderManagement(
+        props.basketId ? props.basketId : null,
+        props.maxAllowedOrderQuantity,
+        props.maxAllowedOrderQuantityErrorMessage,
+        "minOrderQuantityErrorMessage",
+        props.updateBasketUrl,
+        props.getProductPriceUrl
+    )
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -76,13 +85,6 @@ function NewOrderForm(props) {
     };
 
     const onSuggestionSelected = (event, { suggestion }) => {
-        var items = orderItems.filter(item => item.productId === suggestion.id);
-
-        if (items.length > 0) {
-            suggestion.stockQuantity -= items.reduce((sum, item) => sum + item.stockQuantity, 0);
-            suggestion.outletQuantity -= items.reduce((sum, item) => sum + item.outletQuantity, 0); 
-        }
-
         setProduct(suggestion);
     };
 
@@ -90,98 +92,106 @@ function NewOrderForm(props) {
         return `(${suggestion.sku}) ${suggestion.name}`;
     };
 
-    const handleAddOrderItemClick = async () => {
-        if (props.maxAllowedOrderQuantity && 
-           (quantity > props.maxAllowedOrderQuantity)) {
-                toast.error(props.maxAllowedOrderQuantityErrorMessage);
-                return;
-        };
+    const handleAddOrderItemClick = () => {
+        console.log(product);
 
-        let orderItem = {
-            productId: product.id,
-            sku: product.sku,
-            name: product.name,
-            imageId: product.images ? product.images[0] : null,
-            quantity: quantity,
-            stockQuantity: 0,
-            outletQuantity: 0,
-            externalReference,
-            moreInfo,
-            unitPrice: product.price ? product.price : null,
-            price: product.price ? parseFloat(product.price * quantity).toFixed(2) : null,
-            currency: product.currency
-        };
+        // addOrderItemToBasket({
+            
+        // });
+    }
 
-        if (productFromOutlet) {
-            orderItem.outletQuantity = quantity;
-            orderItem.stockQuantity = 0;
-            orderItem.quantity = 0;
+    // const handleAddOrderItemClick = async () => {
+    //     if (props.maxAllowedOrderQuantity && 
+    //        (quantity > props.maxAllowedOrderQuantity)) {
+    //             toast.error(props.maxAllowedOrderQuantityErrorMessage);
+    //             return;
+    //     };
 
-            const outletPrice = await ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, product.sku);
+    //     let orderItem = {
+    //         productId: product.id,
+    //         sku: product.sku,
+    //         name: product.name,
+    //         imageId: product.images ? product.images[0] : null,
+    //         quantity: quantity,
+    //         stockQuantity: 0,
+    //         outletQuantity: 0,
+    //         externalReference,
+    //         moreInfo,
+    //         unitPrice: product.price ? product.price : null,
+    //         price: product.price ? parseFloat(product.price * quantity).toFixed(2) : null,
+    //         currency: product.currency
+    //     };
 
-            if (outletPrice) {
-                orderItem.unitPrice = outletPrice.price
-                orderItem.price = parseFloat(outletPrice.price * quantity).toFixed(2);
-                orderItem.currency = outletPrice.currency;
-            }
-        } else if (product.stockQuantity > 0) {
-            if (quantity > product.stockQuantity) {
-                orderItem.quantity = quantity - product.stockQuantity;
-                orderItem.stockQuantity = product.stockQuantity; 
-            }
-            else {
-                orderItem.stockQuantity = quantity;
-                orderItem.quantity = 0;
-            }
-        }
+    //     if (productFromOutlet) {
+    //         orderItem.outletQuantity = quantity;
+    //         orderItem.stockQuantity = 0;
+    //         orderItem.quantity = 0;
 
-        const basket = {
-            id: basketId,
-            items: [...orderItems, orderItem]
-        };
+    //         const outletPrice = await ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, product.sku);
 
-        const requestOptions = {
-            method: "POST",
-            headers: { 
-                "Content-Type": "application/json", 
-                "X-Requested-With": "XMLHttpRequest" 
-            },
-            body: JSON.stringify(basket)
-        };
+    //         if (outletPrice) {
+    //             orderItem.unitPrice = outletPrice.price
+    //             orderItem.price = parseFloat(outletPrice.price * quantity).toFixed(2);
+    //             orderItem.currency = outletPrice.currency;
+    //         }
+    //     } else if (product.stockQuantity > 0) {
+    //         if (quantity > product.stockQuantity) {
+    //             orderItem.quantity = quantity - product.stockQuantity;
+    //             orderItem.stockQuantity = product.stockQuantity; 
+    //         }
+    //         else {
+    //             orderItem.stockQuantity = quantity;
+    //             orderItem.quantity = 0;
+    //         }
+    //     }
 
-        await fetch(props.updateBasketUrl, requestOptions)
-            .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(quantity + state.totalBasketItems) })
+    //     const basket = {
+    //         id: basketId,
+    //         items: [...orderItems, orderItem]
+    //     };
 
-                AuthenticationHelper.HandleResponse(response);
+    //     const requestOptions = {
+    //         method: "POST",
+    //         headers: { 
+    //             "Content-Type": "application/json", 
+    //             "X-Requested-With": "XMLHttpRequest" 
+    //         },
+    //         body: JSON.stringify(basket)
+    //     };
+
+    //     await fetch(props.updateBasketUrl, requestOptions)
+    //         .then(function (response) {
+    //             dispatch({ type: "SET_IS_LOADING", payload: false });
+    //             dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(quantity + state.totalBasketItems) })
+
+    //             AuthenticationHelper.HandleResponse(response);
                 
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setBasketId(jsonResponse.id);
+    //             return response.json().then(jsonResponse => {
+    //                 if (response.ok) {
+    //                     setBasketId(jsonResponse.id);
 
-                        if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            setProduct(null);
-                            setSearchTerm("");
-                            setExternalReference("");
-                            setMoreInfo("");
-                            setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
-                            setProductFromOutlet(false);
-                            setQuantity(1);
-                        }
-                        else {
-                            setOrderItems([]);
-                        }
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
-    };
+    //                     if (jsonResponse.items && jsonResponse.items.length > 0) {
+    //                         setProduct(null);
+    //                         setSearchTerm("");
+    //                         setExternalReference("");
+    //                         setMoreInfo("");
+    //                         setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
+    //                         setProductFromOutlet(false);
+    //                         setQuantity(1);
+    //                     }
+    //                     else {
+    //                         setOrderItems([]);
+    //                     }
+    //                 }
+    //                 else {
+    //                     toast.error(props.generalErrorMessage);
+    //                 }
+    //             });
+    //         }).catch(() => {
+    //             dispatch({ type: "SET_IS_LOADING", payload: false });
+    //             toast.error(props.generalErrorMessage);
+    //         });
+    // };
 
     const searchInputProps = {
         placeholder: props.searchPlaceholderLabel,
