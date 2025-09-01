@@ -6,7 +6,6 @@ import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
 
 function HeroSlider(props) {
-    
     if (props.items) {
 
         return (
@@ -15,6 +14,7 @@ function HeroSlider(props) {
                     {props.items.map((item, index) =>
                         <LazyLoad offset={LazyLoadConstants.defaultOffset()} key={index}>
                             <div className="hero-slider__item" >
+                                {item.ctaUrl && <a href={item.ctaUrl} className="hero-slider__item__link" />}
                                 <ResponsiveImage {...item.image} />
                                 {item.teaserTitle &&
                                     <div>
