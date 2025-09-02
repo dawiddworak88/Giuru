@@ -622,15 +622,18 @@ function NewOrderForm(props) {
                                 color="primary"
                                 onClick={handlePlaceOrder}
                                 disabled={state.isLoading || disabledActionButtons}
+                                aria-label={props.saveText || "Place order"}
                             >
                                 {props.saveText}
                             </Button>
                             <Button
-                                className="order__clear-button"
+                                color="error"
                                 variant="text"
                                 onClick={clearBasket}
                                 disabled={state.isLoading || disabledActionButtons}
-                                startIcon={<Delete />}>
+                                startIcon={<Delete />}
+                                aria-label={props.clearBasketText || "Clear basket"}
+                            >
                                 {props.clearBasketText}
                             </Button>
                         </div>
