@@ -816,4 +816,7 @@
   <data name="SomeFilesNotDownloadedError" xml:space="preserve">
     <value>Niektóre pliki nie zostały pobrane.</value>
   </data>
+  <data name="ShowText" xml:space="preserve">
+    <value>Pokaż</value>
+  </data>
 </root>

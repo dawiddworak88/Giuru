@@ -810,4 +810,7 @@
   <data name="SomeFilesNotDownloadedError" xml:space="preserve">
     <value>Some files weren't downloaded.</value>
   </data>
+  <data name="ShowText" xml:space="preserve">
+    <value>Anzeigen</value>
+  </data>
 </root>
