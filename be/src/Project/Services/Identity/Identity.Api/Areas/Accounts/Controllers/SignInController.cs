@@ -11,8 +11,6 @@ using Identity.Api.Areas.Accounts.Services.UserServices;
 using IdentityServer4.Services;
 using Identity.Api.Configurations;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Localization;
-using Feature.Account;
 using Microsoft.Extensions.Logging;
 using System;
 
