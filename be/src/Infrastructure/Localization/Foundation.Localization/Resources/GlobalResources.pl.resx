@@ -816,4 +816,10 @@
   <data name="SomeFilesNotDownloadedError" xml:space="preserve">
     <value>Niektóre pliki nie zostały pobrane.</value>
   </data>
+  <data name="CopiedText" xml:space="preserve">
+    <value>Skopiowano</value>
+  </data>
+  <data name="CopyToClipboardText" xml:space="preserve">
+    <value>Kopiuj do schowka</value>
+  </data>
 </root>
