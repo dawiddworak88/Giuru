@@ -81,6 +81,10 @@
         color: $link;
     }
 
+    &__copy-button:active {
+        background-color: $lightgrey;
+    }
+
     &__description-column {
         flex-basis: 38%;
         padding-left: 0.75rem;

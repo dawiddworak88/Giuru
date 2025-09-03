@@ -2,14 +2,14 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { Button } from "@mui/material";
+import { Button, IconButton, Tooltip } from "@mui/material";
 import Files from "../../../../shared/components/Files/Files";
 import { Context } from "../../../../shared/stores/Store";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import Modal from "../../../../shared/components/Modal/Modal";
-import { ExpandMore, ExpandLess } from "@mui/icons-material"
+import { ExpandMore, ExpandLess, ContentCopy } from "@mui/icons-material"
 import { marked } from "marked";
 import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
@@ -31,6 +31,7 @@ function ProductDetail(props) {
     const [showMoreImages, setShowMoreImages] = useState(false);
     const [mediaItems, setMediaItems] = useState(props.mediaItems ? props.mediaItems.slice(0, 6) : []);
     const [activeMediaItemIndex, setActiveMediaItemIndex] = useState(0);
+    const [copied, setCopied] = useState(false);
 
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -52,11 +53,11 @@ function ProductDetail(props) {
 
         const totalQuantity = quantity + stockQuantity + outletQuantity;
 
-        if (props.maxAllowedOrderQuantity && 
-           (totalQuantity > props.maxAllowedOrderQuantity)) {
-                toast.error(props.maxAllowedOrderQuantityErrorMessage);
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                return;
+        if (props.maxAllowedOrderQuantity &&
+            (totalQuantity > props.maxAllowedOrderQuantity)) {
+            toast.error(props.maxAllowedOrderQuantityErrorMessage);
+            dispatch({ type: "SET_IS_LOADING", payload: false });
+            return;
         };
 
         const orderItem = {
@@ -162,6 +163,31 @@ function ProductDetail(props) {
         setShowMoreImages(!showMoreImages);
     }
 
+    const handleOnCopy = async (text) => {
+        try {
+            await navigator.clipboard.writeText(text)
+            setCopied(true)
+            setTimeout(() => setCopied(false), 2000)
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    const CopyButton = (textToCopy) => {
+        return (
+            <Tooltip title={copied ? props.copiedText : props.copyToClipboardText}>
+                <IconButton
+                    size="small"
+                    disableRipple
+                    onClick={() => handleOnCopy(textToCopy)}
+                    className="product-detail__copy-button"
+                >
+                    <ContentCopy fontSize="1rem" />
+                </IconButton>
+            </Tooltip>
+        )
+    }
+
     return (
         <section className="product-detail section">
             <div className="product-detail__container">
@@ -253,11 +279,11 @@ function ProductDetail(props) {
                         </div>
                     </div>
                     <div className="product-detail__description-column">
-                        <p className="product-detail__sku">{props.skuLabel} {props.sku}</p>
+                        <p className="product-detail__sku">{props.skuLabel} {props.sku} {CopyButton(props.sku)}</p>
                         {props.ean &&
-                            <p className="product-detail__ean">{props.eanLabel} {props.ean}</p>
+                            <p className="product-detail__ean">{props.eanLabel} {props.ean} {CopyButton(props.ean)}</p>
                         }
-                        <h1 className="title is-4 mt-1">{props.title}</h1>
+                        <h1 className="title is-4 mt-1">{props.title} {CopyButton(props.title)}</h1>
                         <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
                         {props.outletTitle &&
                             <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>
@@ -276,7 +302,7 @@ function ProductDetail(props) {
                             </div>
                         }
                         {props.price &&
-                            <Price 
+                            <Price
                                 {...props.price}
                             />
                         }
@@ -299,7 +325,7 @@ function ProductDetail(props) {
                         }
                         {props.description &&
                             <div className="product-detail__product-description">
-                                <h3 className="product-detail__feature-title">{props.descriptionLabel}</h3>
+                                <h3 className="product-detail__feature-title">{props.descriptionLabel} {CopyButton(props.description)}</h3>
                                 <div dangerouslySetInnerHTML={{ __html: marked.parse(props.description) }}></div>
                             </div>
                         }
@@ -320,7 +346,7 @@ function ProductDetail(props) {
                                                                 <dt>{item.key}</dt>
                                                                 <dd>{item.value}</dd>
                                                             </Fragment>
-                                                    ))}
+                                                        ))}
                                                 </dl>
                                             </div>
                                         </div>
