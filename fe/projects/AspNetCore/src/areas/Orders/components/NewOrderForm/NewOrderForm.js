@@ -50,7 +50,7 @@ function NewOrderForm(props) {
         initialOrderItems: props.basketItems ? props.basketItems : [],
         maxAllowedOrderQuantity: props.maxAllowedOrderQuantity,
         maxAllowedOrderQuantityErrorMessage: props.maxAllowedOrderQuantityErrorMessage,
-        minOrderQuantityErrorMessage: props.minOrderQuantityErrorMessage,
+        MinOrderQuantityErrorMessage: props.minOrderQuantityErrorMessage,
         generalErrorMessage: props.generalErrorMessage,
         updateBasketUrl: props.updateBasketUrl,
         getPriceUrl: props.getProductPriceUrl,
