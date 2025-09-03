@@ -17,7 +17,6 @@ import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog
 import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
-import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
 
@@ -45,6 +44,7 @@ function NewOrderForm(props) {
         addOrderItemToBasket,
         deleteOrderItemFromBasket,
         clearBasket,
+        setGroupedOrderItems
     } = useOrderManagement({
         initialBasketId: props.basketId ? props.basketId : null,
         initialOrderItems: props.basketItems ? props.basketItems : [],
@@ -215,8 +215,7 @@ function NewOrderForm(props) {
 
                     return response.json().then((jsonResponse) => {
                         if (response.ok) {
-                            setBasketId(jsonResponse.id)
-                            setOrderItems(OrderItemsGrouper.groupOrderItems([...orderItems, ...jsonResponse.items]));
+                            setGroupedOrderItems([...orderItems, ...jsonResponse.items]);
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -350,7 +349,6 @@ function NewOrderForm(props) {
 
                                     setQuantity(numericValue);
                                 }}
-
                             />
                         </div>
                         <div className="column is-2 is-flex is-align-items-flex-end pb-2">

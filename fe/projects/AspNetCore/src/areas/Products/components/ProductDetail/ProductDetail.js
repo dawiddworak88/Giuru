@@ -14,8 +14,8 @@ import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ProductDetailModal from "../ProductDetailModal/ProductDetailModal";
 import Price from "../../../../shared/components/Price/Price";
-import QuantityCalculationHelper from "../../../../shared/helpers/globals/QuantityCalculationHelper";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
+import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
 
 function ProductDetail(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -340,8 +340,8 @@ function ProductDetail(props) {
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
                     handleClose={handleCloseModal}
-                    maxOutletValue={productVariant ? QuantityCalculationHelper.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle) : QuantityCalculationHelper.calculateMaxQuantity(orderItems, 'outletQuantity', props.availableOutletQuantity, props.sku)}
-                    outletQuantityInBasket={productVariant ? QuantityCalculationHelper.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle) : QuantityCalculationHelper.getCurrentQuantity(orderItems, 'outletQuantity', props.sku)}
+                    maxOutletValue={productVariant ? QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle) : QuantityCalculationHelper.calculateMaxQuantity(orderItems, 'outletQuantity', props.availableOutletQuantity, props.sku)}
+                    outletQuantityInBasket={productVariant ? QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle) : QuantityCalculationHelper.getCurrentQuantity(orderItems, 'outletQuantity', props.sku)}
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant ? productVariant : props}
                     labels={props.modal}

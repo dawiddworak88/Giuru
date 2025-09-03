@@ -257,9 +257,12 @@ export const useOrderManagement = ({
 
                     if (jsonResponse.items && jsonResponse.items.length > 0) {
                         setOrderItems(groupOrderItems(jsonResponse.items));
-
-                        resetData?.();
                     }
+                    else {
+                        setOrderItems([]);
+                    }
+
+                    resetData?.();
                 }
             } catch {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
@@ -268,9 +271,14 @@ export const useOrderManagement = ({
         }, [basketId, orderItems]
     );
 
+    const setGroupedOrderItems = (items) => {
+        setOrderItems(groupOrderItems(items));
+    };
+
     return { 
         basketId, 
         orderItems, 
+        setGroupedOrderItems,
         addOrderItemToBasket,
         deleteOrderItemFromBasket,
         clearBasket

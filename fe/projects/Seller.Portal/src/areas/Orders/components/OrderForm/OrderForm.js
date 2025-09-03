@@ -535,12 +535,20 @@ function OrderForm(props) {
                                     disabled={product == null} 
                                     value={quantity} 
                                     onChange={(e) => {
-                                        const value = e.target.value;
+                                        setQuantity(e.target.value);
+                                    }}
+                                    onBlur={() => {
+                                        let numericValue = Number(quantity);
 
-                                        if (value >= 1){
-                                            setQuantity(productFromOutlet && value > maxOutlet ? maxOutlet : value);
+                                        if (isNaN(numericValue) || numericValue < 1) {
+                                            numericValue = 1;
                                         }
-                                        else setQuantity(1)
+
+                                        if (productFromOutlet && numericValue > maxOutlet) {
+                                            numericValue = maxOutlet;
+                                        }
+
+                                        setQuantity(numericValue);
                                     }}
                                 />
                             </div>

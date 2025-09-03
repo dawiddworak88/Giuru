@@ -82,6 +82,24 @@ class QuantityCalculatorService {
         return Math.max(availableQuantity - actualQuantity, 0);
     }
 
+    static getCurrentQuantity = (
+        orderItems, 
+        quantityType, 
+        sku
+    ) => {
+        if (!orderItems || orderItems.length === 0 || !sku) {
+            return 0;
+        }
+
+        const orderItem = orderItems.filter(x => x.sku === sku);
+
+        if (orderItem.length > 0) {
+            return orderItem.reduce((sum, item) => sum + (item[quantityType] || 0), 0);
+        }
+        
+        return 0;
+    }
+
 }
 
 export default QuantityCalculatorService;

@@ -5,7 +5,11 @@ export default class OrderItemsGrouper {
         items.forEach(item => {
             if (item.outletQuantity > 0) {
 
-                const found = grouped.find(g => g.sku === item.sku && g.outletQuantity > 0);
+                const found = grouped.find(g => 
+                    g.sku === item.sku && 
+                    g.outletQuantity > 0 &&
+                    g.moreInfo === item.moreInfo &&
+                    g.externalReference === item.externalReference);
 
                 if (found) {
                     found.outletQuantity += item.outletQuantity;
@@ -18,7 +22,11 @@ export default class OrderItemsGrouper {
                     });
                 }
             } else {
-                const found = grouped.find(g => g.sku === item.sku && (!g.outletQuantity || g.outletQuantity === 0));
+                const found = grouped.find(g => 
+                    g.sku === item.sku && 
+                    (!g.outletQuantity || g.outletQuantity === 0) &&
+                    g.moreInfo === item.moreInfo &&
+                    g.externalReference === item.externalReference);
 
                 if (found) {
                     found.quantity += item.quantity;

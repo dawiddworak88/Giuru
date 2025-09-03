@@ -14,8 +14,8 @@ import AuthenticationHelper from "../../../shared/helpers/globals/Authentication
 import moment from "moment";
 import Modal from "../Modal/Modal";
 import Price from "../Price/Price";
-import QuantityCalculationHelper from "../..//helpers/globals/QuantityCalculationHelper";
 import { useOrderManagement } from "../../../shared/hooks/useOrderManagement";
+import QuantityCalculatorService from "../../services/QuantityCalculatorService";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -264,8 +264,8 @@ function Catalog(props) {
                 <Modal
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
-                    maxOutletValue={productVariant ? QuantityCalculationHelper.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle ? productVariant.subtitle : productVariant.sku) : null}
-                    outletQuantityInBasket={productVariant ? QuantityCalculationHelper.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle ? productVariant.subtitle : productVariant.sku) : 0}
+                    maxOutletValue={productVariant ? QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle ? productVariant.subtitle : productVariant.sku) : null}
+                    outletQuantityInBasket={productVariant ? QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle ? productVariant.subtitle : productVariant.sku) : 0}
                     handleClose={handleCloseModal}
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant}
