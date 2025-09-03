@@ -427,7 +427,7 @@
     <value>Tkanina: </value>
   </data>
   <data name="SuccessfullyAddedProduct" xml:space="preserve">
-    <value>Pomyślnie dodano produkt do koszyka</value>
+    <value>Pomyślnie dodano produkt do koszyka.</value>
   </data>
   <data name="Catalog" xml:space="preserve">
     <value>Katalog</value>
