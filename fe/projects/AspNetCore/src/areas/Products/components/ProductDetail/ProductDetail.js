@@ -17,6 +17,7 @@ import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ProductDetailModal from "../ProductDetailModal/ProductDetailModal";
 import Price from "../../../../shared/components/Price/Price";
+import ToastSuccessAddProductToBasket from "../../../../shared/components/Toast/ToastSuccessAddProductToBasket";
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
@@ -104,7 +105,7 @@ function ProductDetail(props) {
                         setBasketId(jsonResponse.id);
 
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            toast.success(props.successfullyAddedProduct)
+                            ToastSuccessAddProductToBasket(props.toastSuccessAddProductToBasket)
                             setOrderItems(jsonResponse.items);
                             setIsModalOpen(false);
                         }

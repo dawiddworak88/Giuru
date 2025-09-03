@@ -14,6 +14,7 @@ import AuthenticationHelper from "../../../shared/helpers/globals/Authentication
 import moment from "moment";
 import Modal from "../Modal/Modal";
 import Price from "../Price/Price";
+import ToastSuccessAddProductToBasket from "../Toast/ToastSuccessAddProductToBasket";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -156,7 +157,7 @@ function Catalog(props) {
                         setBasketId(jsonResponse.id);
 
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            toast.success(props.successfullyAddedProduct)
+                            ToastSuccessAddProductToBasket(props.toastSuccessAddProductToBasket)
                             setOrderItems(jsonResponse.items);
                             setIsModalOpen(false);
                         }
