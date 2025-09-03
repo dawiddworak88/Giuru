@@ -5,20 +5,26 @@ import { toast } from "react-toastify";
 const ToastSuccessAddProductToBasket = (props) => {
 
     toast.success(
-        <>
+        <div className="is-flex">
             {props.title &&
-                <p>{props.title}</p>
+                <div>
+                    {props.title}
+                </div>
             }
             {props.basketUrl &&
-                <a
-                    className="toast_link"
-                    href={props.basketUrl}
-                    aria-label={props.title}
-                >
-                    {props.showText}
-                </a>
+                <div className="ml-1 mr-3">
+                    <a
+                        href={props.basketUrl}
+                        aria-label={props.title}
+                    >
+                        {props.showText}
+                    </a>
+                </div>
             }
-        </>
+        </div>,
+        {
+            className: "toast-success"
+        }
     )
 }
 
