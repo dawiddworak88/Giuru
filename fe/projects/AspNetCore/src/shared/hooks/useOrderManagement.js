@@ -30,7 +30,12 @@ export const useOrderManagement = ({
 
         items.forEach(item => {
             if (item.outletQuantity > 0) {
-                const found = grouped.find(g => g.sku === item.sku && g.outletQuantity > 0);
+                const found = grouped.find(g => 
+                    g.sku === item.sku && 
+                    g.outletQuantity > 0 &&
+                    g.moreInfo === item.moreInfo &&
+                    g.externalReference === item.externalReference
+                );
 
                 if (found) {
                     found.outletQuantity += item.outletQuantity;
@@ -43,7 +48,12 @@ export const useOrderManagement = ({
                     });
                 }
             } else {
-                const found = grouped.find(g => g.sku === item.sku && (!g.outletQuantity || g.outletQuantity === 0));
+                const found = grouped.find(g => 
+                    g.sku === item.sku && 
+                    (!g.outletQuantity || g.outletQuantity === 0) &&
+                    g.moreInfo === item.moreInfo &&
+                    g.externalReference === item.externalReference
+                );
 
                 if (found) {
                     found.quantity += item.quantity;
@@ -206,13 +216,63 @@ export const useOrderManagement = ({
             dispatch({ type: "SET_IS_LOADING", payload: false });
             toast.error(generalErrorMessage);
         }
-    }, [basketId]);
+    }, [basketId, orderItems]);
 
+    const deleteOrderItemFromBasket = useCallback(
+        async ({
+            orderItem: item,
+            resetData
+        }) => {
+            if (!basketId || !updateBasketUrl) return;
+
+            dispatch({ type: "SET_IS_LOADING", payload: true });
+        
+            const newItems = orderItems.filter(oi => oi !== item);
+
+            const basket = { 
+                id: basketId, 
+                items: newItems 
+            };
+
+            try {
+                const response = await fetch(updateBasketUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Requested-With": "XMLHttpRequest",
+                    },
+                    body: JSON.stringify(basket),
+                });
+
+                const reducedQuantity = item.quantity + item.stockQuantity + item.outletQuantity;
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems - reducedQuantity });
+
+                AuthenticationHelper.HandleResponse(response);
+
+
+                if (response.ok) {
+                    const jsonResponse = await response.json();
+
+                    if (jsonResponse.items && jsonResponse.items.length > 0) {
+                        setOrderItems(groupOrderItems(jsonResponse.items));
+
+                        resetData?.();
+                    }
+                }
+            } catch {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(generalErrorMessage);
+            }
+        }, [basketId, orderItems]
+    );
 
     return { 
         basketId, 
         orderItems, 
         addOrderItemToBasket,
+        deleteOrderItemFromBasket,
         clearBasket
     };
 }

@@ -23,7 +23,6 @@ import QuantityCalculatorService from "../../../../shared/services/QuantityCalcu
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
-    const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
@@ -41,8 +40,10 @@ function NewOrderForm(props) {
     const [billingAddressId, setBillingAddressId] = useState(props.defaultBillingAddressId ? props.defaultBillingAddressId : null);
     
     const { 
+        basketId,
         orderItems, 
         addOrderItemToBasket,
+        deleteOrderItemFromBasket,
         clearBasket,
     } = useOrderManagement({
         initialBasketId: props.basketId ? props.basketId : null,
@@ -110,8 +111,8 @@ function NewOrderForm(props) {
                 setProduct(null);
                 setQuantity(1);
                 setProductFromOutlet(false);
-                setExternalReference(null);
-                setMoreInfo(null);
+                setExternalReference("");
+                setMoreInfo("");
                 setSearchTerm("");
                 setHasCustomOrder(false);
                 setCustomOrder(null);
@@ -140,45 +141,12 @@ function NewOrderForm(props) {
     };
 
     const handleDeleteEntity = () => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const basket = {
-            id: basketId,
-            items: orderItems.filter((orderItem) => orderItem !== entityToDelete)
-        };
-
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(basket)
-        };
-
-        fetch(props.updateBasketUrl, requestOptions)
-            .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setBasketId(jsonResponse.id);
-                        setOpenDeleteDialog(false);
-
-                        if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
-                        }
-                        else {
-                            setOrderItems([]);
-                        }
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
+        deleteOrderItemFromBasket({
+            orderItem: entityToDelete,
+            resetData: () => {
+                setOpenDeleteDialog(false);
+            }
+        });
     };
 
     const handlePlaceOrder = () => {
@@ -367,13 +335,22 @@ function NewOrderForm(props) {
                                 disabled={product == null} 
                                 value={quantity} 
                                 onChange={(e) => {
-                                    const value = e.target.value;
-
-                                    if (value >= 1){
-                                        setQuantity(productFromOutlet && value > maxOutlet ? maxOutlet : value);
-                                    }
-                                    else setQuantity(1)
+                                    setQuantity(e.target.value);
                                 }}
+                                onBlur={() => {
+                                    let numericValue = Number(quantity);
+
+                                    if (isNaN(numericValue) || numericValue < 1) {
+                                        numericValue = 1;
+                                    }
+
+                                    if (productFromOutlet && numericValue > maxOutlet) {
+                                        numericValue = maxOutlet;
+                                    }
+
+                                    setQuantity(numericValue);
+                                }}
+
                             />
                         </div>
                         <div className="column is-2 is-flex is-align-items-flex-end pb-2">
