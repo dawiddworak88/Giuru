@@ -64,6 +64,24 @@ class QuantityCalculatorService {
             isValid: true 
         };
     }
+
+    static calculateMaxQuantity(
+        orderItems, 
+        quantityType, 
+        availableQuantity, 
+        sku
+    ) {
+        if (!orderItems || orderItems.length === 0 || !sku) {
+            return availableQuantity;
+        }
+
+        const actualQuantity = orderItems
+            .filter(item => item.sku === sku)
+            .reduce((sum, item) => sum + (item[quantityType] || 0), 0);
+
+        return Math.max(availableQuantity - actualQuantity, 0);
+    }
+
 }
 
 export default QuantityCalculatorService;
