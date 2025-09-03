@@ -617,22 +617,26 @@ function NewOrderForm(props) {
                     {isOrdered ? (
                         <a href={props.ordersUrl} className="button is-text">{props.navigateToOrdersListText}</a>
                     ) : (
-                        <>
+                        <div className="is-flex is-justify-content-space-between">
                             <Button type="button" variant="contained"
                                 color="primary"
                                 onClick={handlePlaceOrder}
                                 disabled={state.isLoading || disabledActionButtons}
+                                aria-label={props.saveText || "Place order"}
                             >
                                 {props.saveText}
                             </Button>
                             <Button
-                                className="order__clear-button"
-                                color="secondary" variant="contained"
+                                color="error"
+                                variant="text"
                                 onClick={clearBasket}
-                                disabled={state.isLoading || disabledActionButtons}>
+                                disabled={state.isLoading || disabledActionButtons}
+                                startIcon={<Delete />}
+                                aria-label={props.clearBasketText || "Clear basket"}
+                            >
                                 {props.clearBasketText}
                             </Button>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
