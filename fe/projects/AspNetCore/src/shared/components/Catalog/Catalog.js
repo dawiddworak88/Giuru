@@ -15,14 +15,11 @@ import moment from "moment";
 import Modal from "../Modal/Modal";
 import Price from "../Price/Price";
 import QuantityCalculationHelper from "../..//helpers/globals/QuantityCalculationHelper";
-import ProductPricesHelper from "../../helpers/prices/ProductPricesHelper";
-import OrderItemsGrouper from "../../helpers/orders/OrderItemsGroupHelper";
+import { useOrderManagement } from "../../../shared/hooks/useOrderManagement";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
-    const [orderItems, setOrderItems] = useState(props.basketItems ? props.basketItems : []);
     const [page, setPage] = useState(0);
-    const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
     const [itemsPerPage,] = useState(props.itemsPerPage ? props.itemsPerPage : CatalogConstants.defaultCatalogItemsPerPage());
     const [items, setItems] = useState(props.pagedItems.data);
     const [total, setTotal] = useState(props.pagedItems.total);
@@ -101,101 +98,52 @@ function Catalog(props) {
         setIsModalOpen(false);
     }
 
-    const handleAddOrderItemClick = async (item) => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
+    const {
+        orderItems,
+        addOrderItemToBasket
+    } = useOrderManagement({
+        initialBasketId: props.basketId ? props.basketId : null,
+        initialOrderItems: props.basketItems ? props.basketItems : [],
+        maxAllowedOrderQuantity: props.maxAllowedOrderQuantity,
+        maxAllowedOrderQuantityErrorMessage: props.maxAllowedOrderQuantityErrorMessage,
+        minOrderQuantityErrorMessage: props.minOrderQuantityErrorMessage,
+        generalErrorMessage: props.generalErrorMessage,
+        updateBasketUrl: props.updateBasketUrl,
+        getPriceUrl: props.getProductPriceUrl
+    });
 
+    const handleAddOrderItemClick = (item) => {
         const quantity = parseInt(item.quantity);
 
-        if (props.maxAllowedOrderQuantity && 
-           (quantity > props.maxAllowedOrderQuantity)) {
-                toast.error(props.maxAllowedOrderQuantityErrorMessage);
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                return;
-        };
+        const getImages = () => {
+            if (Array.isArray(productVariant.images) && productVariant.images.length > 0) {
+                return productVariant.images.map(img => (typeof img === "object" && img.id ? img.id : img));
+            }
 
-        let orderItem = {
-            productId: productVariant.id,
+            return [];
+        }
+
+        const product = {
+            id: productVariant.id,
             sku: productVariant.subtitle ? productVariant.subtitle : productVariant.sku,
             name: productVariant.title,
-            quantity: quantity,
-            stockQuantity: 0,
-            outletQuantity: 0,
-            imageId: productVariant.images && productVariant.images.length > 0 ? productVariant.images[0].id ? productVariant.images[0].id : productVariant.images[0] : null,
-            externalReference: item.externalReference,
-            moreInfo: item.moreInfo,
-            unitPrice: productVariant.price ? productVariant.price.current : null,
+            images: getImages(),
+            stockQuantity: productVariant.availableQuantity,
+            outletQuantity: productVariant.availableOutletQuantity,
             price: productVariant.price ? parseFloat(productVariant.price.current * quantity).toFixed(2) : null,
             currency: productVariant.price ? productVariant.price.currency : null
-        };
-
-        if (item.isOutletOrder){
-            orderItem.quantity = 0;
-            orderItem.stockQuantity = 0;
-            orderItem.outletQuantity = quantity;
-
-            const outletPrice = await ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, productVariant.subtitle ? productVariant.subtitle : productVariant.sku);
-
-            if (outletPrice) {
-                orderItem.unitPrice = outletPrice.price;
-                orderItem.price = parseFloat(outletPrice.price * quantity).toFixed(2);
-                orderItem.currency = outletPrice.currency;
-            }
         }
-        else if (productVariant.availableQuantity > 0) {
-            const currentAvailableStockQuantity = QuantityCalculationHelper.calculateMaxQuantity(orderItems, 'stockQuantity', productVariant.availableQuantity, productVariant.subtitle ? productVariant.subtitle : productVariant.sku);
 
-            if (quantity > currentAvailableStockQuantity) {
-                orderItem.quantity = quantity - currentAvailableStockQuantity;
-                orderItem.stockQuantity = currentAvailableStockQuantity; 
+        addOrderItemToBasket({
+            product,
+            quantity,
+            isOutletOrder: item.isOutletOrder,
+            externalReference: item.externalReference,
+            moreInfo: item.moreInfo,
+            resetData:() => {
+                setIsModalOpen(false);
             }
-            else {
-                orderItem.stockQuantity = quantity;
-                orderItem.quantity = 0;
-            }
-        }
-        
-        const basket = {
-            id: basketId,
-            items: [...orderItems, orderItem]
-        };
-
-        const requestOptions = {
-            method: "POST",
-            headers: { 
-                "Content-Type": "application/json", 
-                "X-Requested-With": "XMLHttpRequest" 
-            },
-            body: JSON.stringify(basket)
-        };
-
-        await fetch(props.updateBasketUrl, requestOptions)
-            .then((response) => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(quantity + state.totalBasketItems) })
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setBasketId(jsonResponse.id);
-
-                    if (jsonResponse.items && jsonResponse.items.length > 0) {
-                        toast.success(props.successfullyAddedProduct)
-                        setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
-                        setIsModalOpen(false);
-                    }
-                    else {
-                        setOrderItems([]);
-                    }
-                }
-                else {
-                    toast.error(props.generalErrorMessage);
-                }
-            });
-        }).catch(() => {
-            dispatch({ type: "SET_IS_LOADING", payload: false });
-            toast.error(props.generalErrorMessage);
-        });
+        })
     };
 
     return (

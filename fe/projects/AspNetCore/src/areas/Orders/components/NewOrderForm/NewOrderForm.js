@@ -17,9 +17,9 @@ import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog
 import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
-import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
 import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
+import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -28,9 +28,8 @@ function NewOrderForm(props) {
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [productFromOutlet, setProductFromOutlet] = useState(false);
-    const [externalReference, setExternalReference] = useState("");
-    const [moreInfo, setMoreInfo] = useState("");
-    const [orderItems, setOrderItems] = useState(props.basketItems ? props.basketItems : []);
+    const [externalReference, setExternalReference] = useState(null);
+    const [moreInfo, setMoreInfo] = useState(null);
     const [suggestions, setSuggestions] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
@@ -40,14 +39,22 @@ function NewOrderForm(props) {
     const [attachments, setAttachments] = useState([]);
     const [deliveryAddressId, setDeliveryAddressId] = useState(props.defaultDeliveryAddressId ? props.defaultDeliveryAddressId : null);
     const [billingAddressId, setBillingAddressId] = useState(props.defaultBillingAddressId ? props.defaultBillingAddressId : null);
-    const { addOrderItemToBasket } = useOrderManagement(
-        props.basketId ? props.basketId : null,
-        props.maxAllowedOrderQuantity,
-        props.maxAllowedOrderQuantityErrorMessage,
-        "minOrderQuantityErrorMessage",
-        props.updateBasketUrl,
-        props.getProductPriceUrl
-    )
+    
+    const { 
+        orderItems, 
+        addOrderItemToBasket,
+        clearBasket,
+    } = useOrderManagement({
+        initialBasketId: props.basketId ? props.basketId : null,
+        initialOrderItems: props.basketItems ? props.basketItems : [],
+        maxAllowedOrderQuantity: props.maxAllowedOrderQuantity,
+        maxAllowedOrderQuantityErrorMessage: props.maxAllowedOrderQuantityErrorMessage,
+        minOrderQuantityErrorMessage: props.minOrderQuantityErrorMessage,
+        generalErrorMessage: props.generalErrorMessage,
+        updateBasketUrl: props.updateBasketUrl,
+        getPriceUrl: props.getProductPriceUrl,
+        clearBasketUrl: props.clearBasketUrl
+    })
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -93,105 +100,25 @@ function NewOrderForm(props) {
     };
 
     const handleAddOrderItemClick = () => {
-        console.log(product);
-
-        // addOrderItemToBasket({
-            
-        // });
+        addOrderItemToBasket({
+            product,
+            quantity,
+            isOutletOrder: productFromOutlet,
+            externalReference,
+            moreInfo,
+            resetData: () => {
+                setProduct(null);
+                setQuantity(1);
+                setProductFromOutlet(false);
+                setExternalReference(null);
+                setMoreInfo(null);
+                setSearchTerm("");
+                setHasCustomOrder(false);
+                setCustomOrder(null);
+                setAttachments([]);
+            }
+        });
     }
-
-    // const handleAddOrderItemClick = async () => {
-    //     if (props.maxAllowedOrderQuantity && 
-    //        (quantity > props.maxAllowedOrderQuantity)) {
-    //             toast.error(props.maxAllowedOrderQuantityErrorMessage);
-    //             return;
-    //     };
-
-    //     let orderItem = {
-    //         productId: product.id,
-    //         sku: product.sku,
-    //         name: product.name,
-    //         imageId: product.images ? product.images[0] : null,
-    //         quantity: quantity,
-    //         stockQuantity: 0,
-    //         outletQuantity: 0,
-    //         externalReference,
-    //         moreInfo,
-    //         unitPrice: product.price ? product.price : null,
-    //         price: product.price ? parseFloat(product.price * quantity).toFixed(2) : null,
-    //         currency: product.currency
-    //     };
-
-    //     if (productFromOutlet) {
-    //         orderItem.outletQuantity = quantity;
-    //         orderItem.stockQuantity = 0;
-    //         orderItem.quantity = 0;
-
-    //         const outletPrice = await ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, product.sku);
-
-    //         if (outletPrice) {
-    //             orderItem.unitPrice = outletPrice.price
-    //             orderItem.price = parseFloat(outletPrice.price * quantity).toFixed(2);
-    //             orderItem.currency = outletPrice.currency;
-    //         }
-    //     } else if (product.stockQuantity > 0) {
-    //         if (quantity > product.stockQuantity) {
-    //             orderItem.quantity = quantity - product.stockQuantity;
-    //             orderItem.stockQuantity = product.stockQuantity; 
-    //         }
-    //         else {
-    //             orderItem.stockQuantity = quantity;
-    //             orderItem.quantity = 0;
-    //         }
-    //     }
-
-    //     const basket = {
-    //         id: basketId,
-    //         items: [...orderItems, orderItem]
-    //     };
-
-    //     const requestOptions = {
-    //         method: "POST",
-    //         headers: { 
-    //             "Content-Type": "application/json", 
-    //             "X-Requested-With": "XMLHttpRequest" 
-    //         },
-    //         body: JSON.stringify(basket)
-    //     };
-
-    //     await fetch(props.updateBasketUrl, requestOptions)
-    //         .then(function (response) {
-    //             dispatch({ type: "SET_IS_LOADING", payload: false });
-    //             dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(quantity + state.totalBasketItems) })
-
-    //             AuthenticationHelper.HandleResponse(response);
-                
-    //             return response.json().then(jsonResponse => {
-    //                 if (response.ok) {
-    //                     setBasketId(jsonResponse.id);
-
-    //                     if (jsonResponse.items && jsonResponse.items.length > 0) {
-    //                         setProduct(null);
-    //                         setSearchTerm("");
-    //                         setExternalReference("");
-    //                         setMoreInfo("");
-    //                         setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
-    //                         setProductFromOutlet(false);
-    //                         setQuantity(1);
-    //                     }
-    //                     else {
-    //                         setOrderItems([]);
-    //                     }
-    //                 }
-    //                 else {
-    //                     toast.error(props.generalErrorMessage);
-    //                 }
-    //             });
-    //         }).catch(() => {
-    //             dispatch({ type: "SET_IS_LOADING", payload: false });
-    //             toast.error(props.generalErrorMessage);
-    //         });
-    // };
 
     const searchInputProps = {
         placeholder: props.searchPlaceholderLabel,
@@ -343,48 +270,12 @@ function NewOrderForm(props) {
         }
     });
 
-    const clearBasket = () => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const requestOptions = {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-        };
-
-        const requestData = {
-            id: basketId
-        }
-
-        const url = props.clearBasketUrl + "?" + QueryStringSerializer.serialize(requestData);
-        fetch(url, requestOptions)
-            .then((response) => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: null });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        toast.success(jsonResponse.message);
-                        setOrderItems([]);
-                        setBasketId(null);
-                    }
-
-                    setCustomOrder(null);
-                    setHasCustomOrder(false);
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
-    }
-
     const getTotalQuantities = (item) => {
         return item.quantity + item.stockQuantity + item.outletQuantity;
     }
 
     const disabledActionButtons = orderItems.length === 0 ? !customOrder ? true : false : false;
-    const maxOutlet = product ? product.outletQuantity : 0;
+    const maxOutlet = QuantityCalculatorService.calculateMaxQuantity(orderItems, "outletQuantity", product ? product.outletQuantity : 0, product ? product.sku : null);
 
     return (
         <section className="section order">
@@ -499,7 +390,7 @@ function NewOrderForm(props) {
                                         }} />
                                 }
                                 label={props.outletProductLabel}
-                                disabled={!product || product.outletQuantity == 0}
+                                disabled={!product || product.outletQuantity === 0 || maxOutlet === 0}
                             />
                         </div>    
                         <div className="column is-2 is-flex is-align-items-flex-end">

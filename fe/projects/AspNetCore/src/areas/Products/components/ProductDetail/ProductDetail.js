@@ -1,13 +1,10 @@
-import React, { Fragment, useContext, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
-import { toast } from "react-toastify";
 import { Button } from "@mui/material";
 import Files from "../../../../shared/components/Files/Files";
-import { Context } from "../../../../shared/stores/Store";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
-import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import Modal from "../../../../shared/components/Modal/Modal";
 import { ExpandMore, ExpandLess } from "@mui/icons-material"
 import { marked } from "marked";
@@ -18,13 +15,9 @@ import LazyLoadConstants from "../../../../shared/constants/LazyLoadConstants";
 import ProductDetailModal from "../ProductDetailModal/ProductDetailModal";
 import Price from "../../../../shared/components/Price/Price";
 import QuantityCalculationHelper from "../../../../shared/helpers/globals/QuantityCalculationHelper";
-import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper";
-import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
+import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 
 function ProductDetail(props) {
-    const [state, dispatch] = useContext(Context);
-    const [orderItems, setOrderItems] = useState(props.orderItems ? props.orderItems : []);
-    const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
@@ -35,164 +28,88 @@ function ProductDetail(props) {
     const [mediaItems, setMediaItems] = useState(props.mediaItems ? props.mediaItems.slice(0, 6) : []);
     const [activeMediaItemIndex, setActiveMediaItemIndex] = useState(0);
 
-    const handleAddOrderItemClick = async (item) => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
+    const {
+        orderItems,
+        addOrderItemToBasket
+    } = useOrderManagement({
+        initialBasketId: props.basketId ? props.basketId : null,
+        initialOrderItems: props.orderItems ? props.orderItems : [],
+        maxAllowedOrderQuantity: props.maxAllowedOrderQuantity,
+        maxAllowedOrderQuantityErrorMessage: props.maxAllowedOrderQuantityErrorMessage,
+        minOrderQuantityErrorMessage: props.minOrderQuantityErrorMessage,
+        generalErrorMessage: props.generalErrorMessage,
+        updateBasketUrl: props.updateBasketUrl,
+        getPriceUrl: props.getProductPriceUrl
+    });
 
-        let product = props;
-        if (productVariant) {
-            product = {
-                productId: productVariant.id,
-                sku: productVariant.subtitle,
-                title: productVariant.title,
-                images: productVariant.images,
-                price: productVariant.price,
-                availableQuantity: productVariant.availableQuantity,
-                availableOutletQuantity: productVariant.availableOutletQuantity
-            }
-        }
-
-        product = {
-            ...product,
-            quantity: item.quantity,
-            externalReference: item.externalReference,
-            moreInfo: item.moreInfo
-        }
-
+    const handleAddOrderItemClick = (item) => {
         const quantity = parseInt(item.quantity);
 
-        if (props.maxAllowedOrderQuantity && 
-           (quantity > props.maxAllowedOrderQuantity)) {
-                toast.error(props.maxAllowedOrderQuantityErrorMessage);
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                return;
+        let product = {
+            id: props.productId,
+            sku: props.sku,
+            name: props.title,
+            stockQuantity: props.availableQuantity,
+            outletQuantity: props.availableOutletQuantity
         };
 
-        const getImageId = () => {
-            if (productVariant && productVariant.images && productVariant.images.length > 0) {
-                return productVariant.images[0].id;
+        if (productVariant) {
+            product = {
+                id: productVariant.id,
+                sku: productVariant.subtitle,
+                name: productVariant.title,
+                stockQuantity: productVariant.availableQuantity,
+                outletQuantity: productVariant.availableOutletQuantity
+            }
+        }
+
+        const getImageIds = () => {
+            if (productVariant && Array.isArray(productVariant.images) && productVariant.images.length > 0) {
+                return productVariant.images.map(img => img.id);
+            }
+            
+            if (props.images && Array.isArray(props.images) && props.images.length > 0) {
+                return props.images.map(img => img.id);
             }
 
-            if (props.images && props.images.length > 0) {
-                return props.images[0].id;
-            }
-
-            return null;
+            return [];
         };
 
         const getPriceInfo = () => {
             if (productVariant && productVariant.price) {
                 return {
-                    unitPrice: productVariant.price.current,
                     price: parseFloat(productVariant.price.current * quantity).toFixed(2),
                     currency: productVariant.price.currency
                 };
             } else if (props.price) {
                 return {
-                    unitPrice: props.price.current,
                     price: parseFloat(props.price.current * quantity).toFixed(2),
                     currency: props.price.currency
                 };
             } else {
                 return {
-                    unitPrice: null,
                     price: null,
                     currency: null
                 };
             }
         };
 
-        const priceInfo = getPriceInfo();
+        product = {
+            ...product,
+            ...getPriceInfo(),
+            images: getImageIds()
+        }
 
-        let orderItem = {
-            productId: productVariant ? productVariant.id : props.productId,
-            sku: productVariant ? productVariant.subtitle : props.sku,
-            name: productVariant ? productVariant.title : props.title,
-            quantity: quantity,
-            stockQuantity: 0,
-            outletQuantity: 0,
-            imageId: getImageId(),
+        addOrderItemToBasket({
+            product,
+            quantity,
+            isOutletOrder: item.isOutletOrder,
             externalReference: item.externalReference,
             moreInfo: item.moreInfo,
-            unitPrice: priceInfo.unitPrice,
-            price: priceInfo.price,
-            currency: priceInfo.currency
-        }
-
-        const productSku = productVariant ? productVariant.subtitle : props.sku;
-
-        if (item.isOutletOrder) {
-            orderItem.quantity = 0;
-            orderItem.stockQuantity = 0;
-            orderItem.outletQuantity = quantity;
-
-            const outletPrice = await ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, productSku);
-
-            if (outletPrice) {
-                orderItem.unitPrice = outletPrice.price
-                orderItem.price = parseFloat(outletPrice.price * quantity).toFixed(2);
-                orderItem.currency = outletPrice.currency;
+            resetData: () => {
+                setIsModalOpen(false);
             }
-        }
-        else {
-            const availableQuantity = productVariant ? productVariant.availableQuantity : props.availableQuantity;
-
-            if (availableQuantity > 0) {
-                const currentAvailableStockQuantity = QuantityCalculationHelper.calculateMaxQuantity(orderItems, 'stockQuantity', availableQuantity, productSku);
-
-                if (quantity > currentAvailableStockQuantity) {
-                    orderItem.quantity = pendingQuantity - currentAvailableStockQuantity;
-                    orderItem.stockQuantity = currentAvailableStockQuantity; 
-                }
-                else {
-                    orderItem.stockQuantity = quantity;
-                    orderItem.quantity = 0;
-                }
-            }
-        }
-
-        const basket = {
-            id: basketId,
-            items: [...orderItems, orderItem]
-        };
-
-        const requestOptions = {
-            method: "POST",
-            headers: { 
-                "Content-Type": "application/json", 
-                "X-Requested-With": "XMLHttpRequest" 
-            },
-            body: JSON.stringify(basket)
-        };
-
-        await fetch(props.updateBasketUrl, requestOptions)
-            .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(quantity + state.totalBasketItems) })
-
-                    if (response.ok) {
-                        setBasketId(jsonResponse.id);
-
-                        if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            toast.success(props.successfullyAddedProduct)
-                            setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
-                            setIsModalOpen(false);
-                        }
-                        else {
-                            setOrderItems([]);
-                        }
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
+        })
     };
 
     const handleCloseImageModal = () => {

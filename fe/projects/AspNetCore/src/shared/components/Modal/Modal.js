@@ -59,14 +59,14 @@ const Modal = (props) => {
                         variant="standard"
                         label={isOutletOrder ? `${labels.quantityLabel} ${maxOutlet > 0 ? `(${labels.maximalLabel} ${maxOutlet})` : ""} ${outletQuantityInBasket > 0 ? `(${labels.inBasket} ${outletQuantityInBasket})` : ""}` : labels.quantityLabel}
                         inputProps={{ 
-                            min: 0, 
+                            min: 1, 
                             step: 1,
                             className: "quantity-input"
                         }}
                         value={quantity}
                         onChange={(e) => {
                             const value = e.target.value;
-                            if (value >= 0){
+                            if (value >= 1){
                                 setQuantity(isOutletOrder && value > maxOutlet ? maxOutlet : value);
                             }
                             else setQuantity(1)
