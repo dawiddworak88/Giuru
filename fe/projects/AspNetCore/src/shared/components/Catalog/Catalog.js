@@ -182,19 +182,20 @@ function Catalog(props) {
                                                         <h3>{item.productAttributes}</h3>
                                                     </div>
                                                 }
-                                                {item.inStock &&
-                                                    <Availability 
-                                                        className="mt-3"
-                                                        label={props.inStockLabel}
-                                                        availableQuantity={item.availableQuantity}
-                                                    />
-                                                }
-                                                {item.inOutlet &&
-                                                    <Availability 
-                                                        label={props.inOutletLabel}
-                                                        availableQuantity={item.availableOutletQuantity}
-                                                    />
-                                                }
+                                                <div className="catalog-item__availability mt-3">
+                                                    {item.inStock &&
+                                                        <Availability 
+                                                            label={props.inStockLabel}
+                                                            availableQuantity={item.availableQuantity}
+                                                        />
+                                                    }
+                                                    {item.inOutlet &&
+                                                        <Availability 
+                                                            label={props.inOutletLabel}
+                                                            availableQuantity={item.availableOutletQuantity}
+                                                        />
+                                                    }
+                                                </div>
                                                 {item.price && 
                                                     <Price {...item.price} />
                                                 }
