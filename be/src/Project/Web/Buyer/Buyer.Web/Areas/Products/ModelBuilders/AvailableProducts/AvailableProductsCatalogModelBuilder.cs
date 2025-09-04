@@ -65,7 +65,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
         {
             var viewModel = this.availableProductsCatalogModelBuilder.BuildModel(componentModel);
 
-            viewModel.ShowAddToCartButton = true;
             viewModel.SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct");
             viewModel.Title = this.globalLocalizer.GetString("AvailableProducts");
             viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "AvailableProductsApi", new { Area = "Products" });
