@@ -169,6 +169,22 @@ function Catalog(props) {
                                                 </LazyLoad>
                                             </figure>
                                         </a>
+                                        <div className="catalog__card-footer">
+                                            <Button 
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={() => {
+                                                    if (item.canOrder) {
+                                                        toggleModal(item);
+                                                    }
+                                                    else {
+                                                        toggleSidebar(item);
+                                                    }
+                                                }}
+                                            >
+                                                {props.basketLabel}
+                                            </Button>
+                                        </div>
                                         {/* <div className="catalog-item">
                                             <a href={item.url}>
                                                 <div className="card-image" aria-label={item.outletDescription} title={item.outletDescription}>
