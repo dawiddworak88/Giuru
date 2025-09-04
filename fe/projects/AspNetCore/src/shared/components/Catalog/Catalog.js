@@ -162,12 +162,18 @@ function Catalog(props) {
                                         <div className="catalog__card-header">
                                             t
                                         </div>
-                                        <a href={item.url} className="catalog__card-body">
-                                            <figure className="image is-4by3">
-                                                <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
-                                                    <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} imageClassName="card-image-scale-down" />
-                                                </LazyLoad>
-                                            </figure>
+                                        <a className="catalog__card-content">
+                                            <div className="catalog__card-media">
+                                                <figure className="image is-4by3">
+                                                    <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
+                                                        <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} imageClassName="card-image-scale-down" />
+                                                    </LazyLoad>
+                                                </figure>
+                                            </div>
+                                            <div className="catalog__card-body">
+                                                <p className="catalog__card-sku">{props.skuLabel} {item.sku}</p>
+                                                <h2 className="catalog__card-title">{item.title}</h2>
+                                            </div>
                                         </a>
                                         <div className="catalog__card-footer">
                                             <Button 
