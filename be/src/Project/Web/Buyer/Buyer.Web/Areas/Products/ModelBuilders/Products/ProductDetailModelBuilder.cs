@@ -123,7 +123,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 SeeMoreText = _globalLocalizer.GetString("SeeMoreText"),
                 SeeLessText = _globalLocalizer.GetString("SeeLessText"),
                 MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
-                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity")
+                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity"),
+                GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity")
             };
 
             var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
@@ -164,7 +166,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
                             PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
                             Size = _productsService.GetSize(product.ProductAttributes),
-                            IsOutlet = (outlet?.AvailableQuantity > 0).ToYesOrNo(),
                             PointsOfLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
                             LampshadeType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
                             LampshadeSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
@@ -291,7 +292,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
                                 PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
                                 Size = _productsService.GetSize(x.ProductAttributes),
-                                IsOutlet = (outletProductVariants.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo(),
                                 PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
                                 LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
                                 LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),

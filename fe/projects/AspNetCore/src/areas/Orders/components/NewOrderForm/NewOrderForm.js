@@ -17,18 +17,17 @@ import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog
 import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
+import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
+import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
-    const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
-    const [quantity, setQuantity] = useState(0);
-    const [stockQuantity, setStockQuantity] = useState(0);
-    const [outletQuantity, setOutletQuantity] = useState(0);
-    const [externalReference, setExternalReference] = useState("");
-    const [moreInfo, setMoreInfo] = useState("");
-    const [orderItems, setOrderItems] = useState(props.basketItems ? props.basketItems : []);
+    const [quantity, setQuantity] = useState(1);
+    const [productFromOutlet, setProductFromOutlet] = useState(false);
+    const [externalReference, setExternalReference] = useState(null);
+    const [moreInfo, setMoreInfo] = useState(null);
     const [suggestions, setSuggestions] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
@@ -38,6 +37,25 @@ function NewOrderForm(props) {
     const [attachments, setAttachments] = useState([]);
     const [deliveryAddressId, setDeliveryAddressId] = useState(props.defaultDeliveryAddressId ? props.defaultDeliveryAddressId : null);
     const [billingAddressId, setBillingAddressId] = useState(props.defaultBillingAddressId ? props.defaultBillingAddressId : null);
+    
+    const { 
+        basketId,
+        orderItems, 
+        addOrderItemToBasket,
+        deleteOrderItemFromBasket,
+        clearBasket,
+        setGroupedOrderItems
+    } = useOrderManagement({
+        initialBasketId: props.basketId ? props.basketId : null,
+        initialOrderItems: props.basketItems ? props.basketItems : [],
+        maxAllowedOrderQuantity: props.maxAllowedOrderQuantity,
+        maxAllowedOrderQuantityErrorMessage: props.maxAllowedOrderQuantityErrorMessage,
+        MinOrderQuantityErrorMessage: props.minOrderQuantityErrorMessage,
+        generalErrorMessage: props.generalErrorMessage,
+        updateBasketUrl: props.updateBasketUrl,
+        getPriceUrl: props.getProductPriceUrl,
+        clearBasketUrl: props.clearBasketUrl
+    })
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -74,24 +92,7 @@ function NewOrderForm(props) {
         }
     };
 
-    const resetMaxAndQuantityValues = () => {
-        setQuantity(0);
-        setStockQuantity(0);
-        setOutletQuantity(0);
-    };
-
     const onSuggestionSelected = (event, { suggestion }) => {
-        var items = orderItems.filter(item => item.productId === suggestion.id);
-
-        if (items.length > 0) {
-            suggestion.stockQuantity -= items.reduce((sum, item) => sum + item.stockQuantity, 0);
-            suggestion.outletQuantity -= items.reduce((sum, item) => sum + item.outletQuantity, 0); 
-        }
-
-        setQuantity(suggestion.stockQuantity + suggestion.outletQuantity === 0 ? 1 : 0);
-        setStockQuantity(suggestion.stockQuantity > 0 ? 1 : 0);
-        setOutletQuantity(suggestion.outletQuantity > 0 && suggestion.stockQuantity === 0 ? 1 : 0);
-        
         setProduct(suggestion);
     };
 
@@ -100,75 +101,25 @@ function NewOrderForm(props) {
     };
 
     const handleAddOrderItemClick = () => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const totalQuantity = parseInt(quantity) + parseInt(stockQuantity) + parseInt(outletQuantity);
-
-        if (props.maxAllowedOrderQuantity && 
-           (totalQuantity > props.maxAllowedOrderQuantity)) {
-                toast.error(props.maxAllowedOrderQuantityErrorMessage);
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                return;
-        };
-
-        const orderItem = {
-            productId: product.id,
-            sku: product.sku,
-            name: product.name,
-            imageId: product.images ? product.images[0] : null,
-            quantity: quantity ? quantity : 0,
-            stockQuantity: stockQuantity ? stockQuantity : 0,
-            outletQuantity: outletQuantity ? outletQuantity : 0,
-            unitPrice: parseFloat(product.price).toFixed(2),
-            price: parseFloat(product.price * totalQuantity).toFixed(2),
-            currency: product.currency,
+        addOrderItemToBasket({
+            product,
+            quantity,
+            isOutletOrder: productFromOutlet,
             externalReference,
-            moreInfo
-        };
-
-        const basket = {
-            id: basketId,
-            items: [...orderItems, orderItem]
-        };
-
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(basket)
-        };
-
-        fetch(props.updateBasketUrl, requestOptions)
-            .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setBasketId(jsonResponse.id);
-
-                        if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            setProduct(null);
-                            setSearchTerm("");
-                            setExternalReference("");
-                            setMoreInfo("");
-                            resetMaxAndQuantityValues();
-                            setOrderItems(jsonResponse.items);
-                        }
-                        else {
-                            setOrderItems([]);
-                        }
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
-    };
+            moreInfo,
+            resetData: () => {
+                setProduct(null);
+                setQuantity(1);
+                setProductFromOutlet(false);
+                setExternalReference("");
+                setMoreInfo("");
+                setSearchTerm("");
+                setHasCustomOrder(false);
+                setCustomOrder(null);
+                setAttachments([]);
+            }
+        });
+    }
 
     const searchInputProps = {
         placeholder: props.searchPlaceholderLabel,
@@ -190,45 +141,12 @@ function NewOrderForm(props) {
     };
 
     const handleDeleteEntity = () => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const basket = {
-            id: basketId,
-            items: orderItems.filter((orderItem) => orderItem !== entityToDelete)
-        };
-
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(basket)
-        };
-
-        fetch(props.updateBasketUrl, requestOptions)
-            .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setBasketId(jsonResponse.id);
-                        setOpenDeleteDialog(false);
-
-                        if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            setOrderItems(jsonResponse.items);
-                        }
-                        else {
-                            setOrderItems([]);
-                        }
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
+        deleteOrderItemFromBasket({
+            orderItem: entityToDelete,
+            resetData: () => {
+                setOpenDeleteDialog(false);
+            }
+        });
     };
 
     const handlePlaceOrder = () => {
@@ -297,8 +215,7 @@ function NewOrderForm(props) {
 
                     return response.json().then((jsonResponse) => {
                         if (response.ok) {
-                            setBasketId(jsonResponse.id)
-                            setOrderItems([...orderItems, ...jsonResponse.items]);
+                            setGroupedOrderItems([...orderItems, ...jsonResponse.items]);
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -320,47 +237,12 @@ function NewOrderForm(props) {
         }
     });
 
-    const clearBasket = () => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const requestOptions = {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-        };
-
-        const requestData = {
-            id: basketId
-        }
-
-        const url = props.clearBasketUrl + "?" + QueryStringSerializer.serialize(requestData);
-        fetch(url, requestOptions)
-            .then((response) => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: null });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        toast.success(jsonResponse.message);
-                        setOrderItems([]);
-                        setBasketId(null);
-                    }
-
-                    setCustomOrder(null);
-                    setHasCustomOrder(false);
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
-    }
-
-    const disabledActionButtons = orderItems.length === 0 ? !customOrder ? true : false : false;
-
     const getTotalQuantities = (item) => {
         return item.quantity + item.stockQuantity + item.outletQuantity;
     }
+
+    const disabledActionButtons = orderItems.length === 0 ? !customOrder ? true : false : false;
+    const maxOutlet = QuantityCalculatorService.calculateMaxQuantity(orderItems, "outletQuantity", product ? product.outletQuantity : 0, product ? product.sku : null);
 
     return (
         <section className="section order">
@@ -438,38 +320,54 @@ function NewOrderForm(props) {
                             />
                         </div>
                         <div className="column is-1 is-flex is-align-items-flex-end">
-                            <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
-                                label={props.quantityLabel} fullWidth={true} disabled={product == null} value={quantity} onChange={(e) => {
-                                    e.preventDefault();
+                            <TextField 
+                                id="quantity" 
+                                name="quantity" 
+                                type="number" 
+                                inputProps={{ 
+                                    min: "1", 
+                                    step: "1" 
+                                }} 
+                                variant="standard"
+                                label={productFromOutlet ? `${props.quantityLabel} ${maxOutlet > 0 ? `(${props.maximalLabel} ${maxOutlet})` : ""}` : props.quantityLabel} 
+                                fullWidth={true} 
+                                disabled={product == null} 
+                                value={quantity} 
+                                onChange={(e) => {
                                     setQuantity(e.target.value);
                                 }}
-                            />
-                        </div>
-                        <div className="column is-2 is-flex is-align-items-flex-end">
-                            <TextField id="stockQuantity" name="stockQuantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
-                                label={`${props.stockQuantityLabel} (${props.maximalLabel} ${product ? product.stockQuantity : 0})`}
-                                fullWidth={true} disabled={product == null || product.stockQuantity == 0} value={stockQuantity} onChange={(e) => {
-                                    e.preventDefault();
-                                    const value = e.target.value
-                                    if (value >= 0) {
-                                        setStockQuantity(value > product.stockQuantity ? product.stockQuantity : value);
+                                onBlur={() => {
+                                    let numericValue = Number(quantity);
+
+                                    if (isNaN(numericValue) || numericValue < 1) {
+                                        numericValue = 1;
                                     }
-                                    else setStockQuantity(0);
+
+                                    if (productFromOutlet && numericValue > maxOutlet) {
+                                        numericValue = maxOutlet;
+                                    }
+
+                                    setQuantity(numericValue);
                                 }}
                             />
                         </div>
-                        <div className="column is-2 is-flex is-align-items-flex-end">
-                            <TextField id="outletQuantity" name="outletQuantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
-                                label={`${props.outletQuantityLabel} (${props.maximalLabel} ${product ? product.outletQuantity : 0})`}
-                                fullWidth={true} disabled={product == null || product.outletQuantity == 0} value={outletQuantity} onChange={(e) => {
-                                    e.preventDefault();
-                                    const value = e.target.value
-                                    if (value >= 0) {
-                                        setOutletQuantity(value > product.outletQuantity ? product.outletQuantity : value);
-                                    } else setOutletQuantity(0);
-                                }}
+                        <div className="column is-2 is-flex is-align-items-flex-end pb-2">
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={productFromOutlet}
+                                        onChange={(e) => {
+                                            setProductFromOutlet(e.target.checked);
+
+                                            if (e.target.checked && (quantity > maxOutlet)) {
+                                                setQuantity(maxOutlet);
+                                            }
+                                        }} />
+                                }
+                                label={props.outletProductLabel}
+                                disabled={!product || product.outletQuantity === 0 || maxOutlet === 0}
                             />
-                        </div>
+                        </div>    
                         <div className="column is-2 is-flex is-align-items-flex-end">
                             <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel} variant="standard"
                                 fullWidth={true} value={externalReference} onChange={(e) => {
@@ -487,7 +385,7 @@ function NewOrderForm(props) {
                         </div>
                         <div className="column is-1 is-flex is-align-items-flex-end">
                             <Button type="button" variant="contained" color="primary" onClick={handleAddOrderItemClick}
-                                disabled={state.isLoading || !(quantity + stockQuantity + outletQuantity > 0 && product !== null)}
+                                disabled={state.isLoading || !(quantity > 0 && product !== null)}
                             >
                                 {props.addText}
                             </Button>
@@ -669,7 +567,6 @@ NewOrderForm.propTypes = {
     moreInfoLabel: PropTypes.string.isRequired,
     getSuggestionsUrl: PropTypes.string.isRequired,
     orderItemsLabel: PropTypes.string.isRequired,
-    generalErrorMessage: PropTypes.string.isRequired,
     addText: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     noOrderItemsLabel: PropTypes.string.isRequired,
@@ -690,7 +587,9 @@ NewOrderForm.propTypes = {
     initCustomOrderLabel: PropTypes.string.isRequired,
     customOrderLabel: PropTypes.string.isRequired,
     maxAllowedOrderQuantity: PropTypes.number,
-    maxAllowedOrderQuantityErrorMessage: PropTypes.string
+    maxAllowedOrderQuantityErrorMessage: PropTypes.string,
+    getProductPriceUrl: PropTypes.string.isRequired,
+    outletProductLabel: PropTypes.string.isRequired,
 };
 
 export default NewOrderForm;

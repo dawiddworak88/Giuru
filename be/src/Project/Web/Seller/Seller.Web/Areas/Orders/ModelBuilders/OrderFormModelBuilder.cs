@@ -79,7 +79,9 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 MaximalLabel = _globalLocalizer.GetString("MaximalLabel"),
                 UnitPriceLabel = _globalLocalizer.GetString("UnitPrice"),
                 PriceLabel = _globalLocalizer.GetString("Price"),
-                CurrencyLabel = _globalLocalizer.GetString("Currency")
+                CurrencyLabel = _globalLocalizer.GetString("Currency"),
+                GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                OutletProductLabel = _orderLocalizer.GetString("OutletProductLabel")
             };
 
             var clients = await _clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);

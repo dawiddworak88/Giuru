@@ -14,12 +14,12 @@ import AuthenticationHelper from "../../../shared/helpers/globals/Authentication
 import moment from "moment";
 import Modal from "../Modal/Modal";
 import Price from "../Price/Price";
+import { useOrderManagement } from "../../../shared/hooks/useOrderManagement";
+import QuantityCalculatorService from "../../services/QuantityCalculatorService";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
-    const [orderItems, setOrderItems] = useState(props.basketItems ? props.basketItems : []);
     const [page, setPage] = useState(0);
-    const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
     const [itemsPerPage,] = useState(props.itemsPerPage ? props.itemsPerPage : CatalogConstants.defaultCatalogItemsPerPage());
     const [items, setItems] = useState(props.pagedItems.data);
     const [total, setTotal] = useState(props.pagedItems.total);
@@ -98,100 +98,53 @@ function Catalog(props) {
         setIsModalOpen(false);
     }
 
+    const {
+        orderItems,
+        addOrderItemToBasket
+    } = useOrderManagement({
+        initialBasketId: props.basketId ? props.basketId : null,
+        initialOrderItems: props.basketItems ? props.basketItems : [],
+        maxAllowedOrderQuantity: props.maxAllowedOrderQuantity,
+        maxAllowedOrderQuantityErrorMessage: props.maxAllowedOrderQuantityErrorMessage,
+        minOrderQuantityErrorMessage: props.minOrderQuantityErrorMessage,
+        generalErrorMessage: props.generalErrorMessage,
+        updateBasketUrl: props.updateBasketUrl,
+        getPriceUrl: props.getProductPriceUrl
+    });
+
     const handleAddOrderItemClick = (item) => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
         const quantity = parseInt(item.quantity);
-        const stockQuantity = parseInt(item.stockQuantity);
-        const outletQuantity = parseInt(item.outletQuantity);
 
-        const totalQuantity = quantity + stockQuantity + outletQuantity;
+        const getImages = () => {
+            if (Array.isArray(productVariant.images) && productVariant.images.length > 0) {
+                return productVariant.images.map(img => (typeof img === "object" && img.id ? img.id : img));
+            }
 
-        if (props.maxAllowedOrderQuantity && 
-           (totalQuantity > props.maxAllowedOrderQuantity)) {
-                toast.error(props.maxAllowedOrderQuantityErrorMessage);
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                return;
-        };
-        
-        const orderItem = {
-            productId: productVariant.id,
+            return [];
+        }
+
+        const product = {
+            id: productVariant.id,
             sku: productVariant.subtitle ? productVariant.subtitle : productVariant.sku,
             name: productVariant.title,
-            imageId: productVariant.images ? productVariant.images[0].id ? productVariant.images[0].id : productVariant.images[0] : null,
-            quantity: quantity,
-            stockQuantity: stockQuantity,
-            outletQuantity: outletQuantity,
-            unitPrice: productVariant.price ? parseFloat(productVariant.price.current).toFixed(2) : null,
-            price: productVariant.price ? parseFloat(productVariant.price.current * totalQuantity).toFixed(2) : null,
-            currency: productVariant.price ? productVariant.price.currency : null,
+            images: getImages(),
+            stockQuantity: productVariant.availableQuantity,
+            outletQuantity: productVariant.availableOutletQuantity,
+            price: productVariant.price ? parseFloat(productVariant.price.current * quantity).toFixed(2) : null,
+            currency: productVariant.price ? productVariant.price.currency : null
+        }
+
+        addOrderItemToBasket({
+            product,
+            quantity,
+            isOutletOrder: item.isOutletOrder,
             externalReference: item.externalReference,
-            moreInfo: item.moreInfo
-        };
-
-        const basket = {
-            id: basketId,
-            items: [...orderItems, orderItem]
-        };
-
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(basket)
-        };
-
-        if (totalQuantity <= 0) {
-            return toast.error(props.quantityErrorMessage);
-        }
-
-        fetch(props.updateBasketUrl, requestOptions)
-            .then((response) => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(totalQuantity + state.totalBasketItems) })
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setBasketId(jsonResponse.id);
-
-                        if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            toast.success(props.successfullyAddedProduct)
-                            setOrderItems(jsonResponse.items);
-                            setIsModalOpen(false);
-                        }
-                        else {
-                            setOrderItems([]);
-                        }
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
+            moreInfo: item.moreInfo,
+            resetData:() => {
+                setIsModalOpen(false);
+            }
+        })
     };
-
-    const calculateMaxQuantity = (quantityType, availableQuantity) => {
-        if (basketId) {
-            const actualQuantity = getCurrentQuantity(quantityType);
-            return Math.max(availableQuantity - actualQuantity, 0);    
-        }
-
-        return availableQuantity;
-    };
-
-    const getCurrentQuantity = (quantityType) => {
-        const orderItem = orderItems.filter(x => x.sku === productVariant.sku);
-
-        if (orderItem.length > 0) {
-            return orderItem.reduce((sum, item) => sum + item[quantityType], 0);
-        }
-
-        return 0;
-    }
 
     return (
         <section className="catalog section">
@@ -311,11 +264,9 @@ function Catalog(props) {
                 <Modal
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
+                    maxOutletValue={productVariant ? QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle ? productVariant.subtitle : productVariant.sku) : null}
+                    outletQuantityInBasket={productVariant ? QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle ? productVariant.subtitle : productVariant.sku) : 0}
                     handleClose={handleCloseModal}
-                    maxOutletValue={productVariant ? calculateMaxQuantity('outletQuantity', productVariant.availableOutletQuantity) : null}
-                    maxStockValue={productVariant ? calculateMaxQuantity('stockQuantity', productVariant.availableQuantity) : null}
-                    stockQuantityInBasket={productVariant ? getCurrentQuantity('stockQuantity') : 0}
-                    outletQuantityInBasket={productVariant ? getCurrentQuantity('outletQuantity') : 0}
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant}
                     labels={props.modal}
@@ -347,7 +298,8 @@ Catalog.propTypes = {
     items: PropTypes.array,
     sidebar: PropTypes.object,
     maxAllowedOrderQuantity: PropTypes.number,
-    maxAllowedOrderQuantityErrorMessage: PropTypes.string
+    maxAllowedOrderQuantityErrorMessage: PropTypes.string,
+    getProductPriceUrl: PropTypes.string
 };
 
 export default Catalog;

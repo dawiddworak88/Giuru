@@ -816,4 +816,7 @@
   <data name="SomeFilesNotDownloadedError" xml:space="preserve">
     <value>Niektóre pliki nie zostały pobrane.</value>
   </data>
+  <data name="MinOrderQuantity" xml:space="preserve">
+    <value>Minimalna ilość zamówienia to 1</value>
+  </data>
 </root>
