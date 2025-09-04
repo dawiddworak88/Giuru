@@ -155,11 +155,21 @@ function Catalog(props) {
                         {total &&
                             <p className="subtitle is-6">{total} {props.resultsLabel}</p>
                         }
-                        <div className="columns is-tablet is-multiline">
+                        <div className="catalog__cards">
                             {items.map((item, index) => {
                                 return (
-                                    <div key={index} className="column is-3">
-                                        <div className="catalog-item card">
+                                    <div key={index} className="catalog__card">
+                                        <div className="catalog__card-header">
+                                            t
+                                        </div>
+                                        <a href={item.url} className="catalog__card-body">
+                                            <figure className="image is-4by3">
+                                                <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
+                                                    <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} imageClassName="card-image-scale-down" />
+                                                </LazyLoad>
+                                            </figure>
+                                        </a>
+                                        {/* <div className="catalog-item">
                                             <a href={item.url}>
                                                 <div className="card-image" aria-label={item.outletDescription} title={item.outletDescription}>
                                                     {item.inOutlet && item.outletTitle &&
@@ -217,7 +227,7 @@ function Catalog(props) {
                                                     )}
                                                 </div>
                                             }
-                                        </div>
+                                        </div> */}
                                     </div>
                                 )
                             })}
