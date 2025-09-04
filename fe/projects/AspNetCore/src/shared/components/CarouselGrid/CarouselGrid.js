@@ -18,7 +18,7 @@ function CarouselGrid(props) {
                     {item.carouselItems && item.carouselItems.length > 0 && 
                         <div key={item.id} className="carousel-grid__item">
                             <p className="title is-4">{item.title}</p>
-                            <Carousel responsive={CarouselConstants.defaultCarouselResponsive()}>
+                            <Carousel responsive={CarouselConstants.defaultCarouselResponsive()} slidesToSlide={4}>
                                 {item.carouselItems.map((carouselItem, index) =>
                                     <div key={index} className="card">
                                         {carouselItem.sources && 
@@ -58,8 +58,8 @@ function CarouselGrid(props) {
                                                 }
                                             </a>
                                             {carouselItem.price &&
-                                                    <Price {...carouselItem.price} />
-                                                }
+                                                <Price {...carouselItem.price} />
+                                            }
                                         </div>
                                     </div>
                                     )}
