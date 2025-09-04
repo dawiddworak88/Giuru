@@ -24,12 +24,14 @@
         }
 
         &-content {
+            display: flex;
+            flex-direction: column;
             padding: 1.5rem 0 1.625rem 0;
             flex: 1;
         }
 
         &-media {
-            height: 15.25rem;
+            min-height: 15.25rem;
             padding-bottom: 1.5rem;
         }
 
