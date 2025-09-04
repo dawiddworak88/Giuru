@@ -5,48 +5,48 @@ import { header, breadcrumbs, mainNavigation, files, footer } from "./shared/Pro
 
 const mediaItems = [
   {
-    imageSrc: "https://eltap.pl/upload/gallery/172/eridano-104080rgbjpg7311.jpg",
-    imageAlt: "Sectional",
+    mediaSrc: "https://media-test.eltap.com/api/v1/Files/70026166-4877-4a2e-30f2-08d907684408",
+    mediaAlt: "Sectional",
     mimeType: "image"
   },
   {
-    imageSrc: "https://eltap.pl/upload/gallery/65/zamowienie4berlin01soft11200000jpg3793.jpg",
-    imageAlt: "Sectional",
+    mediaSrc: "https://media-test.eltap.com/api/v1/files/version/871e380e-d34f-4d06-129b-08d907684409",
+    mediaAlt: "Sectional",
     mimeType: "image"
   },
   {
-    imageSrc: "https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg",  
-    imageAlt: "Sectional",
+    mediaSrc: "https://media-test.eltap.com/api/v1/Files/70026166-4877-4a2e-30f2-08d907684408",  
+    mediaAlt: "Sectional",
     mimeType: "image"
   },
   {
-    imageSrc: "https://eltap.pl/upload/gallery/172/eridano-104080rgbjpg7311.jpg",
-    imageAlt: "Sectional",
+    mediaSrc: "https://media-test.eltap.com/api/v1/files/version/871e380e-d34f-4d06-129b-08d907684409",
+    mediaAlt: "Sectional",
     mimeType: "image"
   },
   {
-    imageSrc: "https://eltap.pl/upload/gallery/65/zamowienie4berlin01soft11200000jpg3793.jpg",
-    imageAlt: "Sectional",
+    mediaSrc: "https://media-test.eltap.com/api/v1/Files/70026166-4877-4a2e-30f2-08d907684408",
+    mediaAlt: "Sectional",
     mimeType: "image"
   },
   {
-    imageSrc: "https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg",  
-    imageAlt: "Sectional",
+    mediaSrc: "https://media-test.eltap.com/api/v1/files/version/871e380e-d34f-4d06-129b-08d907684409",  
+    mediaAlt: "Sectional",
     mimeType: "image"
   },
   {
-    imageSrc: "https://eltap.pl/upload/gallery/172/eridano-104080rgbjpg7311.jpg",
-    imageAlt: "Sectional",
+    mediaSrc: "https://media-test.eltap.com/api/v1/Files/70026166-4877-4a2e-30f2-08d907684408",
+    mediaAlt: "Sectional",
     mimeType: "image"
   },
   {
-    imageSrc: "https://eltap.pl/upload/gallery/65/zamowienie4berlin01soft11200000jpg3793.jpg",
-    imageAlt: "Sectional",
+    mediaSrc: "https://media-test.eltap.com/api/v1/files/version/871e380e-d34f-4d06-129b-08d907684409",
+    mediaAlt: "Sectional",
     mimeType: "image"
   },
   {
-    imageSrc: "https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg",
-    imageAlt: "Sectional",
+    mediaSrc: "https://media-test.eltap.com/api/v1/Files/70026166-4877-4a2e-30f2-08d907684408",
+    mediaAlt: "Sectional",
     mimeType: "image"
   }
 ];
