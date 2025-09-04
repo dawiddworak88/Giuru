@@ -159,16 +159,12 @@ function Catalog(props) {
                             {items.map((item, index) => {
                                 return (
                                     <div key={index} className="catalog__card">
-                                        <div className="catalog__card-header">
-                                            t
-                                        </div>
+                                        <div className="catalog__card-header"></div>
                                         <a className="catalog__card-content">
                                             <div className="catalog__card-media">
-                                                {/* <figure className="image is-4by3"> */}
-                                                    <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
-                                                        <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} imageClassName="card-image-scale-down" />
-                                                    </LazyLoad>
-                                                {/* </figure> */}
+                                                <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
+                                                    <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} imageClassName="card-image-scale-down" />
+                                                </LazyLoad>
                                             </div>
                                             <div className="catalog__card-body">
                                                 <p className="catalog__card-sku">{props.skuLabel} {item.sku}</p>
@@ -176,6 +172,23 @@ function Catalog(props) {
 
                                                 {item.price && 
                                                     <Price {...item.price} />
+                                                }
+
+                                                {(item.inStock || item.inOutlet) &&
+                                                    <div className="mt-3">
+                                                        {item.inStock &&
+                                                            <Availability 
+                                                                label={props.inStockLabel}
+                                                                availableQuantity={item.availableQuantity}
+                                                            />
+                                                        }
+                                                        {item.inOutlet &&
+                                                            <Availability 
+                                                                label={props.inOutletLabel}
+                                                                availableQuantity={item.availableOutletQuantity}
+                                                            />
+                                                        }
+                                                    </div>
                                                 }
                                             </div>
                                         </a>
