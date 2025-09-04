@@ -16,6 +16,8 @@ import ProductDetailModal from "../ProductDetailModal/ProductDetailModal";
 import Price from "../../../../shared/components/Price/Price";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
+import Zoom from "react-medium-image-zoom";
+import 'react-medium-image-zoom/dist/styles.css';
 
 function ProductDetail(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -227,7 +229,9 @@ function ProductDetail(props) {
                                             <SplideSlide key={index}>
                                                 <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="product-detail__mobile-gallery__mobile-product-image">
                                                     {mediaItem.mimeType.startsWith("image") ? (
-                                                        <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
+                                                        <Zoom>
+                                                            <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
+                                                        </Zoom>
                                                     ) : (
                                                         <video autoPlay loop muted playsInline preload='auto'>
                                                             <source src={mediaItem.mediaSrc} type={mediaItem.mimeType} />
