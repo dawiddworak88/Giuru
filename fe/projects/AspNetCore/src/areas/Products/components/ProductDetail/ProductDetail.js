@@ -16,6 +16,7 @@ import ProductDetailModal from "../ProductDetailModal/ProductDetailModal";
 import Price from "../../../../shared/components/Price/Price";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
+import Availability from "../../../../shared/components/Availability/Availability";
 
 function ProductDetail(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -38,6 +39,7 @@ function ProductDetail(props) {
         maxAllowedOrderQuantityErrorMessage: props.maxAllowedOrderQuantityErrorMessage,
         minOrderQuantityErrorMessage: props.minOrderQuantityErrorMessage,
         generalErrorMessage: props.generalErrorMessage,
+        addProductToBasketMessage: props.toastSuccessAddProductToBasket,
         updateBasketUrl: props.updateBasketUrl,
         getPriceUrl: props.getProductPriceUrl
     });
@@ -111,7 +113,7 @@ function ProductDetail(props) {
             deliveryFrom: moment(item.deliveryFrom).startOf("day"),
             deliveryTo: moment(item.deliveryTo).startOf("day"),
             moreInfo: item.moreInfo,
-            resetData:() => {
+            resetData: () => {
                 setIsModalOpen(false);
             } 
         })
@@ -346,8 +348,8 @@ function ProductDetail(props) {
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
                     handleClose={handleCloseModal}
-                    maxOutletValue={productVariant ? QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle) : QuantityCalculationHelper.calculateMaxQuantity(orderItems, 'outletQuantity', props.availableOutletQuantity, props.sku)}
-                    outletQuantityInBasket={productVariant ? QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle) : QuantityCalculationHelper.getCurrentQuantity(orderItems, 'outletQuantity', props.sku)}
+                    maxOutletValue={productVariant ? QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle) : QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', props.availableOutletQuantity, props.sku)}
+                    outletQuantityInBasket={productVariant ? QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle) : QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', props.sku)}
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant ? productVariant : props}
                     labels={props.modal}
