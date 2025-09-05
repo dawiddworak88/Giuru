@@ -8,7 +8,6 @@ import { Context } from "../../../shared/stores/Store";
 import QueryStringSerializer from "../../../shared/helpers/serializers/QueryStringSerializer";
 import { TablePagination, Button } from "@mui/material";
 import CatalogConstants from "./CatalogConstants";
-import { ShoppingCart } from "@mui/icons-material";
 import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import Modal from "../Modal/Modal";
@@ -167,8 +166,11 @@ function Catalog(props) {
                                                 </LazyLoad>
                                             </div>
                                             <div className="catalog__card-body">
-                                                <p className="catalog__card-sku">{props.skuLabel} {item.sku}</p>
-                                                <h3 className="catalog__card-title">{item.title}</h3>
+                                                <p className="text-highlight">{props.skuLabel} {item.sku}</p>
+                                                <h3 className="title mt-1">{item.title}</h3>
+                                                {item.productAttributes &&
+                                                    <p className="text-highlight mt-1">{item.productAttributes}</p>
+                                                }
 
                                                 {item.price && 
                                                     <Price {...item.price} />
@@ -208,31 +210,6 @@ function Catalog(props) {
                                                 {props.basketLabel}
                                             </Button>
                                         </div>
-                                        {/* <div className="catalog-item">
-                                            <a href={item.url}>
-                                                <div className="card-image" aria-label={item.outletDescription} title={item.outletDescription}>
-                                                    {item.inOutlet && item.outletTitle &&
-                                                        <div className="catalog-item__discount p-1">
-                                                            <span className="p-1">{item.outletTitle}</span>
-                                                        </div>
-                                                    }
-                                                    <figure className="image is-4by3">
-                                                        <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
-                                                            <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} imageClassName="card-image-scale-down" />
-                                                        </LazyLoad>
-                                                    </figure>
-                                                </div>
-                                            </a>
-                                            <div className="media-content">
-                                                <p className="catalog-item__sku">{props.skuLabel} {item.sku}</p>
-                                                <h2 className="catalog-item__title"><a href={item.url}>{item.title}</a></h2>
-                                                {item.productAttributes &&
-                                                    <div className="catalog-item__productAttributes">
-                                                        <h3>{item.productAttributes}</h3>
-                                                    </div>
-                                                }
-                                            </div>
-                                            */}
                                     </div>
                                 )
                             })}
