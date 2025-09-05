@@ -54,6 +54,8 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string CopyToClipboardText { get; set; }
         public int? MaxAllowedOrderQuantity { get; set; }
         public string MaxAllowedOrderQuantityErrorMessage { get; set; }
+        public string MinOrderQuantityErrorMessage { get; set; }
+        public string GetProductPriceUrl { get; set; }
         public SidebarViewModel Sidebar { get; set; }
         public ModalViewModel Modal { get; set; }
         public FilesViewModel Files { get; set; }

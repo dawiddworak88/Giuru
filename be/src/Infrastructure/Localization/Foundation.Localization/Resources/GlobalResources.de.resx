@@ -816,4 +816,7 @@
   <data name="CopyToClipboardText" xml:space="preserve">
     <value>In die Zwischenablage kopieren</value>
   </data>
+  <data name="MinOrderQuantity" xml:space="preserve">
+    <value>Mindestbestellmenge ist 1</value>
+  </data>
 </root>

@@ -48,6 +48,8 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string PriceLabel { get; set; }
         public string CurrencyLabel { get; set; }
         public string GetClientAddressesUrl { get; set; }
+        public string GetProductPriceUrl { get; set; }
+        public string OutletProductLabel { get; set; }
         public int DefaultItemsPerPage { get; set; }
     }
 }

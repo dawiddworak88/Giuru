@@ -60,7 +60,9 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 ExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ExpectedDeliveryLabel"),
                 MaxAllowedOrderQuantity = this.options.Value.MaxAllowedOrderQuantity,
-                MaxAllowedOrderQuantityErrorMessage = this.globalLocalizer.GetString("MaxAllowedOrderQuantity")
+                MaxAllowedOrderQuantityErrorMessage = this.globalLocalizer.GetString("MaxAllowedOrderQuantity"),
+                GetProductPriceUrl = this.linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                MinOrderQuantityErrorMessage = this.globalLocalizer.GetString("MinOrderQuantity")
             };
 
             if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)

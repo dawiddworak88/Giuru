@@ -822,4 +822,7 @@
   <data name="CopyToClipboardText" xml:space="preserve">
     <value>Kopiuj do schowka</value>
   </data>
+  <data name="MinOrderQuantity" xml:space="preserve">
+    <value>Minimalna ilość zamówienia to 1</value>
+  </data>
 </root>

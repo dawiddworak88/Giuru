@@ -18,5 +18,6 @@
         public string SkuLabel { get; set; }
         public string EanLabel { get; set; }
         public string InBasket { get; set; }
+        public string OutletProductLabel { get; set; }
     }
 }
