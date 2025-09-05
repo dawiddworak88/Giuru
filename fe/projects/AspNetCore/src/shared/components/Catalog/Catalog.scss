@@ -18,7 +18,6 @@
         border-radius: 0.25rem;
         background: $white;
         padding: 1rem 0;
-        // flex: 1 1 calc(25% - 1rem);
         min-height: 28rem;
 
         &-header {
@@ -40,7 +39,7 @@
             align-items: center;
             justify-content: center;
             min-height: 15.25rem;
-            padding-bottom: 1.5rem;
+            padding: 0 0.25rem 1.5rem 0.25rem;
 
             img {
                 width: 100%;
@@ -48,9 +47,9 @@
                 object-fit: contain;
             }
 
-            // img[width*1 < height] {
-            //     object-fit: cover;
-            // }
+            img[width*1 < height] {
+                object-fit: cover;
+            }
         }
 
         &-body {
