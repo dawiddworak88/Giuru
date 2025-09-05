@@ -11,12 +11,14 @@
     }
 
     &__card {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         border: 1px solid #EFEFEF;
         border-radius: 0.25rem;
         background: $white;
         padding: 1rem 0;
-        flex: 1 1 calc(25% - 1rem);
+        // flex: 1 1 calc(25% - 1rem);
         min-height: 28rem;
 
         &-header {
