@@ -53,21 +53,21 @@
             display: block;
             text-decoration: none;
 
-            .heading {
+            .body-header {
                 min-height: 4.125rem;
-            }
 
-            .title {
-                font-size: 1.375rem;
-                color: $black;
-                font-weight: 400;
-                line-height: normal;
-                margin-bottom: 0;
-            }
+                .title {
+                    font-size: 1.375rem;
+                    color: $black;
+                    font-weight: 400;
+                    line-height: normal;
+                    margin-bottom: 0;
+                }
 
-            .text-highlight {
-                font-size: 0.875rem;
-                color: $card-subtitle;
+                .text-highlight {
+                    font-size: 0.875rem;
+                    color: $card-subtitle;
+                }
             }
         }
 

@@ -166,7 +166,7 @@ function Catalog(props) {
                                                 </LazyLoad>
                                             </div>
                                             <div className="catalog__card-body">
-                                                <div className="heading">
+                                                <div className="body-header">
                                                     <p className="text-highlight">{props.skuLabel} {item.sku}</p>
                                                     <h3 className="title mt-1">{item.title}</h3>
                                                     {item.productAttributes &&
