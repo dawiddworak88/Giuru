@@ -231,42 +231,8 @@ function Catalog(props) {
                                                         <h3>{item.productAttributes}</h3>
                                                     </div>
                                                 }
-                                                <div className="catalog-item__availability mt-3">
-                                                    {item.inStock &&
-                                                        <Availability 
-                                                            label={props.inStockLabel}
-                                                            availableQuantity={item.availableQuantity}
-                                                        />
-                                                    }
-                                                    {item.inOutlet &&
-                                                        <Availability 
-                                                            label={props.inOutletLabel}
-                                                            availableQuantity={item.availableOutletQuantity}
-                                                        />
-                                                    }
-                                                </div>
-                                                {item.price && 
-                                                    <Price {...item.price} />
-                                                }
                                             </div>
-                                            {props.isLoggedIn &&
-                                                <div className="catalog-item__add-to-cart-button-container">
-                                                    {props.showAddToCartButton ? (
-                                                        item.canOrder && (
-                                                            <div className="row is-flex is-flex-centered">
-                                                                <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => toggleModal(item)} color="primary">
-                                                                    {props.basketLabel}
-                                                                </Button>
-                                                            </div>
-                                                        )
-                                                    ) : (
-                                                        <Button variant="contained" onClick={() => toggleSidebar(item)} color="primary">
-                                                            {props.basketLabel}
-                                                        </Button>
-                                                    )}
-                                                </div>
-                                            }
-                                        </div> */}
+                                            */}
                                     </div>
                                 )
                             })}

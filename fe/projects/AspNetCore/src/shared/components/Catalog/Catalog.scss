@@ -5,8 +5,8 @@
 
 .catalog {
     &__cards {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 1rem;
     }
 
@@ -32,8 +32,23 @@
         }
 
         &-media {
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             min-height: 15.25rem;
             padding-bottom: 1.5rem;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+
+            // img[width*1 < height] {
+            //     object-fit: cover;
+            // }
         }
 
         &-body {
