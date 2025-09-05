@@ -6,7 +6,7 @@
 .catalog {
     &__cards {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
         gap: 1rem;
     }
 
@@ -45,10 +45,6 @@
                 width: 100%;
                 height: 100%;
                 object-fit: contain;
-            }
-
-            img[width*1 < height] {
-                object-fit: cover;
             }
         }
 
