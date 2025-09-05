@@ -166,11 +166,13 @@ function Catalog(props) {
                                                 </LazyLoad>
                                             </div>
                                             <div className="catalog__card-body">
-                                                <p className="text-highlight">{props.skuLabel} {item.sku}</p>
-                                                <h3 className="title mt-1">{item.title}</h3>
-                                                {item.productAttributes &&
-                                                    <p className="text-highlight mt-1">{item.productAttributes}</p>
-                                                }
+                                                <div className="heading">
+                                                    <p className="text-highlight">{props.skuLabel} {item.sku}</p>
+                                                    <h3 className="title mt-1">{item.title}</h3>
+                                                    {item.productAttributes &&
+                                                        <p className="text-highlight mt-1">{item.productAttributes}</p>
+                                                    }
+                                                </div>
 
                                                 {item.price && 
                                                     <Price className="catalog__card-price-spacing" {...item.price} />

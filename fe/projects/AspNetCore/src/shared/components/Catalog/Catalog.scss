@@ -53,6 +53,10 @@
             display: block;
             text-decoration: none;
 
+            .heading {
+                min-height: 4.125rem;
+            }
+
             .title {
                 font-size: 1.375rem;
                 color: $black;
