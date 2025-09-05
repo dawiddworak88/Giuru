@@ -6,13 +6,14 @@ const currencyMapping = {
 };
 
 const Price = ({
+    className,
     current,
     old,
     lowestPrice,
     currency,
     lowestPriceLabel
 }) => (
-    <div className="price">
+    <div className={`price ${className || ''}`}>
         <div className="price__container">
             <h3 className="price__current">{parseFloat(current).toFixed(2)} {currencyMapping[currency]}</h3>
             {old && (

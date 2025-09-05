@@ -173,7 +173,7 @@ function Catalog(props) {
                                                 }
 
                                                 {item.price && 
-                                                    <Price {...item.price} />
+                                                    <Price className="catalog__card-price-spacing" {...item.price} />
                                                 }
 
                                                 {(item.inStock || item.inOutlet) &&
