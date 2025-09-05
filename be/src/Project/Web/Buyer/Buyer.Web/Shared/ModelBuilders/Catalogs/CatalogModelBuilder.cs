@@ -65,7 +65,9 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 UpdateBasketUrl = _linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 ExpectedDeliveryLabel = _inventoryLocalizer.GetString("ExpectedDeliveryLabel"),
                 MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
-                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity")
+                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity"),
+                GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity")
             };
 
             if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)

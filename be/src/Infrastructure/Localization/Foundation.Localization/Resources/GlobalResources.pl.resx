@@ -819,4 +819,7 @@
   <data name="ShowText" xml:space="preserve">
     <value>Pokaż</value>
   </data>
+  <data name="MinOrderQuantity" xml:space="preserve">
+    <value>Minimalna ilość zamówienia to 1</value>
+  </data>
 </root>

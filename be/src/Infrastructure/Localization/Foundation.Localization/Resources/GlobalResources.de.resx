@@ -812,5 +812,8 @@
   </data>
   <data name="ShowText" xml:space="preserve">
     <value>Anzeigen</value>
+  </data>  
+  <data name="MinOrderQuantity" xml:space="preserve">
+    <value>Mindestbestellmenge ist 1</value>
   </data>
 </root>

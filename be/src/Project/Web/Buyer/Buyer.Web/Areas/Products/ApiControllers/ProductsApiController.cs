@@ -5,7 +5,6 @@ using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.ProductColors;
 using Buyer.Web.Areas.Products.Services.Products;
-using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Definitions.Middlewares;
@@ -34,6 +33,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Buyer.Web.Areas.Products.ApiControllers
 {
@@ -51,6 +51,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
         private readonly IProductColorsService _productColorsService;
+        private readonly ILogger<ProductsApiController> _logger;
 
         public ProductsApiController(
             IProductsService productsService,
@@ -63,7 +64,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IOptions<AppSettings> options,
             IPriceService priceService,
             LinkGenerator linkGenerator,
-            IProductColorsService productColorsService)
+            IProductColorsService productColorsService,
+            ILogger<ProductsApiController> logger)
         {
             _productsService = productsService;
             _productsRepository = productsRepository;
@@ -77,6 +79,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             _options = options;
             _priceService = priceService;
             _productColorsService = productColorsService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -160,7 +163,6 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
                         PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
                         Size = _productsService.GetSize(x.ProductAttributes),
-                        IsOutlet = (availableOutletProducts.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo(),
                         PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
                         LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
                         LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
@@ -243,6 +245,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                     if (availableProduct is not null)
                     {
+                        carouselItem.InStock = true;
                         carouselItem.AvailableQuantity = availableProduct.AvailableQuantity;
                         carouselItem.ExpectedDelivery = availableProduct.ExpectedDelivery;
                     }
@@ -251,6 +254,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                     if (availableOutletProduct is not null)
                     {
+                        carouselItem.InOutlet = true;
                         carouselItem.AvailableOutletQuantity = availableOutletProduct.AvailableQuantity;
                         carouselItem.OutletTitle = availableOutletProduct.Title;
                     }
@@ -348,8 +352,6 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
             if (products.Data.Any())
             {
-                var outletItems = await _outletRepository.GetOutletProductsByProductsIdAsync(token, language, products.Data.Select(x => x.Id));
-
                 var prices = Enumerable.Empty<Price>();
 
                 if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
@@ -362,7 +364,6 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
                         PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
                         Size = _productsService.GetSize(x.ProductAttributes),
-                        IsOutlet = (outletItems.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo(),
                         PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
                         LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
                         LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
@@ -439,6 +440,71 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             }
 
             return StatusCode((int)HttpStatusCode.OK, Enumerable.Empty<ProductQuantitiesResponseModel>());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPrice(string sku)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            var product = await _productsRepository.GetProductAsync(sku, language, token);
+
+            if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+            {
+                var outletItem = await _outletRepository.GetOutletProductBySkuAsync(token, language, sku);
+
+                try
+                {
+                    var price = await _priceService.GetPrice(
+                    _options.Value.GrulaAccessToken,
+                    DateTime.UtcNow,
+                    new PriceProduct
+                    {
+                        PrimarySku = product.PrimaryProductSku,
+                        FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                        ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
+                        SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
+                        PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                        Size = _productsService.GetSize(product.ProductAttributes),
+                        PointsOfLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
+                        LampshadeType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
+                        LampshadeSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
+                        LinearLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                        Mirror = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                        Shape = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
+                        PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
+                        SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                        ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
+                        IsOutlet = (outletItem?.AvailableQuantity > 0).ToYesOrNo()
+                    },
+                    new PriceClient
+                    {
+                        Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
+                        Name = User.Identity?.Name,
+                        CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
+                        ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
+                        PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
+                        Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
+                        DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
+                    });
+
+                    if (price is not null)
+                    {
+                        return StatusCode((int)HttpStatusCode.OK, new PriceResponseModel
+                        {
+                            CurrencyCode = price.CurrencyCode,
+                            CurrentPrice = price.CurrentPrice
+                        });
+                    }
+                }
+                catch
+                {
+                    return StatusCode((int)HttpStatusCode.OK);
+                }
+            }
+
+            return StatusCode((int)HttpStatusCode.OK);
         }
     } 
 }

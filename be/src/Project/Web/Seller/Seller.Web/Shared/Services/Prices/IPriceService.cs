@@ -8,9 +8,13 @@ namespace Seller.Web.Shared.Services.Prices
     public interface IPriceService
     {
         Task<IEnumerable<Price>> GetPrices(
-            string token,
             DateTime pricingDate,
             IEnumerable<PriceProduct> products,
+            PriceClient client);
+
+        Task<Price> GetPrice(
+            DateTime pricingDate,
+            PriceProduct product,
             PriceClient client);
     }
 }
