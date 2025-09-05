@@ -108,6 +108,7 @@ function Catalog(props) {
         maxAllowedOrderQuantityErrorMessage: props.maxAllowedOrderQuantityErrorMessage,
         minOrderQuantityErrorMessage: props.minOrderQuantityErrorMessage,
         generalErrorMessage: props.generalErrorMessage,
+        addProductToBasketMessage: props.toastSuccessAddProductToBasket,
         updateBasketUrl: props.updateBasketUrl,
         getPriceUrl: props.getProductPriceUrl
     });
