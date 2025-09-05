@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import moment from "moment";
 import { Button } from "@mui/material";
 import Files from "../../../../shared/components/Files/Files";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
@@ -16,6 +15,7 @@ import ProductDetailModal from "../ProductDetailModal/ProductDetailModal";
 import Price from "../../../../shared/components/Price/Price";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
+import Availability from "../../../../shared/components/Availability/Availability";
 import Zoom from "react-medium-image-zoom";
 import 'react-medium-image-zoom/dist/styles.css';
 
@@ -345,8 +345,8 @@ function ProductDetail(props) {
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
                     handleClose={handleCloseModal}
-                    maxOutletValue={productVariant ? QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle) : QuantityCalculationHelper.calculateMaxQuantity(orderItems, 'outletQuantity', props.availableOutletQuantity, props.sku)}
-                    outletQuantityInBasket={productVariant ? QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle) : QuantityCalculationHelper.getCurrentQuantity(orderItems, 'outletQuantity', props.sku)}
+                    maxOutletValue={productVariant ? QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle) : QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', props.availableOutletQuantity, props.sku)}
+                    outletQuantityInBasket={productVariant ? QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle) : QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', props.sku)}
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant ? productVariant : props}
                     labels={props.modal}
