@@ -44,7 +44,8 @@ function NewOrderForm(props) {
         addOrderItemToBasket,
         deleteOrderItemFromBasket,
         clearBasket,
-        setGroupedOrderItems
+        setGroupedOrderItems,
+        setBasketId
     } = useOrderManagement({
         initialBasketId: props.basketId ? props.basketId : null,
         initialOrderItems: props.basketItems ? props.basketItems : [],
@@ -144,7 +145,7 @@ function NewOrderForm(props) {
         deleteOrderItemFromBasket({
             orderItem: entityToDelete,
             resetData: () => {
-                setOpenDeleteDialog(false);
+                handleDeleteDialogClose();
             }
         });
     };
@@ -215,6 +216,7 @@ function NewOrderForm(props) {
 
                     return response.json().then((jsonResponse) => {
                         if (response.ok) {
+                            setBasketId(jsonResponse.id);
                             setGroupedOrderItems([...orderItems, ...jsonResponse.items]);
                         }
                         else {

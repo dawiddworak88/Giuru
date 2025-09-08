@@ -255,8 +255,20 @@ function Catalog(props) {
                 <Modal
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
-                    maxOutletValue={productVariant ? QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle ? productVariant.subtitle : productVariant.sku) : null}
-                    outletQuantityInBasket={productVariant ? QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle ? productVariant.subtitle : productVariant.sku) : 0}
+                    maxOutletValue={
+                        productVariant 
+                            ? QuantityCalculatorService.calculateMaxQuantity(
+                                orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle ? productVariant.subtitle : productVariant.sku
+                              ) 
+                            : null
+                        }
+                    outletQuantityInBasket={
+                        productVariant 
+                            ? QuantityCalculatorService.getCurrentQuantity(
+                                orderItems, 'outletQuantity', productVariant.subtitle ? productVariant.subtitle : productVariant.sku
+                              ) 
+                            : 0
+                        }
                     handleClose={handleCloseModal}
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant}
