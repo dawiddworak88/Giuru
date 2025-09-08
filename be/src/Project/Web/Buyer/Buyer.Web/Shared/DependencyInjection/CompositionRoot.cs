@@ -43,6 +43,7 @@ using Buyer.Web.Shared.Repositories.Global;
 using Grula.PricingIntelligencePlatform.Sdk;
 using System.Net.Http.Headers;
 using Foundation.Extensions.Services.Cache;
+using Buyer.Web.Shared.Repositories.Inventory;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -76,6 +77,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IIdentityRepository, IdentityRepository>();
             services.AddScoped<IGlobalRepository, GlobalRepository>();
             services.AddScoped<IClientFieldValuesRepository, ClientFieldValuesRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
 
             // Services
             services.AddScoped<ICatalogService, CatalogService>();
