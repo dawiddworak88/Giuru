@@ -88,7 +88,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             var basketItems = new List<BasketItem>();
 
-            foreach (var orderLine in importedOrderLines)
+            foreach (var orderLine in importedOrderLines.OrEmptyIfNull())
             {
                 if (!productBySku.TryGetValue(orderLine.Sku, out var product) || product == null)
                 {
@@ -98,7 +98,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
                 var availableStock = stockByProductId.TryGetValue(product.Id, out var qty) ? qty : 0;
 
-                var stockQuantity = Math.Min((double)orderLine.Quantity, (double)availableStock);
+                var stockQuantity = Math.Min(orderLine.Quantity, (double)availableStock);
                 var quantity = orderLine.Quantity - stockQuantity;
 
                 var basketItem = new BasketItem
