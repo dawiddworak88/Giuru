@@ -22,7 +22,7 @@ export const useOrderManagement = ({
     getPriceUrl
 }) => {
     const [state, dispatch] = useContext(Context);
-    const [basketId, setBasketId] = useState(initialBasketId);
+    const [basketId, setBasketId] = useState(initialBasketId || null);
     const [orderItems, setOrderItems] = useState(initialOrderItems || []);
 
     const groupOrderItems = (items) => {
@@ -227,7 +227,7 @@ export const useOrderManagement = ({
 
             dispatch({ type: "SET_IS_LOADING", payload: true });
         
-            const newItems = orderItems.filter(oi => oi.productId !== item.id);
+            const newItems = orderItems.filter(oi => oi.productId !== item.productId);
 
             const basket = { 
                 id: basketId, 
@@ -277,6 +277,7 @@ export const useOrderManagement = ({
     return { 
         basketId, 
         orderItems, 
+        setBasketId,
         setGroupedOrderItems,
         addOrderItemToBasket,
         deleteOrderItemFromBasket,
