@@ -227,7 +227,7 @@ export const useOrderManagement = ({
 
             dispatch({ type: "SET_IS_LOADING", payload: true });
         
-            const newItems = orderItems.filter(oi => oi !== item);
+            const newItems = orderItems.filter(oi => oi.productId !== item.id);
 
             const basket = { 
                 id: basketId, 
