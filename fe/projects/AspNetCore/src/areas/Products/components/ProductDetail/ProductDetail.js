@@ -16,12 +16,12 @@ import Price from "../../../../shared/components/Price/Price";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
 import Availability from "../../../../shared/components/Availability/Availability";
-import Zoom from "react-medium-image-zoom";
-import 'react-medium-image-zoom/dist/styles.css';
+import ProductZoomModal from "../ProductZoomModal/ProductZoomModal";
 
 function ProductDetail(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isZoomModalOpen, setIsZoomModalOpen] = useState(false);
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null);
     const [canActiveModal, setCanActiveModal] = useState(true);
@@ -133,6 +133,15 @@ function ProductDetail(props) {
         setCanActiveModal(false);
     }
 
+    const handleOpenZoomModal = (index) => {
+        setActiveMediaItemIndex(index)
+        setIsZoomModalOpen(true)
+    }
+
+    const handleCloseZoomModal = () => {
+        setIsZoomModalOpen(false)
+    }
+
     useEffect(() => {
         if (isSidebarOpen) {
             setCanActiveModal(true);
@@ -226,12 +235,10 @@ function ProductDetail(props) {
                                 >
                                     {props.mediaItems.map((mediaItem, index) => {
                                         return (
-                                            <SplideSlide key={index}>
+                                            <SplideSlide key={index} onClick={() => handleOpenZoomModal(index)}>
                                                 <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="product-detail__mobile-gallery__mobile-product-image">
                                                     {mediaItem.mimeType.startsWith("image") ? (
-                                                        <Zoom>
-                                                            <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
-                                                        </Zoom>
+                                                        <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
                                                     ) : (
                                                         <video autoPlay loop muted playsInline preload='auto'>
                                                             <source src={mediaItem.mediaSrc} type={mediaItem.mimeType} />
@@ -356,6 +363,12 @@ function ProductDetail(props) {
                     handleClose={handleCloseImageModal}
                     mediaItems={props.mediaItems}
                     title={props.title}
+                    index={activeMediaItemIndex}
+                />
+                <ProductZoomModal
+                    isOpen={isZoomModalOpen}
+                    handleClose={handleCloseZoomModal}
+                    mediaItems={props.mediaItems}
                     index={activeMediaItemIndex}
                 />
             </div>
