@@ -85,7 +85,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var skusParam = importedOrderLines.Select(x => x.Sku).Distinct().ToEndpointParameterString();
+            var skusParam = importedOrderLines.OrEmptyIfNull().Select(x => x.Sku).Distinct().ToEndpointParameterString();
             var products = await this.catalogProductsRepository.GetProductsAsync(token, language, skusParam);
 
             var productBySku = products

@@ -31,5 +31,6 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
             int? fulfillmentTime,
             string formData);
         Task TriggerProductsReindexingAsync(string token, string language);
+        Task<IEnumerable<Product>> GetProductsBySkusAsync(string token, string language, IEnumerable<string> skus);
     }
 }
