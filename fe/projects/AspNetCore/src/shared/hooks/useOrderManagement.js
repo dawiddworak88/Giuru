@@ -251,7 +251,6 @@ export const useOrderManagement = ({
 
                 AuthenticationHelper.HandleResponse(response);
 
-
                 if (response.ok) {
                     const jsonResponse = await response.json();
 
