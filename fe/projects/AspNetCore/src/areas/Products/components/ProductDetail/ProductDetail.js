@@ -16,6 +16,7 @@ import ProductDetailModal from "../ProductDetailModal/ProductDetailModal";
 import Price from "../../../../shared/components/Price/Price";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
+import Availability from "../../../../shared/components/Availability/Availability";
 
 function ProductDetail(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -74,15 +75,6 @@ function ProductDetail(props) {
             }
 
             return [];
-        };
-
-        const totalQuantity = quantity + stockQuantity + outletQuantity;
-
-        if (props.maxAllowedOrderQuantity &&
-            (totalQuantity > props.maxAllowedOrderQuantity)) {
-            toast.error(props.maxAllowedOrderQuantityErrorMessage);
-            dispatch({ type: "SET_IS_LOADING", payload: false });
-            return;    
         };
 
         const getPriceInfo = () => {
@@ -163,16 +155,46 @@ function ProductDetail(props) {
     }
 
     const handleOnCopy = async (text) => {
-        try {
-            await navigator.clipboard.writeText(text)
-            setCopied(true)
-            setTimeout(() => setCopied(false), 2000)
-        } catch (err) {
-            console.error(err)
+        if (navigator.clipboard && window.isSecureContext) {
+            try {
+                await navigator.clipboard.writeText(text)
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2000)
+            } catch {
+                fallbackCopyTextToClipboard(text)
+            }
+        } else {
+            fallbackCopyTextToClipboard(text)
         }
     }
 
-    const CopyButton = (textToCopy) => {
+    const fallbackCopyTextToClipboard = (text) => {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.top = 0;
+        textArea.style.left = 0;
+        textArea.style.width = "2em";
+        textArea.style.height = "2em";
+        textArea.style.padding = 0;
+        textArea.style.border = "none";
+        textArea.style.outline = "none";
+        textArea.style.boxShadow = "none";
+        textArea.style.background = "transparent";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error(err);
+        }
+        document.body.removeChild(textArea);
+    };
+
+    const copyButton = (textToCopy) => {
         return (
             <Tooltip title={copied ? props.copiedText : props.copyToClipboardText}>
                 <IconButton
@@ -180,6 +202,7 @@ function ProductDetail(props) {
                     disableRipple
                     onClick={() => handleOnCopy(textToCopy)}
                     className="product-detail__copy-button"
+                    aria-label={props.copyToClipboardText}
                 >
                     <ContentCopy fontSize="1rem" />
                 </IconButton>
@@ -196,8 +219,8 @@ function ProductDetail(props) {
                             <div className="is-flex is-flex-wrap product-detail__product-gallery">
                                 {props.mediaItems && props.mediaItems.length > 1 ? (
                                     mediaItems.map((mediaItem, index) => (
-                                        <div className="product-detail__desktop-gallery__desktop-product-image" onClick={() => handleImageModal(index)}>
-                                            <LazyLoad offset={LazyLoadConstants.defaultOffset()} key={index}>
+                                        <div key={index} className="product-detail__desktop-gallery__desktop-product-image" onClick={() => handleImageModal(index)}>
+                                            <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
                                                 {mediaItem.mimeType.startsWith("image") ? (
                                                     <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
                                                 ) : (
@@ -278,11 +301,11 @@ function ProductDetail(props) {
                         </div>
                     </div>
                     <div className="product-detail__description-column">
-                        <p className="product-detail__sku">{props.skuLabel} {props.sku} {CopyButton(props.sku)}</p>
+                        <p className="product-detail__sku">{props.skuLabel} {props.sku} {copyButton(props.sku)}</p>
                         {props.ean &&
-                            <p className="product-detail__ean">{props.eanLabel} {props.ean} {CopyButton(props.ean)}</p>
+                            <p className="product-detail__ean">{props.eanLabel} {props.ean} {copyButton(props.ean)}</p>
                         }
-                        <h1 className="title is-4 mt-1">{props.title} {CopyButton(props.title)}</h1>
+                        <h1 className="title is-4 mt-1">{props.title} {copyButton(props.title)}</h1>
                         <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
                         {props.outletTitle &&
                             <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>
@@ -325,7 +348,7 @@ function ProductDetail(props) {
                         }
                         {props.description &&
                             <div className="product-detail__product-description">
-                                <h3 className="product-detail__feature-title">{props.descriptionLabel} {CopyButton(props.description)}</h3>
+                                <h3 className="product-detail__feature-title">{props.descriptionLabel} {copyButton(props.description)}</h3>
                                 <div dangerouslySetInnerHTML={{ __html: marked.parse(props.description) }}></div>
                             </div>
                         }
@@ -376,8 +399,8 @@ function ProductDetail(props) {
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
                     handleClose={handleCloseModal}
-                    maxOutletValue={productVariant ? QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle) : QuantityCalculationHelper.calculateMaxQuantity(orderItems, 'outletQuantity', props.availableOutletQuantity, props.sku)}
-                    outletQuantityInBasket={productVariant ? QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle) : QuantityCalculationHelper.getCurrentQuantity(orderItems, 'outletQuantity', props.sku)}
+                    maxOutletValue={productVariant ? QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle) : QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', props.availableOutletQuantity, props.sku)}
+                    outletQuantityInBasket={productVariant ? QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle) : QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', props.sku)}
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant ? productVariant : props}
                     labels={props.modal}
@@ -422,7 +445,9 @@ ProductDetail.propTypes = {
     readLessText: PropTypes.string.isRequired,
     readMoreText: PropTypes.string.isRequired,
     maxAllowedOrderQuantity: PropTypes.number,
-    maxAllowedOrderQuantityErrorMessage: PropTypes.string
+    maxAllowedOrderQuantityErrorMessage: PropTypes.string,
+    copiedText: PropTypes.string.isRequired,
+    copyToClipboardText: PropTypes.string.isRequired
 };
 
 export default ProductDetail;
