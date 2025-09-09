@@ -282,7 +282,6 @@ Catalog.propTypes = {
     generalErrorMessage: PropTypes.string.isRequired,
     productsApiUrl: PropTypes.string.isRequired,
     orderBy: PropTypes.string,
-    successfullyAddedProduct: PropTypes.string,
     inStock: PropTypes.bool,
     inOutlet: PropTypes.bool,
     availableQuantity: PropTypes.number,
