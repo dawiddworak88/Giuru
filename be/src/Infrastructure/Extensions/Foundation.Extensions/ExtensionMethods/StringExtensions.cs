@@ -27,6 +27,15 @@ namespace Foundation.Extensions.ExtensionMethods
             return default;
         }
 
+        public static string ToEndpointParameterString(this IEnumerable<string> skus)
+        {
+            if (skus != null && skus.Any())
+            {
+                return string.Join(EndpointParameterConstants.ParameterSeparator, skus);
+            }
+
+            return default;
+        }
         public static string ToCamelCase(this string str)
         {
             if (!string.IsNullOrEmpty(str) && str.Length > 1)

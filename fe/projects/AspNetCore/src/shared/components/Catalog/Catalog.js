@@ -11,11 +11,11 @@ import CatalogConstants from "./CatalogConstants";
 import { ShoppingCart } from "@mui/icons-material";
 import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
-import moment from "moment";
 import Modal from "../Modal/Modal";
 import Price from "../Price/Price";
 import { useOrderManagement } from "../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../services/QuantityCalculatorService";
+import Availability from "../Availability/Availability";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -182,29 +182,20 @@ function Catalog(props) {
                                                         <h3>{item.productAttributes}</h3>
                                                     </div>
                                                 }
-                                                {item.inStock &&
-                                                    <div className="catalog-item__in-stock-details">
-                                                        {item.availableQuantity > 0 && item.availableQuantity &&
-                                                            <div className="stock">
-                                                                {props.inStockLabel} {item.availableQuantity}
-                                                            </div>
-                                                        }
-                                                        {item.expectedDelivery &&
-                                                            <div className="expected-delivery">
-                                                                {props.expectedDeliveryLabel} {moment.utc(item.expectedDelivery).local().format("L")}
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                }
-                                                {item.inOutlet &&
-                                                    <div className="catalog-item__in-stock-details">
-                                                        {item.availableOutletQuantity > 0 && item.availableOutletQuantity &&
-                                                            <div className="stock">
-                                                                {props.inOutletLabel} {item.availableOutletQuantity}
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                }
+                                                <div className="catalog-item__availability mt-3">
+                                                    {item.inStock &&
+                                                        <Availability 
+                                                            label={props.inStockLabel}
+                                                            availableQuantity={item.availableQuantity}
+                                                        />
+                                                    }
+                                                    {item.inOutlet &&
+                                                        <Availability 
+                                                            label={props.inOutletLabel}
+                                                            availableQuantity={item.availableOutletQuantity}
+                                                        />
+                                                    }
+                                                </div>
                                                 {item.price && 
                                                     <Price {...item.price} />
                                                 }
@@ -264,8 +255,20 @@ function Catalog(props) {
                 <Modal
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
-                    maxOutletValue={productVariant ? QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle ? productVariant.subtitle : productVariant.sku) : null}
-                    outletQuantityInBasket={productVariant ? QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle ? productVariant.subtitle : productVariant.sku) : 0}
+                    maxOutletValue={
+                        productVariant 
+                            ? QuantityCalculatorService.calculateMaxQuantity(
+                                orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle ? productVariant.subtitle : productVariant.sku
+                              ) 
+                            : null
+                        }
+                    outletQuantityInBasket={
+                        productVariant 
+                            ? QuantityCalculatorService.getCurrentQuantity(
+                                orderItems, 'outletQuantity', productVariant.subtitle ? productVariant.subtitle : productVariant.sku
+                              ) 
+                            : 0
+                        }
                     handleClose={handleCloseModal}
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant}

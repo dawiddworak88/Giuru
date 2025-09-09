@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import moment from "moment";
 import { Button } from "@mui/material";
 import Files from "../../../../shared/components/Files/Files";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
@@ -252,19 +251,20 @@ function ProductDetail(props) {
                         {props.outletTitle &&
                             <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>
                         }
-                        {props.inStock && props.availableQuantity && props.availableQuantity > 0 &&
-                            <div className="product-detail__in-stock">
-                                {props.inStockLabel} {props.availableQuantity}
-                                {props.expectedDelivery &&
-                                    <div className="product-detail__expected-delivery">{props.expectedDeliveryLabel} {moment.utc(props.expectedDelivery).local().format("L")}</div>
-                                }
-                            </div>
-                        }
-                        {props.inOutlet && props.availableOutletQuantity && props.availableOutletQuantity > 0 &&
-                            <div className="product-detail__in-stock">
-                                {props.inOutletLabel} {props.availableOutletQuantity}
-                            </div>
-                        }
+                        <div className="product-detail__availability mt-3">
+                            {props.inStock && 
+                                <Availability
+                                    label={props.inStockLabel}
+                                    availableQuantity={props.availableQuantity}
+                                />
+                            }
+                            {props.inOutlet && 
+                                <Availability
+                                    label={props.inOutletLabel}
+                                    availableQuantity={props.availableOutletQuantity}
+                                />
+                            }
+                        </div>
                         {props.price &&
                             <Price 
                                 {...props.price}
@@ -340,8 +340,24 @@ function ProductDetail(props) {
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
                     handleClose={handleCloseModal}
-                    maxOutletValue={productVariant ? QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle) : QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', props.availableOutletQuantity, props.sku)}
-                    outletQuantityInBasket={productVariant ? QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle) : QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', props.sku)}
+                    maxOutletValue={
+                        productVariant 
+                            ? QuantityCalculatorService.calculateMaxQuantity(
+                                orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle
+                              ) 
+                            : QuantityCalculatorService.calculateMaxQuantity(
+                                orderItems, 'outletQuantity', props.availableOutletQuantity, props.sku
+                            )
+                        }
+                    outletQuantityInBasket={
+                        productVariant 
+                            ? QuantityCalculatorService.getCurrentQuantity(
+                                orderItems, 'outletQuantity', productVariant.subtitle
+                              ) 
+                            : QuantityCalculatorService.getCurrentQuantity(
+                                orderItems, 'outletQuantity', props.sku
+                            )
+                        }
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant ? productVariant : props}
                     labels={props.modal}
