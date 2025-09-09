@@ -24,7 +24,7 @@ export const useOrderManagement = ({
     getPriceUrl
 }) => {
     const [state, dispatch] = useContext(Context);
-    const [basketId, setBasketId] = useState(initialBasketId);
+    const [basketId, setBasketId] = useState(initialBasketId || null);
     const [orderItems, setOrderItems] = useState(initialOrderItems || []);
 
     const groupOrderItems = (items) => {
@@ -230,7 +230,11 @@ export const useOrderManagement = ({
 
             dispatch({ type: "SET_IS_LOADING", payload: true });
         
-            const newItems = orderItems.filter(oi => oi !== item);
+            const newItems = orderItems.filter(oi =>
+                !(oi.productId === item.productId &&
+                  oi.moreInfo === item.moreInfo &&
+                  oi.externalReference === item.externalReference)
+                );
 
             const basket = { 
                 id: basketId, 
@@ -253,7 +257,6 @@ export const useOrderManagement = ({
                 dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems - reducedQuantity });
 
                 AuthenticationHelper.HandleResponse(response);
-
 
                 if (response.ok) {
                     const jsonResponse = await response.json();
@@ -281,6 +284,7 @@ export const useOrderManagement = ({
     return { 
         basketId, 
         orderItems, 
+        setBasketId,
         setGroupedOrderItems,
         addOrderItemToBasket,
         deleteOrderItemFromBasket,
