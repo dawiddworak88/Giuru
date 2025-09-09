@@ -34,7 +34,12 @@ const ProductZoomModal = (props) => {
     };
 
     const handleTouchStart = (e) => {
-        e.preventDefault()
+        
+        if (e.touches.length > 1) {
+            e.preventDefault()
+            return
+        }
+
         const touch = e.touches[0]
         lastPositionref.current = { x: touch.clientX, y: touch.clientY }
 
@@ -47,7 +52,12 @@ const ProductZoomModal = (props) => {
     };
 
     const handleTouchMove = (e) => {
-        e.preventDefault()
+
+        if (e.touches.length > 1) {
+            e.preventDefault()
+            return
+        }
+
         if (isZoomed) {
             const touch = e.touches[0]
 
