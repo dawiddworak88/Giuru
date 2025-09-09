@@ -2,10 +2,12 @@
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Localization;
 using Foundation.Media.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Seller.Web.Areas.Media.ApiRequestModels;
 using Seller.Web.Areas.Orders.ApiResponseModels;
@@ -40,6 +42,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IMediaItemsRepository mediaRepository;
         private readonly IOrdersRepository ordersRepository;
         private readonly IInventoryRepository inventoryRepository;
+        private readonly IStringLocalizer<OrderResources> orderLocalizer;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
@@ -50,7 +53,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             IMediaItemsRepository mediaRepository,
             IOrdersRepository ordersRepository,
             IInventoryRepository inventoryRepository,
-            ILogger<OrderFileApiController> logger)
+            ILogger<OrderFileApiController> logger,
+            IStringLocalizer<OrderResources> orderLocalizer)
         {
             this.orderFileService = orderFileService;
             this.productsRepository = productsRepository;
@@ -61,6 +65,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             this.mediaRepository = mediaRepository;
             this.ordersRepository = ordersRepository;
             this.inventoryRepository = inventoryRepository;
+            this.orderLocalizer = orderLocalizer;
         }
 
         [HttpPost]
@@ -74,6 +79,11 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             var products = await this.productsRepository.GetProductsBySkusAsync(token, language, skus);
+
+            if (!products.OrEmptyIfNull().Any())
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = this.orderLocalizer.GetString("ProductsNotFound") });
+            }
 
             var productBySku = products
                 .OrEmptyIfNull()
