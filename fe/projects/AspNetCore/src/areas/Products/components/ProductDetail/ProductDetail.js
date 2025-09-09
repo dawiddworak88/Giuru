@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import moment from "moment";
 import { Button } from "@mui/material";
 import Files from "../../../../shared/components/Files/Files";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
@@ -16,6 +15,7 @@ import ProductDetailModal from "../ProductDetailModal/ProductDetailModal";
 import Price from "../../../../shared/components/Price/Price";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
+import Availability from "../../../../shared/components/Availability/Availability";
 
 function ProductDetail(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
