@@ -82,8 +82,15 @@
         color: $link;
     }
 
-    &__copy-button:active {
-        background-color: $lightgrey;
+    &__copy-button {
+        &:active {
+            background-color: $lightgrey;
+        }
+
+        &:focus-visible {
+            outline: 1px solid $link;
+            outline-offset: 1px;
+        }
     }
 
     &__description-column {
