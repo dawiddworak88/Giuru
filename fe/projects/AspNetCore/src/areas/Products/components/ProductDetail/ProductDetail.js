@@ -38,6 +38,7 @@ function ProductDetail(props) {
         maxAllowedOrderQuantityErrorMessage: props.maxAllowedOrderQuantityErrorMessage,
         minOrderQuantityErrorMessage: props.minOrderQuantityErrorMessage,
         generalErrorMessage: props.generalErrorMessage,
+        addProductToBasketMessage: props.toastSuccessAddProductToBasket,
         updateBasketUrl: props.updateBasketUrl,
         getPriceUrl: props.getProductPriceUrl
     });
@@ -105,10 +106,15 @@ function ProductDetail(props) {
             quantity,
             isOutletOrder: item.isOutletOrder,
             externalReference: item.externalReference,
+            unitPrice: product.price ? parseFloat(product.price.current).toFixed(2) : null,
+            price: product.price ? parseFloat(product.price.current * totalQuantity).toFixed(2) : null,
+            currency: product.price ? product.price.currency : null,
+            deliveryFrom: moment(item.deliveryFrom).startOf("day"),
+            deliveryTo: moment(item.deliveryTo).startOf("day"),
             moreInfo: item.moreInfo,
             resetData: () => {
                 setIsModalOpen(false);
-            }
+            } 
         })
     };
 

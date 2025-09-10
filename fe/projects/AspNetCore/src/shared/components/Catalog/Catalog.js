@@ -108,6 +108,7 @@ function Catalog(props) {
         maxAllowedOrderQuantityErrorMessage: props.maxAllowedOrderQuantityErrorMessage,
         minOrderQuantityErrorMessage: props.minOrderQuantityErrorMessage,
         generalErrorMessage: props.generalErrorMessage,
+        addProductToBasketMessage: props.toastSuccessAddProductToBasket,
         updateBasketUrl: props.updateBasketUrl,
         getPriceUrl: props.getProductPriceUrl
     });
@@ -293,7 +294,6 @@ Catalog.propTypes = {
     generalErrorMessage: PropTypes.string.isRequired,
     productsApiUrl: PropTypes.string.isRequired,
     orderBy: PropTypes.string,
-    successfullyAddedProduct: PropTypes.string,
     inStock: PropTypes.bool,
     inOutlet: PropTypes.bool,
     availableQuantity: PropTypes.number,

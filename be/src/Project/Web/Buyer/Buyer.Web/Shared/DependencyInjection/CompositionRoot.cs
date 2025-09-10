@@ -43,6 +43,8 @@ using Buyer.Web.Shared.Repositories.Global;
 using Grula.PricingIntelligencePlatform.Sdk;
 using System.Net.Http.Headers;
 using Foundation.Extensions.Services.Cache;
+using Buyer.Web.Shared.ViewModels.Toasts;
+using Buyer.Web.Shared.ModelBuilders.Toasts;
 using Buyer.Web.Shared.Repositories.Inventory;
 
 namespace Buyer.Web.Shared.DependencyInjection
@@ -68,6 +70,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel>, NotificationBarModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
+            services.AddScoped<IModelBuilder<SuccessAddProductToBasketViewModel>, SuccessAddProductToBasketModelBuilder>();
 
             // Repositories
             services.AddScoped<IBrandRepository, BrandRepository>();
