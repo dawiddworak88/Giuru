@@ -430,7 +430,7 @@
     <value>Stoff</value>
   </data>
   <data name="SuccessfullyAddedProduct" xml:space="preserve">
-    <value>Das Produkt wurde erfolgreich hinzugefügt</value>
+    <value>Das Produkt wurde erfolgreich hinzugefügt.</value>
   </data>
   <data name="Catalog" xml:space="preserve">
     <value>Katalog</value>
@@ -816,6 +816,9 @@
   <data name="CopyToClipboardText" xml:space="preserve">
     <value>In die Zwischenablage kopieren</value>
   </data>
+  <data name="ShowText" xml:space="preserve">
+    <value>Anzeigen</value>
+  </data>  
   <data name="MinOrderQuantity" xml:space="preserve">
     <value>Mindestbestellmenge ist 1</value>
   </data>

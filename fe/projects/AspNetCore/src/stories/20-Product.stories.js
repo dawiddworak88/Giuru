@@ -102,6 +102,11 @@ var productDetail = {
     seeLessText: "See less",
     copyToClipboardText: "Copy to clipboard",
     copiedText: "Copied",
+    toastSuccessAddProductToBasket: {
+      title: "Success added product to basket",
+      basketUrl: "#",
+      showText: "Show"
+    },
     price: {
       current: 999.99,
       old: 1299.99,

@@ -32,6 +32,7 @@ using System.Net.Http.Headers;
 using Grula.PricingIntelligencePlatform.Sdk;
 using Microsoft.Extensions.Configuration;
 using Foundation.Extensions.Services.Cache;
+using Seller.Web.Shared.Repositories.Inventory;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -46,6 +47,7 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IIdentityRepository, IdentityRepository>();
             services.AddScoped<IUserApprovalsRepository, UserApprovalsRepository>();
             services.AddScoped<IProductAttributeItemsRepository, ProductAttributeItemsRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
 
             services.AddScoped<IPriceService, PriceService>();
             services.AddScoped<IProductsService, ProductsService>();

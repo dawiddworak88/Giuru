@@ -427,7 +427,7 @@
     <value>Fabric:</value>
   </data>
   <data name="SuccessfullyAddedProduct" xml:space="preserve">
-    <value>The product has beed added successfully</value>
+    <value>The product has been added successfully.</value>
   </data>
   <data name="Catalog" xml:space="preserve">
     <value>Catalog</value>
@@ -815,6 +815,9 @@
   </data>
   <data name="CopyToClipboardText" xml:space="preserve">
     <value>Copy to clipboard</value>
+  </data>
+  <data name="ShowText" xml:space="preserve">
+    <value>Show</value>
   </data>
   <data name="MinOrderQuantity" xml:space="preserve">
     <value>Minimum order quantity is 1</value>

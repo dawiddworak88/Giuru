@@ -10,17 +10,21 @@ using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.DomainModels.Media;
+using Buyer.Web.Shared.Repositories.Inventory;
 using Buyer.Web.Shared.Repositories.Media;
+using Buyer.Web.Shared.Repositories.Products;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Localization;
 using Foundation.Media.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -45,6 +49,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly ILogger<OrderFileApiController> logger;
         private readonly IMediaItemsRepository mediaRepository;
         private readonly IOrdersRepository ordersRepository;
+        private readonly IInventoryRepository inventoryRepository;
+        private readonly ICatalogProductsRepository catalogProductsRepository;
+        private readonly IStringLocalizer<OrderResources> orderLocalizer;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
@@ -55,7 +62,10 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IMediaService mediaService,
             IMediaItemsRepository mediaRepository,
             IOrdersRepository ordersRepository,
-            ILogger<OrderFileApiController> logger)
+            IInventoryRepository inventoryRepository,
+            ILogger<OrderFileApiController> logger,
+            ICatalogProductsRepository catalogProductsRepository,
+            IStringLocalizer<OrderResources> orderLocalizer)
         {
             this.orderFileService = orderFileService;
             this.productsRepository = productsRepository;
@@ -66,6 +76,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             this.logger = logger;
             this.mediaRepository = mediaRepository;
             this.ordersRepository = ordersRepository;
+            this.inventoryRepository = inventoryRepository;
+            this.catalogProductsRepository = catalogProductsRepository;
+            this.orderLocalizer = orderLocalizer;
         }
 
         [HttpPost]
@@ -77,35 +90,59 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            foreach (var orderLine in importedOrderLines)
-            {
-                var product = await this.productsRepository.GetProductAsync(orderLine.Sku, token, language);
+            var skusParam = importedOrderLines.OrEmptyIfNull().Select(x => x.Sku).Distinct().ToEndpointParameterString();
+            var products = await this.catalogProductsRepository.GetProductsAsync(token, language, skusParam);
 
-                if (product == null)
+            if (!products.OrEmptyIfNull().Any())
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = this.orderLocalizer.GetString("ProductsNotFound") });
+            }
+
+            var productBySku = products
+                .OrEmptyIfNull()
+                .ToDictionary(g => g.Sku, g => g);
+
+            var productIds = products.OrEmptyIfNull().Select(x => x.Id).Distinct().ToList();
+            var stockAvailableProducts = await this.inventoryRepository.GetStockAvailbleProductsByProductIdsAsync(token, language, productIds);
+
+            var stockByProductId = stockAvailableProducts
+                .OrEmptyIfNull()
+                .ToDictionary(g => g.ProductId, g => g.AvailableQuantity);
+
+            foreach (var orderLine in importedOrderLines.OrEmptyIfNull())
+            {
+                if (!productBySku.TryGetValue(orderLine.Sku, out var product) || product == null)
                 {
                     this.logger.LogError($"Product for SKU {orderLine.Sku} and language {language} couldn't be found.");
+                    continue;
                 }
-                else
-                {
-                    var basketItem = new BasketItem
-                    {
-                        ProductId = product.Id,
-                        ProductSku = product.Sku,
-                        ProductName = product.Name,
-                        PictureUrl = product.Images.OrEmptyIfNull().Any() ? this.mediaService.GetMediaUrl(product.Images.First(), OrdersConstants.Basket.BasketProductImageMaxWidth) : null,
-                        Quantity = orderLine.Quantity,
-                        ExternalReference = orderLine.ExternalReference,
-                        MoreInfo = orderLine.MoreInfo
-                    };
 
-                    basketItems.Add(basketItem);
-                }
+                var availableStock = stockByProductId.TryGetValue(product.Id, out var qty) ? qty : 0;
+
+                var stockQuantity = Math.Min(orderLine.Quantity, (double)availableStock);
+                var quantity = orderLine.Quantity - stockQuantity;
+
+                var basketItem = new BasketItem
+                {
+                    ProductId = product.Id,
+                    ProductSku = product.Sku,
+                    ProductName = product.Name,
+                    PictureUrl = product.Images.OrEmptyIfNull().Any() ? this.mediaService.GetMediaUrl(product.Images.First(), OrdersConstants.Basket.BasketProductImageMaxWidth) : null,
+                    Quantity = quantity,
+                    StockQuantity = stockQuantity,
+                    ExternalReference = orderLine.ExternalReference,
+                    MoreInfo = orderLine.MoreInfo
+                };
+
+                basketItems.Add(basketItem);
             }
 
             var reqCookie = this.Request.Cookies[BasketConstants.BasketCookieName];
+
             if (reqCookie is null)
             {
                 reqCookie = Guid.NewGuid().ToString();
+
                 var cookieOptions = new CookieOptions
                 {
                     MaxAge = TimeSpan.FromDays(BasketConstants.BasketCookieMaxAge)
@@ -122,9 +159,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 Id = basket.Id
             };
 
-            var productIds = basket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
-
-            if (productIds.OrEmptyIfNull().Any())
+            if (basket.Items.OrEmptyIfNull().Any())
             {
                 basketResponseModel.Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                 {
@@ -133,6 +168,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     Name = x.ProductName,
                     Sku = x.ProductSku,
                     Quantity = x.Quantity,
+                    StockQuantity = x.StockQuantity,
+                    OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
                     ImageSrc = x.PictureUrl,
                     ImageAlt = x.ProductName,

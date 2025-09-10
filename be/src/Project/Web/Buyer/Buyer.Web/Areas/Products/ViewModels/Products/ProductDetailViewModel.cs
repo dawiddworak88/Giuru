@@ -2,6 +2,7 @@
 using Buyer.Web.Shared.ViewModels.Files;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
+using Buyer.Web.Shared.ViewModels.Toasts;
 using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,6 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string PricesLabel { get; set; }
         public string ProductInformationLabel { get; set; }
         public string SignInToSeePricesLabel { get; set; }
-        public string SuccessfullyAddedProduct { get; set; }
         public string QuantityErrorMessage { get; set; }
         public bool InStock { get; set; }
         public double? AvailableQuantity { get; set; }
@@ -54,6 +54,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string CopyToClipboardText { get; set; }
         public int? MaxAllowedOrderQuantity { get; set; }
         public string MaxAllowedOrderQuantityErrorMessage { get; set; }
+        public SuccessAddProductToBasketViewModel ToastSuccessAddProductToBasket { get; set; }
         public string MinOrderQuantityErrorMessage { get; set; }
         public string GetProductPriceUrl { get; set; }
         public SidebarViewModel Sidebar { get; set; }
