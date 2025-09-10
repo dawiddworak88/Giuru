@@ -354,4 +354,7 @@
   <data name="OutletProductLabel" xml:space="preserve">
     <value>Produkt outletowy</value>
   </data>
+  <data name="ProductsNotFound" xml:space="preserve">
+    <value>Nie znaleziono produktów.</value>
+  </data>
 </root>

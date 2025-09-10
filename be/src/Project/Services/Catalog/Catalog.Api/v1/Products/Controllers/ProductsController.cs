@@ -94,6 +94,7 @@ namespace Catalog.Api.v1.Products.Controllers
         /// Gets list of products by Skus.
         /// </summary>
         /// <param name="skus">The list of skus.</param>
+        /// <param name="sellerId">The brand id.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
         /// <param name="orderBy">The optional order by.</param>
@@ -104,9 +105,13 @@ namespace Catalog.Api.v1.Products.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetBySkus(string skus, int? pageIndex, int? itemsPerPage, string orderBy)
+        public async Task<IActionResult> GetBySkus(
+            string skus,
+            Guid? sellerId,
+            int? pageIndex, 
+            int? itemsPerPage, 
+            string orderBy)
         {
-            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var productSkus = skus.ToEnumerableString();
 
             if (productSkus is not null)
@@ -118,7 +123,7 @@ namespace Catalog.Api.v1.Products.Controllers
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    OrganisationId = sellerId,
                     Language = CultureInfo.CurrentCulture.Name
                 };
 

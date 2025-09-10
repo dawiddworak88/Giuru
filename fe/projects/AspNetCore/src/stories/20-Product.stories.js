@@ -98,6 +98,11 @@ var productDetail = {
     readLessText: "Read less",
     seeMoreText: "See more",
     seeLessText: "See less",
+    toastSuccessAddProductToBasket: {
+      title: "Success added product to basket",
+      basketUrl: "#",
+      showText: "Show"
+    },
     price: {
       current: 999.99,
       old: 1299.99,

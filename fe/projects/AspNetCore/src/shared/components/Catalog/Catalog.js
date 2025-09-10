@@ -107,6 +107,7 @@ function Catalog(props) {
         maxAllowedOrderQuantityErrorMessage: props.maxAllowedOrderQuantityErrorMessage,
         minOrderQuantityErrorMessage: props.minOrderQuantityErrorMessage,
         generalErrorMessage: props.generalErrorMessage,
+        addProductToBasketMessage: props.toastSuccessAddProductToBasket,
         updateBasketUrl: props.updateBasketUrl,
         getPriceUrl: props.getProductPriceUrl
     });
@@ -249,8 +250,20 @@ function Catalog(props) {
                 <Modal
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
-                    maxOutletValue={productVariant ? QuantityCalculatorService.calculateMaxQuantity(orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle ? productVariant.subtitle : productVariant.sku) : null}
-                    outletQuantityInBasket={productVariant ? QuantityCalculatorService.getCurrentQuantity(orderItems, 'outletQuantity', productVariant.subtitle ? productVariant.subtitle : productVariant.sku) : 0}
+                    maxOutletValue={
+                        productVariant 
+                            ? QuantityCalculatorService.calculateMaxQuantity(
+                                orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle ? productVariant.subtitle : productVariant.sku
+                              ) 
+                            : null
+                        }
+                    outletQuantityInBasket={
+                        productVariant 
+                            ? QuantityCalculatorService.getCurrentQuantity(
+                                orderItems, 'outletQuantity', productVariant.subtitle ? productVariant.subtitle : productVariant.sku
+                              ) 
+                            : 0
+                        }
                     handleClose={handleCloseModal}
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant}
@@ -275,7 +288,6 @@ Catalog.propTypes = {
     generalErrorMessage: PropTypes.string.isRequired,
     productsApiUrl: PropTypes.string.isRequired,
     orderBy: PropTypes.string,
-    successfullyAddedProduct: PropTypes.string,
     inStock: PropTypes.bool,
     inOutlet: PropTypes.bool,
     availableQuantity: PropTypes.number,
