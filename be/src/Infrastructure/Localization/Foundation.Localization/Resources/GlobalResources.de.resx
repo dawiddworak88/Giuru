@@ -430,7 +430,7 @@
     <value>Stoff</value>
   </data>
   <data name="SuccessfullyAddedProduct" xml:space="preserve">
-    <value>Das Produkt wurde erfolgreich hinzugefügt</value>
+    <value>Das Produkt wurde erfolgreich hinzugefügt.</value>
   </data>
   <data name="Catalog" xml:space="preserve">
     <value>Katalog</value>
@@ -810,6 +810,9 @@
   <data name="SomeFilesNotDownloadedError" xml:space="preserve">
     <value>Some files weren't downloaded.</value>
   </data>
+  <data name="ShowText" xml:space="preserve">
+    <value>Anzeigen</value>
+  </data>  
   <data name="MinOrderQuantity" xml:space="preserve">
     <value>Mindestbestellmenge ist 1</value>
   </data>

@@ -14,6 +14,8 @@ using System;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Models.Response;
 using System.Linq;
+using Seller.Web.Areas.Orders.ApiRequestModels.Products;
+using Foundation.GenericRepository.Definitions;
 
 namespace Seller.Web.Areas.Shared.Repositories.Products
 {
@@ -319,6 +321,61 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return response.Data;
+            }
+
+            return default;
+        }
+
+        public async Task<IEnumerable<Product>> GetProductsBySkusAsync(string token, string language, IEnumerable<string> skus)
+        {
+            var requestModel = new GetProductsBySkusRequestModel
+            {
+                Skus = skus.ToEndpointParameterString(),
+                PageIndex = Constants.DefaultPageIndex,
+                ItemsPerPage = Constants.DefaultItemsPerPage,
+            };
+
+            var apiRequest = new ApiRequest<GetProductsBySkusRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsSkusApiEndpoint}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<GetProductsBySkusRequestModel>, GetProductsBySkusRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                var products = new List<Product>();
+
+                products.AddRange(response.Data.Data);
+
+                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)Constants.DefaultItemsPerPage);
+
+                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
+                {
+                    apiRequest.Data.PageIndex = i;
+
+                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<GetProductsBySkusRequestModel>, GetProductsBySkusRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
+
+                    if (!nextPagesResponse.IsSuccessStatusCode)
+                    {
+                        throw new CustomException(response.Message, (int)response.StatusCode);
+                    }
+
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Any())
+                    {
+                        products.AddRange(nextPagesResponse.Data.Data);
+                    }
+                }
+
+                return products;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
             return default;

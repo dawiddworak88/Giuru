@@ -9,6 +9,7 @@ import ProductPricesHelper from '../helpers/prices/ProductPricesHelper';
 import { Context } from "../../shared/stores/Store";
 import AuthenticationHelper from "../helpers/globals/AuthenticationHelper";
 import QueryStringSerializer from '../helpers/serializers/QueryStringSerializer';
+import ToastSuccessAddProductToBasket from "../components/Toast/ToastSuccessAddProductToBasket";
 
 export const useOrderManagement = ({
     initialBasketId,
@@ -17,12 +18,13 @@ export const useOrderManagement = ({
     maxAllowedOrderQuantityErrorMessage,
     minOrderQuantityErrorMessage,
     generalErrorMessage,
+    addProductToBasketMessage,
     updateBasketUrl,
     clearBasketUrl,
     getPriceUrl
 }) => {
     const [state, dispatch] = useContext(Context);
-    const [basketId, setBasketId] = useState(initialBasketId);
+    const [basketId, setBasketId] = useState(initialBasketId || null);
     const [orderItems, setOrderItems] = useState(initialOrderItems || []);
 
     const groupOrderItems = (items) => {
@@ -163,8 +165,9 @@ export const useOrderManagement = ({
 
                 if (response.ok) {
                     const jsonResponse = await response.json();
-
                     setBasketId(jsonResponse.id);
+
+                    if (addProductToBasketMessage) ToastSuccessAddProductToBasket(addProductToBasketMessage)
 
                     if (jsonResponse.items?.length > 0) {
                         setOrderItems(jsonResponse.items);
@@ -227,7 +230,11 @@ export const useOrderManagement = ({
 
             dispatch({ type: "SET_IS_LOADING", payload: true });
         
-            const newItems = orderItems.filter(oi => oi !== item);
+            const newItems = orderItems.filter(oi =>
+                !(oi.productId === item.productId &&
+                  oi.moreInfo === item.moreInfo &&
+                  oi.externalReference === item.externalReference)
+                );
 
             const basket = { 
                 id: basketId, 
@@ -250,7 +257,6 @@ export const useOrderManagement = ({
                 dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems - reducedQuantity });
 
                 AuthenticationHelper.HandleResponse(response);
-
 
                 if (response.ok) {
                     const jsonResponse = await response.json();
@@ -278,6 +284,7 @@ export const useOrderManagement = ({
     return { 
         basketId, 
         orderItems, 
+        setBasketId,
         setGroupedOrderItems,
         addOrderItemToBasket,
         deleteOrderItemFromBasket,
