@@ -69,7 +69,7 @@ function ProductDetail(props) {
             if (productVariant && Array.isArray(productVariant.images) && productVariant.images.length > 0) {
                 return productVariant.images.map(img => img.id);
             }
-            
+
             if (props.images && Array.isArray(props.images) && props.images.length > 0) {
                 return props.images.map(img => img.id);
             }
@@ -155,44 +155,35 @@ function ProductDetail(props) {
     }
 
     const handleOnCopy = async (text) => {
-        if (navigator.clipboard && window.isSecureContext) {
-            try {
+        try {
+            if (navigator.clipboard?.writeText && window.isSecureContext) {
                 await navigator.clipboard.writeText(text)
                 setCopied(true)
                 setTimeout(() => setCopied(false), 2000)
-            } catch {
-                fallbackCopyTextToClipboard(text)
+                return
             }
-        } else {
-            fallbackCopyTextToClipboard(text)
-        }
-    }
+        } catch { }
+        fallbackCopyTextToClipboard(text)
+    };
 
     const fallbackCopyTextToClipboard = (text) => {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        textArea.style.position = "fixed";
-        textArea.style.top = 0;
-        textArea.style.left = 0;
-        textArea.style.width = "2em";
-        textArea.style.height = "2em";
-        textArea.style.padding = 0;
-        textArea.style.border = "none";
-        textArea.style.outline = "none";
-        textArea.style.boxShadow = "none";
-        textArea.style.background = "transparent";
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
+        const ta = document.createElement('textarea')
+        ta.value = text
+        ta.setAttribute('readonly', '')
+        ta.style.position = 'absolute'
+        ta.style.left = '-9999px'
+        document.body.appendChild(ta)
+        ta.select()
         try {
-            document.execCommand('copy');
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-        } catch (err) {
-            console.error(err);
+            document.execCommand('copy')
+            setCopied(true)
+            setTimeout(() => setCopied(false), 2000)
+        } finally {
+            document.body.removeChild(ta)
         }
-        document.body.removeChild(textArea);
     };
+
+    const plainDesc = props.description?.replace(/<[^>]+>/g, '') ?? ''
 
     const copyButton = (textToCopy) => {
         return (
@@ -311,13 +302,13 @@ function ProductDetail(props) {
                             <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>
                         }
                         <div className="product-detail__availability mt-3">
-                            {props.inStock && 
+                            {props.inStock &&
                                 <Availability
                                     label={props.inStockLabel}
                                     availableQuantity={props.availableQuantity}
                                 />
                             }
-                            {props.inOutlet && 
+                            {props.inOutlet &&
                                 <Availability
                                     label={props.inOutletLabel}
                                     availableQuantity={props.availableOutletQuantity}
@@ -348,7 +339,7 @@ function ProductDetail(props) {
                         }
                         {props.description &&
                             <div className="product-detail__product-description">
-                                <h3 className="product-detail__feature-title">{props.descriptionLabel} {copyButton(props.description)}</h3>
+                                <h3 className="product-detail__feature-title">{props.descriptionLabel} {copyButton(plainDesc)}</h3>
                                 <div dangerouslySetInnerHTML={{ __html: marked.parse(props.description) }}></div>
                             </div>
                         }
