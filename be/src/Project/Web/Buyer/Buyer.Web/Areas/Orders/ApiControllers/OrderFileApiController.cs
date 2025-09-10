@@ -17,12 +17,14 @@ using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Localization;
 using Foundation.Media.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -49,6 +51,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IOrdersRepository ordersRepository;
         private readonly IInventoryRepository inventoryRepository;
         private readonly ICatalogProductsRepository catalogProductsRepository;
+        private readonly IStringLocalizer<OrderResources> orderLocalizer;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
@@ -61,7 +64,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IOrdersRepository ordersRepository,
             IInventoryRepository inventoryRepository,
             ILogger<OrderFileApiController> logger,
-            ICatalogProductsRepository catalogProductsRepository)
+            ICatalogProductsRepository catalogProductsRepository,
+            IStringLocalizer<OrderResources> orderLocalizer)
         {
             this.orderFileService = orderFileService;
             this.productsRepository = productsRepository;
@@ -74,6 +78,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             this.ordersRepository = ordersRepository;
             this.inventoryRepository = inventoryRepository;
             this.catalogProductsRepository = catalogProductsRepository;
+            this.orderLocalizer = orderLocalizer;
         }
 
         [HttpPost]
@@ -87,6 +92,11 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             var skusParam = importedOrderLines.OrEmptyIfNull().Select(x => x.Sku).Distinct().ToEndpointParameterString();
             var products = await this.catalogProductsRepository.GetProductsAsync(token, language, skusParam);
+
+            if (!products.OrEmptyIfNull().Any())
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = this.orderLocalizer.GetString("ProductsNotFound") });
+            }
 
             var productBySku = products
                 .OrEmptyIfNull()
