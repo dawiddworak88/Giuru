@@ -73,7 +73,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             viewModel.Title = componentModel.SearchTerm;
             viewModel.Sidebar = await _sidebarModelBuilder.BuildModelAsync(componentModel);
             viewModel.Modal = await _modalModelBuilder.BuildModelAsync(componentModel);
-            viewModel.SuccessfullyAddedProduct = _globalLocalizer.GetString("SuccessfullyAddedProduct");
             viewModel.ItemsPerPage = ProductConstants.ProductsCatalogPaginationPageSize;
             viewModel.SearchTerm = componentModel.SearchTerm;
             viewModel.ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "SearchProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
