@@ -15,6 +15,7 @@ import Price from "../Price/Price";
 import { useOrderManagement } from "../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../services/QuantityCalculatorService";
 import Availability from "../Availability/Availability";
+import PriceModal from "../PriceModal/PriceModal";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -246,6 +247,10 @@ function Catalog(props) {
                     labels={props.sidebar}
                 />
             }
+            <PriceModal 
+                open={true} 
+                onClose={() => {}} 
+            />
             {props.modal &&
                 <Modal
                     isOpen={isModalOpen}
