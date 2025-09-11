@@ -24,6 +24,6 @@ const SvgInfo = memo((props) => (
     />
 ));
 
-SvgDelivery.displayName = "InfoIcon";
+SvgInfo.displayName = "InfoIcon";
 
 export default SvgInfo;
