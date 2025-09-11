@@ -16,7 +16,8 @@ const PriceModal = ({
     priceInclusions
 }) => {
     return (
-        <Dialog 
+        <Dialog
+            className='price-modal'
             open={open}
             onClose={onClose}
             aria-label='price-modal'
@@ -29,7 +30,7 @@ const PriceModal = ({
                 }
             }}
         >
-           <DialogTitle>
+           <DialogTitle className='price-modal__title'>
                 Cena zawiera
                 <IconButton 
                     disableRipple
