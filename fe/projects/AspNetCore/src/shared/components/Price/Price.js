@@ -12,13 +12,13 @@ const Price = ({
     old = 1200,
     lowestPrice = 900,
     currency,
-    lowestPriceLabel,
+    lowestPriceLabel = "Najniższa cena w ciągu ostatnich 30 dni:",
     taxLabel = "netto (bez VAT)",
     onInfoClick,
 }) => (
     <div className={`price ${className || ''}`}>
         <div className="price__container">
-            <span className="price__current">{parseFloat(current).toFixed(2)} {currency}</span>
+            <span className="price__current">{parseFloat(current)} {currency}</span>
             {old && (
                 <span className="price__old">{old} {currency}</span>
             )}
