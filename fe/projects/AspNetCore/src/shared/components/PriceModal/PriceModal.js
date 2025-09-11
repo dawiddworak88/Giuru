@@ -1,6 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dialog, DialogContent, DialogTitle, IconButton, ListItem } from '@mui/material';
+import { 
+    Dialog, 
+    DialogContent, 
+    DialogTitle, 
+    IconButton, 
+    ListItem 
+} from '@mui/material';
+import { CloseIcon } from '../../icons';
 
 const PriceModal = ({
     open,
@@ -31,7 +38,7 @@ const PriceModal = ({
                         top: "1rem"
                     }}
                 >
-                    X
+                    <CloseIcon />
                 </IconButton>
             </DialogTitle> 
             <DialogContent

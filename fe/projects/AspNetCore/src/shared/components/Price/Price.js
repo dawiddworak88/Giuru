@@ -4,11 +4,11 @@ import { InfoIcon } from '../../icons';
 const Price = ({
     className,
     current,
-    old = 1200,
-    lowestPrice = 900,
+    old,
+    lowestPrice,
     currency,
-    lowestPriceLabel = "Najniższa cena w ciągu ostatnich 30 dni:",
-    taxLabel = "netto (bez VAT)",
+    lowestPriceLabel,
+    taxLabel,
     onInfoClick,
 }) => (
     <div className={`price ${className || ''}`}>
