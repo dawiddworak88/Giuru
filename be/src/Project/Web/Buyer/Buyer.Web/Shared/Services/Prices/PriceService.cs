@@ -131,6 +131,9 @@ namespace Buyer.Web.Shared.Services.Prices
                             price.Includes.Add("Koszt transportu");
                         }
 
+                        Console.WriteLine($"Client exta packing {client.ExtraPacking}");
+                        Console.WriteLine($"{client.ExtraPacking.ToBool()}");
+
                         if (client.ExtraPacking.ToBool())
                         {
                             price.Includes.Add("Usługę dodatkowego pakowania");
