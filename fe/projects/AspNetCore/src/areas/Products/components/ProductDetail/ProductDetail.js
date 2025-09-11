@@ -1,11 +1,11 @@
 import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Button, IconButton, Tooltip } from "@mui/material";
+import { Button } from "@mui/material";
 import Files from "../../../../shared/components/Files/Files";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 import Modal from "../../../../shared/components/Modal/Modal";
-import { ExpandMore, ExpandLess, ContentCopy } from "@mui/icons-material"
+import { ExpandMore, ExpandLess} from "@mui/icons-material"
 import { marked } from "marked";
 import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
@@ -16,6 +16,8 @@ import Price from "../../../../shared/components/Price/Price";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
 import Availability from "../../../../shared/components/Availability/Availability";
+import DOMPurify from 'dompurify';
+import CopyButton from "../../../../shared/components/CopyButton/CopyButton";
 
 function ProductDetail(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -27,7 +29,6 @@ function ProductDetail(props) {
     const [showMoreImages, setShowMoreImages] = useState(false);
     const [mediaItems, setMediaItems] = useState(props.mediaItems ? props.mediaItems.slice(0, 6) : []);
     const [activeMediaItemIndex, setActiveMediaItemIndex] = useState(0);
-    const [copied, setCopied] = useState(false);
 
     const {
         orderItems,
@@ -107,11 +108,6 @@ function ProductDetail(props) {
             quantity,
             isOutletOrder: item.isOutletOrder,
             externalReference: item.externalReference,
-            unitPrice: product.price ? parseFloat(product.price.current).toFixed(2) : null,
-            price: product.price ? parseFloat(product.price.current * totalQuantity).toFixed(2) : null,
-            currency: product.price ? product.price.currency : null,
-            deliveryFrom: moment(item.deliveryFrom).startOf("day"),
-            deliveryTo: moment(item.deliveryTo).startOf("day"),
             moreInfo: item.moreInfo,
             resetData: () => {
                 setIsModalOpen(false);
@@ -159,52 +155,9 @@ function ProductDetail(props) {
         setShowMoreImages(!showMoreImages);
     }
 
-    const handleOnCopy = async (text) => {
-        try {
-            if (navigator.clipboard?.writeText && window.isSecureContext) {
-                await navigator.clipboard.writeText(text)
-                setCopied(true)
-                setTimeout(() => setCopied(false), 2000)
-                return
-            }
-        } catch { }
-        fallbackCopyTextToClipboard(text)
-    };
-
-    const fallbackCopyTextToClipboard = (text) => {
-        const ta = document.createElement('textarea')
-        ta.value = text
-        ta.setAttribute('readonly', '')
-        ta.style.position = 'absolute'
-        ta.style.left = '-9999px'
-        document.body.appendChild(ta)
-        ta.select()
-        try {
-            document.execCommand('copy')
-            setCopied(true)
-            setTimeout(() => setCopied(false), 2000)
-        } finally {
-            document.body.removeChild(ta)
-        }
-    };
-
-    const plainDesc = props.description?.replace(/<[^>]+>/g, '') ?? ''
-
-    const copyButton = (textToCopy) => {
-        return (
-            <Tooltip title={copied ? props.copiedText : props.copyToClipboardText}>
-                <IconButton
-                    size="small"
-                    disableRipple
-                    onClick={() => handleOnCopy(textToCopy)}
-                    className="product-detail__copy-button"
-                    aria-label={props.copyToClipboardText}
-                >
-                    <ContentCopy fontSize="1rem" />
-                </IconButton>
-            </Tooltip>
-        )
-    }
+    const plainDesc = props.description
+        ? DOMPurify.sanitize(marked.parse(props.description), { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
+        : '';
 
     return (
         <section className="product-detail section">
@@ -297,11 +250,36 @@ function ProductDetail(props) {
                         </div>
                     </div>
                     <div className="product-detail__description-column">
-                        <p className="product-detail__sku">{props.skuLabel} {props.sku} {copyButton(props.sku)}</p>
+                        <p className="product-detail__sku">
+                            {props.skuLabel} {props.sku} 
+                            {<CopyButton 
+                                copiedText={props.copiedText}
+                                copyTextError={props.copyTextError}
+                                copyToClipboardText={props.copyToClipboardText}
+                                text={props.sku}
+                            />}
+                        </p>
                         {props.ean &&
-                            <p className="product-detail__ean">{props.eanLabel} {props.ean} {copyButton(props.ean)}</p>
+                            <p className="product-detail__ean">
+                                {props.eanLabel}
+                                {props.ean}
+                                {<CopyButton 
+                                    copiedText={props.copiedText}
+                                    copyTextError={props.copyTextError}
+                                    copyToClipboardText={props.copyToClipboardText}
+                                    text={props.ean}
+                                />}
+                            </p>
                         }
-                        <h1 className="title is-4 mt-1">{props.title} {copyButton(props.title)}</h1>
+                        <h1 className="title is-4 mt-1">
+                            {props.title} 
+                            {<CopyButton 
+                                copiedText={props.copiedText}
+                                copyTextError={props.copyTextError}
+                                copyToClipboardText={props.copyToClipboardText}
+                                text={props.title}
+                            />}
+                        </h1>
                         <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
                         {props.outletTitle &&
                             <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>
@@ -342,9 +320,17 @@ function ProductDetail(props) {
                                 )}
                             </div>
                         }
-                        {props.description &&
+                        {props.description && 
                             <div className="product-detail__product-description">
-                                <h3 className="product-detail__feature-title">{props.descriptionLabel} {copyButton(plainDesc)}</h3>
+                                <h3 className="product-detail__feature-title">
+                                    {props.descriptionLabel}
+                                    {<CopyButton 
+                                        copiedText={props.copiedText}
+                                        copyTextError={props.copyTextError}
+                                        copyToClipboardText={props.copyToClipboardText}
+                                        text={plainDesc}
+                                    />}
+                                </h3>
                                 <div dangerouslySetInnerHTML={{ __html: marked.parse(props.description) }}></div>
                             </div>
                         }
