@@ -10,19 +10,22 @@ const Price = ({
     lowestPriceLabel,
     taxLabel,
     onInfoClick,
+    showInfoIcon
 }) => (
     <div className={`price ${className || ''}`}>
         <div className="price__container">
             <span className="price__current">{parseFloat(current)} {currency}</span>
-            {old && (
+            {old && 
                 <span className="price__old">{old} {currency}</span>
-            )}
-            {taxLabel && (
+            }
+            {taxLabel && 
                 <span className="price__tax-label">{taxLabel}</span>
-            )}
-            <div className='price__icon' onClick={onInfoClick}>
-                <InfoIcon />
-            </div>
+            }
+            {showInfoIcon && 
+                <div className='price__icon' onClick={onInfoClick}>
+                    <InfoIcon />
+                </div>
+            }
         </div>
         {lowestPrice && lowestPriceLabel && (
             <span className="price__lowest">{lowestPriceLabel} {lowestPrice} {currency}</span>
