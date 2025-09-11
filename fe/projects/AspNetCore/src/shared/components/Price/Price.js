@@ -1,11 +1,6 @@
 import React from 'react';
 import { InfoIcon } from '../../icons';
 
-const currencyMapping = {
-    PLN: "zł",
-    EUR: "€",
-};
-
 const Price = ({
     className,
     current,

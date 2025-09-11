@@ -179,7 +179,7 @@ function Catalog(props) {
 
                                                 {item.price && 
                                                     <Price 
-                                                        onInfoClick={() => setIsModalOpen(true)} 
+                                                        onInfoClick={() => setPriceModalOpen(true)} 
                                                         className="catalog__card-price-spacing" 
                                                         {...item.price} 
                                                     />
