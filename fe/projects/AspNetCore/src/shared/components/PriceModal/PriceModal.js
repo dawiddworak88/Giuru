@@ -5,6 +5,7 @@ import {
     DialogContent, 
     DialogTitle, 
     IconButton, 
+    List, 
     ListItem 
 } from '@mui/material';
 import { CloseIcon } from '../../icons';
@@ -48,12 +49,26 @@ const PriceModal = ({
                     pt: "1.5rem"
                 }}
             >
-                {priceInclusions && priceInclusions.map((inclusion) => {
-                    return (
-                        <ListItem>{inclusion}</ListItem>
-                    )
-                })}
-                <p>*Więcej informacji znajduje się w regulaminie dostępnym na stronie b2b.eltap.com</p>
+                
+                {priceInclusions && (
+                    <List
+                        dense
+                        disablePadding
+                        sx={{
+                            listStyleType: "disc",
+                            "> li": {
+                                display: "list-item"
+                            }
+                        }}
+                    >
+                        {priceInclusions.map((inclusion) => {
+                            return (
+                                <ListItem>{inclusion}</ListItem>
+                            )
+                        })}
+                    </List>
+                )}
+                <p className='mt-3'>*Więcej informacji znajduje się w regulaminie dostępnym na stronie b2b.eltap.com</p>
             </DialogContent>
         </Dialog>
     )
