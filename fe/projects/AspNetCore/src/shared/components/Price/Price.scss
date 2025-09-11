@@ -2,22 +2,29 @@
     padding-right: 1rem;
 
     &__current {
-        font-weight: 700;
-        font-size: 1rem;
-        color: #171717;
-        margin: 0;
+        font-weight: 600;
+        font-size: 1.1875rem;
+        color: $black;
     }
 
     &__container {
         display: flex;
         align-content: center;
         gap: 1rem;
+        flex-wrap: wrap;
     }
 
     &__old {
         white-space: nowrap;
         text-decoration: line-through;
-        color: #7C8693;
+        color: #4A4A4A;
+        font-size: 0.75rem;
+        line-height: 1.5rem;
+    }
+
+    &__tax-label {
+        color: $black;
         font-size: 1rem;
+        font-weight: 400;
     }
 }

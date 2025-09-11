@@ -26,6 +26,7 @@ function Catalog(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null);
+    const [priceModalOpen, setPriceModalOpen] = useState(false);
 
     const toggleSidebar = (item) => {
         setProductVariant(item);
@@ -177,7 +178,11 @@ function Catalog(props) {
                                                 </div>
 
                                                 {item.price && 
-                                                    <Price className="catalog__card-price-spacing" {...item.price} />
+                                                    <Price 
+                                                        onInfoClick={() => setIsModalOpen(true)} 
+                                                        className="catalog__card-price-spacing" 
+                                                        {...item.price} 
+                                                    />
                                                 }
 
                                                 {(item.inStock || item.inOutlet) &&
@@ -248,8 +253,8 @@ function Catalog(props) {
                 />
             }
             <PriceModal 
-                open={true} 
-                onClose={() => {}} 
+                open={priceModalOpen} 
+                onClose={() => setPriceModalOpen(false)} 
             />
             {props.modal &&
                 <Modal

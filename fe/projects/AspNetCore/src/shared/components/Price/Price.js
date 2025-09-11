@@ -1,4 +1,5 @@
 import React from 'react';
+import { InfoIcon } from '../../icons';
 
 const currencyMapping = {
     PLN: "zł",
@@ -8,17 +9,25 @@ const currencyMapping = {
 const Price = ({
     className,
     current,
-    old,
-    lowestPrice,
+    old = 1200,
+    lowestPrice = 900,
     currency,
-    lowestPriceLabel
+    lowestPriceLabel,
+    taxLabel = "netto (bez VAT)",
+    onInfoClick,
 }) => (
     <div className={`price ${className || ''}`}>
         <div className="price__container">
-            <h3 className="price__current">{parseFloat(current).toFixed(2)} {currencyMapping[currency]}</h3>
+            <span className="price__current">{parseFloat(current).toFixed(2)} {currency}</span>
             {old && (
                 <span className="price__old">{old} {currency}</span>
             )}
+            {taxLabel && (
+                <span className="price__tax-label">{taxLabel}</span>
+            )}
+            <div className='' onClick={onInfoClick}>
+                <InfoIcon />
+            </div>
         </div>
         {lowestPrice && lowestPriceLabel && (
             <span className="price__lowest">{lowestPriceLabel} {lowestPrice} {currency}</span>
