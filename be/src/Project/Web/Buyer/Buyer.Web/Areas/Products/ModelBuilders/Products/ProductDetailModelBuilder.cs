@@ -128,6 +128,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
                 MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity"),
                 CopiedText = _globalLocalizer.GetString("CopiedText"),
+                CopyTextError = _globalLocalizer.GetString("CopyTextError"),
                 CopyToClipboardText = _globalLocalizer.GetString("CopyToClipboardText"),
                 GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity")
