@@ -819,6 +819,9 @@
   <data name="CopiedText" xml:space="preserve">
     <value>Skopiowano</value>
   </data>
+  <data name="CopyTextError" xml:space="preserve">
+    <value>Kopiowanie nie powiodłow się.</value>
+  </data>
   <data name="CopyToClipboardText" xml:space="preserve">
     <value>Kopiuj do schowka</value>
   </data>
