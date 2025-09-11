@@ -11,7 +11,8 @@ import { CloseIcon } from '../../icons';
 
 const PriceModal = ({
     open,
-    onClose
+    onClose,
+    priceInclusions
 }) => {
     return (
         <Dialog 
@@ -47,7 +48,11 @@ const PriceModal = ({
                     pt: "1.5rem"
                 }}
             >
-                <ListItem></ListItem>
+                {priceInclusions && priceInclusions.map((inclusion) => {
+                    return (
+                        <ListItem>{inclusion}</ListItem>
+                    )
+                })}
                 <p>*Więcej informacji znajduje się w regulaminie dostępnym na stronie b2b.eltap.com</p>
             </DialogContent>
         </Dialog>

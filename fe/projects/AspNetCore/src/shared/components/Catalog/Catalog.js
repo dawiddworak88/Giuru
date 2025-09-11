@@ -27,6 +27,7 @@ function Catalog(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null);
     const [priceModalOpen, setPriceModalOpen] = useState(false);
+    const [pi, setPi] = useState(null);
 
     const toggleSidebar = (item) => {
         setProductVariant(item);
@@ -186,7 +187,10 @@ function Catalog(props) {
                                                         lowestPrice={1900}
                                                         lowestPriceLabel="Najniższa cena w ciągu ostatnich 30 dni:"
                                                         taxLabel="netto (bez VAT)"
-                                                        onInfoClick={() => setPriceModalOpen(true)} 
+                                                        onInfoClick={() => {
+                                                            setPriceModalOpen(true);
+                                                            setPi(item.price.includes);
+                                                        }} 
                                                     />
                                                 }
 
@@ -259,7 +263,8 @@ function Catalog(props) {
             }
             <PriceModal 
                 open={priceModalOpen} 
-                onClose={() => setPriceModalOpen(false)} 
+                onClose={() => setPriceModalOpen(false)}
+                priceInclusions={pi}
             />
             {props.modal &&
                 <Modal

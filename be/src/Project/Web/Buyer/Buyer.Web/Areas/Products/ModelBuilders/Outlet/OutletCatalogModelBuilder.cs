@@ -119,6 +119,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 CurrencyCode = componentModel.CurrencyCode,
                                 ExtraPacking = componentModel.ExtraPacking,
                                 PaletteLoading = componentModel.PaletteLoading,
+                                OwnTransport = componentModel.OwnTransport,
                                 Country = componentModel.Country,
                                 DeliveryZipCode = componentModel.DeliveryZipCode
                             });

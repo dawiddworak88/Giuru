@@ -1,6 +1,7 @@
 ﻿using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Prices;
 using Buyer.Web.Shared.DomainModels.Prices;
+using Foundation.Extensions.ExtensionMethods;
 using Grula.PricingIntelligencePlatform.Sdk;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -121,8 +122,24 @@ namespace Buyer.Web.Shared.Services.Prices
                         var price = new Price
                         {
                             CurrentPrice = (decimal)grulaPrice.Amount.Amount,
-                            CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode
+                            CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode,
+
                         };
+
+                        if (client.OwnTransport.ToBool())
+                        {
+                            price.Includes.Add("Koszt transportu");
+                        }
+
+                        if (client.ExtraPacking.ToBool())
+                        {
+                            price.Includes.Add("Usługę dodatkowego pakowania");
+                        }
+
+                        if (client.PaletteLoading.ToBool())
+                        {
+                            price.Includes.Add("Dostawę towaru na paletach");
+                        }
 
                         prices.Add(price);
                     }

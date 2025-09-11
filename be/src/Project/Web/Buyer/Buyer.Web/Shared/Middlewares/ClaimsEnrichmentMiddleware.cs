@@ -205,6 +205,23 @@ namespace Buyer.Web.Shared.Middlewares
 
                     claimsToCache.Add(paletteLoadingClaim);
                 }
+
+                var methodOfDelivery = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.MethodOfDeliveryClientFieldName);
+
+                if (methodOfDelivery is not null)
+                {
+                    bool ownTransport = methodOfDelivery.FieldValue == ClaimsEnrichmentConstants.OwnTransportFieldValue;
+
+                    claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.OwnTransportClaimType, ownTransport.ToYesOrNo()));
+
+                    var ownTransportClaim = new CachedClaim
+                    {
+                        Key = ClaimsEnrichmentConstants.OwnTransportClaimType,
+                        Value = ownTransport.ToYesOrNo()
+                    };
+
+                    claimsToCache.Add(ownTransportClaim);
+                }
             }
 
             await _cache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(claimsToCache), new DistributedCacheEntryOptions

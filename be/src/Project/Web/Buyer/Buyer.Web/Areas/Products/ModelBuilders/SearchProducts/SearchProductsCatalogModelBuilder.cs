@@ -125,6 +125,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             CurrencyCode = componentModel.CurrencyCode,
                             ExtraPacking = componentModel.ExtraPacking,
                             PaletteLoading = componentModel.PaletteLoading,
+                            OwnTransport = componentModel.OwnTransport,
                             Country = componentModel.Country,
                             DeliveryZipCode = componentModel.DeliveryZipCode
                         });
@@ -166,7 +167,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             product.Price = new ProductPriceViewModel
                             {
                                 Current = price.CurrentPrice,
-                                Currency = price.CurrencyCode
+                                Currency = price.CurrencyCode,
+                                Includes = price.Includes
                             };
                         }
                     }

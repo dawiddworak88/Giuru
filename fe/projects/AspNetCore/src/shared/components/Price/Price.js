@@ -20,7 +20,7 @@ const Price = ({
             {taxLabel && (
                 <span className="price__tax-label">{taxLabel}</span>
             )}
-            <div className='' onClick={onInfoClick}>
+            <div className='price__icon' onClick={onInfoClick}>
                 <InfoIcon />
             </div>
         </div>

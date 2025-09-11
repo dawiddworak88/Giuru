@@ -39,6 +39,7 @@ namespace Buyer.Web.Areas.Products.Controllers
                 CurrencyCode = this.User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
                 ExtraPacking = this.User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                 PaletteLoading = this.User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
+                OwnTransport = this.User.FindFirst(ClaimsEnrichmentConstants.OwnTransportClaimType)?.Value,
                 Country = this.User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
                 DeliveryZipCode = this.User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
             };
