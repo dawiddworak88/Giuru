@@ -123,7 +123,7 @@ namespace Buyer.Web.Shared.Services.Prices
                         {
                             CurrentPrice = (decimal)grulaPrice.Amount.Amount,
                             CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode,
-
+                            Includes = new List<string>()
                         };
 
                         if (client.OwnTransport.ToBool())
