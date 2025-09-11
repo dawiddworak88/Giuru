@@ -187,7 +187,6 @@ function Catalog(props) {
                                                         lowestPriceLabel="Najniższa cena w ciągu ostatnich 30 dni:"
                                                         taxLabel="netto (bez VAT)"
                                                         onInfoClick={() => setPriceModalOpen(true)} 
-                                                        {...item.price} 
                                                     />
                                                 }
 
