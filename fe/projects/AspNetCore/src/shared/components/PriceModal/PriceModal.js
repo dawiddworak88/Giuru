@@ -30,6 +30,7 @@ const PriceModal = ({
            <DialogTitle>
                 Cena zawiera
                 <IconButton 
+                    disableRipple
                     aria-label="close"
                     onClick={onClose}
                     sx={{
