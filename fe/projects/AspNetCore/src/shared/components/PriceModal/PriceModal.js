@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dialog, DialogTitle } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, IconButton, ListItem } from '@mui/material';
 
 const PriceModal = ({
     open,
@@ -12,14 +12,36 @@ const PriceModal = ({
             onClose={onClose}
             aria-label='price-modal'
             PaperProps={{
-                maxWidth: "750px",
-                px: "40px",
-                py: "40px"
+                sx: {
+                    maxWidth: "750px",
+                    width: "100%",
+                    p: "40px",
+                    borderRadius: "8px"
+                }
             }}
         >
            <DialogTitle>
                 Cena zawiera
+                <IconButton 
+                    aria-label="close"
+                    onClick={onClose}
+                    sx={{
+                        position: 'absolute',
+                        right: "1rem",
+                        top: "1rem"
+                    }}
+                >
+                    X
+                </IconButton>
             </DialogTitle> 
+            <DialogContent
+                sx={{
+                    pt: "1.5rem"
+                }}
+            >
+                <ListItem></ListItem>
+                <p>*Więcej informacji znajduje się w regulaminie dostępnym na stronie b2b.eltap.com</p>
+            </DialogContent>
         </Dialog>
     )
 }
