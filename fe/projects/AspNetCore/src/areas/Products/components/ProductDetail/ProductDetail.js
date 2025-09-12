@@ -16,7 +16,6 @@ import Price from "../../../../shared/components/Price/Price";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
 import Availability from "../../../../shared/components/Availability/Availability";
-import DOMPurify from 'dompurify';
 import CopyButton from "../../../../shared/components/CopyButton/CopyButton";
 
 function ProductDetail(props) {
@@ -154,10 +153,6 @@ function ProductDetail(props) {
 
         setShowMoreImages(!showMoreImages);
     }
-
-    const plainDesc = props.description
-        ? DOMPurify.sanitize(marked.parse(props.description), { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
-        : '';
 
     return (
         <section className="product-detail section">
