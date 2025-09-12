@@ -17,6 +17,7 @@ import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement"
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
 import Availability from "../../../../shared/components/Availability/Availability";
 import CopyButton from "../../../../shared/components/CopyButton/CopyButton";
+import GlobalHelper from "../../../../shared/helpers/globals/GlobalHelper";
 
 function ProductDetail(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -28,6 +29,8 @@ function ProductDetail(props) {
     const [showMoreImages, setShowMoreImages] = useState(false);
     const [mediaItems, setMediaItems] = useState(props.mediaItems ? props.mediaItems.slice(0, 6) : []);
     const [activeMediaItemIndex, setActiveMediaItemIndex] = useState(0);
+    const [cleanDescription, setCleanDescription] = useState('');
+    const [plainText, setPlainText] = useState('');
 
     const {
         orderItems,
@@ -153,6 +156,15 @@ function ProductDetail(props) {
 
         setShowMoreImages(!showMoreImages);
     }
+
+    useEffect(() => {
+        if (props.description) {
+            const sanitized = GlobalHelper.sanitizeHtml(props.description).innerHTML;
+            const clean = marked.parse(sanitized)
+            setCleanDescription(clean);
+            setPlainText(GlobalHelper.extractTextOnly(clean))
+        }
+    }, [props.description])
 
     return (
         <section className="product-detail section">
@@ -323,10 +335,10 @@ function ProductDetail(props) {
                                         copiedText={props.copiedText}
                                         copyTextError={props.copyTextError}
                                         copyToClipboardText={props.copyToClipboardText}
-                                        text={plainDesc}
+                                        text={plainText}
                                     />}
                                 </h3>
-                                <div dangerouslySetInnerHTML={{ __html: marked.parse(props.description) }}></div>
+                                <div dangerouslySetInnerHTML={{ __html: cleanDescription }}></div>
                             </div>
                         }
                         {props.features && props.features.length > 0 &&
