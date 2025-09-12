@@ -30,7 +30,16 @@ const PriceModal = ({
                 }
             }}
         >
-           <DialogTitle className='price-modal__title'>
+           <DialogTitle 
+                className='price-modal__title'
+                sx={{
+                    fontSize: "1.625rem",
+                    lineHeight: "130%",
+                    fontWeight: 400,
+                    p: 0,
+                    letterSpacing: 0
+                }}
+            >
                 Cena zawiera
                 <IconButton 
                     disableRipple
@@ -47,10 +56,9 @@ const PriceModal = ({
             </DialogTitle> 
             <DialogContent
                 sx={{
-                    pt: "1.5rem"
+                    p: "1.5rem 0 0 0"
                 }}
             >
-                
                 {priceInclusions && (
                     <List
                         dense
