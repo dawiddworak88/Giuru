@@ -108,11 +108,6 @@ function ProductDetail(props) {
             quantity,
             isOutletOrder: item.isOutletOrder,
             externalReference: item.externalReference,
-            unitPrice: product.price ? parseFloat(product.price.current).toFixed(2) : null,
-            price: product.price ? parseFloat(product.price.current * totalQuantity).toFixed(2) : null,
-            currency: product.price ? product.price.currency : null,
-            deliveryFrom: moment(item.deliveryFrom).startOf("day"),
-            deliveryTo: moment(item.deliveryTo).startOf("day"),
             moreInfo: item.moreInfo,
             resetData: () => {
                 setIsModalOpen(false);
@@ -180,7 +175,7 @@ function ProductDetail(props) {
                                     mediaItems.map((mediaItem, index) => (
                                         <div className="product-detail__desktop-gallery__desktop-product-image" onClick={() => handleImageModal(index)}>
                                             <LazyLoad offset={LazyLoadConstants.defaultOffset()} key={index}>
-                                                {mediaItem.mimeType.startsWith("image") ? (
+                                                {mediaItem.mimeType?.startsWith("image") ? (
                                                     <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
                                                 ) : (
                                                     <video autoPlay loop muted playsInline preload='auto'>
@@ -194,7 +189,7 @@ function ProductDetail(props) {
                                     props.mediaItems.length == 1 && (
                                         <div className="product-detail__desktop-gallery__desktop-product-image__single" onClick={() => handleImageModal(0)}>
                                             <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
-                                                {props.mediaItems[0].mimeType.startsWith("image") ? (
+                                                {props.mediaItems[0].mimeType?.startsWith("image") ? (
                                                     <ResponsiveImage sources={props.mediaItems[0].sources} imageSrc={props.mediaItems[0].mediaSrc} imageAlt={props.mediaItems[0].mediaAlt} imageTitle={props.title} />
                                                 ) : (
                                                     <video autoPlay loop muted playsInline preload='auto'>
@@ -241,10 +236,12 @@ function ProductDetail(props) {
                                 >
                                     {props.mediaItems.map((mediaItem, index) => {
                                         return (
-                                            <SplideSlide key={index} onClick={() => handleOpenZoomModal(index)}>
+                                            <SplideSlide key={index}>
                                                 <LazyLoad offset={LazyLoadConstants.defaultOffset()} className="product-detail__mobile-gallery__mobile-product-image">
-                                                    {mediaItem.mimeType.startsWith("image") ? (
-                                                        <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
+                                                    {mediaItem.mimeType?.startsWith("image") ? (
+                                                        <div onClick={() => handleOpenZoomModal(index)}>
+                                                            <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
+                                                        </div>
                                                     ) : (
                                                         <video autoPlay loop muted playsInline preload='auto'>
                                                             <source src={mediaItem.mediaSrc} type={mediaItem.mimeType} />
