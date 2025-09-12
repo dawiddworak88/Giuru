@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react"
 import { Dialog } from "@mui/material"
+import PropTypes from "prop-types"
 import ZoomModalConstants from "../../../../shared/constants/ZoomModalConstants"
 
 const ProductZoomModal = (props) => {
@@ -7,12 +8,16 @@ const ProductZoomModal = (props) => {
     const [position, setPosition] = useState(ZoomModalConstants.defaultPosition())
     const [isZoomed, setIsZoomed] = useState(false)
 
-    const { isOpen, handleClose, mediaItems, index } = props
-    const { mediaSrc, mediaAlt } = mediaItems[index]
-
     const imageRef = useRef(null)
     const lastTapRef = useRef(0)
-    const lastPositionref = useRef(ZoomModalConstants.defaultPosition())
+    const lastPositionRef = useRef(ZoomModalConstants.defaultPosition())
+
+    const { isOpen, handleClose, mediaItems, index } = props
+    if (!isOpen || !mediaItems || !mediaItems[index]) return null;
+
+    const item = mediaItems[index];
+    if (!item.mimeType?.startsWith('image')) return null;
+    const { mediaSrc, mediaAlt } = item
 
     const resetZoom = () => {
         setScale(ZoomModalConstants.defaultScale())
@@ -24,8 +29,8 @@ const ProductZoomModal = (props) => {
 
         const image = imageRef.current.getBoundingClientRect()
 
-        const maxX = Math.max(0, image.width / 10)
-        const maxY = Math.max(0, image.height / 10)
+        const maxX = Math.max(0, image.width / 4)
+        const maxY = Math.max(0, image.height / 4)
 
         return {
             x: Math.max(-maxX, Math.min(maxX, newPosition.x)),
@@ -41,7 +46,7 @@ const ProductZoomModal = (props) => {
         }
 
         const touch = e.touches[0]
-        lastPositionref.current = { x: touch.clientX, y: touch.clientY }
+        lastPositionRef.current = { x: touch.clientX, y: touch.clientY }
 
         const now = Date.now()
         if (now - lastTapRef.current < ZoomModalConstants.timeToSecondTap()) {
@@ -61,8 +66,8 @@ const ProductZoomModal = (props) => {
         if (isZoomed) {
             const touch = e.touches[0]
 
-            const deltaX = touch.clientX - lastPositionref.current.x
-            const deltaY = touch.clientY - lastPositionref.current.y
+            const deltaX = touch.clientX - lastPositionRef.current.x
+            const deltaY = touch.clientY - lastPositionRef.current.y
 
             const newPosition = {
                 x: position.x + deltaX,
@@ -70,7 +75,7 @@ const ProductZoomModal = (props) => {
             }
 
             setPosition(constrainPosition(newPosition))
-            lastPositionref.current = { x: touch.clientX, y: touch.clientY }
+            lastPositionRef.current = { x: touch.clientX, y: touch.clientY }
         }
     };
 
@@ -111,7 +116,7 @@ const ProductZoomModal = (props) => {
                 alt={mediaAlt}
                 className="zoom-modal-image"
                 style={{
-                    transform: `scale(${scale}) translate(${position.x}px, ${position.y}px)`,
+                    transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
                     transformOrigin: 'center center'
                 }}
                 onTouchStart={handleTouchStart}
@@ -120,6 +125,13 @@ const ProductZoomModal = (props) => {
             />
         </Dialog>
     )
+}
+
+ProductZoomModal.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    handleClose: PropTypes.func,
+    mediaItems: PropTypes.array.isRequired,
+    index: PropTypes.number.isRequired
 }
 
 export default ProductZoomModal
