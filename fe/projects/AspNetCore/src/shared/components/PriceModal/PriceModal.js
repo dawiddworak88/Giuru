@@ -25,7 +25,7 @@ const PriceModal = ({
                 sx: {
                     maxWidth: "750px",
                     width: "100%",
-                    p: "40px",
+                    padding: "40px",
                     borderRadius: "8px"
                 }
             }}
@@ -37,7 +37,8 @@ const PriceModal = ({
                     lineHeight: "130%",
                     fontWeight: 400,
                     p: 0,
-                    letterSpacing: 0
+                    letterSpacing: 0,
+                    boxShadow: "none"
                 }}
             >
                 Cena zawiera
@@ -56,7 +57,7 @@ const PriceModal = ({
             </DialogTitle> 
             <DialogContent
                 sx={{
-                    p: "1.5rem 0 0 0"
+                    padding: "1.5rem 0 0 0"
                 }}
             >
                 {priceInclusions && (
@@ -77,7 +78,7 @@ const PriceModal = ({
                         })}
                     </List>
                 )}
-                <p className='mt-3'>*Więcej informacji znajduje się w regulaminie dostępnym na stronie b2b.eltap.com</p>
+                <p className='mt-5'>*Więcej informacji znajduje się w regulaminie dostępnym na stronie b2b.eltap.com</p>
             </DialogContent>
         </Dialog>
     )
