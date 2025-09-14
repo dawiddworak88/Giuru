@@ -72,19 +72,17 @@ const PriceModal = ({
                             listStyle: "inside",
                             listStyleType: "disc",
                             "> li": {
-                                display: "list-item"
+                                display: "list-item",
+                                fontSize: "1rem",
+                                fontWeight: "400",
+                                lineHeight: "1.5rem",
+                                padding: 0
                             }
                         }}
                     >
                         {priceInclusions.map((inclusion) => {
                             return (
-                                <ListItem
-                                    sx={{
-                                        textDecoration: "underline"
-                                    }}
-                                >
-                                    {inclusion}
-                                </ListItem>
+                                <ListItem>{inclusion}</ListItem>
                             )
                         })}
                     </List>
