@@ -60,12 +60,16 @@ const PriceModal = ({
                 </IconButton>
             </DialogTitle> 
             <DialogContent
+                sx={{
+                    padding: 0
+                }}
             >
                 {priceInclusions && (
                     <List
                         dense
                         disablePadding
                         sx={{
+                            listStyle: "inside",
                             listStyleType: "disc",
                             "> li": {
                                 display: "list-item"
@@ -74,7 +78,13 @@ const PriceModal = ({
                     >
                         {priceInclusions.map((inclusion) => {
                             return (
-                                <ListItem>{inclusion}</ListItem>
+                                <ListItem
+                                    sx={{
+                                        textDecoration: "underline"
+                                    }}
+                                >
+                                    {inclusion}
+                                </ListItem>
                             )
                         })}
                     </List>
