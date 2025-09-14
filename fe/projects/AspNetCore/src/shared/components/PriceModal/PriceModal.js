@@ -26,7 +26,11 @@ const PriceModal = ({
                     maxWidth: "750px",
                     width: "100%",
                     padding: "40px",
-                    borderRadius: "8px"
+                    borderRadius: "8px",
+                    '& .MuiDialogTitle-root + .MuiDialogContent-root': {
+                        paddingTop: "1.5rem"
+                    }
+                    
                 }
             }}
         >
@@ -56,9 +60,6 @@ const PriceModal = ({
                 </IconButton>
             </DialogTitle> 
             <DialogContent
-                sx={{
-                    padding: "1.5rem 0 0 0"
-                }}
             >
                 {priceInclusions && (
                     <List
