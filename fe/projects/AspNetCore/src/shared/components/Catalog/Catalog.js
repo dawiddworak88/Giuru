@@ -163,7 +163,7 @@ function Catalog(props) {
                                 return (
                                     <div key={index} className="catalog__card">
                                         <div className="catalog__card-header"></div>
-                                        <a className="catalog__card-content">
+                                        <a className="catalog__card-content" href={item.url}>
                                             <div className="catalog__card-media">
                                                 <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
                                                     <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} imageClassName="card-image-scale-down" />
