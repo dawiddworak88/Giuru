@@ -163,20 +163,22 @@ function Catalog(props) {
                                 return (
                                     <div key={index} className="catalog__card">
                                         <div className="catalog__card-header"></div>
-                                        <a className="catalog__card-content" href={item.url}>
+                                        <div className="catalog__card-content">
                                             <div className="catalog__card-media">
-                                                <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
-                                                    <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} imageClassName="card-image-scale-down" />
-                                                </LazyLoad>
+                                                <a href={item.url}>
+                                                    <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
+                                                        <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} imageClassName="card-image-scale-down" />
+                                                    </LazyLoad>
+                                                </a>
                                             </div>
                                             <div className="catalog__card-body">
-                                                <div className="body-header">
+                                                <a className="body-header" href={item.url}>
                                                     <p className="text-highlight">{props.skuLabel} {item.sku}</p>
                                                     <h3 className="title mt-1">{item.title}</h3>
                                                     {item.productAttributes &&
                                                         <p className="text-highlight mt-1">{item.productAttributes}</p>
                                                     }
-                                                </div>
+                                                </a>
 
                                                 {item.price && 
                                                     <Price 
@@ -188,7 +190,7 @@ function Catalog(props) {
                                                         lowestPriceLabel="Najniższa cena w ciągu ostatnich 30 dni:"
                                                         taxLabel="netto (bez VAT)"
                                                         showInfoIcon={Array.isArray(item.price.priceInclusions) ? item.price.priceInclusions.length > 0 : !!item.price.priceInclusions}
-                                                        onInfoClick={() => {
+                                                        onInfoClick={(e) => {
                                                             setPriceModalOpen(true);
                                                             setPi(item.price.priceInclusions);
                                                         }} 
@@ -212,7 +214,7 @@ function Catalog(props) {
                                                     </div>
                                                 }
                                             </div>
-                                        </a>
+                                        </div>
                                         <div className="catalog__card-footer">
                                             <Button 
                                                 variant="contained"
