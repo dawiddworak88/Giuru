@@ -10,6 +10,7 @@ import {
     Typography
 } from '@mui/material';
 import { CloseIcon } from '../../icons';
+import { marked } from "marked";
 
 const PriceModal = ({
     open,
