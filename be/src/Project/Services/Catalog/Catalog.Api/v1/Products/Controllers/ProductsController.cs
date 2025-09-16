@@ -320,6 +320,7 @@ namespace Catalog.Api.v1.Products.Controllers
         /// Returns a product by id.
         /// </summary>
         /// <param name="id">The product id.</param>
+        /// <param name="sellerId">The brand id.</param>
         /// <returns>The product.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
@@ -327,15 +328,13 @@ namespace Catalog.Api.v1.Products.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [AllowAnonymous]
-        public async Task<IActionResult> GetById(Guid? id)
+        public async Task<IActionResult> GetById(Guid? id, Guid? sellerId)
         {
-            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-
             var serviceModel = new GetProductByIdServiceModel
             {
                 Id = id.Value,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                OrganisationId = sellerId,
                 Language = CultureInfo.CurrentCulture.Name
             };
 

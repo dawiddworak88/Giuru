@@ -107,7 +107,7 @@ function ProductDetail(props) {
             isOutletOrder: item.isOutletOrder,
             externalReference: item.externalReference,
             unitPrice: product.price ? parseFloat(product.price.current).toFixed(2) : null,
-            price: product.price ? parseFloat(product.price.current * totalQuantity).toFixed(2) : null,
+            price: product.price ? parseFloat(product.price.current * quantity).toFixed(2) : null,
             currency: product.price ? product.price.currency : null,
             deliveryFrom: moment(item.deliveryFrom).startOf("day"),
             deliveryTo: moment(item.deliveryTo).startOf("day"),
