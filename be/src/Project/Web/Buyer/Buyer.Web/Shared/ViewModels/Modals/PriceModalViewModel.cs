@@ -2,7 +2,7 @@
 {
     public class PriceModalViewModel
     {
-        public string PriceInclusionTitle { get; set; }
-        public string PriceNote { get; set; }
+        public string Title { get; set; }
+        public string Note { get; set; }
     }
 }

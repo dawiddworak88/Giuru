@@ -46,6 +46,7 @@ using Foundation.Extensions.Services.Cache;
 using Buyer.Web.Shared.ViewModels.Toasts;
 using Buyer.Web.Shared.ModelBuilders.Toasts;
 using Buyer.Web.Shared.Repositories.Inventory;
+using Buyer.Web.Shared.ModelBuilders.Modals;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -71,6 +72,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IModelBuilder<SuccessAddProductToBasketViewModel>, SuccessAddProductToBasketModelBuilder>();
+            services.AddScoped<IModelBuilder<PriceModalViewModel>, PriceModalModelBuilder>();
 
             // Repositories
             services.AddScoped<IBrandRepository, BrandRepository>();

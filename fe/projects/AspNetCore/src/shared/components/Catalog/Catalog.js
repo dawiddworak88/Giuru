@@ -266,8 +266,8 @@ function Catalog(props) {
                 <PriceModal 
                     open={priceModalOpen} 
                     onClose={() => setPriceModalOpen(false)}
-                    title={props.priceModal.priceInclusionTitle}
-                    note={props.priceModal.priceNote}
+                    title={props.priceModal.title}
+                    note={props.priceModal.note}
                     priceInclusions={pi}
                 />
             }
