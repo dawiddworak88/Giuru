@@ -32,7 +32,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         private readonly ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> _searchProductsCatalogModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> _sidebarModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> _modalModelBuilder;
-        private readonly IComponentModelBuilder<ComponentModelBase, PriceModalViewModel> _priceModalModelBuilder;
+        private readonly IModelBuilder<PriceModalViewModel> _priceModalModelBuilder;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IProductsService _productsService;
         private readonly IOutletRepository _outletRepository;
@@ -45,7 +45,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> searchProductsCatalogModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
-            IComponentModelBuilder<ComponentModelBase, PriceModalViewModel> priceModalModelBuilder,
+            IModelBuilder<PriceModalViewModel> priceModalModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IProductsService productsService,
             IOutletRepository outletRepository,
@@ -75,7 +75,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             viewModel.Title = componentModel.SearchTerm;
             viewModel.Sidebar = await _sidebarModelBuilder.BuildModelAsync(componentModel);
             viewModel.Modal = await _modalModelBuilder.BuildModelAsync(componentModel);
-            viewModel.PriceModal = _priceModalModelBuilder.BuildModel(componentModel);
+            viewModel.PriceModal = _priceModalModelBuilder.BuildModel();
             viewModel.ItemsPerPage = ProductConstants.ProductsCatalogPaginationPageSize;
             viewModel.SearchTerm = componentModel.SearchTerm;
             viewModel.ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "SearchProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
