@@ -187,10 +187,10 @@ function Catalog(props) {
                                                         lowestPrice={1900}
                                                         lowestPriceLabel="Najniższa cena w ciągu ostatnich 30 dni:"
                                                         taxLabel="netto (bez VAT)"
-                                                        showInfoIcon={Array.isArray(item.price.includes) ? item.price.includes.length > 0 : !!item.price.includes}
+                                                        showInfoIcon={Array.isArray(item.price.priceInclusions) ? item.price.priceInclusions.length > 0 : !!item.price.priceInclusions}
                                                         onInfoClick={() => {
                                                             setPriceModalOpen(true);
-                                                            setPi(item.price.includes);
+                                                            setPi(item.price.priceInclusions);
                                                         }} 
                                                     />
                                                 }
@@ -262,11 +262,15 @@ function Catalog(props) {
                     labels={props.sidebar}
                 />
             }
-            <PriceModal 
-                open={priceModalOpen} 
-                onClose={() => setPriceModalOpen(false)}
-                priceInclusions={pi}
-            />
+            {props.priceModal &&
+                <PriceModal 
+                    open={priceModalOpen} 
+                    onClose={() => setPriceModalOpen(false)}
+                    title={props.priceModal.priceInclusionTitle}
+                    note={props.priceModal.priceNote}
+                    priceInclusions={pi}
+                />
+            }
             {props.modal &&
                 <Modal
                     isOpen={isModalOpen}

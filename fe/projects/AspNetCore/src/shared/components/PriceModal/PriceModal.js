@@ -13,6 +13,8 @@ import { CloseIcon } from '../../icons';
 const PriceModal = ({
     open,
     onClose,
+    title,
+    note,
     priceInclusions
 }) => {
     return (
@@ -45,7 +47,7 @@ const PriceModal = ({
                     boxShadow: "none"
                 }}
             >
-                Cena zawiera
+                {title}
                 <IconButton 
                     disableRipple
                     aria-label="close"
@@ -87,7 +89,9 @@ const PriceModal = ({
                         })}
                     </List>
                 )}
-                <p className='mt-5'>*Więcej informacji znajduje się w regulaminie dostępnym na stronie b2b.eltap.com</p>
+                {note && 
+                    <p className='mt-5'>{note}</p>
+                }
             </DialogContent>
         </Dialog>
     )

@@ -40,6 +40,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string MinOrderQuantityErrorMessage { get; set; }
         public SidebarViewModel Sidebar { get; set; }
         public ModalViewModel Modal { get; set; }
+        public PriceModalViewModel PriceModal { get; set; }
         public IEnumerable<BasketItem> BasketItems { get; set; }
         public PagedResults<IEnumerable<CatalogItemViewModel>> PagedItems { get; set; }
     }

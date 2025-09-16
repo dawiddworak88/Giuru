@@ -12,7 +12,6 @@ using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
-using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -33,6 +32,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         private readonly ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> _searchProductsCatalogModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> _sidebarModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> _modalModelBuilder;
+        private readonly IComponentModelBuilder<ComponentModelBase, PriceModalViewModel> _priceModalModelBuilder;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IProductsService _productsService;
         private readonly IOutletRepository _outletRepository;
@@ -45,6 +45,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> searchProductsCatalogModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
+            IComponentModelBuilder<ComponentModelBase, PriceModalViewModel> priceModalModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IProductsService productsService,
             IOutletRepository outletRepository,
@@ -58,6 +59,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             _productsService = productsService;
             _sidebarModelBuilder = sidebarModelBuilder;
             _modalModelBuilder = modalModelBuilder;
+            _priceModalModelBuilder = priceModalModelBuilder;
             _outletRepository = outletRepository;
             _inventoryRepository = inventoryRepository;
             _globalLocalizer = globalLocalizer;
@@ -73,6 +75,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             viewModel.Title = componentModel.SearchTerm;
             viewModel.Sidebar = await _sidebarModelBuilder.BuildModelAsync(componentModel);
             viewModel.Modal = await _modalModelBuilder.BuildModelAsync(componentModel);
+            viewModel.PriceModal = _priceModalModelBuilder.BuildModel(componentModel);
             viewModel.ItemsPerPage = ProductConstants.ProductsCatalogPaginationPageSize;
             viewModel.SearchTerm = componentModel.SearchTerm;
             viewModel.ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "SearchProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
@@ -168,7 +171,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             {
                                 Current = price.CurrentPrice,
                                 Currency = price.CurrencyCode,
-                                Includes = price.Includes
+                                PriceInclusions = price.Includes
                             };
                         }
                     }

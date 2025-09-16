@@ -83,7 +83,7 @@ namespace Buyer.Web.Shared.Services.Prices
                 return Enumerable.Empty<Price>();
             }
 
-            var priceRequests = new List<PriceRequest>();
+            var requestTuples = new List<(PriceRequest priceRequest, PriceProduct product)>();
             var prices = new List<Price>();
 
             foreach (var product in products)
@@ -91,7 +91,6 @@ namespace Buyer.Web.Shared.Services.Prices
                 if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
                     string.IsNullOrWhiteSpace(product.FabricsGroup))
                 {
-                    prices.Add(null);
                     continue;
                 }
 
@@ -102,21 +101,24 @@ namespace Buyer.Web.Shared.Services.Prices
                     PricingDate = pricingDate
                 };
 
-                priceRequests.Add(priceRequest);
+                requestTuples.Add((priceRequest, product));
             }
 
             var priceQuery = new GetPricesByPriceDriversQuery
             {
                 EnvironmentId = _options.Value.GrulaEnvironmentId.Value,
-                PriceRequests = priceRequests,
+                PriceRequests = requestTuples.Select(x => x.priceRequest).ToList()
             };
 
             try
             {
                 var grulaPrices = await _grulaApiClient.GetPricesByPriceDriversAsync(priceQuery);
 
-                foreach (var grulaPrice in grulaPrices)
+                for (int i = 0; i < grulaPrices.Count; i++)
                 {
+                    var grulaPrice = grulaPrices.ElementAtOrDefault(i);
+                    var requestProduct = requestTuples.ElementAtOrDefault(i).product;
+
                     if (grulaPrice?.Amount is not null)
                     {
                         var price = new Price
@@ -126,22 +128,19 @@ namespace Buyer.Web.Shared.Services.Prices
                             Includes = new List<string>()
                         };
 
-                        if (client.OwnTransport.ToBool())
-                        {
-                            price.Includes.Add("Koszt transportu");
-                        }
-
-                        Console.WriteLine($"Client exta packing {client.ExtraPacking}");
-                        Console.WriteLine($"{client.ExtraPacking.ToBool()}");
-
-                        if (client.ExtraPacking.ToBool())
+                        if (requestProduct.ExtraPacking.ToYesOrNo().ToBool() && client.ExtraPacking.ToBool())
                         {
                             price.Includes.Add("Usługę dodatkowego pakowania");
                         }
 
-                        if (client.PaletteLoading.ToBool())
+                        if ((client?.PaletteLoading.ToBool() ?? false) && !string.IsNullOrWhiteSpace(requestProduct?.PaletteSize))
                         {
-                            price.Includes.Add("Dostawę towaru na paletach");
+                            price.Includes.Add("Dostawa towaru na paletach");
+                        }
+
+                        if (!client.OwnTransport.ToBool())
+                        {
+                            price.Includes.Add("Koszt transportu");
                         }
 
                         prices.Add(price);
