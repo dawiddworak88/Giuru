@@ -320,7 +320,8 @@ Catalog.propTypes = {
     sidebar: PropTypes.object,
     maxAllowedOrderQuantity: PropTypes.number,
     maxAllowedOrderQuantityErrorMessage: PropTypes.string,
-    getProductPriceUrl: PropTypes.string
+    getProductPriceUrl: PropTypes.string,
+    taxLabel: PropTypes.string
 };
 
 export default Catalog;
