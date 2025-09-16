@@ -124,7 +124,8 @@ namespace Buyer.Web.Shared.Services.Prices
                         var price = new Price
                         {
                             CurrentPrice = (decimal)grulaPrice.Amount.Amount,
-                            CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode
+                            CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode,
+                            PriceInclusions = new List<PriceInclusion>()
                         };
 
                         if (requestProduct.ExtraPacking.ToYesOrNo().ToBool() && client.ExtraPacking.ToBool())
