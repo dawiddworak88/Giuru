@@ -2,7 +2,9 @@
 using Buyer.Web.Shared.Definitions.Prices;
 using Buyer.Web.Shared.DomainModels.Prices;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.Localization;
 using Grula.PricingIntelligencePlatform.Sdk;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -17,15 +19,18 @@ namespace Buyer.Web.Shared.Services.Prices
         private readonly GrulaApiClient _grulaApiClient;
         private readonly IOptions<AppSettings> _options;
         private readonly ILogger<PriceService> _logger;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
 
         public PriceService(
             GrulaApiClient grulaApiClient,
             IOptions<AppSettings> options,
-            ILogger<PriceService> logger)
+            ILogger<PriceService> logger,
+            IStringLocalizer<GlobalResources> globalLocalizer)
         {
             _grulaApiClient = grulaApiClient;
             _options = options;
             _logger = logger;
+            _globalLocalizer = globalLocalizer;
         }
 
         public async Task<Price> GetPrice(
@@ -128,20 +133,24 @@ namespace Buyer.Web.Shared.Services.Prices
                             PriceInclusions = new List<PriceInclusion>()
                         };
 
-                        if (requestProduct.ExtraPacking.ToYesOrNo().ToBool() && client.ExtraPacking.ToBool())
+                        if (requestProduct.ExtraPacking.ToYesOrNo().ToBool() && 
+                            client.ExtraPacking.ToBool())
                         {
-                            price.PriceInclusions.Add(BuildUnderlinedText("Usługę dodatkowego pakowania"));
+                            price.PriceInclusions.Add(BuildUnderlinedText(_globalLocalizer.GetString("ExtraPackingService")));
                         }
 
-                       /* if ((client?.PaletteLoading.ToBool() ?? false) && !string.IsNullOrWhiteSpace(requestProduct?.PaletteSize))
+                        if (!string.IsNullOrWhiteSpace(requestProduct?.PaletteSize) && (client?.PaletteLoading.ToBool() ?? false))
                         {
-                            price.Includes.Add("Dostawa towaru na paletach");
+                            price.PriceInclusions.Add(BuildUnderlinedText(_globalLocalizer.GetString("PaletteLoadingService")));
                         }
 
                         if (!client.OwnTransport.ToBool())
                         {
-                            price.Includes.Add("Koszt transportu");
-                        }*/
+                            price.PriceInclusions.Add(new PriceInclusion
+                            {
+                                Text = _globalLocalizer.GetString("TransportService")
+                            });
+                        }
 
                         prices.Add(price);
                     }

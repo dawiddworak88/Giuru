@@ -822,4 +822,13 @@
   <data name="MinOrderQuantity" xml:space="preserve">
     <value>Minimalna ilość zamówienia to 1</value>
   </data>
+  <data name="ExtraPackingService" xml:space="preserve">
+    <value>Usługę dodatkowego pakowania</value>
+  </data>
+  <data name="PaletteLoadingService" xml:space="preserve">
+    <value>Dostawę towaru na paletach</value>
+  </data>
+  <data name="TransportService" xml:space="preserve">
+    <value>Koszt transportu</value>
+  </data>
 </root>

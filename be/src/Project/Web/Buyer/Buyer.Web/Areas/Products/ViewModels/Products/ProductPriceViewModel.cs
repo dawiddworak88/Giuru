@@ -8,7 +8,6 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string Currency { get; set; }
         public decimal? Old { get; set; }
         public decimal? LowestPrice { get; set; }
-        public string LowestPriceLabel { get; set; }
         public IEnumerable<ProductPriceInclusionViewModel> PriceInclusions { get; set; }
     }
 }

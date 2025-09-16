@@ -6,7 +6,8 @@ import {
     DialogTitle, 
     IconButton, 
     List, 
-    ListItem 
+    ListItem, 
+    Typography
 } from '@mui/material';
 import { CloseIcon } from '../../icons';
 
@@ -84,13 +85,20 @@ const PriceModal = ({
                     >
                         {priceInclusions.map((inclusion) => {
                             return (
-                                <ListItem>{inclusion.text} {inclusion.underlinedText && <span style={{textDecoration: "underline"}}>{inclusion.underlinedText}</span>}</ListItem>
+                                <ListItem>{inclusion.text} {inclusion.underlinedText && <span style={{textDecoration: "underline"}}>{inclusion.underlinedText}*</span>}.</ListItem>
                             )
                         })}
                     </List>
                 )}
                 {note && 
-                    <p className='mt-5'>{note}</p>
+                    <Typography 
+                        className='mt-5'
+                        sx={{
+                            fontSize: "0.875rem"
+                        }}
+                    >
+                        {note}
+                    </Typography>
                 }
             </DialogContent>
         </Dialog>

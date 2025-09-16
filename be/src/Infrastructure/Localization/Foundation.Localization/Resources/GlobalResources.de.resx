@@ -812,8 +812,17 @@
   </data>
   <data name="ShowText" xml:space="preserve">
     <value>Anzeigen</value>
-  </data>  
+  </data>
   <data name="MinOrderQuantity" xml:space="preserve">
     <value>Mindestbestellmenge ist 1</value>
+  </data>
+  <data name="ExtraPackingService" xml:space="preserve">
+    <value>Zusätzlicher Verpackungsservice</value>
+  </data>
+  <data name="PaletteLoadingService" xml:space="preserve">
+    <value>Lieferung auf Paletten</value>
+  </data>
+  <data name="TransportService" xml:space="preserve">
+    <value>Transportkosten</value>
   </data>
 </root>
