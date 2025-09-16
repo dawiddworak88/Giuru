@@ -828,6 +828,9 @@
   <data name="PaletteLoadingService" xml:space="preserve">
     <value>Dostawę towaru na paletach</value>
   </data>
+  <data name="PriceInclusions" xml:space="preserve">
+    <value>Cena zawiera</value>
+  </data>
   <data name="TransportService" xml:space="preserve">
     <value>Koszt transportu</value>
   </data>

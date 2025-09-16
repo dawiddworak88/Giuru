@@ -55,10 +55,12 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public SuccessAddProductToBasketViewModel ToastSuccessAddProductToBasket { get; set; }
         public string MinOrderQuantityErrorMessage { get; set; }
         public string GetProductPriceUrl { get; set; }
+        public string TaxLabel { get; set; }
         public SidebarViewModel Sidebar { get; set; }
         public ModalViewModel Modal { get; set; }
         public FilesViewModel Files { get; set; }
         public ProductPriceViewModel Price { get; set; }
+        public PriceModalViewModel PriceModal { get; set; }
         public IEnumerable<BasketItem> OrderItems { get; set; }
         public IEnumerable<ProductMediaItemViewModel> MediaItems { get; set; }
         public IEnumerable<ProductFeatureViewModel> Features { get; set; }

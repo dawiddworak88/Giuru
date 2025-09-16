@@ -85,19 +85,20 @@ const PriceModal = ({
                     >
                         {priceInclusions.map((inclusion) => {
                             return (
-                                <ListItem>{inclusion.text} {inclusion.underlinedText && <span style={{textDecoration: "underline"}}>{inclusion.underlinedText}*</span>}.</ListItem>
+                                <ListItem>{inclusion.text}{inclusion.underlinedText ? <span style={{textDecoration: "underline"}}>{inclusion.underlinedText}.*</span> : "."}</ListItem>
                             )
                         })}
                     </List>
                 )}
                 {note && 
                     <Typography 
+                        component="div"
                         className='mt-5'
                         sx={{
                             fontSize: "0.875rem"
                         }}
+                        dangerouslySetInnerHTML={{ __html: marked.parse(note) }}
                     >
-                        {note}
                     </Typography>
                 }
             </DialogContent>

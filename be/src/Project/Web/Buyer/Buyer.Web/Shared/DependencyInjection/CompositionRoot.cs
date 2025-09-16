@@ -69,10 +69,10 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel>, OrderItemStatusChangesModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel>, NotificationBarModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, PriceModalViewModel>, PriceModalModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IModelBuilder<SuccessAddProductToBasketViewModel>, SuccessAddProductToBasketModelBuilder>();
-            services.AddScoped<IModelBuilder<PriceModalViewModel>, PriceModalModelBuilder>();
 
             // Repositories
             services.AddScoped<IBrandRepository, BrandRepository>();

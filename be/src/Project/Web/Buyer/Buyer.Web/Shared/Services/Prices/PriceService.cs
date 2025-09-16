@@ -60,11 +60,32 @@ namespace Buyer.Web.Shared.Services.Prices
 
                 if (grulaPrice?.Amount is not null)
                 {
-                    return new Price
+                    var price = new Price
                     {
                         CurrentPrice = (decimal)grulaPrice.Amount.Amount,
                         CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode,
+                        PriceInclusions = new List<PriceInclusion>()
                     };
+
+                    if (product.ExtraPacking.ToYesOrNo().AsBool() && client.ExtraPacking.AsBool())
+                    {
+                        price.PriceInclusions.Add(BuildUnderlinedText(_globalLocalizer.GetString("ExtraPackingService")));
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(product?.PaletteSize) && (client?.PaletteLoading.AsBool() ?? false))
+                    {
+                        price.PriceInclusions.Add(BuildUnderlinedText(_globalLocalizer.GetString("PaletteLoadingService")));
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(client.OwnTransport) && !client.OwnTransport.AsBool())
+                    {
+                        price.PriceInclusions.Add(new PriceInclusion
+                        {
+                            Text = _globalLocalizer.GetString("TransportService")
+                        });
+                    }
+
+                    return price;
                 }
 
                 return default;
@@ -133,18 +154,17 @@ namespace Buyer.Web.Shared.Services.Prices
                             PriceInclusions = new List<PriceInclusion>()
                         };
 
-                        if (requestProduct.ExtraPacking.ToYesOrNo().ToBool() && 
-                            client.ExtraPacking.ToBool())
+                        if (requestProduct.ExtraPacking.ToYesOrNo().AsBool() && client.ExtraPacking.AsBool())
                         {
                             price.PriceInclusions.Add(BuildUnderlinedText(_globalLocalizer.GetString("ExtraPackingService")));
                         }
 
-                        if (!string.IsNullOrWhiteSpace(requestProduct?.PaletteSize) && (client?.PaletteLoading.ToBool() ?? false))
+                        if (!string.IsNullOrWhiteSpace(requestProduct?.PaletteSize) && (client?.PaletteLoading.AsBool() ?? false))
                         {
                             price.PriceInclusions.Add(BuildUnderlinedText(_globalLocalizer.GetString("PaletteLoadingService")));
                         }
 
-                        if (!client.OwnTransport.ToBool())
+                        if (!string.IsNullOrWhiteSpace(client.OwnTransport) && !client.OwnTransport.AsBool())
                         {
                             price.PriceInclusions.Add(new PriceInclusion
                             {
@@ -187,7 +207,6 @@ namespace Buyer.Web.Shared.Services.Prices
             
             return allowedClients.Contains(priceClientId.ToString());
         }
-
 
         private List<PriceDriver> CreatePriceDrivers(PriceProduct product, PriceClient client)
         {
