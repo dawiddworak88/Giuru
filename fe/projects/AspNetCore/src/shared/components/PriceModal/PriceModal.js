@@ -23,10 +23,10 @@ const PriceModal = ({
             aria-label='price-modal'
             PaperProps={{
                 sx: {
-                    maxWidth: "750px",
+                    maxWidth: "46.875rem",
                     width: "100%",
-                    padding: "40px",
-                    borderRadius: "8px",
+                    padding: "2.5rem",
+                    borderRadius: "0.5rem",
                     '& .MuiDialogTitle-root + .MuiDialogContent-root': {
                         paddingTop: "1.5rem"
                     }
@@ -94,7 +94,8 @@ const PriceModal = ({
 }
 PriceModal.propTypes = {
     open: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    
 };
 
 export default PriceModal;
