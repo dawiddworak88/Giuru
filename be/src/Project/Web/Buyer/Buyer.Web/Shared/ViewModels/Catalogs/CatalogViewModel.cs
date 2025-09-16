@@ -34,6 +34,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string UpdateBasketUrl { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
         public string GetProductPriceUrl { get; set; }
+        public string TaxLabel { get; set; }
         public int? MaxAllowedOrderQuantity { get; set; }
         public string MaxAllowedOrderQuantityErrorMessage { get; set; }
         public SuccessAddProductToBasketViewModel ToastSuccessAddProductToBasket { get; set; }

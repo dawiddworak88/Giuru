@@ -185,10 +185,7 @@ function Catalog(props) {
                                                         className="catalog__card-price-spacing" 
                                                         current={item.price.current}
                                                         currency={item.price.currency}
-                                                        old={1300}
-                                                        lowestPrice={1900}
-                                                        lowestPriceLabel="Najniższa cena w ciągu ostatnich 30 dni:"
-                                                        taxLabel="netto (bez VAT)"
+                                                        taxLabel={props.taxLabel}
                                                         showInfoIcon={Array.isArray(item.price.priceInclusions) ? item.price.priceInclusions.length > 0 : !!item.price.priceInclusions}
                                                         onInfoClick={(e) => {
                                                             setPriceModalOpen(true);

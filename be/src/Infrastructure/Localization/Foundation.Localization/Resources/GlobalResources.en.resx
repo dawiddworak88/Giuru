@@ -825,4 +825,7 @@
   <data name="TransportService" xml:space="preserve">
     <value>Transportation cost</value>
   </data>
+  <data name="WithoutVat" xml:space="preserve">
+    <value>net (without VAT)</value>
+  </data>
 </root>
