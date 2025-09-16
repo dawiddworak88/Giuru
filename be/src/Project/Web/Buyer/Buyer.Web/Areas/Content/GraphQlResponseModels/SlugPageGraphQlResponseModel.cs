@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Content.Repositories;
+using Buyer.Web.Shared.DomainModels.GraphQl.Shared;
 using Foundation.PageContent.ResponseModels.Seo;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -34,6 +35,9 @@ namespace Buyer.Web.Areas.Content.GraphQlResponseModels
 
         [JsonProperty("seo")]
         public Seo Seo { get; set; }
+
+        [JsonProperty("returnButton")]
+        public Link ReturnButton { get; set; }
 
         [JsonConverter(typeof(BlockConverter))]
         public IEnumerable<Block> Blocks { get; set; }
