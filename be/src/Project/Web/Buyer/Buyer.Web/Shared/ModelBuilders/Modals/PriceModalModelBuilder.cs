@@ -20,7 +20,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Modals
             var viewModel = new PriceModalViewModel
             {
                 Title = "Cena zawiera",
-                Note = "*Więcej info gdzies tam"
+                Note = "*Więcej info w regulaminie"
             };
 
             return viewModel;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Buyer.Web.Shared.DomainModels.Prices
 {
@@ -6,6 +7,6 @@ namespace Buyer.Web.Shared.DomainModels.Prices
     {
         public decimal CurrentPrice { get; set; }
         public string CurrencyCode { get; set; }
-        public List<string> Includes { get; set; }
+        public List<PriceInclusion> PriceInclusions { get; set; }
     }
 }

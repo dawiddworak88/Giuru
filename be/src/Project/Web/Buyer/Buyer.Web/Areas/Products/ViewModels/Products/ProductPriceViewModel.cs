@@ -9,6 +9,6 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public decimal? Old { get; set; }
         public decimal? LowestPrice { get; set; }
         public string LowestPriceLabel { get; set; }
-        public IReadOnlyList<string> PriceInclusions { get; set; }
+        public IEnumerable<ProductPriceInclusionViewModel> PriceInclusions { get; set; }
     }
 }

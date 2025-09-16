@@ -84,7 +84,7 @@ const PriceModal = ({
                     >
                         {priceInclusions.map((inclusion) => {
                             return (
-                                <ListItem>{inclusion}</ListItem>
+                                <ListItem>{inclusion.text} {inclusion.underlinedText && <span style={{textDecoration: "underline"}}>{inclusion.underlinedText}</span>}</ListItem>
                             )
                         })}
                     </List>

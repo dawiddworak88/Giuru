@@ -12,6 +12,7 @@ using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -171,7 +172,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             {
                                 Current = price.CurrentPrice,
                                 Currency = price.CurrencyCode,
-                                PriceInclusions = price.Includes
+                                PriceInclusions = price.PriceInclusions.OrEmptyIfNull().Select(x => new ProductPriceInclusionViewModel
+                                {
+                                    Text = x.Text,
+                                    UnderlinedText = x.UnderlinedText
+                                })
                             };
                         }
                     }

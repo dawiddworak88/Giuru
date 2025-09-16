@@ -124,16 +124,15 @@ namespace Buyer.Web.Shared.Services.Prices
                         var price = new Price
                         {
                             CurrentPrice = (decimal)grulaPrice.Amount.Amount,
-                            CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode,
-                            Includes = new List<string>()
+                            CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode
                         };
 
                         if (requestProduct.ExtraPacking.ToYesOrNo().ToBool() && client.ExtraPacking.ToBool())
                         {
-                            price.Includes.Add("Usługę dodatkowego pakowania");
+                            price.PriceInclusions.Add(BuildUnderlinedText("Usługę dodatkowego pakowania"));
                         }
 
-                        if ((client?.PaletteLoading.ToBool() ?? false) && !string.IsNullOrWhiteSpace(requestProduct?.PaletteSize))
+                       /* if ((client?.PaletteLoading.ToBool() ?? false) && !string.IsNullOrWhiteSpace(requestProduct?.PaletteSize))
                         {
                             price.Includes.Add("Dostawa towaru na paletach");
                         }
@@ -141,7 +140,7 @@ namespace Buyer.Web.Shared.Services.Prices
                         if (!client.OwnTransport.ToBool())
                         {
                             price.Includes.Add("Koszt transportu");
-                        }
+                        }*/
 
                         prices.Add(price);
                     }
@@ -371,6 +370,22 @@ namespace Buyer.Web.Shared.Services.Prices
             }
 
             return priceDrivers;
+        }
+
+        private static PriceInclusion BuildUnderlinedText(string resourceText)
+        {
+            if (string.IsNullOrWhiteSpace(resourceText))
+            {
+                return default;
+            }
+
+            var parts = resourceText.Split(' ', 2);
+
+            return new PriceInclusion
+            {
+                Text = parts[0],
+                UnderlinedText = parts.Length > 1 ? parts[1] : ""
+            };
         }
     }
 }
