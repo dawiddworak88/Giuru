@@ -61,6 +61,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             this.outletRepository = outletRepository;
             _options = options;
             _priceService = priceService;
+            _priceModalModelBuilder = priceModalModelBuilder;
         }
 
         public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(PriceComponentModel componentModel)
