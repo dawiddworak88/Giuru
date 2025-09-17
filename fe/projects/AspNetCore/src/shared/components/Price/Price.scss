@@ -10,6 +10,7 @@
     &__container {
         display: flex;
         align-content: center;
+        align-items: center;
         flex-wrap: wrap;
     }
 
@@ -40,5 +41,9 @@
     &__icon {
         cursor: pointer;
         margin-left: 0.25rem;
+
+        svg {
+            vertical-align: top;
+        }
     }
 }

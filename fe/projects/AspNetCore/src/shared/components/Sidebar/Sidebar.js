@@ -9,14 +9,12 @@ import PropTypes from "prop-types";
 import { Context } from "../../../shared/stores/Store";
 import ResponsiveImage from "../../../shared/components/Picture/ResponsiveImage";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
-import moment from "moment";
-import Price from "../Price/Price";
 import Availability from "../Availability/Availability";
 
 const Sidebar = (props) => {
     const [state, dispatch] = useContext(Context);
     const [productVariants, setProductVariants] = useState([]);
-    const {productId, isOpen, manyUses, setIsOpen, handleOrder, labels, setPriceInclusions, setPriceModalOpen} = props;
+    const {productId, isOpen, manyUses, setIsOpen, handleOrder, labels} = props;
 
     const toggleDrawer = (open) => (e) => {
         if (e && e.type === 'keydown' && 
@@ -144,18 +142,6 @@ const Sidebar = (props) => {
                                                             availableQuantity={carouselItem.availableOutletQuantity}
                                                         />
                                                     </div>
-                                                    {carouselItem.price &&
-                                                        <Price 
-                                                            current={carouselItem.price.current}
-                                                            currency={carouselItem.price.currency}
-                                                            taxLabel={props.labels.taxLabel}
-                                                            showInfoIcon={Array.isArray(carouselItem.price.priceInclusions) ? carouselItem.price.priceInclusions.length > 0 : !!carouselItem.price.priceInclusions}
-                                                            onInfoClick={(e) => {
-                                                                setPriceModalOpen(true);
-                                                                setPriceInclusions(carouselItem.price.priceInclusions);
-                                                            }} 
-                                                        />
-                                                    }
                                                 </div>
                                             </div>
                                             <div className="sidebar-item__buttons">

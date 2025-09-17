@@ -17,6 +17,5 @@
         public string InOutletLabel { get; set; }
         public string LoadingLabel { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
-        public string TaxLabel { get; set;}
     }
 }

@@ -259,8 +259,6 @@ function Catalog(props) {
                     setIsOpen={setIsSidebarOpen}
                     handleOrder={handleModal}
                     labels={props.sidebar}
-                    setPriceInclusions={setPriceInclusions}
-                    setPriceModalOpen={setPriceModalOpen}
                 />
             }
             {props.priceModal &&
