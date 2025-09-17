@@ -27,7 +27,7 @@ function Catalog(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null);
     const [priceModalOpen, setPriceModalOpen] = useState(false);
-    const [pi, setPi] = useState(null);
+    const [priceInclusions, setPriceInclusions] = useState(null);
 
     const toggleSidebar = (item) => {
         setProductVariant(item);
@@ -187,9 +187,9 @@ function Catalog(props) {
                                                         currency={item.price.currency}
                                                         taxLabel={props.taxLabel}
                                                         showInfoIcon={Array.isArray(item.price.priceInclusions) ? item.price.priceInclusions.length > 0 : !!item.price.priceInclusions}
-                                                        onInfoClick={(e) => {
+                                                        onInfoClick={() => {
                                                             setPriceModalOpen(true);
-                                                            setPi(item.price.priceInclusions);
+                                                            setPriceInclusions(item.price.priceInclusions);
                                                         }} 
                                                     />
                                                 }
@@ -259,6 +259,8 @@ function Catalog(props) {
                     setIsOpen={setIsSidebarOpen}
                     handleOrder={handleModal}
                     labels={props.sidebar}
+                    setPriceInclusions={setPriceInclusions}
+                    setPriceModalOpen={setPriceModalOpen}
                 />
             }
             {props.priceModal &&
@@ -267,7 +269,7 @@ function Catalog(props) {
                     onClose={() => setPriceModalOpen(false)}
                     title={props.priceModal.title}
                     note={props.priceModal.note}
-                    priceInclusions={pi}
+                    priceInclusions={priceInclusions}
                 />
             }
             {props.modal &&

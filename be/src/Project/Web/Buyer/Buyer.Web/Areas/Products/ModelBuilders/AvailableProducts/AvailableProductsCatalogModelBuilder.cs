@@ -163,7 +163,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                                 product.Price = new ProductPriceViewModel
                                 {
                                     Current = price.CurrentPrice,
-                                    Currency = price.CurrencyCode
+                                    Currency = price.CurrencyCode,
+                                    PriceInclusions = price.PriceInclusions.OrEmptyIfNull().Select(x => new ProductPriceInclusionViewModel
+                                    {
+                                        Text = x.Text,
+                                        UnderlinedText = x.UnderlinedText
+                                    })
                                 };
                             }
                         }

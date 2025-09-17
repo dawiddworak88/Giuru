@@ -16,7 +16,7 @@ import Availability from "../Availability/Availability";
 const Sidebar = (props) => {
     const [state, dispatch] = useContext(Context);
     const [productVariants, setProductVariants] = useState([]);
-    const {productId, isOpen, manyUses, setIsOpen, handleOrder, labels} = props;
+    const {productId, isOpen, manyUses, setIsOpen, handleOrder, labels, setPriceInclusions, setPriceModalOpen} = props;
 
     const toggleDrawer = (open) => (e) => {
         if (e && e.type === 'keydown' && 
@@ -131,6 +131,9 @@ const Sidebar = (props) => {
                                                             <span className="attribute">{labels.eanLabel} {carouselItem.ean}</span>
                                                         }
                                                     </a>
+                                                    <div className="productAttributes">
+                                                        <p>{carouselItem.productAttributes}</p>
+                                                    </div>
                                                     <div className="sidebar-item__availability mt-2">
                                                         <Availability
                                                             label={labels.inStockLabel}
@@ -141,11 +144,17 @@ const Sidebar = (props) => {
                                                             availableQuantity={carouselItem.availableOutletQuantity}
                                                         />
                                                     </div>
-                                                    <div className="productAttributes">
-                                                        <p>{carouselItem.productAttributes}</p>
-                                                    </div>
                                                     {carouselItem.price &&
-                                                        <Price {...carouselItem.price} />
+                                                        <Price 
+                                                            current={carouselItem.price.current}
+                                                            currency={carouselItem.price.currency}
+                                                            taxLabel={props.labels.taxLabel}
+                                                            showInfoIcon={Array.isArray(carouselItem.price.priceInclusions) ? carouselItem.price.priceInclusions.length > 0 : !!carouselItem.price.priceInclusions}
+                                                            onInfoClick={(e) => {
+                                                                setPriceModalOpen(true);
+                                                                setPriceInclusions(carouselItem.price.priceInclusions);
+                                                            }} 
+                                                        />
                                                     }
                                                 </div>
                                             </div>
