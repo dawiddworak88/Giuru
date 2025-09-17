@@ -278,7 +278,7 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new CustomException(response.Data?.Message, (int)response.StatusCode);
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
             if (response.IsSuccessStatusCode && response.Data?.Id != null)
