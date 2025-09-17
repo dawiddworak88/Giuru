@@ -126,7 +126,7 @@ const Sidebar = (props) => {
                                                         <h1 className="title">{carouselItem.title}</h1>
                                                         <span className="attribute mt-2">{labels.skuLabel} {carouselItem.subtitle}</span>
                                                         {carouselItem.ean &&
-                                                            <span className="attribute mt-2">{labels.eanLabel} {carouselItem.ean}</span>
+                                                            <span className="attribute">{labels.eanLabel} {carouselItem.ean}</span>
                                                         }
                                                     </a>
                                                     <div className="productAttributes">
