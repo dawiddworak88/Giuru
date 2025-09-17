@@ -42,6 +42,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> _filesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> _sidebarModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> _modalModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, PriceModalViewModel> _priceModalModelBuilder;
         private readonly IModelBuilder<SuccessAddProductToBasketViewModel> _toastSuccessAddProductToBasket;
         private readonly IProductsRepository _productsRepository;
         private readonly IOutletRepository _outletRepository;
@@ -62,6 +63,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, PriceModalViewModel> priceModalModelBuilder,
             IModelBuilder<SuccessAddProductToBasketViewModel> toastSuccessAddProductToBasket,
             IProductsRepository productsRepository,
             IOutletRepository outletRepository,
@@ -96,6 +98,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _options = options;
             _productsService = productsService;
             _productColorsService = productColorsService;
+            _priceModalModelBuilder = priceModalModelBuilder;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -128,7 +131,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
                 MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity"),
                 GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity")
+                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity"),
+                PriceModal = await _priceModalModelBuilder.BuildModelAsync(componentModel),
+                TaxLabel = _globalLocalizer.GetString("WithoutVat")
             };
 
             var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
@@ -187,6 +192,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             CurrencyCode = componentModel.CurrencyCode,
                             ExtraPacking = componentModel.ExtraPacking,
                             PaletteLoading = componentModel.PaletteLoading,
+                            OwnTransport = componentModel.OwnTransport,
                             Country = componentModel.Country,
                             DeliveryZipCode = componentModel.DeliveryZipCode
                         });
@@ -197,6 +203,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         {
                             Current = price.CurrentPrice,
                             Currency = price.CurrencyCode,
+                            PriceInclusions = price.PriceInclusions.OrEmptyIfNull().Select(x => new ProductPriceInclusionViewModel
+                            {
+                                Text = x.Text,
+                                UnderlinedText = x.UnderlinedText
+                            })
                         };
                     }
                 }
@@ -318,6 +329,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                    CurrencyCode = componentModel.CurrencyCode,
                                    ExtraPacking = componentModel.ExtraPacking,
                                    PaletteLoading = componentModel.PaletteLoading,
+                                   OwnTransport = componentModel.OwnTransport,
                                    Country = componentModel.Country,
                                    DeliveryZipCode = componentModel.DeliveryZipCode
                                });

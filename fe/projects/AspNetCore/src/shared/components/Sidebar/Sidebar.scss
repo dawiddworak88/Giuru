@@ -118,20 +118,15 @@
         }
         
         .attribute {
+            color: $black;
+            font-size: 0.875rem;
             text-transform: capitalize;
-            font-size: 0.7rem;
         }
 
         .productAttributes {
-            font-size: 0.8rem;
-
-            span {
-                font-weight: 600;
-            }
-
-            p {
-                font-size: 0.7rem;
-            }
+            color: $black;
+            font-size: 0.875rem;
+            margin-top: 0.75rem;
         }
 
         .title {

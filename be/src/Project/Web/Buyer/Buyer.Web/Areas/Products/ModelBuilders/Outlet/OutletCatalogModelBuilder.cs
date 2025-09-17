@@ -33,6 +33,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
         private readonly IStringLocalizer globalLocalizer;
         private readonly ICatalogModelBuilder<PriceComponentModel, OutletPageCatalogViewModel> outletCatalogModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, PriceModalViewModel> _priceModalModelBuilder;
         private readonly IProductsService productsService;
         private readonly LinkGenerator linkGenerator;
         private readonly IOutletRepository outletRepository;
@@ -45,6 +46,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             ICatalogModelBuilder<ComponentModelBase, OutletPageCatalogViewModel> outletCatalogModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, PriceModalViewModel> priceModalModelBuilder,
             IProductsService productsService,
             IOutletRepository outletRepository,
             LinkGenerator linkGenerator,
@@ -59,6 +61,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             this.outletRepository = outletRepository;
             this.modalModelBuilder = modalModelBuilder;
             this.inventoryRepository = inventoryRepository;
+            _priceModalModelBuilder = priceModalModelBuilder;
             _options = options;
             _priceService = priceService;
         }
@@ -72,6 +75,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             viewModel.ItemsPerPage = OutletConstants.Catalog.DefaultItemsPerPage;
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
             viewModel.Modal = await this.modalModelBuilder.BuildModelAsync(componentModel);
+            viewModel.PriceModal = await _priceModalModelBuilder.BuildModelAsync(componentModel);
 
             var outletItems = await this.outletRepository.GetOutletProductsAsync(
                 componentModel.Language, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);
@@ -119,6 +123,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 CurrencyCode = componentModel.CurrencyCode,
                                 ExtraPacking = componentModel.ExtraPacking,
                                 PaletteLoading = componentModel.PaletteLoading,
+                                OwnTransport = componentModel.OwnTransport,
                                 Country = componentModel.Country,
                                 DeliveryZipCode = componentModel.DeliveryZipCode
                             });
@@ -160,7 +165,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                             product.Price = new ProductPriceViewModel
                             {
                                 Currency = price.CurrencyCode,
-                                Current = price.CurrentPrice
+                                Current = price.CurrentPrice,
+                                PriceInclusions = price.PriceInclusions.OrEmptyIfNull().Select(x => new ProductPriceInclusionViewModel
+                                {
+                                    Text = x.Text,
+                                    UnderlinedText = x.UnderlinedText
+                                })
                             };
                         }
                     }

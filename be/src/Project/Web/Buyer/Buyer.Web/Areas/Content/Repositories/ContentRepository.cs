@@ -43,6 +43,7 @@ namespace Buyer.Web.Areas.Content.Repositories
                 var contentPage = new DomainModel.Content
                 {
                     Title = contentPageResponse?.LandingPage?.Data.FirstOrDefault()?.Attributes?.Title,
+                    ReturnButton = contentPageResponse?.LandingPage?.Data.FirstOrDefault()?.Attributes?.ReturnButton,
                 };
 
                 var sharedComponents = new List<SharedComponent>();
@@ -128,6 +129,10 @@ namespace Buyer.Web.Areas.Content.Repositories
                             seo {{
                               metaTitle
                               metaDescription
+                            }}
+                            returnButton {{
+                                href
+                                label
                             }}
                             blocks {{
                               __typename,

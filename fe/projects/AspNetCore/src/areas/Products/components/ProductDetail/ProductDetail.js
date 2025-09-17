@@ -16,6 +16,7 @@ import Price from "../../../../shared/components/Price/Price";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
 import Availability from "../../../../shared/components/Availability/Availability";
+import PriceModal from "../../../../shared/components/PriceModal/PriceModal";
 
 function ProductDetail(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -27,6 +28,8 @@ function ProductDetail(props) {
     const [showMoreImages, setShowMoreImages] = useState(false);
     const [mediaItems, setMediaItems] = useState(props.mediaItems ? props.mediaItems.slice(0, 6) : []);
     const [activeMediaItemIndex, setActiveMediaItemIndex] = useState(0);
+    const [priceModalOpen, setPriceModalOpen] = useState(false);
+    const [pi, setPi] = useState(null);
 
     const {
         orderItems,
@@ -107,7 +110,7 @@ function ProductDetail(props) {
             isOutletOrder: item.isOutletOrder,
             externalReference: item.externalReference,
             unitPrice: product.price ? parseFloat(product.price.current).toFixed(2) : null,
-            price: product.price ? parseFloat(product.price.current * totalQuantity).toFixed(2) : null,
+            price: product.price ? parseFloat(product.price.current * quantity).toFixed(2) : null,
             currency: product.price ? product.price.currency : null,
             deliveryFrom: moment(item.deliveryFrom).startOf("day"),
             deliveryTo: moment(item.deliveryTo).startOf("day"),
@@ -274,7 +277,14 @@ function ProductDetail(props) {
                         </div>
                         {props.price &&
                             <Price 
-                                {...props.price}
+                                current={props.price.current}
+                                currency={props.price.currency}
+                                taxLabel={props.taxLabel}
+                                showInfoIcon={Array.isArray(props.price.priceInclusions) ? props.price.priceInclusions.length > 0 : !!props.price.priceInclusions}
+                                onInfoClick={(e) => {
+                                    setPriceModalOpen(true);
+                                    setPi(props.price.priceInclusions);
+                                }} 
                             />
                         }
                         {props.isAuthenticated &&
@@ -342,6 +352,15 @@ function ProductDetail(props) {
                 <CarouselGrid items={props.productVariants} className="pt-6" />
                 {props.files &&
                     <Files {...props.files} />
+                }
+                {props.priceModal &&
+                    <PriceModal 
+                        open={priceModalOpen} 
+                        onClose={() => setPriceModalOpen(false)}
+                        title={props.priceModal.title}
+                        note={props.priceModal.note}
+                        priceInclusions={pi}
+                    />
                 }
                 <Modal
                     isOpen={isModalOpen}

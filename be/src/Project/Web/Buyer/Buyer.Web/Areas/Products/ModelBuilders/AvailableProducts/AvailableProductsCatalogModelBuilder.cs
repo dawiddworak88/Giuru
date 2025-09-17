@@ -32,6 +32,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
         private readonly IStringLocalizer globalLocalizer;
         private readonly ICatalogModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel> availableProductsCatalogModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, PriceModalViewModel> _priceModalModelBuilder;
         private readonly IProductsService productsService;
         private readonly IInventoryRepository inventoryRepository;
         private readonly LinkGenerator linkGenerator;
@@ -43,6 +44,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             IStringLocalizer<GlobalResources> globalLocalizer,
             ICatalogModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel> availableProductsCatalogModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, PriceModalViewModel> priceModalModelBuilder,
             IProductsService productsService,
             IInventoryRepository inventoryRepository,
             LinkGenerator linkGenerator,
@@ -59,6 +61,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             this.outletRepository = outletRepository;
             _options = options;
             _priceService = priceService;
+            _priceModalModelBuilder = priceModalModelBuilder;
         }
 
         public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -69,6 +72,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "AvailableProductsApi", new { Area = "Products" });
             viewModel.ItemsPerPage = AvailableProductsConstants.Pagination.ItemsPerPage;
             viewModel.Modal = await this.modalModelBuilder.BuildModelAsync(componentModel);
+            viewModel.PriceModal = await _priceModalModelBuilder.BuildModelAsync(componentModel);
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
 
             var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
@@ -117,6 +121,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                                 CurrencyCode = componentModel.CurrencyCode,
                                 ExtraPacking = componentModel.ExtraPacking,
                                 PaletteLoading = componentModel.PaletteLoading,
+                                OwnTransport = componentModel.OwnTransport,
                                 Country = componentModel.Country,
                                 DeliveryZipCode = componentModel.DeliveryZipCode
                             });
@@ -158,7 +163,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                                 product.Price = new ProductPriceViewModel
                                 {
                                     Current = price.CurrentPrice,
-                                    Currency = price.CurrencyCode
+                                    Currency = price.CurrencyCode,
+                                    PriceInclusions = price.PriceInclusions.OrEmptyIfNull().Select(x => new ProductPriceInclusionViewModel
+                                    {
+                                        Text = x.Text,
+                                        UnderlinedText = x.UnderlinedText
+                                    })
                                 };
                             }
                         }

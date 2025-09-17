@@ -309,6 +309,9 @@
   <data name="sh_stockQuantityLabel" xml:space="preserve">
     <value>Bestandsmenge</value>
   </data>
+  <data name="sh_externalReferenceLabel" xml:space="preserve">
+    <value>Eigene Nummer des Kunde</value>
+  </data>
   <data name="oc_subject" xml:space="preserve">
     <value>Bestellbestätigung</value>
   </data>

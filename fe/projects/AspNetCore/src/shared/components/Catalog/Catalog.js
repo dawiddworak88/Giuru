@@ -15,6 +15,7 @@ import Price from "../Price/Price";
 import { useOrderManagement } from "../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../services/QuantityCalculatorService";
 import Availability from "../Availability/Availability";
+import PriceModal from "../PriceModal/PriceModal";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -25,6 +26,8 @@ function Catalog(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null);
+    const [priceModalOpen, setPriceModalOpen] = useState(false);
+    const [priceInclusions, setPriceInclusions] = useState(null);
 
     const toggleSidebar = (item) => {
         setProductVariant(item);
@@ -160,23 +163,35 @@ function Catalog(props) {
                                 return (
                                     <div key={index} className="catalog__card">
                                         <div className="catalog__card-header"></div>
-                                        <a className="catalog__card-content">
+                                        <div className="catalog__card-content">
                                             <div className="catalog__card-media">
-                                                <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
-                                                    <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} imageClassName="card-image-scale-down" />
-                                                </LazyLoad>
+                                                <a href={item.url}>
+                                                    <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
+                                                        <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} imageClassName="card-image-scale-down" />
+                                                    </LazyLoad>
+                                                </a>
                                             </div>
                                             <div className="catalog__card-body">
-                                                <div className="body-header">
+                                                <a className="body-header" href={item.url}>
                                                     <p className="text-highlight">{props.skuLabel} {item.sku}</p>
                                                     <h3 className="title mt-1">{item.title}</h3>
                                                     {item.productAttributes &&
                                                         <p className="text-highlight mt-1">{item.productAttributes}</p>
                                                     }
-                                                </div>
+                                                </a>
 
                                                 {item.price && 
-                                                    <Price className="catalog__card-price-spacing" {...item.price} />
+                                                    <Price 
+                                                        className="catalog__card-price-spacing" 
+                                                        current={item.price.current}
+                                                        currency={item.price.currency}
+                                                        taxLabel={props.taxLabel}
+                                                        showInfoIcon={Array.isArray(item.price.priceInclusions) ? item.price.priceInclusions.length > 0 : !!item.price.priceInclusions}
+                                                        onInfoClick={() => {
+                                                            setPriceModalOpen(true);
+                                                            setPriceInclusions(item.price.priceInclusions);
+                                                        }} 
+                                                    />
                                                 }
 
                                                 {(item.inStock || item.inOutlet) &&
@@ -196,7 +211,7 @@ function Catalog(props) {
                                                     </div>
                                                 }
                                             </div>
-                                        </a>
+                                        </div>
                                         <div className="catalog__card-footer">
                                             <Button 
                                                 variant="contained"
@@ -244,6 +259,15 @@ function Catalog(props) {
                     setIsOpen={setIsSidebarOpen}
                     handleOrder={handleModal}
                     labels={props.sidebar}
+                />
+            }
+            {props.priceModal &&
+                <PriceModal 
+                    open={priceModalOpen} 
+                    onClose={() => setPriceModalOpen(false)}
+                    title={props.priceModal.title}
+                    note={props.priceModal.note}
+                    priceInclusions={priceInclusions}
                 />
             }
             {props.modal &&
@@ -296,7 +320,8 @@ Catalog.propTypes = {
     sidebar: PropTypes.object,
     maxAllowedOrderQuantity: PropTypes.number,
     maxAllowedOrderQuantityErrorMessage: PropTypes.string,
-    getProductPriceUrl: PropTypes.string
+    getProductPriceUrl: PropTypes.string,
+    taxLabel: PropTypes.string
 };
 
 export default Catalog;

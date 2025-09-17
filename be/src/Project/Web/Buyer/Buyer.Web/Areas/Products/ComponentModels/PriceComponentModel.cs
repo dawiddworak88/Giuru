@@ -9,6 +9,7 @@ namespace Buyer.Web.Areas.Products.ComponentModels
         public string CurrencyCode { get; set; }
         public string ExtraPacking { get; set; }
         public string PaletteLoading { get; set; }
+        public string OwnTransport {  get; set; }
         public string Country { get; set; }
         public string DeliveryZipCode { get; set; }
     }
