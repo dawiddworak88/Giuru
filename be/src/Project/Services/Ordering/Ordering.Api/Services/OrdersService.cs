@@ -220,13 +220,15 @@ namespace Ordering.Api.Services
                         oc_quantity = _orderLocalizer.GetString("sh_quantityLabel").Value,
                         oc_stockQuantity = _orderLocalizer.GetString("sh_stockQuantityLabel").Value,
                         oc_outletQuantity = _orderLocalizer.GetString("sh_outletQuantityLabel").Value,
+                        oc_externalReference= _orderLocalizer.GetString("sh_externalReferenceLabel").Value,
                         oc_products = serviceModel.Items.OrEmptyIfNull().Select(x => new
                         {
                             pictureUrl = x.PictureUrl,
                             name = $"{x.ProductName} ({x.ProductSku})",
                             quantity = x.Quantity,
                             stockQuantity = x.StockQuantity,
-                            outletQuantity = x.OutletQuantity
+                            outletQuantity = x.OutletQuantity,
+                            externalReference = x.ExternalReference
                         })
                     }
                 });

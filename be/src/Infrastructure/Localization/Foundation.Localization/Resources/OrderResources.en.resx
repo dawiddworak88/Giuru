@@ -309,6 +309,9 @@
   <data name="sh_stockQuantityLabel" xml:space="preserve">
     <value>Stock quantity</value>
   </data>
+  <data name="sh_externalReferenceLabel" xml:space="preserve">
+    <value>Customer's own number</value>
+  </data>
   <data name="oc_subject" xml:space="preserve">
     <value>Order Confirm</value>
   </data>
