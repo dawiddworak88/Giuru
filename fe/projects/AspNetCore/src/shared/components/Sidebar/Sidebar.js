@@ -124,15 +124,15 @@ const Sidebar = (props) => {
                                                 <div className="sidebar-item__details">
                                                     <a href={carouselItem.url}>
                                                         <h1 className="title">{carouselItem.title}</h1>
-                                                        <span className="attribute">{labels.skuLabel} {carouselItem.subtitle}</span>
+                                                        <span className="attribute mt-2">{labels.skuLabel} {carouselItem.subtitle}</span>
                                                         {carouselItem.ean &&
-                                                            <span className="attribute">{labels.eanLabel} {carouselItem.ean}</span>
+                                                            <span className="attribute mt-2">{labels.eanLabel} {carouselItem.ean}</span>
                                                         }
                                                     </a>
                                                     <div className="productAttributes">
                                                         <p>{carouselItem.productAttributes}</p>
                                                     </div>
-                                                    <div className="sidebar-item__availability mt-2">
+                                                    <div className="sidebar-item__availability mt-4">
                                                         <Availability
                                                             label={labels.inStockLabel}
                                                             availableQuantity={carouselItem.availableQuantity}
