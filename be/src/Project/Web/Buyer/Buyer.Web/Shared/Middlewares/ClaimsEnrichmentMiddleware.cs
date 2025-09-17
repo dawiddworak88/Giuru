@@ -210,17 +210,17 @@ namespace Buyer.Web.Shared.Middlewares
 
                 if (methodOfDelivery is not null)
                 {
-                    bool ownTransport = methodOfDelivery.FieldValue == ClaimsEnrichmentConstants.OwnTransportFieldValue;
+                    bool includedTransport = !string.IsNullOrWhiteSpace(methodOfDelivery.FieldValue) && methodOfDelivery.FieldValue != ClaimsEnrichmentConstants.IncludedTransportFieldValue;
 
-                    claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.OwnTransportClaimType, ownTransport.ToYesOrNo()));
+                    claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.IncludedTransportClaimType, includedTransport.ToYesOrNo()));
 
-                    var ownTransportClaim = new CachedClaim
+                    var includedTransportClaim = new CachedClaim
                     {
-                        Key = ClaimsEnrichmentConstants.OwnTransportClaimType,
-                        Value = ownTransport.ToYesOrNo()
+                        Key = ClaimsEnrichmentConstants.IncludedTransportClaimType,
+                        Value = includedTransport.ToYesOrNo()
                     };
 
-                    claimsToCache.Add(ownTransportClaim);
+                    claimsToCache.Add(includedTransportClaim);
                 }
             }
 

@@ -8,13 +8,13 @@
         public static readonly string CountryClaimType = "Country";
         public static readonly string ZipCodeClaimType = "ZipCode";
         public static readonly string CurrencyClaimType = "Currency";
-        public static readonly string OwnTransportClaimType = "OwnTransport";
+        public static readonly string IncludedTransportClaimType = "IncludedTransport";
 
         public static readonly string ExtraPackingClientFieldName = "Extra Packing";
         public static readonly string PaletteLoadingClientFieldName = "Palette Loading";
         public static readonly string MethodOfDeliveryClientFieldName = "Method of delivery";
 
-        public static readonly string OwnTransportFieldValue = "Own transport";
+        public static readonly string IncludedTransportFieldValue = "Own transport";
 
         public static readonly string CacheKey = "Claims";
     }

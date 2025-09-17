@@ -77,7 +77,7 @@ namespace Buyer.Web.Shared.Services.Prices
                         price.PriceInclusions.Add(BuildUnderlinedText(_globalLocalizer.GetString("PaletteLoadingService")));
                     }
 
-                    if (!string.IsNullOrWhiteSpace(client.OwnTransport) && !client.OwnTransport.AsBool())
+                    if (client.IncludedTransport.AsBool())
                     {
                         price.PriceInclusions.Add(new PriceInclusion
                         {
@@ -164,7 +164,7 @@ namespace Buyer.Web.Shared.Services.Prices
                             price.PriceInclusions.Add(BuildUnderlinedText(_globalLocalizer.GetString("PaletteLoadingService")));
                         }
 
-                        if (!string.IsNullOrWhiteSpace(client.OwnTransport) && !client.OwnTransport.AsBool())
+                        if (client.IncludedTransport.AsBool())
                         {
                             price.PriceInclusions.Add(new PriceInclusion
                             {

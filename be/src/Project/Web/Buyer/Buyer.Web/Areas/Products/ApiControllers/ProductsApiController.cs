@@ -186,7 +186,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
                             ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                             PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
-                            OwnTransport = User.FindFirst(ClaimsEnrichmentConstants.OwnTransportClaimType)?.Value,
+                            IncludedTransport = User.FindFirst(ClaimsEnrichmentConstants.IncludedTransportClaimType)?.Value,
                             Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
                             DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
                         });
@@ -393,7 +393,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
                             ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                             PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
-                            OwnTransport = User.FindFirst(ClaimsEnrichmentConstants.OwnTransportClaimType)?.Value,
+                            IncludedTransport = User.FindFirst(ClaimsEnrichmentConstants.IncludedTransportClaimType)?.Value,
                             Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
                             DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
                         });
@@ -493,7 +493,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
                         ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                         PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
-                        OwnTransport = User.FindFirst(ClaimsEnrichmentConstants.OwnTransportClaimType)?.Value,
+                        IncludedTransport = User.FindFirst(ClaimsEnrichmentConstants.IncludedTransportClaimType)?.Value,
                         Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
                         DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
                     });
