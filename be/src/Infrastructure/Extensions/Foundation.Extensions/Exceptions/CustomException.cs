@@ -1,5 +1,4 @@
-﻿using Foundation.Extensions.Definitions;
-using System;
+﻿using System;
 
 namespace Foundation.Extensions.Exceptions
 {
