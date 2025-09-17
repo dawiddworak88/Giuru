@@ -67,5 +67,10 @@ namespace Foundation.Extensions.ExtensionMethods
 
             return "No";
         }
+
+        public static bool AsBool(this string value)
+        {
+            return value == "Yes";
+        }
     }
 }

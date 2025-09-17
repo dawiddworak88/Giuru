@@ -9,8 +9,6 @@ import PropTypes from "prop-types";
 import { Context } from "../../../shared/stores/Store";
 import ResponsiveImage from "../../../shared/components/Picture/ResponsiveImage";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
-import moment from "moment";
-import Price from "../Price/Price";
 import Availability from "../Availability/Availability";
 
 const Sidebar = (props) => {
@@ -126,12 +124,15 @@ const Sidebar = (props) => {
                                                 <div className="sidebar-item__details">
                                                     <a href={carouselItem.url}>
                                                         <h1 className="title">{carouselItem.title}</h1>
-                                                        <span className="attribute">{labels.skuLabel} {carouselItem.subtitle}</span>
+                                                        <span className="attribute mt-2">{labels.skuLabel} {carouselItem.subtitle}</span>
                                                         {carouselItem.ean &&
                                                             <span className="attribute">{labels.eanLabel} {carouselItem.ean}</span>
                                                         }
                                                     </a>
-                                                    <div className="sidebar-item__availability mt-2">
+                                                    <div className="productAttributes">
+                                                        <p>{carouselItem.productAttributes}</p>
+                                                    </div>
+                                                    <div className="sidebar-item__availability mt-4">
                                                         <Availability
                                                             label={labels.inStockLabel}
                                                             availableQuantity={carouselItem.availableQuantity}
@@ -141,12 +142,6 @@ const Sidebar = (props) => {
                                                             availableQuantity={carouselItem.availableOutletQuantity}
                                                         />
                                                     </div>
-                                                    <div className="productAttributes">
-                                                        <p>{carouselItem.productAttributes}</p>
-                                                    </div>
-                                                    {carouselItem.price &&
-                                                        <Price {...carouselItem.price} />
-                                                    }
                                                 </div>
                                             </div>
                                             <div className="sidebar-item__buttons">

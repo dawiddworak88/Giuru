@@ -33,6 +33,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         private readonly ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> _searchProductsCatalogModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> _sidebarModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> _modalModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, PriceModalViewModel> _priceModalModelBuilder;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IProductsService _productsService;
         private readonly IOutletRepository _outletRepository;
@@ -45,6 +46,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> searchProductsCatalogModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, PriceModalViewModel> priceModalModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IProductsService productsService,
             IOutletRepository outletRepository,
@@ -58,6 +60,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             _productsService = productsService;
             _sidebarModelBuilder = sidebarModelBuilder;
             _modalModelBuilder = modalModelBuilder;
+            _priceModalModelBuilder = priceModalModelBuilder;
             _outletRepository = outletRepository;
             _inventoryRepository = inventoryRepository;
             _globalLocalizer = globalLocalizer;
@@ -73,7 +76,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             viewModel.Title = componentModel.SearchTerm;
             viewModel.Sidebar = await _sidebarModelBuilder.BuildModelAsync(componentModel);
             viewModel.Modal = await _modalModelBuilder.BuildModelAsync(componentModel);
-            viewModel.ShowAddToCartButton = true;
+            viewModel.PriceModal = await _priceModalModelBuilder.BuildModelAsync(componentModel);
             viewModel.ItemsPerPage = ProductConstants.ProductsCatalogPaginationPageSize;
             viewModel.SearchTerm = componentModel.SearchTerm;
             viewModel.ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "SearchProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
@@ -126,6 +129,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             CurrencyCode = componentModel.CurrencyCode,
                             ExtraPacking = componentModel.ExtraPacking,
                             PaletteLoading = componentModel.PaletteLoading,
+                            IncludedTransport = componentModel.IncludedTransport,
                             Country = componentModel.Country,
                             DeliveryZipCode = componentModel.DeliveryZipCode
                         });
@@ -167,7 +171,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             product.Price = new ProductPriceViewModel
                             {
                                 Current = price.CurrentPrice,
-                                Currency = price.CurrencyCode
+                                Currency = price.CurrencyCode,
+                                PriceInclusions = price.PriceInclusions.OrEmptyIfNull().Select(x => new ProductPriceInclusionViewModel
+                                {
+                                    Text = x.Text,
+                                    UnderlinedText = x.UnderlinedText
+                                })
                             };
                         }
                     }

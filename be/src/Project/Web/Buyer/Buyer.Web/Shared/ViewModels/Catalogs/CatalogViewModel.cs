@@ -21,7 +21,6 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string InOutletLabel { get; set; }
         public string BasketLabel { get; set; }
         public string PrimaryFabricLabel { get; set; }
-        public bool ShowAddToCartButton { get; set; }
         public bool IsLoggedIn { get; set; }
         public string SignInUrl { get; set; }
         public string SignInToSeePricesLabel { get; set; }
@@ -35,12 +34,14 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string UpdateBasketUrl { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
         public string GetProductPriceUrl { get; set; }
+        public string TaxLabel { get; set; }
         public int? MaxAllowedOrderQuantity { get; set; }
         public string MaxAllowedOrderQuantityErrorMessage { get; set; }
         public SuccessAddProductToBasketViewModel ToastSuccessAddProductToBasket { get; set; }
         public string MinOrderQuantityErrorMessage { get; set; }
         public SidebarViewModel Sidebar { get; set; }
         public ModalViewModel Modal { get; set; }
+        public PriceModalViewModel PriceModal { get; set; }
         public IEnumerable<BasketItem> BasketItems { get; set; }
         public PagedResults<IEnumerable<CatalogItemViewModel>> PagedItems { get; set; }
     }

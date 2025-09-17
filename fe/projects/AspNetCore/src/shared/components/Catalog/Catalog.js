@@ -8,7 +8,6 @@ import { Context } from "../../../shared/stores/Store";
 import QueryStringSerializer from "../../../shared/helpers/serializers/QueryStringSerializer";
 import { TablePagination, Button } from "@mui/material";
 import CatalogConstants from "./CatalogConstants";
-import { ShoppingCart } from "@mui/icons-material";
 import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import Modal from "../Modal/Modal";
@@ -16,6 +15,7 @@ import Price from "../Price/Price";
 import { useOrderManagement } from "../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../services/QuantityCalculatorService";
 import Availability from "../Availability/Availability";
+import PriceModal from "../PriceModal/PriceModal";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -26,6 +26,8 @@ function Catalog(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null);
+    const [priceModalOpen, setPriceModalOpen] = useState(false);
+    const [priceInclusions, setPriceInclusions] = useState(null);
 
     const toggleSidebar = (item) => {
         setProductVariant(item);
@@ -156,68 +158,75 @@ function Catalog(props) {
                         {total &&
                             <p className="subtitle is-6">{total} {props.resultsLabel}</p>
                         }
-                        <div className="columns is-tablet is-multiline">
+                        <div className="catalog__cards">
                             {items.map((item, index) => {
                                 return (
-                                    <div key={index} className="column is-3">
-                                        <div className="catalog-item card">
-                                            <a href={item.url}>
-                                                <div className="card-image" aria-label={item.outletDescription} title={item.outletDescription}>
-                                                    {item.inOutlet && item.outletTitle &&
-                                                        <div className="catalog-item__discount p-1">
-                                                            <span className="p-1">{item.outletTitle}</span>
-                                                        </div>
+                                    <div key={index} className="catalog__card">
+                                        <div className="catalog__card-header"></div>
+                                        <div className="catalog__card-content">
+                                            <div className="catalog__card-media">
+                                                <a href={item.url}>
+                                                    <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
+                                                        <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} imageClassName="card-image-scale-down" />
+                                                    </LazyLoad>
+                                                </a>
+                                            </div>
+                                            <div className="catalog__card-body">
+                                                <a className="body-header" href={item.url}>
+                                                    <p className="text-highlight">{props.skuLabel} {item.sku}</p>
+                                                    <h3 className="title mt-1">{item.title}</h3>
+                                                    {item.productAttributes &&
+                                                        <p className="text-highlight mt-1">{item.productAttributes}</p>
                                                     }
-                                                    <figure className="image is-4by3">
-                                                        <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
-                                                            <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} imageClassName="card-image-scale-down" />
-                                                        </LazyLoad>
-                                                    </figure>
-                                                </div>
-                                            </a>
-                                            <div className="media-content">
-                                                <p className="catalog-item__sku">{props.skuLabel} {item.sku}</p>
-                                                <h2 className="catalog-item__title"><a href={item.url}>{item.title}</a></h2>
-                                                {item.productAttributes &&
-                                                    <div className="catalog-item__productAttributes">
-                                                        <h3>{item.productAttributes}</h3>
+                                                </a>
+
+                                                {item.price && 
+                                                    <Price 
+                                                        className="catalog__card-price-spacing" 
+                                                        current={item.price.current}
+                                                        currency={item.price.currency}
+                                                        taxLabel={props.taxLabel}
+                                                        showInfoIcon={Array.isArray(item.price.priceInclusions) ? item.price.priceInclusions.length > 0 : !!item.price.priceInclusions}
+                                                        onInfoClick={() => {
+                                                            setPriceModalOpen(true);
+                                                            setPriceInclusions(item.price.priceInclusions);
+                                                        }} 
+                                                    />
+                                                }
+
+                                                {(item.inStock || item.inOutlet) &&
+                                                    <div className="mt-3">
+                                                        {item.inStock &&
+                                                            <Availability 
+                                                                label={props.inStockLabel}
+                                                                availableQuantity={item.availableQuantity}
+                                                            />
+                                                        }
+                                                        {item.inOutlet &&
+                                                            <Availability 
+                                                                label={props.inOutletLabel}
+                                                                availableQuantity={item.availableOutletQuantity}
+                                                            />
+                                                        }
                                                     </div>
                                                 }
-                                                <div className="catalog-item__availability mt-3">
-                                                    {item.inStock &&
-                                                        <Availability 
-                                                            label={props.inStockLabel}
-                                                            availableQuantity={item.availableQuantity}
-                                                        />
-                                                    }
-                                                    {item.inOutlet &&
-                                                        <Availability 
-                                                            label={props.inOutletLabel}
-                                                            availableQuantity={item.availableOutletQuantity}
-                                                        />
-                                                    }
-                                                </div>
-                                                {item.price && 
-                                                    <Price {...item.price} />
-                                                }
                                             </div>
-                                            {props.isLoggedIn &&
-                                                <div className="catalog-item__add-to-cart-button-container">
-                                                    {props.showAddToCartButton ? (
-                                                        item.canOrder && (
-                                                            <div className="row is-flex is-flex-centered">
-                                                                <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => toggleModal(item)} color="primary">
-                                                                    {props.basketLabel}
-                                                                </Button>
-                                                            </div>
-                                                        )
-                                                    ) : (
-                                                        <Button variant="contained" onClick={() => toggleSidebar(item)} color="primary">
-                                                            {props.basketLabel}
-                                                        </Button>
-                                                    )}
-                                                </div>
-                                            }
+                                        </div>
+                                        <div className="catalog__card-footer">
+                                            <Button 
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={() => {
+                                                    if (item.canOrder) {
+                                                        toggleModal(item);
+                                                    }
+                                                    else {
+                                                        toggleSidebar(item);
+                                                    }
+                                                }}
+                                            >
+                                                {props.basketLabel}
+                                            </Button>
                                         </div>
                                     </div>
                                 )
@@ -250,6 +259,15 @@ function Catalog(props) {
                     setIsOpen={setIsSidebarOpen}
                     handleOrder={handleModal}
                     labels={props.sidebar}
+                />
+            }
+            {props.priceModal &&
+                <PriceModal 
+                    open={priceModalOpen} 
+                    onClose={() => setPriceModalOpen(false)}
+                    title={props.priceModal.title}
+                    note={props.priceModal.note}
+                    priceInclusions={priceInclusions}
                 />
             }
             {props.modal &&
@@ -302,7 +320,8 @@ Catalog.propTypes = {
     sidebar: PropTypes.object,
     maxAllowedOrderQuantity: PropTypes.number,
     maxAllowedOrderQuantityErrorMessage: PropTypes.string,
-    getProductPriceUrl: PropTypes.string
+    getProductPriceUrl: PropTypes.string,
+    taxLabel: PropTypes.string
 };
 
 export default Catalog;

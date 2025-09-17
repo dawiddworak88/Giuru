@@ -1,7 +1,10 @@
 ﻿using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Prices;
 using Buyer.Web.Shared.DomainModels.Prices;
+using Foundation.Extensions.ExtensionMethods;
+using Foundation.Localization;
 using Grula.PricingIntelligencePlatform.Sdk;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -16,15 +19,18 @@ namespace Buyer.Web.Shared.Services.Prices
         private readonly GrulaApiClient _grulaApiClient;
         private readonly IOptions<AppSettings> _options;
         private readonly ILogger<PriceService> _logger;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
 
         public PriceService(
             GrulaApiClient grulaApiClient,
             IOptions<AppSettings> options,
-            ILogger<PriceService> logger)
+            ILogger<PriceService> logger,
+            IStringLocalizer<GlobalResources> globalLocalizer)
         {
             _grulaApiClient = grulaApiClient;
             _options = options;
             _logger = logger;
+            _globalLocalizer = globalLocalizer;
         }
 
         public async Task<Price> GetPrice(
@@ -54,11 +60,32 @@ namespace Buyer.Web.Shared.Services.Prices
 
                 if (grulaPrice?.Amount is not null)
                 {
-                    return new Price
+                    var price = new Price
                     {
                         CurrentPrice = (decimal)grulaPrice.Amount.Amount,
                         CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode,
+                        PriceInclusions = new List<PriceInclusion>()
                     };
+
+                    if (product.ExtraPacking.ToYesOrNo().AsBool() && client.ExtraPacking.AsBool())
+                    {
+                        price.PriceInclusions.Add(BuildUnderlinedText(_globalLocalizer.GetString("ExtraPackingService")));
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(product?.PaletteSize) && (client?.PaletteLoading.AsBool() ?? false))
+                    {
+                        price.PriceInclusions.Add(BuildUnderlinedText(_globalLocalizer.GetString("PaletteLoadingService")));
+                    }
+
+                    if (client.IncludedTransport.AsBool())
+                    {
+                        price.PriceInclusions.Add(new PriceInclusion
+                        {
+                            Text = _globalLocalizer.GetString("TransportService")
+                        });
+                    }
+
+                    return price;
                 }
 
                 return default;
@@ -82,7 +109,7 @@ namespace Buyer.Web.Shared.Services.Prices
                 return Enumerable.Empty<Price>();
             }
 
-            var priceRequests = new List<PriceRequest>();
+            var requestTuples = new List<(PriceRequest priceRequest, PriceProduct product)>();
             var prices = new List<Price>();
 
             foreach (var product in products)
@@ -90,7 +117,6 @@ namespace Buyer.Web.Shared.Services.Prices
                 if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
                     string.IsNullOrWhiteSpace(product.FabricsGroup))
                 {
-                    prices.Add(null);
                     continue;
                 }
 
@@ -101,28 +127,50 @@ namespace Buyer.Web.Shared.Services.Prices
                     PricingDate = pricingDate
                 };
 
-                priceRequests.Add(priceRequest);
+                requestTuples.Add((priceRequest, product));
             }
 
             var priceQuery = new GetPricesByPriceDriversQuery
             {
                 EnvironmentId = _options.Value.GrulaEnvironmentId.Value,
-                PriceRequests = priceRequests,
+                PriceRequests = requestTuples.Select(x => x.priceRequest).ToList()
             };
 
             try
             {
                 var grulaPrices = await _grulaApiClient.GetPricesByPriceDriversAsync(priceQuery);
 
-                foreach (var grulaPrice in grulaPrices)
+                for (int i = 0; i < grulaPrices.Count; i++)
                 {
+                    var grulaPrice = grulaPrices.ElementAtOrDefault(i);
+                    var requestProduct = requestTuples.ElementAtOrDefault(i).product;
+
                     if (grulaPrice?.Amount is not null)
                     {
                         var price = new Price
                         {
                             CurrentPrice = (decimal)grulaPrice.Amount.Amount,
-                            CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode
+                            CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode,
+                            PriceInclusions = new List<PriceInclusion>()
                         };
+
+                        if (requestProduct.ExtraPacking.ToYesOrNo().AsBool() && client.ExtraPacking.AsBool())
+                        {
+                            price.PriceInclusions.Add(BuildUnderlinedText(_globalLocalizer.GetString("ExtraPackingService")));
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(requestProduct?.PaletteSize) && (client?.PaletteLoading.AsBool() ?? false))
+                        {
+                            price.PriceInclusions.Add(BuildUnderlinedText(_globalLocalizer.GetString("PaletteLoadingService")));
+                        }
+
+                        if (client.IncludedTransport.AsBool())
+                        {
+                            price.PriceInclusions.Add(new PriceInclusion
+                            {
+                                Text = _globalLocalizer.GetString("TransportService")
+                            });
+                        }
 
                         prices.Add(price);
                     }
@@ -159,7 +207,6 @@ namespace Buyer.Web.Shared.Services.Prices
             
             return allowedClients.Contains(priceClientId.ToString());
         }
-
 
         private List<PriceDriver> CreatePriceDrivers(PriceProduct product, PriceClient client)
         {
@@ -352,6 +399,22 @@ namespace Buyer.Web.Shared.Services.Prices
             }
 
             return priceDrivers;
+        }
+
+        private static PriceInclusion BuildUnderlinedText(string resourceText)
+        {
+            if (string.IsNullOrWhiteSpace(resourceText))
+            {
+                return default;
+            }
+
+            var parts = resourceText.Split(' ', 2);
+
+            return new PriceInclusion
+            {
+                Text = parts[0],
+                UnderlinedText = parts.Length > 1 ? parts[1] : ""
+            };
         }
     }
 }

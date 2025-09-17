@@ -1,0 +1,20 @@
+.price-modal {
+    &__title {
+        color: $black;
+        font-size: 1.625rem;
+        line-height: 130%;
+        font-weight: 400;
+    }
+
+    &__list-item {
+        font-size: 1rem;
+        line-height: 1.5rem;
+        font-weight: 400;
+    }
+
+    &__text-info {
+        font-size: 0.875rem;
+        line-height: 1.5rem;
+        font-weight: 400;
+    }
+}

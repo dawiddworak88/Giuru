@@ -19,6 +19,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
         private readonly ICatalogModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel> catalogModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, PriceModalViewModel> _priceModalModelBuilder;
         private readonly IProductsService productsService;
         private readonly ICategoryRepository categoryRepository;
 
@@ -26,6 +27,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
             ICatalogModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel> catalogModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, PriceModalViewModel> priceModalModelBuilder,
             IProductsService productsService,
             ICategoryRepository categoryRepository)
         {
@@ -34,6 +36,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
             this.productsService = productsService;
             this.categoryRepository = categoryRepository;
             this.modalModelBuilder = modalModelBuilder;
+            _priceModalModelBuilder = priceModalModelBuilder;
         }
 
         public async Task<CategoryCatalogViewModel> BuildModelAsync(SearchProductsComponentModel componentModel)
@@ -48,6 +51,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
                 viewModel.CategoryId = category.Id;
                 viewModel.Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel);
                 viewModel.Modal = await this.modalModelBuilder.BuildModelAsync(componentModel);
+                viewModel.PriceModal = await _priceModalModelBuilder.BuildModelAsync(componentModel);
                 viewModel.OrderBy = nameof(Product.Name);
                 viewModel.PagedItems = await this.productsService.GetProductsAsync(
                     null,

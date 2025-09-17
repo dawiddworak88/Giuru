@@ -3,99 +3,84 @@
 @import "../Price/Price.scss";
 @import "../Toast/ToastSuccessAddProductToBasket.scss";
 @import "../Availability/Availability.scss";
+@import "../PriceModal/PriceModal.scss";
 
 .catalog {
-    .catalog-item {
-        .card-image-scale-down {
-            object-fit: scale-down;
-            padding: 0.75rem;
-        }
-        
-        .media-content {
-            padding: 1rem;
+    &__cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+        gap: 1rem;
+    }
+
+    &__card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border: 1px solid #EFEFEF;
+        border-radius: 0.25rem;
+        background: $white;
+        padding: 1rem 0;
+        min-height: 28rem;
+
+        &-header {
+            min-height: 1.6875rem;
+            padding: 0 1.375rem;
         }
 
-        &__title a {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            text-overflow: ellipsis;
+        &-content {
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 0 1.625rem 0;
+            flex: 1;
+        }
+
+        &-media {
+            aspect-ratio: 4/3;
             overflow: hidden;
-            font-size: 1.25rem;
-        }
-
-        &__title a:hover {
-            color: $primary;
-        }
-
-        &__brand-text {
-            font-size: 0.9rem;
-        }
-
-        &__productAttributes, &__brand {
-            a:hover {
-                color: $primary;
-            }
-        }
-
-        &__discount {
-            position: absolute;
-            top: 1rem;
-            right: 0;
-            z-index: 1;
-            background: $greenonion;
-            color: #ffffff;
-            border-top-left-radius: 0.25rem;
-            border-bottom-left-radius: 0.25rem;
-        }
-
-        &__productAttributes {
-            font-size: 0.750rem;
-        }
-
-        &__in-stock-details {
-            margin-top: 0.5rem;
-
-            .stock {
-                color: $greenonion;
-                font-weight: 600;
-                font-size: 0.8rem;
-            }
-
-            .expected-delivery {
-                color: $greenonion;
-                font-weight: 600;
-                font-size: 0.7rem;
-            }
-        }
-
-        &__price {
-            margin-top: 0.5rem;
-
-            a {
-                color: $primary;
-            }
-        }
-
-        &__sku {
-            font-size: 0.750rem;
-        }
-
-        &__add-to-cart-button-container {
             display: flex;
             align-items: center;
+            justify-content: center;
+            min-height: 15.25rem;
+            padding: 0 0.5rem 1.5rem 0.5rem;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+        }
+
+        &-body {
+            padding: 1.5rem 1rem;
+            display: block;
+            text-decoration: none;
+
+            .body-header {
+                min-height: 4.5rem;
+
+                .title {
+                    font-size: 1.375rem;
+                    color: $black;
+                    font-weight: 400;
+                    line-height: normal;
+                    margin-bottom: 0;
+                }
+
+                .text-highlight {
+                    font-size: 0.875rem;
+                    color: $card-subtitle;
+                }
+            }
+        }
+
+        &-footer {
+            display: flex;
             justify-content: flex-end;
-            padding: 0 1rem 1rem 0.5rem;
+            padding-right: 1rem;
+        }
 
-            .row {
-                display: flex;
-            }
-
-            .quantity-input{
-                min-height: 2.625rem;
-                width: 4rem;
-                margin-right: 0.3125rem;
-            }
+        &-price-spacing {
+            margin-top: 1.125rem;
         }
     }
 }
