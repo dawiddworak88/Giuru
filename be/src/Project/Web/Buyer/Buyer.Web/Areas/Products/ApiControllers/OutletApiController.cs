@@ -122,7 +122,12 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                                 product.Price = new ProductPriceViewModel
                                 {
                                     Current = price.CurrentPrice,
-                                    Currency = price.CurrencyCode
+                                    Currency = price.CurrencyCode,
+                                    PriceInclusions = price.PriceInclusions.OrEmptyIfNull().Select(x => new ProductPriceInclusionViewModel
+                                    {
+                                        Text = x.Text,
+                                        UnderlinedText = x.UnderlinedText
+                                    })
                                 };
                             }
                         }

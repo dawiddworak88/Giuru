@@ -34,6 +34,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Buyer.Web.Areas.Products.ViewModels.Products;
 
 namespace Buyer.Web.Areas.Products.ApiControllers
 {
@@ -269,7 +270,12 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             carouselItem.Price = new CarouselGridPriceViewModel
                             {
                                 Current = price.CurrentPrice,
-                                Currency = price.CurrencyCode
+                                Currency = price.CurrencyCode,
+                                PriceInclusions = price.PriceInclusions.OrEmptyIfNull().Select(x => new CarouselGridPriceInclusionViewModel
+                                {
+                                    Text = x.Text,
+                                    UnderlinedText = x.UnderlinedText
+                                })
                             };
                         }
                     }

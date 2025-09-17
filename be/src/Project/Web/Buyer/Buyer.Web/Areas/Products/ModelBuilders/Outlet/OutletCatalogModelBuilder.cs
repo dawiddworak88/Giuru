@@ -165,7 +165,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                             product.Price = new ProductPriceViewModel
                             {
                                 Currency = price.CurrencyCode,
-                                Current = price.CurrentPrice
+                                Current = price.CurrentPrice,
+                                PriceInclusions = price.PriceInclusions.OrEmptyIfNull().Select(x => new ProductPriceInclusionViewModel
+                                {
+                                    Text = x.Text,
+                                    UnderlinedText = x.UnderlinedText
+                                })
                             };
                         }
                     }
