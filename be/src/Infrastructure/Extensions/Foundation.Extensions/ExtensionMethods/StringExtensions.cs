@@ -70,7 +70,7 @@ namespace Foundation.Extensions.ExtensionMethods
 
         public static bool AsBool(this string value)
         {
-            return value == "Yes" ? true : false;
+            return value == "Yes";
         }
     }
 }

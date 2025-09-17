@@ -25,6 +25,7 @@ const PriceModal = ({
             open={open}
             onClose={onClose}
             aria-label='price-modal'
+            aria-labelledby="price-modal-title"
             PaperProps={{
                 sx: {
                     maxWidth: "46.875rem",
@@ -40,6 +41,7 @@ const PriceModal = ({
         >
            <DialogTitle 
                 className='price-modal__title'
+                id="price-modal-title"
                 sx={{
                     fontSize: "1.625rem",
                     lineHeight: "130%",
@@ -84,9 +86,9 @@ const PriceModal = ({
                             }
                         }}
                     >
-                        {priceInclusions.map((inclusion) => {
+                        {priceInclusions.map((inclusion, index) => {
                             return (
-                                <ListItem>{inclusion.text}{inclusion.underlinedText ? <span style={{textDecoration: "underline"}}> {inclusion.underlinedText}.*</span> : "."}</ListItem>
+                                <ListItem key={index}>{inclusion.text}{inclusion.underlinedText ? <span style={{textDecoration: "underline"}}> {inclusion.underlinedText}.*</span> : "."}</ListItem>
                             )
                         })}
                     </List>
