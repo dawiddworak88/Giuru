@@ -59,7 +59,7 @@ namespace News.Api.Services.Categories
 
             if (category is null)
             {
-                throw new CustomException(_newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             if (await _context.Categories.AnyAsync(x => x.ParentCategoryId == category.Id && x.IsActive))
@@ -69,7 +69,7 @@ namespace News.Api.Services.Categories
 
             if (await _context.NewsItems.AnyAsync(x => x.CategoryId == category.Id && x.IsActive))
             {
-                throw new CustomException(_newsLocalizer.GetString("CategoryDeleteNewsConflict"), (int)HttpStatusCode.Conflict);
+                throw new CustomException(_newsLocalizer.GetString("CategoryDeleteNewsConflict"), (int)HttpStatusCode.NotFound);
             }
 
             category.IsActive = false;
@@ -88,7 +88,7 @@ namespace News.Api.Services.Categories
 
             if (category is null)
             {
-                throw new CustomException(_newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             return new CategoryServiceModel
@@ -149,7 +149,7 @@ namespace News.Api.Services.Categories
             
             if (category is null)
             {
-                throw new CustomException(_newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             if (model.ParentCategoryId.HasValue)
@@ -158,7 +158,7 @@ namespace News.Api.Services.Categories
 
                 if (parentCategory is null)
                 {
-                    throw new CustomException(_newsLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NoContent);
+                    throw new CustomException(_newsLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NotFound);
                 }
 
                 category.ParentCategoryId = model.ParentCategoryId;

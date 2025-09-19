@@ -36,7 +36,7 @@ namespace News.Api.Services.News
 
             if (category is null)
             {
-                throw new CustomException(_newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var newsItem = new NewsItem
@@ -83,7 +83,7 @@ namespace News.Api.Services.News
 
             if (newsItem is null)
             {
-                throw new CustomException(_newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             newsItem.IsActive = false;
@@ -153,7 +153,7 @@ namespace News.Api.Services.News
 
             if (newsItem is null)
             {
-                throw new CustomException(_newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             return new NewsItemServiceModel
@@ -207,13 +207,13 @@ namespace News.Api.Services.News
 
             if (category is null)
             {
-                throw new CustomException(_newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var news = _context.NewsItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
             if (news is null)
             {
-                throw new CustomException(_newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             news.ThumbnailImageId = model.ThumbnailImageId;

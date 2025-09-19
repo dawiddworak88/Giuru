@@ -177,7 +177,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
             if (existingProductAttribute == null)
             {
-                throw new CustomException(_productLocalizer.GetString("ProductAttributeNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_productLocalizer.GetString("ProductAttributeNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             if (existingProductAttribute.ProductAttributeItems.Any(x => x.IsActive))
@@ -203,7 +203,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
             if (existingProductAttributeItem == null)
             {
-                throw new CustomException(_productLocalizer.GetString("ProductAttributeItemNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_productLocalizer.GetString("ProductAttributeItemNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             AssertCategorySchemaReference(existingProductAttributeItem, model.Language);

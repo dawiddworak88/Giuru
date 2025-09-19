@@ -657,14 +657,14 @@ namespace Ordering.Api.Services
 
             if (order is null)
             {
-                throw new CustomException(_orderLocalizer.GetString("OrderNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_orderLocalizer.GetString("OrderNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var newOrderStatus = await _context.OrderStatuses.FirstOrDefaultAsync(x => x.Id == serviceModel.OrderStatusId && x.IsActive);
 
             if (newOrderStatus is null)
             {
-                throw new CustomException(_orderLocalizer.GetString("OrderStatusNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_orderLocalizer.GetString("OrderStatusNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             order.OrderStatusId = newOrderStatus.Id;
@@ -841,14 +841,14 @@ namespace Ordering.Api.Services
 
             if (orderItem is null)
             {
-                throw new CustomException(_orderLocalizer.GetString("OrderItemNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_orderLocalizer.GetString("OrderItemNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var newOrderItemStatus = await _context.OrderStatuses.FirstOrDefaultAsync(x => x.Id == model.OrderItemStatusId && x.IsActive);
 
             if (newOrderItemStatus is null)
             {
-                throw new CustomException(_orderLocalizer.GetString("OrderStatusNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_orderLocalizer.GetString("OrderStatusNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var orderItemStatusChange = new OrderItemStatusChange
