@@ -1,4 +1,5 @@
-﻿using Foundation.PageContent.ResponseModels.Seo;
+﻿using Buyer.Web.Shared.DomainModels.GraphQl.Shared;
+using Foundation.PageContent.ResponseModels.Seo;
 using System.Collections.Generic;
 
 namespace Buyer.Web.Areas.Content.DomainModel
@@ -7,6 +8,7 @@ namespace Buyer.Web.Areas.Content.DomainModel
     {
         public string Title { get; set; }
         public Seo Seo { get; set; }
+        public Link ReturnButton { get; set; }
         public IEnumerable<SharedComponent> SharedComponents { get; set; }
     }
 }

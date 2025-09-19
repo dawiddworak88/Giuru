@@ -8,7 +8,8 @@ import { Context } from "../../../../shared/stores/Store";
 import { Delete, AddShoppingCartRounded } from "@mui/icons-material"
 import {
     Fab, Table, TableBody, TableCell, TableContainer, Autocomplete,
-    TableHead, TableRow, Paper, TextField, Button, CircularProgress
+    TableHead, TableRow, Paper, TextField, Button, CircularProgress,
+    FormControlLabel, Checkbox
 } from "@mui/material";
 import moment from "moment";
 import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
@@ -16,6 +17,8 @@ import OrderFormConstants from "../../../../shared/constants/OrderFormConstants"
 import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
 import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
+import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
+import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper"
 
 function OrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -27,9 +30,7 @@ function OrderForm(props) {
     const [clientAddresses, setClientAddresses] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
-    const [quantity, setQuantity] = useState(0);
-    const [stockQuantity, setStockQuantity] = useState(0);
-    const [outletQuantity, setOutletQuantity] = useState(0);
+    const [quantity, setQuantity] = useState(1);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
     const [orderItems, setOrderItems] = useState([]);
@@ -37,6 +38,7 @@ function OrderForm(props) {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
     const [disableSaveButton, setDisableSaveButton] = useState(false);
+    const [productFromOutlet, setProductFromOutlet] = useState(false);
 
     const onSuggestionsFetchRequested = (args) => {
 
@@ -79,23 +81,13 @@ function OrderForm(props) {
         }
     };
 
-    const resetMaxAndQuantityValues = () => {
-        setQuantity(0);
-        setStockQuantity(0);
-        setOutletQuantity(0);
-    }
-
     const onSuggestionSelected = (event, { suggestion }) => {
-        var items = orderItems.filter(item => item.productId === suggestion.id);
+        let items = orderItems.filter(item => item.productId === suggestion.id);
 
         if (items.length > 0) {
             suggestion.stockQuantity -= items.reduce((sum, item) => sum + item.stockQuantity, 0);
             suggestion.outletQuantity -= items.reduce((sum, item) => sum + item.outletQuantity, 0); 
         }
-
-        setQuantity(suggestion.stockQuantity + suggestion.outletQuantity === 0 ? 1 : 0);
-        setStockQuantity(suggestion.stockQuantity > 0 ? 1 : 0);
-        setOutletQuantity(suggestion.outletQuantity > 0 && suggestion.stockQuantity === 0 ? 1 : 0);
 
         setProduct(suggestion);
     };
@@ -104,28 +96,49 @@ function OrderForm(props) {
         return "(" + suggestion.sku + ")" + " " + suggestion.name;
     };
 
-    const handleAddOrderItemClick = () => {
+    const handleAddOrderItemClick = async () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const totalQuantity = parseInt(quantity) + parseInt(stockQuantity) + parseInt(outletQuantity);
 
         const orderItem = {
             productId: product.id,
             sku: product.sku,
             name: product.name,
             imageId: product.images ? product.images[0] : null,
-            quantity: quantity ? quantity : 0,
-            stockQuantity: stockQuantity ? stockQuantity : 0,
-            outletQuantity: outletQuantity ? outletQuantity : 0,
+            quantity: quantity,
+            stockQuantity: 0,
+            outletQuantity: 0,
             unitPrice: product.price ? parseFloat(product.price).toFixed(2) : null,
-            price: product.price ? parseFloat(product.price * totalQuantity).toFixed(2) : null,
+            price: product.price ? parseFloat(product.price * quantity).toFixed(2) : null,
             currency: product.currency,
             externalReference,
             moreInfo
         };
 
+        if (productFromOutlet) {
+            orderItem.outletQuantity = quantity;
+            orderItem.stockQuantity = 0;
+            orderItem.quantity = 0;
+
+            const outletPrice = await  ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, client.id, product.sku);
+
+            if (outletPrice) {
+                orderItem.unitPrice = outletPrice.price
+                orderItem.price = parseFloat(outletPrice.price * quantity).toFixed(2);
+                orderItem.currency = outletPrice.currency;
+            }
+        } else if (product.stockQuantity > 0) {
+            if (quantity > product.stockQuantity) {
+                orderItem.quantity = quantity - product.stockQuantity;
+                orderItem.stockQuantity = product.stockQuantity; 
+            }
+            else {
+                orderItem.stockQuantity = quantity;
+                orderItem.quantity = 0;
+            }
+        }
+
         if (props.maxAllowedOrderQuantity && 
-           (totalQuantity > props.maxAllowedOrderQuantity)) {
+           (quantity > props.maxAllowedOrderQuantity)) {
                 toast.error(props.maxAllowedOrderQuantityErrorMessage);
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 return;
@@ -138,7 +151,10 @@ function OrderForm(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+            headers: { 
+                "Content-Type": "application/json", 
+                "X-Requested-With": "XMLHttpRequest" 
+            },
             body: JSON.stringify(basket)
         };
 
@@ -149,22 +165,19 @@ function OrderForm(props) {
                 AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
-
                     if (response.ok) {
-
                         setBasketId(jsonResponse.id);
 
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
-
                             setProduct(null);
                             setSearchTerm("");
                             setExternalReference("");
                             setMoreInfo("");
-                            resetMaxAndQuantityValues();
-                            setOrderItems(jsonResponse.items);
+                            setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
+                            setQuantity(1);
+                            setProductFromOutlet(false);
                         }
                         else {
-
                             setOrderItems([]);
                         }
                     }
@@ -226,7 +239,7 @@ function OrderForm(props) {
 
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
 
-                            setOrderItems(jsonResponse.items);
+                            setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
                         }
                         else {
 
@@ -384,7 +397,7 @@ function OrderForm(props) {
                             dispatch({ type: "SET_IS_LOADING", payload: false });
 
                             setBasketId(jsonResponse.id);
-                            setOrderItems([...orderItems, ...jsonResponse.items]);
+                            setOrderItems(OrderItemsGrouper.groupOrderItems([...orderItems, ...jsonResponse.items]));
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -405,9 +418,11 @@ function OrderForm(props) {
         }
     });
 
-    const GetTotalQuantities = (item) => {
+    const getTotalQuantities = (item) => {
         return item.quantity + item.stockQuantity + item.outletQuantity;
     }
+
+    const maxOutlet = product ? product.outletQuantity : 0;
 
     return (
         <section className="section section-small-padding order">
@@ -506,37 +521,54 @@ function OrderForm(props) {
                                     inputProps={searchInputProps} />
                             </div>
                             <div className="column is-1 is-flex is-align-items-flex-end">
-                                <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
-                                    label={props.quantityLabel} fullWidth={true} disabled={product == null} value={quantity} onChange={(e) => {
-                                        e.preventDefault();
+                                <TextField 
+                                    id="quantity" 
+                                    name="quantity" 
+                                    type="number" 
+                                    inputProps={{ 
+                                        min: "1", 
+                                        step: "1" 
+                                    }} 
+                                    variant="standard"
+                                    label={productFromOutlet ? `${props.quantityLabel} ${maxOutlet > 0 ? `(${props.maximalLabel} ${maxOutlet})` : ""}` : props.quantityLabel} 
+                                    fullWidth={true} 
+                                    disabled={product == null} 
+                                    value={quantity} 
+                                    onChange={(e) => {
                                         setQuantity(e.target.value);
-                                    }} />
+                                    }}
+                                    onBlur={() => {
+                                        let numericValue = Number(quantity);
+
+                                        if (isNaN(numericValue) || numericValue < 1) {
+                                            numericValue = 1;
+                                        }
+
+                                        if (productFromOutlet && numericValue > maxOutlet) {
+                                            numericValue = maxOutlet;
+                                        }
+
+                                        setQuantity(numericValue);
+                                    }}
+                                />
                             </div>
-                            <div className="column is-2 is-flex is-align-items-flex-end">
-                            <TextField id="stockQuantity" name="stockQuantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
-                                label={`${props.stockQuantityLabel} (${props.maximalLabel} ${product ? product.stockQuantity : 0})`}
-                                fullWidth={true} disabled={product == null || product.stockQuantity == 0} value={stockQuantity} onChange={(e) => {
-                                    e.preventDefault();
-                                    const value = e.target.value
-                                    if (value >= 0) {
-                                        setStockQuantity(value > product.stockQuantity ? product.stockQuantity : value);
+                            <div className="column is-2 is-flex is-align-items-flex-end pb-2">
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={productFromOutlet}
+                                            onChange={(e) => {
+                                                setProductFromOutlet(e.target.checked);
+
+                                                if (e.target.checked && (quantity > maxOutlet)) {
+                                                    setQuantity(maxOutlet);
+                                                }
+                                            }} />
                                     }
-                                    else setStockQuantity(0);
-                                }}
-                            />
-                        </div>
-                        <div className="column is-2 is-flex is-align-items-flex-end">
-                            <TextField id="outletQuantity" name="outletQuantity" type="number" inputProps={{ min: "0", step: "1" }} variant="standard"
-                                label={`${props.outletQuantityLabel} (${props.maximalLabel} ${product ? product.outletQuantity : 0})`}
-                                fullWidth={true} disabled={product == null || product.outletQuantity == 0} value={outletQuantity} onChange={(e) => {
-                                    e.preventDefault();
-                                    const value = e.target.value
-                                    if (value >= 0) {
-                                        setOutletQuantity(value > product.outletQuantity ? product.outletQuantity : value);
-                                    } else setOutletQuantity(0);
-                                }}
-                            />
-                        </div>
+                                    label={props.outletProductLabel}
+                                    disabled={!product || product.outletQuantity == 0}
+                                />
+                            </div>    
                             <div className="column is-2 is-flex is-align-items-flex-end">
                                 <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel} variant="standard"
                                     fullWidth={true} value={externalReference} onChange={(e) => {
@@ -553,8 +585,13 @@ function OrderForm(props) {
                                     }} />
                             </div>
                             <div className="column is-1 is-flex is-align-items-flex-end">
-                                <Button type="button" variant="contained" color="primary" onClick={handleAddOrderItemClick}
-                                disabled={state.isLoading || !(quantity + stockQuantity + outletQuantity > 0 && product !== null)}>
+                                <Button 
+                                    type="button" 
+                                    variant="contained" 
+                                    color="primary" 
+                                    onClick={handleAddOrderItemClick}
+                                    disabled={state.isLoading || !(quantity > 0 && product !== null)}
+                                >
                                     {props.addText}
                                 </Button>
                             </div>
@@ -598,7 +635,7 @@ function OrderForm(props) {
                                                             <TableCell>{item.quantity}</TableCell>
                                                             <TableCell>{item.stockQuantity}</TableCell>
                                                             <TableCell>{item.outletQuantity}</TableCell>
-                                                            <TableCell className="has-text-weight-bold">{GetTotalQuantities(item)}</TableCell>
+                                                            <TableCell className="has-text-weight-bold">{getTotalQuantities(item)}</TableCell>
                                                             <TableCell>{item.externalReference}</TableCell>
                                                             <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                             <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>

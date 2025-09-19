@@ -309,6 +309,9 @@
   <data name="sh_stockQuantityLabel" xml:space="preserve">
     <value>Bestandsmenge</value>
   </data>
+  <data name="sh_externalReferenceLabel" xml:space="preserve">
+    <value>Eigene Nummer des Kunde</value>
+  </data>
   <data name="oc_subject" xml:space="preserve">
     <value>Bestellbestätigung</value>
   </data>
@@ -350,5 +353,11 @@
   </data>
   <data name="InTotalLabel" xml:space="preserve">
     <value>Insgesamt:</value>
+  </data>
+  <data name="OutletProductLabel" xml:space="preserve">
+    <value>Produkt aus dem Outlet</value>
+  </data>
+  <data name="ProductsNotFound" xml:space="preserve">
+    <value>Produkte nicht gefunden</value>
   </data>
 </root>

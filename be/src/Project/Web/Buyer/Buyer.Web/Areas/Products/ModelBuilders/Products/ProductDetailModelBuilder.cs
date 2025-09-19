@@ -34,6 +34,7 @@ using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Services.ProductColors;
 using Foundation.GenericRepository.Definitions;
+using Buyer.Web.Shared.ViewModels.Toasts;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -42,6 +43,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> _filesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> _sidebarModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> _modalModelBuilder;
+        private readonly IModelBuilder<SuccessAddProductToBasketViewModel> _toastSuccessAddProductToBasket;
         private readonly IProductsRepository _productsRepository;
         private readonly IOutletRepository _outletRepository;
         private readonly IStringLocalizer<InventoryResources> _inventoryResources;
@@ -61,6 +63,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
+            IModelBuilder<SuccessAddProductToBasketViewModel> toastSuccessAddProductToBasket,
             IProductsRepository productsRepository,
             IOutletRepository outletRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -88,6 +91,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _basketService = basketService;
             _orderResources = orderResources;
             _modalModelBuilder = modalModelBuilder;
+            _toastSuccessAddProductToBasket = toastSuccessAddProductToBasket;
             _mediaItemsRepository = mediaItemsRepository;
             _priceService = priceService;
             _options = options;
@@ -104,7 +108,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 IsAuthenticated = componentModel.IsAuthenticated,
                 ProductInformationLabel = _productLocalizer.GetString("ProductInformation"),
                 PricesLabel = _globalLocalizer.GetString("Prices"),
-                SuccessfullyAddedProduct = _globalLocalizer.GetString("SuccessfullyAddedProduct"),
                 QuantityErrorMessage = _globalLocalizer.GetString("QuantityErrorMessage"),
                 SignInToSeePricesLabel = _globalLocalizer.GetString("SignInToSeePrices"),
                 SignInUrl = "#",
@@ -124,7 +127,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 SeeMoreText = _globalLocalizer.GetString("SeeMoreText"),
                 SeeLessText = _globalLocalizer.GetString("SeeLessText"),
                 MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
-                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity")
+                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity"),
+                GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity")
             };
 
             var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
@@ -140,6 +145,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 viewModel.Sku = product.Sku;
                 viewModel.IsProductVariant = product.PrimaryProductId.HasValue;
                 viewModel.Features = product.ProductAttributes?.Select(x => new ProductFeatureViewModel { Key = x.Name, Value = string.Join(", ", x.Values.OrEmptyIfNull()) });
+                viewModel.ToastSuccessAddProductToBasket = _toastSuccessAddProductToBasket.BuildModel();
 
                 var outlet = await _productsRepository.GetProductOutletAsync(componentModel.Id);
 
@@ -165,7 +171,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
                             PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
                             Size = _productsService.GetSize(product.ProductAttributes),
-                            IsOutlet = (outlet?.AvailableQuantity > 0).ToYesOrNo(),
                             PointsOfLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
                             LampshadeType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
                             LampshadeSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
@@ -292,7 +297,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
                                 PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
                                 Size = _productsService.GetSize(x.ProductAttributes),
-                                IsOutlet = (outletProductVariants.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo(),
                                 PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
                                 LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
                                 LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),

@@ -21,6 +21,8 @@ const orderForm = {
     communicationLanguage: "",
     uploadOrderFileUrl: "",
     saveText: "Place order",
+    clearBasketText: "Clear basket",
+    initCustomOrderLabel: "Custom order",
     searchLabel: "Search",
     dropOrSelectFilesLabel: "Drag and drop here, or click to select an order file",
     noResultsLabel: "No results have been found",

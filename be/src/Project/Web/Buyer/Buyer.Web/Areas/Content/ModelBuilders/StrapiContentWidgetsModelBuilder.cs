@@ -33,6 +33,15 @@ namespace Buyer.Web.Areas.Content.ModelBuilders
                     Title = contentPage.Title,
                 };
 
+                if (contentPage.ReturnButton is not null)
+                {
+                    viewModel.ReturnButton = new StrapiReturnButtonViewModel
+                    {
+                        Href = contentPage.ReturnButton.Href,
+                        Label = contentPage.ReturnButton.Label
+                    };
+                }
+
                 var widgets = new List<StrapiWidgetViewModel>();
 
                 foreach (var sharedComponent in contentPage.SharedComponents.OrEmptyIfNull())

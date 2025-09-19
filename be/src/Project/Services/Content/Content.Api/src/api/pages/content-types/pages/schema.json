@@ -57,6 +57,16 @@
         "shared.slider",
         "blocks.video"
       ]
+    },
+    "returnButton": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.link"
     }
   }
 }

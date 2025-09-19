@@ -178,5 +178,25 @@ namespace Seller.Web.Areas.Inventory.Repositories
 
             return default;
         }
+
+        public async Task<OutletItem> GetOutletItemBySkuAsync(string token, string language, string sku)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Data = new RequestModelBase(),
+                Language = language,
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.ProductOutletBySkuApiEndpoint}/{sku}"
+            };
+
+            var response = await _apiService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OutletItem>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data is not null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
     }
 }

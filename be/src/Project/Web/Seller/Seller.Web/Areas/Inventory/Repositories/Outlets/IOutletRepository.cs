@@ -17,6 +17,7 @@ namespace Seller.Web.Areas.Inventory.Repositories
             string orderBy);
         Task DeleteAsync(string token, string language, Guid? id);
         Task<OutletItem> GetOutletItemAsync(string token, string language, Guid? id);
+        Task<OutletItem> GetOutletItemBySkuAsync(string token, string language, string sku);
         Task<Guid> SaveAsync(
             string token, string language, Guid? id, Guid? warehouseId, Guid? productId, string productName, string productSku, double quantity, string title, string description, string ean, double? availableQuantity, Guid? organisationId);
         Task<IEnumerable<OutletItem>> GetOutletProductsByProductsIdAsync(string token, string language, IEnumerable<Guid> ids);

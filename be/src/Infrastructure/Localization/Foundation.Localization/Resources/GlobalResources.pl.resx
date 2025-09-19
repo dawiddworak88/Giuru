@@ -427,7 +427,7 @@
     <value>Tkanina: </value>
   </data>
   <data name="SuccessfullyAddedProduct" xml:space="preserve">
-    <value>Pomyślnie dodano produkt do koszyka</value>
+    <value>Pomyślnie dodano produkt do koszyka.</value>
   </data>
   <data name="Catalog" xml:space="preserve">
     <value>Katalog</value>
@@ -815,5 +815,11 @@
   </data>
   <data name="SomeFilesNotDownloadedError" xml:space="preserve">
     <value>Niektóre pliki nie zostały pobrane.</value>
+  </data>
+  <data name="ShowText" xml:space="preserve">
+    <value>Pokaż</value>
+  </data>
+  <data name="MinOrderQuantity" xml:space="preserve">
+    <value>Minimalna ilość zamówienia to 1</value>
   </data>
 </root>

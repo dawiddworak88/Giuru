@@ -1,6 +1,8 @@
 ﻿using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Services.Baskets;
 using Buyer.Web.Shared.ViewModels.Catalogs;
+using Buyer.Web.Shared.ViewModels.Toasts;
+using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
@@ -12,6 +14,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
 {
     public class CatalogModelBuilder<S, T> : ICatalogModelBuilder<S, T> where S: ComponentModelBase where T: CatalogViewModel, new()
     {
+        private readonly IModelBuilder<SuccessAddProductToBasketViewModel> _toastSuccessAddProductToBasket;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<ProductResources> _productLocalizer;
         private readonly IStringLocalizer<InventoryResources> _inventoryLocalizer;
@@ -20,6 +23,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
         private readonly IOptions<AppSettings> _options;
 
         public CatalogModelBuilder(
+            IModelBuilder<SuccessAddProductToBasketViewModel> toastSuccessAddProductToBasket,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             IStringLocalizer<InventoryResources> inventoryLocalizer,
@@ -27,6 +31,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
             LinkGenerator linkGenerator,
             IOptions<AppSettings> options)
         {
+            _toastSuccessAddProductToBasket = toastSuccessAddProductToBasket;
             _globalLocalizer = globalLocalizer;
             _productLocalizer = productLocalizer;
             _linkGenerator = linkGenerator;
@@ -54,13 +59,15 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 RowsPerPageLabel = _globalLocalizer["RowsPerPage"],
                 IsLoggedIn = componentModel.IsAuthenticated,
                 BasketId = componentModel.BasketId,
-                SuccessfullyAddedProduct = _globalLocalizer.GetString("SuccessfullyAddedProduct"),
+                ToastSuccessAddProductToBasket = _toastSuccessAddProductToBasket.BuildModel(),
                 QuantityErrorMessage = _globalLocalizer.GetString("QuantityErrorMessage"),
                 ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products" }),
                 UpdateBasketUrl = _linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 ExpectedDeliveryLabel = _inventoryLocalizer.GetString("ExpectedDeliveryLabel"),
                 MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
-                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity")
+                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity"),
+                GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity")
             };
 
             if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
