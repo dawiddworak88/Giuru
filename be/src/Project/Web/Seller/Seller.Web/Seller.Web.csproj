@@ -9,7 +9,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
-		<PackageReference Include="Grula.PricingIntelligencePlatform.Sdk" Version="1.0.2" />
+		<PackageReference Include="Grula.PricingIntelligencePlatform.Sdk" Version="1.0.3" />
 		<PackageReference Include="IdentityServer4" Version="4.1.2" />
 		<PackageReference Include="ClosedXML" Version="0.104.2" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.12" />
