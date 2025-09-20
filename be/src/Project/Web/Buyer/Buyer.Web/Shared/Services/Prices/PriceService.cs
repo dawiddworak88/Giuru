@@ -82,27 +82,26 @@ namespace Buyer.Web.Shared.Services.Prices
                 return Enumerable.Empty<Price>();
             }
 
-            var priceRequests = new List<PriceRequest>();
-            var prices = new List<Price>();
+            var productList = (products ?? Enumerable.Empty<PriceProduct>()).ToList();
+            var result = new Price[productList.Count];
 
-            foreach (var product in products)
+            var validIndexed = productList
+                .Select((p, idx) => new { Product = p, Index = idx })
+                .Where(x => !string.IsNullOrWhiteSpace(x.Product.PrimarySku) &&
+                            !string.IsNullOrWhiteSpace(x.Product.FabricsGroup))
+                .ToList();
+
+            if (!validIndexed.Any())
             {
-                if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
-                    string.IsNullOrWhiteSpace(product.FabricsGroup))
-                {
-                    prices.Add(null);
-                    continue;
-                }
-
-                var priceRequest = new PriceRequest
-                {
-                    PriceDrivers = CreatePriceDrivers(product, client),
-                    CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
-                    PricingDate = pricingDate
-                };
-
-                priceRequests.Add(priceRequest);
+                return result;
             }
+
+            var priceRequests = validIndexed.Select(x => new PriceRequest
+            {
+                PriceDrivers = CreatePriceDrivers(x.Product, client),
+                CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
+                PricingDate = pricingDate
+            }).ToList();
 
             var priceQuery = new GetPricesByPriceDriversQuery
             {
@@ -114,31 +113,24 @@ namespace Buyer.Web.Shared.Services.Prices
             {
                 var grulaPrices = await _grulaApiClient.GetPricesByPriceDriversAsync(priceQuery);
 
-                foreach (var grulaPrice in grulaPrices)
+                for (int i = 0; i < validIndexed.Count; i++)
                 {
+                    var grulaPrice = grulaPrices.ElementAtOrDefault(i);
                     if (grulaPrice?.Amount is not null)
                     {
-                        var price = new Price
+                        result[validIndexed[i].Index] = new Price
                         {
                             CurrentPrice = (decimal)grulaPrice.Amount.Amount,
                             CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode
                         };
-
-                        prices.Add(price);
-                    }
-                    else
-                    {
-                        prices.Add(null);
                     }
                 }
 
-                return prices;
-
+                return result;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while fetching prices from the Grula API.");
-
                 return Enumerable.Empty<Price>();
             }
         }
