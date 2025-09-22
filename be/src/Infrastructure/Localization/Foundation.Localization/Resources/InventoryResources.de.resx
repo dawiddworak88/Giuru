@@ -237,4 +237,7 @@
   <data name="WarehouseSavedSuccessfully" xml:space="preserve">
     <value>Neues lagerhaus erfolgreich erstellt</value>
   </data>
+  <data name="OutletNotFound" xml:space="preserve">
+    <value>Ausverkaufsprodukt wurde nicht gefunden.</value>
+  </data>
 </root>

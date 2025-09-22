@@ -238,7 +238,7 @@
     <value>Voraussichtliches Lagerdatum der Ware:</value>
   </data>
   <data name="OrderStatusNotFound" xml:space="preserve">
-    <value>Bestellstatus nicht gefunden</value>
+    <value>Bestellstatus nicht gefunden.</value>
   </data>
   <data name="OrderStatusUpdatedSuccessfully" xml:space="preserve">
     <value>Bestellstatus wurde erfolgreich aktualisiert.</value>
@@ -356,5 +356,8 @@
   </data>
   <data name="ProductsNotFound" xml:space="preserve">
     <value>Produkte nicht gefunden</value>
+  </data>
+  <data name="OrderItemNotFound" xml:space="preserve">
+    <value>Bestellposition wurde nicht gefunden.</value>
   </data>
 </root>
