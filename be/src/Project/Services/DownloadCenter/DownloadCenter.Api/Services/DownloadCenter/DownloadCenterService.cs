@@ -247,7 +247,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (downloadCenterCategoryFiles is null)
             {
-                throw new CustomException(_downloadCenterLocalizer.GetString("DownloadCenterFilesNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             foreach(var downloadCenterCategoryFile in downloadCenterCategoryFiles.OrEmptyIfNull())
