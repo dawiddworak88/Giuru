@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Client.Api.Services.Applications
@@ -174,7 +173,7 @@ namespace Client.Api.Services.Applications
 
             if (clientApplication is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             if (clientApplication.IsDeliveryAddressEqualBillingAddress)
@@ -239,7 +238,7 @@ namespace Client.Api.Services.Applications
 
             if (existingApplication is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var clientApplication = new ClientApplicationServiceModel
@@ -359,7 +358,7 @@ namespace Client.Api.Services.Applications
 
             if (clientApplication == null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             clientApplication.CompanyName = model.CompanyName;

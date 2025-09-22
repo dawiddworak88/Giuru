@@ -36,7 +36,7 @@ namespace Client.Api.Services.FieldOptions
 
             if (fieldDefinition is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("FieldDefinitionNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("FieldDefinitionNotFound"), (int)HttpStatusCode.NotFound);
             }
             else if (fieldDefinition.FieldType != FieldTypesConstants.SelectFieldType)
             {
@@ -82,7 +82,7 @@ namespace Client.Api.Services.FieldOptions
 
             if (fieldOption is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             fieldOption.IsActive = false;
@@ -152,7 +152,7 @@ namespace Client.Api.Services.FieldOptions
 
             if (fieldOption is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var fieldDefinition = await _context.FieldDefinitions.FirstOrDefaultAsync(x => x.OptionSetId == fieldOption.OptionSetId);
@@ -177,7 +177,7 @@ namespace Client.Api.Services.FieldOptions
 
             if (fieldOption is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var fieldOptionTranslation = fieldOption.OptionsTranslations.FirstOrDefault(x => x.Language == model.Language && x.IsActive);

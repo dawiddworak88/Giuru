@@ -36,7 +36,7 @@ namespace Client.Api.Services.Addresses
 
             if (clientAddress is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             if (await _context.Clients.AnyAsync(x => x.DefaultDeliveryAddressId == model.Id && x.IsActive))
@@ -126,7 +126,7 @@ namespace Client.Api.Services.Addresses
 
             if (clientAddress is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             return new ClientAddressServiceModel
@@ -154,7 +154,7 @@ namespace Client.Api.Services.Addresses
 
             if (client is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var clientAddress = new Address
@@ -194,7 +194,7 @@ namespace Client.Api.Services.Addresses
 
             if (clientAddress is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             clientAddress.ClientId = model.ClientId.Value;
