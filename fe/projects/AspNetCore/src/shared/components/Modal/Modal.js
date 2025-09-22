@@ -93,7 +93,7 @@ const Modal = (props) => {
                                     }} />
                             }
                             label={labels.outletProductLabel}
-                            disabled={product.inOutlet && !product.inStock}
+                            disabled={props.outletOrder}
                         />
                     </div> 
                 }
