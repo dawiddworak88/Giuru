@@ -348,6 +348,7 @@ function ProductDetail(props) {
                 }
                 <Modal
                     isOpen={isModalOpen}
+                    outletOrder={props.isDefaultOutletOrder}
                     setIsOpen={setIsModalOpen}
                     handleClose={handleCloseModal}
                     maxOutletValue={
@@ -412,7 +413,8 @@ ProductDetail.propTypes = {
     readLessText: PropTypes.string.isRequired,
     readMoreText: PropTypes.string.isRequired,
     maxAllowedOrderQuantity: PropTypes.number,
-    maxAllowedOrderQuantityErrorMessage: PropTypes.string
+    maxAllowedOrderQuantityErrorMessage: PropTypes.string,
+    isDefaultOutletOrder: PropTypes.bool
 };
 
 export default ProductDetail;
