@@ -109,8 +109,6 @@ function ProductDetail(props) {
             unitPrice: product.price ? parseFloat(product.price.current).toFixed(2) : null,
             price: product.price ? parseFloat(product.price.current * quantity).toFixed(2) : null,
             currency: product.price ? product.price.currency : null,
-            deliveryFrom: moment(item.deliveryFrom).startOf("day"),
-            deliveryTo: moment(item.deliveryTo).startOf("day"),
             moreInfo: item.moreInfo,
             resetData: () => {
                 setIsModalOpen(false);
