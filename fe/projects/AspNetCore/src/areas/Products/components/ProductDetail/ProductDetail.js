@@ -109,8 +109,6 @@ function ProductDetail(props) {
             unitPrice: product.price ? parseFloat(product.price.current).toFixed(2) : null,
             price: product.price ? parseFloat(product.price.current * quantity).toFixed(2) : null,
             currency: product.price ? product.price.currency : null,
-            deliveryFrom: moment(item.deliveryFrom).startOf("day"),
-            deliveryTo: moment(item.deliveryTo).startOf("day"),
             moreInfo: item.moreInfo,
             resetData: () => {
                 setIsModalOpen(false);
@@ -255,8 +253,18 @@ function ProductDetail(props) {
                         }
                         <h1 className="title is-4 mt-1">{props.title}</h1>
                         <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
-                        {props.outletTitle &&
+                        {props.outletTitle && !props.price &&
                             <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>
+                        }
+                        {props.price &&
+                            <div className="product-detail__prices mt-3">
+                                <Price 
+                                    {...props.price}
+                                />
+                                {props.outletTitle && 
+                                    <div className="product-details__discount">({props.outletTitleLabel} {props.outletTitle})</div>
+                                }
+                            </div>
                         }
                         <div className="product-detail__availability mt-3">
                             {props.inStock && 
@@ -272,11 +280,6 @@ function ProductDetail(props) {
                                 />
                             }
                         </div>
-                        {props.price &&
-                            <Price 
-                                {...props.price}
-                            />
-                        }
                         {props.isAuthenticated &&
                             <div className="product-detail__add-to-cart-button">
                                 {props.isProductVariant ? (
@@ -345,6 +348,7 @@ function ProductDetail(props) {
                 }
                 <Modal
                     isOpen={isModalOpen}
+                    outletOrder={false}
                     setIsOpen={setIsModalOpen}
                     handleClose={handleCloseModal}
                     maxOutletValue={

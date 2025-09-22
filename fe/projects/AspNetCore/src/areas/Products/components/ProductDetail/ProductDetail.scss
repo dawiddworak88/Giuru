@@ -57,6 +57,15 @@
         }
     }
 
+    &__prices {
+        display: flex;
+        gap: 0.5rem;
+
+        &:has(.product-details__discount) .price {
+            padding-right: 0;
+        }
+    }
+
     &__mobile-gallery {         
         
         @media only screen and (min-width: $desktop) {                    

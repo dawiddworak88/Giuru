@@ -11,7 +11,7 @@ const Modal = (props) => {
     const [quantity, setQuantity] = useState(1);
     const [externalReference, setExternalReference] = useState("");
     const [moreInfo, setMoreInfo] = useState("");
-    const [isOutletOrder, setIsOutletOrder] = useState(false);
+    const [isOutletOrder, setIsOutletOrder] = useState(props.outletOrder || false);
 
     const handleAddItemToBasket = () => {
         const payload = {
@@ -26,8 +26,8 @@ const Modal = (props) => {
 
     useEffect(() => {
         setExternalReference("");
-        setMoreInfo("")
-        setIsOutletOrder(product ? product.inOutlet && !product.inStock : false);
+        setMoreInfo("");
+        setIsOutletOrder(product ? props.outletOrder : false);
         setQuantity(isOutletOrder && maxOutletValue == 0 ? 0 : 1);
     }, [isOpen])
 
@@ -80,19 +80,17 @@ const Modal = (props) => {
                                 <Checkbox
                                     checked={isOutletOrder}
                                     onChange={(e) => {
-                                        if (product.inOutlet && !product.inStock) {
-                                            setIsOutletOrder(true)
-                                        } else {
-                                            setIsOutletOrder(e.target.checked);
+                                        if (props.outletOrder) return;
+                                        
+                                        setIsOutletOrder(e.target.checked);
 
-                                            if (e.target.checked && (quantity > maxOutlet)) {
-                                                setQuantity(maxOutlet);
-                                            }
+                                        if (e.target.checked && (quantity > maxOutlet)) {
+                                            setQuantity(maxOutlet);
                                         }
                                     }} />
                             }
                             label={labels.outletProductLabel}
-                            disabled={product.inOutlet && !product.inStock}
+                            disabled={props.outletOrder}
                         />
                     </div> 
                 }
@@ -151,7 +149,8 @@ Modal.propTypes = {
     closeLabel: PropTypes.string,
     okLabel: PropTypes.string,
     title: PropTypes.string,
-    labels: PropTypes.object
+    labels: PropTypes.object,
+    outletOrder: PropTypes.bool
 }
 
 export default Modal;
