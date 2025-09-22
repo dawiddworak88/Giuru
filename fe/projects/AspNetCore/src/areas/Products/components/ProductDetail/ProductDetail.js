@@ -256,6 +256,16 @@ function ProductDetail(props) {
                         {props.outletTitle && !props.price &&
                             <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>
                         }
+                        {props.price &&
+                            <div className="product-detail__prices mt-3">
+                                <Price 
+                                    {...props.price}
+                                />
+                                {props.outletTitle && 
+                                    <div className="product-details__discount">({props.outletTitleLabel} {props.outletTitle})</div>
+                                }
+                            </div>
+                        }
                         <div className="product-detail__availability mt-3">
                             {props.inStock && 
                                 <Availability
@@ -270,16 +280,6 @@ function ProductDetail(props) {
                                 />
                             }
                         </div>
-                        {props.price &&
-                            <div className="product-detail__prices">
-                                <Price 
-                                    {...props.price}
-                                />
-                                {props.outletTitle && 
-                                    <div className="product-details__discount">({props.outletTitleLabel} {props.outletTitle})</div>
-                                }
-                            </div>
-                        }
                         {props.isAuthenticated &&
                             <div className="product-detail__add-to-cart-button">
                                 {props.isProductVariant ? (
