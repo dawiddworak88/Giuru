@@ -82,14 +82,10 @@ const Modal = (props) => {
                                     onChange={(e) => {
                                         if (props.outletOrder) return;
                                         
-                                        if (product.inOutlet) {
-                                            setIsOutletOrder(true)
-                                        } else {
-                                            setIsOutletOrder(e.target.checked);
+                                        setIsOutletOrder(e.target.checked);
 
-                                            if (e.target.checked && (quantity > maxOutlet)) {
-                                                setQuantity(maxOutlet);
-                                            }
+                                        if (e.target.checked && (quantity > maxOutlet)) {
+                                            setQuantity(maxOutlet);
                                         }
                                     }} />
                             }
