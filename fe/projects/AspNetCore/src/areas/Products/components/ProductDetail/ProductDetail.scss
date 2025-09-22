@@ -57,6 +57,11 @@
         }
     }
 
+    &__prices {
+        display: flex;
+        gap: 0.5rem;
+    }
+
     &__mobile-gallery {         
         
         @media only screen and (min-width: $desktop) {                    
