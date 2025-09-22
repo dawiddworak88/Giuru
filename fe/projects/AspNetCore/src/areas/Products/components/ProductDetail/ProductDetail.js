@@ -275,7 +275,7 @@ function ProductDetail(props) {
                                 <Price 
                                     {...props.price}
                                 />
-                                {props.outletTitle && !props.price &&
+                                {props.outletTitle && 
                                     <div className="product-details__discount">({props.outletTitleLabel} {props.outletTitle})</div>
                                 }
                             </div>
