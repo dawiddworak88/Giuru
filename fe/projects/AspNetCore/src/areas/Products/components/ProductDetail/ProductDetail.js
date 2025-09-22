@@ -348,6 +348,7 @@ function ProductDetail(props) {
                 }
                 <Modal
                     isOpen={isModalOpen}
+                    outletOrder={false}
                     setIsOpen={setIsModalOpen}
                     handleClose={handleCloseModal}
                     maxOutletValue={

@@ -26,7 +26,8 @@ const Modal = (props) => {
 
     useEffect(() => {
         setExternalReference("");
-        setMoreInfo("")
+        setMoreInfo("");
+        setIsOutletOrder(product ? props.outletOrder : false);
         setQuantity(isOutletOrder && maxOutletValue == 0 ? 0 : 1);
     }, [isOpen])
 
@@ -152,7 +153,8 @@ Modal.propTypes = {
     closeLabel: PropTypes.string,
     okLabel: PropTypes.string,
     title: PropTypes.string,
-    labels: PropTypes.object
+    labels: PropTypes.object,
+    outletOrder: PropTypes.bool
 }
 
 export default Modal;

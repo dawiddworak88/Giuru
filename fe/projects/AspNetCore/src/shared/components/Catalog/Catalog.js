@@ -255,7 +255,7 @@ function Catalog(props) {
             {props.modal &&
                 <Modal
                     isOpen={isModalOpen}
-                    outletOrder={props.isDefaultOutletOrder}
+                    outletOrder={props.isDefaultOutletOrder ?? false}
                     setIsOpen={setIsModalOpen}
                     maxOutletValue={
                         productVariant 
