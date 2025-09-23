@@ -46,34 +46,76 @@ namespace Catalog.Api.v1.Products.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Search(
             [FromBody] FiltersRequestModel filters,
+            string ids,
             Guid? sellerId,
             int? pageIndex,
             int? itemsPerPage,
             string orderBy)
         {
-            var serviceModel = new SearchProductsServiceModel
-            {
-                Filters = new SearchProductsFiltersServiceModel
-                {
-                    Category = filters.Category
-                },
-                PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage,
-                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                Language = CultureInfo.CurrentCulture.Name
-            };
+            var productIds = ids.ToEnumerableGuidIds();
 
-            var products = await _productsService.GetPagedResultsWithFilters(serviceModel);
-
-            if (products is not null)
+            if (productIds.OrEmptyIfNull().Any())
             {
-                var response = new PagedResultsWithFilters<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
+                var serviceModel = new SearchProductsByIdsServiceModel
                 {
-                    Data = products.Data.OrEmptyIfNull().Select(x => MapProductServiceModelToProductResponseModel(x)),
-                    Filters = products.Filters
+                    Ids = productIds,
+                    Filters = new SearchProductsFiltersServiceModel
+                    {
+                        Category = filters.Category,
+                        Shape = filters.Shape,
+                        Color = filters.Color
+                    },
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    OrderBy = orderBy,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = sellerId,
+                    Language = CultureInfo.CurrentCulture.Name
                 };
 
-                return Ok(response);
+                var products = await _productsService.GetPagedResultsWithFiltersByIds(serviceModel);
+
+                if (products is not null)
+                {
+                    var response = new PagedResultsWithFilters<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
+                    {
+                        Data = products.Data.OrEmptyIfNull().Select(x => MapProductServiceModelToProductResponseModel(x)),
+                        Filters = products.Filters
+                    };
+
+                    return Ok(response);
+                }
+            }
+            else
+            {
+                var serviceModel = new SearchProductsServiceModel
+                {
+                    Filters = new SearchProductsFiltersServiceModel
+                    {
+                        Category = filters.Category,
+                        Shape = filters.Shape,
+                        Color = filters.Color
+                    },
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    OrderBy = orderBy,
+                    Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = sellerId,
+                    Language = CultureInfo.CurrentCulture.Name
+                };
+
+                var products = await _productsService.GetPagedResultsWithFilters(serviceModel);
+
+                if (products is not null)
+                {
+                    var response = new PagedResultsWithFilters<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
+                    {
+                        Data = products.Data.OrEmptyIfNull().Select(x => MapProductServiceModelToProductResponseModel(x)),
+                        Filters = products.Filters
+                    };
+
+                    return Ok(response);
+                }
             }
 
             return default;

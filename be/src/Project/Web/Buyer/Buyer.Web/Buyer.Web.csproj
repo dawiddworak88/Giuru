@@ -39,6 +39,7 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\Media\Foundation.Media\Foundation.Media.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Prerendering\Foundation.Prerendering\Foundation.Prerendering.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Presentation\Foundation.Presentation\Foundation.Presentation.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\Search\Foundation.Search\Foundation.Search.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Security\Foundation.Security\Foundation.Security.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\PageContent\Foundation.PageContent\Foundation.PageContent.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Telemetry\Foundation.Telemetry\Foundation.Telemetry.csproj" />

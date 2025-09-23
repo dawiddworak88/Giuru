@@ -310,24 +310,65 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
             foreach (var aggregation in searchResponse.Aggregations)
             {
-                var filter = new Filter
+                if (aggregation.Key == "attributes" && aggregation.Value is SingleBucketAggregate nestedAggregation)
                 {
-                    Name = aggregation.Key,
-                    Values = new List<string>()
-                };
+                    foreach (var subAggregation in nestedAggregation)
+                    {
+                        if (subAggregation.Value is BucketAggregate bucketAgg)
+                        {
+                            var a = new Filter
+                            {
+                                Name = subAggregation.Key,
+                                Values = new List<string>()
+                            };
+
+                            foreach (var item in bucketAgg.Items)
+                            {
+                                if (item is KeyedBucket<object> keyedBucket)
+                                {
+                                    a.Values.Add(keyedBucket.Key.ToString());
+                                }
+                            }
+
+                            results.Add(a);
+                        }
+                    }
+
+                    continue;
+                }
 
                 if (aggregation.Value is BucketAggregate bucketAggregate)
                 {
+                    var filter = new Filter
+                    {
+                        Name = aggregation.Key,
+                        Values = new List<string>()
+                    };
+
                     foreach (var item in bucketAggregate.Items)
                     {
                         if (item is KeyedBucket<object> keyedBucket)
                         {
                             filter.Values.Add(keyedBucket.Key.ToString());
                         }
-                    }
-                }
 
-                results.Add(filter);
+                        if (item is RangeBucket rangeBucket)
+                        {
+                            var from = rangeBucket.From ?? 0;
+                            var to = rangeBucket.To ?? double.PositiveInfinity;
+
+                            var value = double.IsPositiveInfinity(to)
+                                    ? $"{from:0}+"
+                                    : $"{from:0}-{(to - 1):0}";
+
+                            
+
+                            filter.Values.Add(value);
+                        }
+                    }
+
+                    results.Add(filter);
+                }
             }
 
             return results;
@@ -335,7 +376,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
         public async Task<PagedResultsWithFilters<IEnumerable<ProductSearchModel>>> GetPagedResultsWithFilters(
             string langauge, 
-            Guid? sellerId, 
+            Guid? organisationId, 
             int? pageIndex, 
             int? itemsPerPage,
             string orderBy,
@@ -344,9 +385,9 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             var query = Query<ProductSearchModel>.Term(t => t.Language, langauge)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
-            if (sellerId.HasValue)
+            if (organisationId.HasValue)
             {
-                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(sellerId.Value));
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(organisationId.Value));
             }
             else
             {
@@ -364,18 +405,128 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 .From((pageIndex - 1) * itemsPerPage)
                 .Size(itemsPerPage)
                 .Query(q => query)
-                .PostFilter(fq => fq
-                    .Terms(t => t.Field("categoryName.keyword").Terms(filters.Category))
-                )
+                .PostFilter(fq =>
+                    fq.Terms(t => t.Field("categoryName.keyword").Terms(filters.Category)) ||
+                    fq.Nested(n => n
+                        .Path("productAttributes")
+                        .Query(nq => nq.Bool(b => b
+                            .Filter(
+                                fq => fq.Terms(t => t.Field("productAttributes.primaryColor.value.name.keyword").Terms(filters.Color)),
+                                fq => fq.Terms(t => t.Field("productAttributes.shape.value.name.keyword").Terms(filters.Shape))
+                            )
+
+                ))))
                 .Sort(s => Sorting<ProductSearchModel>(orderBy))
-                .Aggregations(
-                    a => a.Terms("category", t => t.Field("categoryName.keyword").Size(100))
-                ));
+                .Aggregations(a => a
+                    .Terms("category", t => t.Field("categoryName.keyword").Size(100))
+                    .Nested("attributes", n => n
+                        .Path("productAttributes")
+                        .Aggregations(aa => aa
+                            .Terms("color", tt => tt
+                                .Field("productAttributes.primaryColor.value.name.keyword")
+                                .Size(100)
+                            )
+                            .Terms("shape", tt => tt
+                                .Field("productAttributes.shape.value.name.keyword")
+                                .Size(100)
+                            )
+                            /*.Range("height", r => r.Field("productAttributes.height.value")
+                                .Ranges(
+                                    rr => rr.From(0).To(69),
+                                    rr => rr.From(70).To(79),
+                                    rr => rr.From(80).To(89),
+                                    rr => rr.From(90).To(99),
+                                    rr => rr.From(99)
+                                )
+                            )*/
+                        )
+                )));
 
 
             if (response.IsValid)
             {
                 return new PagedResultsWithFilters<IEnumerable<ProductSearchModel>>(response.Total, itemsPerPage.Value)
+                {
+                    Data = response.Documents,
+                    Filters = MapFilters(response)
+                };
+            }
+
+            return default;
+        }
+
+        public async Task<PagedResultsWithFilters<IEnumerable<ProductSearchModel>>> GetPagedResultsWithFilters(
+            string langauge, 
+            IEnumerable<Guid> ids, 
+            Guid? organisationId, 
+            string orderBy, 
+            QueryFilters filters)
+        {
+            var query = Query<ProductSearchModel>.Term(t => t.Language, langauge)
+                && Query<ProductSearchModel>.Term(t => t.IsActive, true);
+
+            if (organisationId.HasValue)
+            {
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(organisationId.Value));
+            }
+            else
+            {
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsPublished).Value(true));
+            }
+
+            var idsQuery = Query<ProductSearchModel>.MatchNone();
+
+            foreach (var id in ids)
+            {
+                idsQuery = idsQuery || Query<ProductSearchModel>.Term(t => t.Field(x => x.ProductId).Value(id));
+            }
+
+            query = query && idsQuery;
+
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(q => q
+                .TrackTotalHits()
+                .Query(q => query)
+                .PostFilter(fq => 
+                    fq.Terms(t => t.Field("categoryName.keyword").Terms(filters.Category)) ||
+                    fq.Nested(n => n
+                        .Path("productAttributes")
+                        .Query(nq => nq.Bool(b => b
+                            .Filter(
+                                fq => fq.Terms(t => t.Field("productAttributes.primaryColor.value.name.keyword").Terms(filters.Color)),
+                                fq => fq.Terms(t => t.Field("productAttributes.shape.value.name.keyword").Terms(filters.Shape))
+                            )
+
+                ))))
+                .Sort(s => Sorting<ProductSearchModel>(orderBy))
+                .Aggregations(a => a
+                    .Terms("category", t => t.Field("categoryName.keyword").Size(100))
+                    .Nested("attributes", n => n
+                        .Path("productAttributes")
+                        .Aggregations(aa => aa
+                            .Terms("color", tt => tt
+                                .Field("productAttributes.primaryColor.value.name.keyword")
+                                .Size(100)
+                            )
+                            .Terms("shape", tt => tt
+                                .Field("productAttributes.shape.value.name.keyword")
+                                .Size(100)
+                            )
+                            .Range("height", r => r.Field("productAttributes.height.value")
+                                .Ranges(
+                                    rr => rr.From(0).To(69),
+                                    rr => rr.From(70).To(79),
+                                    rr => rr.From(80).To(89),
+                                    rr => rr.From(90).To(99),
+                                    rr => rr.From(99)
+                                )
+                            )
+                        )
+                )));
+
+
+            if (response.IsValid)
+            {
+                return new PagedResultsWithFilters<IEnumerable<ProductSearchModel>>(response.Total, (int)response.Total)
                 {
                     Data = response.Documents,
                     Filters = MapFilters(response)

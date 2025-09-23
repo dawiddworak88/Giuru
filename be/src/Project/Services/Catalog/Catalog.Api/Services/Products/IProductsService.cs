@@ -22,5 +22,6 @@ namespace Catalog.Api.Services.Products
         void TriggerCatalogIndexRebuild(RebuildCatalogIndexServiceModel model);
         Task<PagedResults<IEnumerable<ProductFileServiceModel>>> GetProductFiles(GetProductFilesServiceModel model);
         Task<PagedResultsWithFilters<IEnumerable<ProductServiceModel>>> GetPagedResultsWithFilters(SearchProductsServiceModel model);
+        Task<PagedResultsWithFilters<IEnumerable<ProductServiceModel>>> GetPagedResultsWithFiltersByIds(SearchProductsByIdsServiceModel model);
     }
 }

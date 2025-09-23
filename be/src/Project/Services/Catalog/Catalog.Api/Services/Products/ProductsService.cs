@@ -574,5 +574,23 @@ namespace Catalog.Api.Services.Products
                 Filters = searchResults.Filters
             };
         }
+
+        public async Task<PagedResultsWithFilters<IEnumerable<ProductServiceModel>>> GetPagedResultsWithFiltersByIds(SearchProductsByIdsServiceModel model)
+        {
+            var searchResults = await _productSearchRepository.GetPagedResultsWithFilters(model.Language, model.Ids, model.OrganisationId, model.OrderBy, model.Filters);
+
+            var pageResullt = new PagedResults<IEnumerable<ProductSearchModel>>(searchResults.Total, searchResults.PageSize)
+            {
+                Data = searchResults.Data
+            };
+
+            var mappedPage = await MapToPageResultsAsync(pageResullt, model.Language, model.OrganisationId);
+
+            return new PagedResultsWithFilters<IEnumerable<ProductServiceModel>>(searchResults.Total, searchResults.PageSize)
+            {
+                Data = mappedPage.Data,
+                Filters = searchResults.Filters
+            };
+        }
     }
 }
