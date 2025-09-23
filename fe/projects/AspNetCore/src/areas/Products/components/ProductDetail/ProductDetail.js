@@ -257,14 +257,9 @@ function ProductDetail(props) {
                             <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>
                         }
                         {props.price &&
-                            <div className="product-detail__prices mt-3">
-                                <Price 
-                                    {...props.price}
-                                />
-                                {props.outletTitle && 
-                                    <div className="product-details__discount">({props.outletTitleLabel} {props.outletTitle})</div>
-                                }
-                            </div>
+                            <Price 
+                                {...props.price}
+                            />
                         }
                         <div className="product-detail__availability mt-3">
                             {props.inStock && 
@@ -274,10 +269,15 @@ function ProductDetail(props) {
                                 />
                             }
                             {props.inOutlet && 
-                                <Availability
-                                    label={props.inOutletLabel}
-                                    availableQuantity={props.availableOutletQuantity}
-                                />
+                                <div className="is-flex">
+                                    <Availability
+                                        label={props.inOutletLabel}
+                                        availableQuantity={props.availableOutletQuantity}
+                                    />
+                                    {props.outletTitle && 
+                                        <div className="product-details__discount ml-2">({props.outletTitleLabel} {props.outletTitle})</div>
+                                    }
+                                </div>
                             }
                         </div>
                         {props.isAuthenticated &&
