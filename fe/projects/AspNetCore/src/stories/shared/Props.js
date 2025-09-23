@@ -1,4 +1,6 @@
 export var header = {
+  getSuggestionsUrl: "#",
+  generalErrorMessage: "General error message",
   logo: {
     targetUrl: "/",
     logoAltLabel: "Logo",

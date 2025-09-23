@@ -1,4 +1,5 @@
-﻿using Foundation.Extensions.Exceptions;
+﻿using Foundation.EventBus.Abstractions;
+using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
@@ -6,6 +7,8 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Inventory.Api.Infrastructure;
 using Inventory.Api.Infrastructure.Entities;
+using Inventory.Api.IntegrationEvents;
+using Inventory.Api.IntegrationEventsModels;
 using Inventory.Api.ServicesModels.InventoryServiceModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -23,15 +26,18 @@ namespace Inventory.Api.Services.InventoryItems
     {
         private readonly InventoryContext _context;
         private readonly IStringLocalizer _inventoryLocalizer;
+        private readonly IEventBus _eventBus;
         private readonly ILogger<InventoryService> _logger;
 
         public InventoryService(
             InventoryContext context,
             IStringLocalizer<InventoryResources> inventoryLocalizer,
+            IEventBus eventBus,
             ILogger<InventoryService> logger)
         {
             _context = context;
             _inventoryLocalizer = inventoryLocalizer;
+            _eventBus = eventBus;
             _logger = logger;
         }
 
@@ -59,6 +65,20 @@ namespace Inventory.Api.Services.InventoryItems
             inventory.LastModifiedDate = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
+
+            var productAvailableQuantityUpdateMessage = new InventoryProductsAvailableQuantityUpdateIntegrationEvent
+            {
+                Products = new List<ProductAvailableQuantityUpdateEventModel>
+                {
+                    new ProductAvailableQuantityUpdateEventModel
+                    {
+                        ProductSku = product.Sku,
+                        AvailableQuantity = serviceModel.AvailableQuantity
+                    }
+                }
+            };
+
+            _eventBus.Publish(productAvailableQuantityUpdateMessage);
 
             return await this.GetAsync(new GetInventoryServiceModel { Id = inventory.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
@@ -95,12 +115,31 @@ namespace Inventory.Api.Services.InventoryItems
 
             await _context.SaveChangesAsync();
 
+            if (serviceModel.AvailableQuantity > 0)
+            {
+                var productAvailableQuantityUpdateMessage = new InventoryProductsAvailableQuantityUpdateIntegrationEvent
+                {
+                    Products = new List<ProductAvailableQuantityUpdateEventModel>
+                    {
+                        new ProductAvailableQuantityUpdateEventModel
+                        {
+                            ProductSku = product.Sku,
+                            AvailableQuantity = serviceModel.AvailableQuantity
+                        }
+                    }
+                };
+
+                _eventBus.Publish(productAvailableQuantityUpdateMessage);
+            }
+
             return await this.GetAsync(new GetInventoryServiceModel { Id = inventory.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
         public async Task SyncProductsInventories(UpdateProductsInventoryServiceModel model)
         {
             _logger.LogWarning($"Received inventory products for organisation {model.OrganisationId} with {model.InventoryItems.Count()} items");
+
+            var productsAvailableQuantityUpdates = new List<ProductAvailableQuantityUpdateEventModel>();
 
             foreach (var item in model.InventoryItems.OrEmptyIfNull())
             {
@@ -122,6 +161,12 @@ namespace Inventory.Api.Services.InventoryItems
                     inventoryProduct.AvailableQuantity = item.AvailableQuantity;
                     inventoryProduct.ExpectedDelivery = item.ExpectedDelivery;
                     inventoryProduct.LastModifiedDate = DateTime.UtcNow;
+
+                    productsAvailableQuantityUpdates.Add(new ProductAvailableQuantityUpdateEventModel
+                    {
+                        ProductSku = product.Sku,
+                        AvailableQuantity = item.AvailableQuantity
+                    });
                 }
                 else
                 {
@@ -155,10 +200,26 @@ namespace Inventory.Api.Services.InventoryItems
                         };
 
                         _context.Inventory.Add(inventoryItem.FillCommonProperties());
+
+                        productsAvailableQuantityUpdates.Add(new ProductAvailableQuantityUpdateEventModel
+                        {
+                            ProductSku = product.Sku,
+                            AvailableQuantity = item.AvailableQuantity
+                        });
                     }
                 }
 
                 await _context.SaveChangesAsync();
+            }
+
+            if (productsAvailableQuantityUpdates.Any())
+            {
+                var productAvailableQuantityUpdateMessage = new InventoryProductsAvailableQuantityUpdateIntegrationEvent
+                {
+                    Products = productsAvailableQuantityUpdates
+                };
+
+                _eventBus.Publish(productAvailableQuantityUpdateMessage);
             }
         }
 
@@ -479,6 +540,20 @@ namespace Inventory.Api.Services.InventoryItems
                 inventory.LastModifiedDate = DateTime.UtcNow;
 
                 await _context.SaveChangesAsync();
+
+                var productAvailableQuantityUpdateMessage = new InventoryProductsAvailableQuantityUpdateIntegrationEvent
+                {
+                    Products = new List<ProductAvailableQuantityUpdateEventModel>
+                    {
+                        new ProductAvailableQuantityUpdateEventModel
+                        {
+                            ProductSku = inventory.Product?.Sku,
+                            AvailableQuantity = productQuantity
+                        }
+                    }
+                };
+
+                _eventBus.Publish(productAvailableQuantityUpdateMessage);
             }
         }
 

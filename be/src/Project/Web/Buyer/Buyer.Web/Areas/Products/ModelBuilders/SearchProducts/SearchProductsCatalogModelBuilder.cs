@@ -5,6 +5,9 @@ using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ViewModels.SearchProducts;
 using Buyer.Web.Areas.Shared.Definitions.Products;
+using Buyer.Web.Shared.ModelBuilders.Catalogs;
+using Buyer.Web.Shared.ViewModels.Catalogs;
+using Buyer.Web.Shared.ViewModels.Filters;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.DomainModels.Prices;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
@@ -25,6 +28,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Foundation.GenericRepository.Definitions;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 {
@@ -34,6 +38,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> _sidebarModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> _modalModelBuilder;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<ProductResources> _productLocalizer;
         private readonly IProductsService _productsService;
         private readonly IOutletRepository _outletRepository;
         private readonly IInventoryRepository _inventoryRepository;
@@ -50,9 +55,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             IOutletRepository outletRepository,
             IInventoryRepository inventoryRepository,
             LinkGenerator linkGenerator,
+            IStringLocalizer<ProductResources> productLocalizer,
             IOptions<AppSettings> options,
             IPriceService priceService
-            )
+        )
         {
             _searchProductsCatalogModelBuilder = searchProductsCatalogModelBuilder;
             _productsService = productsService;
@@ -61,6 +67,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             _outletRepository = outletRepository;
             _inventoryRepository = inventoryRepository;
             _globalLocalizer = globalLocalizer;
+            _productLocalizer = productLocalizer;
             _linkGenerator = linkGenerator;
             _options = options;
             _priceService = priceService;
@@ -77,6 +84,20 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             viewModel.ItemsPerPage = ProductConstants.ProductsCatalogPaginationPageSize;
             viewModel.SearchTerm = componentModel.SearchTerm;
             viewModel.ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "SearchProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.FilterCollector = new FiltersCollectorViewModel
+            {
+                AllFilters = _productLocalizer.GetString("AllFilters"),
+                SortLabel = _productLocalizer.GetString("SortLabel"),
+                ClearAllFilters = _productLocalizer.GetString("ClearAllFilters"),
+                SeeResult = _productLocalizer.GetString("SeeResult"),
+                FiltersLabel = _productLocalizer.GetString("FiltersLabel"),
+                SortItems = new List<SortItemViewModel>
+                    {
+                        new SortItemViewModel { Label = _productLocalizer.GetString("SortDefault"), Key = SortingConstants.Default },
+                        new SortItemViewModel { Label = _productLocalizer.GetString("SortNewest"), Key = SortingConstants.Newest },
+                        new SortItemViewModel { Label = _productLocalizer.GetString("SortName"), Key = SortingConstants.Name }
+                    }
+            };
 
             var products = await _productsService.GetProductsAsync(
                 null,
@@ -87,7 +108,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 true,
                 PaginationConstants.DefaultPageIndex,
                 ProductConstants.ProductsCatalogPaginationPageSize,
-                componentModel.Token);
+                componentModel.Token,
+                SortingConstants.Default);
 
             if (products.Data is not null)
             {
