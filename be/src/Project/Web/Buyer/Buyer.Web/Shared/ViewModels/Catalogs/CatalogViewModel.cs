@@ -24,6 +24,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string PrimaryFabricLabel { get; set; }
         public bool ShowAddToCartButton { get; set; }
         public bool IsLoggedIn { get; set; }
+        public bool IsDefaultOutletOrder { get; set; }
         public string SignInUrl { get; set; }
         public string SignInToSeePricesLabel { get; set; }
         public string DisplayedRowsLabel { get; set; }
