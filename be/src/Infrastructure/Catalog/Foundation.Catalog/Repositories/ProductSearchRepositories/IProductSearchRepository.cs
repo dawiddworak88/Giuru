@@ -1,8 +1,10 @@
 ﻿using Foundation.Catalog.SearchModels.Products;
+using Foundation.Search.Models;
 using Foundation.GenericRepository.Paginations;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Foundation.Search.Paginations;
 
 namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 {
@@ -21,6 +23,13 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
         Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? organisationId, IEnumerable<Guid> ids, string orderBy);
         Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? organisationId, IEnumerable<string> skus, string orderBy);
         Task<PagedResults<IEnumerable<ProductSearchModel>>> GetProductVariantsAsync(Guid id, string language, Guid? organisationId);
+        Task<PagedResultsWithFilters<IEnumerable<ProductSearchModel>>> GetPagedResultsWithFilters(
+            string langauge,
+            Guid? sellerId,
+            int? pageIndex,
+            int? itemsPerPage,
+            string orderBy,
+            QueryFilters filters);
         Task<ProductSearchModel> GetByIdAsync(Guid id, string language, Guid? organisationId);
         Task<ProductSearchModel> GetBySkuAsync(string sku, string language, Guid? organisationId);
         Task<int?> CountAllAsync();

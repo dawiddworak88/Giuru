@@ -3,11 +3,14 @@ using Foundation.Catalog.SearchModels.Products;
 using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Search.Extensions;
+using Foundation.Search.Models;
+using Foundation.Search.Paginations;
 using Nest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Filter = Foundation.Search.Models.Filter;
 
 namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 {
@@ -299,6 +302,87 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             }
 
             return orderBy.ToElasticSortList<T>();
+        }
+
+        private List<Filter> MapFilters(ISearchResponse<ProductSearchModel> searchResponse)
+        {
+            var results = new List<Filter>();
+
+            foreach (var aggregation in searchResponse.Aggregations)
+            {
+                var filter = new Filter
+                {
+                    Name = aggregation.Key,
+                    Values = new List<string>()
+                };
+
+                if (aggregation.Value is BucketAggregate bucketAggregate)
+                {
+                    foreach (var item in bucketAggregate.Items)
+                    {
+                        if (item is KeyedBucket<object> keyedBucket)
+                        {
+                            filter.Values.Add(keyedBucket.Key.ToString());
+                        }
+                    }
+                }
+
+                results.Add(filter);
+            }
+
+            return results;
+        }
+
+        public async Task<PagedResultsWithFilters<IEnumerable<ProductSearchModel>>> GetPagedResultsWithFilters(
+            string langauge, 
+            Guid? sellerId, 
+            int? pageIndex, 
+            int? itemsPerPage,
+            string orderBy,
+            QueryFilters filters)
+        {
+            var query = Query<ProductSearchModel>.Term(t => t.Language, langauge)
+                && Query<ProductSearchModel>.Term(t => t.IsActive, true);
+
+            if (sellerId.HasValue)
+            {
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(sellerId.Value));
+            }
+            else
+            {
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsPublished).Value(true));
+            }
+
+            if (pageIndex.HasValue is false || itemsPerPage.HasValue is false)
+            {
+                pageIndex = Constants.DefaultPageIndex;
+                itemsPerPage = Constants.MaxItemsPerPageLimit;
+            }
+
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(q => q
+                .TrackTotalHits()
+                .From((pageIndex - 1) * itemsPerPage)
+                .Size(itemsPerPage)
+                .Query(q => query)
+                .PostFilter(fq => fq
+                    .Terms(t => t.Field("categoryName.keyword").Terms(filters.Category))
+                )
+                .Sort(s => Sorting<ProductSearchModel>(orderBy))
+                .Aggregations(
+                    a => a.Terms("category", t => t.Field("categoryName.keyword").Size(100))
+                ));
+
+
+            if (response.IsValid)
+            {
+                return new PagedResultsWithFilters<IEnumerable<ProductSearchModel>>(response.Total, itemsPerPage.Value)
+                {
+                    Data = response.Documents,
+                    Filters = MapFilters(response)
+                };
+            }
+
+            return default;
         }
     }
 }

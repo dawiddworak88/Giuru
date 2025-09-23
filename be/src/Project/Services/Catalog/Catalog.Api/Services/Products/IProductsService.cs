@@ -1,5 +1,6 @@
 ﻿using Catalog.Api.ServicesModels.Products;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Search.Paginations;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,5 +21,6 @@ namespace Catalog.Api.Services.Products
         IEnumerable<string> GetProductSuggestions(GetProductSuggestionsServiceModel model);
         void TriggerCatalogIndexRebuild(RebuildCatalogIndexServiceModel model);
         Task<PagedResults<IEnumerable<ProductFileServiceModel>>> GetProductFiles(GetProductFilesServiceModel model);
+        Task<PagedResultsWithFilters<IEnumerable<ProductServiceModel>>> GetPagedResultsWithFilters(SearchProductsServiceModel model);
     }
 }
