@@ -347,6 +347,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
                     foreach (var item in bucketAggregate.Items)
                     {
+                        Console.WriteLine(item.GetType().Name);
                         if (item is KeyedBucket<object> keyedBucket)
                         {
                             filter.Values.Add(keyedBucket.Key.ToString());
@@ -356,6 +357,8 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                         {
                             var from = rangeBucket.From ?? 0;
                             var to = rangeBucket.To ?? double.PositiveInfinity;
+
+                            Console.WriteLine($"From: {from}, To: {to}");
 
                             var value = double.IsPositiveInfinity(to)
                                     ? $"{from:0}+"
@@ -430,7 +433,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                                 .Field("productAttributes.shape.value.name.keyword")
                                 .Size(100)
                             )
-                            /*.Range("height", r => r.Field("productAttributes.height.value")
+                            .Range("height", r => r.Field("productAttributes.height.value")
                                 .Ranges(
                                     rr => rr.From(0).To(69),
                                     rr => rr.From(70).To(79),
@@ -438,7 +441,25 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                                     rr => rr.From(90).To(99),
                                     rr => rr.From(99)
                                 )
-                            )*/
+                            )
+                            .Range("width", r => r.Field("productAttributes.width.value")
+                                .Ranges(
+                                    rr => rr.From(0).To(99),
+                                    rr => rr.From(100).To(149),
+                                    rr => rr.From(150).To(199),
+                                    rr => rr.From(200).To(249),
+                                    rr => rr.From(250)
+                                )
+                            )
+                            .Range("depth", r => r.Field("productAttributes.depth.value")
+                                .Ranges(
+                                    rr => rr.From(0).To(79),
+                                    rr => rr.From(80).To(84),
+                                    rr => rr.From(85).To(89),
+                                    rr => rr.From(90).To(94),
+                                    rr => rr.From(95)
+                                )
+                            )
                         )
                 )));
 
@@ -518,6 +539,24 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                                     rr => rr.From(80).To(89),
                                     rr => rr.From(90).To(99),
                                     rr => rr.From(99)
+                                )
+                            )
+                            .Range("width", r => r.Field("productAttributes.width.value")
+                                .Ranges(
+                                    rr => rr.From(0).To(99),
+                                    rr => rr.From(100).To(149),
+                                    rr => rr.From(150).To(199),
+                                    rr => rr.From(200).To(249),
+                                    rr => rr.From(250)
+                                )
+                            )
+                            .Range("depth", r => r.Field("productAttributes.depth.value")
+                                .Ranges(
+                                    rr => rr.From(0).To(79),
+                                    rr => rr.From(80).To(84),
+                                    rr => rr.From(85).To(89),
+                                    rr => rr.From(90).To(94),
+                                    rr => rr.From(95)
                                 )
                             )
                         )
