@@ -328,6 +328,18 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                                 {
                                     a.Values.Add(keyedBucket.Key.ToString());
                                 }
+
+                                if (item is RangeBucket rangeBucket)
+                                {
+                                    var from = rangeBucket.From ?? 0;
+                                    var to = rangeBucket.To ?? double.PositiveInfinity;
+
+                                    var value = double.IsPositiveInfinity(to)
+                                            ? $"{from:0}+"
+                                            : $"{from:0}-{(to - 1):0}";
+
+                                    a.Values.Add(value);
+                                }
                             }
 
                             results.Add(a);
@@ -347,26 +359,9 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
                     foreach (var item in bucketAggregate.Items)
                     {
-                        Console.WriteLine(item.GetType().Name);
                         if (item is KeyedBucket<object> keyedBucket)
                         {
                             filter.Values.Add(keyedBucket.Key.ToString());
-                        }
-
-                        if (item is RangeBucket rangeBucket)
-                        {
-                            var from = rangeBucket.From ?? 0;
-                            var to = rangeBucket.To ?? double.PositiveInfinity;
-
-                            Console.WriteLine($"From: {from}, To: {to}");
-
-                            var value = double.IsPositiveInfinity(to)
-                                    ? $"{from:0}+"
-                                    : $"{from:0}-{(to - 1):0}";
-
-                            
-
-                            filter.Values.Add(value);
                         }
                     }
 
@@ -415,10 +410,23 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                         .Query(nq => nq.Bool(b => b
                             .Filter(
                                 fq => fq.Terms(t => t.Field("productAttributes.primaryColor.value.name.keyword").Terms(filters.Color)),
-                                fq => fq.Terms(t => t.Field("productAttributes.shape.value.name.keyword").Terms(filters.Shape))
+                                fq => fq.Terms(t => t.Field("productAttributes.shape.value.name.keyword").Terms(filters.Shape)),
+                                fq => nq.Bool(b2 => b2
+                                    .Should(BuildRangeQueries(filters.Height, "productAttributes.height.value").ToArray())
+                                    .MinimumShouldMatch(1)
+                                ),
+                                fq => nq.Bool(b2 => b2
+                                    .Should(BuildRangeQueries(filters.Width, "productAttributes.width.value").ToArray())
+                                    .MinimumShouldMatch(1)
+                                ),
+                                fq => nq.Bool(b2 => b2
+                                    .Should(BuildRangeQueries(filters.Depth, "productAttributes.depth.value").ToArray())
+                                    .MinimumShouldMatch(1)
+                                )
                             )
-
-                ))))
+                        )
+                    )
+                ))
                 .Sort(s => Sorting<ProductSearchModel>(orderBy))
                 .Aggregations(a => a
                     .Terms("category", t => t.Field("categoryName.keyword").Size(100))
@@ -514,10 +522,23 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                         .Query(nq => nq.Bool(b => b
                             .Filter(
                                 fq => fq.Terms(t => t.Field("productAttributes.primaryColor.value.name.keyword").Terms(filters.Color)),
-                                fq => fq.Terms(t => t.Field("productAttributes.shape.value.name.keyword").Terms(filters.Shape))
+                                fq => fq.Terms(t => t.Field("productAttributes.shape.value.name.keyword").Terms(filters.Shape)),
+                                fq => nq.Bool(b2 => b2
+                                    .Should(BuildRangeQueries(filters.Height, "productAttributes.height.value").ToArray())
+                                    .MinimumShouldMatch(1)
+                                ),
+                                fq => nq.Bool(b2 => b2
+                                    .Should(BuildRangeQueries(filters.Width, "productAttributes.width.value").ToArray())
+                                    .MinimumShouldMatch(1)
+                                ),
+                                fq => nq.Bool(b2 => b2
+                                    .Should(BuildRangeQueries(filters.Depth, "productAttributes.depth.value").ToArray())
+                                    .MinimumShouldMatch(1)
+                                )
                             )
-
-                ))))
+                        )
+                    )
+                ))
                 .Sort(s => Sorting<ProductSearchModel>(orderBy))
                 .Aggregations(a => a
                     .Terms("category", t => t.Field("categoryName.keyword").Size(100))
@@ -573,6 +594,48 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             }
 
             return default;
+        }
+
+        private IEnumerable<QueryContainer> BuildRangeQueries(IEnumerable<string>? ranges, string field)
+        {
+            var result = new List<QueryContainer>();
+
+            if (ranges == null)
+                return result;
+
+            foreach (var text in ranges)
+            {
+                if (string.IsNullOrWhiteSpace(text)) continue;
+
+                double gte;
+                double? lt;
+
+                if (text.EndsWith("+"))
+                {
+                    if (!double.TryParse(text.TrimEnd('+'), out gte)) continue;
+                    lt = null;
+                }
+                else
+                {
+                    var parts = text.Split('-');
+
+                    if (parts.Length != 2) continue;
+
+                    if (!double.TryParse(parts[0], out gte)) continue;
+                    if (!double.TryParse(parts[1], out var to)) continue;
+
+                    lt = to + 1;
+                }
+
+                result.Add(new NumericRangeQuery
+                {
+                    Field = field,
+                    GreaterThanOrEqualTo = gte,
+                    LessThan = lt
+                });
+            }
+
+            return result;
         }
     }
 }
