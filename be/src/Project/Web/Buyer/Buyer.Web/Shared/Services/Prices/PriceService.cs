@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Shared.Services.Prices
@@ -77,6 +78,7 @@ namespace Buyer.Web.Shared.Services.Prices
             IEnumerable<PriceProduct> products,
             PriceClient client)
         {
+            Console.WriteLine(JsonSerializer.Serialize(client));
             if (!CanSeePrice(client?.Id))
             {
                 return Enumerable.Empty<Price>();

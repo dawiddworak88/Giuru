@@ -7,6 +7,7 @@ using Seller.Web.Shared.DomainModels.Prices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Shared.Services.Prices
@@ -74,6 +75,8 @@ namespace Seller.Web.Shared.Services.Prices
             IEnumerable<PriceProduct> products,
             PriceClient client)
         {
+            Console.WriteLine(JsonSerializer.Serialize(client));
+
             var productList = (products ?? Enumerable.Empty<PriceProduct>()).ToList();
             var result = new Price[productList.Count];
 
