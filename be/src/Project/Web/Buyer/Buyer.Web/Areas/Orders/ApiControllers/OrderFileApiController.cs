@@ -168,7 +168,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     continue;
                 }
 
-                var availableStock = stockByProductId.GetValueOrDefault(product.Id);
+                var availableStock = stockByProductId.GetValueOrDefault(product.Id) ?? 0;
 
                 var stockQuantity = Math.Min(orderLine.Quantity, (double)availableStock);
                 var quantity = orderLine.Quantity - stockQuantity;
@@ -177,9 +177,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 var pictureUrl = firstImage != Guid.Empty
                     ? _mediaService.GetMediaUrl(firstImage, OrdersConstants.Basket.BasketProductImageMaxWidth)
                     : null;
-
-                var unitPrice = price?.CurrentPrice ?? 0m;
-                var totalPrice = unitPrice * (decimal)orderLine.Quantity;
 
                 var basketItem = new BasketItem
                 {
@@ -190,11 +187,17 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     Quantity = quantity,
                     StockQuantity = stockQuantity,
                     ExternalReference = orderLine.ExternalReference,
-                    MoreInfo = orderLine.MoreInfo,
-                    UnitPrice = unitPrice,
-                    Price = totalPrice,
-                    Currency = price?.CurrencyCode ?? string.Empty,
+                    MoreInfo = orderLine.MoreInfo
                 };
+
+                if (price is not null)
+                {
+                    var totalPrice = price.CurrentPrice * (decimal)orderLine.Quantity;
+
+                    basketItem.UnitPrice = price.CurrentPrice;
+                    basketItem.Price = totalPrice;
+                    basketItem.Currency = price.CurrencyCode;
+                }
 
                 basketItems.Add(basketItem);
             }
