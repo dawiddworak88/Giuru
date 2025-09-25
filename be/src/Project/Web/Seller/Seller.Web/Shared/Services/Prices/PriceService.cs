@@ -75,8 +75,6 @@ namespace Seller.Web.Shared.Services.Prices
             IEnumerable<PriceProduct> products,
             PriceClient client)
         {
-            Console.WriteLine(JsonSerializer.Serialize(client));
-
             var productList = (products ?? Enumerable.Empty<PriceProduct>()).ToList();
             var result = new Price[productList.Count];
 
@@ -319,7 +317,7 @@ namespace Seller.Web.Shared.Services.Prices
                     });
                 }
             }
-
+            Console.WriteLine(JsonSerializer.Serialize(priceDrivers));
             return priceDrivers;
         }
     }

@@ -78,7 +78,7 @@ namespace Buyer.Web.Shared.Services.Prices
             IEnumerable<PriceProduct> products,
             PriceClient client)
         {
-            Console.WriteLine(JsonSerializer.Serialize(client));
+            Console.WriteLine(JsonSerializer.Serialize(products));
             if (!CanSeePrice(client?.Id))
             {
                 return Enumerable.Empty<Price>();
@@ -344,7 +344,7 @@ namespace Buyer.Web.Shared.Services.Prices
                     });
                 }
             }
-
+            Console.WriteLine(JsonSerializer.Serialize(priceDrivers));
             return priceDrivers;
         }
     }
