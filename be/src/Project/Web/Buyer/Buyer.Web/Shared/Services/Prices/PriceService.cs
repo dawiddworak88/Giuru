@@ -78,7 +78,6 @@ namespace Buyer.Web.Shared.Services.Prices
             IEnumerable<PriceProduct> products,
             PriceClient client)
         {
-            Console.WriteLine(JsonSerializer.Serialize(products));
             if (!CanSeePrice(client?.Id))
             {
                 return Enumerable.Empty<Price>();
