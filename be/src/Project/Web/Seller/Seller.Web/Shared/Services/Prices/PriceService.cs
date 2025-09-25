@@ -318,7 +318,7 @@ namespace Seller.Web.Shared.Services.Prices
                     });
                 }
             }
-            Console.WriteLine(JsonSerializer.Serialize(priceDrivers));
+
             return priceDrivers;
         }
     }
