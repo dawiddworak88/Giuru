@@ -344,7 +344,7 @@ namespace Buyer.Web.Shared.Services.Prices
                     });
                 }
             }
-            Console.WriteLine(JsonSerializer.Serialize(priceDrivers));
+
             return priceDrivers;
         }
     }
