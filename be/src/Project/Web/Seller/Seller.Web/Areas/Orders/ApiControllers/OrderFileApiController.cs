@@ -75,6 +75,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             IInventoryRepository inventoryRepository,
             ILogger<OrderFileApiController> logger,
             IStringLocalizer<OrderResources> orderLocalizer,
+            IPriceService priceService,
+            IProductsService productsService,
+            IProductColorsService productColorsService,
             IOptions<AppSettings> options,
             IClientsRepository clientsRepository,
             ICountriesRepository countriesRepository,
@@ -92,6 +95,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             _ordersRepository = ordersRepository;
             _inventoryRepository = inventoryRepository;
             _orderLocalizer = orderLocalizer;
+            _priceService = priceService;
+            _productsService = productsService;
+            _productColorsService = productColorsService;
             _options = options;
             _clientsRepository = clientsRepository;
             _countriesRepository = countriesRepository;
