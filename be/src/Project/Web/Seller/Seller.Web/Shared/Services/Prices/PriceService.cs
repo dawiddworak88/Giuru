@@ -75,6 +75,7 @@ namespace Seller.Web.Shared.Services.Prices
             IEnumerable<PriceProduct> products,
             PriceClient client)
         {
+            Console.WriteLine(JsonSerializer.Serialize(products));
             var productList = (products ?? Enumerable.Empty<PriceProduct>()).ToList();
             var result = new Price[productList.Count];
 
