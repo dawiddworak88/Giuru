@@ -24,6 +24,7 @@ using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ComponentModels;
 using Foundation.Extensions.ExtensionMethods;
+using System.Text.Json;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
@@ -122,6 +123,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                                 DeliveryZipCode = componentModel.DeliveryZipCode
                             });
                     }
+
+                    Console.WriteLine(JsonSerializer.Serialize(prices));
 
                     for (int i = 0; i < products.Data.Count(); i++)
                     {
