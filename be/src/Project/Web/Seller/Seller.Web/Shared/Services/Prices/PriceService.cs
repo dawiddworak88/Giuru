@@ -35,7 +35,8 @@ namespace Seller.Web.Shared.Services.Prices
             PriceClient client)
         {
             if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
-                string.IsNullOrWhiteSpace(product.FabricsGroup))
+                string.IsNullOrWhiteSpace(product.FabricsGroup) ||
+                !CanSeePrice(client?.Id))
             {
                 return null;
             }
@@ -76,6 +77,11 @@ namespace Seller.Web.Shared.Services.Prices
             IEnumerable<PriceProduct> products,
             PriceClient client)
         {
+            if (!CanSeePrice(client?.Id))
+            {
+                return Enumerable.Empty<Price>();
+            }
+
             var productList = (products ?? Enumerable.Empty<PriceProduct>()).ToList();
             var result = new Price[productList.Count];
 
@@ -331,6 +337,23 @@ namespace Seller.Web.Shared.Services.Prices
             }
 
             return priceDrivers;
+        }
+
+        private bool CanSeePrice(Guid? priceClientId)
+        {
+            if (string.IsNullOrWhiteSpace(_options.Value.EnablePricesForClients))
+            {
+                return true;
+            }
+
+            if (!priceClientId.HasValue)
+            {
+                return false;
+            }
+
+            var allowedClients = _options.Value.EnablePricesForClients.Split('&');
+
+            return allowedClients.Contains(priceClientId.ToString());
         }
     }
 }
