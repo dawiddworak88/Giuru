@@ -36,7 +36,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Orders.ApiControllers
@@ -158,8 +157,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                         DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
                     });
             }
-
-            Console.WriteLine(JsonSerializer.Serialize(prices));
 
             var linesWithPrices = importedOrderLines.OrEmptyIfNull().Zip(prices);
 
