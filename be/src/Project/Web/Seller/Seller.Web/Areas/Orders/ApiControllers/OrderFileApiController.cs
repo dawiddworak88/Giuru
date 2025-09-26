@@ -38,6 +38,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace Seller.Web.Areas.Orders.ApiControllers
 {
@@ -204,6 +205,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                         DeliveryZipCode = deliveryZipCode
                     });
             }
+
+            Console.WriteLine(JsonSerializer.Serialize(prices));
 
             var linesWithPrices = importedOrderLines.OrEmptyIfNull().Zip(prices);
 
