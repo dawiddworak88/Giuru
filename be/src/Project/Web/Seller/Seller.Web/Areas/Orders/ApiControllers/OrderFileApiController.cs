@@ -205,17 +205,18 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     });
             }
 
-            var linesWithPrices = importedOrderLines.OrEmptyIfNull().Zip(prices);
+            var productsWithPrices = products.OrEmptyIfNull().Zip(prices);
 
-            foreach (var (orderLine, price) in linesWithPrices)
+            foreach (var (product, price) in productsWithPrices)
             {
-                if (!productBySku.TryGetValue(orderLine.Sku, out var product) || product == null)
+                var availableStock = stockByProductId.GetValueOrDefault(product.Id) ?? 0;
+
+                var orderLine = importedOrderLines.FirstOrDefault(x => x.Sku == product.Sku);
+
+                if (orderLine is null)
                 {
-                    _logger.LogError($"Product for SKU {orderLine.Sku} and language {language} couldn't be found.");
                     continue;
                 }
-
-                var availableStock = stockByProductId.GetValueOrDefault(product.Id) ?? 0;
 
                 var stockQuantity = Math.Min(orderLine.Quantity, (double)availableStock);
                 var quantity = orderLine.Quantity - stockQuantity;
