@@ -8,7 +8,7 @@ namespace Basket.Api.ServicesModelsValidators
 {
     public class UpdateBasketModelValidator : BaseServiceModelValidator<UpdateBasketServiceModel>
     {
-        public UpdateBasketModelValidator()
+        public UpdateBasketModelValidator(int? maxAllowedOrderQuantity)
         {
             this.RuleFor(x => x.Id).NotNull().NotEmpty();
             this.RuleFor(x => x.Items).Custom((items, context) => {
@@ -33,9 +33,15 @@ namespace Basket.Api.ServicesModelsValidators
                         }
 
                         var totalQuantity = item.Quantity + item.StockQuantity + item.OutletQuantity;
+
                         if (totalQuantity <= 0)
                         {
                             context.AddFailure("Total quantity must be greater than 0");
+                        }
+
+                        if (maxAllowedOrderQuantity.HasValue && totalQuantity > maxAllowedOrderQuantity.Value)
+                        {
+                            context.AddFailure($"Total quantity cannot exceed {maxAllowedOrderQuantity.Value}");
                         }
                     }
                 }

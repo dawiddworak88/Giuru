@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Shared.Definitions.Products;
-using Buyer.Web.Areas.Products.Repositories.Products;
+﻿using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.ComponentModels.Files;
 using Buyer.Web.Shared.ViewModels.Files;
@@ -25,15 +24,27 @@ using Foundation.PageContent.Definitions;
 using Foundation.Media.Services.MediaServices;
 using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Repositories.Media;
+using Buyer.Web.Shared.Services.Prices;
+using System;
+using Buyer.Web.Shared.DomainModels.Prices;
+using Microsoft.Extensions.Options;
+using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Areas.Products.Repositories;
+using Buyer.Web.Areas.Products.Services.ProductColors;
+using Buyer.Web.Shared.ViewModels.Toasts;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
-    public class ProductDetailModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel>
+    public class ProductDetailModelBuilder : IAsyncComponentModelBuilder<PriceComponentModel, ProductDetailViewModel>
     {
         private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> _filesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> _sidebarModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> _modalModelBuilder;
+        private readonly IModelBuilder<SuccessAddProductToBasketViewModel> _toastSuccessAddProductToBasket;
         private readonly IProductsRepository _productsRepository;
+        private readonly IOutletRepository _outletRepository;
         private readonly IStringLocalizer<InventoryResources> _inventoryResources;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<OrderResources> _orderResources;
@@ -42,12 +53,18 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
         private readonly IMediaItemsRepository _mediaItemsRepository;
+        private readonly IPriceService _priceService;
+        private readonly IOptions<AppSettings> _options;
+        private readonly IProductsService _productsService;
+        private readonly IProductColorsService _productColorsService;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
+            IModelBuilder<SuccessAddProductToBasketViewModel> toastSuccessAddProductToBasket,
             IProductsRepository productsRepository,
+            IOutletRepository outletRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             IStringLocalizer<InventoryResources> inventoryResources,
@@ -55,12 +72,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IMediaService mediaService,
             IBasketService basketService,
             LinkGenerator linkGenerator,
-            IMediaItemsRepository mediaItemsRepository)
+            IMediaItemsRepository mediaItemsRepository,
+            IPriceService priceService,
+            IOptions<AppSettings> options,
+            IProductsService productsService,
+            IProductColorsService productColorsService)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
             _globalLocalizer = globalLocalizer;
             _productLocalizer = productLocalizer;
+            _outletRepository = outletRepository;
             _mediaService = mediaService;
             _sidebarModelBuilder = sidebarModelBuilder;
             _inventoryResources = inventoryResources;
@@ -68,10 +90,15 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _basketService = basketService;
             _orderResources = orderResources;
             _modalModelBuilder = modalModelBuilder;
+            _toastSuccessAddProductToBasket = toastSuccessAddProductToBasket;
             _mediaItemsRepository = mediaItemsRepository;
+            _priceService = priceService;
+            _options = options;
+            _productsService = productsService;
+            _productColorsService = productColorsService;
         }
 
-        public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<ProductDetailViewModel> BuildModelAsync(PriceComponentModel componentModel)
         {
             var viewModel = new ProductDetailViewModel
             {
@@ -80,7 +107,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 IsAuthenticated = componentModel.IsAuthenticated,
                 ProductInformationLabel = _productLocalizer.GetString("ProductInformation"),
                 PricesLabel = _globalLocalizer.GetString("Prices"),
-                SuccessfullyAddedProduct = _globalLocalizer.GetString("SuccessfullyAddedProduct"),
                 QuantityErrorMessage = _globalLocalizer.GetString("QuantityErrorMessage"),
                 SignInToSeePricesLabel = _globalLocalizer.GetString("SignInToSeePrices"),
                 SignInUrl = "#",
@@ -98,7 +124,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 ReadMoreText = _globalLocalizer.GetString("ReadMore"),
                 ReadLessText = _globalLocalizer.GetString("ReadLess"),
                 SeeMoreText = _globalLocalizer.GetString("SeeMoreText"),
-                SeeLessText = _globalLocalizer.GetString("SeeLessText")
+                SeeLessText = _globalLocalizer.GetString("SeeLessText"),
+                MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
+                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity"),
+                GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity")
             };
 
             var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
@@ -114,6 +144,62 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 viewModel.Sku = product.Sku;
                 viewModel.IsProductVariant = product.PrimaryProductId.HasValue;
                 viewModel.Features = product.ProductAttributes?.Select(x => new ProductFeatureViewModel { Key = x.Name, Value = string.Join(", ", x.Values.OrEmptyIfNull()) });
+                viewModel.ToastSuccessAddProductToBasket = _toastSuccessAddProductToBasket.BuildModel();
+
+                var outlet = await _productsRepository.GetProductOutletAsync(componentModel.Id);
+
+                if (outlet is not null && outlet.AvailableQuantity.HasValue && outlet.AvailableQuantity.Value > 0)
+                {
+                    viewModel.InOutlet = true;
+                    viewModel.OutletTitle = outlet.Title;
+                    viewModel.AvailableOutletQuantity = outlet.AvailableQuantity;
+                    viewModel.ExpectedOutletDelivery = outlet.ExpectedDelivery;
+                }
+
+                if (product.PrimaryProductId.HasValue &&
+                    string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                {
+                    var price = await _priceService.GetPrice(
+                        _options.Value.GrulaAccessToken,
+                        DateTime.UtcNow,
+                        new PriceProduct
+                        {
+                            PrimarySku = product.PrimaryProductSku,
+                            FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
+                            SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
+                            PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                            Size = _productsService.GetSize(product.ProductAttributes),
+                            PointsOfLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
+                            LampshadeType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
+                            LampshadeSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
+                            LinearLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                            Mirror = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                            Shape = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
+                            PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
+                            SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                            ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
+                        },
+                        new PriceClient
+                        {
+                            Id = componentModel.ClientId,
+                            Name = componentModel.Name,
+                            CurrencyCode = componentModel.CurrencyCode,
+                            ExtraPacking = componentModel.ExtraPacking,
+                            PaletteLoading = componentModel.PaletteLoading,
+                            Country = componentModel.Country,
+                            DeliveryZipCode = componentModel.DeliveryZipCode
+                        });
+
+                    if (price is not null)
+                    {
+                        viewModel.Price = new ProductPriceViewModel
+                        {
+                            Current = price.CurrentPrice,
+                            Currency = price.CurrencyCode,
+                        };
+                    }
+                }
 
                 var imagesMediaItems = await _mediaItemsRepository.GetMediaItemsAsync(
                     componentModel.Token,
@@ -179,16 +265,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     viewModel.RestockableInDaysLabel = _inventoryResources.GetString("RestockableInDaysLabel");
                 }
 
-                var outlet = await _productsRepository.GetProductOutletAsync(componentModel.Id);
-
-                if (outlet is not null && outlet.AvailableQuantity.HasValue && outlet.AvailableQuantity.Value > 0)
-                {
-                    viewModel.InOutlet = true;
-                    viewModel.OutletTitle = outlet.Title;
-                    viewModel.AvailableOutletQuantity = outlet.AvailableQuantity;
-                    viewModel.ExpectedOutletDelivery = outlet.ExpectedDelivery;
-                }
-
                 if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
                 {
                     var basketItems = await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
@@ -204,10 +280,58 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                     if (productVariants != null)
                     {
+                        var outletProductVariants = await _outletRepository.GetOutletProductsByProductsIdAsync(componentModel.Token, componentModel.Language, productVariants.Data.Select(x => x.Id));
+
                         var carouselItems = new List<CarouselGridCarouselItemViewModel>();
 
-                        foreach (var productVariant in productVariants.Data.OrEmptyIfNull())
+                        var prices = Enumerable.Empty<Price>();
+
+                        if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                         {
+                            var priceProducts = productVariants.Data.Select(async x => new PriceProduct
+                            {
+                                PrimarySku = x.PrimaryProductSku,
+                                FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                                ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
+                                SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
+                                PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                                Size = _productsService.GetSize(x.ProductAttributes),
+                                PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
+                                LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
+                                LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
+                                LinearLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                                Mirror = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                                Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
+                                PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
+                                SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                                ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
+                            });
+
+                            prices = await _priceService.GetPrices(
+                               _options.Value.GrulaAccessToken,
+                               DateTime.UtcNow,
+                               await Task.WhenAll(priceProducts),
+                               new PriceClient
+                               {
+                                   Id = componentModel.ClientId,
+                                   Name = componentModel.Name,
+                                   CurrencyCode = componentModel.CurrencyCode,
+                                   ExtraPacking = componentModel.ExtraPacking,
+                                   PaletteLoading = componentModel.PaletteLoading,
+                                   Country = componentModel.Country,
+                                   DeliveryZipCode = componentModel.DeliveryZipCode
+                               });
+                        }
+
+                        for (var i = 0; i < productVariants.Data.Count(); i++) 
+                        {
+                            var productVariant = productVariants.Data.ElementAtOrDefault(i);
+
+                            if (productVariant is null)
+                            {
+                                continue;
+                            }  
+
                             var carouselItem = new CarouselGridCarouselItemViewModel
                             {
                                 Id = productVariant.Id,
@@ -216,6 +340,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 ImageAlt = productVariant.Name,
                                 Url = _linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id })
                             };
+
+                            var productVariantPrice = prices.ElementAtOrDefault(i);
+
+                            if (productVariantPrice is not null)
+                            {
+                                carouselItem.Price = new CarouselGridPriceViewModel
+                                {
+                                    Current = productVariantPrice.CurrentPrice,
+                                    Currency = productVariantPrice.CurrencyCode
+                                };
+                            }
 
                             if (productVariant.Images != null && productVariant.Images.Any())
                             {

@@ -1,3 +1,6 @@
+@import "../Price/Price.scss";
+@import "../Availability/Availability.scss";
+
 .sidebar-list {
     width: 450px;
     padding: 0 !important;
@@ -106,25 +109,12 @@
         max-width: 15.625rem;
         flex-direction: column;
 
-        a {
-            display: inline-grid;
+        .price {
+            margin-top: 0.5rem;
         }
 
-        .stock-details {
-            margin-top: 0.625rem;
-            margin-bottom: 0.5rem;
-
-            .stock {
-                color: $greenonion;
-                font-size: 0.8rem;
-                font-weight: 600;
-            }
-
-            .expected-delivery {
-                color: $greenonion;
-                font-size: 0.7rem;
-                font-weight: 600;
-            }
+        a {
+            display: inline-grid;
         }
         
         .attribute {

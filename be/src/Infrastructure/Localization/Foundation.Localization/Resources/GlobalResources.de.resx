@@ -430,7 +430,7 @@
     <value>Stoff</value>
   </data>
   <data name="SuccessfullyAddedProduct" xml:space="preserve">
-    <value>Das Produkt wurde erfolgreich hinzugefügt</value>
+    <value>Das Produkt wurde erfolgreich hinzugefügt.</value>
   </data>
   <data name="Catalog" xml:space="preserve">
     <value>Katalog</value>
@@ -794,5 +794,26 @@
   </data>
   <data name="ClientApprovals" xml:space="preserve">
     <value>Zustimmungen</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Preis</value>
+  </data>
+  <data name="UnitPrice" xml:space="preserve">
+    <value>Stückpreis</value>
+  </data>
+  <data name="MaxAllowedOrderQuantity" xml:space="preserve">
+    <value>Erlaubte Mengengrenze überschritten</value>
+  </data>
+  <data name="NoFilesDownloadedError" xml:space="preserve">
+    <value>Couldn't download any file.</value>
+  </data>
+  <data name="SomeFilesNotDownloadedError" xml:space="preserve">
+    <value>Some files weren't downloaded.</value>
+  </data>
+  <data name="ShowText" xml:space="preserve">
+    <value>Anzeigen</value>
+  </data>  
+  <data name="MinOrderQuantity" xml:space="preserve">
+    <value>Mindestbestellmenge ist 1</value>
   </data>
 </root>

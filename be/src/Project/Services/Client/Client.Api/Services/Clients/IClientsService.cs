@@ -9,6 +9,7 @@ namespace Client.Api.Services.Clients
     {
         PagedResults<IEnumerable<ClientServiceModel>> Get(GetClientsServiceModel model);
         Task<ClientServiceModel> GetAsync(GetClientServiceModel model);
+        Task<ClientServiceModel> GetByEmailAsync(GetClientByEmailServiceModel model);
         Task<ClientServiceModel> GetByOrganisationAsync(GetClientByOrganisationServiceModel model);
         Task DeleteAsync(DeleteClientServiceModel model);
         Task<ClientServiceModel> UpdateAsync(UpdateClientServiceModel serviceModel);

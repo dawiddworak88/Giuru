@@ -1,0 +1,23 @@
+.price {
+    padding-right: 1rem;
+
+    &__current {
+        font-weight: 700;
+        font-size: 1rem;
+        color: #171717;
+        margin: 0;
+    }
+
+    &__container {
+        display: flex;
+        align-content: center;
+        gap: 1rem;
+    }
+
+    &__old {
+        white-space: nowrap;
+        text-decoration: line-through;
+        color: #7C8693;
+        font-size: 1rem;
+    }
+}

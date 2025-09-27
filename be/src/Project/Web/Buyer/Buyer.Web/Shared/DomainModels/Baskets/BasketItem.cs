@@ -4,7 +4,6 @@ namespace Buyer.Web.Shared.DomainModels.Baskets
 {
     public class BasketItem
     {
-        public Guid? Id { get; set; }
         public Guid? ProductId { get; set; }
         public string Sku { get; set; }
         public string Name { get; set; }
@@ -14,6 +13,9 @@ namespace Buyer.Web.Shared.DomainModels.Baskets
         public double Quantity { get; set; }
         public double StockQuantity { get; set; }
         public double OutletQuantity { get; set; }
+        public decimal? UnitPrice { get; set; }
+        public decimal? Price { get; set; }
+        public string Currency { get; set; }
         public string ExternalReference { get; set; }
         public DateTime? DeliveryFrom { get; set; }
         public DateTime? DeliveryTo { get; set; }

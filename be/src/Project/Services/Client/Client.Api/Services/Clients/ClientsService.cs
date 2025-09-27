@@ -106,7 +106,7 @@ namespace Client.Api.Services.Clients
             
             if (existingClient is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var client = new ClientServiceModel
@@ -149,7 +149,7 @@ namespace Client.Api.Services.Clients
 
             if (client is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             if (await _context.Addresses.AnyAsync(x => x.ClientId == model.Id && x.IsActive))
@@ -170,7 +170,7 @@ namespace Client.Api.Services.Clients
 
             if (client is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             client.Name = serviceModel.Name;
@@ -232,7 +232,7 @@ namespace Client.Api.Services.Clients
 
             if (exsitingClient is not null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientExists"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientExists"), (int)HttpStatusCode.Conflict);
             }
 
             var client = new Infrastructure.Clients.Entities.Client
@@ -331,6 +331,35 @@ namespace Client.Api.Services.Clients
                           };
 
             return await clients.FirstOrDefaultAsync();
+        }
+
+        public Task<ClientServiceModel> GetByEmailAsync(GetClientByEmailServiceModel model)
+        {
+            var client = from c in _context.Clients
+                         where c.Email == model.Email && c.IsActive
+                         select new ClientServiceModel
+                         {
+                             Id = c.Id,
+                             Name = c.Name,
+                             Email = c.Email,
+                             CountryId = c.CountryId,
+                             OrganisationId = c.OrganisationId,
+                             PreferedCurrencyId = c.CurrencyId,
+                             CommunicationLanguage = c.Language,
+                             PhoneNumber = c.PhoneNumber,
+                             IsDisabled = c.IsDisabled,
+                             DefaultDeliveryAddressId = c.DefaultDeliveryAddressId,
+                             DefaultBillingAddressId = c.DefaultBillingAddressId,
+                             LastModifiedDate = c.LastModifiedDate,
+                             CreatedDate = c.CreatedDate
+                         };
+
+            if (client is null)
+            {
+                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            return client.FirstOrDefaultAsync();
         }
     }
 }

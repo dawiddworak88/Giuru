@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Orders.ViewModel;
+using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Services.Baskets;
 using Foundation.Extensions.ModelBuilders;
@@ -8,6 +9,7 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,6 +25,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
+        private readonly IOptions<AppSettings> _options;
 
         public OrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -31,7 +34,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             IClientsRepository clientsRepository,
             IClientAddressesRepository clientAddressesRepository,
             IBasketService basketService,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IOptions<AppSettings> options)
         {
             _globalLocalizer = globalLocalizer;
             _orderLocalizer = orderLocalizer;
@@ -40,6 +44,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             _clientLocalizer = clientLocalizer;
             _clientsRepository = clientsRepository;
             _clientAddressesRepository = clientAddressesRepository;
+            _options = options;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -90,7 +95,15 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 SaveMediaUrl = _linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 DeliveryAddressLabel = _clientLocalizer.GetString("DeliveryAddress"),
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
-                MaximalLabel = _globalLocalizer.GetString("MaximalLabel")
+                MaximalLabel = _globalLocalizer.GetString("MaximalLabel"),
+                UnitPriceLabel = _globalLocalizer.GetString("UnitPrice"),
+                PriceLabel = _globalLocalizer.GetString("Price"),
+                CurrencyLabel = _globalLocalizer.GetString("Currency"),
+                MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
+                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity"),
+                GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                OutletProductLabel = _orderLocalizer.GetString("OutletProductLabel"),
+                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity")
             };
 
             if (componentModel.BasketId.HasValue)

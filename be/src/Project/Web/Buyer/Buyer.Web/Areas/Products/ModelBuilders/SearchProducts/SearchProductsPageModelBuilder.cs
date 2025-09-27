@@ -43,9 +43,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 Metadata = await _seoModelBuilder.BuildModelAsync(componentModel),
                 NotificationBar = await _notificationBarModelBuilder.BuildModelAsync(componentModel),
                 Header = await _headerModelBuilder.BuildModelAsync(componentModel),
-                MainNavigation = await _mainNavigationModelBuilder.BuildModelAsync(new ComponentModelBase { Id = componentModel.Id, Token = componentModel.Token, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language }),
+                MainNavigation = await _mainNavigationModelBuilder.BuildModelAsync(new ComponentModelBase { Id = componentModel.Id, Token = componentModel.Token, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language,  }),
                 Catalog = await _searchProductsCatalogModelBuilder.BuildModelAsync(componentModel),
-                Footer = await _footerModelBuilder.BuildModelAsync(componentModel)
+                Footer = await _footerModelBuilder.BuildModelAsync(componentModel),
             };
 
             viewModel.Header.SearchTerm = componentModel.SearchTerm;

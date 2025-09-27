@@ -309,6 +309,9 @@
   <data name="sh_stockQuantityLabel" xml:space="preserve">
     <value>Stock quantity</value>
   </data>
+  <data name="sh_externalReferenceLabel" xml:space="preserve">
+    <value>Customer's own number</value>
+  </data>
   <data name="oc_subject" xml:space="preserve">
     <value>Order Confirm</value>
   </data>
@@ -346,9 +349,15 @@
     <value>The order cannot be placed because the available stock quantity has been exceeded for the product:</value>
   </data>
   <data name="OutletQuantityError" xml:space="preserve">
-    <value>The order cannot be placed because the available outlet quantity has been exceeded for the product::</value>
+    <value>The order cannot be placed because the available outlet quantity has been exceeded for the product:</value>
   </data>
   <data name="InTotalLabel" xml:space="preserve">
     <value>In total:</value>
+  </data>
+  <data name="OutletProductLabel" xml:space="preserve">
+    <value>Product from Outlet</value>
+  </data>
+  <data name="ProductsNotFound" xml:space="preserve">
+    <value>Products not found</value>
   </data>
 </root>

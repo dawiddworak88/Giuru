@@ -42,6 +42,11 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string DeliveryAddress { get; set; }
         public string BillingAddress { get; set; }
         public string SearchTerm { get; set; }
+        public int? MaxAllowedOrderQuantity { get; set; }
+        public string MaxAllowedOrderQuantityErrorMessage { get; set; }
+        public string UnitPriceLabel { get; set; }
+        public string PriceLabel { get; set; }
+        public string CurrencyLabel { get; set; }
         public FilesViewModel Attachments { get; set; }
         public IEnumerable<ListItemViewModel> OrderStatuses { get; set; }
         public IEnumerable<OrderItemViewModel> OrderItems { get; set; }

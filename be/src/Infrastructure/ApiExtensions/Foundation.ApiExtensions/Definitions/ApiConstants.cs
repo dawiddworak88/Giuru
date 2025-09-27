@@ -37,6 +37,7 @@
             public static readonly string ApplicationsApiEndpoint = "/api/v1/clientsapplications";
             public static readonly string ManagersApiEndpoint = "/api/v1/clientaccountmanagers";
             public static readonly string ClientsApiEndpoint = "/api/v1/clients";
+            public static readonly string ClientsByEmailApiEndpoint = "/api/v1/clients/email";
             public static readonly string AddressesApiEndpoint = "/api/v1/clientaddresses";
             public static readonly string FieldsApiEndpoint = "/api/v1/clientfields";
             public static readonly string FieldOptionsApiEndpoint = "/api/v1/clientfieldoptions";
@@ -84,6 +85,7 @@
             public static readonly string OutletProductsApiEndpoint = "/api/v1/outlet/products";
             public static readonly string AvailableOutletProductsApiEndpoint = "/api/v1/outlet/availableproducts";
             public static readonly string ProductOutletApiEndpoint = "/api/v1/outlet/product";
+            public static readonly string ProductOutletBySkuApiEndpoint = "/api/v1/outlet/product/sku";
         }
 
         public struct Media
@@ -118,6 +120,12 @@
             public static readonly string LanguageContentName = "language";
             public static readonly string GuidContentName = "id";
             public static readonly string ChunkNumberContentName = "chunkNumber";
+        }
+
+        public struct Grula
+        {
+            public static readonly string PriceApiEndpoint = "/api/v1/price";
+            public static readonly string PricesApiEndpoint = "/api/v1/prices";
         }
 
         public struct Request

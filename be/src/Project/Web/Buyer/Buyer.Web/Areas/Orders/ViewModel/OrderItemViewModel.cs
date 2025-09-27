@@ -19,6 +19,9 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string ExpectedDateOfProductOnStock { get; set; }
         public string MoreInfo { get; set; }
         public string ProductAttributes { get; set; }
+        public decimal? UnitPrice { get; set; }
+        public decimal? Price { get; set; }
+        public string Currency { get; set; }
         public Guid? OrderItemStatusId { get; set; }
     }
 }

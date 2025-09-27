@@ -2,6 +2,7 @@ import React from "react"
 import BlockRendererClient from "../BlockRendererClient/BlockRendererClient"
 import CarouselGrid from "../CarouselGrid/CarouselGrid";
 import { Video } from "../Video/Video";
+import { ArrowBack } from "@mui/icons-material";
 
 /** Component to transform data from CMS to UI component */
 export const StrapiContent = (props) => {
@@ -24,6 +25,13 @@ export const StrapiContent = (props) => {
             <div className="container">
                 <div className="columns is-centered">
                     <div className="column is-8">
+                        {props.returnButton && props.returnButton?.href &&
+                            <div className="field">
+                                <a href={props.returnButton.href} className="return-button is-flex">
+                                    <ArrowBack fontSize="small" className="mr-1"/> {props.returnButton.label}
+                                </a>
+                            </div>
+                        }
                         {props.widgets && props.widgets.length > 0 && props.widgets.map((widget) => (
                             generateWidget(widget)
                         ))}

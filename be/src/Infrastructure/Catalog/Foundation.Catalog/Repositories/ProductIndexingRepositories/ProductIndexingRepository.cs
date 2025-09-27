@@ -134,7 +134,14 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                             Description = productTranslations.Description,
                             LastModifiedDate = product.LastModifiedDate,
                             CreatedDate = product.CreatedDate
+
+                            
                         };
+
+                        if (product.PrimaryProductId.HasValue)
+                        {
+                            document.PrimaryProductSku = _catalogContext.Products.FirstOrDefault(x => x.Id == product.PrimaryProductId).Sku;
+                        }
 
                         if (!string.IsNullOrWhiteSpace(productTranslations.FormData))
                         {
@@ -149,14 +156,16 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                             {
                                 var formDataObject = JObject.Parse(productTranslations.FormData);
 
-                                var formDataProperties = formDataObject.Children();
+                                var categorySchemaObject = JObject.Parse(categorySchema.Schema);
+                                var formDataProperties = categorySchemaObject["properties"]
+                                    .Children<JProperty>()
+                                    .Select(p => formDataObject.Property(p.Name))
+                                    .Where(p => p != null);
 
                                 var productAttributes = new Dictionary<string, object>();
 
                                 foreach (JProperty formDataProperty in formDataProperties)
                                 {
-                                    var categorySchemaObject = JObject.Parse(categorySchema.Schema);
-
                                     if (categorySchemaObject != null)
                                     {
                                         string key = formDataProperty.Name;

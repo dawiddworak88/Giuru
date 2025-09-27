@@ -27,7 +27,7 @@ namespace Ordering.Api.DependencyInjection
             services.AddDbContext<OrderingContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt =>
             {
                 opt.UseNetTopologySuite();
-                opt.CommandTimeout(600); // Temporary 10 minutes timeout for index creation
+                opt.CommandTimeout(900);
             }));
         }
 

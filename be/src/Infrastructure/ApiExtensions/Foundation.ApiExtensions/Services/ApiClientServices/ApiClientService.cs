@@ -3,6 +3,8 @@ using Foundation.ApiExtensions.Definitions;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Shared.Definitions;
+using Foundation.Extensions.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -56,20 +58,7 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 
                         var response = await client.PostAsync(request.EndpointAddress, content);
 
-                        var apiResponse = new ApiResponse<T>
-                        {
-                            IsSuccessStatusCode = response.IsSuccessStatusCode,
-                            StatusCode = response.StatusCode
-                        };
-
-                        var result = await response.Content.ReadAsStringAsync();
-
-                        if (!string.IsNullOrWhiteSpace(result))
-                        {
-                            apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
-                        }
-
-                        return apiResponse;
+                        return await HandleApiResponseAsync<T>(response);
                     }
                 }
             }
@@ -77,7 +66,7 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
             return default;
         }
 
-        public async Task<ApiResponse<T>> PostAsync<S, W, T>(S request) where S : ApiRequest<W> where T : BaseResponseModel
+        public async Task<ApiResponse<T>> PostAsync<S, W, T>(S request) where S : ApiRequest<W> where T : class
         {
             using (var client = new HttpClient())
             {
@@ -102,20 +91,7 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
                     Encoding.UTF8,
                     "application/json"));
 
-                var apiResponse = new ApiResponse<T>
-                {
-                    IsSuccessStatusCode = response.IsSuccessStatusCode,
-                    StatusCode = response.StatusCode
-                };
-
-                var result = await response.Content.ReadAsStringAsync();
-
-                if (!string.IsNullOrWhiteSpace(result))
-                {
-                    apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
-                }
-
-                return apiResponse;
+                return await HandleApiResponseAsync<T>(response);
             }
         }
 
@@ -157,12 +133,7 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 
                 var result = await response.Content.ReadAsStringAsync();
 
-                if (!string.IsNullOrWhiteSpace(result))
-                {
-                    apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
-                }
-
-                return apiResponse;
+                return await HandleApiResponseAsync<T>(response);
             }
         }
 
@@ -193,21 +164,57 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 
                 var response = await client.DeleteAsync(request.EndpointAddress + "?" + queryString);
 
-                var apiResponse = new ApiResponse<T>
-                {
-                    IsSuccessStatusCode = response.IsSuccessStatusCode,
-                    StatusCode = response.StatusCode
-                };
+                return await HandleApiResponseAsync<T>(response);
+            }
+        }
 
-                var result = await response.Content.ReadAsStringAsync();
+        private async Task<ApiResponse<T>> HandleApiResponseAsync<T>(HttpResponseMessage response)
+        {
+            var apiResponse = new ApiResponse<T>
+            {
+                IsSuccessStatusCode = response.IsSuccessStatusCode,
+                StatusCode = response.StatusCode
+            };
 
+            var result = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
                 if (!string.IsNullOrWhiteSpace(result))
                 {
                     apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
                 }
-
-                return apiResponse;
             }
+            else
+            {
+                try
+                {
+                    var customException = JsonConvert.DeserializeObject<CustomException>(result);
+
+                    if (customException != null)
+                    {
+                        apiResponse.Message = customException.Message;
+                    }
+                }
+                catch
+                {
+                    try
+                    {
+                        var problemDetails = JsonConvert.DeserializeObject<ProblemDetails>(result);
+
+                        if (problemDetails != null)
+                        {
+                            apiResponse.Problem = problemDetails;
+                        }
+                    }
+                    catch
+                    {
+                        apiResponse.RawError = result;
+                    }
+                }
+            }
+
+            return apiResponse;
         }
     }
 }

@@ -37,6 +37,16 @@ using Buyer.Web.Shared.Repositories.GraphQl;
 using Buyer.Web.Shared.ModelBuilders.NotificationBar;
 using Buyer.Web.Shared.ViewModels.NotificationBar;
 using Buyer.Web.Shared.Repositories.Identity;
+using Buyer.Web.Shared.Services.Prices;
+using Buyer.Web.Shared.Middlewares;
+using Buyer.Web.Shared.Repositories.Global;
+using Grula.PricingIntelligencePlatform.Sdk;
+using System.Net.Http.Headers;
+using Foundation.Extensions.Services.Cache;
+using Buyer.Web.Shared.ViewModels.Toasts;
+using Buyer.Web.Shared.ModelBuilders.Toasts;
+using Buyer.Web.Shared.Repositories.Inventory;
+using System;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -61,6 +71,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, NotificationBarViewModel>, NotificationBarModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
+            services.AddScoped<IModelBuilder<SuccessAddProductToBasketViewModel>, SuccessAddProductToBasketModelBuilder>();
 
             // Repositories
             services.AddScoped<IBrandRepository, BrandRepository>();
@@ -68,6 +79,9 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IGraphQlRepository, GraphQlRepository>();
             services.AddScoped<IClientAddressesRepository, ClientAddressesRepository>();
             services.AddScoped<IIdentityRepository, IdentityRepository>();
+            services.AddScoped<IGlobalRepository, GlobalRepository>();
+            services.AddScoped<IClientFieldValuesRepository, ClientFieldValuesRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
 
             // Services
             services.AddScoped<ICatalogService, CatalogService>();
@@ -75,10 +89,26 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<INewsRepository, NewsRepository>();
             services.AddScoped<IFilesRepository, FilesRepository>();
             services.AddScoped<IMediaItemsRepository, MediaItemsRepository>();
+            services.AddScoped<ICacheService, CacheService>();
+            
+            services.AddScoped<IPriceService, PriceService>();
 
             // Client
             services.AddScoped<ICatalogOrderModelBuilder, CatalogOrderModelBuilder>();
             services.AddScoped<IClientsRepository, ClientsRepository>();
+
+            //Middlewares
+            services.AddScoped<ClaimsEnrichmentMiddleware>();
+
+            //Grula HttpClient
+            services.AddHttpClient("GrulaApi")
+                .AddTypedClient(httpClient =>
+                {
+                    httpClient.Timeout = TimeSpan.FromSeconds(10);
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", configuration["GrulaAccessToken"]);
+
+                    return new GrulaApiClient(configuration["GrulaUrl"], httpClient);
+                });
         }
 
         public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)

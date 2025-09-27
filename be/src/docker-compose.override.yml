@@ -2,57 +2,6 @@ version: '3.9'
 
 services:
 
-  grafana:
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    volumes:
-      - ./DockerServices/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
-      - ./DockerServices/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
-      - grafana-data:/var/lib/grafana
-    ports:
-      - "3000:3000"
-
-  otel-collector:
-    command: ["--config=/etc/otel-collector-config.yaml"]
-    volumes:
-      - ./DockerServices/otel-collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml
-    ports:
-      - "1888:1888"
-      - "8888:8888"
-      - "8889:8889"
-      - "13133:13133"
-      - "4317:4317"
-      - "4318:4317"
-      - "55679:55679"
-    links:
-      - jaeger
-      - prometheus
-      - loki
-
-  prometheus:
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--enable-feature=remote-write-receiver'
-      - '--storage.tsdb.retention.time=1d'
-      - '--storage.tsdb.retention.size=1GB'
-    ports:
-      - "9090:9090"
-
-  loki:
-    command: -config.file=/etc/loki/local-config.yaml
-    ports:
-      - "3100:3100"
-
-  jaeger:
-    environment:
-      - SPAN_STORAGE_TYPE=memory
-    command: --memory.max-traces=100000
-    ports:
-      - "5775:5775/udp"
-      - "6831:6831/udp"
-      - "6832:6832/udp"
-      - "16686:16686"
-
   rabbitmq:
     ports:
       - "15672:15672"
@@ -298,6 +247,7 @@ services:
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - EventBusRequestedHeartbeat=60
+      - MaxAllowedOrderQuantity=1000
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
@@ -416,6 +366,7 @@ services:
       - ClientId=663bba90-0036-4a58-8516-39faa8baba87
       - ClientSecret=c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9
       - RedisUrl=redis
+      - MaxAllowedOrderQuantity=1000
       - CatalogUrl=http://catalog-api:8080
       - BasketUrl=http://basket-api:8080
       - ClientUrl=http://client-api:8080
@@ -426,6 +377,25 @@ services:
       - DownloadCenterUrl=http://downloadcenter-api:8080
       - GlobalUrl=http://global-api:8080
       - AnalyticsUrl=http://analytics-api:8080
+      - GrulaUrl=https://api.grula.net
+      - GrulaAccessToken=${GRULA_ACCESS_TOKEN}
+      - GrulaEnvironmentId=${GRULA_ENVIRONMENT_ID}
+      - PossibleExtraPackingAttributeKeys=extraPacking
+      - PossiblePaletteSizeAttributeKeys=palletDimensions,PalletDimensions
+      - PossiblePriceGroupAttributeKeys=priceGroup,grupaCenowa,preisGruppe
+      - PossibleSleepAreaDepthAttributeKeys=sleepAreaDepth
+      - PossibleSleepAreaWidthAttributeKeys=sleepAreaWidth
+      - PossibleWidthAttributeKeys=width
+      - PossibleDepthAttributeKeys=depth
+      - PossiblePointsOfLightAttributeKeys=pointsOfLight,PointsOfLight
+      - PossibleLampshadeTypeAttributeKeys=lampshadeType,LampshadeType
+      - PossibleLampshadeSizeAttributeKeys=lampshadeSize,LampshadeSize
+      - PossibleLinearLightAttributeKeys=linearLight,LinearLight
+      - PossibleMirrorAttributeKeys=mirror,Mirror
+      - PossibleShapeAttributeKeys=shape,Shape
+      - PossiblePrimaryColorAttributeKeys=primaryColor,PrimaryColor
+      - PossibleSecondaryColorAttributeKeys=secondaryColor,SecondaryColor
+      - PossibleShelfTypeAttributeKeys=shelfType,ShelfType
       - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -450,18 +420,40 @@ services:
       - CatalogUrl=http://catalog-api:8080
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - MaxAllowedOrderQuantity=1000
       - InventoryUrl=http://inventory-api:8080
       - OrderUrl=http://ordering-api:8080
       - BasketUrl=http://basket-api:8080
       - ClientUrl=http://client-api:8080
       - NewsUrl=http://news-api:8080
+      - GlobalUrl=http://global-api:8080
       - AnalyticsUrl=http://analytics-api:8080
       - ContentGraphQlUrl=http://content-api:1337/graphql
       - DownloadCenterUrl=http://downloadcenter-api:8080
       - ContentGraphQlAuthorizationKey=${STRAPI_AUTHORIZATION_KEY}
       - MakeComplaintUrl=https://complaints.com
+      - GrulaUrl=https://api.grula.net
+      - GrulaAccessToken=${GRULA_ACCESS_TOKEN}
+      - GrulaEnvironmentId=${GRULA_ENVIRONMENT_ID}
       - ProductAttributes=${PRODUCT_ATTRIBUTES}
       - OrganisationId=${ORGANISATION_ID}
+      - PossibleExtraPackingAttributeKeys=extraPacking
+      - PossiblePaletteSizeAttributeKeys=palletDimensions,PalletDimensions
+      - PossiblePriceGroupAttributeKeys=priceGroup,grupaCenowa,preisGruppe
+      - PossibleSleepAreaDepthAttributeKeys=sleepAreaDepth
+      - PossibleSleepAreaWidthAttributeKeys=sleepAreaWidth
+      - PossibleWidthAttributeKeys=width
+      - PossibleDepthAttributeKeys=depth
+      - PossiblePointsOfLightAttributeKeys=pointsOfLight,PointsOfLight
+      - PossibleLampshadeTypeAttributeKeys=lampshadeType,LampshadeType
+      - PossibleLampshadeSizeAttributeKeys=lampshadeSize,LampshadeSize
+      - PossibleLinearLightAttributeKeys=linearLight,LinearLight
+      - PossibleMirrorAttributeKeys=mirror,Mirror
+      - PossibleShapeAttributeKeys=shape,Shape
+      - PossiblePrimaryColorAttributeKeys=primaryColor,PrimaryColor
+      - PossibleSecondaryColorAttributeKeys=secondaryColor,SecondaryColor
+      - PossibleShelfTypeAttributeKeys=shelfType,ShelfType
+      - ProductColorAttributeId=a04b3368-fa25-4b4a-e4eb-08d907680a85
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317

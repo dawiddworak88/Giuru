@@ -20,6 +20,9 @@ namespace Ordering.Api.v1.ResponseModels
         public string OrderItemStatusChangeComment { get; set; }
         public Guid? LastOrderItemStatusChangeId { get; set; }
         public string MoreInfo { get; set; }
+        public decimal? UnitPrice { get; set; }
+        public decimal? Price { get; set; }
+        public string Currency { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

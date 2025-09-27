@@ -109,13 +109,10 @@ function ClientForm(props) {
                         setCanCreateAccount(true);
                         toast.success(jsonResponse.message);
                     }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
                 });
-            }).catch(() => {
+            }).catch((error) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
+                toast.error(error.message ?? props.generalErrorMessage);
             });
     }
 

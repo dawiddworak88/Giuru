@@ -3,10 +3,15 @@ using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
+using Buyer.Web.Areas.Products.Services.ProductColors;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Files;
+using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.DomainModels.Media;
+using Buyer.Web.Shared.DomainModels.Prices;
 using Buyer.Web.Shared.Repositories.Media;
+using Buyer.Web.Shared.Services.Prices;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
@@ -21,12 +26,14 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Buyer.Web.Areas.Products.ApiControllers
 {
@@ -41,6 +48,10 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IMediaItemsRepository _mediaRepository;
         private readonly IMediaService _mediaService;
         private readonly LinkGenerator _linkGenerator;
+        private readonly IOptions<AppSettings> _options;
+        private readonly IPriceService _priceService;
+        private readonly IProductColorsService _productColorsService;
+        private readonly ILogger<ProductsApiController> _logger;
 
         public ProductsApiController(
             IProductsService productsService,
@@ -50,7 +61,11 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IMediaService mediaService,
             IInventoryRepository inventoryRepository,
             IOutletRepository outletRepository,
-            LinkGenerator linkGenerator)
+            IOptions<AppSettings> options,
+            IPriceService priceService,
+            LinkGenerator linkGenerator,
+            IProductColorsService productColorsService,
+            ILogger<ProductsApiController> logger)
         {
             _productsService = productsService;
             _productsRepository = productsRepository;
@@ -61,6 +76,10 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             _inventoryRepository = inventoryRepository;
             _outletRepository = outletRepository;
             _mediaRepository = mediaRepository;
+            _options = options;
+            _priceService = priceService;
+            _productColorsService = productColorsService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -109,16 +128,77 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
 
                 var productVariants = await _productsRepository.GetProductsAsync(
-                    product.ProductVariants, null, null, language, null, false, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, $"{nameof(Product.Name)} ASC");
+                    product.ProductVariants, 
+                    null, 
+                    null, 
+                    language, 
+                    null, 
+                    false, 
+                    PaginationConstants.DefaultPageIndex, 
+                    PaginationConstants.DefaultPageSize, 
+                    token, 
+                    $"{nameof(Product.Name)} ASC");
 
-                var availableProducts = await _inventoryRepository.GetAvailbleProductsInventoryByIds(token, language, productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
+                var availableProducts = await _inventoryRepository.GetAvailbleProductsInventoryByIds(
+                    token, 
+                    language, 
+                    productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
 
-                var availableOutletProducts = await _outletRepository.GetOutletProductsByIdsAsync(token, language, productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
+                var availableOutletProducts = await _outletRepository.GetOutletProductsByIdsAsync(
+                    token, 
+                    language, 
+                    productVariants.Data.OrEmptyIfNull().Select(x => x.Id));
 
                 var carouselItems = new List<CarouselGridCarouselItemViewModel>();
 
-                foreach (var productVariant in productVariants.Data.OrEmptyIfNull())
+                var prices = Enumerable.Empty<Price>();
+
+                if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                 {
+                    var priceProducts = productVariants.Data.Select(async x => new PriceProduct
+                    {
+                        PrimarySku = x.PrimaryProductSku,
+                        FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                        ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
+                        SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
+                        PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                        Size = _productsService.GetSize(x.ProductAttributes),
+                        PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
+                        LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
+                        LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
+                        LinearLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                        Mirror = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                        Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
+                        PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
+                        SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                        ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
+                    });
+
+                    prices = await _priceService.GetPrices(
+                        _options.Value.GrulaAccessToken,
+                        DateTime.UtcNow,
+                        await Task.WhenAll(priceProducts),
+                        new PriceClient
+                        {
+                            Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
+                            Name = User.Identity?.Name,
+                            CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
+                            ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
+                            PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
+                            Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
+                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
+                        });
+                }
+
+                for (int i = 0; i < productVariants.Data.Count(); i++)
+                {
+                    var productVariant = productVariants.Data.ElementAtOrDefault(i);
+
+                    if (productVariant is null)
+                    {
+                        continue;
+                    }
+
                     var carouselItem = new CarouselGridCarouselItemViewModel
                     {
                         Id = productVariant.Id,
@@ -165,6 +245,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                     if (availableProduct is not null)
                     {
+                        carouselItem.InStock = true;
                         carouselItem.AvailableQuantity = availableProduct.AvailableQuantity;
                         carouselItem.ExpectedDelivery = availableProduct.ExpectedDelivery;
                     }
@@ -173,8 +254,23 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                     if (availableOutletProduct is not null)
                     {
+                        carouselItem.InOutlet = true;
                         carouselItem.AvailableOutletQuantity = availableOutletProduct.AvailableQuantity;
                         carouselItem.OutletTitle = availableOutletProduct.Title;
+                    }
+
+                    if (prices.Any())
+                    {
+                        var price = prices.ElementAtOrDefault(i);
+
+                        if (price is not null)
+                        {
+                            carouselItem.Price = new CarouselGridPriceViewModel
+                            {
+                                Current = price.CurrentPrice,
+                                Currency = price.CurrencyCode
+                            };
+                        }
                     }
 
                     carouselItems.Add(carouselItem);
@@ -256,6 +352,45 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
             if (products.Data.Any())
             {
+                var prices = Enumerable.Empty<Price>();
+
+                if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                {
+                    var priceProducts = products.Data.Select(async x => new PriceProduct
+                    {
+                        PrimarySku = x.PrimaryProductSku,
+                        FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                        ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
+                        SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
+                        PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                        Size = _productsService.GetSize(x.ProductAttributes),
+                        PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
+                        LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
+                        LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
+                        LinearLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                        Mirror = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                        Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
+                        PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
+                        SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                        ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
+                    });
+
+                    prices = await _priceService.GetPrices(
+                        _options.Value.GrulaAccessToken,
+                        DateTime.UtcNow,
+                        await Task.WhenAll(priceProducts),
+                        new PriceClient
+                        {
+                            Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
+                            Name = User.Identity?.Name,
+                            CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
+                            ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
+                            PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
+                            Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
+                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
+                        });
+                }
+
                 var inventories = await _inventoryRepository.GetAvailbleProductsByProductIdsAsync(
                     token,
                     language,
@@ -266,18 +401,110 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     language,
                     products.Data.Select(x => x.Id));
 
-                return StatusCode((int)HttpStatusCode.OK, products.Data.Select(x => new ProductQuantitiesResponseModel
+                var productsQuantities = new List<ProductQuantitiesResponseModel>();
+
+                for (int i = 0; i < products.Data.Count(); i++)
                 {
-                    Id = x.Id,
-                    Sku = x.Sku,
-                    Name = x.Name,
-                    Images = x.Images,
-                    StockQuantity = inventories.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity ?? 0,
-                    OutletQuantity = outlets.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity ?? 0,
-                }));
+                    var product = products.Data.ElementAtOrDefault(i);
+
+                    if (product is null)
+                    {
+                        continue;
+                    }
+
+                    var productQuantity = new ProductQuantitiesResponseModel
+                    {
+                        Id = product.Id,
+                        Sku = product.Sku,
+                        Name = product.Name,
+                        Images = product.Images,
+                        StockQuantity = inventories.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
+                        OutletQuantity = outlets.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
+                    };
+
+                    if (prices.Any())
+                    {
+                        var price = prices.ElementAtOrDefault(i);
+
+                        if (price is not null)
+                        {
+                            productQuantity.Price = price.CurrentPrice;
+                            productQuantity.Currency = price.CurrencyCode;
+                        }
+                    }
+
+                    productsQuantities.Add(productQuantity);
+                }
+
+                return StatusCode((int)HttpStatusCode.OK, productsQuantities);
             }
 
-            return StatusCode((int)HttpStatusCode.OK, products.Data);
+            return StatusCode((int)HttpStatusCode.OK, Enumerable.Empty<ProductQuantitiesResponseModel>());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPrice(string sku)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            var product = await _productsRepository.GetProductAsync(sku, language, token);
+
+            if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+            {
+                var outletItem = await _outletRepository.GetOutletProductBySkuAsync(token, language, sku);
+
+                try
+                {
+                    var price = await _priceService.GetPrice(
+                    _options.Value.GrulaAccessToken,
+                    DateTime.UtcNow,
+                    new PriceProduct
+                    {
+                        PrimarySku = product.PrimaryProductSku,
+                        FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                        ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
+                        SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
+                        PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                        Size = _productsService.GetSize(product.ProductAttributes),
+                        PointsOfLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
+                        LampshadeType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
+                        LampshadeSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
+                        LinearLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                        Mirror = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                        Shape = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
+                        PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
+                        SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                        ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
+                        IsOutlet = (outletItem?.AvailableQuantity > 0).ToYesOrNo()
+                    },
+                    new PriceClient
+                    {
+                        Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
+                        Name = User.Identity?.Name,
+                        CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
+                        ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
+                        PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
+                        Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
+                        DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
+                    });
+
+                    if (price is not null)
+                    {
+                        return StatusCode((int)HttpStatusCode.OK, new PriceResponseModel
+                        {
+                            CurrencyCode = price.CurrencyCode,
+                            CurrentPrice = price.CurrentPrice
+                        });
+                    }
+                }
+                catch
+                {
+                    return StatusCode((int)HttpStatusCode.OK);
+                }
+            }
+
+            return StatusCode((int)HttpStatusCode.OK);
         }
     } 
 }

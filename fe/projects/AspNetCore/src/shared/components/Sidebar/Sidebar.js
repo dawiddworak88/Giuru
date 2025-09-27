@@ -10,6 +10,8 @@ import { Context } from "../../../shared/stores/Store";
 import ResponsiveImage from "../../../shared/components/Picture/ResponsiveImage";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
+import Price from "../Price/Price";
+import Availability from "../Availability/Availability";
 
 const Sidebar = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -129,26 +131,22 @@ const Sidebar = (props) => {
                                                             <span className="attribute">{labels.eanLabel} {carouselItem.ean}</span>
                                                         }
                                                     </a>
-                                                    <div className="stock-details">
-                                                        {carouselItem.availableQuantity > 0 &&
-                                                            <div className="stock">
-                                                                {labels.inStockLabel} {carouselItem.availableQuantity}
-                                                            </div>
-                                                        }
-                                                        {carouselItem.availableOutletQuantity > 0 &&
-                                                            <div className="stock">
-                                                                {labels.inOutletLabel} {carouselItem.availableOutletQuantity} {carouselItem.outletTitle && <span>({carouselItem.outletTitle})</span>}
-                                                            </div>
-                                                        }
-                                                        {carouselItem.expectedDelivery &&
-                                                            <div className="expected-delivery">
-                                                                {labels.expectedDeliveryLabel} {moment(carouselItem.expectedDelivery).format("DD/MM/YYYY")}
-                                                            </div>
-                                                        }
+                                                    <div className="sidebar-item__availability mt-2">
+                                                        <Availability
+                                                            label={labels.inStockLabel}
+                                                            availableQuantity={carouselItem.availableQuantity}
+                                                        />
+                                                        <Availability
+                                                            label={labels.inOutletLabel}
+                                                            availableQuantity={carouselItem.availableOutletQuantity}
+                                                        />
                                                     </div>
                                                     <div className="productAttributes">
                                                         <p>{carouselItem.productAttributes}</p>
                                                     </div>
+                                                    {carouselItem.price &&
+                                                        <Price {...carouselItem.price} />
+                                                    }
                                                 </div>
                                             </div>
                                             <div className="sidebar-item__buttons">

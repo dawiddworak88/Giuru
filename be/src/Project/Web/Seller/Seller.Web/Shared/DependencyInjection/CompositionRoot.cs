@@ -23,12 +23,23 @@ using Foundation.PageContent.ComponentModels;
 using Seller.Web.Shared.ModelBuilders.OrderItemStatusChanges;
 using Seller.Web.Shared.ModelBuilders.Dialogs;
 using Seller.Web.Areas.Shared.Repositories.UserApprovals;
+using Seller.Web.Shared.Services.Prices;
+using Seller.Web.Shared.Services.Products;
+using Foundation.Extensions.Services.Claims;
+using Seller.Web.Shared.Services.ProductColors;
+using Seller.Web.Shared.Repositories.ProductAttributeItems;
+using System.Net.Http.Headers;
+using Grula.PricingIntelligencePlatform.Sdk;
+using Microsoft.Extensions.Configuration;
+using Foundation.Extensions.Services.Cache;
+using Seller.Web.Shared.Repositories.Inventory;
+using System;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
     public static class CompositionRoot
     {
-        public static void RegisterDependencies(this IServiceCollection services)
+        public static void RegisterDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IMediaItemsRepository, MediaItemsRepository>();
             services.AddScoped<IOrganisationsRepository, OrganisationsRepository>();
@@ -36,6 +47,12 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IIdentityRepository, IdentityRepository>();
             services.AddScoped<IUserApprovalsRepository, UserApprovalsRepository>();
+            services.AddScoped<IProductAttributeItemsRepository, ProductAttributeItemsRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
+
+            services.AddScoped<IPriceService, PriceService>();
+            services.AddScoped<IProductsService, ProductsService>();
+            services.AddScoped<IProductColorsService, ProductColorsService>();
 
             services.AddScoped<IModelBuilder<MenuTilesViewModel>, MenuTilesModelBuilder>();
             services.AddScoped<IModelBuilder<IEnumerable<DrawerMenuViewModel>>, DrawerMenuModelBuilder>();
@@ -46,6 +63,19 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderItemStatusChangesViewModel>, OrderItemStatusChangesModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, QRCodeDialogViewModel>, QRCodeDialogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel>, HeaderModelBuilder>();
+
+            services.AddScoped<IClaimsCacheInvalidatorService, ClaimsCacheInvalidatorService>();
+
+            //Grula HttpClient
+            services.AddHttpClient("GrulaApi")
+                .AddTypedClient(httpClient =>
+                {
+                    httpClient.Timeout = TimeSpan.FromSeconds(10);
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", configuration["GrulaAccessToken"]);
+
+                    return new GrulaApiClient(configuration["GrulaUrl"], httpClient);
+                });
+            services.AddScoped<ICacheService, CacheService>();
         }
     }
 }

@@ -427,7 +427,7 @@
     <value>Fabric:</value>
   </data>
   <data name="SuccessfullyAddedProduct" xml:space="preserve">
-    <value>The product has beed added successfully</value>
+    <value>The product has been added successfully.</value>
   </data>
   <data name="Catalog" xml:space="preserve">
     <value>Catalog</value>
@@ -794,5 +794,26 @@
   </data>
   <data name="Cards" xml:space="preserve">
     <value>Cards</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="UnitPrice" xml:space="preserve">
+    <value>Unit price</value>
+  </data>
+  <data name="MaxAllowedOrderQuantity" xml:space="preserve">
+    <value>Allowed quantity limit exceeded.</value>
+  </data>
+  <data name="NoFilesDownloadedError" xml:space="preserve">
+    <value>Es konnte keine Datei heruntergeladen werden.</value>
+  </data>
+  <data name="SomeFilesNotDownloadedError" xml:space="preserve">
+    <value>Einige Dateien wurden nicht heruntergeladen.</value>
+  </data>
+  <data name="ShowText" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="MinOrderQuantity" xml:space="preserve">
+    <value>Minimum order quantity is 1</value>
   </data>
 </root>

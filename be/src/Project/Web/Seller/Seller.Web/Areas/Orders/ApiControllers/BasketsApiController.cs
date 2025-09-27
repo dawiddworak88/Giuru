@@ -51,7 +51,10 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
-                    MoreInfo = x.MoreInfo
+                    MoreInfo = x.MoreInfo,
+                    UnitPrice = x.UnitPrice,
+                    Price = x.Price,
+                    Currency = x.Currency
                 }));
 
             var basketResponseModel = new BasketResponseModel
@@ -75,7 +78,10 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     ExternalReference = x.ExternalReference,
                     ImageSrc = x.PictureUrl,
                     ImageAlt = x.ProductName,
-                    MoreInfo = x.MoreInfo
+                    MoreInfo = x.MoreInfo,
+                    UnitPrice = x.UnitPrice,
+                    Price = x.Price,
+                    Currency = x.Currency
                 });
             }
 

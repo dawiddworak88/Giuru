@@ -309,6 +309,9 @@
   <data name="sh_stockQuantityLabel" xml:space="preserve">
     <value>Ilość stanowa</value>
   </data>
+  <data name="sh_externalReferenceLabel" xml:space="preserve">
+    <value>Numer własny klienta</value>
+  </data>
   <data name="oc_subject" xml:space="preserve">
     <value>Potwierdzenie zamówienia</value>
   </data>
@@ -350,5 +353,11 @@
   </data>
   <data name="InTotalLabel" xml:space="preserve">
     <value>W sumie:</value>
+  </data>
+  <data name="OutletProductLabel" xml:space="preserve">
+    <value>Produkt outletowy</value>
+  </data>
+  <data name="ProductsNotFound" xml:space="preserve">
+    <value>Nie znaleziono produktów.</value>
   </data>
 </root>

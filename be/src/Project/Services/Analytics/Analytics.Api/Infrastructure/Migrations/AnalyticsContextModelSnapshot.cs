@@ -17,10 +17,13 @@ namespace Analytics.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.13")
+                .HasAnnotation("ProductVersion", "8.0.12")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Analytics.Api.Infrastructure.Entities.SalesAnalytics.ClientDimension", b =>
                 {
@@ -208,6 +211,9 @@ namespace Analytics.Api.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Currency")
+                        .HasColumnType("nvarchar(3)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -222,6 +228,9 @@ namespace Analytics.Api.Infrastructure.Migrations
 
                     b.Property<Guid?>("LocationDimensionId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<Guid>("ProductDimensionId")
                         .HasColumnType("uniqueidentifier");

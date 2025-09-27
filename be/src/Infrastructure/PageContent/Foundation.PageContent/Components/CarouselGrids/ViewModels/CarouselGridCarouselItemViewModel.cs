@@ -15,12 +15,15 @@ namespace Foundation.PageContent.Components.CarouselGrids.ViewModels
         public string Subtitle { get; set; }
         public string Ean { get; set; }
         public string OutletTitle { get; set; }
+        public bool InStock { get; set; }
         public double? AvailableQuantity { get; set; }
+        public bool InOutlet { get; set; }
         public double? AvailableOutletQuantity { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
         public DateTime? CreatedDate { get; set; }
         public IEnumerable<SourceViewModel> Sources { get; set; }
         public string ProductAttributes { get; set; }
+        public CarouselGridPriceViewModel Price { get; set; }
         public IEnumerable<ImageVariantViewModel> Images { get; set; }
     }
 }
