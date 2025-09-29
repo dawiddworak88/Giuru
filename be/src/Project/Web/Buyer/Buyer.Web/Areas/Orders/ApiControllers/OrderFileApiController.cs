@@ -36,7 +36,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Orders.ApiControllers
@@ -109,9 +108,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("ProductsNotFound") });
             }
 
-            var productBySku = products
-                .OrEmptyIfNull()
-                .ToDictionary(g => g.Sku, g => g);
+            var orderLines = importedOrderLines.Where(x => products.Select(y => y.Sku).Contains(x.Sku));
 
             var productIds = products.OrEmptyIfNull().Select(x => x.Id).Distinct();
             var stockAvailableProducts = await _inventoryRepository.GetStockAvailbleProductsByProductIdsAsync(token, language, productIds);
@@ -126,13 +123,13 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             {
                 var priceProducts = new List<PriceProduct>();
 
-                foreach (var orderLine in importedOrderLines)
+                foreach (var orderLine in orderLines)
                 {
                     var product = products.FirstOrDefault(x => x.Sku == orderLine.Sku);
 
                     if (product is null)
                     {
-                        priceProducts.Add(null);
+                        continue;
                     }
 
                     priceProducts.Add(new PriceProduct
@@ -171,9 +168,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     });
             }
 
-            for (var i = 0; i < importedOrderLines.Count(); i++)
+            for (var i = 0; i < orderLines.Count(); i++)
             {
-                var orderLine = importedOrderLines.ElementAtOrDefault(i);
+                var orderLine = orderLines.ElementAtOrDefault(i);
 
                 if (orderLine is null)
                 {
