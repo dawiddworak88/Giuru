@@ -132,7 +132,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
                     if (product is null)
                     {
-                        continue;
+                        priceProducts.Add(null);
                     }
 
                     priceProducts.Add(new PriceProduct
