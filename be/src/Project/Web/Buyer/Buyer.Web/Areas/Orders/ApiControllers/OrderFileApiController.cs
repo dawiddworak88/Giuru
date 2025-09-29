@@ -186,7 +186,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 }
 
                 var availableStock = stockByProductId.TryGetValue(product.Id, out var qty) ? qty : 0;
-
                 var stockQuantity = Math.Min(orderLine.Quantity, (double)availableStock);
                 var quantity = orderLine.Quantity - stockQuantity;
 
