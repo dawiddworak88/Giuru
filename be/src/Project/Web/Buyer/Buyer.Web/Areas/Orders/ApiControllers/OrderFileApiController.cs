@@ -36,6 +36,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Orders.ApiControllers
@@ -123,29 +124,41 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
             {
-                var priceProduct = products.Select(async x => new PriceProduct
+                var priceProducts = new List<PriceProduct>();
+
+                foreach (var orderLine in importedOrderLines)
                 {
-                    PrimarySku = x.PrimaryProductSku,
-                    FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                    ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
-                    SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
-                    PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
-                    Size = _productsService.GetSize(x.ProductAttributes),
-                    PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
-                    LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
-                    LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
-                    LinearLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
-                    Mirror = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
-                    Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
-                    PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
-                    SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
-                    ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
-                });
+                    var product = products.FirstOrDefault(x => x.Sku == orderLine.Sku);
+
+                    if (product is null)
+                    {
+                        continue;
+                    }
+
+                    priceProducts.Add(new PriceProduct
+                    {
+                        PrimarySku = product.PrimaryProductSku,
+                        FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                        ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
+                        SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
+                        PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                        Size = _productsService.GetSize(product.ProductAttributes),
+                        PointsOfLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
+                        LampshadeType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
+                        LampshadeSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
+                        LinearLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                        Mirror = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                        Shape = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
+                        PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
+                        SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                        ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
+                    });
+                }
 
                 prices = await _priceService.GetPrices(
                     _options.Value.GrulaAccessToken,
                     DateTime.UtcNow,
-                    await Task.WhenAll(priceProduct),
+                    priceProducts,
                     new PriceClient
                     {
                         Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
@@ -158,18 +171,24 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     });
             }
 
-            var productsWithPrices = products.OrEmptyIfNull().Zip(prices);
-
-            foreach (var (product, price) in productsWithPrices)
+            for (var i = 0; i < importedOrderLines.Count(); i++)
             {
-                var availableStock = stockByProductId.GetValueOrDefault(product.Id) ?? 0;
-
-                var orderLine = importedOrderLines.FirstOrDefault(x => x.Sku == product.Sku);
+                var orderLine = importedOrderLines.ElementAtOrDefault(i);
 
                 if (orderLine is null)
                 {
                     continue;
                 }
+
+                var product = products.FirstOrDefault(x => x.Sku == orderLine.Sku);
+
+                if (product is null)
+                {
+                    _logger.LogWarning($"Product for SKU {orderLine.Sku} and language {language} not found.");
+                    continue;
+                }
+
+                var availableStock = stockByProductId.TryGetValue(product.Id, out var qty) ? qty : 0;
 
                 var stockQuantity = Math.Min(orderLine.Quantity, (double)availableStock);
                 var quantity = orderLine.Quantity - stockQuantity;
@@ -182,7 +201,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 var basketItem = new BasketItem
                 {
                     ProductId = product.Id,
-                    ProductSku = product.Sku,
+                    ProductSku = orderLine.Sku,
                     ProductName = product.Name,
                     PictureUrl = pictureUrl,
                     Quantity = quantity,
@@ -191,13 +210,18 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     MoreInfo = orderLine.MoreInfo
                 };
 
-                if (price is not null)
+                if (prices.Any())
                 {
-                    var totalPrice = price.CurrentPrice * (decimal)orderLine.Quantity;
+                    var price = prices.ElementAtOrDefault(i);
 
-                    basketItem.UnitPrice = price.CurrentPrice;
-                    basketItem.Price = totalPrice;
-                    basketItem.Currency = price.CurrencyCode;
+                    if (price is not null)
+                    {
+                        var totalPrice = price.CurrentPrice * (decimal)orderLine.Quantity;
+
+                        basketItem.UnitPrice = price.CurrentPrice;
+                        basketItem.Price = totalPrice;
+                        basketItem.Currency = price.CurrencyCode;
+                    }
                 }
 
                 basketItems.Add(basketItem);
