@@ -260,10 +260,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
                     if (price is not null)
                     {
-                        var totalPrice = price.CurrentPrice * (decimal)orderLine.Quantity;
-
                         basketItem.UnitPrice = price.CurrentPrice;
-                        basketItem.Price = totalPrice;
+                        basketItem.Price = price.CurrentPrice * (decimal)orderLine.Quantity;
                         basketItem.Currency = price.CurrencyCode;
                     }
                 }
