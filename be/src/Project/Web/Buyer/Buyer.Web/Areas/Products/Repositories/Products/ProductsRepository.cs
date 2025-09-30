@@ -319,7 +319,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
 
                     if (nextPagesResponse.IsSuccessStatusCode is false)
                     {
-                        throw new CustomException(response.Message, (int)response.StatusCode);
+                        throw new CustomException(nextPagesResponse.Message, (int)response.StatusCode);
                     }
 
                     if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Any())
