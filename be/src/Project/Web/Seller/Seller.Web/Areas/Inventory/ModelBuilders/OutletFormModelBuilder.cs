@@ -95,7 +95,7 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                     viewModel.AvailableQuantity = outletItem.AvailableQuantity;
                     viewModel.Ean = outletItem.Ean;
 
-                    var product = await this.productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, outletItem.ProductId);
+                    var product = await this.productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, outletItem.ProductId, componentModel.SellerId);
 
                     if (product is not null)
                     {

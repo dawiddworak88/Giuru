@@ -94,7 +94,7 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                     viewModel.RestockableInDays = inventoryProduct.RestockableInDays;
                     viewModel.ExpectedDelivery = inventoryProduct.ExpectedDelivery;
                     
-                    var product = await this.productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, inventoryProduct.ProductId);
+                    var product = await this.productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, inventoryProduct.ProductId, componentModel.SellerId);
 
                     if (product is not null)
                     {

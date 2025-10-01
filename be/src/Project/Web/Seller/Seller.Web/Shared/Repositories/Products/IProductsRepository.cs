@@ -9,7 +9,7 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
     public interface IProductsRepository
     {
         Task DeleteAsync(string token, string language, Guid? id);
-        Task<Product> GetProductAsync(string token, string language, Guid? id);
+        Task<Product> GetProductAsync(string token, string language, Guid? id, Guid? sellerId);
         Task<Product> GetProductAsync(string token, string language, string sku);
         Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(string token, string language, string searchTerm, bool? hasPrimaryProduct, Guid? sellerId, int pageIndex, int itemsPerPage, string orderBy);
         Task<IEnumerable<Product>> GetAllProductsAsync(string token, string language, IEnumerable<Guid> productIds);

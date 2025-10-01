@@ -114,7 +114,8 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 var product = await _productsRepository.GetProductAsync(
                     componentModel.Token,
                     componentModel.Language,
-                    componentModel.Id);
+                    componentModel.Id,
+                    componentModel.SellerId);
 
                 if (product != null)
                 {
@@ -141,7 +142,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                     if (product.PrimaryProductId.HasValue)
                     {
-                        var primaryProduct = await _productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, product.PrimaryProductId);
+                        var primaryProduct = await _productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, product.PrimaryProductId, componentModel.SellerId);
 
                         if (primaryProduct is not null)
                         {

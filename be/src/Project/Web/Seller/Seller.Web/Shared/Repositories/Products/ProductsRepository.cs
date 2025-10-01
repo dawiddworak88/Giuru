@@ -207,17 +207,22 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
             }
         }
 
-        public async Task<Product> GetProductAsync(string token, string language, Guid? id)
+        public async Task<Product> GetProductAsync(string token, string language, Guid? id, Guid? sellerId)
         {
-            var apiRequest = new ApiRequest<RequestModelBase>
+            var requestModel = new ProductRequestModel
+            {
+                SellerId = sellerId
+            };
+
+            var apiRequest = new ApiRequest<ProductRequestModel>
             {
                 Language = language,
-                Data = new RequestModelBase(),
+                Data = requestModel,
                 AccessToken = token,
                 EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}/{id}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Product>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<ProductRequestModel>, ProductRequestModel, Product>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
