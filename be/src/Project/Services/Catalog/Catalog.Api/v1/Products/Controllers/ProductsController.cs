@@ -112,6 +112,7 @@ namespace Catalog.Api.v1.Products.Controllers
             int? itemsPerPage, 
             string orderBy)
         {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var productSkus = skus.ToEnumerableString();
 
             if (productSkus is not null)
@@ -123,7 +124,7 @@ namespace Catalog.Api.v1.Products.Controllers
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = sellerId,
+                    OrganisationId = sellerId ?? GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = CultureInfo.CurrentCulture.Name
                 };
 
@@ -330,11 +331,13 @@ namespace Catalog.Api.v1.Products.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetById(Guid? id, Guid? sellerId)
         {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
             var serviceModel = new GetProductByIdServiceModel
             {
                 Id = id.Value,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = sellerId,
+                OrganisationId = sellerId ?? GuidHelper.ParseNullable(sellerClaim?.Value),
                 Language = CultureInfo.CurrentCulture.Name
             };
 
