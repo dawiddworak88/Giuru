@@ -66,7 +66,7 @@ namespace Seller.Web.Areas.Inventory.ApiControllers
             var language    = CultureInfo.CurrentUICulture.Name;
 
             var OrganisationId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value);
-            var product = await this.productsRepository.GetProductAsync(token, language, model.ProductId);
+            var product = await this.productsRepository.GetProductAsync(token, language, model.ProductId, OrganisationId);
 
             if (product != null)
             {
