@@ -1,7 +1,5 @@
-﻿using Foundation.Extensions.ModelBuilders;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Ordering.Api.Infrastructure.Orders.Entities;
-using System.ComponentModel;
 
 namespace Ordering.Api.Infrastructure
 {
@@ -38,11 +36,45 @@ namespace Ordering.Api.Infrastructure
                 entity.HasIndex(e => new { e.IsActive, e.ClientName });
             });
 
+            builder.Entity<Order>(entity =>
+            {
+                entity.HasIndex(e => e.CreatedDate)
+                    .HasDatabaseName("IX_Orders_IsActive1_CreatedDate")
+                    .HasFilter("[IsActive] = 1");
+            });
+
+            builder.Entity<Order>(entity =>
+            {
+                entity.HasIndex(e => new { e.IsActive, e.CreatedDate, e.Id })
+                    .HasDatabaseName("IX_Orders_IsActive_CreatedDate_Id_Filtered")
+                    .HasFilter("[IsActive] = 1");
+            });
+
+            builder.Entity<Order>(entity =>
+            {
+                entity.HasIndex(e => new { e.CreatedDate, e.Id })
+                    .HasDatabaseName("IX_Orders_IsActive1_CreatedDate_Id")
+                    .HasFilter("[IsActive] = 1")
+                    .IncludeProperties(e => new { e.ClientName, e.OrderStatusId, e.OrderStateId });
+            });
+
             // Index for OrderItems to optimize filtering by OrderId and IsActive
             builder.Entity<OrderItem>(entity =>
             {
                 entity.HasIndex(e => new { e.OrderId, e.IsActive })
                 .IncludeProperties(e => new { e.ProductId, e.ExternalReference, e.LastOrderItemStatusChangeId });
+            });
+
+            builder.Entity<OrderItem>(entity =>
+            {
+                entity.HasIndex(e => e.OrderId)
+                    .HasDatabaseName("IX_OrderItems_OrderId_Cover")
+                    .IncludeProperties(e => new
+                    {
+                        e.CreatedDate, e.Currency, e.ExternalReference, e.IsActive, e.LastModifiedDate,
+                        e.LastOrderItemStatusChangeId, e.MoreInfo, e.OutletQuantity, e.PictureUrl, e.Price,
+                        e.ProductId, e.ProductName, e.ProductSku, e.Quantity, e.RowVersion, e.StockQuantity, e.UnitPrice
+                    });
             });
 
             // Index for OrderStatusTranslations to optimize lookup by OrderStatusId, Language and IsActive
