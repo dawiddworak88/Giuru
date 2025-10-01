@@ -49,15 +49,6 @@ namespace Media.Api.DependencyInjection
                     tags: new string[] { "mediaapidb" });
             }
 
-            if (string.IsNullOrWhiteSpace(configuration["StorageConnectionString"]) is false)
-            {
-                hcBuilder
-                    .AddAzureBlobStorage(
-                        configuration["StorageConnectionString"],
-                        name: "media-api-azurestorage",
-                        tags: new string[] { "azurestorage" });
-            }
-
             if (string.IsNullOrWhiteSpace(configuration["EventBusConnection"]) is false)
             {
                 hcBuilder
