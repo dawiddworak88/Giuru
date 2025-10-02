@@ -9,7 +9,8 @@ const CopyButton = ({
     copiedText,
     copyTextError,
     copyToClipboardText,
-    text
+    text,
+    label
 }) => {
     const [copied, setCopied] = useState(false);
 
@@ -21,7 +22,7 @@ const CopyButton = ({
                 setTimeout(() => setCopied(false), CopyConstants.copyFeedbackDuration())
                 return
             }
-        } catch (err) { 
+        } catch (err) {
             toast.error(copyTextError)
         }
         fallbackCopyTextToClipboard()
@@ -51,8 +52,9 @@ const CopyButton = ({
                 disableRipple
                 className="copy-button"
                 onClick={handleOnCopy}
+                aria-label={`${copyToClipboardText}: ${label}`}
             >
-                <ContentCopy fontSize="1rem" />
+                <ContentCopy fontSize="small" />
             </IconButton>
         </Tooltip>
     )
