@@ -246,4 +246,7 @@
   <data name="WarehouseSavedSuccessfully" xml:space="preserve">
     <value>Pomyślnie utworzono nowy magazyn</value>
   </data>
+  <data name="OutletNotFound" xml:space="preserve">
+    <value>Nie znaleziono produktu na wyprzedaży</value>
+  </data>
 </root>

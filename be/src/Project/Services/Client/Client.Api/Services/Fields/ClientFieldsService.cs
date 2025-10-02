@@ -63,7 +63,7 @@ namespace Client.Api.Services.Fields
 
             if (fieldDefinition is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("FieldDefinitionNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("FieldDefinitionNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var fieldDefinitionTranslation = fieldDefinition.FieldDefinitionTranslations.FirstOrDefault(x => x.Language == model.Language && x.IsActive);
@@ -173,7 +173,7 @@ namespace Client.Api.Services.Fields
 
             if (fieldDefinition is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("FieldDefinitionNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("FieldDefinitionNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             fieldDefinition.IsActive = false;
@@ -191,7 +191,7 @@ namespace Client.Api.Services.Fields
 
             if (fieldDefinition is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("FieldDefinitionNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("FieldDefinitionNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var fieldDefinitionTranslation = fieldDefinition.FieldDefinitionTranslations.FirstOrDefault(x => x.FieldDefinitionId == fieldDefinition.Id && x.Language == model.Language && x.IsActive);

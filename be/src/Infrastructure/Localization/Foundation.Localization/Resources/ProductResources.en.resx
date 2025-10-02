@@ -300,4 +300,13 @@
   <data name="ProductSkuConflict" xml:space="preserve">
     <value>A product with this SKU already exists.</value>
   </data>
+  <data name="BrandNotFound" xml:space="preserve">
+    <value>Brand not found.</value>
+  </data>
+  <data name="ProductNotFound" xml:space="preserve">
+    <value>Product not found.</value>
+  </data>
+  <data name="ProductAttributeItemConflict" xml:space="preserve">
+    <value>Such an attribute value already exists.</value>
+  </data>
 </root>

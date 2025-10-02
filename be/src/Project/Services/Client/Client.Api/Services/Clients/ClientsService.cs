@@ -1,5 +1,4 @@
 ﻿using Client.Api.Infrastructure;
-using Client.Api.Infrastructure.Clients.Entities;
 using Client.Api.Infrastructure.Groups.Entities;
 using Client.Api.Infrastructure.Managers.Entities;
 using Client.Api.ServicesModels.Clients;

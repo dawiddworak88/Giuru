@@ -57,7 +57,7 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
                 return response.Data.Id.Value;
             }
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
@@ -77,9 +77,9 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
 
             var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
-                throw new CustomException(response.Data.Message, (int)response.StatusCode);
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
         }
 
@@ -111,7 +111,7 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
                 };
             }
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
@@ -136,7 +136,7 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
                 return response.Data;
             }
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
@@ -176,7 +176,7 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
 
                     var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ProductAttribute>>>(apiRequest);
 
-                    if (!nextPagesResponse.IsSuccessStatusCode)
+                    if (nextPagesResponse.IsSuccessStatusCode is false)
                     {
                         throw new CustomException(response.Message, (int)response.StatusCode);
                     }
@@ -190,7 +190,7 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
                 return productAttributes;
             }
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }

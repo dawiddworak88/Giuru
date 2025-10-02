@@ -240,4 +240,7 @@
   <data name="WarehouseSavedSuccessfully" xml:space="preserve">
     <value>Warehouse has been successfully created</value>
   </data>
+  <data name="OutletNotFound" xml:space="preserve">
+    <value>Outlet product not found.</value>
+  </data>
 </root>

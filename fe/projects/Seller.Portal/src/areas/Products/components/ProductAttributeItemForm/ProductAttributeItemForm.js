@@ -47,7 +47,7 @@ function ProductAttributeItemForm(props) {
                         toast.success(jsonResponse.message);
                     }
                     else {
-                        toast.error(props.generalErrorMessage);
+                        toast.error(jsonResponse.message ? jsonResponse.message : props.generalErrorMessage);
                     }
                 });
             }).catch(() => {

@@ -360,4 +360,7 @@
   <data name="ProductsNotFound" xml:space="preserve">
     <value>Nie znaleziono produktów.</value>
   </data>
+  <data name="OrderItemNotFound" xml:space="preserve">
+    <value>Nie znaleziono produktu.</value>
+  </data>
 </root>

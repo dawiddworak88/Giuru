@@ -1,6 +1,5 @@
 ﻿using Feature.Account;
 using Foundation.Extensions.Exceptions;
-using Foundation.Localization;
 using Foundation.Mailing.Configurations;
 using Foundation.Mailing.Models;
 using Foundation.Mailing.Services;
@@ -57,10 +56,10 @@ namespace Identity.Api.Services.Users
             var timeExpiration = DateTime.UtcNow.AddHours(IdentityConstants.VerifyTimeExpiration);
 
             var existingOrganisation = await _identityContext.Organisations.FirstOrDefaultAsync(x => x.ContactEmail == serviceModel.Email && x.IsActive);
-            
+
             if (existingOrganisation == null)
             {
-                throw new CustomException(_accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo(existingOrganisation.Language);
@@ -191,12 +190,12 @@ namespace Identity.Api.Services.Users
 
             if (existingUser is null)
             {
-                throw new CustomException(_accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             if (existingUser.EmailConfirmed)
             {
-                throw new CustomException(_accountLocalizer.GetString("EmailIsConfirmedText"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_accountLocalizer.GetString("EmailIsConfirmedText"), (int)HttpStatusCode.Conflict);
             }
 
             if ((existingUser.VerifyExpirationDate >= DateTime.UtcNow) is false)
@@ -218,7 +217,7 @@ namespace Identity.Api.Services.Users
 
             if (existingUser is null)
             {
-                throw new CustomException(_accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             existingUser.FirstName = serviceModel.FirstName;
@@ -232,7 +231,7 @@ namespace Identity.Api.Services.Users
 
             if (organisation is null)
             {
-                throw new CustomException(_accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             organisation.Name = serviceModel.Name;
@@ -259,7 +258,7 @@ namespace Identity.Api.Services.Users
 
                 if (userOrganisation is null)
                 {
-                    throw new CustomException(_accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NoContent);
+                    throw new CustomException(_accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NotFound);
                 }
 
                 Thread.CurrentThread.CurrentCulture = new CultureInfo(userOrganisation.Language);

@@ -36,7 +36,7 @@ namespace Client.Api.Services.FieldValues
 
             if (client is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var fieldsValues = _context.ClientFieldValues

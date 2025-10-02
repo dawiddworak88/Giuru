@@ -54,7 +54,7 @@ namespace Global.Api.Services.Countries
 
             if (country is null)
             {
-                throw new CustomException(_globalLocalizer.GetString("CountryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_globalLocalizer.GetString("CountryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             country.IsActive = false;
@@ -106,7 +106,7 @@ namespace Global.Api.Services.Countries
 
             if (country is null)
             {
-                throw new CustomException(_globalLocalizer.GetString("CountryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_globalLocalizer.GetString("CountryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             return new CountryServiceModel
@@ -124,7 +124,7 @@ namespace Global.Api.Services.Countries
 
             if (country is null)
             {
-                throw new CustomException(_globalLocalizer.GetString("CountryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new CustomException(_globalLocalizer.GetString("CountryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var countryTranslation = await _context.CountryTranslations.FirstOrDefaultAsync(x => x.CountryId == model.Id && x.Language == model.Language && x.IsActive);
