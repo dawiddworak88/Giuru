@@ -177,6 +177,7 @@ namespace Catalog.Api.v1.Products.Controllers
             int? itemsPerPage,
             string orderBy)
         {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var productIds = ids.ToEnumerableGuidIds();
 
             if (productIds is not null)
@@ -188,6 +189,7 @@ namespace Catalog.Api.v1.Products.Controllers
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
                     Language = CultureInfo.CurrentCulture.Name,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     IsSeller = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == AccountConstants.Roles.Seller
                 };
 
@@ -223,6 +225,7 @@ namespace Catalog.Api.v1.Products.Controllers
                     Language = CultureInfo.CurrentCulture.Name,
                     HasPrimaryProduct = hasPrimaryProduct,
                     IsNew = isNew,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     IsSeller = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == AccountConstants.Roles.Seller
                 };
 

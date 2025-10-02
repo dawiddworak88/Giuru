@@ -21,7 +21,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             string orderBy);
         Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? organisationId, bool? isSeller, IEnumerable<Guid> ids, string orderBy);
         Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? organisationId, bool? isSeller, IEnumerable<string> skus, string orderBy);
-        Task<PagedResults<IEnumerable<ProductSearchModel>>> GetProductVariantsAsync(Guid id, string language, Guid? organisationId);
+        Task<PagedResults<IEnumerable<ProductSearchModel>>> GetProductVariantsAsync(Guid id, string language, Guid? organisationId, bool? isSeller);
         Task<ProductSearchModel> GetByIdAsync(Guid id, string language, Guid? organisationId, bool? isSeller);
         Task<ProductSearchModel> GetBySkuAsync(string sku, string language, Guid? organisationId, bool? isSeller);
         Task<int?> CountAllAsync();

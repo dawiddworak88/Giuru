@@ -40,7 +40,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.CategoryId).Value(categoryId.Value));
             }
 
-            if (sellerId.HasValue && isSeller.HasValue)
+            if (sellerId.HasValue && isSeller is true)
             {
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(sellerId.Value));
             }
@@ -224,13 +224,13 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetProductVariantsAsync(Guid id, string language, Guid? organisationId)
+        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetProductVariantsAsync(Guid id, string language, Guid? organisationId, bool? isSeller)
         {
             var query = Query<ProductSearchModel>.Term(t => t.Field(x => x.PrimaryProductId).Value(id))
                 && Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
-            if (organisationId.HasValue)
+            if (organisationId.HasValue && isSeller is true)
             {
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(organisationId.Value));
             }
