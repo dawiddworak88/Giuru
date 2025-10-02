@@ -94,7 +94,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 && Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
-            if (organisationId.HasValue && isSeller.HasValue)
+            if (organisationId.HasValue && isSeller is true)
             {
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(organisationId.Value));
             }
@@ -119,7 +119,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 && Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
-            if (organisationId.HasValue && isSeller.HasValue)
+            if (organisationId.HasValue && isSeller is true)
             {
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(organisationId.Value));
             }
@@ -143,7 +143,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             var query = Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
-            if (organisationId.HasValue && isSeller.HasValue)
+            if (organisationId.HasValue && isSeller is true)
             {
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(organisationId.Value));
             }
@@ -179,7 +179,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             var query = Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
-            if (organisationId.HasValue && isSeller.HasValue)
+            if (organisationId.HasValue && isSeller is true)
             {
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(organisationId.Value));
             }
