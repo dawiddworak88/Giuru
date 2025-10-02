@@ -27,6 +27,7 @@ namespace Ordering.Api.DependencyInjection
             services.AddDbContext<OrderingContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt =>
             {
                 opt.UseNetTopologySuite();
+                opt.CommandTimeout(900);
             }));
         }
 

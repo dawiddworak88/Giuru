@@ -94,7 +94,6 @@ namespace Catalog.Api.v1.Products.Controllers
         /// Gets list of products by Skus.
         /// </summary>
         /// <param name="skus">The list of skus.</param>
-        /// <param name="sellerId">The brand id.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
         /// <param name="orderBy">The optional order by.</param>
@@ -107,11 +106,11 @@ namespace Catalog.Api.v1.Products.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetBySkus(
             string skus,
-            Guid? sellerId,
             int? pageIndex, 
             int? itemsPerPage, 
             string orderBy)
         {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var productSkus = skus.ToEnumerableString();
 
             if (productSkus is not null)
@@ -123,7 +122,8 @@ namespace Catalog.Api.v1.Products.Controllers
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = sellerId,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    IsSeller = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == AccountConstants.Roles.Seller,
                     Language = CultureInfo.CurrentCulture.Name
                 };
 
@@ -156,7 +156,6 @@ namespace Catalog.Api.v1.Products.Controllers
         /// </summary>
         /// <param name="ids">The list of product ids.</param>
         /// <param name="categoryId">The category id.</param>
-        /// <param name="sellerId">The brand id.</param>
         /// <param name="hasPrimaryProduct">Set to null to get all products including product variants. Set to false to get primary products only. Set to true to get product variants only.</param>
         /// <param name="isNew">Set to null to get all products. Set to true to get new products only.</param>
         /// <param name="searchTerm">The search term.</param>
@@ -171,7 +170,6 @@ namespace Catalog.Api.v1.Products.Controllers
         public async Task<IActionResult> Get(
             string ids, 
             Guid? categoryId, 
-            Guid? sellerId,
             bool? hasPrimaryProduct,
             bool? isNew,
             string searchTerm, 
@@ -179,6 +177,7 @@ namespace Catalog.Api.v1.Products.Controllers
             int? itemsPerPage,
             string orderBy)
         {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var productIds = ids.ToEnumerableGuidIds();
 
             if (productIds is not null)
@@ -189,7 +188,9 @@ namespace Catalog.Api.v1.Products.Controllers
                     PageIndex = pageIndex,
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
-                    Language = CultureInfo.CurrentCulture.Name
+                    Language = CultureInfo.CurrentCulture.Name,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    IsSeller = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == AccountConstants.Roles.Seller
                 };
 
                 var validator = new GetProductsByIdsModelValidator();
@@ -220,11 +221,12 @@ namespace Catalog.Api.v1.Products.Controllers
                     ItemsPerPage = itemsPerPage,
                     SearchTerm = searchTerm,
                     CategoryId = categoryId,
-                    OrganisationId = sellerId,
                     OrderBy = orderBy,
                     Language = CultureInfo.CurrentCulture.Name,
                     HasPrimaryProduct = hasPrimaryProduct,
-                    IsNew = isNew
+                    IsNew = isNew,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    IsSeller = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == AccountConstants.Roles.Seller
                 };
 
                 var products = await _productService.GetAsync(serviceModel);
@@ -320,7 +322,6 @@ namespace Catalog.Api.v1.Products.Controllers
         /// Returns a product by id.
         /// </summary>
         /// <param name="id">The product id.</param>
-        /// <param name="sellerId">The brand id.</param>
         /// <returns>The product.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
@@ -328,13 +329,16 @@ namespace Catalog.Api.v1.Products.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [AllowAnonymous]
-        public async Task<IActionResult> GetById(Guid? id, Guid? sellerId)
+        public async Task<IActionResult> GetById(Guid? id)
         {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
             var serviceModel = new GetProductByIdServiceModel
             {
                 Id = id.Value,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = sellerId,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                IsSeller = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == AccountConstants.Roles.Seller,
                 Language = CultureInfo.CurrentCulture.Name
             };
 
@@ -379,6 +383,7 @@ namespace Catalog.Api.v1.Products.Controllers
                 Sku = sku,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                IsSeller = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == AccountConstants.Roles.Seller,
                 Language = CultureInfo.CurrentCulture.Name
             };
 
