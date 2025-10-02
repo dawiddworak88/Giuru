@@ -336,14 +336,14 @@ namespace Catalog.Api.Services.Products
                 model.ItemsPerPage,
                 model.OrderBy);
 
-            return await this.MapToPageResultsAsync(searchResults, model.Language, model.OrganisationId);
+            return await this.MapToPageResultsAsync(searchResults, model.Language, model.OrganisationId, model.IsSeller);
         }
 
         public async Task<PagedResults<IEnumerable<ProductServiceModel>>> GetByIdsAsync(GetProductsByIdsServiceModel model)
         {
             var searchResults = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.IsSeller, model.Ids, model.OrderBy);
             
-            return await this.MapToPageResultsAsync(searchResults, model.Language, model.OrganisationId);
+            return await this.MapToPageResultsAsync(searchResults, model.Language, model.OrganisationId, model.IsSeller);
         }
 
         public async Task<ProductServiceModel> GetByIdAsync(GetProductByIdServiceModel model)
@@ -356,7 +356,7 @@ namespace Catalog.Api.Services.Products
 
                 if (!searchResultItem.PrimaryProductIdHasValue)
                 {
-                    var productVariants = await _productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, model.Language, model.OrganisationId);
+                    var productVariants = await _productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, model.Language, model.OrganisationId, model.IsSeller);
                     productSearchModel.ProductVariants = productVariants?.Data?.Select(x => x.ProductId);
                 }
 
@@ -376,7 +376,7 @@ namespace Catalog.Api.Services.Products
 
                 if (!searchResultItem.PrimaryProductIdHasValue)
                 {
-                    var productVariants = await _productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, model.Language, model.OrganisationId);
+                    var productVariants = await _productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, model.Language, model.OrganisationId, model.IsSeller);
                     productSearchModel.ProductVariants = productVariants?.Data?.Select(x => x.ProductId);
                 }
 
@@ -395,10 +395,10 @@ namespace Catalog.Api.Services.Products
         {
             var products = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.IsSeller, model.Skus, model.OrderBy);
 
-            return await this.MapToPageResultsAsync(products, model.Language, model.OrganisationId);
+            return await this.MapToPageResultsAsync(products, model.Language, model.OrganisationId, model.IsSeller);
         }
 
-        private async Task<PagedResults<IEnumerable<ProductServiceModel>>> MapToPageResultsAsync(PagedResults<IEnumerable<ProductSearchModel>> searchResults, string language, Guid? organisationId)
+        private async Task<PagedResults<IEnumerable<ProductServiceModel>>> MapToPageResultsAsync(PagedResults<IEnumerable<ProductSearchModel>> searchResults, string language, Guid? organisationId, bool? isSeller)
         {
             if (searchResults?.Data is not null && searchResults.Data.Any())
             {
@@ -410,7 +410,7 @@ namespace Catalog.Api.Services.Products
 
                     if (!searchResultItem.PrimaryProductIdHasValue)
                     {
-                        var productVariants = await _productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, language, organisationId);
+                        var productVariants = await _productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, language, organisationId, isSeller);
                         
                         productSearchModel.ProductVariants = productVariants?.Data?.Select(x => x.ProductId);
                     }
