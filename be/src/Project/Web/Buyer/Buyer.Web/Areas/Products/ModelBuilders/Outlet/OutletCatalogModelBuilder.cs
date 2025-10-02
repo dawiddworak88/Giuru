@@ -73,6 +73,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             viewModel.ItemsPerPage = OutletConstants.Catalog.DefaultItemsPerPage;
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
             viewModel.Modal = await this.modalModelBuilder.BuildModelAsync(componentModel);
+            viewModel.IsDefaultOutletOrder = true;
 
             var outletItems = await this.outletRepository.GetOutletProductsAsync(
                 componentModel.Language, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);

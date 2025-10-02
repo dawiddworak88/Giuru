@@ -13,6 +13,8 @@ namespace Seller.Web.Shared.Services.Prices
 {
     public class PriceService : IPriceService
     {
+        private const int MaxBatchSize = 100;
+        
         private readonly GrulaApiClient _grulaApiClient;
         private readonly IOptions<AppSettings> _options;
         private readonly ILogger<PriceService> _logger;
@@ -33,7 +35,8 @@ namespace Seller.Web.Shared.Services.Prices
             PriceClient client)
         {
             if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
-                string.IsNullOrWhiteSpace(product.FabricsGroup))
+                string.IsNullOrWhiteSpace(product.FabricsGroup) ||
+                !CanSeePrice(client?.Id))
             {
                 return null;
             }
@@ -74,65 +77,73 @@ namespace Seller.Web.Shared.Services.Prices
             IEnumerable<PriceProduct> products,
             PriceClient client)
         {
-            var priceRequests = new List<PriceRequest>();
-            var prices = new List<Price>();
-
-            foreach (var product in products)
+            if (!CanSeePrice(client?.Id))
             {
-                if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
-                    string.IsNullOrWhiteSpace(product.FabricsGroup))
-                {
-                    prices.Add(null);
-                    continue;
-                }
-
-                var priceRequest = new PriceRequest
-                {
-                    PriceDrivers = CreatePriceDrivers(product, client),
-                    CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
-                    PricingDate = pricingDate
-                };
-
-                priceRequests.Add(priceRequest);
-            }
-
-            var priceQuery = new GetPricesByPriceDriversQuery
-            {
-                EnvironmentId = _options.Value.GrulaEnvironmentId.Value,
-                PriceRequests = priceRequests,
-            };
-
-            try
-            {
-                var grulaPrices = await _grulaApiClient.GetPricesByPriceDriversAsync(priceQuery);
-
-                foreach (var grulaPrice in grulaPrices)
-                {
-                    if (grulaPrice?.Amount is not null)
-                    {
-                        var price = new Price
-                        {
-                            CurrentPrice = (decimal)grulaPrice.Amount.Amount,
-                            CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode
-                        };
-
-                        prices.Add(price);
-                    }
-                    else
-                    {
-                        prices.Add(null);
-                    }
-                }
-
-                return prices;
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error while fetching prices from the Grula API.");
-
                 return Enumerable.Empty<Price>();
             }
+
+            var productList = (products ?? Enumerable.Empty<PriceProduct>()).ToList();
+            var result = new Price[productList.Count];
+
+            var validIndexed = productList
+                .Select((p, idx) => new { Product = p, Index = idx })
+                .Where(x => !string.IsNullOrWhiteSpace(x.Product.PrimarySku) &&
+                            !string.IsNullOrWhiteSpace(x.Product.FabricsGroup))
+                .ToList();
+
+            if (!validIndexed.Any())
+            {
+                return result;
+            }
+
+            var pairs = validIndexed.Select(x => new
+            {
+                x.Index,
+                Request = new PriceRequest
+                {
+                    PriceDrivers = CreatePriceDrivers(x.Product, client),
+                    CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
+                    PricingDate = pricingDate
+                }
+            }).ToList();
+
+            var batches = pairs.Chunk(MaxBatchSize);
+            int batchIdx = 0;
+
+            foreach (var batch in batches)
+            {
+                var priceQuery = new GetPricesByPriceDriversQuery
+                {
+                    EnvironmentId = _options.Value.GrulaEnvironmentId.Value,
+                    PriceRequests = batch.Select(b => b.Request).ToList(),
+                };
+
+                try
+                {
+                    var grulaPrices = await _grulaApiClient.GetPricesByPriceDriversAsync(priceQuery);
+
+                    for (int i = 0; i < batch.Length && i < grulaPrices.Count; i++)
+                    {
+                        var grulaPrice = grulaPrices.ElementAtOrDefault(i);
+                        if (grulaPrice?.Amount is not null)
+                        {
+                            result[batch[i].Index] = new Price
+                            {
+                                CurrentPrice = (decimal)grulaPrice.Amount.Amount,
+                                CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode
+                            };
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error while fetching prices from the Grula API for batch {BatchIndex} of size {BatchSize}.", batchIdx, batch.Length);
+                }
+
+                batchIdx++;
+            }
+
+            return result;
         }
 
         private List<PriceDriver> CreatePriceDrivers(PriceProduct product, PriceClient client)
@@ -326,6 +337,23 @@ namespace Seller.Web.Shared.Services.Prices
             }
 
             return priceDrivers;
+        }
+
+        private bool CanSeePrice(Guid? priceClientId)
+        {
+            if (string.IsNullOrWhiteSpace(_options.Value.EnablePricesForClients))
+            {
+                return true;
+            }
+
+            if (!priceClientId.HasValue)
+            {
+                return false;
+            }
+
+            var allowedClients = _options.Value.EnablePricesForClients.Split('&');
+
+            return allowedClients.Contains(priceClientId.ToString());
         }
     }
 }

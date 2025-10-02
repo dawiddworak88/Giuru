@@ -255,6 +255,7 @@ function Catalog(props) {
             {props.modal &&
                 <Modal
                     isOpen={isModalOpen}
+                    outletOrder={props.isDefaultOutletOrder ?? false}
                     setIsOpen={setIsModalOpen}
                     maxOutletValue={
                         productVariant 
@@ -302,7 +303,8 @@ Catalog.propTypes = {
     sidebar: PropTypes.object,
     maxAllowedOrderQuantity: PropTypes.number,
     maxAllowedOrderQuantityErrorMessage: PropTypes.string,
-    getProductPriceUrl: PropTypes.string
+    getProductPriceUrl: PropTypes.string,
+    isDefaultOutletOrder: PropTypes.bool
 };
 
 export default Catalog;

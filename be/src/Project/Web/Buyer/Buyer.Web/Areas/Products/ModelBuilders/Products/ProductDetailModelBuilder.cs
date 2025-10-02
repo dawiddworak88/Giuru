@@ -169,7 +169,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         {
                             PrimarySku = product.PrimaryProductSku,
                             FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
+                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
                             SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
                             PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
                             Size = _productsService.GetSize(product.ProductAttributes),

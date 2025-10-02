@@ -110,6 +110,9 @@ function ProductDetail(props) {
             quantity,
             isOutletOrder: item.isOutletOrder,
             externalReference: item.externalReference,
+            unitPrice: product.price ? parseFloat(product.price.current).toFixed(2) : null,
+            price: product.price ? parseFloat(product.price.current * quantity).toFixed(2) : null,
+            currency: product.price ? product.price.currency : null,
             moreInfo: item.moreInfo,
             resetData: () => {
                 setIsModalOpen(false);
@@ -288,8 +291,13 @@ function ProductDetail(props) {
                             />}
                         </h1>
                         <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
-                        {props.outletTitle &&
+                        {props.outletTitle && !props.price &&
                             <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>
+                        }
+                        {props.price &&
+                            <Price 
+                                {...props.price}
+                            />
                         }
                         <div className="product-detail__availability mt-3">
                             {props.inStock &&
@@ -298,18 +306,18 @@ function ProductDetail(props) {
                                     availableQuantity={props.availableQuantity}
                                 />
                             }
-                            {props.inOutlet &&
-                                <Availability
-                                    label={props.inOutletLabel}
-                                    availableQuantity={props.availableOutletQuantity}
-                                />
+                            {props.inOutlet && 
+                                <div className="is-flex">
+                                    <Availability
+                                        label={props.inOutletLabel}
+                                        availableQuantity={props.availableOutletQuantity}
+                                    />
+                                    {props.outletTitle && 
+                                        <div className="product-details__discount ml-2">({props.outletTitleLabel} {props.outletTitle})</div>
+                                    }
+                                </div>
                             }
                         </div>
-                        {props.price &&
-                            <Price
-                                {...props.price}
-                            />
-                        }
                         {props.isAuthenticated &&
                             <div className="product-detail__add-to-cart-button">
                                 {props.isProductVariant ? (
@@ -386,6 +394,7 @@ function ProductDetail(props) {
                 }
                 <Modal
                     isOpen={isModalOpen}
+                    outletOrder={false}
                     setIsOpen={setIsModalOpen}
                     handleClose={handleCloseModal}
                     maxOutletValue={
