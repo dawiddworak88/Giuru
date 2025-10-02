@@ -267,6 +267,7 @@ function ProductDetail(props) {
                                 copyTextError={props.copyTextError}
                                 copyToClipboardText={props.copyToClipboardText}
                                 text={props.sku}
+                                label={props.skuLabel}
                             />}
                         </p>
                         {props.ean &&
@@ -278,6 +279,7 @@ function ProductDetail(props) {
                                     copyTextError={props.copyTextError}
                                     copyToClipboardText={props.copyToClipboardText}
                                     text={props.ean}
+                                    label={props.eanLabel}
                                 />}
                             </p>
                         }
@@ -288,6 +290,7 @@ function ProductDetail(props) {
                                 copyTextError={props.copyTextError}
                                 copyToClipboardText={props.copyToClipboardText}
                                 text={props.title}
+                                label={props.title}
                             />}
                         </h1>
                         <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
@@ -344,6 +347,7 @@ function ProductDetail(props) {
                                         copyTextError={props.copyTextError}
                                         copyToClipboardText={props.copyToClipboardText}
                                         text={plainText}
+                                        label={props.descriptionLabel}
                                     />}
                                 </h3>
                                 <div dangerouslySetInnerHTML={{ __html: cleanDescription }}></div>
@@ -461,7 +465,8 @@ ProductDetail.propTypes = {
     maxAllowedOrderQuantity: PropTypes.number,
     maxAllowedOrderQuantityErrorMessage: PropTypes.string,
     copiedText: PropTypes.string.isRequired,
-    copyToClipboardText: PropTypes.string.isRequired
+    copyToClipboardText: PropTypes.string.isRequired,
+    copyTextError: PropTypes.string.isRequired
 };
 
 export default ProductDetail;
