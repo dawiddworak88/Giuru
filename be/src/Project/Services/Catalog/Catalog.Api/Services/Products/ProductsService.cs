@@ -330,24 +330,25 @@ namespace Catalog.Api.Services.Products
                 model.OrganisationId, 
                 model.HasPrimaryProduct,
                 model.IsNew,
+                model.IsSeller,
                 model.SearchTerm,
                 model.PageIndex, 
                 model.ItemsPerPage,
                 model.OrderBy);
 
-            return await this.MapToPageResultsAsync(searchResults, model.Language, model.OrganisationId);
+            return await this.MapToPageResultsAsync(searchResults, model.Language, model.OrganisationId, model.IsSeller);
         }
 
         public async Task<PagedResults<IEnumerable<ProductServiceModel>>> GetByIdsAsync(GetProductsByIdsServiceModel model)
         {
-            var searchResults = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Ids, model.OrderBy);
+            var searchResults = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.IsSeller, model.Ids, model.OrderBy);
             
-            return await this.MapToPageResultsAsync(searchResults, model.Language, model.OrganisationId);
+            return await this.MapToPageResultsAsync(searchResults, model.Language, model.OrganisationId, model.IsSeller);
         }
 
         public async Task<ProductServiceModel> GetByIdAsync(GetProductByIdServiceModel model)
         {
-            var searchResultItem = await _productSearchRepository.GetByIdAsync(model.Id.Value, model.Language, model.OrganisationId);
+            var searchResultItem = await _productSearchRepository.GetByIdAsync(model.Id.Value, model.Language, model.OrganisationId, model.IsSeller);
 
             if (searchResultItem is not null)
             {
@@ -355,7 +356,7 @@ namespace Catalog.Api.Services.Products
 
                 if (!searchResultItem.PrimaryProductIdHasValue)
                 {
-                    var productVariants = await _productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, model.Language, model.OrganisationId);
+                    var productVariants = await _productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, model.Language, model.OrganisationId, model.IsSeller);
                     productSearchModel.ProductVariants = productVariants?.Data?.Select(x => x.ProductId);
                 }
 
@@ -367,7 +368,7 @@ namespace Catalog.Api.Services.Products
 
         public async Task<ProductServiceModel> GetBySkuAsync(GetProductBySkuServiceModel model)
         {
-            var searchResultItem = await _productSearchRepository.GetBySkuAsync(model.Sku, model.Language, model.OrganisationId);
+            var searchResultItem = await _productSearchRepository.GetBySkuAsync(model.Sku, model.Language, model.OrganisationId, model.IsSeller);
 
             if (searchResultItem is not null)
             {
@@ -375,7 +376,7 @@ namespace Catalog.Api.Services.Products
 
                 if (!searchResultItem.PrimaryProductIdHasValue)
                 {
-                    var productVariants = await _productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, model.Language, model.OrganisationId);
+                    var productVariants = await _productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, model.Language, model.OrganisationId, model.IsSeller);
                     productSearchModel.ProductVariants = productVariants?.Data?.Select(x => x.ProductId);
                 }
 
@@ -392,12 +393,12 @@ namespace Catalog.Api.Services.Products
 
         public async Task<PagedResults<IEnumerable<ProductServiceModel>>> GetBySkusAsync(GetProductsBySkusServiceModel model)
         {
-            var products = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Skus, model.OrderBy);
+            var products = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.IsSeller, model.Skus, model.OrderBy);
 
-            return await this.MapToPageResultsAsync(products, model.Language, model.OrganisationId);
+            return await this.MapToPageResultsAsync(products, model.Language, model.OrganisationId, model.IsSeller);
         }
 
-        private async Task<PagedResults<IEnumerable<ProductServiceModel>>> MapToPageResultsAsync(PagedResults<IEnumerable<ProductSearchModel>> searchResults, string language, Guid? organisationId)
+        private async Task<PagedResults<IEnumerable<ProductServiceModel>>> MapToPageResultsAsync(PagedResults<IEnumerable<ProductSearchModel>> searchResults, string language, Guid? organisationId, bool? isSeller)
         {
             if (searchResults?.Data is not null && searchResults.Data.Any())
             {
@@ -409,7 +410,7 @@ namespace Catalog.Api.Services.Products
 
                     if (!searchResultItem.PrimaryProductIdHasValue)
                     {
-                        var productVariants = await _productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, language, organisationId);
+                        var productVariants = await _productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, language, organisationId, isSeller);
                         
                         productSearchModel.ProductVariants = productVariants?.Data?.Select(x => x.ProductId);
                     }
