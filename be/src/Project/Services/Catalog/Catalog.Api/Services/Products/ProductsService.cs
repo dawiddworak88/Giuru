@@ -330,6 +330,7 @@ namespace Catalog.Api.Services.Products
                 model.OrganisationId, 
                 model.HasPrimaryProduct,
                 model.IsNew,
+                model.IsSeller,
                 model.SearchTerm,
                 model.PageIndex, 
                 model.ItemsPerPage,
@@ -340,14 +341,14 @@ namespace Catalog.Api.Services.Products
 
         public async Task<PagedResults<IEnumerable<ProductServiceModel>>> GetByIdsAsync(GetProductsByIdsServiceModel model)
         {
-            var searchResults = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Ids, model.OrderBy);
+            var searchResults = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.IsSeller, model.Ids, model.OrderBy);
             
             return await this.MapToPageResultsAsync(searchResults, model.Language, model.OrganisationId);
         }
 
         public async Task<ProductServiceModel> GetByIdAsync(GetProductByIdServiceModel model)
         {
-            var searchResultItem = await _productSearchRepository.GetByIdAsync(model.Id.Value, model.Language, model.OrganisationId);
+            var searchResultItem = await _productSearchRepository.GetByIdAsync(model.Id.Value, model.Language, model.OrganisationId, model.IsSeller);
 
             if (searchResultItem is not null)
             {
@@ -367,7 +368,7 @@ namespace Catalog.Api.Services.Products
 
         public async Task<ProductServiceModel> GetBySkuAsync(GetProductBySkuServiceModel model)
         {
-            var searchResultItem = await _productSearchRepository.GetBySkuAsync(model.Sku, model.Language, model.OrganisationId);
+            var searchResultItem = await _productSearchRepository.GetBySkuAsync(model.Sku, model.Language, model.OrganisationId, model.IsSeller);
 
             if (searchResultItem is not null)
             {
@@ -392,7 +393,7 @@ namespace Catalog.Api.Services.Products
 
         public async Task<PagedResults<IEnumerable<ProductServiceModel>>> GetBySkusAsync(GetProductsBySkusServiceModel model)
         {
-            var products = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Skus, model.OrderBy);
+            var products = await _productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.IsSeller, model.Skus, model.OrderBy);
 
             return await this.MapToPageResultsAsync(products, model.Language, model.OrganisationId);
         }
