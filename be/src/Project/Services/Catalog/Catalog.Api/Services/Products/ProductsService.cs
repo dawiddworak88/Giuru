@@ -303,6 +303,7 @@ namespace Catalog.Api.Services.Products
                 throw new CustomException(_productLocalizer.GetString("ProductVariantsDeleteProductConflict"), (int)HttpStatusCode.Conflict);
             }
 
+            product.LastModifiedDate = DateTime.UtcNow;
             product.IsActive = false;
 
             await _context.SaveChangesAsync();
