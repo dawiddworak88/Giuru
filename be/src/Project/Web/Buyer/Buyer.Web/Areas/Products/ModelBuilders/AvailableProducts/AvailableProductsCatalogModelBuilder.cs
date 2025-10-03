@@ -23,7 +23,6 @@ using Buyer.Web.Shared.Services.Prices;
 using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ComponentModels;
-using Foundation.Extensions.ExtensionMethods;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {

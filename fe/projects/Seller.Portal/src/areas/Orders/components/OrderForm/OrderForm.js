@@ -380,6 +380,7 @@ function OrderForm(props) {
             const formData = new FormData();
 
             formData.append("file", file);
+            formData.append("clientId", client.id)
 
             const requestOptions = {
                 method: "POST",
@@ -408,7 +409,7 @@ function OrderForm(props) {
                     toast.error(props.generalErrorMessage);
                 });
         });
-    }, []);
+    }, [client]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
