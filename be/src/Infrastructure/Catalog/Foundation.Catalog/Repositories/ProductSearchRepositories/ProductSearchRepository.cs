@@ -24,13 +24,13 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
         }
 
         public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(
-            string language,
-            Guid? categoryId,
-            Guid? sellerId,
+            string language, 
+            Guid? categoryId, 
+            Guid? sellerId, 
             bool? hasPrimaryProduct,
             bool? isNew,
-            string searchTerm,
-            int? pageIndex,
+            string searchTerm, 
+            int? pageIndex, 
             int? itemsPerPage,
             string orderBy)
         {
@@ -60,10 +60,10 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             {
                 query = query && Query<ProductSearchModel>.Term(t => t.IsNew, isNew.Value);
             }
-
+            
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query &&
+                query = query && 
                     (Query<ProductSearchModel>.QueryString(d => d.Query(searchTerm))
                         || Query<ProductSearchModel>.Prefix(x => x.Sku, searchTerm)
                         || Query<ProductSearchModel>.Prefix(x => x.Ean, searchTerm)
@@ -279,7 +279,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 )
             );
 
-            var nameSuggestions =
+            var nameSuggestions = 
                 from suggest in nameResponse.Suggest["name"]
                 from option in suggest.Options
                 select option.Text;
@@ -289,7 +289,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
         private SortDescriptor<T> Sorting<T>(string orderBy) where T : ProductSearchModel
         {
-            if (string.IsNullOrWhiteSpace(orderBy) ||
+            if (string.IsNullOrWhiteSpace(orderBy) || 
                 orderBy == SortingConstants.Name ||
                 orderBy == SortingConstants.Default)
             {
@@ -373,9 +373,9 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
         }
 
         public async Task<PagedResultsWithFilters<IEnumerable<ProductSearchModel>>> GetPagedResultsWithFilters(
-            string langauge,
-            Guid? organisationId,
-            int? pageIndex,
+            string langauge, 
+            Guid? organisationId, 
+            int? pageIndex, 
             int? itemsPerPage,
             string orderBy,
             QueryFilters filters)
@@ -398,69 +398,6 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 itemsPerPage = Constants.MaxItemsPerPageLimit;
             }
 
-            var response = await GetSearchResposeWithFilters(query, filters, pageIndex, itemsPerPage, orderBy);
-
-            if (response.IsValid)
-            {
-                return new PagedResultsWithFilters<IEnumerable<ProductSearchModel>>(response.Total, itemsPerPage.Value)
-                {
-                    Data = response.Documents,
-                    Filters = MapFilters(response)
-                };
-            }
-
-            return default;
-        }
-
-        public async Task<PagedResultsWithFilters<IEnumerable<ProductSearchModel>>> GetPagedResultsWithFilters(
-            string langauge,
-            IEnumerable<Guid> ids,
-            Guid? organisationId,
-            string orderBy,
-            QueryFilters filters)
-        {
-            var query = Query<ProductSearchModel>.Term(t => t.Language, langauge)
-                && Query<ProductSearchModel>.Term(t => t.IsActive, true);
-
-            if (organisationId.HasValue)
-            {
-                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(organisationId.Value));
-            }
-            else
-            {
-                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsPublished).Value(true));
-            }
-
-            var idsQuery = Query<ProductSearchModel>.MatchNone();
-
-            foreach (var id in ids)
-            {
-                idsQuery = idsQuery || Query<ProductSearchModel>.Term(t => t.Field(x => x.ProductId).Value(id));
-            }
-
-            query = query && idsQuery;
-
-            var response = await GetSearchResposeWithFilters(query, filters, 0, 0, orderBy);
-
-            if (response.IsValid)
-            {
-                return new PagedResultsWithFilters<IEnumerable<ProductSearchModel>>(response.Total, (int)response.Total)
-                {
-                    Data = response.Documents,
-                    Filters = MapFilters(response)
-                };
-            }
-
-            return default;
-        }
-
-        private async Task<ISearchResponse<ProductSearchModel>> GetSearchResposeWithFilters(
-            QueryContainer query,
-            QueryFilters filters,
-            int? pageIndex,
-            int? itemsPerPage,
-            string orderBy)
-        {
             var response = await _elasticClient.SearchAsync<ProductSearchModel>(q => q
                 .TrackTotalHits()
                 .From((pageIndex - 1) * itemsPerPage)
@@ -534,7 +471,129 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                         )
                 )));
 
-            return response;
+
+            if (response.IsValid)
+            {
+                return new PagedResultsWithFilters<IEnumerable<ProductSearchModel>>(response.Total, itemsPerPage.Value)
+                {
+                    Data = response.Documents,
+                    Filters = MapFilters(response)
+                };
+            }
+
+            return default;
+        }
+
+        public async Task<PagedResultsWithFilters<IEnumerable<ProductSearchModel>>> GetPagedResultsWithFilters(
+            string langauge, 
+            IEnumerable<Guid> ids, 
+            Guid? organisationId, 
+            string orderBy, 
+            QueryFilters filters)
+        {
+            var query = Query<ProductSearchModel>.Term(t => t.Language, langauge)
+                && Query<ProductSearchModel>.Term(t => t.IsActive, true);
+
+            if (organisationId.HasValue)
+            {
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(organisationId.Value));
+            }
+            else
+            {
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsPublished).Value(true));
+            }
+
+            var idsQuery = Query<ProductSearchModel>.MatchNone();
+
+            foreach (var id in ids)
+            {
+                idsQuery = idsQuery || Query<ProductSearchModel>.Term(t => t.Field(x => x.ProductId).Value(id));
+            }
+
+            query = query && idsQuery;
+
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(q => q
+                .TrackTotalHits()
+                .Query(q => query)
+                .PostFilter(fq => 
+                    fq.Terms(t => t.Field("categoryName.keyword").Terms(filters.Category)) ||
+                    fq.Nested(n => n
+                        .Path("productAttributes")
+                        .Query(nq => nq.Bool(b => b
+                            .Filter(
+                                fq => fq.Terms(t => t.Field("productAttributes.primaryColor.value.name.keyword").Terms(filters.Color)),
+                                fq => fq.Terms(t => t.Field("productAttributes.shape.value.name.keyword").Terms(filters.Shape)),
+                                fq => nq.Bool(b2 => b2
+                                    .Should(BuildRangeQueries(filters.Height, "productAttributes.height.value").ToArray())
+                                    .MinimumShouldMatch(1)
+                                ),
+                                fq => nq.Bool(b2 => b2
+                                    .Should(BuildRangeQueries(filters.Width, "productAttributes.width.value").ToArray())
+                                    .MinimumShouldMatch(1)
+                                ),
+                                fq => nq.Bool(b2 => b2
+                                    .Should(BuildRangeQueries(filters.Depth, "productAttributes.depth.value").ToArray())
+                                    .MinimumShouldMatch(1)
+                                )
+                            )
+                        )
+                    )
+                ))
+                .Sort(s => Sorting<ProductSearchModel>(orderBy))
+                .Aggregations(a => a
+                    .Terms("category", t => t.Field("categoryName.keyword").Size(100))
+                    .Nested("attributes", n => n
+                        .Path("productAttributes")
+                        .Aggregations(aa => aa
+                            .Terms("color", tt => tt
+                                .Field("productAttributes.primaryColor.value.name.keyword")
+                                .Size(100)
+                            )
+                            .Terms("shape", tt => tt
+                                .Field("productAttributes.shape.value.name.keyword")
+                                .Size(100)
+                            )
+                            .Range("height", r => r.Field("productAttributes.height.value")
+                                .Ranges(
+                                    rr => rr.From(0).To(69),
+                                    rr => rr.From(70).To(79),
+                                    rr => rr.From(80).To(89),
+                                    rr => rr.From(90).To(99),
+                                    rr => rr.From(99)
+                                )
+                            )
+                            .Range("width", r => r.Field("productAttributes.width.value")
+                                .Ranges(
+                                    rr => rr.From(0).To(99),
+                                    rr => rr.From(100).To(149),
+                                    rr => rr.From(150).To(199),
+                                    rr => rr.From(200).To(249),
+                                    rr => rr.From(250)
+                                )
+                            )
+                            .Range("depth", r => r.Field("productAttributes.depth.value")
+                                .Ranges(
+                                    rr => rr.From(0).To(79),
+                                    rr => rr.From(80).To(84),
+                                    rr => rr.From(85).To(89),
+                                    rr => rr.From(90).To(94),
+                                    rr => rr.From(95)
+                                )
+                            )
+                        )
+                )));
+
+
+            if (response.IsValid)
+            {
+                return new PagedResultsWithFilters<IEnumerable<ProductSearchModel>>(response.Total, (int)response.Total)
+                {
+                    Data = response.Documents,
+                    Filters = MapFilters(response)
+                };
+            }
+
+            return default;
         }
 
         private IEnumerable<QueryContainer> BuildRangeQueries(IEnumerable<string>? ranges, string field)
