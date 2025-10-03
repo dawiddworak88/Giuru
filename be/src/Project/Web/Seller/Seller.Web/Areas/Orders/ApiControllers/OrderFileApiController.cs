@@ -119,7 +119,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             var products = await _productsRepository.GetProductsBySkusAsync(token, language, skus);
 
-            if (products.OrEmptyIfNull().Any() is false)
+            if (products.OrEmptyIfNull().Any() is false || importedOrderLines.Any(x => products.Select(y => y.Sku).Contains(x.Sku) is false))
             {
                 return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("ProductsNotFound") });
             }
@@ -209,20 +209,15 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     });
             }
 
-            for (var i = 0; i < importedOrderLines.Count(); i++)
+            for (var i = 0; i < products.Count(); i++)
             {
+                var product = products.ElementAtOrDefault(i);
+
                 var orderLine = importedOrderLines.ElementAtOrDefault(i);
 
                 if (orderLine is null)
                 {
-                    continue;
-                }
-
-                var product = products.FirstOrDefault(x => x.Sku == orderLine.Sku);
-
-                if (product is null)
-                {
-                    _logger.LogWarning($"Product for SKU {orderLine.Sku} and language {language} not found.");
+                    _logger.LogWarning($"Product for SKU {product.Sku} and language {language} not found.");
                     continue;
                 }
 
