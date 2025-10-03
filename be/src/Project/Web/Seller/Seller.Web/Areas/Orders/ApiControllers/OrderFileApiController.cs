@@ -38,7 +38,6 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Text.Json;
 
 namespace Seller.Web.Areas.Orders.ApiControllers
 {
@@ -119,14 +118,14 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             var products = await _productsRepository.GetProductsBySkusAsync(token, language, skus);
 
-            if (products.OrEmptyIfNull().Any() is false || importedOrderLines.Any(x => products.Select(y => y.Sku).Contains(x.Sku) is false))
+            if (products.OrEmptyIfNull().Any() is false)
             {
                 return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("ProductsNotFound") });
             }
 
             var productLookup = products.ToDictionary(p => p.Sku);
 
-            products = importedOrderLines
+            var orderedProducts = importedOrderLines
                 .Where(x => productLookup.ContainsKey(x.Sku))
                 .Select(x => productLookup[x.Sku]);
 
@@ -175,7 +174,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
                 var currency = await _currenciesRepository.GetAsync(token, _options.Value.DefaultCulture, client?.PreferedCurrencyId);
 
-                var priceProducts = products.Select(async x => new PriceProduct
+                var priceProducts = orderedProducts.Select(async x => new PriceProduct
                 {
                     PrimarySku = x.PrimaryProductSku,
                     FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
@@ -209,15 +208,13 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     });
             }
 
-            for (var i = 0; i < products.Count(); i++)
+            var priceIndex = 0;
+
+            foreach (var orderLine in importedOrderLines)
             {
-                var product = products.ElementAtOrDefault(i);
-
-                var orderLine = importedOrderLines.ElementAtOrDefault(i);
-
-                if (orderLine is null)
+                if (!productLookup.TryGetValue(orderLine.Sku, out var product))
                 {
-                    _logger.LogWarning($"Product for SKU {product.Sku} and language {language} not found.");
+                    _logger.LogWarning($"Product for SKU {orderLine.Sku} and language {language} not found.");
                     continue;
                 }
 
@@ -245,7 +242,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
                 if (prices.Any())
                 {
-                    var price = prices.ElementAtOrDefault(i);
+                    var price = prices.ElementAtOrDefault(priceIndex);
 
                     if (price is not null)
                     {
@@ -256,6 +253,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 }
 
                 basketItems.Add(basketItem);
+                priceIndex++;
             }
 
             var basket = await _basketRepository.SaveAsync(
