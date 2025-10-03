@@ -162,7 +162,7 @@ services:
       - EventBusRequestedHeartbeat=60
       - ElasticsearchUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:9200
       - LogstashUrl=http://logstash:31311
-      - ElasticsearchIndex=catalog
+      - ElasticsearchIndex=catalog2
       - Brands=4a8f8442-43b0-4223-83bb-978d5e81acc7&ELTAP&09affcc9-1665-45d6-919f-3d2026106ba1
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
@@ -184,7 +184,7 @@ services:
       - EventBusRequestedHeartbeat=60
       - ElasticsearchUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:9200
       - LogstashUrl=http://logstash:31311
-      - ElasticsearchIndex=catalog
+      - ElasticsearchIndex=catalog2
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
