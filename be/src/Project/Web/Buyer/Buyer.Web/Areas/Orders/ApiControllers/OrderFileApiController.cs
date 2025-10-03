@@ -108,7 +108,11 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("ProductsNotFound") });
             }
 
-            var orderLines = importedOrderLines.Where(x => products.Select(y => y.Sku).Contains(x.Sku));
+            var productLookup = products.ToDictionary(p => p.Sku);
+
+            var orderedProducts = importedOrderLines
+                .Where(x => productLookup.ContainsKey(x.Sku))
+                .Select(x => productLookup[x.Sku]);
 
             var productIds = products.OrEmptyIfNull().Select(x => x.Id).Distinct();
             var stockAvailableProducts = await _inventoryRepository.GetStockAvailbleProductsByProductIdsAsync(token, language, productIds);
@@ -121,41 +125,29 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
             {
-                var priceProducts = new List<PriceProduct>();
-
-                foreach (var orderLine in orderLines)
+                var priceProducts = orderedProducts.Select(async x => new PriceProduct
                 {
-                    var product = products.FirstOrDefault(x => x.Sku == orderLine.Sku);
-
-                    if (product is null)
-                    {
-                        continue;
-                    }
-
-                    priceProducts.Add(new PriceProduct
-                    {
-                        PrimarySku = product.PrimaryProductSku,
-                        FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                        ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
-                        SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
-                        PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
-                        Size = _productsService.GetSize(product.ProductAttributes),
-                        PointsOfLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
-                        LampshadeType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
-                        LampshadeSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
-                        LinearLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
-                        Mirror = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
-                        Shape = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
-                        PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
-                        SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
-                        ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
-                    });
-                }
+                    PrimarySku = x.PrimaryProductSku,
+                    FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                    ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
+                    SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
+                    PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                    Size = _productsService.GetSize(x.ProductAttributes),
+                    PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
+                    LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
+                    LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
+                    LinearLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                    Mirror = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                    Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
+                    PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
+                    SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                    ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
+                });
 
                 prices = await _priceService.GetPrices(
                     _options.Value.GrulaAccessToken,
                     DateTime.UtcNow,
-                    priceProducts,
+                    await Task.WhenAll(priceProducts),
                     new PriceClient
                     {
                         Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
@@ -168,24 +160,18 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     });
             }
 
-            for (var i = 0; i < orderLines.Count(); i++)
+            var priceIndex = 0;
+
+            foreach (var orderLine in importedOrderLines)
             {
-                var orderLine = orderLines.ElementAtOrDefault(i);
-
-                if (orderLine is null)
-                {
-                    continue;
-                }
-
-                var product = products.FirstOrDefault(x => x.Sku == orderLine.Sku);
-
-                if (product is null)
+                if (!productLookup.TryGetValue(orderLine.Sku, out var product))
                 {
                     _logger.LogWarning($"Product for SKU {orderLine.Sku} and language {language} not found.");
                     continue;
                 }
 
                 var availableStock = stockByProductId.TryGetValue(product.Id, out var qty) ? qty : 0;
+
                 var stockQuantity = Math.Min(orderLine.Quantity, (double)availableStock);
                 var quantity = orderLine.Quantity - stockQuantity;
 
@@ -208,7 +194,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
                 if (prices.Any())
                 {
-                    var price = prices.ElementAtOrDefault(i);
+                    var price = prices.ElementAtOrDefault(priceIndex);
 
                     if (price is not null)
                     {
@@ -219,6 +205,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 }
 
                 basketItems.Add(basketItem);
+                priceIndex++;
             }
 
             var reqCookie = Request.Cookies[BasketConstants.BasketCookieName];
