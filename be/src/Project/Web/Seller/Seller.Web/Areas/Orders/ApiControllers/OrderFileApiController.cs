@@ -134,7 +134,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             var stockByProductId = stockAvailableProducts
                .OrEmptyIfNull()
-               .ToDictionary(g => g.ProductId, g => g.AvailableQuantity);
+               .ToDictionary(g => g.ProductId, g => (double)g.AvailableQuantity);
 
             var basketItems = new List<BasketItem>();
 
@@ -220,8 +220,13 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
                 var availableStock = stockByProductId.TryGetValue(product.Id, out var qty) ? qty : 0;
 
-                var stockQuantity = Math.Min(orderLine.Quantity, (double)availableStock);
+                var stockQuantity = Math.Min(orderLine.Quantity, availableStock);
                 var quantity = orderLine.Quantity - stockQuantity;
+
+                if (stockByProductId.ContainsKey(product.Id))
+                {
+                    stockByProductId[product.Id] = Math.Max(0, availableStock - stockQuantity);
+                }
 
                 var firstImage = product.Images.OrEmptyIfNull().FirstOrDefault();
                 var pictureUrl = firstImage != Guid.Empty
