@@ -316,33 +316,10 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                     {
                         if (subAggregation.Value is BucketAggregate bucketAgg)
                         {
-                            var a = new Filter
-                            {
-                                Name = subAggregation.Key,
-                                Values = new List<string>()
-                            };
+                            var filter = MapBucketAggregate(subAggregation.Key, bucketAgg);
 
-                            foreach (var item in bucketAgg.Items)
-                            {
-                                if (item is KeyedBucket<object> keyedBucket)
-                                {
-                                    a.Values.Add(keyedBucket.Key.ToString());
-                                }
-
-                                if (item is RangeBucket rangeBucket)
-                                {
-                                    var from = rangeBucket.From ?? 0;
-                                    var to = rangeBucket.To ?? double.PositiveInfinity;
-
-                                    var value = double.IsPositiveInfinity(to)
-                                            ? $"{from:0}+"
-                                            : $"{from:0}-{(to - 1):0}";
-
-                                    a.Values.Add(value);
-                                }
-                            }
-
-                            results.Add(a);
+                            if (filter != null)
+                                results.Add(filter);
                         }
                     }
 
@@ -351,21 +328,10 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
                 if (aggregation.Value is BucketAggregate bucketAggregate)
                 {
-                    var filter = new Filter
-                    {
-                        Name = aggregation.Key,
-                        Values = new List<string>()
-                    };
+                    var filter = MapBucketAggregate(aggregation.Key, bucketAggregate);
 
-                    foreach (var item in bucketAggregate.Items)
-                    {
-                        if (item is KeyedBucket<object> keyedBucket)
-                        {
-                            filter.Values.Add(keyedBucket.Key.ToString());
-                        }
-                    }
-
-                    results.Add(filter);
+                    if (filter != null)
+                        results.Add(filter);
                 }
             }
 
@@ -594,6 +560,44 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             }
 
             return default;
+        }
+
+        private Filter? MapBucketAggregate(string name, BucketAggregate bucketAggregate)
+        {
+            if (bucketAggregate.Items.FirstOrDefault() is KeyedBucket<object>)
+            {
+                var values = bucketAggregate.Items
+                    .Cast<KeyedBucket<object>>()
+                    .Select(b => b.Key?.ToString() ?? "")
+                    .Where(v => !string.IsNullOrWhiteSpace(v))
+                    .ToList();
+
+                return values.Count > 0
+                    ? new Filter { Name = name, Values = values }
+                    : null;
+            }
+
+            if (bucketAggregate.Items.FirstOrDefault() is RangeBucket)
+            {
+                var values = bucketAggregate.Items
+                    .Cast<RangeBucket>()
+                    .Select(rangeBucket =>
+                    {
+                        var from = rangeBucket.From ?? 0;
+                        var to = rangeBucket.To ?? double.PositiveInfinity;
+
+                        return double.IsPositiveInfinity(to)
+                                ? $"{from:0}+"
+                                : $"{from:0}-{(to - 1):0}"; ;
+                    })
+                    .ToList();
+
+                return values.Count > 0
+                    ? new Filter { Name = name, Values = values }
+                    : null;
+            }
+
+            return null;
         }
 
         private IEnumerable<QueryContainer> BuildRangeQueries(IEnumerable<string>? ranges, string field)
