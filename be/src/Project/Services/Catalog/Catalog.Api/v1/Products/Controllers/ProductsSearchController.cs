@@ -22,11 +22,11 @@ namespace Catalog.Api.v1.Products.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize]
     [ApiController]
-    public class ProductSearchController : BaseApiController
+    public class ProductsSearchController : BaseApiController
     {
         private readonly IProductsService _productsService;
 
-        public ProductSearchController(IProductsService productsService)
+        public ProductsSearchController(IProductsService productsService)
         {
             _productsService = productsService;
         }
