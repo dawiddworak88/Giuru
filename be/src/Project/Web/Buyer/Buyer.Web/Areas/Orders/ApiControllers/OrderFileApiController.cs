@@ -6,13 +6,17 @@ using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Areas.Orders.Services.OrderFiles;
 using Buyer.Web.Areas.Products.Repositories.Products;
+using Buyer.Web.Areas.Products.Services.ProductColors;
+using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Definitions.Files;
+using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.DomainModels.Media;
+using Buyer.Web.Shared.DomainModels.Prices;
 using Buyer.Web.Shared.Repositories.Inventory;
 using Buyer.Web.Shared.Repositories.Media;
-using Buyer.Web.Shared.Repositories.Products;
+using Buyer.Web.Shared.Services.Prices;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
@@ -40,18 +44,20 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
     [Authorize]
     public class OrderFileApiController : BaseApiController
     {
-        private readonly IOrderFileService orderFileService;
-        private readonly IProductsRepository productsRepository;
-        private readonly IBasketRepository basketRepository;
-        private readonly LinkGenerator linkGenerator;
-        private readonly IOptions<AppSettings> options;
-        private readonly IMediaService mediaService;
-        private readonly ILogger<OrderFileApiController> logger;
-        private readonly IMediaItemsRepository mediaRepository;
-        private readonly IOrdersRepository ordersRepository;
-        private readonly IInventoryRepository inventoryRepository;
-        private readonly ICatalogProductsRepository catalogProductsRepository;
-        private readonly IStringLocalizer<OrderResources> orderLocalizer;
+        private readonly IOrderFileService _orderFileService;
+        private readonly IProductsRepository _productsRepository;
+        private readonly IBasketRepository _basketRepository;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IOptions<AppSettings> _options;
+        private readonly IMediaService _mediaService;
+        private readonly ILogger<OrderFileApiController> _logger;
+        private readonly IMediaItemsRepository _mediaRepository;
+        private readonly IOrdersRepository _ordersRepository;
+        private readonly IInventoryRepository _inventoryRepository;
+        private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly IPriceService _priceService;
+        private readonly IProductsService _productsService;
+        private readonly IProductColorsService _productColorsService;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
@@ -64,80 +70,150 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IOrdersRepository ordersRepository,
             IInventoryRepository inventoryRepository,
             ILogger<OrderFileApiController> logger,
-            ICatalogProductsRepository catalogProductsRepository,
-            IStringLocalizer<OrderResources> orderLocalizer)
+            IStringLocalizer<OrderResources> orderLocalizer,
+            IPriceService priceService,
+            IProductsService productsService,
+            IProductColorsService productColorsService)
         {
-            this.orderFileService = orderFileService;
-            this.productsRepository = productsRepository;
-            this.basketRepository = basketRepository;
-            this.linkGenerator = linkGenerator;
-            this.options = options;
-            this.mediaService = mediaService;
-            this.logger = logger;
-            this.mediaRepository = mediaRepository;
-            this.ordersRepository = ordersRepository;
-            this.inventoryRepository = inventoryRepository;
-            this.catalogProductsRepository = catalogProductsRepository;
-            this.orderLocalizer = orderLocalizer;
+            _orderFileService = orderFileService;
+            _productsRepository = productsRepository;
+            _basketRepository = basketRepository;
+            _linkGenerator = linkGenerator;
+            _options = options;
+            _mediaService = mediaService;
+            _logger = logger;
+            _mediaRepository = mediaRepository;
+            _ordersRepository = ordersRepository;
+            _inventoryRepository = inventoryRepository;
+            _orderLocalizer = orderLocalizer;
+            _priceService = priceService;
+            _productsService = productsService;
+            _productColorsService = productColorsService;
         }
 
         [HttpPost]
         public async Task<IActionResult> Index([FromForm] UploadMediaRequestModel model)
         {
-            var importedOrderLines = this.orderFileService.ImportOrderLines(model.File);
+            var importedOrderLines = _orderFileService.ImportOrderLines(model.File);
             var basketItems = new List<BasketItem>();
 
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var skusParam = importedOrderLines.OrEmptyIfNull().Select(x => x.Sku).Distinct().ToEndpointParameterString();
-            var products = await this.catalogProductsRepository.GetProductsAsync(token, language, skusParam);
+            var skusParam = importedOrderLines.OrEmptyIfNull().Select(x => x.Sku).Distinct();
+            var products = await _productsRepository.GetProductsBySkusAsync(token, language, skusParam);
 
-            if (!products.OrEmptyIfNull().Any())
+            if (products.OrEmptyIfNull().Any() is false)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = this.orderLocalizer.GetString("ProductsNotFound") });
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("ProductsNotFound") });
             }
 
-            var productBySku = products
-                .OrEmptyIfNull()
-                .ToDictionary(g => g.Sku, g => g);
+            var productLookup = products.ToDictionary(p => p.Sku);
 
-            var productIds = products.OrEmptyIfNull().Select(x => x.Id).Distinct().ToList();
-            var stockAvailableProducts = await this.inventoryRepository.GetStockAvailbleProductsByProductIdsAsync(token, language, productIds);
+            var orderedProducts = importedOrderLines
+                .Where(x => productLookup.ContainsKey(x.Sku))
+                .Select(x => productLookup[x.Sku]);
+
+            var productIds = products.OrEmptyIfNull().Select(x => x.Id).Distinct();
+            var stockAvailableProducts = await _inventoryRepository.GetStockAvailbleProductsByProductIdsAsync(token, language, productIds);
 
             var stockByProductId = stockAvailableProducts
                 .OrEmptyIfNull()
-                .ToDictionary(g => g.ProductId, g => g.AvailableQuantity);
+                .ToDictionary(g => g.ProductId, g => (double)g.AvailableQuantity);
 
-            foreach (var orderLine in importedOrderLines.OrEmptyIfNull())
+            var prices = Enumerable.Empty<Price>();
+
+            if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
             {
-                if (!productBySku.TryGetValue(orderLine.Sku, out var product) || product == null)
+                var priceProducts = orderedProducts.Select(async x => new PriceProduct
                 {
-                    this.logger.LogError($"Product for SKU {orderLine.Sku} and language {language} couldn't be found.");
+                    PrimarySku = x.PrimaryProductSku,
+                    FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                    ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
+                    SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
+                    PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                    Size = _productsService.GetSize(x.ProductAttributes),
+                    PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
+                    LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
+                    LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
+                    LinearLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                    Mirror = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                    Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
+                    PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
+                    SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                    ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
+                });
+
+                prices = await _priceService.GetPrices(
+                    _options.Value.GrulaAccessToken,
+                    DateTime.UtcNow,
+                    await Task.WhenAll(priceProducts),
+                    new PriceClient
+                    {
+                        Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
+                        Name = User.Identity?.Name,
+                        CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
+                        ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
+                        PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
+                        Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
+                        DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
+                    });
+            }
+
+            var priceIndex = 0;
+
+            foreach (var orderLine in importedOrderLines)
+            {
+                if (!productLookup.TryGetValue(orderLine.Sku, out var product))
+                {
+                    _logger.LogWarning($"Product for SKU {orderLine.Sku} and language {language} not found.");
                     continue;
                 }
 
                 var availableStock = stockByProductId.TryGetValue(product.Id, out var qty) ? qty : 0;
 
-                var stockQuantity = Math.Min(orderLine.Quantity, (double)availableStock);
+                var stockQuantity = Math.Min(orderLine.Quantity, availableStock);
                 var quantity = orderLine.Quantity - stockQuantity;
+
+                if (stockByProductId.ContainsKey(product.Id))
+                {
+                    stockByProductId[product.Id] = Math.Max(0, availableStock - stockQuantity);
+                }
+
+                var firstImage = product.Images.OrEmptyIfNull().FirstOrDefault();
+                var pictureUrl = firstImage != Guid.Empty
+                    ? _mediaService.GetMediaUrl(firstImage, OrdersConstants.Basket.BasketProductImageMaxWidth)
+                    : null;
 
                 var basketItem = new BasketItem
                 {
                     ProductId = product.Id,
-                    ProductSku = product.Sku,
+                    ProductSku = orderLine.Sku,
                     ProductName = product.Name,
-                    PictureUrl = product.Images.OrEmptyIfNull().Any() ? this.mediaService.GetMediaUrl(product.Images.First(), OrdersConstants.Basket.BasketProductImageMaxWidth) : null,
+                    PictureUrl = pictureUrl,
                     Quantity = quantity,
                     StockQuantity = stockQuantity,
                     ExternalReference = orderLine.ExternalReference,
                     MoreInfo = orderLine.MoreInfo
                 };
 
+                if (prices.Any())
+                {
+                    var price = prices.ElementAtOrDefault(priceIndex);
+
+                    if (price is not null)
+                    {
+                        basketItem.UnitPrice = price.CurrentPrice;
+                        basketItem.Price = price.CurrentPrice * (decimal)orderLine.Quantity;
+                        basketItem.Currency = price.CurrencyCode;
+                    }
+                }
+
                 basketItems.Add(basketItem);
+                priceIndex++;
             }
 
-            var reqCookie = this.Request.Cookies[BasketConstants.BasketCookieName];
+            var reqCookie = Request.Cookies[BasketConstants.BasketCookieName];
 
             if (reqCookie is null)
             {
@@ -147,12 +223,12 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 {
                     MaxAge = TimeSpan.FromDays(BasketConstants.BasketCookieMaxAge)
                 };
-                this.Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
+                Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
             }
 
             var id = Guid.Parse(reqCookie);
 
-            var basket = await this.basketRepository.SaveAsync(token, language, id, basketItems);
+            var basket = await _basketRepository.SaveAsync(token, language, id, basketItems);
 
             var basketResponseModel = new BasketResponseModel
             {
@@ -164,7 +240,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 basketResponseModel.Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                 {
                     ProductId = x.ProductId,
-                    ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = language, Id = x.ProductId }),
+                    ProductUrl = _linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = language, Id = x.ProductId }),
                     Name = x.ProductName,
                     Sku = x.ProductSku,
                     Quantity = x.Quantity,
@@ -173,11 +249,14 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     ExternalReference = x.ExternalReference,
                     ImageSrc = x.PictureUrl,
                     ImageAlt = x.ProductName,
-                    MoreInfo = x.MoreInfo
+                    MoreInfo = x.MoreInfo,
+                    UnitPrice = x.UnitPrice,
+                    Price = x.Price,
+                    Currency = x.Currency,
                 });
             }
 
-            return this.StatusCode((int)HttpStatusCode.OK, basketResponseModel);
+            return StatusCode((int)HttpStatusCode.OK, basketResponseModel);
         }
 
         [HttpGet]
@@ -186,14 +265,14 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var productFiles = await this.ordersRepository.GetOrderFilesAsync(token, language, id, pageIndex, itemsPerPage, searchTerm, $"{nameof(OrderFile.CreatedDate)} desc");
+            var productFiles = await _ordersRepository.GetOrderFilesAsync(token, language, id, pageIndex, itemsPerPage, searchTerm, $"{nameof(OrderFile.CreatedDate)} desc");
 
             var filesModel = new List<FileItem>();
             var filesIds = productFiles.Data.Select(x => x.Id);
 
             if (productFiles is not null && filesIds.Any())
             {
-                var files = await this.mediaRepository.GetMediaItemsAsync(token, language, filesIds, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize);
+                var files = await _mediaRepository.GetMediaItemsAsync(token, language, filesIds, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize);
 
                 foreach (var file in files.OrEmptyIfNull())
                 {
@@ -202,10 +281,10 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                         Id = file.Id,
                         Name = file.Name,
                         Filename = file.Filename,
-                        Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
+                        Url = _mediaService.GetNonCdnMediaUrl(file.Id),
                         Description = file.Description ?? "-",
                         IsProtected = file.IsProtected,
-                        Size = this.mediaService.ConvertToMB(file.Size),
+                        Size = _mediaService.ConvertToMB(file.Size),
                         LastModifiedDate = file.LastModifiedDate,
                         CreatedDate = file.CreatedDate
                     };
@@ -219,7 +298,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 Data = filesModel
             };
 
-            return this.StatusCode((int)HttpStatusCode.OK, pagedFiles);
+            return StatusCode((int)HttpStatusCode.OK, pagedFiles);
         }
     }
 }

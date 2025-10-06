@@ -8,7 +8,7 @@ const Availability = ({
     availableQuantity
 }) => {
     return (
-        availableQuantity && availableQuantity > 0 && (
+        availableQuantity > 0 && (
             <div className={`availability ${className || ""}`}>
                 <div className="availability__delivery-icon">
                     <DeliveryIcon />
