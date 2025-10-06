@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using Buyer.Web.Areas.Products.DomainModels;
 using Foundation.Extensions.Exceptions;
 using Buyer.Web.Areas.Orders.ApiRequestModels;
+using Buyer.Web.Shared.ApiRequestModels.Catalogs;
+using Foundation.GenericRepository.Definitions;
 
 namespace Buyer.Web.Areas.Products.Repositories.Products
 {
@@ -280,6 +282,61 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             }
 
             return default;
+        }
+        
+        public async Task<IEnumerable<Product>> GetProductsBySkusAsync(string token, string language, IEnumerable<string> skus)
+        {
+            var requestModel = new GetProductsBySkusRequestModel
+            {
+                Skus = skus.ToEndpointParameterString(),
+                PageIndex = Constants.DefaultPageIndex,
+                ItemsPerPage = Constants.DefaultItemsPerPage
+            };
+
+            var apiRequest = new ApiRequest<GetProductsBySkusRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsSkusApiEndpoint}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<GetProductsBySkusRequestModel>, GetProductsBySkusRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                var products = new List<Product>();
+
+                products.AddRange(response.Data.Data);
+
+                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)Constants.DefaultItemsPerPage);
+
+                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
+                {
+                    apiRequest.Data.PageIndex = i;
+
+                    var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<GetProductsBySkusRequestModel>, GetProductsBySkusRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
+
+                    if (nextPagesResponse.IsSuccessStatusCode is false)
+                    {
+                        throw new CustomException(nextPagesResponse.Message, (int)response.StatusCode);
+                    }
+
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Any())
+                    {
+                        products.AddRange(nextPagesResponse.Data.Data);
+                    }
+                }
+
+                return products;
+            }
+
+            if (response.IsSuccessStatusCode is false)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;            
         }
 
         private static Product MapProductResponseToProduct(ProductResponseModel productResponse)
