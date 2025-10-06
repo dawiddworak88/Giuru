@@ -96,7 +96,10 @@ namespace Catalog.Api.v1.Products.Controllers
                     {
                         Category = filters.Category,
                         Shape = filters.Shape,
-                        Color = filters.Color
+                        Color = filters.Color,
+                        Width = filters.Width,
+                        Height = filters.Height,
+                        Depth = filters.Depth
                     },
                     PageIndex = pageIndex,
                     ItemsPerPage = itemsPerPage,
