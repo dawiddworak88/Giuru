@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, Chip, Drawer, ListItemText, MenuItem, Select, Typography } from "@mui/material";
-import Arrow from "../../Icons/Arrow";
-import { CheckBox, CheckBoxChecked } from "../../Icons/CheckBox";
-import Remove from "../../Icons/Remove";
-import Filters from "../../Icons/Filters";
+import { 
+    Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, 
+    Chip, Drawer, ListItemText, MenuItem, Select, Typography 
+} from "@mui/material";
 import { Close } from "@mui/icons-material";
+import { 
+    ArrowIcon, CheckboxCheckedIcon, CheckboxIcon,
+    FiltersIcon, RemoveIcon 
+} from "../../icons";
 
 function FilterCollector(props) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -72,7 +75,7 @@ function FilterCollector(props) {
                                     </Typography>
                                     );
                                 }}
-                                IconComponent={(props) => <Arrow {...props}/>}
+                                IconComponent={(props) => <ArrowIcon className="material-icons" {...props}/>}
                                 className="filters-collector__filters__select mr-3 py-0 px-2"
                             >
                                 {item.items.map((variant, index) => (
@@ -84,8 +87,8 @@ function FilterCollector(props) {
                                         <Checkbox
                                             className="filters-collector__filters__select__item__checkbox"
                                             checked={isFilterSelected(item.key, variant.value)}
-                                            icon={<CheckBox />}
-                                            checkedIcon={<CheckBoxChecked />} />
+                                            icon={<CheckboxIcon />}
+                                            checkedIcon={<CheckboxCheckedIcon />} />
                                         <ListItemText primary={variant.label} />
                                     </MenuItem>
                                 ))}
@@ -94,7 +97,7 @@ function FilterCollector(props) {
                         <Button
                             className="filters-collector__filters__button px-4 py-1"
                             onClick={() => setSidebarOpen(true)}
-                            endIcon={<Filters />}
+                            endIcon={<FiltersIcon />}
                         >
                             <Typography fontWeight={700}>
                                 {props.allFilters}
@@ -107,7 +110,7 @@ function FilterCollector(props) {
                         <div className="filters-collector__sort__text has-text-weight-bold mr-3">{props.sortLabel}</div>
                         <Select
                             className="filters-collector__sort__select"
-                            IconComponent={(props) => <Arrow {...props}/>}
+                            IconComponent={(props) => <ArrowIcon {...props}/>}
                             value={props.sorting}
                             onChange={(e) => props.setSorting(e.target.value)}
                         >
@@ -136,7 +139,7 @@ function FilterCollector(props) {
                         key={index}
                         label={item.label}
                         onDelete={() => handleOnDeleteFilter(index)}
-                        deleteIcon={<Remove />} />
+                        deleteIcon={<RemoveIcon />} />
                 ))}
                 {props.filters.length > 1 && 
                     <Button
@@ -166,7 +169,7 @@ function FilterCollector(props) {
                         {props.filterInputs && props.filterInputs.length > 0 && props.filterInputs.map((item, index) => (
                             <Accordion key={index} className="sidebar__filters__filter">
                                 <AccordionSummary
-                                    expandIcon={<Arrow />}
+                                    expandIcon={<ArrowIcon />}
                                 >
                                     {item.label}
                                 </AccordionSummary>
@@ -175,8 +178,8 @@ function FilterCollector(props) {
                                         <Checkbox
                                             className="sidebar__filters__filter__item__checkbox"
                                             checked={isFilterSelected(item.key, variant.value)}
-                                            icon={<CheckBox />}
-                                            checkedIcon={<CheckBoxChecked />}
+                                            icon={<CheckboxIcon />}
+                                            checkedIcon={<CheckboxCheckedIcon />}
                                             onClick={() => handleOnSidebarFilterSet(item.key, variant.value, variant.label) } />
                                         <Typography>{variant.label}</Typography>
                                     </AccordionDetails>
