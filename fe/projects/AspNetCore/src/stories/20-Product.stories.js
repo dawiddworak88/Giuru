@@ -101,7 +101,7 @@ var productDetail = {
     seeMoreText: "See more",
     seeLessText: "See less",
     copyToClipboardText: "Copy to clipboard",
-    CopyTextError: "Copying failed",
+    copyTextError: "Copying failed",
     copiedText: "Copied",
     toastSuccessAddProductToBasket: {
       title: "Success added product to basket",
