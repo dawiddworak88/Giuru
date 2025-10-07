@@ -37,9 +37,16 @@ const CopyButton = ({
         document.body.appendChild(ta)
         ta.select()
         try {
-            document.execCommand('copy')
-            setCopied(true)
-            setTimeout(() => setCopied(false), CopyConstants.copyFeedbackDuration())
+            const successful = document.execCommand('copy')
+            if (successful)
+            {
+                setCopied(true)
+                setTimeout(() => setCopied(false), CopyConstants.copyFeedbackDuration())
+            } else {
+                toast.error(copyTextError)
+            }
+        } catch (err) {
+            toast.error(copyTextError)
         } finally {
             document.body.removeChild(ta)
         }
