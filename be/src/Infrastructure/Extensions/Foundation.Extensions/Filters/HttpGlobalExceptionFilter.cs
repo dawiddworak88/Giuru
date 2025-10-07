@@ -41,7 +41,7 @@ namespace Foundation.Extensions.Filters
                 response.DeveloperMessage = context.Exception;
             }
 
-            if (statusCode != FilterConstants.NoContentStatusCode ||
+            if (statusCode != FilterConstants.NoContentStatusCode &&
                 statusCode != FilterConstants.UnauthorizedStatusCode)
             {
                 context.Result = new ObjectResult(response);
