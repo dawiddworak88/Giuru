@@ -43,9 +43,10 @@ export default class GlobalHelper {
 
   static sanitizeHtml = (htmlString) => {
     return DOMPurify.sanitize(htmlString, {
-      ALLOWED_TAGS: ['p', 'br', 'b', 'i', 'em', 'strong', 'a', 'ul', 'ol', 'li'],
-      ALLOWED_ATTR: ['href', 'target'],
-      RETURN_DOM: true
+      ALLOWED_TAGS: ['p', 'br', 'b', 'i', 'em', 'strong', 'a', 
+        'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+        'code', 'pre', 'blockquote', 'hr'],
+      ALLOWED_ATTR: ['href', 'target', 'rel']
     });
   };
 
