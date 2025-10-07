@@ -5,7 +5,7 @@ import Files from "../../../../shared/components/Files/Files";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 import Modal from "../../../../shared/components/Modal/Modal";
-import { ExpandMore, ExpandLess} from "@mui/icons-material"
+import { ExpandMore, ExpandLess } from "@mui/icons-material"
 import { marked } from "marked";
 import ResponsiveImage from "../../../../shared/components/Picture/ResponsiveImage";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
