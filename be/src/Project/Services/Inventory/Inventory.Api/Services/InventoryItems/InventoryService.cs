@@ -42,7 +42,7 @@ namespace Inventory.Api.Services.InventoryItems
 
             if (product is null || inventory is null)
             {
-                throw new CustomException(_inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_inventoryLocalizer.GetString("InventoryNotFound"));
             }
 
             product.Name = serviceModel.ProductName;
@@ -172,7 +172,7 @@ namespace Inventory.Api.Services.InventoryItems
 
             if (inventoryProduct is null)
             {
-                throw new CustomException(_inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_inventoryLocalizer.GetString("InventoryNotFound"));
             }
 
             return new InventoryServiceModel
@@ -405,7 +405,7 @@ namespace Inventory.Api.Services.InventoryItems
 
             if (inventory is null)
             {
-                throw new CustomException(_inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_inventoryLocalizer.GetString("InventoryNotFound"));
             }
 
             inventory.IsActive = false;

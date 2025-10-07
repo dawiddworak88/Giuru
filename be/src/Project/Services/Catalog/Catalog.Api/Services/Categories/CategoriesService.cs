@@ -19,6 +19,7 @@ using Foundation.EventBus.Abstractions;
 using System.Diagnostics;
 using Catalog.Api.IntegrationEvents;
 using System.Linq.Dynamic.Core;
+using System.Reflection.PortableExecutable;
 
 namespace Catalog.Api.Services.Categories
 {
@@ -101,7 +102,7 @@ namespace Catalog.Api.Services.Categories
 
             if (categoryItem is null)
             {
-                throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_productLocalizer.GetString("CategoryNotFound"));
             }
 
             var translations = _context.CategoryTranslations.Where(x => x.CategoryId == categoryItem.Id && x.IsActive || x.CategoryId == categoryItem.Parentid && x.IsActive).ToList();
@@ -127,17 +128,17 @@ namespace Catalog.Api.Services.Categories
 
             if (category is null)
             {
-                throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_productLocalizer.GetString("CategoryNotFound"));
             }
 
             if (await _context.Categories.AnyAsync(x => x.Parentid == category.Id && x.IsActive))
             {
-                throw new CustomException(_productLocalizer.GetString("SubcategoriesDeleteCategoryConflict"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(_productLocalizer.GetString("SubcategoriesDeleteCategoryConflict"));
             }
 
             if (await _context.Products.AnyAsync(x => x.CategoryId == category.Id && x.IsActive))
             {
-                throw new CustomException(_productLocalizer.GetString("ProductsDeleteCategoryConflict"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(_productLocalizer.GetString("ProductsDeleteCategoryConflict"));
             }
 
             category.IsActive = false;
@@ -151,7 +152,7 @@ namespace Catalog.Api.Services.Categories
 
             if (category is null)
             {
-                throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_productLocalizer.GetString("CategoryNotFound"));
             }
 
             if (model.ParentId.HasValue)
@@ -160,7 +161,7 @@ namespace Catalog.Api.Services.Categories
 
                 if (parentCategory is null)
                 {
-                    throw new CustomException(_productLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NotFound);
+                    throw new NotFoundException(_productLocalizer.GetString("ParentCategoryNotFound"));
                 }
 
                 category.Parentid = model.ParentId;
@@ -361,7 +362,7 @@ namespace Catalog.Api.Services.Categories
 
             if (categorySchema is null)
             {
-                throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound); 
+                throw new NotFoundException(_productLocalizer.GetString("CategoryNotFound")); 
             }
 
             return new CategorySchemasServiceModel

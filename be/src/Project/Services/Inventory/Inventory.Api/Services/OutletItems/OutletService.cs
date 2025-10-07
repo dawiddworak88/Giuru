@@ -42,7 +42,7 @@ namespace Inventory.Api.Services.OutletItems
 
             if (product is null || outlet is null)
             {
-                throw new CustomException(_inventoryLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_inventoryLocalizer.GetString("OutletNotFound"));
             }
 
             product.Name = model.ProductName;
@@ -229,7 +229,7 @@ namespace Inventory.Api.Services.OutletItems
 
             if (outletItem is null)
             {
-                throw new CustomException(_inventoryLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_inventoryLocalizer.GetString("OutletNotFound"));
             }
 
             return new OutletServiceModel
@@ -465,7 +465,7 @@ namespace Inventory.Api.Services.OutletItems
 
             if (outlet == null)
             {
-                throw new CustomException(_inventoryLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_inventoryLocalizer.GetString("OutletNotFound"));
             }
 
             outlet.IsActive = false;

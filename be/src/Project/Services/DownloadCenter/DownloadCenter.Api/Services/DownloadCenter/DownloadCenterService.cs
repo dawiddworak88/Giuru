@@ -59,7 +59,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (downloadCenterFile is null)
             {
-                throw new CustomException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"));
             }
 
             foreach(var downloadCenterCategoryFile in downloadCenterFile.OrEmptyIfNull())
@@ -117,7 +117,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (downloadCenterFile is null)
             {
-                throw new CustomException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"));
             }
 
             var downloadCenterFileItem = new DownloadCenterItemFileServiceModel
@@ -190,7 +190,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (downloadCenterCategory is null)
             {
-                throw new CustomException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"));
             }
 
             var subcategories = _context.DownloadCenterCategories.Where(x => x.ParentCategoryId == downloadCenterCategory.Id && x.IsActive && x.IsVisible).ToList();
@@ -247,7 +247,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (downloadCenterCategoryFiles is null)
             {
-                throw new CustomException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"));
             }
 
             foreach(var downloadCenterCategoryFile in downloadCenterCategoryFiles.OrEmptyIfNull())

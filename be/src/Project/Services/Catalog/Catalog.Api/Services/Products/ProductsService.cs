@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using Foundation.Extensions.ExtensionMethods;
 using Microsoft.EntityFrameworkCore;
 using Foundation.Extensions.Exceptions;
-using System.Net;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
 using System;
@@ -55,19 +54,19 @@ namespace Catalog.Api.Services.Products
 
             if (brand is null)
             {
-                throw new CustomException(_productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_productLocalizer.GetString("BrandNotFound"));
             }
 
             var category = _context.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
 
             if (category is null)
             {
-                throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_productLocalizer.GetString("CategoryNotFound"));
             }
 
             if (_context.Products.Any(x => x.Sku == model.Sku && x.IsActive))
             {
-                throw new CustomException(_productLocalizer.GetString("ProductSkuConflict"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(_productLocalizer.GetString("ProductSkuConflict"));
             }
 
             var product = new Product
@@ -150,32 +149,33 @@ namespace Catalog.Api.Services.Products
 
         public async Task<Guid?> UpdateAsync(CreateUpdateProductModel model)
         {
+            throw new NotFoundException("NotFound somethnig!");
             using var source = new ActivitySource(this.GetType().Name);
 
             var brand = _context.Brands.FirstOrDefault(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
 
             if (brand is null)
             {
-                throw new CustomException(_productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_productLocalizer.GetString("BrandNotFound"));
             }
 
             var category = _context.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
 
             if (category is null)
             {
-                throw new CustomException(_productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_productLocalizer.GetString("CategoryNotFound"));
             }
 
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
 
             if (product is null)
             {
-                throw new CustomException(_productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_productLocalizer.GetString("ProductNotFound"));
             }
 
             if (_context.Products.Any(x => x.Sku == model.Sku && x.Id != model.Id && x.IsActive))
             {
-                throw new CustomException(_productLocalizer.GetString("ProductSkuConflict"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(_productLocalizer.GetString("ProductSkuConflict"));
             }
 
             product.IsNew = model.IsNew;
@@ -289,18 +289,19 @@ namespace Catalog.Api.Services.Products
 
         public async Task DeleteAsync(DeleteProductServiceModel model)
         {
+            throw new NotFoundException(_productLocalizer.GetString("ProductNotFound"));
             using var source = new ActivitySource(this.GetType().Name);
 
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
 
             if (product is null)
             {
-                throw new CustomException(_productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_productLocalizer.GetString("ProductNotFound"));
             }
 
             if (await _context.Products.AnyAsync(x => x.PrimaryProductId == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive))
             {
-                throw new CustomException(_productLocalizer.GetString("ProductVariantsDeleteProductConflict"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(_productLocalizer.GetString("ProductVariantsDeleteProductConflict"));
             }
 
             product.IsActive = false;
