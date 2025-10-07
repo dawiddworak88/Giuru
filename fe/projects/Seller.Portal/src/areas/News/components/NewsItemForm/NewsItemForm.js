@@ -78,7 +78,7 @@ const NewsItemForm = (props) => {
                         setFieldValue({ name: "id", value: jsonResponse.id });
                     }
                     else {
-                        toast.error(jsonResponse.message ? jsonResponse.message : props.generalErrorMessage);
+                        toast.error(jsonResponse?.message || props.generalErrorMessage);
                     }
                 });
             });

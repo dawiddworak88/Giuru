@@ -217,7 +217,7 @@ const ClientApplicationForm = (props) => {
                         toast.success(jsonResponse.message);
                     }
                     else {
-                        toast.error(jsonResponse.message ? jsonResponse.message : props.generalErrorMessage);
+                        toast.error(jsonResponse?.message || props.generalErrorMessage);
                     }
                 });
 
