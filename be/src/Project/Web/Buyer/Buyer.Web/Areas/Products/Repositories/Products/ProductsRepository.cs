@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 using Buyer.Web.Areas.Products.DomainModels;
 using Foundation.Extensions.Exceptions;
 using Buyer.Web.Areas.Orders.ApiRequestModels;
+using Foundation.Search.Paginations;
+using Foundation.Search.Models;
+using Nest;
 
 namespace Buyer.Web.Areas.Products.Repositories.Products
 {
@@ -312,6 +315,47 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                         Name = x.Name,
                         Values = x.Values.OrEmptyIfNull().Select(y => y)
                     })
+                };
+            }
+
+            return default;
+        }
+
+        public async Task<PagedResultsWithFilters<IEnumerable<Product>>> GetProductsWithFiltersAsync(string token, string language, string searchTerm, QueryFilters filters, int pageIndex, int itemsPerPage, string orderBy)
+        {
+            var productsRequestModel = new ProductsRequestModel
+            {
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
+            };
+
+            var apiRequest = new ApiRequest<ProductsRequestModel>
+            {
+                Language = language,
+                Data = productsRequestModel,
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsSearchApiEndpoint}"
+            };
+
+            var response = await _apiClientService.PostAsync<ApiRequest<ProductsRequestModel>, ProductsRequestModel, PagedResultsWithFilters<IEnumerable<ProductResponseModel>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data is not null)
+            {
+                var products = new List<Product>();
+
+                foreach (var productResponse in response.Data.Data)
+                {
+                    var product = MapProductResponseToProduct(productResponse);
+
+                    products.Add(product);
+                }
+
+                return new PagedResultsWithFilters<IEnumerable<Product>>(response.Data.Total, response.Data.PageSize)
+                {
+                    Data = products,
+                    Filters = response.Data.Filters
                 };
             }
 

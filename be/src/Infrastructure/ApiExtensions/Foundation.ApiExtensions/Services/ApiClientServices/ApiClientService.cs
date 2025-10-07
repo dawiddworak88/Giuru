@@ -5,9 +5,11 @@ using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -215,6 +217,44 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
             }
 
             return apiResponse;
+        }
+
+        public async Task<ApiResponse<T>> PostWithQueryAsync<S, W, T>(S request, IDictionary<string, string> queryParams)
+            where S : ApiRequest<W>
+            where T : class
+        {
+            var endpoint = request.EndpointAddress;
+
+            if (queryParams is not null && queryParams.Count > 0)
+            {
+                endpoint = QueryHelpers.AddQueryString(endpoint, queryParams);
+            }
+
+            using (var client = new HttpClient())
+            {
+                if (ApiExtensionsConstants.TimeoutMilliseconds > 0)
+                {
+                    client.Timeout = TimeSpan.FromMilliseconds(ApiExtensionsConstants.TimeoutMilliseconds);
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.AccessToken))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AccessToken);
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.Language))
+                {
+                    client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue(request.Language));
+                }
+
+                var response = await client.PostAsync(
+                    endpoint,
+                    new StringContent(JsonConvert.SerializeObject(request.Data, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }),
+                    Encoding.UTF8,
+                    "application/json"));
+
+                return await HandleApiResponseAsync<T>(response);
+            }
         }
     }
 }
