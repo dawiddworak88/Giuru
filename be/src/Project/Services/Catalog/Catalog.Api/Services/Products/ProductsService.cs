@@ -149,7 +149,6 @@ namespace Catalog.Api.Services.Products
 
         public async Task<Guid?> UpdateAsync(CreateUpdateProductModel model)
         {
-            throw new NotFoundException("NotFound somethnig!");
             using var source = new ActivitySource(this.GetType().Name);
 
             var brand = _context.Brands.FirstOrDefault(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
@@ -289,7 +288,6 @@ namespace Catalog.Api.Services.Products
 
         public async Task DeleteAsync(DeleteProductServiceModel model)
         {
-            throw new NotFoundException(_productLocalizer.GetString("ProductNotFound"));
             using var source = new ActivitySource(this.GetType().Name);
 
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
