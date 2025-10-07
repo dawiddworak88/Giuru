@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import { Button } from "@mui/material";
 import Files from "../../../../shared/components/Files/Files";
@@ -29,8 +29,6 @@ function ProductDetail(props) {
     const [showMoreImages, setShowMoreImages] = useState(false);
     const [mediaItems, setMediaItems] = useState(props.mediaItems ? props.mediaItems.slice(0, 6) : []);
     const [activeMediaItemIndex, setActiveMediaItemIndex] = useState(0);
-    const [cleanDescription, setCleanDescription] = useState('');
-    const [plainText, setPlainText] = useState('');
 
     const {
         orderItems,
@@ -160,14 +158,17 @@ function ProductDetail(props) {
         setShowMoreImages(!showMoreImages);
     }
 
-    useEffect(() => {
-        if (props.description) {
-            const sanitized = GlobalHelper.sanitizeHtml(props.description).innerHTML;
-            const clean = marked.parse(sanitized)
-            setCleanDescription(clean);
-            setPlainText(GlobalHelper.extractTextOnly(clean))
-        }
-    }, [props.description])
+    const { cleanDescription, plainText } = useMemo(() => {
+        if (!props.description) return { cleanDescription: '', plainText: '' };
+        
+        const sanitized = GlobalHelper.sanitizeHtml(props.description);
+        const clean = marked.parse(sanitized);
+        return {
+            cleanDescription: clean,
+            plainText: GlobalHelper.extractTextOnly(clean)
+        };
+    }, [props.description]);
+
 
     return (
         <section className="product-detail section">
@@ -261,37 +262,36 @@ function ProductDetail(props) {
                     </div>
                     <div className="product-detail__description-column">
                         <p className="product-detail__sku">
-                            {props.skuLabel} {props.sku} 
-                            {<CopyButton 
+                            {props.skuLabel} {props.sku}
+                            <CopyButton
                                 copiedText={props.copiedText}
                                 copyTextError={props.copyTextError}
                                 copyToClipboardText={props.copyToClipboardText}
                                 text={props.sku}
                                 label={props.skuLabel}
-                            />}
+                            />
                         </p>
                         {props.ean &&
                             <p className="product-detail__ean">
-                                {props.eanLabel}
-                                {props.ean}
-                                {<CopyButton 
+                                {props.eanLabel} {props.ean}
+                                <CopyButton
                                     copiedText={props.copiedText}
                                     copyTextError={props.copyTextError}
                                     copyToClipboardText={props.copyToClipboardText}
                                     text={props.ean}
                                     label={props.eanLabel}
-                                />}
+                                />
                             </p>
                         }
                         <h1 className="title is-4 mt-1">
                             {props.title} 
-                            {<CopyButton 
+                            <CopyButton
                                 copiedText={props.copiedText}
                                 copyTextError={props.copyTextError}
                                 copyToClipboardText={props.copyToClipboardText}
                                 text={props.title}
                                 label={props.title}
-                            />}
+                            />
                         </h1>
                         <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
                         {props.outletTitle && !props.price &&
@@ -342,13 +342,13 @@ function ProductDetail(props) {
                             <div className="product-detail__product-description">
                                 <h3 className="product-detail__feature-title">
                                     {props.descriptionLabel}
-                                    {<CopyButton 
-                                        copiedText={props.copiedText}
+                                    <CopyButton
+                                       copiedText={props.copiedText}
                                         copyTextError={props.copyTextError}
                                         copyToClipboardText={props.copyToClipboardText}
                                         text={plainText}
                                         label={props.descriptionLabel}
-                                    />}
+                                    />
                                 </h3>
                                 <div dangerouslySetInnerHTML={{ __html: cleanDescription }}></div>
                             </div>
