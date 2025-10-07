@@ -19,7 +19,6 @@ using Foundation.EventBus.Abstractions;
 using System.Diagnostics;
 using Catalog.Api.IntegrationEvents;
 using System.Linq.Dynamic.Core;
-using System.Reflection.PortableExecutable;
 
 namespace Catalog.Api.Services.Categories
 {
