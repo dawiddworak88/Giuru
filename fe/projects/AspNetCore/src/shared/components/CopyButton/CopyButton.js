@@ -71,7 +71,8 @@ CopyButton.propTypes = {
     copiedText: PropTypes.string.isRequired,
     copyTextError: PropTypes.string.isRequired,
     copyToClipboardText: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired
+    text: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired
 }
 
 export default CopyButton
