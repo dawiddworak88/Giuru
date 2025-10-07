@@ -28,6 +28,7 @@
             public static readonly string ProductSuggestionsApiEndpoint = "/api/v1/productsuggestions";
             public static readonly string ProductFilesApiEndpoint = "/api/v1/products/files";
             public static readonly string ProductsSkusApiEndpoint = "/api/v1/products/skus";
+            public static readonly string ProductsSearchApiEndpoint = "/api/v1/productssearch";
         }
 
         public struct Client
