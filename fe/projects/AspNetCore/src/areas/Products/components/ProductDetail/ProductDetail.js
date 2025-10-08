@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useMemo } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Button } from "@mui/material";
 import Files from "../../../../shared/components/Files/Files";
@@ -29,6 +29,8 @@ function ProductDetail(props) {
     const [showMoreImages, setShowMoreImages] = useState(false);
     const [mediaItems, setMediaItems] = useState(props.mediaItems ? props.mediaItems.slice(0, 6) : []);
     const [activeMediaItemIndex, setActiveMediaItemIndex] = useState(0);
+    const [cleanDescription, setCleanDescription] = useState('');
+    const [plainText, setPlainText] = useState('');
 
     const {
         orderItems,
@@ -158,17 +160,14 @@ function ProductDetail(props) {
         setShowMoreImages(!showMoreImages);
     }
 
-    const { cleanDescription, plainText } = useMemo(() => {
-        if (!props.description) return { cleanDescription: '', plainText: '' };
-        
-        const sanitized = GlobalHelper.sanitizeHtml(props.description);
-        const clean = marked.parse(sanitized);
-        return {
-            cleanDescription: clean,
-            plainText: GlobalHelper.extractTextOnly(clean)
-        };
-    }, [props.description]);
-
+    useEffect(() => {
+        if (props.description) {
+            const sanitized = GlobalHelper.sanitizeHtml(props.description);
+            const clean = marked.parse(sanitized)
+            setCleanDescription(clean);
+            setPlainText(GlobalHelper.extractTextOnly(clean))
+        }
+    }, [props.description])
 
     return (
         <section className="product-detail section">

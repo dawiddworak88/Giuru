@@ -1,6 +1,5 @@
 import { createTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
-import DOMPurify from 'dompurify';
 
 export default class GlobalHelper {
 
@@ -42,12 +41,20 @@ export default class GlobalHelper {
   }
 
   static sanitizeHtml = (htmlString) => {
-    return DOMPurify.sanitize(htmlString, {
-      ALLOWED_TAGS: ['p', 'br', 'b', 'i', 'em', 'strong', 'a', 
-        'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-        'code', 'pre', 'blockquote', 'hr'],
-      ALLOWED_ATTR: ['href', 'target', 'rel']
-    });
+    const div = document.createElement("div");
+
+    div.innerHTML = htmlString;
+
+    const dangerousElements = [
+      'script', 'style', 'iframe', 'object', 'embed', 'form', 
+      'input', 'textarea', 'select', 'button', 'meta', 'link',
+      'base', 'applet', 'svg', 'math', 'audio', 'video', 'source',
+      'track', 'frame', 'frameset', 'noframes', 'noscript'
+    ];
+
+    div.querySelectorAll(dangerousElements).forEach(el => el.remove());
+
+    return div.innerHTML;
   };
 
   static extractTextOnly = (htmlString) => {
