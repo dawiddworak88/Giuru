@@ -57,7 +57,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
         {
             var downloadCenterFile = _context.DownloadCenterCategoryFiles.Where(x => x.MediaId == model.Id && x.IsActive);
 
-            if (downloadCenterFile is null)
+            if (downloadCenterFile.Any() is false)
             {
                 throw new NotFoundException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"));
             }
@@ -245,7 +245,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
         {
             var downloadCenterCategoryFiles = _context.DownloadCenterCategoryFiles.Where(x => x.MediaId == model.Id && x.IsActive);
 
-            if (downloadCenterCategoryFiles is null)
+            if (downloadCenterCategoryFiles.Any() is false)
             {
                 throw new NotFoundException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"));
             }
