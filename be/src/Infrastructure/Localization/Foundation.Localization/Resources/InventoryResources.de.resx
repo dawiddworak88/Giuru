@@ -238,6 +238,6 @@
     <value>Neues lagerhaus erfolgreich erstellt</value>
   </data>
   <data name="OutletNotFound" xml:space="preserve">
-    <value>Ausverkaufsprodukt wurde nicht gefunden.</value>
+    <value>Produkt aus dem Outlet wurde nicht gefunden.</value>
   </data>
 </root>
