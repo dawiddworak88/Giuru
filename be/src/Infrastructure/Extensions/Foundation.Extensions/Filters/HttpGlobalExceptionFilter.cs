@@ -1,20 +1,26 @@
 ﻿using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Localization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Localization;
 
 namespace Foundation.Extensions.Filters
 {
     public class HttpGlobalExceptionFilter : IExceptionFilter
     {
         private readonly IWebHostEnvironment _env;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
 
-        public HttpGlobalExceptionFilter(IWebHostEnvironment env)
+        public HttpGlobalExceptionFilter(
+            IWebHostEnvironment env,
+            IStringLocalizer<GlobalResources> globalLocalizer)
         {
             _env = env;
+            _globalLocalizer = globalLocalizer;
         }
 
         public void OnException(ExceptionContext context)
@@ -26,7 +32,7 @@ namespace Foundation.Extensions.Filters
                 UnprocessableEntityException ex => (StatusCodes.Status422UnprocessableEntity, ex.Message),
                 BadRequestException ex => (StatusCodes.Status400BadRequest, ex.Message),
                 CustomException ex => (ex.StatusCode, ex.Message),
-                _ => (StatusCodes.Status500InternalServerError, string.Empty)
+                _ => (StatusCodes.Status500InternalServerError, _globalLocalizer.GetString("AnErrorOccurred"))
             };
 
             context.HttpContext.Response.StatusCode = statusCode;
