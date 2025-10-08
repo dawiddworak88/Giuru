@@ -31,6 +31,7 @@ namespace Foundation.Extensions.Filters
                 ConflictException ex => (StatusCodes.Status409Conflict, ex.Message),
                 UnprocessableEntityException ex => (StatusCodes.Status422UnprocessableEntity, ex.Message),
                 BadRequestException ex => (StatusCodes.Status400BadRequest, ex.Message),
+                UnauthorizedExcpetion ex => (StatusCodes.Status401Unauthorized, ex.Message),
                 CustomException ex => (ex.StatusCode, ex.Message),
                 _ => (StatusCodes.Status500InternalServerError, _globalLocalizer.GetString("AnErrorOccurred"))
             };
