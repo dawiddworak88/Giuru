@@ -37,7 +37,7 @@ namespace Client.Api.Services.Roles
 
             if (existingRole is not null)
             {
-                throw new BadRequestException(this.clientLocalizer.GetString("RoleIsExisting"));
+                throw new ConflictException(this.clientLocalizer.GetString("RoleIsExisting"));
             }
 
             var role = new ClientRole

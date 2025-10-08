@@ -177,7 +177,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
             if (existingProductAttribute == null)
             {
-                throw new NotFoundException(_productLocalizer.GetString("ProductAttributeNotFound"));
+                throw new ConflictException(_productLocalizer.GetString("ProductAttributeNotFound"));
             }
 
             if (existingProductAttribute.ProductAttributeItems.Any(x => x.IsActive))
