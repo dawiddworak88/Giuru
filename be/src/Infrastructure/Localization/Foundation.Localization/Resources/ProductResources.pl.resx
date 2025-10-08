@@ -304,7 +304,7 @@
     <value>Marka nie została znaleziona.</value>
   </data>
   <data name="ProductNotFound" xml:space="preserve">
-    <value>Produkt nie została znaleziona.</value>
+    <value>Produkt nie została znaleziony.</value>
   </data>
   <data name="ProductAttributeItemConflict" xml:space="preserve">
     <value>Taka wartość atrybutu już istnieje.</value>
