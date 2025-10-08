@@ -191,7 +191,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
         public async Task<PagedResultsWithFilters<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(string token, string language, IEnumerable<Guid> ids, QueryFilters filters, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
-            var pagedProducts = await this.productsRepository.GetProductsWithFiltersAsync(token, language, searchTerm, filters, pageIndex, itemsPerPage, orderBy);
+            var pagedProducts = await this.productsRepository.GetProductsWithFiltersAsync(token, language, searchTerm, ids, filters, pageIndex, itemsPerPage, orderBy);
 
             if (pagedProducts?.Data != null)
             {
@@ -259,7 +259,8 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
             return new PagedResultsWithFilters<IEnumerable<CatalogItemViewModel>>(pagedProducts.Total, PaginationConstants.DefaultPageIndex)
             {
-                Data = Enumerable.Empty<CatalogItemViewModel>()
+                Data = Enumerable.Empty<CatalogItemViewModel>(),
+                Filters = new List<Filter>()
             };
         }
     }

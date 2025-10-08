@@ -18,6 +18,14 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
         Task<ProductStock> GetProductOutletAsync(Guid? productId);
         Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token);
         Task<PagedResults<IEnumerable<ProductFile>>> GetProductFilesAsync(string token, string language, Guid? id, int pageIndex, int itemsPerPage, string searchTerm, string orderBy);
-        Task<PagedResultsWithFilters<IEnumerable<Product>>> GetProductsWithFiltersAsync(string token, string language, string searchTerm, QueryFilters filters, int pageIndex, int itemsPerPage, string orderBy);
+        Task<PagedResultsWithFilters<IEnumerable<Product>>> GetProductsWithFiltersAsync(
+            string token, 
+            string language, 
+            string searchTerm, 
+            IEnumerable<Guid> ids,
+            QueryFilters filters, 
+            int pageIndex, 
+            int itemsPerPage, 
+            string orderBy);
     }
 }

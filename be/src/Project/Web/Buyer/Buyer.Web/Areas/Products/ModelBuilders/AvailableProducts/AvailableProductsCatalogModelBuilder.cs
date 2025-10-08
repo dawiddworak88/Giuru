@@ -26,6 +26,7 @@ using Buyer.Web.Areas.Products.ComponentModels;
 using Foundation.Extensions.ExtensionMethods;
 using Buyer.Web.Shared.ViewModels.Filters;
 using Foundation.GenericRepository.Definitions;
+using Foundation.Search.Models;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
@@ -78,16 +79,31 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
 
             var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
-                componentModel.Language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token);
+                componentModel.Language, 
+                PaginationConstants.DefaultPageIndex, 
+                AvailableProductsConstants.Pagination.ItemsPerPage, 
+                componentModel.Token);
 
             var outletItems = await this.outletRepository.GetOutletProductsAsync(
-                componentModel.Language, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);
+                componentModel.Language, 
+                PaginationConstants.DefaultPageIndex, 
+                OutletConstants.Catalog.DefaultItemsPerPage, 
+                componentModel.Token);
 
             if (inventories?.Data is not null && inventories.Data.Any())
             {
-                var products = await this.productsService.GetProductsAsync(
+                /*ar products = await this.productsService.GetProductsAsync(
                     inventories.Data.Select(x => x.ProductId), null, null, componentModel.Language,
-                    null, false, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token, SortingConstants.Default);
+                    null, false, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token, SortingConstants.Default);*/
+                var products = await this.productsService.GetProductsAsync(
+                    componentModel.Token,
+                    componentModel.Language,
+                    inventories.Data.Select(x => x.ProductId),
+                    new QueryFilters(),
+                    null,
+                    PaginationConstants.DefaultPageIndex,
+                    AvailableProductsConstants.Pagination.ItemsPerPage,
+                    SortingConstants.Default);
 
                 if (products is not null)
                 {
@@ -182,6 +198,19 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                             new SortItemViewModel { Label = _productLocalizer.GetString("SortDefault"), Key = SortingConstants.Default },
                             new SortItemViewModel { Label = _productLocalizer.GetString("SortNewest"), Key = SortingConstants.Newest },
                             new SortItemViewModel { Label = _productLocalizer.GetString("SortName"), Key = SortingConstants.Name }
+                        },
+                        FilterInputs = new List<FilterViewModel>
+                        {
+                            new FilterViewModel
+                            {
+                                Key = "category",
+                                Label = this.globalLocalizer.GetString("Category"),
+                                Items = products.Filters.FirstOrDefault(x => x.Name == "category").Values.Select(x => new FilterItemViewModel
+                                {
+                                    Label = x,
+                                    Value = x
+                                })
+                            }
                         }
                     };
 
