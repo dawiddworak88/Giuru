@@ -173,7 +173,7 @@ namespace Client.Api.Services.Applications
 
             if (clientApplication is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_clientLocalizer.GetString("ClientApplicationNotFound"));
             }
 
             if (clientApplication.IsDeliveryAddressEqualBillingAddress)
@@ -238,7 +238,7 @@ namespace Client.Api.Services.Applications
 
             if (existingApplication is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_clientLocalizer.GetString("ClientApplicationNotFound"));
             }
 
             var clientApplication = new ClientApplicationServiceModel
@@ -358,7 +358,7 @@ namespace Client.Api.Services.Applications
 
             if (clientApplication == null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_clientLocalizer.GetString("ClientApplicationNotFound"));
             }
 
             clientApplication.CompanyName = model.CompanyName;
