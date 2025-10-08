@@ -38,9 +38,15 @@ namespace Inventory.Api.Services.InventoryItems
         public async Task<InventoryServiceModel> UpdateAsync(UpdateInventoryServiceModel serviceModel)
         {
             var inventory = await _context.Inventory.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
+
+            if (inventory is null)
+            {
+                throw new NotFoundException(_inventoryLocalizer.GetString("InventoryNotFound"));
+            }
+
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == inventory.ProductId && x.IsActive);
 
-            if (product is null || inventory is null)
+            if (product is null)
             {
                 throw new NotFoundException(_inventoryLocalizer.GetString("InventoryNotFound"));
             }

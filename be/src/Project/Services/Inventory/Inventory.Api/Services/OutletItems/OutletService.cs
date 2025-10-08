@@ -38,9 +38,15 @@ namespace Inventory.Api.Services.OutletItems
         public async Task<OutletServiceModel> UpdateAsync(UpdateOutletServiceModel model)
         {
             var outlet = await _context.Outlet.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
+
+            if (outlet is null)
+            {
+                throw new NotFoundException(_inventoryLocalizer.GetString("OutletNotFound"));
+            }
+
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == outlet.ProductId && x.IsActive);
 
-            if (product is null || outlet is null)
+            if (product is null)
             {
                 throw new NotFoundException(_inventoryLocalizer.GetString("OutletNotFound"));
             }
