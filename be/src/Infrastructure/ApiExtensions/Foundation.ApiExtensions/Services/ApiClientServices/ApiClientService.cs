@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -186,6 +187,8 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
                 {
                     apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
                 }
+
+                Console.WriteLine(apiResponse.Data);
             }
             else
             {
@@ -219,10 +222,35 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
             return apiResponse;
         }
 
-        public async Task<ApiResponse<T>> PostWithQueryAsync<S, W, T>(S request, IDictionary<string, string> queryParams)
+        public async Task<ApiResponse<T>> PostWithQueryAsync<S, W, Q, T>(S request, Q queryObject)
             where S : ApiRequest<W>
             where T : class
         {
+            var queryParams = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase);
+
+            if (queryObject is not null)
+            {
+                foreach (var prop in typeof(Q).GetProperties())
+                {
+                    var value = prop.GetValue(queryObject);
+
+                    if (value is null) continue;
+
+                    var stringValue = value switch
+                    {
+                        IFormattable f => f.ToString(null, CultureInfo.InvariantCulture),
+                        bool b => b ? "true" : "false",
+                        _ => value.ToString()
+                    };
+
+                    if (!string.IsNullOrWhiteSpace(stringValue))
+                    {
+                        var key = char.ToLowerInvariant(prop.Name[0]) + prop.Name[1..];
+
+                        queryParams[key] = stringValue;
+                    }
+                }
+            }
             var endpoint = request.EndpointAddress;
 
             if (queryParams is not null && queryParams.Count > 0)

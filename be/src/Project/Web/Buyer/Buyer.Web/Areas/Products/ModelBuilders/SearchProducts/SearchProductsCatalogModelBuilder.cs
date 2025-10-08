@@ -29,6 +29,9 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Foundation.GenericRepository.Definitions;
+using System.Reflection.Emit;
+using Foundation.Search.Models;
+using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 {
@@ -98,8 +101,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         new SortItemViewModel { Label = _productLocalizer.GetString("SortName"), Key = SortingConstants.Name }
                     }
             };
+            viewModel.Filters = componentModel.Filters;
 
-            var products = await _productsService.GetProductsAsync(
+            /*var products = await _productsService.GetProductsAsync(
                 null,
                 null,
                 null,
@@ -109,6 +113,16 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 PaginationConstants.DefaultPageIndex,
                 ProductConstants.ProductsCatalogPaginationPageSize,
                 componentModel.Token,
+                SortingConstants.Default);*/
+
+            var products = await _productsService.GetProductsAsync(
+                componentModel.Token,
+                componentModel.Language,
+                null,
+                componentModel.Filters,
+                componentModel.SearchTerm,
+                PaginationConstants.DefaultPageIndex,
+                ProductConstants.ProductsCatalogPaginationPageSize,
                 SortingConstants.Default);
 
             if (products.Data is not null)
@@ -196,6 +210,20 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 
                     product.CanOrder = true;
                 }
+
+                viewModel.FilterCollector.FilterInputs = new List<FilterViewModel>
+                {
+                    new FilterViewModel
+                    {
+                        Key = "category",
+                        Label = _globalLocalizer.GetString("Category"),
+                        Items = products.Filters.FirstOrDefault(x => x.Name == "category").Values.Select(x => new FilterItemViewModel
+                        {
+                            Label = x,
+                            Value = x,
+                        })
+                    }
+                };
 
                 viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(products.Total, products.PageSize)
                 {

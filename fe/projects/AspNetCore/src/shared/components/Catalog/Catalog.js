@@ -29,6 +29,10 @@ function Catalog(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null);
     const [sorting, setSorting] = useState(props.filterCollector && props.filterCollector.sortItems.length > 0 ? SortingConstants.defaultKey() : "");
+    const [filters, setFilters] = useState(props.filters 
+        ? Object.entries(props.filters)
+            .flatMap(([key, arr]) => (arr || []).map(v => ({ key, value: v, label: v }))) 
+        : []);
 
     const toggleSidebar = (item) => {
         setProductVariant(item);
@@ -121,6 +125,28 @@ function Catalog(props) {
         })
     };
 
+    const handleFilters = (value) => {
+        setFilters(value);
+
+        let searchParameters = {
+            categoryId: props.categoryId,
+            pageIndex: page + 1,
+            itemsPerPage,
+            orderBy: sorting
+        };
+
+        if (props.searchTerm != null) {
+            searchParameters = {
+                ...searchParameters,
+                searchTerm: props.searchTerm
+            }
+        }
+
+        const url = updateSearchUrl(value, props.searchTerm, true);
+
+        console.log(url);
+    }
+
     const handleSetSorting = (value) => {
         setSorting(value)
         
@@ -175,6 +201,34 @@ function Catalog(props) {
             });
     }
 
+    const updateSearchUrl = (selectedFilters, searchTerm, push = true) => {
+        const basePath = window.location.pathname; 
+        const params = new URLSearchParams();
+
+        if (searchTerm?.trim()) {
+            params.set("searchTerm", searchTerm.trim());
+        }
+
+        const grouped = selectedFilters.reduce((acc, f) => {
+            if (!f?.key || !f?.value) return acc;
+            (acc[f.key] ||= []).push(f.value);
+            return acc;
+        }, {});
+
+        Object.entries(grouped).forEach(([key, values]) => {
+            values.forEach(v => params.append(`search[${key}]`, v));
+        });
+
+        const query = params.toString();
+        const newUrl = query ? `${basePath}?${query}` : basePath;
+
+  // aktualizuj adres bez przeładowania
+        const fn = push ? window.history.pushState : window.history.replaceState;
+        fn.call(window.history, null, "", newUrl);
+
+    return newUrl;
+}
+
     return (
         <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
@@ -184,9 +238,10 @@ function Catalog(props) {
                         {...props.filterCollector}
                         total={total}
                         resultsLabel={props.resultsLabel}
-                        filters={[]}
+                        filters={filters}
                         sorting={sorting}
                         setSorting={handleSetSorting}
+                        setFilters={handleFilters}
                     />
                 </div>
                 {items && items.length > 0 ? (

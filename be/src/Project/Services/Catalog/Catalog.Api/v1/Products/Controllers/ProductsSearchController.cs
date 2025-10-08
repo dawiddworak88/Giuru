@@ -10,6 +10,7 @@ using Foundation.Extensions.Helpers;
 using Foundation.Search.Paginations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

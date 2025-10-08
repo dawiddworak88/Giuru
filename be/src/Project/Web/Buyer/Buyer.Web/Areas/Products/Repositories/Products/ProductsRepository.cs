@@ -18,6 +18,7 @@ using Buyer.Web.Areas.Orders.ApiRequestModels;
 using Foundation.Search.Paginations;
 using Foundation.Search.Models;
 using Nest;
+using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.Repositories.Products
 {
@@ -323,7 +324,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
 
         public async Task<PagedResultsWithFilters<IEnumerable<Product>>> GetProductsWithFiltersAsync(string token, string language, string searchTerm, QueryFilters filters, int pageIndex, int itemsPerPage, string orderBy)
         {
-            var productsRequestModel = new ProductsRequestModel
+            var requestQuery = new ProductsRequestModel
             {
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
@@ -331,15 +332,15 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 OrderBy = orderBy
             };
 
-            var apiRequest = new ApiRequest<ProductsRequestModel>
+            var apiRequest = new ApiRequest<QueryFilters>
             {
                 Language = language,
-                Data = productsRequestModel,
+                Data = filters,
                 AccessToken = token,
                 EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsSearchApiEndpoint}"
             };
 
-            var response = await _apiClientService.PostAsync<ApiRequest<ProductsRequestModel>, ProductsRequestModel, PagedResultsWithFilters<IEnumerable<ProductResponseModel>>>(apiRequest);
+            var response = await _apiClientService.PostWithQueryAsync<ApiRequest<QueryFilters>, QueryFilters, ProductsRequestModel, PagedResultsWithFilters<IEnumerable<ProductResponseModel>>>(apiRequest, requestQuery);
 
             if (response.IsSuccessStatusCode && response.Data?.Data is not null)
             {
