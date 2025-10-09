@@ -199,7 +199,7 @@
     <value>Eltern-Kategorie</value>
   </data>
   <data name="ParentCategoryNotFound" xml:space="preserve">
-    <value>Eltern Kategorie nicht gefunden </value>
+    <value>Eltern Kategorie nicht gefunden.</value>
   </data>
   <data name="Product" xml:space="preserve">
     <value>Produkt</value>

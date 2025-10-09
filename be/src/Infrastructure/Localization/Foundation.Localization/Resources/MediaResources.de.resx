@@ -127,13 +127,13 @@
     <value>Medien</value>
   </data>
   <data name="MediaDeletedSuccessfully" xml:space="preserve">
-    <value>Medien erfolgreich gelöscht</value>
+    <value>Medien erfolgreich gelöscht.</value>
   </data>
   <data name="MediaItemsLabel" xml:space="preserve">
     <value>Mediendateien hochladen</value>
   </data>
   <data name="MediaNotFound" xml:space="preserve">
-    <value>Medien nicht gefunden</value>
+    <value>Medien nicht gefunden.</value>
   </data>
   <data name="MediaUpdatedSuccessfully" xml:space="preserve">
     <value>Medien erfolgreich aktualisiert</value>

@@ -177,12 +177,12 @@ namespace Catalog.Api.Services.ProductAttributes
 
             if (existingProductAttribute == null)
             {
-                throw new ConflictException(_productLocalizer.GetString("ProductAttributeNotFound"));
+                throw new NotFoundException(_productLocalizer.GetString("ProductAttributeNotFound"));
             }
 
             if (existingProductAttribute.ProductAttributeItems.Any(x => x.IsActive))
             {
-                throw new NotFoundException(_productLocalizer.GetString("ProductAttributeNotEmpty"));
+                throw new ConflictException(_productLocalizer.GetString("ProductAttributeNotEmpty"));
             }
 
             AssertCategorySchemaReference(existingProductAttribute, model.Language);

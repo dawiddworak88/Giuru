@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Account created successfully</value>
+    <value>Account created successfully.</value>
   </data>
   <data name="AccountText" xml:space="preserve">
     <value>Create account</value>
@@ -127,7 +127,7 @@
     <value>Back to roles</value>
   </data>
   <data name="ApplicationDeletedSuccessfully" xml:space="preserve">
-    <value>Successfully deleted customer application</value>
+    <value>Successfully deleted customer application.</value>
   </data>
   <data name="BackToClientsApplications" xml:space="preserve">
     <value>Back to clients applications</value>
@@ -136,13 +136,13 @@
     <value>Client</value>
   </data>
   <data name="ClientAlreadyExists" xml:space="preserve">
-    <value>User with this e-mail address has been already created</value>
+    <value>User with this e-mail address has been already created.</value>
   </data>
   <data name="ClientApplicationNotFound" xml:space="preserve">
-    <value>Customer application not found</value>
+    <value>Customer application not found.</value>
   </data>
   <data name="ClientApplicationSavedSuccessfully" xml:space="preserve">
-    <value>Successfully saved client application</value>
+    <value>Successfully saved client application.</value>
   </data>
   <data name="ClientApplyConfirmation" xml:space="preserve">
     <value>Thank you for registering on our B2B platform. Your application has been sent and is waiting for verification by our team. We will notify you by e-mail about activating the account</value>
@@ -154,16 +154,16 @@
     <value>New cooperation request</value>
   </data>
   <data name="ClientDeletedSuccessfully" xml:space="preserve">
-    <value>Client has been deleted successfully</value>
+    <value>Client has been deleted successfully.</value>
   </data>
   <data name="ClientExists" xml:space="preserve">
-    <value>A customer with this e-mail address already exists</value>
+    <value>A customer with this e-mail address already exists.</value>
   </data>
   <data name="ClientManagers" xml:space="preserve">
     <value>Client account managers</value>
   </data>
   <data name="ClientNotFound" xml:space="preserve">
-    <value>Client has not been found</value>
+    <value>Client has not been found.</value>
   </data>
   <data name="Clients" xml:space="preserve">
     <value>Clients</value>
@@ -172,7 +172,7 @@
     <value>Clients applications</value>
   </data>
   <data name="ClientSavedSuccessfully" xml:space="preserve">
-    <value>Client has been saved successfully</value>
+    <value>Client has been saved successfully.</value>
   </data>
   <data name="ClientsGroups" xml:space="preserve">
     <value>Clients groups</value>
@@ -196,31 +196,31 @@
     <value>Edit client group</value>
   </data>
   <data name="GroupDeleteClientConflict" xml:space="preserve">
-    <value>Unassign clients from this group</value>
+    <value>Unassign clients from this group.</value>
   </data>
   <data name="GroupDeletedSuccessfully" xml:space="preserve">
-    <value>Client group has been deleted successfully</value>
+    <value>Client group has been deleted successfully.</value>
   </data>
   <data name="GroupNotFound" xml:space="preserve">
-    <value>Client group has not been found</value>
+    <value>Client group has not been found.</value>
   </data>
   <data name="GroupSavedSuccessfully" xml:space="preserve">
-    <value>Client group has been saved successfully</value>
+    <value>Client group has been saved successfully.</value>
   </data>
   <data name="ManagerDeleteConflict" xml:space="preserve">
-    <value>Unassign clients from this account manager</value>
+    <value>Unassign clients from this account manager.</value>
   </data>
   <data name="ManagerDeletedSuccessfully" xml:space="preserve">
-    <value>Account manager has been deleted successfully</value>
+    <value>Account manager has been deleted successfully.</value>
   </data>
   <data name="ManagerExist" xml:space="preserve">
-    <value>Account manager exist</value>
+    <value>Account manager exist.</value>
   </data>
   <data name="ManagerNotFound" xml:space="preserve">
-    <value>Account manager has not been found</value>
+    <value>Account manager has not been found.</value>
   </data>
   <data name="ManagerSavedSuccessfully" xml:space="preserve">
-    <value>Account manager has been saved successfully</value>
+    <value>Account manager has been saved successfully.</value>
   </data>
   <data name="NavigateToClientsLabel" xml:space="preserve">
     <value>Back to clients</value>
@@ -256,22 +256,22 @@
     <value>Reset password</value>
   </data>
   <data name="RoleDeletedSuccessfully" xml:space="preserve">
-    <value>Successfully deleted role</value>
+    <value>Successfully deleted role.</value>
   </data>
   <data name="RoleIsExisting" xml:space="preserve">
-    <value>Role exist</value>
+    <value>Role exist.</value>
   </data>
   <data name="RoleNotFound" xml:space="preserve">
-    <value>Role not found</value>
+    <value>Role not found.</value>
   </data>
   <data name="RoleSavedSuccessfully" xml:space="preserve">
-    <value>Successfully saved role</value>
+    <value>Successfully saved role.</value>
   </data>
   <data name="CountryDeletedSuccessfully" xml:space="preserve">
-    <value>Country deleted successfully</value>
+    <value>Country deleted successfully.</value>
   </data>
   <data name="CountrySavedSuccessfully" xml:space="preserve">
-    <value>Country saved successfully</value>
+    <value>Country saved successfully.</value>
   </data>
   <data name="EditCountry" xml:space="preserve">
     <value>Edit country</value>
@@ -283,13 +283,13 @@
     <value>Add country</value>
   </data>
   <data name="AddressDeleteDefaultConflict" xml:space="preserve">
-    <value>The selected address is assigned as the default</value>
+    <value>The selected address is assigned as the default.</value>
   </data>
   <data name="ClientAddressNotFound" xml:space="preserve">
-    <value>Client address not found</value>
+    <value>Client address not found.</value>
   </data>
   <data name="ClientDeleteAddressConflict" xml:space="preserve">
-    <value>Delete the addresses assigned to this Client</value>
+    <value>Delete the addresses assigned to this Client.</value>
   </data>
   <data name="BackToAddresses" xml:space="preserve">
     <value>Back to addresses</value>
@@ -298,19 +298,19 @@
     <value>Delivery address</value>
   </data>
   <data name="DeliveryAddressDeleteDefaultConflict" xml:space="preserve">
-    <value>Delivery address cannot be deleted because it is assigned as default</value>
+    <value>Delivery address cannot be deleted because it is assigned as default.</value>
   </data>
   <data name="ClientAddressDeletedSuccessfully" xml:space="preserve">
-    <value>Client address successfully deleted</value>
+    <value>Client address successfully deleted.</value>
   </data>
   <data name="ClientAddressSavedSuccessfully" xml:space="preserve">
-    <value>Client address successfully saved</value>
+    <value>Client address successfully saved.</value>
   </data>
   <data name="BillingAddress" xml:space="preserve">
     <value>Billing address</value>
   </data>
   <data name="BillingAddressDeleteDefaultConflict" xml:space="preserve">
-    <value>Billing address cannot be deleted because it is assigned as the default address</value>
+    <value>Billing address cannot be deleted because it is assigned as the default address.</value>
   </data>
   <data name="NewClientAddress" xml:space="preserve">
     <value>Add address</value>
@@ -319,13 +319,13 @@
     <value>Consent has been given</value>
   </data>
   <data name="FieldDefinitionNotFound" xml:space="preserve">
-    <value>Dynamic field definition not found</value>
+    <value>Dynamic field definition not found.</value>
   </data>
   <data name="FieldDefinitionSelectTypeConflict" xml:space="preserve">
-    <value>Option cannot be assigned to the field definition due to the selected type</value>
+    <value>Option cannot be assigned to the field definition due to the selected type.</value>
   </data>
   <data name="FieldOptionNotFound" xml:space="preserve">
-    <value>Dynamic field option not found</value>
+    <value>Dynamic field option not found.</value>
   </data>
   <data name="BackToField" xml:space="preserve">
     <value>Back to field definition</value>
@@ -349,19 +349,25 @@
     <value>Add field option</value>
   </data>
   <data name="FieldDeletedSuccessfully" xml:space="preserve">
-    <value>Successfully deleted dynamic field</value>
+    <value>Successfully deleted dynamic field.</value>
   </data>
   <data name="FieldOptionDeletedSuccessfully" xml:space="preserve">
-    <value>Successfully deleted dynamic field option</value>
+    <value>Successfully deleted dynamic field option.</value>
   </data>
   <data name="FieldOptionSavedSuccessfully" xml:space="preserve">
-    <value>Successfully saved dynamic field option</value>
+    <value>Successfully saved dynamic field option.</value>
   </data>
   <data name="FieldSavedSuccessfully" xml:space="preserve">
-    <value>Successfully saved dynamic field</value>
+    <value>Successfully saved dynamic field.</value>
   </data>
   <data name="PreferedCurrencyLabel" xml:space="preserve">
     <value>Prefered currency</value>
+  </data>
+  <data name="ApprovalNotFound" xml:space="preserve">
+    <value>Approval not found.</value>
+  </data>
+  <data name="ClientApprovals" xml:space="preserve">
+    <value>Approvals</value>
   </data>
   <data name="EditClientApproval" xml:space="preserve">
     <value>Edit Approval</value>
@@ -373,9 +379,9 @@
     <value>New Approval</value>
   </data>
   <data name="ClientApprovalSavedSuccessfully" xml:space="preserve">
-    <value>Approval saved successfully</value>
+    <value>Approval saved successfully.</value>
   </data>
   <data name="ClientApprovalDeletedSuccessfully" xml:space="preserve">
-    <value>Approval deleted successfully</value>
+    <value>Approval deleted successfully.</value>
   </data>
 </root>
