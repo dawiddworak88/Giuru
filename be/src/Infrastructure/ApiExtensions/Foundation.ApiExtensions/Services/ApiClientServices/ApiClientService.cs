@@ -187,8 +187,6 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
                 {
                     apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
                 }
-
-                Console.WriteLine(apiResponse.Data);
             }
             else
             {

@@ -38,7 +38,6 @@ namespace Catalog.Api.v1.Products.Controllers
         /// Gets list of products.
         /// </summary>
         /// <param name="ids">The optional list of product ids.</param>
-        /// <param name="sellerId">The brand id.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
         /// <param name="orderBy">The optional order by.</param>

@@ -49,22 +49,16 @@ function Catalog(props) {
 
         setPage(() => newPage);
 
-        let searchParameters = {
+        const params = buildSearchParams({
+            selectedFilters: filters,
             categoryId: props.categoryId,
-            brandId: props.brandId,
-            pageIndex: newPage + 1,
+            searchTerm: props.searchTerm,
+            pageIndex: page + 1,
             itemsPerPage,
             orderBy: sorting
-        };
-
-        if (props.searchTerm != null) {
-            searchParameters = {
-                ...searchParameters,
-                searchTerm: props.searchTerm
-            }
-        }
-
-        fetchData(searchParameters);
+        })
+        
+        fetchData(params);
     };
 
     const handleModal = (item) => {
@@ -128,19 +122,16 @@ function Catalog(props) {
     const handleFilters = (value) => {
         setFilters(value);
 
-        let searchParameters = {
+        const params = buildSearchParams({
+            selectedFilters: value,
             categoryId: props.categoryId,
+            searchTerm: props.searchTerm,
             pageIndex: page + 1,
             itemsPerPage,
             orderBy: sorting
-        };
-
-        if (props.searchTerm != null) {
-            searchParameters = {
-                ...searchParameters,
-                searchTerm: props.searchTerm
-            }
-        }
+        })
+        
+        fetchData(params);
 
         const url = updateSearchUrl(value, props.searchTerm, true);
 
@@ -149,32 +140,26 @@ function Catalog(props) {
 
     const handleSetSorting = (value) => {
         setSorting(value)
-        
-        let searchParameters = {
+
+        const params = buildSearchParams({
+            selectedFilters: filters,
             categoryId: props.categoryId,
-            brandId: props.brandId,
+            searchTerm: props.searchTerm,
             pageIndex: page + 1,
             itemsPerPage,
             orderBy: value
-        };
-
-        if (props.searchTerm != null) {
-            searchParameters = {
-                ...searchParameters,
-                searchTerm: props.searchTerm
-            }
-        }
-
-        fetchData(searchParameters);
+        })
+        
+        fetchData(params);
     }
 
-    const fetchData = (searchParameters) => {
+    const fetchData = (params) => {
         const requestOptions = {
             method: "GET",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
         };
 
-        const url = props.productsApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+        const url = `${props.productsApiUrl}?${params.toString()}`;
 
         return fetch(url, requestOptions)
             .then(function (response) {
@@ -184,10 +169,7 @@ function Catalog(props) {
                 AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
-
                     if (response.ok) {
-
-                        setItems(() => []);
                         setItems(() => jsonResponse.data);
                         setTotal(() => jsonResponse.total);
                     }
@@ -227,6 +209,42 @@ function Catalog(props) {
 
         return newUrl;
     }
+
+    const buildSearchParams = ({
+        searchTerm,
+        selectedFilters = [],
+        categoryId,
+        pageIndex,
+        itemsPerPage,
+        orderBy
+    }) => {
+        const params = new URLSearchParams();
+
+        if (searchTerm?.trim()) params.set("searchTerm", searchTerm.trim());
+        if (categoryId != null) params.set("categoryId", categoryId);
+        if (pageIndex != null) params.set("pageIndex", pageIndex);
+        if (itemsPerPage != null) params.set("itemsPerPage", itemsPerPage);
+        if (orderBy != null) params.set("orderBy", orderBy);
+
+        appendFilterParams(params, selectedFilters);
+
+        return params;
+    }
+
+    const appendFilterParams = (params, selectedFilters) => {
+        if (!Array.isArray(selectedFilters) || selectedFilters.length === 0) return;
+
+        const grouped = selectedFilters.reduce((acc, f) => {
+            if (!f?.key || !f?.value) return acc;
+            (acc[f.key] ||= []).push(f.value);
+            return acc;
+        }, {});
+
+        Object.entries(grouped).forEach(([key, values]) => {
+            values.forEach(v => params.append(`search[${key}]`, v));
+        });
+    };
+
 
     return (
         <section className="catalog section">
