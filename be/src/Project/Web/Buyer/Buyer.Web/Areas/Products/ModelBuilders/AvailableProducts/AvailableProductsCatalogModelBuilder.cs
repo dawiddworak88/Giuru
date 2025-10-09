@@ -210,6 +210,16 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                                     Label = x,
                                     Value = x
                                 })
+                            },
+                            new FilterViewModel
+                            {
+                                Key = "color",
+                                Label = this.globalLocalizer.GetString("Color"),
+                                Items = products.Filters.FirstOrDefault(x => x.Name == "color").Values.Select(x => new FilterItemViewModel
+                                {
+                                    Label = x,
+                                    Value = x
+                                })
                             }
                         }
                     };
