@@ -99,7 +99,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                     componentModel.Token,
                     componentModel.Language,
                     inventories.Data.Select(x => x.ProductId),
-                    new QueryFilters(),
+                    componentModel.Filters,
                     null,
                     PaginationConstants.DefaultPageIndex,
                     AvailableProductsConstants.Pagination.ItemsPerPage,

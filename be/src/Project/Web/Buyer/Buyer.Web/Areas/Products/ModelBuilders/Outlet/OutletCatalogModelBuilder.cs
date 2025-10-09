@@ -93,7 +93,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                     componentModel.Token,
                     componentModel.Language,
                     outletItems.Data.Select(x => x.ProductId),
-                    new QueryFilters(),
+                    componentModel.Filters,
                     null,
                     PaginationConstants.DefaultPageIndex,
                     OutletConstants.Catalog.DefaultItemsPerPage,

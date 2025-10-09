@@ -10,12 +10,9 @@ using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Filters;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.DomainModels.Prices;
-using Buyer.Web.Shared.ModelBuilders.Catalogs;
 using Buyer.Web.Shared.Services.Prices;
-using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
-using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -29,9 +26,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Foundation.GenericRepository.Definitions;
-using System.Reflection.Emit;
-using Foundation.Search.Models;
-using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 {
@@ -103,7 +97,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             };
             viewModel.Filters = componentModel.Filters;
 
-            /*var products = await _productsService.GetProductsAsync(
+            var products = await _productsService.GetProductsAsync(
                 null,
                 null,
                 null,
@@ -113,16 +107,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 PaginationConstants.DefaultPageIndex,
                 ProductConstants.ProductsCatalogPaginationPageSize,
                 componentModel.Token,
-                SortingConstants.Default);*/
-
-            var products = await _productsService.GetProductsAsync(
-                componentModel.Token,
-                componentModel.Language,
-                null,
-                componentModel.Filters,
-                componentModel.SearchTerm,
-                PaginationConstants.DefaultPageIndex,
-                ProductConstants.ProductsCatalogPaginationPageSize,
                 SortingConstants.Default);
 
             if (products.Data is not null)
@@ -210,20 +194,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 
                     product.CanOrder = true;
                 }
-
-                viewModel.FilterCollector.FilterInputs = new List<FilterViewModel>
-                {
-                    new FilterViewModel
-                    {
-                        Key = "category",
-                        Label = _globalLocalizer.GetString("Category"),
-                        Items = products.Filters.FirstOrDefault(x => x.Name == "category").Values.Select(x => new FilterItemViewModel
-                        {
-                            Label = x,
-                            Value = x,
-                        })
-                    }
-                };
 
                 viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(products.Total, products.PageSize)
                 {
