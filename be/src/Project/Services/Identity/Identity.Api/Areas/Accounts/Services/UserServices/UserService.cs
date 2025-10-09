@@ -59,7 +59,7 @@ namespace Identity.Api.Areas.Accounts.Services.UserServices
 
                 if (clientId == _options.Value.SellerClientId.ToString() && !await _organisationService.IsSellerAsync(user.OrganisationId))
                 {
-                    throw new UnauthorizedExcpetion(_accountLocalizer.GetString("AccessDenied"));
+                    throw new UnauthorizedException(_accountLocalizer.GetString("AccessDenied"));
                 }
 
                 if (await _userManager.CheckPasswordAsync(user, password) is false)
