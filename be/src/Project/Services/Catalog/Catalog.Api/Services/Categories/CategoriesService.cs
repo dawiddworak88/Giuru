@@ -257,7 +257,10 @@ namespace Catalog.Api.Services.Categories
 
             var parentCategory = await _context.Categories.FirstOrDefaultAsync(x => x.Id == model.ParentId && x.IsActive);
 
-            category.Level = parentCategory.Level + 1;
+            if (parentCategory is not null)
+            {
+                category.Level = parentCategory.Level + 1;
+            }
 
             _context.Categories.Add(category.FillCommonProperties());
 
