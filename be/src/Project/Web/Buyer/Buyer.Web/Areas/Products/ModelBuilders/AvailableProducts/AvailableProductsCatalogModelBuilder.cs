@@ -92,9 +92,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 
             if (inventories?.Data is not null && inventories.Data.Any())
             {
-                /*ar products = await this.productsService.GetProductsAsync(
-                    inventories.Data.Select(x => x.ProductId), null, null, componentModel.Language,
-                    null, false, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token, SortingConstants.Default);*/
                 var products = await this.productsService.GetProductsAsync(
                     componentModel.Token,
                     componentModel.Language,

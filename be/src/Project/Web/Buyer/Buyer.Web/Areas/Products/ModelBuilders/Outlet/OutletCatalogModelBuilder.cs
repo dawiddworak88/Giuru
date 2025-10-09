@@ -27,7 +27,6 @@ using Buyer.Web.Areas.Products.ComponentModels;
 using Foundation.Extensions.ExtensionMethods;
 using Buyer.Web.Shared.ViewModels.Filters;
 using Foundation.GenericRepository.Definitions;
-using Foundation.Search.Models;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders
 {
