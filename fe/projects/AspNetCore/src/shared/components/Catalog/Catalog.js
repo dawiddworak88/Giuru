@@ -222,12 +222,11 @@ function Catalog(props) {
         const query = params.toString();
         const newUrl = query ? `${basePath}?${query}` : basePath;
 
-  // aktualizuj adres bez przeładowania
         const fn = push ? window.history.pushState : window.history.replaceState;
         fn.call(window.history, null, "", newUrl);
 
-    return newUrl;
-}
+        return newUrl;
+    }
 
     return (
         <section className="catalog section">

@@ -11,6 +11,8 @@ using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Search.Binders;
+using Foundation.Search.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -47,7 +49,11 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Get(
+            [ModelBinder(BinderType = typeof(SearchQueryFiltersBinder))] QueryFilters filters,
+            int pageIndex, 
+            int itemsPerPage, 
+            string orderBy)
         {
             var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
                 CultureInfo.CurrentUICulture.Name,
@@ -58,15 +64,13 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             if (inventories?.Data is not null && inventories.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
-                    inventories.Data.Select(x => x.ProductId),
-                    null,
-                    null,
+                    await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                     CultureInfo.CurrentUICulture.Name,
+                    inventories.Data.Select(x => x.ProductId),
+                    filters,
                     null,
-                    false,
                     pageIndex,
                     itemsPerPage,
-                    await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                     orderBy);
 
                 var outletItems = await _outletRepository.GetOutletProductsByProductsIdAsync(
