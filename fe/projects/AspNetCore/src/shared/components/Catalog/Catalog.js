@@ -131,11 +131,9 @@ function Catalog(props) {
             orderBy: sorting
         })
         
+        applyUrlFromParams(value, props.searchTerm);
+
         fetchData(params);
-
-        const url = updateSearchUrl(value, props.searchTerm, true);
-
-        console.log(url);
     }
 
     const handleSetSorting = (value) => {
@@ -183,33 +181,6 @@ function Catalog(props) {
             });
     }
 
-    const updateSearchUrl = (selectedFilters, searchTerm, push = true) => {
-        const basePath = window.location.pathname; 
-        const params = new URLSearchParams();
-
-        if (searchTerm?.trim()) {
-            params.set("searchTerm", searchTerm.trim());
-        }
-
-        const grouped = selectedFilters.reduce((acc, f) => {
-            if (!f?.key || !f?.value) return acc;
-            (acc[f.key] ||= []).push(f.value);
-            return acc;
-        }, {});
-
-        Object.entries(grouped).forEach(([key, values]) => {
-            values.forEach(v => params.append(`search[${key}]`, v));
-        });
-
-        const query = params.toString();
-        const newUrl = query ? `${basePath}?${query}` : basePath;
-
-        const fn = push ? window.history.pushState : window.history.replaceState;
-        fn.call(window.history, null, "", newUrl);
-
-        return newUrl;
-    }
-
     const buildSearchParams = ({
         searchTerm,
         selectedFilters = [],
@@ -245,6 +216,29 @@ function Catalog(props) {
         });
     };
 
+    const buildFilterUrlParams = (selectedFilters, searchTerm) => {
+        const params = new URLSearchParams();
+
+        if (searchTerm?.trim()) {
+            params.set("searchTerm", searchTerm.trim());
+        }
+
+        appendFilterParams(params, selectedFilters);
+
+        return params;
+    };
+
+    const applyUrlFromParams = (filters, searchTerm, push = true) => {
+        const basePath = window.location.pathname;
+        const params = buildFilterUrlParams(filters, searchTerm);
+        const query = params.toString();
+        const newUrl = query ? `${basePath}?${query}` : basePath;
+
+        const fn = push ? window.history.pushState : window.history.replaceState;
+        fn.call(window.history, null, "", newUrl);
+
+        return newUrl;
+    };
 
     return (
         <section className="catalog section">
