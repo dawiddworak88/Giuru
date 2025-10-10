@@ -223,9 +223,6 @@ function FilterCollector(props) {
                             IconComponent={(props) => <ArrowIcon {...props}/>}
                             value={props.sorting}
                             onChange={(e) => props.setSorting(e.target.value)}
-                            sx={{
-                                color: "#064254"
-                            }}
                             MenuProps={{
                                 autoFocus: false,
                                 PaperProps: {
@@ -234,6 +231,19 @@ function FilterCollector(props) {
                                         paddingY: "1rem"
                                     }
                                 }
+                            }}
+                            renderValue={() => {
+                                return (
+                                    <Typography
+                                        sx={{
+                                            fontSize: "0.75rem",
+                                            fontWeight: 700,
+                                            color: "#064254"
+                                        }}
+                                    >
+                                        {props.sorting}
+                                    </Typography>
+                                )
                             }}
                         >
                             {props.sortItems.map((item, index) => (
