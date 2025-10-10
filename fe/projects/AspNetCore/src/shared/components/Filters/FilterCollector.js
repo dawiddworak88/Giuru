@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { 
-    Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, 
-    Chip, Drawer, ListItemText, MenuItem, Select, Typography 
+    Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, 
+    Chip, Drawer, ListItemText, MenuItem, Select, Typography, 
+    useMediaQuery,
+    useTheme
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { 
@@ -45,68 +47,169 @@ function FilterCollector(props) {
         props.setFilters([])
     }
 
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isNotMobile = !isMobile;
+
     return (
         <div>
-            <div className="filters-collector is-flex is-align-items-center">
-                {props.total !== 0 &&
-                    <div className="filters-collector__total pr-5">
-                        <p>{props.total} {props.resultsLabel}</p>
-                    </div>
-                }
-                {props.filterInputs && props.filterInputs.length > 0 &&
-                    <div className="filters-collector__filters">
-                        {props.filterInputs.map((item, index) => (
-                            <Select
-                                key={index}
-                                multiple displayEmpty
-                                value={props.filters}
-                                onChange={handleOnSelectFiltersChange}
-                                MenuProps={{
-                                    PaperProps: {
-                                        sx: {
-                                            padding: '1.5rem 1.25rem 0 1.25rem'
-                                        },
-                                    }
-                                }}
-                                renderValue={() => {
-                                    return (
-                                    <Typography fontWeight={700}>
-                                        {item.label}
-                                    </Typography>
-                                    );
-                                }}
-                                IconComponent={(props) => <ArrowIcon className="material-icons" {...props}/>}
-                                className="filters-collector__filters__select mr-3 py-0 px-2"
-                            >
-                                {item.items.map((variant, index) => (
-                                    <MenuItem
-                                        className="filters-collector__filters__select__item pt-0 pr-4 pb-5 pl-0"
-                                        value={{key: item.key, value: variant.value, label: variant.label }}
-                                        key={index}
-                                    >
-                                        <Checkbox
-                                            className="filters-collector__filters__select__item__checkbox"
-                                            checked={isFilterSelected(item.key, variant.value)}
-                                            icon={<CheckboxIcon />}
-                                            checkedIcon={<CheckboxCheckedIcon />} />
-                                        <ListItemText primary={variant.label} />
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        ))}
-                        <Button
-                            className="filters-collector__filters__button px-4 py-1"
-                            onClick={() => setSidebarOpen(true)}
-                            endIcon={<FiltersIcon />}
+            <Box 
+                component="div"
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: '100%',
+                    mb: '1.5rem'
+                }}
+            >
+                {props.total !== 0 && (
+                    <Box
+                        component="div"
+                        sx={{
+                            marginRight: "1.5rem"
+                        }}
+                    >
+                        <Typography
+                            sx={{
+                                fontSize: "0.875rem",
+                                fontWeight: 400,
+                                lineHeight: "1.5rem",
+                                color: "#7C8693"
+                            }}
                         >
-                            <Typography fontWeight={700}>
-                                {props.allFilters}
-                            </Typography>
-                        </Button>
-                    </div>
+                            {props.total} {props.resultsLabel}
+                        </Typography>
+                    </Box>
+                )}
+                {isNotMobile &&
+                    <Box
+                        component="div"
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "1.5rem"
+                        }}
+                    >
+                        {props.filterInputs && props.filterInputs.length > 0 && (
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    gap: "0.75rem",
+                                    marginRight: "0.75rem"
+                                }}
+                            >
+                                {props.filterInputs.map((item, index) => (
+                                    <Select
+                                        key={index}
+                                        multiple
+                                        displayEmpty
+                                        value={props.filters}
+                                        sx={{
+                                            height: "2.5rem",
+                                            borderRadius: "0.25rem",
+                                            backgroundColor: "#F7F7F7",
+                                            paddingX: "1rem",
+                                            paddingY: "0.25rem",
+                                            "&& .MuiSelect-select": {
+                                                minHeight: "unset"
+                                            }
+                                        }}
+                                        MenuProps={{
+                                            autoFocus: false,
+                                            PaperProps: {
+                                                sx: {
+                                                    borderRadius: "0.5rem",
+                                                    paddingX: "2.5rem",
+                                                    paddingY: "2rem"
+                                                }
+                                            }
+                                        }}
+                                        onChange={handleOnSelectFiltersChange}
+                                        IconComponent={(props) => <ArrowIcon {...props}/>}
+                                        renderValue={() => {
+                                            return (
+                                                <Typography 
+                                                    sx={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        fontWeight: 700,
+                                                        fontSize: "0.75rem",
+                                                        color: "#171717"
+                                                    }}
+                                                >
+                                                    {item.label}
+                                                </Typography>
+                                            );
+                                        }}
+                                    >
+                                        {item.items.map((variant, index) => (
+                                           <MenuItem
+                                                key={index}
+                                                value={{
+                                                    key: item.key, 
+                                                    value: variant.value, 
+                                                    label: variant.label 
+                                                }}
+                                                sx={{
+                                                    height: "1.5rem",
+                                                    padding: 0,
+                                                    "&:not(:first-child)": {
+                                                        marginTop: "1.5rem"
+                                                    }
+                                                }}
+                                            >
+                                                <Checkbox
+                                                    checked={isFilterSelected(item.key, variant.value)}
+                                                    icon={<CheckboxIcon />}
+                                                    checkedIcon={<CheckboxCheckedIcon />} 
+                                                    sx={{
+                                                        padding: 0,
+                                                        height: "1.5rem"
+                                                    }}
+                                                />
+                                                <ListItemText primary={variant.label} sx={{
+                                                    fontSize: "0.875rem",
+                                                    fontWeight: 400,
+                                                    color: "#171717"
+                                                }}/>
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                ))}
+                            </Box>
+                        )}
+                    </Box>
                 }
+                <Button
+                    onClick={() => setSidebarOpen(true)}
+                    endIcon={<FiltersIcon />}
+                    sx={{
+                        height: "2.5rem",
+                        paddingX: "1rem",
+                        paddingY: "0.25rem",
+                        borderRadius: "0.25rem",
+                        backgroundColor: "#F7F7F7"
+                    }}
+                >
+                    <Typography
+                        sx={{
+                            fontWeight: 700,
+                            fontSize: "0.75rem",
+                            color: "#171717"
+                        }}
+                    >
+                        {props.allFilters}
+                    </Typography>
+                </Button>
                 {props.sortItems && props.sortItems.length > 0 &&
-                    <div className="is-flex filters-collector__sort">
+                    <Box 
+                        sx={{
+                            display: "flex",
+                            minWidth: "fit-content",
+                            alignItems: "center",
+                            marginLeft: "auto"
+                        }}
+                    >
                         <div className="filters-collector__sort__text has-text-weight-bold mr-3">{props.sortLabel}</div>
                         <Select
                             className="filters-collector__sort__select"
@@ -124,14 +227,9 @@ function FilterCollector(props) {
                                 </MenuItem>
                             ))}
                         </Select>
-                    </div>
+                    </Box>
                 }
-            </div>
-            {props.total !== 0 &&
-                <div className="filters-collector__total-mobile">
-                    <p>{props.total} {props.resultsLabel}</p>
-                </div>
-            }
+            </Box>
             <div className="active-filters">
                 {props.filters.map((item, index) => (
                     <Chip

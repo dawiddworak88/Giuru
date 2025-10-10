@@ -1,6 +1,10 @@
+.filter-button {
+    background-color: $desertstorm;
+}
+
 .filters-collector {
     width: 100%;
-    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
 
     &__total {
         min-width: fit-content;
@@ -39,9 +43,7 @@
     }
 
     &__sort {
-        min-width: fit-content;
-        align-items: center;
-        margin-left: auto;
+        
 
         &__text {
             font-size: 0.9rem;
