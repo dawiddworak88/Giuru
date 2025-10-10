@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 import { 
     Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, 
     Chip, Drawer, ListItemText, MenuItem, Select, Typography, 
-    useMediaQuery,
-    useTheme
+    useMediaQuery, useTheme
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { 
@@ -207,21 +206,45 @@ function FilterCollector(props) {
                             display: "flex",
                             minWidth: "fit-content",
                             alignItems: "center",
-                            marginLeft: "auto"
+                            marginLeft: "auto",
+                            gap: "1.75rem"
                         }}
                     >
-                        <div className="filters-collector__sort__text has-text-weight-bold mr-3">{props.sortLabel}</div>
+                        <Typography
+                            sx={{
+                                fontSize: "0.75rem",
+                                fontWeight: 700,
+                                color: "#171717"
+                            }}
+                        >
+                            {props.sortLabel}
+                        </Typography>
                         <Select
-                            className="filters-collector__sort__select"
                             IconComponent={(props) => <ArrowIcon {...props}/>}
                             value={props.sorting}
                             onChange={(e) => props.setSorting(e.target.value)}
+                            sx={{
+                                color: "#064254"
+                            }}
+                            MenuProps={{
+                                autoFocus: false,
+                                PaperProps: {
+                                    sx: {
+                                        paddingX: "1.5rem",
+                                        paddingY: "1rem"
+                                    }
+                                }
+                            }}
                         >
                             {props.sortItems.map((item, index) => (
                                 <MenuItem
-                                    className="py-2 px-5"
                                     key={index}
                                     value={item.key}
+                                    sx={{
+                                        "&:not(:first-child)": {
+                                            marginTop: "1rem"
+                                        }
+                                    }}
                                 >
                                     {item.label}    
                                 </MenuItem>
