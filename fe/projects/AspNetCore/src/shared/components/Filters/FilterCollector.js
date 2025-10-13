@@ -10,6 +10,7 @@ import {
     ArrowIcon, CheckboxCheckedIcon, CheckboxIcon,
     FiltersIcon, RemoveIcon 
 } from "../../icons";
+import NestedFilterAccordionDropdown from "./NestedFilterAccordionDropdown";
 
 function FilterCollector(props) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -98,82 +99,91 @@ function FilterCollector(props) {
                                 }}
                             >
                                 {props.filterInputs.map((item, index) => (
-                                    <Select
-                                        key={index}
-                                        multiple
-                                        displayEmpty
-                                        value={props.filters}
-                                        sx={{
-                                            height: "2.5rem",
-                                            borderRadius: "0.25rem",
-                                            backgroundColor: "#F7F7F7",
-                                            paddingX: "1rem",
-                                            paddingY: "0.25rem",
-                                            "&& .MuiSelect-select": {
-                                                minHeight: "unset"
-                                            }
-                                        }}
-                                        MenuProps={{
-                                            autoFocus: false,
-                                            PaperProps: {
-                                                sx: {
-                                                    borderRadius: "0.5rem",
-                                                    paddingX: "2.5rem",
-                                                    paddingY: "2rem"
+                                    item.isNested ? (
+                                        <NestedFilterAccordionDropdown 
+                                            label={item.label}
+                                            filterGroups={item.items}
+                                            selectedFilters={props.filters}
+                                            onChange={updateFilters}
+                                        />
+                                    ) : (
+                                        <Select
+                                            key={index}
+                                            multiple
+                                            displayEmpty
+                                            value={props.filters}
+                                            sx={{
+                                                height: "2.5rem",
+                                                borderRadius: "0.25rem",
+                                                backgroundColor: "#F7F7F7",
+                                                paddingX: "1rem",
+                                                paddingY: "0.25rem",
+                                                "&& .MuiSelect-select": {
+                                                    minHeight: "unset"
                                                 }
-                                            }
-                                        }}
-                                        onChange={handleOnSelectFiltersChange}
-                                        IconComponent={(props) => <ArrowIcon {...props}/>}
-                                        renderValue={() => {
-                                            return (
-                                                <Typography 
+                                            }}
+                                            MenuProps={{
+                                                autoFocus: false,
+                                                PaperProps: {
+                                                    sx: {
+                                                        borderRadius: "0.5rem",
+                                                        paddingX: "2.5rem",
+                                                        paddingY: "2rem"
+                                                    }
+                                                }
+                                            }}
+                                            onChange={handleOnSelectFiltersChange}
+                                            IconComponent={(props) => <ArrowIcon {...props}/>}
+                                            renderValue={() => {
+                                                return (
+                                                    <Typography 
+                                                        sx={{
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            fontWeight: 700,
+                                                            fontSize: "0.75rem",
+                                                            color: "#171717"
+                                                        }}
+                                                    >
+                                                        {item.label}
+                                                    </Typography>
+                                                );
+                                            }}
+                                        >
+                                            {item.items.map((variant, index) => (
+                                                <MenuItem
+                                                    key={index}
+                                                    value={{
+                                                        key: item.key, 
+                                                        value: variant.value, 
+                                                        label: variant.label 
+                                                    }}
                                                     sx={{
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                        fontWeight: 700,
-                                                        fontSize: "0.75rem",
-                                                        color: "#171717"
+                                                        height: "1.5rem",
+                                                        padding: 0,
+                                                        "&:not(:first-child)": {
+                                                            marginTop: "1.5rem"
+                                                        }
                                                     }}
                                                 >
-                                                    {item.label}
-                                                </Typography>
-                                            );
-                                        }}
-                                    >
-                                        {item.items.map((variant, index) => (
-                                           <MenuItem
-                                                key={index}
-                                                value={{
-                                                    key: item.key, 
-                                                    value: variant.value, 
-                                                    label: variant.label 
-                                                }}
-                                                sx={{
-                                                    height: "1.5rem",
-                                                    padding: 0,
-                                                    "&:not(:first-child)": {
-                                                        marginTop: "1.5rem"
-                                                    }
-                                                }}
-                                            >
-                                                <Checkbox
-                                                    checked={isFilterSelected(item.key, variant.value)}
-                                                    icon={<CheckboxIcon />}
-                                                    checkedIcon={<CheckboxCheckedIcon />} 
-                                                    sx={{
-                                                        padding: 0,
-                                                        height: "1.5rem"
-                                                    }}
-                                                />
-                                                <ListItemText primary={variant.label} sx={{
-                                                    fontSize: "0.875rem",
-                                                    fontWeight: 400,
-                                                    color: "#171717"
-                                                }}/>
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
+                                                    <Checkbox
+                                                        checked={isFilterSelected(item.key, variant.value)}
+                                                        icon={<CheckboxIcon />}
+                                                        checkedIcon={<CheckboxCheckedIcon />} 
+                                                        sx={{
+                                                            padding: 0,
+                                                            height: "1.5rem"
+                                                        }}
+                                                    />
+                                                    <ListItemText primary={variant.label} sx={{
+                                                        fontSize: "0.875rem",
+                                                        fontWeight: 400,
+                                                        color: "#171717"
+                                                    }}/>
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    )
                                 ))}
                             </Box>
                         )}
